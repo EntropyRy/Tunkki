@@ -1,0 +1,21 @@
+services:
+#    entropy_tunkki.example:
+#        class: Entropy\TunkkiBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    entropy_tunkki.admin.events:
+        class: Entropy\TunkkiBundle\Admin\EventsAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Events, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Events }
+
+    entropy_tunkki.admin.items:
+        class: Entropy\TunkkiBundle\Admin\ItemsAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Items, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
+
+    entropy_tunkki.admin.files:
+        class: Entropy\TunkkiBundle\Admin\FilesAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Files, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Files }

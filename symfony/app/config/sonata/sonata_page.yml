@@ -1,0 +1,101 @@
+cmf_routing:
+    chain:
+        routers_by_id:
+            sonata.page.router: 150
+            router.default: 100
+
+sonata_page:
+    multisite: host
+    use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
+    ignore_route_patterns:
+        - ^(.*)admin(.*)   # ignore admin route, ie route containing 'admin'
+        - ^_(.*)          # ignore symfony routes
+    hide_disabled_blocks: true
+    ignore_routes:
+        - sonata_page_esi_cache
+        - sonata_page_ssi_cache
+        - sonata_page_js_sync_cache
+        - sonata_page_js_async_cache
+        - sonata_cache_esi
+        - sonata_page_cache_esi
+        - sonata_cache_ssi
+        - sonata_page_cache_ssi
+        - sonata_cache_js_async
+        - sonata_cache_js_sync
+        - sonata_cache_symfony
+        - sonata_page_exceptions_list
+        - sonata_page_exceptions_edit
+        - sonata_cache_apc
+        - sonata_media_gallery_index
+        - sonata_media_gallery_view
+        - sonata_media_view
+        - sonata_media_download
+
+    ignore_uri_patterns:
+        - ^/admin\/   # ignore admin route, ie route containing 'admin'
+        - ^/api\/   # ignore admin route, ie route containing 'admin'
+
+    page_defaults:
+        homepage: {decorate: false} # disable decoration for homepage, key - is a page route
+
+    default_template: default # template key from templates section, used as default for pages
+    templates:
+        default: 
+            path: 'SonataPageBundle::layout.html.twig' 
+            name: default # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
+
+            containers:
+                header:
+                    name: Header
+                content_top:
+                    name: Top content
+                content:
+                    name: Main content
+                content_bottom:
+                    name: Bottom content
+                footer:
+                    name: Footer
+            matrix:
+                layout: |
+                    HHHHHHHH
+                    HHHHHHHH
+                    TTTTBBBB
+                    TTTTBBBB
+                    TTTTBBBB
+                    TTTTBBBB
+                    CCCCCCCC
+                    CCCCCCCC
+                    FFFFFFFF
+                    FFFFFFFF
+
+                mapping:
+                    H: header
+                    T: content_top
+                    C: content
+                    B: content_bottom
+                    F: footer
+
+        # ESIMERKKI COMPOSERIN PAGETEMPLATEN TEKOON
+#        etusivu:
+#                path: 'ProjectBundle::etusivu.html.twig'
+#                name: 'Front Page'
+#                containers:
+#                         hero:
+#                                  name: Hero
+#                         content:
+#                                 name: Content
+#                matrix:
+#                         layout: |
+#                                 HHHHHHHH
+#                                 CCCCCCCC
+#                                 CCCCCCCC
+#                                 CCCCCCCC
+#                                 CCCCCCCC
+#                         mapping:
+#                                 H: hero
+#                                 C: content
+#
+    # manage the http errors
+    catch_exceptions:
+         not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
+         fatal:     [500]    # so you can use the same page for different http errors or specify specific page for each error

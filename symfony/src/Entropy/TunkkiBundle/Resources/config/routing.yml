@@ -1,0 +1,3 @@
+entropy_tunkki_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: EntropyTunkkiBundle:Default:index }

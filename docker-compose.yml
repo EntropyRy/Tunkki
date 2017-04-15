@@ -1,0 +1,24 @@
+version: '2'
+services:
+    storage:
+        image: debian:jessie
+        volumes:
+            - ./symfony:/var/www/symfony
+            - ./logs/symfony:/var/www/symfony/app/logs
+            - ./symfony/web/uploads:/var/www/symfony/web/uploads
+    fpm:
+        build: fpm
+        expose:
+            - "9000"
+        volumes_from:
+            - storage
+    web:
+        build: web
+        ports:
+            - "3011:80"
+        links:
+            - fpm
+        volumes_from:
+            - storage
+        volumes:
+            - ./logs/nginx/:/var/log/nginx

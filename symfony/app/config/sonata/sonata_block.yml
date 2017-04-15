@@ -1,0 +1,25 @@
+# listaus kaikista blockeista https://github.com/sonata-project/sandbox/blob/2.3/app/config/sonata/sonata_block.yml
+
+sonata_block:
+    context_manager: sonata.page.block.context_manager
+    default_contexts: [sonata_page_bundle]
+    http_cache:
+        listener: false 
+#        "SonataDemoBundle:Builder:mainMenu": "Main Menu"
+    blocks:
+        # Enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts:   [admin] # adminin etusivun listaus kaikista alaadminiseista, tämä estää tämän blokin käytön frontissa
+        sonata.admin.block.search_result: # jotta adminin hakusivu toimii
+            contexts:   [admin]
+
+        sonata.media.block.media:
+           # contexts: [Homepage]
+        sonata.media.block.gallery:
+        sonata.media.block.feature_media:
+        sonata.page.block.children_pages:
+        sonata.page.block.shared_block:       
+        sonata.block.service.text:
+        sonata.timeline.block.timeline:
+            contexts:   [admin] # Jos halutaan että block toimii vain adminissa
+        # Your other blocks

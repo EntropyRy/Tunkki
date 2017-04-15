@@ -1,0 +1,17 @@
+
+sonata_api_page:
+    type:         rest
+    prefix:       /page
+    resource:     "@SonataPageBundle/Resources/config/routing/api.xml"
+
+sonata_api_media:
+    type:         rest
+    prefix:       /media
+    resource:     "@SonataMediaBundle/Resources/config/routing/api.xml"
+
+sonata_api_user:
+    type:         rest
+    prefix:       /user
+    resource:     "@SonataUserBundle/Resources/config/routing/api.xml"
+
+
