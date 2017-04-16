@@ -62,7 +62,7 @@ class ItemsAdmin extends AbstractAdmin
 //            ->add('manufacturer')
  //           ->add('model')
  //           ->add('description')
-            ->add('whoCanRent')
+ //           ->add('whoCanRent')
             ->add('status', 'choice', array(
                 'multiple' => true,
                 'choices'=>
@@ -79,7 +79,7 @@ class ItemsAdmin extends AbstractAdmin
             ->add('needsFixing', null, array('editable'=>true))
 //            ->add('rentHistory')
 //            ->add('history')
-            ->add('forSale', null, array('editable'=>true))
+//            ->add('forSale', null, array('editable'=>true))
 //            ->add('createdAt')
 //            ->add('updatedAt')
 //            ->add('creator')

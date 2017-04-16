@@ -189,4 +189,14 @@ class Events
     {
         return $this->product;
     }
+
+    public function __toString()
+    {
+        if(is_object($this->getProduct())){
+            return 'Event for '.$this->getProduct()->getName();
+        }
+        else {
+            return 'No associated product';
+        }
+    }
 }

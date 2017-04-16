@@ -58,6 +58,11 @@ class EventsAdmin extends AbstractAdmin
             ->add('creator', null, array('disabled' => true))
             ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
         ;
+        if (!$this->hasParentFieldDescription()){
+            $formMapper
+                ->add('product')
+            ;
+        }
     }
 
     /**
