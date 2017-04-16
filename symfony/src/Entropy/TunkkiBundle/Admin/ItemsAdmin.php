@@ -26,17 +26,11 @@ class ItemsAdmin extends AbstractAdmin
             ->add('whoCanRent', null, array(), 'choice', array(
                 'choices'=>
                     array(
-                          'Aktiiveille' => 'Aktiiveille', 'Tuttavajärjestöille ja aktiiveille' => 'Tuttavajärjestöille ja aktiiveille', 
-                          'Vain aktiiveille' => 'Vain aktiiveille', 'Ei Vuokrata' => 'Ei Vuokrata'
+                          '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
+                          '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
                          )
                  ))
-            ->add('status', null, array(), 'choice', array(
-                'choices'=>
-                    array(
-                          'OK' => 'OK', 'Rikki' => 'Rikki', 'Ei voi korjata' => 'Ei voi korjata', 
-                          'Puutteellinen' => 'Puutteellinen', 'Kateissa' => 'Kateissa'
-                         )
-                 ))
+            ->add('tags')
             ->add('rent')
             ->add('rentNotice')
 //            ->add('fixingHistory')
@@ -64,14 +58,15 @@ class ItemsAdmin extends AbstractAdmin
  //           ->add('model')
  //           ->add('description')
  //           ->add('whoCanRent')
-            ->add('status', 'choice', array(
+            ->add('tags')
+         /*   ->add('status', 'choice', array(
                 'multiple' => true,
                 'choices'=>
                     array(
                           'OK' => 'OK', 'Rikki' => 'Rikki', 'Ei voi korjata' => 'Ei voi korjata', 
                           'Puutteellinen' => 'Puutteellinen', 'Kateissa' => 'Kateissa'
                          )
-                 ))
+                 ))*/
             ->add('rent', 'currency', array(
                 'currency' => 'Eur'
                 ))
@@ -108,38 +103,30 @@ class ItemsAdmin extends AbstractAdmin
                 ->add('model')
                 ->add('serialnumber')
                 ->add('placeinstorage')
-/*                ->add('tags', 'sonata_type_model_autocomplete', array(
+                ->add('description', 'textarea', array('required' => false, 'label' => 'Item description'))
+                ->add('commission', 'sonata_type_date_picker')
+                ->add('tags', 'sonata_type_model_autocomplete', array(
                     'property' => 'name',
                     'multiple' => 'true',
                     'required' => false,
-                ))*/
-                ->add('description', 'textarea', array('required' => false, 'label' => 'Item description'))
-                ->add('commission', 'sonata_type_date_picker')
+                    'minimum_input_length' => 2
+                ))
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
-                ->add('forSale')
                 ->add('whoCanRent', 'choice', array(
                     'choices'=>
                         array(
-                              'Aktiiveille' => 'Aktiiveille', 'Tuttavajärjestöille ja aktiiveille' => 'Tuttavajärjestöille ja aktiiveille', 
-                              'Vain aktiiveille' => 'Vain aktiiveille', 'Ei Vuokrata' => 'Ei Vuokrata'
-                             )
-                     ))
-                ->add('status', 'choice', array(
-                    'multiple' => true,
-                    'choices'=>
-                        array(
-                              'OK' => 'OK', 'Rikki' => 'Rikki', 'Ei voi korjata' => 'Ei voi korjata', 
-                              'Puutteellinen' => 'Puutteellinen', 'Kateissa' => 'Kateissa'
+                              '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
+                              '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
                              )
                      ))
                 ->add('rent')
                 ->add('rentNotice', 'textarea', array('required' => false))
+                ->add('forSale')
             ->end()
         ->end()
         ->tab('Events')
         ->with('Events')
-            ->add('needsFixing')
             ->add('fixingHistory', 'sonata_type_collection', array(
                     'label' => null, 'btn_add'=>'Add new event', 
                     'by_reference'=>false,
@@ -147,6 +134,7 @@ class ItemsAdmin extends AbstractAdmin
                     'type_options' => array('delete' => false),
                     'required' => false),
                     array('edit'=>'inline', 'inline'=>'table'))
+            ->add('needsFixing')
             ->add('rentHistory')
             ->add('history')
         ->end() 
@@ -184,7 +172,6 @@ class ItemsAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-//            ->add('id')
             ->add('name')
             ->add('manufacturer')
             ->add('model')
@@ -192,14 +179,7 @@ class ItemsAdmin extends AbstractAdmin
             ->add('description')
             ->add('commission')
             ->add('whoCanRent')
-            ->add('status', 'choice', array(
-                'multiple' => true,
-                'choices'=>
-                    array(
-                          'OK' => 'OK', 'Rikki' => 'Rikki', 'Ei voi korjata' => 'Ei voi korjata', 
-                          'Puutteellinen' => 'Puutteellinen', 'Kateissa' => 'Kateissa'
-                         )
-                 ))
+            ->add('tags')
             ->add('rent')
             ->add('rentNotice')
             ->add('needsFixing')

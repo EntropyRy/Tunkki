@@ -48,6 +48,7 @@ sonata_admin:
                     - entropy_tunkki.admin.events
 #                    - sonata.media.admin.media
                     - entropy_tunkki.admin.files
+                    - sonata.classification.admin.tag
 
 #            sonata.admin.group.content:
 #                label:           Content 

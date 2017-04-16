@@ -4,8 +4,7 @@ namespace Entropy\TunkkiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-//use Sonata\ClassificationBundle\Model\Tag;
-//use Sonata\ClassificationBundle\Model\TagInterface;
+
 /**
  * Items
  *
@@ -74,11 +73,14 @@ class Items
     private $whoCanRent;
 
     /**
-     * @var array
-     *
-     * @ORM\Column(name="Status", type="array", nullable=true)
+     * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})
+     * @ORM\JoinTable(
+     *      name="Item_tags",
+     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     * )
      */
-    private $status;
+    private $tags;
 
     /**
      * @var float
@@ -300,30 +302,6 @@ class Items
     }
 
     /**
-     * Set status
-     *
-     * @param string $status
-     *
-     * @return Items
-     */
-    public function setStatus($status)
-    {
-        $this->status = $status;
-
-        return $this;
-    }
-
-    /**
-     * Get status
-     *
-     * @return string
-     */
-    public function getStatus()
-    {
-        return $this->status;
-    }
-
-    /**
      * Set rent
      *
      * @param float $rent
@@ -525,6 +503,7 @@ class Items
     public function __construct()
     {
         $this->fixingHistory = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -722,5 +701,41 @@ class Items
     public function getModifier()
     {
         return $this->modifier;
+    }
+
+
+
+    /**
+     * Add tag
+     *
+     * @param \Application\Sonata\ClassificationBundle\Entity\Tag $tag
+     *
+     * @return Items
+     */
+    public function addTag(\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
+    {
+        $this->tags[] = $tag;
+
+        return $this;
+    }
+
+    /**
+     * Remove tag
+     *
+     * @param \Application\Sonata\ClassificationBundle\Entity\Tag $tag
+     */
+    public function removeTag(\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
+    {
+        $this->tags->removeElement($tag);
+    }
+
+    /**
+     * Get tags
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTags()
+    {
+        return $this->tags;
     }
 }
