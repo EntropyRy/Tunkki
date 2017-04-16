@@ -178,7 +178,13 @@ class ItemsAdmin extends AbstractAdmin
             ->add('serialnumber')
             ->add('description')
             ->add('commission')
-            ->add('whoCanRent')
+            ->add('whoCanRent', 'choice', array(
+                'choices'=>
+                    array(
+                          '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
+                          '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
+                         )
+                 ))
             ->add('tags')
             ->add('rent')
             ->add('rentNotice')
