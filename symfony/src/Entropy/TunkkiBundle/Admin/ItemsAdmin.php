@@ -217,6 +217,7 @@ class ItemsAdmin extends AbstractAdmin
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
+        $Items->setModifier($username);
         $Items->setCreator($username);
         foreach ($Items->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
@@ -228,7 +229,7 @@ class ItemsAdmin extends AbstractAdmin
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $Items->setCreator($username);
+        $Items->setModifier($username);
         foreach ($Items->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
                 $history->setCreator($username);

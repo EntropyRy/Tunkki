@@ -699,4 +699,28 @@ class Items
     {
         return $this->placeinstorage;
     }
+
+    /**
+     * Set modifier
+     *
+     * @param string $modifier
+     *
+     * @return Items
+     */
+    public function setModifier($modifier)
+    {
+        $this->modifier = $modifier;
+
+        return $this;
+    }
+
+    /**
+     * Get modifier
+     *
+     * @return string
+     */
+    public function getModifier()
+    {
+        return $this->modifier;
+    }
 }

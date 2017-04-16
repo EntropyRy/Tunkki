@@ -156,6 +156,13 @@ class Items
     private $creator;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="Modifier", type="string", length=255)
+     */
+    private $modifier;
+
+    /**
      * @var \DateTime
      * 
      * @ORM\Column(name="Commission", type="datetime", nullable=true)
@@ -667,5 +674,29 @@ class Items
     public function getFiles()
     {
         return $this->files;
+    }
+
+    /**
+     * Set placeinstorage
+     *
+     * @param string $placeinstorage
+     *
+     * @return Items
+     */
+    public function setPlaceinstorage($placeinstorage)
+    {
+        $this->placeinstorage = $placeinstorage;
+
+        return $this;
+    }
+
+    /**
+     * Get placeinstorage
+     *
+     * @return string
+     */
+    public function getPlaceinstorage()
+    {
+        return $this->placeinstorage;
     }
 }
