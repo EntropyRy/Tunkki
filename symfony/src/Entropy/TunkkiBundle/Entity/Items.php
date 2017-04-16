@@ -156,6 +156,13 @@ class Items
     private $creator;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="Modifier", type="string", length=255)
+     */
+    private $modifier;
+
+    /**
      * @var \DateTime
      * 
      * @ORM\Column(name="Commission", type="datetime", nullable=true)

@@ -48,6 +48,7 @@ class ItemsAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt')
             ->add('creator')
+            ->add('modifier')
         ;
     }
 
@@ -168,8 +169,9 @@ class ItemsAdmin extends AbstractAdmin
                     ->tab('Meta')
                     ->with('Meta')
                         ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
-                        ->add('updatedAt', 'sonata_type_datetime_picker', array('disabled' => true))
                         ->add('creator', null, array('disabled' => true))
+                        ->add('updatedAt', 'sonata_type_datetime_picker', array('disabled' => true))
+                        ->add('modifier', null, array('disabled' => true))
                     ->end()
                     ;
             }
@@ -188,7 +190,7 @@ class ItemsAdmin extends AbstractAdmin
             ->add('model')
             ->add('serialnumber')
             ->add('description')
-            ->add('commission', 'sonata_type_date_picker')
+            ->add('commission')
             ->add('whoCanRent')
             ->add('status', 'choice', array(
                 'multiple' => true,
@@ -204,9 +206,11 @@ class ItemsAdmin extends AbstractAdmin
             ->add('rentHistory')
             ->add('history')
             ->add('forSale')
+            ->add('files.fileinfo')
             ->add('createdAt')
             ->add('updatedAt')
             ->add('creator')
+            ->add('modifier')
         ;
     }
     public function prePersist($Items)
