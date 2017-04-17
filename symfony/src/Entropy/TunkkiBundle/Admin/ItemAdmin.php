@@ -210,6 +210,11 @@ class ItemAdmin extends AbstractAdmin
                 $history->setCreator($username);
             }
         } 
+    }
+    public function postPersist($Item)
+    {
+        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $username = $user->getFirstname()." ".$user->getLastname();
         $this->SendToMattermost($Item, $username, 'created');
     }
     public function preUpdate($Item)
