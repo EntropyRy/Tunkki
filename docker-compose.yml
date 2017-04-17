@@ -5,7 +5,6 @@ services:
         volumes:
             - ./symfony:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/app/logs
-            - ./symfony/web/uploads:/var/www/symfony/web/uploads
     fpm:
         build: fpm
         expose:

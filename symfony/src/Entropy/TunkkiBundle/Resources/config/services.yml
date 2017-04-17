@@ -13,6 +13,8 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\Item, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
+        calls:
+            - [setTemplate, [outer_list_rows_mosaic, EntropyTunkkiBundle:Admin:list_outer_rows_mosaic.html.twig]]
 
     entropy_tunkki.admin.files:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
