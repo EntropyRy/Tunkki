@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table()
  * @ORM\Entity
  */
-class Files
+class File
 {
     /**
      * @var integer
@@ -29,7 +29,7 @@ class Files
     private $fileinfo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Items", inversedBy="files")
+     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Item", inversedBy="files")
      *
      */
     private $product;
@@ -78,11 +78,11 @@ class Files
     /**
      * Set product
      *
-     * @param \Entropy\TunkkiBundle\Entity\Items $product
+     * @param \Entropy\TunkkiBundle\Entity\Item $product
      *
      * @return Files
      */
-    public function setProduct(\Entropy\TunkkiBundle\Entity\Items $product = null)
+    public function setProduct(\Entropy\TunkkiBundle\Entity\Item $product = null)
     {
         $this->product = $product;
 
@@ -92,7 +92,7 @@ class Files
     /**
      * Get product
      *
-     * @return \Entropy\TunkkiBundle\Entity\Items
+     * @return \Entropy\TunkkiBundle\Entity\Item
      */
     public function getProduct()
     {

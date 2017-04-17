@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class FilesAdmin extends AbstractAdmin
+class FileAdmin extends AbstractAdmin
 {
     /**
      * @param DatagridMapper $datagridMapper

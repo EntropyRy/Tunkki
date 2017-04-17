@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\ItemsRepository")
  * @ORM\HasLifecycleCallbacks 
  */
-class Items
+class Item
 {
     /**
      * @var integer
@@ -104,12 +104,12 @@ class Items
     private $needsFixing;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Events", mappedBy="product", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="product", cascade={"all"})
      */
     private $fixingHistory;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Files", mappedBy="product", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\File", mappedBy="product", cascade={"all"})
      */
     private $files;
 
@@ -509,11 +509,11 @@ class Items
     /**
      * Add fixingHistory
      *
-     * @param \Entropy\TunkkiBundle\Entity\Events $fixingHistory
+     * @param \Entropy\TunkkiBundle\Entity\Event $fixingHistory
      *
      * @return Items
      */
-    public function addFixingHistory(\Entropy\TunkkiBundle\Entity\Events $fixingHistory)
+    public function addFixingHistory(\Entropy\TunkkiBundle\Entity\Event $fixingHistory)
     {
         $fixingHistory->setProduct($this);
         $this->fixingHistory[] = $fixingHistory;
@@ -524,9 +524,9 @@ class Items
     /**
      * Remove fixingHistory
      *
-     * @param \Entropy\TunkkiBundle\Entity\Events $fixingHistory
+     * @param \Entropy\TunkkiBundle\Entity\Event $fixingHistory
      */
-    public function removeFixingHistory(\Entropy\TunkkiBundle\Entity\Events $fixingHistory)
+    public function removeFixingHistory(\Entropy\TunkkiBundle\Entity\Event $fixingHistory)
     {
         $fixingHistory->setProduct(null);
         $this->fixingHistory->removeElement($fixingHistory);
@@ -622,11 +622,11 @@ class Items
     /**
      * Add file
      *
-     * @param \Entropy\TunkkiBundle\Entity\Files $file
+     * @param \Entropy\TunkkiBundle\Entity\File $file
      *
      * @return Items
      */
-    public function addFile(\Entropy\TunkkiBundle\Entity\Files $file)
+    public function addFile(\Entropy\TunkkiBundle\Entity\File $file)
     {
         $file->setProduct($this);
         $this->files[] = $file;
@@ -637,9 +637,9 @@ class Items
     /**
      * Remove file
      *
-     * @param \Entropy\TunkkiBundle\Entity\Files $file
+     * @param \Entropy\TunkkiBundle\Entity\File $file
      */
-    public function removeFile(\Entropy\TunkkiBundle\Entity\Files $file)
+    public function removeFile(\Entropy\TunkkiBundle\Entity\File $file)
     {
         $file->setProduct(null);
         $this->files->removeElement($file);

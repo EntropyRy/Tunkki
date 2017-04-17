@@ -12,7 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\EventsRepository")
  * @ORM\HasLifecycleCallbacks 
  */
-class Events
+class Event
 {
     /**
      * @var integer
@@ -25,7 +25,7 @@ class Events
 
     /**
      * 
-     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Items", inversedBy="fixingHistory")
+     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Item", inversedBy="fixingHistory")
      */
     private $product;
 
@@ -169,11 +169,11 @@ class Events
     /**
      * Set product
      *
-     * @param \Entropy\TunkkiBundle\Entity\Items $product
+     * @param \Entropy\TunkkiBundle\Entity\Item $product
      *
      * @return Events
      */
-    public function setProduct(\Entropy\TunkkiBundle\Entity\Items $product = null)
+    public function setProduct(\Entropy\TunkkiBundle\Entity\Item $product = null)
     {
         $this->product = $product;
 
@@ -183,7 +183,7 @@ class Events
     /**
      * Get product
      *
-     * @return \Entropy\TunkkiBundle\Entity\Items
+     * @return \Entropy\TunkkiBundle\Entity\Item
      */
     public function getProduct()
     {
