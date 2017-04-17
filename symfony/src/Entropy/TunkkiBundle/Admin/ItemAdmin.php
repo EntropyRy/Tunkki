@@ -199,27 +199,52 @@ class ItemAdmin extends AbstractAdmin
             ->add('modifier')
         ;
     }
-    public function prePersist($Items)
+    public function prePersist($Item)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $Items->setModifier($username);
-        $Items->setCreator($username);
-        foreach ($Items->getfixingHistory() as $history) {
+        $Item->setModifier($username);
+        $Item->setCreator($username);
+        foreach ($Item->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
                 $history->setCreator($username);
             }
         } 
+        $this->SendToMattermost($Item, $username, 'created');
     }
-    public function preUpdate($Items)
+    public function preUpdate($Item)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $Items->setModifier($username);
-        foreach ($Items->getfixingHistory() as $history) {
+        $Item->setModifier($username);
+        foreach ($Item->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
                 $history->setCreator($username);
             }
-        } 
+        }
+        $this->SendToMattermost($Item, $username, 'updated');
+    }
+    public function SendToMattermost($Item, $username, $text)
+    {
+        $xcURL = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_hook');
+        $botname = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_botname');
+        $botimg = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_img');
+        $add_url = $this->getConfigurationPool()->getContainer()->getParameter('mm_add_url');
+        
+        $curl = curl_init($xcURL);
+        $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'",
+            "text":"## <'.$add_url$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
+        $cOptArr = array (
+            CURLOPT_URL => $xcURL,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_POST => 1
+        );
+        $rc = curl_setopt_array ($curl, $cOptArr);
+        $rc = curl_setopt ($curl, CURLOPT_POSTFIELDS, http_build_query (array ('payload' => $payload)));
+        $rc = curl_exec ($curl);
+        if ($rc == false){
+            curl_close ($curl);
+        }
     }
 }

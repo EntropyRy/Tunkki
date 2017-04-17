@@ -12,3 +12,8 @@ parameters:
     mailer_password: null
     locale: en
     secret: MyownSecret
+    mm_tunkki_hook: null
+    mm_tunkki_img: null
+    mm_tunkki_botname: null
+    mm_add_url: null
+
