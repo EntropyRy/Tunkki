@@ -233,7 +233,7 @@ class ItemAdmin extends AbstractAdmin
         
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'",
-            "text":"## <'.$add_url$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
+            "text":"#### <'.$add_url.'/'.$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
         $cOptArr = array (
             CURLOPT_URL => $xcURL,
             CURLOPT_TIMEOUT => 10,
