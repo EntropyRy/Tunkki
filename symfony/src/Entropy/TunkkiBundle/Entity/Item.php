@@ -24,6 +24,12 @@ class Item
     private $id;
 
     /**
+     * @ORM\Column(type="integer")
+     * @ORM\Version
+     */
+    protected $version;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="Name", type="string", length=255)
