@@ -7,12 +7,14 @@ services:
             - ./logs/symfony:/var/www/symfony/app/logs
     fpm:
         build: fpm
+        restart: unless-stopped
         expose:
             - "9000"
         volumes_from:
             - storage
     web:
         build: web
+        restart: unless-stopped
         ports:
             - "3011:80"
         links:
