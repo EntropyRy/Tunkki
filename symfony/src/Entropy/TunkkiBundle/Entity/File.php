@@ -130,6 +130,9 @@ class File
      */
     public function getDownload()
     {
-        return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
+        if (is_object($this->getFile())){
+            return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
+        } 
+        else { return 'X'; }
     }
 }
