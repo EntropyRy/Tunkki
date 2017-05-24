@@ -55,10 +55,18 @@ class Event
     /**
      * @var string
      *
-     * @ORM\Column(name="Creator", type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
 
+    /**
+     * @var string
+     *
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
+     */
+    private $modifier;
 
     /**
      * Get id
@@ -143,30 +151,6 @@ class Event
     }
 
     /**
-     * Set creator
-     *
-     * @param string $creator
-     *
-     * @return Events
-     */
-    public function setCreator($creator)
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * Get creator
-     *
-     * @return string
-     */
-    public function getCreator()
-    {
-        return $this->creator;
-    }
-
-    /**
      * Set product
      *
      * @param \Entropy\TunkkiBundle\Entity\Item $product
@@ -198,5 +182,53 @@ class Event
         else {
             return 'No associated product';
         }
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $creator
+     *
+     * @return Event
+     */
+    public function setCreator(\Application\Sonata\UserBundle\Entity\User $creator = null)
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * Set modifier
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $modifier
+     *
+     * @return Event
+     */
+    public function setModifier(\Application\Sonata\UserBundle\Entity\User $modifier = null)
+    {
+        $this->modifier = $modifier;
+
+        return $this;
+    }
+
+    /**
+     * Get modifier
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getModifier()
+    {
+        return $this->modifier;
     }
 }

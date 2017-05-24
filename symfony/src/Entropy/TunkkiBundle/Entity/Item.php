@@ -159,14 +159,16 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="Creator", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Modifier", type="string", length=255)
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
      */
     private $modifier;
 
@@ -447,30 +449,6 @@ class Item
         return $this->updatedAt;
     }
 
-    /**
-     * Set creator
-     *
-     * @param string $creator
-     *
-     * @return Items
-     */
-    public function setCreator($creator)
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * Get creator
-     *
-     * @return string
-     */
-    public function getCreator()
-    {
-        return $this->creator;
-    }
-
     public function __toString()
     {
         if ($this->getName()){
@@ -662,32 +640,6 @@ class Item
     }
 
     /**
-     * Set modifier
-     *
-     * @param string $modifier
-     *
-     * @return Items
-     */
-    public function setModifier($modifier)
-    {
-        $this->modifier = $modifier;
-
-        return $this;
-    }
-
-    /**
-     * Get modifier
-     *
-     * @return string
-     */
-    public function getModifier()
-    {
-        return $this->modifier;
-    }
-
-
-
-    /**
      * Add tag
      *
      * @param \Application\Sonata\ClassificationBundle\Entity\Tag $tag
@@ -767,5 +719,53 @@ class Item
     public function getWhoCanRent()
     {
         return $this->whoCanRent;
+    }
+
+    /**
+     * Set creator
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $creator
+     *
+     * @return Item
+     */
+    public function setCreator(\Application\Sonata\UserBundle\Entity\User $creator = null)
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * Get creator
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getCreator()
+    {
+        return $this->creator;
+    }
+
+    /**
+     * Set modifier
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $modifier
+     *
+     * @return Item
+     */
+    public function setModifier(\Application\Sonata\UserBundle\Entity\User $modifier = null)
+    {
+        $this->modifier = $modifier;
+
+        return $this;
+    }
+
+    /**
+     * Get modifier
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getModifier()
+    {
+        return $this->modifier;
     }
 }

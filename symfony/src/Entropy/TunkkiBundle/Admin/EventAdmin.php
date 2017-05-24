@@ -61,6 +61,8 @@ class EventAdmin extends AbstractAdmin
         if (!$this->hasParentFieldDescription()){
             $formMapper
                 ->add('product')
+                ->add('modifier', null, array('disabled' => true))
+                ->add('updatedAt','sonata_type_datetime_picker', array('disabled' => true))
             ;
         }
     }
@@ -76,18 +78,18 @@ class EventAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt')
             ->add('creator')
+            ->add('modifier')
         ;
     }
     public function prePersist($Event)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
-        $Event->setCreator($username);
+        $Event->setCreator($user);
+        $Event->setModifier($user);
     }
     public function preUpdate($Event)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
-        $Event->setCreator($username);
+        $Event->setModifier($user);
     }
 }

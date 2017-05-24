@@ -201,11 +201,11 @@ class ItemAdmin extends AbstractAdmin
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $Item->setModifier($username);
-        $Item->setCreator($username);
+        $Item->setModifier($user);
+        $Item->setCreator($user);
         foreach ($Item->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
-                $history->setCreator($username);
+                $history->setCreator($user);
             }
         } 
     }
@@ -218,11 +218,10 @@ class ItemAdmin extends AbstractAdmin
     public function preUpdate($Item)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
-        $Item->setModifier($username);
+        $Item->setModifier($user);
         foreach ($Item->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
-                $history->setCreator($username);
+                $history->setCreator($user);
             }
         }
         $this->SendToMattermost($Item, $username, 'updated');
