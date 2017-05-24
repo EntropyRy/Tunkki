@@ -23,14 +23,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('serialnumber')
             ->add('description')
             ->add('placeinstorage')
-            ->add('whoCanRent', null, array(), 'choice', array(
-                'choices'=>
-                    array(
-                              '1' => 'Everybody', '2' => 'Nobody', 
-                              '3' => 'Members', '4' => 'Organizations'
-                     ),
-                     'multiple' => true
-                 ))
+            ->add('whoCanRent')
             ->add('tags')
             ->add('rent')
             ->add('rentNotice')
