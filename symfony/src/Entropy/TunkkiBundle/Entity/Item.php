@@ -744,4 +744,28 @@ class Item
     {
         return $this->tags;
     }
+
+    /**
+     * Set version
+     *
+     * @param integer $version
+     *
+     * @return Item
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return integer
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
 }
