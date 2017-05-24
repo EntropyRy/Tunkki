@@ -2,11 +2,11 @@ sonata_seo:
 #    default:          sonata.seo.page.default
     encoding:         UTF-8
     page:
-        title:            Nitro Project
+        title:            Entropy Project
         metas:
             name:
-                keywords:             foo bar
-                description:          The description
+                keywords:             inventory
+                description:          Inventory and maybe something else
                 robots:               index, follow
 
             property:
@@ -16,8 +16,8 @@ sonata_seo:
 
                 # Open Graph information
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
-                'og:site_name':       Nitro Project Sandbox
-                'og:description':     A demo of the some rich bundles for your Symfony2 projects
+                'og:site_name':       Entropy Tunkki
+                'og:description':     Inventory and maybe something else
                 #
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8
