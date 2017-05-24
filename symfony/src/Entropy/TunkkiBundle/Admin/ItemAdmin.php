@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class ItemAdmin extends AbstractAdmin
 {
@@ -75,6 +76,9 @@ class ItemAdmin extends AbstractAdmin
 //            ->add('creator')
             ->add('_action', null, array(
                 'actions' => array(
+                    'clone' => array(
+                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_clone.html.twig'
+                    ),
                     'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
@@ -245,5 +249,9 @@ class ItemAdmin extends AbstractAdmin
         if ($rc == false){
             curl_close ($curl);
         }
+    }
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 }

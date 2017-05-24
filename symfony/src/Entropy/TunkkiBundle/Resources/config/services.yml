@@ -10,7 +10,7 @@ services:
 
     entropy_tunkki.admin.items:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Item, SonataAdminBundle:CRUD]
+        arguments: [~, Entropy\TunkkiBundle\Entity\Item, EntropyTunkkiBundle:ItemAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
         calls:
