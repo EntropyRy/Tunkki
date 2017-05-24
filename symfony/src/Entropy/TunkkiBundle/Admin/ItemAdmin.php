@@ -207,6 +207,9 @@ class ItemAdmin extends AbstractAdmin
             if($history->getCreator()==''){ 
                 $history->setCreator($user);
             }
+            if($history->getModifier()==''){ 
+                $history->setModifier($user);
+            }
         } 
     }
     public function postPersist($Item)
@@ -218,10 +221,14 @@ class ItemAdmin extends AbstractAdmin
     public function preUpdate($Item)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
         foreach ($Item->getfixingHistory() as $history) {
             if($history->getCreator()==''){ 
                 $history->setCreator($user);
+            }
+            if($history->getModifier()==''){ 
+                $history->setModifier($user);
             }
         }
         $this->SendToMattermost($Item, $username, 'updated');
