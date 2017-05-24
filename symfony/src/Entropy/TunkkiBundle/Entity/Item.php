@@ -72,9 +72,9 @@ class Item
     private $description;
 
     /**
-     * @var string
+     * @var simple_array
      *
-     * @ORM\Column(name="WhoCanRent", type="string", length=255, nullable=true)
+     * @ORM\Column(name="WhoCanRent", type="simple_array", length=255, nullable=true)
      */
     private $whoCanRent;
 
@@ -281,30 +281,6 @@ class Item
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set whoCanRent
-     *
-     * @param string $whoCanRent
-     *
-     * @return Items
-     */
-    public function setWhoCanRent($whoCanRent)
-    {
-        $this->whoCanRent = $whoCanRent;
-
-        return $this;
-    }
-
-    /**
-     * Get whoCanRent
-     *
-     * @return string
-     */
-    public function getWhoCanRent()
-    {
-        return $this->whoCanRent;
     }
 
     /**
@@ -767,5 +743,29 @@ class Item
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set whoCanRent
+     *
+     * @param array $whoCanRent
+     *
+     * @return Item
+     */
+    public function setWhoCanRent($whoCanRent)
+    {
+        $this->whoCanRent = $whoCanRent;
+
+        return $this;
+    }
+
+    /**
+     * Get whoCanRent
+     *
+     * @return array
+     */
+    public function getWhoCanRent()
+    {
+        return $this->whoCanRent;
     }
 }

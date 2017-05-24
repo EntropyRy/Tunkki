@@ -1,5 +1,5 @@
 sonata_admin:
-    title: -Tunkki
+    title: Tunkki
     security:
         handler: sonata.admin.security.handler.role
     title_logo: bundles/entropytunkki/images/logo.png
@@ -42,7 +42,7 @@ sonata_admin:
 
         groups:
             sonata.admin.group.entropy:
-                label:           Tunkki 
+                label:           Inventory 
                 label_catalogue: EntropyTunkkiBundle
                 items:
                     - entropy_tunkki.admin.items

@@ -26,9 +26,10 @@ class ItemAdmin extends AbstractAdmin
             ->add('whoCanRent', null, array(), 'choice', array(
                 'choices'=>
                     array(
-                          '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
-                          '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
-                         )
+                              '1' => 'Everybody', '2' => 'Nobody', 
+                              '3' => 'Members', '4' => 'Organizations'
+                     ),
+                     'multiple' => true
                  ))
             ->add('tags')
             ->add('rent')
@@ -114,12 +115,12 @@ class ItemAdmin extends AbstractAdmin
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
                 ->add('whoCanRent', 'choice', array(
-                    'choices'=>
-                        array(
-                              '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
-                              '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
-                             )
-                     ))
+                     'choices'=> array(
+                              '1' => 'Everybody', '2' => 'Nobody', 
+                              '3' => 'Members', '4' => 'Organizations'
+                     ),
+                     'multiple' => true
+                ))
                 ->add('rent')
                 ->add('rentNotice', 'textarea', array('required' => false))
                 ->add('forSale')
@@ -179,12 +180,12 @@ class ItemAdmin extends AbstractAdmin
             ->add('description')
             ->add('commission')
             ->add('whoCanRent', 'choice', array(
-                'choices'=>
-                    array(
-                          '1' => 'Aktiiveille', '2' => 'Tuttavajärjestöille ja aktiiveille', 
-                          '3' => 'Vain aktiiveille', '4' => 'Ei Vuokrata', '5' => 'kaikille'
-                         )
-                 ))
+                 'choices'=> array(
+                              '1' => 'Everybody', '2' => 'Nobody', 
+                              '3' => 'Members', '4' => 'Organizations'
+                     ),
+                     'multiple' => true
+            ))
             ->add('tags')
             ->add('rent')
             ->add('rentNotice')
