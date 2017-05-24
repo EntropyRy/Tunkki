@@ -33,9 +33,6 @@ class EventAdmin extends AbstractAdmin
   //          ->add('id')
             ->add('product')
             ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('creator')
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
@@ -51,16 +48,18 @@ class EventAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        if (!$this->hasParentFieldDescription()){
+            $formMapper
+                ->add('product')
+            ;
+        }
         $formMapper
-    //        ->add('id')
             ->add('description','textarea', array('required' => false))
-//            ->add('updatedAt','sonata_type_datetime_picker', array('disabled' => true))
             ->add('creator', null, array('disabled' => true))
             ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
         ;
         if (!$this->hasParentFieldDescription()){
             $formMapper
-                ->add('product')
                 ->add('modifier', null, array('disabled' => true))
                 ->add('updatedAt','sonata_type_datetime_picker', array('disabled' => true))
             ;
@@ -73,7 +72,6 @@ class EventAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-      //      ->add('id')
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')

@@ -6,7 +6,7 @@ services:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Event, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Events }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Events, show_mosaic_button: false  }
 
     entropy_tunkki.admin.items:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
@@ -20,4 +20,4 @@ services:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\File, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Files }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Files, show_mosaic_button: false } 
