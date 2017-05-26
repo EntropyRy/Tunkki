@@ -6,7 +6,7 @@ services:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Event, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Events, show_mosaic_button: false  }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Item Events, show_mosaic_button: false  }
 
     entropy_tunkki.admin.items:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
