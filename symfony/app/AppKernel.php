@@ -33,7 +33,7 @@ class AppKernel extends Kernel
 	new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
 	// Sonata I18N
     new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
-	new Sonata\TranslationBundle\SonataTranslationBundle(),
+//	new Sonata\TranslationBundle\SonataTranslationBundle(),
 	new Sonata\IntlBundle\SonataIntlBundle(),
 	// Sonata Media
 	new Sonata\MediaBundle\SonataMediaBundle(),

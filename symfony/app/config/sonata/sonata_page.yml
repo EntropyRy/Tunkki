@@ -41,7 +41,7 @@ sonata_page:
     default_template: default # template key from templates section, used as default for pages
     templates:
         default: 
-            path: 'SonataPageBundle::layout.html.twig' 
+            path: 'EntropyTunkkiBundle::layout.html.twig' 
             name: default # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
 
             containers:

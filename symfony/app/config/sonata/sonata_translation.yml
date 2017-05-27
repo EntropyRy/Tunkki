@@ -6,6 +6,6 @@ sonata_translation:
     default_locale: fi
     # here enable the types you need
     gedmo:
-        enabled: true
+        enabled: false
 #    phpcr:
 #        enabled: true

@@ -20,4 +20,15 @@ services:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\File, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Files, show_mosaic_button: false } 
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Files, show_mosaic_button: false }
+
+    entropy_tunkki.page.itempage:
+        class: Entropy\TunkkiBundle\PageService\ItemPage
+        arguments:
+                - "Item history"
+                - "@sonata.page.template_manager"
+                - "@doctrine.orm.entity_manager"
+        tags:
+                - { name: sonata.page, alias: Item}
+
+ 

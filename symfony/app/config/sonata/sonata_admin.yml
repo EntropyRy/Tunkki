@@ -41,32 +41,38 @@ sonata_admin:
             #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
 
         groups:
-            sonata.admin.group.entropy:
+            sonata.admin.group.inventory:
                 label:           Inventory 
                 label_catalogue: EntropyTunkkiBundle
                 items:
                     - entropy_tunkki.admin.items
                     - entropy_tunkki.admin.events
-#                    - sonata.media.admin.media
                     - entropy_tunkki.admin.files
-                    - sonata.classification.admin.tag
 
-#            sonata.admin.group.content:
-#                label:           Content 
-#                label_catalogue: SonataAdminBundle
-#                items:
-#                    - sonata.page.admin.page
-#                    - sonata.media.admin.media
-#                    - sonata.media.admin.gallery
-#
+            sonata.admin.group.classifiaction:
+                label:           Classification 
+                label_catalogue: SonataClassificationBundle
+                items:
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.context
+                    - sonata.classification.admin.collection
+
+            sonata.admin.group.content:
+                label:           Content 
+                label_catalogue: SonataAdminBundle
+                items:
+                    - sonata.page.admin.page
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+
             sonata.admin.group.administration:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
                     - sonata.user.admin.user
                     - sonata.user.admin.group
-                   # - sonata.page.admin.site
-                   # - sonata.notification.admin.message
+                    - sonata.page.admin.site
+                    - sonata.notification.admin.message
     assets:
         javascripts:
             # Defaults:

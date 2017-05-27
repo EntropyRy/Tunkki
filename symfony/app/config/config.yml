@@ -11,8 +11,8 @@ imports:
     - { resource: sonata/sonata_seo.yml }
     - { resource: sonata/sonata_page.yml }
     - { resource: sonata/sonata_notification.yml }
-    - { resource: sonata/sonata_translation.yml }
     - { resource: sonata/sonata_timeline.yml }
+    #- { resource: sonata/sonata_translation.yml }
 
 framework:
     #esi:             ~

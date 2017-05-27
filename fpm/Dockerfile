@@ -14,7 +14,7 @@ RUN apk upgrade --update && apk add --no-cache zlib-dev icu-dev libev libmcrypt-
     make && make install && \
     rm -rf ~/libiconv \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install gd intl iconv bcmath pdo_mysql opcache zip \
+    && docker-php-ext-install gd intl iconv bcmath pdo_mysql opcache zip sockets \
     && apk del grep build-base tar re2c make file 
     
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*

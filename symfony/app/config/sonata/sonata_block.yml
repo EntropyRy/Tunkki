@@ -22,4 +22,6 @@ sonata_block:
         sonata.block.service.text:
         sonata.timeline.block.timeline:
             contexts:   [admin] # Jos halutaan että block toimii vain adminissa
+        sonata_translation.block.locale_switcher:
+            contexts:   [admin]
         # Your other blocks
