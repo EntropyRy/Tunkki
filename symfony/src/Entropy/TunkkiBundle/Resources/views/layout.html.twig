@@ -53,7 +53,10 @@ file that was distributed with this source code.
                 {% for item in fix %}
                     <div>
                     <h1>{{ item.name }}</h1>
-                    {# item.fixingHistory.description #}
+                    {% for fixh in item.fixinghistory %}
+                        {{fixh.creator}}: {{ fixh.description }}<br>
+                    {% endfor %}
+                    {# dump(item) #}
                     </div>
                 {% endfor %}
             {% endif %}

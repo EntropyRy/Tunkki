@@ -110,7 +110,7 @@ class Item
     private $needsFixing;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="product", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="product", cascade={"all"}, fetch="EAGER")
      */
     private $fixingHistory;
 
