@@ -43,7 +43,7 @@ file that was distributed with this source code.
             {% if fix is defined %}
                 {% for item in fix %}
                     <div>
-                    <h1>{{ item.name }}</h1>
+                    <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h1>{{ item.name }}</h1></a>
                     {% for fixh in item.fixinghistory %}
                         {{fixh.creator}}: {{ fixh.description }}<br>
                     {% endfor %}
