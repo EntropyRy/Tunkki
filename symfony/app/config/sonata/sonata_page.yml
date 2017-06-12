@@ -5,8 +5,10 @@ cmf_routing:
             router.default: 100
 
 sonata_page:
-    multisite: host
-    use_streamed_response: false # set the value to false in debug mode or if the reverse proxy does not handle streamed response
+    is_inline_edition_on:  false
+    slugify_service:      sonata.core.slugify.native
+    multisite: host 
+    use_streamed_response: true # set the value to false in debug mode or if the reverse proxy does not handle streamed response
     ignore_route_patterns:
         - ^(.*)admin(.*)   # ignore admin route, ie route containing 'admin'
         - ^_(.*)          # ignore symfony routes
@@ -37,7 +39,7 @@ sonata_page:
 
     page_defaults:
         homepage: {decorate: false} # disable decoration for homepage, key - is a page route
-
+    default_page_service:  sonata.page.service.default
     default_template: default # template key from templates section, used as default for pages
     templates:
         default: 
