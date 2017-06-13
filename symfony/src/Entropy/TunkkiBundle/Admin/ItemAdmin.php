@@ -122,20 +122,18 @@ class ItemAdmin extends AbstractAdmin
                 ->add('rentNotice', 'textarea', array('required' => false))
                 ->add('forSale')
             ->end()
-        ->end()
-        ->tab('Events')
-        ->with('Events')
-            ->add('fixingHistory', 'sonata_type_collection', array(
-                    'label' => null, 'btn_add'=>'Add new event', 
-                    'by_reference'=>false,
-                    'cascade_validation' => true, 
-                    'type_options' => array('delete' => false),
-                    'required' => false),
-                    array('edit'=>'inline', 'inline'=>'table'))
-            ->add('needsFixing')
-            ->add('rentHistory')
-            ->add('history')
-        ->end() 
+            ->with('Events')
+                ->add('fixingHistory', 'sonata_type_collection', array(
+                        'label' => null, 'btn_add'=>'Add new event', 
+                        'by_reference'=>false,
+                        'cascade_validation' => true, 
+                        'type_options' => array('delete' => false),
+                        'required' => false),
+                        array('edit'=>'inline', 'inline'=>'table'))
+                ->add('needsFixing')
+            //    ->add('rentHistory')
+            //    ->add('history')
+            ->end() 
         ->end()
         ->tab('Files')
         ->with('Files')
