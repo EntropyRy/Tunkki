@@ -49,6 +49,13 @@ sonata_admin:
                     - entropy_tunkki.admin.events
                     - entropy_tunkki.admin.files
 
+            sonata.admin.group.rentals:
+                label:           Rentals 
+                label_catalogue: EntropyTunkkiBundle
+                items:
+                    - entropy_tunkki.admin.booking
+                    - entropy_tunkki.admin.pakage
+
             sonata.admin.group.classifiaction:
                 label:           Classification 
                 label_catalogue: SonataClassificationBundle

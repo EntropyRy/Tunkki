@@ -31,4 +31,14 @@ services:
         tags:
                 - { name: sonata.page, alias: Item}
 
- 
+    entropy_tunkki.admin.booking:
+        class: Entropy\TunkkiBundle\Admin\BookingAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Booking, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
+
+    entropy_tunkki.admin.pakage:
+        class: Entropy\TunkkiBundle\Admin\PakageAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Pakage, EntropyTunkkiBundle:PakageAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Pakage }

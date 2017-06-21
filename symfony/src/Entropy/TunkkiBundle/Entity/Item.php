@@ -110,6 +110,13 @@ class Item
     private $needsFixing;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ToSpareParts", type="boolean", nullable=true)
+     */
+    private $toSpareParts;
+
+    /**
      * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="product", cascade={"all"}, fetch="EAGER")
      */
     private $fixingHistory;
@@ -157,20 +164,21 @@ class Item
     private $updatedAt;
 
     /**
-     * @var string
-     *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
 
     /**
-     * @var string
-     *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
      */
     private $modifier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Pakage", inversedBy="items")
+     */
+    private $pakages;
 
     /**
      * @var \DateTime
@@ -767,5 +775,78 @@ class Item
     public function getModifier()
     {
         return $this->modifier;
+    }
+
+
+    /**
+     * Add pakage
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     *
+     * @return Item
+     */
+    public function addPakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    {
+        $this->pakages[] = $pakage;
+
+        return $this;
+    }
+
+    /**
+     * Remove pakage
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     */
+    public function removePakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    {
+        $this->pakages->removeElement($pakage);
+    }
+
+    /**
+     * Get pakages
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPakages()
+    {
+        return $this->pakages;
+    }
+
+    /**
+     * Set toSpareParts
+     *
+     * @param boolean $toSpareParts
+     *
+     * @return Item
+     */
+    public function setToSpareParts($toSpareParts)
+    {
+        $this->toSpareParts = $toSpareParts;
+
+        return $this;
+    }
+
+    /**
+     * Get toSpareParts
+     *
+     * @return boolean
+     */
+    public function getToSpareParts()
+    {
+        return $this->toSpareParts;
+    }
+
+    /**
+     * Set pakages
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakages
+     *
+     * @return Item
+     */
+    public function setPakages(\Entropy\TunkkiBundle\Entity\Pakage $pakages = null)
+    {
+        $this->pakages = $pakages;
+
+        return $this;
     }
 }

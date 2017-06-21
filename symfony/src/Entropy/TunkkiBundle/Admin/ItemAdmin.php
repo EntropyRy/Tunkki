@@ -122,7 +122,9 @@ class ItemAdmin extends AbstractAdmin
                 ->add('rentNotice', 'textarea', array('required' => false))
                 ->add('forSale')
             ->end()
-            ->with('Events')
+            ->with('Condition')
+                ->add('toSpareParts')
+                ->add('needsFixing')
                 ->add('fixingHistory', 'sonata_type_collection', array(
                         'label' => null, 'btn_add'=>'Add new event', 
                         'by_reference'=>false,
@@ -130,7 +132,6 @@ class ItemAdmin extends AbstractAdmin
                         'type_options' => array('delete' => false),
                         'required' => false),
                         array('edit'=>'inline', 'inline'=>'table'))
-                ->add('needsFixing')
             //    ->add('rentHistory')
             //    ->add('history')
             ->end() 
