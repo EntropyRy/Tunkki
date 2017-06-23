@@ -1,0 +1,27 @@
+{% extends 'SonataPageBundle::base_layout.html.twig' %}
+
+{% block sonata_page_container %}
+    <div class="container">
+        <div class="content">
+            {% if page is defined %}
+                <div class="row">
+                    {{ sonata_page_render_container('hero', page) }}
+                </div>
+            {% endif %}
+            {% if fix is defined %}
+                {% for item in fix %}
+                    <div>
+                    <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h1>{{ item.name }}</h1></a>
+                    {% for fixh in item.fixinghistory %}
+                        <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
+                    {% endfor %}
+                    {# dump(item) #}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+        <footer class="row">
+            {{ sonata_page_render_container('footer', 'global') }}
+        </footer>
+    </div>
+{% endblock %}

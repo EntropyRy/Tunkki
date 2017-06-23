@@ -78,25 +78,26 @@ sonata_page:
                     F: footer
 
         # ESIMERKKI COMPOSERIN PAGETEMPLATEN TEKOON
-#        etusivu:
-#                path: 'ProjectBundle::etusivu.html.twig'
-#                name: 'Front Page'
-#                containers:
-#                         hero:
-#                                  name: Hero
-#                         content:
-#                                 name: Content
-#                matrix:
-#                         layout: |
-#                                 HHHHHHHH
-#                                 CCCCCCCC
-#                                 CCCCCCCC
-#                                 CCCCCCCC
-#                                 CCCCCCCC
-#                         mapping:
-#                                 H: hero
-#                                 C: content
-#
+        fix:
+            path: 'EntropyTunkkiBundle::fix.html.twig' 
+            name: 'Fix Page'
+            containers:
+                hero:
+                    name: Hero
+                content:
+                    name: Content
+            matrix:
+                layout: |
+                    HHHHHHHH
+                    CCCCCCCC
+                    CCCCCCCC
+                    CCCCCCCC
+                    CCCCCCCC
+
+                mapping:
+                    H: hero
+                    C: content
+
     # manage the http errors
     catch_exceptions:
          not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
