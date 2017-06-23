@@ -11,7 +11,7 @@
             {% if fix is defined %}
                 {% for item in fix %}
                     <div>
-                    <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h1>{{ item.name }}</h1></a>
+                    <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h3>{{ item.name }}</h3></a>
                     {% for fixh in item.fixinghistory %}
                         <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
                     {% endfor %}
