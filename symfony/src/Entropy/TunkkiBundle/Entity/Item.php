@@ -112,7 +112,7 @@ class Item
     /**
      * @var boolean
      *
-     * @ORM\Column(name="ToSpareParts", type="boolean", nullable=true)
+     * @ORM\Column(name="ToSpareParts", type="boolean")
      */
     private $toSpareParts;
 
@@ -472,6 +472,7 @@ class Item
     {
         $this->fixingHistory = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->toSpareParts = false;
     }
 
     /**

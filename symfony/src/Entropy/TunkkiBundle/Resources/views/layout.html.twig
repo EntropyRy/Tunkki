@@ -45,7 +45,7 @@ file that was distributed with this source code.
                     <div>
                     <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h1>{{ item.name }}</h1></a>
                     {% for fixh in item.fixinghistory %}
-                        {{fixh.creator}}: {{ fixh.description }}<br>
+                        <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
                     {% endfor %}
                     {# dump(item) #}
                     </div>

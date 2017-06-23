@@ -17,7 +17,6 @@ class ItemAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
             ->add('name')
             ->add('manufacturer')
             ->add('model')
@@ -28,16 +27,16 @@ class ItemAdmin extends AbstractAdmin
             ->add('tags')
             ->add('rent')
             ->add('rentNotice')
-//            ->add('fixingHistory')
+            ->add('toSpareParts')
             ->add('needsFixing')
-            ->add('rentHistory')
-            ->add('history')
+            //->add('rentHistory')
+            //->add('history')
             ->add('forSale')
             ->add('commission')
-            ->add('createdAt')
-            ->add('updatedAt')
-            ->add('creator')
-            ->add('modifier')
+            //->add('createdAt')
+            //->add('updatedAt')
+            //->add('creator')
+            //->add('modifier')
         ;
     }
 

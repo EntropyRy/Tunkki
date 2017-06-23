@@ -33,7 +33,7 @@ class ItemPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
-        $needsfix = $this->em->getRepository('EntropyTunkkiBundle:Item')->findBy(array('needsFixing' => true, 'toSpareParts' => null));
+        $needsfix = $this->em->getRepository('EntropyTunkkiBundle:Item')->findBy(array('needsFixing' => true, 'toSpareParts' => false));
         return $this->templateManager->renderResponse($page->getTemplateCode(), array_merge($parameters,array('fix'=>$needsfix)), $response);
     }
 }
