@@ -60,8 +60,14 @@ class Booking
     /**
      * @var string
      *
+     * @ORM\OneToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", mappedBy="bookings")
+     */
+    private $invoicee;
+
+    /**
+     * @var string
+     *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
      */
     private $creator;
 
@@ -77,7 +83,6 @@ class Booking
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
      */
     private $modifier;
 
@@ -390,5 +395,39 @@ class Booking
     public function __toString()
     {
         return $this->name ? $this->name.' - '.date_format($this->bookingDate,'d.m.Y') : 'n/a';
+    }
+
+    /**
+     * Add invoicee
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
+     *
+     * @return Booking
+     */
+    public function addInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
+    {
+        $this->invoicee[] = $invoicee;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoicee
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
+     */
+    public function removeInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
+    {
+        $this->invoicee->removeElement($invoicee);
+    }
+
+    /**
+     * Get invoicee
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvoicee()
+    {
+        return $this->invoicee;
     }
 }

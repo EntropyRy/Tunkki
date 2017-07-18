@@ -18,6 +18,7 @@ class BookingAdmin extends AbstractAdmin
         $datagridMapper
             ->add('name')
             ->add('items')
+            ->add('invoicee')
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
@@ -31,6 +32,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('name')
+            ->add('invoicee')
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
@@ -54,6 +56,7 @@ class BookingAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->tab('General')
             ->with('Booking')
             ->add('name')
             ->add('bookingDate', 'sonata_type_date_picker')
@@ -63,11 +66,15 @@ class BookingAdmin extends AbstractAdmin
             ->with('Rentals')
             ->add('items', null, array('expanded' => false))
             ->add('pakages', null, array('expanded' => true))
+            ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
             ->end()
-//            ->add('creator')
-//            ->add('createdAt')
-//            ->add('modifier')
-//            ->add('modifiedAt')
+            ->end()
+            ->tab('Meta')
+            ->add('creator')
+            ->add('createdAt')
+            ->add('modifier')
+            ->add('modifiedAt')
+            ->end()
         ;
     }
 
@@ -78,6 +85,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
+            ->add('invoicee')
             ->add('items')
             ->add('bookingDate')
             ->add('retrieval')

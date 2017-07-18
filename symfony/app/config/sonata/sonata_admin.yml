@@ -55,6 +55,7 @@ sonata_admin:
                 items:
                     - entropy_tunkki.admin.booking
                     - entropy_tunkki.admin.pakage
+                    - entropy_tunkki.admin.invoicee
 
             sonata.admin.group.classifiaction:
                 label:           Classification 

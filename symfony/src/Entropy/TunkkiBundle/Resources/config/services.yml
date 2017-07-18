@@ -42,3 +42,9 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\Pakage, EntropyTunkkiBundle:PakageAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Pakage }
+
+    entropy_tunkki.admin.invoicee:
+        class: Entropy\TunkkiBundle\Admin\InvoiceeAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Invoicee, EntropyTunkkiBundle:InvoiceeAdmin]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Invoicee }
