@@ -24,7 +24,7 @@ class Invoicee
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", inversedBy="invoicee")
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", mappedBy="invoicee")
      */
     private $bookings;
 

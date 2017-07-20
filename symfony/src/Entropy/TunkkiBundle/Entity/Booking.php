@@ -64,7 +64,7 @@ class Booking
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", mappedBy="bookings")
+     * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", inversedBy="bookings")
      */
     private $invoicee;
 
@@ -400,40 +400,6 @@ class Booking
     }
 
     /**
-     * Add invoicee
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
-     *
-     * @return Booking
-     */
-    public function addInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
-    {
-        $this->invoicee[] = $invoicee;
-
-        return $this;
-    }
-
-    /**
-     * Remove invoicee
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
-     */
-    public function removeInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
-    {
-        $this->invoicee->removeElement($invoicee);
-    }
-
-    /**
-     * Get invoicee
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInvoicee()
-    {
-        return $this->invoicee;
-    }
-
-    /**
      * Set referenceNumber
      *
      * @param string $referenceNumber
@@ -469,5 +435,39 @@ class Booking
         $this->invoicee = $invoicee;
 
         return $this;
+    }
+
+    /**
+     * Add invoicee
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
+     *
+     * @return Booking
+     */
+    public function addInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
+    {
+        $this->invoicee[] = $invoicee;
+
+        return $this;
+    }
+
+    /**
+     * Remove invoicee
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
+     */
+    public function removeInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
+    {
+        $this->invoicee->removeElement($invoicee);
+    }
+
+    /**
+     * Get invoicee
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getInvoicee()
+    {
+        return $this->invoicee;
     }
 }
