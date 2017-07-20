@@ -176,7 +176,7 @@ class Item
     private $modifier;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Pakage", inversedBy="items")
+     * @ORM\ManyToMany(targetEntity="Pakage", inversedBy="items")
      */
     private $pakages;
 

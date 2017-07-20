@@ -279,4 +279,8 @@ class Invoicee
     {
         return $this->bookings;
     }
+    public function __toString()
+    {
+        return ($this->name ? $this->name : 'N/A');
+    }
 }

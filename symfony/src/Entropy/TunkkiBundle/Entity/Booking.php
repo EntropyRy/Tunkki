@@ -30,6 +30,13 @@ class Booking
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="referenceNumber", type="string", length=255)
+     */
+    private $referenceNumber = 'Coming soon';
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="retrieval", type="datetime")
@@ -44,28 +51,24 @@ class Booking
     private $returning;
 
     /**
-     * @var string
      *
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item")
      */
     private $items;
 
     /**
-     * @var string
      *
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Pakage")
      */
     private $pakages;
 
     /**
-     * @var string
      *
      * @ORM\OneToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", mappedBy="bookings")
      */
     private $invoicee;
 
     /**
-     * @var string
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      */
@@ -80,7 +83,6 @@ class Booking
     private $createdAt;
 
     /**
-     * @var string
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      */
@@ -362,11 +364,11 @@ class Booking
     /**
      * Add pakage
      *
-     * @param \Entropy\TunkkiBundle\Entity\Item $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
      *
      * @return Booking
      */
-    public function addPakage(\Entropy\TunkkiBundle\Entity\Item $pakage)
+    public function addPakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
     {
         $this->pakages[] = $pakage;
 
@@ -376,9 +378,9 @@ class Booking
     /**
      * Remove pakage
      *
-     * @param \Entropy\TunkkiBundle\Entity\Item $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
      */
-    public function removePakage(\Entropy\TunkkiBundle\Entity\Item $pakage)
+    public function removePakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
     {
         $this->pakages->removeElement($pakage);
     }
@@ -429,5 +431,43 @@ class Booking
     public function getInvoicee()
     {
         return $this->invoicee;
+    }
+
+    /**
+     * Set referenceNumber
+     *
+     * @param string $referenceNumber
+     *
+     * @return Booking
+     */
+    public function setReferenceNumber($referenceNumber)
+    {
+        $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    /**
+     * Get referenceNumber
+     *
+     * @return string
+     */
+    public function getReferenceNumber()
+    {
+        return $this->referenceNumber;
+    }
+
+    /**
+     * Set invoicee
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
+     *
+     * @return Booking
+     */
+    public function setInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee = null)
+    {
+        $this->invoicee = $invoicee;
+
+        return $this;
     }
 }

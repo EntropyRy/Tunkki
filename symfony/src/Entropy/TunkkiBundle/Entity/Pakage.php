@@ -22,7 +22,7 @@ class Pakage
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="pakages", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="pakages", cascade={"all"})
      */
     private $items;
 
@@ -60,7 +60,7 @@ class Pakage
     /**
      * @var string
      *
-     * @ORM\Column(name="notes", type="string", length=255)
+     * @ORM\Column(name="notes", type="text", nullable=true)
      */
     private $notes;
 
@@ -73,30 +73,6 @@ class Pakage
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set items
-     *
-     * @param string $items
-     *
-     * @return Pakage
-     */
-    public function setItems($items)
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
-    /**
-     * Get items
-     *
-     * @return string
-     */
-    public function getItems()
-    {
-        return $this->items;
     }
 
     /**
@@ -188,6 +164,7 @@ class Pakage
      */
     public function addItem(\Entropy\TunkkiBundle\Entity\Item $item)
     {
+        $item->addPakage($this);
         $this->items[] = $item;
 
         return $this;
@@ -200,6 +177,7 @@ class Pakage
      */
     public function removeItem(\Entropy\TunkkiBundle\Entity\Item $item)
     {
+        $item->pakages->removeElement($this);
         $this->items->removeElement($item);
     }
 
@@ -264,5 +242,34 @@ class Pakage
     public function __toString()
     {
         return $this->name ? $this->name: 'n/a';
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
+    }
+
+    public function getRentFromItems()
+    {
+        $price = 0;
+        foreach ($this->getItems() as $item) {
+            $price += $item->getRent();
+        }
+        return $price;
+    }
+    public function getItemsNeedingFixing()
+    {
+        $needsfix = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach ($this->getItems() as $item) {
+            if ($item->getneedsFixing())
+                $needsfix[] = $item;
+                $this->setNeedsFixing(true);
+        }
+        return $needsfix;
     }
 }

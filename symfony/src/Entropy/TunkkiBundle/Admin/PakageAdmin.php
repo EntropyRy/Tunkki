@@ -18,7 +18,7 @@ class PakageAdmin extends AbstractAdmin
         $datagridMapper
             ->add('name')
             ->add('rent')
-            ->add('needsFixing')
+//            ->add('needsFixing')
             ->add('notes')
         ;
     }
@@ -31,7 +31,10 @@ class PakageAdmin extends AbstractAdmin
         $listMapper
             ->add('name')
             ->add('rent')
-            ->add('needsFixing')
+            ->add('items')
+            ->add('rentFromItems')
+  //          ->add('needsFixing')
+            ->add('itemsNeedingFixing','array')
             ->add('notes')
             ->add('_action', null, array(
                 'actions' => array(
@@ -49,11 +52,14 @@ class PakageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->with('Pakage')
             ->add('name')
-            ->add('items')
             ->add('rent')
-            ->add('needsFixing')
+    //        ->add('needsFixing')
             ->add('notes')
+            ->add('items', 'sonata_type_model', array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
+            ->add('rentFromItems', 'text', array('disabled' => true))
+            ->end()
         ;
     }
 
@@ -66,7 +72,7 @@ class PakageAdmin extends AbstractAdmin
             ->add('name')
             ->add('items')
             ->add('rent')
-            ->add('needsFixing')
+      //      ->add('needsFixing')
             ->add('notes')
         ;
     }
