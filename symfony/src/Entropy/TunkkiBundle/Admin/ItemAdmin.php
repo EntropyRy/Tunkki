@@ -66,7 +66,7 @@ class ItemAdmin extends AbstractAdmin
                 ))
             //->add('rentNotice')
             ->add('placeinstorage')
-            ->add('needsFixing', null, array('editable'=>true))
+            ->add('needsFixing', null, array('editable'=>true, 'template' => 'EntropyTunkkiBundle:Admin:invertboolean.html.twig'))
 //            ->add('rentHistory')
 //            ->add('history')
 //            ->add('forSale', null, array('editable'=>true))
