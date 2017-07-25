@@ -51,6 +51,8 @@ class BookingAdmin extends AbstractAdmin
             ->add('returning')
             ->add('pakages')
             ->add('items')
+            ->add('returned', null, array('editable' => true))
+            ->add('paid', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
@@ -76,11 +78,14 @@ class BookingAdmin extends AbstractAdmin
             ->end()
             ->with('Persons', array('class' => 'col-md-6'))
             ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
+            ->add('giver', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'Remove association'))
             ->end()
             ->with('Rentals')
             ->add('referenceNumber', null, array('disabled' => true))
             ->add('items', null, array('expanded' => false))
             ->add('pakages', null, array('expanded' => true))
+            ->add('paid')
+            ->add('returned')
             ->end()
             ->end()
             ->tab('Meta')

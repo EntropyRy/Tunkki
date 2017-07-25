@@ -34,19 +34,33 @@ class Booking
      *
      * @ORM\Column(name="referenceNumber", type="string", length=255)
      */
-    private $referenceNumber = 'Coming soon';
+    private $referenceNumber = 'Wait for it...';
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="paid", type="boolean")
+     */
+    private $paid = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="returned", type="boolean")
+     */
+    private $returned = false;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="retrieval", type="datetime")
+     * @ORM\Column(name="retrieval", type="datetime", nullable=true)
      */
     private $retrieval;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="returning", type="datetime")
+     * @ORM\Column(name="returning", type="datetime", nullable=true)
      */
     private $returning;
 
@@ -67,6 +81,12 @@ class Booking
      * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", inversedBy="bookings")
      */
     private $invoicee;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     */
+    private $giver;
 
     /**
      *
@@ -469,5 +489,77 @@ class Booking
     public function getInvoicee()
     {
         return $this->invoicee;
+    }
+
+    /**
+     * Set paid
+     *
+     * @param boolean $paid
+     *
+     * @return Booking
+     */
+    public function setPaid($paid)
+    {
+        $this->paid = $paid;
+
+        return $this;
+    }
+
+    /**
+     * Get paid
+     *
+     * @return boolean
+     */
+    public function getPaid()
+    {
+        return $this->paid;
+    }
+
+    /**
+     * Set returned
+     *
+     * @param boolean $returned
+     *
+     * @return Booking
+     */
+    public function setReturned($returned)
+    {
+        $this->returned = $returned;
+
+        return $this;
+    }
+
+    /**
+     * Get returned
+     *
+     * @return boolean
+     */
+    public function getReturned()
+    {
+        return $this->returned;
+    }
+
+    /**
+     * Set giver
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $giver
+     *
+     * @return Booking
+     */
+    public function setGiver(\Application\Sonata\UserBundle\Entity\User $giver = null)
+    {
+        $this->giver = $giver;
+
+        return $this;
+    }
+
+    /**
+     * Get giver
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getGiver()
+    {
+        return $this->giver;
     }
 }
