@@ -12,7 +12,7 @@
                 {% for item in fix %}
                     <div>
                     <a href="/admin/entropy/tunkki/item/{{item.id}}/edit"><h3>{{ item.name }}</h3></a>
-                    {% for fixh in item.fixinghistory %}
+                    {% for fixh in item.fixinghistory|reverse %}
                         <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
                     {% endfor %}
                     {# dump(item) #}

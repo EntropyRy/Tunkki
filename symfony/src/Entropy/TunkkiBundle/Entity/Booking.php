@@ -65,6 +65,13 @@ class Booking
     private $returning;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="paid_date", type="datetime", nullable=true)
+     */
+    private $paid_date;
+
+    /**
      *
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item")
      */
@@ -87,6 +94,11 @@ class Booking
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      */
     private $giver;
+
+    /**
+     * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2)
+     */
+    private $actualPrice;
 
     /**
      *
@@ -500,6 +512,7 @@ class Booking
      */
     public function setPaid($paid)
     {
+        $this->setPaidDate(new \DateTime());
         $this->paid = $paid;
 
         return $this;
@@ -561,5 +574,72 @@ class Booking
     public function getGiver()
     {
         return $this->giver;
+    }
+
+    /**
+     * Set paidDate
+     *
+     * @param \DateTime $paidDate
+     *
+     * @return Booking
+     */
+    public function setPaidDate($paidDate)
+    {
+        $this->paid_date = $paidDate;
+
+        return $this;
+    }
+
+    /**
+     * Get paidDate
+     *
+     * @return \DateTime
+     */
+    public function getPaidDate()
+    {
+        return $this->paid_date;
+    }
+
+    /**
+     * Get calculatedPrice
+     *
+     * @return int
+     */
+    public function getCalculatedTotalPrice()
+    {
+        $price = 0;
+        foreach ($this->getItems() as $item) {
+            $price += $item->getRent();
+        }
+        if ($this->getPakages()){
+            foreach ($this->getPakages() as $pakage) {
+                $price += $pakage->getRent();
+            }
+        }
+        return $price;
+    }
+
+    /**
+     * Set actualPrice
+     *
+     * @param string $actualPrice
+     *
+     * @return Booking
+     */
+    public function setActualPrice($actualPrice)
+    {
+        $this->actualPrice = $actualPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get actualPrice
+     *
+     * @return string
+     */
+    public function getActualPrice()
+    {
+        return $this->actualPrice;
     }
 }

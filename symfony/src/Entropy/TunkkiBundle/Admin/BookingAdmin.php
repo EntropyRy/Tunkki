@@ -70,25 +70,32 @@ class BookingAdmin extends AbstractAdmin
     {
         $formMapper
             ->tab('General')
-            ->with('Booking', array('class' => 'col-md-6'))
+            ->with('Booking', array('class' => 'col-md-3'))
             ->add('name')
             ->add('bookingDate', 'sonata_type_date_picker')
             ->add('retrieval', 'sonata_type_datetime_picker')
             ->add('returning', 'sonata_type_datetime_picker')
             ->end()
-            ->with('Persons', array('class' => 'col-md-6'))
+            ->with('Persons', array('class' => 'col-md-9'))
             ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
             ->add('giver', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'Remove association'))
             ->end()
-            ->with('Rentals')
-            ->add('referenceNumber', null, array('disabled' => true))
+            ->end()
+            ->tab('Rentals')
+            ->with('The Stuff', array('class' => 'col-md-6'))
             ->add('items', null, array('expanded' => false))
             ->add('pakages', null, array('expanded' => true))
-            ->add('paid')
-            ->add('returned')
+            ->end()
+            ->with('Payment Information', array('class' => 'col-md-6'))
+            ->add('referenceNumber', null, array('disabled' => true))
+            ->add('calculatedTotalPrice', 'text', array('disabled' => true))
+            ->add('actualPrice', null, array('disabled' => false))
             ->end()
             ->end()
             ->tab('Meta')
+                ->add('returned')
+                ->add('paid')
+                ->add('paid_date', 'sonata_type_datetime_picker', array('disabled' => false, 'required' => false))
                 ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
                 ->add('creator', null, array('disabled' => true))
                 ->add('modifiedAt', 'sonata_type_datetime_picker', array('disabled' => true))
@@ -138,6 +145,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $booking->setCreator($user);
+        $booking->setActualPrice($booking->getCalculatedTotalPrice()*0.9);
     }    
     public function preUpdate($booking)
     {
