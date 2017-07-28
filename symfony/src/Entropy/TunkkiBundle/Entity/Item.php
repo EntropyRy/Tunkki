@@ -127,9 +127,12 @@ class Item
     private $files;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="RentHistory", type="string", length=255, nullable=true)
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", cascade={"all"})
+     * @ORM\JoinTable(
+     *      name="Item_rentHistory",
+     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="booking_id", referencedColumnName="id")}
+     * )
      */
     private $rentHistory;
 
@@ -363,30 +366,6 @@ class Item
     public function getNeedsFixing()
     {
         return $this->needsFixing;
-    }
-
-    /**
-     * Set rentHistory
-     *
-     * @param string $rentHistory
-     *
-     * @return Items
-     */
-    public function setRentHistory($rentHistory)
-    {
-        $this->rentHistory = $rentHistory;
-
-        return $this;
-    }
-
-    /**
-     * Get rentHistory
-     *
-     * @return string
-     */
-    public function getRentHistory()
-    {
-        return $this->rentHistory;
     }
 
     /**
@@ -849,5 +828,39 @@ class Item
         $this->pakages = $pakages;
 
         return $this;
+    }
+
+    /**
+     * Add rentHistory
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Booking $rentHistory
+     *
+     * @return Item
+     */
+    public function addRentHistory(\Entropy\TunkkiBundle\Entity\Booking $rentHistory)
+    {
+        $this->rentHistory[] = $rentHistory;
+
+        return $this;
+    }
+
+    /**
+     * Remove rentHistory
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Booking $rentHistory
+     */
+    public function removeRentHistory(\Entropy\TunkkiBundle\Entity\Booking $rentHistory)
+    {
+        $this->rentHistory->removeElement($rentHistory);
+    }
+
+    /**
+     * Get rentHistory
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getRentHistory()
+    {
+        return $this->rentHistory;
     }
 }

@@ -131,7 +131,9 @@ class ItemAdmin extends AbstractAdmin
                         'type_options' => array('delete' => false),
                         'required' => false),
                         array('edit'=>'inline', 'inline'=>'table'))
-                ->add('rentHistory')
+                ->add('rentHistory', null, 
+                        ['disabled' => true]
+                     )
             //    ->add('history')
             ->end() 
         ->end()

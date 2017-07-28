@@ -219,30 +219,6 @@ class Booking
     }
 
     /**
-     * Set items
-     *
-     * @param string $items
-     *
-     * @return Booking
-     */
-    public function setItems($items)
-    {
-        $this->items = $items;
-
-        return $this;
-    }
-
-    /**
-     * Get items
-     *
-     * @return string
-     */
-    public function getItems()
-    {
-        return $this->items;
-    }
-
-    /**
      * Set createdAt
      *
      * @param \DateTime $createdAt
@@ -360,37 +336,6 @@ class Booking
     public function getModifier()
     {
         return $this->modifier;
-    }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    /**
-     * Add item
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Item $item
-     *
-     * @return Booking
-     */
-    public function addItem(\Entropy\TunkkiBundle\Entity\Item $item)
-    {
-        $this->items[] = $item;
-
-        return $this;
-    }
-
-    /**
-     * Remove item
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Item $item
-     */
-    public function removeItem(\Entropy\TunkkiBundle\Entity\Item $item)
-    {
-        $this->items->removeElement($item);
     }
 
     /**
@@ -630,9 +575,11 @@ class Booking
         foreach ($this->getItems() as $item) {
             $return .= $item->getName().': '.$item->getRentNotice().' ';
         }
-        foreach ($this->getPakages() as $pakage) {
-            foreach ($pakage->getItems() as $item) {
-                $return .= $item->getName().': '.$item->getRentNotice().' ';
+        if ($this->getPakages()){
+            foreach ($this->getPakages() as $pakage) {
+                foreach ($pakage->getItems() as $item) {
+                    $return .= $item->getName().': '.$item->getRentNotice().' ';
+                }
             }
         }
         return $return;
@@ -659,5 +606,49 @@ class Booking
     public function getActualPrice()
     {
         return $this->actualPrice;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->pakages = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add item
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Item $item
+     *
+     * @return Booking
+     */
+    public function addItem(\Entropy\TunkkiBundle\Entity\Item $item)
+    {
+        $item->addRentHistory($this);
+        $this->items[] = $item;
+
+        return $this;
+    }
+
+    /**
+     * Remove item
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Item $item
+     */
+    public function removeItem(\Entropy\TunkkiBundle\Entity\Item $item)
+    {
+        $item->removeRentHistory($this);
+        $this->items->removeElement($item);
+    }
+
+    /**
+     * Get items
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getItems()
+    {
+        return $this->items;
     }
 }
