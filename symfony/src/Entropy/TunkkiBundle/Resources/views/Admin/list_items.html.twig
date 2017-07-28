@@ -1,0 +1,62 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_flat_inner_row.html.twig' %}
+
+{% block row %}
+<div class="col-md-2">
+{% set loaded = 1 %}
+{% for file in object.files %}
+    {% if file is defined and loaded %}
+        {% if file.file.providerName == "sonata.media.provider.image" %}
+            {% media file.file, 'small' %}
+            {% set loaded = 0 %}
+        {% endif %}
+    {% endif %}
+{% endfor %}
+{% if loaded %}
+    <img src="/bundles/entropytunkki/images/logo.png" alt="noimg" />
+{% endif %}
+</div>
+<div class="col-md-4">
+    {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['tags']) }}<br>
+    <small>
+        {{ object.description|truncate(150) }}
+    </small>
+
+</div>
+{% if object.rent %}
+<div class="col-md-3">
+{% else %}
+<div class="col-md-6">
+{% endif %}
+
+        Condition<hr style="margin: 2px">
+        needs fixing: {{ object|render_list_element(admin.list['needsFixing']) }}<br>
+        {% set fixh = object.fixinghistory|last %}
+        {% if fixh %}
+         <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
+        {% endif %}
+</div>
+{% if object.rent %}
+<div class="col-md-3">
+        Rent info<hr style="margin: 2px">
+        For:
+        {% for who in object.whocanrent %}
+            {% if who=="1" %}
+                Everybody
+            {% endif %}
+            {% if who=="2" %}
+                Nobody
+            {% endif %}
+            {% if who=="3" %}
+                Members
+            {% endif %}
+            {% if who=="4" %}
+                Organizations
+            {% endif %}
+        {% endfor %}
+        <span class="pull-right">{{ object.rent }} €</span><br>
+    <small>
+        {{ object.rentnotice }}
+    </small>
+</div>
+{% endif %}
+{% endblock %}

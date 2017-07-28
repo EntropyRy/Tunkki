@@ -15,6 +15,8 @@ services:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
         calls:
             - [setTemplate, [outer_list_rows_mosaic, EntropyTunkkiBundle:Admin:list_outer_rows_mosaic.html.twig]]
+            - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_items.html.twig]]
+            - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
 
     entropy_tunkki.admin.files:
         class: Entropy\TunkkiBundle\Admin\FileAdmin

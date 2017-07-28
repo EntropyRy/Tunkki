@@ -620,6 +620,24 @@ class Booking
     }
 
     /**
+     * Get RentNotices
+     *
+     * @return string
+     */
+    public function getRentInformation()
+    {
+        $return = '';
+        foreach ($this->getItems() as $item) {
+            $return .= $item->getName().': '.$item->getRentNotice().' ';
+        }
+        foreach ($this->getPakages() as $pakage) {
+            foreach ($pakage->getItems() as $item) {
+                $return .= $item->getName().': '.$item->getRentNotice().' ';
+            }
+        }
+        return $return;
+    }
+    /**
      * Set actualPrice
      *
      * @param string $actualPrice

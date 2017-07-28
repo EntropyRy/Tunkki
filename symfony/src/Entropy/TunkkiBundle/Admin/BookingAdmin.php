@@ -85,6 +85,7 @@ class BookingAdmin extends AbstractAdmin
             ->with('The Stuff', array('class' => 'col-md-6'))
             ->add('items', null, array('expanded' => false))
             ->add('pakages', null, array('expanded' => true))
+            ->add('rentInformation', 'textarea', array('disabled' => true))
             ->end()
             ->with('Payment Information', array('class' => 'col-md-6'))
             ->add('referenceNumber', null, array('disabled' => true))
