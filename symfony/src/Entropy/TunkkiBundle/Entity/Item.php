@@ -863,4 +863,12 @@ class Item
     {
         return $this->rentHistory;
     }
+
+    public function canBeRentedByCondition()
+    {
+        if ($this->getRent() && !$this->getNeedsFixing() && !$this->getForSale() && !$this->gettoSpareParts()){
+            return true;
+        }
+        return false;
+    }
 }

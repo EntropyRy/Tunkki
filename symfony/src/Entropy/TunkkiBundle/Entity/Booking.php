@@ -347,6 +347,9 @@ class Booking
      */
     public function addPakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
     {
+        foreach ($pakage->getItems() as $item){
+            $item->addRentHistory($this);
+        }
         $this->pakages[] = $pakage;
 
         return $this;
@@ -359,6 +362,9 @@ class Booking
      */
     public function removePakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
     {
+        foreach ($pakage->getItems() as $item){
+            $item->rentHistory->removeElement($this);
+        }
         $this->pakages->removeElement($pakage);
     }
 

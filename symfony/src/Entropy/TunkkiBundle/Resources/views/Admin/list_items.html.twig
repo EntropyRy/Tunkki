@@ -29,7 +29,9 @@
 {% endif %}
 
         Condition<hr style="margin: 2px">
-        needs fixing: {{ object|render_list_element(admin.list['needsFixing']) }}<br>
+        {% if not object.canBeRentedByCondition %}
+            <span class="btn-danger">needs fixing:{{ object.canBeRentedByCondition }}</span><br>
+        {% endif %}
         {% set fixh = object.fixinghistory|last %}
         {% if fixh %}
          <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>

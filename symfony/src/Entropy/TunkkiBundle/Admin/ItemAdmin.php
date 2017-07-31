@@ -115,7 +115,7 @@ class ItemAdmin extends AbstractAdmin
                               '1' => 'Everybody', '2' => 'Nobody', 
                               '3' => 'Members', '4' => 'Organizations'
                      ),
-                     'multiple' => true
+                     'multiple' => true, 'expanded' => true
                 ))
                 ->add('rent')
                 ->add('rentNotice', 'textarea', array('required' => false))
@@ -131,9 +131,6 @@ class ItemAdmin extends AbstractAdmin
                         'type_options' => array('delete' => false),
                         'required' => false),
                         array('edit'=>'inline', 'inline'=>'table'))
-                ->add('rentHistory', null, 
-                        ['disabled' => true]
-                     )
             //    ->add('history')
             ->end() 
         ->end()
@@ -153,6 +150,11 @@ class ItemAdmin extends AbstractAdmin
             if($subject->getCreatedAt()){
                 $formMapper
                     ->tab('Meta')
+                    ->with('history')
+                    ->add('rentHistory', null, 
+                        ['disabled' => true]
+                     )
+                    ->end()
                     ->with('Meta')
                         ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
                         ->add('creator', null, array('disabled' => true))

@@ -45,7 +45,7 @@ class Pakage
      *
      * @ORM\Column(name="needs_fixing", type="boolean")
      */
-    private $needsFixing;
+    private $needsFixing = false;
 
     /**
      * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})

@@ -10,4 +10,6 @@ namespace Entropy\TunkkiBundle\Entity;
  */
 class ItemsRepository extends \Doctrine\ORM\EntityRepository
 {
+
+
 }
