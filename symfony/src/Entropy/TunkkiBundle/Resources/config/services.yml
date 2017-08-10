@@ -38,6 +38,9 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\Booking, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
+        calls:
+            - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_bookings.html.twig]]
+            - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
 
     entropy_tunkki.admin.pakage:
         class: Entropy\TunkkiBundle\Admin\PakageAdmin
@@ -50,3 +53,9 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\Invoicee, EntropyTunkkiBundle:InvoiceeAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Invoicee }
+
+    entropy_tunkki.admin.billable_event:
+        class: Entropy\TunkkiBundle\Admin\BillableEventAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\BillableEvent, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: BillableEvent }

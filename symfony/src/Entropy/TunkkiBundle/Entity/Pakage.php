@@ -22,7 +22,7 @@ class Pakage
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="pakages", cascade={"all"})
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="pakages", cascade={"all"}, fetch="EAGER")
      */
     private $items;
 
@@ -241,7 +241,14 @@ class Pakage
     
     public function __toString()
     {
-        return $this->name ? $this->name: 'n/a';
+        $return = $this->name ? $this->name: 'n/a';
+    /*    if ($return != 'n/a'){
+            $return .= ' = ';
+            foreach ($this->getItems() as $item){
+                $return .= $item->getName().', ';
+            }
+        }*/
+        return $return;
     }
 
     /**

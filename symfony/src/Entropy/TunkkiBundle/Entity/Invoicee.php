@@ -45,6 +45,13 @@ class Invoicee
     /**
      * @var string
      *
+     * @ORM\Column(name="organization", type="string", length=255, nullable=true)
+     */
+    private $organization;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="zipcode", type="string", length=255, nullable=true)
      */
     private $zipcode;
@@ -282,5 +289,60 @@ class Invoicee
     public function __toString()
     {
         return ($this->name ? $this->name : 'N/A');
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Set organization
+     *
+     * @param string $organization
+     *
+     * @return Invoicee
+     */
+    public function setOrganization($organization)
+    {
+        $this->organization = $organization;
+
+        return $this;
+    }
+
+    /**
+     * Get organization
+     *
+     * @return string
+     */
+    public function getOrganization()
+    {
+        return $this->organization;
+    }
+
+    /**
+     * Add booking
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Booking $booking
+     *
+     * @return Invoicee
+     */
+    public function addBooking(\Entropy\TunkkiBundle\Entity\Booking $booking)
+    {
+        $this->bookings[] = $booking;
+
+        return $this;
+    }
+
+    /**
+     * Remove booking
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Booking $booking
+     */
+    public function removeBooking(\Entropy\TunkkiBundle\Entity\Booking $booking)
+    {
+        $this->bookings->removeElement($booking);
     }
 }

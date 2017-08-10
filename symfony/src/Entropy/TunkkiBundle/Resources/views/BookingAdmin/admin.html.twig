@@ -1,0 +1,16 @@
+{% extends 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
+
+{% block choice_widget_expanded %}
+   <div {{ block('widget_container_attributes') }}>
+    {%- for child in form %}
+        {{- form_widget(child) -}}
+        {{- form_label(child, 'test', {translation_domain: choice_translation_domain}) -}}
+        {% set entity = form.vars.choices[child.vars.value].data %}
+        <ul>
+            {% for item in entity.items %}
+                <li>{{ item }}</li>
+            {% endfor %} 
+        </ul>
+    {% endfor -%}
+    </div> 
+{% endblock %}

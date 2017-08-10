@@ -91,6 +91,12 @@ class Booking
 
     /**
      *
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\BillableEvent", mappedBy="booking", cascade={"persist"})
+     */
+    private $billableEvents;
+
+    /**
+     *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      */
     private $giver;
@@ -99,6 +105,11 @@ class Booking
      * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2)
      */
     private $actualPrice;
+
+    /**
+     * @ORM\Column(name="numberOfRentDays", type="integer")
+     */
+    private $numberOfRentDays = 1;
 
     /**
      *
@@ -656,5 +667,64 @@ class Booking
     public function getItems()
     {
         return $this->items;
+    }
+
+    /**
+     * Set numberOfRentDays
+     *
+     * @param integer $numberOfRentDays
+     *
+     * @return Booking
+     */
+    public function setNumberOfRentDays($numberOfRentDays)
+    {
+        $this->numberOfRentDays = $numberOfRentDays;
+
+        return $this;
+    }
+
+    /**
+     * Get numberOfRentDays
+     *
+     * @return integer
+     */
+    public function getNumberOfRentDays()
+    {
+        return $this->numberOfRentDays;
+    }
+
+    /**
+     * Add billableEvent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\BillableEvent $billableEvent
+     *
+     * @return Booking
+     */
+    public function addBillableEvent(\Entropy\TunkkiBundle\Entity\BillableEvent $billableEvent)
+    {
+        $billableEvent->setBooking($this);
+        $this->billableEvents[] = $billableEvent;
+
+        return $this;
+    }
+
+    /**
+     * Remove billableEvent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\BillableEvent $billableEvent
+     */
+    public function removeBillableEvent(\Entropy\TunkkiBundle\Entity\BillableEvent $billableEvent)
+    {
+        $this->billableEvents->removeElement($billableEvent);
+    }
+
+    /**
+     * Get billableEvents
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBillableEvents()
+    {
+        return $this->billableEvents;
     }
 }

@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class InvoiceeAdmin extends AbstractAdmin
+class BillableEventAdmin extends AbstractAdmin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -16,14 +16,8 @@ class InvoiceeAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('name')
-            ->add('organization')
-            ->add('streetadress')
-            ->add('zipcode')
-            ->add('city')
-            ->add('phone')
-            ->add('email')
-            ->add('note')
+            ->add('description')
+            ->add('unitPrice')
         ;
     }
 
@@ -33,14 +27,8 @@ class InvoiceeAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('name')
-            ->add('phone')
-            ->add('email')
-            ->add('organization')
-            ->add('streetadress')
-            ->add('zipcode')
-            ->add('city')
-            ->add('note')
+            ->add('description')
+            ->add('unitPrice')
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
@@ -57,14 +45,8 @@ class InvoiceeAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name')
-            ->add('phone')
-            ->add('email')
-            ->add('organization')
-            ->add('streetadress')
-            ->add('zipcode')
-            ->add('city')
-            ->add('note')
+            ->add('description')
+            ->add('unitPrice')
         ;
     }
 
@@ -74,14 +56,8 @@ class InvoiceeAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
-            ->add('name')
-            ->add('phone')
-            ->add('email')
-            ->add('organization')
-            ->add('streetadress')
-            ->add('zipcode')
-            ->add('city')
-            ->add('note')
+            ->add('description')
+            ->add('unitPrice')
         ;
     }
 }

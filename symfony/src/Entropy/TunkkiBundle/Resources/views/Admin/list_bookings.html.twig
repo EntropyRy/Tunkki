@@ -1,0 +1,28 @@
+{% extends 'SonataAdminBundle:CRUD:base_list_flat_inner_row.html.twig' %}
+
+{% block row %}
+<div class="col-md-5">
+    {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['bookingDate']) }}<br>
+    <small>
+        {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
+    Invoicee: {{ object|render_list_element(admin.list['invoicee']) }}<br>
+    Giver: {{ object.giver }}
+    </small>
+</div>
+<div class="col-md-5">
+        {% for item in object.items %}
+            {% if item.canBeRentedByCondition %}
+                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
+            {% endif %}
+        {% endfor %}
+        {% for pakage in object.pakages %}
+            {% for item in pakage.itemsNeedingFixing %}
+                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
+            {% endfor %}
+        {% endfor %}
+</div>
+<div class="col-md-2">
+    {{ object.actualPrice }}€<br>
+    Paid: {{ object|render_list_element(admin.list['paid']) }}
+</div>
+{% endblock %}

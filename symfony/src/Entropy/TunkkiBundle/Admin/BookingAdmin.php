@@ -44,7 +44,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('referenceNumber')
-            ->add('name')
+            ->addIdentifier('name')
             ->add('invoicee')
             ->add('bookingDate')
             ->add('retrieval')
@@ -71,32 +71,38 @@ class BookingAdmin extends AbstractAdmin
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-3'))
-            ->add('name')
-            ->add('bookingDate', 'sonata_type_date_picker')
-            ->add('retrieval', 'sonata_type_datetime_picker')
-            ->add('returning', 'sonata_type_datetime_picker')
+                ->add('name')
+                ->add('bookingDate', 'sonata_type_date_picker')
+                ->add('retrieval', 'sonata_type_datetime_picker')
+                ->add('returning', 'sonata_type_datetime_picker')
             ->end()
             ->with('Persons', array('class' => 'col-md-9'))
-            ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
-            ->add('giver', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'Remove association'))
+                ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
+                ->add('giver', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'Remove association'))
             ->end()
             ->end()
             ->tab('Rentals')
             ->with('The Stuff', array('class' => 'col-md-6'))
-            ->add('items', null, array('expanded' => false, 'by_reference' => false))
-            ->add('pakages', null, array('expanded' => true))
-            ->add('rentInformation', 'textarea', array('disabled' => true))
+                ->add('items', null, array('expanded' => false, 'by_reference' => false))
+                ->add('pakages', null, array('expanded' => true))
+                ->add('rentInformation', 'textarea', array('disabled' => true))
             ->end()
             ->with('Payment Information', array('class' => 'col-md-6'))
-            ->add('referenceNumber', null, array('disabled' => true))
-            ->add('calculatedTotalPrice', 'text', array('disabled' => true))
-            ->add('actualPrice', null, array('disabled' => false, 'required' => false))
+                ->add('referenceNumber', null, array('disabled' => true))
+                ->add('calculatedTotalPrice', 'text', array('disabled' => true))
+                ->add('numberOfRentDays', null, array('help' => 'How many days are actually billed', 'disabled' => false, 'required' => true))
+                ->add('actualPrice', null, array('disabled' => false, 'required' => false))
+            ->end()
+            ->with('Events', array('class' => 'col-md-12'))
+                ->add('returned')
+                ->add('billableEvents', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
+                    array('edit' => 'inline', 'inline' => 'table')
+                )
+                ->add('paid')
+                ->add('paid_date', 'sonata_type_datetime_picker', array('disabled' => false, 'required' => false))
             ->end()
             ->end()
             ->tab('Meta')
-                ->add('returned')
-                ->add('paid')
-                ->add('paid_date', 'sonata_type_datetime_picker', array('disabled' => false, 'required' => false))
                 ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
                 ->add('creator', null, array('disabled' => true))
                 ->add('modifiedAt', 'sonata_type_datetime_picker', array('disabled' => true))
@@ -152,5 +158,13 @@ class BookingAdmin extends AbstractAdmin
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $booking->setModifier($user);
-    }    
+    } 
+  
+    public function getFormTheme()
+    {
+        return array_merge(
+            parent::getFormTheme(),
+            array('EntropyTunkkiBundle:BookingAdmin:admin.html.twig')
+        );
+    } 
 }
