@@ -63,6 +63,7 @@ sonata_admin:
                 items:
                     - sonata.classification.admin.tag
                     - sonata.classification.admin.context
+                    - sonata.classification.admin.category
                     - sonata.classification.admin.collection
 
             sonata.admin.group.content:
