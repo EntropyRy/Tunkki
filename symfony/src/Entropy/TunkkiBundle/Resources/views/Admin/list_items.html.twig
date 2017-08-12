@@ -16,22 +16,28 @@
 {% endif %}
 </div>
 <div class="col-md-4">
-    {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['tags']) }}<br>
+    {{ object|render_list_element(admin.list['name']) }} 
+        {% if object.categories is not empty %}
+            - 
+            {% for category in object.categories %}
+                {{ category }}
+            {% endfor %}
+        {% endif %}
+        <br>
     <small>
         {{ object.description|truncate(150) }}
     </small>
-
 </div>
 {% if object.rent %}
 <div class="col-md-3">
 {% else %}
 <div class="col-md-6">
 {% endif %}
-
-        Condition<hr style="margin: 2px">
+        Condition
         {% if not object.canBeRentedByCondition %}
-            <span class="btn-danger">needs fixing:{{ object.canBeRentedByCondition }}</span><br>
+            <span class="btn-danger pull-right">needs fixing</span><br>
         {% endif %}
+        <hr style="margin: 2px">
         {% set fixh = object.fixinghistory|last %}
         {% if fixh %}
          <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>

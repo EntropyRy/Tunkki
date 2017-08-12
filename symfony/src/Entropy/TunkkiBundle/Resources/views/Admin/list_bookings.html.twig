@@ -22,7 +22,8 @@
         {% endfor %}
 </div>
 <div class="col-md-2">
-    {{ object.actualPrice }}€<br>
-    Paid: {{ object|render_list_element(admin.list['paid']) }}
+    Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
+    Paid: {{ object|render_list_element(admin.list['paid']) }}<br>
+    Price: {{ object.actualPrice }}€<br>
 </div>
 {% endblock %}

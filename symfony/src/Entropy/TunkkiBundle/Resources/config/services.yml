@@ -59,3 +59,14 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\BillableEvent, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: BillableEvent }
+
+    entropy_tunkki.block.bookings:
+        class: Entropy\TunkkiBundle\Block\BookingsBlock
+        arguments: # Nämä kaikki välitetään classin _construct functiolle
+            - "Booking Block" # Tämä on blockin nimi adminissa
+            - "@templating" # teplate
+            - "@doctrine.orm.entity_manager" # Entity manager blockin käyttöön
+            - "@service_container" # service container
+        tags:
+            - { name: sonata.block, alias: bookingblock }
+

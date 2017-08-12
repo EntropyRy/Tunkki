@@ -79,6 +79,16 @@ class Item
     private $whoCanRent;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Category", cascade={"persist"})
+     * @ORM\JoinTable(
+     *      name="Item_categories",
+     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
+     * )
+     */
+    private $categories;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})
      * @ORM\JoinTable(
      *      name="Item_tags",
@@ -866,9 +876,43 @@ class Item
 
     public function canBeRentedByCondition()
     {
-        if ($this->getRent() && !$this->getNeedsFixing() && !$this->getForSale() && !$this->gettoSpareParts()){
-            return true;
+        if ($this->getRent() > 0 && empty($this->getNeedsFixing()) && empty($this->getForSale()) && empty($this->getToSpareParts())){
+            return false;
         }
-        return false;
+        return true;
+    }
+
+    /**
+     * Add category
+     *
+     * @param \Application\Sonata\ClassificationBundle\Entity\Category $category
+     *
+     * @return Item
+     */
+    public function addCategory(\Application\Sonata\ClassificationBundle\Entity\Category $category)
+    {
+        $this->categories[] = $category;
+
+        return $this;
+    }
+
+    /**
+     * Remove category
+     *
+     * @param \Application\Sonata\ClassificationBundle\Entity\Category $category
+     */
+    public function removeCategory(\Application\Sonata\ClassificationBundle\Entity\Category $category)
+    {
+        $this->categories->removeElement($category);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }

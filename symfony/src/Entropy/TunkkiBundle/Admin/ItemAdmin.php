@@ -29,6 +29,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('rentNotice')
             ->add('toSpareParts')
             ->add('needsFixing')
+            ->add('categories', null, array('field_options' => array('expanded' => false, 'multiple' => true)) )
             //->add('rentHistory')
             //->add('history')
             ->add('forSale')
@@ -108,6 +109,7 @@ class ItemAdmin extends AbstractAdmin
                     'required' => false,
                     'minimum_input_length' => 2
                 ))
+                ->add('categories')
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
                 ->add('whoCanRent', 'choice', array(

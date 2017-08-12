@@ -25,3 +25,5 @@ sonata_block:
         sonata_translation.block.locale_switcher:
             contexts:   [admin]
         # Your other blocks
+        entropy_tunkki.block.bookings:
+            contexts:   [admin]
