@@ -8,9 +8,17 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
+use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
+use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
+use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
+use Application\Sonata\ClassificationBundle\Entity\Category;
 
 class ItemAdmin extends AbstractAdmin
 {
+
+    protected $categoryManager;
+
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -29,7 +37,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('rentNotice')
             ->add('toSpareParts')
             ->add('needsFixing')
-            ->add('categories', null, array('field_options' => array('expanded' => false, 'multiple' => true)) )
+            ->add('category', null, array('field_options' => array('expanded' => false, 'multiple' => true)) )
             //->add('rentHistory')
             //->add('history')
             ->add('forSale')
@@ -92,6 +100,9 @@ class ItemAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $context = 'item';
+        $currentContext = $this->getConfigurationPool()->getContainer()->get('sonata.classification.manager.context')->find($context);
+
         $formMapper
 //            ->add('id')
         ->tab('General')
@@ -109,7 +120,16 @@ class ItemAdmin extends AbstractAdmin
                     'required' => false,
                     'minimum_input_length' => 2
                 ))
-                ->add('categories')
+              ->add('category', 'Sonata\ClassificationBundle\Form\Type\CategorySelectorType', array(
+                        'class' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getClass(),
+                        'required' => false,
+                        'by_reference' => false,
+                        'context' => $currentContext,
+                        'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
+                        'category' => $this->getSubject()->getCategory() ? $this->getSubject()->getCategory() : new Category,
+                        'placeholder' => $this->getSubject()->getCategory(),
+                        'btn_add' => false
+                    ))
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
                 ->add('whoCanRent', 'choice', array(
@@ -224,6 +244,9 @@ class ItemAdmin extends AbstractAdmin
     }
     public function preUpdate($Item)
     {
+        if (is_int($Item->getCategory())){
+            $Item->setCategory($this->categoryManager->findOneBy(array('id' => $Item->getCategory())));
+        }
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
@@ -263,5 +286,11 @@ class ItemAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
+    }
+
+    public function __construct($code, $class, $baseControllerName, $categoryManager=null)
+    {
+        parent::__construct($code, $class, $baseControllerName);
+        $this->categoryManager = $categoryManager;  
     }
 }

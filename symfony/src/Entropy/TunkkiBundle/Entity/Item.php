@@ -79,14 +79,14 @@ class Item
     private $whoCanRent;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Category", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Application\Sonata\ClassificationBundle\Entity\Category", cascade={"persist"})
      * @ORM\JoinTable(
-     *      name="Item_categories",
+     *      name="Item_category",
      *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
      * )
      */
-    private $categories;
+    private $category;
 
     /**
      * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})
@@ -882,37 +882,29 @@ class Item
         return true;
     }
 
+
+
     /**
-     * Add category
+     * Set category
      *
      * @param \Application\Sonata\ClassificationBundle\Entity\Category $category
      *
      * @return Item
      */
-    public function addCategory(\Application\Sonata\ClassificationBundle\Entity\Category $category)
+    public function setCategory(\Application\Sonata\ClassificationBundle\Entity\Category $category = null)
     {
-        $this->categories[] = $category;
+        $this->category = $category;
 
         return $this;
     }
 
     /**
-     * Remove category
+     * Get category
      *
-     * @param \Application\Sonata\ClassificationBundle\Entity\Category $category
+     * @return \Application\Sonata\ClassificationBundle\Entity\Category
      */
-    public function removeCategory(\Application\Sonata\ClassificationBundle\Entity\Category $category)
+    public function getCategory()
     {
-        $this->categories->removeElement($category);
-    }
-
-    /**
-     * Get categories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
+        return $this->category;
     }
 }

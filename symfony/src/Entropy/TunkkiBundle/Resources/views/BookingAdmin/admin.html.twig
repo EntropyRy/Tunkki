@@ -3,14 +3,26 @@
 {% block choice_widget_expanded %}
    <div {{ block('widget_container_attributes') }}>
     {%- for child in form %}
-        {{- form_widget(child) -}}
-        {{- form_label(child, 'test', {translation_domain: choice_translation_domain}) -}}
         {% set entity = form.vars.choices[child.vars.value].data %}
-        <ul>
-            {% for item in entity.items %}
-                <li>{{ item }}</li>
-            {% endfor %} 
-        </ul>
+        <div class="box box-solid collapsed-box">
+            <div class="box-header" style="padding: 0px;">
+                <span>
+                    {{- form_widget(child) -}}
+                    {{- form_label(child, {translation_domain: choice_translation_domain}) -}}
+                </span>
+                <div class="box-tools pull-right">
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i>Show Contents</button>
+                </div>
+            </div>
+            <div style="display: none;" class="box-body">
+            <ul>
+                {% for item in entity.items %}
+                    <li>{{ item }}</li>
+                {% endfor %} 
+            </ul>
+            Note: {{ entity.notes }}
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->          
     {% endfor -%}
     </div> 
 {% endblock %}
