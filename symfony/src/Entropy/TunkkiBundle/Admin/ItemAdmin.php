@@ -17,8 +17,6 @@ use Application\Sonata\ClassificationBundle\Entity\Category;
 class ItemAdmin extends AbstractAdmin
 {
 
-    protected $categoryManager;
-
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -244,9 +242,6 @@ class ItemAdmin extends AbstractAdmin
     }
     public function preUpdate($Item)
     {
-        if (is_int($Item->getCategory())){
-            $Item->setCategory($this->categoryManager->findOneBy(array('id' => $Item->getCategory())));
-        }
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
@@ -291,6 +286,5 @@ class ItemAdmin extends AbstractAdmin
     public function __construct($code, $class, $baseControllerName, $categoryManager=null)
     {
         parent::__construct($code, $class, $baseControllerName);
-        $this->categoryManager = $categoryManager;  
     }
 }
