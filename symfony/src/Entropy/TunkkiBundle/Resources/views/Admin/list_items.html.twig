@@ -18,10 +18,10 @@
 <div class="col-md-4">
     {{ object|render_list_element(admin.list['name']) }}<br> 
         {% if object.category is not empty %}
-            {% if object.category.parent.parent is not empty %}
-                {{ object.category.parent.parent }} -
-            {% endif %}
             {% if object.category.parent is not empty %}
+                {% if object.category.parent.parent is not empty %}
+                    {{ object.category.parent.parent }} -
+                {% endif %}
                 {{ object.category.parent }} -
             {% endif %}
                 {{ object.category }}
@@ -36,14 +36,13 @@
 {% else %}
 <div class="col-md-6">
 {% endif %}
-        Condition
         {% if not object.canBeRentedByCondition %}
-            <span class="btn-danger pull-right">needs fixing</span><br>
-        {% endif %}
+        Condition  <span class="btn-danger pull-right">needs fixing</span><br>
         <hr style="margin: 2px">
         {% set fixh = object.fixinghistory|last %}
-        {% if fixh %}
-         <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
+            {% if fixh %}
+             <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
+            {% endif %}
         {% endif %}
 </div>
 {% if object.rent %}

@@ -876,10 +876,10 @@ class Item
 
     public function canBeRentedByCondition()
     {
-        if ($this->getRent() > 0 && empty($this->getNeedsFixing()) && empty($this->getForSale()) && empty($this->getToSpareParts())){
-            return false;
+        if (empty($this->getNeedsFixing()) && empty($this->getForSale()) && empty($this->getToSpareParts())){
+            return true;
         }
-        return true;
+        return false;
     }
 
 
