@@ -70,3 +70,8 @@ services:
         tags:
             - { name: sonata.block, alias: bookingblock }
 
+    entropy_tunkki.admin.who_can_rent_choice:
+        class: Entropy\TunkkiBundle\Admin\WhoCanRentChoiceAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoice }

@@ -130,12 +130,10 @@ class ItemAdmin extends AbstractAdmin
                     ))
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
-                ->add('whoCanRent', 'choice', array(
-                     'choices'=> array(
-                              '1' => 'Everybody', '2' => 'Nobody', 
-                              '3' => 'Members', '4' => 'Organizations'
-                     ),
-                     'multiple' => true, 'expanded' => true
+                ->add('whoCanRent', null, array(
+                    'multiple' => true, 
+                    'expanded' => true,
+                    'help' => 'Select all fitting groups!'
                 ))
                 ->add('rent')
                 ->add('rentNotice', 'textarea', array('required' => false))

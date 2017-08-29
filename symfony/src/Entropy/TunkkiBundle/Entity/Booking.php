@@ -85,6 +85,12 @@ class Booking
 
     /**
      *
+     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\WhoCanRentChoice", cascade={"persist"})
+     */
+    private $rentingPrivileges;
+
+    /**
+     *
      * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", inversedBy="bookings")
      */
     private $invoicee;
@@ -726,5 +732,30 @@ class Booking
     public function getBillableEvents()
     {
         return $this->billableEvents;
+    }
+
+
+    /**
+     * Set rentingPrivileges
+     *
+     * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $rentingPrivileges
+     *
+     * @return Booking
+     */
+    public function setRentingPrivileges(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $rentingPrivileges = null)
+    {
+        $this->rentingPrivileges = $rentingPrivileges;
+
+        return $this;
+    }
+
+    /**
+     * Get rentingPrivileges
+     *
+     * @return \Entropy\TunkkiBundle\Entity\WhoCanRentChoice
+     */
+    public function getRentingPrivileges()
+    {
+        return $this->rentingPrivileges;
     }
 }

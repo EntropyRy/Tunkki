@@ -72,9 +72,8 @@ class Item
     private $description;
 
     /**
-     * @var simple_array
      *
-     * @ORM\Column(name="WhoCanRent", type="simple_array", length=255, nullable=true)
+     * @ORM\ManyToMany(targetEntity="Entropy\TunkkiBundle\Entity\WhoCanRentChoice", cascade={"persist"})
      */
     private $whoCanRent;
 
@@ -696,30 +695,6 @@ class Item
     }
 
     /**
-     * Set whoCanRent
-     *
-     * @param array $whoCanRent
-     *
-     * @return Item
-     */
-    public function setWhoCanRent($whoCanRent)
-    {
-        $this->whoCanRent = $whoCanRent;
-
-        return $this;
-    }
-
-    /**
-     * Get whoCanRent
-     *
-     * @return array
-     */
-    public function getWhoCanRent()
-    {
-        return $this->whoCanRent;
-    }
-
-    /**
      * Set creator
      *
      * @param \Application\Sonata\UserBundle\Entity\User $creator
@@ -906,5 +881,39 @@ class Item
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Add whoCanRent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent
+     *
+     * @return Item
+     */
+    public function addWhoCanRent(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent)
+    {
+        $this->whoCanRent[] = $whoCanRent;
+
+        return $this;
+    }
+
+    /**
+     * Remove whoCanRent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent
+     */
+    public function removeWhoCanRent(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent)
+    {
+        $this->whoCanRent->removeElement($whoCanRent);
+    }
+
+    /**
+     * Get whoCanRent
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWhoCanRent()
+    {
+        return $this->whoCanRent;
     }
 }

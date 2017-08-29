@@ -50,18 +50,7 @@
         Rent info<hr style="margin: 2px">
         For:
         {% for who in object.whocanrent %}
-            {% if who=="1" %}
-                Everybody
-            {% endif %}
-            {% if who=="2" %}
-                Nobody
-            {% endif %}
-            {% if who=="3" %}
-                Members
-            {% endif %}
-            {% if who=="4" %}
-                Organizations
-            {% endif %}
+            {{ who }}
         {% endfor %}
         <span class="pull-right">{{ object.rent }} €</span><br>
     <small>
