@@ -126,13 +126,19 @@ class BookingAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
-            ->add('invoicee')
-            ->add('items')
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
+            ->add('invoicee')
+            ->add('items')
+            ->add('pakages')
             ->add('creator')
-            ->add('createdAt')
+            ->add('referenceNumber')
+            ->add('actualPrice')
+            ->add('returned')
+            ->add('billableEvents')
+            ->add('paid')
+            ->add('paid_date')
             ->add('modifier')
             ->add('modifiedAt')
         ;

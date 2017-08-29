@@ -279,4 +279,21 @@ class Pakage
         }
         return $needsfix;
     }
+
+    /**
+     * Get somethingBroken
+     *
+     * @return boolean
+     */
+    public function getIsSomethingBroken()
+    {
+        if($this->getItems()){
+            foreach ($this->getItems() as $item) {
+                if($item->getNeedsFixing() == true){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

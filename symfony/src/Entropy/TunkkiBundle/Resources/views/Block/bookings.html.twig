@@ -1,4 +1,59 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-    <h2>Bookings</h2>
+<div class="box">
+    <div class="box-header">
+        <h3 class="box-title">Future Bookings</h3>
+    </div>
+    <div class="box-body">
+    {% for booking in bookings %}
+        <div class="box box-solid collapsed-box">
+            <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
+                <a href="{{ path('admin_entropy_tunkki_booking_show', {'id':booking.id}) }}">{{ booking.name }} -
+                {{ booking.bookingdate|date('d.m.Y') }}</a>
+                {% if booking.IsSomethingBroken %}Something is Broken!!{% endif %}
+                <div class="box-tools pull-right">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_edit', {'id':booking.id}) }}">
+                        <i class="fa fa-pencil-square-o"></i>edit
+                    </a>
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i>Show Contents</button>
+                </div>
+            </div>
+            <div style="display: none;" class="box-body">
+                <div class="row">
+                    <div class="col-md-6">
+                    <h3>{{ booking.giver }}</h3>
+                    <div>Retrieval: {{ booking.retrieval|date('d.m.Y H:i') }}</div>
+                    <div>Returning: {{ booking.returning|date('d.m.Y H:i') }}</div>
+                    </div>
+                    <div class="col-md-6">
+                    {% if booking.items is not empty %}
+                        Items:
+                        <ul>
+                        {% for item in booking.items %}
+                            <li class="
+                                {% if item.needsFixing %}btn-danger{% endif %}   
+                            ">{{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if booking.pakages is not empty %}
+                        {% for pakage in booking.pakages %}
+                            Pakage: {{ pakage }}
+                            <ul>
+                            {% for item in pakage.items %}
+                                <li class="
+                                    {% if item.needsFixing %}btn-danger{% endif %}   
+                                ">{{ item }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endfor %}
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {{ dump(bookings)}}
+    </div>
+</div>        
 {% endblock %}

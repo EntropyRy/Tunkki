@@ -588,6 +588,29 @@ class Booking
     }
 
     /**
+     * Get somethingBroken
+     *
+     * @return boolean
+     */
+    public function getIsSomethingBroken()
+    {
+        if ($this->getItems()){
+            foreach ($this->getItems() as $item) {
+                if($item->getNeedsFixing()==true){
+                    return true;
+                }
+            }
+        }
+        if ($this->getPakages()){
+            foreach ($this->getPakages() as $pakage) {
+                if($pakage->getIsSomethingBroken()){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    /**
      * Get RentNotices
      *
      * @return string
