@@ -58,7 +58,7 @@ services:
         class: Entropy\TunkkiBundle\Admin\BillableEventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\BillableEvent, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: BillableEvent }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Billable Events }
 
     entropy_tunkki.block.bookings:
         class: Entropy\TunkkiBundle\Block\BookingsBlock
@@ -74,4 +74,18 @@ services:
         class: Entropy\TunkkiBundle\Admin\WhoCanRentChoiceAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoice }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoices }
+
+    entropy_tunkki.admin.accessory:
+        class: Entropy\TunkkiBundle\Admin\AccessoryAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Accessory, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Accessory }
+        public: true
+
+    entropy_tunkki.admin.accessory_choices:
+        class: Entropy\TunkkiBundle\Admin\AccessoryChoiceAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\AccessoryChoice, SonataAdminBundle:CRUD]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: AccessoryChoices }
+        public: true

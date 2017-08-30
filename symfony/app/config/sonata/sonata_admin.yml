@@ -57,8 +57,15 @@ sonata_admin:
                     - entropy_tunkki.admin.booking
                     - entropy_tunkki.admin.pakage
                     - entropy_tunkki.admin.invoicee
+
+            sonata.admin.group.rental.admin:
+                label:           RentalAdmin
+                label_catalogue: EntropyTunkkiBundle
+                items:
                     - entropy_tunkki.admin.who_can_rent_choice
                     - entropy_tunkki.admin.billable_event
+                    #- entropy_tunkki.admin.accessory
+                    - entropy_tunkki.admin.accessory_choices
 
             sonata.admin.group.classifiaction:
                 label:           Classification 

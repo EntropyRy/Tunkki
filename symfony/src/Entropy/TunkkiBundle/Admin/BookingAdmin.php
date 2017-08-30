@@ -90,6 +90,9 @@ class BookingAdmin extends AbstractAdmin
                 ->with('The Stuff', array('class' => 'col-md-6'))
                     ->add('items', null, array('expanded' => false, 'by_reference' => false))
                     ->add('pakages', null, array('expanded' => true))
+                    ->add('accessories', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
+                        array('edit' => 'inline', 'inline' => 'table')
+                    )
                     ->add('rentInformation', 'textarea', array('disabled' => true))
                 ->end()
                 ->with('Payment Information', array('class' => 'col-md-6'))

@@ -85,6 +85,12 @@ class Booking
 
     /**
      *
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Accessory", cascade={"persist"})
+     */
+    private $accessories;
+
+    /**
+     *
      * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\WhoCanRentChoice", cascade={"persist"})
      */
     private $rentingPrivileges;
@@ -780,5 +786,39 @@ class Booking
     public function getRentingPrivileges()
     {
         return $this->rentingPrivileges;
+    }
+
+    /**
+     * Add accessory
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Accessory $accessory
+     *
+     * @return Booking
+     */
+    public function addAccessory(\Entropy\TunkkiBundle\Entity\Accessory $accessory)
+    {
+        $this->accessories[] = $accessory;
+
+        return $this;
+    }
+
+    /**
+     * Remove accessory
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Accessory $accessory
+     */
+    public function removeAccessory(\Entropy\TunkkiBundle\Entity\Accessory $accessory)
+    {
+        $this->accessories->removeElement($accessory);
+    }
+
+    /**
+     * Get accessories
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAccessories()
+    {
+        return $this->accessories;
     }
 }

@@ -11,7 +11,7 @@
 </div>
 <div class="col-md-5">
         {% for item in object.items %}
-            {% if item.canBeRentedByCondition %}
+            {% if not item.canBeRentedByCondition %}
                 <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
             {% endif %}
         {% endfor %}
