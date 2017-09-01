@@ -255,11 +255,12 @@ class ItemAdmin extends AbstractAdmin
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
             $text = 'updeted to be broken';
+            $this->SendToMattermost($Item, $username, $text);
         }
         if($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
             $text = 'updated to be fixed';
+            $this->SendToMattermost($Item, $username, $text);
         }
-        $this->SendToMattermost($Item, $username, $text);
     }
     public function SendToMattermost($Item, $username, $text)
     {
