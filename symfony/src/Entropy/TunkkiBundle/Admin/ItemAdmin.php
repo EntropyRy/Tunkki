@@ -251,7 +251,15 @@ class ItemAdmin extends AbstractAdmin
                 $history->setModifier($user);
             }
         }
-        $this->SendToMattermost($Item, $username, 'updated');
+        $em = $this->getModelManager()->getEntityManager($this->getClass());
+        $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
+        if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
+            $text = 'updeted to be broken';
+        }
+        if($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
+            $text = 'updated to be fixed';
+        }
+        $this->SendToMattermost($Item, $username, $text);
     }
     public function SendToMattermost($Item, $username, $text)
     {
@@ -262,7 +270,8 @@ class ItemAdmin extends AbstractAdmin
         
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'",
-            "text":"#### <'.$add_url.'/'.$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
+            "text":"#### <'
+                .$add_url.'/'.$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
         $cOptArr = array (
             CURLOPT_URL => $xcURL,
             CURLOPT_TIMEOUT => 10,
