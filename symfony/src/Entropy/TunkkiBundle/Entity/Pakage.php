@@ -58,6 +58,12 @@ class Pakage
     private $tags;
 
     /**
+     *
+     * @ORM\ManyToMany(targetEntity="Entropy\TunkkiBundle\Entity\WhoCanRentChoice", cascade={"persist"})
+     */
+    private $whoCanRent;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="notes", type="text", nullable=true)
@@ -295,5 +301,39 @@ class Pakage
             }
         }
         return false;
+    }
+
+    /**
+     * Add whoCanRent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent
+     *
+     * @return Pakage
+     */
+    public function addWhoCanRent(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent)
+    {
+        $this->whoCanRent[] = $whoCanRent;
+
+        return $this;
+    }
+
+    /**
+     * Remove whoCanRent
+     *
+     * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent
+     */
+    public function removeWhoCanRent(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent)
+    {
+        $this->whoCanRent->removeElement($whoCanRent);
+    }
+
+    /**
+     * Get whoCanRent
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getWhoCanRent()
+    {
+        return $this->whoCanRent;
     }
 }
