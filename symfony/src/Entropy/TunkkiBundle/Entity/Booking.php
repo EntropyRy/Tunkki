@@ -111,7 +111,13 @@ class Booking
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      */
-    private $giver;
+    private $givenAwayBy;
+
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     */
+    private $receivedBy;
 
     /**
      * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2)
@@ -527,30 +533,6 @@ class Booking
     }
 
     /**
-     * Set giver
-     *
-     * @param \Application\Sonata\UserBundle\Entity\User $giver
-     *
-     * @return Booking
-     */
-    public function setGiver(\Application\Sonata\UserBundle\Entity\User $giver = null)
-    {
-        $this->giver = $giver;
-
-        return $this;
-    }
-
-    /**
-     * Get giver
-     *
-     * @return \Application\Sonata\UserBundle\Entity\User
-     */
-    public function getGiver()
-    {
-        return $this->giver;
-    }
-
-    /**
      * Set paidDate
      *
      * @param \DateTime $paidDate
@@ -820,5 +802,54 @@ class Booking
     public function getAccessories()
     {
         return $this->accessories;
+    }
+
+    /**
+     * Set givenAwayBy
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $givenAwayBy
+     *
+     * @return Booking
+     */
+    public function setGivenAwayBy(\Application\Sonata\UserBundle\Entity\User $givenAwayBy = null)
+    {
+        $this->givenAwayBy = $givenAwayBy;
+
+        return $this;
+    }
+
+    /**
+     * Get givenAwayBy
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getGivenAwayBy()
+    {
+        return $this->givenAwayBy;
+    }
+
+
+    /**
+     * Set receivedBy
+     *
+     * @param \Application\Sonata\UserBundle\Entity\User $receivedBy
+     *
+     * @return Booking
+     */
+    public function setReceivedBy(\Application\Sonata\UserBundle\Entity\User $receivedBy = null)
+    {
+        $this->receivedBy = $receivedBy;
+
+        return $this;
+    }
+
+    /**
+     * Get receivedBy
+     *
+     * @return \Application\Sonata\UserBundle\Entity\User
+     */
+    public function getReceivedBy()
+    {
+        return $this->receivedBy;
     }
 }

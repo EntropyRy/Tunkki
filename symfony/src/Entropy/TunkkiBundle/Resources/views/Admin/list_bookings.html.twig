@@ -6,7 +6,8 @@
     <small>
         {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
     Invoicee: {{ object|render_list_element(admin.list['invoicee']) }}<br>
-    Giver: {{ object.giver }}
+    Given Away by: {{ object.givenAwayBy }}
+    Recived by: {{ object.ReceivedBy }}
     </small>
 </div>
 <div class="col-md-5">

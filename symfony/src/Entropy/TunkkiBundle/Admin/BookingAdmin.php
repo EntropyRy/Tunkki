@@ -68,18 +68,39 @@ class BookingAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $em = $this->modelManager->getEntityManager('Entropy\TunkkiBundle\Entity\Item');
+
+        $subject = $this->getSubject();
+        if (!empty($subject->getName())) {
+            $forWho = $subject->getRentingPrivileges();
+            $retrieval = $subject->getRetrieval();
+            $returning = $subject->getReturning();
+        }
+
+        $items = $em->createQueryBuilder('c')
+                ->select('c')
+                ->from('EntropyTunkkiBundle:Item', 'c')
+                ->where('c.needsFixing == false')
+          //      ->andwhere('c.Retrieval < :retrieval')
+          //      ->andwhere('c.Returning > :returning')
+          //      ->setParameter('retrieval', $retrieval)
+          //      ->setParameter('returning', $returning)
+                
+                ;
+    
         $formMapper
             ->tab('General')
-            ->with('Booking', array('class' => 'col-md-3'))
+            ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
                 ->add('bookingDate', 'sonata_type_date_picker')
                 ->add('retrieval', 'sonata_type_datetime_picker')
+                ->add('givenAwayBy', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'unassign'))
                 ->add('returning', 'sonata_type_datetime_picker')
+                ->add('receivedBy', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'unassign'))
             ->end()
-            ->with('Persons', array('class' => 'col-md-9'))
-                ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'Remove association'))
+            ->with('Who is Renting?', array('class' => 'col-md-6'))
+                ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'unassign'))
                 ->add('rentingPrivileges', null, array('help' => 'Only items that are in this group are shown'))
-                ->add('giver', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'Remove association'))
             ->end()
             ->end();
 
@@ -88,8 +109,20 @@ class BookingAdmin extends AbstractAdmin
             $formMapper 
                 ->tab('Rentals')
                 ->with('The Stuff', array('class' => 'col-md-6'))
-                    ->add('items', null, array('expanded' => false, 'by_reference' => false))
-                    ->add('pakages', null, array('expanded' => true))
+                    ->add('items', 'sonata_type_model', array(
+                        'query' => $items, 
+                        'multiple' => true, 
+                        'expanded' => false, 
+                        'by_reference' => false,
+                        'btn_add' => false
+                    ))
+                    ->add('pakages', null, array( //'sonata_type_model', array(
+ //                       'query' => $pakages, 
+                        'multiple' => true, 
+                        'expanded' => true, 
+                        'by_reference' => false,
+                       // 'btn_add' => false
+                    ))
                     ->add('accessories', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
