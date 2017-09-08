@@ -80,7 +80,7 @@ class BookingAdmin extends AbstractAdmin
         $items = $em->createQueryBuilder('c')
                 ->select('c')
                 ->from('EntropyTunkkiBundle:Item', 'c')
-                ->where('c.needsFixing == false')
+                ->where('c.needsFixing = false')
           //      ->andwhere('c.Retrieval < :retrieval')
           //      ->andwhere('c.Returning > :returning')
           //      ->setParameter('retrieval', $retrieval)
