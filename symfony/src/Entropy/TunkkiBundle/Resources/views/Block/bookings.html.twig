@@ -20,12 +20,11 @@
             </div>
             <div style="display: none;" class="box-body">
                 <div class="row">
-                    <div class="col-md-6">
-                    <h3>{{ booking.givenAwayBy }}</h3>
-                    <div>Retrieval: {{ booking.retrieval|date('d.m.Y H:i') }}</div>
-                    <div>Returning: {{ booking.returning|date('d.m.Y H:i') }}</div>
+                    <div class="col-md-5">
+                    <div>Given away: {{ booking.retrieval|date('d.m.Y H:i') }} by {{ booking.givenAwayBy }}</div>
+                    <div>Returning: {{ booking.returning|date('d.m.Y H:i') }} by {{ booking.receivedBy }}</div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                     {% if booking.items is not empty %}
                         Items:
                         <ul>
