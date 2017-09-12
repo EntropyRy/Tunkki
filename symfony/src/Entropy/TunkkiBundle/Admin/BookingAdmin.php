@@ -32,7 +32,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('items')
             ->add('pakages')
             ->add('invoicee')
-            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>'sonata_type_date_picker_range'])
+            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>'sonata_type_date_range_picker'])
             ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
             ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
         ;
