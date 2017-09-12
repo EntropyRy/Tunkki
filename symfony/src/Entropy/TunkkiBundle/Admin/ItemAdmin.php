@@ -112,6 +112,7 @@ class ItemAdmin extends AbstractAdmin
                 ->add('placeinstorage')
                 ->add('description', 'textarea', array('required' => false, 'label' => 'Item description'))
                 ->add('commission', 'sonata_type_date_picker')
+                ->add('commissionPrice')
                 ->add('tags', 'sonata_type_model_autocomplete', array(
                     'property' => 'name',
                     'multiple' => 'true',

@@ -123,4 +123,10 @@ class BillableEvent
     {
         return $this->booking;
     }
+
+    public function __toString()
+    {
+        if (!empty($this->getUnitPrice()))
+            return $this->description ? $this->description.': '.$this->getUnitPrice() : '';
+    }
 }

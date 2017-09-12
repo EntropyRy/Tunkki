@@ -100,7 +100,7 @@ class Item
     /**
      * @var float
      *
-     * @ORM\Column(name="Rent", type="float", nullable=true)
+     * @ORM\Column(name="Rent", type="decimal", precision=7, scale=2, nullable=true)
      */
     private $rent;
 
@@ -198,6 +198,11 @@ class Item
      * @ORM\Column(name="Commission", type="datetime", nullable=true)
      */
     private $commission;
+
+    /**
+     * @ORM\Column(name="comissionPrice", type="decimal", precision=7, scale=2, nullable=true)
+     */
+    private $commissionPrice;
 
     /**
      * Get id
@@ -915,5 +920,30 @@ class Item
     public function getWhoCanRent()
     {
         return $this->whoCanRent;
+    }
+
+
+    /**
+     * Set commissionPrice
+     *
+     * @param string $commissionPrice
+     *
+     * @return Item
+     */
+    public function setCommissionPrice($commissionPrice)
+    {
+        $this->commissionPrice = $commissionPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get commissionPrice
+     *
+     * @return string
+     */
+    public function getCommissionPrice()
+    {
+        return $this->commissionPrice;
     }
 }
