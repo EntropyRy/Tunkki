@@ -17,6 +17,8 @@ use Application\Sonata\ClassificationBundle\Entity\Category;
 class ItemAdmin extends AbstractAdmin
 {
 
+    protected $mm;
+    protected $ts;
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -35,15 +37,18 @@ class ItemAdmin extends AbstractAdmin
             ->add('rentNotice')
             ->add('toSpareParts')
             ->add('needsFixing')
+/*            ->add('category',  'doctrine_orm_choice', [
+                    'label' => 'Category'
+                ], CategorySelectorType::class,  [
+                    'class' => 'Application\Sonata\ClassificationBundle\Entity\Category',
+//                    'context' =>  'item',
+                    'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
+                    'category' => new Category(),
+                ]
+            )*/
             ->add('category', null, array('field_options' => array('expanded' => false, 'multiple' => true)) )
-            //->add('rentHistory')
-            //->add('history')
             ->add('forSale')
-            ->add('commission')
-            //->add('createdAt')
-            //->add('updatedAt')
-            //->add('creator')
-            //->add('modifier')
+            ->add('commission', 'doctrine_orm_date',['field_type'=>'sonata_type_date_picker'])
         ;
     }
 
@@ -53,25 +58,11 @@ class ItemAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-//            ->add('id')
             ->addIdentifier('name')
-//            ->add('manufacturer')
- //           ->add('model')
- //           ->add('description')
- //           ->add('whoCanRent')
             ->add('tags')
-         /*   ->add('status', 'choice', array(
-                'multiple' => true,
-                'choices'=>
-                    array(
-                          'OK' => 'OK', 'Rikki' => 'Rikki', 'Ei voi korjata' => 'Ei voi korjata', 
-                          'Puutteellinen' => 'Puutteellinen', 'Kateissa' => 'Kateissa'
-                         )
-                 ))*/
             ->add('rent', 'currency', array(
                 'currency' => 'Eur'
                 ))
-            //->add('rentNotice')
             ->add('placeinstorage')
             ->add('needsFixing', null, array('editable'=>true, 'template' => 'EntropyTunkkiBundle:Admin:invertboolean.html.twig'))
 //            ->add('rentHistory')
@@ -220,8 +211,7 @@ class ItemAdmin extends AbstractAdmin
     }
     public function prePersist($Item)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
+        $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
         $Item->setCreator($user);
         foreach ($Item->getfixingHistory() as $history) {
@@ -235,13 +225,14 @@ class ItemAdmin extends AbstractAdmin
     }
     public function postPersist($Item)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $this->SendToMattermost($Item, $username, 'created');
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.$Item->getName().'> created by '.$username;
+        $this->mm->SendToMattermost($text);
     }
     public function preUpdate($Item)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
         foreach ($Item->getfixingHistory() as $history) {
@@ -255,45 +246,26 @@ class ItemAdmin extends AbstractAdmin
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text = 'updeted to be broken';
-            $this->SendToMattermost($Item, $username, $text);
+            $text = '#### <'.$this->getConfigurationPool()->getContainer()->get('request')->getSchemeAndHttpHost().
+                    ''.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.
+                    $Item->getName().'> updeted to be broken by '.$username;
         }
-        if($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text = 'updated to be fixed';
-            $this->SendToMattermost($Item, $username, $text);
+        elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
+            $text = '#### <'.$this->getConfigurationPool()->getContainer()->get('request')->getSchemeAndHttpHost().
+                    ''.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.
+                    $Item->getName().'> updeted to be fixed by '.$username;
         }
-    }
-    public function SendToMattermost($Item, $username, $text)
-    {
-        $xcURL = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_hook');
-        $botname = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_botname');
-        $botimg = $this->getConfigurationPool()->getContainer()->getParameter('mm_tunkki_img');
-        $add_url = $this->getConfigurationPool()->getContainer()->getParameter('mm_add_url');
-        
-        $curl = curl_init($xcURL);
-        $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'",
-            "text":"#### <'
-                .$add_url.'/'.$Item->getId().'/show|'.$Item->getName().'> '.$text.' by '.$username.'"}';
-        $cOptArr = array (
-            CURLOPT_URL => $xcURL,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST => 1
-        );
-        $rc = curl_setopt_array ($curl, $cOptArr);
-        $rc = curl_setopt ($curl, CURLOPT_POSTFIELDS, http_build_query (array ('payload' => $payload)));
-        $rc = curl_exec ($curl);
-        if ($rc == false){
-            curl_close ($curl);
-        }
+        $this->mm->SendToMattermost($text);
     }
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 
-    public function __construct($code, $class, $baseControllerName, $categoryManager=null)
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
     {
+        $this->mm = $mm;
+        $this->ts = $ts;
         parent::__construct($code, $class, $baseControllerName);
     }
 }

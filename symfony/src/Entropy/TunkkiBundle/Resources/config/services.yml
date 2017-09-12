@@ -1,7 +1,7 @@
 services:
-#    entropy_tunkki.example:
-#        class: Entropy\TunkkiBundle\Example
-#        arguments: [@service_id, "plain_value", %parameter%]
+    entropy_tunkki.helper.mattermost:
+        class: Entropy\TunkkiBundle\Helper\Mattermost
+        arguments: [@service_container]
     entropy_tunkki.admin.events:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Event, SonataAdminBundle:CRUD]
@@ -10,7 +10,12 @@ services:
 
     entropy_tunkki.admin.items:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Item, EntropyTunkkiBundle:ItemAdmin]
+        arguments:
+            - ~
+            - Entropy\TunkkiBundle\Entity\Item
+            - EntropyTunkkiBundle:ItemAdmin
+            - "@entropy_tunkki.helper.mattermost"
+            - "@security.token_storage"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
         calls:
