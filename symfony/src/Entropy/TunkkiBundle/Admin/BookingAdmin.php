@@ -30,10 +30,11 @@ class BookingAdmin extends AbstractAdmin
         $datagridMapper
             ->add('name')
             ->add('items')
+            ->add('pakages')
             ->add('invoicee')
-            ->add('bookingDate')
-            ->add('retrieval')
-            ->add('returning')
+            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>'sonata_type_date_picker_range'])
+            ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
+            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
         ;
     }
 
