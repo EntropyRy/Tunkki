@@ -17,13 +17,16 @@ use Application\Sonata\ClassificationBundle\Entity\Category;
 class ItemAdmin extends AbstractAdmin
 {
 
-    protected $mm;
+    protected $mm; // Matteromst helper
     protected $ts;
     /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $context = 'item';
+        $currentContext = $this->getConfigurationPool()->getContainer()->get('sonata.classification.manager.context')->find($context);
+
         $datagridMapper
             ->add('name')
             ->add('manufacturer')
@@ -34,19 +37,19 @@ class ItemAdmin extends AbstractAdmin
             ->add('whoCanRent')
             ->add('tags')
             ->add('rent')
-            ->add('rentNotice')
+            ->add('pakages')
             ->add('toSpareParts')
             ->add('needsFixing')
-/*            ->add('category',  'doctrine_orm_choice', [
-                    'label' => 'Category'
+            ->add('category',  null, [
+                    'label' => 'Item.category'
                 ], CategorySelectorType::class,  [
-                    'class' => 'Application\Sonata\ClassificationBundle\Entity\Category',
-//                    'context' =>  'item',
+                    'class' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getClass(),
+                    'context' =>  $currentContext,
                     'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
                     'category' => new Category(),
+                    'multiple' => true,
                 ]
-            )*/
-            ->add('category', null, array('field_options' => array('expanded' => false, 'multiple' => true)) )
+            )
             ->add('forSale')
             ->add('commission', 'doctrine_orm_date',['field_type'=>'sonata_type_date_picker'])
         ;
