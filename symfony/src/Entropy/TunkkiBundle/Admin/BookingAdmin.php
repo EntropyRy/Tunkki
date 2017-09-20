@@ -95,14 +95,19 @@ class BookingAdmin extends AbstractAdmin
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
-                ->add('bookingDate', 'sonata_type_date_picker')
-                ->add('retrieval', 'sonata_type_datetime_picker', ['dp_side_by_side' => true])
-                ->add('givenAwayBy', 'sonata_type_model_list', array('btn_add' => false, 'btn_delete' => 'unassign'))
-                ->add('returning', 'sonata_type_datetime_picker', ['dp_side_by_side' => true])
-                ->add('receivedBy', 'sonata_type_model_list', array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('bookingDate', 'Sonata\CoreBundle\Form\Type\DatePickerType')
+                ->add('retrieval', 'Sonata\CoreBundle\Form\Type\DateTimePickerType', [
+                        'dp_side_by_side' => true, 
+                        'dp_use_seconds' => false,
+                        'with_seconds' => false, 
+                        ])
+                ->add('givenAwayBy', 'Sonata\AdminBundle\Form\Type\ModelListType', array('btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('returning', 'Sonata\CoreBundle\Form\Type\DateTimePickerType', ['dp_side_by_side' => true, 'dp_use_seconds' => false])
+                ->add('receivedBy', 'Sonata\AdminBundle\Form\Type\ModelListType', array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('returned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
-                ->add('invoicee', 'sonata_type_model_list', array('btn_delete' => 'unassign'))
+                ->add('invoicee', 'Sonata\AdminBundle\Form\Type\ModelListType', array('btn_delete' => 'unassign'))
                 ->add('rentingPrivileges', null, array('help' => 'Only items that are in this group are shown'))
             ->end()
             ->end();
@@ -111,8 +116,8 @@ class BookingAdmin extends AbstractAdmin
         if (!empty($subject->getName())) {
             $formMapper 
                 ->tab('Rentals')
-                ->with('The Stuff', array('class' => 'col-md-6'))
-                    ->add('items', 'sonata_type_model', array(
+                ->with('The Stuff')
+                    ->add('items', 'Sonata\AdminBundle\Form\Type\ModelType', array(
                         'query' => $items, 
                         'multiple' => true, 
                         'expanded' => false, 
@@ -126,21 +131,20 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                        // 'btn_add' => false
                     ))
-                    ->add('accessories', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
+                    ->add('accessories', 'Sonata\CoreBundle\Form\Type\CollectionType', array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
                     ->add('rentInformation', 'textarea', array('disabled' => true))
                 ->end()
-                ->with('Payment Information', array('class' => 'col-md-6'))
+                ->end()
+                ->tab('Payment')
+                ->with('Payment Information')
                     ->add('referenceNumber', null, array('disabled' => true))
                     ->add('calculatedTotalPrice', 'text', array('disabled' => true))
                     ->add('numberOfRentDays', null, array('help' => 'How many days are actually billed', 'disabled' => false, 'required' => true))
                     ->add('actualPrice', null, array('disabled' => false, 'required' => false))
                 ->end()
-                ->end()
-                ->tab('Events')
                 ->with('Events', array('class' => 'col-md-12'))
-                    ->add('returned')
                     ->add('billableEvents', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )

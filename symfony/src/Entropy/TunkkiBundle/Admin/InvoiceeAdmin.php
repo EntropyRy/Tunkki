@@ -23,7 +23,6 @@ class InvoiceeAdmin extends AbstractAdmin
             ->add('city')
             ->add('phone')
             ->add('email')
-            ->add('note')
         ;
     }
 
@@ -40,7 +39,6 @@ class InvoiceeAdmin extends AbstractAdmin
             ->add('streetadress')
             ->add('zipcode')
             ->add('city')
-            ->add('note')
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
@@ -64,7 +62,6 @@ class InvoiceeAdmin extends AbstractAdmin
             ->add('streetadress')
             ->add('zipcode')
             ->add('city')
-            ->add('note')
         ;
     }
 
@@ -81,7 +78,6 @@ class InvoiceeAdmin extends AbstractAdmin
             ->add('streetadress')
             ->add('zipcode')
             ->add('city')
-            ->add('note')
         ;
     }
 }

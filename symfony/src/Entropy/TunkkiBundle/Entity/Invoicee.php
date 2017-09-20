@@ -78,14 +78,6 @@ class Invoicee
     private $email;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="note", type="text", nullable=true)
-     */
-    private $note;
-
-
-    /**
      * Get id
      *
      * @return integer
@@ -237,30 +229,6 @@ class Invoicee
     public function getEmail()
     {
         return $this->email;
-    }
-
-    /**
-     * Set note
-     *
-     * @param string $note
-     *
-     * @return Invoicee
-     */
-    public function setNote($note)
-    {
-        $this->note = $note;
-
-        return $this;
-    }
-
-    /**
-     * Get note
-     *
-     * @return string
-     */
-    public function getNote()
-    {
-        return $this->note;
     }
 
     /**
