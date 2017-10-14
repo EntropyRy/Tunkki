@@ -13,6 +13,7 @@ use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
 use Application\Sonata\ClassificationBundle\Entity\Category;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class ItemAdmin extends AbstractAdmin
 {
@@ -205,13 +206,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('serialnumber')
             ->add('description')
             ->add('commission')
-            ->add('whoCanRent', 'choice', array(
-                 'choices'=> array(
-                              '1' => 'Everybody', '2' => 'Nobody', 
-                              '3' => 'Members', '4' => 'Organizations'
-                     ),
-                     'multiple' => true
-            ))
+            ->add('whoCanRent')
             ->add('tags')
             ->add('rent')
             ->add('rentNotice')
@@ -263,13 +258,13 @@ class ItemAdmin extends AbstractAdmin
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text = '#### <'.$this->getConfigurationPool()->getContainer()->get('request')->getSchemeAndHttpHost().
-                    ''.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.
+            $text = '#### <'
+                    .$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
                     $Item->getName().'> updeted to be broken by '.$username;
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text = '#### <'.$this->getConfigurationPool()->getContainer()->get('request')->getSchemeAndHttpHost().
-                    ''.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.
+            $text = '#### <'
+                    .$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
                     $Item->getName().'> updeted to be fixed by '.$username;
         }
         $this->mm->SendToMattermost($text);
