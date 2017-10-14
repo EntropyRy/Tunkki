@@ -79,11 +79,7 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity="Application\Sonata\ClassificationBundle\Entity\Category", cascade={"persist"})
-     * @ORM\JoinTable(
-     *      name="Item_category",
-     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}
-     * )
+     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
 
@@ -533,6 +529,17 @@ class Item
     }
 
     /**
+     * reset fixingHistory
+     *
+     * @return null
+     */
+    public function resetFixingHistory()
+    {
+        foreach ($this->getFixingHistory() as $fix){
+            $this->removeFixingHistory($fix);
+        }
+    }
+    /**
      * Set commission
      *
      * @param \DateTime $commission
@@ -852,6 +859,18 @@ class Item
     public function getRentHistory()
     {
         return $this->rentHistory;
+    }
+
+    /**
+     * reset rentHistory
+     *
+     * @return null
+     */
+    public function resetRentHistory()
+    {
+        foreach ($this->getRentHistory() as $rent){
+            $this->removeRentHistory($rent);
+        }
     }
 
     public function canBeRentedByCondition()

@@ -134,8 +134,7 @@ class ItemAdmin extends AbstractAdmin
                         'by_reference' => false,
                         'context' => $currentContext,
                         'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
-                        'category' => $this->getSubject()->getCategory() ? $this->getSubject()->getCategory() : new Category,
-                        'placeholder' => $this->getSubject()->getCategory(),
+                        'category' => new Category(),
                         'btn_add' => false
                     ))
             ->end()
@@ -239,7 +238,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $user = $this->ts->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()]).'|'.$Item->getName().'> created by '.$username;
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$username;
         $this->mm->SendToMattermost($text);
     }
     public function preUpdate($Item)

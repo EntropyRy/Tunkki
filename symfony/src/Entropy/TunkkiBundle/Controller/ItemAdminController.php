@@ -5,6 +5,7 @@ namespace Entropy\TunkkiBundle\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Entropy\TunkkiBundle\Entity\Item;
 
 class ItemAdminController extends Controller
 {
@@ -15,14 +16,28 @@ class ItemAdminController extends Controller
         if (!$object) {
             throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
         }
-
-        // Be careful, you may need to overload the __clone method of your object
-        // to set its id to null !
-        $clonedObject = clone $object;
-
+        $clonedObject = new Item;
+        //$clonedObject = clone $object;
         $clonedObject->setName($object->getName().' (Clone)');
+        $clonedObject->setManufacturer($object->getManufacturer());
+        $clonedObject->setModel($object->getModel());
+        $clonedObject->setPlaceinstorage($object->getPlaceinstorage());
+        $clonedObject->setDescription($object->getDescription());
+        $clonedObject->setCommission($object->getCommission());
+        $clonedObject->setCommissionPrice($object->getCommissionPrice());
+        foreach ($object->getWhoCanRent() as $who){
+            $clonedObject->addWhoCanRent($who);
+        }
+        $clonedObject->setRent($object->getRent());
+        $clonedObject->setRentNotice($object->getRentNotice());
+        $clonedObject->setForSale($object->getForSale());
+        $clonedObject->setToSpareParts($object->getToSpareParts());
+        $clonedObject->setNeedsFixing($object->getNeedsFixing());
 
         $this->admin->create($clonedObject);
+
+        $clonedObject->setCategory($object->getCategory());
+        $this->admin->update($clonedObject);
 
         $this->addFlash('sonata_flash_success', 'Cloned successfully');
 
