@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Validator\ErrorElement;
 
 class BookingAdmin extends AbstractAdmin
 {
@@ -84,13 +85,14 @@ class BookingAdmin extends AbstractAdmin
                 ->select('c')
                 ->from('EntropyTunkkiBundle:Item', 'c')
                 ->where('c.needsFixing = false')
+                ->andwhere('c.toSpareParts = false')
+                ->orderBy('c.category', 'ASC')
           //      ->andwhere('c.Retrieval < :retrieval')
           //      ->andwhere('c.Returning > :returning')
           //      ->setParameter('retrieval', $retrieval)
           //      ->setParameter('returning', $returning)
                 
                 ;
-    
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
@@ -122,7 +124,7 @@ class BookingAdmin extends AbstractAdmin
                         'multiple' => true, 
                         'expanded' => false, 
                         'by_reference' => false,
-                        'btn_add' => false
+                        'btn_add' => false,
                     ))
                     ->add('pakages', null, array( //'sonata_type_model', array(
  //                       'query' => $pakages, 
@@ -223,5 +225,32 @@ class BookingAdmin extends AbstractAdmin
             parent::getFormTheme(),
             array('EntropyTunkkiBundle:BookingAdmin:admin.html.twig')
         );
+    }
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        $errorElement
+            ->with('retrieval')
+                ->assertNotNull(array())
+            ->end()
+            ->with('returning')
+                ->assertNotNull(array())
+            ->end()
+            ->with('bookingDate')
+                ->assertNotNull(array())
+            ->end()
+            ->with('givenAwayBy')
+                ->assertNotNull(array())
+            ->end()
+            ->with('rentingPrivileges')
+                ->assertNotNull(array())
+            ->end()
+        ;
+        if($object->getRetrieval() > $object->getReturning()){
+            $errorElement->with('retrieval')->addViolation('Must be before the returning')->end();
+            $errorElement->with('returning')->addViolation('Must be after the retrieval')->end();
+        }
+        if(($object->getReturned() == true) and ($object->getReceivedBy() == null)){
+            $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
+        }
     } 
 }

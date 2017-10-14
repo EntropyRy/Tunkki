@@ -19,9 +19,6 @@
     {{ object|render_list_element(admin.list['name']) }}<br> 
         {% if object.category is not empty %}
             {% if object.category.parent is not empty %}
-                {% if object.category.parent.parent is not empty %}
-                    {{ object.category.parent.parent }} -
-                {% endif %}
                 {{ object.category.parent }} -
             {% endif %}
                 {{ object.category }}
