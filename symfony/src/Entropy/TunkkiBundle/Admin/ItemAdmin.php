@@ -256,15 +256,15 @@ class ItemAdmin extends AbstractAdmin
         }
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>';
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated';
         if($original['name']!= $Item->getName()) {
-            $text .= ' renamed from '.$original['name'];
+            $text .= '; renamed from '.$original['name'];
         }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text .= ' updeted to be broken';
+            $text .= '; updeted to be broken';
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text .= ' updeted to be fixed';
+            $text .= '; updeted to be fixed';
         }
 
         $text .= ' by '. $username;
