@@ -256,16 +256,18 @@ class ItemAdmin extends AbstractAdmin
         }
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>';
+        if($original['name']!= $Item->getName()) {
+            $text .= ' renamed from '.$original['name'];
+        }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text = '#### <'
-                    .$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
-                    $Item->getName().'> updeted to be broken by '.$username;
+            $text .= ' updeted to be broken';
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text = '#### <'
-                    .$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
-                    $Item->getName().'> updeted to be fixed by '.$username;
+            $text .= ' updeted to be fixed';
         }
+
+        $text .= ' by '. $username;
         $this->mm->SendToMattermost($text);
     }
     protected function configureRoutes(RouteCollection $collection)
