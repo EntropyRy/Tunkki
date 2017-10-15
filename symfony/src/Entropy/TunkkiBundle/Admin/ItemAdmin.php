@@ -259,16 +259,19 @@ class ItemAdmin extends AbstractAdmin
         $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated';
         if($original['name']!= $Item->getName()) {
             $text .= '; renamed from '.$original['name'];
+            $this->mm->SendToMattermost($text);
         }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
             $text .= '; updeted to be broken';
+            $text .= ' by '. $username;
+            $this->mm->SendToMattermost($text);
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
             $text .= '; updeted to be fixed';
+            $text .= ' by '. $username;
+            $this->mm->SendToMattermost($text);
         }
 
-        $text .= ' by '. $username;
-        $this->mm->SendToMattermost($text);
     }
     protected function configureRoutes(RouteCollection $collection)
     {
