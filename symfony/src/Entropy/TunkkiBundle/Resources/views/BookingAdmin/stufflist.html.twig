@@ -24,6 +24,14 @@
                 </div>
             {% endfor %}
             {% endif %}
+            {% if accessories %}
+            <h2>Accessories</h2>
+            {% for item in accessories %}
+                <div class="checkbox">
+                <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
+                </div>
+            {% endfor %}
+            {% endif %}
             </div>
         </div>
     </div>
