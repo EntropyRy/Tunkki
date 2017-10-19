@@ -1,0 +1,35 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+{% block sonata_admin_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+            {% if pakages %}
+            <h2>Pakages</h2>
+            {% for pakage in pakages %}
+                <h4>{{ pakage }}</h4>
+                {% for item in pakage.items %}
+                    <div class="checkbox">
+                    <label><input type="checkbox"> {{ item }}</label>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            </div>
+            {% endif %}
+            <div class="col-md-12">
+            {% if items %}
+            <h2>Items</h2>
+            {% for item in items %}
+                <div class="checkbox">
+                <label><input type="checkbox"> {{ item }}</label>
+                </div>
+            {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+<style>
+@media print {
+.icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
+}
+</style>
+{% endblock %}

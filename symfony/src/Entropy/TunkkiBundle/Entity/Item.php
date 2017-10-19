@@ -540,6 +540,17 @@ class Item
         }
     }
     /**
+     * reset whocanrent 
+     *
+     * @return null
+     */
+    public function resetWhoCanRent()
+    {
+        foreach ($this->getWhoCanRent() as $who){
+            $this->removeWhoCanRent($who);
+        }
+    }
+    /**
      * Set commission
      *
      * @param \DateTime $commission

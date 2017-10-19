@@ -40,7 +40,7 @@ services:
 
     entropy_tunkki.admin.booking:
         class: Entropy\TunkkiBundle\Admin\BookingAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Booking, SonataAdminBundle:CRUD]
+        arguments: [~, Entropy\TunkkiBundle\Entity\Booking, EntropyTunkkiBundle:BookingAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
         calls:

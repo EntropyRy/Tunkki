@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class BookingAdmin extends AbstractAdmin
 {
@@ -59,7 +60,10 @@ class BookingAdmin extends AbstractAdmin
             ->add('paid', null, array('editable' => true))
             ->add('_action', null, array(
                 'actions' => array(
-                    'show' => array(),
+                    'stuffList' => array(
+                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_stuff.html.twig'
+                    ),
+            //        'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 ),
@@ -253,4 +257,8 @@ class BookingAdmin extends AbstractAdmin
             $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
         }
     } 
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
+    }
 }

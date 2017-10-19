@@ -259,6 +259,7 @@ class ItemAdmin extends AbstractAdmin
         $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated';
         if($original['name']!= $Item->getName()) {
             $text .= '; renamed from '.$original['name'];
+            $text .= ' by '. $username;
             $this->mm->SendToMattermost($text);
         }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
@@ -277,7 +278,15 @@ class ItemAdmin extends AbstractAdmin
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
-
+    public function configureBatchActions($actions)
+    {
+        if ($this->hasRoute('edit') && $this->hasAccess('edit')) {
+            $actions['batchEdit'] = array(
+                'ask_confirmation' => true
+            );
+        }
+        return $actions;
+    }
     public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
     {
         $this->mm = $mm;
