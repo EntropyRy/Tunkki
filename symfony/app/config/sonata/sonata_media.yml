@@ -23,6 +23,8 @@ sonata_media:
                 small: { width: 100 , quality: 90}
                 big:   { width: 500 , quality: 100}
         item:  # the default context is mandatory
+            download:
+                strategy: sonata.media.security.public_strategy
             providers:
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
