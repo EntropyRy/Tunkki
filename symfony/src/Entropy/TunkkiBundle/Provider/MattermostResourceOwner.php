@@ -43,7 +43,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      */
     public function getId()
     {
-        return $this->response['user']['id'] ?: null;
+        return $this->response['id'] ?: null;
     }
     /**
      * Get user name
@@ -52,34 +52,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      */
     public function getName()
     {
-        return $this->response['user']['name'] ?: null;
-    }
-    /**
-     * Is user deleted?
-     *
-     * @return bool|null
-     */
-    public function isDeleted()
-    {
-        return $this->response['user']['deleted'] ?: null;
-    }
-    /**
-     * Get user color
-     *
-     * @return string|null
-     */
-    public function getColor()
-    {
-        return $this->response['user']['color'] ?: null;
-    }
-    /**
-     * Get user profile
-     *
-     * @return string|null
-     */
-    public function getProfile()
-    {
-        return $this->response['user']['profile'] ?: null;
+        return $this->response['name'] ?: null;
     }
     /**
      * Get user first name
@@ -88,7 +61,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      */
     public function getFirstName()
     {
-        return $this->response['user']['profile']['first_name'] ?: null;
+        return $this->response['first_name'] ?: null;
     }
     /**
      * Get user last name
@@ -97,7 +70,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      */
     public function getLastName()
     {
-        return $this->response['user']['profile']['last_name'] ?: null;
+        return $this->response['last_name'] ?: null;
     }
     /**
      * Get user real name
@@ -106,7 +79,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      */
     public function getRealName()
     {
-        return $this->response['user']['profile']['real_name'] ?: null;
+        return $this->response['real_name'] ?: null;
     }
     /**
      * Get user email
@@ -116,36 +89,5 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     public function getEmail()
     {
         return $this->response['email'] ?: null;
-    }
-    public function isAdmin()
-    {
-        return $this->response['user']['is_admin'] ?: null;
-    }
-    /**
-     * Is user owner?
-     *
-     * @return string|null
-     */
-    public function isOwner()
-    {
-        return $this->response['user']['is_owner'] ?: null;
-    }
-    /**
-     * Does user have 2FA enabled?
-     *
-     * @return bool|null
-     */
-    public function hasTwoFactorAuthentication()
-    {
-        return $this->response['user']['has_2fa'] ?: null;
-    }
-    /**
-     * Does user have files?
-     *
-     * @return bool|null
-     */
-    public function hasFiles()
-    {
-        return $this->response['user']['has_files'] ?: null;
     }
 }
