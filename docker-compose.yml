@@ -1,4 +1,9 @@
 version: '2'
+
+networks:
+    front-tier:
+    back-tier:
+
 services:
     storage:
         image: debian:jessie
@@ -8,6 +13,8 @@ services:
     fpm:
         build: fpm
         restart: unless-stopped
+        networks:
+            - back-tier
         expose:
             - "9000"
         volumes_from:
@@ -15,6 +22,9 @@ services:
     web:
         build: web
         restart: unless-stopped
+        networks:
+            - back-tier
+            - front-tier
         ports:
             - "3011:80"
         links:
