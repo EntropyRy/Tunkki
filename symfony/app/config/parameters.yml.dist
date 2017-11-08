@@ -18,4 +18,5 @@ parameters:
     mm_add_url: null
     mattermost_client_id: null
     mattermost_client_secret: null
+    mattermost_redirect_route: null
 

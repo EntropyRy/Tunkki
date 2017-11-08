@@ -8,8 +8,8 @@ knpu_oauth2_client:
             client_id: %mattermost_client_id%
             client_secret: %mattermost_client_secret%
             # a route name you'll create
-            redirect_route: _entropy_mattermost_check
-            redirect_params: {}
+            redirect_route: %mattermost_redirect_route%
+            redirect_params: { }
 
             # whether to check OAuth2 "state": defaults to true
             # use_state: false
