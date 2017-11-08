@@ -2,6 +2,14 @@ services:
     entropy_tunkki.helper.mattermost:
         class: Entropy\TunkkiBundle\Helper\Mattermost
         arguments: [@service_container]
+    my_mattermost_authenticator:
+        class: Entropy\TunkkiBundle\Security\MattermostAuthenticator
+        #autowire: true
+        # use autowiring, OR you can specify the argument manually
+        arguments:
+            - '@oauth2.registry'
+            - '@doctrine.orm.entity_manager'
+            - '@router'
     entropy_tunkki.admin.events:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Event, SonataAdminBundle:CRUD]

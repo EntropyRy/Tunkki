@@ -3,6 +3,7 @@ imports:
     - { resource: security.yml }
     - { resource: services.yml }
     - { resource: fos_rest.yml }
+    - { resource: oauth.yml }
     - { resource: sonata/sonata_block.yml }
     - { resource: sonata/sonata_admin.yml }
     - { resource: sonata/sonata_user.yml }

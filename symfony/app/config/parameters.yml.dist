@@ -16,4 +16,6 @@ parameters:
     mm_tunkki_img: null
     mm_tunkki_botname: null
     mm_add_url: null
+    mattermost_client_id: null
+    mattermost_client_secret: null
 

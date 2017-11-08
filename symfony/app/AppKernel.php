@@ -60,6 +60,9 @@ class AppKernel extends Kernel
         new Sonata\TimelineBundle\SonataTimelineBundle(),
         new Spy\TimelineBundle\SpyTimelineBundle(),
         new Application\Sonata\TimelineBundle\ApplicationSonataTimelineBundle(),
+        // Oauth
+        new KnpU\OAuth2ClientBundle\KnpUOAuth2ClientBundle(),
+        // Tunkki
             new Entropy\TunkkiBundle\EntropyTunkkiBundle(),
         );
 

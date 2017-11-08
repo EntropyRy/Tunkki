@@ -36,7 +36,8 @@
         "symfony/monolog-bridge": "^2.6",
         "friendsofsymfony/rest-bundle": "^1.8",
         "nelmio/api-doc-bundle": "^2.13",
-        "stof/doctrine-extensions-bundle": "^1.2"
+        "stof/doctrine-extensions-bundle": "^1.2",
+        "knpuniversity/oauth2-client-bundle": "^1.12"
     },
     "require-dev": {
         "sensio/generator-bundle": "~2.3"

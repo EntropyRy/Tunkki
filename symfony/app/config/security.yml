@@ -11,7 +11,7 @@ security:
             - ROLE_SONATA_PAGE_ADMIN_BLOCK_EDIT
     providers:
         fos_userbundle:
-            id: fos_user.user_manager
+            id: fos_user.user_provider.username_email
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
@@ -28,6 +28,10 @@ security:
             logout:
                 path:           /admin/logout
             anonymous:          true
+        main:
+            pattern:            /oauth(.*)
+            context:            user
+            anonymous:          true
 #        api:
 #            pattern:            /api(.*)
 #            context:            user
@@ -42,6 +46,8 @@ security:
 #            anonymous:          true
 
     access_control:
+        - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }

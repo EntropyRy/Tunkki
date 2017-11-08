@@ -1,3 +1,9 @@
-entropy_tunkki_homepage:
-    path:     /hello/{name}
-    defaults: { _controller: EntropyTunkkiBundle:Default:index }
+#entropy_tunkki_homepage:
+#    path:     /hello/{name}
+#    defaults: { _controller: EntropyTunkkiBundle:Default:index }
+_entropy_mattermost_auth:
+    path:     /oauth
+    defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connect }
+_entropy_mattermost_check:
+    path:     /oauth/check
+    defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connectCheck }
