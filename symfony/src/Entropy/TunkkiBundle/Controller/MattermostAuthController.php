@@ -19,14 +19,16 @@ class MattermostAuthController extends Controller
     }
     public function connectCheckAction(Request $request)
     {
-        $client = $this->get('oauth2.registry')
-            ->getClient('mattermost');
+        $client = $this->get('oauth2.registry')->getClient('mattermost');
 
         try {
             $mmuser = $client->fetchUser();
             $this->em = $this->container->get('doctrine.orm.entity_manager');
             $user = $this->em->getRepository('ApplicationSonataUserBundle:User')
                 ->findOneBy(['email' => $mmuser->getEmail()]);
+            if(!$user){
+                return $this->redirect($this->generateUrl('sonata_admin_dashboard'));
+            }
             // LOGIN
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
@@ -34,8 +36,6 @@ class MattermostAuthController extends Controller
             $event = new InteractiveLoginEvent($request, $token);
             $this->get("event_dispatcher")->dispatch("security.interactive_login", $event);
             return $this->redirect($this->generateUrl('sonata_admin_dashboard'));
-
-
         } catch (IdentityProviderException $e) {
             var_dump($e->getMessage());die;
         }
