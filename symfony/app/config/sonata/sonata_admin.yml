@@ -46,8 +46,8 @@ sonata_admin:
                 label:           Inventory 
                 label_catalogue: EntropyTunkkiBundle
                 items:
-                    - entropy_tunkki.admin.items
-                    - entropy_tunkki.admin.events
+                    - entropy_tunkki.admin.item
+                    - entropy_tunkki.admin.event
                     - entropy_tunkki.admin.files
 
             sonata.admin.group.rentals:

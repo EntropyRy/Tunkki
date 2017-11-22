@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class EventAdmin extends AbstractAdmin
 {
+    protected $parentAssociationMapping = 'product';
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -29,15 +30,18 @@ class EventAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
+        if (!$this->isChild()){
+            $listMapper->add('product');
+        }
         $listMapper
-  //          ->add('id')
-            ->add('product')
             ->add('description')
+            ->add('creator')
+            ->add('createdAt')
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
                     'edit' => array(),
-                    'delete' => array(),
+     //               'delete' => array(),
                 )
             ))
         ;
@@ -48,7 +52,7 @@ class EventAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if (!$this->hasParentFieldDescription()){
+        if (!$this->isChild()){
             $formMapper
                 ->add('product')
             ;
@@ -58,7 +62,7 @@ class EventAdmin extends AbstractAdmin
             ->add('creator', null, array('disabled' => true))
             ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
         ;
-        if (!$this->hasParentFieldDescription()){
+        if (!$this->isChild()){
             $formMapper
                 ->add('modifier', null, array('disabled' => true))
                 ->add('updatedAt','sonata_type_datetime_picker', array('disabled' => true))
@@ -72,6 +76,7 @@ class EventAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper)
     {
         $showMapper
+            ->add('product')
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')

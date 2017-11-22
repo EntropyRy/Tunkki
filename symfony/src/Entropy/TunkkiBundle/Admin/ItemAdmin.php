@@ -2,6 +2,8 @@
 
 namespace Entropy\TunkkiBundle\Admin;
 
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -30,8 +32,6 @@ class ItemAdmin extends AbstractAdmin
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
         '_sort_by' => 'updatedAt'  // name of the ordered field
-                                 // (default = the model's id field, if any)
-
         // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     );
     /**
@@ -148,16 +148,16 @@ class ItemAdmin extends AbstractAdmin
                 ->add('rentNotice', 'textarea', array('required' => false))
                 ->add('forSale')
             ->end()
-            ->with('Condition')
+            ->with('Condition', array('class' => 'col-md-6'))
                 ->add('toSpareParts')
                 ->add('needsFixing')
-                ->add('fixingHistory', 'sonata_type_collection', array(
+/*                ->add('fixingHistory', 'sonata_type_collection', array(
                         'label' => null, 'btn_add'=>'Add new event', 
                         'by_reference'=>false,
                         'cascade_validation' => true, 
                         'type_options' => array('delete' => false),
                         'required' => false),
-                        array('edit'=>'inline', 'inline'=>'table'))
+                        array('edit'=>'inline'))*/
             //    ->add('history')
             ->end() 
         ->end()
@@ -219,6 +219,27 @@ class ItemAdmin extends AbstractAdmin
             ->add('creator')
             ->add('modifier')
         ;
+    }
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+            return;
+        }
+
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        $id = $admin->getRequest()->get('id');
+
+//        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('Edit Item', array('uri' => $admin->generateUrl('edit', array('id' => $id))));
+        }
+
+        if ($this->isGranted('LIST')) {
+            $menu->addChild('Fixing History', array(
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.list', array('id' => $id))
+            ));
+        }
     }
     public function prePersist($Item)
     {
