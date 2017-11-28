@@ -10,17 +10,21 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class FileAdmin extends AbstractAdmin
 {
+    protected $parentAssociationMapping = 'product';
     /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
             ->add('fileinfo')
             ->add('file')
-            ->add('product')
         ;
+        if(!$this->isChild()){
+            $datagridMapper
+                ->add('product')
+            ;
+        }
     }
 
     /**
@@ -29,11 +33,13 @@ class FileAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-  //          ->add('id')
             ->addIdentifier('fileinfo')
-            ->add('file')
-            ->add('download', 'html')
-            ->add('product')
+            ->add('file', null, ['template' => 'EntropyTunkkiBundle:Admin:preview.html.twig'])
+            ->add('download', 'html');
+        if(!$this->isChild()){
+            $listMapper->add('product');
+        }
+        $listMapper
             ->add('_action', null, array(
                 'actions' => array(
 //                    'show' => array(),
@@ -51,11 +57,9 @@ class FileAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('fileinfo')
-            //->add('tuote')
             ->add('file', 'sonata_type_model_list', array(
                 'required' => false,
-                'btn_delete' => false,
-                'btn_list' => false,
+                'btn_delete' => 'unlink',
                     ), array(
                     'link_parameters' => array(
                         'context' => 'item'
@@ -63,7 +67,7 @@ class FileAdmin extends AbstractAdmin
             ))
 //            ->add('download', 'url', array('route' => 'sonata_media_download', 'parameters' => array('id'=>2 )))
         ;
-        if (!$this->hasParentFieldDescription()){
+        if(!$this->isChild()){
             $formMapper
                 ->add('product')
             ;
@@ -77,7 +81,7 @@ class FileAdmin extends AbstractAdmin
     {
         $showMapper
 //            ->add('id')
-            ->add('tiedostoinfo')
+//            ->add('tiedostoinfo')
         ;
     }
 }

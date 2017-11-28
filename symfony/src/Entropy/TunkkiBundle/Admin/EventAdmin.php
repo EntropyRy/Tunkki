@@ -58,6 +58,7 @@ class EventAdmin extends AbstractAdmin
             ;
         }
         $formMapper
+            ->add('product.needsFixing')
             ->add('description','textarea', array('required' => false))
             ->add('creator', null, array('disabled' => true))
             ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
@@ -78,10 +79,10 @@ class EventAdmin extends AbstractAdmin
         $showMapper
             ->add('product')
             ->add('description')
-            ->add('createdAt')
-            ->add('updatedAt')
             ->add('creator')
+            ->add('createdAt')
             ->add('modifier')
+            ->add('updatedAt')
         ;
     }
     public function prePersist($Event)

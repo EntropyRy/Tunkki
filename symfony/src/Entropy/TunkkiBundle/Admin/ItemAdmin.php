@@ -113,7 +113,7 @@ class ItemAdmin extends AbstractAdmin
         $formMapper
 //            ->add('id')
         ->tab('General')
-            ->with('Item', array('class' => 'col-md-6'))
+            ->with('General Information', array('class' => 'col-md-6'))
                 ->add('name')
                 ->add('manufacturer')
                 ->add('model')
@@ -160,8 +160,8 @@ class ItemAdmin extends AbstractAdmin
                         array('edit'=>'inline'))*/
             //    ->add('history')
             ->end() 
-        ->end()
-        ->tab('Files')
+        ->end();
+/*        ->tab('Files')
         ->with('Files')
             ->add('files', 'sonata_type_collection', array(
                     'label' => null, 'btn_add'=>'Add new file', 
@@ -171,7 +171,7 @@ class ItemAdmin extends AbstractAdmin
                     'required' => false),
                     array('edit'=>'inline', 'inline'=>'table'))
         ->end() 
-        ->end();
+        ->end(); */
         $subject = $this->getSubject();
         if($subject){
             if($subject->getCreatedAt()){
@@ -213,7 +213,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('rentHistory')
             ->add('history')
             ->add('forSale')
-            ->add('files.fileinfo')
+            ->add('file.fileinfo')
             ->add('createdAt')
             ->add('updatedAt')
             ->add('creator')
@@ -233,11 +233,11 @@ class ItemAdmin extends AbstractAdmin
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Item', array('uri' => $admin->generateUrl('edit', array('id' => $id))));
-        }
-
-        if ($this->isGranted('LIST')) {
             $menu->addChild('Fixing History', array(
                 'uri' => $admin->generateUrl('entropy_tunkki.admin.event.list', array('id' => $id))
+            ));
+            $menu->addChild('Manage Files', array(
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', array('id' => $id))
             ));
         }
     }

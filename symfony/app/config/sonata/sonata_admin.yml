@@ -33,8 +33,7 @@ sonata_admin:
             - { position: left, type: sonata.admin.block.admin_list }
             #- { position: left, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
             - { position: right, type: entropy_tunkki.block.bookings}
-            #- { position: right, type: sonata.admin_doctrine_orm.block.audit}
-            - { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
+#            - { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
            # - { position: right, type: sonata.news.block.recent_posts, settings: { title: Recent Posts, number: 7, mode: admin }}
             #- { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
             #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
@@ -48,7 +47,7 @@ sonata_admin:
                 items:
                     - entropy_tunkki.admin.item
                     - entropy_tunkki.admin.event
-                    - entropy_tunkki.admin.files
+                    - entropy_tunkki.admin.file
 
             sonata.admin.group.rentals:
                 label:           Rentals 

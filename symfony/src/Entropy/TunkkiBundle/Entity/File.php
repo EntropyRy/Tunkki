@@ -135,4 +135,9 @@ class File
         } 
         else { return 'X'; }
     }
+
+    public function __toString()
+    {
+        return '' ? $this->fileinfo : $this->fileinfo;
+    }
 }
