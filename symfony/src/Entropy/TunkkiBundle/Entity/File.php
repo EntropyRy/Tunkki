@@ -138,6 +138,6 @@ class File
 
     public function __toString()
     {
-        return '' ? $this->fileinfo : $this->fileinfo;
+        return $this->fileinfo ? $this->fileinfo : '' ;
     }
 }
