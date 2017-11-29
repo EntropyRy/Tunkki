@@ -11,7 +11,7 @@
     {% endif %}
 {% endfor %}
 {% if loaded %} 
-    <img src="{{ meta.image }}" alt="" />
+    <img src="/bundles/entropytunkki/images/logo.png" alt="" />
 {% endif %}
 {% endblock %}
 
@@ -35,8 +35,4 @@
     {% else %}
         {{ meta.title|truncate(40) }}
     {% endif %}
-    {# if object.files[0] is defined %}
-        {{ dump(object.files[0].file) }}
-    {% endif #}
-
 {% endblock %}
