@@ -82,7 +82,7 @@ class ItemAdmin extends AbstractAdmin
                 'currency' => 'Eur'
                 ))
             ->add('placeinstorage')
-            ->add('needsFixing', null, array('editable'=>true, 'template' => 'EntropyTunkkiBundle:Admin:invertboolean.html.twig'))
+            ->add('needsFixing', null, array('editable'=>true, 'inverse' => true))
 //            ->add('rentHistory')
 //            ->add('history')
 //            ->add('forSale', null, array('editable'=>true))
@@ -246,14 +246,6 @@ class ItemAdmin extends AbstractAdmin
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
         $Item->setCreator($user);
-        foreach ($Item->getfixingHistory() as $history) {
-            if($history->getCreator()==''){ 
-                $history->setCreator($user);
-            }
-            if($history->getModifier()==''){ 
-                $history->setModifier($user);
-            }
-        } 
     }
     public function postPersist($Item)
     {
@@ -267,32 +259,20 @@ class ItemAdmin extends AbstractAdmin
         $user = $this->ts->getToken()->getUser();
         $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
-        foreach ($Item->getfixingHistory() as $history) {
-            if($history->getCreator()==''){ 
-                $history->setCreator($user);
-            }
-            if($history->getModifier()==''){ 
-                $history->setModifier($user);
-            }
-        }
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
         $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated';
         if($original['name']!= $Item->getName()) {
             $text .= '; renamed from '.$original['name'];
-            $text .= ' by '. $username;
-            $this->mm->SendToMattermost($text);
         }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
             $text .= '; updeted to be broken';
-            $text .= ' by '. $username;
-            $this->mm->SendToMattermost($text);
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
             $text .= '; updeted to be fixed';
-            $text .= ' by '. $username;
-            $this->mm->SendToMattermost($text);
         }
+        $text .= ' by '. $username;
+        $this->mm->SendToMattermost($text);
 
     }
     protected function configureRoutes(RouteCollection $collection)

@@ -7,9 +7,12 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class EventAdmin extends AbstractAdmin
 {
+    protected $ts;
+    protected $mm;
     protected $parentAssociationMapping = 'product';
     /**
      * @param DatagridMapper $datagridMapper
@@ -58,7 +61,9 @@ class EventAdmin extends AbstractAdmin
             ;
         }
         $formMapper
-            ->add('product.needsFixing')
+            ->add('product.needsFixing', 'choice',[
+                    'choices' => [ true => 'Yes', false => 'No']
+                ])
             ->add('description','textarea', array('required' => false))
             ->add('creator', null, array('disabled' => true))
             ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
@@ -87,13 +92,34 @@ class EventAdmin extends AbstractAdmin
     }
     public function prePersist($Event)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $Event->setCreator($user);
         $Event->setModifier($user);
     }
+    public function postPersist($Event)
+    {
+        $text = '#### <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
+                $Event->getProduct()->getName().'> ';
+
+        if($Event->getProduct()->getNeedsFixing() == true){
+            $text .= 'updeted to be broken with comment: '. $Event->getDescription();
+        }
+        elseif($Event->getProduct()->getNeedsFixing() == false){
+            $text .= 'updeted to be fixed with comment: '. $Event->getDescription();
+        }
+        $text .= ' by '. $Event->getCreator();
+        $this->mm->SendToMattermost($text);
+    }
     public function preUpdate($Event)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
+
     }
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null) 
+    { 
+        $this->mm = $mm; 
+        $this->ts = $ts; 
+        parent::__construct($code, $class, $baseControllerName); 
+    } 
 }

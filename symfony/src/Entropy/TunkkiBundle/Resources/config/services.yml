@@ -28,6 +28,17 @@ services:
             - [addChild, ['@entropy_tunkki.admin.event']]
             - [addChild, ['@entropy_tunkki.admin.file']]
 
+    entropy_tunkki.admin.event:
+        class: Entropy\TunkkiBundle\Admin\EventAdmin
+        arguments: 
+            - ~
+            - Entropy\TunkkiBundle\Entity\Event
+            - SonataAdminBundle:CRUD
+            - "@entropy_tunkki.helper.mattermost"
+            - "@security.token_storage"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: All Events, show_mosaic_button: false  }
+
     entropy_tunkki.admin.file:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\File, SonataAdminBundle:CRUD]
@@ -43,11 +54,6 @@ services:
         tags:
                 - { name: sonata.page, alias: Item}
 
-    entropy_tunkki.admin.event:
-        class: Entropy\TunkkiBundle\Admin\EventAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Event, SonataAdminBundle:CRUD]
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: All Events, show_mosaic_button: false  }
     entropy_tunkki.admin.booking:
         class: Entropy\TunkkiBundle\Admin\BookingAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Booking, EntropyTunkkiBundle:BookingAdmin]
