@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class FileAdmin extends AbstractAdmin
 {
@@ -57,7 +58,7 @@ class FileAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('fileinfo')
-            ->add('file', 'sonata_type_model_list', array(
+            ->add('file', ModelListType::class, array(
                 'required' => false,
                 'btn_delete' => 'unlink',
                     ), array(
@@ -65,7 +66,6 @@ class FileAdmin extends AbstractAdmin
                         'context' => 'item'
                     )
             ))
-//            ->add('download', 'url', array('route' => 'sonata_media_download', 'parameters' => array('id'=>2 )))
         ;
         if(!$this->isChild()){
             $formMapper

@@ -19,6 +19,7 @@ services:
             - EntropyTunkkiBundle:ItemAdmin
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
+            - "@sonata.classification.manager.context"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
         calls:

@@ -10,18 +10,26 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
 use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
-use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
 use Application\Sonata\ClassificationBundle\Entity\Category;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
+use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sonata\CoreBundle\Form\Type\CollectionType;
+use Sonata\CoreBundle\Form\Type\DateTimePickerType;
+use Sonata\CoreBundle\Form\Type\DatePickerType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class ItemAdmin extends AbstractAdmin
 {
 
-    protected $mm; // Matteromst helper
-    protected $ts;
+    protected $mm; // Mattermost helper
+    protected $ts; // Token Storage
+    protected $cm; // Context Manager
 
     /**
      * Default Datagrid values
@@ -32,7 +40,6 @@ class ItemAdmin extends AbstractAdmin
         '_page' => 1,            // display the first page (default = 1)
         '_sort_order' => 'DESC', // reverse order (default = 'ASC')
         '_sort_by' => 'updatedAt'  // name of the ordered field
-        // the '_sort_by' key can be of the form 'mySubModel.mySubSubModel.myField'.
     );
     /**
      * @param DatagridMapper $datagridMapper
@@ -40,7 +47,8 @@ class ItemAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $context = 'item';
-        $currentContext = $this->getConfigurationPool()->getContainer()->get('sonata.classification.manager.context')->find($context);
+        $currentContext = $this->cm->find($context);
+		$categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
 
         $datagridMapper
             ->add('name')
@@ -58,15 +66,15 @@ class ItemAdmin extends AbstractAdmin
             ->add('category',  null, [
                     'label' => 'Item.category'
                 ], CategorySelectorType::class,  [
-                    'class' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getClass(),
+                    'class' => $categoryAdmin->getClass(),
                     'context' =>  $currentContext,
-                    'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
+                    'model_manager' => $categoryAdmin->getModelManager(),
                     'category' => new Category(),
                     'multiple' => true,
                 ]
             )
             ->add('forSale')
-            ->add('commission', 'doctrine_orm_date',['field_type'=>'sonata_type_date_picker'])
+            ->add('commission', 'doctrine_orm_date',['field_type'=>DateTimePickerType::class])
         ;
     }
 
@@ -108,10 +116,10 @@ class ItemAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $context = 'item';
-        $currentContext = $this->getConfigurationPool()->getContainer()->get('sonata.classification.manager.context')->find($context);
+        $currentContext = $this->cm->find($context);
+		$categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
 
         $formMapper
-//            ->add('id')
         ->tab('General')
             ->with('General Information', array('class' => 'col-md-6'))
                 ->add('name')
@@ -119,21 +127,21 @@ class ItemAdmin extends AbstractAdmin
                 ->add('model')
                 ->add('serialnumber')
                 ->add('placeinstorage')
-                ->add('description', 'textarea', array('required' => false, 'label' => 'Item description'))
-                ->add('commission', 'sonata_type_date_picker')
+                ->add('description', TextareaType::class, array('required' => false, 'label' => 'Item description'))
+                ->add('commission', DatePickerType::class)
                 ->add('commissionPrice')
-                ->add('tags', 'sonata_type_model_autocomplete', array(
+                ->add('tags', ModelAutocompleteType::class, array(
                     'property' => 'name',
                     'multiple' => 'true',
                     'required' => false,
                     'minimum_input_length' => 2
                 ))
-              ->add('category', 'Sonata\ClassificationBundle\Form\Type\CategorySelectorType', array(
-                        'class' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getClass(),
+              ->add('category', CategorySelectorType::class, array(
+                        'class' => $categoryAdmin->getClass(),
                         'required' => false,
                         'by_reference' => false,
                         'context' => $currentContext,
-                        'model_manager' => $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category')->getModelManager(),
+                        'model_manager' => $categoryAdmin->getModelManager(),
                         'category' => new Category(),
                         'btn_add' => false
                     ))
@@ -145,47 +153,26 @@ class ItemAdmin extends AbstractAdmin
                     'help' => 'Select all fitting groups!'
                 ))
                 ->add('rent')
-                ->add('rentNotice', 'textarea', array('required' => false))
+                ->add('rentNotice', TextareaType::class, array('required' => false))
                 ->add('forSale')
             ->end()
             ->with('Condition', array('class' => 'col-md-6'))
                 ->add('toSpareParts')
                 ->add('needsFixing')
-/*                ->add('fixingHistory', 'sonata_type_collection', array(
-                        'label' => null, 'btn_add'=>'Add new event', 
-                        'by_reference'=>false,
-                        'cascade_validation' => true, 
-                        'type_options' => array('delete' => false),
-                        'required' => false),
-                        array('edit'=>'inline'))*/
-            //    ->add('history')
             ->end() 
         ->end();
-/*        ->tab('Files')
-        ->with('Files')
-            ->add('files', 'sonata_type_collection', array(
-                    'label' => null, 'btn_add'=>'Add new file', 
-                    'by_reference'=>false,
-                    'cascade_validation' => true, 
-                    'type_options' => array('delete' => true),
-                    'required' => false),
-                    array('edit'=>'inline', 'inline'=>'table'))
-        ->end() 
-        ->end(); */
         $subject = $this->getSubject();
         if($subject){
             if($subject->getCreatedAt()){
                 $formMapper
                     ->tab('Meta')
                     ->with('history')
-                    ->add('rentHistory', null, 
-                        ['disabled' => true]
-                     )
+                    ->add('rentHistory', null, ['disabled' => true])
                     ->end()
                     ->with('Meta')
-                        ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
+                        ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
                         ->add('creator', null, array('disabled' => true))
-                        ->add('updatedAt', 'sonata_type_datetime_picker', array('disabled' => true))
+                        ->add('updatedAt', DateTimePickerType::class, array('disabled' => true))
                         ->add('modifier', null, array('disabled' => true))
                     ->end()
                     ;
@@ -288,10 +275,11 @@ class ItemAdmin extends AbstractAdmin
         }
         return $actions;
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $cm)
     {
         $this->mm = $mm;
         $this->ts = $ts;
+        $this->cm = $cm;
         parent::__construct($code, $class, $baseControllerName);
     }
 }

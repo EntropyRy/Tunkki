@@ -8,6 +8,9 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
 class PakageAdmin extends AbstractAdmin
 {
     /**
@@ -59,8 +62,8 @@ class PakageAdmin extends AbstractAdmin
             ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
     //        ->add('needsFixing')
             ->add('notes')
-            ->add('items', 'sonata_type_model', array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
-            ->add('rentFromItems', 'text', array('disabled' => true))
+            ->add('items', ModelType::class, array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
+            ->add('rentFromItems', TextType::class, array('disabled' => true))
             ->end()
         ;
     }

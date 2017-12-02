@@ -9,18 +9,21 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\CoreBundle\Form\Type\DateTimePickerType;
+use Sonata\CoreBundle\Form\Type\DateRangePickerType;
+use Sonata\CoreBundle\Form\Type\DateTimeRangePickerType;
+use Sonata\CoreBundle\Form\Type\DatePickerType;
+use Sonata\CoreBundle\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class BookingAdmin extends AbstractAdmin
 {
     protected $datagridValues = array(
-
-        // display the first page (default = 1)
         '_page' => 1,
-
-        // reverse order (default = 'ASC')
         '_sort_order' => 'DESC',
-
-        // name of the ordered field (default = the model's id field, if any)
         '_sort_by' => 'createdAt',
     );
 
@@ -34,9 +37,9 @@ class BookingAdmin extends AbstractAdmin
             ->add('items')
             ->add('pakages')
             ->add('invoicee')
-            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>'sonata_type_date_range_picker'])
-            ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
-            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>'sonata_type_datetime_range_picker'])
+            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>DateRangePickerType::class])
+            ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
+            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
             ->add('givenAwayBy')
             ->add('receivedBy')
         ;
@@ -101,19 +104,19 @@ class BookingAdmin extends AbstractAdmin
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
-                ->add('bookingDate', 'Sonata\CoreBundle\Form\Type\DatePickerType')
-                ->add('retrieval', 'Sonata\CoreBundle\Form\Type\DateTimePickerType', [
+                ->add('bookingDate', DatePickerType::class, [])
+                ->add('retrieval', DateTimePickerType::class, [
                         'dp_side_by_side' => true, 
                         'dp_use_seconds' => false,
                         'with_seconds' => false, 
                         ])
-                ->add('givenAwayBy', 'Sonata\AdminBundle\Form\Type\ModelListType', array('btn_add' => false, 'btn_delete' => 'unassign'))
-                ->add('returning', 'Sonata\CoreBundle\Form\Type\DateTimePickerType', ['dp_side_by_side' => true, 'dp_use_seconds' => false])
-                ->add('receivedBy', 'Sonata\AdminBundle\Form\Type\ModelListType', array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('returning', DateTimePickerType::class, ['dp_side_by_side' => true, 'dp_use_seconds' => false])
+                ->add('receivedBy', ModelListType::class, array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
                 ->add('returned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
-                ->add('invoicee', 'Sonata\AdminBundle\Form\Type\ModelListType', array('btn_delete' => 'unassign'))
+                ->add('invoicee', ModelListType::class, array('btn_delete' => 'unassign'))
                 ->add('rentingPrivileges', null, array('help' => 'Only items that are in this group are shown'))
             ->end()
             ->end();
@@ -123,7 +126,7 @@ class BookingAdmin extends AbstractAdmin
             $formMapper 
                 ->tab('Rentals')
                 ->with('The Stuff')
-                    ->add('items', 'Sonata\AdminBundle\Form\Type\ModelType', array(
+                    ->add('items', ModelType::class, array(
                         'query' => $items, 
                         'multiple' => true, 
                         'expanded' => false, 
@@ -137,31 +140,31 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                        // 'btn_add' => false
                     ))
-                    ->add('accessories', 'Sonata\CoreBundle\Form\Type\CollectionType', array('required' => false, 'by_reference' => false),
+                    ->add('accessories', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
-                    ->add('rentInformation', 'textarea', array('disabled' => true))
+                    ->add('rentInformation', TextareaType::class, array('disabled' => true))
                 ->end()
                 ->end()
                 ->tab('Payment')
                 ->with('Payment Information')
                     ->add('referenceNumber', null, array('disabled' => true))
-                    ->add('calculatedTotalPrice', 'text', array('disabled' => true))
+                    ->add('calculatedTotalPrice', TextType::class, array('disabled' => true))
                     ->add('numberOfRentDays', null, array('help' => 'How many days are actually billed', 'disabled' => false, 'required' => true))
                     ->add('actualPrice', null, array('disabled' => false, 'required' => false))
                 ->end()
                 ->with('Events', array('class' => 'col-md-12'))
-                    ->add('billableEvents', 'sonata_type_collection', array('required' => false, 'by_reference' => false),
+                    ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
                     ->add('paid')
-                    ->add('paid_date', 'sonata_type_datetime_picker', array('disabled' => false, 'required' => false))
+                    ->add('paid_date', DateTimePickerType::class, array('disabled' => false, 'required' => false))
                 ->end()
                 ->end()
                 ->tab('Meta')
-                    ->add('createdAt', 'sonata_type_datetime_picker', array('disabled' => true))
+                    ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
                     ->add('creator', null, array('disabled' => true))
-                    ->add('modifiedAt', 'sonata_type_datetime_picker', array('disabled' => true))
+                    ->add('modifiedAt', DateTimePickerType::class, array('disabled' => true))
                     ->add('modifier', null, array('disabled' => true))
                 ->end()
             ;

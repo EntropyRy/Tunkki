@@ -9,6 +9,11 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Sonata\CoreBundle\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 class EventAdmin extends AbstractAdmin
 {
     protected $ts;
@@ -20,7 +25,6 @@ class EventAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-//            ->add('id')
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')
@@ -61,17 +65,13 @@ class EventAdmin extends AbstractAdmin
             ;
         }
         $formMapper
-            ->add('product.needsFixing', 'choice',[
-                    'choices' => [ true => 'Yes', false => 'No']
-                ])
-            ->add('description','textarea', array('required' => false))
-            ->add('creator', null, array('disabled' => true))
-            ->add('createdAt','sonata_type_datetime_picker', array('disabled' => true))
+            ->add('product.needsFixing', CheckboxType::class,['required' => false])
+            ->add('description',TextareaType::class, array('required' => false))
         ;
         if (!$this->isChild()){
             $formMapper
                 ->add('modifier', null, array('disabled' => true))
-                ->add('updatedAt','sonata_type_datetime_picker', array('disabled' => true))
+                ->add('updatedAt',DateTimePickerType::class, array('disabled' => true))
             ;
         }
     }
