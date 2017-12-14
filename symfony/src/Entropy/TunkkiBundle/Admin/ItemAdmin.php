@@ -85,17 +85,15 @@ class ItemAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('tags')
             ->add('rent', 'currency', array(
                 'currency' => 'Eur'
                 ))
-            ->add('placeinstorage')
             ->add('needsFixing', null, array('editable'=>true, 'inverse' => true))
 //            ->add('rentHistory')
 //            ->add('history')
 //            ->add('forSale', null, array('editable'=>true))
 //            ->add('createdAt')
-//            ->add('updatedAt')
+            ->add('updatedAt')
 //            ->add('creator')
             ->add('_action', null, array(
                 'actions' => array(

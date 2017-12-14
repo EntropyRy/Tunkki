@@ -1,5 +1,8 @@
 fos_user:
     db_driver:      orm # can be orm or odm
+    from_email:     
+        address: webmaster@entropy.fi
+        sender_name: Entropy TunkkiAdmin
     firewall_name:  main
     user_class:     Application\Sonata\UserBundle\Entity\User
     group:
@@ -12,3 +15,6 @@ fos_user:
 sonata_user:
     security_acl: false
     manager_type: orm # can be orm or mongodb
+    class:
+        user: Application\Sonata\UserBundle\Entity\User
+        group: Application\Sonata\UserBundle\Entity\Group

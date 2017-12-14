@@ -1,29 +1,17 @@
 <?php
-/*
- * This file is part of the Sonata package.
- *
- * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-require_once __DIR__ . '/../app/bootstrap.php.cache';
-require_once __DIR__ . '/../app/AppKernel.php';
-
-//use Symfony\Component\HttpFoundation\Request;
-
-// if you want to use the SonataPageBundle with multisite
-// using different relative paths, you must change the request
-// object to use the SiteRequest
-use Sonata\PageBundle\Request\SiteRequest as Request;
-
-$request = Request::createFromGlobals();
-
+use Symfony\Component\HttpFoundation\Request;
+require __DIR__.'/../vendor/autoload.php';
+if (PHP_VERSION_ID < 70000) {
+    include_once __DIR__.'/../var/bootstrap.php.cache';
+}
 $kernel = new AppKernel('prod', false);
-
+if (PHP_VERSION_ID < 70000) {
+    $kernel->loadClassCache();
+}
+//$kernel = new AppCache($kernel);
+// When using the HttpCache, you need to call the method in your front controller instead of relying on the configuration parameter
+//Request::enableHttpMethodParameterOverride();
+$request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
-
 $kernel->terminate($request, $response);
-
