@@ -21,7 +21,7 @@ class PakageAdmin extends AbstractAdmin
         $datagridMapper
             ->add('name')
             ->add('rent')
-//            ->add('needsFixing')
+            ->add('whoCanRent')
             ->add('notes')
         ;
     }
@@ -58,12 +58,12 @@ class PakageAdmin extends AbstractAdmin
         $formMapper
             ->with('Pakage')
             ->add('name')
-            ->add('rent')
             ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
-    //        ->add('needsFixing')
-            ->add('notes')
             ->add('items', ModelType::class, array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
             ->add('rentFromItems', TextType::class, array('disabled' => true))
+            ->add('rent')
+    //        ->add('needsFixing')
+            ->add('notes')
             ->end()
         ;
     }
