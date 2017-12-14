@@ -1,7 +1,7 @@
 services:
     entropy_tunkki.helper.mattermost:
         class: Entropy\TunkkiBundle\Helper\Mattermost
-        arguments: [@service_container]
+        arguments: ["@service_container"]
     my_mattermost_authenticator:
         class: Entropy\TunkkiBundle\Security\MattermostAuthenticator
         #autowire: true
