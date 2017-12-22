@@ -31,7 +31,7 @@ services:
 
     entropy_tunkki.admin.event:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
-        arguments: 
+        arguments:
             - ~
             - Entropy\TunkkiBundle\Entity\Event
             - SonataAdminBundle:CRUD
@@ -57,7 +57,13 @@ services:
 
     entropy_tunkki.admin.booking:
         class: Entropy\TunkkiBundle\Admin\BookingAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Booking, EntropyTunkkiBundle:BookingAdmin]
+        arguments: 
+            - ~
+            - Entropy\TunkkiBundle\Entity\Booking
+            - EntropyTunkkiBundle:BookingAdmin
+            - "@entropy_tunkki.helper.mattermost"
+            - "@security.token_storage"
+
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
         calls:

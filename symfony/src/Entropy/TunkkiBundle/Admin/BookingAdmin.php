@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Route\RouteCollection;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Sonata\CoreBundle\Form\Type\DateTimePickerType;
 use Sonata\CoreBundle\Form\Type\DateRangePickerType;
 use Sonata\CoreBundle\Form\Type\DateTimeRangePickerType;
@@ -21,7 +22,10 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class BookingAdmin extends AbstractAdmin
 {
-    protected $datagridValues = array(
+    protected $mm; // Mattermost helper
+    protected $ts; // Token Storage
+
+	protected $datagridValues = array(
         '_page' => 1,
         '_sort_order' => 'DESC',
         '_sort_by' => 'createdAt',
@@ -98,7 +102,6 @@ class BookingAdmin extends AbstractAdmin
           //      ->andwhere('c.Returning > :returning')
           //      ->setParameter('retrieval', $retrieval)
           //      ->setParameter('returning', $returning)
-                
                 ;
         $formMapper
             ->tab('General')
@@ -211,7 +214,6 @@ class BookingAdmin extends AbstractAdmin
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
         }
-    
         return $viite.''.(10 - ($summa % 10)) % 10;
     }
     public function prePersist($booking)
@@ -219,13 +221,13 @@ class BookingAdmin extends AbstractAdmin
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $booking->setCreator($user);
         $booking->setActualPrice($booking->getCalculatedTotalPrice()*0.9);
-    }    
+    }
     public function preUpdate($booking)
     {
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $booking->setModifier($user);
-    } 
-  
+    }
+
     public function getFormTheme()
     {
         return array_merge(
@@ -264,4 +266,17 @@ class BookingAdmin extends AbstractAdmin
     {
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
     }
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
+    {
+        $this->mm = $mm;
+        $this->ts = $ts;
+        parent::__construct($code, $class, $baseControllerName);
+    }/*
+    public function postPersist($booking)
+	{
+        $user = $this->ts->getToken()->getUser();
+        $username = $user->getFirstname()." ".$user->getLastname();
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $booking->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> created by '.$username;
+        $this->mm->SendToMattermost($text);
+	}*/
 }
