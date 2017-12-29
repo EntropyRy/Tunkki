@@ -199,10 +199,6 @@ class BookingAdmin extends AbstractAdmin
         ;
     }
 
-    public function postPersist($booking)
-    {
-        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
-    }
 
     protected function calculateReferenceNumber($booking)
     {
@@ -221,6 +217,16 @@ class BookingAdmin extends AbstractAdmin
         $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
         $booking->setCreator($user);
         $booking->setActualPrice($booking->getCalculatedTotalPrice()*0.9);
+    }
+    public function postPersist($booking)
+    {
+        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        $user = $this->ts->getToken()->getUser();
+        $username = $user->getFirstname()." ".$user->getLastname();
+		$text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
+			UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
+			$booking->getBookingDate()->format('d.m.Y').' created by '.$username;
+        $this->mm->SendToMattermost($text);
     }
     public function preUpdate($booking)
     {
@@ -271,12 +277,5 @@ class BookingAdmin extends AbstractAdmin
         $this->mm = $mm;
         $this->ts = $ts;
         parent::__construct($code, $class, $baseControllerName);
-    }/*
-    public function postPersist($booking)
-	{
-        $user = $this->ts->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $booking->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> created by '.$username;
-        $this->mm->SendToMattermost($text);
-	}*/
+    }
 }

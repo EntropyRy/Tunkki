@@ -38,7 +38,7 @@
         "friendsofsymfony/user-bundle": "^2",
         "friendsofsymfony/rest-bundle": "^1.8",
         "nelmio/api-doc-bundle": "^2.13",
-        "stof/doctrine-extensions-bundle": "^1.2",
+        "stof/doctrine-extensions-bundle": "^1.3",
         "knpuniversity/oauth2-client-bundle": "^1.12"
     },
     "require-dev": {

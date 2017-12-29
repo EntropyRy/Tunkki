@@ -63,7 +63,6 @@ services:
             - EntropyTunkkiBundle:BookingAdmin
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
-
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
         calls:
