@@ -5,7 +5,7 @@
     {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['bookingDate']) }}<br>
     <small>
         {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
-    Invoicee: {{ object|render_list_element(admin.list['invoicee']) }}<br>
+    Renter: {{ object|render_list_element(admin.list['renter']) }}<br>
     Given Away by: {{ object.givenAwayBy }}
     Recived by: {{ object.ReceivedBy }}
     </small>

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BillableEvent
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\BillableEventRepository")
+ * @ORM\Entity
  */
 class BillableEvent
 {

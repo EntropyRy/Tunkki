@@ -97,9 +97,9 @@ class Booking
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Invoicee", inversedBy="bookings")
+     * @ORM\ManyToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Renter", inversedBy="bookings")
      */
-    private $invoicee;
+    private $renter;
 
     /**
      *
@@ -433,54 +433,6 @@ class Booking
     public function getReferenceNumber()
     {
         return $this->referenceNumber;
-    }
-
-    /**
-     * Set invoicee
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
-     *
-     * @return Booking
-     */
-    public function setInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee = null)
-    {
-        $this->invoicee = $invoicee;
-
-        return $this;
-    }
-
-    /**
-     * Add invoicee
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
-     *
-     * @return Booking
-     */
-    public function addInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
-    {
-        $this->invoicee[] = $invoicee;
-
-        return $this;
-    }
-
-    /**
-     * Remove invoicee
-     *
-     * @param \Entropy\TunkkiBundle\Entity\Invoicee $invoicee
-     */
-    public function removeInvoicee(\Entropy\TunkkiBundle\Entity\Invoicee $invoicee)
-    {
-        $this->invoicee->removeElement($invoicee);
-    }
-
-    /**
-     * Get invoicee
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getInvoicee()
-    {
-        return $this->invoicee;
     }
 
     /**
@@ -851,5 +803,29 @@ class Booking
     public function getReceivedBy()
     {
         return $this->receivedBy;
+    }
+
+    /**
+     * Set renter.
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Renter|null $renter
+     *
+     * @return Booking
+     */
+    public function setRenter(\Entropy\TunkkiBundle\Entity\Renter $renter = null)
+    {
+        $this->renter = $renter;
+
+        return $this;
+    }
+
+    /**
+     * Get renter.
+     *
+     * @return \Entropy\TunkkiBundle\Entity\Renter|null
+     */
+    public function getRenter()
+    {
+        return $this->renter;
     }
 }

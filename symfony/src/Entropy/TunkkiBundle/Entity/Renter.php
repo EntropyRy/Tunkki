@@ -5,12 +5,12 @@ namespace Entropy\TunkkiBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Invoicee
+ * Renter
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\InvoiceeRepository")
+ * @ORM\Entity
  */
-class Invoicee
+class Renter
 {
     /**
      * @var integer
@@ -24,7 +24,7 @@ class Invoicee
     /**
      * @var string
      *
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", mappedBy="invoicee")
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", mappedBy="renter")
      */
     private $bookings;
 
@@ -92,7 +92,7 @@ class Invoicee
      *
      * @param string $name
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setName($name)
     {
@@ -116,7 +116,7 @@ class Invoicee
      *
      * @param string $streetadress
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setStreetadress($streetadress)
     {
@@ -140,7 +140,7 @@ class Invoicee
      *
      * @param string $zipcode
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setZipcode($zipcode)
     {
@@ -164,7 +164,7 @@ class Invoicee
      *
      * @param string $city
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setCity($city)
     {
@@ -188,7 +188,7 @@ class Invoicee
      *
      * @param string $phone
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setPhone($phone)
     {
@@ -212,7 +212,7 @@ class Invoicee
      *
      * @param string $email
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setEmail($email)
     {
@@ -236,7 +236,7 @@ class Invoicee
      *
      * @param \Entropy\TunkkiBundle\Entity\Booking $bookings
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setBookings(\Entropy\TunkkiBundle\Entity\Booking $bookings = null)
     {
@@ -271,7 +271,7 @@ class Invoicee
      *
      * @param string $organization
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function setOrganization($organization)
     {
@@ -295,7 +295,7 @@ class Invoicee
      *
      * @param \Entropy\TunkkiBundle\Entity\Booking $booking
      *
-     * @return Invoicee
+     * @return Renter
      */
     public function addBooking(\Entropy\TunkkiBundle\Entity\Booking $booking)
     {

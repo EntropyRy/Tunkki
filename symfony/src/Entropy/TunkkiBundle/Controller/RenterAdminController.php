@@ -4,6 +4,6 @@ namespace Entropy\TunkkiBundle\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 
-class InvoiceeAdminController extends CRUDController
+class RenterAdminController extends CRUDController
 {
 }

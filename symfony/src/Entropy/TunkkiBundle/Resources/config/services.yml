@@ -73,13 +73,13 @@ services:
         class: Entropy\TunkkiBundle\Admin\PakageAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Pakage, EntropyTunkkiBundle:PakageAdmin]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Pakage }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Pakages }
 
-    entropy_tunkki.admin.invoicee:
-        class: Entropy\TunkkiBundle\Admin\InvoiceeAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Invoicee, EntropyTunkkiBundle:InvoiceeAdmin]
+    entropy_tunkki.admin.renter:
+        class: Entropy\TunkkiBundle\Admin\RenterAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Renter, EntropyTunkkiBundle:RenterAdmin]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Invoicee }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Renters }
 
     entropy_tunkki.admin.billable_event:
         class: Entropy\TunkkiBundle\Admin\BillableEventAdmin

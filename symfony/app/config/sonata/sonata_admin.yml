@@ -54,16 +54,18 @@ sonata_admin:
                 label_catalogue: EntropyTunkkiBundle
                 items:
                     - entropy_tunkki.admin.booking
-                    - entropy_tunkki.admin.pakage
-                    - entropy_tunkki.admin.invoicee
 
             sonata.admin.group.rentaladmin:
-                label:           RentalAdmin
+                label:           Configuration
                 label_catalogue: EntropyTunkkiBundle
                 items:
+                    - entropy_tunkki.admin.pakage
+                    - entropy_tunkki.admin.renter
                     - entropy_tunkki.admin.who_can_rent_choice
                     - entropy_tunkki.admin.billable_event
                     - entropy_tunkki.admin.accessory_choices
+                    - sonata.classification.admin.category
+                    - sonata.user.admin.user
 
             sonata.admin.group.classification:
                 label:           Classification 
@@ -71,8 +73,9 @@ sonata_admin:
                 items:
                     - sonata.classification.admin.tag
                     - sonata.classification.admin.context
-                    - sonata.classification.admin.category
                     - sonata.classification.admin.collection
+                    - sonata.classification.admin.category
+                roles: [SONATA_SUPER_ADMIN]
 
             sonata.admin.group.content:
                 label:           Content 
@@ -81,6 +84,7 @@ sonata_admin:
                     - sonata.page.admin.page
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
+                roles: [SONATA_SUPER_ADMIN]
 
             sonata.admin.group.administration:
                 label:           Administration
@@ -90,6 +94,7 @@ sonata_admin:
                     - sonata.user.admin.group
                     - sonata.page.admin.site
                     - sonata.notification.admin.message
+                roles: [SONATA_SUPER_ADMIN]
     assets:
         javascripts:
             # Defaults:
