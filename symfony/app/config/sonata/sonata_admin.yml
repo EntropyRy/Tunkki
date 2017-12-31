@@ -44,6 +44,7 @@ sonata_admin:
             sonata.admin.group.inventory:
                 label:           Inventory 
                 label_catalogue: EntropyTunkkiBundle
+                icon:            '<i class="fa fa-archive"></i>'
                 items:
                     - entropy_tunkki.admin.item
                     - entropy_tunkki.admin.event
@@ -52,12 +53,14 @@ sonata_admin:
             sonata.admin.group.rentals:
                 label:           Rentals 
                 label_catalogue: EntropyTunkkiBundle
+                icon:            '<i class="fa fa-sign-out"></i>'
                 items:
                     - entropy_tunkki.admin.booking
 
             sonata.admin.group.rentaladmin:
                 label:           Configuration
                 label_catalogue: EntropyTunkkiBundle
+                icon:            '<i class="fa fa-cogs"></i>'
                 items:
                     - entropy_tunkki.admin.pakage
                     - entropy_tunkki.admin.renter
