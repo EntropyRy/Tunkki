@@ -1068,16 +1068,16 @@
         },
         {
             "name": "enqueue/amqp-lib",
-            "version": "0.8.11",
+            "version": "0.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/amqp-lib.git",
-                "reference": "f465486ab94ef42c3220b792450d4713e80c1127"
+                "reference": "db759456632cda2d762c632a20660508bbe3976f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-enqueue/amqp-lib/zipball/f465486ab94ef42c3220b792450d4713e80c1127",
-                "reference": "f465486ab94ef42c3220b792450d4713e80c1127",
+                "url": "https://api.github.com/repos/php-enqueue/amqp-lib/zipball/db759456632cda2d762c632a20660508bbe3976f",
+                "reference": "db759456632cda2d762c632a20660508bbe3976f",
                 "shasum": ""
             },
             "require": {
@@ -1118,26 +1118,26 @@
                 "MIT"
             ],
             "description": "Message Queue Amqp Transport",
-            "homepage": "https://github.com/php-enqueue/enqueue-dev",
+            "homepage": "https://enqueue.forma-pro.com/",
             "keywords": [
                 "AMQP",
                 "messaging",
                 "queue"
             ],
-            "time": "2017-12-14T12:20:06+00:00"
+            "time": "2018-01-04T09:46:31+00:00"
         },
         {
             "name": "enqueue/amqp-tools",
-            "version": "0.8.11",
+            "version": "0.8.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-enqueue/amqp-tools.git",
-                "reference": "78f7763d9fbb79ec59676be01c8f92d90d4cb6b0"
+                "reference": "e8b28a03d9740ba1cb2cf7e0d8a82e1bac33acc7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-enqueue/amqp-tools/zipball/78f7763d9fbb79ec59676be01c8f92d90d4cb6b0",
-                "reference": "78f7763d9fbb79ec59676be01c8f92d90d4cb6b0",
+                "url": "https://api.github.com/repos/php-enqueue/amqp-tools/zipball/e8b28a03d9740ba1cb2cf7e0d8a82e1bac33acc7",
+                "reference": "e8b28a03d9740ba1cb2cf7e0d8a82e1bac33acc7",
                 "shasum": ""
             },
             "require": {
@@ -1169,13 +1169,13 @@
                 "MIT"
             ],
             "description": "Message Queue Amqp Tools",
-            "homepage": "https://github.com/php-enqueue/enqueue-dev",
+            "homepage": "https://enqueue.forma-pro.com/",
             "keywords": [
                 "AMQP",
                 "messaging",
                 "queue"
             ],
-            "time": "2017-12-14T12:20:06+00:00"
+            "time": "2018-01-04T09:46:31+00:00"
         },
         {
             "name": "fig/link-util",
@@ -3299,16 +3299,16 @@
         },
         {
             "name": "queue-interop/amqp-interop",
-            "version": "0.7.1",
+            "version": "0.7.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/queue-interop/amqp-interop.git",
-                "reference": "54f7cd58cc02594265b1fd400d5d7bbcadbf3691"
+                "reference": "03cfac42483d07ab45d1896a6a2e1d873a216bba"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/queue-interop/amqp-interop/zipball/54f7cd58cc02594265b1fd400d5d7bbcadbf3691",
-                "reference": "54f7cd58cc02594265b1fd400d5d7bbcadbf3691",
+                "url": "https://api.github.com/repos/queue-interop/amqp-interop/zipball/03cfac42483d07ab45d1896a6a2e1d873a216bba",
+                "reference": "03cfac42483d07ab45d1896a6a2e1d873a216bba",
                 "shasum": ""
             },
             "require": {
@@ -3333,7 +3333,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2017-11-14T14:32:21+00:00"
+            "time": "2018-01-04T09:52:06+00:00"
         },
         {
             "name": "queue-interop/queue-interop",
@@ -3586,16 +3586,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.30.0",
+            "version": "3.30.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "e492eb6ad23eed69f250c0bee5a59990d4756bbc"
+                "reference": "dd9675e053255c1e5c0a56e7f6ddb8752d0e7510"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/e492eb6ad23eed69f250c0bee5a59990d4756bbc",
-                "reference": "e492eb6ad23eed69f250c0bee5a59990d4756bbc",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/dd9675e053255c1e5c0a56e7f6ddb8752d0e7510",
+                "reference": "dd9675e053255c1e5c0a56e7f6ddb8752d0e7510",
                 "shasum": ""
             },
             "require": {
@@ -3606,6 +3606,7 @@
                 "sonata-project/block-bundle": "^3.2",
                 "sonata-project/core-bundle": "^3.6",
                 "sonata-project/exporter": "^1.7.1",
+                "symfony/asset": "^2.8 || ^3.2 || ^4.0",
                 "symfony/class-loader": "^2.8 || ^3.2 || ^4.0",
                 "symfony/config": "^2.8 || ^3.2 || ^4.0",
                 "symfony/console": "^2.8 || ^3.2 || ^4.0",
@@ -3680,20 +3681,20 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2017-12-25T16:13:27+00:00"
+            "time": "2018-01-02T08:27:49+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
-            "version": "3.9.0",
+            "version": "3.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataBlockBundle.git",
-                "reference": "e068ba31f067ba1622cf89c4e105c366d1b53d1b"
+                "reference": "904d35f99c05ee3eda3b1dec1f169fe4220eb5b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/e068ba31f067ba1622cf89c4e105c366d1b53d1b",
-                "reference": "e068ba31f067ba1622cf89c4e105c366d1b53d1b",
+                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/904d35f99c05ee3eda3b1dec1f169fe4220eb5b8",
+                "reference": "904d35f99c05ee3eda3b1dec1f169fe4220eb5b8",
                 "shasum": ""
             },
             "require": {
@@ -3703,6 +3704,7 @@
                 "sonata-project/core-bundle": "^3.4",
                 "symfony/form": "^2.8 || ^3.2 || ^4.0",
                 "symfony/http-kernel": "^2.8 || ^3.2 || ^4.0",
+                "symfony/twig-bundle": "^2.8 || ^3.2 || ^4.0",
                 "twig/twig": "^1.34 || ^2.0"
             },
             "conflict": {
@@ -3754,7 +3756,7 @@
                 "block",
                 "sonata"
             ],
-            "time": "2017-12-12T16:57:30+00:00"
+            "time": "2018-01-08T09:34:31+00:00"
         },
         {
             "name": "sonata-project/cache",
@@ -3900,16 +3902,16 @@
         },
         {
             "name": "sonata-project/classification-bundle",
-            "version": "3.5.0",
+            "version": "3.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataClassificationBundle.git",
-                "reference": "eaf69f12198a56a8edcf18b1e8557ea208de4364"
+                "reference": "36252814a1f335276136592d45fd40e7eb49cab1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/eaf69f12198a56a8edcf18b1e8557ea208de4364",
-                "reference": "eaf69f12198a56a8edcf18b1e8557ea208de4364",
+                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/36252814a1f335276136592d45fd40e7eb49cab1",
+                "reference": "36252814a1f335276136592d45fd40e7eb49cab1",
                 "shasum": ""
             },
             "require": {
@@ -3978,20 +3980,20 @@
                 "tag",
                 "taxonomy"
             ],
-            "time": "2017-12-08T09:25:16+00:00"
+            "time": "2018-01-07T10:02:10+00:00"
         },
         {
             "name": "sonata-project/core-bundle",
-            "version": "3.8.0",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "8e6bbe11c89a3ce540f3f3ce7c2f231c2f5a2d92"
+                "reference": "d6be7dd79a69dfeb63d75b4b0e4871d9cf4133a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/8e6bbe11c89a3ce540f3f3ce7c2f231c2f5a2d92",
-                "reference": "8e6bbe11c89a3ce540f3f3ce7c2f231c2f5a2d92",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/d6be7dd79a69dfeb63d75b4b0e4871d9cf4133a0",
+                "reference": "d6be7dd79a69dfeb63d75b4b0e4871d9cf4133a0",
                 "shasum": ""
             },
             "require": {
@@ -4053,7 +4055,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2017-12-16T18:36:00+00:00"
+            "time": "2018-01-07T10:18:00+00:00"
         },
         {
             "name": "sonata-project/datagrid-bundle",
@@ -4721,16 +4723,16 @@
         },
         {
             "name": "sonata-project/page-bundle",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "1a91939e2527d48e91c6e6f334ea501d0f8540c3"
+                "reference": "8dd0f02e0c20e01eaeac3821aff288a2e0593cbe"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/1a91939e2527d48e91c6e6f334ea501d0f8540c3",
-                "reference": "1a91939e2527d48e91c6e6f334ea501d0f8540c3",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/8dd0f02e0c20e01eaeac3821aff288a2e0593cbe",
+                "reference": "8dd0f02e0c20e01eaeac3821aff288a2e0593cbe",
                 "shasum": ""
             },
             "require": {
@@ -4810,37 +4812,36 @@
                 "page",
                 "sonata"
             ],
-            "time": "2017-12-12T17:10:38+00:00"
+            "time": "2018-01-07T10:12:57+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",
-            "version": "2.4.0",
+            "version": "2.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataSeoBundle.git",
-                "reference": "1e444d99d7fbc75b6ade8a5e6207cd96d2a9f48b"
+                "reference": "a4daa6c4b77406440e72c105ad22b85b73314b5e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/1e444d99d7fbc75b6ade8a5e6207cd96d2a9f48b",
-                "reference": "1e444d99d7fbc75b6ade8a5e6207cd96d2a9f48b",
+                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/a4daa6c4b77406440e72c105ad22b85b73314b5e",
+                "reference": "a4daa6c4b77406440e72c105ad22b85b73314b5e",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.6 || ^7.0",
                 "sonata-project/exporter": "^1.2.2",
-                "symfony/framework-bundle": "^2.8 || ^3.2",
-                "symfony/options-resolver": "^2.8 || ^3.2",
+                "symfony/framework-bundle": "^2.8 || ^3.2 || ^4.0",
+                "symfony/options-resolver": "^2.8 || ^3.2 || ^4.0",
                 "twig/twig": "^1.14.2 || ^2.0"
             },
             "require-dev": {
                 "guzzle/guzzle": "3.*",
-                "sllh/php-cs-fixer-styleci-bridge": "^2.0",
                 "sonata-project/admin-bundle": "^3.0",
                 "sonata-project/block-bundle": "^3.7",
-                "symfony/console": "^2.8 || ^3.2",
-                "symfony/finder": "^2.8 || ^3.2",
-                "symfony/phpunit-bridge": "^3.3"
+                "symfony/console": "^2.8 || ^3.2 || ^4.0",
+                "symfony/finder": "^2.8 || ^3.2 || ^4.0",
+                "symfony/phpunit-bridge": "^3.3 || ^4.0"
             },
             "suggest": {
                 "guzzle/guzzle": "3.*",
@@ -4878,7 +4879,7 @@
                 "seo",
                 "sonata"
             ],
-            "time": "2017-11-30T10:59:14+00:00"
+            "time": "2018-01-07T10:05:46+00:00"
         },
         {
             "name": "sonata-project/timeline-bundle",
@@ -5962,27 +5963,27 @@
         },
         {
             "name": "symfony/security-acl",
-            "version": "v3.0.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/security-acl.git",
-                "reference": "053b49bf4aa333a392c83296855989bcf88ddad1"
+                "reference": "ab4dfe2d95e038cd367dd04604487b0a3359bcff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/security-acl/zipball/053b49bf4aa333a392c83296855989bcf88ddad1",
-                "reference": "053b49bf4aa333a392c83296855989bcf88ddad1",
+                "url": "https://api.github.com/repos/symfony/security-acl/zipball/ab4dfe2d95e038cd367dd04604487b0a3359bcff",
+                "reference": "ab4dfe2d95e038cd367dd04604487b0a3359bcff",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.5.9",
-                "symfony/security-core": "~2.8|~3.0"
+                "symfony/security-core": "~2.8|~3.0|~4.0"
             },
             "require-dev": {
                 "doctrine/common": "~2.2",
                 "doctrine/dbal": "~2.2",
                 "psr/log": "~1.0",
-                "symfony/phpunit-bridge": "~2.8|~3.0"
+                "symfony/phpunit-bridge": "~2.8|~3.0|~4.0"
             },
             "suggest": {
                 "doctrine/dbal": "For using the built-in ACL implementation",
@@ -6019,7 +6020,7 @@
             ],
             "description": "Symfony Security Component - ACL (Access Control List)",
             "homepage": "https://symfony.com",
-            "time": "2015-12-28T09:39:46+00:00"
+            "time": "2017-07-21T06:01:18+00:00"
         },
         {
             "name": "symfony/swiftmailer-bundle",
@@ -6082,16 +6083,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.2",
+            "version": "v3.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "29961b693fa2157a3f349d1a801f9f8742be4e03"
+                "reference": "21abeae69baf64d689b04ca33663b4354be1a226"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/29961b693fa2157a3f349d1a801f9f8742be4e03",
-                "reference": "29961b693fa2157a3f349d1a801f9f8742be4e03",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/21abeae69baf64d689b04ca33663b4354be1a226",
+                "reference": "21abeae69baf64d689b04ca33663b4354be1a226",
                 "shasum": ""
             },
             "require": {
@@ -6233,7 +6234,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2017-12-15T02:05:35+00:00"
+            "time": "2018-01-05T08:33:31+00:00"
         },
         {
             "name": "twig/extensions",
