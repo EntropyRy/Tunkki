@@ -125,6 +125,7 @@ class ItemAdmin extends AbstractAdmin
                 ->add('model')
                 ->add('serialnumber')
                 ->add('placeinstorage')
+                ->add('url')
                 ->add('description', TextareaType::class, array('required' => false, 'label' => 'Item description'))
                 ->add('commission', DatePickerType::class)
                 ->add('commissionPrice')

@@ -16,7 +16,10 @@
 {% endif %}
 </div>
 <div class="col-md-4">
-    {{ object|render_list_element(admin.list['name']) }}<br> 
+    {{ object|render_list_element(admin.list['name']) }}
+        {% if object.url is not empty %}
+            <span class="pull-right"><a hrer="{{object.url}}">URL</a>
+        {% endif %}<br>
         {% if object.category is not empty %}
             {% if object.category.parent is not empty %}
                 {{ object.category.parent }} -
@@ -25,7 +28,7 @@
         {% endif %}
         <br>
     <small>
-        {{ object.description|raw|truncate(150) }}
+        {{ object.description|truncate(150) }}
     </small>
 </div>
 {% if object.rent %}

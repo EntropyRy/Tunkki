@@ -53,6 +53,13 @@ class Item
     /**
      * @var string
      *
+     * @ORM\Column(name="Url", type="string", length=500, nullable=true)
+     */
+	private $url;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="SerialNumber", type="string", length=255, nullable=true)
      */
     private $serialnumber;
@@ -975,5 +982,29 @@ class Item
     public function getCommissionPrice()
     {
         return $this->commissionPrice;
+    }
+
+    /**
+     * Set url.
+     *
+     * @param string|null $url
+     *
+     * @return Item
+     */
+    public function setUrl($url = null)
+    {
+        $this->url = $url;
+
+        return $this;
+    }
+
+    /**
+     * Get url.
+     *
+     * @return string|null
+     */
+    public function getUrl()
+    {
+        return $this->url;
     }
 }
