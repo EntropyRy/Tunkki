@@ -18,7 +18,7 @@
 <div class="col-md-4">
     {{ object|render_list_element(admin.list['name']) }}
         {% if object.url is not empty %}
-            <span class="pull-right"><a hrer="{{object.url}}">URL</a>
+            <span class="pull-right"><a href="{{object.url}}">URL</a></span>
         {% endif %}<br>
         {% if object.category is not empty %}
             {% if object.category.parent is not empty %}
