@@ -28,9 +28,9 @@ class Accessory
     private $name;
 
     /**
-     * @var integer
+     * @var string
      *
-     * @ORM\Column(name="count", type="integer")
+     * @ORM\Column(name="count", type="string", length=50)
      */
     private $count;
 
@@ -48,7 +48,7 @@ class Accessory
     /**
      * Set count
      *
-     * @param integer $count
+     * @param string $count
      *
      * @return Accessory
      */
@@ -62,7 +62,7 @@ class Accessory
     /**
      * Get count
      *
-     * @return integer
+     * @return string
      */
     public function getCount()
     {
