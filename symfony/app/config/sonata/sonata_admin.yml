@@ -4,6 +4,7 @@ sonata_admin:
         handler: sonata.admin.security.handler.role
     title_logo: bundles/entropytunkki/images/logo.png
 
+    persist_filters: true
     options:
         use_select2: true
         html5_validate: true # does use html5 validation
