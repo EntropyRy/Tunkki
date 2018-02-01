@@ -38,8 +38,8 @@ class ItemAdmin extends AbstractAdmin
      */
     protected $datagridValues = array(
         '_page' => 1,            // display the first page (default = 1)
-        '_sort_order' => 'DESC', // reverse order (default = 'ASC')
-        '_sort_by' => 'updatedAt'  // name of the ordered field
+        '_sort_order' => 'ASC', // reverse order (default = 'ASC')
+        '_sort_by' => 'name'  // name of the ordered field
     );
     /**
      * @param DatagridMapper $datagridMapper
