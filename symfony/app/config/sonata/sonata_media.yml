@@ -1,16 +1,8 @@
 # Täysi conffi: https://sonata-project.org/bundles/media/master/doc/reference/advanced_configuration.html
-
 sonata_media:
-        # if you don't use default namespace configuration
-    class:
-        media:              Application\Sonata\MediaBundle\Entity\Media
-        gallery:            Application\Sonata\MediaBundle\Entity\Gallery
-        gallery_has_media:  Application\Sonata\MediaBundle\Entity\GalleryHasMedia
-        category: Application\Sonata\ClassificationBundle\Entity\Category 
-
-    default_context: default
-    #category_manager: sonata.classification.manager.category
-    db_driver: doctrine_orm # or doctrine_mongodb, doctrine_phpcr
+    db_driver: doctrine_orm
+    force_disable_category: false
+    default_context: item
     contexts:
         default:  # the default context is mandatory
             providers:

@@ -47,12 +47,13 @@
 </div>
 {% if object.rent %}
 <div class="col-md-3">
-        Rent info<hr style="margin: 2px">
+        Rent info
+        <span class="pull-right">{{ object.rent }} €</span>
+		<hr style="margin: 2px">
         For:
         {% for who in object.whocanrent %}
             {{ who }}
         {% endfor %}
-        <span class="pull-right">{{ object.rent }} €</span><br>
     <small>
         {{ object.rentnotice }}
     </small>
