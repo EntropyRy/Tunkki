@@ -27,6 +27,7 @@ class ItemAdminController extends Controller
         $clonedObject->setDescription($object->getDescription());
         $clonedObject->setCommission($object->getCommission());
         $clonedObject->setCommissionPrice($object->getCommissionPrice());
+        $clonedObject->setURL($object->getURL());
         foreach ($object->getWhoCanRent() as $who){
             $clonedObject->addWhoCanRent($who);
         }

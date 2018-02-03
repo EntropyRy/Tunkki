@@ -32,16 +32,6 @@ class ItemAdmin extends AbstractAdmin
     protected $cm; // Context Manager
 
     /**
-     * Default Datagrid values
-     *
-     * @var array
-     */
-    protected $datagridValues = array(
-        '_page' => 1,            // display the first page (default = 1)
-        '_sort_order' => 'ASC', // reverse order (default = 'ASC')
-        '_sort_by' => 'name'  // name of the ordered field
-    );
-    /**
      * @param DatagridMapper $datagridMapper
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
@@ -236,31 +226,39 @@ class ItemAdmin extends AbstractAdmin
     public function postPersist($Item)
     {
         $user = $this->ts->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$username;
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
         $this->mm->SendToMattermost($text);
 	}
     public function preUpdate($Item)
     {
         $user = $this->ts->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
         $Item->setModifier($user);
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated';
+        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated;';
         if($original['name']!= $Item->getName()) {
-            $text .= '; renamed from '.$original['name'];
+            $text .= ' renamed from '.$original['name'];
+			$text .= ' by '. $user;
+			$this->mm->SendToMattermost($text);
         }
         if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text .= '; updeted to be broken';
+            $text .= ' updeted to be broken';
+			$text .= ' by '. $user;
+			$this->mm->SendToMattermost($text);
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text .= '; updeted to be fixed';
+            $text .= ' updeted to be fixed';
+			$text .= ' by '. $user;
+			$this->mm->SendToMattermost($text);
         }
-        $text .= ' by '. $username;
-        $this->mm->SendToMattermost($text);
 
     }
+	public function preRemove($Item)
+	{
+		$user = $this->ts->getToken()->getUser();
+        $text = '#### '.$Item->getName().' deleted by '.$user;
+		$this->mm->SendToMattermost($text);
+	}
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
