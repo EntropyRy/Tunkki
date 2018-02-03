@@ -97,6 +97,16 @@ services:
         tags:
             - { name: sonata.block, alias: bookingblock }
 
+    entropy_tunkki.block.brokenitems:
+        class: Entropy\TunkkiBundle\Block\BrokenItemsBlock
+        arguments: # Nämä kaikki välitetään classin _construct functiolle
+            - "Broken Items Block" # Tämä on blockin nimi adminissa
+            - "@templating" # teplate
+            - "@doctrine.orm.entity_manager" # Entity manager blockin käyttöön
+            - "@service_container" # service container
+        tags:
+            - { name: sonata.block, alias: brokenitemsblock }
+
     entropy_tunkki.admin.who_can_rent_choice:
         class: Entropy\TunkkiBundle\Admin\WhoCanRentChoiceAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
