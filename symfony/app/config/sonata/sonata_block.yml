@@ -28,4 +28,3 @@ sonata_block:
         entropy_tunkki.block.bookings:
             contexts:   [admin]
         entropy_tunkki.block.brokenitems:
-            contexts:   [admin]
