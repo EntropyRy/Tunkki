@@ -774,37 +774,37 @@ class Item
 
 
     /**
-     * Add pakage
+     * Add package
      *
-     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Package $package
      *
      * @return Item
      */
-    public function addPakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    public function addPackage(\Entropy\TunkkiBundle\Entity\Package $package)
     {
-        $this->pakages[] = $pakage;
+        $this->packages[] = $package;
 
         return $this;
     }
 
     /**
-     * Remove pakage
+     * Remove package
      *
-     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Package $package
      */
-    public function removePakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    public function removePackage(\Entropy\TunkkiBundle\Entity\Package $package)
     {
-        $this->pakages->removeElement($pakage);
+        $this->packages->removeElement($package);
     }
 
     /**
-     * Get pakages
+     * Get packages
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPakages()
+    public function getPackages()
     {
-        return $this->pakages;
+        return $this->packages;
     }
 
     /**
@@ -832,15 +832,15 @@ class Item
     }
 
     /**
-     * Set pakages
+     * Set packages
      *
-     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakages
+     * @param \Entropy\TunkkiBundle\Entity\Package $packages
      *
      * @return Item
      */
-    public function setPakages(\Entropy\TunkkiBundle\Entity\Pakage $pakages = null)
+    public function setPackages(\Entropy\TunkkiBundle\Entity\Package $packages = null)
     {
-        $this->pakages = $pakages;
+        $this->packages = $packages;
 
         return $this;
     }
