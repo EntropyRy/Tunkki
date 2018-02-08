@@ -117,7 +117,7 @@ class ItemAdmin extends AbstractAdmin
                 ->add('placeinstorage')
                 ->add('url')
                 ->add('description', TextareaType::class, array('required' => false, 'label' => 'Item description'))
-                ->add('commission', DatePickerType::class, ['required' => false ])
+                ->add('commission', DateTimePickerType::class, ['required' => false, 'dp_language' => 'fi' ])
                 ->add('commissionPrice')
                 ->add('tags', ModelAutocompleteType::class, array(
                     'property' => 'name',
