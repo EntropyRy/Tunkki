@@ -15,7 +15,7 @@ class BookingAdminController extends CRUDController
         foreach ($object->getItems() as $item){
             $items[]=$item;
         }
-        foreach ($object->getPakages() as $item){
+        foreach ($object->getPackages() as $item){
             $packages[]=$item;
         }
         foreach ($object->getAccessories() as $item){
