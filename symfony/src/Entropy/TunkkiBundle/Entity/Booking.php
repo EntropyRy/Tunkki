@@ -79,9 +79,9 @@ class Booking
 
     /**
      *
-     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Pakage")
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Package")
      */
-    private $pakages;
+    private $packages;
 
     /**
      *
@@ -368,43 +368,43 @@ class Booking
     }
 
     /**
-     * Add pakage
+     * Add package
      *
-     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Package $package
      *
      * @return Booking
      */
-    public function addPakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    public function addPackage(\Entropy\TunkkiBundle\Entity\Package $package)
     {
-        foreach ($pakage->getItems() as $item){
+        foreach ($package->getItems() as $item){
             $item->addRentHistory($this);
         }
-        $this->pakages[] = $pakage;
+        $this->packages[] = $package;
 
         return $this;
     }
 
     /**
-     * Remove pakage
+     * Remove package
      *
-     * @param \Entropy\TunkkiBundle\Entity\Pakage $pakage
+     * @param \Entropy\TunkkiBundle\Entity\Package $package
      */
-    public function removePakage(\Entropy\TunkkiBundle\Entity\Pakage $pakage)
+    public function removePackage(\Entropy\TunkkiBundle\Entity\Package $package)
     {
-        foreach ($pakage->getItems() as $item){
+        foreach ($package->getItems() as $item){
             $item->rentHistory->removeElement($this);
         }
-        $this->pakages->removeElement($pakage);
+        $this->packages->removeElement($package);
     }
 
     /**
-     * Get pakages
+     * Get packages
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getPakages()
+    public function getPackages()
     {
-        return $this->pakages;
+        return $this->packages;
     }
     public function __toString()
     {
@@ -519,9 +519,9 @@ class Booking
         foreach ($this->getItems() as $item) {
             $price += $item->getRent();
         }
-        if ($this->getPakages()){
-            foreach ($this->getPakages() as $pakage) {
-                $price += $pakage->getRent();
+        if ($this->getPackages()){
+            foreach ($this->getPackages() as $package) {
+                $price += $package->getRent();
             }
         }
         return $price;
@@ -541,9 +541,9 @@ class Booking
                 }
             }
         }
-        if ($this->getPakages()){
-            foreach ($this->getPakages() as $pakage) {
-                if($pakage->getIsSomethingBroken()){
+        if ($this->getPackages()){
+            foreach ($this->getPackages() as $package) {
+                if($package->getIsSomethingBroken()){
                     return true;
                 }
             }
@@ -561,9 +561,9 @@ class Booking
         foreach ($this->getItems() as $item) {
             $return .= $item->getName().': '.$item->getRentNotice().' ';
         }
-        if ($this->getPakages()){
-            foreach ($this->getPakages() as $pakage) {
-                foreach ($pakage->getItems() as $item) {
+        if ($this->getPackages()){
+            foreach ($this->getPackages() as $package) {
+                foreach ($package->getItems() as $item) {
                     $return .= $item->getName().': '.$item->getRentNotice().' ';
                 }
             }
@@ -599,7 +599,7 @@ class Booking
     public function __construct()
     {
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->pakages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->packages = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

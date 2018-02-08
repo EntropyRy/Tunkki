@@ -191,9 +191,9 @@ class Item
     private $modifier;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Pakage", inversedBy="items")
+     * @ORM\ManyToMany(targetEntity="Package", inversedBy="items")
      */
-    private $pakages;
+    private $packages;
 
     /**
      * @var \DateTime

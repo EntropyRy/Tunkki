@@ -39,7 +39,7 @@ class BookingAdmin extends AbstractAdmin
         $datagridMapper
             ->add('name')
             ->add('items')
-            ->add('pakages')
+            ->add('packages')
             ->add('renter')
             ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>DateRangePickerType::class])
             ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
@@ -61,7 +61,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
-            ->add('pakages')
+            ->add('packages')
             ->add('items')
             ->add('returned', null, array('editable' => true))
             ->add('paid', null, array('editable' => true))
@@ -136,7 +136,7 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                         'btn_add' => false,
                     ))
-                    ->add('pakages', null, array( //'sonata_type_model', array(
+                    ->add('packages', null, array( //'sonata_type_model', array(
  //                       'query' => $pakages, 
                         'multiple' => true, 
                         'expanded' => true, 
@@ -186,7 +186,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('returning')
             ->add('renter')
             ->add('items')
-            ->add('pakages')
+            ->add('packages')
             ->add('creator')
             ->add('referenceNumber')
             ->add('actualPrice')

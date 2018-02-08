@@ -50,7 +50,7 @@ sonata_admin:
                 label_catalogue: EntropyTunkkiBundle
                 icon:            '<i class="fa fa-cogs"></i>'
                 items:
-                    - entropy_tunkki.admin.pakage
+                    - entropy_tunkki.admin.package
                     - entropy_tunkki.admin.renter
                     - entropy_tunkki.admin.who_can_rent_choice
                     - entropy_tunkki.admin.billable_event

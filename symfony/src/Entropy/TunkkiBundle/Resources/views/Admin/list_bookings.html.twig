@@ -16,8 +16,8 @@
                 <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
             {% endif %}
         {% endfor %}
-        {% for pakage in object.pakages %}
-            {% for item in pakage.itemsNeedingFixing %}
+        {% for package in object.packages %}
+            {% for item in package.itemsNeedingFixing %}
                 <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
             {% endfor %}
         {% endfor %}

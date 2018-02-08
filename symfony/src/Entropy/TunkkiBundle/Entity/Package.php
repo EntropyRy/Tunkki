@@ -5,12 +5,12 @@ namespace Entropy\TunkkiBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Pakage
+ * Package
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\PakageRepository")
+ * @ORM\Entity
  */
-class Pakage
+class Package
 {
     /**
      * @var integer
@@ -22,7 +22,7 @@ class Pakage
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="pakages", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="packages", cascade={"all"}, fetch="EAGER")
      */
     private $items;
 
@@ -46,16 +46,6 @@ class Pakage
      * @ORM\Column(name="needs_fixing", type="boolean")
      */
     private $needsFixing = false;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})
-     * @ORM\JoinTable(
-     *      name="Pakage_tags",
-     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     * )
-     */
-    private $tags;
 
     /**
      *
@@ -86,7 +76,7 @@ class Pakage
      *
      * @param string $rent
      *
-     * @return Pakage
+     * @return Package
      */
     public function setRent($rent)
     {
@@ -110,7 +100,7 @@ class Pakage
      *
      * @param boolean $needsFixing
      *
-     * @return Pakage
+     * @return Package
      */
     public function setNeedsFixing($needsFixing)
     {
@@ -134,7 +124,7 @@ class Pakage
      *
      * @param string $notes
      *
-     * @return Pakage
+     * @return Package
      */
     public function setNotes($notes)
     {
@@ -158,7 +148,6 @@ class Pakage
     public function __construct()
     {
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -166,11 +155,11 @@ class Pakage
      *
      * @param \Entropy\TunkkiBundle\Entity\Item $item
      *
-     * @return Pakage
+     * @return Package
      */
     public function addItem(\Entropy\TunkkiBundle\Entity\Item $item)
     {
-        $item->addPakage($this);
+        $item->addPackage($this);
         $this->items[] = $item;
 
         return $this;
@@ -183,42 +172,8 @@ class Pakage
      */
     public function removeItem(\Entropy\TunkkiBundle\Entity\Item $item)
     {
-        $item->pakages->removeElement($this);
+        $item->packages->removeElement($this);
         $this->items->removeElement($item);
-    }
-
-    /**
-     * Add tag
-     *
-     * @param \Application\Sonata\ClassificationBundle\Entity\Tag $tag
-     *
-     * @return Pakage
-     */
-    public function addTag(\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
-    {
-        $this->tags[] = $tag;
-
-        return $this;
-    }
-
-    /**
-     * Remove tag
-     *
-     * @param \Application\Sonata\ClassificationBundle\Entity\Tag $tag
-     */
-    public function removeTag(\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
-    {
-        $this->tags->removeElement($tag);
-    }
-
-    /**
-     * Get tags
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTags()
-    {
-        return $this->tags;
     }
 
     /**
@@ -226,7 +181,7 @@ class Pakage
      *
      * @param string $name
      *
-     * @return Pakage
+     * @return Package
      */
     public function setName($name)
     {
@@ -308,7 +263,7 @@ class Pakage
      *
      * @param \Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent
      *
-     * @return Pakage
+     * @return Package
      */
     public function addWhoCanRent(\Entropy\TunkkiBundle\Entity\WhoCanRentChoice $whoCanRent)
     {

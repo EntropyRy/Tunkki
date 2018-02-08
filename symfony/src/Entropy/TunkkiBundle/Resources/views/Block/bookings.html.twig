@@ -35,11 +35,11 @@
                         {% endfor %}
                         </ul>
                     {% endif %}
-                    {% if booking.pakages is not empty %}
-                        {% for pakage in booking.pakages %}
-                            Pakage: {{ pakage }}
+                    {% if booking.packages is not empty %}
+                        {% for package in booking.packages %}
+                            Package: {{ package }}
                             <ul>
-                            {% for item in pakage.items %}
+                            {% for item in package.items %}
                                 <li class="
                                     {% if item.needsFixing %}btn-danger{% endif %}   
                                 ">{{ item }}</li>

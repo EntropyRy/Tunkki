@@ -69,11 +69,11 @@ services:
             - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_bookings.html.twig]]
             - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
 
-    entropy_tunkki.admin.pakage:
-        class: Entropy\TunkkiBundle\Admin\PakageAdmin
-        arguments: [~, Entropy\TunkkiBundle\Entity\Pakage, EntropyTunkkiBundle:PakageAdmin]
+    entropy_tunkki.admin.package:
+        class: Entropy\TunkkiBundle\Admin\PackageAdmin
+        arguments: [~, Entropy\TunkkiBundle\Entity\Package, EntropyTunkkiBundle:PackageAdmin]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Pakages }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Packages }
 
     entropy_tunkki.admin.renter:
         class: Entropy\TunkkiBundle\Admin\RenterAdmin

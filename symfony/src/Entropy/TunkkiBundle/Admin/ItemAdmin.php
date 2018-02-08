@@ -50,7 +50,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('whoCanRent')
             ->add('tags')
             ->add('rent')
-            ->add('pakages')
+            ->add('packages')
             ->add('toSpareParts')
             ->add('needsFixing')
             ->add('category',  null, [

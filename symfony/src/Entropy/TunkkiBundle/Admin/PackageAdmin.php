@@ -11,7 +11,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-class PakageAdmin extends AbstractAdmin
+class PackageAdmin extends AbstractAdmin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -56,7 +56,7 @@ class PakageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->with('Pakage')
+            ->with('Package')
             ->add('name')
             ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
             ->add('items', ModelType::class, array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
