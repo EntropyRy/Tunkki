@@ -19,6 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+//use Entropy\TunkkiBundle\Form\Type\ItemsType;
+use Entropy\TunkkiBundle\Entity\Item;
+
 
 class BookingAdmin extends AbstractAdmin
 {
@@ -97,7 +100,7 @@ class BookingAdmin extends AbstractAdmin
                 ->from('EntropyTunkkiBundle:Item', 'c')
                 ->where('c.needsFixing = false')
                 ->andwhere('c.toSpareParts = false')
-                ->orderBy('c.category', 'ASC')
+                ->orderBy('c.name', 'ASC')
           //      ->andwhere('c.Retrieval < :retrieval')
           //      ->andwhere('c.Returning > :returning')
           //      ->setParameter('retrieval', $retrieval)
@@ -132,7 +135,8 @@ class BookingAdmin extends AbstractAdmin
                     ->add('items', ModelType::class, array(
                         'query' => $items, 
                         'multiple' => true, 
-                        'expanded' => false, 
+                //        'class' => Item::class,
+						'template' => false,
                         'by_reference' => false,
                         'btn_add' => false,
                     ))
@@ -205,7 +209,7 @@ class BookingAdmin extends AbstractAdmin
         $ki = 0;
         $summa = 0;
         $kertoimet = [7, 3, 1];
-        $viite = '303'.$booking->getId();
+        $viite = '303'.($booking->getId()+1220);
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
