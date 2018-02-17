@@ -559,7 +559,9 @@ class Booking
     {
         $return = '';
         foreach ($this->getItems() as $item) {
-            $return .= $item->getName().': '.$item->getRentNotice().' ';
+			if($item->getRentNotice()){
+	            $return .= $item->getName().': '.$item->getRentNotice().' '. PHP_EOL;
+			}
         }
         if ($this->getPackages()){
             foreach ($this->getPackages() as $package) {

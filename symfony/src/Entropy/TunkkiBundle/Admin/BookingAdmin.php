@@ -17,9 +17,11 @@ use Sonata\CoreBundle\Form\Type\DatePickerType;
 use Sonata\CoreBundle\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
-//use Entropy\TunkkiBundle\Form\Type\ItemsType;
+use Entropy\TunkkiBundle\Form\Type\ItemsType;
 use Entropy\TunkkiBundle\Entity\Item;
 
 
@@ -86,26 +88,12 @@ class BookingAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        $em = $this->modelManager->getEntityManager('Entropy\TunkkiBundle\Entity\Item');
-
         $subject = $this->getSubject();
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
             $retrieval = $subject->getRetrieval();
             $returning = $subject->getReturning();
         }
-
-        $items = $em->createQueryBuilder('c')
-                ->select('c')
-                ->from('EntropyTunkkiBundle:Item', 'c')
-                ->where('c.needsFixing = false')
-                ->andwhere('c.toSpareParts = false')
-                ->orderBy('c.name', 'ASC')
-          //      ->andwhere('c.Retrieval < :retrieval')
-          //      ->andwhere('c.Returning > :returning')
-          //      ->setParameter('retrieval', $retrieval)
-          //      ->setParameter('returning', $returning)
-                ;
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
@@ -132,20 +120,14 @@ class BookingAdmin extends AbstractAdmin
             $formMapper 
                 ->tab('Rentals')
                 ->with('The Stuff')
-                    ->add('items', ModelType::class, array(
-                        'query' => $items, 
-                        'multiple' => true, 
-                //        'class' => Item::class,
-						'template' => false,
-                        'by_reference' => false,
-                        'btn_add' => false,
-                    ))
                     ->add('packages', null, array( //'sonata_type_model', array(
  //                       'query' => $pakages, 
                         'multiple' => true, 
                         'expanded' => true, 
                         'by_reference' => false,
-                       // 'btn_add' => false
+                    ))
+                    ->add('items', ItemsType::class, array(
+						'bookings' => $subject
                     ))
                     ->add('accessories', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
@@ -240,10 +222,11 @@ class BookingAdmin extends AbstractAdmin
 
     public function getFormTheme()
     {
-        return array_merge(
+		$themes = array_merge(
             parent::getFormTheme(),
             array('EntropyTunkkiBundle:BookingAdmin:admin.html.twig')
         );
+		return $themes;
     }
     public function validate(ErrorElement $errorElement, $object)
     {

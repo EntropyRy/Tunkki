@@ -10,7 +10,14 @@ services:
             - '@oauth2.registry'
             - '@doctrine.orm.entity_manager'
             - '@router'
-
+    entropy_tunkki.form.type.items:
+        class: Entropy\TunkkiBundle\Form\Type\ItemsType
+        arguments:
+            - "@property_accessor"
+            - '@doctrine.orm.entity_manager'
+            - '@sonata.classification.manager.category'
+        tags:
+            - { name: form.type }
     entropy_tunkki.admin.item:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
         arguments:
@@ -28,6 +35,7 @@ services:
             - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
             - [addChild, ['@entropy_tunkki.admin.event']]
             - [addChild, ['@entropy_tunkki.admin.file']]
+        public: true
 
     entropy_tunkki.admin.event:
         class: Entropy\TunkkiBundle\Admin\EventAdmin
@@ -39,12 +47,14 @@ services:
             - "@security.token_storage"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: All Events, show_mosaic_button: false  }
+        public: true
 
     entropy_tunkki.admin.file:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\File, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: All Files, show_mosaic_button: false }
+        public: true
 
     entropy_tunkki.page.itempage:
         class: Entropy\TunkkiBundle\PageService\ItemPage
@@ -54,6 +64,7 @@ services:
                 - "@doctrine.orm.entity_manager"
         tags:
                 - { name: sonata.page, alias: Item}
+        public: true
 
     entropy_tunkki.admin.booking:
         class: Entropy\TunkkiBundle\Admin\BookingAdmin
@@ -68,24 +79,28 @@ services:
         calls:
             - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_bookings.html.twig]]
             - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
+        public: true
 
     entropy_tunkki.admin.package:
         class: Entropy\TunkkiBundle\Admin\PackageAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Package, EntropyTunkkiBundle:PackageAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Packages }
+        public: true
 
     entropy_tunkki.admin.renter:
         class: Entropy\TunkkiBundle\Admin\RenterAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\Renter, EntropyTunkkiBundle:RenterAdmin]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Renters }
+        public: true
 
     entropy_tunkki.admin.billable_event:
         class: Entropy\TunkkiBundle\Admin\BillableEventAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\BillableEvent, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Billable Events }
+        public: true
 
     entropy_tunkki.block.bookings:
         class: Entropy\TunkkiBundle\Block\BookingsBlock
@@ -112,6 +127,7 @@ services:
         arguments: [~, Entropy\TunkkiBundle\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoices }
+        public: true
 
     entropy_tunkki.admin.accessory:
         class: Entropy\TunkkiBundle\Admin\AccessoryAdmin
