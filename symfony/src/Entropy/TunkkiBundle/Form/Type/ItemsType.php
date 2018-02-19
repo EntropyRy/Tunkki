@@ -49,23 +49,34 @@ class ItemsType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
 		$root = $this->cm->getRootCategory('item');
-	    $queryBuilder = $this->em->createQueryBuilder('c')
-                ->select('c')
-                ->from('EntropyTunkkiBundle:Item', 'c')
-                ->Where('c.needsFixing = false')
-                ->andWhere('c.rent >= 0.00')
-                ->andWhere('c.toSpareParts = false')
-                ->leftJoin('c.packages', 'p')
+	    $queryBuilder = $this->em->createQueryBuilder('i')
+                ->select('i')
+                ->from('EntropyTunkkiBundle:Item', 'i')
+                ->Where('i.needsFixing = false')
+                ->andWhere('i.rent >= 0.00')
+                ->andWhere('i.toSpareParts = false')
+                ->leftJoin('i.packages', 'p')
 				->andWhere('p IS NULL')
-                ->orderBy('c.name', 'ASC');
+                ->orderBy('i.name', 'ASC');
 
 		$choices = $queryBuilder->getQuery()->getResult();
+		// map categories
+		foreach($choices as $choice) {
+			foreach($root->getChildren() as $cat) {
+				if($choice->getCategory() == $cat){
+					$cats[$cat->getName()]=$choice;
+				}
+				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
+					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+				}	
+			}	
+		}
 		$resolver->setDefaults([
 			'class' => Item::class,
 			'required' => false,
 			'choices' => $choices,
 			'bookings' => null,
-			'categories' => $root,
+			'categories' => $cats,
 			'compound' => true,
 			'multiple' => true,
 			'expanded' => true,
