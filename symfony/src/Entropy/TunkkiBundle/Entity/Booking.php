@@ -392,7 +392,7 @@ class Booking
     public function removePackage(\Entropy\TunkkiBundle\Entity\Package $package)
     {
         foreach ($package->getItems() as $item){
-            $item->rentHistory->removeElement($this);
+            $item->removeRentHistory($this);
         }
         $this->packages->removeElement($package);
     }
