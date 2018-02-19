@@ -455,8 +455,8 @@ class Item
 
     public function __toString()
     {
-        if ($this->getName()){
-            return $this->getName();
+        if ($this->name){
+            return $this->name;
         }
         else{ return 'N/A';}
     }
@@ -890,16 +890,6 @@ class Item
             $this->removeRentHistory($rent);
         }
     }
-
-    public function canBeRentedByCondition()
-    {
-        if (empty($this->getNeedsFixing()) && empty($this->getForSale()) && empty($this->getToSpareParts())){
-            return true;
-        }
-        return false;
-    }
-
-
 
     /**
      * Set category

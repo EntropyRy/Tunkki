@@ -40,6 +40,7 @@
 	<h3>{{ key }}</h3>
 	<div id="masonry">
 		{% for key2, cat in category %}
+		{% if key2 %}
 		<div class="item">
 			<h4>{{ key2 }}</h4>
 			{%- for child in form %}
@@ -51,6 +52,7 @@
 				{% endif %}
 			{% endfor -%}
 		</div>
+		{% endif %}
 		{% endfor -%}
 	</div>
 </div>

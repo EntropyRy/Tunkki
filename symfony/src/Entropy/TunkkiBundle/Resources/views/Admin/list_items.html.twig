@@ -36,13 +36,19 @@
 {% else %}
 <div class="col-md-6">
 {% endif %}
-        {% if not object.canBeRentedByCondition %}
+        {% if object.needsFixing %}
         Condition  <span class="btn-danger pull-right">needs fixing</span><br>
         <hr style="margin: 2px">
         {% set fixh = object.fixinghistory|last %}
             {% if fixh %}
              <span>{{fixh.createdAt|date('d.m.Y')}}, {{fixh.creator}}: {{ fixh.description }}</span><br>
             {% endif %}
+        {% endif %}
+        {% if object.toSpareParts %}
+		<span><h2>Spare part</h2></span>
+        {% endif %}
+        {% if object.forSale %}
+		<span><h2>For Sale</h2></span>
         {% endif %}
 </div>
 {% if object.rent %}

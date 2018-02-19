@@ -53,8 +53,9 @@ class ItemsType extends AbstractType
                 ->select('i')
                 ->from('EntropyTunkkiBundle:Item', 'i')
                 ->Where('i.needsFixing = false')
-                ->andWhere('i.rent >= 0.00')
+//                ->andWhere('i.rent >= 0.00')
                 ->andWhere('i.toSpareParts = false')
+                ->andWhere('i.forSale = false')
                 ->leftJoin('i.packages', 'p')
 				->andWhere('p IS NULL')
                 ->orderBy('i.name', 'ASC');
@@ -64,11 +65,11 @@ class ItemsType extends AbstractType
 		foreach($choices as $choice) {
 			foreach($root->getChildren() as $cat) {
 				if($choice->getCategory() == $cat){
-					$cats[$cat->getName()]=$choice;
+					$cats[$cat->getName()][]=0;
 				}
 				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
-					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
-				}	
+					$cats[$cat->getName()][$choice->getCategory()->getName()]=0;
+				}
 			}	
 		}
 		$resolver->setDefaults([
