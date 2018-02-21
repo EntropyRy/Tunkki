@@ -166,7 +166,10 @@ class BookingAdmin extends AbstractAdmin
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
                 ->add('renter', ModelListType::class, array('btn_delete' => 'unassign'))
-                ->add('rentingPrivileges', null, array('required' => false, 'help' => 'If empty, everything is shown!'))
+				->add('rentingPrivileges', null, [
+					'placeholder' => 'Show everything!'
+
+				])
             ->end()
             ->end();
 
@@ -193,7 +196,7 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                     ))
                     ->add('items', ItemsType::class, array(
-						'bookings' => $subject,
+			//			'bookings' => $subject,
 						'categories' => $itemCats,
 						'choices' => $itemChoices
 					));
