@@ -7,6 +7,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\CoreBundle\Validator\ErrorElement;
 
 class RenterAdmin extends AbstractAdmin
 {
@@ -79,5 +80,13 @@ class RenterAdmin extends AbstractAdmin
             ->add('zipcode')
             ->add('city')
         ;
+	}
+    public function validate(ErrorElement $errorElement, $object)
+    {
+        if(empty($object->getPhone()) and (empty($object->getEmail()))){
+            $errorElement->with('email')->addViolation('Either one has to be defined')->end();
+            $errorElement->with('phone')->addViolation('Either one has to be defined')->end();
+        }
     }
+
 }
