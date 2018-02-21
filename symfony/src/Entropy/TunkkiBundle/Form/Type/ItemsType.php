@@ -1,21 +1,13 @@
 <?php
 namespace Entropy\TunkkiBundle\Form\Type;
 
-use Sonata\AdminBundle\Form\DataTransformer\ModelsToArrayTransformer;
-use Sonata\AdminBundle\Form\DataTransformer\ModelToIdTransformer;
-use Sonata\AdminBundle\Form\EventListener\MergeCollectionListener;
-use Sonata\AdminBundle\Form\ChoiceList\ModelChoiceLoader;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
+
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
-use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 use Entropy\TunkkiBundle\Entity\Item;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,13 +17,11 @@ class ItemsType extends AbstractType
    /**
      * @var PropertyAccessorInterface
      */
-    protected $propertyAccessor;
     protected $em;
     protected $cm;
 
-    public function __construct(PropertyAccessorInterface $propertyAccessor, $em, $cm)
+    public function __construct($em, $cm)
     {
-        $this->propertyAccessor = $propertyAccessor;
 		$this->em = $em;
 		$this->cm = $cm;
     }
@@ -45,10 +35,9 @@ class ItemsType extends AbstractType
         $view->vars['btn_list'] = $options['btn_list'];
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
-    }
-    public function configureOptions(OptionsResolver $resolver)
-    {
-		$root = $this->cm->getRootCategory('item');
+	}
+	private function getChoices($options = null)
+	{
 	    $queryBuilder = $this->em->createQueryBuilder('i')
                 ->select('i')
                 ->from('EntropyTunkkiBundle:Item', 'i')
@@ -59,8 +48,13 @@ class ItemsType extends AbstractType
                 ->leftJoin('i.packages', 'p')
 				->andWhere('p IS NULL')
                 ->orderBy('i.name', 'ASC');
-
 		$choices = $queryBuilder->getQuery()->getResult();
+		return $choices;
+	}
+
+	private function getCategories($choices)
+	{
+		$root = $this->cm->getRootCategory('item');
 		// map categories
 		foreach($choices as $choice) {
 			foreach($root->getChildren() as $cat) {
@@ -72,12 +66,20 @@ class ItemsType extends AbstractType
 				}
 			}	
 		}
+		return $cats;
+
+	}
+    public function configureOptions(OptionsResolver $resolver)
+	{
+		$choices = $this->getChoices();
+		$categories = $this->getCategories($choices);
+
 		$resolver->setDefaults([
 			'class' => Item::class,
 			'required' => false,
 			'choices' => $choices,
 			'bookings' => null,
-			'categories' => $cats,
+			'categories' => $categories,
 			'compound' => true,
 			'multiple' => true,
 			'expanded' => true,

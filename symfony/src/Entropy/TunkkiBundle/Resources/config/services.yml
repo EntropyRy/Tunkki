@@ -13,7 +13,6 @@ services:
     entropy_tunkki.form.type.items:
         class: Entropy\TunkkiBundle\Form\Type\ItemsType
         arguments:
-            - "@property_accessor"
             - '@doctrine.orm.entity_manager'
             - '@sonata.classification.manager.category'
         tags:
@@ -74,6 +73,8 @@ services:
             - EntropyTunkkiBundle:BookingAdmin
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
+            - "@sonata.classification.manager.category"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings }
         calls:

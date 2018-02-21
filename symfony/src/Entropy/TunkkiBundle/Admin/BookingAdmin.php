@@ -23,12 +23,15 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Entropy\TunkkiBundle\Form\Type\ItemsType;
 use Entropy\TunkkiBundle\Entity\Item;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 
 
 class BookingAdmin extends AbstractAdmin
 {
     protected $mm; // Mattermost helper
     protected $ts; // Token Storage
+    protected $em; // E manager
+    protected $cm; // Category manager
 
 	protected $datagridValues = array(
         '_page' => 1,
@@ -81,7 +84,54 @@ class BookingAdmin extends AbstractAdmin
                 ),
             ))
         ;
-    }
+	}
+	private function getItemChoices($privileges = null)
+	{
+	    $queryBuilder = $this->em->createQueryBuilder('i')
+                   ->select('i')
+                   ->from('EntropyTunkkiBundle:Item', 'i')
+                   ->andWhere('i.needsFixing = false')
+                   ->andWhere('i.rent >= 0.00')
+                   ->andWhere('i.toSpareParts = false')
+                   ->andWhere('i.forSale = false')
+                   ->leftJoin('i.packages', 'p')
+                   ->andWhere('p IS NULL')
+                   ->leftJoin('i.whoCanRent', 'r')
+                   ->andWhere('r = :privilege')
+                   ->setParameter('privilege', $privileges)
+                   ->orderBy('i.name', 'ASC');
+		$choices = $queryBuilder->getQuery()->getResult();
+		return $choices;
+	}
+	private function getPackageChoices($privileges)
+	{
+	    $queryBuilder = $this->em->createQueryBuilder('p')
+                   ->select('p')
+                   ->from('EntropyTunkkiBundle:Package', 'p')
+                   ->andWhere('p.rent >= 0.00')
+                   ->leftJoin('p.whoCanRent', 'r')
+                   ->andWhere('r = :privilege')
+                   ->setParameter('privilege', $privileges)
+                   ->orderBy('p.name', 'ASC');
+		$choices = $queryBuilder->getQuery()->getResult();
+		return $choices;
+	}
+	private function getCategories($choices = null)
+	{
+		$root = $this->cm->getRootCategory('item');
+		// map categories
+		foreach($choices as $choice) {
+			foreach($root->getChildren() as $cat) {
+				if($choice->getCategory() == $cat){
+					$cats[$cat->getName()][]=0;
+				}
+				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
+					$cats[$cat->getName()][$choice->getCategory()->getName()]=0;
+				}
+			}
+		}
+		return $cats;
+	}
 
     /**
      * @param FormMapper $formMapper
@@ -92,44 +142,66 @@ class BookingAdmin extends AbstractAdmin
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
             $retrieval = $subject->getRetrieval();
-            $returning = $subject->getReturning();
-        }
+			$returning = $subject->getReturning();
+			if(!empty($forWho)){
+				$packageChoices = $this->getPackageChoices($forWho);
+				$itemChoices = $this->getItemChoices($forWho);
+				$itemCats = $this->getCategories($itemChoices);
+			} 
+		}
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
                 ->add('bookingDate', DatePickerType::class, [])
                 ->add('retrieval', DateTimePickerType::class, [
-                        'dp_side_by_side' => true, 
+                        'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
-                        'with_seconds' => false, 
+                        'with_seconds' => false,
                         ])
-                ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign'))
+                ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign', 'required' => false))
                 ->add('returning', DateTimePickerType::class, ['dp_side_by_side' => true, 'dp_use_seconds' => false])
                 ->add('receivedBy', ModelListType::class, array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
                 ->add('returned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
                 ->add('renter', ModelListType::class, array('btn_delete' => 'unassign'))
-                ->add('rentingPrivileges', null, array('help' => 'Only items that are in this group are shown'))
+                ->add('rentingPrivileges', null, array('required' => false, 'help' => 'If empty, everything is shown!'))
             ->end()
             ->end();
 
-        $subject = $this->getSubject();
-        if (!empty($subject->getName())) {
+        if (!empty($subject->getName()) && empty($forWho)) {
             $formMapper 
                 ->tab('Rentals')
                 ->with('The Stuff')
                     ->add('packages', null, array( //'sonata_type_model', array(
- //                       'query' => $pakages, 
                         'multiple' => true, 
                         'expanded' => true, 
                         'by_reference' => false,
                     ))
                     ->add('items', ItemsType::class, array(
-						'bookings' => $subject
+						'bookings' => $subject,
+					));
+		} elseif (!empty($subject->getName()) && !empty($forWho)) {
+            $formMapper 
+                ->tab('Rentals')
+                ->with('The Stuff')
+                    ->add('packages', null, array( //'sonata_type_model', array(
+                        'choices' => $packageChoices, 
+                        'multiple' => true, 
+                        'expanded' => true, 
+                        'by_reference' => false,
                     ))
-                    ->add('accessories', CollectionType::class, array('required' => false, 'by_reference' => false),
+                    ->add('items', ItemsType::class, array(
+						'bookings' => $subject,
+						'categories' => $itemCats,
+						'choices' => $itemChoices
+					));
+		}
+
+		if (!empty($subject->getName())){
+            $formMapper 
+					->add('accessories', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
                     ->add('rentInformation', TextareaType::class, array('disabled' => true))
@@ -234,16 +306,10 @@ class BookingAdmin extends AbstractAdmin
             ->with('retrieval')
                 ->assertNotNull(array())
             ->end()
-            ->with('returning')
-                ->assertNotNull(array())
-            ->end()
             ->with('bookingDate')
                 ->assertNotNull(array())
             ->end()
-            ->with('givenAwayBy')
-                ->assertNotNull(array())
-            ->end()
-            ->with('rentingPrivileges')
+            ->with('renter')
                 ->assertNotNull(array())
             ->end()
         ;
@@ -259,10 +325,12 @@ class BookingAdmin extends AbstractAdmin
     {
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $em=null, $cm=null)
     {
         $this->mm = $mm;
         $this->ts = $ts;
+        $this->em = $em;
+        $this->cm = $cm;
         parent::__construct($code, $class, $baseControllerName);
     }
 }
