@@ -154,13 +154,14 @@ class BookingAdmin extends AbstractAdmin
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
                 ->add('bookingDate', DatePickerType::class, [])
-                ->add('retrieval', DateTimePickerType::class, [
+				->add('retrieval', DateTimePickerType::class, [
+						'required' => false,
                         'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
                         'with_seconds' => false,
                         ])
                 ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign', 'required' => false))
-                ->add('returning', DateTimePickerType::class, ['dp_side_by_side' => true, 'dp_use_seconds' => false])
+                ->add('returning', DateTimePickerType::class, ['dp_side_by_side' => true, 'dp_use_seconds' => false, 'required' => false])
                 ->add('receivedBy', ModelListType::class, array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
                 ->add('returned')
             ->end()
@@ -306,9 +307,6 @@ class BookingAdmin extends AbstractAdmin
     public function validate(ErrorElement $errorElement, $object)
     {
         $errorElement
-            ->with('retrieval')
-                ->assertNotNull(array())
-            ->end()
             ->with('bookingDate')
                 ->assertNotNull(array())
             ->end()
