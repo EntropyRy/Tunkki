@@ -35,6 +35,8 @@
 {% endblock %}
 
 {% block entropy_type_items_widget %}
+{% if bookings is not empty %}
+{% endif %}
 {% for key, category in categories %}
 <div class="col-md-12">
 	<h3>{{ key }}</h3>
@@ -45,10 +47,28 @@
 			<h4>{{ key2 }}</h4>
 			{%- for child in form %}
 				{% set entity = form.vars.choices[child.vars.value].data %}
+				{% set rentHistory = entity.rentHistory.toArray %}
 				{% if entity.category == key2 %}
-				<div {{ block('widget_container_attributes') }}>
-					{{ block('item') }}
-				</div>
+					{% if bookings is not empty %}
+						{% for booking in bookings %}
+							{% if booking in rentHistory %}
+								<div style="opacity: 0.3;">	
+									<div {{ block('widget_container_attributes') }}>
+										{{- form_widget(child) -}}
+										{{- form_label(child) -}}
+									</div>
+								</div>
+							{% else %}
+								<div {{ block('widget_container_attributes') }}>
+									{{ block('item') }}
+								</div>
+							{% endif %}
+						{% endfor %}
+					{% else %}
+						<div {{ block('widget_container_attributes') }}>
+							{{ block('item') }}
+						</div>
+					{% endif %}
 				{% endif %}
 			{% endfor -%}
 		</div>
@@ -59,7 +79,6 @@
 {% endfor %}
 <style>
 #masonry {
-   /* Prevent vertical gaps */
    line-height: 22px;
    -webkit-column-count: 3;
    -webkit-column-gap:   5px;

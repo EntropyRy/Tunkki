@@ -69,8 +69,6 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
-            ->add('packages')
-            ->add('items')
             ->add('returned', null, array('editable' => true))
             ->add('paid', null, array('editable' => true))
             ->add('_action', null, array(
@@ -116,6 +114,24 @@ class BookingAdmin extends AbstractAdmin
 		$choices = $queryBuilder->getQuery()->getResult();
 		return $choices;
 	}
+	private function getBookingsAtTheSameTime($subject)
+	{
+		$startAt = $subject->getRetrieval();
+		$endAt = $subject->getReturning();
+	    $queryBuilder = $this->em->createQueryBuilder('b')
+                   ->select('b')
+                   ->from('EntropyTunkkiBundle:Booking', 'b')
+				   ->Where('b.id != :id')
+				   ->andWhere('b.returned = false')
+                   ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
+                   ->andWhere('b.returning BETWEEN :startAt and :endAt')
+                   ->setParameter('startAt', $startAt)
+                   ->setParameter('endAt', $endAt)
+                   ->setParameter('id', $subject->getId())
+                   ->orderBy('b.name', 'ASC');
+		$bookings = $queryBuilder->getQuery()->getResult();
+		return $bookings;
+	}
 	private function getCategories($choices = null)
 	{
 		$root = $this->cm->getRootCategory('item');
@@ -141,8 +157,7 @@ class BookingAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
-            $retrieval = $subject->getRetrieval();
-			$returning = $subject->getReturning();
+			$bookings = $this->getBookingsAtTheSameTime($subject);
 			if(!empty($forWho)){
 				$packageChoices = $this->getPackageChoices($forWho);
 				$itemChoices = $this->getItemChoices($forWho);
@@ -153,15 +168,22 @@ class BookingAdmin extends AbstractAdmin
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
-                ->add('bookingDate', DatePickerType::class, [])
+				->add('bookingDate', DatePickerType::class, [
+						'format' => 'd.M.y',
+					])
 				->add('retrieval', DateTimePickerType::class, [
 						'required' => false,
+						'format' => 'd.M.y H:mm',
                         'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
-                        'with_seconds' => false,
                         ])
                 ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign', 'required' => false))
-                ->add('returning', DateTimePickerType::class, ['dp_side_by_side' => true, 'dp_use_seconds' => false, 'required' => false])
+				->add('returning', DateTimePickerType::class, [
+						'required' => false,
+						'format' => 'd.M.y H:mm',
+						'dp_side_by_side' => true, 
+						'dp_use_seconds' => false, 
+					])
                 ->add('receivedBy', ModelListType::class, array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
                 ->add('returned')
             ->end()
@@ -184,7 +206,7 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                     ))
                     ->add('items', ItemsType::class, array(
-						'bookings' => $subject,
+						'bookings' => $bookings,
 					));
 		} elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper 
@@ -197,7 +219,7 @@ class BookingAdmin extends AbstractAdmin
                         'by_reference' => false,
                     ))
                     ->add('items', ItemsType::class, array(
-			//			'bookings' => $subject,
+						'bookings' => $bookings,
 						'categories' => $itemCats,
 						'choices' => $itemChoices
 					));

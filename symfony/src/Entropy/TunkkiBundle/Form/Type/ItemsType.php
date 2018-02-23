@@ -80,6 +80,7 @@ class ItemsType extends AbstractType
 			'choices' => $choices,
 			'bookings' => null,
 			'categories' => $categories,
+			'by_reference' => false,
 			'compound' => true,
 			'multiple' => true,
 			'expanded' => true,

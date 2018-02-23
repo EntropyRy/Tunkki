@@ -140,11 +140,6 @@ class Item
 
     /**
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Booking", cascade={"all"})
-     * @ORM\JoinTable(
-     *      name="Item_rentHistory",
-     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="booking_id", referencedColumnName="id")}
-     * )
      */
     private $rentHistory;
 

@@ -1,26 +1,35 @@
 {% extends 'SonataAdminBundle:CRUD:base_list_flat_inner_row.html.twig' %}
 
 {% block row %}
-<div class="col-md-5">
+<div class="col-md-10">
+	<span class="pull-left">
     {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['bookingDate']) }}<br>
     <small>
+	{% if object.retrieval and object.returning %}
         {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
+	{% endif %}
     Renter: {{ object|render_list_element(admin.list['renter']) }}<br>
-    Given Away by: {{ object.givenAwayBy }}
-    Recived by: {{ object.ReceivedBy }}
+	{% if object.givenAwayBy %}
+	Given Away by: {{ object.givenAwayBy }}</br>
+	{% endif %}
+	{% if object.ReceivedBy %}
+	Recived by: {{ object.ReceivedBy }}</br>
+	{% endif %}
+    Returned: {{ object|render_list_element(admin.list['returned']) }}<br>
     </small>
-</div>
-<div class="col-md-5">
+	</span>
+	<span class="pull-left" style="padding-left: 5px;">
         {% for item in object.items %}
             {% if item.needsFixing %}
-                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
+                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }}</a>
             {% endif %}
         {% endfor %}
         {% for package in object.packages %}
             {% for item in package.itemsNeedingFixing %}
-                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }} needs fixing</a>
+                <a class="btn btn-sm btn-danger" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">{{ item.name }}</a>
             {% endfor %}
         {% endfor %}
+	</span>
 </div>
 <div class="col-md-2">
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
