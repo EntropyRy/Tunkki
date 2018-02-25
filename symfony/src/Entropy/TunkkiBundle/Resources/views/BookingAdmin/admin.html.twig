@@ -1,7 +1,6 @@
 {% extends 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
 
 {% block entropy_type_packages_widget %}
-	<div {{ block('widget_container_attributes') }}>
     {%- for child in form %}
 		{% set reserved = false %}
         {% set package = form.vars.choices[child.vars.value].data %}
@@ -12,10 +11,9 @@
 				{%endfor %}
 			{% endfor %}
 			<div class="box box-solid collapsed-box">
-				<div class="box-header" style="padding: 0px;{% if reserved %}opacity:0.5;{% endif %}">
+				<div class="box-header" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}">
 					<span>
-						{{- form_widget(child) -}}
-						{{- form_label(child, {translation_domain: choice_translation_domain}) -}}
+						{{ block('item') }}
 					</span>
 					<div class="box-tools pull-right">
 						<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
@@ -32,12 +30,13 @@
 			</div><!-- /.box -->
 		{% endif %}
     {% endfor -%}
-    </div> 
 {% endblock %}
 
 {% block item %}
+<div {{ block('widget_container_attributes') }}>
 	{{- form_widget(child) -}}
 	{{- form_label(child) -}}
+</div> 
 {% endblock %}
 
 {% block entropy_type_items_widget %}
@@ -50,29 +49,16 @@
 		<div class="item">
 			<h4>{{ key2 }}</h4>
 			{%- for child in form %}
-				{% set entity = form.vars.choices[child.vars.value].data %}
-				{% set rentHistory = entity.rentHistory.toArray %}
-				{% if entity.category == key2 %}
+				{% set item = form.vars.choices[child.vars.value].data %}
+				{% set rentHistory = item.rentHistory.toArray %}
+				{% if item.category == key2 %}
+					<div
 					{% if bookings is not empty %}
 						{% for booking in bookings %}
-							{% if booking in rentHistory %}
-								<div style="opacity: 0.3;">	
-									<div {{ block('widget_container_attributes') }}>
-										{{- form_widget(child) -}}
-										{{- form_label(child) -}}
-									</div>
-								</div>
-							{% else %}
-								<div {{ block('widget_container_attributes') }}>
-									{{ block('item') }}
-								</div>
-							{% endif %}
+							{% if booking in rentHistory %}style="opacity: 0.3;"{% endif %}	
 						{% endfor %}
-					{% else %}
-						<div {{ block('widget_container_attributes') }}>
-							{{ block('item') }}
-						</div>
 					{% endif %}
+				    >{{ block('item') }}</div>
 				{% endif %}
 			{% endfor -%}
 		</div>
@@ -81,47 +67,5 @@
 	</div>
 </div>
 {% endfor %}
-<style>
-#masonry {
-   line-height: 22px;
-   -webkit-column-count: 3;
-   -webkit-column-gap:   5px;
-   -moz-column-count:    3;
-   -moz-column-gap:      5px;
-   column-count:         3;
-   column-gap:           5px;
-}
-@media (max-width: 1400px) {
-  #masonry {
-  -moz-column-count:    4;
-  -webkit-column-count: 4;
-  column-count:         4;
-  }
-}
-@media (max-width: 1200px) {
-  #masonry {
-  -moz-column-count:    3;
-  -webkit-column-count: 3;
-  column-count:         3;
-  }
-}
-@media (max-width: 1000px) {
-  #masonry {
-  -moz-column-count:    2;
-  -webkit-column-count: 2;
-  column-count:         2;
-  }
-}
-@media (max-width: 500px) {
-  #masonry {
-  -moz-column-count:    1;
-  -webkit-column-count: 1;
-  column-count:         1;
-  }
-}
-.item {
-	height: auto;
-}
-</style>
 {% endblock %}
 

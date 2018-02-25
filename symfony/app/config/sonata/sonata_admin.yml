@@ -94,5 +94,6 @@ sonata_admin:
         extra_stylesheets:
             # Pagebundle
             - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
-            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
             - bundles/sonatapage/sonata-page.back.min.css
+            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
+            - bundles/entropytunkki/css/admin.css
