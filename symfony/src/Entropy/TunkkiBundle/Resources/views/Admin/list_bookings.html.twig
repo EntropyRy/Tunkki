@@ -18,6 +18,7 @@
     Returned: {{ object|render_list_element(admin.list['returned']) }}<br>
     </small>
 	</span>
+	{% if not object.paid and not object.returned %}
 	<span class="pull-left" style="padding-left: 5px;">
         {% for item in object.items %}
             {% if item.needsFixing %}
@@ -30,6 +31,7 @@
             {% endfor %}
         {% endfor %}
 	</span>
+	{% endif %}
 </div>
 <div class="col-md-2">
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>

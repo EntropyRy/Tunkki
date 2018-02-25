@@ -22,6 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Entropy\TunkkiBundle\Form\Type\ItemsType;
+use Entropy\TunkkiBundle\Form\Type\PackagesType;
 use Entropy\TunkkiBundle\Entity\Item;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 
@@ -69,8 +70,8 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
-            ->add('returned', null, array('editable' => true))
-            ->add('paid', null, array('editable' => true))
+            ->add('returned')
+            ->add('paid')
             ->add('_action', null, array(
                 'actions' => array(
                     'stuffList' => array(
@@ -176,53 +177,58 @@ class BookingAdmin extends AbstractAdmin
 						'format' => 'd.M.y H:mm',
                         'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
-                        ])
-                ->add('givenAwayBy', ModelListType::class, array('btn_add' => false, 'btn_delete' => 'unassign', 'required' => false))
+					])
+				->add('givenAwayBy', ModelListType::class, [
+						'btn_add' => false,
+						'btn_delete' => 'unassign', 
+						'required' => false
+					])
 				->add('returning', DateTimePickerType::class, [
 						'required' => false,
 						'format' => 'd.M.y H:mm',
 						'dp_side_by_side' => true, 
 						'dp_use_seconds' => false, 
 					])
-                ->add('receivedBy', ModelListType::class, array('required' => false, 'btn_add' => false, 'btn_delete' => 'unassign'))
+				->add('receivedBy', ModelListType::class, [
+						'required' => false, 
+						'btn_add' => false, 
+						'btn_delete' => 'unassign'
+					])
                 ->add('returned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
-                ->add('renter', ModelListType::class, array('btn_delete' => 'unassign'))
+                ->add('renter', ModelListType::class, ['btn_delete' => 'unassign'])
 				->add('rentingPrivileges', null, [
 					'placeholder' => 'Show everything!'
-
-				])
+					])
             ->end()
             ->end();
 
+		if (!empty($subject->getName())) {
+            $formMapper 
+                ->tab('Rentals')
+				->with('The Stuff (grayed out selections are in another booking)');
+		}
+
         if (!empty($subject->getName()) && empty($forWho)) {
             $formMapper 
-                ->tab('Rentals')
-                ->with('The Stuff')
-                    ->add('packages', null, array( //'sonata_type_model', array(
-                        'multiple' => true, 
-                        'expanded' => true, 
-                        'by_reference' => false,
-                    ))
-                    ->add('items', ItemsType::class, array(
+					->add('packages', PackagesType::class, [
 						'bookings' => $bookings,
-					));
+					])
+                    ->add('items', ItemsType::class, [
+						'bookings' => $bookings,
+					]);
 		} elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper 
-                ->tab('Rentals')
-                ->with('The Stuff')
-                    ->add('packages', null, array( //'sonata_type_model', array(
+					->add('packages', PackagesType::class, [ 
                         'choices' => $packageChoices, 
-                        'multiple' => true, 
-                        'expanded' => true, 
-                        'by_reference' => false,
-                    ))
-                    ->add('items', ItemsType::class, array(
+						'bookings' => $bookings,
+					])
+                    ->add('items', ItemsType::class, [
 						'bookings' => $bookings,
 						'categories' => $itemCats,
 						'choices' => $itemChoices
-					));
+					]);
 		}
 
 		if (!empty($subject->getName())){
@@ -235,10 +241,14 @@ class BookingAdmin extends AbstractAdmin
                 ->end()
                 ->tab('Payment')
                 ->with('Payment Information')
-                    ->add('referenceNumber', null, array('disabled' => true))
-                    ->add('calculatedTotalPrice', TextType::class, array('disabled' => true))
-                    ->add('numberOfRentDays', null, array('help' => 'How many days are actually billed', 'disabled' => false, 'required' => true))
-                    ->add('actualPrice', null, array('disabled' => false, 'required' => false))
+                    ->add('referenceNumber', null, ['disabled' => true])
+                    ->add('calculatedTotalPrice', TextType::class, ['disabled' => true])
+					->add('numberOfRentDays', null, [
+						'help' => 'How many days are actually billed', 
+						'disabled' => false, 
+						'required' => true
+						])
+                    ->add('actualPrice', null, ['disabled' => false, 'required' => false])
                 ->end()
                 ->with('Events', array('class' => 'col-md-12'))
                     ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),
@@ -249,10 +259,10 @@ class BookingAdmin extends AbstractAdmin
                 ->end()
                 ->end()
                 ->tab('Meta')
-                    ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
-                    ->add('creator', null, array('disabled' => true))
-                    ->add('modifiedAt', DateTimePickerType::class, array('disabled' => true))
-                    ->add('modifier', null, array('disabled' => true))
+                    ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                    ->add('creator', null, ['disabled' => true])
+                    ->add('modifiedAt', DateTimePickerType::class, ['disabled' => true])
+                    ->add('modifier', null, ['disabled' => true])
                 ->end()
             ;
         }

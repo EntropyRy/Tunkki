@@ -1,29 +1,35 @@
 {% extends 'SonataAdminBundle:Form:form_admin_fields.html.twig' %}
 
-{% block choice_widget_expanded %}
-   <div {{ block('widget_container_attributes') }}>
+{% block entropy_type_packages_widget %}
+	<div {{ block('widget_container_attributes') }}>
     {%- for child in form %}
-        {% set entity = form.vars.choices[child.vars.value].data %}
-		{% if entity.items is defined %}
-        <div class="box box-solid collapsed-box">
-            <div class="box-header" style="padding: 0px;">
-                <span>
-                    {{- form_widget(child) -}}
-                    {{- form_label(child, {translation_domain: choice_translation_domain}) -}}
-                </span>
-                <div class="box-tools pull-right">
-                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i>Show Contents</button>
-                </div>
-            </div>
-            <div style="display: none;" class="box-body">
-            <ul>
-                {% for item in entity.items %}
-                    <li>{{ item }}</li>
-                {% endfor %} 
-            </ul>
-            Note: {{ entity.notes }}
-            </div><!-- /.box-body -->
-        </div><!-- /.box -->
+		{% set reserved = false %}
+        {% set package = form.vars.choices[child.vars.value].data %}
+		{% if package.items is defined %}
+			{% for item in package.items %}
+				{% for itemBooking in item.rentHistory.toArray if itemBooking in bookings  %}
+					{% set reserved = true %}
+				{%endfor %}
+			{% endfor %}
+			<div class="box box-solid collapsed-box">
+				<div class="box-header" style="padding: 0px;{% if reserved %}opacity:0.5;{% endif %}">
+					<span>
+						{{- form_widget(child) -}}
+						{{- form_label(child, {translation_domain: choice_translation_domain}) -}}
+					</span>
+					<div class="box-tools pull-right">
+						<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
+					</div>
+				</div>
+				<div style="display: none;" class="box-body">
+				<ul>
+					{% for item in package.items %}
+						<li>{{ item }}</li>
+					{% endfor %} 
+				</ul>
+				Note: {{ package.notes }}
+				</div><!-- /.box-body -->
+			</div><!-- /.box -->
 		{% endif %}
     {% endfor -%}
     </div> 
@@ -35,8 +41,6 @@
 {% endblock %}
 
 {% block entropy_type_items_widget %}
-{% if bookings is not empty %}
-{% endif %}
 {% for key, category in categories %}
 <div class="col-md-12">
 	<h3>{{ key }}</h3>

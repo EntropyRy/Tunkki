@@ -17,6 +17,12 @@ services:
             - '@sonata.classification.manager.category'
         tags:
             - { name: form.type }
+    entropy_tunkki.form.type.packages:
+        class: Entropy\TunkkiBundle\Form\Type\PackagesType
+        arguments:
+            - '@doctrine.orm.entity_manager'
+        tags:
+            - { name: form.type }
     entropy_tunkki.admin.item:
         class: Entropy\TunkkiBundle\Admin\ItemAdmin
         arguments:
