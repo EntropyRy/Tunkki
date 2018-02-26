@@ -44,14 +44,14 @@
 <div class="col-md-12">
 	<h3>{{ key }}
 	{% if loop.first %}
-		<button id="pop" type="button" class="btn" data-toggle="popover" title="Color coding for the items" 
+		<button id="pop" type="button" class="btn pull-right" data-toggle="popover" title="Color coding for the items" 
 			data-content='<span style="opacity:0.3;">Greyed out</span> selections are in another booking.</br>
 		<span style="color:brown;">redish</span> selections need fixing.</br>
 		<span style="border: brown 1px dotted;">circled</span> are not allowed to be rented.</br></br>
-		Any combination is possible.'>
+		Any combination is possible.' data-placement="left">
 		Help?</button>
 		<script>
-		$("#pop").popover({"html":true, "viewport":"#masonry"});
+		$("#pop").popover({"html":true, });
 		</script>
 		{% endif %}</h3>
 	<div id="masonry">
