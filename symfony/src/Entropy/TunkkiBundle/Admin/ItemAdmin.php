@@ -117,7 +117,10 @@ class ItemAdmin extends AbstractAdmin
                 ->add('placeinstorage')
                 ->add('url')
                 ->add('description', TextareaType::class, array('required' => false, 'label' => 'Item description'))
-                ->add('commission', DateTimePickerType::class, ['required' => false, 'dp_language' => 'fi' ])
+				->add('commission', DatePickerType::class, [
+					'required' => false, 
+					'format' => 'd.M.y'
+				])
                 ->add('commissionPrice')
                 ->add('tags', ModelAutocompleteType::class, array(
                     'property' => 'name',
@@ -147,7 +150,7 @@ class ItemAdmin extends AbstractAdmin
             ->with('Condition', array('class' => 'col-md-6'))
                 ->add('forSale')
                 ->add('toSpareParts')
-                ->add('needsFixing')
+                ->add('needsFixing', null, ['disabled' => true, 'help' => 'to change this use the fixing history'])
             ->end() 
         ->end();
         $subject = $this->getSubject();
@@ -226,7 +229,7 @@ class ItemAdmin extends AbstractAdmin
     public function postPersist($Item)
     {
         $user = $this->ts->getToken()->getUser();
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
+        $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
         $this->mm->SendToMattermost($text);
 	}
     public function preUpdate($Item)
@@ -235,28 +238,28 @@ class ItemAdmin extends AbstractAdmin
         $Item->setModifier($user);
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = '#### <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> updated;';
+        $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>:';
         if($original['name']!= $Item->getName()) {
             $text .= ' renamed from '.$original['name'];
 			$text .= ' by '. $user;
 			$this->mm->SendToMattermost($text);
         }
-        if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text .= ' updeted to be broken';
+/*        if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
+            $text .= ' **_BROKEN_**';
 			$text .= ' by '. $user;
 			$this->mm->SendToMattermost($text);
         }
         elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text .= ' updeted to be fixed';
+            $text .= ' **_FIXED_**';
 			$text .= ' by '. $user;
 			$this->mm->SendToMattermost($text);
         }
-
+ */
     }
 	public function preRemove($Item)
 	{
 		$user = $this->ts->getToken()->getUser();
-        $text = '#### '.$Item->getName().' deleted by '.$user;
+        $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
 		$this->mm->SendToMattermost($text);
 	}
     protected function configureRoutes(RouteCollection $collection)

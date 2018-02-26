@@ -308,23 +308,21 @@ class BookingAdmin extends AbstractAdmin
     }
     public function prePersist($booking)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $booking->setCreator($user);
-        $booking->setActualPrice($booking->getCalculatedTotalPrice()*0.9);
     }
     public function postPersist($booking)
     {
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $user = $this->ts->getToken()->getUser();
-        $username = $user->getFirstname()." ".$user->getLastname();
 		$text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
 			UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
-			$booking->getBookingDate()->format('d.m.Y').' created by '.$username;
+			$booking->getBookingDate()->format('d.m.Y').' created by '.$user;
         $this->mm->SendToMattermost($text);
     }
     public function preUpdate($booking)
     {
-        $user = $this->getConfigurationPool()->getContainer()->get('security.token_storage')->getToken()->getUser();
+        $user = $this->ts->getToken()->getUser();
         $booking->setModifier($user);
     }
 

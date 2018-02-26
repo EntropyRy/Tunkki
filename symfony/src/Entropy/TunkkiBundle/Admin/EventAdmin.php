@@ -97,25 +97,39 @@ class EventAdmin extends AbstractAdmin
         $Event->setModifier($user);
     }
     public function postPersist($Event)
-    {
-        $text = '#### <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
-                $Event->getProduct()->getName().'> ';
-
-        if($Event->getProduct()->getNeedsFixing() == true){
-            $text .= 'updeted to be broken with comment: '. $Event->getDescription();
-        }
-        elseif($Event->getProduct()->getNeedsFixing() == false){
-            $text .= 'updeted to be fixed with comment: '. $Event->getDescription();
-        }
-        $text .= ' by '. $Event->getCreator();
+	{
+        $user = $Event->getCreator();
+		$text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text);
     }
     public function preUpdate($Event)
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
+	}
+    public function postUpdate($Event)
+	{
+        $user = $Event->getModifier();
+		$text = $this->getMMtext($Event, $user);
+        $this->mm->SendToMattermost($text);
+	}
+	private function getMMtext($Event, $user)
+	{
+        $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
+                $Event->getProduct()->getName().'> ';
 
-    }
+        if($Event->getProduct()->getNeedsFixing() == true){
+            $text .= '**_BROKEN_** ';
+        }
+        elseif($Event->getProduct()->getNeedsFixing() == false){
+            $text .= '**_FIXED_** ';
+		}
+		if($Event->getDescription()){
+			$text .= 'with comment: '.$Event->getDescription();
+		}
+		$text .= ' by '. $user;
+		return $text;
+	}
     public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null) 
     { 
         $this->mm = $mm; 

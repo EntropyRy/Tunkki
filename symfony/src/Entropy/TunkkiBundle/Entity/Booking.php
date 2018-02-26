@@ -120,7 +120,7 @@ class Booking
     private $receivedBy;
 
     /**
-     * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2)
+     * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2, nullable=true)
      */
     private $actualPrice;
 
