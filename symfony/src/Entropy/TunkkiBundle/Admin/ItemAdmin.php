@@ -147,11 +147,11 @@ class ItemAdmin extends AbstractAdmin
                 ->add('rent')
                 ->add('rentNotice', TextareaType::class, array('required' => false))
             ->end()
-            ->with('Condition', array('class' => 'col-md-6'))
+/*            ->with('Condition', array('class' => 'col-md-6'))
                 ->add('forSale')
                 ->add('toSpareParts')
                 ->add('needsFixing', null, ['disabled' => true, 'help' => 'to change this use the fixing history'])
-            ->end() 
+				->end() */
         ->end();
         $subject = $this->getSubject();
         if($subject){
@@ -212,8 +212,8 @@ class ItemAdmin extends AbstractAdmin
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Item', array('uri' => $admin->generateUrl('edit', array('id' => $id))));
-            $menu->addChild('Fixing History', array(
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.list', array('id' => $id))
+            $menu->addChild('Manage Status', array(
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.create', array('id' => $id))
             ));
             $menu->addChild('Manage Files', array(
                 'uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', array('id' => $id))

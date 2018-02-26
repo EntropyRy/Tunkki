@@ -129,7 +129,7 @@ class Item
     private $toSpareParts;
 
     /**
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="product", cascade={"all"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="item", cascade={"all"}, fetch="EAGER")
      */
     private $fixingHistory;
 

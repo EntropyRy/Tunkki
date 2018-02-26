@@ -27,7 +27,7 @@ class Event
      * 
      * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Item", inversedBy="fixingHistory")
      */
-    private $product;
+    private $item;
 
     /**
      * @var string
@@ -151,33 +151,33 @@ class Event
     }
 
     /**
-     * Set product
+     * Set item
      *
-     * @param \Entropy\TunkkiBundle\Entity\Item $product
+     * @param \Entropy\TunkkiBundle\Entity\Item $item
      *
      * @return Events
      */
-    public function setProduct(\Entropy\TunkkiBundle\Entity\Item $product = null)
+    public function setItem(\Entropy\TunkkiBundle\Entity\Item $item = null)
     {
-        $this->product = $product;
+        $this->item = $item;
 
         return $this;
     }
 
     /**
-     * Get product
+     * Get item
      *
      * @return \Entropy\TunkkiBundle\Entity\Item
      */
-    public function getProduct()
+    public function getItem()
     {
-        return $this->product;
+        return $this->item;
     }
 
     public function __toString()
     {
-        if(is_object($this->getProduct())){
-            return 'Event for '.$this->getProduct()->getName();
+        if(is_object($this->getItem())){
+            return 'Event for '.$this->getItem()->getName();
         }
         else {
             return 'No associated product';
