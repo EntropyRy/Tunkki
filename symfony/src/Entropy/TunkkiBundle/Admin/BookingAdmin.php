@@ -24,6 +24,8 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use Entropy\TunkkiBundle\Form\Type\ItemsType;
 use Entropy\TunkkiBundle\Form\Type\PackagesType;
 use Entropy\TunkkiBundle\Entity\Item;
+use Entropy\TunkkiBundle\Entity\Booking;
+use Entropy\TunkkiBundle\Entity\Package;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 
 
@@ -84,55 +86,6 @@ class BookingAdmin extends AbstractAdmin
             ))
         ;
 	}
-	private function getItemChoices($privileges = null)
-	{
-	    $queryBuilder = $this->em->createQueryBuilder('i')
-                   ->select('i')
-                   ->from('EntropyTunkkiBundle:Item', 'i')
-                   ->andWhere('i.needsFixing = false')
-                   ->andWhere('i.rent >= 0.00')
-                   ->andWhere('i.toSpareParts = false')
-                   ->andWhere('i.forSale = false')
-                   ->leftJoin('i.packages', 'p')
-                   ->andWhere('p IS NULL')
-                   ->leftJoin('i.whoCanRent', 'r')
-                   ->andWhere('r = :privilege')
-                   ->setParameter('privilege', $privileges)
-                   ->orderBy('i.name', 'ASC');
-		$choices = $queryBuilder->getQuery()->getResult();
-		return $choices;
-	}
-	private function getPackageChoices($privileges)
-	{
-	    $queryBuilder = $this->em->createQueryBuilder('p')
-                   ->select('p')
-                   ->from('EntropyTunkkiBundle:Package', 'p')
-                   ->andWhere('p.rent >= 0.00')
-                   ->leftJoin('p.whoCanRent', 'r')
-                   ->andWhere('r = :privilege')
-                   ->setParameter('privilege', $privileges)
-                   ->orderBy('p.name', 'ASC');
-		$choices = $queryBuilder->getQuery()->getResult();
-		return $choices;
-	}
-	private function getBookingsAtTheSameTime($subject)
-	{
-		$startAt = $subject->getRetrieval();
-		$endAt = $subject->getReturning();
-	    $queryBuilder = $this->em->createQueryBuilder('b')
-                   ->select('b')
-                   ->from('EntropyTunkkiBundle:Booking', 'b')
-				   ->Where('b.id != :id')
-				   ->andWhere('b.returned = false')
-                   ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
-                   ->orWhere('b.returning BETWEEN :startAt and :endAt')
-                   ->setParameter('startAt', $startAt)
-                   ->setParameter('endAt', $endAt)
-                   ->setParameter('id', $subject->getId())
-                   ->orderBy('b.name', 'ASC');
-		$bookings = $queryBuilder->getQuery()->getResult();
-		return $bookings;
-	}
 	private function getCategories($choices = null)
 	{
 		$root = $this->cm->getRootCategory('item');
@@ -158,10 +111,11 @@ class BookingAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
-			$bookings = $this->getBookingsAtTheSameTime($subject);
+			$bookingsrepo = $this->em->getRepository(Booking::class);
+			$bookings = $bookingsrepo->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
 			if(!empty($forWho)){
-				$packageChoices = $this->getPackageChoices($forWho);
-				$itemChoices = $this->getItemChoices($forWho);
+				$packageChoices = $this->em->getRepository(Package::class)->getPackageChoicesWithPrivileges($forWho);
+				$itemChoices = $this->em->getRepository(Item::class)->getItemChoicesWithPrivileges($forWho);
 				$itemCats = $this->getCategories($itemChoices);
 			} 
 		}
@@ -207,7 +161,7 @@ class BookingAdmin extends AbstractAdmin
 		if (!empty($subject->getName())) {
             $formMapper 
                 ->tab('Rentals')
-				->with('The Stuff (grayed out selections are in another booking)');
+				->with('The Stuff');
 		}
 
         if (!empty($subject->getName()) && empty($forWho)) {
@@ -221,8 +175,8 @@ class BookingAdmin extends AbstractAdmin
 		} elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper 
 					->add('packages', PackagesType::class, [ 
-                        'choices' => $packageChoices, 
 						'bookings' => $bookings,
+                        'choices' => $packageChoices, 
 					])
                     ->add('items', ItemsType::class, [
 						'bookings' => $bookings,

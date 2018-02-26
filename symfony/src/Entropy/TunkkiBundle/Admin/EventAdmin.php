@@ -70,6 +70,7 @@ class EventAdmin extends AbstractAdmin
 		if ($this->getSubject()->getItem() != NULL ){
 			$formMapper
 				->with('Status', ['class'=>'col-md-4'])
+				->add('item.cannotBeRented', CheckboxType::class,['required' => false])
 				->add('item.needsFixing', CheckboxType::class,['required' => false])
 				->add('item.forSale', CheckboxType::class,['required' => false])
 				->add('item.toSpareParts', CheckboxType::class,['required' => false])

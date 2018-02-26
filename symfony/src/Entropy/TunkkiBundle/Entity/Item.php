@@ -119,14 +119,21 @@ class Item
      *
      * @ORM\Column(name="NeedsFixing", type="boolean", nullable=true)
      */
-    private $needsFixing;
+    private $needsFixing = false;
 
     /**
      * @var boolean
      *
      * @ORM\Column(name="ToSpareParts", type="boolean")
      */
-    private $toSpareParts;
+    private $toSpareParts = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="CannotBeRented", type="boolean")
+     */
+	private $cannotBeRented = false;
 
     /**
      * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="item", cascade={"all"}, fetch="EAGER")
@@ -991,5 +998,29 @@ class Item
     public function getUrl()
     {
         return $this->url;
+    }
+
+    /**
+     * Set cannotBeRented.
+     *
+     * @param bool $cannotBeRented
+     *
+     * @return Item
+     */
+    public function setCannotBeRented($cannotBeRented)
+    {
+        $this->cannotBeRented = $cannotBeRented;
+
+        return $this;
+    }
+
+    /**
+     * Get cannotBeRented.
+     *
+     * @return bool
+     */
+    public function getCannotBeRented()
+    {
+        return $this->cannotBeRented;
     }
 }

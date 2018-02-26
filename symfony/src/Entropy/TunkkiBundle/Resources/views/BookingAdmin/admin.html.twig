@@ -40,6 +40,7 @@
 {% endblock %}
 
 {% block entropy_type_items_widget %}
+<small>Greyed out selections are in another booking and redish selections need fixing</small>
 {% for key, category in categories %}
 <div class="col-md-12">
 	<h3>{{ key }}</h3>
@@ -52,13 +53,18 @@
 				{% set item = form.vars.choices[child.vars.value].data %}
 				{% set rentHistory = item.rentHistory.toArray %}
 				{% if item.category == key2 %}
-					<div
+					<div style="
 					{% if bookings is not empty %}
 						{% for booking in bookings if booking in rentHistory %}
-							style="opacity: 0.3;"
+							opacity: 0.3;
 						{% endfor %}
 					{% endif %}
-				    >{{ block('item') }}</div>
+					{% if item.needsFixing %}
+						color:brown;
+					{% endif %}
+					">
+					{{ block('item') }}
+					</div>
 				{% endif %}
 			{% endfor -%}
 		</div>

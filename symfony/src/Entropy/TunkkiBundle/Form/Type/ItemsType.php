@@ -36,22 +36,6 @@ class ItemsType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
 	}
-	private function getChoices($options = null)
-	{
-	    $queryBuilder = $this->em->createQueryBuilder('i')
-                ->select('i')
-                ->from('EntropyTunkkiBundle:Item', 'i')
-                ->Where('i.needsFixing = false')
-//                ->andWhere('i.rent >= 0.00')
-                ->andWhere('i.toSpareParts = false')
-                ->andWhere('i.forSale = false')
-                ->leftJoin('i.packages', 'p')
-				->andWhere('p IS NULL')
-                ->orderBy('i.name', 'ASC');
-		$choices = $queryBuilder->getQuery()->getResult();
-		return $choices;
-	}
-
 	private function getCategories($choices)
 	{
 		$root = $this->cm->getRootCategory('item');
@@ -71,7 +55,7 @@ class ItemsType extends AbstractType
 	}
     public function configureOptions(OptionsResolver $resolver)
 	{
-		$choices = $this->getChoices();
+		$choices = $this->em->getRepository(Item::class)->getAllItemChoices();
 		$categories = $this->getCategories($choices);
 
 		$resolver->setDefaults([

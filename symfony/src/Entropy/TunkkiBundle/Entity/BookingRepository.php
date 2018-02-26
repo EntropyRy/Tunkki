@@ -10,4 +10,17 @@ namespace Entropy\TunkkiBundle\Entity;
  */
 class BookingRepository extends \Doctrine\ORM\EntityRepository
 {
+	public function findBookingsAtTheSameTime($id, $startAt, $endAt)
+	{
+		$queryBuilder = $this->createQueryBuilder('b')
+					   ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
+					   ->orWhere('b.returning BETWEEN :startAt and :endAt')
+					   ->andWhere('b.returned = false')
+					   ->andWhere('b.id != :id')
+					   ->setParameter('startAt', $startAt)
+					   ->setParameter('endAt', $endAt)
+					   ->setParameter('id', $id)
+					   ->orderBy('b.name', 'ASC');
+		return $queryBuilder->getQuery()->getResult();
+	}
 }

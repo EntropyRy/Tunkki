@@ -53,6 +53,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('packages')
             ->add('toSpareParts')
             ->add('needsFixing')
+            ->add('cannotBeRented')
             ->add('category',  null, [
                     'label' => 'Item.category'
                 ], CategorySelectorType::class,  [
@@ -189,6 +190,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('rent')
             ->add('rentNotice')
             ->add('needsFixing')
+            ->add('cannotBeRented')
             ->add('rentHistory')
             ->add('history')
             ->add('forSale')
