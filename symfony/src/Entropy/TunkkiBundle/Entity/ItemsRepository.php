@@ -13,9 +13,6 @@ class ItemsRepository extends \Doctrine\ORM\EntityRepository
 	public function getAllItemChoices()
 	{
 		$queryBuilder = $this->createQueryBuilder('i')
-				->Where('i.cannotBeRented = false')
-				->andWhere('i.toSpareParts = false')
-				->andWhere('i.forSale = false')
 				->leftJoin('i.packages', 'p')
 				->andWhere('p IS NULL')
 				->orderBy('i.name', 'ASC');

@@ -76,7 +76,7 @@ class EventAdmin extends AbstractAdmin
 				->add('item.toSpareParts', CheckboxType::class,['required' => false])
 				->end()
 				->with('Message', ['class' => 'col-md-8'])
-				->add('description',TextareaType::class, array('required' => false))
+				->add('description',TextareaType::class, array('required' => true))
 				->end()
 			;
 			if (!$this->isChild()){
@@ -134,11 +134,18 @@ class EventAdmin extends AbstractAdmin
         $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
                 $Event->getItem()->getName().'> ';
 		$fix = $Event->getItem()->getNeedsFixing();
+		$rent = $Event->getItem()->getCannotBeRented();
         if($fix == true){
             $text .= '**_BROKEN_** ';
         }
         elseif($fix == false){
             $text .= '**_FIXED_** ';
+		}
+        if($rent == true){
+            $text .= 'and cannot be rented ';
+        }
+        elseif($rent == false){
+            $text .= 'but can be rented ';
 		}
 		if($Event->getDescription()){
 			$text .= 'with comment: '.$Event->getDescription();

@@ -62,6 +62,9 @@
 					{% if item.needsFixing %}
 						color:brown;
 					{% endif %}
+					{% if item.cannotBeRented %}
+						border: brown 1px dotted;
+					{% endif %}
 					">
 					{{ block('item') }}
 					</div>
