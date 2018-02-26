@@ -40,10 +40,20 @@
 {% endblock %}
 
 {% block entropy_type_items_widget %}
-<small>Greyed out selections are in another booking and redish selections need fixing</small>
 {% for key, category in categories %}
 <div class="col-md-12">
-	<h3>{{ key }}</h3>
+	<h3>{{ key }}
+	{% if loop.first %}
+		<button id="pop" type="button" class="btn" data-toggle="popover" title="Color coding for the items" 
+			data-content='<span style="opacity:0.3;">Greyed out</span> selections are in another booking.</br>
+		<span style="color:brown;">redish</span> selections need fixing.</br>
+		<span style="border: brown 1px dotted;">circled</span> are not allowed to be rented.</br></br>
+		Any combination is possible.'>
+		Help?</button>
+		<script>
+		$("#pop").popover({"html":true, "viewport":"#masonry"});
+		</script>
+		{% endif %}</h3>
 	<div id="masonry">
 		{% for key2, cat in category %}
 		{% if key2 %}
