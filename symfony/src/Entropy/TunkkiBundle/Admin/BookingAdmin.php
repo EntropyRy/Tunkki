@@ -125,7 +125,7 @@ class BookingAdmin extends AbstractAdmin
 				   ->Where('b.id != :id')
 				   ->andWhere('b.returned = false')
                    ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
-                   ->andWhere('b.returning BETWEEN :startAt and :endAt')
+                   ->orWhere('b.returning BETWEEN :startAt and :endAt')
                    ->setParameter('startAt', $startAt)
                    ->setParameter('endAt', $endAt)
                    ->setParameter('id', $subject->getId())

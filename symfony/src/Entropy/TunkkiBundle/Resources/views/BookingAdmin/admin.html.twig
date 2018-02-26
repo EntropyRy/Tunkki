@@ -54,8 +54,8 @@
 				{% if item.category == key2 %}
 					<div
 					{% if bookings is not empty %}
-						{% for booking in bookings %}
-							{% if booking in rentHistory %}style="opacity: 0.3;"{% endif %}	
+						{% for booking in bookings if booking in rentHistory %}
+							style="opacity: 0.3;"
 						{% endfor %}
 					{% endif %}
 				    >{{ block('item') }}</div>
