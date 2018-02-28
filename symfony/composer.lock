@@ -875,16 +875,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.6.0",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "374e7ace49d864dad8cddbc55346447c8a6a2083"
+                "reference": "87ee409783a4a322b5597ebaae558661404055a7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/374e7ace49d864dad8cddbc55346447c8a6a2083",
-                "reference": "374e7ace49d864dad8cddbc55346447c8a6a2083",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/87ee409783a4a322b5597ebaae558661404055a7",
+                "reference": "87ee409783a4a322b5597ebaae558661404055a7",
                 "shasum": ""
             },
             "require": {
@@ -953,7 +953,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-12-20T00:38:15+00:00"
+            "time": "2018-02-27T07:30:56+00:00"
         },
         {
             "name": "egeloen/ckeditor-bundle",
@@ -2335,16 +2335,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "1.17.0",
+            "version": "v1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "2c1187323e7852279cfc8b982f6ea95715314a7e"
+                "reference": "ee11f72af34352d5c42b34c4d36a16fb1dfd5422"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/2c1187323e7852279cfc8b982f6ea95715314a7e",
-                "reference": "2c1187323e7852279cfc8b982f6ea95715314a7e",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/ee11f72af34352d5c42b34c4d36a16fb1dfd5422",
+                "reference": "ee11f72af34352d5c42b34c4d36a16fb1dfd5422",
                 "shasum": ""
             },
             "require": {
@@ -2385,7 +2385,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2018-02-12T19:02:54+00:00"
+            "time": "2018-02-26T15:06:14+00:00"
         },
         {
             "name": "kriswallsmith/assetic",
@@ -3531,16 +3531,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.31.1",
+            "version": "3.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "215fd15911510dd7146cd917f5369afb59124d8f"
+                "reference": "7f07dbf2cb5abf0e7eedafb08e78d6e1722afd1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/215fd15911510dd7146cd917f5369afb59124d8f",
-                "reference": "215fd15911510dd7146cd917f5369afb59124d8f",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/7f07dbf2cb5abf0e7eedafb08e78d6e1722afd1d",
+                "reference": "7f07dbf2cb5abf0e7eedafb08e78d6e1722afd1d",
                 "shasum": ""
             },
             "require": {
@@ -3552,7 +3552,7 @@
                 "sonata-project/core-bundle": "^3.6",
                 "sonata-project/exporter": "^1.7.1",
                 "symfony/asset": "^2.8 || ^3.2 || ^4.0",
-                "symfony/class-loader": "^2.8 || ^3.2 || ^4.0",
+                "symfony/class-loader": "^2.8 || ^3.2",
                 "symfony/config": "^2.8 || ^3.2 || ^4.0",
                 "symfony/console": "^2.8 || ^3.2 || ^4.0",
                 "symfony/dependency-injection": "^2.8 || ^3.2 || ^4.0",
@@ -3626,7 +3626,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2018-02-08T10:23:39+00:00"
+            "time": "2018-02-28T16:59:32+00:00"
         },
         {
             "name": "sonata-project/block-bundle",

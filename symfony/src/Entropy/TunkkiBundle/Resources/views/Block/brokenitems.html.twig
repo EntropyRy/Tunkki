@@ -11,10 +11,10 @@
                 <a href="{{ path('admin_entropy_tunkki_item_show', {'id':item.id}) }}">{{ item.name }}</a>
                 <div class="box-tools pull-right">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">
-                        <i class="fa fa-pencil-square-o"></i>edit
+                        <i class="fa fa-pencil-square-o"></i> edit
                     </a>
                     {% if item.fixingHistory is not empty %}
-                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i>Show Comments</button>
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Comments</button>
 					{% endif %}
                 </div>
             </div>
@@ -23,8 +23,8 @@
 					<div class="col-md-12">
                     {% if item.fixingHistory is not empty %}
                         <ul>
-                        {% for comment in item.fixingHistory %}
-                            <li class="">[{{comment.createdAt|date('j.n.Y h:m')}}] {{comment.creator}}: {{ comment.description }}</li>
+                        {% for comment in item.fixingHistory|reverse|slice(0,5) %}
+                            <li class="">[{{comment.createdAt|date('j.n.Y H:m')}}] {{comment.creator}}: {{ comment.description }}</li>
                         {% endfor %}
                         </ul>
                     {% endif %}

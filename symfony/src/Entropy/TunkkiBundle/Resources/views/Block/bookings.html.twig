@@ -13,40 +13,39 @@
                 {% if booking.IsSomethingBroken %}Something is Broken!!{% endif %}
                 <div class="box-tools pull-right">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_edit', {'id':booking.id}) }}">
-                        <i class="fa fa-pencil-square-o"></i>edit
+                        <i class="fa fa-pencil-square-o"></i> edit
                     </a>
-                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i>Show Contents</button>
+                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
                 </div>
             </div>
             <div style="display: none;" class="box-body">
                 <div class="row">
-                    <div class="col-md-5">
-                    <div>Given away: {{ booking.retrieval|date('d.m.Y H:i') }} by {{ booking.givenAwayBy }}</div>
-                    <div>Returning: {{ booking.returning|date('d.m.Y H:i') }} by {{ booking.receivedBy }}</div>
+                    <div class="col-md-4">
+						<div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} by {{ booking.givenAwayBy }}</div>
+						<hr>
+						<div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} by {{ booking.receivedBy }}</div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-8">
                     {% if booking.items is not empty %}
                         Items:
                         <ul>
                         {% for item in booking.items %}
-                            <li class="
-                                {% if item.needsFixing %}btn-danger{% endif %}   
-                            ">{{ item }}</li>
+						<li>
+							{% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
+                            {{ item }}</li>
                         {% endfor %}
                         </ul>
                     {% endif %}
-                    {% if booking.packages is not empty %}
-                        {% for package in booking.packages %}
-                            Package: {{ package }}
-                            <ul>
-                            {% for item in package.items %}
-                                <li class="
-                                    {% if item.needsFixing %}btn-danger{% endif %}   
-                                ">{{ item }}</li>
-                            {% endfor %}
-                            </ul>
-                        {% endfor %}
-                    {% endif %}
+					{% for package in booking.packages if package is not empty%}
+						Package: {{ package }}
+						<ul>
+						{% for item in package.items %}
+						<li>
+							{% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
+							{{ item }}</li>
+						{% endfor %}
+						</ul>
+					{% endfor %}
                     </div>
                 </div>
             </div>
