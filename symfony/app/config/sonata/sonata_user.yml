@@ -1,20 +1,30 @@
 fos_user:
-    db_driver:      orm # can be orm or odm
+    db_driver:      orm
     from_email:     
         address: webmaster@entropy.fi
         sender_name: Entropy TunkkiAdmin
-    firewall_name:  main
-    user_class:     Application\Sonata\UserBundle\Entity\User
+    firewall_name: main
+    user_class: Application\Sonata\UserBundle\Entity\User
+#    user_class: Entropy\TunkkiBundle\Entity\User
     group:
-        group_class:   Application\Sonata\UserBundle\Entity\Group
-        group_manager: sonata.user.orm.group_manager                    # If you're using doctrine orm (use sonata.user.mongodb.user_manager for mongodb)
+        group_class: Application\Sonata\UserBundle\Entity\Group
+        group_manager: sonata.user.orm.group_manager 
     service:
-        user_manager: sonata.user.orm.user_manager                      # If you're using doctrine orm (use sonata.user.mongodb.group_manager for mongodb)
-
+        user_manager: sonata.user.orm.user_manager
 
 sonata_user:
     security_acl: false
     manager_type: orm # can be orm or mongodb
     class:
         user: Application\Sonata\UserBundle\Entity\User
+        #        user: Entropy\TunkkiBundle\Entity\User
         group: Application\Sonata\UserBundle\Entity\Group
+    admin:
+        user:
+            class:          Sonata\UserBundle\Admin\Document\UserAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle
+        group:
+            class:          Sonata\UserBundle\Admin\Document\GroupAdmin
+            controller:     SonataAdminBundle:CRUD
+            translation:    SonataUserBundle        

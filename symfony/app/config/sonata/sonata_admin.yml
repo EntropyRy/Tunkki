@@ -30,6 +30,7 @@ sonata_admin:
 
         groups:
             sonata.admin.group.inventory:
+                keep_open:  true
                 label:           Inventory 
                 label_catalogue: EntropyTunkkiBundle
                 icon:            '<i class="fa fa-archive"></i>'
@@ -39,6 +40,7 @@ sonata_admin:
                     - entropy_tunkki.admin.file
 
             sonata.admin.group.rentals:
+                keep_open:  true
                 label:           Rentals 
                 label_catalogue: EntropyTunkkiBundle
                 icon:            '<i class="fa fa-sign-out"></i>'
@@ -56,7 +58,8 @@ sonata_admin:
                     - entropy_tunkki.admin.billable_event
                     - entropy_tunkki.admin.accessory_choices
                     - sonata.classification.admin.category
-                    - sonata.user.admin.user
+                    - entropy_tunkki.admin.user
+                      #    - sonata.user.admin.user
 
             sonata.admin.group.classification:
                 label:           Classification 
@@ -81,7 +84,8 @@ sonata_admin:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
-                    - sonata.user.admin.user
+                      #- sonata.user.admin.user
+                    - entropy_tunkki.admin.user
                     - sonata.user.admin.group
                     - sonata.page.admin.site
                     - sonata.notification.admin.message

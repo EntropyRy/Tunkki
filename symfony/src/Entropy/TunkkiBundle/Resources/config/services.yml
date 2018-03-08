@@ -54,6 +54,18 @@ services:
             - { name: sonata.admin, manager_type: orm, group: admin, label: All Events, show_mosaic_button: false  }
         public: true
 
+    entropy_tunkki.admin.user:
+        class: Entropy\TunkkiBundle\Admin\UserAdmin
+        arguments:
+            - ~
+            - Application\Sonata\UserBundle\Entity\User
+            - SonataAdminBundle:CRUD
+            - "@entropy_tunkki.helper.mattermost"
+            - "@security.token_storage"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: users, show_mosaic_button: false  }
+        public: true
+
     entropy_tunkki.admin.file:
         class: Entropy\TunkkiBundle\Admin\FileAdmin
         arguments: [~, Entropy\TunkkiBundle\Entity\File, SonataAdminBundle:CRUD]

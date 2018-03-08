@@ -54,8 +54,8 @@ class AppKernel extends Kernel
 	new Application\Sonata\PageBundle\ApplicationSonataPageBundle(),
 	new Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle(),
 	// APIIN TARVITTAVAT
-	new FOS\RestBundle\FOSRestBundle(),
-	new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
+//	new FOS\RestBundle\FOSRestBundle(),
+//	new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
         // Timeline
         new Sonata\TimelineBundle\SonataTimelineBundle(),
         new Spy\TimelineBundle\SpyTimelineBundle(),

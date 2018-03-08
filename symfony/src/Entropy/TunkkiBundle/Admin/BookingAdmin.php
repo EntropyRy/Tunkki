@@ -31,6 +31,7 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 
 class BookingAdmin extends AbstractAdmin
 {
+	protected $baseRoutePattern = 'booking';
     protected $mm; // Mattermost helper
     protected $ts; // Token Storage
     protected $em; // E manager

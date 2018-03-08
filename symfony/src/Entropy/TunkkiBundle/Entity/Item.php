@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Items
+ * Item
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\ItemsRepository")
@@ -182,13 +182,13 @@ class Item
 
     /**
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $creator;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $modifier;
 

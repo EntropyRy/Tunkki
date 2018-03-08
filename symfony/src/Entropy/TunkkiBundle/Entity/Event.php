@@ -56,7 +56,7 @@ class Event
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $creator;
 
@@ -64,7 +64,7 @@ class Event
      * @var string
      *
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $modifier;
 
