@@ -27,6 +27,7 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 class ItemAdmin extends AbstractAdmin
 {
 
+	protected $baseRoutePattern = 'item';
     protected $mm; // Mattermost helper
     protected $ts; // Token Storage
     protected $cm; // Context Manager

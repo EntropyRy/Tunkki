@@ -1,15 +1,15 @@
-version: '2'
+version: '3.2'
 
 networks:
     front-tier:
     back-tier:
 
 services:
-    storage:
-        image: debian:jessie
-        volumes:
-            - ./symfony:/var/www/symfony
-            - ./logs/symfony:/var/www/symfony/app/logs
+    #    storage:
+    #    image: debian:jessie
+    #    volumes:
+    #        - ./symfony:/var/www/symfony
+    #        - ./logs/symfony:/var/www/symfony/app/logs
     fpm:
         build: fpm
         restart: unless-stopped
@@ -17,8 +17,9 @@ services:
             - back-tier
         expose:
             - "9000"
-        volumes_from:
-            - storage
+        volumes:
+            - ./symfony:/var/www/symfony
+            - ./logs/symfony:/var/www/symfony/var/logs
     web:
         build: web
         restart: unless-stopped
@@ -29,7 +30,8 @@ services:
             - "3011:80"
         links:
             - fpm
-        volumes_from:
-            - storage
+        volumes:
+            - ./symfony:/var/www/symfony
+            - ./logs/symfony:/var/www/symfony/var/logs
         volumes:
             - ./logs/nginx/:/var/log/nginx

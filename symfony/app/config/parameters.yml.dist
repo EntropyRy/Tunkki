@@ -8,14 +8,15 @@ parameters:
     database_password: ~
     mailer_transport: smtp
     mailer_host: null
+    mailer_port: null
     mailer_user: null
     mailer_password: null
+    mailer_sender_address: null
     locale: en
     secret: MyownSecret
     mm_tunkki_hook: null
     mm_tunkki_img: null
     mm_tunkki_botname: null
-    mm_add_url: null
     mattermost_client_id: null
     mattermost_client_secret: null
     mattermost_redirect_route: null
