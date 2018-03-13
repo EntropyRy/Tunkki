@@ -91,5 +91,12 @@ class Accessory
     public function getName()
     {
         return $this->name;
-    }
+	}
+
+	public function __toString()
+	{
+		$name = $this->name ? $this->name : 'n/a';
+		$count = $this->count ? $this->count : '';
+		return $name .' X '. $count;
+	}
 }

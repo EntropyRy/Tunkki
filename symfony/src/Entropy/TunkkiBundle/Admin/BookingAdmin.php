@@ -2,6 +2,8 @@
 
 namespace Entropy\TunkkiBundle\Admin;
 
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,23 +12,25 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\CoreBundle\Validator\ErrorElement;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+// Forms
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\CoreBundle\Form\Type\DateTimePickerType;
 use Sonata\CoreBundle\Form\Type\DateRangePickerType;
 use Sonata\CoreBundle\Form\Type\DateTimeRangePickerType;
 use Sonata\CoreBundle\Form\Type\DatePickerType;
 use Sonata\CoreBundle\Form\Type\CollectionType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Entropy\TunkkiBundle\Form\Type\ItemsType;
 use Entropy\TunkkiBundle\Form\Type\PackagesType;
+// Entity
 use Entropy\TunkkiBundle\Entity\Item;
 use Entropy\TunkkiBundle\Entity\Booking;
 use Entropy\TunkkiBundle\Entity\Package;
-use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 
 
 class BookingAdmin extends AbstractAdmin
@@ -42,6 +46,23 @@ class BookingAdmin extends AbstractAdmin
         '_sort_order' => 'DESC',
         '_sort_by' => 'createdAt',
     );
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    {
+        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+            return;
+        }
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        $id = $admin->getRequest()->get('id');
+    
+//        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
+
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild('Edit Booking', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
+            $menu->addChild('Show Stufflist', [
+                'uri' => $admin->generateUrl('stuffList', ['id' => $id])
+            ]);
+        }
+    }
 
     /**
      * @param DatagridMapper $datagridMapper
@@ -236,13 +257,15 @@ class BookingAdmin extends AbstractAdmin
             ->add('renter')
             ->add('items')
             ->add('packages')
-            ->add('creator')
+            ->add('accessories')
             ->add('referenceNumber')
             ->add('actualPrice')
             ->add('returned')
             ->add('billableEvents')
             ->add('paid')
             ->add('paid_date')
+            ->add('creator')
+            ->add('creatededAt')
             ->add('modifier')
             ->add('modifiedAt')
         ;
