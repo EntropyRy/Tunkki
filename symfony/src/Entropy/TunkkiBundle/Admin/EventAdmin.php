@@ -26,6 +26,7 @@ class EventAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
+            ->add('item')
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')
