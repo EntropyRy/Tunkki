@@ -162,35 +162,7 @@ class Item
      *
      * @ORM\Column(name="ForSale", type="boolean", nullable=true)
      */
-    private $forSale;
-
-    /**
-     * @var \DateTime
-     * 
-     * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="CreatedAt", type="datetime", nullable=true)
-     */
-    private $createdAt;
-
-    /**
-     * @var \DateTime
-     *
-     * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="UpdatedAt", type="datetime", nullable=true)
-     */
-    private $updatedAt;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    private $creator;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    private $modifier;
+    private $forSale = false;
 
     /**
      * @ORM\ManyToMany(targetEntity="Package", inversedBy="items")
@@ -208,6 +180,34 @@ class Item
      * @ORM\Column(name="comissionPrice", type="decimal", precision=7, scale=2, nullable=true)
      */
     private $commissionPrice;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+	private $creator;
+
+    /**
+     * @var \DateTime
+     * 
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(name="CreatedAt", type="datetime", nullable=true)
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
+     */
+	private $modifier;
+
+    /**
+     * @var \DateTime
+     *
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(name="UpdatedAt", type="datetime", nullable=true)
+     */
+    private $updatedAt;
 
     /**
      * Get id
