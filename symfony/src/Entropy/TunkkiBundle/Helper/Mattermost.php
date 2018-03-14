@@ -12,7 +12,6 @@ class Mattermost {
         $xcURL = $this->container->getParameter('mm_tunkki_hook');
         $botname = $this->container->getParameter('mm_tunkki_botname');
         $botimg = $this->container->getParameter('mm_tunkki_img');
-        $add_url = $this->container->getParameter('mm_add_url');
 
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","text":"'.$text.'"}';
