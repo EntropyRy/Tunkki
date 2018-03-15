@@ -14,7 +14,11 @@
 				{% endif %}
 			{% endfor %}
 			<div class="box box-solid collapsed-box">
-				<div class="box-header {% if fix %}bg-warning{% endif %}" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}">
+				<div class="box-header {% if fix %}bg-warning{% endif %}" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}"
+					{% if package.Notes %}
+		  				title="{{ package.Notes }}"
+		  			{% endif %}
+					>
 					<span>
 						{{ block('item') }}
 					</span>
@@ -49,6 +53,7 @@
 {% endblock %}
 
 {% block entropy_type_items_widget %}
+{%spaceless %}
 {% for key, category in categories %}
 <div class="col-md-12">
 	<h3>{{ key }}
@@ -84,8 +89,21 @@
 					{% if item.cannotBeRented %}
 						border: brown 1px dotted;
 					{% endif %}
-					">
-					{{ block('item') }}
+					"
+					{% if item.rentNotice %}
+		  				title="{{ item.rentNotice }}"
+		  			{% endif %}
+					>
+					{#{ block('item') }#}
+					<div class="checkbox">
+						<label for="{{child.vars.id }}">
+							<input type="checkbox" value="{{child.vars.value}}" {% if child.vars.checked %}checked="checked"{%endif%} id="{{child.vars.id}}" name="{{child.vars.full_name }}">
+							{{ child.vars.label }}
+							{% if item.rentNotice %}
+							<i class="fa fa-question-circle-o" title="{{ item.rentNotice }}"></i>
+							{% endif %}
+						</label>
+					</div>
 					</div>
 				{% endif %}
 			{% endfor -%}
@@ -95,5 +113,6 @@
 	</div>
 </div>
 {% endfor %}
+{% endspaceless %}
 {% endblock %}
 

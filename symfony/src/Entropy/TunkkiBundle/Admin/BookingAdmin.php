@@ -209,10 +209,10 @@ class BookingAdmin extends AbstractAdmin
 
 		if (!empty($subject->getName())){
             $formMapper 
-					->add('accessories', CollectionType::class, array('required' => false, 'by_reference' => false),
-                        array('edit' => 'inline', 'inline' => 'table')
+				->add('accessories', CollectionType::class, 
+						['required' => false, 'by_reference' => false],
+                        ['edit' => 'inline', 'inline' => 'table']
                     )
-                    ->add('rentInformation', TextareaType::class, array('disabled' => true))
                 ->end()
                 ->end()
                 ->tab('Payment')
