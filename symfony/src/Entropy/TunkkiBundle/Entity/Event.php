@@ -180,7 +180,7 @@ class Event
             return 'Event for '.$this->getItem()->getName();
         }
         else {
-            return 'No associated product';
+            return 'No associated item';
         }
     }
 

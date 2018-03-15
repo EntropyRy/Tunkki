@@ -69,6 +69,11 @@ class EventAdmin extends AbstractAdmin
             ;
 		}
 		if ($this->getSubject()->getItem() != NULL ){
+			$event = $this->getSubject()->getItem()->getFixingHistory()->last();
+			$help = '';
+			if($event){
+				$help = "Last: [".$event->getCreatedAt()->format('d.m.y H:m').'] '.$event->getCreator().': '.$event->getDescription();
+			}
 			$formMapper
 				->with('Status', ['class'=>'col-md-4'])
 				->add('item.cannotBeRented', CheckboxType::class,['required' => false])
@@ -77,7 +82,10 @@ class EventAdmin extends AbstractAdmin
 				->add('item.toSpareParts', CheckboxType::class,['required' => false])
 				->end()
 				->with('Message', ['class' => 'col-md-8'])
-				->add('description',TextareaType::class, array('required' => true))
+				->add('description',TextareaType::class, [
+					'required' => true,
+					'help' => $help 
+					])
 				->end()
 			;
 			if (!$this->isChild()){
