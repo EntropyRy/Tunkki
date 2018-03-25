@@ -69,10 +69,12 @@ class EventAdmin extends AbstractAdmin
             ;
 		}
 		if ($this->getSubject()->getItem() != NULL ){
-			$event = $this->getSubject()->getItem()->getFixingHistory()->last();
+			$events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(1,5));
 			$help = '';
-			if($event){
-				$help = "Last: [".$event->getCreatedAt()->format('d.m.y H:m').'] '.$event->getCreator().': '.$event->getDescription();
+			if($events){
+				foreach ($events as $event){
+					$help .= "[".$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
+				}
 			}
 			$formMapper
 				->with('Status', ['class'=>'col-md-4'])
@@ -84,7 +86,8 @@ class EventAdmin extends AbstractAdmin
 				->with('Message', ['class' => 'col-md-8'])
 				->add('description',TextareaType::class, [
 					'required' => true,
-					'help' => $help 
+					'help' => $help,
+					'sonata_help' => $help,
 					])
 				->end()
 			;

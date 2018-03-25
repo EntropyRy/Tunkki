@@ -33,7 +33,7 @@ services:
             - "@security.token_storage"
             - "@sonata.classification.manager.context"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
+            - { name: sonata.admin, manager_type: orm, audit: true, group: admin, label: Items }
         calls:
             - [setTemplate, [outer_list_rows_mosaic, EntropyTunkkiBundle:Admin:list_outer_rows_mosaic.html.twig]]
             - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_items.html.twig]]
