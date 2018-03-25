@@ -27,7 +27,7 @@ class BookingsBlock extends BaseBlockService {
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $bookings = $this->em->getRepository('EntropyTunkkiBundle:Booking')->findBy(array('returned' => false));
+        $bookings = $this->em->getRepository('EntropyTunkkiBundle:Booking')->findBy(['returned' => false], ['bookingDate' => 'DESC']);
         
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
