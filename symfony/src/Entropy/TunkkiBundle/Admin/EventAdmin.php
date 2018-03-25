@@ -69,7 +69,7 @@ class EventAdmin extends AbstractAdmin
             ;
 		}
 		if ($this->getSubject()->getItem() != NULL ){
-			$events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(1,5));
+			$events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0,5));
 			$help = '';
 			if($events){
 				foreach ($events as $event){
