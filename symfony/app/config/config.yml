@@ -79,6 +79,10 @@ doctrine:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
 
+sonata_doctrine_orm_admin:
+    audit:
+        force: false
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -93,7 +97,10 @@ sonata_intl:
     timezone:
         default: Europe/Helsinki
 
-sonata_core: ~
+sonata_core:
+    form:
+        mapping:
+            enabled: true
 
 # nelmio_api_doc: ~
 

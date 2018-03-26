@@ -16,8 +16,8 @@ sonata_block:
         sonata.media.block.media:
            # contexts: [Homepage]
         sonata.media.block.gallery:
-        sonata.media.block.feature_media:
-        sonata.page.block.children_pages:
+            #        sonata.media.block.feature_media:
+            #sonata.page.block.children_pages:
         sonata.page.block.shared_block:       
         sonata.block.service.text:
         sonata.timeline.block.timeline:

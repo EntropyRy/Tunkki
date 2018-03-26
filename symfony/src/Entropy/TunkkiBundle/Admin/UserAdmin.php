@@ -20,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class UserAdmin extends BaseUserAdmin
 {
-	protected $baseRoutePattern = 'member';
+	protected $baseRoutePattern = 'user';
     protected $ts;
 	protected $mm;
     protected $userManager;

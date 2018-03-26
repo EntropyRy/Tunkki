@@ -26,10 +26,12 @@ security:
             logout:
                 path:           /admin/logout
             anonymous:          true
+            logout_on_user_change: true
         main:
             pattern:            /oauth(.*)
             context:            user
             anonymous:          true
+            logout_on_user_change: true
 #        api:
 #            pattern:            /api(.*)
 #            context:            user

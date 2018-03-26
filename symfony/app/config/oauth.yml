@@ -5,10 +5,10 @@ knpu_oauth2_client:
             type: generic
             provider_class: Entropy\TunkkiBundle\Provider\Mattermost
             # add and configure client_id and client_secret in parameters.yml
-            client_id: %mattermost_client_id%
-            client_secret: %mattermost_client_secret%
+            client_id: "%mattermost_client_id%"
+            client_secret: "%mattermost_client_secret%"
             # a route name you'll create
-            redirect_route: %mattermost_redirect_route%
+            redirect_route: "%mattermost_redirect_route%"
             redirect_params: { }
 
             # whether to check OAuth2 "state": defaults to true
