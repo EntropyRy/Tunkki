@@ -97,6 +97,6 @@ class Accessory
 	{
 		$name = $this->name ? $this->name : 'n/a';
 		$count = $this->count ? $this->count : '';
-		return $name .' X '. $count;
+		return $count .' X '.$name;
 	}
 }
