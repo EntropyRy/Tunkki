@@ -10,7 +10,7 @@
             <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
                 {{ booking.bookingdate|date('d.m.Y') }} -
 				<a href="{{ path('admin_entropy_tunkki_booking_show', {'id':booking.id}) }}">{{ booking.name }}</a>
-                {% if booking.IsSomethingBroken %}- Something is Broken!!{% endif %}
+				{% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
                 <div class="box-tools pull-right">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_edit', {'id':booking.id}) }}">
                         <i class="fa fa-pencil-square-o"></i> edit
