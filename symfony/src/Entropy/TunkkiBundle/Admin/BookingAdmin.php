@@ -329,7 +329,12 @@ class BookingAdmin extends AbstractAdmin
         }
         if(($object->getReturned() == true) and ($object->getReceivedBy() == null)){
             $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
-        }
+		}
+		foreach ($object->getAccessories() as $line){
+			if($line->getCount() == NULL and $line->getName() == NULL){
+				$errorElement->with('accessories')->addViolation('Dont leave empty lines in accessories')->end();
+			}
+		}
     } 
     protected function configureRoutes(RouteCollection $collection)
     {
