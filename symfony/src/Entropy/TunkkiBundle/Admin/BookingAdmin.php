@@ -41,11 +41,12 @@ class BookingAdmin extends AbstractAdmin
     protected $em; // E manager
     protected $cm; // Category manager
 
-	protected $datagridValues = array(
+	protected $datagridValues = [
         '_page' => 1,
         '_sort_order' => 'DESC',
         '_sort_by' => 'createdAt',
-    );
+	];
+
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
         if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
@@ -115,7 +116,7 @@ class BookingAdmin extends AbstractAdmin
 		foreach($choices as $choice) {
 			foreach($root->getChildren() as $cat) {
 				if($choice->getCategory() == $cat){
-					$cats[$cat->getName()][]=$choice;
+					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
 				}
 				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
 					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;

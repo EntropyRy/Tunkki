@@ -43,7 +43,7 @@ class ItemsType extends AbstractType
 		foreach($choices as $choice) {
 			foreach($root->getChildren() as $cat) {
 				if($choice->getCategory() == $cat){
-					$cats[$cat->getName()][]=0;
+					$cats[$cat->getName()][$choice->getCategory()->getName()]=0;
 				}
 				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
 					$cats[$cat->getName()][$choice->getCategory()->getName()]=0;
