@@ -21,9 +21,21 @@
             <div style="display: none;" class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-						<div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} <br> {{ booking.givenAwayBy }}</div>
+						<div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} <br> 
+							{% if booking.givenAwayBy %}
+								{{ booking.givenAwayBy }}
+							{% else %}
+								nobody?
+							{% endif %}
+						</div>
 						<hr>
-						<div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} <br> {{ booking.receivedBy }}</div>
+						<div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} <br>
+							{% if booking.receivedBy %}
+								{{ booking.receivedBy }}
+							{% else %}
+								nobody?
+							{% endif %}
+						</div>
                     </div>
                     <div class="col-md-5">
 					{% for package in booking.packages if package is not empty%}
