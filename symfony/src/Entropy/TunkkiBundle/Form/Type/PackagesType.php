@@ -21,35 +21,35 @@ class PackagesType extends AbstractType
 
     public function __construct($em)
     {
-		$this->em = $em;
+        $this->em = $em;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-		parent::buildView($view, $form, $options);
+        parent::buildView($view, $form, $options);
         $view->vars['bookings'] = $options['bookings'];
         $view->vars['btn_add'] = $options['btn_add'];
         $view->vars['btn_list'] = $options['btn_list'];
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
-	}
+    }
     public function configureOptions(OptionsResolver $resolver)
-	{
-		$resolver->setDefaults([
-			'class' => Package::class,
-			'required' => false,
-			'choices' => null,
-			'bookings' => [],
-			'by_reference' => false,
-			'compound' => true,
-			'multiple' => true,
-			'expanded' => true,
-			'btn_add' => 'link_add',
-			'btn_list' => 'link_list',
-			'btn_delete' => 'link_delete',
-			'btn_catalogue' => 'SonataAdminBundle',
-		]);
-	}
+    {
+        $resolver->setDefaults([
+            'class' => Package::class,
+            'required' => false,
+            'choices' => null,
+            'bookings' => [],
+            'by_reference' => false,
+            'compound' => true,
+            'multiple' => true,
+            'expanded' => true,
+            'btn_add' => 'link_add',
+            'btn_list' => 'link_list',
+            'btn_delete' => 'link_delete',
+            'btn_catalogue' => 'SonataAdminBundle',
+        ]);
+    }
     public function getParent()
     {
         return EntityType::class;

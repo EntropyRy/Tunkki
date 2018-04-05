@@ -2,53 +2,53 @@
 {% block entropy_type_packages_widget %}
 {% spaceless %}
     {%- for child in form %}
-		{% set reserved,fix = false,false %}
+        {% set reserved,fix = false,false %}
         {% set package = form.vars.choices[child.vars.value].data %}
-		{% if package.items is defined %}
-			{% for item in package.items %}
-				{% for itemBooking in item.rentHistory.toArray if itemBooking in bookings  %}
-					{% set reserved = true %}
-				{%endfor %}
-				{% if item.needsFixing %}
-					{% set fix = true %}
-				{% endif %}
-			{% endfor %}
-			<div class="box box-solid collapsed-box">
-				<div class="box-header {% if fix %}bg-warning{% endif %}" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}"
-					{% if package.Notes %}
-		  				title="{{ package.Notes }}"
-		  			{% endif %}
-					>
-					<span>
-						{{ block('item') }}
-					</span>
-					<div class="box-tools pull-right">
-						<button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
-					</div>
-				</div>
-				<div style="display: none;" class="box-body">
-				<ul>
-					{% for item in package.items %}
-					<li>
-						{% if item.needsFixing %}
-							<i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
-						{% endif %}
-						{{ item }}
-					</li>
-					{% endfor %} 
-				</ul>
-				Note: {{ package.notes }}
-				</div><!-- /.box-body -->
-			</div><!-- /.box -->
-		{% endif %}
+        {% if package.items is defined %}
+            {% for item in package.items %}
+                {% for itemBooking in item.rentHistory.toArray if itemBooking in bookings  %}
+                    {% set reserved = true %}
+                {%endfor %}
+                {% if item.needsFixing %}
+                    {% set fix = true %}
+                {% endif %}
+            {% endfor %}
+            <div class="box box-solid collapsed-box">
+                <div class="box-header {% if fix %}bg-warning{% endif %}" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}"
+                    {% if package.Notes %}
+                        title="{{ package.Notes }}"
+                    {% endif %}
+                    >
+                    <span>
+                        {{ block('item') }}
+                    </span>
+                    <div class="box-tools pull-right">
+                        <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
+                    </div>
+                </div>
+                <div style="display: none;" class="box-body">
+                <ul>
+                    {% for item in package.items %}
+                    <li>
+                        {% if item.needsFixing %}
+                            <i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
+                        {% endif %}
+                        {{ item }}
+                    </li>
+                    {% endfor %} 
+                </ul>
+                Note: {{ package.notes }}
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+        {% endif %}
     {% endfor -%}
 {% endspaceless %}
 {% endblock %}
 
 {% block item %}
 <div {{ block('widget_container_attributes') }}>
-	{{- form_widget(child) -}}
-	{{- form_label(child) -}}
+    {{- form_widget(child) -}}
+    {{- form_label(child) -}}
 </div> 
 {% endblock %}
 
@@ -56,57 +56,57 @@
 {%spaceless %}
 {% for key, category in categories %}
 <div class="col-md-12">
-	<h3>{{ key }}
-		{% if loop.first %}
-			{{ block('helpbutton') }}
-		{% endif %}
-	</h3>
-	<div id="masonry">
-		{% for key2, cat in category %}
-		{% if key2 %}
-		<div class="item">
-			<h4>{{ key2 }}</h4>
-			{%- for child in form %}
-				{% set item = form.vars.choices[child.vars.value].data %}
-				{% set rentHistory = item.rentHistory.toArray %}
-				{% if item.category == key2 %}
-					<div style="
-					{% if bookings is not empty %}
-						{% for booking in bookings if booking in rentHistory %}
-							opacity: 0.3;
-						{% endfor %}
-					{% endif %}
-					"
-					{% if item.rentNotice %}
-		  				title="{{ item.rentNotice }}"
-		  			{% endif %}
-					>
-					{#{ block('item') }#}
-					<div class="checkbox">
-						{% if item.cannotBeRented %}
-							<i class="fa fa-ban" style="position: absolute; left: 5px; top: 4px;"></i>
-						{% endif %}
-						<label for="{{child.vars.id }}">
-							<input type="checkbox" value="{{child.vars.value}}" {% if child.vars.checked %}checked="checked"{%endif%} id="{{child.vars.id}}" name="{{child.vars.full_name }}">
-							{% if item.needsFixing %}
-								<i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
-							{% endif %}
-							{% if item.toSpareParts %}
-								<i class="fa fa-puzzle-piece" style="padding-left: 2px;"></i>
-							{% endif %}
-							{{ child.vars.label }}
-							{% if item.rentNotice %}
-							<i class="fa fa-question-circle-o" title="{{ item.rentNotice }}" onclick="void(0)"></i>
-							{% endif %}
-						</label>
-					</div>
-					</div>
-				{% endif %}
-			{% endfor -%}
-		</div>
-		{% endif %}
-		{% endfor -%}
-	</div>
+    <h3>{{ key }}
+        {% if loop.first %}
+            {{ block('helpbutton') }}
+        {% endif %}
+    </h3>
+    <div id="masonry">
+        {% for key2, cat in category %}
+        {% if key2 %}
+        <div class="item">
+            <h4>{{ key2 }}</h4>
+            {%- for child in form %}
+                {% set item = form.vars.choices[child.vars.value].data %}
+                {% set rentHistory = item.rentHistory.toArray %}
+                {% if item.category == key2 %}
+                    <div style="
+                    {% if bookings is not empty %}
+                        {% for booking in bookings if booking in rentHistory %}
+                            opacity: 0.3;
+                        {% endfor %}
+                    {% endif %}
+                    "
+                    {% if item.rentNotice %}
+                        title="{{ item.rentNotice }}"
+                    {% endif %}
+                    >
+                    {#{ block('item') }#}
+                    <div class="checkbox">
+                        {% if item.cannotBeRented %}
+                            <i class="fa fa-ban" style="position: absolute; left: 5px; top: 4px;"></i>
+                        {% endif %}
+                        <label for="{{child.vars.id }}">
+                            <input type="checkbox" value="{{child.vars.value}}" {% if child.vars.checked %}checked="checked"{%endif%} id="{{child.vars.id}}" name="{{child.vars.full_name }}">
+                            {% if item.needsFixing %}
+                                <i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
+                            {% endif %}
+                            {% if item.toSpareParts %}
+                                <i class="fa fa-puzzle-piece" style="padding-left: 2px;"></i>
+                            {% endif %}
+                            {{ child.vars.label }}
+                            {% if item.rentNotice %}
+                            <i class="fa fa-question-circle-o" title="{{ item.rentNotice }}" onclick="void(0)"></i>
+                            {% endif %}
+                        </label>
+                    </div>
+                    </div>
+                {% endif %}
+            {% endfor -%}
+        </div>
+        {% endif %}
+        {% endfor -%}
+    </div>
 </div>
 {% endfor %}
 {% endspaceless %}

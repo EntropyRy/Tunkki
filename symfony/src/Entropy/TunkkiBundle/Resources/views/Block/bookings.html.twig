@@ -9,8 +9,8 @@
         <div class="box box-solid collapsed-box">
             <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
                 {{ booking.bookingdate|date('d.m.Y') }} -
-				<a href="{{ path('admin_entropy_tunkki_booking_show', {'id':booking.id}) }}">{{ booking.name }}</a>
-				{% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
+                <a href="{{ path('admin_entropy_tunkki_booking_show', {'id':booking.id}) }}">{{ booking.name }}</a>
+                {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
                 <div class="box-tools pull-right">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_edit', {'id':booking.id}) }}">
                         <i class="fa fa-pencil-square-o"></i> edit
@@ -21,49 +21,49 @@
             <div style="display: none;" class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-						<div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} <br> 
-							{% if booking.givenAwayBy %}
-								{{ booking.givenAwayBy }}
-							{% else %}
-								nobody?
-							{% endif %}
-						</div>
-						<hr>
-						<div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} <br>
-							{% if booking.receivedBy %}
-								{{ booking.receivedBy }}
-							{% else %}
-								nobody?
-							{% endif %}
-						</div>
+                        <div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} <br> 
+                            {% if booking.givenAwayBy %}
+                                {{ booking.givenAwayBy }}
+                            {% else %}
+                                nobody?
+                            {% endif %}
+                        </div>
+                        <hr>
+                        <div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} <br>
+                            {% if booking.receivedBy %}
+                                {{ booking.receivedBy }}
+                            {% else %}
+                                nobody?
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="col-md-5">
-					{% for package in booking.packages if package is not empty%}
-						Package: {{ package }}
-						<ul>
-						{% for item in package.items %}
-						<li>
-							{% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-							{{ item }}</li>
-						{% endfor %}
-						</ul>
-					{% endfor %}
+                    {% for package in booking.packages if package is not empty%}
+                        Package: {{ package }}
+                        <ul>
+                        {% for item in package.items %}
+                        <li>
+                            {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
+                            {{ item }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endfor %}
                     {% if booking.accessories is not empty %}
                         Accessories:
                         <ul>
                         {% for item in booking.accessories %}
-						<li>{{ item }}</li>
+                        <li>{{ item }}</li>
                         {% endfor %}
                         </ul>
                     {% endif %}
-					</div>
+                    </div>
                     <div class="col-md-4">
                     {% if booking.items is not empty %}
                         Items:
                         <ul>
                         {% for item in booking.items %}
-						<li>
-							{% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
+                        <li>
+                            {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
                             {{ item }}</li>
                         {% endfor %}
                         </ul>

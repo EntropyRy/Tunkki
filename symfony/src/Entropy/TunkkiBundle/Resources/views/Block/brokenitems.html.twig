@@ -15,16 +15,16 @@
                     </a>
                     {% if item.fixingHistory is not empty %}
                     <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Comments</button>
-					{% endif %}
+                    {% endif %}
                 </div>
             </div>
             <div style="display: none;" class="box-body">
                 <div class="row">
-					<div class="col-md-12">
+                    <div class="col-md-12">
                     {% if item.fixingHistory is not empty %}
-						{{ item.getFixingHistoryMessages(5, 'html')|raw }}
+                        {{ item.getFixingHistoryMessages(5, 'html')|raw }}
                     {% endif %}
-					</div>
+                    </div>
                 </div>
             </div>
         </div>

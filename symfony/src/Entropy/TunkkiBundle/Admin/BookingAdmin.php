@@ -35,17 +35,17 @@ use Entropy\TunkkiBundle\Entity\Package;
 
 class BookingAdmin extends AbstractAdmin
 {
-	protected $baseRoutePattern = 'booking';
+    protected $baseRoutePattern = 'booking';
     protected $mm; // Mattermost helper
     protected $ts; // Token Storage
     protected $em; // E manager
     protected $cm; // Category manager
 
-	protected $datagridValues = [
+    protected $datagridValues = [
         '_page' => 1,
         '_sort_order' => 'DESC',
         '_sort_by' => 'createdAt',
-	];
+    ];
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
@@ -108,23 +108,23 @@ class BookingAdmin extends AbstractAdmin
                 ),
             ))
         ;
-	}
-	private function getCategories($choices = null)
-	{
-		$root = $this->cm->getRootCategory('item');
-		// map categories
-		foreach($choices as $choice) {
-			foreach($root->getChildren() as $cat) {
-				if($choice->getCategory() == $cat){
-					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
-				}
-				elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
-					$cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
-				}
-			}
-		}
-		return $cats;
-	}
+    }
+    private function getCategories($choices = null)
+    {
+        $root = $this->cm->getRootCategory('item');
+        // map categories
+        foreach($choices as $choice) {
+            foreach($root->getChildren() as $cat) {
+                if($choice->getCategory() == $cat){
+                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                }
+                elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
+                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                }
+            }
+        }
+        return $cats;
+    }
 
     /**
      * @param FormMapper $formMapper
@@ -134,84 +134,84 @@ class BookingAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
-			$bookingsrepo = $this->em->getRepository(Booking::class);
-			$bookings = $bookingsrepo->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
-			if(!empty($forWho)){
-				$packageChoices = $this->em->getRepository(Package::class)->getPackageChoicesWithPrivileges($forWho);
-				$itemChoices = $this->em->getRepository(Item::class)->getItemChoicesWithPrivileges($forWho);
-				$itemCats = $this->getCategories($itemChoices);
-			} 
-		}
+            $bookingsrepo = $this->em->getRepository(Booking::class);
+            $bookings = $bookingsrepo->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
+            if(!empty($forWho)){
+                $packageChoices = $this->em->getRepository(Package::class)->getPackageChoicesWithPrivileges($forWho);
+                $itemChoices = $this->em->getRepository(Item::class)->getItemChoicesWithPrivileges($forWho);
+                $itemCats = $this->getCategories($itemChoices);
+            } 
+        }
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
                 ->add('name')
-				->add('bookingDate', DatePickerType::class, [
-						'format' => 'd.M.y',
-					])
-				->add('retrieval', DateTimePickerType::class, [
-						'required' => false,
-						'format' => 'd.M.y H:mm',
+                ->add('bookingDate', DatePickerType::class, [
+                        'format' => 'd.M.y',
+                    ])
+                ->add('retrieval', DateTimePickerType::class, [
+                        'required' => false,
+                        'format' => 'd.M.y H:mm',
                         'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
-					])
-				->add('givenAwayBy', ModelListType::class, [
-						'btn_add' => false,
-						'btn_delete' => 'unassign', 
-						'required' => false
-					])
-				->add('returning', DateTimePickerType::class, [
-						'required' => false,
-						'format' => 'd.M.y H:mm',
-						'dp_side_by_side' => true, 
-						'dp_use_seconds' => false, 
-					])
-				->add('receivedBy', ModelListType::class, [
-						'required' => false, 
-						'btn_add' => false, 
-						'btn_delete' => 'unassign'
-					])
+                    ])
+                ->add('givenAwayBy', ModelListType::class, [
+                        'btn_add' => false,
+                        'btn_delete' => 'unassign', 
+                        'required' => false
+                    ])
+                ->add('returning', DateTimePickerType::class, [
+                        'required' => false,
+                        'format' => 'd.M.y H:mm',
+                        'dp_side_by_side' => true, 
+                        'dp_use_seconds' => false, 
+                    ])
+                ->add('receivedBy', ModelListType::class, [
+                        'required' => false, 
+                        'btn_add' => false, 
+                        'btn_delete' => 'unassign'
+                    ])
                 ->add('returned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
                 ->add('renter', ModelListType::class, ['btn_delete' => 'unassign'])
-				->add('rentingPrivileges', null, [
-					'placeholder' => 'Show everything!'
-					])
+                ->add('rentingPrivileges', null, [
+                    'placeholder' => 'Show everything!'
+                    ])
             ->end()
             ->end();
 
-		if (!empty($subject->getName())) {
+        if (!empty($subject->getName())) {
             $formMapper 
                 ->tab('Rentals')
-				->with('The Stuff');
-		}
+                ->with('The Stuff');
+        }
 
         if (!empty($subject->getName()) && empty($forWho)) {
             $formMapper 
-					->add('packages', PackagesType::class, [
-						'bookings' => $bookings,
-					])
+                    ->add('packages', PackagesType::class, [
+                        'bookings' => $bookings,
+                    ])
                     ->add('items', ItemsType::class, [
-						'bookings' => $bookings,
-					]);
-		} elseif (!empty($subject->getName()) && !empty($forWho)) {
+                        'bookings' => $bookings,
+                    ]);
+        } elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper 
-					->add('packages', PackagesType::class, [ 
-						'bookings' => $bookings,
+                    ->add('packages', PackagesType::class, [ 
+                        'bookings' => $bookings,
                         'choices' => $packageChoices, 
-					])
+                    ])
                     ->add('items', ItemsType::class, [
-						'bookings' => $bookings,
-						'categories' => $itemCats,
-						'choices' => $itemChoices
-					]);
-		}
+                        'bookings' => $bookings,
+                        'categories' => $itemCats,
+                        'choices' => $itemChoices
+                    ]);
+        }
 
-		if (!empty($subject->getName())){
+        if (!empty($subject->getName())){
             $formMapper 
-				->add('accessories', CollectionType::class, 
-						['required' => false, 'by_reference' => false],
+                ->add('accessories', CollectionType::class, 
+                        ['required' => false, 'by_reference' => false],
                         ['edit' => 'inline', 'inline' => 'table']
                     )
                 ->end()
@@ -220,11 +220,11 @@ class BookingAdmin extends AbstractAdmin
                 ->with('Payment Information')
                     ->add('referenceNumber', null, ['disabled' => true])
                     ->add('calculatedTotalPrice', TextType::class, ['disabled' => true])
-					->add('numberOfRentDays', null, [
-						'help' => 'How many days are actually billed', 
-						'disabled' => false, 
-						'required' => true
-						])
+                    ->add('numberOfRentDays', null, [
+                        'help' => 'How many days are actually billed', 
+                        'disabled' => false, 
+                        'required' => true
+                        ])
                     ->add('actualPrice', null, ['disabled' => false, 'required' => false])
                 ->end()
                 ->with('Events', array('class' => 'col-md-12'))
@@ -294,9 +294,9 @@ class BookingAdmin extends AbstractAdmin
     {
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $user = $this->ts->getToken()->getUser();
-		$text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
-			UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
-			$booking->getBookingDate()->format('d.m.Y').' created by '.$user;
+        $text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
+            $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
         $this->mm->SendToMattermost($text);
     }
     public function preUpdate($booking)
@@ -307,11 +307,11 @@ class BookingAdmin extends AbstractAdmin
 
     public function getFormTheme()
     {
-		$themes = array_merge(
+        $themes = array_merge(
             parent::getFormTheme(),
             array('EntropyTunkkiBundle:BookingAdmin:admin.html.twig')
         );
-		return $themes;
+        return $themes;
     }
     public function validate(ErrorElement $errorElement, $object)
     {
@@ -329,12 +329,12 @@ class BookingAdmin extends AbstractAdmin
         }
         if(($object->getReturned() == true) and ($object->getReceivedBy() == null)){
             $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
-		}
-		foreach ($object->getAccessories() as $line){
-			if($line->getCount() == NULL and $line->getName() == NULL){
-				$errorElement->with('accessories')->addViolation('Dont leave empty lines in accessories')->end();
-			}
-		}
+        }
+        foreach ($object->getAccessories() as $line){
+            if($line->getCount() == NULL and $line->getName() == NULL){
+                $errorElement->with('accessories')->addViolation('Dont leave empty lines in accessories')->end();
+            }
+        }
     } 
     protected function configureRoutes(RouteCollection $collection)
     {

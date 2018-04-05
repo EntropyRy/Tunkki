@@ -25,7 +25,7 @@
                 {{ object.category.parent }} -
             {% endif %}
                 {{ object.category }}
-			<br>
+            <br>
         {% endif %}
     <small>
         {{ object.description|truncate(150) }}
@@ -37,21 +37,21 @@
 <div class="col-md-6">
 {% endif %}
         {% if object.needsFixing or object.toSpareParts or object.forSale or object.cannotBeRented%}
-		Condition
-		<span class="pull-right">
-			{% if object.needsFixing %}
-			<i class="fa fa-medkit" title="Needs Fixing!"></i>
-			{% endif %}
-			{% if object.toSpareParts %}
-			<i class="fa fa-puzzle-piece" title="To Spare Parts!"></i>
-			{% endif %}
-			{% if object.cannotBeRented %}
-			<i class="fa fa-ban" title="Cannot be rented!"></i>
-			{% endif %}
-			{% if object.forSale %}
-			<i class="fa fa-euro" title="For Sale!"></i>
-			{% endif %}
-		</span>
+        Condition
+        <span class="pull-right">
+            {% if object.needsFixing %}
+            <i class="fa fa-medkit" title="Needs Fixing!"></i>
+            {% endif %}
+            {% if object.toSpareParts %}
+            <i class="fa fa-puzzle-piece" title="To Spare Parts!"></i>
+            {% endif %}
+            {% if object.cannotBeRented %}
+            <i class="fa fa-ban" title="Cannot be rented!"></i>
+            {% endif %}
+            {% if object.forSale %}
+            <i class="fa fa-euro" title="For Sale!"></i>
+            {% endif %}
+        </span>
         <hr style="margin: 2px">
         {% set fixh = object.fixinghistory|last %}
             {% if fixh %}
@@ -63,7 +63,7 @@
 <div class="col-md-3">
         Rent info
         <span class="pull-right">{{ object.rent }} €</span>
-		<hr style="margin: 2px">
+        <hr style="margin: 2px">
         For:
         {% for who in object.whocanrent %}
             {{ who }}

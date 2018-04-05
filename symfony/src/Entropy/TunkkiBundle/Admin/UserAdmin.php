@@ -20,16 +20,16 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class UserAdmin extends BaseUserAdmin
 {
-	protected $baseRoutePattern = 'user';
+    protected $baseRoutePattern = 'user';
     protected $ts;
-	protected $mm;
+    protected $mm;
     protected $userManager;
     /**
      * {@inheritdoc}
      */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-	{
-		parent::configureDatagridFilters($datagridMapper);
+    {
+        parent::configureDatagridFilters($datagridMapper);
         $datagridMapper;
     }
 
@@ -37,56 +37,56 @@ class UserAdmin extends BaseUserAdmin
      * {@inheritdoc}
      */
     protected function configureListFields(ListMapper $listMapper): void
-	{
-		parent::configureListFields($listMapper);
-		$listMapper;
-	}
+    {
+        parent::configureListFields($listMapper);
+        $listMapper;
+    }
 
     /**
      * {@inheritdoc}
      */
     protected function configureFormFields(FormMapper $formMapper): void
-	{
-		parent::configureFormFields($formMapper);
-		$formMapper
-			->tab('Member')
-				->with('Entropy', ['class' => 'col-md-6'])
-					->add('StudentUnionMember')
-					->add('Application')
-					->add('ApplicationDate', DatePickerType::class, ['required' => false])
-					->add('ApplicationAcceptedDate', DatePickerType::class,['required' => false])
-				->end()
-			->end()
-			;
+    {
+        parent::configureFormFields($formMapper);
+        $formMapper
+            ->tab('Member')
+                ->with('Entropy', ['class' => 'col-md-6'])
+                    ->add('StudentUnionMember')
+                    ->add('Application')
+                    ->add('ApplicationDate', DatePickerType::class, ['required' => false])
+                    ->add('ApplicationAcceptedDate', DatePickerType::class,['required' => false])
+                ->end()
+            ->end()
+            ;
     }
 
     /**
      * {@inheritdoc}
      */
     protected function configureShowFields(ShowMapper $showMapper): void
-	{
-		parent::configureShowFields($showMapper);
-		$showMapper;
-	}
+    {
+        parent::configureShowFields($showMapper);
+        $showMapper;
+    }
     public function postPersist($Event)
-	{
+    {
         $user = $this->ts->getToken()->getUser();
-		$text = $this->getMMtext($Event, $user);
+        $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text);
     }
-	private function getMMtext($NewUser, $user)
-	{
+    private function getMMtext($NewUser, $user)
+    {
         $text = 'USER: <'.$this->generateUrl('show', ['id'=>$NewUser->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
                 $NewUser.'> ';
-		$text .= ' by '. $user;
-		return $text;
-	}
+        $text .= ' by '. $user;
+        return $text;
+    }
     public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null) 
     { 
         $this->mm = $mm; 
         $this->ts = $ts; 
         parent::__construct($code, $class, $baseControllerName); 
-	}
+    }
     /**
      * @param UserManagerInterface $userManager
      */
