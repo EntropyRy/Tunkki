@@ -76,9 +76,6 @@
 							opacity: 0.3;
 						{% endfor %}
 					{% endif %}
-					{% if item.cannotBeRented %}
-						border: brown 1px dotted;
-					{% endif %}
 					"
 					{% if item.rentNotice %}
 		  				title="{{ item.rentNotice }}"
@@ -86,6 +83,9 @@
 					>
 					{#{ block('item') }#}
 					<div class="checkbox">
+						{% if item.cannotBeRented %}
+							<i class="fa fa-ban" style="position: absolute; left: 5px; top: 4px;"></i>
+						{% endif %}
 						<label for="{{child.vars.id }}">
 							<input type="checkbox" value="{{child.vars.value}}" {% if child.vars.checked %}checked="checked"{%endif%} id="{{child.vars.id}}" name="{{child.vars.full_name }}">
 							{% if item.needsFixing %}
@@ -119,7 +119,7 @@ data-content='
 <i class="fa fa-medkit"></i> selections need fixing.</br>
 <i class="fa fa-question-circle-o"></i> gives you rent info on mouse over</br>
 <i class="fa fa-puzzle-piece"></i> to spare parts!</br>
-<span style="border: brown 1px dotted;">circled</span> are not allowed to be rented.</br></br>
+<i class="fa fa-ban"></i> are not allowed to be rented.</br></br>
 Any combination is possible.' data-placement="left">
 Help?</button>
 <script>
