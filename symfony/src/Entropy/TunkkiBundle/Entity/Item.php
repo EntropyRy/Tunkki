@@ -538,6 +538,29 @@ class Item
     }
 
     /**
+     * Get fixingHistoryMessages
+     *
+     * @return string
+     */
+    public function getFixingHistoryMessages($count, $endofline = null)
+	{
+		if($endofline == 'html'){
+			$eol = "<br>";
+		} else {
+			$eol = PHP_EOL;
+		}
+		$messages = '';
+		foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()),0,$count) as $event){
+			$messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$event->getCreator().': '.$event->getDescription().''.$eol;
+		}
+		if($messages != NULL){
+	        return $messages;
+		} else {
+			return 'no messages';
+		}
+	}
+
+    /**
      * reset fixingHistory
      *
      * @return null

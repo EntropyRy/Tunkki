@@ -31,7 +31,7 @@
 					{% for item in package.items %}
 					<li>
 						{% if item.needsFixing %}
-							<i class="fa fa-medkit"></i>
+							<i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
 						{% endif %}
 						{{ item }}
 					</li>
@@ -57,17 +57,10 @@
 {% for key, category in categories %}
 <div class="col-md-12">
 	<h3>{{ key }}
-	{% if loop.first %}
-		<button id="pop" type="button" class="btn pull-right" data-toggle="popover" title="Color coding for the items" 
-			data-content='<span style="opacity:0.3;">Greyed out</span> selections are in another booking.</br>
-		<span style="color:brown;">redish</span> selections need fixing.</br>
-		<span style="border: brown 1px dotted;">circled</span> are not allowed to be rented.</br></br>
-		Any combination is possible.' data-placement="left">
-		Help?</button>
-		<script>
-		$("#pop").popover({"html":true, });
-		</script>
-		{% endif %}</h3>
+		{% if loop.first %}
+			{{ block('helpbutton') }}
+		{% endif %}
+	</h3>
 	<div id="masonry">
 		{% for key2, cat in category %}
 		{% if key2 %}
@@ -83,9 +76,6 @@
 							opacity: 0.3;
 						{% endfor %}
 					{% endif %}
-					{% if item.needsFixing %}
-						color:brown;
-					{% endif %}
 					{% if item.cannotBeRented %}
 						border: brown 1px dotted;
 					{% endif %}
@@ -98,9 +88,15 @@
 					<div class="checkbox">
 						<label for="{{child.vars.id }}">
 							<input type="checkbox" value="{{child.vars.value}}" {% if child.vars.checked %}checked="checked"{%endif%} id="{{child.vars.id}}" name="{{child.vars.full_name }}">
+							{% if item.needsFixing %}
+								<i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
+							{% endif %}
+							{% if item.toSpareParts %}
+								<i class="fa fa-puzzle-piece" style="padding-left: 2px;"></i>
+							{% endif %}
 							{{ child.vars.label }}
 							{% if item.rentNotice %}
-							<i class="fa fa-question-circle-o" title="{{ item.rentNotice }}"></i>
+							<i class="fa fa-question-circle-o" title="{{ item.rentNotice }}" onclick="void(0)"></i>
 							{% endif %}
 						</label>
 					</div>
@@ -116,3 +112,17 @@
 {% endspaceless %}
 {% endblock %}
 
+{% block helpbutton %}
+<button id="pop" type="button" class="btn pull-right" data-toggle="popover" title="Coding for the items" 
+data-content='
+<span style="opacity:0.3;">Greyed out</span> selections are in another booking.</br>
+<i class="fa fa-medkit"></i> selections need fixing.</br>
+<i class="fa fa-question-circle-o"></i> gives you rent info on mouse over</br>
+<i class="fa fa-puzzle-piece"></i> to spare parts!</br>
+<span style="border: brown 1px dotted;">circled</span> are not allowed to be rented.</br></br>
+Any combination is possible.' data-placement="left">
+Help?</button>
+<script>
+$("#pop").popover({"html":true, });
+</script>
+{% endblock %}
