@@ -103,7 +103,7 @@ class Booking
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\BillableEvent", mappedBy="booking", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\BillableEvent", mappedBy="booking", cascade={"persist"}, orphanRemoval=true)
      */
     private $billableEvents;
 
