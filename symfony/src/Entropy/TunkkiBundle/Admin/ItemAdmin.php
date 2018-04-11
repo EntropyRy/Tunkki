@@ -123,7 +123,7 @@ class ItemAdmin extends AbstractAdmin
 					'required' => false, 
 					'format' => 'd.M.y'
 				])
-                ->add('commissionPrice')
+                ->add('purchasePrice')
                 ->add('tags', ModelAutocompleteType::class, array(
                     'property' => 'name',
                     'multiple' => 'true',

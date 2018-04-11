@@ -184,9 +184,9 @@ class Item
     private $commission;
 
     /**
-     * @ORM\Column(name="comissionPrice", type="decimal", precision=7, scale=2, nullable=true)
+     * @ORM\Column(name="purchasePrice", type="decimal", precision=7, scale=2, nullable=true)
      */
-    private $commissionPrice;
+    private $purchasePrice;
 
     /**
      * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
@@ -1076,5 +1076,29 @@ class Item
     public function getCompensationPrice()
     {
         return $this->compensationPrice;
+    }
+
+    /**
+     * Set purchasePrice.
+     *
+     * @param string|null $purchasePrice
+     *
+     * @return Item
+     */
+    public function setPurchasePrice($purchasePrice = null)
+    {
+        $this->purchasePrice = $purchasePrice;
+
+        return $this;
+    }
+
+    /**
+     * Get purchasePrice.
+     *
+     * @return string|null
+     */
+    public function getPurchasePrice()
+    {
+        return $this->purchasePrice;
     }
 }
