@@ -307,6 +307,7 @@ class BookingAdmin extends AbstractAdmin
     }
     public function preUpdate($booking)
     {
+        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $user = $this->ts->getToken()->getUser();
         $booking->setModifier($user);
     }
