@@ -51,6 +51,13 @@ class Booking
     private $returned = false;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="invoiceSent", type="boolean")
+     */
+    private $invoiceSent = false;
+
+    /**
      * @var \DateTime
      *
      * @ORM\Column(name="retrieval", type="datetime", nullable=true)
@@ -829,5 +836,29 @@ class Booking
     public function getRenter()
     {
         return $this->renter;
+    }
+
+    /**
+     * Set invoiceSent.
+     *
+     * @param bool $invoiceSent
+     *
+     * @return Booking
+     */
+    public function setInvoiceSent($invoiceSent)
+    {
+        $this->invoiceSent = $invoiceSent;
+
+        return $this;
+    }
+
+    /**
+     * Get invoiceSent.
+     *
+     * @return bool
+     */
+    public function getInvoiceSent()
+    {
+        return $this->invoiceSent;
     }
 }

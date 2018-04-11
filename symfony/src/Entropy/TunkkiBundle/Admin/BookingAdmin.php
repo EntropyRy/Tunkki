@@ -72,14 +72,17 @@ class BookingAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('name')
+            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>DateRangePickerType::class])
             ->add('items')
             ->add('packages')
             ->add('renter')
-            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>DateRangePickerType::class])
             ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
-            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
             ->add('givenAwayBy')
+            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
             ->add('receivedBy')
+            ->add('returned')
+            ->add('invoiceSent')
+            ->add('paid')
         ;
     }
 
@@ -154,27 +157,29 @@ class BookingAdmin extends AbstractAdmin
                         'format' => 'd.M.y H:mm',
                         'dp_side_by_side' => true,
                         'dp_use_seconds' => false,
+                        'label' => 'Pickup Time'
                     ])
                 ->add('givenAwayBy', ModelListType::class, [
                         'btn_add' => false,
-                        'btn_delete' => 'unassign', 
+                        'btn_delete' => 'Unassign', 
                         'required' => false
                     ])
                 ->add('returning', DateTimePickerType::class, [
                         'required' => false,
                         'format' => 'd.M.y H:mm',
                         'dp_side_by_side' => true, 
-                        'dp_use_seconds' => false, 
+                        'dp_use_seconds' => false,
+                        'label' => 'Return Time'
                     ])
                 ->add('receivedBy', ModelListType::class, [
                         'required' => false, 
                         'btn_add' => false, 
-                        'btn_delete' => 'unassign'
+                        'btn_delete' => 'Unassign'
                     ])
-                ->add('returned')
+                ->add('returned', null, ['label' => 'Items Returned'])
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
-                ->add('renter', ModelListType::class, ['btn_delete' => 'unassign'])
+                ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
                 ->add('rentingPrivileges', null, [
                     'placeholder' => 'Show everything!'
                     ])
@@ -231,6 +236,7 @@ class BookingAdmin extends AbstractAdmin
                     ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
+                    ->add('invoiceSent')
                     ->add('paid')
                     ->add('paid_date', DateTimePickerType::class, array('disabled' => false, 'required' => false))
                 ->end()

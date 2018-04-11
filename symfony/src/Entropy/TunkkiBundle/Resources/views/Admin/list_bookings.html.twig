@@ -41,6 +41,9 @@
 </span>
 <div class="col-md-2">
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
+    {% if object.invoiceSent %}
+    <span class="btn-success">Invoice Sent</span><br>
+    {% endif %}
     Paid: {{ object|render_list_element(admin.list['paid']) }}<br>
     Price: {{ object.actualPrice }}€<br>
 </div>

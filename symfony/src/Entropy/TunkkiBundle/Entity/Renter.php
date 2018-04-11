@@ -256,7 +256,9 @@ class Renter
     }
     public function __toString()
     {
-        return ($this->name ? $this->name : 'N/A');
+        $name = $this->name ? $this->name : 'N/A';
+        $org = $this->organization;
+        return ($org ? $this->name.' / '.$org : $name);
     }
     /**
      * Constructor

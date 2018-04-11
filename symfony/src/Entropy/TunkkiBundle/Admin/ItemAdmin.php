@@ -146,8 +146,9 @@ class ItemAdmin extends AbstractAdmin
                     'expanded' => true,
                     'help' => 'Select all fitting groups!'
                 ))
-                ->add('rent')
-                ->add('rentNotice', TextareaType::class, array('required' => false))
+                ->add('rent', null, ['label' => 'Rental price (€)'])
+                ->add('rentNotice', TextareaType::class, ['required' => false,'label' => 'Rental Notice'])
+                ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
             ->end()
 /*            ->with('Condition', array('class' => 'col-md-6'))
                 ->add('forSale')

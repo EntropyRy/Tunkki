@@ -108,6 +108,13 @@ class Item
     private $rent;
 
     /**
+     * @var float
+     *
+     * @ORM\Column(name="compensationPrice", type="decimal", precision=7, scale=2, nullable=true)
+     */
+    private $compensationPrice;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="RentNotice", type="string", length=5000, nullable=true)
@@ -1045,5 +1052,29 @@ class Item
     public function getCannotBeRented()
     {
         return $this->cannotBeRented;
+    }
+
+    /**
+     * Set compensationPrice.
+     *
+     * @param string|null $compensationPrice
+     *
+     * @return Item
+     */
+    public function setCompensationPrice($compensationPrice = null)
+    {
+        $this->compensationPrice = $compensationPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get compensationPrice.
+     *
+     * @return string|null
+     */
+    public function getCompensationPrice()
+    {
+        return $this->compensationPrice;
     }
 }
