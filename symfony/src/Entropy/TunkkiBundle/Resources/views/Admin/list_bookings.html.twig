@@ -15,12 +15,12 @@
     {% if object.ReceivedBy %}
     Recived by: {{ object.ReceivedBy }}</br>
     {% endif %}
-    Returned: {{ object|render_list_element(admin.list['returned']) }}<br>
+    Returned: {{ object|render_list_element(admin.list['itemsReturned']) }}<br>
     </small>
     </span>
 </div>
 <span class="col-md-6 pull-left">
-    {% if not object.paid and not object.returned %}
+    {% if not object.paid and not object.itemsReturned %}
         {% for item in object.items %}
             {% if item.needsFixing %}
                 <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
@@ -39,6 +39,7 @@
         {% endfor %}
     {% endif %}
 </span>
+{% if object.actualPrice %}
 <div class="col-md-2">
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
     {% if object.invoiceSent %}
@@ -47,4 +48,5 @@
     Paid: {{ object|render_list_element(admin.list['paid']) }}<br>
     Price: {{ object.actualPrice }}€<br>
 </div>
+{% endif %}
 {% endblock %}

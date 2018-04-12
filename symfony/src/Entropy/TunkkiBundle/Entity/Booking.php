@@ -46,9 +46,9 @@ class Booking
     /**
      * @var boolean
      *
-     * @ORM\Column(name="returned", type="boolean")
+     * @ORM\Column(name="itemsReturned", type="boolean")
      */
-    private $returned = false;
+    private $itemsReturned = false;
 
     /**
      * @var boolean
@@ -468,30 +468,6 @@ class Booking
     }
 
     /**
-     * Set returned
-     *
-     * @param boolean $returned
-     *
-     * @return Booking
-     */
-    public function setReturned($returned)
-    {
-        $this->returned = $returned;
-
-        return $this;
-    }
-
-    /**
-     * Get returned
-     *
-     * @return boolean
-     */
-    public function getReturned()
-    {
-        return $this->returned;
-    }
-
-    /**
      * Set paidDate
      *
      * @param \DateTime $paidDate
@@ -860,5 +836,29 @@ class Booking
     public function getInvoiceSent()
     {
         return $this->invoiceSent;
+    }
+
+    /**
+     * Set itemsReturned.
+     *
+     * @param bool $itemsReturned
+     *
+     * @return Booking
+     */
+    public function setItemsReturned($itemsReturned)
+    {
+        $this->itemsReturned = $itemsReturned;
+
+        return $this;
+    }
+
+    /**
+     * Get itemsReturned.
+     *
+     * @return bool
+     */
+    public function getItemsReturned()
+    {
+        return $this->itemsReturned;
     }
 }

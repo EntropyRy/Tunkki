@@ -80,7 +80,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('givenAwayBy')
             ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
             ->add('receivedBy')
-            ->add('returned')
+            ->add('itemsReturned')
             ->add('invoiceSent')
             ->add('paid')
         ;
@@ -98,7 +98,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('retrieval')
             ->add('returning')
-            ->add('returned')
+            ->add('itemsReturned')
             ->add('paid')
             ->add('_action', null, array(
                 'actions' => array(
@@ -176,7 +176,7 @@ class BookingAdmin extends AbstractAdmin
                         'btn_add' => false, 
                         'btn_delete' => 'Unassign'
                     ])
-                ->add('returned', null, ['label' => 'Items Returned'])
+                ->add('itemsReturned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
@@ -267,7 +267,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('accessories')
             ->add('referenceNumber')
             ->add('actualPrice')
-            ->add('returned')
+            ->add('itemsReturned')
             ->add('billableEvents')
             ->add('paid')
             ->add('paid_date')

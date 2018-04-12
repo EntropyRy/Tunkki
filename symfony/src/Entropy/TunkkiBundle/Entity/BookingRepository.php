@@ -15,7 +15,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 		$queryBuilder = $this->createQueryBuilder('b')
 					   ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
 					   ->orWhere('b.returning BETWEEN :startAt and :endAt')
-					   ->andWhere('b.returned = false')
+					   ->andWhere('b.itemsReturned = false')
 					   ->andWhere('b.id != :id')
 					   ->setParameter('startAt', $startAt)
 					   ->setParameter('endAt', $endAt)
