@@ -34,7 +34,14 @@ class Booking
      *
      * @ORM\Column(name="referenceNumber", type="string", length=255)
      */
-    private $referenceNumber = 'Wait for it...';
+    private $referenceNumber;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="renterHash", type="string", length=255)
+     */
+    private $renterHash;
 
     /**
      * @var boolean
@@ -860,5 +867,29 @@ class Booking
     public function getItemsReturned()
     {
         return $this->itemsReturned;
+    }
+
+    /**
+     * Set renterHash.
+     *
+     * @param string $renterHash
+     *
+     * @return Booking
+     */
+    public function setRenterHash($renterHash)
+    {
+        $this->renterHash = $renterHash;
+
+        return $this;
+    }
+
+    /**
+     * Get renterHash.
+     *
+     * @return string
+     */
+    public function getRenterHash()
+    {
+        return $this->renterHash;
     }
 }

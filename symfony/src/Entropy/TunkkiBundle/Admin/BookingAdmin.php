@@ -31,6 +31,8 @@ use Entropy\TunkkiBundle\Form\Type\PackagesType;
 use Entropy\TunkkiBundle\Entity\Item;
 use Entropy\TunkkiBundle\Entity\Booking;
 use Entropy\TunkkiBundle\Entity\Package;
+// Hash
+use Hashids\Hashids;
 
 
 class BookingAdmin extends AbstractAdmin
@@ -76,6 +78,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('items')
             ->add('packages')
             ->add('renter')
+            ->add('renterHash')
             ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
             ->add('givenAwayBy')
             ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
@@ -182,7 +185,8 @@ class BookingAdmin extends AbstractAdmin
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
                 ->add('rentingPrivileges', null, [
                     'placeholder' => 'Show everything!'
-                    ])
+                ])
+                ->add('renterHash', null, ['disabled' => true])
             ->end()
             ->end();
 
@@ -278,7 +282,11 @@ class BookingAdmin extends AbstractAdmin
         ;
     }
 
-
+    protected function calculateOwnerHash($booking)
+    {
+        $hashids = new Hashids($booking->getName().$booking->getRenter(),10);
+        return $hashids->encode($booking->getReferenceNumber());
+    }
     protected function calculateReferenceNumber($booking)
     {
         $ki = 0;
@@ -299,6 +307,7 @@ class BookingAdmin extends AbstractAdmin
     public function postPersist($booking)
     {
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         $text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
@@ -307,7 +316,12 @@ class BookingAdmin extends AbstractAdmin
     }
     public function preUpdate($booking)
     {
-        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        if($booking->getReferenceNumber() == NULL){
+            $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        }
+        if($booking->getRenterHash() == NULL){
+            $booking->setRenterHash($this->calculateOwnerHash($booking));
+        }
         $user = $this->ts->getToken()->getUser();
         $booking->setModifier($user);
     }
@@ -334,7 +348,7 @@ class BookingAdmin extends AbstractAdmin
             $errorElement->with('retrieval')->addViolation('Must be before the returning')->end();
             $errorElement->with('returning')->addViolation('Must be after the retrieval')->end();
         }
-        if(($object->getReturned() == true) and ($object->getReceivedBy() == null)){
+        if(($object->getItemsReturned() == true) and ($object->getReceivedBy() == null)){
             $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
         }
         if($object->getAccessories() != NULL){
