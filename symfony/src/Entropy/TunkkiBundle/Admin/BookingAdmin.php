@@ -285,7 +285,7 @@ class BookingAdmin extends AbstractAdmin
     protected function calculateOwnerHash($booking)
     {
         $hashids = new Hashids($booking->getName().$booking->getRenter(),10);
-        return $hashids->encode($booking->getReferenceNumber());
+        return strtolower($hashids->encode($booking->getReferenceNumber()));
     }
     protected function calculateReferenceNumber($booking)
     {
