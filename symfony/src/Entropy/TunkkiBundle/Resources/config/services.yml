@@ -38,8 +38,8 @@ services:
             - [setTemplate, [outer_list_rows_mosaic, EntropyTunkkiBundle:Admin:list_outer_rows_mosaic.html.twig]]
             - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_items.html.twig]]
             - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
-            - [addChild, ['@entropy_tunkki.admin.event']]
-            - [addChild, ['@entropy_tunkki.admin.file']]
+            - [addChild, ['@entropy_tunkki.admin.event'], ['item']]
+            - [addChild, ['@entropy_tunkki.admin.file'], ['files']]
         public: true
 
     entropy_tunkki.admin.event:
@@ -98,6 +98,7 @@ services:
         calls:
             - [setTemplate, [inner_list_row, EntropyTunkkiBundle:Admin:list_bookings.html.twig]]
             - [setTemplate, [base_list_field, SonataAdminBundle:CRUD:base_list_flat_field.html.twig]]
+            - [addChild, ['@entropy_tunkki.admin.event'], ['booking']]
         public: true
 
     entropy_tunkki.admin.package:

@@ -1,6 +1,10 @@
-#entropy_tunkki_homepage:
-#    path:     /hello/{name}
-#    defaults: { _controller: EntropyTunkkiBundle:Default:index }
+entropy_tunkki_booking_hash:
+    path:     /booking/{bookingid}/renter/{renterid}/{hash}
+    defaults: { _controller: EntropyTunkkiBundle:RenterHash:index }
+    requirements:
+        bookingid: '\d+'
+        renterid: '\d+'
+        
 _entropy_mattermost_auth:
     path:     /oauth
     defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connect }
