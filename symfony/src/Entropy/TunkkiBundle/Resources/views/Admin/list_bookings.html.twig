@@ -41,6 +41,10 @@
 </span>
 {% if object.actualPrice %}
 <div class="col-md-2">
+    {% if object.renterHash %}
+    <a href="{{ path('entropy_tunkki_booking_hash', {'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
+        url</a><br>
+    {% endif %}
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
     {% if object.invoiceSent %}
     <span class="btn-success">Invoice Sent</span><br>

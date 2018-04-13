@@ -31,11 +31,10 @@ class RenterHashController extends Controller
         $rent['accessories'] = 0;
         foreach ($object->getItems() as $item){
             $items[]=$item;
-            $rent['items']+=$item->getRent();
+            $rent['items']+=$item->getCompensationPrice();
         }
         foreach ($object->getPackages() as $item){
             $packages[]=$item;
-            $rent['packages']+=$item->getRent();
         }
         foreach ($object->getAccessories() as $item){
             $accessories[]=$item;

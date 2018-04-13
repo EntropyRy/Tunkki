@@ -13,13 +13,11 @@
             {% for package in packages %}
             <div class="checkbox">
                 <label><input type="checkbox">{{ package }}:</label>
-                <span class="pull-right">{{ package.rent }}€</span>
                 {% for item in package.items %}
                 <small>{{ item }}</small>{% if not loop.last %},{% endif %}
                 {% endfor %}
             </div>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ rent['packages'] }}€</span>
             </div>
             {% endif %}
             <div class="col-md-12">
@@ -28,10 +26,8 @@
             {% for item in items %}
                 <div class="checkbox">
                     <label><input type="checkbox"> {{ item }}</label>
-                    <span class="pull-right">{{ item.rent }}€</span>
                 </div>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ rent['items'] }}€</span>
             {% endif %}
             {% if accessories %}
             <h3>Accessories</h3>
@@ -44,7 +40,6 @@
             Subtotal: <span class="pull-right">{{ rent['accessories'] }}€</span>
             {% endif %}
             <hr>
-            <div>Total (does not contain accessories): <span class="pull-right">{{ rent['total'] }}€</span></div>
             <div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div>
             </div>
         </div>
