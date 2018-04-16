@@ -26,5 +26,4 @@ sonata_block:
             contexts:   [admin]
         # Your other blocks
         entropy_tunkki.block.bookings:
-            contexts:   [admin]
         entropy_tunkki.block.brokenitems:

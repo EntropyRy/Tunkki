@@ -31,9 +31,9 @@ class AccessoryChoice
     /**
      * @var string
      *
-     * @ORM\Column(name="price", type="integer")
+     * @ORM\Column(name="compensationPrice", type="integer")
      */
-    private $price;
+    private $compensationPrice;
 
     /**
      * Get id
@@ -96,5 +96,29 @@ class AccessoryChoice
     public function __toString()
     {
         return $this->name ? $this->name : '';
+    }
+
+    /**
+     * Set compensationPrice.
+     *
+     * @param int $compensationPrice
+     *
+     * @return AccessoryChoice
+     */
+    public function setCompensationPrice($compensationPrice)
+    {
+        $this->compensationPrice = $compensationPrice;
+
+        return $this;
+    }
+
+    /**
+     * Get compensationPrice.
+     *
+     * @return int
+     */
+    public function getCompensationPrice()
+    {
+        return $this->compensationPrice;
     }
 }

@@ -18,7 +18,7 @@ class AccessoryChoiceAdmin extends AbstractAdmin
         $datagridMapper
 //            ->add('id')
             ->add('name')
-            ->add('price', null, ['label' => 'Compensation price (€)'])
+            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
         ;
     }
 
@@ -29,7 +29,7 @@ class AccessoryChoiceAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('name')
-            ->add('price', null, ['label' => 'Compensation price (€)'])
+            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
             ->add('_action', null, array(
                 'actions' => array(
                     'show' => array(),
@@ -47,7 +47,7 @@ class AccessoryChoiceAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('name')
-            ->add('price', null, ['label' => 'Compensation price (€)'])
+            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
         ;
     }
 
@@ -58,7 +58,7 @@ class AccessoryChoiceAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('name')
-            ->add('price', null, ['label' => 'Compensation price (€)'])
+            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
         ;
     }
 }

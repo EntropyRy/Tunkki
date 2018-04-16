@@ -14,6 +14,7 @@ class BookingAdminController extends CRUDController
         $rent['items'] = 0;
         $rent['packages'] = 0;
         $rent['accessories'] = 0;
+        $compensation['accessories'] = 0;
         $object = $this->admin->getSubject(); 
         foreach ($object->getItems() as $item){
             $items[]=$item;
@@ -25,7 +26,7 @@ class BookingAdminController extends CRUDController
         }
         foreach ($object->getAccessories() as $item){
             $accessories[]=$item;
-            $rent['accessories']+=$item->getName()->getPrice()*$item->getCount();
+            $compensation['accessories']+=$item->getName()->getCompensationPrice()*$item->getCount();
         }
         $rent['total'] = $rent['items'] + $rent['packages']; //+ $rent['accessories'];
         $rent['actualTotal']=$object->getActualPrice();
@@ -36,6 +37,7 @@ class BookingAdminController extends CRUDController
         $data['packages']=$packages;
         $data['accessories']=$accessories;
         $data['rent']=$rent;
+        $data['compensation']=$compensation;
         return $this->render('EntropyTunkkiBundle:BookingAdmin:stufflist.html.twig', $data);
     }
 

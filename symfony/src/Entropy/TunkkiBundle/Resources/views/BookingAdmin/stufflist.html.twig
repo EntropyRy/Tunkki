@@ -38,10 +38,10 @@
             {% for item in accessories %}
                 <div class="checkbox">
                 <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
-                    <span class="pull-right">{{ item.name.price }} €/pcs</span>
+                <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
                 </div>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ rent['accessories'] }}€</span>
+            Subtotal: <span class="pull-right">{{ compensation['accessories'] }}€</span>
             {% endif %}
             <hr>
             <div>Total (does not contain accessories): <span class="pull-right">{{ rent['total'] }}€</span></div>

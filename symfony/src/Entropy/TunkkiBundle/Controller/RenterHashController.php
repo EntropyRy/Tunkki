@@ -17,21 +17,23 @@ class RenterHashController extends Controller
             throw new NotFoundHttpException();
         }
         $this->em = $this->container->get('doctrine.orm.entity_manager');
-        $user = $this->em->getRepository('EntropyTunkkiBundle:Renter')
+        $renter = $this->em->getRepository('EntropyTunkkiBundle:Renter')
                 ->findOneBy(['id' => $renterid]);
         $booking = $this->em->getRepository('EntropyTunkkiBundle:Booking')
             ->findOneBy(['id' => $bookingid, 'renterHash' => $hash]);
-        if ( $booking->getRenter()->getId() == $renterid){
+        if ( !empty($booking) and $booking->getRenter() == $renter){
             $object = $booking;
         $items = [];
         $packages = [];
         $accessories = [];
         $rent['items'] = 0;
+        $compensation['items'] = 0;
         $rent['packages'] = 0;
         $rent['accessories'] = 0;
         foreach ($object->getItems() as $item){
             $items[]=$item;
-            $rent['items']+=$item->getCompensationPrice();
+            $rent['items']+=$item->getPrice();
+            $compensation['items']+=$item->getCompensationPrice();
         }
         foreach ($object->getPackages() as $item){
             $packages[]=$item;
