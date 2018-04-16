@@ -30,9 +30,10 @@ class RenterHashController extends Controller
         $compensation['items'] = 0;
         $rent['packages'] = 0;
         $rent['accessories'] = 0;
+        $compensation['accessories'] = 0;
         foreach ($object->getItems() as $item){
             $items[]=$item;
-            $rent['items']+=$item->getPrice();
+            $rent['items']+=$item->getRent();
             $compensation['items']+=$item->getCompensationPrice();
         }
         foreach ($object->getPackages() as $item){
@@ -40,7 +41,7 @@ class RenterHashController extends Controller
         }
         foreach ($object->getAccessories() as $item){
             $accessories[]=$item;
-            $rent['accessories']+=$item->getName()->getPrice()*$item->getCount();
+            $compensation['accessories']+=$item->getName()->getCompensationPrice()*$item->getCount();
         }
         $rent['total'] = $rent['items'] + $rent['packages']; //+ $rent['accessories'];
         $rent['actualTotal']=$object->getActualPrice();
@@ -51,8 +52,9 @@ class RenterHashController extends Controller
         $data['packages']=$packages;
         $data['accessories']=$accessories;
         $data['rent']=$rent;
+        $data['compensation']=$compensation;
 
-        return $this->render('EntropyTunkkiBundle::stufflist.html.twig', $data);
+        return $this->render('EntropyTunkkiBundle::stufflist_for_renter.html.twig', $data);
         }
         else {
             throw new NotFoundHttpException();

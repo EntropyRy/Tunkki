@@ -1,13 +1,3 @@
-{#
-
-This file is part of the Sonata package.
-
-(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
-
-For the full copyright and license information, please view the LICENSE
-file that was distributed with this source code.
-
-#}
 {%- block sonata_page_html_tag -%}
 <!DOCTYPE html>
 <html {{ sonata_seo_html_attributes() }}>
@@ -44,36 +34,13 @@ file that was distributed with this source code.
     {% endblock %}
 
     {% block sonata_page_body_tag %}
-        <body class="sonata-bc">
+        <body class="sonata-bc" style="max-width: 70%;margin: 0 auto;">
     {% endblock %}
 
         {% block sonata_page_top_bar %}
             {% block page_top_bar %} {# Deprecated block #}
                 {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_PREVIOUS_ADMIN') ) %}
-
-                    {% if sonata_page.isEditor and sonata_page.isInlineEditionOn %}
-                        <!-- CMS specific variables -->
-                        <script>
-                            jQuery(document).ready(function() {
-                                Sonata.Page.init({
-                                    url: {
-                                        block_save_position: '{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}',
-                                        block_edit:          '{{ sonata_admin.url('sonata.page.admin.page|sonata.page.admin.block', 'edit', {'id': 'BLOCK_ID'}) }}'
-                                    }
-                                });
-                            });
-                        </script>
-                    {% endif %}
-
-                    <header class="sonata-bc sonata-page-top-bar navbar navbar-inverse navbar-fixed-top" role="banner"
-                    {% if sonata_page.isEditor and sonata_page.isInlineEditionOn %}
-                        data-page-editor='{{ {
-                            url: {
-                                block_save_position: sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page),
-                                block_edit:          sonata_admin.url('sonata.page.admin.page|sonata.page.admin.block', 'edit', {'id': 'BLOCK_ID'})
-                            }
-                        }|json_encode()|raw }}'
-                    {% endif %}>
+                <header class="sonata-bc sonata-page-top-bar navbar navbar-inverse navbar-fixed-top" role="banner">
                         <div class="container">
                             <ul class="nav navbar-nav">
                                 {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
@@ -147,35 +114,14 @@ file that was distributed with this source code.
             {% endblock %}
         {% endblock %}
 
-        {% block sonata_page_container %}
-            {% block page_container %}{% endblock %} {# Deprecated block #}
+        {% block stufflist_container %}
         {% endblock %}
-        {% block content %}
+
+        {% block sonata_page_container %}
         {% endblock %}
 
         {% block sonata_page_asset_footer %}
-            {% block page_asset_footer %} {# Deprecated block #}
-                {% if page is defined %}
-                    {% if page.javascript is not empty %}
-                        <script>
-                            {{ page.javascript|raw }}
-                        </script>
-                    {% endif %}
-                    {% if page.stylesheet is not empty %}
-                        <style>
-                            {{ page.stylesheet|raw }}
-                        </style>
-                    {% endif %}
-                {% endif %}
-                {#
-                    These includes can be done only at this point as all blocks are loaded,
-                    Limition : this does not work if a global page is loaded from an ESI tag inside a container block
-                #}
-                {{ sonata_block_include_stylesheets('screen', app.request.basePath) }}
-                {{ sonata_block_include_javascripts('screen', app.request.basePath) }}
-            {% endblock %}
         {% endblock %}
 
-        <!-- monitoring:3e9fda56df2cdd3b039f189693ab7844fbb2d4f6 -->
     </body>
 </html>
