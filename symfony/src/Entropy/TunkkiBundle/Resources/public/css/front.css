@@ -1,0 +1,10 @@
+.checkbox div[class^="icheckbox"], .checkbox-inline div[class^="icheckbox"], .radio div[class^="iradio"], .radio-inline div[class^="iradio"] {
+    position: relative;
+    margin-top: 4px \9;
+    margin-right: 5px;
+    margin-top: -3px;
+}
+.checkbox label, .radio label {
+    font-weight: 700;
+    margin-left: -20px;
+}
