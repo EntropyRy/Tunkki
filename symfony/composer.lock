@@ -530,16 +530,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.9.0",
+            "version": "1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "b2754fd483b73d002f80dd846222887edae3e748"
+                "reference": "703fad32e4c8cbe609caf45a71a1d4266c830f0f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/b2754fd483b73d002f80dd846222887edae3e748",
-                "reference": "b2754fd483b73d002f80dd846222887edae3e748",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/703fad32e4c8cbe609caf45a71a1d4266c830f0f",
+                "reference": "703fad32e4c8cbe609caf45a71a1d4266c830f0f",
                 "shasum": ""
             },
             "require": {
@@ -611,7 +611,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2018-04-16T15:02:26+00:00"
+            "time": "2018-04-19T14:07:39+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -3419,16 +3419,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.35.0",
+            "version": "3.35.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "3a5f85ee9909c0fa20623394450e06b96174a32c"
+                "reference": "7e3203d04f36a2a579b209d65cf7f2a485ce74fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/3a5f85ee9909c0fa20623394450e06b96174a32c",
-                "reference": "3a5f85ee9909c0fa20623394450e06b96174a32c",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/7e3203d04f36a2a579b209d65cf7f2a485ce74fc",
+                "reference": "7e3203d04f36a2a579b209d65cf7f2a485ce74fc",
                 "shasum": ""
             },
             "require": {
@@ -3520,7 +3520,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2018-04-16T08:28:33+00:00"
+            "time": "2018-04-20T09:47:48+00:00"
         },
         {
             "name": "sonata-project/block-bundle",

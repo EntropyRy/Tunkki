@@ -8,3 +8,8 @@
     font-weight: 700;
     margin-left: -20px;
 }
+@media print {
+   .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
+   .no-print, .no-print * { display: none; }
+}
+

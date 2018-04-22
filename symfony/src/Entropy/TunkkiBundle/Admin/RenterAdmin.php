@@ -83,9 +83,8 @@ class RenterAdmin extends AbstractAdmin
 	}
     public function validate(ErrorElement $errorElement, $object)
     {
-        if(empty($object->getPhone()) and (empty($object->getEmail()))){
-            $errorElement->with('email')->addViolation('Either one has to be defined')->end();
-            $errorElement->with('phone')->addViolation('Either one has to be defined')->end();
+        if(empty($object->getEmail())){
+            $errorElement->with('email')->addViolation('Email is needed for the billing')->end();
         }
     }
 
