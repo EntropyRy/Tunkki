@@ -44,40 +44,52 @@ sonata_page:
     templates:
         default: 
             path: 'EntropyTunkkiBundle::layout.html.twig' 
-            name: default # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
+            name: Default # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
 
             containers:
-                header:
-                    name: Header
                 content_top:
                     name: Top content
                 content:
                     name: Main content
                 content_bottom:
                     name: Bottom content
+            matrix:
+                layout: |
+                    TTTTTTTT
+                    TTTTTTTT
+                    CCCCCCCC
+                    CCCCCCCC
+                    CCCCCCCC
+                    BBBBBBBB
+                    BBBBBBBB
+
+                mapping:
+                    T: content_top
+                    C: content
+                    B: content_bottom
+        global: 
+            path: 'EntropyTunkkiBundle::layout.html.twig' 
+            name: Global # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
+
+            containers:
+                header:
+                    name: Header
                 footer:
                     name: Footer
             matrix:
                 layout: |
                     HHHHHHHH
                     HHHHHHHH
-                    TTTTBBBB
-                    TTTTBBBB
-                    TTTTBBBB
-                    TTTTBBBB
-                    CCCCCCCC
-                    CCCCCCCC
+                    HHHHHHHH
+                    FFFFFFFF
                     FFFFFFFF
                     FFFFFFFF
 
                 mapping:
                     H: header
-                    T: content_top
-                    C: content
-                    B: content_bottom
                     F: footer
 
-        # ESIMERKKI COMPOSERIN PAGETEMPLATEN TEKOON
+
         fix:
             path: 'EntropyTunkkiBundle::fix.html.twig' 
             name: 'Fix Page'
