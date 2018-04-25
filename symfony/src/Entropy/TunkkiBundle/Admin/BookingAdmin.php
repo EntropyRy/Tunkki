@@ -301,13 +301,13 @@ class BookingAdmin extends AbstractAdmin
     }
     public function prePersist($booking)
     {
+        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         $booking->setCreator($user);
     }
     public function postPersist($booking)
     {
-        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
-        $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         $text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
