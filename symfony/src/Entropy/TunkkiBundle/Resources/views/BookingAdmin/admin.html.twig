@@ -70,17 +70,7 @@
                 {% set item = form.vars.choices[child.vars.value].data %}
                 {% set rentHistory = item.rentHistory.toArray %}
                 {% if item.category == key2 %}
-                    <div style="
-                    {% if bookings is not empty %}
-                        {% for booking in bookings if booking in rentHistory %}
-                            opacity: 0.3;
-                        {% endfor %}
-                    {% endif %}
-                    "
-                    {% if item.rentNotice %}
-                        title="{{ item.rentNotice }}"
-                    {% endif %}
-                    >
+                    <div style="{% if bookings is not empty %}{% for booking in bookings if booking in rentHistory %}opacity: 0.3;{% endfor %}{% endif %}">
                     {#{ block('item') }#}
                     <div class="checkbox">
                         {% if item.cannotBeRented %}
