@@ -1,73 +1,65 @@
-{% extends 'EntropyTunkkiBundle::base_layout.html.twig' %}
+{% extends 'EntropyTunkkiBundle::layout.html.twig' %}
 {% block title %}
-<title>{{name}} - {{ date }}</title>
+<title>{{bookingdata.name}} - {{ bookingdata.date }}</title>
 {% endblock %}
-{% block stufflist_container %}
-<div class="container">
-    <div class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <h1>{{ name }} - {{ date }}
-                    <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
-                </h1>
-            </div>
-            <div class="col-md-12">
-            {% if packages %}
-            <h3>Packages</h3>
-            {% for package in packages %}
-            <div class="checkbox">
-                <label><input type="checkbox">{{ package }}:</label>
-            </div>
-            <ul>
-                {% for item in package.items %}
-                <li class="list-unstyled">
-                    <div class="checkbox">
-                        <label><input type="checkbox">{{ item }}</label>
-                        {% if item.compensationPrice %}
-                            <span class="pull-right">{{ item.compensationPrice }} €</span>
-                        {% endif %}
-                        {% for file in item.files %} 
-                        <span class="no-print">- {{ file.downloadLink|raw }}</span> 
-                        {% endfor %}
-                    </div>
-
-                </li>
-                {% endfor %}
-            </ul>
-            {% endfor %}
-            </div>
-            {% endif %}
-            <div class="col-md-12">
-            {% if items %}
-            <h3>Items</h3>
-            {% for item in items %}
-                <div class="checkbox">
-                    <label><input type="checkbox"> {{ item }}</label> 
-                    {% for file in item.files %} 
-                        <span class="no-print">- {{ file.downloadLink|raw }}</span> 
-                    {% endfor %}
-                    {% if item.compensationPrice %}
-                        <span class="pull-right">{{ item.compensationPrice }} €</span>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            {% endif %}
-            {% if accessories %}
-            <h3>Accessories</h3>
-            {% for item in accessories %}
-                <div class="checkbox">
-                <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
-                {% if item.name.compensationPrice %}
-                    <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
-                {% endif %}
-                </div>
-            {% endfor %}
-            {% endif %}
-            <!--<div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div> -->
-            </div>
-        </div>
-    </div>
+{% block content %}
+<div class="col-md-12">
+    <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
+        <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
+    </h1>
 </div>
+<div class="col-md-12">
+{% if bookingdata.packages %}
+<h3>Packages</h3>
+{% for package in bookingdata.packages %}
+<div class="checkbox">
+    <label><input type="checkbox">{{ package }}:</label>
+</div>
+<ul>
+    {% for item in package.items %}
+    <li class="list-unstyled">
+        <div class="checkbox">
+            <label><input type="checkbox">{{ item }}</label>
+            {% if item.compensationPrice %}
+                <span class="pull-right">{{ item.compensationPrice }} €</span>
+            {% endif %}
+            {% for file in item.files %} 
+            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+            {% endfor %}
+        </div>
+
+    </li>
+    {% endfor %}
+</ul>
+{% endfor %}
+</div>
+{% endif %}
+<div class="col-md-12">
+{% if bookingdata.items %}
+<h3>Items</h3>
+{% for item in bookingdata.items %}
+    <div class="checkbox">
+        <label><input type="checkbox"> {{ item }}</label> 
+        {% for file in item.files %} 
+            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+        {% endfor %}
+        {% if item.compensationPrice %}
+            <span class="pull-right">{{ item.compensationPrice }} €</span>
+        {% endif %}
+    </div>
+{% endfor %}
+{% endif %}
+{% if bookingdata.accessories %}
+<h3>Accessories</h3>
+{% for item in bookingdata.accessories %}
+    <div class="checkbox">
+    <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
+    {% if item.name.compensationPrice %}
+        <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
+    {% endif %}
+    </div>
+{% endfor %}
+{% endif %}
+<!--<div>Actual Total: <span class="pull-right">{#{ rent['actualTotal'] }#}€</span></div> -->
 </div>
 {% endblock %}

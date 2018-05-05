@@ -4,6 +4,7 @@ namespace Entropy\TunkkiBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface;
 
 class RenterHashController extends Controller
 {
@@ -22,7 +23,12 @@ class RenterHashController extends Controller
         $bookingdata = $this->em->getRepository('EntropyTunkkiBundle:Booking')
             ->getBookingData($bookingid, $hash, $renter);
         if (!empty($bookingdata)){
-            return $this->render('EntropyTunkkiBundle::stufflist_for_renter.html.twig', $bookingdata);
+            $cms = $this->container->get("sonata.page.cms.page");
+            $page = $cms->getCurrentPage();
+            return $this->render('EntropyTunkkiBundle::stufflist_for_renter.html.twig', [
+                'bookingdata' => $bookingdata, 
+                'page' => $page
+            ]);
         }
         else {
             throw new NotFoundHttpException();
