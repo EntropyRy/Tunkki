@@ -19,7 +19,7 @@ class EventAdmin extends AbstractAdmin
 {
     protected $ts;
     protected $mm;
-    protected $parentAssociationMapping = 'item';
+    protected $parentAssociationMapping = ['entropy_tunkki.admin.item'=>'item', 'entropy_tunkki.admin.booking' =>'booking'];
     /**
      * @param DatagridMapper $datagridMapper
      */
@@ -27,6 +27,7 @@ class EventAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('item')
+            ->add('booking')
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')
@@ -41,18 +42,18 @@ class EventAdmin extends AbstractAdmin
     {
         if (!$this->isChild()){
             $listMapper->add('item');
+            $listMapper->add('booking');
         }
         $listMapper
             ->add('description')
             ->add('creator')
             ->add('createdAt')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-     //               'delete' => array(),
-                )
-            ))
+            ->add('_action', null, [
+                'actions' => [
+                    'show' => [],
+                    'edit' => [],
+                ]])
+            
         ;
     }
 
@@ -65,6 +66,11 @@ class EventAdmin extends AbstractAdmin
             $formMapper
                 ->with('Item', ['class'=>'col-md-12'])
 				->add('item')
+				->end()
+            ;
+            $formMapper
+                ->with('Booking', ['class'=>'col-md-12'])
+				->add('booking')
 				->end()
             ;
 		}
@@ -90,18 +96,34 @@ class EventAdmin extends AbstractAdmin
 					'sonata_help' => $help,
 					])
 				->end()
-			;
-			if (!$this->isChild()){
-				$formMapper
-					->with('Meta')
-					->add('creator', null, array('disabled' => true))
-					->add('createdAt',DateTimePickerType::class, array('disabled' => true))
-					->add('modifier', null, array('disabled' => true))
-					->add('updatedAt',DateTimePickerType::class, array('disabled' => true))
-					->end()
-				;
-			}
-		}
+                ;
+        }
+		if ($this->getSubject()->getBooking() != NULL ){
+			$formMapper
+				->with('Status', ['class'=>'col-md-4'])
+				->add('booking.cancelled', CheckboxType::class,['required' => false])
+				->add('booking.renterConsent', CheckboxType::class,['required' => false, 'disabled' => true])
+				->add('booking.itemsReturned', CheckboxType::class,['required' => false])
+				->add('booking.invoiceSent', CheckboxType::class,['required' => false])
+				->add('booking.paid', CheckboxType::class,['required' => false])
+				->end()
+				->with('Message', ['class' => 'col-md-8'])
+				->add('description',TextareaType::class, [
+					'required' => true,
+					])
+				->end()
+                ;
+        }
+        if (!$this->isChild()){
+            $formMapper
+                ->with('Meta')
+                ->add('creator', null, array('disabled' => true))
+                ->add('createdAt',DateTimePickerType::class, array('disabled' => true))
+                ->add('modifier', null, array('disabled' => true))
+                ->add('updatedAt',DateTimePickerType::class, array('disabled' => true))
+                ->end()
+            ;
+        }
     }
 
     /**
@@ -111,6 +133,7 @@ class EventAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('item')
+            ->add('booking')
             ->add('description')
             ->add('creator')
             ->add('createdAt')
@@ -142,23 +165,29 @@ class EventAdmin extends AbstractAdmin
         $this->mm->SendToMattermost($text);
 	}
 	private function getMMtext($Event, $user)
-	{
-        $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.
-                $Event->getItem()->getName().'> ';
-		$fix = $Event->getItem()->getNeedsFixing();
-		$rent = $Event->getItem()->getCannotBeRented();
-        if($fix == true){
-            $text .= '**_BROKEN_** ';
+    {
+        $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|';
+        $fix = null;
+        $rent = null;
+        if(!empty($Event->getItem())){
+            $thing = $Event->getItem();
+            $fix = $thing->getNeedsFixing();
+            $rent = $thing->getCannotBeRented();
+            $text .= $thing->getName().'> ';
+            if($fix === true){
+                $text .= '**_NEEDS FIXING_** ';
+            } elseif ($fix === false){
+                $text .= '**_FIXED_** ';
+            }
+            if($rent === true){
+                $text .= 'cannot be rented ';
+            } elseif ($fix === false){
+                $text .= 'can be rented ';
+            }
+        } else {
+            $thing = $Event->getBooking();
+            $text .= $thing->getName().'> ';
         }
-        elseif($fix == false){
-            $text .= '**_FIXED_** ';
-		}
-        if($rent == true){
-            $text .= 'and cannot be rented ';
-        }
-        elseif($rent == false){
-            $text .= 'but can be rented ';
-		}
 		if($Event->getDescription()){
 			$text .= 'with comment: '.$Event->getDescription();
 		}

@@ -16,6 +16,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 					   ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
 					   ->orWhere('b.returning BETWEEN :startAt and :endAt')
 					   ->andWhere('b.itemsReturned = false')
+					   ->andWhere('b.cancelled = false')
 					   ->andWhere('b.id != :id')
 					   ->setParameter('startAt', $startAt)
 					   ->setParameter('endAt', $endAt)
@@ -51,8 +52,10 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
 			$packages[]=$item;
 		} 
 		foreach ($object->getAccessories() as $item){ 
-			$accessories[]=$item; 
-			$compensation['accessories']+=$item->getName()->getCompensationPrice()*$item->getCount(); 
+            $accessories[]=$item;
+            if(is_int($item->getCount())){
+                $compensation['accessories']+=$item->getName()->getCompensationPrice()*$item->getCount();
+            } 
 		} 
 		$rent['total'] = $rent['items'] + $rent['packages']; //+ $rent['accessories']; 
 		$rent['actualTotal']=$object->getActualPrice(); 

@@ -30,6 +30,12 @@ class Event
     private $item;
 
     /**
+     * 
+     * @ORM\ManyToOne(targetEntity="Entropy\TunkkiBundle\Entity\Booking", inversedBy="statusEvents")
+     */
+    private $booking;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="Description", type="string", length=5000, nullable=true)
@@ -178,8 +184,9 @@ class Event
     {
         if(is_object($this->getItem())){
             return 'Event for '.$this->getItem()->getName();
-        }
-        else {
+        } elseif(is_object($this->getBooking())){
+            return 'Event for '.$this->getBooking()->getName();
+        } else {
             return 'No associated item';
         }
     }
@@ -230,5 +237,29 @@ class Event
     public function getModifier()
     {
         return $this->modifier;
+    }
+
+    /**
+     * Set booking.
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Booking|null $booking
+     *
+     * @return Event
+     */
+    public function setBooking(\Entropy\TunkkiBundle\Entity\Booking $booking = null)
+    {
+        $this->booking = $booking;
+
+        return $this;
+    }
+
+    /**
+     * Get booking.
+     *
+     * @return \Entropy\TunkkiBundle\Entity\Booking|null
+     */
+    public function getBooking()
+    {
+        return $this->booking;
     }
 }

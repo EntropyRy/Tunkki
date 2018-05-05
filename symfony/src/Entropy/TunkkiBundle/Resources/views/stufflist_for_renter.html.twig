@@ -5,7 +5,6 @@
 {% block stufflist_container %}
 <div class="container">
     <div class="content">
-
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -19,10 +18,23 @@
             {% for package in packages %}
             <div class="checkbox">
                 <label><input type="checkbox">{{ package }}:</label>
-                {% for item in package.items %}
-                <small>{{ item }}</small>{% if not loop.last %},{% endif %}
-                {% endfor %}
             </div>
+            <ul>
+                {% for item in package.items %}
+                <li class="list-unstyled">
+                    <div class="checkbox">
+                        <label><input type="checkbox">{{ item }}</label>
+                        {% if item.compensationPrice %}
+                            <span class="pull-right">{{ item.compensationPrice }} €</span>
+                        {% endif %}
+                        {% for file in item.files %} 
+                        <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+                        {% endfor %}
+                    </div>
+
+                </li>
+                {% endfor %}
+            </ul>
             {% endfor %}
             </div>
             {% endif %}
@@ -31,7 +43,13 @@
             <h3>Items</h3>
             {% for item in items %}
                 <div class="checkbox">
-                    <label><input type="checkbox"> {{ item }}</label>
+                    <label><input type="checkbox"> {{ item }}</label> 
+                    {% for file in item.files %} 
+                        <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+                    {% endfor %}
+                    {% if item.compensationPrice %}
+                        <span class="pull-right">{{ item.compensationPrice }} €</span>
+                    {% endif %}
                 </div>
             {% endfor %}
             {% endif %}
@@ -40,20 +58,16 @@
             {% for item in accessories %}
                 <div class="checkbox">
                 <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
-                <!--        <span class="pull-right">{#{ item.name.price }#} €/pcs</span> -->
+                {% if item.name.compensationPrice %}
+                    <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
+                {% endif %}
                 </div>
             {% endfor %}
             {% endif %}
-            <hr>
-            <div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div>
+            <!--<div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div> -->
             </div>
         </div>
     </div>
 </div>
 </div>
-<style>
-@media print {
-.icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
-}
-</style>
 {% endblock %}

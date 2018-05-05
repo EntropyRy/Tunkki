@@ -8,49 +8,87 @@
     {% if object.retrieval and object.returning %}
         {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
     {% endif %}
-    Renter: {{ object|render_list_element(admin.list['renter']) }}<br>
+    Renter: {{ object|render_list_element(admin.list['renter']) }} -
+    {% if object.renterHash %}
+    <a href="{{ path('entropy_tunkki_booking_hash', {'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
+        Stufflist for renter</a><br>
+    {% endif %}
     {% if object.givenAwayBy %}
     Given Away by: {{ object.givenAwayBy }}</br>
     {% endif %}
     {% if object.ReceivedBy %}
     Recived by: {{ object.ReceivedBy }}</br>
     {% endif %}
-    Returned: {{ object|render_list_element(admin.list['itemsReturned']) }}<br>
     </small>
     </span>
 </div>
-<span class="col-md-6 pull-left">
-    {% if not object.paid and not object.itemsReturned %}
-        {% for item in object.items %}
-            {% if item.needsFixing %}
-                <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
-                    <i class="fa fa-medkit"></i>
-                    {{ item.name }}
-                </a>
-            {% endif %}
-        {% endfor %}
-        {% for package in object.packages %}
-            {% for item in package.itemsNeedingFixing %}
+<span class="col-md-6">
+    <a href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':object.id}) }}">Change booking Status</a>
+    {% if not object.renterConsent and object.actualPrice%}
+    <span class="pull-right label label-warning">Needs Renters Consent</span>
+    {% elseif object.renterConsent and object.actualPrice %}
+    <span class="pull-right label label-success">Renters Consent</span>
+    {% endif %}
+    <hr style="margin: 0px">
+    {% if object.cancelled %}
+    <span class="label label-warning">Cancelled</span>
+    {% else %}
+        {% if not object.itemsReturned %}
+            {% for item in object.items if item.needsFixing %}
                 <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
                     <i class="fa fa-medkit"></i>
                     {{ item.name }}
                 </a>
             {% endfor %}
-        {% endfor %}
+            {% for package in object.packages %}
+                {% for item in package.itemsNeedingFixing %}
+                    <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
+                        <i class="fa fa-medkit"></i>
+                        {{ item.name }}
+                    </a>
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+        {%spaceless%}
+        <div class="label-group">
+            <span class="label label-success">Items Returned</span>
+            {% if object.actualPrice %}
+                {% if object.invoiceSent %}
+                <span class="label label-success">Invoice Sent</span>
+                {% else %}
+                <span class="label label-danger">Invoice not sent</span>
+                {% endif %}
+                {% if object.paid %}
+                <span class="label label-success">Paid</span>
+                {% else %}
+                <span class="label label-danger">Not paid</span>
+                {% endif %}
+            {% endif %}
+        </div>
+        {% endspaceless %}
+        {% endif %}
     {% endif %}
 </span>
 {% if object.actualPrice %}
 <div class="col-md-2">
-    {% if object.renterHash %}
-    <a href="{{ path('entropy_tunkki_booking_hash', {'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
-        url</a><br>
-    {% endif %}
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
-    {% if object.invoiceSent %}
-    <span class="btn-success">Invoice Sent</span><br>
-    {% endif %}
-    Paid: {{ object|render_list_element(admin.list['paid']) }}<br>
     Price: {{ object.actualPrice }}€<br>
 </div>
 {% endif %}
+<style>
+.label-group>.label:first-child {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0;
+}
+.label-group>.label:nth-child(2) {
+    border-radius: 0;
+    margin-left: 0;
+}
+.label-group>.label:last-child {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: 0;
+}
+</style>
 {% endblock %}

@@ -61,7 +61,10 @@ class BookingAdmin extends AbstractAdmin
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Booking', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
-            $menu->addChild('Show Stufflist', [
+            $menu->addChild('Status', [
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.create', ['id' => $id])
+            ]);
+            $menu->addChild('Stufflist', [
                 'uri' => $admin->generateUrl('stuffList', ['id' => $id])
             ]);
         }
@@ -179,7 +182,6 @@ class BookingAdmin extends AbstractAdmin
                         'btn_add' => false, 
                         'btn_delete' => 'Unassign'
                     ])
-                ->add('itemsReturned')
             ->end()
             ->with('Who is Renting?', array('class' => 'col-md-6'))
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
@@ -240,8 +242,6 @@ class BookingAdmin extends AbstractAdmin
                     ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),
                         array('edit' => 'inline', 'inline' => 'table')
                     )
-                    ->add('invoiceSent')
-                    ->add('paid')
                     ->add('paid_date', DateTimePickerType::class, array('disabled' => false, 'required' => false))
                 ->end()
                 ->end()

@@ -128,10 +128,14 @@ class File
      *
      * @return string 
      */
-    public function getDownload()
+    public function getDownloadLink()
     {
         if (is_object($this->getFile())){
-            return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
+            if(is_string($this->getFileinfo())){
+                return '<a href="/media/download/'.$this->getFile()->getId().'">'.$this->getFileinfo().'</a>';
+            } else {
+                return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
+            }
         } 
         else { return 'X'; }
     }

@@ -234,9 +234,10 @@ class Package
     {
         $needsfix = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($this->getItems() as $item) {
-            if ($item->getneedsFixing())
+            if ($item->getneedsFixing()){
                 $needsfix[] = $item;
                 $this->setNeedsFixing(true);
+            }
         }
         return $needsfix;
     }

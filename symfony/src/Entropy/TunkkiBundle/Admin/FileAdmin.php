@@ -36,7 +36,7 @@ class FileAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('fileinfo')
             ->add('file', null, ['template' => 'EntropyTunkkiBundle:Admin:preview.html.twig'])
-            ->add('download', 'html');
+            ->add('downloadLink', 'html');
         if(!$this->isChild()){
             $listMapper->add('product');
         }

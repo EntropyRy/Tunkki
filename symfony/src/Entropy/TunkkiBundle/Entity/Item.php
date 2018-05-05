@@ -24,12 +24,6 @@ class Item
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     * @ORM\Version
-     */
-    protected $version;
-
-    /**
      * @var string
      *
      * @ORM\Column(name="Name", type="string", length=255)
@@ -730,30 +724,6 @@ class Item
     public function getTags()
     {
         return $this->tags;
-    }
-
-    /**
-     * Set version
-     *
-     * @param integer $version
-     *
-     * @return Item
-     */
-    public function setVersion($version)
-    {
-        $this->version = $version;
-
-        return $this;
-    }
-
-    /**
-     * Get version
-     *
-     * @return integer
-     */
-    public function getVersion()
-    {
-        return $this->version;
     }
 
     /**

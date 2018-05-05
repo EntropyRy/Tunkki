@@ -46,9 +46,9 @@ class Booking
     /**
      * @var boolean
      *
-     * @ORM\Column(name="paid", type="boolean")
+     * @ORM\Column(name="renterConsent", type="boolean")
      */
-    private $paid = false;
+    private $renterConsent = false;
 
     /**
      * @var boolean
@@ -63,6 +63,20 @@ class Booking
      * @ORM\Column(name="invoiceSent", type="boolean")
      */
     private $invoiceSent = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="paid", type="boolean")
+     */
+    private $paid = false;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="cancelled", type="boolean")
+     */
+    private $cancelled = false;
 
     /**
      * @var \DateTime
@@ -142,6 +156,11 @@ class Booking
      * @ORM\Column(name="numberOfRentDays", type="integer")
      */
     private $numberOfRentDays = 1;
+
+    /**
+     * @ORM\OneToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Event", mappedBy="booking", cascade={"all"})
+     */
+    private $statusEvents;
 
     /**
      *
@@ -891,5 +910,89 @@ class Booking
     public function getRenterHash()
     {
         return $this->renterHash;
+    }
+
+    /**
+     * Set renterConsent.
+     *
+     * @param bool $renterConsent
+     *
+     * @return Booking
+     */
+    public function setRenterConsent($renterConsent)
+    {
+        $this->renterConsent = $renterConsent;
+
+        return $this;
+    }
+
+    /**
+     * Get renterConsent.
+     *
+     * @return bool
+     */
+    public function getRenterConsent()
+    {
+        return $this->renterConsent;
+    }
+
+    /**
+     * Set cancelled.
+     *
+     * @param bool $cancelled
+     *
+     * @return Booking
+     */
+    public function setCancelled($cancelled)
+    {
+        $this->cancelled = $cancelled;
+
+        return $this;
+    }
+
+    /**
+     * Get cancelled.
+     *
+     * @return bool
+     */
+    public function getCancelled()
+    {
+        return $this->cancelled;
+    }
+
+    /**
+     * Add statusEvent.
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Event $statusEvent
+     *
+     * @return Booking
+     */
+    public function addStatusEvent(\Entropy\TunkkiBundle\Entity\Event $statusEvent)
+    {
+        $this->statusEvents[] = $statusEvent;
+
+        return $this;
+    }
+
+    /**
+     * Remove statusEvent.
+     *
+     * @param \Entropy\TunkkiBundle\Entity\Event $statusEvent
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeStatusEvent(\Entropy\TunkkiBundle\Entity\Event $statusEvent)
+    {
+        return $this->statusEvents->removeElement($statusEvent);
+    }
+
+    /**
+     * Get statusEvents.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getStatusEvents()
+    {
+        return $this->statusEvents;
     }
 }
