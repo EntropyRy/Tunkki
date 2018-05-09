@@ -118,7 +118,6 @@ sonata_page:
         stylesheets:
             - 'bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css'
             - 'bundles/sonataadmin/vendor/iCheck/skins/square/blue.css'
-            - 'bundles/sonatapage/sonata-page.front.css'
             - 'bundles/entropytunkki/css/front.css'
         javascripts:
             - 'bundles/sonatacore/vendor/jquery/dist/jquery.min.js'
