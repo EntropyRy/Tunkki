@@ -28,10 +28,20 @@ security:
             anonymous:          true
             logout_on_user_change: true
         main:
-            pattern:            /oauth(.*)
+            pattern:            .*
             context:            user
+#            form_login:
+#                login_path:     /login
+#                default_target_path: /profile
+#                check_path:     /login_check
+#                post_only:      true
+#            logout:
+#                path:           /logout
+#                target:         /login
             anonymous:          true
+            switch_user:        true
             logout_on_user_change: true
+
 #        api:
 #            pattern:            /api(.*)
 #            context:            user

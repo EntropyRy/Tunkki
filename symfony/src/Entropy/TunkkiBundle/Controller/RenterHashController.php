@@ -26,6 +26,7 @@ class RenterHashController extends Controller
             $cms = $this->container->get("sonata.page.cms.page");
             $page = $cms->getCurrentPage();
             return $this->render('EntropyTunkkiBundle::stufflist_for_renter.html.twig', [
+                'renter' => $renter, 
                 'bookingdata' => $bookingdata, 
                 'page' => $page
             ]);
