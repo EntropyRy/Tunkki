@@ -29,23 +29,28 @@ class RenterHashController extends Controller
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){
             $translator = $this->get('translator');
-            if($bookingdata[1]->getRenterConsent()){
+            $object = $bookingdata[1];
+            if($object->getRenterConsent()){
                 $class='hidden';
             } else {
-                $class='button';
+                $class='btn btn-large btn-success';
             }
-            $form = $this->createFormBuilder($bookingdata[1])
+            $form = $this->createFormBuilder($object)
                 ->add('renterConsent',CheckboxType::class,[
                     'required' => true,
-                    'label' => $translator->trans('renter_gives_consent')
+                    'label' => $translator->trans('renter_gives_consent'),
+                    'label_attr' => ['style'=>'margin-right: 5px;']
                 ])
-                ->add('agree', SubmitType::class, ['attr'=>['class'=>$class]])
+                ->add('agree', SubmitType::class, [
+                    'attr'=>['class'=>$class],
+                    'label'=> $translator->trans('agree')
+                ])
                 ->getForm();
 			if($request->getMethod() == 'POST'){
 				$form->handleRequest($request);
 				if($form->isValid() && $form->isSubmitted()){
 					//$bookingdata = $form->getData();
-					$this->em->persist($bookingdata[1]);
+					$this->em->persist($object);
 					$this->em->flush();
 				}
 			}

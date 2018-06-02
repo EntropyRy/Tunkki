@@ -4,11 +4,9 @@
 {% endblock %}
 {% block content %}
 <div class="col-md-12">
-    <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
-        <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
-    </h1>
-</div>
-<div class="col-md-12">
+<h1>{{ bookingdata.name }} - {{ bookingdata.date }}
+    <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
+</h1>
 {% if bookingdata.packages %}
 <h3>{{ 'packages'|trans }}</h3>
 {% for package in bookingdata.packages %}
@@ -34,7 +32,6 @@
 {% endfor %}
 </div>
 {% endif %}
-<div class="col-md-12">
 {% if bookingdata.items %}
 <h3>{{ 'items'|trans }}</h3>
 {% for item in bookingdata.items %}
@@ -65,9 +62,11 @@
 {% if renter.organization %}{{ renter.organization }}<br>{% endif %}
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}
 {{ renter.email }}
-<div class="row">
+<hr>
+<div class="consent_form">
+{{ form_start(form) }}
 {{ form_widget(form) }}
-</div>
 <!--<div>Actual Total: <span class="pull-right">{#{ rent['actualTotal'] }#}€</span></div> -->
+</div>
 </div>
 {% endblock %}
