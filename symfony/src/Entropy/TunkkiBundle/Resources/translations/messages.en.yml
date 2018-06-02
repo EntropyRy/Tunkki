@@ -1,3 +1,5 @@
 packages: packages
 items: items
 accessories: accessories
+renter: renter
+renter_gives_consent: Renter has read and accepeted contractual terms

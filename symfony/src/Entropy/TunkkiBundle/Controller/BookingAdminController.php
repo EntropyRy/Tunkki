@@ -13,7 +13,7 @@ class BookingAdminController extends CRUDController
         $this->em = $this->getDoctrine()->getManager();
         $bookingdata = $this->em->getRepository('EntropyTunkkiBundle:Booking')
               ->getBookingData($object->getId(), $object->getRenterHash(), $object->getRenter());
-        return $this->render('EntropyTunkkiBundle:BookingAdmin:stufflist.html.twig', $bookingdata);
+        return $this->render('EntropyTunkkiBundle:BookingAdmin:stufflist.html.twig', $bookingdata[0]);
     }
 
 }

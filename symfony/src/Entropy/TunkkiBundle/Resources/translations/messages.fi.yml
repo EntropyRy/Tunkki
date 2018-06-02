@@ -2,3 +2,4 @@ packages: paketit
 items: tavarat
 accessories: tarvikkeet
 renter: vuokraaja
+renter_gives_consent: Vuokraaja on lukenut ja hyväksynyt ehdot

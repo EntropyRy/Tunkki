@@ -65,7 +65,9 @@
 {% if renter.organization %}{{ renter.organization }}<br>{% endif %}
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}
 {{ renter.email }}
-
+<div class="row">
+{{ form_widget(form) }}
+</div>
 <!--<div>Actual Total: <span class="pull-right">{#{ rent['actualTotal'] }#}€</span></div> -->
 </div>
 {% endblock %}
