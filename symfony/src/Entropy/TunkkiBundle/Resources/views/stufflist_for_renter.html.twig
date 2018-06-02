@@ -3,6 +3,7 @@
 <title>{{bookingdata.name}} - {{ bookingdata.date }}</title>
 {% endblock %}
 {% block content %}
+{{ dump(page) }}
 <div class="col-md-12">
 <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
     <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
