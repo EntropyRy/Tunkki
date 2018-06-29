@@ -36,7 +36,6 @@ sonata_admin:
                 icon:            '<i class="fa fa-archive"></i>'
                 items:
                     - entropy_tunkki.admin.item
-                    - entropy_tunkki.admin.event
                     - entropy_tunkki.admin.file
 
             sonata.admin.group.rentals:
@@ -85,6 +84,7 @@ sonata_admin:
                 label_catalogue: SonataAdminBundle
                 items:
                       #- sonata.user.admin.user
+                    - entropy_tunkki.admin.event
                     - entropy_tunkki.admin.user
                     - sonata.user.admin.group
                     - sonata.page.admin.site
