@@ -69,7 +69,8 @@ class PackageAdmin extends AbstractAdmin
                 'multiple'=>true, 
                 'expanded' => false, 
                 'by_reference' => false,
-                'query' => $query
+                'query' => $query,
+                'help' => 'Item cannot be in two packages at the same time'
             ])
             ->add('rentFromItems', TextType::class, array('disabled' => true))
             ->add('rent')
