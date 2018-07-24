@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Entropy\TunkkiBundle\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
@@ -55,11 +56,21 @@ class PackageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $em = $this->modelManager->getEntityManager(Item::class);
+        $query = $em->createQueryBuilder('i')->select('i')
+                    ->from('EntropyTunkkiBundle:Item', 'i')
+                    ->andWhere('i.packages is empty');
         $formMapper
             ->with('Package')
             ->add('name')
             ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
-            ->add('items', ModelType::class, array('btn_add'=> false, 'multiple'=>true, 'expanded' => false, 'by_reference' => false))
+            ->add('items', ModelType::class, [
+                'btn_add'=> false, 
+                'multiple'=>true, 
+                'expanded' => false, 
+                'by_reference' => false,
+                'query' => $query
+            ])
             ->add('rentFromItems', TextType::class, array('disabled' => true))
             ->add('rent')
     //        ->add('needsFixing')
