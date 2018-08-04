@@ -160,3 +160,12 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: AccessoryChoices }
         public: true
+
+    entropy_tunkki.admin.email_notification:
+        class: Entropy\TunkkiBundle\EventListener\BookingAdminListener
+        arguments:
+            - "@swiftmailer.mailer"
+            - "@templating"
+            - "%booking_notification_email%"
+        tags:
+            - { name: kernel.event_listener, event: sonata.admin.event.persistence.post_persist, method: sendEmailNotification }

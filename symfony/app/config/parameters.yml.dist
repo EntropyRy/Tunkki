@@ -20,4 +20,5 @@ parameters:
     mattermost_client_id: null
     mattermost_client_secret: null
     mattermost_redirect_route: null
+    booking_notification_email: null
 

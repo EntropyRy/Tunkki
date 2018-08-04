@@ -313,6 +313,7 @@ class BookingAdmin extends AbstractAdmin
             UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
             $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
         $this->mm->SendToMattermost($text);
+        //$this->sendNotificationMail($booking);
     }
     public function preUpdate($booking)
     {

@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
+<style type="text/css">
+@media screen and (max-width: 480px){
+    a[class="post_btn"] {
+        float: none !important;
+    }
+}
+</style>
+<body>
+<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-top: 20px; line-height: 1.7; color: #555;">
+<tr>
+<td>
+    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 660px; font-family: Helvetica, Arial, sans-serif; font-size: 14px; background: #FFF;">
+        <tr>
+            <td style="border: 1px solid #ddd;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+                    <tr>
+                        <td style="padding: 20px 20px 10px 20px; text-align:center;">
+                            <img src="https://tunkki.entropy.fi/bundles/entropytunkki/images/logo.png" width="70" alt="Entropy Ry"> TUNKKI
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <table border="0" cellpadding="0" cellspacing="0" style="padding: 20px 50px 0; text-align: center; width: 100%;">
+                                <tr>
+                                    <td style="border-bottom: 1px solid #ddd; margin: 10px 0 20px;">
+<table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
+                                        <tr>
+                                            <td style="text-align: left">
+                                                <span style="font-size: 16px; font-weight: bold; color: #555; margin: 0 0 5px; display: inline-block;">
+                                                New Booking!
+                                                </span>
+                                                <div style="margin: 5px 0 0;">{{ booking.name }}</div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="line-height:24px; text-align: center; padding: 10px;  background: #0acfcf;">
+                                            {% spaceless %}
+                                                <a style="color: white; line-height:24px; text-align: center; padding: 10px;" href="
+                                                    {{ url('admin_entropy_tunkki_booking_stuffList', {'id': booking.id}) }}
+                                                    ">
+                                                    Booking stufflist >>
+                                                </a><br>
+                                                <a style="color: white; line-height:24px; text-align: center; padding: 10px;" href="
+                                                    {{ url('admin_entropy_tunkki_booking_edit', {'id': booking.id}) }}
+                                                    ">
+                                                    Booking edit >>
+                                                </a>
+                                            {% endspaceless %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <br/>
+                                            </td>
+                                        </tr>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="color: #999; padding-top: 20px; text-align: center; line-height: 25px; font-size: 13px;">
+                        Entropy ry, Jämeräntaival 3 A 1, 02150 Espoo
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;color: #AAA; font-size: 11px; padding-bottom: 10px;">
+                            <p style="padding: 0 50px;">
+								<p>If you have forgotten your password you can order new one from <a href="{{ url('sonata_user_admin_resetting_request') }}">here</a></p>
+                                <br>
+								<p><a href="{{ url('_entropy_mattermost_auth') }}">Mattermost Login</a></p>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</td>
+</tr>
+</table>
+
+</body></html>
+
