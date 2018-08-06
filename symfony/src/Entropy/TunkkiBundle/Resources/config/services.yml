@@ -167,5 +167,6 @@ services:
             - "@swiftmailer.mailer"
             - "@templating"
             - "%booking_notification_email%"
+            - "%mm_tunkki_img%"
         tags:
             - { name: kernel.event_listener, event: sonata.admin.event.persistence.post_persist, method: sendEmailNotification }

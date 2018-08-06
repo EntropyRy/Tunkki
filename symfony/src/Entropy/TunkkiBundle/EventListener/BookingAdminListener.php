@@ -11,12 +11,14 @@ class BookingAdminListener
     private $mailer = null;
     private $templating = null;
     private $email = null;
+    private $img = null;
 
-    public function __construct(\Swift_Mailer $mailer, $templating, $email)
+    public function __construct(\Swift_Mailer $mailer, $templating, $email, $img)
     {
         $this->mailer = $mailer;
         $this->templating = $templating;
         $this->email = $email;
+        $this->img = $img;
     }
 
     public function sendEmailNotification( \Sonata\AdminBundle\Event\PersistenceEvent $event )
@@ -32,9 +34,10 @@ class BookingAdminListener
            $message->setBody(
            $this->templating->render(
                'EntropyTunkkiBundle:Emails:notification.html.twig',
-                [
-                    'booking' => $booking,
-                ] 
+                   [
+                       'img' => $this->img,
+                       'booking' => $booking,
+                   ] 
                ),
                'text/html'
            );

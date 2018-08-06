@@ -18,7 +18,7 @@
                 <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
                     <tr>
                         <td style="padding: 20px 20px 10px 20px; text-align:center;">
-                            <img src="https://tunkki.entropy.fi/bundles/entropytunkki/images/logo.png" width="70" alt="Entropy Ry"> TUNKKI
+                            <img src="{{ img }}" width="70" alt="Entropy Ry"> TUNKKI
                         </td>
                     </tr>
                     <tr>
@@ -30,9 +30,14 @@
                                         <tr>
                                             <td style="text-align: left">
                                                 <span style="font-size: 16px; font-weight: bold; color: #555; margin: 0 0 5px; display: inline-block;">
-                                                New Booking!
+                                                    New Booking! - {{ booking.name }} on {{ booking.bookingDate|date("d.m.Y") }}
                                                 </span>
-                                                <div style="margin: 5px 0 0;">{{ booking.name }}</div>
+                                                <div style="margin: 5px 0 0;">
+                                                {% if booking.retrieval %}
+                                                    Pickup Time: {{ booking.retrieval| date("d.m.Y H:m") }}
+                                                {% endif %}
+                                                </div>
+                                                Renter: {{ booking.renter }}
                                             </td>
                                         </tr>
                                         <tr>
@@ -42,7 +47,7 @@
                                                     {{ url('admin_entropy_tunkki_booking_stuffList', {'id': booking.id}) }}
                                                     ">
                                                     Booking stufflist >>
-                                                </a><br>
+                                                </a><br><br>
                                                 <a style="color: white; line-height:24px; text-align: center; padding: 10px;" href="
                                                     {{ url('admin_entropy_tunkki_booking_edit', {'id': booking.id}) }}
                                                     ">
