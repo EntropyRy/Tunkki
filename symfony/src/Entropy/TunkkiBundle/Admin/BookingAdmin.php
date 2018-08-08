@@ -292,7 +292,8 @@ class BookingAdmin extends AbstractAdmin
         $ki = 0;
         $summa = 0;
         $kertoimet = [7, 3, 1];
-        $viite = '303'.($booking->getId()+1220);
+        $id = (int)$booking->getId()+1220;
+        $viite = (int)'303'.$id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
@@ -308,6 +309,8 @@ class BookingAdmin extends AbstractAdmin
     }
     public function postPersist($booking)
     {
+        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         $text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
