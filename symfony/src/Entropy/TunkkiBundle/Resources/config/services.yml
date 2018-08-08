@@ -168,5 +168,6 @@ services:
             - "@templating"
             - "%booking_notification_email%"
             - "%mm_tunkki_img%"
+            - "%mailer_sender_address%"
         tags:
-            - { name: kernel.event_listener, event: entropy_tunkki.admin.booking.event.persistence.post_persist, method: sendEmailNotification }
+            - { name: kernel.event_listener, event: sonata.admin.event.persistence.post_persist, method: sendEmailNotification }
