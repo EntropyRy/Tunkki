@@ -302,8 +302,6 @@ class BookingAdmin extends AbstractAdmin
     }
     public function prePersist($booking)
     {
-        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
-        $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         $booking->setCreator($user);
     }

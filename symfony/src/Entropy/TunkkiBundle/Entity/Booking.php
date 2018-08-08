@@ -34,14 +34,14 @@ class Booking
      *
      * @ORM\Column(name="referenceNumber", type="string", length=255)
      */
-    private $referenceNumber;
+    private $referenceNumber = 0;
 
     /**
      * @var string
      *
      * @ORM\Column(name="renterHash", type="string", length=255)
      */
-    private $renterHash;
+    private $renterHash = 0;
 
     /**
      * @var boolean
