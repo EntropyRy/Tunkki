@@ -22,7 +22,7 @@ class Package
     private $id;
 
     /**
-     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="packages", cascade={"all"}, fetch="EAGER")
+     * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item", mappedBy="packages", orphanRemoval=false, fetch="EAGER")
      */
     private $items;
 
