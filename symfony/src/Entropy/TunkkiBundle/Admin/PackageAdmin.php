@@ -56,10 +56,16 @@ class PackageAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
+        $p = $this->getSubject();
         $em = $this->modelManager->getEntityManager(Item::class);
         $query = $em->createQueryBuilder('i')->select('i')
                     ->from('EntropyTunkkiBundle:Item', 'i')
-                    ->andWhere('i.packages is empty');
+                    ->andWhere('i.packages is empty')
+                    ->leftJoin('i.packages', 'pack')
+                    ->orWhere('pack = :p')
+                    ->orderBy('i.name', 'ASC')
+                    ->setParameter('p', $p);
+
         $formMapper
             ->with('Package')
             ->add('name')
