@@ -1,7 +1,7 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
     "content-hash": "d046a23dd964a124e6433382b35140a5",
@@ -4676,16 +4676,16 @@
         },
         {
             "name": "sonata-project/seo-bundle",
-            "version": "2.5.1",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataSeoBundle.git",
-                "reference": "62affda210bc3f19890fb03aaa91c753109c85ae"
+                "reference": "8192b1280a4d793f71f7aa6d7b6daff90a340faa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/62affda210bc3f19890fb03aaa91c753109c85ae",
-                "reference": "62affda210bc3f19890fb03aaa91c753109c85ae",
+                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/8192b1280a4d793f71f7aa6d7b6daff90a340faa",
+                "reference": "8192b1280a4d793f71f7aa6d7b6daff90a340faa",
                 "shasum": ""
             },
             "require": {
@@ -4704,7 +4704,7 @@
                 "sonata-project/block-bundle": "<3.11"
             },
             "require-dev": {
-                "guzzle/guzzle": "3.*",
+                "guzzle/guzzle": "^3.8",
                 "sonata-project/admin-bundle": "^3.31",
                 "sonata-project/block-bundle": "^3.11",
                 "sonata-project/core-bundle": "^3.9",
@@ -4750,7 +4750,7 @@
                 "seo",
                 "sonata"
             ],
-            "time": "2018-02-23T16:33:11+00:00"
+            "time": "2018-08-27T08:02:50+00:00"
         },
         {
             "name": "sonata-project/timeline-bundle",
@@ -5963,20 +5963,20 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.4.14",
+            "version": "v3.4.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e"
+                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e",
-                "reference": "f50e17fa4edd6216f7fe5b908f04e64ba1d19a9e",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
+                "reference": "5bb5c2d4b0d5cf10672015b68519a199e6ac27c1",
                 "shasum": ""
             },
             "require": {
-                "doctrine/common": "~2.4@stable",
+                "doctrine/common": "~2.4",
                 "ext-xml": "*",
                 "fig/link-util": "^1.0",
                 "php": "^5.5.9|>=7.0.8",
@@ -6064,7 +6064,7 @@
                 "doctrine/data-fixtures": "1.0.*",
                 "doctrine/dbal": "~2.4",
                 "doctrine/doctrine-bundle": "~1.4",
-                "doctrine/orm": "~2.4,>=2.4.5,<=2.7.0",
+                "doctrine/orm": "~2.4,>=2.4.5",
                 "egulias/email-validator": "~1.2,>=1.2.8|~2.0",
                 "monolog/monolog": "~1.11",
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
@@ -6114,7 +6114,7 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2018-08-01T14:48:04+00:00"
+            "time": "2018-08-28T06:06:28+00:00"
         },
         {
             "name": "twig/extensions",

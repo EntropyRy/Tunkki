@@ -23,13 +23,12 @@
     </span>
 </div>
 <span class="col-md-6">
-    <a href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':object.id}) }}">Change booking Status</a>
+    <a class="btn btn-sm btn-default" href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':object.id}) }}">Change Status</a>
     {% if not object.renterConsent and object.actualPrice%}
     <span class="pull-right label label-warning">Needs Renters Consent</span>
     {% elseif object.renterConsent and object.actualPrice %}
     <span class="pull-right label label-success">Renters Consent</span>
     {% endif %}
-    <hr style="margin: 0px">
     {% if object.cancelled %}
     <span class="label label-warning">Cancelled</span>
     {% else %}
