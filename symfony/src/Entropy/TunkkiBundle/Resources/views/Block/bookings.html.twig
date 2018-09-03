@@ -9,7 +9,7 @@
         <div class="box box-solid collapsed-box">
             <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
                 <div class="pull-left">
-                    {{ booking.bookingdate|date('d.m.Y') }} 
+                    {{ booking.bookingdate|date('d.m.Y') }}
                     {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
                     <br> 
                     <a href="{{ path('admin_entropy_tunkki_booking_show', {'id':booking.id}) }}">{{ booking.name }}</a>
@@ -17,6 +17,10 @@
                 <div class="box-tools pull-right" style="position:relative">
                     <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_edit', {'id':booking.id}) }}">
                         <i class="fa fa-pencil-square-o"></i> edit
+                    </a>
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':booking.id}) }}">
+                        <i class="fa fa-pencil-square-o"></i>
+                        Change Status
                     </a>
                     <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
                 </div>
