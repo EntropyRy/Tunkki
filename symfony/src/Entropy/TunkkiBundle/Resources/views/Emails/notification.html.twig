@@ -37,23 +37,26 @@
                                                     Pickup Time: {{ booking.retrieval| date("d.m.Y H:m") }}
                                                 {% endif %}
                                                 </div>
-                                                Renter: {{ booking.renter }}
+                                                <div>Renter: {{ booking.renter }}</div>
+                                                <div>Creator: {{ booking.creator }}</div>
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2" style="line-height:24px; text-align: center; padding: 10px;  background: #0acfcf;">
-                                            {% spaceless %}
                                                 <a style="color: white; line-height:24px; text-align: center; padding: 10px;" href="
-                                                    {{ url('admin_entropy_tunkki_booking_stuffList', {'id': booking.id}) }}
-                                                    ">
+                                                {{ url('admin_entropy_tunkki_booking_stuffList', {'id': booking.id}) }}
+                                                ">
                                                     Booking stufflist >>
-                                                </a><br><br>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" style="line-height:24px; text-align: center; padding: 10px;  background: #0acfcf;">
                                                 <a style="color: white; line-height:24px; text-align: center; padding: 10px;" href="
                                                     {{ url('admin_entropy_tunkki_booking_edit', {'id': booking.id}) }}
                                                     ">
-                                                    Booking edit >>
+                                                        Booking edit >>
                                                 </a>
-                                            {% endspaceless %}
                                             </td>
                                         </tr>
                                         <tr>
