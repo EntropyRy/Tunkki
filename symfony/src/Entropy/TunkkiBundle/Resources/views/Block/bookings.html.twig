@@ -28,7 +28,7 @@
             <div style="display: none;" class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <div>Given away <br> {{ booking.retrieval|date('d.m.Y H:i') }} <br> 
+                        <div>Given away <br>{%if booking.retrieval %} {{ booking.retrieval|date('d.m.Y H:i') }}<br>{%endif %} 
                             {% if booking.givenAwayBy %}
                                 {{ booking.givenAwayBy }}
                             {% else %}
@@ -36,7 +36,7 @@
                             {% endif %}
                         </div>
                         <hr>
-                        <div>Returning <br> {{ booking.returning|date('d.m.Y H:i') }} <br>
+                        <div>Returning <br> {%if booking.returning %}{{ booking.returning|date('d.m.Y H:i') }} <br>{%endif %}
                             {% if booking.receivedBy %}
                                 {{ booking.receivedBy }}
                             {% else %}

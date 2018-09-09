@@ -22,7 +22,7 @@
     </small>
     </span>
 </div>
-<span class="col-md-6">
+<span class="col-md-{% if object.actualPrice %}6{% else %}8{%endif%}">
     <a class="btn btn-sm btn-default" href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':object.id}) }}">Change Status</a>
     {% if not object.renterConsent and object.actualPrice%}
     <span class="pull-right label label-warning">Needs Renters Consent</span>
