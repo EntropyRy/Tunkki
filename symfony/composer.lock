@@ -2449,16 +2449,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "v1.21.0",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "41990df63e9d663b4c1bf7918cc9dcfa5475e068"
+                "reference": "a7faba0303b55ec2a3b7387d434704e866162aa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/41990df63e9d663b4c1bf7918cc9dcfa5475e068",
-                "reference": "41990df63e9d663b4c1bf7918cc9dcfa5475e068",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/a7faba0303b55ec2a3b7387d434704e866162aa7",
+                "reference": "a7faba0303b55ec2a3b7387d434704e866162aa7",
                 "shasum": ""
             },
             "require": {
@@ -2471,7 +2471,7 @@
             },
             "require-dev": {
                 "league/oauth2-facebook": "^1.1|^2.0",
-                "phpunit/phpunit": "^4.8",
+                "phpunit/phpunit": "^4.8.36",
                 "symfony/security-guard": "^2.8|^3.0"
             },
             "suggest": {
@@ -2499,7 +2499,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2018-08-24T20:49:40+00:00"
+            "time": "2018-09-10T16:37:37+00:00"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -4373,16 +4373,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.15.0",
+            "version": "3.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "3e1e6656ba088f9a315073efb1c40067efbfec59"
+                "reference": "14ec9933438fef1cdda76629a222ed7643af1af1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/3e1e6656ba088f9a315073efb1c40067efbfec59",
-                "reference": "3e1e6656ba088f9a315073efb1c40067efbfec59",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/14ec9933438fef1cdda76629a222ed7643af1af1",
+                "reference": "14ec9933438fef1cdda76629a222ed7643af1af1",
                 "shasum": ""
             },
             "require": {
@@ -4493,7 +4493,7 @@
                 "vimeo",
                 "youtube"
             ],
-            "time": "2018-07-06T21:03:23+00:00"
+            "time": "2018-09-23T20:36:58+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
@@ -5314,16 +5314,16 @@
         },
         {
             "name": "symfony-cmf/routing-bundle",
-            "version": "2.1.0",
+            "version": "2.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/routing-bundle.git",
-                "reference": "0984ef5acbd6a75d518d68f6b5a9d805861a9445"
+                "reference": "9200b91d2985f9634f2a64536279aee6a1e1a0d8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/0984ef5acbd6a75d518d68f6b5a9d805861a9445",
-                "reference": "0984ef5acbd6a75d518d68f6b5a9d805861a9445",
+                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/9200b91d2985f9634f2a64536279aee6a1e1a0d8",
+                "reference": "9200b91d2985f9634f2a64536279aee6a1e1a0d8",
                 "shasum": ""
             },
             "require": {
@@ -5378,7 +5378,7 @@
                 "database",
                 "routing"
             ],
-            "time": "2018-06-18T14:20:39+00:00"
+            "time": "2018-09-24T06:49:35+00:00"
         },
         {
             "name": "symfony/monolog-bundle",
@@ -6240,16 +6240,16 @@
         },
         {
             "name": "zendframework/zenddiagnostics",
-            "version": "v1.3.0",
+            "version": "v1.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zendframework/zend-diagnostics.git",
-                "reference": "6dd4a159a1bd6fcc8f14f2eda195b5caebabc414"
+                "reference": "90bc83201c8fdd97715705e58bf2688796086cde"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zendframework/zend-diagnostics/zipball/6dd4a159a1bd6fcc8f14f2eda195b5caebabc414",
-                "reference": "6dd4a159a1bd6fcc8f14f2eda195b5caebabc414",
+                "url": "https://api.github.com/repos/zendframework/zend-diagnostics/zipball/90bc83201c8fdd97715705e58bf2688796086cde",
+                "reference": "90bc83201c8fdd97715705e58bf2688796086cde",
                 "shasum": ""
             },
             "require": {
@@ -6301,7 +6301,7 @@
                 "test",
                 "zf"
             ],
-            "time": "2018-07-30T20:31:14+00:00"
+            "time": "2018-09-17T16:14:52+00:00"
         }
     ],
     "packages-dev": [
