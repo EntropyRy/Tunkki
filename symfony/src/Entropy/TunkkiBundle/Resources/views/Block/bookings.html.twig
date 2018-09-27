@@ -7,8 +7,8 @@
     </div>
     <div class="box-body">
         {% for booking in bookings %}
-        {% if booking.bookingdate|date('d.m.Y') < "now"|date('d.m.Y') and shown == false %}
-        <h3>Should be returned</h3>
+        {% if booking.bookingdate < date('now') and shown == false %}
+        <h3 style="text-align: center;">Should be returned</h3>
         {% set shown = true %}
         {% endif %}
         <div class="box box-solid collapsed-box">
