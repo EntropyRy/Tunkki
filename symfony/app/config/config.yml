@@ -88,8 +88,8 @@ jms_serializer:
     metadata:
         directories:
 
-ivory_ck_editor:
-    input_sync: true
+#ivory_ck_editor:
+#    input_sync: true
 
 stof_doctrine_extensions:
     default_locale: en_US
