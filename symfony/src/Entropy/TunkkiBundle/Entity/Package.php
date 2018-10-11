@@ -172,7 +172,7 @@ class Package
      */
     public function removeItem(\Entropy\TunkkiBundle\Entity\Item $item)
     {
-        $item->packages->removeElement($this);
+        $item->getPackages()->removeElement($this);
         $this->items->removeElement($item);
     }
 
