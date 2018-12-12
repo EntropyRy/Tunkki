@@ -1,4 +1,8 @@
 services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
     entropy_tunkki.helper.mattermost:
         class: Entropy\TunkkiBundle\Helper\Mattermost
         arguments: ["@service_container"]

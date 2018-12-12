@@ -77,11 +77,6 @@ sonata_intl:
     timezone:
         default: Europe/Helsinki
 
-sonata_core:
-    form:
-        mapping:
-            enabled: true
-
 # nelmio_api_doc: ~
 
 jms_serializer:
