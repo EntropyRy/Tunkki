@@ -27,7 +27,7 @@ class AppKernel extends Kernel
 	new Sonata\AdminBundle\SonataAdminBundle(),
 	// Sonata authentication
 	new FOS\UserBundle\FOSUserBundle(),
-	new Sonata\UserBundle\SonataUserBundle('FOSUserBundle'),
+	new Sonata\UserBundle\SonataUserBundle(),
 	// Sonata I18N
     new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 //	new Sonata\TranslationBundle\SonataTranslationBundle(),

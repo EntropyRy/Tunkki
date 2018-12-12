@@ -22,11 +22,4 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class ApplicationSonataPageBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getParent()
-    {
-        return 'SonataPageBundle';
-    }
 }
