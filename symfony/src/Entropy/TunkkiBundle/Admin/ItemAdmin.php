@@ -112,7 +112,7 @@ class ItemAdmin extends AbstractAdmin
         $formMapper
         ->tab('General')
             ->with('General Information', array('class' => 'col-md-6'))
-                ->add('name')
+                ->add('name', null, ['help' => 'used in spoken language'])
                 ->add('manufacturer')
                 ->add('model')
                 ->add('serialnumber')
