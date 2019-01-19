@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\ItemsRepository")
- * @ORM\HasLifecycleCallbacks 
+ * @ORM\HasLifecycleCallbacks
  */
 class Item
 {

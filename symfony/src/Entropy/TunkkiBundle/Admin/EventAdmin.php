@@ -12,7 +12,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Sonata\CoreBundle\Form\Type\DateTimePickerType;
+use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class EventAdmin extends AbstractAdmin

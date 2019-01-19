@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  *
  * @ORM\Table()
  * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\PackagesRepository")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Package
 {

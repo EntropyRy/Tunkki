@@ -27,8 +27,8 @@ class BrokenItemsBlock extends BaseBlockService {
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $broken = $this->em->getRepository('EntropyTunkkiBundle:Item')->findBy(array('needsFixing' => true, 'toSpareParts' => false));
-        
+        $broken = $this->em->getRepository('EntropyTunkkiBundle:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
+        //$broken = null; 
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
             'broken'  => $broken

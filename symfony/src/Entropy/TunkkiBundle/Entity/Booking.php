@@ -102,12 +102,14 @@ class Booking
     /**
      *
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Item")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     private $items;
 
     /**
      *
      * @ORM\ManyToMany(targetEntity="\Entropy\TunkkiBundle\Entity\Package")
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
      */
     private $packages;
 

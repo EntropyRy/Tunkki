@@ -20,8 +20,8 @@ use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\CoreBundle\Form\Type\CollectionType;
-use Sonata\CoreBundle\Form\Type\DateTimePickerType;
-use Sonata\CoreBundle\Form\Type\DatePickerType;
+use Sonata\Form\Type\DateTimePickerType;
+use Sonata\Form\Type\DatePickerType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class ItemAdmin extends AbstractAdmin
@@ -55,8 +55,9 @@ class ItemAdmin extends AbstractAdmin
             ->add('toSpareParts')
             ->add('needsFixing')
             ->add('cannotBeRented')
+            ->add('forSale')
             ->add('category',  null, [
-                    'label' => 'Item.category'
+                    'label' => 'Category'
                 ], CategorySelectorType::class,  [
                     'class' => $categoryAdmin->getClass(),
                     'context' =>  $currentContext,
@@ -65,8 +66,6 @@ class ItemAdmin extends AbstractAdmin
                     'multiple' => true,
                 ]
             )
-            ->add('forSale')
-            ->add('commission', 'doctrine_orm_date',['field_type'=>DateTimePickerType::class])
         ;
     }
 
@@ -111,26 +110,26 @@ class ItemAdmin extends AbstractAdmin
 
         $formMapper
         ->tab('General')
-            ->with('General Information', array('class' => 'col-md-6'))
+            ->with('General Information', ['class' => 'col-md-6'])
                 ->add('name', null, ['help' => 'used in spoken language'])
                 ->add('manufacturer')
                 ->add('model')
                 ->add('serialnumber')
                 ->add('placeinstorage')
                 ->add('url')
-                ->add('description', TextareaType::class, array('required' => false, 'label' => 'Item description'))
+                ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
 				->add('commission', DatePickerType::class, [
 					'required' => false, 
 					'format' => 'd.M.y'
 				])
                 ->add('purchasePrice')
-                ->add('tags', ModelAutocompleteType::class, array(
+                ->add('tags', ModelAutocompleteType::class, [
                     'property' => 'name',
                     'multiple' => 'true',
                     'required' => false,
                     'minimum_input_length' => 2
-                ))
-              ->add('category', CategorySelectorType::class, array(
+                ])
+              ->add('category', CategorySelectorType::class, [
                         'class' => $categoryAdmin->getClass(),
                         'required' => false,
                         'by_reference' => false,
@@ -138,14 +137,14 @@ class ItemAdmin extends AbstractAdmin
                         'model_manager' => $categoryAdmin->getModelManager(),
                         'category' => new Category(),
                         'btn_add' => false
-                    ))
+                    ])
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
-                ->add('whoCanRent', null, array(
+                ->add('whoCanRent', null, [
                     'multiple' => true, 
                     'expanded' => true,
                     'help' => 'Select all fitting groups!'
-                ))
+                ])
                 ->add('rent', null, ['label' => 'Rental price (€)'])
                 ->add('rentNotice', TextareaType::class, ['required' => false,'label' => 'Rental Notice'])
                 ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
@@ -165,10 +164,10 @@ class ItemAdmin extends AbstractAdmin
                     ->add('rentHistory', null, ['disabled' => true])
                     ->end()
                     ->with('Meta')
-                        ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
-                        ->add('creator', null, array('disabled' => true))
-                        ->add('updatedAt', DateTimePickerType::class, array('disabled' => true))
-                        ->add('modifier', null, array('disabled' => true))
+                        ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                        ->add('creator', null, ['disabled' => true])
+                        ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
+                        ->add('modifier', null, ['disabled' => true])
                     ->end()
                     ;
             }

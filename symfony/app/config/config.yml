@@ -58,10 +58,12 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
-
-sonata_doctrine_orm_admin:
-    audit:
-        force: false
+        metadata_cache_driver: apcu
+        query_cache_driver: apcu
+        second_level_cache:
+          enabled: false
+          log_enabled: true
+          region_cache_driver: apcu
 
 # Swiftmailer Configuration
 swiftmailer:
