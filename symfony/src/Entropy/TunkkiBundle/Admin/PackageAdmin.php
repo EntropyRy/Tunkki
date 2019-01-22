@@ -58,14 +58,20 @@ class PackageAdmin extends AbstractAdmin
     {
         $p = $this->getSubject();
         $em = $this->modelManager->getEntityManager(Item::class);
-        $query = $em->createQueryBuilder('i')->select('i')
+        if(is_null($p->getId())){
+            $query = $em->createQueryBuilder('i')->select('i')
+                    ->from('EntropyTunkkiBundle:Item', 'i')
+                    ->andWhere('i.packages is empty')
+                    ->orderBy('i.name', 'ASC');
+        } else {
+            $query = $em->createQueryBuilder('i')->select('i')
                     ->from('EntropyTunkkiBundle:Item', 'i')
                     ->andWhere('i.packages is empty')
                     ->leftJoin('i.packages', 'pack')
                     ->orWhere('pack = :p')
                     ->orderBy('i.name', 'ASC')
                     ->setParameter('p', $p);
-
+        }
         $formMapper
             ->with('Package')
             ->add('name')
