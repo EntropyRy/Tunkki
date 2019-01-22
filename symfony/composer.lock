@@ -3886,16 +3886,16 @@
         },
         {
             "name": "sonata-project/core-bundle",
-            "version": "3.14.1",
+            "version": "3.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "b38dfe1709c02cb9bb95f38c48103803f0aaaf3c"
+                "reference": "664d338cde48effa27c96846a131d75b4b5ea255"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/b38dfe1709c02cb9bb95f38c48103803f0aaaf3c",
-                "reference": "b38dfe1709c02cb9bb95f38c48103803f0aaaf3c",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/664d338cde48effa27c96846a131d75b4b5ea255",
+                "reference": "664d338cde48effa27c96846a131d75b4b5ea255",
                 "shasum": ""
             },
             "require": {
@@ -3966,7 +3966,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2019-01-17T07:33:02+00:00"
+            "time": "2019-01-20T13:25:19+00:00"
         },
         {
             "name": "sonata-project/datagrid-bundle",
@@ -4029,16 +4029,16 @@
         },
         {
             "name": "sonata-project/doctrine-extensions",
-            "version": "1.1.4",
+            "version": "1.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/sonata-doctrine-extensions.git",
-                "reference": "1f619e6f5a27b5bbaa48ab0872b19dc2064bc03f"
+                "reference": "187495be73b2099c6ff8d0c2384ca31a8adca66e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/1f619e6f5a27b5bbaa48ab0872b19dc2064bc03f",
-                "reference": "1f619e6f5a27b5bbaa48ab0872b19dc2064bc03f",
+                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/187495be73b2099c6ff8d0c2384ca31a8adca66e",
+                "reference": "187495be73b2099c6ff8d0c2384ca31a8adca66e",
                 "shasum": ""
             },
             "require": {
@@ -4093,29 +4093,29 @@
                 "doctrine2",
                 "json"
             ],
-            "time": "2019-01-15T23:01:57+00:00"
+            "time": "2019-01-19T09:07:22+00:00"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
-            "version": "3.7.0",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "8676f4a1293c9e7ea2978be9ac6746ad7d4a2e23"
+                "reference": "276e0925d6824ddd5a791146df08f922197b9bd7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/8676f4a1293c9e7ea2978be9ac6746ad7d4a2e23",
-                "reference": "8676f4a1293c9e7ea2978be9ac6746ad7d4a2e23",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/276e0925d6824ddd5a791146df08f922197b9bd7",
+                "reference": "276e0925d6824ddd5a791146df08f922197b9bd7",
                 "shasum": ""
             },
             "require": {
                 "doctrine/doctrine-bundle": "^1.8",
-                "doctrine/orm": "^2.4.5",
-                "php": "^5.6 || ^7.0",
+                "doctrine/orm": "^2.5",
+                "php": "^7.1",
                 "sonata-project/admin-bundle": "^3.29",
                 "sonata-project/core-bundle": "^3.8",
-                "sonata-project/exporter": "^1.3.1",
+                "sonata-project/exporter": "^1.11.0 || ^2.0",
                 "symfony/config": "^2.8 || ^3.2 || ^4.0",
                 "symfony/console": "^2.8 || ^3.2 || ^4.0",
                 "symfony/dependency-injection": "^2.8 || ^3.2 || ^4.0",
@@ -4137,7 +4137,7 @@
             "require-dev": {
                 "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
                 "sonata-project/block-bundle": "^3.11",
-                "symfony/phpunit-bridge": "^4.0"
+                "symfony/phpunit-bridge": "^4.2"
             },
             "suggest": {
                 "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
@@ -4177,7 +4177,7 @@
                 "generator",
                 "sonata"
             ],
-            "time": "2018-12-29T21:37:07+00:00"
+            "time": "2019-01-20T16:50:56+00:00"
         },
         {
             "name": "sonata-project/easy-extends-bundle",
