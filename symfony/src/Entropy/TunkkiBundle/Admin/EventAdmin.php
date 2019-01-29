@@ -19,7 +19,7 @@ class EventAdmin extends AbstractAdmin
 {
     protected $ts;
     protected $mm;
-    protected $parentAssociationMapping = ['entropy_tunkki.admin.item'=>'item', 'entropy_tunkki.admin.booking' =>'booking'];
+//    protected $parentAssociationMapping = ['entropy_tunkki.admin.item'=>'item', 'entropy_tunkki.admin.booking' =>'booking'];
     /**
      * @param DatagridMapper $datagridMapper
      */

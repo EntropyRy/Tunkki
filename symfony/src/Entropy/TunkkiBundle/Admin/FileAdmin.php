@@ -11,7 +11,6 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class FileAdmin extends AbstractAdmin
 {
-    protected $parentAssociationMapping = 'product';
     /**
      * @param DatagridMapper $datagridMapper
      */
