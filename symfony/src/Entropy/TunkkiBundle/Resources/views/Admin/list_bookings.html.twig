@@ -24,10 +24,10 @@
 </div>
 <span class="col-md-{% if object.actualPrice %}6{% else %}8{%endif%}">
     <a class="btn btn-sm btn-default" href="{{ path('admin_entropy_tunkki_booking_event_create', {'id':object.id}) }}">Change Status</a>
-    {% if not object.renterConsent and object.actualPrice%}
-    <span class="pull-right label label-warning">Needs Renters Consent</span>
+    {% if not object.renterConsent and object.actualPrice and not object.cancelled %}
+    <span class="label label-warning">Needs Renters Consent</span>
     {% elseif object.renterConsent and object.actualPrice %}
-    <span class="pull-right label label-success">Renters Consent</span>
+    <span class="label label-success">Renters Consent</span>
     {% endif %}
     {% if object.cancelled %}
     <span class="label label-warning">Cancelled</span>
@@ -49,14 +49,11 @@
             {% endfor %}
         {% else %}
         {%spaceless%}
-        <div class="label-group">
+        <div {% if object.actualPrice %}class="label-group"{%endif%}>
             <span class="label label-success">Items Returned</span>
             {% if object.actualPrice %}
-                {% if object.invoiceSent %}
-                <span class="label label-success">Invoice Sent</span>
-                {% else %}
-                <span class="label label-danger">Invoice not sent</span>
-                {% endif %}
+                <span class="label label-{% if object.invoiceSent %}success">Invoice{% else %}danger">Invoice not{% endif %}
+                sent </span>
                 {% if object.paid %}
                 <span class="label label-success">Paid</span>
                 {% else %}
@@ -68,7 +65,7 @@
         {% endif %}
     {% endif %}
 </span>
-{% if object.actualPrice %}
+{% if object.actualPrice and not object.cancelled %}
 <div class="col-md-2">
     Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
     Price: {{ object.actualPrice }}€<br>
