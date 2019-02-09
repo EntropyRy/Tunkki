@@ -108,6 +108,9 @@ class BookingAdmin extends AbstractAdmin
             ->add('paid')
             ->add('_action', null, array(
                 'actions' => array(
+                    'status' => array(
+                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_status.html.twig'
+                    ),
                     'stuffList' => array(
                         'template' => 'EntropyTunkkiBundle:CRUD:list__action_stuff.html.twig'
                     ),
@@ -183,7 +186,7 @@ class BookingAdmin extends AbstractAdmin
                         'btn_delete' => 'Unassign'
                     ])
             ->end()
-            ->with('Who is Renting?', array('class' => 'col-md-6'))
+            ->with('Who is Renting?', ['class' => 'col-md-6'])
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
                 ->add('rentingPrivileges', null, [
                     'placeholder' => 'Show everything!'
