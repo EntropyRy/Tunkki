@@ -3466,16 +3466,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.45.1",
+            "version": "3.45.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "ba9c5dcbfe0412859d63f3319606ae006591ac85"
+                "reference": "b75183f7004b87378a5d3e7d6af03ec784787e67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/ba9c5dcbfe0412859d63f3319606ae006591ac85",
-                "reference": "ba9c5dcbfe0412859d63f3319606ae006591ac85",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/b75183f7004b87378a5d3e7d6af03ec784787e67",
+                "reference": "b75183f7004b87378a5d3e7d6af03ec784787e67",
                 "shasum": ""
             },
             "require": {
@@ -3530,6 +3530,7 @@
             "suggest": {
                 "jms/di-extra-bundle": "Annotations for Admin definition",
                 "jms/translation-bundle": "Extract message keys from Admins",
+                "kunicmarko/sonata-auto-configure-bundle": "Auto configures Admin classes",
                 "sensio/generator-bundle": "Add sonata:admin:generate command",
                 "sonata-project/intl-bundle": "Add localized date and number into the list"
             },
@@ -3567,7 +3568,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2019-01-14T22:05:25+00:00"
+            "time": "2019-02-14T22:46:27+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -3886,16 +3887,16 @@
         },
         {
             "name": "sonata-project/core-bundle",
-            "version": "3.15.1",
+            "version": "3.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCoreBundle.git",
-                "reference": "30f5d1201aab91c493b2f15d91f6514fe4ad2daf"
+                "reference": "3789031c679cef8cdefcfabc743e4957ea6e6b13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/30f5d1201aab91c493b2f15d91f6514fe4ad2daf",
-                "reference": "30f5d1201aab91c493b2f15d91f6514fe4ad2daf",
+                "url": "https://api.github.com/repos/sonata-project/SonataCoreBundle/zipball/3789031c679cef8cdefcfabc743e4957ea6e6b13",
+                "reference": "3789031c679cef8cdefcfabc743e4957ea6e6b13",
                 "shasum": ""
             },
             "require": {
@@ -3966,7 +3967,7 @@
             "keywords": [
                 "sonata"
             ],
-            "time": "2019-01-26T22:34:20+00:00"
+            "time": "2019-02-16T18:52:42+00:00"
         },
         {
             "name": "sonata-project/datagrid-bundle",
@@ -5166,16 +5167,16 @@
         },
         {
             "name": "stephpy/timeline-bundle",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stephpy/timeline-bundle.git",
-                "reference": "e408d9d17a811e74c51ddcb9f03d8aa8fdc5a583"
+                "reference": "5937b6436984c78e9baafaf6c922c6e1020de14e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stephpy/timeline-bundle/zipball/e408d9d17a811e74c51ddcb9f03d8aa8fdc5a583",
-                "reference": "e408d9d17a811e74c51ddcb9f03d8aa8fdc5a583",
+                "url": "https://api.github.com/repos/stephpy/timeline-bundle/zipball/5937b6436984c78e9baafaf6c922c6e1020de14e",
+                "reference": "5937b6436984c78e9baafaf6c922c6e1020de14e",
                 "shasum": ""
             },
             "require": {
@@ -5192,7 +5193,7 @@
                 "doctrine/orm": "^2.6",
                 "symfony/console": "~2.0|~3.0|~4.0",
                 "symfony/expression-language": "~2.0|~3.0|~4.0",
-                "symfony/twig-bundle": "~2.0|~3.0|~4.0"
+                "symfony/twig-bundle": "~2.8.13|~3.0|~4.0"
             },
             "suggest": {
                 "doctrine/mongodb-odm-bundle": "Use doctrine ODM driver",
@@ -5229,7 +5230,7 @@
                 "symfony",
                 "timeline"
             ],
-            "time": "2018-02-07T08:25:19+00:00"
+            "time": "2019-02-18T10:50:58+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
