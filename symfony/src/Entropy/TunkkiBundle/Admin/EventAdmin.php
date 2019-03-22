@@ -109,7 +109,8 @@ class EventAdmin extends AbstractAdmin
 				->end()
 				->with('Message', ['class' => 'col-md-8'])
 				->add('description',TextareaType::class, [
-					'required' => true,
+                    'required' => true,
+                    'help' => 'Describe in more detail. Will be visible for others in Mattermost.',
 					])
 				->end()
                 ;
