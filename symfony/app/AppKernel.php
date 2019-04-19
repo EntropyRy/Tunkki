@@ -19,7 +19,8 @@ class AppKernel extends Kernel
 	// Sonata Easy Extends
 	new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
 	// Sonata ORM
-	new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+    new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
+    new Sonata\Doctrine\Bridge\Symfony\Bundle\SonataDoctrineBundle(),
 	// Sonata admin
 	new Sonata\CoreBundle\SonataCoreBundle(),
 	new Sonata\BlockBundle\SonataBlockBundle(),
@@ -29,7 +30,7 @@ class AppKernel extends Kernel
 	new FOS\UserBundle\FOSUserBundle(),
 	new Sonata\UserBundle\SonataUserBundle(),
 	// Sonata I18N
-    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
+//    new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 //	new Sonata\TranslationBundle\SonataTranslationBundle(),
 	new Sonata\IntlBundle\SonataIntlBundle(),
 	// Sonata Media

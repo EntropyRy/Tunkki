@@ -54,7 +54,7 @@ doctrine:
         password: "%database_password%"
         charset:  UTF8
         types:
-            json: Sonata\Doctrine\Types\JsonType
+            json: Doctrine\DBAL\Types\JsonType
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
@@ -91,5 +91,8 @@ jms_serializer:
 #ivory_ck_editor:
 #    input_sync: true
 
-stof_doctrine_extensions:
-    default_locale: en_US
+            #stof_doctrine_extensions:
+            #    default_locale: en_US
+sensio_framework_extra:
+    router:
+        annotations: false
