@@ -189,7 +189,8 @@ class BookingAdmin extends AbstractAdmin
             ->with('Who is Renting?', ['class' => 'col-md-6'])
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
                 ->add('rentingPrivileges', null, [
-                    'placeholder' => 'Show everything!'
+                    'placeholder' => 'Show everything!',
+                    'expanded' => true
                 ])
                 ->add('renterHash', null, ['disabled' => true])
             ->end()
