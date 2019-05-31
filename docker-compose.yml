@@ -5,11 +5,6 @@ networks:
     back-tier:
 
 services:
-    #    storage:
-    #    image: debian:jessie
-    #    volumes:
-    #        - ./symfony:/var/www/symfony
-    #        - ./logs/symfony:/var/www/symfony/app/logs
     fpm:
         build: fpm
         restart: unless-stopped
@@ -20,6 +15,7 @@ services:
         volumes:
             - ./symfony:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/var/logs
+            - /etc/localtime:/etc/localtime:ro
     web:
         build: web
         restart: unless-stopped
