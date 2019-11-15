@@ -16,16 +16,7 @@
 <ul>
     {% for item in package.items %}
     <li class="list-unstyled">
-        <div class="checkbox">
-            <label><input type="checkbox">{{ item }}</label>
-            {% if item.compensationPrice %}
-                <span class="pull-right">{{ item.compensationPrice }} €</span>
-            {% endif %}
-            {% for file in item.files %} 
-            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
-            {% endfor %}
-        </div>
-
+        {{ block('item') }}
     </li>
     {% endfor %}
 </ul>
@@ -34,15 +25,7 @@
 {% if bookingdata.items %}
 <h3>{{ 'items'|trans }}</h3>
 {% for item in bookingdata.items %}
-    <div class="checkbox">
-        <label><input type="checkbox"> {{ item }}</label> 
-        {% for file in item.files %} 
-            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
-        {% endfor %}
-        {% if item.compensationPrice %}
-            <span class="pull-right">{{ item.compensationPrice }} €</span>
-        {% endif %}
-    </div>
+    {{ block('item') }}
 {% endfor %}
 {% endif %}
 {% if bookingdata.accessories %}
@@ -69,3 +52,16 @@
 </div>
 </div>
 {% endblock %}
+
+{% block item %}
+        <div class="checkbox">
+            <label><input type="checkbox">{{ item }}, Manufacturer: {{ item.Manufacturer }}, Model: {{item.model}}, S/N: {{ item.serialNumber }}</label>
+            {% if item.compensationPrice %}
+                <span class="pull-right">{{ item.compensationPrice }} €</span>
+            {% endif %}
+            {% for file in item.files %} 
+            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+            {% endfor %}
+        </div>
+{% endblock %}
+
