@@ -1,5 +1,3 @@
-# listaus kaikista blockeista https://github.com/sonata-project/sandbox/blob/2.3/app/config/sonata/sonata_block.yml
-
 sonata_block:
     context_manager: sonata.page.block.context_manager
     default_contexts: [sonata_page_bundle]
