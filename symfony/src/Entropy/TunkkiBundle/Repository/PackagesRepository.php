@@ -1,6 +1,6 @@
 <?php
 
-namespace Entropy\TunkkiBundle\Entity;
+namespace Entropy\TunkkiBundle\Repository;
 
 /**
  * PackagesRepository

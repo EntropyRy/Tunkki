@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Events
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\EventsRepository")
+ * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Repository\EventsRepository")
  * @ORM\HasLifecycleCallbacks 
  */
 class Event

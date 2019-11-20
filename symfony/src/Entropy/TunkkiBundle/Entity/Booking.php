@@ -9,7 +9,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Booking
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Entity\BookingRepository")
+ * @ORM\Entity(repositoryClass="Entropy\TunkkiBundle\Repository\BookingRepository")
  */
 class Booking
 {
