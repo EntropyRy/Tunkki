@@ -1,4 +1,3 @@
-# Täysi conffi: https://sonata-project.org/bundles/media/master/doc/reference/advanced_configuration.html
 sonata_media:
     db_driver: doctrine_orm
     force_disable_category: false

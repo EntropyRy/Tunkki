@@ -12,133 +12,39 @@ use Doctrine\ORM\Mapping as ORM;
  */ 
 class User extends BaseUser
 {
-	/**
-     * @var boolean
+    /**
      *
-     * @ORM\Column(name="StudentUnionMember", type="boolean", nullable=true)
+     * @ORM\OneToOne(targetEntity="\Entropy\TunkkiBundle\Entity\Member", inversedBy="user")
      */
-    private $StudentUnionMember;
-
-    /**
-     * @var string
-     * 
-     * @ORM\Column(name="Application", type="text", nullable=true)
-     */
-    private $Application;
-
-    /**
-     * @var \DateTime
-     * 
-     * @ORM\Column(name="ApplicationDate", type="datetime", nullable=true)
-     */
-    private $ApplicationDate;
-
-    /**
-     * @var \DateTime
-     * 
-     * @ORM\Column(name="ApplicationAcceptedDate", type="datetime", nullable=true)
-     */
-
-	private $ApplicationAcceptedDate;
+    private $member;
 
 	public function __construct()
 	{
 		parent::__construct();
 	}
 
+
     /**
-     * Set studentUnionMember.
+     * Set member.
      *
-     * @param bool|null $studentUnionMember
+     * @param \Entropy\TunkkiBundle\Entity\Member|null $member
      *
      * @return User
      */
-    public function setStudentUnionMember($studentUnionMember = null)
+    public function setMember(\Entropy\TunkkiBundle\Entity\Member $member = null)
     {
-        $this->StudentUnionMember = $studentUnionMember;
+        $this->member = $member;
 
         return $this;
     }
 
     /**
-     * Get studentUnionMember.
+     * Get member.
      *
-     * @return bool|null
+     * @return \Entropy\TunkkiBundle\Entity\Member|null
      */
-    public function getStudentUnionMember()
+    public function getMember()
     {
-        return $this->StudentUnionMember;
-    }
-
-    /**
-     * Set application.
-     *
-     * @param string|null $application
-     *
-     * @return User
-     */
-    public function setApplication($application = null)
-    {
-        $this->Application = $application;
-
-        return $this;
-    }
-
-    /**
-     * Get application.
-     *
-     * @return string|null
-     */
-    public function getApplication()
-    {
-        return $this->Application;
-    }
-
-    /**
-     * Set applicationDate.
-     *
-     * @param \DateTime|null $applicationDate
-     *
-     * @return User
-     */
-    public function setApplicationDate($applicationDate = null)
-    {
-        $this->ApplicationDate = $applicationDate;
-
-        return $this;
-    }
-
-    /**
-     * Get applicationDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getApplicationDate()
-    {
-        return $this->ApplicationDate;
-    }
-
-    /**
-     * Set applicationAcceptedDate.
-     *
-     * @param \DateTime|null $applicationAcceptedDate
-     *
-     * @return User
-     */
-    public function setApplicationAcceptedDate($applicationAcceptedDate = null)
-    {
-        $this->ApplicationAcceptedDate = $applicationAcceptedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get applicationAcceptedDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getApplicationAcceptedDate()
-    {
-        return $this->ApplicationAcceptedDate;
+        return $this->member;
     }
 }

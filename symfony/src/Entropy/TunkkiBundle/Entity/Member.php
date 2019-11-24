@@ -3,6 +3,7 @@
 namespace Entropy\TunkkiBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Member
@@ -24,9 +25,16 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="firstname", type="string", length=255)
      */
-    private $name;
+    private $firstname;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="lastname", type="string", length=255)
+     */
+    private $lastname;
 
     /**
      * @var string
@@ -45,27 +53,22 @@ class Member
     /**
      * @var string|null
      *
-     * @ORM\Column(name="HomeCity", type="string", length=255, nullable=true)
+     * @ORM\Column(name="CityOfResidence", type="string", length=255, nullable=true)
      */
-    private $homeCity;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="AYYMembership", type="boolean")
-     */
-    private $aYYMembership = false;
+    private $CityOfResidence;
 
     /**
      * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="createdAt", type="datetime")
      */
     private $createdAt;
 
     /**
-     * @var string
+     * @var \DateTime
      *
+     * @Gedmo\Timestampable(on="update")
      * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
@@ -77,6 +80,40 @@ class Member
      */
     private $copiedAsMember;
 
+	/**
+     * @var boolean
+     *
+     * @ORM\Column(name="StudentUnionMember", type="boolean")
+     */
+    private $StudentUnionMember = false;
+
+    /**
+     * @var string
+     * 
+     * @ORM\Column(name="Application", type="text", nullable=true)
+     */
+    private $Application;
+
+    /**
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="ApplicationDate", type="datetime", nullable=true)
+     */
+    private $ApplicationDate;
+
+    /**
+     * @var \DateTime
+     * 
+     * @ORM\Column(name="ApplicationAcceptedDate", type="datetime", nullable=true)
+     */
+
+    private $ApplicationAcceptedDate;
+
+    /**
+     *
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User", mappedBy="member")
+     */
+    private $user;
 
     /**
      * Get id.
@@ -89,27 +126,13 @@ class Member
     }
 
     /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Member
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
      * Get name.
      *
      * @return string
      */
     public function getName()
     {
-        return $this->name;
+        return $this->firstname.' '.$this->lastname;
     }
 
     /**
@@ -158,54 +181,6 @@ class Member
     public function getPhone()
     {
         return $this->phone;
-    }
-
-    /**
-     * Set homeCity.
-     *
-     * @param string|null $homeCity
-     *
-     * @return Member
-     */
-    public function setHomeCity($homeCity = null)
-    {
-        $this->homeCity = $homeCity;
-
-        return $this;
-    }
-
-    /**
-     * Get homeCity.
-     *
-     * @return string|null
-     */
-    public function getHomeCity()
-    {
-        return $this->homeCity;
-    }
-
-    /**
-     * Set aYYMembership.
-     *
-     * @param bool $aYYMembership
-     *
-     * @return Member
-     */
-    public function setAYYMembership($aYYMembership)
-    {
-        $this->aYYMembership = $aYYMembership;
-
-        return $this;
-    }
-
-    /**
-     * Get aYYMembership.
-     *
-     * @return bool
-     */
-    public function getAYYMembership()
-    {
-        return $this->aYYMembership;
     }
 
     /**
@@ -278,5 +253,201 @@ class Member
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+    /**
+     * Set studentUnionMember.
+     *
+     * @param bool|null $studentUnionMember
+     *
+     * @return User
+     */
+    public function setStudentUnionMember($studentUnionMember = null)
+    {
+        $this->StudentUnionMember = $studentUnionMember;
+
+        return $this;
+    }
+
+    /**
+     * Get studentUnionMember.
+     *
+     * @return bool|null
+     */
+    public function getStudentUnionMember()
+    {
+        return $this->StudentUnionMember;
+    }
+
+    /**
+     * Set application.
+     *
+     * @param string|null $application
+     *
+     * @return User
+     */
+    public function setApplication($application = null)
+    {
+        $this->Application = $application;
+
+        return $this;
+    }
+
+    /**
+     * Get application.
+     *
+     * @return string|null
+     */
+    public function getApplication()
+    {
+        return $this->Application;
+    }
+
+    /**
+     * Set applicationDate.
+     *
+     * @param \DateTime|null $applicationDate
+     *
+     * @return User
+     */
+    public function setApplicationDate($applicationDate = null)
+    {
+        $this->ApplicationDate = $applicationDate;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationDate.
+     *
+     * @return \DateTime|null
+     */
+    public function getApplicationDate()
+    {
+        return $this->ApplicationDate;
+    }
+
+    /**
+     * Set applicationAcceptedDate.
+     *
+     * @param \DateTime|null $applicationAcceptedDate
+     *
+     * @return User
+     */
+    public function setApplicationAcceptedDate($applicationAcceptedDate = null)
+    {
+        $this->ApplicationAcceptedDate = $applicationAcceptedDate;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationAcceptedDate.
+     *
+     * @return \DateTime|null
+     */
+    public function getApplicationAcceptedDate()
+    {
+        return $this->ApplicationAcceptedDate;
+    }
+
+    /**
+     * Set cityOfResidence.
+     *
+     * @param string|null $cityOfResidence
+     *
+     * @return Member
+     */
+    public function setCityOfResidence($cityOfResidence = null)
+    {
+        $this->CityOfResidence = $cityOfResidence;
+
+        return $this;
+    }
+
+    /**
+     * Get cityOfResidence.
+     *
+     * @return string|null
+     */
+    public function getCityOfResidence()
+    {
+        return $this->CityOfResidence;
+    }
+
+    /**
+     * Set user.
+     *
+     * @param \Entropy\TunkkiBundle\Entity\User|null $user
+     *
+     * @return Member
+     */
+    public function setUser(\Entropy\TunkkiBundle\Entity\User $user = null)
+    {
+        $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * Get user.
+     *
+     * @return \Entropy\TunkkiBundle\Entity\User|null
+     */
+    public function getUser()
+    {
+        return $this->user;
+    }
+
+    public function __toString()
+    {
+        return $this->getName();
+    }
+
+    /**
+     * Set firstname.
+     *
+     * @param string $firstname
+     *
+     * @return Member
+     */
+    public function setFirstname($firstname)
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    /**
+     * Get firstname.
+     *
+     * @return string
+     */
+    public function getFirstname()
+    {
+        return $this->firstname;
+    }
+
+    /**
+     * Set lastname.
+     *
+     * @param string $lastname
+     *
+     * @return Member
+     */
+    public function setLastname($lastname)
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    /**
+     * Get lastname.
+     *
+     * @return string
+     */
+    public function getLastname()
+    {
+        return $this->lastname;
     }
 }

@@ -86,6 +86,7 @@ sonata_admin:
                       #- sonata.user.admin.user
                     - entropy_tunkki.admin.event
                     - entropy_tunkki.admin.user
+                    - entropy_tunkki.admin.member
                     - sonata.user.admin.group
                     - sonata.page.admin.site
                       # - sonata.notification.admin.message

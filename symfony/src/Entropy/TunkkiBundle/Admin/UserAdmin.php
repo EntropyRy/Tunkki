@@ -51,10 +51,7 @@ class UserAdmin extends BaseUserAdmin
         $formMapper
             ->tab('Member')
                 ->with('Entropy', ['class' => 'col-md-6'])
-                    ->add('StudentUnionMember')
-                    ->add('Application')
-                    ->add('ApplicationDate', DatePickerType::class, ['required' => false])
-                    ->add('ApplicationAcceptedDate', DatePickerType::class,['required' => false])
+                    ->add('member')
                 ->end()
             ->end()
             ;
