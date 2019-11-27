@@ -20,7 +20,7 @@ final class MemberAdminController extends CRUDController
         }
         if ($object->getUser()) {
             $this->addFlash('sonata_flash_success', sprintf('Member already copied as a User'));
-            $object->setCopiedAsMember(1);
+            $object->setCopiedAsUser(1);
             $this->admin->update($object);
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
@@ -30,6 +30,8 @@ final class MemberAdminController extends CRUDController
             $this->addFlash('sonata_flash_warning', sprintf('User with this email already exists'));
             $user->setMember($object);
             $userM->updateUser($user);
+            $object->setCopiedAsUser(1);
+            $this->admin->update($object);
             $this->addFlash('sonata_flash_success', sprintf('User with this email linked as user'));
         } else {
             $user = $userM->createUser();
