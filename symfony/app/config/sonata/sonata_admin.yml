@@ -72,6 +72,13 @@ sonata_admin:
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
                 roles: [SONATA_SUPER_ADMIN]
+            sonata.admin.group.members:
+                label:           Members
+                label_catalogue: SonataAdminBundle
+                icon:            '<i class="fa fa-users"></i>'
+                items:
+                    - entropy_tunkki.admin.user
+                    - entropy_tunkki.admin.member
 
             sonata.admin.group.administration:
                 label:           Administration
