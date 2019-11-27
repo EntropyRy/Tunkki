@@ -44,6 +44,13 @@ class Member
     private $email;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
+     */
+    private $username;
+
+    /**
      * @var string|null
      *
      * @ORM\Column(name="phone", type="string", length=255, nullable=true)
@@ -542,5 +549,29 @@ class Member
     public function getApplicationHandledDate()
     {
         return $this->ApplicationHandledDate;
+    }
+
+    /**
+     * Set username.
+     *
+     * @param string|null $username
+     *
+     * @return Member
+     */
+    public function setUsername($username = null)
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * Get username.
+     *
+     * @return string|null
+     */
+    public function getUsername()
+    {
+        return $this->username;
     }
 }

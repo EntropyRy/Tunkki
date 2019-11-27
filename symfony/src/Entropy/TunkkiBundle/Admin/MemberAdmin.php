@@ -17,6 +17,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('username')
             ->add('firstname')
             ->add('lastname')
             ->add('email')
@@ -31,6 +32,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
+            ->add('username')
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember')
@@ -57,6 +59,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
+            ->add('username')
             ->add('firstname')
             ->add('lastname')
             ->add('email')
@@ -76,6 +79,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
+            ->add('username')
             ->add('name')
             ->add('email')
             ->add('phone')

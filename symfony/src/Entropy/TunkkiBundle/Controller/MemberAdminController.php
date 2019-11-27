@@ -43,7 +43,7 @@ final class MemberAdminController extends CRUDController
             $user->setPlainPassword($pass);
             $user->setMember($object);
             $userM->updateUser($user);
-            $object->setCopiedAsMember(1);
+            $object->setCopiedAsUser(1);
             $this->admin->update($object);
             $this->addFlash('sonata_flash_success', sprintf('User created successfully with password : %s, Please define user groups manually!', $pass));
         }
