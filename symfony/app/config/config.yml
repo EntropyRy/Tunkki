@@ -55,6 +55,8 @@ doctrine:
         charset:  UTF8
         types:
             json: Doctrine\DBAL\Types\JsonType
+        mapping_types:
+            enum: string
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true

@@ -23,10 +23,8 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->add('StudentUnionMember')
-            ->add('Application')
-            ->add('ApplicationDate')
-            ->add('ApplicationAcceptedDate')
-            ->add('copiedAsMember')
+            ->add('copiedAsUser')
+            ->add('isActiveMember')
         ;
     }
 
@@ -36,7 +34,8 @@ final class MemberAdmin extends AbstractAdmin
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember')
-            ->add('copiedAsMember')
+            ->add('copiedAsUser')
+            ->add('isActiveMember')
             ->add('createdAt')
             ->add('updatedAt')
             ->add('_action', null, [
@@ -46,6 +45,9 @@ final class MemberAdmin extends AbstractAdmin
                     'delete' => [],
                     'makeuser' => [
                         'template' => 'EntropyTunkkiBundle:CRUD:list__action_makeuser.html.twig'
+                    ],
+                    'sendrejectreason' => [
+                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_sendrejectreason.html.twig'
                     ],
                 ],
             ])
@@ -60,11 +62,14 @@ final class MemberAdmin extends AbstractAdmin
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
-            ->add('copiedAsMember')
             ->add('StudentUnionMember')
             ->add('Application')
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
-            ->add('ApplicationAcceptedDate', DatePickerType::class, ['required' => false])
+            ->add('ApplicationHandledDate', DatePickerType::class, ['required' => false])
+            ->add('rejectReason')
+            ->add('rejectReasonSent')
+            ->add('isActiveMember')
+            ->add('copiedAsUser')
         ;
     }
 
@@ -75,11 +80,14 @@ final class MemberAdmin extends AbstractAdmin
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
-            ->add('copiedAsMember')
             ->add('StudentUnionMember')
             ->add('Application')
             ->add('ApplicationDate')
-            ->add('ApplicationAcceptedDate')
+            ->add('ApplicationHandledDate')
+            ->add('isActiveMember')
+            ->add('rejectReason')
+            ->add('rejectReasonSent')
+            ->add('copiedAsUser')
             ->add('createdAt')
             ->add('updatedAt')
         ;
@@ -87,5 +95,6 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
+        $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
     }   
 }

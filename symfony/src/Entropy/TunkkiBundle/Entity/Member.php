@@ -39,7 +39,7 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, unique=true)
+     * @ORM\Column(name="email", type="string", length=255, nullable=true)
      */
     private $email;
 
@@ -76,9 +76,23 @@ class Member
     /**
      * @var bool
      *
-     * @ORM\Column(name="CopiedAsMember", type="boolean")
+     * @ORM\Column(name="CopiedAsUser", type="boolean")
      */
-    private $copiedAsMember;
+    private $copiedAsUser = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="isActiveMember", type="boolean")
+     */
+    private $isActiveMember = false;
+
+    /**
+     * @var bool
+     *
+     * @ORM\Column(name="rejectReasonSent", type="boolean")
+     */
+    private $rejectReasonSent = false;
 
 	/**
      * @var boolean
@@ -95,6 +109,13 @@ class Member
     private $Application;
 
     /**
+     * @var string
+     * 
+     * @ORM\Column(name="reject_reason", type="text", nullable=true)
+     */
+    private $rejectReason;
+
+    /**
      * @var \DateTime
      * 
      * @ORM\Column(name="ApplicationDate", type="datetime", nullable=true)
@@ -104,10 +125,9 @@ class Member
     /**
      * @var \DateTime
      * 
-     * @ORM\Column(name="ApplicationAcceptedDate", type="datetime", nullable=true)
+     * @ORM\Column(name="ApplicationHandledDate", type="datetime", nullable=true)
      */
-
-    private $ApplicationAcceptedDate;
+    private $ApplicationHandledDate;
 
     /**
      *
@@ -208,30 +228,6 @@ class Member
     }
 
     /**
-     * Set copiedAsMember.
-     *
-     * @param bool $copiedAsMember
-     *
-     * @return Member
-     */
-    public function setCopiedAsMember($copiedAsMember)
-    {
-        $this->copiedAsMember = $copiedAsMember;
-
-        return $this;
-    }
-
-    /**
-     * Get copiedAsMember.
-     *
-     * @return bool
-     */
-    public function getCopiedAsMember()
-    {
-        return $this->copiedAsMember;
-    }
-
-    /**
      * Set updatedAt.
      *
      * @param \DateTime $updatedAt
@@ -324,30 +320,6 @@ class Member
     public function getApplicationDate()
     {
         return $this->ApplicationDate;
-    }
-
-    /**
-     * Set applicationAcceptedDate.
-     *
-     * @param \DateTime|null $applicationAcceptedDate
-     *
-     * @return User
-     */
-    public function setApplicationAcceptedDate($applicationAcceptedDate = null)
-    {
-        $this->ApplicationAcceptedDate = $applicationAcceptedDate;
-
-        return $this;
-    }
-
-    /**
-     * Get applicationAcceptedDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getApplicationAcceptedDate()
-    {
-        return $this->ApplicationAcceptedDate;
     }
 
     /**
@@ -449,5 +421,126 @@ class Member
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * Set copiedAsUser.
+     *
+     * @param bool $copiedAsUser
+     *
+     * @return Member
+     */
+    public function setCopiedAsUser($copiedAsUser)
+    {
+        $this->copiedAsUser = $copiedAsUser;
+
+        return $this;
+    }
+
+    /**
+     * Get copiedAsUser.
+     *
+     * @return bool
+     */
+    public function getCopiedAsUser()
+    {
+        return $this->copiedAsUser;
+    }
+
+    /**
+     * Set isActiveMember.
+     *
+     * @param bool $isActiveMember
+     *
+     * @return Member
+     */
+    public function setIsActiveMember($isActiveMember)
+    {
+        $this->isActiveMember = $isActiveMember;
+
+        return $this;
+    }
+
+    /**
+     * Get isActiveMember.
+     *
+     * @return bool
+     */
+    public function getIsActiveMember()
+    {
+        return $this->isActiveMember;
+    }
+
+    /**
+     * Set rejectReason.
+     *
+     * @param string|null $rejectReason
+     *
+     * @return Member
+     */
+    public function setRejectReason($rejectReason = null)
+    {
+        $this->rejectReason = $rejectReason;
+
+        return $this;
+    }
+
+    /**
+     * Get rejectReason.
+     *
+     * @return string|null
+     */
+    public function getRejectReason()
+    {
+        return $this->rejectReason;
+    }
+
+    /**
+     * Set rejectReasonSent.
+     *
+     * @param bool $rejectReasonSent
+     *
+     * @return Member
+     */
+    public function setRejectReasonSent($rejectReasonSent)
+    {
+        $this->rejectReasonSent = $rejectReasonSent;
+
+        return $this;
+    }
+
+    /**
+     * Get rejectReasonSent.
+     *
+     * @return bool
+     */
+    public function getRejectReasonSent()
+    {
+        return $this->rejectReasonSent;
+    }
+
+
+    /**
+     * Set applicationHandledDate.
+     *
+     * @param \DateTime|null $applicationHandledDate
+     *
+     * @return Member
+     */
+    public function setApplicationHandledDate($applicationHandledDate = null)
+    {
+        $this->ApplicationHandledDate = $applicationHandledDate;
+
+        return $this;
+    }
+
+    /**
+     * Get applicationHandledDate.
+     *
+     * @return \DateTime|null
+     */
+    public function getApplicationHandledDate()
+    {
+        return $this->ApplicationHandledDate;
     }
 }

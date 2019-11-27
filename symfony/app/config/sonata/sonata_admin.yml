@@ -5,18 +5,12 @@ sonata_admin:
     title_logo: bundles/entropytunkki/images/logo.png
     global_search:
         empty_boxes: hide
-
     persist_filters: true
     options:
         use_select2: true
         html5_validate: true # does use html5 validation
         pager_links: 5 # pager max links to display
         lock_protection: true
-#    templates:
-#        layout:               'SonataAdminBundle::standard_layout.html.twig'
-#        ajax:                 'SonataAdminBundle::ajax_layout.html.twig'
-#        dashboard:            'SonataAdminBundle:Core:dashboard.html.twig'
-#        search:               'SonataAdminBundle:Core:search.html.twig'
     dashboard:
         blocks:
             - { class: col-md-12, position: top, type: entropy_tunkki.block.bookings}
