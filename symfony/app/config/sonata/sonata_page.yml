@@ -44,51 +44,29 @@ sonata_page:
     templates:
         default: 
             path: 'EntropyTunkkiBundle::layout.html.twig' 
-            name: Default # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
-
-            containers:
-                content_top:
-                    name: Top content
-                content:
-                    name: Main content
-                content_bottom:
-                    name: Bottom content
-            matrix:
-                layout: |
-                    TTTTTTTT
-                    TTTTTTTT
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
-                    BBBBBBBB
-                    BBBBBBBB
-
-                mapping:
-                    T: content_top
-                    C: content
-                    B: content_bottom
-        global: 
-            path: 'EntropyTunkkiBundle::layout.html.twig' 
-            name: Global # Tämä siis määritetään defaultiksi aina kun luodaan uusi sivu pagebundlella
+            name: Default
 
             containers:
                 header:
                     name: Header
+                content:
+                    name: Content
                 footer:
                     name: Footer
             matrix:
                 layout: |
-                    HHHHHHHH
-                    HHHHHHHH
-                    HHHHHHHH
-                    FFFFFFFF
-                    FFFFFFFF
-                    FFFFFFFF
+                    TTTTTTTT
+                    TTTTTTTT
+                    CCCCCCCC
+                    CCCCCCCC
+                    CCCCCCCC
+                    BBBBBBBB
+                    BBBBBBBB
 
                 mapping:
-                    H: header
-                    F: footer
-
+                    T: header
+                    C: content
+                    B: footer
 
         fix:
             path: 'EntropyTunkkiBundle::fix.html.twig' 
