@@ -51,8 +51,6 @@ sonata_admin:
                     - entropy_tunkki.admin.billable_event
                     - entropy_tunkki.admin.accessory_choices
                     - sonata.classification.admin.category
-                    - entropy_tunkki.admin.user
-                      #    - sonata.user.admin.user
 
             sonata.admin.group.classification:
                 label:           Classification 
