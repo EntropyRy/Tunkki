@@ -35,7 +35,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('username')
             ->add('name')
             ->add('email')
-            ->add('StudentUnionMember')
+            ->add('StudentUnionMember', null, ['editable' => true])
             ->add('copiedAsUser')
             ->add('isActiveMember')
             ->add('createdAt')
