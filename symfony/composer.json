@@ -11,15 +11,13 @@
     },
     "require": {
         "php": ">=7",
-        "symfony/symfony": "^3.4",
-        "symfony/swiftmailer-bundle": "^2.0",
+        "symfony/symfony": "^4.3",
+        "symfony/swiftmailer-bundle": "^3.1",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/monolog-bridge": "^3.4",
-        "monolog/monolog": "^1",
+        "symfony/monolog-bridge": "^4.4",
         "doctrine/orm": "^2.4.8",
         "doctrine/doctrine-bundle": "~1.4",
         "twig/extensions": "^1.0",
-        "sensio/distribution-bundle": "^5.0",
         "sensio/framework-extra-bundle": "^5.0",
         "incenteev/composer-parameter-handler": "^2.1.2",
         "sonata-project/admin-bundle": "^3.0",
@@ -30,9 +28,9 @@
         "sonata-project/classification-bundle": "^3",
         "sonata-project/seo-bundle": "^2.0",
         "sonata-project/page-bundle": "^3.0",
-        "sonata-project/intl-bundle": "^2.2",
+        "sonata-project/intl-bundle": "^2.7",
         "sonata-project/media-bundle": "^3.0",
-        "sonata-project/formatter-bundle": "^3.0",
+        "sonata-project/formatter-bundle": "^4.1",
         "sonata-project/timeline-bundle": "^3.0",
         "sonata-project/translation-bundle": "^2",
         "friendsofsymfony/user-bundle": "^2",
@@ -42,7 +40,7 @@
         "hashids/hashids": "^3.0"
     },
     "require-dev": {
-        "sensio/generator-bundle": "^3.1"
+        "symfony/maker-bundle": "^1"
     },
     "scripts": {
         "post-root-package-install": [
@@ -50,21 +48,13 @@
         ],
         "post-install-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "bin/console cache:clear --ansi",
+            "bin/console assets:install"
         ],
         "post-update-cmd": [
             "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::removeSymfonyStandardFiles",
-            "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::prepareDeploymentTarget"
+            "bin/console cache:clear --ansi",
+            "bin/console assets:install"
         ]
     },
     "config": {
