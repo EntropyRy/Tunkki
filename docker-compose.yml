@@ -27,5 +27,5 @@ services:
         links:
             - fpm
         volumes:
-            - ./symfony/web:/var/www/symfony/web
+            - ./symfony/public:/var/www/symfony/public
             - ./logs/nginx/:/var/log/nginx

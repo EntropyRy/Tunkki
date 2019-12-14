@@ -1,0 +1,98 @@
+sonata_admin:
+    title: Tunkki
+    security:
+        handler: sonata.admin.security.handler.role
+    title_logo: images/logo.png
+    global_search:
+        empty_boxes: hide
+    persist_filters: true
+    options:
+        use_select2: true
+        html5_validate: true # does use html5 validation
+        pager_links: 5 # pager max links to display
+        lock_protection: true
+    dashboard:
+        blocks:
+            - { class: col-md-12, position: top, type: entropy_tunkki.block.bookings}
+            - { position: right, type: entropy_tunkki.block.brokenitems}
+            - { position: left, type: sonata.admin.block.admin_list }
+            - { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
+            #- { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
+            #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
+            #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}
+            #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
+
+        groups:
+            sonata.admin.group.inventory:
+                keep_open:  true
+                label:           Inventory 
+                label_catalogue: App 
+                icon:            '<i class="fa fa-archive"></i>'
+                items:
+                    - entropy_tunkki.admin.item
+                    - entropy_tunkki.admin.file
+
+            sonata.admin.group.rentals:
+                keep_open:  true
+                label:           Rentals 
+                label_catalogue: App 
+                icon:            '<i class="fa fa-sign-out"></i>'
+                items:
+                    - entropy_tunkki.admin.booking
+
+            sonata.admin.group.rentaladmin:
+                label:           Configuration
+                label_catalogue: App 
+                icon:            '<i class="fa fa-cogs"></i>'
+                items:
+                    - entropy_tunkki.admin.package
+                    - entropy_tunkki.admin.renter
+                    - entropy_tunkki.admin.who_can_rent_choice
+                    - entropy_tunkki.admin.billable_event
+                    - entropy_tunkki.admin.accessory_choices
+                    - sonata.classification.admin.category
+
+            sonata.admin.group.classification:
+                label:           Classification 
+                label_catalogue: SonataClassificationBundle
+                items:
+                    - sonata.classification.admin.tag
+                    - sonata.classification.admin.context
+                    - sonata.classification.admin.collection
+                    - sonata.classification.admin.category
+                roles: [SONATA_SUPER_ADMIN]
+
+            sonata.admin.group.content:
+                label:           Content 
+                label_catalogue: SonataAdminBundle
+                items:
+                    - sonata.page.admin.page
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+                roles: [SONATA_SUPER_ADMIN]
+            sonata.admin.group.members:
+                label:           Members
+                label_catalogue: SonataAdminBundle
+                icon:            '<i class="fa fa-users"></i>'
+                items:
+                    - entropy_tunkki.admin.user
+                    - entropy_tunkki.admin.member
+
+            sonata.admin.group.administration:
+                label:           Administration
+                label_catalogue: SonataAdminBundle
+                items:
+                      #- sonata.user.admin.user
+                    - entropy_tunkki.admin.event
+                    - entropy_tunkki.admin.user
+                    - entropy_tunkki.admin.member
+                    - sonata.user.admin.group
+                    - sonata.page.admin.site
+                      # - sonata.notification.admin.message
+                roles: [SONATA_SUPER_ADMIN]
+    assets:
+        extra_stylesheets:
+            # Pagebundle
+            - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
+            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
+            - css/admin.css

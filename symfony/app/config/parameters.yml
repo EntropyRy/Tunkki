@@ -1,0 +1,22 @@
+parameters:
+    database_driver: pdo_mysql
+    database_host: entropy.fi
+    database_port: null
+    database_name: etunkki_dev
+    database_user: etunkki
+    database_password: 'swowhnf3i3u7gbq2-ö.qnbjgkli#!'
+    mailer_transport: smtp
+    mailer_host: entropy.fi
+    mailer_user: null
+    mailer_password: null
+    mailer_port: null
+    mailer_sender_address: webmaster@entropy.fi
+    locale: fi
+    secret: 'aowudha2döih23alodfbnh2fNAjuba2PADWfkbua2fiuabh2flua2hnflujneaslfuo34hlijblsihbfliu#bulouuhn.göoi4hjöioub'
+    mm_tunkki_hook: 'https://chat.entropy.fi/hooks/csqfdendi3yamrwksbj379bf3e'
+    mm_tunkki_img: 'https://tunkki.entropy.fi/bundles/entropytunkki/images/logo.png'
+    mm_tunkki_botname: TunkkiBotti
+    mattermost_client_id: 9dhno5zpapfn5p3p1p3xhqpxxo
+    mattermost_client_secret: 63aaczp8ffr9brs7zhoyijhsuw
+    mattermost_redirect_route: _entropy_mattermost_check
+    booking_notification_email: harri.haivala@gmail.com
