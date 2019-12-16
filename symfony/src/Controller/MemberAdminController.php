@@ -63,7 +63,7 @@ final class MemberAdminController extends CRUDController
         $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
         $message->setBody(
         $templating->render(
-            'EntropyTunkkiBundle:Emails:applicationrejected.html.twig',
+            'Emails/applicationrejected.html.twig',
                 [
                     'img' => $this->getParameter('mm_tunkki_img'),
                     'user' => $object,

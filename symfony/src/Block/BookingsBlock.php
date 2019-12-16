@@ -10,6 +10,7 @@ use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
+use App\Entity\Booking;
 use Doctrine\ORM\EntityManager;
 /**
  * Description of BookingBlock
@@ -27,13 +28,13 @@ class BookingsBlock extends BaseBlockService {
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $bookings = $this->em->getRepository('App:Booking')->findBy([
+        $bookings = $this->em->getRepository(Booking::class)->findBy([
             'itemsReturned' => false, 
             'cancelled' => false
         ],[
             'bookingDate' => 'DESC'
         ]);
-        
+         
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
             'bookings'  => $bookings
@@ -49,7 +50,7 @@ class BookingsBlock extends BaseBlockService {
     public function configureSettings(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'position' => '1',
-            'template' => 'App:Block:bookings.html.twig',
+            'template' => 'block/bookings.html.twig',
         ));
     }
 }

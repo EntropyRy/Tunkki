@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Accessory
  *
- * @ORM\Table()
+ * @ORM\Table(name="Accessory")
  * @ORM\Entity
  */
 class Accessory

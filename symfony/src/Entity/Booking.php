@@ -2,13 +2,16 @@
 
 namespace App\Entity;
 
+use App\Application\Sonata\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Booking
  *
- * @ORM\Table()
+ * @ORM\Table("Booking")
  * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
  */
 class Booking
@@ -25,21 +28,21 @@ class Booking
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=190)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="referenceNumber", type="string", length=255)
+     * @ORM\Column(name="referenceNumber", type="string", length=190)
      */
     private $referenceNumber = 0;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="renterHash", type="string", length=255)
+     * @ORM\Column(name="renterHash", type="string", length=199)
      */
     private $renterHash = 0;
 
@@ -355,54 +358,6 @@ class Booking
     }
 
     /**
-     * Set creator
-     *
-     * @param App\Application\Sonata\UserBundle\Entity\User $creator
-     *
-     * @return Booking
-     */
-    public function setCreator(App\Application\Sonata\UserBundle\Entity\User $creator = null)
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * Get creator
-     *
-     * @return App\Application\Sonata\UserBundle\Entity\User
-     */
-    public function getCreator()
-    {
-        return $this->creator;
-    }
-
-    /**
-     * Set modifier
-     *
-     * @param App\Application\Sonata\UserBundle\Entity\User $modifier
-     *
-     * @return Booking
-     */
-    public function setModifier(App\Application\Sonata\UserBundle\Entity\User $modifier = null)
-    {
-        $this->modifier = $modifier;
-
-        return $this;
-    }
-
-    /**
-     * Get modifier
-     *
-     * @return App\Application\Sonata\UserBundle\Entity\User
-     */
-    public function getModifier()
-    {
-        return $this->modifier;
-    }
-
-    /**
      * Add package
      *
      * @param \App\Entity\Package $package
@@ -611,8 +566,11 @@ class Booking
      */
     public function __construct()
     {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->packages = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new ArrayCollection();
+        $this->packages = new ArrayCollection();
+        $this->accessories = new ArrayCollection();
+        $this->billableEvents = new ArrayCollection();
+        $this->statusEvents = new ArrayCollection();
     }
 
     /**
@@ -723,99 +681,6 @@ class Booking
         $this->rentingPrivileges = $rentingPrivileges;
 
         return $this;
-    }
-
-    /**
-     * Get rentingPrivileges
-     *
-     * @return \App\Entity\WhoCanRentChoice
-     */
-    public function getRentingPrivileges()
-    {
-        return $this->rentingPrivileges;
-    }
-
-    /**
-     * Add accessory
-     *
-     * @param \App\Entity\Accessory $accessory
-     *
-     * @return Booking
-     */
-    public function addAccessory(\App\Entity\Accessory $accessory)
-    {
-        $this->accessories[] = $accessory;
-
-        return $this;
-    }
-
-    /**
-     * Remove accessory
-     *
-     * @param \App\Entity\Accessory $accessory
-     */
-    public function removeAccessory(\App\Entity\Accessory $accessory)
-    {
-        $this->accessories->removeElement($accessory);
-    }
-
-    /**
-     * Get accessories
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getAccessories()
-    {
-        return $this->accessories;
-    }
-
-    /**
-     * Set givenAwayBy
-     *
-     * @param App\Application\Sonata\UserBundle\Entity\User $givenAwayBy
-     *
-     * @return Booking
-     */
-    public function setGivenAwayBy(App\Application\Sonata\UserBundle\Entity\User $givenAwayBy = null)
-    {
-        $this->givenAwayBy = $givenAwayBy;
-
-        return $this;
-    }
-
-    /**
-     * Get givenAwayBy
-     *
-     * @return App\Application\Sonata\UserBundle\Entity\User
-     */
-    public function getGivenAwayBy()
-    {
-        return $this->givenAwayBy;
-    }
-
-
-    /**
-     * Set receivedBy
-     *
-     * @param App\Application\Sonata\UserBundle\Entity\User $receivedBy
-     *
-     * @return Booking
-     */
-    public function setReceivedBy(App\Application\Sonata\UserBundle\Entity\User $receivedBy = null)
-    {
-        $this->receivedBy = $receivedBy;
-
-        return $this;
-    }
-
-    /**
-     * Get receivedBy
-     *
-     * @return App\Application\Sonata\UserBundle\Entity\User
-     */
-    public function getReceivedBy()
-    {
-        return $this->receivedBy;
     }
 
     /**
@@ -996,5 +861,84 @@ class Booking
     public function getStatusEvents()
     {
         return $this->statusEvents;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): self
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Accessory[]
+     */
+    public function getAccessories(): Collection
+    {
+        return $this->accessories;
+    }
+
+    public function addAccessory(Accessory $accessory): self
+    {
+        if (!$this->accessories->contains($accessory)) {
+            $this->accessories[] = $accessory;
+        }
+
+        return $this;
+    }
+
+    public function removeAccessory(Accessory $accessory): self
+    {
+        if ($this->accessories->contains($accessory)) {
+            $this->accessories->removeElement($accessory);
+        }
+
+        return $this;
+    }
+
+    public function getRentingPrivileges(): ?WhoCanRentChoice
+    {
+        return $this->rentingPrivileges;
+    }
+
+    public function getGivenAwayBy(): ?User
+    {
+        return $this->givenAwayBy;
+    }
+
+    public function setGivenAwayBy(?User $givenAwayBy): self
+    {
+        $this->givenAwayBy = $givenAwayBy;
+
+        return $this;
+    }
+
+    public function getReceivedBy(): ?User
+    {
+        return $this->receivedBy;
+    }
+
+    public function setReceivedBy(?User $receivedBy): self
+    {
+        $this->receivedBy = $receivedBy;
+
+        return $this;
+    }
+
+    public function getModifier(): ?User
+    {
+        return $this->modifier;
+    }
+
+    public function setModifier(?User $modifier): self
+    {
+        $this->modifier = $modifier;
+
+        return $this;
     }
 }

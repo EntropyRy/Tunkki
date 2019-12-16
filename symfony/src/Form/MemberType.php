@@ -20,7 +20,7 @@ class MemberType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Entropy\TunkkiBundle\Entity\Member'
+            'data_class' => 'App\Entity\Member'
         ));
     }
 

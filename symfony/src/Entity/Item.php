@@ -2,13 +2,18 @@
 
 namespace App\Entity;
 
+use App\Application\Sonata\ClassificationBundle\Entity\Category;
+use App\Application\Sonata\ClassificationBundle\Entity\Tag;
+use App\Application\Sonata\UserBundle\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Item
  *
- * @ORM\Table()
+ * @ORM\Table(name="Item")
  * @ORM\Entity(repositoryClass="App\Repository\ItemsRepository")
  * @ORM\HasLifecycleCallbacks
  */
@@ -26,21 +31,21 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="Name", type="string", length=255)
+     * @ORM\Column(name="Name", type="string", length=190)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Manufacturer", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Manufacturer", type="string", length=190, nullable=true)
      */
     private $manufacturer;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="Model", type="string", length=255, nullable=true)
+     * @ORM\Column(name="Model", type="string", length=190, nullable=true)
      */
     private $model;
 
@@ -54,14 +59,14 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="SerialNumber", type="string", length=255, nullable=true)
+     * @ORM\Column(name="SerialNumber", type="string", length=190, nullable=true)
      */
     private $serialnumber;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="PlaceInStorage", type="string", length=255, nullable=true)
+     * @ORM\Column(name="PlaceInStorage", type="string", length=190, nullable=true)
      */
     private $placeinstorage;
 
@@ -154,7 +159,7 @@ class Item
     /**
      * @var string
      *
-     * @ORM\Column(name="History", type="string", length=255, nullable=true)
+     * @ORM\Column(name="History", type="string", length=190, nullable=true)
      */
     private $history;
 
@@ -472,6 +477,10 @@ class Item
         $this->fixingHistory = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
         $this->toSpareParts = false;
+        $this->whoCanRent = new ArrayCollection();
+        $this->files = new ArrayCollection();
+        $this->rentHistory = new ArrayCollection();
+        $this->packages = new ArrayCollection();
     }
 
     /**

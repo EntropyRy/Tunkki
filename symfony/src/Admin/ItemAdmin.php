@@ -11,7 +11,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Form\Extension\Core\ChoiceList\SimpleChoiceList;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
-use Application\Sonata\ClassificationBundle\Entity\Category;
+use App\Application\Sonata\ClassificationBundle\Entity\Category;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
@@ -88,7 +88,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('_action', null, array(
                 'actions' => array(
                     'clone' => array(
-                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_clone.html.twig'
+                        'template' => 'admin/crud/list__action_clone.html.twig'
                     ),
                     'show' => array(),
                     'edit' => array(),

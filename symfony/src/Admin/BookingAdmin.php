@@ -24,13 +24,12 @@ use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
-use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
-use Entropy\TunkkiBundle\Form\Type\ItemsType;
-use Entropy\TunkkiBundle\Form\Type\PackagesType;
+use App\Form\ItemsType;
+use App\Form\PackagesType;
 // Entity
-use Entropy\TunkkiBundle\Entity\Item;
-use Entropy\TunkkiBundle\Entity\Booking;
-use Entropy\TunkkiBundle\Entity\Package;
+use App\Entity\Item;
+use App\Entity\Booking;
+use App\Entity\Package;
 // Hash
 use Hashids\Hashids;
 
@@ -109,10 +108,10 @@ class BookingAdmin extends AbstractAdmin
             ->add('_action', null, array(
                 'actions' => array(
                     'status' => array(
-                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_status.html.twig'
+                        'template' => '@App/admin/crud/list__action_status.html.twig'
                     ),
                     'stuffList' => array(
-                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_stuff.html.twig'
+                        'template' => '@App/admin/crud/list__action_stuff.html.twig'
                     ),
             //        'show' => array(),
                     'edit' => array(),
@@ -336,7 +335,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $themes = array_merge(
             parent::getFormTheme(),
-            array('EntropyTunkkiBundle:BookingAdmin:admin.html.twig')
+            array('admin/booking/_edit_rentals.html.twig')
         );
         return $themes;
     }

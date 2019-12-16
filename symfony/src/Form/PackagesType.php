@@ -8,15 +8,12 @@ use Symfony\Component\Form\FormView;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Entropy\TunkkiBundle\Entity\Package;
+use App\Entity\Package;
 
 use Doctrine\ORM\EntityManagerInterface;
 
 class PackagesType extends AbstractType
 {
-   /**
-     * @var PropertyAccessorInterface
-     */
     protected $em;
 
     public function __construct(EntityManagerInterface $em)
