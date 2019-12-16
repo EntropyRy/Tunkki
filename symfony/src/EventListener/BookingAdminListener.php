@@ -26,7 +26,7 @@ class BookingAdminListener
     public function sendEmailNotification( \Sonata\AdminBundle\Event\PersistenceEvent $event )
     {       
         if($this->email){
-           if(get_class($event->getObject()) == "Entropy\TunkkiBundle\Entity\Booking"){
+           if(get_class($event->getObject()) == "App\Entity\Booking"){
                $booking = $event->getObject();
                $mailer = $this->mailer;
                $message = new \Swift_Message();
@@ -35,7 +35,7 @@ class BookingAdminListener
                $message->setSubject("[Entropy Tunkki] New Booking on ". $booking->getBookingDate()->format('d.m.Y') );
                $message->setBody(
                $this->templating->render(
-                   'EntropyTunkkiBundle:Emails:notification.html.twig',
+                   '@emails/notification.html.twig',
                        [
                            'img' => $this->img,
                            'booking' => $booking,

@@ -2,12 +2,13 @@
 
 namespace App\Entity;
 
+use App\Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Files
  *
- * @ORM\Table()
+ * @ORM\Table(name="File")
  * @ORM\Entity
  */
 class File
@@ -24,7 +25,7 @@ class File
     /**
      * @var string
      *
-     * @ORM\Column(name="tiedostoinfo", type="string", length=255, nullable=true)
+     * @ORM\Column(name="tiedostoinfo", type="string", length=190, nullable=true)
      */
     private $fileinfo;
 

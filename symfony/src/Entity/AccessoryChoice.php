@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * AccessoryChoices
  *
- * @ORM\Table()
+ * @ORM\Table("AccessoryChoice")
  * @ORM\Entity
  */
 class AccessoryChoice
@@ -24,7 +24,7 @@ class AccessoryChoice
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=190)
      */
     private $name;
 

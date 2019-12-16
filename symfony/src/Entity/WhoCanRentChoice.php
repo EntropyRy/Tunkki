@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * WhoCanRentCoice
  *
- * @ORM\Table()
+ * @ORM\Table(name="WhoCanRentChoice")
  * @ORM\Entity
  */
 class WhoCanRentChoice
@@ -24,7 +24,7 @@ class WhoCanRentChoice
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=190)
      */
     private $name;
 

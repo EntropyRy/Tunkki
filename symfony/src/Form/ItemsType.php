@@ -8,7 +8,7 @@ use Symfony\Component\Form\FormView;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Entropy\TunkkiBundle\Entity\Item;
+use App\Entity\Item;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface as Category;

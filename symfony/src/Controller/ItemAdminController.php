@@ -7,7 +7,7 @@ use Sonata\AdminBundle\Controller\CRUDController as Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Entropy\TunkkiBundle\Entity\Item;
+use App\Entity\Item;
 
 class ItemAdminController extends Controller
 {

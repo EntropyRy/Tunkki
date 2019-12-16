@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * BillableEvent
  *
- * @ORM\Table()
+ * @ORM\Table(name="BillableEvent")
  * @ORM\Entity
  */
 class BillableEvent

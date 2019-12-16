@@ -46,10 +46,10 @@ final class MemberAdmin extends AbstractAdmin
                     'edit' => [],
                     'delete' => [],
                     'makeuser' => [
-                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_makeuser.html.twig'
+                        'template' => 'admin/crud/list__action_makeuser.html.twig'
                     ],
                     'sendrejectreason' => [
-                        'template' => 'EntropyTunkkiBundle:CRUD:list__action_sendrejectreason.html.twig'
+                        'template' => 'admin/crud/list__action_sendrejectreason.html.twig'
                     ],
                 ],
             ])

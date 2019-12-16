@@ -8,9 +8,9 @@
     {% for item in broken %}
         <div class="box box-solid collapsed-box">
             <div class="box-header">
-                <a href="{{ path('admin_entropy_tunkki_item_show', {'id':item.id}) }}">{{ item.name }}</a>
+                <a href="{{ path('admin_app_item_show', {'id':item.id}) }}">{{ item.name }}</a>
                 <div class="box-tools pull-right">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_entropy_tunkki_item_edit', {'id':item.id}) }}">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_item_edit', {'id':item.id}) }}">
                         <i class="fa fa-pencil-square-o"></i> edit
                     </a>
                     {% if item.fixingHistory is not empty %}

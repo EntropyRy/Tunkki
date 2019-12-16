@@ -112,7 +112,7 @@ sonata_page:
 
 
     class:
-        page: 'App\Entity\SonataPagePage'
-        snapshot: 'App\Entity\SonataPageSnapshot'
-        block: 'App\Entity\SonataPageBlock'
-        site: 'App\Entity\SonataPageSite'
+        page: 'App\Application\Sonata\PageBundle\Entity\Page'
+        snapshot: 'App\Application\Sonata\PageBundle\Entity\Snapshot'
+        block: 'App\Application\Sonata\PageBundle\Entity\Block'
+        site: 'App\Application\Sonata\PageBundle\Entity\Site'

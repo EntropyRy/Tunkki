@@ -27,7 +27,7 @@ class BrokenItemsBlock extends BaseBlockService {
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $broken = $this->em->getRepository('EntropyTunkkiBundle:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
+        $broken = $this->em->getRepository('App:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         //$broken = null; 
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
@@ -44,7 +44,7 @@ class BrokenItemsBlock extends BaseBlockService {
     public function configureSettings(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'position' => '1',
-            'template' => 'EntropyTunkkiBundle:Block:brokenitems.html.twig',
+            'template' => 'block/brokenitems.html.twig',
         ));
     }
 }

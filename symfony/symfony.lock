@@ -47,6 +47,19 @@
     "doctrine/doctrine-cache-bundle": {
         "version": "1.4.0"
     },
+    "doctrine/doctrine-migrations-bundle": {
+        "version": "1.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.2",
+            "ref": "c1431086fec31f17fbcfe6d6d7e92059458facc1"
+        },
+        "files": [
+            "config/packages/doctrine_migrations.yaml",
+            "src/Migrations/.gitignore"
+        ]
+    },
     "doctrine/event-manager": {
         "version": "1.1.0"
     },
@@ -58,6 +71,9 @@
     },
     "doctrine/lexer": {
         "version": "1.2.0"
+    },
+    "doctrine/migrations": {
+        "version": "2.2.0"
     },
     "doctrine/orm": {
         "version": "v2.7.0"
@@ -199,6 +215,12 @@
     "nikic/php-parser": {
         "version": "v4.3.0"
     },
+    "ocramius/package-versions": {
+        "version": "1.5.1"
+    },
+    "ocramius/proxy-manager": {
+        "version": "2.2.3"
+    },
     "paragonie/random_compat": {
         "version": "v2.0.18"
     },
@@ -231,9 +253,6 @@
         "files": [
             "config/packages/sensio_framework_extra.yaml"
         ]
-    },
-    "simplethings/entity-audit-bundle": {
-        "version": "v1.0.9"
     },
     "sonata-project/admin-bundle": {
         "version": "3.31",
@@ -533,6 +552,9 @@
     "symfony/options-resolver": {
         "version": "v4.4.1"
     },
+    "symfony/orm-pack": {
+        "version": "v1.0.7"
+    },
     "symfony/polyfill-ctype": {
         "version": "v1.13.1"
     },
@@ -710,6 +732,12 @@
     },
     "twig/twig": {
         "version": "v2.12.2"
+    },
+    "zendframework/zend-code": {
+        "version": "3.4.1"
+    },
+    "zendframework/zend-eventmanager": {
+        "version": "3.2.1"
     },
     "zendframework/zenddiagnostics": {
         "version": "v1.6.0"

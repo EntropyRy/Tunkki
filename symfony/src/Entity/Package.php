@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Package
  *
- * @ORM\Table()
+ * @ORM\Table(name="Package")
  * @ORM\Entity(repositoryClass="App\Repository\PackagesRepository")
  * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
@@ -30,14 +32,14 @@ class Package
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="name", type="string", length=190)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="rent", type="string", length=255)
+     * @ORM\Column(name="rent", type="string", length=190)
      */
     private $rent;
 
@@ -149,6 +151,7 @@ class Package
     public function __construct()
     {
         $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->whoCanRent = new ArrayCollection();
     }
 
     /**

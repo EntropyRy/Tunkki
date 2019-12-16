@@ -23,9 +23,9 @@ class RenterHashController extends Controller
             throw new NotFoundHttpException();
         }
         $this->em = $this->getDoctrine()->getManager();
-        $renter = $this->em->getRepository('EntropyTunkkiBundle:Renter')
+        $renter = $this->em->getRepository('App:Renter')
                 ->findOneBy(['id' => $renterid]);
-        $bookingdata = $this->em->getRepository('EntropyTunkkiBundle:Booking')
+        $bookingdata = $this->em->getRepository('App:Booking')
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){
             $translator = $this->get('translator');
@@ -56,7 +56,7 @@ class RenterHashController extends Controller
 			}
             $cms = $this->container->get("sonata.page.cms_manager_selector")->retrieve();
             $page = $cms->getCurrentPage();
-            return $this->render('EntropyTunkkiBundle::stufflist_for_renter.html.twig', [
+            return $this->render('stufflist_for_renter.html.twig', [
                 'renter' => $renter, 
                 'bookingdata' => $bookingdata[0],
                 'form' => $form->createView(), 

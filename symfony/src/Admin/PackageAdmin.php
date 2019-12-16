@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Entropy\TunkkiBundle\Entity\Item;
+use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
@@ -60,12 +60,12 @@ class PackageAdmin extends AbstractAdmin
         $em = $this->modelManager->getEntityManager(Item::class);
         if(is_null($p->getId())){
             $query = $em->createQueryBuilder('i')->select('i')
-                    ->from('EntropyTunkkiBundle:Item', 'i')
+                    ->from('App:Item', 'i')
                     ->andWhere('i.packages is empty')
                     ->orderBy('i.name', 'ASC');
         } else {
             $query = $em->createQueryBuilder('i')->select('i')
-                    ->from('EntropyTunkkiBundle:Item', 'i')
+                    ->from('App:Item', 'i')
                     ->andWhere('i.packages is empty')
                     ->leftJoin('i.packages', 'pack')
                     ->orWhere('pack = :p')
