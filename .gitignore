@@ -1,3 +1,2 @@
 /.env.*.local
-symfony/.env.*.local
 logs/
