@@ -8,11 +8,7 @@
     {% if object.retrieval and object.returning %}
         {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
     {% endif %}
-    Renter: {{ object|render_list_element(admin.list['renter']) }} -
-    {% if object.renterHash %}
-    <a href="{{ path('entropy_tunkki_booking_hash', {'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
-        Stufflist for renter</a><br>
-    {% endif %}
+    Renter: {{ object|render_list_element(admin.list['renter']) }} - {{ block('contract') }}
     {% if object.givenAwayBy %}
     Given Away by: {{ object.givenAwayBy }}</br>
     {% endif %}
@@ -24,7 +20,7 @@
 </div>
 <span class="col-md-{% if object.actualPrice %}6{% else %}8{%endif%}">
     {% if not object.renterConsent and object.actualPrice and not object.cancelled %}
-    <span class="label label-warning">Needs Renters Consent</span><br>
+    <span class="label label-warning">Needs Renters Consent</span> - {{ block('contract') }}<br>
     {% elseif object.renterConsent and object.actualPrice %}
     <span class="label label-success">Renters Consent</span><br>
     {% endif %}
@@ -33,14 +29,14 @@
     {% else %}
         {% if not object.itemsReturned %}
             {% for item in object.items if item.needsFixing %}
-                <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
+                <a class="btn btn-sm" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
                     <i class="fa fa-medkit"></i>
                     {{ item.name }}
                 </a>
             {% endfor %}
             {% for package in object.packages %}
                 {% for item in package.itemsNeedingFixing %}
-                    <a class="btn btn-sm" href="{{ path('admin_entropy_tunkki_item_event_list', {'id':item.id}) }}">
+                    <a class="btn btn-sm" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
                         <i class="fa fa-medkit"></i>
                         {{ item.name }}
                     </a>
@@ -79,4 +75,14 @@
     margin-left: 0;
 }
 </style>
+{% endblock %}
+
+{% block contract %}
+    {% if object.renterHash %}
+        <a href="{{ path('entropy_tunkki_booking_hash', {
+            'bookingid':object.id, 
+            'renterid':object.renter.id, 
+            'hash': object.renterHash}) }}">
+        Contract</a>
+    {% endif %}
 {% endblock %}

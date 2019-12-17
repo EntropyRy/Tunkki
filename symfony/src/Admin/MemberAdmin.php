@@ -14,6 +14,12 @@ use Sonata\Form\Type\DatePickerType;
 
 final class MemberAdmin extends AbstractAdmin
 {
+    protected $datagridValues = [
+        '_page' => 1,
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'createdAt',
+    ];
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -38,8 +44,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('StudentUnionMember', null, ['editable' => true])
             ->add('copiedAsUser')
             ->add('isActiveMember')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('ApplicationDate')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -101,4 +106,11 @@ final class MemberAdmin extends AbstractAdmin
         $collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
         $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
     }   
+    public function postUpdate($member)
+    {
+        $user = $member->getUser();
+        if($user){
+            $member->setUsername($user->getUsername());
+        }
+    }
 }

@@ -1,4 +1,4 @@
-{% extends 'EntropyTunkkiBundle::layout.html.twig' %}
+{% extends 'layout.html.twig' %}
 {% block title %}
 <title>{{bookingdata.name}} - {{ bookingdata.date }}</title>
 {% endblock %}
@@ -8,7 +8,7 @@
     <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
 </h1>
 {% if bookingdata.packages %}
-<h3>{{ 'packages'|trans }}</h3>
+<h3 style="text-transform: capitalize;">{{ 'packages'|trans }}</h3>
 {% for package in bookingdata.packages %}
 <div class="checkbox">
     <label><input type="checkbox">{{ package }}:</label>
@@ -23,13 +23,13 @@
 {% endfor %}
 {% endif %}
 {% if bookingdata.items %}
-<h3>{{ 'items'|trans }}</h3>
+<h3 style="text-transform: capitalize;">{{ 'items'|trans }}</h3>
 {% for item in bookingdata.items %}
     {{ block('item') }}
 {% endfor %}
 {% endif %}
 {% if bookingdata.accessories %}
-<h3>{{ 'accessories'|trans }}</h3>
+<h3 style="text-transform: capitalize;">{{ 'accessories'|trans }}</h3>
 {% for item in bookingdata.accessories %}
     <div class="checkbox">
     <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
@@ -39,7 +39,7 @@
     </div>
 {% endfor %}
 {% endif %}
-<h3>{{ 'renter'|trans }}</h3>
+<h3 style="text-transform: capitalize;">{{ 'renter'|trans }}</h3>
 {{ renter.name }}<br>
 {% if renter.organization %}{{ renter.organization }}<br>{% endif %}
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}

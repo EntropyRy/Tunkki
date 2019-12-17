@@ -91,7 +91,7 @@ class Booking
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="returning", type="datetime", nullable=true)
+     * @ORM\Column(name="return_date", type="datetime", nullable=true)
      */
     private $returning;
 
@@ -203,159 +203,6 @@ class Booking
     private $bookingDate;
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Booking
-     */
-    public function setName($name)
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    /**
-     * Set retrieval
-     *
-     * @param \DateTime $retrieval
-     *
-     * @return Booking
-     */
-    public function setRetrieval($retrieval)
-    {
-        $this->retrieval = $retrieval;
-
-        return $this;
-    }
-
-    /**
-     * Get retrieval
-     *
-     * @return \DateTime
-     */
-    public function getRetrieval()
-    {
-        return $this->retrieval;
-    }
-
-    /**
-     * Set returning
-     *
-     * @param \DateTime $returning
-     *
-     * @return Booking
-     */
-    public function setReturning($returning)
-    {
-        $this->returning = $returning;
-
-        return $this;
-    }
-
-    /**
-     * Get returning
-     *
-     * @return \DateTime
-     */
-    public function getReturning()
-    {
-        return $this->returning;
-    }
-
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Booking
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * Set modifiedAt
-     *
-     * @param \DateTime $modifiedAt
-     *
-     * @return Booking
-     */
-    public function setModifiedAt($modifiedAt)
-    {
-        $this->modifiedAt = $modifiedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get modifiedAt
-     *
-     * @return \DateTime
-     */
-    public function getModifiedAt()
-    {
-        return $this->modifiedAt;
-    }
-
-    /**
-     * Set bookingDate
-     *
-     * @param \DateTime $bookingDate
-     *
-     * @return Booking
-     */
-    public function setBookingDate($bookingDate)
-    {
-        $this->bookingDate = $bookingDate;
-
-        return $this;
-    }
-
-    /**
-     * Get bookingDate
-     *
-     * @return \DateTime
-     */
-    public function getBookingDate()
-    {
-        return $this->bookingDate;
-    }
 
     /**
      * Add package
@@ -401,29 +248,6 @@ class Booking
         return $this->name ? $this->name.' - '.date_format($this->bookingDate,'d.m.Y') : 'n/a';
     }
 
-    /**
-     * Set referenceNumber
-     *
-     * @param string $referenceNumber
-     *
-     * @return Booking
-     */
-    public function setReferenceNumber($referenceNumber)
-    {
-        $this->referenceNumber = $referenceNumber;
-
-        return $this;
-    }
-
-    /**
-     * Get referenceNumber
-     *
-     * @return string
-     */
-    public function getReferenceNumber()
-    {
-        return $this->referenceNumber;
-    }
 
     /**
      * Set paid
@@ -938,6 +762,95 @@ class Booking
     public function setModifier(?User $modifier): self
     {
         $this->modifier = $modifier;
+
+        return $this;
+    }
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getReferenceNumber(): ?string
+    {
+        return $this->referenceNumber;
+    }
+
+    public function setReferenceNumber(string $referenceNumber): self
+    {
+        $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    public function getRetrieval(): ?\DateTimeInterface
+    {
+        return $this->retrieval;
+    }
+
+    public function setRetrieval(?\DateTimeInterface $retrieval): self
+    {
+        $this->retrieval = $retrieval;
+
+        return $this;
+    }
+
+    public function getReturning(): ?\DateTimeInterface
+    {
+        return $this->returning;
+    }
+
+    public function setReturning(?\DateTimeInterface $returning): self
+    {
+        $this->returning = $returning;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getModifiedAt(): ?\DateTimeInterface
+    {
+        return $this->modifiedAt;
+    }
+
+    public function setModifiedAt(\DateTimeInterface $modifiedAt): self
+    {
+        $this->modifiedAt = $modifiedAt;
+
+        return $this;
+    }
+
+    public function getBookingDate(): ?\DateTimeInterface
+    {
+        return $this->bookingDate;
+    }
+
+    public function setBookingDate(\DateTimeInterface $bookingDate): self
+    {
+        $this->bookingDate = $bookingDate;
 
         return $this;
     }

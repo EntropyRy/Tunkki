@@ -108,10 +108,10 @@ class BookingAdmin extends AbstractAdmin
             ->add('_action', null, array(
                 'actions' => array(
                     'status' => array(
-                        'template' => '@App/admin/crud/list__action_status.html.twig'
+                        'template' => 'admin/crud/list__action_status.html.twig'
                     ),
                     'stuffList' => array(
-                        'template' => '@App/admin/crud/list__action_stuff.html.twig'
+                        'template' => 'admin/crud/list__action_stuff.html.twig'
                     ),
             //        'show' => array(),
                     'edit' => array(),
@@ -309,7 +309,7 @@ class BookingAdmin extends AbstractAdmin
         $booking->setCreator($user);
     }
     public function postPersist($booking)
-    {
+    {   
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
