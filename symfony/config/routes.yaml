@@ -1,19 +1,19 @@
 entropy_tunkki_booking_hash:
     path:     /booking/{bookingid}/renter/{renterid}/{hash}
-    defaults: { _controller: EntropyTunkkiBundle:RenterHash:index }
+    controller: App\Controller\RenterHashController:indexAction 
     requirements:
         bookingid: '\d+'
         renterid: '\d+'
 
 _entropy_mattermost_auth:
     path:     /oauth
-    defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connect }
+    controller: App\Controller\MattermostAuthController:connectAction
 _entropy_mattermost_check:
     path:     /oauth/check
-    defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connectCheck }
+    controller: App\Controller\MattermostAuthController:connectCheckAction
 _entropy_mattermost_check_ssl:
     path:     /oauth/check
-    defaults: { _controller: EntropyTunkkiBundle:MattermostAuth:connectCheck }
+    controller: App\Controller\MattermostAuthController:connectCheckAction
     schemes:  [https]
 
 

@@ -35,7 +35,7 @@ class BookingAdminListener
                $message->setSubject("[Entropy Tunkki] New Booking on ". $booking->getBookingDate()->format('d.m.Y') );
                $message->setBody(
                $this->templating->render(
-                   '@emails/notification.html.twig',
+                   'emails/notification.html.twig',
                        [
                            'img' => $this->img,
                            'booking' => $booking,

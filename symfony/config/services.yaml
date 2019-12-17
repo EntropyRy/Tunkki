@@ -38,7 +38,7 @@ services:
             - "@security.token_storage"
             - "@sonata.classification.manager.context"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Items }
+            - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Items }
         calls:
             - [setTemplate, [outer_list_rows_mosaic, admin/item/list_outer_rows_mosaic.html.twig]]
             - [setTemplate, [inner_list_row, admin/item/list.html.twig]]
@@ -51,12 +51,12 @@ services:
 
     my_mattermost_authenticator:
         class: App\Security\MattermostAuthenticator
-        autowire: true
+        #autowire: true
         # use autowiring, OR you can specify the argument manually
-        #arguments:
-        #    - '@oauth2.registry'
-        #    - '@doctrine.orm.entity_manager'
-        #    - '@router'
+        arguments:
+            - '@oauth2.registry'
+            - '@doctrine.orm.entity_manager'
+            - '@router'
 
     entropy_tunkki.admin.event:
         class: App\Admin\EventAdmin
@@ -111,7 +111,7 @@ services:
             - "@doctrine.orm.entity_manager"
             - "@sonata.classification.manager.category"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Bookings, show_mosaic_button: false }
+            - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Bookings, show_mosaic_button: false }
         calls:
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
