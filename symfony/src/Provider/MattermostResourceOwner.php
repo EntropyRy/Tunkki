@@ -11,12 +11,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      * @var array
      */
     protected $response;
-    /**
-     * Token
-     *
-     * @var \League\OAuth2\Client\Token\AccessToken
-     */
-    protected $token;
+
     /**
      * MattermostResourceOwner constructor.
      *
@@ -25,7 +20,6 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     public function __construct(array $response)
     {
         $this->response = $response;
-        $this->token = $token;
     }
     /**
      * Return all of the owner details available as an array.
