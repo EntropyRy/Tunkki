@@ -38,7 +38,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('username')
+            ->add('user', null, ['label' => 'Tunkki User'])
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember', null, ['editable' => true])
@@ -97,6 +97,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('rejectReason')
             ->add('rejectReasonSent')
             ->add('copiedAsUser')
+            ->add('user')
             ->add('createdAt')
             ->add('updatedAt')
         ;

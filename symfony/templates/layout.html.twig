@@ -28,6 +28,10 @@
                         {% endif %}
                     {% endif %}
                 {% endblock %}
+                {% set list = block('list') is defined ? block('list') : '' %}
+                {% if list|length > 0 %}
+                    {{list|raw }}
+                {% endif %}
             </div>
             {% if page is defined and page != null %}
                 <div class="row">
