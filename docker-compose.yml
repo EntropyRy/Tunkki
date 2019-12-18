@@ -6,7 +6,7 @@ networks:
 
 services:
     fpm:
-        build: fpm
+        build: docker/fpm
         restart: unless-stopped
         networks:
             - back-tier
@@ -14,10 +14,10 @@ services:
             - "9000"
         volumes:
             - ./symfony:/var/www/symfony
-            - ./logs/symfony:/var/www/symfony/var/logs
+            - ./logs/symfony:/var/www/symfony/var/log
             - /etc/localtime:/etc/localtime:ro
     web:
-        build: web
+        build: docker/web
         restart: unless-stopped
         networks:
             - back-tier

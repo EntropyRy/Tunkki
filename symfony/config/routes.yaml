@@ -15,5 +15,6 @@ _entropy_mattermost_check_ssl:
     path:     /oauth/check
     controller: App\Controller\MattermostAuthController:connectCheckAction
     schemes:  [https]
-
-
+_member_form:
+    path:    /join
+    controller: App\Controller\MemberFormController:new
