@@ -1,11 +1,11 @@
 /web/bundles/
-/web/uploads/
-/build/
+/web/css/
+/web/images/
+/web/js/
 /vendor/
 /bin/*
 /build/
 !bin/console
-!bin/symfony_requirements
 /phpunit.xml
 
 

@@ -10,4 +10,8 @@ namespace App\Repository;
  */
 class MemberRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getDuplicate($member)
+    {
+        return true;
+    }
 }
