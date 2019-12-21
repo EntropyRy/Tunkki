@@ -16,19 +16,23 @@ class MemberFormController extends AbstractController
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
+        $state=null;
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $old = $em->getRepository(Member::class)->getDuplicate($member);
-            if(!$old){
+            $name = $em->getRepository(Member::class)->getByName($member->getFirstname(), $member->getLastname());
+            $email = $em->getRepository(Member::class)->getByEmail($member->getEmail());
+            if(!$name && !$email){
                 $em->persist($member);
                 $em->flush();
+                $state = 'added';
             } else {
-
+                $state = 'update';
             } 
         }
 
         return $this->render('member/form.html.twig', [
+            'state' => $state,
             'form' => $form->createView(),
         ]);
     }

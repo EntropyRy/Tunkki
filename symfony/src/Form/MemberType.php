@@ -21,7 +21,10 @@ class MemberType extends AbstractType
             ->add('email', EmailType::class)
             ->add('phone', TextType::class)
             ->add('CityOfResidence', TextType::class)
-            ->add('StudentUnionMember', CheckboxType::class, ['label_attr' => ['class'=>'switch-custom']])
+            ->add('StudentUnionMember', CheckboxType::class, [
+                'label_attr' => ['class'=>'switch-custom'],
+                'required' => false
+            ])
             ->add('Submit', SubmitType::class)
         ;
     }
@@ -30,7 +33,6 @@ class MemberType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Member::class,
-            'required' => true
         ]);
     }
 }

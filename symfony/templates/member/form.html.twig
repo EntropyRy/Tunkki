@@ -1,4 +1,18 @@
 {% extends 'base_layout.html.twig' %}
 {% block sonata_page_container %}
+{% if state == 'update' %}
+<div>Jos haluat päivittää jäsenrekisteritietosi niin ota yhteyttä hallitukseen: 
+    <button class="btn btn-info">
+        {% apply spaceless %}
+        {% set url = 'mailto:hallitus@entropy.fi?subject=Jäsentietojeni%20muuttaminen&body=Olen%20'~ form.vars.data.firstname ~'%20'~ form.vars.data.lastname ~(' ja haluan vaihtaa tietoni jäsenrekisterissä seuraaviksi\n\nnimi:\nemail:\nphone:\ncity of residence:\nstudent union member:\n')|url_encode%}
+        <a href="{{ url }}">
+            hallitus@entropy.fi
+        </a>
+        {% endapply %}
+    </button>
+</div>
+{% elseif state == 'added' %}
+<div>Tietosi on nyt tallennettu jäsenrekisteriimme. / Your information is now saved in our member registry</div>
+{% endif %}
 {{ form(form) }}
 {% endblock %}
