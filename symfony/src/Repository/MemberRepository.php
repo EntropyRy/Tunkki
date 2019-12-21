@@ -10,8 +10,20 @@ namespace App\Repository;
  */
 class MemberRepository extends \Doctrine\ORM\EntityRepository
 {
-    public function getDuplicate($member)
+    public function getByEmail($email)
     {
-        return true;
+        $qb = $this->createQueryBuilder('m')
+        ->where('m.email = :email')
+        ->setParameter('email', $email);
+        return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
+    }
+    public function getByName($firstname, $lastname)
+    {
+        $qb = $this->createQueryBuilder('m')
+        ->where('m.firstname = :firstname')
+        ->andWhere('m.lastname = :lastname')
+        ->setParameter('firstname', $firstname)
+        ->setParameter('lastname', $lastname);
+        return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
 }
