@@ -56,6 +56,9 @@ final class MemberAdmin extends AbstractAdmin
                     'sendrejectreason' => [
                         'template' => 'admin/crud/list__action_sendrejectreason.html.twig'
                     ],
+                    'activememberinfo' => [
+                        'template' => 'admin/crud/list__action_email_active_member_info.html.twig'
+                    ],
                 ],
             ])
         ;
@@ -106,6 +109,7 @@ final class MemberAdmin extends AbstractAdmin
     {
         $collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
         $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
+        $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }   
     public function postUpdate($member)
     {

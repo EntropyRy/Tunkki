@@ -49,15 +49,16 @@ final class EmailAdmin extends AbstractAdmin
             ->add('purpose', ChoiceType::class,[
                 'choices' => [
                     'Automatic email to new Member on registration' => 'member',
-                    'Automatic email to member who is accepted as Active Member' => 'activemember',
+                    'Automatic thank you email to member who requests Active Member status' => 'active_member',
+                    'New Active Member info package (can be sent from the member list)' => 'active_member_info_package',
                     //'Booking Email' => 'booking',
                     //'Other' => 'other'
                 ], 
                 'expanded' => true, 
                 'multiple' => false,
-                'help' => 'There is automatic Booking email to vuokra list and application rejected for active member which cannot be edited here. Other kinds of emails can be defined.'
+                'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ])
-            ->add('subject')
+            ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
             ->add('body', SimpleFormatterType::class, ['format' => 'text'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to tunkki login, usually not needed in emails defined here'])
             ;
