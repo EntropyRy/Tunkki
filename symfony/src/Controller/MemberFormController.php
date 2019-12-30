@@ -30,7 +30,7 @@ class MemberFormController extends AbstractController
             if(!$name && !$email){
                 $em->persist($member);
                 $em->flush();
-                $this->sendEmailToNewMember('member', $member, $em, $mailer);
+                $this->sendEmailToMember('member', $member, $em, $mailer);
                 $state = 'added';
             } else {
                 $state = 'update';
@@ -57,7 +57,7 @@ class MemberFormController extends AbstractController
             if(!$name && !$email){
                 $em->persist($member);
                 $em->flush();
-                $this->sendEmailToNewActiveMember('activemember', $member, $em, $mailer);
+                $this->sendEmailToMember('active_member', $member, $em, $mailer);
                 $state = 'added';
             } else {
                 $state = 'update';
@@ -69,7 +69,7 @@ class MemberFormController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-    protected function sendEmailToNewMember($purpose, $member, $em, $mailer)
+    protected function sendEmailToMember($purpose, $member, $em, $mailer)
     {
         $email = $em->getRepository(Email::class)->findOneBy(['purpose' => $purpose]);
         $message = new \Swift_Message($email->getSubject());

@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Entity\Email;
 
 final class MemberAdminController extends CRUDController
 {
@@ -64,9 +65,8 @@ final class MemberAdminController extends CRUDController
         $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
         $message->setBody(
             $this->renderView(
-                'emails/applicationrejected.html.twig',
+                'emails/member.html.twig',
                     [
-                        'img' => $this->getParameter('mm_tunkki_img'),
                         'user' => $object,
                         'email' => ['addLoginLinksToFooter'=>false],
                     ]
@@ -77,6 +77,30 @@ final class MemberAdminController extends CRUDController
         $object->setRejectReasonSent(1);
         $this->admin->update($object);
         $this->addFlash('sonata_flash_success', sprintf('Reject reason sent to %s', $object->getName()));
+        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+        
+    }
+    public function activememberinfoAction($id)
+    {
+        $object = $this->admin->getSubject();
+        $em = $this->getDoctrine()->getManager();
+        $email = $em->getRepository(Email::class)->findOneBy(['purpose' => 'active_member_info_package']);
+        $message = new \Swift_Message();
+        $message->setFrom(['hallitus@entropy.fi'], "Entropyn Hallitus");
+        $message->setTo($object->getEmail());
+        $message->setSubject($email->getSubject());
+        $message->setBody(
+            $this->renderView(
+                'emails/member.html.twig',
+                    [
+                        'email' => $email,
+                    ]
+                ),
+                'text/html'
+        );
+        $this->get('mailer')->send($message);
+        //$this->admin->update($object);
+        $this->addFlash('sonata_flash_success', sprintf('Member info package sent to %s', $object->getName()));
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         
     }
