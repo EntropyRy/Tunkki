@@ -2,5 +2,12 @@ packages: packages
 items: items
 accessories: accessories
 renter: renter
-renter_gives_consent: Renter has read and accepeted contractual terms
-agree: agree
+Renter consent: Renter has read and accepeted contractual terms
+Submit: Submit
+Agree: Agree
+Firstname: First name
+Lastname: Last name
+Email: Email
+Phone: Phone number
+City of residence: City of residence
+Student union member: AYY member

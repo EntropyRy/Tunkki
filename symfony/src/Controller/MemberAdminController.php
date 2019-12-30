@@ -58,23 +58,22 @@ final class MemberAdminController extends CRUDController
     public function sendrejectreasonAction($id)
     {
         $object = $this->admin->getSubject();
-        $mailer = $this->get("swiftmailer.mailer");
-        $templating = $this->get("templating");
         $message = new \Swift_Message();
         $message->setFrom(['hallitus@entropy.fi'], "Entropyn Hallitus");
         $message->setTo($object->getEmail());
         $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
         $message->setBody(
-        $templating->render(
-            'Emails/applicationrejected.html.twig',
-                [
-                    'img' => $this->getParameter('mm_tunkki_img'),
-                    'user' => $object,
-                ]
-            ),
-            'text/html'
+            $this->renderView(
+                'emails/applicationrejected.html.twig',
+                    [
+                        'img' => $this->getParameter('mm_tunkki_img'),
+                        'user' => $object,
+                        'email' => ['addLoginLinksToFooter'=>false],
+                    ]
+                ),
+                'text/html'
         );
-        $mailer->send($message);
+        $this->get('mailer')->send($message);
         $object->setRejectReasonSent(1);
         $this->admin->update($object);
         $this->addFlash('sonata_flash_success', sprintf('Reject reason sent to %s', $object->getName()));

@@ -1,8 +1,12 @@
 <?php
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Member;
+use App\Entity\Email;
 use App\Form\MemberType;
+use App\Form\ActiveMemberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -11,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class MemberFormController extends AbstractController
 {
-    public function new(Request $request)
+    public function newMember(Request $request, \Swift_Mailer $mailer)
     {
         $member = new Member();
         $form = $this->createForm(MemberType::class, $member);
@@ -20,11 +24,13 @@ class MemberFormController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
             $em = $this->getDoctrine()->getManager();
-            $name = $em->getRepository(Member::class)->getByName($member->getFirstname(), $member->getLastname());
-            $email = $em->getRepository(Member::class)->getByEmail($member->getEmail());
+            $memberRepo = $em->getRepository(Member::class);
+            $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
+            $email = $memberRepo->getByEmail($member->getEmail());
             if(!$name && !$email){
                 $em->persist($member);
                 $em->flush();
+                $this->sendEmailToNewMember('member', $member, $em, $mailer);
                 $state = 'added';
             } else {
                 $state = 'update';
@@ -35,5 +41,49 @@ class MemberFormController extends AbstractController
             'state' => $state,
             'form' => $form->createView(),
         ]);
+    }
+    public function activeMember(Request $request, \Swift_Mailer $mailer)
+    {
+        $member = new Member();
+        $form = $this->createForm(ActiveMemberType::class, $member);
+        $form->handleRequest($request);
+        $state=null;
+        if ($form->isSubmitted() && $form->isValid()) {
+            $member = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $memberRepo = $em->getRepository(Member::class);
+            $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
+            $email = $memberRepo->getByEmail($member->getEmail());
+            if(!$name && !$email){
+                $em->persist($member);
+                $em->flush();
+                $this->sendEmailToNewActiveMember('activemember', $member, $em, $mailer);
+                $state = 'added';
+            } else {
+                $state = 'update';
+            } 
+        }
+
+        return $this->render('member/form.html.twig', [
+            'state' => $state,
+            'form' => $form->createView(),
+        ]);
+    }
+    protected function sendEmailToNewMember($purpose, $member, $em, $mailer)
+    {
+        $email = $em->getRepository(Email::class)->findOneBy(['purpose' => $purpose]);
+        $message = new \Swift_Message($email->getSubject());
+        $message->setFrom([$this->getParameter('mailer_sender_address')], "Tunkki");
+        $message->setTo($member->getEmail());
+        $message->setBody(
+            $this->renderView(
+               'emails/base.html.twig',
+                   [
+                       'email' => $email,
+                   ]
+               ),
+               'text/html'
+            );
+        $mailer->send($message);
     }
 }

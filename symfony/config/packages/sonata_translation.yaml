@@ -9,4 +9,5 @@ sonata_block:
 
 sonata_translation:
     locales: ['fi','en']
-    default_locale: 'fi'
+    default_locale: fi
+    locale_switcher: true

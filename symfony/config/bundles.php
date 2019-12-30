@@ -31,6 +31,7 @@ return [
     Sonata\TimelineBundle\SonataTimelineBundle::class => ['all' => true],
     Sonata\TranslationBundle\SonataTranslationBundle::class => ['all' => true],
     Sonata\UserBundle\SonataUserBundle::class => ['all' => true],
+    Sonata\Doctrine\Bridge\Symfony\Bundle\SonataDoctrineBundle::class => ['all' => true],
     Knp\Bundle\MarkdownBundle\KnpMarkdownBundle::class => ['all' => true],
     JMS\SerializerBundle\JMSSerializerBundle::class => ['all' => true],
     Spy\TimelineBundle\SpyTimelineBundle::class => ['all' => true],

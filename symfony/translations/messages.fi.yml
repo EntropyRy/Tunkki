@@ -2,5 +2,13 @@ packages: paketit
 items: tavarat
 accessories: tarvikkeet
 renter: vuokraaja
-renter_gives_consent: Vuokraaja on lukenut ja hyväksynyt ehdot
-agree: hyväksy
+Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
+Submit: lähetä
+Agree: hyväksy
+Firstname: Etunimi
+Lastname: Sukunimi
+Email: Sähköposti
+Phone: Puhelinnumero
+City of residence: Asuinpaikkakunta
+Student union member: Olen AYY:n jäsen
+
