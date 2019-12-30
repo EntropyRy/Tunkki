@@ -68,13 +68,6 @@
     },
     "prefer-stable": true,
     "extra": {
-        "symfony-app-dir": "app",
-        "symfony-bin-dir": "bin",
-        "symfony-var-dir": "var",
-        "symfony-web-dir": "web",
-        "symfony-assets-install": "copy",
-        "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
-        }
+        "symfony-assets-install": "copy"
     }
 }

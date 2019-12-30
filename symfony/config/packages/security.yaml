@@ -26,7 +26,6 @@ security:
             logout:
                 path:           /admin/logout
             anonymous:          true
-            logout_on_user_change: true
         main:
             user_checker: security.user_checker
             pattern:            .*
@@ -41,7 +40,6 @@ security:
 #                target:         /login
             anonymous:          true
             switch_user:        true
-            logout_on_user_change: true
 
 #        api:
 #            pattern:            /api(.*)

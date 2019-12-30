@@ -77,6 +77,7 @@ sonata_admin:
                 items:
                     - entropy_tunkki.admin.user
                     - entropy_tunkki.admin.member
+                    - admin.email
 
             sonata.admin.group.administration:
                 label:           Administration

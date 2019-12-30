@@ -7,3 +7,8 @@ twig:
         - '@SonataCore/Form/datepicker.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'
         - 'bootstrap_4_layout.html.twig'
+    globals:
+        tunkki_img: '%env(MM_TUNKKI_IMG)%'
+    date:
+        format: d.m.Y, H:i:s
+        timezone: Europe/Helsinki

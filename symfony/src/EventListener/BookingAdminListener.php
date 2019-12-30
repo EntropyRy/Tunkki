@@ -37,8 +37,8 @@ class BookingAdminListener
                $this->templating->render(
                    'emails/notification.html.twig',
                        [
-                           'img' => $this->img,
                            'booking' => $booking,
+                           'email' => ['addLoginLinksToFooter' => true]
                        ] 
                    ),
                    'text/html'

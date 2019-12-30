@@ -2,19 +2,18 @@
 namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface;
+use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 
 // Form
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use App\Form\BookingConsentType;
 
 
 class RenterHashController extends Controller
 {
     protected $em;
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, CmsManagerSelector $cms)
     {
         $bookingid = $request->get('bookingid');
         $hash = $request->get('hash');
@@ -28,24 +27,13 @@ class RenterHashController extends Controller
         $bookingdata = $this->em->getRepository('App:Booking')
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){
-            $translator = $this->get('translator');
             $object = $bookingdata[1];
             if($object->getRenterConsent()){
                 $class='hidden';
             } else {
                 $class='btn btn-large btn-success';
             }
-            $form = $this->createFormBuilder($object)
-                ->add('renterConsent',CheckboxType::class,[
-                    'required' => true,
-                    'label' => $translator->trans('renter_gives_consent'),
-                    'label_attr' => ['style'=>'margin-right: 5px;']
-                ])
-                ->add('agree', SubmitType::class, [
-                    'attr'=>['class'=>$class],
-                    'label'=> $translator->trans('agree')
-                ])
-                ->getForm();
+            $form = $this->createForm(BookingConsentType::class, $object);
 			if($request->getMethod() == 'POST'){
 				$form->handleRequest($request);
 				if($form->isValid() && $form->isSubmitted()){
@@ -54,8 +42,7 @@ class RenterHashController extends Controller
 					$this->em->flush();
 				}
 			}
-            $cms = $this->container->get("sonata.page.cms_manager_selector")->retrieve();
-            $page = $cms->getCurrentPage();
+            $page = $cms->retrieve()->getCurrentPage();
             return $this->render('stufflist_for_renter.html.twig', [
                 'renter' => $renter, 
                 'bookingdata' => $bookingdata[0],

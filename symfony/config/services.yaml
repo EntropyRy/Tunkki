@@ -17,16 +17,18 @@ services:
     _defaults:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-
-    App\:
-        resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Application}'
+        public: false
 
     App\Controller\:
         resource: '../src/Controller'
         tags: ['controller.service_arguments']
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Application}'
+
 
     Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
+    Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
 
     entropy_tunkki.admin.item:
         class: App\Admin\ItemAdmin
@@ -45,6 +47,7 @@ services:
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
             - [addChild, ['@entropy_tunkki.admin.event', 'item']]
             - [addChild, ['@entropy_tunkki.admin.file', 'product']]
+        public: true
     entropy_tunkki.helper.mattermost:
         class: App\Helper\Mattermost
         arguments: ["@service_container"]
@@ -68,6 +71,7 @@ services:
             - "@security.token_storage"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Item Events, show_mosaic_button: false  }
+        public: true
 
     entropy_tunkki.admin.user:
         class: App\Admin\UserAdmin
@@ -79,18 +83,22 @@ services:
             - "@security.token_storage"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Users }
+        public: true
 
     entropy_tunkki.admin.file:
         class: App\Admin\FileAdmin
         arguments: [~, App\Entity\File, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Files, show_mosaic_button: false }
+        public: true
 
     entropy_tunkki.admin.member:
         class: App\Admin\MemberAdmin
         arguments: [~, App\Entity\Member, App\Controller\MemberAdminController]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Members}
+        public: true
+
     entropy_tunkki.page.itempage:
         class: App\PageService\ItemPage
         arguments:
@@ -99,6 +107,7 @@ services:
                 - "@doctrine.orm.entity_manager"
         tags:
                 - { name: sonata.page, alias: Item}
+        public: true
 
     entropy_tunkki.admin.booking:
         class: App\Admin\BookingAdmin
@@ -116,23 +125,27 @@ services:
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
             - [addChild, ['@entropy_tunkki.admin.event', 'booking']]
+        public: true
 
     entropy_tunkki.admin.package:
         class: App\Admin\PackageAdmin
         arguments: [~, App\Entity\Package, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Packages }
+        public: true
 
     entropy_tunkki.admin.renter:
         class: App\Admin\RenterAdmin
         arguments: [~, App\Entity\Renter, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Renters }
+        public: true
     entropy_tunkki.admin.billable_event:
         class: App\Admin\BillableEventAdmin
         arguments: [~, App\Entity\BillableEvent, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Billable Events }
+        public: true
 
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
@@ -142,6 +155,7 @@ services:
             - "@doctrine.orm.entity_manager" 
         tags:
             - { name: sonata.block, alias: bookingblock }
+        public: true
 
     entropy_tunkki.block.brokenitems:
         class: App\Block\BrokenItemsBlock
@@ -151,23 +165,27 @@ services:
             - "@doctrine.orm.entity_manager"
         tags:
             - { name: sonata.block, alias: brokenitemsblock }
+        public: true
 
     entropy_tunkki.admin.who_can_rent_choice:
         class: App\Admin\WhoCanRentChoiceAdmin
         arguments: [~, App\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoices }
+        public: true
 
     entropy_tunkki.admin.accessory:
         class: App\Admin\AccessoryAdmin
         arguments: [~, App\Entity\Accessory, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Accessory }
+        public: true
     entropy_tunkki.admin.accessory_choices:
         class: App\Admin\AccessoryChoiceAdmin
         arguments: [~, App\Entity\AccessoryChoice, SonataAdminBundle:CRUD]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: AccessoryChoices }
+        public: true
 
     entropy_tunkki.admin.email_notification:
         class: App\EventListener\BookingAdminListener
@@ -179,4 +197,11 @@ services:
             - "%mailer_sender_address%"
         tags:
             - { name: kernel.event_listener, event: sonata.admin.event.persistence.post_persist, method: sendEmailNotification }
+        public: true
 
+    admin.email:
+        class: App\Admin\EmailAdmin
+        arguments: [~, App\Entity\Email, App\Controller\EmailAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Emails }
+        public: true

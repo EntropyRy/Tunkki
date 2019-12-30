@@ -94,7 +94,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('ApplicationDate')
             ->add('ApplicationHandledDate')
             ->add('isActiveMember')
-            ->add('rejectReason')
+            ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
             ->add('rejectReasonSent')
             ->add('copiedAsUser')
             ->add('user')

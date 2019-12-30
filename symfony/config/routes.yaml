@@ -16,5 +16,12 @@ _entropy_mattermost_check_ssl:
     controller: App\Controller\MattermostAuthController:connectCheckAction
     schemes:  [https]
 _member_form:
-    path:    /join
-    controller: App\Controller\MemberFormController:new
+    path:    /member/join
+    controller: App\Controller\MemberFormController:newMember
+_active_member_form:
+    path:    /member/active
+    controller: App\Controller\MemberFormController:activeMember
+
+
+    #sonata_translation:
+    #resource: '@SonataTranslationBundle/Resources/config/routes.yaml'
