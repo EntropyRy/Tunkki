@@ -30,9 +30,8 @@ final class EmailAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('purpose')
             ->add('subject')
-            ->add('body')
-            ->add('createdAt')
-            ->add('updatedAt')
+            ->add('body', 'html')
+            ->add('updatedAt', 'datetime')
             ->add('_action', null, [
                 'actions' => [
                     'preview' => ['template' => 'admin/crud/list__action_email_preview.html.twig'],
@@ -59,7 +58,7 @@ final class EmailAdmin extends AbstractAdmin
                 'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ])
             ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
-            ->add('body', SimpleFormatterType::class, ['format' => 'text'])
+            ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to tunkki login, usually not needed in emails defined here'])
             ;
     }
@@ -67,12 +66,12 @@ final class EmailAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
-            ->add('subject')
-            ->add('body')
             ->add('purpose')
+            ->add('subject')
+            ->add('body', 'html')
+            ->add('addLoginLinksToFooter')
             ->add('createdAt')
             ->add('updatedAt')
-            ->add('addLoginLinksToFooter')
             ;
     }
 
