@@ -29,11 +29,9 @@
 <table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
                                     </td>
                                     <td style="text-align: left">
-                                        {% set content = block('content') is defined ? block('content') : '' %}
+                                        {% set content = block('content') is defined ? block('content') : email.body|raw %}
                                         {% if content|length > 0 %}
                                             {{ content|raw }}
-                                        {% else %}
-                                            {{ email.body|raw|nl2br }}
                                         {% endif %}
                                     </td>
                                 </tr>
