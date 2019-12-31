@@ -49,19 +49,34 @@ class MemberFormController extends AbstractController
         $form->handleRequest($request);
         $state=null;
         if ($form->isSubmitted() && $form->isValid()) {
-            $member = $form->getData();
+            $new = $form->getData();
             $em = $this->getDoctrine()->getManager();
             $memberRepo = $em->getRepository(Member::class);
-            $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
-            $email = $memberRepo->getByEmail($member->getEmail());
-            if(!$name && !$email){
-                $em->persist($member);
-                $em->flush();
-                $this->sendEmailToMember('active_member', $member, $em, $mailer);
-                $state = 'added';
+            $member = $memberRepo->getByName($new->getFirstname(), $new->getLastname());
+            if($member){
+                if(!$member->getIsActiveMember()){
+                    if(is_null($member->getApplication())){
+                        $member->setEmail($new->getEmail());
+                        $member->setUsername($new->getUsername());
+                        $member->setPhone($new->getPhone());
+                        $member->setCityOfResidence($new->getCityOfResidence());
+                        $member->setApplication($new->getApplication());
+                        $member->setApplicationDate(new \DateTime());
+                        $em->persist($member);
+                    } else {
+                        $new->setApplicationDate(new \DateTime());
+                        $em->persist($new);
+                        $member = $new;
+                    }
+                    $em->flush();
+                    $this->sendEmailToMember('active_member', $member, $em, $mailer);
+                    $state = 'added';
+                } else {
+                    $state = 'update';
+                }
             } else {
-                $state = 'update';
-            } 
+                $state = 'no';
+            }
         }
 
         return $this->render('member/form.html.twig', [
