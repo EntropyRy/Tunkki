@@ -12,7 +12,9 @@
     </button>
 </div>
 {% elseif state == 'added' %}
-<div>Tietosi on nyt tallennettu jäsenrekisteriimme. / Your information is now saved in our member registry</div>
+<div>Tietosi on nyt tallennettu jäsenrekisteriimme. Saat vielä asiasta sähköpostin! / Your information is now saved in our member registry. You'll get an email about it!</div>
+{% elseif state == 'no' %}
+<div>Sinuun pitää olla ensin jäsen ennenkuin voit hakea aktiivijäsenyyttä / You have to member first to apply for active membership</div>
 {% endif %}
 {{ form(form) }}
 {% endblock %}
