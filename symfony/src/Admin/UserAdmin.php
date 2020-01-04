@@ -6,16 +6,8 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use FOS\UserBundle\Model\UserManagerInterface;
 use Sonata\UserBundle\Admin\Model\UserAdmin as BaseUserAdmin;
-use Sonata\AdminBundle\Route\RouteCollection;
-
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Sonata\Form\Type\DateTimePickerType;
-use Sonata\Form\Type\DatePickerType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class UserAdmin extends BaseUserAdmin
 {
@@ -54,6 +46,8 @@ class UserAdmin extends BaseUserAdmin
                 ->end()
             ->end()
             ;
+        $formMapper->removeGroup('Social', 'User');
+        $formMapper->removeGroup('Roles', 'Security');
     }
 
     /**

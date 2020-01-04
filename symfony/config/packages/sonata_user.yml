@@ -19,7 +19,7 @@ sonata_user:
         group: App\Application\Sonata\UserBundle\Entity\Group
     admin:
         user:
-            class:          Sonata\UserBundle\Admin\Entity\UserAdmin
+            class:          App\Admin\UserAdmin
             controller:     SonataAdminBundle:CRUD
             translation:    SonataUserBundle
         group:
