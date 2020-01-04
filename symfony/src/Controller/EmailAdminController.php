@@ -14,6 +14,6 @@ final class EmailAdminController extends CRUDController
         //$em = $this->getDoctrine()->getManager();
         //$email = $em->getRepository('App:Email')
         //      ->findOneBy('id' => $object->getId());
-        return $this->render('emails/base.html.twig', ['email' => $email]);
+        return $this->renderWithExtraParams('emails/base.html.twig', ['email' => $email]);
     }
 }
