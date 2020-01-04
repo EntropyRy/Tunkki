@@ -42,16 +42,21 @@ final class MemberAdminController extends CRUDController
             $user->setLastname($object->getLastname());
             $user->setEmail($object->getEmail());
             $user->setPhone($object->getPhone());
-            $user->setUsername($object->getName());
+            $user->setUsername($object->getUsername());
             $user->setEnabled(1);
             $pass = bin2hex(openssl_random_pseudo_bytes(6));
             $user->setPlainPassword($pass);
             $user->setMember($object);
             $userM->updateUser($user);
-            $object->setUsername($object->getUser()->getUsername());
             $object->setCopiedAsUser(1);
             $this->admin->update($object);
-            $this->addFlash('sonata_flash_success', sprintf('User created successfully with password : %s, Please define user groups manually!', $pass));
+            $userEditLink = $this->get('router')->generate('admin_sonata_user_user_edit', ['id' => $user->getId()]);
+            $this->addFlash('sonata_flash_success', 
+                sprintf('User created successfully with password : %s', $pass
+            ));
+            $this->addFlash('sonata_flash_error', 
+                sprintf('Please define user groups manually!: <a href="%s">Here</a>', $userEditLink
+            ));
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

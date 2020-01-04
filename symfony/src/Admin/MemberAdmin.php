@@ -14,6 +14,7 @@ use Sonata\Form\Type\DatePickerType;
 
 final class MemberAdmin extends AbstractAdmin
 {
+    protected $baseRoutePattern = 'member';
     protected $datagridValues = [
         '_page' => 1,
         '_sort_order' => 'DESC',
