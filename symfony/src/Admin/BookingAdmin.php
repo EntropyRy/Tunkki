@@ -9,7 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
@@ -239,7 +239,11 @@ class BookingAdmin extends AbstractAdmin
                         'disabled' => false, 
                         'required' => true
                         ])
-                    ->add('actualPrice', null, ['disabled' => false, 'required' => false])
+                    ->add('actualPrice', null, [
+                        'disabled' => false, 
+                        'required' => false,
+                        'help' => 'If booking does not need to be billed: leave this empty'
+                    ])
                 ->end()
                 ->with('Events', array('class' => 'col-md-12'))
                     ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),
