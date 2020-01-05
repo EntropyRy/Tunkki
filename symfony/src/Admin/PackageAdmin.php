@@ -86,7 +86,7 @@ class PackageAdmin extends AbstractAdmin
             ])
             ->add('rentFromItems', TextType::class, array('disabled' => true))
             ->add('rent')
-    //        ->add('needsFixing')
+            ->add('compensationPrice')
             ->add('notes')
             ->end()
         ;
@@ -102,6 +102,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('items')
             ->add('rent')
       //      ->add('needsFixing')
+            ->add('compensationPrice')
             ->add('notes')
         ;
     }

@@ -51,6 +51,8 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
             } 
             foreach ($object->getPackages() as $item){ 
                 $packages[]=$item;
+                $rent['packages']+=$item->getRent();
+                $compensation['packages']+=$item->getCompensationPrice(); 
             } 
             foreach ($object->getAccessories() as $item){ 
                 $accessories[]=$item;

@@ -8,44 +8,111 @@
                 </h1>
             </div>
             <div class="col-md-12">
+
             {% if packages %}
             <h3>Packages</h3>
+            {{ block('tablehead') }}
             {% for package in packages %}
-            <div class="checkbox">
-                <label><input type="checkbox">{{ package }}:</label>
-                <span class="pull-right">{{ package.rent }}€</span>
-                {% for item in package.items %}
-                <small>{{ item }}</small>{% if not loop.last %},{% endif %}
-                {% endfor %}
-            </div>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox">{{ package }}:</label>
+                            {% for item in package.items %}
+                            <small>{{ item }}</small>{% if not loop.last %},{% endif %}
+                            {% endfor %}
+                        </div>
+                    </td>
+                    <td>
+                        <span class="">{{ compensation['packages'] }}€</span>
+                    </td>
+                    <td>
+                        <span class="">{{ package.rent }}€</span>
+                    </td>
+                </tr>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ rent['packages'] }}€</span>
-            </div>
+                <tr>
+                    <td>
+                        Subtotal:
+                    </td>
+                    <td>
+                        <span>{{ compensation['packages'] }}€</span>
+                    </td>
+                    <td>
+                        <span>{{ rent['packages'] }}€</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             {% endif %}
-            <div class="col-md-12">
             {% if items %}
             <h3>Items</h3>
+            {{ block('tablehead') }}
             {% for item in items %}
-                <div class="checkbox">
-                    <label><input type="checkbox"> {{ item }}</label>
-                    <span class="pull-right">{{ item.rent }}€</span>
-                </div>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox"> {{ item }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="">{{ item.compensationPrice }}€</span>
+                    </td>
+                    <td>
+                        <span class="">{{ item.rent }}€</span>
+                    </td>
+                </tr>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ rent['items'] }}€</span>
+                <tr>
+                    <td>
+                        Subtotal:
+                    </td>
+                    <td>
+                        <span>{{ compensation['items'] }}€</span>
+                    </td>
+                    <td>
+                        <span>{{ rent['items'] }}€</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             {% endif %}
             {% if accessories %}
             <h3>Accessories</h3>
+            {{ block('tablehead') }}
             {% for item in accessories %}
-                <div class="checkbox">
-                <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
-                <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
-                </div>
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="">{{ item.name.compensationPrice }}€/pcs</span>
+                    </td>
+                    <td>
+                        <span class="">N/A</span>
+                    </td>
+                </tr>
             {% endfor %}
-            Subtotal: <span class="pull-right">{{ compensation['accessories'] }}€</span>
+                <tr>
+                    <td>
+                        Subtotal:
+                    </td>
+                    <td>
+                        <span>{{ compensation['accessories'] }}€</span>
+                    </td>
+                    <td>
+                        <span>N/A</span>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
             {% endif %}
             <hr style="border-top: 1px solid #222;">
             <div>Total (does not contain accessories): <span class="pull-right">{{ rent['total'] }}€</span></div>
+            {% if rent['actualTotal'] %}
             <div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div>
+            {% endif %}
             </div>
         </div>
     </div>
@@ -54,4 +121,16 @@
 .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
 }
 </style>
+{% endblock %}
+
+{% block tablehead %}
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Compensation</th>
+            <th scope="col">Rent</th>
+        </tr>
+    </thead>
+    <tbody>
 {% endblock %}
