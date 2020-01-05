@@ -63,6 +63,11 @@ class Package
      */
     private $notes;
 
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $compensationPrice;
+
 
     /**
      * Get id
@@ -295,5 +300,17 @@ class Package
     public function getWhoCanRent()
     {
         return $this->whoCanRent;
+    }
+
+    public function getCompensationPrice(): ?string
+    {
+        return $this->compensationPrice;
+    }
+
+    public function setCompensationPrice(?string $compensationPrice): self
+    {
+        $this->compensationPrice = $compensationPrice;
+
+        return $this;
     }
 }
