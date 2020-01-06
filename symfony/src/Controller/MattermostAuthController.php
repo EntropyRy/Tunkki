@@ -7,7 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface; 
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use App\Entity\User;
 
 class MattermostAuthController extends Controller
 {
@@ -32,7 +33,7 @@ class MattermostAuthController extends Controller
         try {
             $mmuser = $client->fetchUser();
             $this->em = $this->get('doctrine');
-            $user = $this->em->getRepository('ApplicationSonataUserBundle:User')
+            $user = $this->em->getRepository(User::class)
                 ->findOneBy(['email' => $mmuser->getEmail()]);
             if(!$user){
                 return $this->redirect($this->generateUrl('sonata_admin_dashboard'));
