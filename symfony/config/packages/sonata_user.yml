@@ -4,7 +4,7 @@ fos_user:
         address: webmaster@entropy.fi
         sender_name: Entropy TunkkiAdmin
     firewall_name: main
-    user_class: App\Application\Sonata\UserBundle\Entity\User
+    user_class: App\Entity\User
     group:
         group_class: App\Application\Sonata\UserBundle\Entity\Group
         group_manager: sonata.user.orm.group_manager
@@ -15,7 +15,7 @@ sonata_user:
     security_acl: false
     manager_type: orm
     class:
-        user: App\Application\Sonata\UserBundle\Entity\User
+        user: App\Entity\User
         group: App\Application\Sonata\UserBundle\Entity\Group
     admin:
         user:

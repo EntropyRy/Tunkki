@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\UserBundle\Entity\User;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -130,25 +130,25 @@ class Booking
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\App\Entity\Renter", inversedBy="bookings")
+     * @ORM\ManyToOne(targetEntity="Renter", inversedBy="bookings")
      */
     private $renter;
 
     /**
      *
-     * @ORM\OneToMany(targetEntity="\App\Entity\BillableEvent", mappedBy="booking", cascade={"persist"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="BillableEvent", mappedBy="booking", cascade={"persist"}, orphanRemoval=true)
      */
     private $billableEvents;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      */
     private $givenAwayBy;
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      */
     private $receivedBy;
 
@@ -169,7 +169,7 @@ class Booking
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      */
     private $creator;
 
@@ -183,7 +183,7 @@ class Booking
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      */
     private $modifier;
 
@@ -201,6 +201,11 @@ class Booking
      * @ORM\Column(name="booking_date", type="date")
      */
     private $bookingDate;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="App\Entity\Reward", mappedBy="bookings")
+     */
+    private $rewards;
 
 
 
@@ -395,6 +400,7 @@ class Booking
         $this->accessories = new ArrayCollection();
         $this->billableEvents = new ArrayCollection();
         $this->statusEvents = new ArrayCollection();
+        $this->rewards = new ArrayCollection();
     }
 
     /**
@@ -851,6 +857,34 @@ class Booking
     public function setBookingDate(\DateTimeInterface $bookingDate): self
     {
         $this->bookingDate = $bookingDate;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Reward[]
+     */
+    public function getRewards(): Collection
+    {
+        return $this->rewards;
+    }
+
+    public function addReward(Reward $reward): self
+    {
+        if (!$this->rewards->contains($reward)) {
+            $this->rewards[] = $reward;
+            $reward->addBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReward(Reward $reward): self
+    {
+        if ($this->rewards->contains($reward)) {
+            $this->rewards->removeElement($reward);
+            $reward->removeBooking($this);
+        }
 
         return $this;
     }

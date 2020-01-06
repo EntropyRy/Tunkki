@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\UserBundle\Entity\User;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -62,7 +62,7 @@ class Event
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\App\Entity\User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $creator;
@@ -70,7 +70,7 @@ class Event
     /**
      * @var string
      *
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="\App\Entity\User")
      * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private $modifier;
@@ -195,11 +195,11 @@ class Event
     /**
      * Set creator
      *
-     * @param \App\Application\Sonata\UserBundle\Entity\User $creator
+     * @param \App\Entity\User $creator
      *
      * @return Event
      */
-    public function setCreator(\App\Application\Sonata\UserBundle\Entity\User $creator = null)
+    public function setCreator(\App\Entity\User $creator = null)
     {
         $this->creator = $creator;
 
@@ -209,7 +209,7 @@ class Event
     /**
      * Get creator
      *
-     * @return \App\Application\Sonata\UserBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getCreator()
     {
@@ -219,11 +219,11 @@ class Event
     /**
      * Set modifier
      *
-     * @param \App\Application\Sonata\UserBundle\Entity\User $modifier
+     * @param \App\Entity\User $modifier
      *
      * @return Event
      */
-    public function setModifier(\App\Application\Sonata\UserBundle\Entity\User $modifier = null)
+    public function setModifier(\App\Entity\User $modifier = null)
     {
         $this->modifier = $modifier;
 
@@ -233,7 +233,7 @@ class Event
     /**
      * Get modifier
      *
-     * @return \App\Application\Sonata\UserBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getModifier()
     {

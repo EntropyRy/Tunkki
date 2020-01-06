@@ -43,6 +43,7 @@ class UserAdmin extends BaseUserAdmin
             ->tab('Member')
                 ->with('Entropy', ['class' => 'col-md-6'])
                     ->add('member')
+                    ->add('rewards')
                 ->end()
             ->end()
             ;

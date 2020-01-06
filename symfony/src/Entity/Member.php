@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\UserBundle\Entity\User;
+use App\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -139,7 +139,7 @@ class Member
 
     /**
      *
-     * @ORM\OneToOne(targetEntity="App\Application\Sonata\UserBundle\Entity\User", mappedBy="member")
+     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="member")
      */
     private $user;
 
