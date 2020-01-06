@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Application\Sonata\ClassificationBundle\Entity\Category;
 use App\Application\Sonata\ClassificationBundle\Entity\Tag;
-use App\Application\Sonata\UserBundle\Entity\User;
+use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -188,7 +188,7 @@ class Item
     private $purchasePrice;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
 	private $creator;
@@ -202,7 +202,7 @@ class Item
     private $createdAt;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\App\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
 	private $modifier;
@@ -738,11 +738,11 @@ class Item
     /**
      * Set creator
      *
-     * @param \App\Application\Sonata\UserBundle\Entity\User $creator
+     * @param \App\Entity\User $creator
      *
      * @return Item
      */
-    public function setCreator(\App\Application\Sonata\UserBundle\Entity\User $creator = null)
+    public function setCreator(\App\Entity\User $creator = null)
     {
         $this->creator = $creator;
 
@@ -752,7 +752,7 @@ class Item
     /**
      * Get creator
      *
-     * @return \App\Application\Sonata\UserBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getCreator()
     {
@@ -762,11 +762,11 @@ class Item
     /**
      * Set modifier
      *
-     * @param \App\Application\Sonata\UserBundle\Entity\User $modifier
+     * @param \App\Entity\User $modifier
      *
      * @return Item
      */
-    public function setModifier(\App\Application\Sonata\UserBundle\Entity\User $modifier = null)
+    public function setModifier(\App\Entity\User $modifier = null)
     {
         $this->modifier = $modifier;
 
@@ -776,7 +776,7 @@ class Item
     /**
      * Get modifier
      *
-     * @return \App\Application\Sonata\UserBundle\Entity\User
+     * @return \App\Entity\User
      */
     public function getModifier()
     {

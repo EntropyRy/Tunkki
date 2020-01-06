@@ -153,6 +153,10 @@ class BookingAdmin extends AbstractAdmin
                 $itemCats = $this->getCategories($itemChoices);
             } 
         }
+        $changerewardownner = false;
+        if($subject->getPaid()){
+            $changerewardownner = true;
+        } 
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
@@ -170,7 +174,8 @@ class BookingAdmin extends AbstractAdmin
                 ->add('givenAwayBy', ModelListType::class, [
                         'btn_add' => false,
                         'btn_delete' => 'Unassign', 
-                        'required' => false
+                        'required' => false,
+                        'disabled' => $changerewardownner
                     ])
                 ->add('returning', DateTimePickerType::class, [
                         'required' => false,
@@ -182,7 +187,8 @@ class BookingAdmin extends AbstractAdmin
                 ->add('receivedBy', ModelListType::class, [
                         'required' => false, 
                         'btn_add' => false, 
-                        'btn_delete' => 'Unassign'
+                        'btn_delete' => 'Unassign',
+                        'disabled' => $changerewardownner
                     ])
             ->end()
             ->with('Who is Renting?', ['class' => 'col-md-6'])
