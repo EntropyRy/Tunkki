@@ -44,6 +44,5 @@ return [
     App\Application\Sonata\TimelineBundle\ApplicationSonataTimelineBundle::class => ['all' => true],
     App\Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
-    Doctrine\Bundle\DoctrineCacheBundle\DoctrineCacheBundle::class => ['all' => true],
     SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
 ];

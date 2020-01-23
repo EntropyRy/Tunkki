@@ -11,7 +11,7 @@
         {% endif %}
     </span>
 </div>
-<div class="col-sm-2">
+<div class="col-xs-2">
     {% if not object.renterConsent and object.actualPrice and not object.cancelled %}
     <span class="label label-danger">Contract not signed</span><br>
     {% elseif object.renterConsent and object.actualPrice %}
@@ -29,12 +29,11 @@
         {% endif %}
     {% endif %}
 </div>
-<div class="col-sm-{% if object.actualPrice %}8{% else %}10{%endif%}" style="border-left: 1px solid #a2a2a2;">
-    <span>
+<div class="col-xs-{% if object.actualPrice %}8{% else %}10{%endif%}" style="border-left: 1px solid #a2a2a2;">
     <small>
     Renter: {{ object|render_list_element(admin.list['renter']) }} {% if object.actualPrice and not object.cancelled %}- {{ block('contract') }}{% endif %}<br>
     {% if object.retrieval and object.returning %}
-        From - To: {{ object|render_list_element(admin.list['retrieval']) }} - {{ object|render_list_element(admin.list['returning']) }}<br>
+        From - To: {{ object.retrieval|date }} - {{ object.returning|date }}<br>
     {% endif %}
     {% if object.givenAwayBy %}
     Given Away by: {{ object.givenAwayBy }}</br>
@@ -46,11 +45,10 @@
         {% if not object.itemsReturned %}
             {{ block('brokenitems') }}
         {% endif %}
-    </span>
 </div>
 {% if object.actualPrice and not object.cancelled %}
-<div class="col-sm-2" style="border-left: 1px solid #a2a2a2;">
-    Ref. {{ object|render_list_element(admin.list['referenceNumber']) }}<br>
+<div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
+    Ref. {{ object.referenceNumber }}<br>
     Price: {{ object.actualPrice }}€<br>
 </div>
 {% endif %}
@@ -84,7 +82,7 @@
 
 {% block brokenitems %}
     {% for item in object.items if item.needsFixing %}
-        <a class="btn btn-sm" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
+        <a class="btn btn-sm" style="display: inline-block;" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
             <i class="fa fa-medkit"></i>
             {{ item.name }}
         </a>

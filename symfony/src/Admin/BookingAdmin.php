@@ -97,12 +97,9 @@ class BookingAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->addIdentifier('referenceNumber')
             ->addIdentifier('name')
             ->add('renter')
             ->add('bookingDate')
-            ->add('retrieval')
-            ->add('returning')
             ->add('itemsReturned')
             ->add('paid')
             ->add('_action', null, array(
