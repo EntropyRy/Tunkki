@@ -68,20 +68,31 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('username')
+            ->with('Base',['class' => 'col-md-6'])
             ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
             ->add('StudentUnionMember')
+            ->end()
+            ->with('Active Member', ['class' => 'col-md-6'])
+            ->add('username')
             ->add('Application')
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
-            ->add('ApplicationHandledDate', DatePickerType::class, ['required' => false])
+            ->add('ApplicationHandledDate', DatePickerType::class, [
+                'required' => false, 
+                'help'=>'doubles as accepted as active member date'
+            ])
             ->add('rejectReason')
             ->add('rejectReasonSent')
             ->add('isActiveMember')
             ->add('copiedAsUser')
+            ->add('user', null, ['help' => 'Tunkki User'])
+            ->end()
+            ->with('Hanorary',['class' => 'col-md-6'])
+            ->add('AcceptedAsHonoraryMember', DatePickerType::class, ['required' => false])
+            ->end()
         ;
     }
 

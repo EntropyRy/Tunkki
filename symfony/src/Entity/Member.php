@@ -144,6 +144,11 @@ class Member
     private $user;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $AcceptedAsHonoraryMember;
+
+    /**
      * Get id.
      *
      * @return int
@@ -574,5 +579,17 @@ class Member
     public function getUsername()
     {
         return $this->username;
+    }
+
+    public function getAcceptedAsHonoraryMember(): ?\DateTimeInterface
+    {
+        return $this->AcceptedAsHonoraryMember;
+    }
+
+    public function setAcceptedAsHonoraryMember(?\DateTimeInterface $AcceptedAsHonoraryMember): self
+    {
+        $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember;
+
+        return $this;
     }
 }

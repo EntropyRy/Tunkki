@@ -50,15 +50,17 @@
                         </div>
                     </div>
                     <div class="col-md-5">
-                    {% for package in booking.packages if package is not empty%}
-                        Package: {{ package }}
-                        <ul>
-                        {% for item in package.items %}
-                        <li>
-                            {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-                            {{ item }}</li>
-                        {% endfor %}
-                        </ul>
+                    {% for package in booking.packages %}
+                        {%if package is not empty %}
+                            Package: {{ package }}
+                            <ul>
+                            {% for item in package.items %}
+                            <li>
+                                {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
+                                {{ item }}</li>
+                            {% endfor %}
+                            </ul>
+                        {% endif %}
                     {% endfor %}
                     {% if booking.accessories is not empty %}
                         Accessories:
