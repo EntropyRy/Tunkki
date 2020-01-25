@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\Form\Type\DatePickerType;
+use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 
 final class MemberAdmin extends AbstractAdmin
 {
@@ -33,6 +34,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('StudentUnionMember')
             ->add('copiedAsUser')
             ->add('isActiveMember')
+            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['input_type' => 'timestamp'])
         ;
     }
 
@@ -67,6 +69,10 @@ final class MemberAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+        $editable = false;
+        if (!is_null($this->getSubject()->getApplication())){
+            $editable = true;
+        }
         $formMapper
             ->with('Base',['class' => 'col-md-6'])
             ->add('firstname')
@@ -74,11 +80,18 @@ final class MemberAdmin extends AbstractAdmin
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
-            ->add('StudentUnionMember')
+            ->end()
+            ->with('Member status',['class' => 'col-md-6'])
+            ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
+            ->add('isActiveMember',null, ['help' => 'Grants access to Entropy systems'])
+            ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
+                'required' => false,
+                'help' => 'Grants free access to Entropy parties'
+            ])
             ->end()
             ->with('Active Member', ['class' => 'col-md-6'])
-            ->add('username')
-            ->add('Application')
+            ->add('username', null, ['help' => 'asked from the member'])
+            ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
             ->add('ApplicationHandledDate', DatePickerType::class, [
                 'required' => false, 
@@ -86,12 +99,8 @@ final class MemberAdmin extends AbstractAdmin
             ])
             ->add('rejectReason')
             ->add('rejectReasonSent')
-            ->add('isActiveMember')
             ->add('copiedAsUser')
-            ->add('user', null, ['help' => 'Tunkki User'])
-            ->end()
-            ->with('Hanorary',['class' => 'col-md-6'])
-            ->add('AcceptedAsHonoraryMember', DatePickerType::class, ['required' => false])
+            ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
         ;
     }
@@ -129,5 +138,9 @@ final class MemberAdmin extends AbstractAdmin
         if($user){
             $member->setUsername($user->getUsername());
         }
+    }
+    public function getExportFields()
+    {
+        return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];
     }
 }
