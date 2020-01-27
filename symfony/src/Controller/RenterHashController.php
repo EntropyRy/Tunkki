@@ -18,12 +18,15 @@ class RenterHashController extends Controller
         $bookingid = $request->get('bookingid');
         $hash = $request->get('hash');
         $renterid = $request->get('renterid');
-        if(empty($bookingid) || empty($hash) || empty($renterid)){
+        if(empty($bookingid) || empty($hash) || is_null($renterid)){
             throw new NotFoundHttpException();
         }
         $this->em = $this->getDoctrine()->getManager();
         $renter = $this->em->getRepository('App:Renter')
-                ->findOneBy(['id' => $renterid]);
+            ->findOneBy(['id' => $renterid]);
+        if(is_null($renter)){
+            $renter = 0;
+        }
         $bookingdata = $this->em->getRepository('App:Booking')
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){

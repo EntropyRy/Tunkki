@@ -149,6 +149,11 @@ class Member
     private $AcceptedAsHonoraryMember;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isFullMember = false;
+
+    /**
      * Get id.
      *
      * @return int
@@ -589,6 +594,18 @@ class Member
     public function setAcceptedAsHonoraryMember(?\DateTimeInterface $AcceptedAsHonoraryMember): self
     {
         $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember;
+
+        return $this;
+    }
+
+    public function getIsFullMember(): ?bool
+    {
+        return $this->isFullMember;
+    }
+
+    public function setIsFullMember(bool $isFullMember): self
+    {
+        $this->isFullMember = $isFullMember;
 
         return $this;
     }

@@ -84,6 +84,7 @@ final class MemberAdmin extends AbstractAdmin
             ->with('Member status',['class' => 'col-md-6'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
             ->add('isActiveMember',null, ['help' => 'Grants access to Entropy systems'])
+            ->add('isFullMember',null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
             ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
                 'required' => false,
                 'help' => 'Grants free access to Entropy parties'

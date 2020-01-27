@@ -39,6 +39,7 @@
     </div>
 {% endfor %}
 {% endif %}
+{% if renter %}
 <h3 style="text-transform: capitalize;">{{ 'renter'|trans }}</h3>
 {{ renter.name }}<br>
 {% if renter.organization %}{{ renter.organization }}<br>{% endif %}
@@ -51,6 +52,7 @@
 <!--<div>Actual Total: <span class="pull-right">{#{ rent['actualTotal'] }#}€</span></div> -->
 </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block item %}

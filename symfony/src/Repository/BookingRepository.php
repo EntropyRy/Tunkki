@@ -29,9 +29,9 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
         $queryBuilder = $this->createQueryBuilder('b')
                        ->andWhere('b.renterHash = :hash')
                        ->andWhere('b.id = :id')
-                       ->andWhere('b.renter = :renter')
+                       //->andWhere('b.renter = :renter')
                        ->setParameter('hash', $hash)
-                       ->setParameter('renter', $renter)
+                       //->setParameter('renter', $renter)
                        ->setParameter('id', $id);
         $object = $queryBuilder->getQuery()->getOneOrNullResult();
         if(is_object($object)){ 
