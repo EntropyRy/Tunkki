@@ -81,7 +81,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->end()
-            ->with('Member status',['class' => 'col-md-6'])
+            ->with('Membership status',['class' => 'col-md-6'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
             ->add('isActiveMember',null, ['help' => 'Grants access to Entropy systems'])
             ->add('isFullMember',null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
@@ -90,7 +90,7 @@ final class MemberAdmin extends AbstractAdmin
                 'help' => 'Grants free access to Entropy parties'
             ])
             ->end()
-            ->with('Active Member', ['class' => 'col-md-6'])
+            ->with('Membership info', ['class' => 'col-md-6'])
             ->add('username', null, ['help' => 'asked from the member'])
             ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])

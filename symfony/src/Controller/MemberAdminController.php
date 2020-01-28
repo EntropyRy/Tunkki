@@ -50,7 +50,7 @@ final class MemberAdminController extends CRUDController
             $userM->updateUser($user);
             $object->setCopiedAsUser(1);
             $this->admin->update($object);
-            $userEditLink = $this->get('router')->generate('admin_sonata_user_user_edit', ['id' => $user->getId()]);
+            $userEditLink = $this->get('router')->generate('admin_app_user_edit', ['id' => $user->getId()]);
             $this->addFlash('sonata_flash_success', 
                 sprintf('User created successfully with password : %s', $pass
             ));
