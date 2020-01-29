@@ -31,6 +31,8 @@ final class RewardAdmin extends AbstractAdmin
         $listMapper
             ->add('user')
             ->add('reward')
+            ->add('Evenout')
+            ->add('Weight')
             ->add('paid')
             ->add('paidDate')
             ->add('PaymentHandledBy')
@@ -64,6 +66,8 @@ final class RewardAdmin extends AbstractAdmin
             ->add('user')
             ->add('bookings')
             ->add('reward')
+            ->add('Evenout')
+            ->add('Weight')
             ->add('paid')
             ->add('paidDate')
             ->add('paymentHandledBy')
@@ -76,5 +80,14 @@ final class RewardAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('makepaid', $this->getRouterIdParameter().'/makepaid');
+        $collection->add('PrepareEvenout', 'evenout/prepare');
+        $collection->add('Evenout', 'evenout/make');
     }
+    public function configureSideMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null)
+    {
+        $menu->addChild($this->trans('evenout'),[
+            'route'=> 'admin_app_reward_PrepareEvenout',
+        ])->setAttribute('icon', 'fa fa-balance-scale');
+    }
+    
 }

@@ -56,6 +56,16 @@ class Reward
      */
     private $updatedAt;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $Weight = 0;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     */
+    private $Evenout;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
@@ -172,5 +182,35 @@ class Reward
     public function __toString()
     {
         return '#'.$this->id. ' for '.$this->user;
+    }
+
+    public function getWeight(): ?int
+    {
+        return $this->Weight;
+    }
+
+    public function setWeight(int $Weight): self
+    {
+        $this->Weight = $Weight;
+
+        return $this;
+    }
+    public function addWeight(int $Weight): self
+    {
+        $this->Weight += $Weight;
+
+        return $this;
+    }
+
+    public function getEvenout(): ?string
+    {
+        return $this->Evenout;
+    }
+
+    public function setEvenout(?string $Evenout): self
+    {
+        $this->Evenout = $Evenout;
+
+        return $this;
     }
 }

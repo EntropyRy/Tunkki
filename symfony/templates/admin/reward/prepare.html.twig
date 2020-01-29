@@ -1,0 +1,21 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+<div class="container-fluid">
+    <div class="row">
+    <h2>Old distribution</h2>
+    {% for reward in rewards %}
+    <div>{{ reward.user }} - {{ reward.reward }} </div>
+    {% endfor %}
+    <div>Total in pool: {{ total.pool }}€ with {{ total.sum }} jobs
+    </div>
+    <hr>
+    <h2>New distribution</h2>
+    {% for reward in rewards %}
+    <div>{{ reward.user }} - {{ total.pool }} * {{ reward.weight }} / {{total.sum }} = {{ total.pool * reward.weight / total.sum}}€</div>
+    {% endfor %}
+    <hr> 
+    {{ button|raw }}
+</div>
+{% endblock %}
+

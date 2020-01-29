@@ -64,35 +64,38 @@ class BookingAdminListener
                     $amount = $booking->getActualPrice() * 0.10;
                     if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
                         $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
+                        $gr->addWeight(2);
                     } else {
                         $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
                         $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
+                        $gr->addWeight(1);
+                        $rr->addWeight(1);
                         $this->em->persist($rr);
                     }
                     $this->em->persist($gr);
-                    $this->em->flush();
+                    $this->em->flush();                    
                 }
             }
         }
     }
     private function giveRewardToUser($amount, $booking, $user)
     {
-        if(count($user->getRewards())==0){ // doesnt exists
+        $all = $user->getRewards();
+        foreach($all as $reward){
+            if(!$reward->getPaid()){
+                $r = $reward;
+                break;
+            }
+        }
+        if(!isset($r)){ // doesnt exists
             // create new reward for the user
             $r = new Reward();
             $r->setUser($user);
-        } else {
-            $all = $user->getRewards();
-            foreach($all as $r){
-                if(!$r->getPaid()){
-                    break;
-                }
-            }
         }
         if (!$r->getBookings()->contains($booking)){
             $r->addBooking($booking);
-            $r->addReward($amount);
         }
+        $r->addReward($amount);
         return $r;
     }
 }
