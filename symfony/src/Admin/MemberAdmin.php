@@ -70,7 +70,8 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $editable = false;
-        if (!is_null($this->getSubject()->getApplication())){
+        $object = $this->getSubject();
+        if ($object and !is_null($object->getApplication())){
             $editable = true;
         }
         $formMapper

@@ -31,8 +31,8 @@ final class RewardAdmin extends AbstractAdmin
         $listMapper
             ->add('user')
             ->add('reward')
-            ->add('Evenout')
             ->add('Weight')
+            ->add('Evenout')
             ->add('paid')
             ->add('paidDate')
             ->add('PaymentHandledBy')

@@ -85,6 +85,9 @@ class ItemAdmin extends AbstractAdmin
 //            ->add('creator')
             ->add('_action', null, array(
                 'actions' => array(
+                    'status' => array(
+                        'template' => 'admin/crud/list__action_status.html.twig'
+                    ),                    
                     'clone' => array(
                         'template' => 'admin/crud/list__action_clone.html.twig'
                     ),
