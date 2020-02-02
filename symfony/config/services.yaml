@@ -218,3 +218,10 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Rewards }
         public: true
+
+    entropy.admin.contract:
+        class: App\Admin\ContractAdmin
+        arguments: [~, App\Entity\Contract, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Contract }
+        public: true

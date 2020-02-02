@@ -27,6 +27,8 @@ class RenterHashController extends Controller
         if(is_null($renter)){
             $renter = 0;
         }
+        $contract = $this->em->getRepository('App:Contract')
+            ->findOneBy(['purpose' => 'rent']);
         $bookingdata = $this->em->getRepository('App:Booking')
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){
@@ -46,7 +48,8 @@ class RenterHashController extends Controller
 				}
 			}
             $page = $cms->retrieve()->getCurrentPage();
-            return $this->render('stufflist_for_renter.html.twig', [
+            return $this->render('contract.html.twig', [
+                'contract' => $contract, 
                 'renter' => $renter, 
                 'bookingdata' => $bookingdata[0],
                 'form' => $form->createView(), 

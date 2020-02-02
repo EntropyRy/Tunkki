@@ -15,12 +15,17 @@ class BookingConsentType extends AbstractType
     {
         if ($builder->getData()->getRenterConsent()){
             $class = 'disabled';
+            $disabled = true;
         } else {
             $class = 'btn-large btn-primary btn';
+            $disabled = false;
         }
         $builder
             ->add('renterConsent')
-            ->add('Agree', SubmitType::class, ['attr' => ['class' => $class]])
+            ->add('Agree', SubmitType::class, [
+                'disabled' => $disabled,
+                'attr' => ['class' => $class]
+            ])
         ;
     }
 

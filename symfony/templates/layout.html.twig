@@ -1,11 +1,11 @@
 {% extends 'base_layout.html.twig' %}
 {% block sonata_page_container %}
-    <div class="container">
+    <div class="container-fluid">
         <div class="content">
             <div class="row page-header">
                 {{ sonata_page_render_container('header', 'global') }}
             </div>
-
+            <hr>
             {% if page is defined and page != null %}
                 <div class="row">
                     {% if page.name != 'global'%}

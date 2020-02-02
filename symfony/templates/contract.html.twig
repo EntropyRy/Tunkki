@@ -4,40 +4,41 @@
 {% endblock %}
 {% block list %}
 <div class="col-md-12">
+{{ contract.contentFi|raw }}
 <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
-    <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
+    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
 </h1>
 {% if bookingdata.packages %}
 <h3 style="text-transform: capitalize;">{{ 'packages'|trans }}</h3>
-{% for package in bookingdata.packages %}
-<div class="checkbox">
-    <label><input type="checkbox">{{ package }}:</label>
-</div>
-<ul>
-    {% for item in package.items %}
-    <li class="list-unstyled">
-        {{ block('item') }}
-    </li>
+    {% for package in bookingdata.packages %}
+    <input type="checkbox"><label>{{ package }}:</label>
+    <ul class="list-unstyled">
+        {% for item in package.items %}
+        <li>
+            {{ block('item') }}
+        </li>
+        {% endfor %}
+    </ul>
     {% endfor %}
-</ul>
-{% endfor %}
 {% endif %}
 {% if bookingdata.items %}
 <h3 style="text-transform: capitalize;">{{ 'items'|trans }}</h3>
-{% for item in bookingdata.items %}
-    {{ block('item') }}
-{% endfor %}
+    {% for item in bookingdata.items %}
+        {{ block('item') }}
+    {% endfor %}
 {% endif %}
 {% if bookingdata.accessories %}
-<h3 style="text-transform: capitalize;">{{ 'accessories'|trans }}</h3>
-{% for item in bookingdata.accessories %}
-    <div class="checkbox">
-    <label><input type="checkbox"><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
-    {% if item.name.compensationPrice %}
-        <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
-    {% endif %}
-    </div>
-{% endfor %}
+    <h3 style="text-transform: capitalize;">{{ 'accessories'|trans }}</h3>
+    <ul class="list-unstyled">
+    {% for item in bookingdata.accessories %}
+    <li>
+        <input type="checkbox"><label><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
+            {% if item.name.compensationPrice %}
+                <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
+            {% endif %}
+    </li>
+    {% endfor %}
+    </ul>
 {% endif %}
 {% if renter %}
 <h3 style="text-transform: capitalize;">{{ 'renter'|trans }}</h3>
@@ -56,8 +57,8 @@
 {% endblock %}
 
 {% block item %}
-        <div class="checkbox">
-            <label><input type="checkbox">{{ item }}, Manufacturer: {{ item.Manufacturer }}, Model: {{item.model}}, S/N: {{ item.serialNumber }}</label>
+        <div class="form-check">
+            <input type="checkbox"><label>{{ item }}, Manufacturer: {{ item.Manufacturer }}, Model: {{item.model}}, S/N: {{ item.serialNumber }}</label>
             {% if item.compensationPrice %}
                 <span class="pull-right">{{ item.compensationPrice }} €</span>
             {% endif %}

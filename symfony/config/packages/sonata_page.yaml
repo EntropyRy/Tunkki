@@ -12,7 +12,7 @@ sonata_admin:
 sonata_page:
     is_inline_edition_on:  false
     slugify_service: sonata.core.slugify.cocur
-    multisite: host
+    multisite: host_with_path_by_locale
     use_streamed_response: false
     hide_disabled_blocks: true
     router_auto_register:
@@ -100,12 +100,16 @@ sonata_page:
         fatal:     [500]    # so you can use the same page for different http errors or specify specific page for each error
     assets:
         stylesheets:
-            - 'bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css'
+            #- 'bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css'
             - 'bundles/sonataadmin/vendor/iCheck/skins/square/blue.css'
+            - 'css/bs4/bootstrap.min.css'
             - 'css/front.css'
         javascripts:
-            - 'bundles/sonatacore/vendor/jquery/dist/jquery.min.js'
-            - 'bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js'
+            #- 'bundles/sonatacore/vendor/jquery/dist/jquery.min.js'
+            #- 'bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js'
+            - 'js/bs4/jquery-3.4.1.slim.min.js'
+            - 'js/bs4/bootstrap.min.js'
+            - 'js/bs4/popper.min.js'
             - 'bundles/sonataadmin/vendor/iCheck/icheck.min.js'
             - 'bundles/sonatapage/sonata-page.front.js'
             - 'js/front.js'

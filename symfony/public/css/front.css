@@ -12,4 +12,12 @@
    .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
    .no-print, .no-print * { display: none; }
 }
+body .sonata-page-top-bar {
+    position: fixed;
+    width: auto;
+    top: 40%;
+    opacity: 0.8;
+    z-index: 300;
+    background: #1a1a1a;
+}
 
