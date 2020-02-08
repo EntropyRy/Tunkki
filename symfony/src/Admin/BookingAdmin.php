@@ -55,8 +55,6 @@ class BookingAdmin extends AbstractAdmin
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
         $id = $admin->getRequest()->get('id');
-    
-//        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Booking', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
@@ -65,6 +63,15 @@ class BookingAdmin extends AbstractAdmin
             ]);
             $menu->addChild('Stufflist', [
                 'uri' => $admin->generateUrl('stuffList', ['id' => $id])
+            ]);
+            $object = $admin->getSubject();
+            $menu->addChild('Contract', [
+                'route' => 'entropy_tunkki_booking_hash',
+                'routeParameters' => [
+                     'bookingid'=> $id,
+                     'renterid' => $object->getRenter()->getId(), 
+                     'hash' => $object->getRenterHash()
+                ]
             ]);
         }
     }
@@ -153,7 +160,7 @@ class BookingAdmin extends AbstractAdmin
         $changerewardownner = false;
         if($subject->getPaid()){
             $changerewardownner = true;
-        } 
+        }
         $formMapper
             ->tab('General')
             ->with('Booking', array('class' => 'col-md-6'))
@@ -191,29 +198,45 @@ class BookingAdmin extends AbstractAdmin
             ->with('Who is Renting?', ['class' => 'col-md-6'])
                 ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
                 ->add('rentingPrivileges', null, [
-                    'placeholder' => 'Show everything!',
-                    'expanded' => true
+                    'placeholder' => false,
+                    'expanded' => true,
                 ])
                 ->add('renterHash', null, ['disabled' => true])
             ->end()
             ->end();
-
-        if (!empty($subject->getName())) {
+        if(is_object($subject->getRenter()) && $subject->getRenter()->getId() == 1){
             $formMapper 
-                ->tab('Rentals')
-                ->with('The Stuff');
+            ->tab('General')
+            ->with('Who is Renting?', ['class' => 'col-md-6'])
+                ->add('rentingPrivileges', null, [
+                    'placeholder' => 'Show everything!',
+                    'expanded' => true,
+                ])
+                ->end()
+                ->end()
+               ; 
         }
 
         if (!empty($subject->getName()) && empty($forWho)) {
-            $formMapper 
+            $formMapper
+                ->tab('Rentals')
+                ->with('The Stuff')
                     ->add('packages', PackagesType::class, [
                         'bookings' => $bookings,
                     ])
                     ->add('items', ItemsType::class, [
                         'bookings' => $bookings,
-                    ]);
+                    ])
+                    ->add('accessories', CollectionType::class, 
+                            ['required' => false, 'by_reference' => false],
+                            ['edit' => 'inline', 'inline' => 'table']
+                        )
+                ->end()
+                ->end();
         } elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper 
+                ->tab('Rentals')
+                ->with('The Stuff')
                     ->add('packages', PackagesType::class, [ 
                         'bookings' => $bookings,
                         'choices' => $packageChoices, 
@@ -222,17 +245,17 @@ class BookingAdmin extends AbstractAdmin
                         'bookings' => $bookings,
                         'categories' => $itemCats,
                         'choices' => $itemChoices
-                    ]);
+                    ])
+                    ->add('accessories', CollectionType::class, 
+                            ['required' => false, 'by_reference' => false],
+                            ['edit' => 'inline', 'inline' => 'table']
+                        )
+                ->end()
+                ->end();
         }
 
         if (!empty($subject->getName())){
             $formMapper 
-                ->add('accessories', CollectionType::class, 
-                        ['required' => false, 'by_reference' => false],
-                        ['edit' => 'inline', 'inline' => 'table']
-                    )
-                ->end()
-                ->end()
                 ->tab('Payment')
                 ->with('Payment Information')
                     ->add('referenceNumber', null, ['disabled' => true])

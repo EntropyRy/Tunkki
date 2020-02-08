@@ -16,7 +16,7 @@ if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false
 }
 $kernel = new Kernel($_SERVER['APP_ENV'], (bool) $_SERVER['APP_DEBUG']);
 //$request = Request::createFromGlobals();
-$request = RequestFactory::createFromGlobals('host_with_path_by_locale');
+$request = RequestFactory::createFromGlobals('host_with_path');
 $response = $kernel->handle($request);
 $response->send();
 $kernel->terminate($request, $response);

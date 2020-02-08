@@ -12,7 +12,7 @@ sonata_admin:
 sonata_page:
     is_inline_edition_on:  false
     slugify_service: sonata.core.slugify.cocur
-    multisite: host_with_path_by_locale
+    multisite: host_with_path
     use_streamed_response: false
     hide_disabled_blocks: true
     router_auto_register:

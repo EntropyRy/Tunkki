@@ -14,7 +14,6 @@ services:
             - "9000"
         volumes:
             - ./symfony:/var/www/symfony
-            - ./logs/symfony:/var/www/symfony/var/log
             - /etc/localtime:/etc/localtime:ro
     web:
         build: docker/web
@@ -28,4 +27,3 @@ services:
             - fpm
         volumes:
             - ./symfony/public:/var/www/symfony/public
-            - ./logs/nginx/:/var/log/nginx
