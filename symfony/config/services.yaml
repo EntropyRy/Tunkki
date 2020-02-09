@@ -223,3 +223,10 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Contract }
         public: true
+
+    entropy.admin.event:
+        class: App\Admin\EventAdmin
+        arguments: [~, App\Entity\Event, App\Controller\EventAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Event }
+        public: true

@@ -1,12 +1,13 @@
-{% extends 'layout.html.twig' %}
+{% extends 'onecolumn.html.twig' %}
 {% block title %}
 <title>{{bookingdata.name}} - {{ bookingdata.date }}</title>
 {% endblock %}
-{% block list %}
+{% block content %}
 <div class="col-md-12">
-{{ contract.contentFi|raw }}
+    <input type="button" value="Print" class="no-print btn btn-primary float-right" onClick="window.print()">
+    {% set loc = 'content'~((app.request.locale)|capitalize) %}
+{{attribute(contract, loc)|raw }}
 <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
-    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
 </h1>
 {% if bookingdata.packages %}
 <h3 style="text-transform: capitalize;">{{ 'packages'|trans }}</h3>
@@ -34,7 +35,7 @@
     <li>
         <input type="checkbox"><label><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
             {% if item.name.compensationPrice %}
-                <span class="pull-right">{{ item.name.compensationPrice }} €/pcs</span>
+                <span class="float-right">{{ item.name.compensationPrice }} €/pcs</span>
             {% endif %}
     </li>
     {% endfor %}
@@ -47,6 +48,7 @@
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}
 {{ renter.email }}
 <hr>
+    <input type="button" value="Print" class="no-print btn btn-primary float-right" onClick="window.print()">
 <div class="consent_form">
 {{ form_start(form) }}
 {{ form_widget(form) }}

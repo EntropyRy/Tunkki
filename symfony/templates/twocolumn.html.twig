@@ -1,0 +1,34 @@
+{% extends 'base_layout.html.twig' %}
+{% block sonata_page_container %}
+    <div class="container">
+        <div class="content row">
+            <div class="col-12">
+                {{ sonata_page_render_container('header', 'global') }}
+            </div>
+            <div class="col-12 col-md-8">
+            {% block page_content %}
+                {% if content is defined %}
+                    {{ content|raw }}
+                {% else %}
+                    {% set content = block('content') is defined ? block('content') : '' %}
+                    {% if content|length > 0 %}
+                        {{ content|raw }}
+                    {% elseif page is defined %}
+                        {{ sonata_page_render_container('content', page) }}
+                    {% endif %}
+                {% endif %}
+            {% endblock %}
+            </div>
+            <div class="col-12 col-md-4">
+                {% if page is defined %}
+                {{ sonata_page_render_container('rcontent', 'global') }}
+                {{ sonata_page_render_container('rcontent', page) }}
+                {% endif %}
+            </div>
+        </div>
+
+        <footer class="row">
+            {{ sonata_page_render_container('footer', 'global') }}
+        </footer>
+    </div>
+{% endblock %}

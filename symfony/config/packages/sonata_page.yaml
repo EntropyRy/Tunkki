@@ -14,7 +14,7 @@ sonata_page:
     slugify_service: sonata.core.slugify.cocur
     multisite: host_with_path
     use_streamed_response: false
-    hide_disabled_blocks: true
+    hide_disabled_blocks: false
     router_auto_register:
         enabled: true
         priority: 150
@@ -46,32 +46,68 @@ sonata_page:
 
     default_template: default
     templates:
+        onecolumn:
+            path: 'onecolumn.html.twig'
+            name: One Column
+
+            containers:
+                content:
+                    name: Content
+            matrix:
+                layout: |
+                    CCCCCCCC
+                    CCCCCCCC
+                    CCCCCCCC
+
+                mapping:
+                    C: content
+
         default:
-            path: 'layout.html.twig'
-            name: Default
+            path: 'twocolumn.html.twig'
+            name: Two Column
+
+            containers:
+                content:
+                    name: Content
+                rcontent:
+                    name: Right Content
+            matrix:
+                layout: |
+                    CCCCCSSS
+                    CCCCCSSS
+                    CCCCCSSS
+
+                mapping:
+                    C: content
+                    S: rcontent
+        global:
+            path: 'global.html.twig'
+            name: Global
 
             containers:
                 header:
                     name: Header
                 content:
                     name: Content
+                rcontent:
+                    name: Right Content
                 footer:
                     name: Footer
             matrix:
                 layout: |
                     TTTTTTTT
                     TTTTTTTT
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
+                    CCCCCSSS
+                    CCCCCSSS
+                    CCCCCSSS
                     BBBBBBBB
                     BBBBBBBB
 
                 mapping:
                     T: header
                     C: content
+                    S: rcontent
                     B: footer
-
         fix:
             path: 'fix.html.twig'
             name: 'Fix Page'

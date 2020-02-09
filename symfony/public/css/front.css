@@ -1,3 +1,18 @@
+body {
+    background-image: url(/images/bg_stripe.png);
+    background-position: left top;
+    background-size: auto;
+    background-repeat: repeat;
+    background-attachment: scroll;
+
+}
+.container {
+    margin-top: 40px;
+    margin-bottom: 40px;
+    background: white;
+    border: 2px solid #DDD;
+}
+
 .checkbox div[class^="icheckbox"], .checkbox-inline div[class^="icheckbox"], .radio div[class^="iradio"], .radio-inline div[class^="iradio"] {
     position: relative;
     margin-top: 4px \9;
