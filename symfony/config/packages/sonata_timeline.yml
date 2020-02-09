@@ -19,7 +19,7 @@ spy_timeline:
 sonata_timeline:
     manager_type: orm
     class:
-        #        user:               '%sonata.user.admin.user.entity%'
+        user: App\Entity\User 
         component: App\Application\Sonata\TimelineBundle\Entity\Component
         actionComponent: App\Application\Sonata\TimelineBundle\Entity\ActionComponent
         action: App\Application\Sonata\TimelineBundle\Entity\Action

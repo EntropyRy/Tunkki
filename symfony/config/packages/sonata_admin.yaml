@@ -16,7 +16,7 @@ sonata_admin:
             - { class: col-md-12, position: top, type: entropy_tunkki.block.bookings}
             - { position: right, type: entropy_tunkki.block.brokenitems}
             - { position: left, type: sonata.admin.block.admin_list }
-              #- { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
+            - { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
             #- { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
             #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
             #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}

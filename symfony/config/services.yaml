@@ -161,8 +161,6 @@ services:
         class: App\Block\BrokenItemsBlock
         arguments:
             - "Broken Items Block" 
-            - "@templating"
-            - "@doctrine.orm.entity_manager"
         tags:
             - { name: sonata.block, alias: brokenitemsblock }
         public: true
@@ -171,7 +169,7 @@ services:
         class: App\Admin\WhoCanRentChoiceAdmin
         arguments: [~, App\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: WhoCanRentChoices }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Who Can Rent Choices }
         public: true
 
     entropy_tunkki.admin.accessory:
@@ -184,7 +182,7 @@ services:
         class: App\Admin\AccessoryChoiceAdmin
         arguments: [~, App\Entity\AccessoryChoice, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: AccessoryChoices }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Accessory Choices }
         public: true
 
     entropy_tunkki.admin.email_notification:

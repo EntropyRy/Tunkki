@@ -7,10 +7,10 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Templating\EngineInterface;
 /**
  * Description of BookingBlock
  *
@@ -35,7 +35,7 @@ class BrokenItemsBlock extends BaseBlockService {
         ), $response);
     }
 
-    public function __construct($name,$templating, EntityManager $em)
+    public function __construct($name, EngineInterface $templating, EntityManagerInterface $em)
     {
         $this->em = $em;
         parent::__construct($name,$templating);
