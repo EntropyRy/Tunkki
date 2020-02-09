@@ -86,7 +86,7 @@ sonata_admin:
                 label_catalogue: SonataAdminBundle
                 items:
                       #- sonata.user.admin.user
-                    - entropy_tunkki.admin.event
+                    - entropy_tunkki.admin.statusevent
                     - entropy_tunkki.admin.user
                     - entropy_tunkki.admin.member
                     - sonata.user.admin.group

@@ -82,14 +82,14 @@
 
 {% block brokenitems %}
     {% for item in object.items if item.needsFixing %}
-        <a class="btn btn-sm" style="display: inline-block;" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
+        <a class="btn btn-sm" style="display: inline-block;" href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
             <i class="fa fa-medkit"></i>
             {{ item.name }}
         </a>
     {% endfor %}
     {% for package in object.packages %}
         {% for item in package.itemsNeedingFixing %}
-            <a class="btn btn-sm" href="{{ path('admin_app_item_event_list', {'id':item.id}) }}">
+            <a class="btn btn-sm" href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
                 <i class="fa fa-medkit"></i>
                 {{ item.name }}
             </a>

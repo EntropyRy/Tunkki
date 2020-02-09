@@ -216,7 +216,7 @@ class ItemAdmin extends AbstractAdmin
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Item', array('uri' => $admin->generateUrl('edit', array('id' => $id))));
             $menu->addChild('Status', array(
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.create', array('id' => $id))
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', array('id' => $id))
             ));
             $menu->addChild('Files', array(
                 'uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', array('id' => $id))

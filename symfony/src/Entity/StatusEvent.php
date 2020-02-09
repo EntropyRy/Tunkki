@@ -9,11 +9,11 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * Events
  *
- * @ORM\Table(name="Event")
+ * @ORM\Table(name="StatusEvent")
  * @ORM\Entity(repositoryClass="App\Repository\EventsRepository")
  * @ORM\HasLifecycleCallbacks 
  */
-class Event
+class StatusEvent
 {
     /**
      * @var integer

@@ -15,11 +15,10 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
-class EventAdmin extends AbstractAdmin
+class StatusEventAdmin extends AbstractAdmin
 {
     protected $ts;
     protected $mm;
-//    protected $parentAssociationMapping = ['entropy_tunkki.admin.item'=>'item', 'entropy_tunkki.admin.booking' =>'booking'];
     /**
      * @param DatagridMapper $datagridMapper
      */

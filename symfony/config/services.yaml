@@ -45,7 +45,7 @@ services:
             - [setTemplate, [outer_list_rows_mosaic, admin/item/list_outer_rows_mosaic.html.twig]]
             - [setTemplate, [inner_list_row, admin/item/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
-            - [addChild, ['@entropy_tunkki.admin.event', 'item']]
+            - [addChild, ['@entropy_tunkki.admin.statusevent', 'item']]
             - [addChild, ['@entropy_tunkki.admin.file', 'product']]
         public: true
     entropy_tunkki.helper.mattermost:
@@ -61,16 +61,16 @@ services:
             - '@doctrine.orm.entity_manager'
             - '@router'
 
-    entropy_tunkki.admin.event:
-        class: App\Admin\EventAdmin
+    entropy_tunkki.admin.statusevent:
+        class: App\Admin\StatusEventAdmin
         arguments:
             - ~
-            - App\Entity\Event
+            - App\Entity\StatusEvent
             - ~ 
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Item Events, show_mosaic_button: false  }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Status Events, show_mosaic_button: false  }
         public: true
 
     entropy_tunkki.admin.user:
@@ -124,7 +124,7 @@ services:
         calls:
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
-            - [addChild, ['@entropy_tunkki.admin.event', 'booking']]
+            - [addChild, ['@entropy_tunkki.admin.statusevent', 'booking']]
         public: true
 
     entropy_tunkki.admin.package:

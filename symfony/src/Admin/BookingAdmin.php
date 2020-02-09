@@ -59,7 +59,7 @@ class BookingAdmin extends AbstractAdmin
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Booking', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
             $menu->addChild('Status', [
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.event.create', ['id' => $id])
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', ['id' => $id])
             ]);
             $menu->addChild('Stufflist', [
                 'uri' => $admin->generateUrl('stuffList', ['id' => $id])

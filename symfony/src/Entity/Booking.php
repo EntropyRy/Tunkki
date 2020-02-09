@@ -163,7 +163,7 @@ class Booking
     private $numberOfRentDays = 1;
 
     /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\Event", mappedBy="booking", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="booking", cascade={"all"})
      */
     private $statusEvents;
 
@@ -660,11 +660,11 @@ class Booking
     /**
      * Add statusEvent.
      *
-     * @param \App\Entity\Event $statusEvent
+     * @param \App\Entity\StatusEvent $statusEvent
      *
      * @return Booking
      */
-    public function addStatusEvent(\App\Entity\Event $statusEvent)
+    public function addStatusEvent(\App\Entity\StatusEvent $statusEvent)
     {
         $this->statusEvents[] = $statusEvent;
 
@@ -678,7 +678,7 @@ class Booking
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeStatusEvent(\App\Entity\Event $statusEvent)
+    public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent)
     {
         return $this->statusEvents->removeElement($statusEvent);
     }

@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 use App\Entity\Booking;
-use App\Entity\Event;
+use App\Entity\StatusEvent as Event;
 use App\Entity\Reward;
 use Sonata\AdminBundle\Event\PersistenceEvent;
 use Doctrine\ORM\EntityManagerInterface;

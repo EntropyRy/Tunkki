@@ -142,7 +142,7 @@ class Item
 	private $cannotBeRented = false;
 
     /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\Event", mappedBy="item", cascade={"all"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="item", cascade={"all"}, fetch="EAGER")
      */
     private $fixingHistory;
 
@@ -486,11 +486,11 @@ class Item
     /**
      * Add fixingHistory
      *
-     * @param \App\Entity\Event $fixingHistory
+     * @param \App\Entity\StatusEvent $fixingHistory
      *
      * @return Items
      */
-    public function addFixingHistory(\App\Entity\Event $fixingHistory)
+    public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
         $fixingHistory->setProduct($this);
         $this->fixingHistory[] = $fixingHistory;
@@ -501,9 +501,9 @@ class Item
     /**
      * Remove fixingHistory
      *
-     * @param \App\Entity\Event $fixingHistory
+     * @param \App\Entity\StatusEvent $fixingHistory
      */
-    public function removeFixingHistory(\App\Entity\Event $fixingHistory)
+    public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
         $fixingHistory->setProduct(null);
         $this->fixingHistory->removeElement($fixingHistory);
