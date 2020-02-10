@@ -11,6 +11,7 @@ body {
     margin-bottom: 40px;
     background: white;
     border: 2px solid #DDD;
+    box-shadow: 0 0 20px 0px;
 }
 
 .checkbox div[class^="icheckbox"], .checkbox-inline div[class^="icheckbox"], .radio div[class^="iradio"], .radio-inline div[class^="iradio"] {

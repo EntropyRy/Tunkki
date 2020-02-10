@@ -20,10 +20,9 @@ class EventController extends Controller
         $eventdata = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
         $page = $cms->retrieve()->getCurrentPage();
         return $this->render('event.html.twig', [
-                'eventdata' => $eventdata,
+                'event' => $eventdata,
                 'page' => $page
             ]);
-        throw new NotFoundHttpException();
     }
     public function allAction(Request $request, CmsManagerSelector $cms)
     {
@@ -34,6 +33,5 @@ class EventController extends Controller
                 'eventdata' => $eventdata,
                 'page' => $page
             ]);
-        throw new NotFoundHttpException();
     }
 }

@@ -1,0 +1,18 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block content %}
+    {{ sonata_page_render_container('content', page) }}
+    {% if event is defined %}
+        <div clas="col">
+            {% media event.picture, 'reference' with {'sizes': '(min-width: 20em) 50vw, 100vw'} %}
+            {% if app.request.locale == 'fi' %}
+            <h2>{{ event.nimi }} - {{ event.eventdate|date('d.m.Y') }}</h2>
+            {{ event.Sisallys|raw }}
+            {% endif %}
+            {% if app.request.locale == 'en' %}
+            <h2>{{ event.name }} - {{ event.eventdate|date('d.m.Y') }}</h2>
+            {{ event.Content|raw }}
+            {% endif %}
+        </div>
+    {% endif %}
+{% endblock %}
