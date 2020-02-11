@@ -2,7 +2,7 @@
 
 namespace App\EventListener;
 use App\Entity\Booking;
-use App\Entity\StatusEvent as Event;
+use App\Entity\StatusEvent;
 use App\Entity\Reward;
 use Sonata\AdminBundle\Event\PersistenceEvent;
 use Doctrine\ORM\EntityManagerInterface;
@@ -55,25 +55,27 @@ class BookingAdminListener
     public function updateRewards(PersistenceEvent $args )
     {
         $event = $args->getObject();
-        if ($event instanceof Event) {
-            $booking = $event->getBooking();
-            if($booking->getPaid() && $booking->getActualPrice()>0){ // now it is paid
-                $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
-                if(!$old['paid']){ // earlier it was not paid
-                    // give reward
-                    $amount = $booking->getActualPrice() * 0.10;
-                    if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
-                        $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
-                        $gr->addWeight(2);
-                    } else {
-                        $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
-                        $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
-                        $gr->addWeight(1);
-                        $rr->addWeight(1);
-                        $this->em->persist($rr);
+        if ($event instanceof StatusEvent) {
+            if($event->getBooking() instanceof Booking){
+                $booking = $event->getBooking();
+                if($booking->getPaid() && $booking->getActualPrice()>0){ // now it is paid
+                    $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
+                    if(!$old['paid']){ // earlier it was not paid
+                        // give reward
+                        $amount = $booking->getActualPrice() * 0.10;
+                        if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
+                            $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
+                            $gr->addWeight(2);
+                        } else {
+                            $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
+                            $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
+                            $gr->addWeight(1);
+                            $rr->addWeight(1);
+                            $this->em->persist($rr);
+                        }
+                        $this->em->persist($gr);
+                        $this->em->flush();                    
                     }
-                    $this->em->persist($gr);
-                    $this->em->flush();                    
                 }
             }
         }
