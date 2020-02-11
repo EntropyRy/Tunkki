@@ -72,6 +72,11 @@ class Event
      */
     private $published = false;
 
+    /**
+     * @ORM\Column(type="string", length=180)
+     */
+    private $type;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -215,5 +220,32 @@ class Event
     public function __construct()
     {
         $this->publishDate = new \DateTime();
+        $this->css = "/* If you want to play with CSS these help you. First remove this and last line
+header {
+display: none; 
+}
+footer {
+display: none !important;
+}
+body { 
+background: black;
+}
+.container {
+background: transparent;
+color: red;
+}
+*/";
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
     }
 }

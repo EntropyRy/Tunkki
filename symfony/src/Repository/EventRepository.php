@@ -27,8 +27,10 @@ class EventRepository extends ServiceEntityRepository
     {
         $now = new \DateTime('now-1');
         return $this->createQueryBuilder('e')
-            ->andWhere('e.EventDate > :val')
-            ->setParameter('val', $now)
+            ->andWhere('e.EventDate > :date')
+            ->andWhere('e.type != :type')
+            ->setParameter('date', $now)
+            ->setParameter('type', 'Announcement')
             ->orderBy('e.EventDate', 'ASC')
             ->setMaxResults(10)
             ->getQuery()

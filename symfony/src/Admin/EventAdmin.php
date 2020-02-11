@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 //use Sonata\MediaBundle\Form\Type\MediaType;
 
 final class EventAdmin extends AbstractAdmin
@@ -78,6 +79,7 @@ final class EventAdmin extends AbstractAdmin
     {
         $TypeChoices = [
             'Event' => 'Event',
+            'Kerde Event' => 'Kerde Event',
             'Annoucement' => 'Announcement',
         ];
         $PlaceChoices = [
@@ -97,22 +99,23 @@ final class EventAdmin extends AbstractAdmin
             ->end()
             ->with('Functionality', ['class' => 'col-md-4'])
             ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
-            ->add('published')
+            ->add('published', null, ['help' => 'Only logged in users can see if not published'])
             ->add('publishDate', DateTimePickerType::class, [
                 'help' => 'If this needs to be released at certain time',
                 'required' => false
                 ]
             )
+            ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
             ->add('publishPlaces')
-            ->add('css')
             ->add('url')
             ->end()
-            ->with('Media', ['class' => 'col-md-6'])
+            ->with('Eye Candy', ['class' => 'col-md-6'])
             ->add('picture', ModelListType::class,[],[ 
-                'linkAttributes'=>[
+                'link_parameters'=>[
                 'context' => 'event',
                 'provider' => 'sonata.media.provider.image',
             ]])
+            ->add('css')
             ->end()
             ;
     }

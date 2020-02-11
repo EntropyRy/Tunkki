@@ -6,13 +6,12 @@
     </div>
     <div class="box-body">
         <ul>
-            {% set name = 'name_attribute'|trans %}
+        {% set name = 'name_attribute'|trans %}
         {% for event in events %}
-        <li><a href="{{ path('entropy_event', {'id':event.id}) }}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
+            <li><a href="{{ path('entropy_event', {'id':event.id}) }}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
         {% else %}
-        {{ 'stay_tuned'|trans}}
+            {{ 'stay_tuned'|trans}}
         {% endfor %}
-
         </ul>
     </div>
 </div>        

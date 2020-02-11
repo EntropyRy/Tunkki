@@ -1,4 +1,5 @@
 name_attribute: name
+content_attribute: Content
 packages: packages
 items: items
 accessories: accessories
@@ -17,3 +18,4 @@ active.member.application: Your application for Entropy active member
 stay_tuned: Stay Tuned!
 future_events: Future Events
 event_not_found: Event not found
+released: Julkaistu

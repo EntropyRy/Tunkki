@@ -1,0 +1,28 @@
+{% extends 'twocolumn.html.twig' %}
+{% block content %}
+    {% set name_attr = 'name_attribute'|trans %}
+    {% set content_attr = 'content_attribute'|trans %}
+    {{ sonata_page_render_container('content', page) }}
+    {% for event in events %}
+        {% if app.user %}
+            {% set visible = true %}
+        {% else %}
+        {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+        {% endif %}
+        {% if event is not null and visible %}
+            <div clas="col">
+                    <h2 class="font-italic">{{ attribute(event, name_attr) }}
+                        {% if event.type != 'Announcement' %}
+                            - {{ event.eventdate|date('d.m.Y') }}
+                        {% endif %}
+                    </h2>
+
+                    <small>{{ 'released'|trans }}: {{ event.publishDate|date('d.m.Y') }}</small>
+                    {% if event.picture is not null %}
+                        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+                    {% endif %}
+                    {{ attribute(event,content_attr)|raw }}
+            </div>
+        {% endif %}    
+    {% endfor %}
+{% endblock %}

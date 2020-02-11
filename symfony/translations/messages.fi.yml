@@ -1,4 +1,5 @@
 name_attribute: nimi
+content_attribute: Sisallys
 packages: paketit
 items: tavarat
 accessories: tarvikkeet
@@ -17,3 +18,4 @@ active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
 stay_tuned: Pysy kuulolla!
 future_events: Tulevat Tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
+released: Julkaistu

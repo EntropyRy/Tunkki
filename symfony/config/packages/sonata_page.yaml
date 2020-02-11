@@ -76,6 +76,24 @@ sonata_page:
                 mapping:
                     C: content
                     S: rcontent
+        frontpage:
+            path: 'frontpage.html.twig'
+            name: Front Page
+
+            containers:
+                content:
+                    name: Content
+                rcontent:
+                    name: Right Content
+            matrix:
+                layout: |
+                    CCCCCSSS
+                    CCCCCSSS
+                    CCCCCSSS
+
+                mapping:
+                    C: content
+                    S: rcontent
         global:
             path: 'global.html.twig'
             name: Global

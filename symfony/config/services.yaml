@@ -108,6 +108,15 @@ services:
         tags:
                 - { name: sonata.page, alias: Item}
         public: true
+    entropy.page.eventspage:
+        class: App\PageService\EventsPage
+        arguments:
+                - "Events"
+                - "@sonata.page.template_manager"
+                - "@doctrine.orm.entity_manager"
+        tags:
+                - { name: sonata.page, alias: Item}
+        public: true
 
     entropy_tunkki.admin.booking:
         class: App\Admin\BookingAdmin
