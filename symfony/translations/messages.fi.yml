@@ -1,3 +1,4 @@
+name_attribute: nimi
 packages: paketit
 items: tavarat
 accessories: tarvikkeet
@@ -13,3 +14,6 @@ City of residence: Asuinpaikkakunta
 Student union member: Olen AYY:n jäsen
 Username: Käytäjänimi
 active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
+stay_tuned: Pysy kuulolla!
+future_events: Tulevat Tapahtumat
+event_not_found: Tapahtumaa ei löytynyt

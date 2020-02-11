@@ -164,6 +164,13 @@ services:
         tags:
             - { name: sonata.block, alias: brokenitemsblock }
         public: true
+    entropy.block.future_events:
+        class: App\Block\FutureEventsBlock
+        arguments:
+            - "Future Events Block" 
+        tags:
+            - { name: sonata.block, alias: futureeventsblock }
+        public: true
 
     entropy_tunkki.admin.who_can_rent_choice:
         class: App\Admin\WhoCanRentChoiceAdmin

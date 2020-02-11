@@ -29,6 +29,16 @@ sonata_media:
             formats:
                 small: { width: 500 , quality: 90}
                 big:   { width: 1200 , quality: 100}
+        event: 
+            download:
+                strategy: sonata.media.security.public_strategy
+            providers:
+                - sonata.media.provider.youtube
+                - sonata.media.provider.image
+                - sonata.media.provider.file
+            formats:
+                small: { width: 500 , quality: 90}
+                banner:   { width: 1200 , quality: 100}
 
     cdn:
         server:

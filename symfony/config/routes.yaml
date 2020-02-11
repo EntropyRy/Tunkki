@@ -4,12 +4,12 @@ entropy_tunkki_booking_hash:
     requirements:
         bookingid: '\d+'
         renterid: '\d+'
-entropy_tunkki_event:
+entropy_event:
     path:     /event/{id}/
     controller: App\Controller\EventController:oneAction 
     requirements:
         id: '\d+'
-entropy_tunkki_events:
+entropy_events:
     path:     /events/
     controller: App\Controller\EventController:allAction 
     requirements:

@@ -43,7 +43,7 @@ class Event
     private $publishPlaces;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media" ,cascade={"persist"})
      */
     private $picture;
 
@@ -66,6 +66,11 @@ class Event
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $url;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $published = false;
 
     public function getId(): ?int
     {
@@ -194,5 +199,21 @@ class Event
     public function __toString()
     {
         return $this->getName() ? $this->getName() : 'Happening';
+    }
+
+    public function getPublished(): ?bool
+    {
+        return $this->published;
+    }
+
+    public function setPublished(bool $published): self
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+    public function __construct()
+    {
+        $this->publishDate = new \DateTime();
     }
 }

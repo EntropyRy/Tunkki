@@ -1,7 +1,3 @@
-sonata_block:
-    context_manager: sonata.page.block.context_manager
-    default_contexts: [sonata_page_bundle]
-
 sonata_admin:
     assets:
         extra_javascripts:
@@ -14,7 +10,7 @@ sonata_page:
     slugify_service: sonata.core.slugify.cocur
     multisite: host_with_path
     use_streamed_response: false
-    hide_disabled_blocks: false
+    hide_disabled_blocks: true
     router_auto_register:
         enabled: true
         priority: 150
@@ -91,6 +87,9 @@ sonata_page:
                     name: Content
                 rcontent:
                     name: Right Content
+                    blocks:
+                        - entropy.block.future_events
+                        - sonata.block.service.menu 
                 footer:
                     name: Footer
             matrix:

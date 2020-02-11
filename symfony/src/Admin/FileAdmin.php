@@ -43,7 +43,6 @@ class FileAdmin extends AbstractAdmin
         $listMapper
             ->add('_action', null, array(
                 'actions' => array(
-//                    'show' => array(),
                     'edit' => array(),
                     'delete' => array(),
                 )
@@ -58,14 +57,14 @@ class FileAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('fileinfo')
-            ->add('file', ModelListType::class, array(
+            ->add('file', ModelListType::class, [
                 'required' => false,
                 'btn_delete' => 'unlink',
-                    ), array(
-                    'link_parameters' => array(
-                        'context' => 'item'
-                    )
-            ))
+            ], [
+                'link_parameters' => [
+                    'context' => 'item'
+                ]
+            ])
         ;
         if(!$this->isChild()){
             $formMapper

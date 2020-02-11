@@ -2,9 +2,16 @@
 
 {% block content %}
     {{ sonata_page_render_container('content', page) }}
-    {% if event is defined %}
+    {% if app.user %}
+        {% set visible = true %}
+    {% else %}
+    {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+    {% endif %}
+    {% if event is not null and visible %}
         <div clas="col">
-            {% media event.picture, 'reference' with {'sizes': '(min-width: 20em) 50vw, 100vw'} %}
+            {% if event.picture is not null %}
+            {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+            {% endif %}
             {% if app.request.locale == 'fi' %}
             <h2>{{ event.nimi }} - {{ event.eventdate|date('d.m.Y') }}</h2>
             {{ event.Sisallys|raw }}
@@ -14,5 +21,15 @@
             {{ event.Content|raw }}
             {% endif %}
         </div>
+<style>
+{{ event.css|raw }}
+</style>
+    {% else %}
+        <div clas="col">
+            <br>
+            <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
+            <br>
+        </div>
     {% endif %}
 {% endblock %}
+
