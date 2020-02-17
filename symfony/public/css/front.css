@@ -1,17 +1,40 @@
+@font-face {
+font-family: "SpaceGrotesk";
+src: url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf");
+src: url("/font/space-grotesk/fonts/webfont/SpaceGrotesk-SemiBold.woff") format("woff"),
+url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf") format("opentype"),
+}
+
 body {
     background-image: url(/images/bg_stripe.png);
     background-position: left top;
     background-size: auto;
     background-repeat: repeat;
     background-attachment: scroll;
-
+    font-family: "SpaceGrotesk";
+    color: #102c3a;
 }
-.container {
+.e-container {
     margin-top: 40px;
     margin-bottom: 40px;
     background: white;
     border: 2px solid #DDD;
     box-shadow: 0 0 20px 0px;
+}
+.header {
+    width: 100%;
+    margin-bottom: 2%;
+}
+a {
+    color: #2b7093;
+}
+nav {
+    border-top: 1px solid #afafaf;
+    border-bottom: 1px solid #afafaf;
+    font-weight: 800;
+}
+nav.navbar-light .nav-item a.nav-link  {
+    color: #102c3a;
 }
 footer {
     background: #191919;

@@ -8,6 +8,8 @@
             <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             {% if block('title') is defined %}
                 {{ block('title') }}
+            {% elseif page.title is defined %}
+                <title>Entropy Ry | {{ page.title }}</title>
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}
@@ -53,7 +55,7 @@
                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             {% for site in sites %}
-                                                <li><a href="{{ site.url }}">{{ site.name }}</a></li>
+                                                <li><a href="{{ site.url ? site.url : '/'}}">{{ site.name }}</a></li>
                                             {% endfor %}
                                         </ul>
                                     </li>

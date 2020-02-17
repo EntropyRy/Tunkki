@@ -1,13 +1,14 @@
 sonata_seo:
-#    default:          sonata.seo.page.default
     encoding:         UTF-8
     page:
-        title:            Entropy Project
+        title:            Entropy
+        default:          sonata.seo.page.default
         metas:
             name:
-                keywords:             inventory
-                description:          Inventory and maybe something else
+                keywords:             Entropy,Ry,Electornic,Music,Association,Culture
+                description:          Electronic music and culture association
                 robots:               index, follow
+                viewport:             width=device-width, initial-scale=1
 
             property:
                 # Facebook application settings
@@ -16,8 +17,8 @@ sonata_seo:
 
                 # Open Graph information
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
-                'og:site_name':       Entropy Tunkki
-                'og:description':     Inventory and maybe something else
+                'og:site_name':       Entropy ry
+                'og:description':     Electronic music and culture association
                 #
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8

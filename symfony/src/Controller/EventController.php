@@ -19,18 +19,13 @@ class EventController extends Controller
         $this->em = $this->getDoctrine()->getManager();
         $eventdata = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
         $page = $cms->retrieve()->getCurrentPage();
+        if ($request->getLocale() == 'en'){
+            $page->setTitle($eventdata->getName());
+        } else {
+            $page->setTitle($eventdata->getNimi());
+        }
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
-                'page' => $page
-            ]);
-    }
-    public function allAction(Request $request, CmsManagerSelector $cms)
-    {
-        $this->em = $this->getDoctrine()->getManager();
-        $eventdata = $this->em->getRepository(Event::class)->findAll();
-        $page = $cms->retrieve()->getCurrentPage();
-        return $this->render('events.html.twig', [
-                'eventdata' => $eventdata,
                 'page' => $page
             ]);
     }

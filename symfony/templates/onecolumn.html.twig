@@ -1,9 +1,10 @@
 {% extends 'base_layout.html.twig' %}
 {% block sonata_page_container %}
-    <div class="container">
+    <div class="container e-container">
         <div class="content row">
-            <header class="col-12" id="header">
+            <header class="header">
                 {{ sonata_page_render_container('header', 'global') }}
+                {% include 'menu/menu.html.twig' %}
             </header>
             <div class="col-12">
             {% block page_content %}

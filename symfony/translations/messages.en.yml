@@ -1,3 +1,4 @@
+# Tunkki
 name_attribute: name
 content_attribute: Content
 packages: packages
@@ -7,6 +8,12 @@ renter: renter
 Renter consent: Renter has read and accepeted contractual terms
 Submit: Submit
 Agree: Agree
+
+# Entropy.fi Menu
+frontpage: Frontpage
+join_us: Join us
+
+# Entropy.fi
 Firstname: First name
 Lastname: Last name
 Email: Email

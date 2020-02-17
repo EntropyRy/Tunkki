@@ -10,7 +10,7 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
         {% endif %}
         {% if event is not null and visible %}
-            <div clas="col">
+            <div class="post">
                     <h2 class="font-italic">{{ attribute(event, name_attr) }}
                         {% if event.type != 'Announcement' %}
                             - {{ event.eventdate|date('d.m.Y') }}

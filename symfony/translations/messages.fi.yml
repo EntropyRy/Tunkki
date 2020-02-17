@@ -1,3 +1,4 @@
+# Tunkki
 name_attribute: nimi
 content_attribute: Sisallys
 packages: paketit
@@ -7,6 +8,12 @@ renter: vuokraaja
 Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
 Submit: lähetä
 Agree: hyväksy
+
+# Entropy.fi Menu
+frontpage: Etusivu
+join_us: Liity meihin
+
+# Entropy.fi
 Firstname: Etunimi
 Lastname: Sukunimi
 Email: Sähköposti
