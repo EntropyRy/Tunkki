@@ -16,6 +16,7 @@
 
             {{ sonata_seo_metadatas() }}
             {% block sonata_page_stylesheets %}
+                {{ encore_entry_link_tags('app') }}
                 {% for stylesheet in sonata_page.assets.stylesheets %}
                     <link rel="stylesheet" href="{{ asset(stylesheet) }}" media="all">
                 {% endfor %}
@@ -26,6 +27,7 @@
                 <!--[if lt IE 9]>
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                 <![endif]-->
+                {{ encore_entry_script_tags('app') }}
 
                 {% for js in sonata_page.assets.javascripts %}
                     <script src="{{ asset(js) }}"></script>
