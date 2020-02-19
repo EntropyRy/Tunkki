@@ -18,6 +18,7 @@ class EventController extends Controller
         }
         $this->em = $this->getDoctrine()->getManager();
         $eventdata = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
+
         $page = $cms->retrieve()->getCurrentPage();
         if ($request->getLocale() == 'en'){
             $page->setTitle($eventdata->getName());

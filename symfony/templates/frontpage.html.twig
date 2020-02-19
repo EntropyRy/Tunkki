@@ -11,13 +11,13 @@
         {% endif %}
         {% if event is not null and visible %}
             <div class="post">
-                    <h2 class="font-italic">{{ attribute(event, name_attr) }}
+                    <h2>{{ attribute(event, name_attr) }}
                         {% if event.type != 'Announcement' %}
-                            - {{ event.eventdate|date('d.m.Y') }}
+                            - {{ event.eventdate|date() }}
                         {% endif %}
                     </h2>
 
-                    <small>{{ 'released'|trans }}: {{ event.publishDate|date('d.m.Y') }}</small>
+                    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
                     {% if event.picture is not null %}
                         {% media event.picture, 'banner' with {'class':'img-fluid'} %}
                     {% endif %}

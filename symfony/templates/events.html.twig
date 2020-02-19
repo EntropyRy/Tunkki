@@ -1,18 +1,31 @@
-{% extends 'onecolumn.html.twig' %}
-
+{% extends 'twocolumn.html.twig' %}
 {% block content %}
-    {{ sonata_page_render_container('hero', page) }}
+    {% set newyear = date('Y') %}
+    {% set name_attr = 'name_attribute'|trans %}
     {{ sonata_page_render_container('content', page) }}
-    {% if eventdata is defined %}
-        {% for event in eventdata %}
-            <div clas="col">
-                {% if app.request.locale == 'fi' %}
-                    {{ event.nimi }} - {{ event.eventdate|date('d.m.Y') }}
+    {% for event in events %}
+        {% if app.user %}
+            {% set visible = true %}
+        {% else %}
+            {% set visible = app.user is null and event.published %}
+        {% endif %}
+        {% if event is not null and visible and event.type != 'Announcement'%}
+            {% set year = event.eventdate|date('Y') %}
+            <div class="post">
+                {% if year != newyear %}
+                    <div class="linetext"><span>{{year}}</span></div>
                 {% endif %}
-                {% if app.request.locale == 'en' %}
-                    {{ event.name }}
-                {% endif %}
+                <h5 class="d-flex justify-content-between">
+                    <span>
+                        <a href="{{ path('entropy_event', {'id': event.id})}}">{{ attribute(event, name_attr) }}</a>
+                    </span>
+                    <span class="border-bottom flex-fill"></span>
+                    <span>{{ event.eventdate|format_datetime('d.M.') }}</span>
+                </h5>
             </div>
-        {% endfor %}
-    {% endif %}
+            {% set newyear = event.eventdate|date('Y') %}
+        {% endif %}    
+    {% endfor %}
+    {#{ 'older_from_archive'|trans }#}
 {% endblock %}
+

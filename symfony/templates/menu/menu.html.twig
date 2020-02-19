@@ -1,38 +1,48 @@
+{% apply spaceless %}
+{% set loc = app.request.locale %}
 <nav class="navbar navbar-expand-lg navbar-light">
-<a class="navbar-brand d-lg-none" href="/">
-    <img src="https://entropy.fi/logo/entropy-logo_update.svg" width="35" height="45" class="d-inline-block" alt="Entropy">ntropy</a>
+<a class="navbar-brand d-lg-none" href="/"><img src="/images/header-logo-text.svg" width="auto" height="45" class="d-inline-block" alt="Entropy"></a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-        <li class="nav-item active"><a class="nav-link" href="/">{{'frontpage'|trans}}</a></li>
-        <li class="nav-item"><a class="nav-link" href="https://entropy.fi/liity/">LIITY</a></li>
-        <li class="nav-item"><a class="nav-link" href="https://entropy.fi/tapahtumat/">Events</a></li>
-        <li class="nav-item"><a class="nav-link" href="https://entropy.fi/vuokraus/">VUOKRAUS</a></li>
+        <li class="nav-item">
+            <a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}">{{'frontpage'|trans}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}{{'join_us'|trans}}">{{'join_us'|trans|capitalize}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}{{'events'|trans}}">{{'events'|trans|capitalize}}</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}{{'rentals'|trans}}">{{'rentals'|trans|capitalize}}</a>
+        </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                ARKISTO
+                {{'archive'|trans|capitalize}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="https://entropy.fi/arkisto/artistit/">Artistit</a>
-                <a class="dropdown-item" href="https://entropy.fi/arkisto/tapahtumat/">Tapahtumat</a>
-                <a class="dropdown-item" href="https://entropy.fi/arkisto/audio/">Audio</a>
-                <a class="dropdown-item" href="https://epics.entropy.fi/">Kuvat</a>
-                <a class="dropdown-item" href="https://entropy.fi/arkisto/videot/">Videot</a>
+                <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'archive'|trans}}/{{'artists'|trans}}">{{'artists'|trans|capitalize}}</a>
+                <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'archive'|trans}}/{{'audio'|trans}}">{{'audio'|trans|capitalize}}</a>
+                <a class="dropdown-item" href="https://epics.entropy.fi/">{{'pictures'|trans|capitalize}}</a>
+                <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'archive'|trans}}/{{'videos'|trans}}/">{{'videos'|trans|capitalize}}</a>
             </div>
         </li>
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                MEISTÄ
+                {{'about_us'|trans|capitalize}}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="https://entropy.fi/yhdistys/">Yhdistys</a>
-                <a class="dropdown-item" href="https://entropy.fi/yhdistys/historiaa/">Historiaa</a>
+                <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'association'|trans}}">{{'association'|trans|capitalize}}</a>
+                <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'history'|trans}}">{{'history'|trans|capitalize}}</a>
             </div>
         </li>
-        <li class="nav-item"><a class="nav-link" href="https://entropy.fi/yhteystiedot/">YHTEYSTIEDOT</a></li>
+        <li class="nav-item"><a class="nav-link" href="/{%if app.request.locale == 'fi'%}en/{%endif%}{{'contact'|trans}}">{{'contact'|trans|capitalize}}</a></li>
     </ul>
-    <button class="btn btn-primary">{{"join_us"|trans }}!</button>
+    <!-- <button class="btn btn-primary">{{"join_us"|trans }}!</button> -->
+    <span><a href="/{%if loc == 'fi'%}en/{%endif%}{{ page.name|lower|trans }}">{{'lang'|trans|capitalize}}</a></span>
   </div>
 </nav>
+{% endapply %}

@@ -10,5 +10,5 @@ twig:
     globals:
         tunkki_img: '%env(MM_TUNKKI_IMG)%'
     date:
-        format: d.m.Y, H:i:s
+        format: j.n.Y, H:i
         timezone: Europe/Helsinki

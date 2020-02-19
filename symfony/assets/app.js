@@ -3,4 +3,8 @@ import './css/app.css';
 
 import 'bootstrap';
 
-console.log('Hello Webpack Encore');
+$(document).ready(function() {
+    $('nav').find('a[href="'+window.location.pathname+'"]').parent().addClass('active');
+});
+
+//console.log('Hello Webpack Encore');

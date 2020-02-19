@@ -79,8 +79,8 @@ final class EventAdmin extends AbstractAdmin
     {
         $TypeChoices = [
             'Event' => 'Event',
-            'Kerde Event' => 'Kerde Event',
-            'Annoucement' => 'Announcement',
+            'Clubroom Event' => 'Kerde Event',
+            'Announcement' => 'Announcement',
         ];
         $PlaceChoices = [
             'Wall' => 'Wall',
@@ -98,6 +98,7 @@ final class EventAdmin extends AbstractAdmin
             ->add('Sisallys', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->end()
             ->with('Functionality', ['class' => 'col-md-4'])
+            ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
             ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
             ->add('published', null, ['help' => 'Only logged in users can see if not published'])
             ->add('publishDate', DateTimePickerType::class, [
@@ -105,7 +106,6 @@ final class EventAdmin extends AbstractAdmin
                 'required' => false
                 ]
             )
-            ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
             ->add('publishPlaces')
             ->add('url')
             ->end()

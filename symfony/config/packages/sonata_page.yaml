@@ -93,6 +93,24 @@ sonata_page:
                 mapping:
                     C: content
                     S: rcontent
+        events:
+            path: 'events.html.twig'
+            name: Events Page
+
+            containers:
+                content:
+                    name: Content
+                rcontent:
+                    name: Right Content
+            matrix:
+                layout: |
+                    CCCCCSSS
+                    CCCCCSSS
+                    CCCCCSSS
+
+                mapping:
+                    C: content
+                    S: rcontent
         global:
             path: 'global.html.twig'
             name: Global
@@ -160,7 +178,7 @@ sonata_page:
         javascripts:
             #- 'bundles/sonatacore/vendor/jquery/dist/jquery.min.js'
             #- 'bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js'
-            #- 'js/bs4/jquery-3.4.1.slim.min.js'
+            - 'js/bs4/jquery-3.4.1.slim.min.js'
             #- 'js/bs4/bootstrap.min.js'
             #- 'js/bs4/popper.min.js'
             #- 'bundles/sonataadmin/vendor/iCheck/icheck.min.js'

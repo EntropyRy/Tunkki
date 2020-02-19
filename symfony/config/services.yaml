@@ -29,6 +29,7 @@ services:
 
     Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
     Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
+    Laminas\EventManager\EventManagerInterface: '@session.manager'
 
     entropy_tunkki.admin.item:
         class: App\Admin\ItemAdmin
@@ -115,7 +116,16 @@ services:
                 - "@sonata.page.template_manager"
                 - "@doctrine.orm.entity_manager"
         tags:
-                - { name: sonata.page, alias: Item}
+                - { name: sonata.page, alias: eventspage}
+        public: true
+    entropy.page.alleventspage:
+        class: App\PageService\AllEventsPage
+        arguments:
+                - "All Events"
+                - "@sonata.page.template_manager"
+                - "@doctrine.orm.entity_manager"
+        tags:
+                - { name: sonata.page, alias: alleventspage}
         public: true
 
     entropy_tunkki.admin.booking:

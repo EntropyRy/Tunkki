@@ -197,6 +197,9 @@
     "kriswallsmith/buzz": {
         "version": "v0.16.1"
     },
+    "laminas/laminas-zendframework-bridge": {
+        "version": "1.0.1"
+    },
     "league/oauth2-client": {
         "version": "2.4.1"
     },
@@ -508,6 +511,12 @@
             "src/Kernel.php"
         ]
     },
+    "symfony/http-client": {
+        "version": "v4.4.4"
+    },
+    "symfony/http-client-contracts": {
+        "version": "v2.0.1"
+    },
     "symfony/http-foundation": {
         "version": "v4.4.1"
     },
@@ -732,6 +741,9 @@
     },
     "twig/twig": {
         "version": "v2.12.2"
+    },
+    "webimpress/safe-writer": {
+        "version": "2.0.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"

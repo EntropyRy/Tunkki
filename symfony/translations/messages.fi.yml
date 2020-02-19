@@ -11,7 +11,19 @@ Agree: hyväksy
 
 # Entropy.fi Menu
 frontpage: Etusivu
-join_us: Liity meihin
+join_us: liity 
+events: tapahtumat 
+contact: yhteystiedot
+history: historiaa
+archive: arkisto
+rentals: vuokraus
+about_us: meistä
+lang: English
+artists: artistit
+audio: audio
+videos: videot
+pictures: kuvat
+association: yhdistys
 
 # Entropy.fi
 Firstname: Etunimi
@@ -23,6 +35,7 @@ Student union member: Olen AYY:n jäsen
 Username: Käytäjänimi
 active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
 stay_tuned: Pysy kuulolla!
-future_events: Tulevat Tapahtumat
+future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
 released: Julkaistu
+older_from_archive: Vanhemmat löydät arkistosta

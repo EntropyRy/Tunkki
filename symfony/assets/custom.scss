@@ -3,6 +3,7 @@ $theme-colors: (
   "primary": #2b7093,
   "danger": #ff4136
 );
+$enable-responsive-font-sizes: true;
 
 @import "node_modules/bootstrap/scss/bootstrap";
 
@@ -17,3 +18,19 @@ $theme-colors: (
 //@import "node_modules/bootstrap/scss/images";
 //@import "node_modules/bootstrap/scss/code";
 //@import "node_modules/bootstrap/scss/grid";
+nav .navbar-nav .active > .nav-link{
+    color: $dark;
+}
+
+.linetext{
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 20px auto;
+    span {
+        background: #fff;
+        padding: 0 10px;
+        font-size: 1.4rem;
+    }
+}

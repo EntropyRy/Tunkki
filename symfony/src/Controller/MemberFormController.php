@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpClient\HttpClient;
 
 class MemberFormController extends AbstractController
 {
@@ -31,7 +32,9 @@ class MemberFormController extends AbstractController
                 $em->persist($member);
                 $em->flush();
                 $this->sendEmailToMember('member', $member, $em, $mailer);
+                $code = $this->addToInfoMailingList($member);
                 $state = 'added';
+
             } else {
                 $state = 'update';
             } 
@@ -100,5 +103,16 @@ class MemberFormController extends AbstractController
                'text/html'
             );
         $mailer->send($message);
+    }
+    public function addToInfoMailingList($member)
+    {
+        $client = HttpClient::create();
+        $response = $client->request('POST', 'https://list.ayy.fi/mailman/subscribe/entropy-tiedotus',[
+            'query' => [
+                'email' => $member->getEmail(),
+                'fullname' => $member->getName()
+            ]
+        ]);
+        return $response->getStatusCode();
     }
 }
