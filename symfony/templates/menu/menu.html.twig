@@ -39,7 +39,7 @@
                 <a class="dropdown-item" href="/{%if loc == 'en'%}en/{%endif%}{{'history'|trans}}">{{'history'|trans|capitalize}}</a>
             </div>
         </li>
-        <li class="nav-item"><a class="nav-link" href="/{%if app.request.locale == 'fi'%}en/{%endif%}{{'contact'|trans}}">{{'contact'|trans|capitalize}}</a></li>
+        <li class="nav-item"><a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}{{'contact'|trans}}">{{'contact'|trans|capitalize}}</a></li>
     </ul>
     <!-- <button class="btn btn-primary">{{"join_us"|trans }}!</button> -->
     <span><a href="/{%if loc == 'fi'%}en/{%endif%}{{ page.name|lower|trans }}">{{'lang'|trans|capitalize}}</a></span>

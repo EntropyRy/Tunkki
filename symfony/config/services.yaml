@@ -170,10 +170,15 @@ services:
         class: App\Block\BookingsBlock
         arguments:
             - "Booking Block" 
-            - "@templating"
-            - "@doctrine.orm.entity_manager" 
         tags:
             - { name: sonata.block, alias: bookingblock }
+        public: true
+    entropy_tunkki.block.linklist:
+        class: App\Block\LinkListBlock
+        arguments:
+            - "Link List Block" 
+        tags:
+            - { name: sonata.block, alias: linklistblock }
         public: true
 
     entropy_tunkki.block.brokenitems:

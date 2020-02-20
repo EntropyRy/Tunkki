@@ -1,0 +1,15 @@
+{% extends sonata_block.templates.block_base %}
+{% block block%}
+    {% set visible = false %}
+    {% if settings.show and app.user %}
+        {% set visible = true %}
+    {% endif %}
+    {% if visible %}
+        <h5>{{ settings.title }}</h5>
+        <ul>
+        {% for link in settings.urls %}
+            <li><a target="_blank" href="{{ link.url }}">{{ link.title }}</a>
+        {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

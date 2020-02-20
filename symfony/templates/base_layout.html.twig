@@ -9,7 +9,7 @@
             {% if block('title') is defined %}
                 {{ block('title') }}
             {% elseif page.title is defined %}
-                <title>Entropy Ry | {{ page.title }}</title>
+                <title>{{ page.title }} | Entropy ry</title>
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}

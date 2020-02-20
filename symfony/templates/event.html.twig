@@ -13,11 +13,11 @@
             {% media event.picture, 'banner' with {'class':'img-fluid'} %}
             {% endif %}
             {% if app.request.locale == 'fi' %}
-            <h2>{{ event.nimi }} - {{ event.eventdate|date('d.m.Y') }}</h2>
+            <h2>{{ event.nimi }} - {{ event.eventdate|date() }}</h2>
             {{ event.Sisallys|raw }}
             {% endif %}
             {% if app.request.locale == 'en' %}
-            <h2>{{ event.name }} - {{ event.eventdate|date('d.m.Y') }}</h2>
+            <h2>{{ event.name }} - {{ event.eventdate|date() }}</h2>
             {{ event.Content|raw }}
             {% endif %}
         </div>
