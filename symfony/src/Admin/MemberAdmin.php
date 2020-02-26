@@ -33,10 +33,10 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->add('copiedAsUser')
+            ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('StudentUnionMember')
             ->add('isActiveMember')
             ->add('isFullMember')
-            ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['field_type' => DateRangeType::class])
         ;
     }
