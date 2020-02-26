@@ -73,7 +73,7 @@ final class MemberAdmin extends AbstractAdmin
     {
         $editable = false;
         $object = $this->getSubject();
-        if ($object and !is_null($object->getApplication())){
+        if ($object and !empty($object->getApplication())){
             $editable = true;
         }
         $formMapper
