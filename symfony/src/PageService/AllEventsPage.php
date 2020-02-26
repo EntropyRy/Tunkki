@@ -10,21 +10,12 @@ use Sonata\PageBundle\Page\TemplateManager;
 
 class AllEventsPage implements PageServiceInterface
 {
-    /**
-     * @var TemplateManager
-     */
     private $templateManager;
-
-    /**
-     * @var EntityManager 
-     */
     private $em;
-
     private $name;
 
     public function __construct($name, TemplateManager $templateManager, $em)
     {
-        
         $this->name             = $name;
         $this->templateManager  = $templateManager;
         $this->em               = $em;

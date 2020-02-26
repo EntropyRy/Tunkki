@@ -76,6 +76,7 @@ sonata_admin:
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
                     - entropy.admin.event
+                    - entropy.admin.menu
                 roles: [SONATA_SUPER_ADMIN]
             sonata.admin.group.members:
                 label:           Members

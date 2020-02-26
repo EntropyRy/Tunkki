@@ -11,18 +11,28 @@
         {% endif %}
         {% if event is not null and visible %}
             <div class="post">
+                {% if event.type != 'Announcement' %}
+                <a href="{{ path('entropy_event',{'id': event.id}) }}">
+                    <h2>{{ attribute(event, name_attr) }} - {{ event.eventdate|date() }}</h2>
+                        {% if event.picture is not null %}
+                            {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+                        {% endif %}
+                </a>
+                <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
+                {% else %}
                     <h2>{{ attribute(event, name_attr) }}
                         {% if event.type != 'Announcement' %}
                             - {{ event.eventdate|date() }}
                         {% endif %}
                     </h2>
-
-                    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
                     {% if event.picture is not null %}
                         {% media event.picture, 'banner' with {'class':'img-fluid'} %}
                     {% endif %}
+                    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
                     {{ attribute(event,content_attr)|raw }}
+                {% endif %}
             </div>
+            <hr>
         {% endif %}    
     {% endfor %}
 {% endblock %}

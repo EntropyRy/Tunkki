@@ -175,9 +175,9 @@ class BookingAdmin extends AbstractAdmin
                         'dp_use_seconds' => false,
                         'label' => 'Pickup Time'
                     ])
-                ->add('givenAwayBy', ModelListType::class, [
-                        'btn_add' => false,
-                        'btn_delete' => 'Unassign', 
+                ->add('givenAwayBy',null,[ // ModelListType::class, [
+                        /*'btn_add' => false,
+                        'btn_delete' => 'Unassign', */
                         'required' => false,
                         'disabled' => $changerewardownner
                     ])
@@ -188,10 +188,10 @@ class BookingAdmin extends AbstractAdmin
                         'dp_use_seconds' => false,
                         'label' => 'Return Time'
                     ])
-                ->add('receivedBy', ModelListType::class, [
+                ->add('receivedBy', null, [ //ModelListType::class, [
                         'required' => false, 
-                        'btn_add' => false, 
-                        'btn_delete' => 'Unassign',
+                        /*'btn_add' => false, 
+                        'btn_delete' => 'Unassign', */
                         'disabled' => $changerewardownner
                     ])
             ->end()

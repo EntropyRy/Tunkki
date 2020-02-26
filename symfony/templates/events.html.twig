@@ -19,7 +19,11 @@
                     <span>
                         <a href="{{ path('entropy_event', {'id': event.id})}}">{{ attribute(event, name_attr) }}</a>
                     </span>
-                    <span class="border-bottom flex-fill"></span>
+                    <span class="border-bottom flex-fill">
+                        {% if event.epics %}
+                        <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
+                        {% endif %}
+                    </span>
                     <span>{{ event.eventdate|format_datetime('d.M.') }}</span>
                 </h5>
             </div>

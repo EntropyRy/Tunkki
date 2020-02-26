@@ -29,8 +29,15 @@ services:
 
     Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
     Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
-    Laminas\EventManager\EventManagerInterface: '@session.manager'
 
+    entropy.menu_builder.fi:
+        class: App\Menu\MenuBuilder
+        tags:
+            - { name: knp_menu.menu_builder, method: createMainMenuFi, alias: fi }
+    entropy.menu_builder.en:
+        class: App\Menu\MenuBuilder
+        tags:
+            - { name: knp_menu.menu_builder, method: createMainMenuEn, alias: en }
     entropy_tunkki.admin.item:
         class: App\Admin\ItemAdmin
         arguments:
@@ -118,6 +125,14 @@ services:
         tags:
                 - { name: sonata.page, alias: eventspage}
         public: true
+    entropy.page.member.form:
+        class: App\PageService\MemberFormPage
+        arguments:
+                - "Member Form"
+                - "@sonata.page.template_manager"
+        tags:
+                - { name: sonata.page, alias: eventspage}
+        public: true
     entropy.page.alleventspage:
         class: App\PageService\AllEventsPage
         arguments:
@@ -172,6 +187,13 @@ services:
             - "Booking Block" 
         tags:
             - { name: sonata.block, alias: bookingblock }
+        public: true
+    entropy.block.joinus:
+        class: App\Block\JoinUsBlock
+        arguments:
+            - "Join Us Block" 
+        tags:
+            - { name: sonata.block, alias: joinusblock }
         public: true
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
@@ -261,3 +283,16 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Event }
         public: true
+
+    entropy.admin.menu:
+        class: App\Admin\MenuAdmin
+        arguments: [~, App\Entity\Menu, App\Controller\MenuAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Menu }
+        public: true
+    gedmo.listener.tree:
+        class: Gedmo\Tree\TreeListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [ setAnnotationReader, [ "@annotation_reader" ] ]

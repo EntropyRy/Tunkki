@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * @method Menu|null find($id, $lockMode = null, $lockVersion = null)
@@ -12,13 +13,13 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  * @method Menu[]    findAll()
  * @method Menu[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MenuRepository extends ServiceEntityRepository
+class MenuRepository extends NestedTreeRepository
 {
-    public function __construct(ManagerRegistry $registry)
+/*    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Menu::class);
     }
-
+ */
     // /**
     //  * @return Menu[] Returns an array of Menu objects
     //  */

@@ -116,6 +116,7 @@ final class EventAdmin extends AbstractAdmin
                 'provider' => 'sonata.media.provider.image',
             ]])
             ->add('css')
+            ->add('epics', null, ['help' => 'link to ePics pictures'])
             ->end()
             ;
     }

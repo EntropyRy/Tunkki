@@ -8,11 +8,10 @@ renter: renter
 Renter consent: Renter has read and accepeted contractual terms
 Submit: Submit
 Agree: Agree
+tree_catalog_title: Tree Menu Hierarchy
 
 # Entropy.fi Menu
-frontpage: Frontpage
 join_us: Join us
-tapahtumat: events
 about_us: about us
 lang: suomi
 artists: artists
@@ -33,5 +32,6 @@ future_events: Future Events
 event_not_found: Event cannot be found
 released: Released
 older_from_archive: Older events you can find in the archive
+register_as_member: Register as a new member
 
 

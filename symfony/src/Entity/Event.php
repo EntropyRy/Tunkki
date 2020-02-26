@@ -77,6 +77,11 @@ class Event
      */
     private $type;
 
+    /**
+     * @ORM\Column(type="string", length=180, nullable=true)
+     */
+    private $epics;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -245,6 +250,18 @@ color: red;
     public function setType(string $type): self
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    public function getEpics(): ?string
+    {
+        return $this->epics;
+    }
+
+    public function setEpics(?string $epics): self
+    {
+        $this->epics = $epics;
 
         return $this;
     }

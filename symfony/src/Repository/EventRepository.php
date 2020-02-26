@@ -25,7 +25,7 @@ class EventRepository extends ServiceEntityRepository
     
     public function getFutureEvents()
     {
-        $now = new \DateTime('now-1');
+        $now = new \DateTime('now-8hours');
         return $this->createQueryBuilder('e')
             ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')

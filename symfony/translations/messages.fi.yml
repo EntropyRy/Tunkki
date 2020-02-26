@@ -6,7 +6,8 @@ items: tavarat
 accessories: tarvikkeet
 renter: vuokraaja
 Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
-Submit: lähetä
+Submit: Lähetä
+submit: lähetä
 Agree: hyväksy
 
 # Entropy.fi Menu
@@ -39,6 +40,6 @@ future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
 released: Julkaistu
 older_from_archive: Vanhemmat löydät arkistosta
-
-
+register_as_member: Rekisteröidy jäseneksi
+close: Sulje
 
