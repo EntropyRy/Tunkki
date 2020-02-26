@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
+use Sonata\Form\Type\DateRangeType;
 
 final class MemberAdmin extends AbstractAdmin
 {
@@ -35,7 +36,8 @@ final class MemberAdmin extends AbstractAdmin
             ->add('StudentUnionMember')
             ->add('isActiveMember')
             ->add('isFullMember')
-            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['input_type' => 'timestamp'])
+            ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
+            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['field_type' => DateRangeType::class])
         ;
     }
 
