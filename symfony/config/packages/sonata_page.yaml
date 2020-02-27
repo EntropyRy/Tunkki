@@ -143,9 +143,6 @@ sonata_page:
                     name: Content
                 rcontent:
                     name: Right Content
-                    blocks:
-                        - entropy.block.future_events
-                        - sonata.block.service.menu 
                 footer:
                     name: Footer
             matrix:
