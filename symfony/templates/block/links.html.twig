@@ -1,7 +1,7 @@
 {% extends sonata_block.templates.block_base %}
-{% block block%}
-    {% set visible = false %}
-    {% if settings.show and app.user %}
+{% block block %}
+    {% set visible = settings.show %}
+    {% if not settings.show and app.user %}
         {% set visible = true %}
     {% endif %}
     {% if visible %}
