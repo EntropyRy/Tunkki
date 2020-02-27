@@ -30,6 +30,7 @@
             {% set newyear = event.eventdate|date('Y') %}
         {% endif %}    
     {% endfor %}
+    {{ sonata_page_render_container('oldevents', page) }}
     {#{ 'older_from_archive'|trans }#}
 {% endblock %}
 
