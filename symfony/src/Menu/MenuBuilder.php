@@ -30,7 +30,8 @@ class MenuBuilder
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         foreach ($roots as $m){
             $menu = $this->addItem($menu, $m, $locale);
-            foreach ($m->getChildren() as $item){
+            $m = $this->sortByPosition($m);
+            foreach ($m as $item){
                 if($item->getUrl() == '#'){
                     $dropdown = $menu->addChild(
                         $item->getNimi(),
@@ -58,7 +59,8 @@ class MenuBuilder
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         foreach ($roots as $m){
             $menu = $this->addItem($menu, $m, $locale);
-            foreach ($m->getChildren() as $item){
+            $m = $this->sortByPosition($m);
+            foreach ($m as $item){
                 if($item->getUrl() == '#'){
                     $dropdown = $menu->addChild(
                         $item->getLabel(),
@@ -100,5 +102,15 @@ class MenuBuilder
             }
         }
         return $menu;
+    }
+    private function sortByPosition($m)
+    {
+        $array = $m->getChildren()->toArray();
+        usort($array, 
+            function ($a, $b){ 
+                return $a->getPosition() <=> $b->getPosition();
+            }
+        );
+        return $array;
     }
 }
