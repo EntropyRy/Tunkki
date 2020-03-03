@@ -24,10 +24,11 @@ class EventsPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
-        $events = $this->em->getRepository('App:Event')->findBy(['published' => true]);
+        $events = $this->em->getRepository('App:Event')->findEventsByNotType('announcement');
+        //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
-            array_merge($parameters,array('events'=>$events)), 
+            array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 
             $response
         );
     }

@@ -3,34 +3,42 @@
     {% set newyear = date('Y') %}
     {% set name_attr = 'name_attribute'|trans %}
     {{ sonata_page_render_container('content', page) }}
+    <div class="custom-control custom-switch">
+      <input type="checkbox" class="custom-control-input active" id="clubroomSwitch" checked>
+      <label class="custom-control-label" for="clubroomSwitch">{{'clubroom_events'|trans}}</label>
+    </div>
+    <div id="events">
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}
         {% else %}
             {% set visible = app.user is null and event.published %}
         {% endif %}
-        {% if event is not null and visible and event.type != 'Announcement'%}
-            {% set year = event.eventdate|date('Y') %}
-            <div class="post">
-                {% if year != newyear %}
-                    <div class="linetext"><span>{{year}}</span></div>
-                {% endif %}
-                <h5 class="d-flex justify-content-between">
-                    <span>
-                        <a href="{{ path('entropy_event', {'id': event.id})}}">{{ attribute(event, name_attr) }}</a>
-                    </span>
-                    <span class="border-bottom flex-fill">
-                        {% if event.epics %}
-                        <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
-                        {% endif %}
-                    </span>
-                    <span>{{ event.eventdate|format_datetime('d.M.') }}</span>
-                </h5>
+        {% set year = event.eventdate|date('Y') %}
+        {% if event is not null and visible and event.type != "announcement" %}
+            {% if year != newyear %}
+                <div class="linetext"><span>{{year}}</span></div>
+            {% endif %}
+            <div class="post" data-type="{{event.type}}">
+                {{ block('events') }}
             </div>
-            {% set newyear = event.eventdate|date('Y') %}
-        {% endif %}    
+        {% endif %}
+        {% set newyear = event.eventdate|date('Y') %}
     {% endfor %}
     {{ sonata_page_render_container('oldevents', page) }}
-    {#{ 'older_from_archive'|trans }#}
+    </div>
 {% endblock %}
 
+{% block events %}
+            <h5 class="d-flex justify-content-between">
+                <span>
+                    <a href="{{ path('entropy_event', {'id': event.id})}}">{{ attribute(event, name_attr) }}</a>
+                </span>
+                <span class="border-bottom flex-fill">
+                    {% if event.epics %}
+                    <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
+                    {% endif %}
+                </span>
+                <span>{{ event.eventdate|format_datetime('d.M.') }}</span>
+            </h5>
+{% endblock %}

@@ -79,7 +79,7 @@ final class EventAdmin extends AbstractAdmin
     {
         $TypeChoices = [
             'Event' => 'Event',
-            'Clubroom Event' => 'Kerde Event',
+            'Clubroom Event' => 'Clubroom',
             'Announcement' => 'Announcement',
         ];
         $PlaceChoices = [

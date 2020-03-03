@@ -37,6 +37,26 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    public function findEventsByType($type)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.type = :val')
+            ->setParameter('val', $type)
+            ->orderBy('r.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findEventsByNotType($type)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.type != :val')
+            ->setParameter('val', $type)
+            ->orderBy('r.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     /*
     public function findOneBySomeField($value): ?Event
