@@ -78,7 +78,6 @@ sonata_admin:
                     - entropy.admin.menu
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
-                roles: [SONATA]
             sonata.admin.group.members:
                 label:           Members
                 label_catalogue: SonataAdminBundle
