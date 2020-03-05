@@ -71,13 +71,14 @@ sonata_admin:
             sonata.admin.group.content:
                 label:           Content 
                 label_catalogue: SonataAdminBundle
+                icon:            '<i class="fa fa-sitemap"></i>'
                 items:
                     - sonata.page.admin.page
-                    - sonata.media.admin.media
-                    - sonata.media.admin.gallery
                     - entropy.admin.event
                     - entropy.admin.menu
-                roles: [SONATA_SUPER_ADMIN]
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+                roles: [SONATA]
             sonata.admin.group.members:
                 label:           Members
                 label_catalogue: SonataAdminBundle
