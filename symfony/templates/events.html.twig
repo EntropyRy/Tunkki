@@ -32,7 +32,17 @@
 {% block events %}
             <h5 class="d-flex justify-content-between">
                 <span>
-                    <a href="{{ path('entropy_event', {'id': event.id})}}">{{ attribute(event, name_attr) }}</a>
+                    {% if event.url is null and event.externalUrl %}
+                        {{ attribute(event, name_attr) }}
+                    {% else %}
+                        {% if event.url and not event.externalUrl %}
+                        <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+                        {% else %}
+                        <a href="{{ path('entropy_event',{'id': event.id}) }}">
+                        {% endif %}
+                        {{ attribute(event, name_attr) }}
+                        </a>
+                    {% endif %}
                 </span>
                 <span class="border-bottom flex-fill">
                     {% if event.epics %}
