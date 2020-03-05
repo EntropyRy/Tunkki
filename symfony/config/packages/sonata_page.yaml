@@ -121,8 +121,8 @@ sonata_page:
             containers:
                 content:
                     name: Content
-                oldevents:
-                    name: Old Events
+                afterevents:
+                    name: After Events
                 rcontent:
                     name: Right Content
             matrix:
@@ -136,7 +136,7 @@ sonata_page:
                 mapping:
                     C: content
                     S: rcontent
-                    O: oldevents
+                    O: afterevents
                     
         global:
             path: 'global.html.twig'

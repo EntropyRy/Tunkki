@@ -25,6 +25,10 @@ class AllEventsPage implements PageServiceInterface
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
         $events = $this->em->getRepository('App:Event')->findBy(['published' => true]);
+        $sticky = $this->em->getRepository('App:Event')->findOneBy(['published' => true, 'sticky' => true]);
+        if($sticky){
+            $events = array_merge([$sticky], $events);
+        }
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
             array_merge($parameters,array('events'=>$events)), 

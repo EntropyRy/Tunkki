@@ -8,7 +8,13 @@
         <ul>
         {% set name = 'name_attribute'|trans %}
         {% for event in events %}
-            <li><a href="{{ path('entropy_event', {'id':event.id}) }}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
+            <li>
+            <a href="
+            {% if event.url %}
+            {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+            {% else %}
+            {{ path('entropy_event',{'id': event.id}) }}
+            {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
         {% else %}
             {{ 'stay_tuned'|trans}}
         {% endfor %}

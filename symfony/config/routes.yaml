@@ -6,9 +6,14 @@ entropy_tunkki_booking_hash:
         renterid: '\d+'
 entropy_event:
     path:     /event/{id}/
-    controller: App\Controller\EventController:oneAction 
+    controller: App\Controller\EventController:oneId 
     requirements:
         id: '\d+'
+entropy_event_slug:
+    path:     /{year}/{slug}/
+    controller: App\Controller\EventController:oneSlug
+    requirements:
+        year: '\d+'
 
 _entropy_mattermost_auth:
     path:     /oauth

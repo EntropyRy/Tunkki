@@ -48,24 +48,22 @@ final class EventAdmin extends AbstractAdmin
             ->add('Sisallys')
             ->add('EventDate')
             ->add('publishDate')
-            ->add('publishPlaces')
             ->add('css')
             ->add('url')
+            ->add('sticky')
             ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('Name')
-            ->add('Content')
-            ->add('Nimi')
-            ->add('Sisallys')
             ->add('EventDate')
+            ->add('Name')
+            ->add('type')
             ->add('publishDate')
-            ->add('publishPlaces')
-            ->add('css')
+            ->add('externalUrl')
             ->add('url')
+            ->add('sticky')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -78,47 +76,84 @@ final class EventAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $TypeChoices = [
-            'Event' => 'Event',
-            'Clubroom Event' => 'Clubroom',
-            'Announcement' => 'Announcement',
+            'Event' => 'event',
+            'Clubroom Event' => 'clubroom',
+            'Announcement' => 'announcement',
         ];
         $PlaceChoices = [
-            'Wall' => 'Wall',
-            'Own Page' => 'Own Page'
+            'All' => 'all',
         ];
-
-
-        $formMapper
-            ->with('English', ['class' => 'col-md-6'])
-            ->add('Name')
-            ->add('Content', SimpleFormatterType::class, ['format' => 'richhtml'])
-            ->end()
-            ->with('Finnish', ['class' => 'col-md-6'])
-            ->add('Nimi')
-            ->add('Sisallys', SimpleFormatterType::class, ['format' => 'richhtml'])
-            ->end()
-            ->with('Functionality', ['class' => 'col-md-4'])
-            ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
-            ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
-            ->add('published', null, ['help' => 'Only logged in users can see if not published'])
-            ->add('publishDate', DateTimePickerType::class, [
-                'help' => 'If this needs to be released at certain time',
-                'required' => false
-                ]
-            )
-            ->add('publishPlaces')
-            ->add('url')
-            ->end()
-            ->with('Eye Candy', ['class' => 'col-md-6'])
-            ->add('picture', ModelListType::class,[],[ 
-                'link_parameters'=>[
-                'context' => 'event',
-                'provider' => 'sonata.media.provider.image',
-            ]])
-            ->add('css')
-            ->add('epics', null, ['help' => 'link to ePics pictures'])
-            ->end()
-            ;
+        if ($this->isCurrentRoute('create')) {
+            $formMapper
+                // The thumbnail field will only be added when the edited item is created
+                ->with('English', ['class' => 'col-md-6'])
+                ->add('Name')
+                ->end()
+                ->with('Finnish', ['class' => 'col-md-6'])
+                ->add('Nimi')
+                ->end()
+                ->with('Functionality', ['class' => 'col-md-4'])
+                ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
+                ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
+                ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
+                ->add('published', null, ['help' => 'Only logged in users can see if not published'])
+                ->add('externalUrl', null, ['help'=>'Is the add hosted here?'])
+                ->add('url', null, [
+                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
+                ->end();
+        } else {
+            $event = $this->getSubject();
+            if($event->getType() == 'announcement'){}
+            $formMapper
+                ->with('English', ['class' => 'col-md-6'])
+                ->add('Name');
+            if ($event->getexternalUrl()==false){
+                $formMapper
+                    ->add('Content', SimpleFormatterType::class, ['format' => 'richhtml', 'required' => false]);
+            }
+            $formMapper
+                ->end()
+                ->with('Finnish', ['class' => 'col-md-6'])
+                ->add('Nimi');
+            if ($event->getexternalUrl()==false){
+                $formMapper
+                    ->add('Sisallys', SimpleFormatterType::class, ['format' => 'richhtml', 'required' => false]);
+            }
+            $formMapper
+                ->end()
+                ->with('Functionality', ['class' => 'col-md-4'])
+                ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
+                ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
+                ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
+                ->add('published', null, ['help' => 'Only logged in users can see if not published'])
+                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
+                ->add('publishDate', DateTimePickerType::class, [
+                    'help' => 'If this needs to be released at certain time',
+                    'required' => false
+                    ]
+                )
+                ->add('publishPlaces', ChoiceType::class, ['choices' => $PlaceChoices])
+                ->add('externalUrl', null, ['help'=>'Is the add hosted here?'])
+                ->add('url', null, [
+                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
+                ->end()
+                ->with('Eye Candy', ['class' => 'col-md-6'])
+                ->add('picture', ModelListType::class,[
+                        'required' => false
+                    ],[ 
+                        'link_parameters'=>[
+                        'context' => 'event',
+                        'provider' => 'sonata.media.provider.image',
+                    ]]);
+            if ($event->getexternalUrl()==false){
+                $formMapper
+                    ->add('css');
+            }
+            $formMapper
+                ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->end()
+                ;
+        }
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void

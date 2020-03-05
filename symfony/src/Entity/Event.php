@@ -38,7 +38,7 @@ class Event
     private $publishDate;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $publishPlaces;
 
@@ -53,12 +53,12 @@ class Event
     private $css;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $Content;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $Sisallys;
 
@@ -81,6 +81,21 @@ class Event
      * @ORM\Column(type="string", length=180, nullable=true)
      */
     private $epics;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $externalUrl = false;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $until;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $sticky = false;
 
     public function getId(): ?int
     {
@@ -262,6 +277,42 @@ color: red;
     public function setEpics(?string $epics): self
     {
         $this->epics = $epics;
+
+        return $this;
+    }
+
+    public function getExternalUrl(): ?bool
+    {
+        return $this->externalUrl;
+    }
+
+    public function setExternalUrl(bool $externalUrl): self
+    {
+        $this->externalUrl = $externalUrl;
+
+        return $this;
+    }
+
+    public function getUntil(): ?\DateTimeInterface
+    {
+        return $this->until;
+    }
+
+    public function setUntil(?\DateTimeInterface $until): self
+    {
+        $this->until = $until;
+
+        return $this;
+    }
+
+    public function getSticky(): ?bool
+    {
+        return $this->sticky;
+    }
+
+    public function setSticky(bool $sticky): self
+    {
+        $this->sticky = $sticky;
 
         return $this;
     }

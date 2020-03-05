@@ -6,7 +6,7 @@ import 'bootstrap';
 $(document).ready(function() {
     $('#clubroomSwitch').click(function() {
         $('.post').each(function() {
-            if ($(this).data('type') == 'Clubroom'){
+            if ($(this).data('type') == 'clubroom'){
                 $(this).animate({
                     height: "toggle"
                 });
