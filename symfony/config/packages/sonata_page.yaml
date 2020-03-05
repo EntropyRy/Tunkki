@@ -85,6 +85,8 @@ sonata_page:
             containers:
                 content:
                     name: Content
+                acontent:
+                    name: After Content
                 rcontent:
                     name: Right Content
             matrix:
@@ -92,10 +94,13 @@ sonata_page:
                     CCCCCSSS
                     CCCCCSSS
                     CCCCCSSS
+                    OOOOOSSS
+                    OOOOOSSS
 
                 mapping:
                     C: content
                     S: rcontent
+                    O: acontent
         memberform:
             path: 'member/formpage.html.twig'
             name: Member Form Page
