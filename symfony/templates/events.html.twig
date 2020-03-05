@@ -49,6 +49,14 @@
                     <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
                     {% endif %}
                 </span>
-                <span>{{ event.eventdate|format_datetime('d.M.') }}</span>
+                <span>
+                    {% apply spaceless %}
+                    {% if event.until %}
+                    {{ event.eventdate|format_datetime('d') }}-{{ event.until|format_datetime('d.M.') }}
+                    {% else %}
+                    {{ event.eventdate|format_datetime('d.M.') }}
+                    {% endif %}
+                    {% endapply %}
+                </span>
             </h5>
 {% endblock %}
