@@ -20,6 +20,10 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 final class EventAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'event';
+    protected $datagridValues = [
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'EventDate',
+    ];
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
@@ -58,7 +62,7 @@ final class EventAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('EventDate')
-            ->add('Name')
+            ->addIdentifier('Name')
             ->add('type')
             ->add('publishDate')
             ->add('externalUrl')
@@ -97,6 +101,11 @@ final class EventAdmin extends AbstractAdmin
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
                 ->add('published', null, ['help' => 'Only logged in users can see if not published'])
+                ->add('publishDate', DateTimePickerType::class, [
+                    'help' => 'If this needs to be released at certain time',
+                    'required' => false
+                    ]
+                )
                 ->add('externalUrl', null, ['help'=>'Is the add hosted here?'])
                 ->add('url', null, [
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
