@@ -87,6 +87,10 @@ final class EventAdmin extends AbstractAdmin
         $PlaceChoices = [
             'All' => 'all',
         ];
+        $PicChoices = [
+            'Banner' => 'banner',
+            'Right side of the text' => 'right',
+        ];
         if ($this->isCurrentRoute('create')) {
             $formMapper
                 // The thumbnail field will only be added when the edited item is created
@@ -112,7 +116,7 @@ final class EventAdmin extends AbstractAdmin
                 ->end();
         } else {
             $event = $this->getSubject();
-            if($event->getType() == 'announcement'){}
+            //if($event->getType() == 'announcement'){}
             $formMapper
                 ->with('English', ['class' => 'col-md-6'])
                 ->add('Name');
@@ -153,7 +157,8 @@ final class EventAdmin extends AbstractAdmin
                         'link_parameters'=>[
                         'context' => 'event',
                         'provider' => 'sonata.media.provider.image',
-                    ]]);
+                    ]])
+                ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
             if ($event->getexternalUrl()==false){
                 $formMapper
                     ->add('css');

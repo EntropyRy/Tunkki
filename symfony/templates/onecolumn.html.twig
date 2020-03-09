@@ -6,7 +6,6 @@
                 {{ sonata_page_render_container('header', 'global') }}
                 {% include 'menu/menu.html.twig' %}
             </header>
-            <div class="col-12">
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}
@@ -19,7 +18,6 @@
                     {% endif %}
                 {% endif %}
             {% endblock %}
-            </div>
         </div>
 
         <footer class="row">

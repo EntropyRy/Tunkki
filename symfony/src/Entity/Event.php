@@ -97,6 +97,11 @@ class Event
      */
     private $sticky = false;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $picturePosition = 'banner';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -313,6 +318,18 @@ color: red;
     public function setSticky(bool $sticky): self
     {
         $this->sticky = $sticky;
+
+        return $this;
+    }
+
+    public function getPicturePosition(): ?string
+    {
+        return $this->picturePosition;
+    }
+
+    public function setPicturePosition(string $picturePosition): self
+    {
+        $this->picturePosition = $picturePosition;
 
         return $this;
     }

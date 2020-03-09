@@ -43,7 +43,11 @@
         <li class="nav-item"><a class="nav-link" href="/{%if loc == 'en'%}en/{%endif%}{{'contact'|trans}}">{{'contact'|trans|capitalize}}</a></li>
     </ul>#}
     <!-- <button class="btn btn-primary">{{"join_us"|trans }}!</button> -->
+    {% if event is defined and not event.externalUrl%}
+    <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+    {% else %}
     <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+    {% endif %}
   </div>
 </nav>
 {% endapply %}

@@ -1,17 +1,18 @@
 {% extends 'onecolumn.html.twig' %}
 
 {% block content %}
-    {{ sonata_page_render_container('content', page) }}
+    {#{ sonata_page_render_container('content', page) }#}
+    <div class="{% if event.picturePosition == 'right' %}row p-4{%else%}col{%endif%}">
     {% if app.user %}
         {% set visible = true %}
     {% else %}
     {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-        <div clas="col">
-            {% if event.picture is not null %}
-            {% media event.picture, 'banner' with {'class':'img-fluid'} %}
-            {% endif %}
+        {% if event.picture is not null and event.picturePosition == 'banner' %}
+        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+        {% endif %}
+        <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
             {% if app.request.locale == 'fi' %}
             <h2>{{ event.nimi }} - {{ event.eventdate|date() }}</h2>
             {{ event.Sisallys|raw }}
@@ -21,6 +22,10 @@
             {{ event.Content|raw }}
             {% endif %}
         </div>
+        {% if event.picture is not null and event.picturePosition == 'right' %}
+        <div class="col-4">{% media event.picture, 'banner' with {'class':'img-fluid'} %}</div>
+        {% endif %}
+    </div>
 <style>
 {{ event.css|raw }}
 </style>
