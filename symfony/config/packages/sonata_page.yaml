@@ -108,6 +108,8 @@ sonata_page:
             containers:
                 content:
                     name: Content
+                acontent:
+                    name: After Content
                 rcontent:
                     name: Right Content
             matrix:
@@ -115,10 +117,13 @@ sonata_page:
                     CCCCCSSS
                     CCCCCSSS
                     CCCCCSSS
+                    OOOOOSSS
+                    OOOOOSSS
 
                 mapping:
                     C: content
                     S: rcontent
+                    O: acontent
         events:
             path: 'events.html.twig'
             name: Events Page
@@ -175,20 +180,16 @@ sonata_page:
             path: 'fix.html.twig'
             name: 'Fix Page'
             containers:
-                hero:
-                    name: Hero
                 content:
                     name: Content
             matrix:
                 layout: |
-                    HHHHHHHH
                     CCCCCCCC
                     CCCCCCCC
                     CCCCCCCC
                     CCCCCCCC
 
                 mapping:
-                    H: hero
                     C: content
 
 

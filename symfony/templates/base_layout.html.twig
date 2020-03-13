@@ -89,6 +89,14 @@
                                         </a>
                                     </li>
                                 {% endif %}
+                                {% if event is defined %}
+                                    <li>
+                                        <a href="{{ sonata_admin.url('entropy.admin.event', 'edit', {'id': event.id}) }}">
+                                            <i class="fa fa-magic"></i>
+                                            {{ 'edit_event'|trans}}
+                                        </a>
+                                    </li>
+                                {% endif %}
 
                                 {% if page is defined and not page.enabled %}
                                     <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
