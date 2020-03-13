@@ -11,7 +11,6 @@
         {% endif %}
         {% if event is not null and visible %}
             <div class="post">
-                {% if event.type != 'announcement' %}
                     {% if event.url is null and event.externalUrl %}
                         {{ block('eventhead') }}
                     {% else %}
@@ -24,11 +23,18 @@
                         </a>
                     {% endif %}
                     <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
-                {% else %}
-                    {{ block('eventhead') }}
-                    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
-                    {{ attribute(event,content_attr)|raw }}
-                {% endif %}
+                    {% if event.picture is not null and event.picturePosition == 'right' %}
+                    <div class="row">
+                        <div class="col-8">
+                        {{ attribute(event,content_attr)|raw }}
+                        </div>
+                        <div class="col-4">
+                        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+                        </div>
+                    </div>
+                    {% else %}
+                        {{ attribute(event,content_attr)|raw }}
+                    {% endif %}
             </div>
             <hr>
         {% endif %}    
@@ -39,7 +45,7 @@
 <h2>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
         {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
     </h2>
-    {% if event.picture is not null %}
+    {% if event.picture is not null and event.picturePosition == 'banner' %}
         {% media event.picture, 'banner' with {'class':'img-fluid'} %}
     {% endif %}
 {% endblock %}

@@ -15,8 +15,9 @@
             {% else %}
             {{ path('entropy_event',{'id': event.id}) }}
             {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
+            </li>
         {% else %}
-            {{ 'stay_tuned'|trans}}
+        <li style="list-style-type: none; margin-left: -24px;"><i class="fas fa-bullhorn"></i> {{ 'stay_tuned'|trans}}</li>
         {% endfor %}
         </ul>
     </div>
