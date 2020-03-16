@@ -33,11 +33,13 @@ class EventController extends Controller
             ]));
         }
         $page = $cms->retrieve()->getCurrentPage();
+        
         if ($request->getLocale() == 'en'){
             $page->setTitle($eventdata->getName());
         } else {
             $page->setTitle($eventdata->getNimi());
         }
+       
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
                 'page' => $page
@@ -51,7 +53,13 @@ class EventController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $this->em = $this->getDoctrine()->getManager();
-        $eventdata = $this->em->getRepository(Event::class)->findOneBy(['url' => $slug]);
+        $eventdata = $this->em->getRepository(Event::class)->findBy(['url' => $slug]);
+        foreach ($eventdata as $event){
+            if ($event->geteventDate()->format('Y') == $year){
+                $eventdata = $event;
+                break;
+            }
+        }
         if(!$eventdata){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }

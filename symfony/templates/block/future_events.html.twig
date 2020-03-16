@@ -5,10 +5,10 @@
         <h5 class="box-title">{{'future_events'|trans}}</h5>
     </div>
     <div class="box-body">
-        <ul>
+        <ul class="fa-ul">
         {% set name = 'name_attribute'|trans %}
         {% for event in events %}
-            <li>
+        <li><span class="fa-li"><i class="fas fa-link"></i></span>
             <a href="
             {% if event.url %}
             {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
@@ -17,7 +17,7 @@
             {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
             </li>
         {% else %}
-        <li style="list-style-type: none; margin-left: -24px;"><i class="fas fa-bullhorn"></i> {{ 'stay_tuned'|trans}}</li>
+        <li class="fa-li"><i class="fas fa-bullhorn"></i> {{ 'stay_tuned'|trans}}</li>
         {% endfor %}
         </ul>
     </div>

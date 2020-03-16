@@ -37,7 +37,8 @@ final class EventAdmin extends AbstractAdmin
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
-                     'id'=> $id,
+                    'id'=> $id,
+                    '_locale' => $this->getRequest()->getLocale()
                  ],
                  'linkAttributes' => ['target' => '_blank']
             ]);
@@ -146,7 +147,10 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add('publishPlaces', ChoiceType::class, ['choices' => $PlaceChoices])
-                ->add('externalUrl', null, ['help'=>'Is the add hosted here?'])
+                ->add('externalUrl', null, [
+                    'label' => 'External Url/No add at all if url is empty',
+                    'help'=>'Is the add hosted here?'
+                ])
                 ->add('url', null, [
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
                 ->end()

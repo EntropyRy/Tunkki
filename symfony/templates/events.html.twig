@@ -1,6 +1,11 @@
 {% extends 'twocolumn.html.twig' %}
 {% block content %}
     {% set newyear = date('Y') %}
+    {% if app.request.locale == 'en' %}
+        {% set route = 'entropy_event_en' %}
+    {% else %}
+        {% set route = 'entropy_event' %}
+    {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
     {{ sonata_page_render_container('content', page) }}
     <div class="form-check">
@@ -15,7 +20,7 @@
             {% set visible = app.user is null and event.published %}
         {% endif %}
         {% set year = event.eventdate|date('Y') %}
-        {% if event is not null and visible and event.type != "announcement" %}
+        {% if event is not null and visible %}
             {% if year != newyear %}
                 <div class="linetext"><span>{{year}}</span></div>
             {% endif %}
@@ -32,13 +37,13 @@
 {% block events %}
             <h5 class="d-flex justify-content-between">
                 <span>
-                    {% if event.url is null and event.externalUrl %}
+                    {% if event.url is empty and event.externalUrl %}
                         {{ attribute(event, name_attr) }}
                     {% else %}
                         {% if event.url and not event.externalUrl %}
                         <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
                         {% else %}
-                        <a href="{{ path('entropy_event',{'id': event.id}) }}">
+                        <a href="{{ path(route,{'id': event.id}) }}">
                         {% endif %}
                         {{ attribute(event, name_attr) }}
                         </a>

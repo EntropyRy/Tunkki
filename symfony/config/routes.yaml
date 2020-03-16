@@ -5,6 +5,11 @@ entropy_tunkki_booking_hash:
         bookingid: '\d+'
         renterid: '\d+'
 entropy_event:
+    path:     /tapahtuma/{id}/
+    controller: App\Controller\EventController:oneId 
+    requirements:
+        id: '\d+'
+entropy_event_en:
     path:     /event/{id}/
     controller: App\Controller\EventController:oneId 
     requirements:

@@ -259,6 +259,12 @@ background: black;
 background: transparent;
 color: red;
 }
+img-banner {  
+
+}
+img-right {  
+
+}
 */";
     }
 

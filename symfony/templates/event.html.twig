@@ -10,7 +10,7 @@
     {% endif %}
     {% if event is not null and visible %}
         {% if event.picture is not null and event.picturePosition == 'banner' %}
-        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+        {% media event.picture, 'banner' with {'class':'img-banner img-fluid pb-2'} %}
         {% endif %}
         <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
             {% if app.request.locale == 'fi' %}
@@ -23,7 +23,7 @@
             {% endif %}
         </div>
         {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="col-4">{% media event.picture, 'banner' with {'class':'img-fluid'} %}</div>
+        <div class="col-4">{% media event.picture, 'banner' with {'class':'img-right img-fluid'} %}</div>
         {% endif %}
     </div>
 <style>
