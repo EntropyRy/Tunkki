@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b5096b861e6a7a2da30e701ea8a93ca",
+    "content-hash": "ff5a2a6fb30013a55e0c7b6418f42841",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -5040,16 +5040,16 @@
         },
         {
             "name": "sonata-project/exporter",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/exporter.git",
-                "reference": "018474961b03bce8c24280520f8f8ed7e0a69cb1"
+                "reference": "ed2b6e43982eec5c267b3ff3bc0e3c97ab98b849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/018474961b03bce8c24280520f8f8ed7e0a69cb1",
-                "reference": "018474961b03bce8c24280520f8f8ed7e0a69cb1",
+                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/ed2b6e43982eec5c267b3ff3bc0e3c97ab98b849",
+                "reference": "ed2b6e43982eec5c267b3ff3bc0e3c97ab98b849",
                 "shasum": ""
             },
             "require": {
@@ -5061,13 +5061,13 @@
                 "matthiasnoback/symfony-config-test": "^4.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0",
                 "propel/propel1": "^1.6",
-                "symfony/config": "^3.4 || ^4.0",
-                "symfony/dependency-injection": "^3.4 || ^4.0",
-                "symfony/http-foundation": "^3.4 || ^4.0",
-                "symfony/http-kernel": "^3.4 || ^4.0",
-                "symfony/phpunit-bridge": "^4.3.8",
-                "symfony/property-access": "^3.4 || ^4.0",
-                "symfony/routing": "^3.4 || ^4.0"
+                "symfony/config": "^3.4 || ^4.3 || ^5.0",
+                "symfony/dependency-injection": "^3.4 || ^4.3 || ^5.0",
+                "symfony/http-foundation": "^3.4 || ^4.3 || ^5.0",
+                "symfony/http-kernel": "^3.4 || ^4.3 || ^5.0",
+                "symfony/phpunit-bridge": "^4.3.8 || ^5.0",
+                "symfony/property-access": "^3.4 || ^4.3 || ^5.0",
+                "symfony/routing": "^3.4 || ^4.3 || ^5.0"
             },
             "suggest": {
                 "propel/propel1": "To export propel collections",
@@ -5105,7 +5105,7 @@
                 "export",
                 "xls"
             ],
-            "time": "2020-02-06T19:17:41+00:00"
+            "time": "2020-03-17T17:59:38+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",

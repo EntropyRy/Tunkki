@@ -57,9 +57,9 @@
                 <span>
                     {% apply spaceless %}
                     {% if event.until %}
-                    {{ event.eventdate|format_datetime('d') }}-{{ event.until|format_datetime('d.M.') }}
+                    {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
                     {% else %}
-                    {{ event.eventdate|format_datetime('d.M.') }}
+                    {{ event.eventdate|date('j.n.') }}
                     {% endif %}
                     {% endapply %}
                 </span>
