@@ -57,10 +57,12 @@
                 <span>
                     {% apply spaceless %}
                     {% if event.until %}
-                        {% if event.until|event.until|date('n') != event.eventdate|date('n') %}
+                        {% if event.until|date('n') != event.eventdate|date('n') %}
                             {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                        {% else %}
+                        {% elseif event.until|date('j') != event.eventdate|date('j') %}
                             {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
+                        {% else %}
+                            {{ event.eventdate|date('j.n.') }}
                         {% endif %}
                     {% else %}
                     {{ event.eventdate|date('j.n.') }}
