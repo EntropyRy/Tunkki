@@ -259,10 +259,10 @@ background: black;
 background: transparent;
 color: red;
 }
-img-banner {  
+.img-banner {  
 
 }
-img-right {  
+.img-right {  
 
 }
 */";
