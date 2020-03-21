@@ -159,8 +159,7 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false
                     ],[ 
                         'link_parameters'=>[
-                        'context' => 'event',
-                        'provider' => 'sonata.media.provider.image',
+                        'context' => 'event'
                     ]])
                 ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
             if ($event->getexternalUrl()==false){
