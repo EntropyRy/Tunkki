@@ -39,7 +39,6 @@ class EventController extends Controller
         } else {
             $page->setTitle($eventdata->getNimi());
         }
-       
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
                 'page' => $page

@@ -48,3 +48,6 @@ sonata_media:
         local:
             directory: "%kernel.project_dir%/public/upload/media"
             create: true
+    providers:
+        youtube:
+            html5: false 
