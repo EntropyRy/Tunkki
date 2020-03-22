@@ -123,7 +123,11 @@ final class EventAdmin extends AbstractAdmin
                 ->add('Name');
             if ($event->getexternalUrl()==false){
                 $formMapper
-                    ->add('Content', SimpleFormatterType::class, ['format' => 'richhtml', 'required' => false]);
+                    ->add('Content', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default',
+                    ]);
             }
             $formMapper
                 ->end()
@@ -131,7 +135,11 @@ final class EventAdmin extends AbstractAdmin
                 ->add('Nimi');
             if ($event->getexternalUrl()==false){
                 $formMapper
-                    ->add('Sisallys', SimpleFormatterType::class, ['format' => 'richhtml', 'required' => false]);
+                    ->add('Sisallys', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default' 
+                    ]);
             }
             $formMapper
                 ->end()
