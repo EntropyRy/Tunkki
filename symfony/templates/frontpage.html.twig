@@ -2,7 +2,6 @@
 {% block content %}
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
-    {{ sonata_page_render_container('content', page) }}
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}

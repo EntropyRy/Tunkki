@@ -7,7 +7,6 @@
         {% set route = 'entropy_event' %}
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
-    {{ sonata_page_render_container('content', page) }}
     <div class="form-check">
       <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked>
       <label class="form-check-label" for="clubroomSwitch"> {{'include_clubroom_events'|trans}}</label>

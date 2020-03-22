@@ -1,8 +1,6 @@
 {% extends 'twocolumn.html.twig' %}
 
 {% block content %}
-    {{ sonata_page_render_container('hero', page) }}
-    {{ sonata_page_render_container('content', page) }}
     {% if fix is defined %}
         {% for item in fix %}
             <div>

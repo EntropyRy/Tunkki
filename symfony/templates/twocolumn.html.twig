@@ -11,6 +11,9 @@
                 {% if content is defined %}
                     {{ content|raw }}
                 {% else %}
+                    {% if page is defined %}
+                        {{ sonata_page_render_container('content', page) }}
+                    {% endif %}
                     {% set content = block('content') is defined ? block('content') : '' %}
                     {% if content|length > 0 %}
                         {{ content|raw }}

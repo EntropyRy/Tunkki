@@ -60,9 +60,9 @@
 
 {% block item %}
         <div class="form-check">
-            <input type="checkbox"><label>{{ item }}, Manufacturer: {{ item.Manufacturer }}, Model: {{item.model}}, S/N: {{ item.serialNumber }}</label>
+            <input type="checkbox"><label>{{ item }}, Manufacturer: {{ item.Manufacturer }}, Model: {{item.model}}{% if item.serialNumber %}, S/N: {{ item.serialNumber }}{%endif%}</label>
             {% if item.compensationPrice %}
-                <span class="pull-right">{{ item.compensationPrice }} €</span>
+                <span class="float-right">{{ item.compensationPrice }} €</span>
             {% endif %}
             {% for file in item.files %} 
             <span class="no-print">- {{ file.downloadLink|raw }}</span> 

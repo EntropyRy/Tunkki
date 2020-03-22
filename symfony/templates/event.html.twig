@@ -1,7 +1,6 @@
 {% extends 'onecolumn.html.twig' %}
 
 {% block content %}
-    {#{ sonata_page_render_container('content', page) }#}
     <div class="{% if event.picturePosition == 'right' %}row p-4{%else%}col{%endif%}">
     {% if app.user %}
         {% set visible = true %}
