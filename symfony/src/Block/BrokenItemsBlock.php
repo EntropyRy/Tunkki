@@ -8,21 +8,16 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Templating\EngineInterface;
-/**
- * Description of BookingBlock
- *
- * @author H
- */
+
 class BrokenItemsBlock extends BaseBlockService {
 
     protected $em;
 
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) 
+    public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block) 
     {
-        $formMapper;
     }
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)

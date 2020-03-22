@@ -11,3 +11,4 @@ sonata_translation:
     locales: ['fi','en']
     default_locale: fi
     locale_switcher: true
+    locale_switcher_show_country_flags: false

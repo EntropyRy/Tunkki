@@ -5,11 +5,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractAdminBlockService as BaseBlockService;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Event;
 use Doctrine\ORM\EntityManagerInterface;
@@ -43,8 +43,14 @@ class FutureEventsBlock extends BaseBlockService {
     public function getBlockMetadata($code = null)
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
-            'class' => 'fa fa-picture-o',
+            'class' => 'fa fa-bullhorn',
         ]);
+    }
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    {
+    }
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
     }
 }
 

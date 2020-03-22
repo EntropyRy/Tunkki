@@ -5,11 +5,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractAdminBlockService as BaseBlockService;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -18,9 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use App\Form\UrlsType;
-/**
- * @author H
- */
+
 class LinkListBlock extends BaseBlockService {
 
     protected $em;
@@ -31,7 +29,7 @@ class LinkListBlock extends BaseBlockService {
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
-	public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
 		$formMapper
 			->add('settings', ImmutableArrayType::class, [
 				'keys' => [
@@ -74,8 +72,12 @@ class LinkListBlock extends BaseBlockService {
     public function getBlockMetadata($code = null)
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
-            'class' => 'fa fa-url',
+            'class' => 'fa fa-link',
         ]);
     }
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    {
+    }
+
 }
 

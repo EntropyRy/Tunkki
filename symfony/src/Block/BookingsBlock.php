@@ -9,23 +9,14 @@ use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Validator\ErrorElement;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
-/**
- * Description of BookingBlock
- *
- * @author H
- */
+
 class BookingsBlock extends BaseBlockService {
 
     protected $em;
-
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) 
-    {
-        $formMapper;
-    }
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
@@ -54,5 +45,18 @@ class BookingsBlock extends BaseBlockService {
             'template' => 'block/bookings.html.twig',
         ));
     }
+    public function getBlockMetadata($code = null)
+    {
+        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+            'class' => 'fa fa-book',
+        ]);
+    }
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
+    }
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    {
+    }
+
 }
 
