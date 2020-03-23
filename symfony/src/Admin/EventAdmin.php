@@ -145,6 +145,7 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Functionality', ['class' => 'col-md-4'])
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
+                ->add('cancelled', null, ['help' => 'Event has been cancelled'])
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
                 ->add('published', null, ['help' => 'Only logged in users can see if not published'])

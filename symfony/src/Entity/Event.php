@@ -102,6 +102,11 @@ class Event
      */
     private $picturePosition = 'banner';
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $cancelled = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -336,6 +341,18 @@ color: red;
     public function setPicturePosition(string $picturePosition): self
     {
         $this->picturePosition = $picturePosition;
+
+        return $this;
+    }
+
+    public function getCancelled(): ?bool
+    {
+        return $this->cancelled;
+    }
+
+    public function setCancelled(bool $cancelled): self
+    {
+        $this->cancelled = $cancelled;
 
         return $this;
     }

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ff5a2a6fb30013a55e0c7b6418f42841",
+    "content-hash": "b41af5197dbc0df800c315663b0ab412",
     "packages": [
         {
             "name": "behat/transliterator",
