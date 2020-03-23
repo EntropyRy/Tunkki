@@ -23,7 +23,7 @@
             {% if year != newyear %}
                 <div class="linetext"><span>{{year}}</span></div>
             {% endif %}
-            <div class="post" data-type="{{event.type}}">
+            <div class="post" data-type="{{event.type}}" data-cancelled="{{event.cancelled}}">
                 {{ block('events') }}
             </div>
         {% endif %}
@@ -35,7 +35,7 @@
 
 {% block events %}
             <h5 class="d-flex justify-content-between">
-                <span>
+                <span {% if event.cancelled%}style="text-decoration: line-through;"{% endif %}>
                     {% if event.url is empty and event.externalUrl %}
                         {{ attribute(event, name_attr) }}
                     {% else %}

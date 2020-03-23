@@ -81,7 +81,7 @@
                                     </ul>
                                 </li>
 
-                                {% if page is defined %}
+                                {% if page is defined and event is not defined %}
                                     <li>
                                         <a href="{{ sonata_admin.url('sonata.page.admin.page', 'compose', {'id': page.id}) }}">
                                             <i class="fa fa-magic"></i>
