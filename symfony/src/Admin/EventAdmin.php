@@ -91,6 +91,7 @@ final class EventAdmin extends AbstractAdmin
         $PicChoices = [
             'Banner' => 'banner',
             'Right side of the text' => 'right',
+            'After the post' => 'after',
         ];
         if ($this->isCurrentRoute('create')) {
             $formMapper

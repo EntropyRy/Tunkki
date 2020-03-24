@@ -29,6 +29,11 @@
         {% if event.picture is not null and event.picturePosition == 'right' %}
         <div class="col-4">{% media event.picture, 'banner' with {'class':'img-right img-fluid'} %}</div>
         {% endif %}
+        {% if event.picture is not null and event.picturePosition == 'after' %}
+            <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
+            {% media event.picture, 'banner' with {'class':'img-after img-fluid'} %}
+            </div>
+        {% endif %}
     </div>
 <style>
 .video-fluid{

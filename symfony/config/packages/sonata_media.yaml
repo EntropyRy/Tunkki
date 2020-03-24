@@ -35,7 +35,6 @@ sonata_media:
             providers:
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
-                - sonata.media.provider.file
             formats:
                 small: { width: 500 , quality: 90}
                 banner:   { width: 1200 , quality: 100}
