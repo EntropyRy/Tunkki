@@ -38,7 +38,6 @@ final class EventAdmin extends AbstractAdmin
                 'route' => 'entropy_event',
                 'routeParameters' => [
                     'id'=> $id,
-                    '_locale' => $this->getRequest()->getLocale()
                  ],
                  'linkAttributes' => ['target' => '_blank']
             ]);

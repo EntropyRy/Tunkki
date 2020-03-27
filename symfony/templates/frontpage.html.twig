@@ -45,6 +45,8 @@
         {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
     </h2>
     {% if event.picture is not null and event.picturePosition == 'banner' %}
+    <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
         {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+    </div>
     {% endif %}
 {% endblock %}

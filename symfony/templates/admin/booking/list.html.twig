@@ -81,7 +81,7 @@
 {% endblock %}
 
 {% block brokenitems %}
-    {% for item in object.items if item.needsFixing %}
+    {% for item in object.items|filter(item=>item.needsFixing=='true') %}
         <a class="btn btn-sm" style="display: inline-block;" href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
             <i class="fa fa-medkit"></i>
             {{ item.name }}

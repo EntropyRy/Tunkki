@@ -184,7 +184,7 @@ services:
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
         arguments:
-            - "Booking Block" 
+            - "@twig" 
         tags:
             - { name: sonata.block, alias: bookingblock }
         public: true
