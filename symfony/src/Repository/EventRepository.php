@@ -37,6 +37,38 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    public function findOneEventByTypeWithSticky($type)
+    {
+        $e = $this->findOneStickyEventByType($type);
+        if (is_null($e)){
+            $e = $this->findOneEventByType($type);
+        }
+        return $e;
+    }
+    public function findOneEventByType($type)
+    {
+        return $this->createQueryBuilder('c')
+           ->andWhere('c.type = :val')
+           ->setParameter('val', $type)
+           ->orderBy('c.EventDate', 'DESC')
+           ->setMaxResults(1)
+           ->getQuery()
+           ->getOneOrNullResult()
+           ;
+    }
+    public function findOneStickyEventByType($type)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.type = :val')
+            ->andWhere('r.sticky = :sticky')
+            ->setParameter('val', $type)
+            ->setParameter('sticky', 1)
+            ->orderBy('r.EventDate', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult()
+            ;
+    }
     public function findEventsByType($type)
     {
         return $this->createQueryBuilder('r')
@@ -58,15 +90,4 @@ class EventRepository extends ServiceEntityRepository
         ;
     }
 
-    /*
-    public function findOneBySomeField($value): ?Event
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

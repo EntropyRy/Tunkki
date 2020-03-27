@@ -45,11 +45,17 @@ final class EventAdmin extends AbstractAdmin
     }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
+        $TypeChoices = [
+            'Event' => 'event',
+            'Clubroom Event' => 'clubroom',
+            'Announcement' => 'announcement',
+        ];
         $datagridMapper
             ->add('Name')
             ->add('Content')
             ->add('Nimi')
             ->add('Sisallys')
+            ->add('type',null,[],ChoiceType::class, ['choices' => $TypeChoices])
             ->add('EventDate')
             ->add('publishDate')
             ->add('css')
