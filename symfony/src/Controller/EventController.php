@@ -23,6 +23,9 @@ class EventController extends Controller
         if(!$eventdata){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
+        if(empty($eventdata->getUrl()) && $eventdata->getexternalUrl()){
+                return new RedirectResponse("/");
+        }
         if($eventdata->getUrl()){
             if($eventdata->getexternalUrl()){
                 return new RedirectResponse($eventdata->getUrl());
