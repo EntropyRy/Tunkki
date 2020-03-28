@@ -30,7 +30,7 @@ class LinkListBlock extends BaseBlockService {
         ], $response);
     }
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
-        $this->buildCreateForm(FormMapper $formMapper, BlockInterface $block);
+        $this->buildCreateForm($formMapper, $block);
     }
 	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
 		$formMapper
