@@ -53,6 +53,7 @@
 
 {% block eventhead %}
 <h2>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
+    {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
         {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
     </h2>
     {% if event.picture is not null and event.picturePosition == 'banner' %}
