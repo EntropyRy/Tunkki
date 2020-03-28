@@ -29,6 +29,9 @@ class LinkListBlock extends BaseBlockService {
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+        $this->buildCreateForm(FormMapper $formMapper, BlockInterface $block);
+    }
 	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
 		$formMapper
 			->add('settings', ImmutableArrayType::class, [
