@@ -52,5 +52,8 @@ class FutureEventsBlock extends BaseBlockService {
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
+    }
 }
 
