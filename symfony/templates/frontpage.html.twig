@@ -9,7 +9,17 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
         {% endif %}
         {% if event is not null and visible %}
-            <div class="post">
+        <div class="row">
+            <div class="col-1">
+                <h2>
+                {% if event.type == 'announcement' %}
+                    <i class="fas fa-bullhorn"></i>
+                {% else %}
+                    <i class="fas fa-calendar"></i>
+                {% endif %}
+                </h2>
+            </div>
+            <div class="post col-11">
                     {% if event.url is null and event.externalUrl %}
                         {{ block('eventhead') }}
                     {% else %}
@@ -34,8 +44,9 @@
                     {% else %}
                         {{ attribute(event,content_attr)|raw }}
                     {% endif %}
-            </div>
             <hr>
+            </div>
+        </div>
         {% endif %}    
     {% endfor %}
 {% endblock %}

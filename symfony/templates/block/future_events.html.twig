@@ -17,7 +17,7 @@
             {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
             </li>
         {% else %}
-        <li><span class="fa-li"><i class="fas fa-bullhorn"></i></span> {{ 'stay_tuned'|trans}}</li>
+        <li><span class="fa-li"><i class="fas fa-exclamation"></i></span> {{ 'stay_tuned'|trans}}</li>
         {% endfor %}
         </ul>
     </div>

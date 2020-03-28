@@ -24,11 +24,14 @@ class FrontPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
-        // $sticky = $this->em->getRepository('App:Event')->findOneStickyEvent();
         $announcement = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('announcement');
         $event = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('event');
         $clubroom = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('clubroom');
-        $events = array_merge([$announcement], [$event], [$clubroom]);
+        if ($announcement->getEventDate() > $event->getEventDate()){
+            $events = array_merge([$announcement], [$event], [$clubroom]);
+        } else {
+            $events = array_merge([$event], [$clubroom], [$announcement]);
+        }
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
             array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 

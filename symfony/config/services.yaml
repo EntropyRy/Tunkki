@@ -145,7 +145,7 @@ services:
     entropy.page.frontpage:
         class: App\PageService\FrontPage
         arguments:
-                - "Front"
+                - "Front Page"
                 - "@sonata.page.template_manager"
                 - "@doctrine.orm.entity_manager"
         tags:
