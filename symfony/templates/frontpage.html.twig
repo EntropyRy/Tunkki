@@ -15,7 +15,11 @@
                 {% if event.type == 'announcement' %}
                     <i class="fas fa-bullhorn"></i>
                 {% else %}
-                    <i class="fas fa-calendar"></i>
+                    {% if event.cancelled %}
+                    <i class="far fa-calendar-times"></i>
+                    {% else %}
+                    <i class="far fa-calendar"></i>
+                    {% endif %}
                 {% endif %}
                 </h2>
             </div>
