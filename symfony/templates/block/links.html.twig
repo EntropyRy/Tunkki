@@ -1,10 +1,10 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-    {% set visible = settings.show %}
-    {% if not settings.show and app.user %}
-        {% set visible = true %}
+    {% set hidden = settings.show %}
+    {% if app.user %}
+        {% set hidden = false %}
     {% endif %}
-    {% if visible %}
+    {% if not hidden %}
         <h5>{{ settings.title }}</h5>
         <ul class="fa-ul">
         {% for link in settings.urls %}
