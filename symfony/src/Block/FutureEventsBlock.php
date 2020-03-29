@@ -7,15 +7,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Event;
 use Doctrine\ORM\EntityManagerInterface;
-/**
- * @author H
- */
 class FutureEventsBlock extends BaseBlockService {
 
     protected $em;
@@ -29,10 +25,10 @@ class FutureEventsBlock extends BaseBlockService {
         ), $response);
     }
 
-    public function __construct($name, EngineInterface $templating, EntityManagerInterface $em)
+    public function __construct($twig, EntityManagerInterface $em)
     {
         $this->em = $em;
-        parent::__construct($name, $templating);
+        parent::__construct($twig);
     }
 
     public function configureSettings(OptionsResolver $resolver) {
@@ -54,6 +50,10 @@ class FutureEventsBlock extends BaseBlockService {
     }
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
+    }
+    public function getName()
+    {
+        return 'Future Events Block';
     }
 }
 

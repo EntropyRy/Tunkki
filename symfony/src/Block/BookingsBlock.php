@@ -7,7 +7,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
@@ -33,10 +32,10 @@ class BookingsBlock extends BaseBlockService {
         ), $response);
     }
 
-    public function __construct($name,EngineInterface $templating, EntityManagerInterface $em)
+    public function __construct($name, EntityManagerInterface $em)
     {
         $this->em = $em;
-        parent::__construct($name,$templating);
+        parent::__construct($name);
     }
 
     public function configureSettings(OptionsResolver $resolver) {
@@ -51,7 +50,14 @@ class BookingsBlock extends BaseBlockService {
             'class' => 'fa fa-book',
         ]);
     }
+    public function getName()
+    {
+        return 'Bookings Block';
+    }
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
+    }
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)

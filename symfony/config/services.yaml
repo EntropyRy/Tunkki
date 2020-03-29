@@ -200,14 +200,14 @@ services:
     entropy.block.joinus:
         class: App\Block\JoinUsBlock
         arguments:
-            - "Join Us Block" 
+            - "@twig" 
         tags:
             - { name: sonata.block, alias: joinusblock }
         public: true
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
         arguments:
-            - "Link List Block" 
+            - "@twig" 
         tags:
             - { name: sonata.block, alias: linklistblock }
         public: true
@@ -215,14 +215,14 @@ services:
     entropy_tunkki.block.brokenitems:
         class: App\Block\BrokenItemsBlock
         arguments:
-            - "Broken Items Block" 
+            - "@twig" 
         tags:
             - { name: sonata.block, alias: brokenitemsblock }
         public: true
     entropy.block.future_events:
         class: App\Block\FutureEventsBlock
         arguments:
-            - "Future Events Block" 
+            - "@twig" 
         tags:
             - { name: sonata.block, alias: futureeventsblock }
         public: true

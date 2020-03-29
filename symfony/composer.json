@@ -11,7 +11,7 @@
         "doctrine/doctrine-bundle": "^2.0",
         "friendsofsymfony/user-bundle": "^2",
         "hashids/hashids": "^3.0",
-        "knpuniversity/oauth2-client-bundle": "^1.12",
+        "knpuniversity/oauth2-client-bundle": "^2",
         "sensio/framework-extra-bundle": "^5.0",
         "simplethings/entity-audit-bundle": "^1.0",
         "sonata-project/admin-bundle": "^3.0",

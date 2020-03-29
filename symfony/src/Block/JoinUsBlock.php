@@ -18,6 +18,13 @@ class JoinUsBlock extends BaseBlockService {
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) 
     {
     }
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) 
+    {
+    }
+    public function getName() 
+    {
+        return 'Join Us Block';
+    }
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
@@ -25,12 +32,6 @@ class JoinUsBlock extends BaseBlockService {
             'block'     => $blockContext->getBlock(),
         ), $response);
     }
-
-    public function __construct($name,EngineInterface $templating)
-    {
-        parent::__construct($name,$templating);
-    }
-
     public function configureSettings(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'position' => '1',

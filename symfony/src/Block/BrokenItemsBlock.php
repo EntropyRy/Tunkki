@@ -10,7 +10,6 @@ use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Templating\EngineInterface;
 
 class BrokenItemsBlock extends BaseBlockService {
 
@@ -18,6 +17,13 @@ class BrokenItemsBlock extends BaseBlockService {
 
     public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block) 
     {
+    }
+    public function buildiEditForm(FormMapper $formMapper, BlockInterface $block) 
+    {
+    }
+    public function getName() 
+    {
+        return 'Broken Items Block';
     }
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
@@ -30,10 +36,10 @@ class BrokenItemsBlock extends BaseBlockService {
         ), $response);
     }
 
-    public function __construct($name, EngineInterface $templating, EntityManagerInterface $em)
+    public function __construct($twig, EntityManagerInterface $em)
     {
         $this->em = $em;
-        parent::__construct($name,$templating);
+        parent::__construct($twig);
     }
 
     public function configureSettings(OptionsResolver $resolver) {
