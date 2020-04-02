@@ -2,36 +2,34 @@
 
 {% block content %}
     <div class="{% if event.picturePosition == 'right' %}row p-4{%else%}col{%endif%}">
+    {% if app.request.locale == 'fi' %}
+        {% set name = 'nimi' %}
+        {% set content = 'Sisallys' %}
+    {% else %}
+        {% set name = 'name' %}
+        {% set content = 'Content' %}
+    {% endif %}
     {% if app.user %}
         {% set visible = true %}
     {% else %}
     {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-        {% if event.picture is not null and event.picturePosition == 'banner' %}
-        <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
-        {% media event.picture, 'banner' with {'class':'img-banner img-fluid'} %}
-        </div>
-        {% endif %}
+        {{ block('pic') }}
         <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
-            {% if app.request.locale == 'fi' %}
-            <h2>{{ event.nimi }} - {{ event.eventdate|date() }}
+            <h2>{{ attribute(event, name) }} - {{ event.eventdate|date() }}
                 <small>{% if event.cancelled%}*{{'cancelled'|trans}}*{% endif %}</small>
             </h2>
-            {{ event.Sisallys|raw }}
-            {% endif %}
-            {% if app.request.locale == 'en' %}
-            <h2>{{ event.name }} - {{ event.eventdate|date() }}</h2>
-                <small>{% if event.cancelled%}*{{'cancelled'|trans}}*{% endif %}</small>
-            {{ event.Content|raw }}
-            {% endif %}
+            {{ attribute(event, content)|raw }}
         </div>
         {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="col-4">{% media event.picture, 'banner' with {'class':'img-right img-fluid'} %}</div>
+        <div class="col-4 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
+            {% media event.picture, 'banner' with {'class':'img-right img-fluid','title': attribute(event, name) } %}
+        </div>
         {% endif %}
         {% if event.picture is not null and event.picturePosition == 'after' %}
             <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
-            {% media event.picture, 'banner' with {'class':'img-after img-fluid'} %}
+            {% media event.picture, 'banner' with {'class':'img-after img-fluid', 'title': attribute(event, name)} %}
             </div>
         {% endif %}
     </div>
@@ -46,4 +44,10 @@
         </div>
     {% endif %}
 {% endblock %}
-
+{% block pic %}
+    {% if event.picture is not null and event.picturePosition == 'banner' %}
+    <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
+        {% media event.picture, 'banner' with {'class':'img-banner img-fluid', 'title': attribute(event, name)} %}
+    </div>
+    {% endif %}
+{% endblock %}
