@@ -2,13 +2,8 @@
 
 {% block content %}
     <div class="{% if event.picturePosition == 'right' %}row p-4{%else%}col{%endif%}">
-    {% if app.request.locale == 'fi' %}
-        {% set name = 'nimi' %}
-        {% set content = 'Sisallys' %}
-    {% else %}
-        {% set name = 'name' %}
-        {% set content = 'Content' %}
-    {% endif %}
+    {% set name = 'name_attribute'|trans %}
+    {% set content = 'content_attribute'|trans %}
     {% if app.user %}
         {% set visible = true %}
     {% else %}

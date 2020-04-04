@@ -151,6 +151,16 @@ services:
         tags:
                 - { name: sonata.page, alias: frontpage}
         public: true
+    entropy.page.announcementspage:
+        class: App\PageService\AnnouncementsPage
+        arguments:
+                - "Announcements Page"
+                - "@sonata.page.template_manager"
+                - "@doctrine.orm.entity_manager"
+        tags:
+                - { name: sonata.page, alias: announcementspage}
+        public: true
+
 
     entropy_tunkki.admin.booking:
         class: App\Admin\BookingAdmin

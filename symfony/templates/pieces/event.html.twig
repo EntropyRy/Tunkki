@@ -1,0 +1,37 @@
+{% block event %}
+    {% if event.url is null and event.externalUrl %}
+        {{ block('eventhead') }}
+    {% else %}
+        {% if event.url and not event.externalUrl %}
+        <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+        {% else %}
+        <a href="{{ path('entropy_event',{'id': event.id}) }}">
+        {% endif %}
+        {{ block('eventhead') }}
+        </a>
+    {% endif %}
+    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
+    {% if event.picture is not null and event.picturePosition == 'right' %}
+    <div class="row">
+        <div class="col-8">
+        {{ attribute(event,content_attr)|raw }}
+        </div>
+        <div class="col-4">
+        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+        </div>
+    </div>
+    {% else %}
+        {{ attribute(event,content_attr)|raw }}
+    {% endif %}
+{% endblock %}
+{% block eventhead %}
+<h2>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
+    {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
+        {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
+    </h2>
+    {% if event.picture is not null and event.picturePosition == 'banner' %}
+    <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
+        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+    </div>
+    {% endif %}
+{% endblock %}

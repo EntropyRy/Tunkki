@@ -1,4 +1,5 @@
 {% extends 'twocolumn.html.twig' %}
+{% use 'pieces/event.html.twig' %}
 {% block content %}
     {% set newyear = date('Y') %}
     {% if app.request.locale == 'en' %}
@@ -7,10 +8,7 @@
         {% set route = 'entropy_event' %}
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
-    <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked>
-      <label class="form-check-label" for="clubroomSwitch"> {{'include_clubroom_events'|trans}}</label>
-    </div>
+    {% set content_attr = 'content_attribute'|trans %}
     <div id="events">
     {% for event in events %}
         {% if app.user %}
@@ -20,12 +18,17 @@
         {% endif %}
         {% set year = event.eventdate|date('Y') %}
         {% if event is not null and visible %}
+            {% if loop.first %}
+            {{ block('event') }}
+            <hr>
+            {% else %}
             {% if year != newyear %}
                 <div class="linetext"><span>{{year}}</span></div>
             {% endif %}
             <div class="post" data-type="{{event.type}}" data-cancelled="{{event.cancelled}}">
                 {{ block('events') }}
             </div>
+            {% endif %}
         {% endif %}
         {% set newyear = event.eventdate|date('Y') %}
     {% endfor %}
@@ -54,17 +57,7 @@
                 </span>
                 <span>
                     {% apply spaceless %}
-                    {% if event.until %}
-                        {% if event.until|date('n') != event.eventdate|date('n') %}
-                            {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                        {% elseif event.until|date('j') != event.eventdate|date('j') %}
-                            {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
-                        {% else %}
-                            {{ event.eventdate|date('j.n.') }}
-                        {% endif %}
-                    {% else %}
-                    {{ event.eventdate|date('j.n.') }}
-                    {% endif %}
+                    {{ event.publishdate|date('j.n.') }}
                     {% endapply %}
                 </span>
             </h5>
