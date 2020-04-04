@@ -20,7 +20,6 @@
         {% if event is not null and visible %}
             {% if loop.first %}
             {{ block('event') }}
-            <hr>
             {% else %}
             {% if year != newyear %}
                 <div class="linetext"><span>{{year}}</span></div>
