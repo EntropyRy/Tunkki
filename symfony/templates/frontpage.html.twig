@@ -16,7 +16,9 @@
                 {% if event.type == 'announcement' %}
                     <i class="fas fa-bullhorn"></i>
                     <hr>
-                    <a href="/{{'announcements_url'|trans}}"><i class="fas fa-history"></i></a>
+                    <a href="{% if app.request.locale == 'en' %}/en{%endif%}/{{'announcements_url'|trans}}">
+                        <i class="fas fa-history"></i>
+                    </a>
                 {% else %}
                     {% if event.cancelled %}
                     <i class="far fa-calendar-times"></i>
