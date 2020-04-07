@@ -49,10 +49,10 @@ footer {
     text-decoration: none;
 }
 #site-info {
-    font-family: georgia;
+/*    font-family: georgia;*/
     font-size: 18px;
     font-weight: normal;
-    letter-spacing: 7px;
+/* letter-spacing: 7px; */
     padding-bottom: 10px;
     width: 100%;
 }
