@@ -179,7 +179,14 @@ final class EventAdmin extends AbstractAdmin
                 ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
             if ($event->getexternalUrl()==false){
                 $formMapper
-                    ->add('css');
+                    ->add('css')
+                    ->add('attachment', ModelListType::class,[
+                        'required' => false,
+                        'help' => 'added as downloadable link'
+                        ],[ 
+                            'link_parameters'=>[
+                            'context' => 'event'
+                        ]]);
             }
             $formMapper
                 ->add('epics', null, ['help' => 'link to ePics pictures'])

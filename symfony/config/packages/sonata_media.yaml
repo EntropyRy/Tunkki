@@ -35,6 +35,7 @@ sonata_media:
             providers:
                 - sonata.media.provider.youtube
                 - sonata.media.provider.image
+                - sonata.media.provider.file
             formats:
                 small: { width: 500 , quality: 90}
                 banner:   { width: 1200 , quality: 100}
@@ -49,4 +50,31 @@ sonata_media:
             create: true
     providers:
         youtube:
-            html5: false 
+            html5: false
+        file:
+            allowed_mime_types:
+                - application/pdf
+                - application/x-pdf
+                - application/rtf
+                - text/html
+                - text/rtf
+                - text/plain
+                - application/excel
+                - application/msword
+                - application/vnd.ms-excel
+                - application/vnd.ms-powerpoint
+                - application/vnd.ms-powerpoint
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+                - application/vnd.openxmlformats-officedocument.wordprocessingml.template
+                - application/vnd.oasis.opendocument.text
+                - application/vnd.oasis.opendocument.graphics
+                - application/vnd.oasis.opendocument.presentation
+                - application/vnd.oasis.opendocument.spreadsheet
+                - application/vnd.oasis.opendocument.chart
+                - application/vnd.oasis.opendocument.formula
+                - application/vnd.oasis.opendocument.database
+                - application/vnd.oasis.opendocument.image
+                - text/comma-separated-values
+                - text/xml
+                - application/xml
+                - application/zip

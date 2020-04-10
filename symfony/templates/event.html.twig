@@ -1,33 +1,28 @@
 {% extends 'onecolumn.html.twig' %}
-
+{% use 'pieces/event.html.twig' %}
 {% block content %}
-    <div class="{% if event.picturePosition == 'right' %}row p-4{%else%}col{%endif%}">
-    {% set name = 'name_attribute'|trans %}
-    {% set content = 'content_attribute'|trans %}
+    {% set content_attr = 'content_attribute'|trans %}
+    {% set name_attr = 'name_attribute'|trans %}    
     {% if app.user %}
         {% set visible = true %}
     {% else %}
-    {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+        {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-        {{ block('pic') }}
         <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
-            <h2>{{ attribute(event, name) }} - {{ event.eventdate|date() }}
-                <small>{% if event.cancelled%}*{{'cancelled'|trans}}*{% endif %}</small>
-            </h2>
-            {{ attribute(event, content)|raw }}
+            {{ block('eventhead_reverse') }}
+            {{ block('eventcontent') }}
         </div>
         {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="col-4 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
-            {% media event.picture, 'banner' with {'class':'img-right img-fluid','title': attribute(event, name) } %}
+        <div class="col-4 mb-2">
+            {{ block('event_media') }}
         </div>
         {% endif %}
         {% if event.picture is not null and event.picturePosition == 'after' %}
-            <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
-            {% media event.picture, 'banner' with {'class':'img-after img-fluid', 'title': attribute(event, name)} %}
+            <div class="img-after mb-2">
+                {{ block('event_media') }}
             </div>
-        {% endif %}
-    </div>
+        {% endif %} 
 <style>
 {{ event.css|raw }}
 </style>

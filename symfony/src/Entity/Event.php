@@ -107,6 +107,11 @@ class Event
      */
     private $cancelled = false;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media")
+     */
+    private $attachment;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -353,6 +358,18 @@ color: red;
     public function setCancelled(bool $cancelled): self
     {
         $this->cancelled = $cancelled;
+
+        return $this;
+    }
+
+    public function getAttachment(): ?Media
+    {
+        return $this->attachment;
+    }
+
+    public function setAttachment(?Media $attachment): self
+    {
+        $this->attachment = $attachment;
 
         return $this;
     }

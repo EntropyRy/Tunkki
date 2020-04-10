@@ -1,4 +1,6 @@
 {% block event %}
+{% set content_attr = 'content_attribute'|trans %}
+{% set name_attr = 'name_attribute'|trans %}
     {% if event.url is null and event.externalUrl %}
         {{ block('eventhead') }}
     {% else %}
@@ -14,24 +16,46 @@
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-8">
-        {{ attribute(event,content_attr)|raw }}
+        {{ block('eventcontent')}}
         </div>
         <div class="col-4">
-        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+        {{ block('eventmedia') }}
         </div>
     </div>
     {% else %}
-        {{ attribute(event,content_attr)|raw }}
+        {{ block('eventcontent')}}
     {% endif %}
 {% endblock %}
+{% block eventhead_reverse %}
+    {{ block('event_banner_media') }}
+    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
+    {{ block('event_name') }}
+{% endblock %}
 {% block eventhead %}
+    {{ block('event_name') }}
+    {{ block('event_banner_media') }}
+{% endblock %}
+{% block event_name %}
 <h2>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
-        {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
-    </h2>
+    {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
+</h2>
+{% endblock %}
+{% block event_banner_media %}
     {% if event.picture is not null and event.picturePosition == 'banner' %}
-    <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
-        {% media event.picture, 'banner' with {'class':'img-fluid'} %}
+    {{ block('event_media') }}
+    {% endif %}
+{% endblock %}
+{% block eventcontent %}
+    {{ attribute(event,content_attr)|raw }}
+    {% if event.attachment %}
+    <div class="mb-2">
+    <i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
     </div>
     {% endif %}
+{% endblock %}
+{% block event_media %}
+    <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
+        {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
+    </div>
 {% endblock %}
