@@ -6,7 +6,7 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    {{ knp_menu_render(loc) }}
+      {{ knp_menu_render(loc) }}
     {% if event is defined and event.url is not empty and not event.externalUrl%}
     <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
     {% else %}

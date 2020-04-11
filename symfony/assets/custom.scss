@@ -30,10 +30,12 @@ $enable-responsive-font-sizes: true;
 //@import "node_modules/bootstrap/scss/mixins";
 //@import "node_modules/bootstrap/scss/utilities";
 
-nav .navbar-nav .active > .nav-link{
-    color: $dark;
+.navbar-nav .current, .navbar-nav .current_ancestor.dropdown .nav-link {
+    text-decoration: underline;
 }
-
+.navbar-nav .current_ancestor.dropdown .dropdown-menu .nav-link {
+    text-decoration: none;
+}
 .linetext{
     width: 100%;
     text-align: center;
