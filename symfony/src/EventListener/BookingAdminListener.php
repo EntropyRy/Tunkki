@@ -62,19 +62,21 @@ class BookingAdminListener
                     $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
                     if(!$old['paid']){ // earlier it was not paid
                         // give reward
-                        $amount = $booking->getActualPrice() * 0.10;
-                        if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
-                            $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
-                            $gr->addWeight(2);
-                        } else {
-                            $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
-                            $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
-                            $gr->addWeight(1);
-                            $rr->addWeight(1);
-                            $this->em->persist($rr);
+                        if(!empty($booking->getActualPrice()){
+                            $amount = $booking->getActualPrice() * 0.10;
+                            if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
+                                $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
+                                $gr->addWeight(2);
+                            } else {
+                                $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
+                                $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
+                                $gr->addWeight(1);
+                                $rr->addWeight(1);
+                                $this->em->persist($rr);
+                            }
+                            $this->em->persist($gr);
+                            $this->em->flush();
                         }
-                        $this->em->persist($gr);
-                        $this->em->flush();                    
                     }
                 }
             }
