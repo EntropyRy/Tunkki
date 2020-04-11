@@ -62,7 +62,7 @@ class BookingAdminListener
                     $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
                     if(!$old['paid']){ // earlier it was not paid
                         // give reward
-                        if(!empty($booking->getActualPrice()){
+                        if(!empty($booking->getActualPrice())){
                             $amount = $booking->getActualPrice() * 0.10;
                             if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
                                 $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
