@@ -103,7 +103,12 @@ class StatusEventAdmin extends AbstractAdmin
 				->add('booking.renterConsent', CheckboxType::class,['required' => false, 'disabled' => true])
 				->add('booking.itemsReturned', CheckboxType::class,['required' => false])
 				->add('booking.invoiceSent', CheckboxType::class,['required' => false])
-				->add('booking.paid', CheckboxType::class,['required' => false])
+                ->add('booking.paid', CheckboxType::class,[
+                    'required' => false,
+                    'help' => 'please make sure booking handler has been selected'
+                ])
+				->add('booking.givenAwayBy', null, ['disabled' => true])
+				->add('booking.receivedBy', null, ['disabled' => true])
 				->end()
 				->with('Message', ['class' => 'col-md-8'])
 				->add('description',TextareaType::class, [
