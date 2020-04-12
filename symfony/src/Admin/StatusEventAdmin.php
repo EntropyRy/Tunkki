@@ -92,7 +92,6 @@ class StatusEventAdmin extends AbstractAdmin
 				->add('description',TextareaType::class, [
 					'required' => true,
 					'help' => $help,
-					'sonata_help' => $help,
 					])
 				->end()
                 ;

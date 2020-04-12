@@ -10,7 +10,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * Events
  *
  * @ORM\Table(name="StatusEvent")
- * @ORM\Entity(repositoryClass="App\Repository\EventsRepository")
+ * @ORM\Entity
  * @ORM\HasLifecycleCallbacks 
  */
 class StatusEvent
