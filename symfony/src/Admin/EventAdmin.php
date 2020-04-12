@@ -185,7 +185,8 @@ final class EventAdmin extends AbstractAdmin
                         'help' => 'added as downloadable link'
                         ],[ 
                             'link_parameters'=>[
-                            'context' => 'event'
+                            'context' => 'event',
+                            'provider' => 'sonata.media.provider.file'
                         ]]);
             }
             $formMapper
