@@ -10,21 +10,6 @@ Submit: Lähetä
 submit: lähetä
 Agree: hyväksy
 
-# Entropy.fi Menu
-frontpage: Etusivu
-join_us: liity 
-events: tapahtumat 
-contact: yhteystiedot
-history: historiaa
-archive: arkisto
-rentals: vuokraus
-about_us: meistä
-lang: English
-artists: artistit
-audio: audio
-videos: videot
-pictures: kuvat
-association: yhdistys
 
 # Entropy.fi
 Firstname: Etunimi
@@ -49,3 +34,20 @@ privacy_policy: Rekisteriseloste
 submit_and_agree: Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot
 cancelled: PERUTTU
 announcements_url: tiedotukset
+frontpage: Etusivu
+join_us: Liity 
+events: Tapahtumat 
+contact: Yhteystiedot
+history: Historiaa
+archive: Arkisto
+rentals: Vuokraus
+about_us: Meistä
+lang: English
+artists: Artistit
+audio: Audio
+videos: Videot
+pictures: Kuvat
+association: Yhdistys
+tickets: Liput
+fb.event: FB tapahtuma
+

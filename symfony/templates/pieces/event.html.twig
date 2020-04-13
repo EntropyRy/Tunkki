@@ -2,36 +2,36 @@
 {% set content_attr = 'content_attribute'|trans %}
 {% set name_attr = 'name_attribute'|trans %}
     {% if event.url is null and event.externalUrl %}
-        {{ block('eventhead') }}
+        {{ block('event_head') }}
     {% else %}
         {% if event.url and not event.externalUrl %}
         <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
         {% else %}
         <a href="{{ path('entropy_event',{'id': event.id}) }}">
         {% endif %}
-        {{ block('eventhead') }}
+        {{ block('event_head') }}
         </a>
     {% endif %}
     <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-8">
-        {{ block('eventcontent')}}
+        {{ block('event_content')}}
         </div>
         <div class="col-4">
-        {{ block('eventmedia') }}
+        {{ block('event_media') }}
         </div>
     </div>
     {% else %}
-        {{ block('eventcontent')}}
+        {{ block('event_content')}}
     {% endif %}
 {% endblock %}
-{% block eventhead_reverse %}
+{% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
     {{ block('event_name') }}
 {% endblock %}
-{% block eventhead %}
+{% block event_head %}
     {{ block('event_name') }}
     {{ block('event_banner_media') }}
 {% endblock %}
@@ -46,16 +46,32 @@
     {{ block('event_media') }}
     {% endif %}
 {% endblock %}
-{% block eventcontent %}
+{% block event_content %}
     {{ attribute(event,content_attr)|raw }}
     {% if event.attachment %}
     <div class="mb-2">
     <i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
     </div>
     {% endif %}
+    {{ block('links')}}
 {% endblock %}
 {% block event_media %}
     <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
+{% endblock %}
+{% block links %}
+{% if event.epics or event.links %}
+<hr>
+    {% if event.epics %}
+    <i class="fas fa-image"></i>
+    <a href="{{ event.epics }}">Epics</a>
+    {% endif %}
+    {% for keys in event.links %}
+        {% for url in keys %}
+        <i class="{{ url.icon }}"></i>
+        <a href="{{ url.url }}">{{ url.title|trans }}</a>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
 {% endblock %}

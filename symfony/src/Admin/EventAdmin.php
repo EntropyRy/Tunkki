@@ -10,12 +10,14 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\CollectionType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
+use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
-use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-//use Sonata\MediaBundle\Form\Type\MediaType;
+use App\Form\UrlsType;
 
 final class EventAdmin extends AbstractAdmin
 {
@@ -117,7 +119,10 @@ final class EventAdmin extends AbstractAdmin
                     'required' => false
                     ]
                 )
-                ->add('externalUrl', null, ['help'=>'Is the add hosted here?'])
+                ->add('externalUrl', null, [
+                    'label' => 'External Url/No add at all if url is empty',
+                    'help'=>'Is the add hosted here?'
+                ])
                 ->add('url', null, [
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
                 ->end();
@@ -191,6 +196,20 @@ final class EventAdmin extends AbstractAdmin
             }
             $formMapper
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->add('links', ImmutableArrayType::class, [
+                    'help' => 'Titles are translated automaticallyi if they are in right format like: tickets, fb.event<br>
+request admin to add more translations!',
+                    'keys' => [
+                        ['urls', CollectionType::class, [
+                            'required' => false,
+                            'allow_add' => true,
+                            'allow_delete' => true,
+                            'prototype' => true,
+                            'by_reference' => false,
+                            'allow_extra_fields' => true,
+                            'entry_type' => UrlsType::class,
+                        ]],
+                    ]])
                 ->end()
                 ;
         }

@@ -10,14 +10,6 @@ Submit: Submit
 Agree: Agree
 tree_catalog_title: Tree Menu Hierarchy
 
-# Entropy.fi Menu
-join_us: Join us
-about_us: about us
-lang: suomi
-artists: artists
-audio: audio
-videos: videos
-
 # Entropy.fi
 Firstname: First name
 Lastname: Last name
@@ -40,3 +32,11 @@ privacy_policy: Privacy Policy
 submit_and_agree: By submiting this form you agree on our privacy policy
 cancelled: CANCELLED
 announcements_url: announcements
+join_us: Join us
+about_us: about us
+lang: suomi
+artists: Artists
+audio: Audio
+videos: Videos
+tickets: Tickets
+fb.event: FB Event

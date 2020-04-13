@@ -10,8 +10,8 @@
     {% endif %}
     {% if event is not null and visible %}
         <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
-            {{ block('eventhead_reverse') }}
-            {{ block('eventcontent') }}
+            {{ block('event_head_reverse') }}
+            {{ block('event_content') }}
         </div>
         {% if event.picture is not null and event.picturePosition == 'right' %}
         <div class="col-4 mb-2">
@@ -32,12 +32,5 @@
             <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
             <br>
         </div>
-    {% endif %}
-{% endblock %}
-{% block pic %}
-    {% if event.picture is not null and event.picturePosition == 'banner' %}
-    <div class="img-fluid mb-2 {% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% endif %}">
-        {% media event.picture, 'banner' with {'class':'img-banner img-fluid', 'title': attribute(event, name)} %}
-    </div>
     {% endif %}
 {% endblock %}

@@ -112,6 +112,11 @@ class Event
      */
     private $attachment;
 
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $links = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -370,6 +375,18 @@ color: red;
     public function setAttachment(?Media $attachment): self
     {
         $this->attachment = $attachment;
+
+        return $this;
+    }
+
+    public function getLinks(): ?array
+    {
+        return $this->links;
+    }
+
+    public function setLinks(?array $links): self
+    {
+        $this->links = $links;
 
         return $this;
     }
