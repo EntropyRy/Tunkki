@@ -62,16 +62,22 @@
 {% endblock %}
 {% block links %}
 {% if event.epics or event.links %}
+<div class="pb-3">
 <hr>
-    {% if event.epics %}
-    <i class="fas fa-image"></i>
-    <a href="{{ event.epics }}">Epics</a>
-    {% endif %}
     {% for keys in event.links %}
         {% for url in keys %}
-        <i class="{{ url.icon }}"></i>
-        <a href="{{ url.url }}">{{ url.title|trans }}</a>
+        <span class="pr-2">
+            <i class="{{ url.icon }}"></i>
+            <a href="{{ url.url }}">{{ url.title|trans }}</a>
+        </span>
         {% endfor %}
     {% endfor %}
+    {% if event.epics %}
+    <span class="pr-2">
+        <i class="fas fa-image"></i>
+        <a href="{{ event.epics }}">Epics</a>
+    </span>
+    {% endif %}
+</div>
 {% endif %}
 {% endblock %}
