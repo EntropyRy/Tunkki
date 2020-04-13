@@ -172,7 +172,9 @@ final class EventAdmin extends AbstractAdmin
                     'help'=>'Is the add hosted here?'
                 ])
                 ->add('url', null, [
-                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'])
+                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event. 
+                     In case of external need whole url like: https://entropy.fi/rave/bunka1'
+                    ])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-6'])
                 ->add('picture', ModelListType::class,[
@@ -197,8 +199,8 @@ final class EventAdmin extends AbstractAdmin
             $formMapper
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('links', ImmutableArrayType::class, [
-                    'help' => 'Titles are translated automaticallyi if they are in right format like: tickets, fb.event<br>
-request admin to add more translations!',
+                    'help' => 'Titles are translated automatically. examples: tickets, fb.event.<br> 
+                                request admin to add more translations!',
                     'keys' => [
                         ['urls', CollectionType::class, [
                             'required' => false,
