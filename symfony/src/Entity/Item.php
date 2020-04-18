@@ -142,7 +142,7 @@ class Item
 	private $cannotBeRented = false;
 
     /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="item", cascade={"all"}, fetch="EAGER")
+     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="item", cascade={"all"}, fetch="LAZY")
      */
     private $fixingHistory;
 

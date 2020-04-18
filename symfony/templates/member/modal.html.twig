@@ -19,8 +19,7 @@
           {{ form_row(form.phone, {'row_attr': {'class':'col-6'}}) }}
 		  </div>
           {{ form_row(form.CityOfResidence) }}
-          {{ form_row(form.Submit, {'attr': {'class':'d-none'}}) }}
-          {{ form_end(form) }}
+          {{ form_row(form.StudentUnionMember) }}
           <small>{{'submit_and_agree'|trans}}</small>
       </div>
       <div class="d-none actions text-center">
@@ -30,7 +29,8 @@
       <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{'close'|trans}}</button>
           <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-info">{{ 'privacy_policy'|trans}}</a>
-          <button type="button" type="submit" id="sendRequest" class="btn btn-primary">{{ 'Submit'|trans}}</button>
+          {{ form_row(form.Submit, {'attr': {'class':'btn btn-primary'}}) }}
+          {{ form_end(form) }}
       </div>
     </div>
   </div>

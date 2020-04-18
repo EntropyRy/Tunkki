@@ -1,17 +1,19 @@
 <?php
 namespace App\Helper;
 
-class Mattermost {
-    protected $container;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-    public function __construct($container) {
-        $this->container = $container;
+class Mattermost {
+    protected $bag;
+
+    public function __construct(ParameterBagInterface $bag) {
+        $this->bag = $bag;
     }
     public function SendToMattermost($text, $Item = null, $username = null)
     {
-        $xcURL = $this->container->getParameter('mm_tunkki_hook');
-        $botname = $this->container->getParameter('mm_tunkki_botname');
-        $botimg = $this->container->getParameter('mm_tunkki_img');
+        $xcURL = $this->bag->get('mm_tunkki_hook');
+        $botname = $this->bag->get('mm_tunkki_botname');
+        $botimg = $this->bag->get('mm_tunkki_img');
 
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","text":"'.$text.'"}';

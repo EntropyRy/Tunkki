@@ -5,6 +5,7 @@ namespace App\PageService;
 use App\Entity\Member;
 use App\Entity\Email;
 use App\Form\MemberType;
+use App\Helper\Mattermost;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
@@ -25,6 +26,7 @@ class MemberFormPage implements PageServiceInterface
     private $formF;
     private $bag;
     private $twig;
+    private $mm;
 
     public function __construct($name, 
         TemplateManager $templateManager, 
@@ -32,7 +34,8 @@ class MemberFormPage implements PageServiceInterface
         \Swift_Mailer $mailer, 
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
-        EngineInterface $twig
+        EngineInterface $twig,
+        Mattermost $mm
     )
     {
         $this->name             = $name;
@@ -42,6 +45,7 @@ class MemberFormPage implements PageServiceInterface
         $this->formF            = $formF;
         $this->bag              = $bag;
         $this->twig             = $twig;
+        $this->mm               = $mm;
     }
     public function getName(){ return $this->name;}
 
@@ -61,6 +65,7 @@ class MemberFormPage implements PageServiceInterface
                 $this->em->flush();
                 $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
                 $code = $this->addToInfoMailingList($member);
+                $this->announceToMattermost($member);
                 $state = 'added';
 
             } else {
@@ -102,4 +107,10 @@ class MemberFormPage implements PageServiceInterface
         ]);
         return $response->getStatusCode();
     }
+    protected function announceToMattermost($member)
+    {
+        $text = '**New Member: '.$member.'**';
+        $this->mm->SendToMattermost($text);
+    }
+    
 }

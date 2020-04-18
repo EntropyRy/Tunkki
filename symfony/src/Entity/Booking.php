@@ -163,7 +163,7 @@ class Booking
     private $numberOfRentDays = 1;
 
     /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="booking", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="booking", cascade={"all"}, fetch="LAZY")
      */
     private $statusEvents;
 

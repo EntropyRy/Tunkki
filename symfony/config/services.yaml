@@ -29,7 +29,7 @@ services:
 
     Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
     Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
-
+    Sonata\PageBundle\Page\TemplateManager: '@sonata.page.template_manager'
     entropy.menu_builder.fi:
         class: App\Menu\MenuBuilder
         tags:
@@ -58,7 +58,6 @@ services:
         public: true
     entropy_tunkki.helper.mattermost:
         class: App\Helper\Mattermost
-        arguments: ["@service_container"]
 
     my_mattermost_authenticator:
         class: App\Security\MattermostAuthenticator
@@ -129,7 +128,6 @@ services:
         class: App\PageService\MemberFormPage
         arguments:
                 - "Member Form"
-                - "@sonata.page.template_manager"
         tags:
                 - { name: sonata.page, alias: eventspage}
         public: true
