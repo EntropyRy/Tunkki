@@ -19,6 +19,7 @@ sonata_seo:
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
                 'og:site_name':       Entropy ry
                 'og:description':     Electronic music and culture association
+                'og:image':       https://entropy.fi/images/header-logo.svg
                 #
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8

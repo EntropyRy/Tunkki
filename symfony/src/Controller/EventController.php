@@ -7,12 +7,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Sonata\SeoBundle\Seo\SeoPageInterface;
 use App\Entity\Event;
 
 class EventController extends Controller
 {
     protected $em;
-    public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans)
+    public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
     {
         $eventid = $request->get('id');
         if(empty($eventid)){
@@ -39,8 +40,12 @@ class EventController extends Controller
         
         if ($request->getLocale() == 'en'){
             $page->setTitle($eventdata->getName());
+            $seo->addMeta('property', 'og:title',$eventdata->getName())
+                ->addMeta('property', 'og:description', $eventdata->getContent());
         } else {
             $page->setTitle($eventdata->getNimi());
+            $seo->addMeta('property', 'og:title',$eventdata->getNimi())
+                ->addMeta('property', 'og:description', $eventdata->getSisallys());
         }
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
