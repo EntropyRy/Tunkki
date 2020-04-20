@@ -56,7 +56,7 @@ sonata_media:
                 - jpg
                 - png
                 - jpeg
-				- svg
+                - svg
             allowed_mime_types:
                 - image/pjpeg
                 - image/jpeg
