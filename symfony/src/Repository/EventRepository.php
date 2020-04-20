@@ -49,7 +49,9 @@ class EventRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('c')
            ->andWhere('c.type = :val')
+           ->andWhere('c.published = :pub')
            ->setParameter('val', $type)
+           ->setParameter('pub', true)
            ->orderBy('c.EventDate', 'DESC')
            ->setMaxResults(1)
            ->getQuery()
