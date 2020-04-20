@@ -51,6 +51,18 @@ sonata_media:
     providers:
         youtube:
             html5: false
+        image:
+            allowed_extensions:
+                - jpg
+                - png
+                - jpeg
+				- svg
+            allowed_mime_types:
+                - image/pjpeg
+                - image/jpeg
+                - image/png
+                - image/x-png
+                - image/svg+xml
         file:
             allowed_mime_types:
                 - application/pdf
