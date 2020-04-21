@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
+use function Symfony\Component\String\u;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -274,7 +275,7 @@ background: black;
 background: transparent;
 color: red;
 }
-.img-banner {  
+.img-fluid {  
 
 }
 .img-right {  
@@ -389,5 +390,13 @@ color: red;
         $this->links = $links;
 
         return $this;
+    }
+    public function getAbstract($lang)
+    {
+        if ($lang=='fi'){
+            return u(strip_tags($this->Sisallys))->truncate(150,'..');
+        } else {
+            return u(strip_tags($this->Content))->truncate(150,'..');
+        }
     }
 }

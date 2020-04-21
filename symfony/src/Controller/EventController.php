@@ -41,18 +41,24 @@ class EventController extends Controller
         if ($request->getLocale() == 'en'){
             $page->setTitle($eventdata->getName());
             $seo->addMeta('property', 'og:title',$eventdata->getName())
-                ->addMeta('property', 'og:description', $eventdata->getContent());
+                ->addMeta('property', 'og:description', $eventdata->getAbstract('en'))
+                ;
         } else {
             $page->setTitle($eventdata->getNimi());
             $seo->addMeta('property', 'og:title',$eventdata->getNimi())
-                ->addMeta('property', 'og:description', $eventdata->getSisallys());
+                ->addMeta('property', 'og:description', $eventdata->getAbstract('fi'))
+                ;
+        }
+        if($eventdata->getType() != 'Announcement'){
+            $seo->addMeta('property', 'og:type', 'event')
+                ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
         }
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
                 'page' => $page
             ]);
     }
-    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans)
+    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
     {
         $slug = $request->get('slug');
         $year = $request->get('year');
@@ -73,8 +79,26 @@ class EventController extends Controller
         $page = $cms->retrieve()->getCurrentPage();
         if ($request->getLocale() == 'en'){
             $page->setTitle($eventdata->getName());
+            $seo->addMeta('property', 'og:title',$eventdata->getName())
+                ->addMeta('property', 'og:description', $eventdata->getAbstract('en'))
+/*                ->addMeta('property', 'og:url', $this->generateUrl('entropy_event_slug', [
+                     'year' => $eventdata->getEventDate()->format('Y'),
+                     'slug' => $eventdata->getUrl()
+                 ])) */
+                ;
         } else {
             $page->setTitle($eventdata->getNimi());
+            $seo->addMeta('property', 'og:title',$eventdata->getNimi())
+                ->addMeta('property', 'og:description', $eventdata->getAbstract('fi'))
+/*                ->addMeta('property', 'og:url', $this->generateUrl('entropy_event_slug', [
+                     'year' => $eventdata->getEventDate()->format('Y'),
+                     'slug' => $eventdata->getUrl()]))
+                 ])) */
+                ;
+        }
+        if($eventdata->getType() != 'Announcement'){
+            $seo->addMeta('property', 'og:type', 'event')
+                ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
         }
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
