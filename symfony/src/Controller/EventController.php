@@ -49,7 +49,7 @@ class EventController extends Controller
                 ->addMeta('property', 'og:description', $eventdata->getAbstract('fi'))
                 ;
         }
-        if($eventdata->getType() != 'Announcement'){
+        if($eventdata->getType() != 'announcement'){
             $seo->addMeta('property', 'og:type', 'event')
                 ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
         }
