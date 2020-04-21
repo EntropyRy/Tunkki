@@ -96,7 +96,7 @@ class EventController extends Controller
                  ])) */
                 ;
         }
-        if($eventdata->getType() != 'Announcement'){
+        if($eventdata->getType() != 'announcement'){
             $seo->addMeta('property', 'og:type', 'event')
                 ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
         }
