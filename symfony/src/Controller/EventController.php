@@ -16,6 +16,7 @@ class EventController extends Controller
     public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
     {
         $eventid = $request->get('id');
+        $lang = $request->getLocale();
         if(empty($eventid)){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -37,22 +38,7 @@ class EventController extends Controller
             ]));
         }
         $page = $cms->retrieve()->getCurrentPage();
-        
-        if ($request->getLocale() == 'en'){
-            $page->setTitle($eventdata->getName());
-            $seo->addMeta('property', 'og:title',$eventdata->getName())
-                ->addMeta('property', 'og:description', $eventdata->getAbstract('en'))
-                ;
-        } else {
-            $page->setTitle($eventdata->getNimi());
-            $seo->addMeta('property', 'og:title',$eventdata->getNimi())
-                ->addMeta('property', 'og:description', $eventdata->getAbstract('fi'))
-                ;
-        }
-        if($eventdata->getType() != 'announcement'){
-            $seo->addMeta('property', 'og:type', 'event')
-                ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
-        }
+        $this->setMetaData($lang, $eventdata, $page, $seo); 
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
                 'page' => $page
@@ -77,32 +63,29 @@ class EventController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $page = $cms->retrieve()->getCurrentPage();
-        if ($request->getLocale() == 'en'){
+        $this->setMetaData($lang, $eventdata, $page, $seo); 
+        return $this->render('event.html.twig', [
+                'event' => $eventdata,
+                'page' => $page
+            ]);
+    }
+    private function setMetaData($lang, $eventdata, $page, $seo)
+    {
+        if ($lang == 'en'){
             $page->setTitle($eventdata->getName());
             $seo->addMeta('property', 'og:title',$eventdata->getName())
                 ->addMeta('property', 'og:description', $eventdata->getAbstract('en'))
-/*                ->addMeta('property', 'og:url', $this->generateUrl('entropy_event_slug', [
-                     'year' => $eventdata->getEventDate()->format('Y'),
-                     'slug' => $eventdata->getUrl()
-                 ])) */
                 ;
         } else {
             $page->setTitle($eventdata->getNimi());
             $seo->addMeta('property', 'og:title',$eventdata->getNimi())
                 ->addMeta('property', 'og:description', $eventdata->getAbstract('fi'))
-/*                ->addMeta('property', 'og:url', $this->generateUrl('entropy_event_slug', [
-                     'year' => $eventdata->getEventDate()->format('Y'),
-                     'slug' => $eventdata->getUrl()]))
-                 ])) */
                 ;
         }
         if($eventdata->getType() != 'announcement'){
             $seo->addMeta('property', 'og:type', 'event')
                 ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
         }
-        return $this->render('event.html.twig', [
-                'event' => $eventdata,
-                'page' => $page
-            ]);
+
     }
 }
