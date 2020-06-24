@@ -35,7 +35,8 @@
         "symfony/orm-pack": "^1.0",
         "symfony/swiftmailer-bundle": "^3.1",
         "symfony/webpack-encore-bundle": "^1.7",
-        "symfony/yaml": "^4.1"
+        "symfony/yaml": "^4.1",
+        "twig/string-extra": "^3.0"
     },
      "conflict": {
          "symfony/symfony": "*"
