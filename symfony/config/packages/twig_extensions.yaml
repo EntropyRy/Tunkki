@@ -1,10 +1,10 @@
-services:
-    Twig\Extensions\ArrayExtension: null
-    Twig\Extensions\DateExtension: null
-    Twig\Extensions\IntlExtension: null
-    Twig\Extensions\TextExtension: null
-    twigstringextension:
-        class: 'Twig\Extra\String\StringExtension'
-        tags:
-            - { name: twig.extension }
-
+#services:
+#    Twig\Extensions\ArrayExtension: null
+#    Twig\Extensions\DateExtension: null
+#    Twig\Extensions\IntlExtension: null
+#    Twig\Extensions\TextExtension: null
+#    twigstringextension:
+#        class: 'Twig\Extra\String\StringExtension'
+#        tags:
+#            - { name: twig.extension }
+#
