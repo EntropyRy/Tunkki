@@ -399,4 +399,12 @@ color: red;
             return u(strip_tags($this->Content))->truncate(150,'..');
         }
     }
+    public function getNameByLang($lang)
+    {
+        if($lang=='fi'){
+            return $this->Nimi;
+        } else {
+            return $this->Name;
+        }
+    }
 }
