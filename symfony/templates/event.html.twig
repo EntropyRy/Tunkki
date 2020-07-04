@@ -9,12 +9,12 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-        <div class="{% if event.picturePosition == 'right' %}col-8{% else %}col{% endif %}">
+        <div class="{% if event.picturePosition == 'right' %}col-md-8 order-1 order-md-0{% else %}col{% endif %}">
             {{ block('event_head_reverse') }}
             {{ block('event_content') }}
         </div>
         {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="col-4 mb-2">
+        <div class="col-md-4 order-0 order-md-1 mb-2">
             {{ block('event_media') }}
         </div>
         {% endif %}
