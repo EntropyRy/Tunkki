@@ -62,6 +62,7 @@ class EventController extends Controller
         if(!$eventdata){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
+        $lang = $request->getLocale();
         $page = $cms->retrieve()->getCurrentPage();
         $this->setMetaData($lang, $eventdata, $page, $seo); 
         return $this->render('event.html.twig', [
