@@ -28,7 +28,7 @@
             <br>
         {% endif %}
     <small>
-        {{ object.description|truncate(150) }}
+        {{ object.description|u.truncate(150) }}
     </small>
 </div>
 {% if object.rent %}

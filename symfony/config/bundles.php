@@ -16,7 +16,6 @@ return [
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     Sonata\EasyExtendsBundle\SonataEasyExtendsBundle::class => ['all' => true],
     Sonata\DatagridBundle\SonataDatagridBundle::class => ['all' => true],
-    Sonata\CoreBundle\SonataCoreBundle::class => ['all' => true],
     Sonata\BlockBundle\SonataBlockBundle::class => ['all' => true],
     Sonata\AdminBundle\SonataAdminBundle::class => ['all' => true],
     Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle::class => ['all' => true],
@@ -27,7 +26,6 @@ return [
     Sonata\NotificationBundle\SonataNotificationBundle::class => ['all' => true],
     Sonata\CacheBundle\SonataCacheBundle::class => ['all' => true],
     Sonata\PageBundle\SonataPageBundle::class => ['all' => true],
-    Sonata\IntlBundle\SonataIntlBundle::class => ['all' => true],
     Sonata\TimelineBundle\SonataTimelineBundle::class => ['all' => true],
     Sonata\TranslationBundle\SonataTranslationBundle::class => ['all' => true],
     Sonata\UserBundle\SonataUserBundle::class => ['all' => true],
@@ -46,4 +44,6 @@ return [
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
     SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
+    Sonata\Twig\Bridge\Symfony\SonataTwigBundle::class => ['all' => true],
+    Sonata\Form\Bridge\Symfony\SonataFormBundle::class => ['all' => true],
 ];
