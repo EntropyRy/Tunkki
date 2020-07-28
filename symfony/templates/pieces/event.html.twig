@@ -61,8 +61,8 @@
     </div>
 {% endblock %}
 {% block links %}
-{% if event.epics is not empty or event.links is defined %}
-<div class="pb-3">
+{% if event.epics is not empty or event.links.0 is defined %}
+<div>
 <hr>
     {% for keys in event.links %}
         {% for url in keys %}
