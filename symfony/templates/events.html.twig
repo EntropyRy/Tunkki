@@ -19,10 +19,10 @@
             {% set visible = app.user is null and event.published %}
         {% endif %}
         {% set year = event.eventdate|date('Y') %}
+        {% if year != newyear %}
+            <div class="linetext"><span>{{year}}</span></div>
+        {% endif %}
         {% if event is not null and visible %}
-            {% if year != newyear %}
-                <div class="linetext"><span>{{year}}</span></div>
-            {% endif %}
             <div class="post" data-type="{{event.type}}" data-cancelled="{{event.cancelled}}">
                 {{ block('events') }}
             </div>
