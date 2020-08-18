@@ -11,7 +11,6 @@ sonata_admin:
         html5_validate: true # does use html5 validation
         pager_links: 5 # pager max links to display
         lock_protection: true
-        legacy_twig_text_extension: false
     dashboard:
         blocks:
             - { class: col-md-8, position: top, type: entropy_tunkki.block.bookings}

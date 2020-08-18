@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Validator\ErrorElement;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
@@ -83,14 +84,14 @@ class BookingAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('name')
-            ->add('bookingDate', 'doctrine_orm_date_range',['field_type'=>DateRangePickerType::class])
+            ->add('bookingDate', DateTimeRangeFilter::class,['field_type'=>DateRangePickerType::class])
             ->add('items')
             ->add('packages')
             ->add('renter')
             ->add('renterHash')
-            ->add('retrieval', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
+            ->add('retrieval', DateTimeRangeFilter::class,['field_type'=>DateTimeRangePickerType::class])
             ->add('givenAwayBy')
-            ->add('returning', 'doctrine_orm_datetime_range',['field_type'=>DateTimeRangePickerType::class])
+            ->add('returning', DateTimeRangeFilter::class,['field_type'=>DateTimeRangePickerType::class])
             ->add('receivedBy')
             ->add('itemsReturned')
             ->add('invoiceSent')
