@@ -6,6 +6,7 @@ import bsCustomFileInput from 'bs-custom-file-input'
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
 require('@fortawesome/fontawesome-free/js/all.js');
+require('typeface-spacegrotesk')
 
 $(document).ready(function() {
     bsCustomFileInput.init();
@@ -18,9 +19,6 @@ $(document).ready(function() {
             }
         });
     });
-    $('.custom-file-input').on('change',function(){
-            var fileName = $(this).val();
-    })
 });
 
 //console.log('Hello Webpack Encore');

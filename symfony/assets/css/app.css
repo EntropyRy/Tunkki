@@ -1,9 +1,9 @@
-@font-face {
+/*@font-face {
 font-family: "SpaceGrotesk";
 src: url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf");
 src: url("/font/space-grotesk/fonts/webfont/SpaceGrotesk-SemiBold.woff") format("woff"),
 url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf") format("opentype"),
-}
+}*/
 
 body {
     background-image: url(/images/bg_stripe.png);
@@ -11,7 +11,7 @@ body {
     background-size: auto;
     background-repeat: repeat;
     background-attachment: scroll;
-    font-family: "SpaceGrotesk";
+    font-family: "Space Text";
     color: #102c3a;
 }
 .e-container {
