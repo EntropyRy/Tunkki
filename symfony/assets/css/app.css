@@ -1,10 +1,3 @@
-/*@font-face {
-font-family: "SpaceGrotesk";
-src: url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf");
-src: url("/font/space-grotesk/fonts/webfont/SpaceGrotesk-SemiBold.woff") format("woff"),
-url("/font/space-grotesk/fonts/variable/SpaceGroteskVariable.ttf") format("opentype"),
-}*/
-
 body {
     background-image: url(/images/bg_stripe.png);
     background-position: left top;
