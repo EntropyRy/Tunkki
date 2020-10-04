@@ -1,7 +1,7 @@
-/web/bundles/
-/web/css/
-/web/images/
-/web/js/
+/public/bundles/
+/public/css/
+/public/images/
+/public/js/
 /vendor/
 /bin/*
 /build/

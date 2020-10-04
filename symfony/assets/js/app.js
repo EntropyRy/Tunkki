@@ -4,6 +4,9 @@ import '../css/app.css';
 import 'bootstrap';
 import bsCustomFileInput from 'bs-custom-file-input'
 
+require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/js/all.js');
+
 $(document).ready(function() {
     bsCustomFileInput.init();
     $('#clubroomSwitch').click(function() {
