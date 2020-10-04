@@ -1,5 +1,5 @@
 sonata_formatter:
-    default_formatter: text
+    default_formatter: richhtml
     formatters:
         markdown:
             service: sonata.formatter.text.markdown

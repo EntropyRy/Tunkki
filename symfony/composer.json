@@ -8,6 +8,7 @@
     },
     "require": {
         "php": ">=7",
+        "beberlei/doctrineextensions": "^1.2",
         "doctrine/doctrine-bundle": "^2.0",
         "friendsofsymfony/user-bundle": "^2",
         "hashids/hashids": "^3.0",

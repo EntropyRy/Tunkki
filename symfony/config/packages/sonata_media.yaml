@@ -39,6 +39,14 @@ sonata_media:
             formats:
                 small: { width: 500 , quality: 90}
                 banner:   { width: 1200 , quality: 100}
+        artist: 
+            download:
+                strategy: sonata.media.security.public_strategy
+            providers:
+                - sonata.media.provider.image
+            formats:
+                small: { width: 400 , quality: 90}
+                big:   { width: 800 , quality: 100}
 
     cdn:
         server:

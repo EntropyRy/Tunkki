@@ -38,6 +38,13 @@ sonata_page:
         - sonata_media_gallery_view
         - sonata_media_view
         - sonata_media_download
+          #- entropy_event.fi
+          #- entropy_event.en
+          #- entropy_event_slug.fi
+          #- entropy_event_slug.en
+          #- entropy_event_slug
+          #- entropy_event_slug_artist_signup.en
+          #- entropy_event_slug_artist_signup.fi
 
     ignore_uri_patterns:
         - ^/admin\/   # ignore admin route, ie route containing 'admin'

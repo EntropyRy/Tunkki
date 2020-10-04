@@ -1,4 +1,7 @@
 {
+    "beberlei/doctrineextensions": {
+        "version": "v1.2.7"
+    },
     "behat/transliterator": {
         "version": "v1.2.0"
     },
@@ -157,6 +160,15 @@
     },
     "kriswallsmith/buzz": {
         "version": "v0.16.1"
+    },
+    "laminas/laminas-code": {
+        "version": "3.4.1"
+    },
+    "laminas/laminas-diagnostics": {
+        "version": "1.6.0"
+    },
+    "laminas/laminas-eventmanager": {
+        "version": "3.3.0"
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.0.1"
@@ -400,6 +412,21 @@
     "symfony/debug": {
         "version": "v4.4.1"
     },
+    "symfony/debug-bundle": {
+        "version": "4.1",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.1",
+            "ref": "f8863cbad2f2e58c4b65fa1eac892ab189971bea"
+        },
+        "files": [
+            "config/packages/dev/debug.yaml"
+        ]
+    },
+    "symfony/debug-pack": {
+        "version": "v1.0.8"
+    },
     "symfony/dependency-injection": {
         "version": "v4.4.1"
     },
@@ -561,6 +588,9 @@
     "symfony/property-access": {
         "version": "v4.4.1"
     },
+    "symfony/property-info": {
+        "version": "v5.1.5"
+    },
     "symfony/routing": {
         "version": "4.2",
         "recipe": {
@@ -692,6 +722,25 @@
             "config/packages/dev/web_profiler.yaml",
             "config/packages/test/web_profiler.yaml",
             "config/routes/dev/web_profiler.yaml"
+        ]
+    },
+    "symfony/webpack-encore-bundle": {
+        "version": "1.6",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.6",
+            "ref": "69e1d805ad95964088bd510c05995e87dc391564"
+        },
+        "files": [
+            "assets/css/app.css",
+            "assets/js/app.js",
+            "config/packages/assets.yaml",
+            "config/packages/prod/webpack_encore.yaml",
+            "config/packages/test/webpack_encore.yaml",
+            "config/packages/webpack_encore.yaml",
+            "package.json",
+            "webpack.config.js"
         ]
     },
     "symfony/yaml": {

@@ -7,6 +7,7 @@ twig:
         - '@SonataForm/Form/datepicker.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'
         - 'bootstrap_4_layout.html.twig'
+          #- '@SonataMedia/Form/media_widgets.html.twig'
     globals:
         tunkki_img: '%env(MM_TUNKKI_IMG)%'
     date:
