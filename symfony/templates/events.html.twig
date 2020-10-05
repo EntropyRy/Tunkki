@@ -57,7 +57,7 @@
                     {% if event.until %}
                         {% if event.until|date('n') != event.eventdate|date('n') %}
                             {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                        {% elseif event.until|date('j')-1 != event.eventdate|date('j') %}
+                        {% elseif (event.until|date('j')-event.eventdate|date('j'))>1 %}
                             {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
                         {% else %}
                             {{ event.eventdate|date('j.n.') }}

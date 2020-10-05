@@ -2764,16 +2764,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "v2.3.0",
+            "version": "v2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "9d1eb0e16cb34d72deaf4ae38a7259da0ce23590"
+                "reference": "9984ff5c2b61ec7bc7429f1f43d6a77f013dc7f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/9d1eb0e16cb34d72deaf4ae38a7259da0ce23590",
-                "reference": "9d1eb0e16cb34d72deaf4ae38a7259da0ce23590",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/9984ff5c2b61ec7bc7429f1f43d6a77f013dc7f3",
+                "reference": "9984ff5c2b61ec7bc7429f1f43d6a77f013dc7f3",
                 "shasum": ""
             },
             "require": {
@@ -2817,7 +2817,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2020-08-26T23:53:51+00:00"
+            "time": "2020-09-29T20:39:26+00:00"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -10333,16 +10333,16 @@
         },
         {
             "name": "symfony/translation-contracts",
-            "version": "v2.2.0",
+            "version": "v2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation-contracts.git",
-                "reference": "77ce1c3627c9f39643acd9af086631f842c50c4d"
+                "reference": "e2eaa60b558f26a4b0354e1bbb25636efaaad105"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/77ce1c3627c9f39643acd9af086631f842c50c4d",
-                "reference": "77ce1c3627c9f39643acd9af086631f842c50c4d",
+                "url": "https://api.github.com/repos/symfony/translation-contracts/zipball/e2eaa60b558f26a4b0354e1bbb25636efaaad105",
+                "reference": "e2eaa60b558f26a4b0354e1bbb25636efaaad105",
                 "shasum": ""
             },
             "require": {
@@ -10354,7 +10354,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.2-dev"
+                    "dev-master": "2.3-dev"
                 },
                 "thanks": {
                     "name": "symfony/contracts",
@@ -10404,7 +10404,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2020-09-07T11:33:47+00:00"
+            "time": "2020-09-28T13:05:58+00:00"
         },
         {
             "name": "symfony/twig-bridge",
