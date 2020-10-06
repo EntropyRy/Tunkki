@@ -1,4 +1,4 @@
-FROM nginx:1.17-alpine
+FROM nginx:1.19-alpine
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /etc/nginx/conf.d/default.conf
 ADD nginx.conf /etc/nginx/
 ADD symfony.conf /etc/nginx/conf.d/
