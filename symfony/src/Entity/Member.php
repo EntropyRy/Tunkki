@@ -138,12 +138,6 @@ class Member
     private $ApplicationHandledDate;
 
     /**
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="member")
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $AcceptedAsHonoraryMember;
@@ -152,6 +146,11 @@ class Member
      * @ORM\Column(type="boolean")
      */
     private $isFullMember = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="member", cascade={"persist", "remove"})
+     */
+    private $user;
 
     /**
      * Get id.
@@ -362,30 +361,6 @@ class Member
     public function getCityOfResidence()
     {
         return $this->CityOfResidence;
-    }
-
-    /**
-     * Set user.
-     *
-     * @param \App\Entity\User|null $user
-     *
-     * @return Member
-     */
-    public function setUser(\App\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return \App\Entity\User|null
-     */
-    public function getUser()
-    {
-        return $this->user;
     }
 
     public function __toString()
@@ -608,5 +583,36 @@ class Member
         $this->isFullMember = $isFullMember;
 
         return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newMember = null === $user ? null : $this;
+        if ($user->getMember() !== $newMember) {
+            $user->setMember($newMember);
+        }
+
+        return $this;
+    }
+    public function getProgressP(): string
+    {
+        if($this->AcceptedAsHonoraryMember)
+            return '100';
+        if(!$this->isActiveMember && !$this->StudentUnionMember)
+            return '10';
+        if(!$this->isActiveMember && $this->StudentUnionMember)
+            return '25';
+        if($this->isActiveMember && !$this->isFullMember && !$this->StudentUnionMember)
+            return '24';
+        if($this->isActiveMember && ($this->isFullMember || $this->StudentUnionMember))
+            return '75';
     }
 }

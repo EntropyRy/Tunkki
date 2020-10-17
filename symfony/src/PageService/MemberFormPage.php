@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 class MemberFormPage implements PageServiceInterface
 {
@@ -34,7 +34,7 @@ class MemberFormPage implements PageServiceInterface
         \Swift_Mailer $mailer, 
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
-        EngineInterface $twig,
+        Environment $twig,
         Mattermost $mm
     )
     {

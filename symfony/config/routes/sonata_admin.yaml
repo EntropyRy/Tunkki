@@ -7,10 +7,10 @@ _sonata_admin:
     type: sonata_admin
     prefix: /admin
 
-sonata_user:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
-    prefix: /admin
-
-sonata_user_admin_resetting:
-    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
-    prefix: /admin/resetting
+    #sonata_user:
+    #    resource: '@SonataUserBundle/Resources/config/routing/admin_security.xml'
+    #    prefix: /admin
+    #
+    #sonata_user_admin_resetting:
+    #    resource: '@SonataUserBundle/Resources/config/routing/admin_resetting.xml'
+    #    prefix: /admin/resetting

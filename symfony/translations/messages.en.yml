@@ -42,3 +42,19 @@ tickets: Tickets
 fb.event: FB Event
 entropy.seo.description: Electronic music and culture association
 map: Map
+profile_url: en/profile
+reset_your_password: Reset your password
+send_password_reset_email: Send password reset email
+reset_password_form_help: Enter your email address and we we will send you a link to reset your password.
+reset_password_info: An email has been sent that contains a link that you can click to reset your password. This link will expire in
+hours: hours
+reset_password_email_info: If you did not receive the email check you junk mail or
+try_again: try again
+New password: New password
+Repeat Password: Repeat password
+Reset password: Reset password
+forgot_password: Forgot your password?
+password: Password
+email: Email
+please_sign_in: Please sign in
+sign_in: Sign in

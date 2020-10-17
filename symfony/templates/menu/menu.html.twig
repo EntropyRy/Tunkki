@@ -2,15 +2,24 @@
 {% set loc = app.request.locale %}
 <nav class="navbar navbar-expand-lg navbar-light">
 <a class="navbar-brand d-lg-none" href="/"><img src="/images/header-logo-text.svg" width="auto" height="45" class="d-inline-block" alt="Entropy"></a>
+    {% if event is defined and event.url is not empty and not event.externalUrl %}
+    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+    {% else %}
+    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+    {% endif %}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
       {{ knp_menu_render(loc) }}
-    {% if event is defined and event.url is not empty and not event.externalUrl%}
-    <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+    {% if not app.user %}
+        {% if event is defined and event.url is not empty and not event.externalUrl %}
+        <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+        {% else %}
+        <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+        {% endif %}
     {% else %}
-    <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+        <span><a href="/{{ 'profile_url'|trans }}"><i class="fas fa-user"></i> {{ app.user.username }}</a></span>
     {% endif %}
   </div>
 </nav>

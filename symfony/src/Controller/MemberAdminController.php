@@ -8,7 +8,9 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Entity\Email;
+use App\Entity\User;
 
 final class MemberAdminController extends CRUDController
 {
@@ -26,37 +28,37 @@ final class MemberAdminController extends CRUDController
             $this->admin->update($object);
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
-        $userM = $this->get('entropy_tunkki.admin.user')->getUserManager();
-        $user = $userM->findUserByEmail($object->getEmail());
+        $em = $this->get('doctrine.orm.entity_manager');
+        $userR = $em->getRepository(User::class);
+        $user = $userR->findOneBy(['email' => $object->getEmail()]);
         if ($user){ // käyttäjä olemassa
             $this->addFlash('sonata_flash_error', sprintf('User with this email already exists'));
             $user->setMember($object);
-            $userM->updateUser($user);
+            $user->setLocale('fi');
+            $em->persist($user);
+            $em->flush();
             $object->setCopiedAsUser(1);
-            $object->setUsername($user->getUsername());
+            //$object->setUsername($user->getUsername());
             $this->admin->update($object);
             $this->addFlash('sonata_flash_success', sprintf('User with this email linked as user'));
         } else {
-            $user = $userM->createUser();
-            $user->setFirstname($object->getFirstname());
-            $user->setLastname($object->getLastname());
+            $user = new User();
+            $passwordEncoder = $this->get('security.password_encoder');
             $user->setEmail($object->getEmail());
-            $user->setPhone($object->getPhone());
-            $user->setUsername($object->getUsername());
-            $user->setEnabled(1);
             $pass = bin2hex(openssl_random_pseudo_bytes(6));
-            $user->setPlainPassword($pass);
+            $user->setPassword($passwordEncoder->encodePassword($user,$pass));
             $user->setMember($object);
-            $userM->updateUser($user);
+            $em->persist($user);
+            $em->flush();
             $object->setCopiedAsUser(1);
             $this->admin->update($object);
-            $userEditLink = $this->get('router')->generate('admin_app_user_edit', ['id' => $user->getId()]);
+            //$userEditLink = $this->get('router')->generate('admin_app_user_edit', ['id' => $user->getId()]);
             $this->addFlash('sonata_flash_success', 
                 sprintf('User created successfully with password : %s', $pass
             ));
-            $this->addFlash('sonata_flash_error', 
-                sprintf('Please define user groups manually!: <a href="%s">Here</a>', $userEditLink
-            ));
+            //$this->addFlash('sonata_flash_error', 
+            //    sprintf('Please define user groups manually!: <a href="%s">Here</a>', $userEditLink
+            //));
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

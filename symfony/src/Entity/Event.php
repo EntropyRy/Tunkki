@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="event")
  */
 class Event
 {

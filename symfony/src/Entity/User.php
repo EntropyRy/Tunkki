@@ -1,49 +1,215 @@
-<?php 
-  
-namespace App\Entity; 
-  
+<?php
+
+namespace App\Entity;
+
+use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Sonata\UserBundle\Entity\BaseUser;
-use Doctrine\ORM\Mapping as ORM; 
-use App\Entity\Reward;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity
- * @ORM\Table(name="fos_user_user")
+ * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User extends BaseUser
+class User implements UserInterface
 {
     /**
      * @ORM\Id
+     * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
      */
-    protected $id;
+    private $id;
+
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Reward", mappedBy="user", orphanRemoval=true)
+     * @ORM\Column(type="string", length=180, unique=true)
      */
-    private $rewards;
+    private $email;
+
     /**
-     *
-     * @ORM\OneToOne(targetEntity="\App\Entity\Member", inversedBy="user")
+     * @ORM\Column(type="json")
+     */
+    private $roles = [];
+
+    /**
+     * @var string The hashed password
+     * @ORM\Column(type="string")
+     */
+    private $password;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Member::class, inversedBy="user", cascade={"persist", "remove"})
      */
     private $member;
 
     /**
-     * Get id.
-     *
-     * @return int $id
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
      */
-    public function getId()
+    private $CreatedAt;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $UpdatedAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Reward", mappedBy="user", orphanRemoval=true)
+     */
+    private $rewards;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $LastLogin;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $locale = 'fi';
+
+    public function __construct()
+    {
+        $this->rewards = new ArrayCollection();
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function __construct()
+    public function getEmail(): ?string
     {
-        parent::__construct();
-        $this->rewards = new ArrayCollection();
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
+    {
+        if ($this->member){
+            if ($this->member->getUsername()) {
+                return $this->member->getUsername();
+            }
+        } 
+        return $this->email;
+    }
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getSalt()
+    {
+        // not needed when using the "bcrypt" algorithm in security.yaml
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
+    }
+
+    public function getMember(): ?Member
+    {
+        return $this->member;
+    }
+
+    public function setMember(?Member $member): self
+    {
+        $this->member = $member;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->CreatedAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
+    {
+        $this->CreatedAt = $CreatedAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->UpdatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $UpdatedAt): self
+    {
+        $this->UpdatedAt = $UpdatedAt;
+
+        return $this;
+    }
+
+    public function getLastLogin(): ?\DateTimeInterface
+    {
+        return $this->LastLogin;
+    }
+
+    public function setLastLogin(?\DateTimeInterface $LastLogin): self
+    {
+        $this->LastLogin = $LastLogin;
+
+        return $this;
+    }
+    public function __toString()
+    {
+        if ($this->member){
+            return $this->member->getName();
+        } else {
+            return $this->email;
+        }
     }
     /**
      * @return Collection|Reward[]
@@ -76,28 +242,15 @@ class User extends BaseUser
         return $this;
     }
 
-    /**
-     * Set member.
-     *
-     * @param Member|null $member
-     *
-     * @return User
-     */
-    public function setMember(Member $member = null)
+    public function getLocale(): ?string
     {
-        $this->member = $member;
+        return $this->locale;
+    }
+
+    public function setLocale(string $locale): self
+    {
+        $this->locale = $locale;
 
         return $this;
     }
-
-    /**
-     * Get member.
-     *
-     * @return Member|null
-     */
-    public function getMember()
-    {
-        return $this->member;
-    }
-
 }

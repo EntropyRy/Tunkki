@@ -80,17 +80,17 @@ services:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Status Events, show_mosaic_button: false  }
         public: true
 
-    entropy_tunkki.admin.user:
-        class: App\Admin\UserAdmin
-        arguments:
-            - ~
-            - App\Entity\User
-            - ~ 
-            - "@entropy_tunkki.helper.mattermost"
-            - "@security.token_storage"
-        tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Users }
-        public: true
+        #    entropy_tunkki.admin.user:
+        #        class: App\Admin\UserAdmin
+        #        arguments:
+        #            - ~
+        #            - App\Entity\User
+        #            - ~ 
+        #            - "@entropy_tunkki.helper.mattermost"
+        #            - "@security.token_storage"
+        #        tags:
+        #            - { name: sonata.admin, manager_type: orm, group: admin, label: Users }
+        #        public: true
 
     entropy_tunkki.admin.file:
         class: App\Admin\FileAdmin
@@ -207,6 +207,13 @@ services:
         public: true
     entropy.block.joinus:
         class: App\Block\JoinUsBlock
+        arguments:
+            - "@twig" 
+        tags:
+            - { name: sonata.block, alias: joinusblock }
+        public: true
+    entropy.block.member_info:
+        class: App\Block\MemberInfoBlock
         arguments:
             - "@twig" 
         tags:

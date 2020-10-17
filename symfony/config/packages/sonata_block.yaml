@@ -8,3 +8,4 @@ sonata_block:
         entropy_tunkki.block.brokenitems:
         entropy_tunkki.block.bookings:
         entropy.block.future_events: ~
+        entropy.block.member_info: ~

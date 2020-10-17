@@ -44,12 +44,12 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('user', null, ['label' => 'Tunkki User'])
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember', null, ['editable' => true])
             ->add('isActiveMember')
             ->add('isFullMember')
+            ->add('user.LastLogin')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],

@@ -7,7 +7,7 @@
 
             <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             {% if block('title') is defined %}
-                {{ block('title') }}
+                <title>{{ block('title') }}</title>
             {% elseif page.title is defined %}
                 <title>{{ page.title }} | Entropy ry</title>
             {% else %}
