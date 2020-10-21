@@ -16,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * Require ROLE_USER for *every* controller method in this class.
  *
@@ -30,15 +32,23 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function edit(Request $request, Security $security, FormFactoryInterface $formF)
+    public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
     {
         $member = $security->getUser()->getMember();
         $form = $formF->create(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
+            $user = $member->getUser();
+            if (!is_null($user->getPassword())){
+                $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
+                $em->persist($user);
+            }
+            $em->persist($member);
+            $em->flush();
 
-
+            return $this->redirectToRoute('entropy_profile');
         }
         return $this->render('profile/edit.html.twig', [
             'member' => $member,

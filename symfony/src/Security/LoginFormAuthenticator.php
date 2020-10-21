@@ -3,6 +3,7 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Entity\Member;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -67,14 +68,14 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
             throw new InvalidCsrfTokenException();
         }
 
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $credentials['email']]);
+        $member = $this->entityManager->getRepository(Member::class)->findOneBy(['email' => $credentials['email']]);
 
-        if (!$user) {
+        if (!$member) {
             // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
 
-        return $user;
+        return $member->getUser();
     }
 
     public function checkCredentials($credentials, UserInterface $user)
@@ -103,7 +104,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
             return new RedirectResponse($this->urlGenerator->generate('sonata_admin_dashboard'));
         } else {
-            return new RedirectResponse('/');
+            return new RedirectResponse('entropy_profile');
         }
 
     }

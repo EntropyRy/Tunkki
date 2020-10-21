@@ -16,6 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
 
 class MemberFormPage implements PageServiceInterface
@@ -28,6 +29,7 @@ class MemberFormPage implements PageServiceInterface
     private $bag;
     private $twig;
     private $mm;
+    private $passwordEncoder;
 
     public function __construct($name, 
         TemplateManager $templateManager, 
@@ -36,7 +38,8 @@ class MemberFormPage implements PageServiceInterface
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
         Environment $twig,
-        Mattermost $mm
+        Mattermost $mm,
+        UserPasswordEncoderInterface $passwordEncoder
     )
     {
         $this->name             = $name;
@@ -47,6 +50,7 @@ class MemberFormPage implements PageServiceInterface
         $this->bag              = $bag;
         $this->twig             = $twig;
         $this->mm               = $mm;
+        $this->passwordEncoder  = $passwordEncoder;
     }
     public function getName(){ return $this->name;}
 
@@ -62,11 +66,9 @@ class MemberFormPage implements PageServiceInterface
             $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
             $email = $memberRepo->getByEmail($member->getEmail());
             if(!$name && !$email){
-                $user = new User();
-                $user->setMember($member);
-                $user->setPassword(bin2hex(openssl_random_pseudo_bytes(20)));
+                $user = $member->getUser();
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
                 $member->setLocale($request->getlocale());
-                $member->setUser($user);
                 $this->em->persist($user);
                 $this->em->persist($member);
                 $this->em->flush();

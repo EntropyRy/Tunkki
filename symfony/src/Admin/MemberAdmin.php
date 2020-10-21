@@ -10,9 +10,11 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\Form\Type\DatePickerType;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
+use Sonata\Form\Type\DatePickerType;
+use Sonata\Doctrine\Types\JsonType;
+// use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class MemberAdmin extends AbstractAdmin
 {

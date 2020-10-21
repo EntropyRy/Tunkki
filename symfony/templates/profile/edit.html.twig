@@ -15,8 +15,15 @@
               {{ form_row(form.username, {'row_attr': {'class':'col-md-6'}}) }}
               {{ form_row(form.CityOfResidence, {'row_attr': {'class':'col-md-6'}}) }}
 		  </div>
-          {{ form_row(form.StudentUnionMember) }}
-          <a class="btn float-right btn-secondary" href="{{url('app_forgot_password_request') }}">{{ 'password-reset'|trans }}</a>
+		  <div class="form-row">
+              {{ form_row(form.user.MattermostId, {'disabled': true, 'row_attr': {'class':'col-md-6'}}) }}
+              {{ form_row(form.locale, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+              {{ form_row(form.StudentUnionMember, {'row_attr': {'class':'col-md-4'}}) }}
+		  <div class="form-row">
+              {{ form_row(form.user.password.first, {'row_attr': {'class':'col-md-6'}}) }}
+              {{ form_row(form.user.password.second, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
           {{ form_row(form.Submit, {'attr': {'class':'btn btn-primary'}}) }}
           {{ form_end(form) }}
 </div>

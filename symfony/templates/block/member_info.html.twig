@@ -25,7 +25,7 @@
         <li><span class="fa-li"><i class="fas fa-globe"></i></span>
             {{ member.locale|trans }}&nbsp;
         </li>
-        <li><span class="fa-li"><i class="far {% if member.isActiveMember %}fa-check-square{%else%}fa-square{%endif%}"></i></span>
+        <li><span class="fa-li"><i class="{% if member.StudentUnionMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i></span>
             {{'Student union member'|trans}}
         </li>
         </ul>
