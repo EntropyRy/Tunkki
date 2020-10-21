@@ -9,7 +9,8 @@ Renter consent: Renter has read and accepeted contractual terms
 Submit: Submit
 Agree: Agree
 tree_catalog_title: Tree Menu Hierarchy
-
+fi: Finnish
+en: English
 # Entropy.fi
 Firstname: First name
 Lastname: Last name
@@ -17,6 +18,10 @@ Email: Email
 Phone: Phone number
 City of residence: City of residence
 Student union member: AYY member
+Full member: Full member
+HC member: HC member
+since: since
+member: Member
 Username: Username
 active.member.application: Your application for Entropy active member
 stay_tuned: Stay Tuned!
@@ -58,3 +63,10 @@ password: Password
 email: Email
 please_sign_in: Please sign in
 sign_in: Sign in
+membership_information: Membership information
+membership_status: Membership status
+you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: You need at least 25% to be able to vote in our association meeting
+100_procent_is_honorary_member: 100% is HC member
+used_in_other_services: User in our other services
+you_can_change_your_member_information_by_loging_in: You can change your member information by loging in
+edit: edit

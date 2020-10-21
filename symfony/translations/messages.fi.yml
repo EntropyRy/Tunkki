@@ -9,7 +9,8 @@ Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
 Submit: Lähetä
 submit: lähetä
 Agree: hyväksy
-
+fi: Suomi
+en: Englanti
 
 # Entropy.fi
 Firstname: Etunimi
@@ -17,7 +18,12 @@ Lastname: Sukunimi
 Email: Sähköposti
 Phone: Puhelinnumero
 City of residence: Asuinpaikkakunta
-Student union member: Olen AYY:n jäsen
+Student union member: AYY:n jäsenyys
+Active member: Aktiivi jäsenyys
+HC member: HC jäsenyys
+Full member: Täysi jäsenyys
+Member: Jäsen
+since: alkaen
 Username: Käytäjänimi
 active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
 stay_tuned: Pysy kuulolla!
@@ -35,7 +41,7 @@ submit_and_agree: Lähettämällä tämän lomakkeen hyväksyt rekisteriselostee
 cancelled: PERUTTU
 announcements_url: tiedotukset
 frontpage: Etusivu
-join_us: Liity 
+join_us: Liity
 events: Tapahtumat 
 contact: Yhteystiedot
 history: Historiaa
@@ -69,3 +75,10 @@ password: Salasana
 email: Sähköposti
 please_sign_in: Kirjaudu sisään!
 sign_in: Kirjaudu sisään
+membership_information: Jäsen tiedot
+membership_status: Jäsen tilanne
+you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitser vähintään 25% jotta voit äänestää yhdistyskokouksessa
+100_procent_is_honorary_member: 100% on HC jäsen
+used_in_other_services: Käytetään meidän muissa palveluissa
+you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsen tietojasi kirjautumalla sisään
+edit: muokkaa

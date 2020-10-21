@@ -2,60 +2,65 @@
 namespace App\Security;
 
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\RouterInterface;
 use KnpU\OAuth2ClientBundle\Client\Provider\SlackClient;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use App\Entity\Member;
+use App\Entity\User;
 
-abstract class MattermostAuthenticator extends SocialAuthenticator
+class MattermostAuthenticator extends SocialAuthenticator
 {
     private $clientRegistry;
     private $em;
-    private $router;
+    private $urlG;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManager $em, RouterInterface $router)
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, UrlGeneratorInterface $urlG)
     {
         $this->clientRegistry = $clientRegistry;
         $this->em = $em;
-        $this->router = $router;
+        $this->urlG = $urlG;
     }
-
+    public function supports(Request $request)
+    {
+                        // continue ONLY if the current ROUTE matches the check ROUTE
+        return $request->attributes->get('_route') === '_entropy_mattermost_check';
+    }
     public function getCredentials(Request $request)
     {
-        if ($request->getPathInfo() != '/oauth') {
-            // don't auth
-            return;
-        }
-
-        return $this->fetchAccessToken($this->getSlackClient());
+        return $this->fetchAccessToken($this->getMattermostClient());
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         /** @var FacebookUser $facebookUser */
-        $mattermostUser = $this->getSlackClient()
+        $mattermostUser = $this->getMattermostClient()
             ->fetchUserFromToken($credentials);
 
         $email = $mattermostUser->getEmail();
-
         // 1) have they logged in with Mattermost before? Easy!
-        $existingUser = $this->em->getRepository('ApplicationSonataUserBundle:User')
-            ->findOneBy(['mattermostId' => $mattermostUser->getId()]);
+        $existingUser = $this->em->getRepository(User::class)
+            ->findOneBy(['MattermostId' => $mattermostUser->getId()]);
         if ($existingUser) {
             return $existingUser;
         }
 
         // 2) do we have a matching user by email?
-        $user = $this->em->getRepository('ApplicationSonataUserBundle:User')
+        $member = $this->em->getRepository(Member::class)
                     ->findOneBy(['email' => $email]);
 
         // 3) Maybe you just want to "register" them by creating
         // a User object
-        //$user->setFacebookId($facebookUser->getId());
-        //$this->em->persist($user);
-        //$this->em->flush();
+        $user = $member->getUser();
+        $user->setMattermostId($mattermostUser->getId());
+        $this->em->persist($user);
+        $this->em->flush();
 
         return $user;
     }
@@ -69,16 +74,32 @@ abstract class MattermostAuthenticator extends SocialAuthenticator
             ->getClient('mattermost');
     }
 
-/*    public function onAuthenticationFailure()
+    public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
+        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
+
+        return new Response($message, Response::HTTP_FORBIDDEN);
     }
 
-    public function onAuthenticationSuccess()
+    public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-    }
-    
-    private function start(Request $request, AuthenticationException $authException = null)
-    {
+        $user = $token->getUser();
+        $user->setLastLogin(new \DateTime());
+        $this->em->persist($user);
+        $this->em->flush();
 
-    }*/
+        if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
+            return new RedirectResponse($this->urlG->generate('sonata_admin_dashboard'));
+        } else {
+            return new RedirectResponse('/');
+        }
+    }
+   
+    public function start(Request $request, AuthenticationException $authException = null)
+    {
+        return new RedirectResponse(
+            '/login/', // might be the site, where users choose their oauth provider
+            Response::HTTP_TEMPORARY_REDIRECT
+        );
+    } 
 }

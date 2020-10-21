@@ -22,11 +22,6 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
-     */
-    private $email;
-
-    /**
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -65,9 +60,9 @@ class User implements UserInterface
     private $LastLogin;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $locale = 'fi';
+    private $MattermostId;
 
     public function __construct()
     {
@@ -81,14 +76,7 @@ class User implements UserInterface
 
     public function getEmail(): ?string
     {
-        return $this->email;
-    }
-
-    public function setEmail(string $email): self
-    {
-        $this->email = $email;
-
-        return $this;
+        return $this->member->getEmail();
     }
 
     /**
@@ -208,7 +196,7 @@ class User implements UserInterface
         if ($this->member){
             return $this->member->getName();
         } else {
-            return $this->email;
+            return 'user: '.$this->id;
         }
     }
     /**
@@ -242,15 +230,16 @@ class User implements UserInterface
         return $this;
     }
 
-    public function getLocale(): ?string
+    public function getMattermostId(): ?string
     {
-        return $this->locale;
+        return $this->MattermostId;
     }
 
-    public function setLocale(string $locale): self
+    public function setMattermostId(?string $MattermostId): self
     {
-        $this->locale = $locale;
+        $this->MattermostId = $MattermostId;
 
         return $this;
     }
+
 }

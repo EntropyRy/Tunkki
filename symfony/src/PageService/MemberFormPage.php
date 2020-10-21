@@ -3,6 +3,7 @@
 namespace App\PageService;
 
 use App\Entity\Member;
+use App\Entity\User;
 use App\Entity\Email;
 use App\Form\MemberType;
 use App\Helper\Mattermost;
@@ -61,13 +62,18 @@ class MemberFormPage implements PageServiceInterface
             $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
             $email = $memberRepo->getByEmail($member->getEmail());
             if(!$name && !$email){
+                $user = new User();
+                $user->setMember($member);
+                $user->setPassword(bin2hex(openssl_random_pseudo_bytes(20)));
+                $member->setLocale($request->getlocale());
+                $member->setUser($user);
+                $this->em->persist($user);
                 $this->em->persist($member);
                 $this->em->flush();
                 $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
                 $code = $this->addToInfoMailingList($member);
                 $this->announceToMattermost($member);
                 $state = 'added';
-
             } else {
                 $state = 'update';
             }

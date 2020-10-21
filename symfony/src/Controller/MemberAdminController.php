@@ -34,7 +34,6 @@ final class MemberAdminController extends CRUDController
         if ($user){ // käyttäjä olemassa
             $this->addFlash('sonata_flash_error', sprintf('User with this email already exists'));
             $user->setMember($object);
-            $user->setLocale('fi');
             $em->persist($user);
             $em->flush();
             $object->setCopiedAsUser(1);

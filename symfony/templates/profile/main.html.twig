@@ -1,0 +1,11 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{member.name}} | Entropy ry
+{% endblock %}
+{% block content %}
+    {{ sonata_block_render({'type':'entropy.block.member_info'}) }}
+<div class="col-md-12">
+</div>
+{% endblock %}
+
+

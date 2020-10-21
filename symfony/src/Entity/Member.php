@@ -40,7 +40,7 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=190, nullable=true)
+     * @ORM\Column(name="email", type="string", length=190, unique=true)
      */
     private $email;
 
@@ -151,6 +151,11 @@ class Member
      * @ORM\OneToOne(targetEntity=User::class, mappedBy="member", cascade={"persist", "remove"})
      */
     private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $locale = 'fi';
 
     /**
      * Get id.
@@ -614,5 +619,17 @@ class Member
             return '24';
         if($this->isActiveMember && ($this->isFullMember || $this->StudentUnionMember))
             return '75';
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(?string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
     }
 }

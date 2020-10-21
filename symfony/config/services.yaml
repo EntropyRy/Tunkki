@@ -63,10 +63,10 @@ services:
         class: App\Security\MattermostAuthenticator
         #autowire: true
         # use autowiring, OR you can specify the argument manually
-        arguments:
-            - '@oauth2.registry'
-            - '@doctrine.orm.entity_manager'
-            - '@router'
+        #        arguments:
+        #    - '@oauth2.registry'
+        #    - '@doctrine.orm.entity_manager'
+        #    - '@router'
 
     entropy_tunkki.admin.statusevent:
         class: App\Admin\StatusEventAdmin

@@ -95,8 +95,12 @@ security:
             anonymous:          true
             switch_user:        true
             guard:
+                entry_point: App\Security\LoginFormAuthenticator
                 authenticators:
+                    #- "@my_mattermost_authenticator"
                     - App\Security\LoginFormAuthenticator
+                    - App\Security\MattermostAuthenticator
+
             logout:
                 path: app_logout
                 # where to redirect after logout
@@ -121,11 +125,9 @@ security:
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-          #- { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
-          #- { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
         - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-#        - { path: ^/api/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

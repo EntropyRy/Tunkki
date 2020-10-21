@@ -43,7 +43,8 @@ sonata_page:
         - app_reset_password
         - app_login
         - app_logout
-          #- entropy_event.fi
+        - entropy_profile
+        - entropy_profile_edit
           #- entropy_event.en
           #- entropy_event_slug.fi
           #- entropy_event_slug.en
