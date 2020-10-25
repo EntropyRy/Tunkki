@@ -90,8 +90,11 @@ class User implements UserInterface
             if ($this->member->getUsername()) {
                 return $this->member->getUsername();
             }
+            if ($this->member->getEmail()) {
+                return $this->member->getEmail();
+            }
         } 
-        return $this->email;
+        return 'N/A';
     }
     /**
      * @see UserInterface

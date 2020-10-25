@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -84,13 +86,6 @@ class Member
     /**
      * @var bool
      *
-     * @ORM\Column(name="CopiedAsUser", type="boolean")
-     */
-    private $copiedAsUser = false;
-
-    /**
-     * @var bool
-     *
      * @ORM\Column(name="isActiveMember", type="boolean")
      */
     private $isActiveMember = false;
@@ -156,6 +151,16 @@ class Member
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $locale = 'fi';
+
+    /**
+     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="member")
+     */
+    private $artist;
+
+    public function __construct()
+    {
+        $this->artist = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -422,30 +427,6 @@ class Member
     }
 
     /**
-     * Set copiedAsUser.
-     *
-     * @param bool $copiedAsUser
-     *
-     * @return Member
-     */
-    public function setCopiedAsUser($copiedAsUser)
-    {
-        $this->copiedAsUser = $copiedAsUser;
-
-        return $this;
-    }
-
-    /**
-     * Get copiedAsUser.
-     *
-     * @return bool
-     */
-    public function getCopiedAsUser()
-    {
-        return $this->copiedAsUser;
-    }
-
-    /**
      * Set isActiveMember.
      *
      * @param bool $isActiveMember
@@ -632,4 +613,43 @@ class Member
 
         return $this;
     }
+
+    /**
+     * @return Collection|Artist[]
+     */
+    public function getArtist(): Collection
+    {
+        return $this->artist;
+    }
+    public function getArtistWithId($id): Artist
+    {
+        foreach ($this->getArtist() as $artist){
+            if($artist->getId() == $id){
+                return $artist;
+            }
+        }
+    }
+    public function addArtist(Artist $artist): self
+    {
+        if (!$this->artist->contains($artist)) {
+            $this->artist[] = $artist;
+            $artist->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtist(Artist $artist): self
+    {
+        if ($this->artist->contains($artist)) {
+            $this->artist->removeElement($artist);
+            // set the owning side to null (unless already changed)
+            if ($artist->getMember() === $this) {
+                $artist->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

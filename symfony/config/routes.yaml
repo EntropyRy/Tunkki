@@ -19,6 +19,13 @@ entropy_event_slug:
     controller: App\Controller\EventController:oneSlug
     requirements:
         year: '\d+'
+entropy_event_slug_artist_signup:
+    path: 
+        en: /{year}/{slug}/signup
+        fi: /{year}/{slug}/ilmottautuminen
+    controller: App\Controller\EventController:artistSignUp
+    requirements:
+        year: '\d+'
 entropy_profile:
     path:
         en: /profile/
@@ -29,7 +36,25 @@ entropy_profile_edit:
         en: /profile/edit
         fi: /profiili/muokkaa
     controller: App\Controller\ProfileController:edit
-
+entropy_artist_create:
+    path:
+        en: /profile/artist/create
+        fi: /profiili/artisti/uusi
+    controller: App\Controller\ArtistController:create
+    requirements:
+        id: '\d+'
+entropy_artist_edit:
+    path:
+        en: /profile/artist/{id}/edit
+        fi: /profiili/artisti/{id}/muokkaa
+    controller: App\Controller\ArtistController:edit
+    requirements:
+        id: '\d+'
+entropy_artist_delete:
+    path: /profile/artist/{id}/delete
+    controller: App\Controller\ArtistController:delete
+    requirements:
+        id: '\d+'
 _entropy_mattermost_auth:
     path:     /oauth
     controller: App\Controller\MattermostAuthController:connectAction

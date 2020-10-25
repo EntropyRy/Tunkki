@@ -1,5 +1,8 @@
 {% extends 'emails/base.html.twig'%}
 {% block content %}
+{% if email_data %}
+{% set email = email_data %}
+{% endif %}
     {% if user is defined %}
     <div>
         {{ user.rejectReason|nl2br }}

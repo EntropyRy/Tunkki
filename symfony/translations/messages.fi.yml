@@ -76,10 +76,47 @@ password: Salasana
 email: Sähköposti
 please_sign_in: Kirjaudu sisään!
 sign_in: Kirjaudu sisään
-membership_information: Jäsen tiedot
-membership_status: Jäsen tilanne
+membership_information: Jäsentiedot
+membership_status: Jäsentilanne
 you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitser vähintään 25% jotta voit äänestää yhdistyskokouksessa
 100_procent_is_honorary_member: 100% on HC jäsen
 used_in_other_services: Käytetään meidän muissa palveluissa
 you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsen tietojasi kirjautumalla sisään
 edit: muokkaa
+paid_renting_rewards: Voukratehtävien kompensaatiot
+no_renting_rewards: Ei tapahtumia, kysele miten voit osallistua?
+next_reward_is_bubling_under: Seuraava on tulossa..
+add_new_artist: lisää uusi artistiprofiili
+artist_profiles: Artistiprofiilit
+artist_information: Perustiedot
+preview: Esikatselu
+artist_name: Artistinimi
+artist_type: Tyyppi
+artist_genre: Genre(t)
+artist_bio: Bio Suomeksi
+artist_bio_en: Bio Englanniksi
+artist_hardware: Laitteisto
+picture: Kuva
+widget_headline_information: informaatio
+widget_label_type: tyyppi
+widget_label_context: konteksti
+widget_label_binary_content: tiedosto
+widget_label_unlink: poista linkitys
+genre_help: Vj voi merkitä minkälaista materiaalia
+bio_help: Kerro lyhyesti saavutuksistasi 
+hardware_help: Mitä tekniikkaa käytät esiintymiseen?
+no_artist_profile: Ei yhtään profiilia
+created_at: luotu
+updated_at: päivitetty
+artist_links: Linkit media näytteisiin ja muihin palveluihin
+no_linked_media: Ei linkitettyä mediaa
+Add: Lisää
+artist_promo_picture: Promo kuva
+delete: poista
+Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
+no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
+new_artist_help_html: Jos haluat luoda uuden artistin voit tehdä sen profiili sivultasi
+bio_attribute: Bio
+succesfully_signed_up_for_the_party: Onnistuneesti ilmottauduttu tapahtumaan esiintymään!
+all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa. Haluatko luoda uuden?
+duplicate_artist_found: Saman niminen artisti löytyy jo!

@@ -3,15 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-//use App\Entity\Member;
-//use App\Entity\Email;
 use App\Form\MemberType;
-//use App\Form\ActiveMemberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-//use Symfony\Component\Form\Extension\Core\Type\DateType;
-//use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-//use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Security\Core\Security;
@@ -41,14 +35,12 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
             $user = $member->getUser();
-            if (!is_null($user->getPassword())){
-                $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
-                $em->persist($user);
-            }
+            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
+            $em->persist($user);
             $em->persist($member);
             $em->flush();
-
-            return $this->redirectToRoute('entropy_profile');
+            $request->setLocale($member->getLocale());
+            return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
         return $this->render('profile/edit.html.twig', [
             'member' => $member,

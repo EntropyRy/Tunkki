@@ -34,7 +34,6 @@ final class MemberAdmin extends AbstractAdmin
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
-            ->add('copiedAsUser')
             ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('StudentUnionMember')
             ->add('isActiveMember')
@@ -46,6 +45,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
+            ->add('artist')
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember', null, ['editable' => true])
@@ -103,7 +103,6 @@ final class MemberAdmin extends AbstractAdmin
                 'required' => false, 
                 'help'=>'doubles as accepted as active member date'
             ])
-            ->add('copiedAsUser')
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
             ;
@@ -133,7 +132,6 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isFullMember')
             ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
             ->add('rejectReasonSent')
-            ->add('copiedAsUser')
             ->add('user')
             ->add('createdAt')
             ->add('updatedAt')

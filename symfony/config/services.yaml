@@ -30,6 +30,10 @@ services:
     Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
     Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
     Sonata\PageBundle\Page\TemplateManager: '@sonata.page.template_manager'
+    symfony.mailer:
+        alias: Symfony\Component\Mailer\MailerInterface
+        public: true
+
     entropy.menu_builder.fi:
         class: App\Menu\MenuBuilder
         tags:
@@ -217,7 +221,14 @@ services:
         arguments:
             - "@twig" 
         tags:
-            - { name: sonata.block, alias: joinusblock }
+            - { name: sonata.block, alias: memberblock }
+        public: true
+    entropy.block.artist_info:
+        class: App\Block\ArtistInfoBlock
+        arguments:
+            - "@twig" 
+        tags:
+            - { name: sonata.block, alias: artistblock }
         public: true
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
@@ -306,8 +317,15 @@ services:
         arguments: [~, App\Entity\Event, App\Controller\EventAdminController]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Event }
+        calls:
+            - [addChild, ['@admin.event_artist_info', 'Event']]
         public: true
-
+    admin.event_artist_info:
+        class: App\Admin\EventArtistInfoAdmin
+        arguments: [~, App\Entity\EventArtistInfo, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: EventArtistInfo }
+        public: true
     entropy.admin.menu:
         class: App\Admin\MenuAdmin
         arguments: [~, App\Entity\Menu, App\Controller\MenuAdminController]

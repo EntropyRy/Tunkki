@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Application\Sonata\MediaBundle\Entity\Media;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use function Symfony\Component\String\u;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -118,6 +120,11 @@ class Event
      * @ORM\Column(type="array", nullable=true)
      */
     private $links = [];
+
+    /**
+     * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Event")
+     */
+    private $eventArtistInfos;
 
     public function getId(): ?int
     {
@@ -283,6 +290,7 @@ color: red;
 
 }
 */";
+		$this->eventArtistInfos = new ArrayCollection();
     }
 
     public function getType(): ?string
@@ -407,5 +415,36 @@ color: red;
         } else {
             return $this->Name;
         }
+    }
+
+    /**
+     * @return Collection|EventArtistInfo[]
+     */
+    public function getEventArtistInfos(): Collection
+    {
+        return $this->eventArtistInfos;
+    }
+
+    public function addEventArtistInfo(EventArtistInfo $eventArtistInfo): self
+    {
+        if (!$this->eventArtistInfos->contains($eventArtistInfo)) {
+            $this->eventArtistInfos[] = $eventArtistInfo;
+            $eventArtistInfo->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEventArtistInfo(EventArtistInfo $eventArtistInfo): self
+    {
+        if ($this->eventArtistInfos->contains($eventArtistInfo)) {
+            $this->eventArtistInfos->removeElement($eventArtistInfo);
+            // set the owning side to null (unless already changed)
+            if ($eventArtistInfo->getEvent() === $this) {
+                $eventArtistInfo->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -47,7 +47,7 @@
     {% endif %}
 {% endblock %}
 {% block event_content %}
-    {{ attribute(event,content_attr)|raw }}
+{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
     {% if event.attachment %}
     <div class="mb-2">
     <i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
@@ -81,3 +81,50 @@
 </div>
 {% endif %}
 {% endblock %}
+{% block timetable %}
+<ul>
+{% for time in event.eventArtistInfos %}
+<li>{{ time.StartTime|date('H:i')}}: <a href="#{{ time.artist }}">{{ time.artist }}</a></li>
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block bios %}
+{% set bio_attribute = 'bio_attribute'|trans %}
+    {% for time in event.eventArtistInfos %}
+    {% set artist = time.artist %}
+    {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
+        {% if thecycle == 'even' %}
+        <div id="{{ artist }}" class="col-md-12 pt-3">
+            <div class="row">
+                <div class="col-md-5">
+                    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
+                    <small>{{ artist.genre }}</small>
+                    <div>{{ attribute(artist, bio_attribute) }}</div>
+                </div>
+                <div class="col-md-7">
+                    <img width="100%" src="{% path artist.Picture, 'big' %}"> 
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div id="{{ artist }}" class="col-md-12 pt-3">
+            <div class="row">
+                <div class="col-md-7">
+                    <img width="100%" src="{% path artist.Picture, 'big' %}"> 
+                </div>
+                <div class="col-md-5">
+                    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
+                    <small>{{ artist.genre }}</small>
+                    <div>{{ attribute(artist, bio_attribute) }}</div>
+                    <hr>
+                    {% for link in artist.links %}
+                    <span><a href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+

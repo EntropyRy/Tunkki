@@ -75,6 +75,17 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
             ;
     }
+    public function findEventBySlugAndYear($slug,$year)
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.url = :val')
+            ->andWhere('YEAR(r.EventDate) = :year')
+            ->setParameter('val', $slug)
+            ->setParameter('year', $year)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
     public function findEventsByType($type)
     {
         return $this->createQueryBuilder('r')

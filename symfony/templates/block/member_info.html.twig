@@ -1,6 +1,6 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-<div class="col-md-4">
+<div class="col-sm-4">
 <div class="box">
     <div class="box-header">
         <h5 class="box-title">{{'membership_information'|trans}}</h5>
@@ -22,7 +22,7 @@
         <li><span class="fa-li"><i class="fas fa-city"></i></span>
             {{ member.CityOfResidence }}
         </li>
-        <li><span class="fa-li"><i class="fas fa-globe"></i></span>
+        <li><span class="fa-li"><i class="fas fa-language"></i></span>
             {{ member.locale|trans }}&nbsp;
         </li>
         <li><span class="fa-li"><i class="{% if member.StudentUnionMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i></span>
@@ -33,7 +33,7 @@
     </div>
 </div>        
 </div>
-<div class="col-md-8">
+<div class="col-sm-8">
 <div class="box">
     <div class="box-header">
         <h5 class="box-title">{{'membership_status'|trans}}</h5>
@@ -74,6 +74,22 @@
         </span>
         </li>
         </ul>
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{'paid_renting_rewards'|trans}}</h5>
+    </div>
+    <div class="box-body">
+        {% for reward in member.user.rewards|reverse|slice(0,5) %}
+            {% if reward.PaidDate %}
+            {{ reward.PaidDate|date('d.m.Y') }}: {{ reward.Evenout }}€<br>
+            {% else %}
+            {{ 'next_reward_is_bubling_under'|trans }}<br>
+            {% endif %}
+        {% else %}
+        {{'no_renting_rewards'|trans }}
+        {% endfor %}
     </div>
 </div>        
 </div>
