@@ -82,7 +82,8 @@ class EventController extends Controller
     ){
         $artists = $security->getUser()->getMember()->getArtist();
         if (count($artists)==0){
-            $this->addFlash('success', $trans->trans('no_artsit_create_one'));
+            $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
+            $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
         }
         $slug = $request->get('slug');
@@ -98,7 +99,7 @@ class EventController extends Controller
             }
         } 
         if (count($artists)==0){
-            $this->addFlash('success', $trans->trans('all_artists_signed_up_create_one'));
+            $this->addFlash('warning', $trans->trans('all_artists_signed_up_create_one'));
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
         }
         $artisteventinfo = new EventArtistInfo();

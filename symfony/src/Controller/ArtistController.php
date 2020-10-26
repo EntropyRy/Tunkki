@@ -35,6 +35,11 @@ class ArtistController extends AbstractController
             try {
                 $em->persist($artist);
                 $em->flush();
+                $referer = $request->getSession()->get('referer');
+                if($referer){
+                    $request->getSession()->remove('referer');
+                    return $this->redirect($referer);
+                }
                 return $this->redirectToRoute('entropy_profile');
             } catch (UniqueConstraintViolationException $e){
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));

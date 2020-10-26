@@ -98,7 +98,7 @@ class EventArtistInfo
     }
     public function __toString()
     {
-        return $this->artist;
+        return $this->Artist;
     }
 
     public function getWishForPlayTime(): ?string

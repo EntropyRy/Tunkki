@@ -10,12 +10,16 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sonata\Form\Type\DateTimePickerType;
+
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'artists';
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('Artist')
             ->add('SetLength')
             ->add('StartTime')
             ;
@@ -25,9 +29,9 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('Artist')
+            ->add('WishForPlayTime')
             ->add('SetLength')
             ->add('StartTime')
-            ->add('Event')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -41,8 +45,13 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('Artist')
+            ->add('WishForPlayTime', TextType::class, ['disabled' => true])
             ->add('SetLength')
-            ->add('StartTime')
+            ->add('StartTime', DateTimePickerType::class, [
+                'dp_pick_time'=> true,
+                'dp_pick_date'=> false,
+                'format' => 'H:mm'
+            ])
             ;
     }
 
