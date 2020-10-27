@@ -5,11 +5,11 @@
 
 {% block content %}
 <div class="col-md-12">
-    <h1>{{'profile'|trans|capitalize }}</h1>
+    <h1>{{'profile.name'|trans|capitalize }}</h1>
 </div>
     {{ sonata_block_render({'type':'entropy.block.member_info'}) }}
     <h2 class="col-md-12 pb-2 pt-2">{{'artist_profiles'|trans }}
-        <a class="btn btn-primary" href="{{ url('entropy_artist_create') }}">{{'add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+        <a class="btn btn-primary" href="{{ url('entropy_artist_create') }}">{{'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
     </h2>
     {{ sonata_block_render({'type':'entropy.block.artist_info'}) }}
 {% endblock %}

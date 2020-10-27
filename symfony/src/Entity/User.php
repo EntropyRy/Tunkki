@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
@@ -29,8 +30,14 @@ class User implements UserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\Length(min=8)
      */
     private $password;
+
+    /**
+     * @Assert\Length(min=8)
+     */
+    private $plainPassword;
 
     /**
      * @ORM\OneToOne(targetEntity=Member::class, inversedBy="user", cascade={"persist", "remove"})
@@ -144,7 +151,7 @@ class User implements UserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getMember(): ?Member
@@ -244,5 +251,13 @@ class User implements UserInterface
 
         return $this;
     }
-
+    public function getPlainPassword()
+    {
+        return $this->plainPassword;
+    }
+    public function setPlainPassword($plainPassword)
+    {
+        $this->plainPassword = $plainPassword;
+		$this->password = null;
+    }
 }

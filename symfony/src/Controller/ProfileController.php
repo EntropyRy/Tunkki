@@ -35,11 +35,12 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
             $user = $member->getUser();
-            $user->setPassword($encoder->encodePassword($user, $user->getPassword()));
+            $user->setPassword($encoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
             $em->persist($user);
             $em->persist($member);
             $em->flush();
             $request->setLocale($member->getLocale());
+            $this->addFlash('success', 'profile.member_data_changed');
             return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
         return $this->render('profile/edit.html.twig', [

@@ -59,7 +59,6 @@ fb.event: FB tapahtuma
 entropy.seo.description: Elektronisen musiikin kulttuuri yhdistys
 map: Kartta
 profile_url: profiili
-profile: Profiili
 reset_your_password: Vaihda salasanasi
 send_password_reset_email: Lähetä salasanan nollaus sähköposti
 reset_password_form_help: Kun annat sähköpostisi niin lähetämme sinulle sähköpostin josta löydät linkin salasanan vaihtamiseksi
@@ -120,3 +119,8 @@ bio_attribute: Bio
 succesfully_signed_up_for_the_party: Onnistuneesti ilmottauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa. Haluatko luoda uuden?
 duplicate_artist_found: Saman niminen artisti löytyy jo!
+Please enter a password: Anna salasana
+Locale: Kieli
+profile:
+    member_data_changed: Salasana ja tiedot muutettu
+    name: Profiili
