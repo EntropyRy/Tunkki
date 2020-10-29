@@ -47,6 +47,7 @@ sonata_media:
             formats:
                 small: { width: 400 , quality: 90}
                 big:   { width: 800 , quality: 100}
+                square:   { width: 800 , height: 800, quality: 100, resizer: sonata.media.resizer.square}
 
     cdn:
         server:

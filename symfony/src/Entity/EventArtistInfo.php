@@ -23,7 +23,7 @@ class EventArtistInfo
     private $SetLength;
 
     /**
-     * @ORM\Column(type="time", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $StartTime;
 

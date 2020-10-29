@@ -97,34 +97,39 @@
         {% if thecycle == 'even' %}
         <div id="{{ artist }}" class="col-md-12 pt-3">
             <div class="row">
-                <div class="col-md-5">
-                    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
-                    <small>{{ artist.genre }}</small>
-                    <div>{{ attribute(artist, bio_attribute) }}</div>
+                <div class="col-md-5 order-sm-last order-md-first">
+                    {{ block('artist_info') }}
                 </div>
-                <div class="col-md-7">
-                    <img width="100%" src="{% path artist.Picture, 'big' %}"> 
+                <div class="col-md-7 order-sm-first order-md-last">
+                    {{ block('artist_pic') }}
                 </div>
             </div>
         </div>
         {% else %}
         <div id="{{ artist }}" class="col-md-12 pt-3">
             <div class="row">
-                <div class="col-md-7">
-                    <img width="100%" src="{% path artist.Picture, 'big' %}"> 
+                <div class="col-md-7 order-sm-first order-md-first">
+                    {{ block('artist_pic') }}
                 </div>
-                <div class="col-md-5">
-                    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
-                    <small>{{ artist.genre }}</small>
-                    <div>{{ attribute(artist, bio_attribute) }}</div>
-                    <hr>
-                    {% for link in artist.links %}
-                    <span><a href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
-                    {% endfor %}
+                <div class="col-md-5 order-sm-last order-md-last">
+                    {{ block('artist_info') }}
                 </div>
             </div>
         </div>
         {% endif %}
     {% endfor %}
 {% endblock %}
-
+{% block artist_info %}
+    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
+    <small>{{ artist.genre }}</small>
+    <div>{{ attribute(artist, bio_attribute) }}</div>
+    {% if artist.links is not empty %}
+        <hr>
+        {% for link in artist.links %}
+        <span><a href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+{% block artist_pic %}
+    <img width="100%" src="{% path artist.Picture, 'square' %}"> 
+{% endblock %}

@@ -95,7 +95,10 @@ bio_attribute: BioEn
 succesfully_signed_up_for_the_party: Succesfully signed up for the party!
 all_artists_signed_up_create_one: All of your artis ahve been signed up for this party. Create new one?
 duplicate_artist_found: Duplicate artist name found!
+widget_label_binary_content: Binary content
+widget_label_unlink: Unlink
 profile:
     member_data_changed: Password and member data changed
     add_new_artist: Add new artist profile
+    name: profile
     

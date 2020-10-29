@@ -97,7 +97,9 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $user->setLastLogin(new \DateTime());
         $this->entityManager->persist($user);
         $this->entityManager->flush();
-        $request->setLocale($user->getMember()->getLocale());
+        if(!is_null($user->getMember()->getLocale())){
+            $request->setLocale($user->getMember()->getLocale());
+        }
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }

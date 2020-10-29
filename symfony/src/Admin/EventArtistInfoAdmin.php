@@ -48,9 +48,10 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('WishForPlayTime', TextType::class, ['disabled' => true])
             ->add('SetLength')
             ->add('StartTime', DateTimePickerType::class, [
-                'dp_pick_time'=> true,
-                'dp_pick_date'=> false,
-                'format' => 'H:mm'
+                'dp_side_by_side' => true,
+                'format' => 'd.M.y H:m',
+                'required' => false,
+                'help' => 'please select right date so that we can order the artist right'
             ])
             ;
     }

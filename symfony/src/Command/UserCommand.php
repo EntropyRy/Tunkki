@@ -12,6 +12,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Console\Question\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
+use App\Entity\Member;
 
 class UserCommand extends Command
 {
@@ -42,11 +43,13 @@ class UserCommand extends Command
 
         $email = $input->getArgument('email');
         if ($email) {
-            $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
-            if (!$user){
+            $user = $this->em->getRepository(Member::class)->findOneBy(['email' => $email])->getUser();
+            /*if (!$user){
                 $user = new User();
-                $user->setEmail($email);
-            }
+                $member = new Member();
+                $member->setEmail($email);
+                $member->setUser($user);
+            }*/
             if($input->getOption('password')){
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');
