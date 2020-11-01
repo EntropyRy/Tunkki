@@ -338,3 +338,10 @@ services:
             - { name: doctrine.event_subscriber, connection: default }
         calls:
             - [ setAnnotationReader, [ "@annotation_reader" ] ]
+
+    entropy.admin.access_groups:
+        class: App\Admin\AccessGroupsAdmin
+        arguments: [~, App\Entity\AccessGroups, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: AccessGroups }
+        public: true

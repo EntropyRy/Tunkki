@@ -101,4 +101,7 @@ profile:
     member_data_changed: Password and member data changed
     add_new_artist: Add new artist profile
     name: profile
-    
+    access_groups: Access groups
+    apply_for_active_member: Apply for active membership
+    apply_active_member_help: Your application is editable until next board meeting. We hope you will tell us what you have done in entropy, what would you like to do in Entropy and why are you applying.
+    application_saved: Application saved

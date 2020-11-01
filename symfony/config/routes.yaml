@@ -43,6 +43,11 @@ entropy_artist_create:
     controller: App\Controller\ArtistController:create
     requirements:
         id: '\d+'
+entropy_profile_active_member:
+    path:
+        en: /profile/apply
+        fi: /profiili/aktiiviksi
+    controller: App\Controller\ProfileController:apply
 entropy_artist_edit:
     path:
         en: /profile/artist/{id}/edit

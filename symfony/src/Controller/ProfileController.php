@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\MemberType;
+use App\Form\ActiveMemberType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,6 +46,24 @@ class ProfileController extends AbstractController
         }
         return $this->render('profile/edit.html.twig', [
             'member' => $member,
+            'form' => $form->createView()
+        ]);
+    }
+    public function apply(Request $request, Security $security, FormFactoryInterface $formF)
+    {
+        $member = $security->getUser()->getMember();
+        $form = $formF->create(ActiveMemberType::class, $member);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $member = $form->getData();
+            $member->setApplicationDate(new \DateTime('now'));
+            $em->persist($member);
+            $em->flush();
+            $this->addFlash('success', 'profile.application_saved');
+            return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
+        }
+        return $this->render('profile/apply.html.twig', [
             'form' => $form->createView()
         ]);
     }

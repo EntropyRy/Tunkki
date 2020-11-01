@@ -71,9 +71,15 @@ class User implements UserInterface
      */
     private $MattermostId;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=AccessGroups::class, mappedBy="users")
+     */
+    private $accessGroups;
+
     public function __construct()
     {
         $this->rewards = new ArrayCollection();
+        $this->accessGroups = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -111,6 +117,13 @@ class User implements UserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
+        foreach($this->accessGroups as $group){
+            if($group->getActive()){
+                foreach($group->getRoles() as $role){
+                    $roles[] = $role;
+                }
+            }
+        }
 
         return array_unique($roles);
     }
@@ -259,5 +272,32 @@ class User implements UserInterface
     {
         $this->plainPassword = $plainPassword;
 		$this->password = null;
+    }
+
+    /**
+     * @return Collection|AccessGroups[]
+     */
+    public function getAccessGroups(): Collection
+    {
+        return $this->accessGroups;
+    }
+
+    public function addAccessGroup(AccessGroups $accessGroup): self
+    {
+        if (!$this->accessGroups->contains($accessGroup)) {
+            $this->accessGroups[] = $accessGroup;
+            $accessGroup->addUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessGroup(AccessGroups $accessGroup): self
+    {
+        if ($this->accessGroups->removeElement($accessGroup)) {
+            $accessGroup->removeUser($this);
+        }
+
+        return $this;
     }
 }

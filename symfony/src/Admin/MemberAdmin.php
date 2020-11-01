@@ -34,6 +34,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
+            ->add('ApplicationDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('StudentUnionMember')
             ->add('isActiveMember')
@@ -80,11 +81,13 @@ final class MemberAdmin extends AbstractAdmin
         }
         $formMapper
             ->with('Base',['class' => 'col-md-4'])
+            ->add('username')
             ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
+            ->add('locale')
             ->end()
             ->with('Membership status',['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
@@ -96,7 +99,6 @@ final class MemberAdmin extends AbstractAdmin
             ])
             ->end()
             ->with('Membership info',['class' => 'col-md-4'])
-            ->add('username', null, ['help' => 'asked from the member'])
             ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
             ->add('ApplicationHandledDate', DatePickerType::class, [
@@ -143,13 +145,6 @@ final class MemberAdmin extends AbstractAdmin
         $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }   
-    public function postUpdate($member)
-    {
-        $user = $member->getUser();
-        if($user){
-            $member->setUsername($user->getUsername());
-        }
-    }
     public function getExportFields()
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];

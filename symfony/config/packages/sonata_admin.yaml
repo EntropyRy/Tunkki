@@ -74,6 +74,7 @@ sonata_admin:
                     - entropy.admin.menu
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
+                roles: [CONTENT, SONATA_SUPER_ADMIN]
             sonata.admin.group.members:
                 label:           Members
                 label_catalogue: SonataAdminBundle
@@ -88,6 +89,7 @@ sonata_admin:
                 items:
                     - entropy_tunkki.admin.statusevent
                     - sonata.page.admin.site
+                    - entropy.admin.access_groups
                 roles: [SONATA_SUPER_ADMIN]
     assets:
         extra_stylesheets:

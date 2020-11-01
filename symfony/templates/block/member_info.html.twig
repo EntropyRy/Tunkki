@@ -53,27 +53,33 @@
         {{'you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting'|trans}},
         {{'100_procent_is_honorary_member'|trans}}
         </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" disabled {% if member %}checked{% endif %}>
-            <label class="form-check-label" for="inlineCheckbox2">{{'Member'|trans}}, {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" disabled {% if member.isActiveMember %}checked{% endif %}>
-            <label class="form-check-label" for="inlineCheckbox2">{{'Active member'|trans}}{% if member.ApplicationHandledDate %}, {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
-            </label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2" disabled {% if member.isFullMember %}checked{% endif %}>
-            <label class="form-check-label" for="inlineCheckbox2">{{'Full member'|trans}}</label>
-        </div>
-        <div class="form-check form-check-inline">
-            <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3" disabled {% if member.AcceptedAsHonoraryMember %}checked{% endif %}>
-            <label class="form-check-label" for="inlineCheckbox3">{{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %}, {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
-            </label>
-        </div>
+        <span>
+            <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Member'|trans}}, {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
+        </span>
+        <span>
+            <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Active member'|trans}}{% if member.ApplicationHandledDate %}, {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
+        </span>
+        <span>
+            <i class="{% if member.isFullMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Full member'|trans}}
+        </span>
+        <span>
+            <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %}, {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
         </span>
         </li>
+        <li><span class="fa-li"><i class="fas fa-users-cog"></i></span>
+            {{ 'profile.access_groups'|trans }}:
+            {% for group in member.user.AccessGroups %}
+            {{ group }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </li>
         </ul>
+        {% if not member.isActiveMember %}
+        <a class="btn btn-primary btn-large" href="{{ url('entropy_profile_active_member') }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
+        {% endif %}
     </div>
 </div>
 <div class="box">

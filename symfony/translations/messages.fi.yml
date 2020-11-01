@@ -125,3 +125,8 @@ profile:
     member_data_changed: Salasana ja tiedot muutettu
     name: Profiili
     add_new_artist: Lisää uusi artistiprofiili
+    access_groups: Oikeudet
+    apply_for_active_member: Hae aktiivijäsenyyttä
+    apply_active_member_help: Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata sitä siihen asti. Toivomme että kerrot meille mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet.
+    application_saved: Hakemus tallennettu
+    

@@ -16,14 +16,14 @@
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-md-8 order-1 order-md-0">
-        {{ block('event_content')}}
+        {{ block('event_frontpage_content')}}
         </div>
         <div class="col-md-4 order-0 order-md-1">
         {{ block('event_media') }}
         </div>
     </div>
     {% else %}
-        {{ block('event_content')}}
+        {{ block('event_frontpage_content')}}
     {% endif %}
 {% endblock %}
 {% block event_head_reverse %}
@@ -48,11 +48,10 @@
 {% endblock %}
 {% block event_content %}
 {{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
-    {% if event.attachment %}
-    <div class="mb-2">
-    <i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
-    </div>
-    {% endif %}
+    {{ block('links')}}
+{% endblock %}
+{% block event_frontpage_content %}
+{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': ''})|raw }}
     {{ block('links')}}
 {% endblock %}
 {% block event_media %}
@@ -61,6 +60,11 @@
     </div>
 {% endblock %}
 {% block links %}
+{% if event.attachment %}
+<div class="mb-2">
+<i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
+</div>
+{% endif %}
 {% if event.epics is not empty or event.links.urls.0 is defined %}
 <div>
 <hr>

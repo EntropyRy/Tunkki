@@ -58,7 +58,7 @@
                                 <li><a href="{{ path('sonata_admin_dashboard') }}">{{ "header.sonata_admin_dashboard"|trans({}, 'SonataPageBundle') }}</a></li>
                             {% endif %}
 
-                            {% if sonata_page.isEditor %}
+                            {% if sonata_page.isEditor and is_granted('CONTENT') %}
                                 {% set sites = sonata_page.siteavailables %}
 
                                 {% if sites|length > 1 and site is defined %}
@@ -99,26 +99,23 @@
                                     </li>
                                 {% endif %}
                                 {% if event is defined %}
+                                    {% if is_granted('CONTENT') or is_granted('ROLE_SUPER_ADMIN')%}
                                     <li>
                                         <a href="{{ sonata_admin.url('entropy.admin.event', 'edit', {'id': event.id}) }}">
                                             <i class="fa fa-magic"></i>
                                             {{ 'edit_event'|trans}}
                                         </a>
                                     </li>
+                                    {% endif %}
                                 {% endif %}
 
+                                {% if page is defined and page.edited %}
+                                    <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
+                                {% endif %}
                                 {% if page is defined and not page.enabled %}
                                     <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
                                 {% endif %}
 
-                                {% if sonata_page.isInlineEditionOn and page is defined %}
-                                    <li>
-                                        <form class="form-inline" style="margin: 0px">
-                                            <label class="checkbox inline" for="page-action-enabled-edit"><input type="checkbox" id="page-action-enabled-edit">{{ 'header.show_zone'|trans({}, 'SonataPageBundle') }}</label>
-                                            <input type="submit" class="btn" value="{{ 'btn_save_position'|trans({}, 'SonataPageBundle') }}" id="page-action-save-position">
-                                        </form>
-                                    </li>
-                                {% endif %}
                             {% endif %}
 
                             {% if app.user and is_granted('ROLE_PREVIOUS_ADMIN') %}

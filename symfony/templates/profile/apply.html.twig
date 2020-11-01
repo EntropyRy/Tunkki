@@ -1,0 +1,15 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{'profile.apply_for_active_member'|trans}} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    <p>{{'profile.apply_active_member_help'|trans}}</p>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+
