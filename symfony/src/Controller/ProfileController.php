@@ -52,6 +52,10 @@ class ProfileController extends AbstractController
     public function apply(Request $request, Security $security, FormFactoryInterface $formF)
     {
         $member = $security->getUser()->getMember();
+        if($member->getIsActiveMember()){
+            $this->addFlash('success', 'profile.you_are_active_member_already');
+            return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
+        }
         $form = $formF->create(ActiveMemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

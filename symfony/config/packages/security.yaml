@@ -7,6 +7,7 @@ security:
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_ADMIN: [ROLE_USER, ROLE_SONATA_ADMIN]
+        BOARD: [ROLE_SUPER_ADMIN]
         CONTENT:
             - ROLE_ADMIN
             - ROLE_ENTROPY_ADMIN_MENU_ALL

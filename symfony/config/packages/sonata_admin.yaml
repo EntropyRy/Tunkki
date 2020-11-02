@@ -13,14 +13,14 @@ sonata_admin:
         lock_protection: true
     dashboard:
         blocks:
-            - { class: col-md-8, position: top, type: entropy_tunkki.block.bookings}
+            - { position: right, type: entropy_tunkki.block.bookings}
             - { position: right, type: entropy_tunkki.block.brokenitems}
             - { position: left, type: sonata.admin.block.admin_list }
-            - { position: left, type: entropy.block.future_events }
+              #- { position: left, type: entropy.block.future_events }
               #- { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.member, text: Members}}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy.admin.event, text: Events, color: bg-green}}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.booking, text: Bookings, color: bg-yellow}}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.member, text: Members, template: 'block\stats.html.twig'}}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy.admin.event, text: Events, color: bg-green, template: 'block\stats.html.twig'}}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.booking, text: Bookings, color: bg-yellow, template: 'block\stats.html.twig'}}
 
         groups:
             sonata.admin.group.inventory:

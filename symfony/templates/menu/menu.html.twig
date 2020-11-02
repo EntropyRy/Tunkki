@@ -18,9 +18,21 @@
         {% else %}
         <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
         {% endif %}
-        <span style="padding-left:5px;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i></a></span>
+        <!--        <span style="padding-left:5px;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i>{{'login'|trans|capitalize}}</a></span> -->
     {% else %}
-        <span><a href="{{ url('entropy_profile.'~loc)}}"><i class="fas fa-user"></i> {{ app.user.username }}</a></span>
+        <ul class="nav nav-pills">
+             <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> {{ app.user.username }}</a>
+                 <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{{ url('entropy_profile.'~loc)}}">
+                        <i class="fas fa-user-cog"></i> {{ 'profile.name'|trans }}
+                    </a>
+                    <a class="dropdown-item" href="{{ url('app_logout')}}">
+                        <i class="fas fa-sign-out-alt"></i> {{ 'logout'|trans|capitalize }}
+                    </a>
+                 </div>
+             </li>
+        </ul>
     {% endif %}
   </div>
 </nav>

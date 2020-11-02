@@ -31,7 +31,13 @@
             <div class="pt-2">{{'events'|trans}}:</div>
             <ul>
             {% for info in ar.eventArtistInfos %}
-            <li><a href="{{ url('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a></li>
+            <li><a href="{{ url('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>
+                {% if info.StartTime %}
+                @ {{ info.StartTime|date('H:i')}}
+                {% else %}
+                : {{ 'artist.not_confirmed_yet'|trans }}
+                {% endif %}
+            </li>
             {% endfor %}
             </ul>
         </div>

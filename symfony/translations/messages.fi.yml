@@ -19,9 +19,9 @@ Email: Sähköposti
 Phone: Puhelinnumero
 City of residence: Asuinpaikkakunta
 Student union member: AYY:n jäsenyys
-Active member: Aktiivi jäsenyys
-HC member: HC jäsenyys
-Full member: Täysi jäsenyys
+Active member: Aktiivijäsenyys
+HC member: HC-jäsenyys
+Full member: Täysjäsenyys
 Member: Jäsen
 since: alkaen
 Username: Käytäjänimi
@@ -77,14 +77,11 @@ please_sign_in: Kirjaudu sisään!
 sign_in: Kirjaudu sisään
 membership_information: Jäsentiedot
 membership_status: Jäsentilanne
-you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitser vähintään 25% jotta voit äänestää yhdistyskokouksessa
-100_procent_is_honorary_member: 100% on HC jäsen
+you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitset vähintään 25 %, jotta voit äänestää yhdistyskokouksessa
+100_procent_is_honorary_member: 100 % on HC-jäsen
 used_in_other_services: Käytetään meidän muissa palveluissa
 you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsen tietojasi kirjautumalla sisään
 edit: muokkaa
-paid_renting_rewards: Voukratehtävien kompensaatiot
-no_renting_rewards: Ei tapahtumia, kysele miten voit osallistua?
-next_reward_is_bubling_under: Seuraava on tulossa..
 add_new_artist: lisää uusi artistiprofiili
 artist_profiles: Artistiprofiilit
 artist_information: Perustiedot
@@ -129,4 +126,10 @@ profile:
     apply_for_active_member: Hae aktiivijäsenyyttä
     apply_active_member_help: Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata sitä siihen asti. Toivomme että kerrot meille mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet.
     application_saved: Hakemus tallennettu
+    paid_renting_rewards: Vuokratehtävien kompensaatiot
+    no_renting_rewards: Ei tapahtumia. Kysele vaikka Mattermostissa, miten voit osallistua.
+    next_reward_is_bubling_under: Seuraava on tulossa..
+    you_are_active_member_already: Olet jo aktiivijäsen
+artist:
+    not_confirmed_yet: Ei vahvistettu (vielä)
     

@@ -58,7 +58,7 @@
                                 <li><a href="{{ path('sonata_admin_dashboard') }}">{{ "header.sonata_admin_dashboard"|trans({}, 'SonataPageBundle') }}</a></li>
                             {% endif %}
 
-                            {% if sonata_page.isEditor and is_granted('CONTENT') %}
+                            {% if sonata_page.isEditor and is_granted('CONTENT') or is_granted('ROLE_SUPER_ADMIN') %}
                                 {% set sites = sonata_page.siteavailables %}
 
                                 {% if sites|length > 1 and site is defined %}
@@ -99,18 +99,16 @@
                                     </li>
                                 {% endif %}
                                 {% if event is defined %}
-                                    {% if is_granted('CONTENT') or is_granted('ROLE_SUPER_ADMIN')%}
                                     <li>
                                         <a href="{{ sonata_admin.url('entropy.admin.event', 'edit', {'id': event.id}) }}">
                                             <i class="fa fa-magic"></i>
                                             {{ 'edit_event'|trans}}
                                         </a>
                                     </li>
-                                    {% endif %}
                                 {% endif %}
 
                                 {% if page is defined and page.edited %}
-                                    <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
+                                    <li><span style="padding-left: 20px;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span></li>
                                 {% endif %}
                                 {% if page is defined and not page.enabled %}
                                     <li><span style="padding-left: 20px; background: red;"><strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em></strong></span></li>

@@ -103,7 +103,6 @@ $enable-responsive-font-sizes: true;
 	border-radius: 3px;
 	background: #ffffff;
 	border-top: 3px solid #d2d6de;
-		border-top-color: rgb(210, 214, 222);
 	border-top-color: rgb(210, 214, 222);
 	margin-bottom: 20px;
 	width: 100%;
@@ -121,4 +120,14 @@ $enable-responsive-font-sizes: true;
 		border-bottom-left-radius: 3px;
 		padding: 10px;
 	}
+}
+@include media-breakpoint-down(lg) {
+   .e-container {
+       border: 0px solid #fff;
+   }
+}
+@include media-breakpoint-up(lg) {
+   .e-container {
+       border: 2px solid #DDD;
+   }
 }

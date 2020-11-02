@@ -14,7 +14,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Doctrine\Types\JsonType;
-// use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class MemberAdmin extends AbstractAdmin
 {
@@ -97,6 +97,7 @@ final class MemberAdmin extends AbstractAdmin
                 'required' => false,
                 'help' => 'Grants free access to Entropy parties'
             ])
+            //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
             ->with('Membership info',['class' => 'col-md-4'])
             ->add('Application', null, ['disabled' => $editable])

@@ -82,7 +82,10 @@ final class AccessGroupsAdmin extends AbstractAdmin
 		foreach($rolesHierarchy as $key => $roles) {
 			if(empty($roles)) {
 				continue;
-			}
+            }
+            if($key == 'ROLE_ADMIN' || $key == 'ROLE_SUPER_ADMIN'){
+                continue;
+            }
             $flatRoles[$key] = $key;
 		}
 		return $flatRoles;
