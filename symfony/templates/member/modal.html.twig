@@ -21,7 +21,7 @@
 		  </div>
           {{ form_row(form.CityOfResidence) }}
           {{ form_row(form.StudentUnionMember) }}
-          {{ form_row(form.user.password) }}
+          {{ form_row(form.user.plainPassword) }}
           {{ form_row(form.user.MattermostId, {'row_attr': {'class':'d-none'}}) }}
           {{ form_row(form.locale, {'row_attr': {'class':'d-none'}}) }}
           <small>{{'submit_and_agree'|trans}}</small>

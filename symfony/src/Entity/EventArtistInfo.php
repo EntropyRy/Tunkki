@@ -43,6 +43,11 @@ class EventArtistInfo
      */
     private $WishForPlayTime;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Artist::class, cascade={"persist", "remove"})
+     */
+    private $artistClone;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -109,6 +114,18 @@ class EventArtistInfo
     public function setWishForPlayTime(?string $WishForPlayTime): self
     {
         $this->WishForPlayTime = $WishForPlayTime;
+
+        return $this;
+    }
+
+    public function getArtistClone(): ?Artist
+    {
+        return $this->artistClone;
+    }
+
+    public function setArtistClone(?Artist $artistClone): self
+    {
+        $this->artistClone = $artistClone;
 
         return $this;
     }

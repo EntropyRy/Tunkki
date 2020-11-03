@@ -13,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="member")
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
 class Member
 {
@@ -144,6 +145,7 @@ class Member
 
     /**
      * @ORM\OneToOne(targetEntity=User::class, mappedBy="member", cascade={"persist", "remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
      */
     private $user;
 
@@ -153,7 +155,8 @@ class Member
     private $locale = 'fi';
 
     /**
-     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="member")
+     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="member", orphanRemoval=true)
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
      */
     private $artist;
 

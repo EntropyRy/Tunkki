@@ -95,36 +95,43 @@
 
 {% block bios %}
 {% set bio_attribute = 'bio_attribute'|trans %}
-    {% for time in event.eventArtistInfos %}
-    {% set artist = time.artist %}
-    {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
-        {% if thecycle == 'even' %}
-        <div id="{{ artist }}" class="col-md-12 pt-3">
-            <div class="row">
-                <div class="col-md-5 order-sm-last order-md-first">
-                    {{ block('artist_info') }}
+    {% for info in event.eventArtistInfos %}
+        {% if info.StartTime is not null %}
+            {% set name = info.artist.name %}
+            {% if info.artistClone is null %}
+                {% set artist = info.artist %}
+            {% else %}
+                {% set artist = info.artistClone %}
+            {% endif %}
+            {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
+                {% if thecycle == 'even' %}
+                <div id="{{ name }}" class="col-md-12 pt-3">
+                    <div class="row">
+                        <div class="col-md-5 order-sm-last order-md-first">
+                            {{ block('artist_info') }}
+                        </div>
+                        <div class="col-md-7 order-sm-first order-md-last">
+                            {{ block('artist_pic') }}
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-7 order-sm-first order-md-last">
-                    {{ block('artist_pic') }}
+                {% else %}
+                <div id="{{ name }}" class="col-md-12 pt-3">
+                    <div class="row">
+                        <div class="col-md-7 order-sm-first order-md-first">
+                            {{ block('artist_pic') }}
+                        </div>
+                        <div class="col-md-5 order-sm-last order-md-last">
+                            {{ block('artist_info') }}
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        {% else %}
-        <div id="{{ artist }}" class="col-md-12 pt-3">
-            <div class="row">
-                <div class="col-md-7 order-sm-first order-md-first">
-                    {{ block('artist_pic') }}
-                </div>
-                <div class="col-md-5 order-sm-last order-md-last">
-                    {{ block('artist_info') }}
-                </div>
-            </div>
-        </div>
+                {% endif %}
         {% endif %}
     {% endfor %}
 {% endblock %}
 {% block artist_info %}
-    <h3>{{ artist }} @ {{time.StartTime|date('H:i')}}</h3>
+    <h3>{{ name }} @ {{info.StartTime|date('H:i')}}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {% if artist.links is not empty %}

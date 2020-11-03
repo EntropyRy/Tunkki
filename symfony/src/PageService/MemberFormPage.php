@@ -67,7 +67,7 @@ class MemberFormPage implements PageServiceInterface
             $email = $memberRepo->getByEmail($member->getEmail());
             if(!$name && !$email){
                 $user = $member->getUser();
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $user->getPassword()));
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
                 $member->setLocale($request->getlocale());
                 $this->em->persist($user);
                 $this->em->persist($member);
@@ -79,6 +79,8 @@ class MemberFormPage implements PageServiceInterface
             } else {
                 $state = 'update';
             }
+        } else {
+            $state = 'form_no';
         }
 
         return $this->templateManager->renderResponse(

@@ -28,6 +28,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('artist')
             ->add('username')
             ->add('firstname')
             ->add('lastname')

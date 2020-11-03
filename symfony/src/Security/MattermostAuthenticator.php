@@ -55,8 +55,6 @@ class MattermostAuthenticator extends SocialAuthenticator
         $member = $this->em->getRepository(Member::class)
                     ->findOneBy(['email' => $email]);
 
-        // 3) Maybe you just want to "register" them by creating
-        // a User object
         $user = $member->getUser();
         $user->setMattermostId($mattermostUser->getId());
         $this->em->persist($user);

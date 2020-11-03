@@ -1,6 +1,5 @@
 security:
     encoders:
-        #        FOS\UserBundle\Model\UserInterface: sha512
         App\Entity\User:
             algorithm: auto
 
@@ -83,27 +82,16 @@ security:
             user_checker: security.user_checker
             pattern:            .*
             context:            user
-#            form_login:
-#                login_path:     /login
-#                default_target_path: /profile
-#                check_path:     /login_check
-#                post_only:      true
-#            logout:
-#                path:           /logout
-#                target:         /login
             anonymous:          true
             switch_user:        true
             guard:
                 entry_point: App\Security\LoginFormAuthenticator
                 authenticators:
-                    #- "@my_mattermost_authenticator"
                     - App\Security\LoginFormAuthenticator
                     - App\Security\MattermostAuthenticator
 
             logout:
                 path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
                 # where to redirect after logout
                 # target: app_any_route
 

@@ -108,6 +108,12 @@ class EventController extends Controller
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $artist = $form->getData();
+            $artistClone = clone $artist->getArtist();
+            //$artistClone->setPicture(clone $artist->getArtist()->getPicture());
+            $artistClone->setMember(null);
+            $artistClone->setName($artistClone->getName().'#'.$artist->getArtist()->getId());
+            $artist->setArtistClone($artistClone);
+            $this->em->persist($artistClone);
             $this->em->persist($artist);
             $this->em->flush();
             $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));

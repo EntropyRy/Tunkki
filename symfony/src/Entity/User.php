@@ -12,6 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
 class User implements UserInterface
 {

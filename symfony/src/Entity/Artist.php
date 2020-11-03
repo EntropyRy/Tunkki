@@ -12,6 +12,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * @ORM\Entity(repositoryClass=ArtistRepository::class)
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
 class Artist
 {
@@ -31,11 +32,6 @@ class Artist
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $genre;
-
-    /**
-     * @ORM\OneToOne(targetEntity=Media::class, cascade={"persist", "remove"})
-     */
-    private $picture;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -84,6 +80,11 @@ class Artist
      */
     private $links = [];
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Media::class, cascade={"persist", "remove"})
+     */
+    private $Picture;
+
     public function __construct()
     {
         $this->eventArtistInfos = new ArrayCollection();
@@ -114,18 +115,6 @@ class Artist
     public function setGenre(?string $genre): self
     {
         $this->genre = $genre;
-
-        return $this;
-    }
-
-    public function getPicture(): ?Media
-    {
-        return $this->picture;
-    }
-
-    public function setPicture(?Media $picture): self
-    {
-        $this->picture = $picture;
 
         return $this;
     }
@@ -257,6 +246,18 @@ class Artist
     public function setLinks(?array $links): self
     {
         $this->links = $links;
+
+        return $this;
+    }
+
+    public function getPicture(): ?Media
+    {
+        return $this->Picture;
+    }
+
+    public function setPicture(?Media $Picture): self
+    {
+        $this->Picture = $Picture;
 
         return $this;
     }

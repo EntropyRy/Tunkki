@@ -124,12 +124,13 @@ profile:
     add_new_artist: Lisää uusi artistiprofiili
     access_groups: Oikeudet
     apply_for_active_member: Hae aktiivijäsenyyttä
-    apply_active_member_help: Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata sitä siihen asti. Toivomme että kerrot meille mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet.
+    apply_active_member_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
     application_saved: Hakemus tallennettu
     paid_renting_rewards: Vuokratehtävien kompensaatiot
     no_renting_rewards: Ei tapahtumia. Kysele vaikka Mattermostissa, miten voit osallistua.
     next_reward_is_bubling_under: Seuraava on tulossa..
     you_are_active_member_already: Olet jo aktiivijäsen
+    application_for_active_member: Aktiivijäsen hakemuksesi
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     

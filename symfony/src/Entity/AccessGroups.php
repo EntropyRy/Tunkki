@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AccessGroupsRepository::class)
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
 class AccessGroups
 {
