@@ -25,7 +25,6 @@ Full member: Täysjäsenyys
 Member: Jäsen
 since: alkaen
 Username: Käytäjänimi
-active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
 stay_tuned: Pysy kuulolla!
 future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
@@ -80,34 +79,20 @@ membership_status: Jäsentilanne
 you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitset vähintään 25 %, jotta voit äänestää yhdistyskokouksessa
 100_procent_is_honorary_member: 100 % on HC-jäsen
 used_in_other_services: Käytetään meidän muissa palveluissa
-you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsen tietojasi kirjautumalla sisään
+you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla sisään
 edit: muokkaa
 add_new_artist: lisää uusi artistiprofiili
-artist_profiles: Artistiprofiilit
-artist_information: Perustiedot
 preview: Esikatselu
-artist_name: Artistinimi
-artist_type: Tyyppi
-artist_genre: Genre(t)
-artist_bio: Bio Suomeksi
-artist_bio_en: Bio Englanniksi
-artist_hardware: Laitteisto
 picture: Kuva
 widget_headline_information: informaatio
 widget_label_type: tyyppi
 widget_label_context: konteksti
 widget_label_binary_content: tiedosto
 widget_label_unlink: poista linkitys
-genre_help: Vj voi merkitä minkälaista materiaalia
-bio_help: Kerro lyhyesti saavutuksistasi 
-hardware_help: Mitä tekniikkaa käytät esiintymiseen?
-no_artist_profile: Ei yhtään profiilia
 created_at: luotu
 updated_at: päivitetty
-artist_links: Linkit media näytteisiin ja muihin palveluihin
 no_linked_media: Ei linkitettyä mediaa
 Add: Lisää
-artist_promo_picture: Promo kuva
 delete: poista
 Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
 no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
@@ -118,19 +103,52 @@ all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapa
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
+url:
+    form:
+        open_in_new_window: Avaa uudessa ikkunassa
+        title: Otsikko
+        url: Url-osoite
+        icon: Icon luokka (class)
+
 profile:
     member_data_changed: Salasana ja tiedot muutettu
     name: Profiili
     add_new_artist: Lisää uusi artistiprofiili
     access_groups: Oikeudet
     apply_for_active_member: Hae aktiivijäsenyyttä
-    apply_active_member_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
     application_saved: Hakemus tallennettu
     paid_renting_rewards: Vuokratehtävien kompensaatiot
     no_renting_rewards: Ei tapahtumia. Kysele vaikka Mattermostissa, miten voit osallistua.
     next_reward_is_bubling_under: Seuraava on tulossa..
     you_are_active_member_already: Olet jo aktiivijäsen
     application_for_active_member: Aktiivijäsen hakemuksesi
+    save: tallenna
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
-    
+    no_artist_profile: Ei yhtään profiilia
+    information: Perustiedot
+    profiles: Artistiprofiilit
+    form:
+        name: Artistinimi
+        type: Tyyppi
+        bio: Bio Suomeksi
+        bio_en: Bio Englanniksi
+        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä Englanniksi
+        bio_help: Kerro lyhyesti saavutuksistasi 
+        hardware_help: Mitä tekniikkaa käytät esiintymiseen?
+        promo_picture: Promo kuva
+        genre: Genre(t)
+        hardware: Laitteisto
+        links: Linkit media näytteisiin ja muihin palveluihin
+
+member:
+    active:
+        application_title: Hae aktiivijäseneksi
+        application: Hakemuksesi Entropyn aktiivijäseneksi
+        apply_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
+        requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
+        requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
+        requirements3: Hallitus tietää kuka olet
+        requirements2: Viimeaikainen aktiivisuutesi
+        requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
+

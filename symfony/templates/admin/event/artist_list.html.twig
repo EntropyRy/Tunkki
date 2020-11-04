@@ -1,0 +1,69 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% block sonata_admin_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ event }} 
+                    <input type="button" value="Print" class="no-print btn pull-right" onClick="window.print()">
+                </h1>
+            </div>
+            <div class="col-md-12">
+            {% if infos %}
+            <h3>Artists</h3>
+            {{ block('tablehead') }}
+            {% for info in infos %}
+                {% set artist = info.Artist %}
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <label><input type="checkbox"> {{ artist }}</label>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="">{{ artist.genre }}</span>
+                    </td>
+                    <td>
+                        <span class="">{{ artist.hardware }}</span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {% for link in artist.links %}
+                            <a href="{{ link.url }}">{{link.title}}</a>
+                            {% endfor %}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {% if info.StartTime is not null %}
+                            {{ info.StartTime|date('H:i') }}
+                            {% endif %}
+                        </span>
+                    </td>
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+<style>
+@media print {
+.icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
+}
+</style>
+{% endblock %}
+
+{% block tablehead %}
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+            <th scope="col">Genre</th>
+            <th scope="col">Hardware</th>
+            <th scope="col">links</th>
+            <th scope="col">Start Time</th>
+        </tr>
+    </thead>
+    <tbody>
+{% endblock %}

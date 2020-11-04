@@ -109,7 +109,6 @@ class EventController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $artist = $form->getData();
             $artistClone = clone $artist->getArtist();
-            //$artistClone->setPicture(clone $artist->getArtist()->getPicture());
             $artistClone->setMember(null);
             $artistClone->setName($artistClone->getName().'#'.$artist->getArtist()->getId());
             $artist->setArtistClone($artistClone);
@@ -120,7 +119,7 @@ class EventController extends Controller
             return new RedirectResponse($this->generateUrl('entropy_profile'));
         }
         //$page = $cms->retrieve()->getCurrentPage();
-        return $this->render('artist/form.html.twig', [
+        return $this->render('artist/singup.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
         ]);

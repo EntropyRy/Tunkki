@@ -1,12 +1,15 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-{% for ar in member.artist %}
+<h2 class="col-md-12 pb-2 pt-2">{{'artist.profiles'|trans }}
+    <a class="btn btn-primary" href="{{ url('entropy_artist_create') }}">{{'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+</h2>
+ {% for ar in member.artist %}
 <div class="col-12">
 <div class="row">
 <div class="col-sm-4">
     <div class="box">
         <div class="box-header">
-            <h5 class="box-title">{{'artist_information'|trans}}</h5>
+            <h5 class="box-title">{{'artist.information'|trans}}</h5>
         </div>
         <div class="box-body">
             <ul class="fa-ul">
@@ -14,10 +17,10 @@
                 {{ ar.type }}: {{ ar.name }}
             </li>
             <li><span class="fa-li"><i class="fas fa-question"></i></span>
-                {{'artist_genre'|trans}}: {{ ar.genre }}<br>
-                {{'artist_hardware'|trans}}: {{ ar.hardware }}<br>
-                {{'created_at'| trans }}: {{ar.createdAt|date('d.m.Y')}}<br>
-                {{'updated_at'| trans }}: {{ar.updatedAt|date('d.m.Y')}}
+                {{'artist.form.genre'|trans}}: {{ ar.genre }}<br>
+                {{'artist.form.hardware'|trans}}: {{ ar.hardware }}<br>
+                {{'created_at'|trans }}: {{ar.createdAt|date('d.m.Y')}}<br>
+                {{'updated_at'|trans }}: {{ar.updatedAt|date('d.m.Y')}}
             </li>
             </ul>
             <a class="btn btn-primary btn-large" href="{{ url('entropy_artist_edit',{'id':ar.id}) }}">{{ 'edit'|trans|capitalize }}</a>
@@ -55,7 +58,9 @@
                 <p>{{ ar.bio }}</p>
                 <hr>
                 {% for link in ar.links %}
-                <span><a href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+                <span>
+                    <a {% if link.open_in_new_window %}target="_blank"{% endif %}href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
+                </span>
                 {% endfor %}
             </div>
             <div class="col-sm-6">
@@ -67,6 +72,6 @@
 </div>
 </div>
 {% else %}
-<div class="col-md-12">{{ 'no_artist_profile'|trans }}</div>
+<div class="col-md-12">{{ 'artist.no_artist_profile'|trans }}</div>
 {% endfor %}
 {% endblock %}

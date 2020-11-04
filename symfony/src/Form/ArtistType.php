@@ -19,28 +19,36 @@ class ArtistType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', null, ['label' => 'artist_name'])
+            ->add('name', null, ['label' => 'artist.form.name'])
             ->add('type', ChoiceType::class, [
-                'label' => 'artist_type',
+                'label' => 'artist.form.type',
                 'choices' => [
                     'DJ' => 'DJ',
                     'Live' => 'Live',
                     'VJ' => 'VJ'
                 ]
             ])
-            ->add('genre', null, ['label' => 'artist_genre','help' => 'genre_help'])
-            ->add('bio', null, ['label' => 'artist_bio','help' => 'bio_help'])
-            ->add('bioEn', null, ['label' => 'artist_bio_en','help' => 'bio_help'])
-            ->add('hardware', null, ['label' => 'artist_hardware','help' => 'hardware_help'])
+            ->add('genre', null, ['label' => 'artist.form.genre','help' => 'artist.form.genre_help'])
+            ->add('bio', null, ['label' => 'artist.form.bio','help' => 'artist.form.bio_help'])
+            ->add('bioEn', null, ['label' => 'artist.form.bio_en','help' => 'artist.form.bio_help'])
+            ->add('hardware', null, ['label' => 'artist.form.hardware','help' => 'artist.form.hardware_help'])
             ->add('links', CollectionType::class, [
-                'label' => 'artist_links',
-                'entry_type' => UrlsType::class,
+                'label' => 'artist.form.links',
                 'allow_add' => true,
                 'by_reference' => false,
-                'allow_delete' => true
-            ])
+                'allow_delete' => true,
+                'delete_empty' => true,
+                'prototype' => true,
+                'entry_type' => UrlsType::class,
+                'attr' => ['class' => 'form-row'],
+                'entry_options' => [
+                    'row_attr' => ['class' => 'col-md-6 col-12'],
+                    'label' => false
+                ],
+                ],['edit' => 'inline']
+            )
             ->add('picture', MediaType::class, [
-                    'label' => 'artist_promo_picture',
+                    'label' => 'artist.form.promo_picture',
                     'provider' => 'sonata.media.provider.image',
                     'context' => 'artist',
                     'new_on_update' => true,

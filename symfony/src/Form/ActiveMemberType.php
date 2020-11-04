@@ -13,8 +13,7 @@ class ActiveMemberType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('Application', null, ['label' => 'active.member.application'])
-            ->add('Submit', SubmitType::class)
+            ->add('Application', null, ['label' => 'member.active.application'])
         ;
     }
 
