@@ -49,7 +49,7 @@ class Artist
     private $hardware;
 
     /**
-     * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Artist", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Artist", cascade={"persist", "detach"})
      */
     private $eventArtistInfos;
 
@@ -81,7 +81,7 @@ class Artist
     private $links = [];
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Media::class, cascade={"persist", "detach"})
      */
     private $Picture;
 
@@ -186,6 +186,11 @@ class Artist
         return $this;
     }
 
+    public function clearEventArtistInfos()
+    {
+        $this->eventArtistInfos->clear();
+    }
+
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
@@ -222,7 +227,9 @@ class Artist
     public function setMember(?Member $member): self
     {
         $this->member = $member;
-
+        if(!is_null($member)){
+            $member->addArtist($this);
+        } 
         return $this;
     }
 

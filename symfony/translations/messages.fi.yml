@@ -114,9 +114,9 @@ event:
 url:
     form:
         open_in_new_window: Avaa uudessa ikkunassa
-        title: Otsikko
+        title: Linkin teksti 
         url: Url-osoite
-        icon: Icon luokka (class)
+        icon: Iconin luokka (class)
 
 profile:
     member_data_changed: Salasana ja tiedot muutettu
@@ -141,7 +141,7 @@ artist:
         type: Tyyppi
         bio: Bio Suomeksi
         bio_en: Bio Englanniksi
-        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä Englanniksi
+        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
         bio_help: Kerro lyhyesti saavutuksistasi 
         hardware_help: Mitä tekniikkaa käytät esiintymiseen?
         promo_picture: Promo kuva

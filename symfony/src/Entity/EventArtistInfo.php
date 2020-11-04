@@ -34,7 +34,7 @@ class EventArtistInfo
 
     /**
      * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="eventArtistInfos")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
      */
     private $Artist;
 
@@ -44,7 +44,7 @@ class EventArtistInfo
     private $WishForPlayTime;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Artist::class, cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=Artist::class, cascade={"persist"})
      */
     private $artistClone;
 

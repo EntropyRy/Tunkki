@@ -70,11 +70,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     {
         $artistClone = clone $eventinfo->getArtist();
         $artistClone->setMember(null);
-        $artistClone->setName($artistClone->getName().'#'.$eventinfo->getArtist()->getId());
+        $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName());
         $eventinfo->setArtistClone($artistClone);
-//        $this->em->persist($artistClone);
-//        $this->em->persist($eventinfo);
-//        $this->em->flush();
-        //$this->addFlash('success', $trans->trans('Artist cloned succesfully'));
     }
 }

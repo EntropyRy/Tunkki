@@ -82,6 +82,7 @@ final class MemberAdmin extends AbstractAdmin
         }
         $formMapper
             ->with('Base',['class' => 'col-md-4'])
+            ->add('artist')
             ->add('username')
             ->add('firstname')
             ->add('lastname')

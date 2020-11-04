@@ -23,7 +23,7 @@
         <ul class="nav nav-pills">
              <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> {{ app.user.username }}</a>
-                 <div class="dropdown-menu dropdown-menu-right">
+                 <div class="dropdown-menu dropdown-menu-lg-right">
                     {% if is_granted('ROLE_SONATA_ADMIN') %}
                     <a class="dropdown-item" href="{{ url('sonata_admin_dashboard')}}">
                         <i class="fas fa-cogs"></i> {{ 'header.sonata_admin_dashboard'|trans({}, 'SonataPageBundle') }}

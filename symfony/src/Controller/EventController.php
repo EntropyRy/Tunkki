@@ -110,7 +110,7 @@ class EventController extends Controller
             $artist = $form->getData();
             $artistClone = clone $artist->getArtist();
             $artistClone->setMember(null);
-            $artistClone->setName($artistClone->getName().'#'.$artist->getArtist()->getId());
+            $artistClone->setName($artistClone->getName().' for '.$event->getName());
             $artist->setArtistClone($artistClone);
             $this->em->persist($artistClone);
             $this->em->persist($artist);

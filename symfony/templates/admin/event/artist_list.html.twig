@@ -12,7 +12,11 @@
             <h3>Artists</h3>
             {{ block('tablehead') }}
             {% for info in infos %}
+                {% if info.ArtistClone is null %}
                 {% set artist = info.Artist %}
+                {% else %}
+                {% set artist = info.ArtistClone %}
+                {% endif %}
                 <tr>
                     <td>
                         <div class="checkbox">

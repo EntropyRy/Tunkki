@@ -72,7 +72,8 @@
         {% for url in keys %}
         <span class="pr-2">
             <i class="{{ url.icon }}"></i>
-            <a {% if url.open_in_new_window %}target="_blank"{% endif %} href="{{ url.url }}">{{ url.title|trans }}</a>
+            <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} 
+                href="{{ url.url }}">{{ url.title|trans }}</a>
         </span>
         {% endfor %}
     {% endfor %}
@@ -87,9 +88,17 @@
 {% endblock %}
 {% block timetable %}
 <ul>
-{% for time in event.eventArtistInfos %}
-    {% if time.StartTime is not empty %}
-        <li>{{ time.StartTime|date('H:i')}}: <a href="#{{ time.artist }}">{{ time.artist }}</a></li>
+{% for info in event.eventArtistInfos %}
+    {% if info.artistClone is null %}
+        {% set artist = info.artist %}
+        {% set name = info.artist.name %}
+    {% else %}
+        {% set artist = info.artistClone %}
+        {% set redact = ' for '~event.name %}
+        {% set name = artist.name|replace({(redact): ' '}) %}
+    {% endif %}
+    {% if info.StartTime is not empty %}
+        <li>{{ info.StartTime|date('H:i')}}: <a href="#{{ name }}">{{ name }}</a></li>
     {% endif %}
 {% endfor %}
 </ul>
@@ -99,11 +108,13 @@
 {% set bio_attribute = 'bio_attribute'|trans %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
-            {% set name = info.artist.name %}
             {% if info.artistClone is null %}
                 {% set artist = info.artist %}
+                {% set name = info.artist.name %}
             {% else %}
                 {% set artist = info.artistClone %}
+                {% set redact = ' for '~event.name %}
+                {% set name = artist.name|replace({(redact): ' '}) %}
             {% endif %}
             {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
                 {% if thecycle == 'even' %}
@@ -139,7 +150,7 @@
     {% if artist.links is not empty %}
         <hr>
         {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
         {% endfor %}
     {% endif %}
 {% endblock %}
