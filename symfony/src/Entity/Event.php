@@ -123,6 +123,7 @@ class Event
 
     /**
      * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Event")
+     * @ORM\OrderBy({"StartTime" = "ASC"})
      */
     private $eventArtistInfos;
 
