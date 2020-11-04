@@ -32,6 +32,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('Artist')
             ->add('artistClone')
             ->add('WishForPlayTime')
+            ->add('freeWord')
             ->add('SetLength')
             ->add('StartTime')
             ->add('_action', null, [

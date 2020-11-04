@@ -48,6 +48,11 @@ class EventArtistInfo
      */
     private $artistClone;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $freeWord;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -126,6 +131,18 @@ class EventArtistInfo
     public function setArtistClone(?Artist $artistClone): self
     {
         $this->artistClone = $artistClone;
+
+        return $this;
+    }
+
+    public function getFreeWord(): ?string
+    {
+        return $this->freeWord;
+    }
+
+    public function setFreeWord(?string $freeWord): self
+    {
+        $this->freeWord = $freeWord;
 
         return $this;
     }

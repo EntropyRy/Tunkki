@@ -16,11 +16,19 @@ class EventArtistInfoType extends AbstractType
             ->add('Artist', null, [
                 'choices' => $options['artists'],
                 'choice_value' => 'name',
-                'help' => 'new_artist_help_html',
-                'help_html' => true
+                'help' => 'event.form.sign_up.new_artist_help_html',
+                'help_html' => true,
             ])
-            ->add('WishForPlayTime')
-            ->add('SetLength')
+            ->add('WishForPlayTime',null, [
+                'label' => 'event.form.sign_up.wish_for_playtime'
+            ])
+            ->add('SetLength', null, [
+                'label' => 'event.form.sign_up.set_length'
+            ])
+            ->add('freeWord',null,[
+                'label' => 'event.form.sign_up.free_word',
+                'help'=> 'event.form.sign_up.why_should_we_choose_you'
+            ])
             //->add('StartTime', TimeType::class)
             //->add('Event', null, ['disabled' => true])
         ;

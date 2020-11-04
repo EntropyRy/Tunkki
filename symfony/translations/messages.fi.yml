@@ -96,13 +96,21 @@ Add: Lisää
 delete: poista
 Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
 no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
-new_artist_help_html: Jos haluat luoda uuden artistin voit tehdä sen profiili sivultasi
 bio_attribute: Bio
 succesfully_signed_up_for_the_party: Onnistuneesti ilmottauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa. Haluatko luoda uuden?
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
+event:
+    form:
+        sign_up:
+            why_should_we_choose_you: Miksi valitsisimme sinut?
+            wish_for_playtime: Toive soittojankohdasta
+            set_length: Toive setin pituudesta
+            free_word: Vapaa sana
+            save: Tallenna
+            new_artist_help_html: Jos haluat luoda uuden artistin voit tehdä sen profiili sivultasi
 url:
     form:
         open_in_new_window: Avaa uudessa ikkunassa

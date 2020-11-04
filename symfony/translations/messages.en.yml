@@ -75,10 +75,19 @@ no_linked_media: No linked media
 no_artsit_create_one: You don't have artist profile. Create one!
 bio_attribute: BioEn
 succesfully_signed_up_for_the_party: Succesfully signed up for the party!
-all_artists_signed_up_create_one: All of your artis ahve been signed up for this party. Create new one?
+all_artists_signed_up_create_one: All of your artist have been signed up for this party. Create new one?
 duplicate_artist_found: Duplicate artist name found!
 widget_label_binary_content: Binary content
 widget_label_unlink: Unlink
+event:
+    form:
+        sign_up:
+            why_should_we_choose_you: Why should we choose you?
+            wish_for_playtime: Wish for playtime
+            set_length: Wish for set length
+            free_word: Free word
+            save: Save
+            new_artist_help_html: If you want to create a new artist you can do it from your profile page
 url:
     form:
         open_in_new_window: Open in a new window

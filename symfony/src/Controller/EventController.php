@@ -119,7 +119,7 @@ class EventController extends Controller
             return new RedirectResponse($this->generateUrl('entropy_profile'));
         }
         //$page = $cms->retrieve()->getCurrentPage();
-        return $this->render('artist/singup.html.twig', [
+        return $this->render('artist/signup.html.twig', [
             'event' => $event,
             'form' => $form->createView(),
         ]);

@@ -40,7 +40,7 @@ final class EventAdmin extends AbstractAdmin
 			$menu->addChild('Event', 
                $admin->generateMenuUrl('edit', ['id' => $id])
             );
-            $menu->addChild('Artist info', 
+            $menu->addChild('Artist editor', 
                $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
             );
             $menu->addChild('Artist list', [
