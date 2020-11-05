@@ -42,7 +42,12 @@ final class MemberAdminController extends CRUDController
             $user->setLastname($object->getLastname());
             $user->setEmail($object->getEmail());
             $user->setPhone($object->getPhone());
-            $user->setUsername($object->getUsername());
+            if ($object->getUsername()){
+                $user->setUsername($object->getUsername());
+            } else {
+                $username = strstr($object->getEmail(), '@', true); 
+                $user->setUsername($username);
+            }
             $user->setEnabled(1);
             $pass = bin2hex(openssl_random_pseudo_bytes(6));
             $user->setPlainPassword($pass);
