@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
@@ -36,6 +37,15 @@ final class EventAdmin extends AbstractAdmin
        $id = $admin->getRequest()->get('id');
 
        if ($this->isGranted('EDIT')) {
+			$menu->addChild('Event', 
+               $admin->generateMenuUrl('edit', ['id' => $id])
+            );
+            $menu->addChild('Artist editor', 
+               $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
+            );
+            $menu->addChild('Artist list', [
+               'uri' => $admin->generateUrl('artistList', ['id' => $id])
+            ]);
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
@@ -138,6 +148,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => 'richhtml', 
                         'required' => false,
                         'ckeditor_context' => 'default',
+                        'help' => 'use special tag {{ timetable }} and {{ bios }} to insert artist infos'
                     ]);
             }
             $formMapper
@@ -149,7 +160,8 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Sisallys', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                        'ckeditor_context' => 'default' 
+                        'ckeditor_context' => 'default', 
+                        'help' => 'use special tag {{ timetable }} and {{ bios }} to insert artist infos'
                     ]);
             }
             $formMapper
@@ -230,5 +242,9 @@ final class EventAdmin extends AbstractAdmin
             ->add('Sisallys')
             ->add('url')
             ;
+    }
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
     }
 }

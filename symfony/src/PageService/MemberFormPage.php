@@ -3,6 +3,7 @@
 namespace App\PageService;
 
 use App\Entity\Member;
+use App\Entity\User;
 use App\Entity\Email;
 use App\Form\MemberType;
 use App\Helper\Mattermost;
@@ -15,7 +16,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Templating\EngineInterface;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Twig\Environment;
 
 class MemberFormPage implements PageServiceInterface
 {
@@ -27,6 +29,7 @@ class MemberFormPage implements PageServiceInterface
     private $bag;
     private $twig;
     private $mm;
+    private $passwordEncoder;
 
     public function __construct($name, 
         TemplateManager $templateManager, 
@@ -34,8 +37,9 @@ class MemberFormPage implements PageServiceInterface
         \Swift_Mailer $mailer, 
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
-        EngineInterface $twig,
-        Mattermost $mm
+        Environment $twig,
+        Mattermost $mm,
+        UserPasswordEncoderInterface $passwordEncoder
     )
     {
         $this->name             = $name;
@@ -46,6 +50,7 @@ class MemberFormPage implements PageServiceInterface
         $this->bag              = $bag;
         $this->twig             = $twig;
         $this->mm               = $mm;
+        $this->passwordEncoder  = $passwordEncoder;
     }
     public function getName(){ return $this->name;}
 
@@ -61,16 +66,21 @@ class MemberFormPage implements PageServiceInterface
             $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
             $email = $memberRepo->getByEmail($member->getEmail());
             if(!$name && !$email){
+                $user = $member->getUser();
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
+                $member->setLocale($request->getlocale());
+                $this->em->persist($user);
                 $this->em->persist($member);
                 $this->em->flush();
                 $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
                 $code = $this->addToInfoMailingList($member);
                 $this->announceToMattermost($member);
                 $state = 'added';
-
             } else {
                 $state = 'update';
             }
+        } else {
+            $state = 'form_no';
         }
 
         return $this->templateManager->renderResponse(

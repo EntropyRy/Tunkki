@@ -23,11 +23,13 @@ class Mattermost {
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_POST => 1
         );
-        $rc = curl_setopt_array ($curl, $cOptArr);
-        $rc = curl_setopt ($curl, CURLOPT_POSTFIELDS, http_build_query (array ('payload' => $payload)));
-        $rc = curl_exec ($curl);
-        if ($rc == false){
-            curl_close ($curl);
+        curl_setopt_array ($curl, $cOptArr);
+        curl_setopt ($curl, CURLOPT_POSTFIELDS, http_build_query (array ('payload' => $payload)));
+        if( ! $result = curl_exec($curl))
+        {
+            trigger_error(curl_error($curl));
         }
+        curl_close($curl);
+        return $result;
     }
 }

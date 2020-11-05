@@ -1,0 +1,24 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{'profile.apply_for_active_member'|trans}} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    <h2>{{'member.active.application_title'|trans}}</h2>
+    <p>{{'member.active.apply_help'|trans}}</p>
+    <h5>{{'member.active.requirements'|trans}}</h5>
+    <small>{{'member.active.requirements_help'|trans}}</small>
+    <ul>
+        <li>{{'member.active.requirements1'|trans}}</li>
+        <li>{{'member.active.requirements2'|trans}}</li>
+        <li>{{'member.active.requirements3'|trans}}</li>
+    </ul>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input class="btn btn-primary" type="submit" value="{{ 'profile.save'|trans|capitalize }}" />
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+

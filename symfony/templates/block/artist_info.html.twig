@@ -1,0 +1,77 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+<h2 class="col-md-12 pb-2 pt-2">{{'artist.profiles'|trans }}
+    <a class="btn btn-primary" href="{{ url('entropy_artist_create') }}">{{'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+</h2>
+ {% for ar in member.artist %}
+<div class="col-12">
+<div class="row">
+<div class="col-sm-4">
+    <div class="box">
+        <div class="box-header">
+            <h5 class="box-title">{{'artist.information'|trans}}</h5>
+        </div>
+        <div class="box-body">
+            <ul class="fa-ul">
+            <li><span class="fa-li"><i class="fas fa-user"></i></span>
+                {{ ar.type }}: {{ ar.name }}
+            </li>
+            <li><span class="fa-li"><i class="fas fa-question"></i></span>
+                {{'artist.form.genre'|trans}}: {{ ar.genre }}<br>
+                {{'artist.form.hardware'|trans}}: {{ ar.hardware }}<br>
+                {{'created_at'|trans }}: {{ar.createdAt|date('d.m.Y')}}<br>
+                {{'updated_at'|trans }}: {{ar.updatedAt|date('d.m.Y')}}
+            </li>
+            </ul>
+            <a class="btn btn-primary btn-large" href="{{ url('entropy_artist_edit',{'id':ar.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+            <a class="btn btn-secondary btn-large" onclick="return ConfirmDelete();" href="{{ url('entropy_artist_delete',{'id':ar.id}) }}">{{ 'delete'|trans|capitalize }}</a>
+            <script>
+            function ConfirmDelete()
+            {
+            return confirm("{{'Are you sure you want to delete?'|trans}}");
+            }
+            </script>
+            <div class="pt-2">{{'events'|trans|capitalize}}:</div>
+            <ul>
+            {% for info in ar.eventArtistInfos %}
+            <li><a href="{{ url('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>
+                {% if info.StartTime %}
+                @ {{ info.StartTime|date('H:i')}}
+                {% else %}
+                : {{ 'artist.not_confirmed_yet'|trans }}
+                {% endif %}
+            </li>
+            {% endfor %}
+            </ul>
+        </div>
+    </div>        
+</div>
+<div class="col-sm-8">
+    <div class="box">
+        <div class="box-header">
+            <h5 class="box-title">{{'preview'|trans}}</h5>
+        </div>
+        <div class="box-body row">
+            <div class="col-sm-6">
+                <h4>{{ ar.name }}</h4>
+                <small>{{ar.genre}}</small>
+                <p>{{ ar.bio }}</p>
+                <hr>
+                {% for link in ar.links %}
+                <span>
+                    <a {% if link.open_in_new_window %}target="_blank"{% endif %}href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
+                </span>
+                {% endfor %}
+            </div>
+            <div class="col-sm-6">
+                <img width="100%" src="{% path ar.Picture, 'square' %}">
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+{% else %}
+<div class="col-md-12">{{ 'artist.no_artist_profile'|trans }}</div>
+{% endfor %}
+{% endblock %}

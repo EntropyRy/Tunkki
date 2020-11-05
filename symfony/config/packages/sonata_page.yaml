@@ -12,11 +12,10 @@ sonata_page:
     use_streamed_response: true
     hide_disabled_blocks: true
     page_defaults:
-        decorate:
-            enabled: false
+        decorate: true 
     router_auto_register:
         enabled: true
-        priority: 150
+        priority: 200
     ignore_route_patterns:
         - ^(.*)admin(.*)   # ignore admin route, ie route containing 'admin'
         - ^_(.*)          # ignore symfony routes
@@ -38,16 +37,25 @@ sonata_page:
         - sonata_media_gallery_view
         - sonata_media_view
         - sonata_media_download
-          #- entropy_event.fi
-          #- entropy_event.en
-          #- entropy_event_slug.fi
-          #- entropy_event_slug.en
-          #- entropy_event_slug
-          #- entropy_event_slug_artist_signup.en
-          #- entropy_event_slug_artist_signup.fi
+        - oauth2_authorize
+        - oauth2_token
+        - app_forgot_password_request
+        - app_check_email
+        - app_reset_password
+        - app_login
+        - app_logout
+        - entropy_profile
+        - entropy_profile_edit
+        - entropy_profile_active_member
+        - entropy_artist_create
+        - entropy_artist_edit
+        - entropy_artist_delete
+        - entropy_event_slug_artist_signup
 
     ignore_uri_patterns:
-        - ^/admin\/   # ignore admin route, ie route containing 'admin'
+        - ^/admin\/   
+        - ^/profiilii\/  
+        - ^/profile\/  
 
     default_template: default
     templates:

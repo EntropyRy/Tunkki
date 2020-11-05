@@ -1,0 +1,10 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block title %}{{'Password Reset Email Sent'|trans}}{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <p>{{ 'reset_password_info'|trans}} {{ tokenLifetime|date('g') }} {{'hours'|trans}}.</p>
+    <p>{{ 'reset_password_email_info'|trans}} <a href="{{ path('app_forgot_password_request') }}">{{'try_again'|trans}}</a>.</p>
+</div>
+{% endblock %}

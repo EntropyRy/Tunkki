@@ -1,0 +1,2 @@
+under_password_limit: 'Your password should be at least {{ limit }} characters'
+passwords_need_to_match: The password fields must match.

@@ -8,7 +8,13 @@ use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Core\Security;
 use App\Entity\Event;
+use App\Entity\Artist;
+use App\Entity\EventArtistInfo;
+use App\Form\EventArtistInfoType;
+use App\Form\ArtistType;
 
 class EventController extends Controller
 {
@@ -52,13 +58,8 @@ class EventController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $this->em = $this->getDoctrine()->getManager();
-        $eventdata = $this->em->getRepository(Event::class)->findBy(['url' => $slug]);
-        foreach ($eventdata as $event){
-            if ($event->geteventDate()->format('Y') == $year){
-                $eventdata = $event;
-                break;
-            }
-        }
+        $eventdata = $this->em->getRepository(Event::class)
+			->findEventBySlugAndYear($slug, $year);
         if(!$eventdata){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -67,8 +68,61 @@ class EventController extends Controller
         $this->setMetaData($lang, $eventdata, $page, $seo); 
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
-                'page' => $page
+    //            'page' => $page
             ]);
+    }
+	/**
+	 * @IsGranted("ROLE_USER")
+	 */
+    public function artistSignUp(
+        Request $request, 
+        SeoPageInterface $seo,
+        Security $security,
+        TranslatorInterface $trans
+    ){
+        $artists = $security->getUser()->getMember()->getArtist();
+        if (count($artists)==0){
+            $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
+            $request->getSession()->set('referer', $request->getPathInfo());
+            return new RedirectResponse($this->generateUrl('entropy_artist_create'));
+        }
+        $slug = $request->get('slug');
+        $year = $request->get('year');
+        $this->em = $this->getDoctrine()->getManager();
+        $event = $this->em->getRepository(Event::class)
+                          ->findEventBySlugAndYear($slug, $year);
+        foreach ($artists as $key => $artist){
+            foreach ($artist->getEventArtistInfos() as $info){
+                if($info->getEvent() == $event){
+                    unset($artists[$key]);
+                }
+            }
+        } 
+        if (count($artists)==0){
+            $this->addFlash('warning', $trans->trans('all_artists_signed_up_create_one'));
+            return new RedirectResponse($this->generateUrl('entropy_artist_create'));
+        }
+        $artisteventinfo = new EventArtistInfo();
+        $artisteventinfo->setEvent($event);
+        $form = $this->createForm(EventArtistInfoType::class, $artisteventinfo, ['artists' => $artists]);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $artist = $form->getData();
+            $artistClone = clone $artist->getArtist();
+            $artistClone->setMember(null);
+            $artistClone->setName($artistClone->getName().' for '.$event->getName());
+            $artist->setArtistClone($artistClone);
+            $this->em->persist($artistClone);
+            $this->em->persist($artist);
+            $this->em->flush();
+            $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));
+            return new RedirectResponse($this->generateUrl('entropy_profile'));
+        }
+        //$page = $cms->retrieve()->getCurrentPage();
+        return $this->render('artist/signup.html.twig', [
+            'event' => $event,
+            'form' => $form->createView(),
+        ]);
     }
     private function setMetaData($lang, $eventdata, $page, $seo)
     {

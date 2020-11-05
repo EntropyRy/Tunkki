@@ -1,0 +1,30 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block content %}
+<div class="col-md-12">
+      {{ form_start(form) }}
+		  <div class="form-row">
+          {{ form_row(form.firstname, {'row_attr': {'class':'col-md-6'}}) }}
+          {{ form_row(form.lastname, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+		  <div class="form-row">
+          {{ form_row(form.email, {'row_attr': {'class':'col-md-6'}}) }}
+          {{ form_row(form.phone, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+		  <div class="form-row">
+              {{ form_row(form.username, {'row_attr': {'class':'col-md-6'}}) }}
+              {{ form_row(form.CityOfResidence, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+		  <div class="form-row">
+              {{ form_row(form.user.MattermostId, {'disabled': true, 'row_attr': {'class':'col-md-6'}}) }}
+              {{ form_row(form.locale, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+              {{ form_row(form.StudentUnionMember, {'row_attr': {'class':'col-md-4'}}) }}
+		  <div class="form-row">
+              {{ form_row(form.user.plainPassword.first, {'row_attr': {'class':'col-md-6'}}) }}
+              {{ form_row(form.user.plainPassword.second, {'row_attr': {'class':'col-md-6'}}) }}
+		  </div>
+          <input class="btn btn-primary" type="submit" value="{{'profile.save'|trans|capitalize}}" />
+          {{ form_end(form) }}
+</div>
+{% endblock %} 

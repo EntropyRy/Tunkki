@@ -6,6 +6,15 @@
                 {{ sonata_page_render_container('header', 'global') }}
                 {% include 'menu/menu.html.twig' %}
             </header>
+            {% for label, messages in app.flashes %}
+                <div class="col-md-12">
+                {% for message in messages %}
+                      <div class="alert alert-notice">
+                         <h4><i class="fas fa-arrow-right"></i>  {{ message|trans }}</h4>
+                      </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}

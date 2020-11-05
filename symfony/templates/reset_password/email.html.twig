@@ -1,0 +1,15 @@
+{% extends 'emails/base.html.twig'%}
+
+{% block content %}
+<h1>Terve! / Hi!</h1>
+
+<p>Vaihtaaksesi salasanasi vieraile seuraavassa linkissä</p>
+<p>To reset your password, please visit the following link</p>
+
+<a href="{{ url('app_reset_password', {token: resetToken.token}) }}">{{ url('app_reset_password', {token: resetToken.token}) }}</a>
+
+<p>Tämä linkki vanhenee {{ tokenLifetime|date('g') }} tunnissa.</p>
+<p>This link will expire in {{ tokenLifetime|date('g') }} hours.</p>
+
+<p>Cheers!</p>
+{% endblock %}

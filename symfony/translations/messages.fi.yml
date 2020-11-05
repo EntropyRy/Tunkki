@@ -9,7 +9,8 @@ Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
 Submit: Lähetä
 submit: lähetä
 Agree: hyväksy
-
+fi: Suomi
+en: Englanti
 
 # Entropy.fi
 Firstname: Etunimi
@@ -17,9 +18,13 @@ Lastname: Sukunimi
 Email: Sähköposti
 Phone: Puhelinnumero
 City of residence: Asuinpaikkakunta
-Student union member: Olen AYY:n jäsen
-Username: Käytäjänimi
-active.member.application: Hakemuksesi Entropyn aktiivijäseneksi
+Student union member: AYY:n jäsenyys
+Active member: Aktiivijäsenyys
+HC member: HC-jäsenyys
+Full member: Täysjäsenyys
+Member: Jäsen
+since: alkaen
+Username: Käyttäjänimi
 stay_tuned: Pysy kuulolla!
 future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
@@ -35,7 +40,7 @@ submit_and_agree: Lähettämällä tämän lomakkeen hyväksyt rekisteriselostee
 cancelled: PERUTTU
 announcements_url: tiedotukset
 frontpage: Etusivu
-join_us: Liity 
+join_us: Liity
 events: Tapahtumat 
 contact: Yhteystiedot
 history: Historiaa
@@ -52,3 +57,110 @@ tickets: Liput
 fb.event: FB tapahtuma
 entropy.seo.description: Elektronisen musiikin kulttuuri yhdistys
 map: Kartta
+profile_url: profiili
+reset_your_password: Vaihda salasanasi
+send_password_reset_email: Lähetä
+reset_password_form_help: Kun annat sähköpostisi niin lähetämme sinulle sähköpostin josta löydät linkin salasanan vaihtamiseksi
+reset_password_info: Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit nollata salasanasi. Linkki vanhentuu
+hours: tunnissa
+Password Reset Email Sent: Salasanan nollaus sähköposti lähetetty
+reset_password_email_info: Jos et saanut sähköpostia tarkista roskapostisi tai
+try_again: yritä uudelleen
+New password: Salasana
+Repeat Password: Toista salasana
+Reset password: Vaihda salasana
+forgot_password: Unohditko salasanasi?
+password: Salasana
+email: Sähköposti
+please_sign_in: Kirjaudu sisään!
+sign_in: Kirjaudu sisään
+membership_information: Jäsentiedot
+membership_status: Jäsentilanne
+you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitset vähintään 25 %, jotta voit äänestää yhdistyskokouksessa
+100_procent_is_honorary_member: 100 % on HC-jäsen
+used_in_other_services: Käytetään meidän muissa palveluissa
+you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
+edit: muokkaa
+add_new_artist: lisää uusi artistiprofiili
+preview: Esikatselu
+picture: Kuva
+widget_headline_information: informaatio
+widget_label_type: tyyppi
+widget_label_context: konteksti
+widget_label_binary_content: Tiedosto
+widget_label_unlink: Poista kuva profiilista
+link_media: Lisää kuva tiedostoista
+created_at: luotu
+updated_at: päivitetty
+no_linked_media: Ei linkitettyä mediaa
+Add: Lisää
+delete: poista
+Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
+no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
+bio_attribute: Bio
+succesfully_signed_up_for_the_party: Onnistuneesti ilmottauduttu tapahtumaan esiintymään!
+all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa. Haluatko luoda uuden?
+duplicate_artist_found: Saman niminen artisti löytyy jo!
+Please enter a password: Anna salasana
+Locale: Kieli
+event:
+    form:
+        sign_up:
+            artist: Artisti
+            why_should_we_choose_you: Miksi valitsisimme sinut?
+            wish_for_playtime: Toive soittojankohdasta
+            set_length: Toive setin pituudesta
+            free_word: Vapaa sana
+            save: Tallenna
+            new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
+url:
+    form:
+        open_in_new_window: Avaa uudessa ikkunassa
+        title: Linkin teksti 
+        url: Url-osoite
+        icon: Iconin luokka (class)
+
+profile:
+    member_data_changed: Salasana ja tiedot muutettu
+    name: Profiili
+    add_new_artist: Lisää uusi artistiprofiili
+    access_groups: Oikeudet
+    apply_for_active_member: Hae aktiivijäsenyyttä
+    application_saved: Hakemus tallennettu
+    paid_renting_rewards: Vuokratehtävien kompensaatiot
+    no_renting_rewards: Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa, miten voit osallistua.
+    next_reward_is_bubling_under: Seuraava on tulossa..
+    you_are_active_member_already: Olet jo aktiivijäsen
+    application_for_active_member: Aktiivijäsen hakemuksesi
+    save: tallenna
+artist:
+    not_confirmed_yet: Ei vahvistettu (vielä)
+    no_artist_profile: Ei yhtään profiilia
+    information: Perustiedot
+    profiles: Artistiprofiilit
+    form:
+        name: Artistinimi
+        type: Tyyppi
+        bio: Bio suomeksi
+        bio_en: Bio englanniksi
+        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
+        bio_help: Kerro lyhyesti saavutuksistasi 
+        hardware_help: Mitä tekniikkaa käytät esiintymiseen?
+        promo_picture: Promokuva
+        genre: Genre(t)
+        hardware: Laitteisto
+        links: Linkit medianäytteisiin ja muihin palveluihin
+
+member:
+    active:
+        application_title: Hae aktiivijäseneksi
+        application: Hakemuksesi Entropyn aktiivijäseneksi
+        apply_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
+        requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
+        requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
+        requirements3: Hallitus tietää kuka olet
+        requirements2: Viimeaikainen aktiivisuutesi
+        requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
+You have already requested a reset password email. Please check your email or try again soon.: Olet jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin uudelleen.
+The reset password link is invalid. Please try to reset your password again.: Linkki ei kelpaa. Yritä aloittaa prosessi alusta.
+The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta. 

@@ -2,15 +2,8 @@
 {% use 'member/modal.html.twig' %}
 {% block content %}
 {% if state == 'update' %}
-<div>Jos haluat päivittää jäsenrekisteritietosi niin ota yhteyttä hallitukseen / To update your member info send email to the board: 
-    <button class="btn btn-info">
-        {% apply spaceless %}
-        {% set url = 'mailto:hallitus@entropy.fi?subject=Jäsentietojeni%20muuttaminen&body=Olen%20'~ form.vars.data.firstname ~'%20'~ form.vars.data.lastname ~(' ja haluan vaihtaa tietoni jäsenrekisterissä seuraaviksi\n\nnimi:\nemail:\nphone:\ncity of residence:\nstudent union member:\n')|url_encode%}
-        <a href="{{ url }}">
-            hallitus@entropy.fi
-        </a>
-        {% endapply %}
-    </button>
+<div>{{'you_can_change_your_member_information_by_loging_in'|trans}}<br>
+    <a class="btn btn-primary" href="/{{'profile_url'|trans}}">{{'please_sign_in'|trans}}</a>
 </div>
 {% elseif state == 'added' %}
 <div>Tietosi on nyt tallennettu jäsenrekisteriimme. Saat vielä asiasta sähköpostin! / Your information is now saved in our member registry. You'll get an email about it!</div>

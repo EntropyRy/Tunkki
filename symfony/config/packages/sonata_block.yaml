@@ -8,3 +8,7 @@ sonata_block:
         entropy_tunkki.block.brokenitems:
         entropy_tunkki.block.bookings:
         entropy.block.future_events: ~
+        entropy.block.member_info: ~
+        entropy.block.artist_info: ~
+        sonata.media.block.media:
+            settings: { template: 'block\media.html.twig' }

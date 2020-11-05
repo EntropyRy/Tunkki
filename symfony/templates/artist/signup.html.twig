@@ -1,0 +1,12 @@
+{% extends 'event.html.twig' %}
+
+{% block content %}
+<div class="col-12">
+    <div class="col-12">
+{{ form_start(form) }}
+{{ form_widget(form) }}
+<input class="btn btn-primary" type="submit" value="{{'event.form.sign_up.save'|trans}}">
+{{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

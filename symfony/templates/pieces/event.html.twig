@@ -16,14 +16,14 @@
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-md-8 order-1 order-md-0">
-        {{ block('event_content')}}
+        {{ block('event_frontpage_content')}}
         </div>
         <div class="col-md-4 order-0 order-md-1">
         {{ block('event_media') }}
         </div>
     </div>
     {% else %}
-        {{ block('event_content')}}
+        {{ block('event_frontpage_content')}}
     {% endif %}
 {% endblock %}
 {% block event_head_reverse %}
@@ -47,12 +47,11 @@
     {% endif %}
 {% endblock %}
 {% block event_content %}
-    {{ attribute(event,content_attr)|raw }}
-    {% if event.attachment %}
-    <div class="mb-2">
-    <i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
-    </div>
-    {% endif %}
+{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
+    {{ block('links')}}
+{% endblock %}
+{% block event_frontpage_content %}
+{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': ''})|raw }}
     {{ block('links')}}
 {% endblock %}
 {% block event_media %}
@@ -61,6 +60,11 @@
     </div>
 {% endblock %}
 {% block links %}
+{% if event.attachment %}
+<div class="mb-2">
+<i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
+</div>
+{% endif %}
 {% if event.epics is not empty or event.links.urls.0 is defined %}
 <div>
 <hr>
@@ -68,7 +72,8 @@
         {% for url in keys %}
         <span class="pr-2">
             <i class="{{ url.icon }}"></i>
-            <a href="{{ url.url }}">{{ url.title|trans }}</a>
+            <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} 
+                href="{{ url.url }}">{{ url.title|trans }}</a>
         </span>
         {% endfor %}
     {% endfor %}
@@ -80,4 +85,75 @@
     {% endif %}
 </div>
 {% endif %}
+{% endblock %}
+{% block timetable %}
+<ul>
+{% for info in event.eventArtistInfos %}
+    {% if info.artistClone is null %}
+        {% set artist = info.artist %}
+        {% set name = info.artist.name %}
+    {% else %}
+        {% set artist = info.artistClone %}
+        {% set redact = ' for '~event.name %}
+        {% set name = artist.name|replace({(redact): ' '}) %}
+    {% endif %}
+    {% if info.StartTime is not empty %}
+        <li>{{ info.StartTime|date('H:i')}}: <a href="#{{ name }}">{{ name }}</a></li>
+    {% endif %}
+{% endfor %}
+</ul>
+{% endblock %}
+
+{% block bios %}
+{% set bio_attribute = 'bio_attribute'|trans %}
+    {% for info in event.eventArtistInfos %}
+        {% if info.StartTime is not empty %}
+            {% if info.artistClone is null %}
+                {% set artist = info.artist %}
+                {% set name = info.artist.name %}
+            {% else %}
+                {% set artist = info.artistClone %}
+                {% set redact = ' for '~event.name %}
+                {% set name = artist.name|replace({(redact): ' '}) %}
+            {% endif %}
+            {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
+                {% if thecycle == 'even' %}
+                <div id="{{ name }}" class="col-md-12 pt-3">
+                    <div class="row">
+                        <div class="col-md-5 order-sm-last order-md-first">
+                            {{ block('artist_info') }}
+                        </div>
+                        <div class="col-md-7 order-sm-first order-md-last">
+                            {{ block('artist_pic') }}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <div id="{{ name }}" class="col-md-12 pt-3">
+                    <div class="row">
+                        <div class="col-md-7 order-sm-first order-md-first">
+                            {{ block('artist_pic') }}
+                        </div>
+                        <div class="col-md-5 order-sm-last order-md-last">
+                            {{ block('artist_info') }}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+{% block artist_info %}
+    <h3>{{ name }} @ {{info.StartTime|date('H:i')}}</h3>
+    <small>{{ artist.genre }}</small>
+    <div>{{ attribute(artist, bio_attribute) }}</div>
+    {% if artist.links is not empty %}
+        <hr>
+        {% for link in artist.links %}
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+        {% endfor %}
+    {% endif %}
+{% endblock %}
+{% block artist_pic %}
+    <img width="100%" src="{% path artist.Picture, 'square' %}"> 
 {% endblock %}

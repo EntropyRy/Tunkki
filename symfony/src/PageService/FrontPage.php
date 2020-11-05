@@ -27,11 +27,16 @@ class FrontPage implements PageServiceInterface
         $announcement = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('announcement');
         $event = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('event');
         $clubroom = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('clubroom');
-        if ($announcement->getEventDate() > $event->getEventDate()){
-            $events = array_merge([$announcement], [$event], [$clubroom]);
+        if ($clubroom->getEventDate() > $event->getEventDate()){
+            $events = [$clubroom, $event];
         } else {
-            $events = array_merge([$event], [$clubroom], [$announcement]);
+            $events = [$event, $clubroom];
         }
+        if ($announcement->getEventDate() > $events[0]->getEventDate()){
+            $events = array_merge([$announcement], $events);
+        } else {
+            $events = array_merge($events, [$announcement]);
+		}
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
             array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 

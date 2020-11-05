@@ -1,12 +1,14 @@
 <?php
 use App\Kernel;
 use Symfony\Component\ErrorHandler\Debug;
-//use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Request\RequestFactory;
 require dirname(__DIR__).'/config/bootstrap.php';
-if ($_SERVER['APP_DEBUG']) {
+if ($_SERVER['APP_DEBUG'] && in_array(@$_SERVER['REMOTE_ADDR'], [$_ENV['TRUSTED_IPS']]) ) {
     umask(0000);
     Debug::enable();
+} else {
+    $_SERVER['APP_ENV'] = 'prod';
 }
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
     Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_ALL ^ Request::HEADER_X_FORWARDED_HOST);

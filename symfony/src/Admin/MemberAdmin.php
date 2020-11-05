@@ -10,9 +10,11 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
-use Sonata\Form\Type\DatePickerType;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
+use Sonata\Form\Type\DatePickerType;
+use Sonata\Doctrine\Types\JsonType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class MemberAdmin extends AbstractAdmin
 {
@@ -26,13 +28,14 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('artist')
             ->add('username')
             ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
-            ->add('copiedAsUser')
+            ->add('ApplicationDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('StudentUnionMember')
             ->add('isActiveMember')
@@ -44,12 +47,13 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('user', null, ['label' => 'Tunkki User'])
+            ->add('artist')
             ->add('name')
             ->add('email')
             ->add('StudentUnionMember', null, ['editable' => true])
             ->add('isActiveMember')
             ->add('isFullMember')
+            ->add('user.LastLogin')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -78,11 +82,14 @@ final class MemberAdmin extends AbstractAdmin
         }
         $formMapper
             ->with('Base',['class' => 'col-md-4'])
+            ->add('artist')
+            ->add('username')
             ->add('firstname')
             ->add('lastname')
             ->add('email')
             ->add('phone')
             ->add('CityOfResidence')
+            ->add('locale')
             ->end()
             ->with('Membership status',['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
@@ -92,16 +99,15 @@ final class MemberAdmin extends AbstractAdmin
                 'required' => false,
                 'help' => 'Grants free access to Entropy parties'
             ])
+            //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
             ->with('Membership info',['class' => 'col-md-4'])
-            ->add('username', null, ['help' => 'asked from the member'])
             ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
             ->add('ApplicationHandledDate', DatePickerType::class, [
                 'required' => false, 
                 'help'=>'doubles as accepted as active member date'
             ])
-            ->add('copiedAsUser')
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
             ;
@@ -131,7 +137,6 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isFullMember')
             ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
             ->add('rejectReasonSent')
-            ->add('copiedAsUser')
             ->add('user')
             ->add('createdAt')
             ->add('updatedAt')
@@ -143,13 +148,6 @@ final class MemberAdmin extends AbstractAdmin
         $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }   
-    public function postUpdate($member)
-    {
-        $user = $member->getUser();
-        if($user){
-            $member->setUsername($user->getUsername());
-        }
-    }
     public function getExportFields()
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];

@@ -1,0 +1,102 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+<div class="col-sm-4">
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{'membership_information'|trans}}</h5>
+    </div>
+    <div class="box-body">
+        <ul class="fa-ul">
+        <li><span class="fa-li"><i class="fas fa-user"></i></span>
+            {{ member.name }}, {{ member.username }}
+        </li>
+        <li><span class="fa-li"><i class="fas fa-envelope"></i></span>
+            {{ member.email }}
+        </li>
+        <li><span class="fa-li"><i class="fas fa-lock"></i></span>
+            ********
+        </li>
+        <li><span class="fa-li"><i class="fas fa-phone"></i></span>
+            {{ member.phone }}
+        </li>
+        <li><span class="fa-li"><i class="fas fa-city"></i></span>
+            {{ member.CityOfResidence }}
+        </li>
+        <li><span class="fa-li"><i class="fas fa-language"></i></span>
+            {{ member.locale|trans }}&nbsp;
+        </li>
+        <li><span class="fa-li"><i class="{% if member.StudentUnionMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i></span>
+            {{'Student union member'|trans}}
+        </li>
+        </ul>
+        <a class="btn btn-primary btn-large" href="{{ url('entropy_profile_edit') }}">{{ 'edit'|trans|capitalize }}</a>
+    </div>
+</div>        
+</div>
+<div class="col-sm-8">
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{'membership_status'|trans}}</h5>
+    </div>
+    <div class="box-body">
+        <ul class="fa-ul">
+        <li><span class="fa-li"><i class="fas fa-trophy"></i></span>
+        <div class="progress" style="height: 25px;">
+            <div class="progress-bar" 
+                role="progressbar" 
+                style="width: {{member.ProgressP}}%" 
+                aria-valuenow="{{member.ProgressP}}" 
+                aria-valuemin="0" 
+                aria-valuemax="100">{{member.ProgressP}}%</div>
+        </div>
+        <div>
+        {{'you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting'|trans}},
+        {{'100_procent_is_honorary_member'|trans}}
+        </div>
+        <span>
+            <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Member'|trans}}, {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
+        </span>
+        <span>
+            <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Active member'|trans}}{% if member.ApplicationHandledDate %}, {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
+        </span>
+        <span>
+            <i class="{% if member.isFullMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'Full member'|trans}}
+        </span>
+        <span>
+            <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+            {{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %}, {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
+        </span>
+        </li>
+        <li><span class="fa-li"><i class="fas fa-users-cog"></i></span>
+            {{ 'profile.access_groups'|trans }}:
+            {% for group in member.user.AccessGroups %}
+            {{ group }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+        </li>
+        </ul>
+        {% if not member.isActiveMember %}
+        <a class="btn btn-primary btn-large" href="{{ url('entropy_profile_active_member') }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
+        {% endif %}
+    </div>
+</div>
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{'profile.paid_renting_rewards'|trans}}</h5>
+    </div>
+    <div class="box-body">
+        {% for reward in member.user.rewards|reverse|slice(0,5) %}
+            {% if reward.PaidDate %}
+            {{ reward.PaidDate|date('d.m.Y') }}: {{ reward.Evenout }}€<br>
+            {% else %}
+            {{ 'profile.next_reward_is_bubling_under'|trans }}<br>
+            {% endif %}
+        {% else %}
+        {{'profile.no_renting_rewards'|trans }}
+        {% endfor %}
+    </div>
+</div>        
+</div>
+{% endblock %}

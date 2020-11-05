@@ -2,15 +2,42 @@
 {% set loc = app.request.locale %}
 <nav class="navbar navbar-expand-lg navbar-light">
 <a class="navbar-brand d-lg-none" href="/"><img src="/images/header-logo-text.svg" width="auto" height="45" class="d-inline-block" alt="Entropy"></a>
+    {% if event is defined and event.url is not empty and not event.externalUrl %}
+    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+    {% else %}
+    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+    {% endif %}
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
       {{ knp_menu_render(loc) }}
-    {% if event is defined and event.url is not empty and not event.externalUrl%}
-    <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+    {% if not app.user %}
+        {% if event is defined and event.url is not empty and not event.externalUrl %}
+        <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
+        {% else %}
+        <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+        {% endif %}
+        <!--        <span style="padding-left:5px;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i>{{'login'|trans|capitalize}}</a></span> -->
     {% else %}
-    <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+        <ul class="nav nav-pills">
+             <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> {{ app.user.username }}</a>
+                 <div class="dropdown-menu dropdown-menu-lg-right">
+                    {% if is_granted('ROLE_SONATA_ADMIN') %}
+                    <a class="dropdown-item" href="{{ url('sonata_admin_dashboard')}}">
+                        <i class="fas fa-cogs"></i> {{ 'header.sonata_admin_dashboard'|trans({}, 'SonataPageBundle') }}
+                    </a>
+                    {% endif %}
+                    <a class="dropdown-item" href="{{ url('entropy_profile.'~loc)}}">
+                        <i class="fas fa-user-cog"></i> {{ 'profile.name'|trans|capitalize }}
+                    </a>
+                    <a class="dropdown-item" href="{{ url('app_logout')}}">
+                        <i class="fas fa-sign-out-alt"></i> {{ 'logout'|trans|capitalize }}
+                    </a>
+                 </div>
+             </li>
+        </ul>
     {% endif %}
   </div>
 </nav>

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -11,6 +13,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="member")
  * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
 class Member
 {
@@ -40,7 +43,7 @@ class Member
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=190, nullable=true)
+     * @ORM\Column(name="email", type="string", length=190, unique=true)
      */
     private $email;
 
@@ -80,13 +83,6 @@ class Member
      * @ORM\Column(name="updatedAt", type="datetime")
      */
     private $updatedAt;
-
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="CopiedAsUser", type="boolean")
-     */
-    private $copiedAsUser = false;
 
     /**
      * @var bool
@@ -138,12 +134,6 @@ class Member
     private $ApplicationHandledDate;
 
     /**
-     *
-     * @ORM\OneToOne(targetEntity="App\Entity\User", mappedBy="member")
-     */
-    private $user;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $AcceptedAsHonoraryMember;
@@ -152,6 +142,28 @@ class Member
      * @ORM\Column(type="boolean")
      */
     private $isFullMember = false;
+
+    /**
+     * @ORM\OneToOne(targetEntity=User::class, mappedBy="member", cascade={"persist", "remove"})
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
+     */
+    private $user;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $locale = 'fi';
+
+    /**
+     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="member", orphanRemoval=true)
+     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
+     */
+    private $artist;
+
+    public function __construct()
+    {
+        $this->artist = new ArrayCollection();
+    }
 
     /**
      * Get id.
@@ -364,30 +376,6 @@ class Member
         return $this->CityOfResidence;
     }
 
-    /**
-     * Set user.
-     *
-     * @param \App\Entity\User|null $user
-     *
-     * @return Member
-     */
-    public function setUser(\App\Entity\User $user = null)
-    {
-        $this->user = $user;
-
-        return $this;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return \App\Entity\User|null
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
     public function __toString()
     {
         return $this->getName();
@@ -439,30 +427,6 @@ class Member
     public function getLastname()
     {
         return $this->lastname;
-    }
-
-    /**
-     * Set copiedAsUser.
-     *
-     * @param bool $copiedAsUser
-     *
-     * @return Member
-     */
-    public function setCopiedAsUser($copiedAsUser)
-    {
-        $this->copiedAsUser = $copiedAsUser;
-
-        return $this;
-    }
-
-    /**
-     * Get copiedAsUser.
-     *
-     * @return bool
-     */
-    public function getCopiedAsUser()
-    {
-        return $this->copiedAsUser;
     }
 
     /**
@@ -609,4 +573,86 @@ class Member
 
         return $this;
     }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newMember = null === $user ? null : $this;
+        if ($user->getMember() !== $newMember) {
+            $user->setMember($newMember);
+        }
+
+        return $this;
+    }
+    public function getProgressP(): string
+    {
+        if($this->AcceptedAsHonoraryMember)
+            return '100';
+        if(!$this->isActiveMember && !$this->StudentUnionMember)
+            return '10';
+        if(!$this->isActiveMember && $this->StudentUnionMember)
+            return '25';
+        if($this->isActiveMember && !$this->isFullMember && !$this->StudentUnionMember)
+            return '24';
+        if($this->isActiveMember && ($this->isFullMember || $this->StudentUnionMember))
+            return '75';
+    }
+
+    public function getLocale(): ?string
+    {
+        return $this->locale;
+    }
+
+    public function setLocale(?string $locale): self
+    {
+        $this->locale = $locale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Artist[]
+     */
+    public function getArtist(): Collection
+    {
+        return $this->artist;
+    }
+    public function getArtistWithId($id): Artist
+    {
+        foreach ($this->getArtist() as $artist){
+            if($artist->getId() == $id){
+                return $artist;
+            }
+        }
+    }
+    public function addArtist(Artist $artist): self
+    {
+        if (!$this->artist->contains($artist)) {
+            $this->artist[] = $artist;
+            $artist->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArtist(Artist $artist): self
+    {
+        if ($this->artist->contains($artist)) {
+            $this->artist->removeElement($artist);
+            // set the owning side to null (unless already changed)
+            if ($artist->getMember() === $this) {
+                $artist->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
 }

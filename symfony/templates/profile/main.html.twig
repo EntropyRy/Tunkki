@@ -1,0 +1,14 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{member.name}} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    <h1>{{'profile.name'|trans|capitalize }}</h1>
+</div>
+    {{ sonata_block_render({'type':'entropy.block.member_info'}) }}
+    {{ sonata_block_render({'type':'entropy.block.artist_info'}) }}
+{% endblock %}
+
+

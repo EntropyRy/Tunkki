@@ -10,6 +10,7 @@
       </div>
       <div class="modal-body">
           {{ form_start(form) }}
+          {{ form_row(form.username) }}
 		  <div class="form-row">
           {{ form_row(form.firstname, {'row_attr': {'class':'col-6'}}) }}
           {{ form_row(form.lastname, {'row_attr': {'class':'col-6'}}) }}
@@ -20,16 +21,15 @@
 		  </div>
           {{ form_row(form.CityOfResidence) }}
           {{ form_row(form.StudentUnionMember) }}
+          {{ form_row(form.user.plainPassword) }}
+          {{ form_row(form.user.MattermostId, {'row_attr': {'class':'d-none'}}) }}
+          {{ form_row(form.locale, {'row_attr': {'class':'d-none'}}) }}
           <small>{{'submit_and_agree'|trans}}</small>
-      </div>
-      <div class="d-none actions text-center">
-        <span class="forminfo"></span>
-        <span id="loadingSpinner">C</span>
       </div>
       <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{'close'|trans}}</button>
           <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-info">{{ 'privacy_policy'|trans}}</a>
-          {{ form_row(form.Submit, {'attr': {'class':'btn btn-primary'}}) }}
+          <input class="btn btn-primary" type="submit" value="Submit" />
           {{ form_end(form) }}
       </div>
     </div>

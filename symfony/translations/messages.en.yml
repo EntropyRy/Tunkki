@@ -9,7 +9,8 @@ Renter consent: Renter has read and accepeted contractual terms
 Submit: Submit
 Agree: Agree
 tree_catalog_title: Tree Menu Hierarchy
-
+fi: Finnish
+en: English
 # Entropy.fi
 Firstname: First name
 Lastname: Last name
@@ -17,6 +18,9 @@ Email: Email
 Phone: Phone number
 City of residence: City of residence
 Student union member: AYY member
+Full member: Full member
+HC member: HC member
+since: since
 Username: Username
 active.member.application: Your application for Entropy active member
 stay_tuned: Stay Tuned!
@@ -42,3 +46,98 @@ tickets: Tickets
 fb.event: FB Event
 entropy.seo.description: Electronic music and culture association
 map: Map
+profile_url: en/profile
+reset_your_password: Reset your password
+send_password_reset_email: Send password reset email
+reset_password_form_help: Enter your email address and we we will send you a link to reset your password.
+reset_password_info: An email has been sent that contains a link that you can click to reset your password. This link will expire in
+hours: hours
+reset_password_email_info: If you did not receive the email check you junk mail or
+try_again: try again
+New password: New password
+Repeat Password: Repeat password
+Reset password: Reset password
+forgot_password: Forgot your password?
+password: Password
+email: Email
+please_sign_in: Please sign in
+sign_in: Sign in
+created_at: Created at
+updated_at: Updated at
+membership_information: Membership information
+membership_status: Membership status
+you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: You need at least 25% to be able to vote in our association meeting
+100_procent_is_honorary_member: 100% is HC member
+used_in_other_services: User in our other services
+you_can_change_your_member_information_by_loging_in: You can change your member information by loging in. If you have a problem you can contact the board.
+edit: edit
+preview: Preview
+Picture: Picture
+no_linked_media: No linked media
+no_artsit_create_one: You don't have artist profile. Create one!
+bio_attribute: BioEn
+succesfully_signed_up_for_the_party: Succesfully signed up for the party!
+all_artists_signed_up_create_one: All of your artist have been signed up for this party. Create new one?
+duplicate_artist_found: Duplicate artist name found!
+widget_label_binary_content: Binary content
+widget_label_unlink: Unlink
+link_media: Add a photo from your files
+event:
+    form:
+        sign_up:
+            artist: Artist
+            why_should_we_choose_you: Why should we choose you?
+            wish_for_playtime: At what time do you wish to play?
+            set_length: Preferred length of the set
+            free_word: Free word
+            save: Save
+            new_artist_help_html: If you want to create a new artist you can do it from your profile page
+url:
+    form:
+        open_in_new_window: Open in a new window
+        title: Title
+        url: Url
+        icon: Icon class
+profile:
+    member_data_changed: Password and member data changed
+    add_new_artist: Add new artist profile
+    name: profile
+    access_groups: Access groups
+    application_saved: Application saved
+    paid_renting_rewards: Rental compensations
+    no_renting_rewards: No rental compensations yet. If you wish to be involved in renting out Entropy's equipment, ask around in Mattermost about how you can get involved.
+    next_reward_is_bubling_under: Next one is bubling under
+    you_are_active_member_already: You are active member already
+    application_for_active_member: Your application for active member
+    save: save
+    apply_for_active_member: Apply to become an active member
+artist:
+    not_confirmed_yet: Not confirmed (yet)
+    no_artist_profile: No artist profiles
+    hardware: Hardware you use
+    profiles: Artist Profiles
+    information: Artist information
+    form:
+        genre_help: VJs may describe the mood of the visualization. This field is not translated.
+        bio_help: Tell something about your artist achievements.
+        hardware_help: What kind of hardware are you using?
+        name: Artist name
+        type: Type
+        bio: Bio in Finnish
+        bio_en: Bio in English
+        links: Links to media and other stuff
+        promo_picture: Promo picture
+        genre: Genre(s)
+        information: Basic info
+        hardware: Hardware
+member:
+    active:
+        application_title: Apply for active membership
+        application: Your motivation letter for active membership
+        apply_help: We hope you will tell us what you have done in Entropy, what would you like to do in Entropy and why are you applying for active membership. Your application is editable until the next board meeting.
+        requirements: General requirements for becoming an active member
+        requirements_help: The board is not restricted by these guidelines. 
+        requirements3: The board knows who you are
+        requirements2: How active you have been lately
+        requirements1: You have been organizing at least 3 events in Entropy
+

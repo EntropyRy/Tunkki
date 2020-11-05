@@ -13,18 +13,14 @@ sonata_admin:
         lock_protection: true
     dashboard:
         blocks:
-            - { class: col-md-8, position: top, type: entropy_tunkki.block.bookings}
+            - { position: right, type: entropy_tunkki.block.bookings}
             - { position: right, type: entropy_tunkki.block.brokenitems}
             - { position: left, type: sonata.admin.block.admin_list }
-            - { position: left, type: entropy.block.future_events }
-              #            - { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.member, text: Members}}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy.admin.event, text: Events, color: bg-green}}
-            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.booking, text: Bookings, color: bg-yellow}}
-            #- { position: right, type: sonata.news.block.recent_comments, settings: { title: Recent Comments, number: 7, mode: admin }}
-            #- { position: right, type: sonata.order.block.recent_orders, settings: { title: Recent Orders, number: 5, mode: admin }}
-            #- { position: right, type: sonata.customer.block.recent_customers, settings: { title: Recent Customers, number: 5, mode: admin }}
-            #- { position: right, type: sonata.block.service.rss, settings: { title: Sonata Project's Feeds, url: http://sonata-project.org/blog/archive.rss }}
+              #- { position: left, type: entropy.block.future_events }
+              #- { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.member, text: Members, template: 'block\stats.html.twig'}}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy.admin.event, text: Events, color: bg-green, template: 'block\stats.html.twig'}}
+            - { position: top, type: sonata.admin.block.stats, settings: { code:  entropy_tunkki.admin.booking, text: Bookings, color: bg-yellow, template: 'block\stats.html.twig'}}
 
         groups:
             sonata.admin.group.inventory:
@@ -78,12 +74,12 @@ sonata_admin:
                     - entropy.admin.menu
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
+                roles: [CONTENT, SONATA_SUPER_ADMIN]
             sonata.admin.group.members:
                 label:           Members
                 label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-users"></i>'
                 items:
-                    - entropy_tunkki.admin.user
                     - entropy_tunkki.admin.member
                     - admin.email
 
@@ -91,13 +87,9 @@ sonata_admin:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
-                      #- sonata.user.admin.user
                     - entropy_tunkki.admin.statusevent
-                    - entropy_tunkki.admin.user
-                    - entropy_tunkki.admin.member
-                    - sonata.user.admin.group
                     - sonata.page.admin.site
-                      # - sonata.notification.admin.message
+                    - entropy.admin.access_groups
                 roles: [SONATA_SUPER_ADMIN]
     assets:
         extra_stylesheets:
