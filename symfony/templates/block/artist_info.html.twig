@@ -31,7 +31,7 @@
             return confirm("{{'Are you sure you want to delete?'|trans}}");
             }
             </script>
-            <div class="pt-2">{{'events'|trans}}:</div>
+            <div class="pt-2">{{'events'|trans|capitalize}}:</div>
             <ul>
             {% for info in ar.eventArtistInfos %}
             <li><a href="{{ url('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>

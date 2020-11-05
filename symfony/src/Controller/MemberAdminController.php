@@ -13,6 +13,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 use App\Entity\Email;
 use App\Entity\User;
+use App\Entity\Member;
 
 final class MemberAdminController extends CRUDController
 {
@@ -28,30 +29,19 @@ final class MemberAdminController extends CRUDController
             $object->setUsername($object->getUser()->getUsername());
             $this->admin->update($object);
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
-        }
-        $em = $this->get('doctrine.orm.entity_manager');
-        $userR = $em->getRepository(User::class);
-        $user = $userR->findOneBy(['email' => $object->getEmail()]);
-        if ($user){ // käyttäjä olemassa
-            $this->addFlash('sonata_flash_error', sprintf('User with this email already exists'));
-            $user->setMember($object);
-            $em->persist($user);
-            $em->flush();
-            $this->admin->update($object);
-            $this->addFlash('sonata_flash_success', sprintf('User with this email linked as user'));
         } else {
             $user = new User();
             $passwordEncoder = $this->get('security.password_encoder');
-            $user->setEmail($object->getEmail());
             $pass = bin2hex(openssl_random_pseudo_bytes(6));
             $user->setPassword($passwordEncoder->encodePassword($user,$pass));
             $user->setMember($object);
+            $em = $this->get('doctrine.orm.entity_manager');
             $em->persist($user);
             $em->flush();
             $this->admin->update($object);
             //$userEditLink = $this->get('router')->generate('admin_app_user_edit', ['id' => $user->getId()]);
             $this->addFlash('sonata_flash_success', 
-                sprintf('User created successfully with password : %s', $pass
+                sprintf('User created successfully' 
             ));
             //$this->addFlash('sonata_flash_error', 
             //    sprintf('Please define user groups manually!: <a href="%s">Here</a>', $userEditLink

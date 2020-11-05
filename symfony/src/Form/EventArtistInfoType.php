@@ -16,6 +16,8 @@ class EventArtistInfoType extends AbstractType
             ->add('Artist', null, [
                 'choices' => $options['artists'],
                 'choice_value' => 'name',
+                'required' => true,
+                'label' => 'event.form.sign_up.artist',
                 'help' => 'event.form.sign_up.new_artist_help_html',
                 'help_html' => true,
             ])

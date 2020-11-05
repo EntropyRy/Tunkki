@@ -30,7 +30,7 @@
                     </a>
                     {% endif %}
                     <a class="dropdown-item" href="{{ url('entropy_profile.'~loc)}}">
-                        <i class="fas fa-user-cog"></i> {{ 'profile.name'|trans }}
+                        <i class="fas fa-user-cog"></i> {{ 'profile.name'|trans|capitalize }}
                     </a>
                     <a class="dropdown-item" href="{{ url('app_logout')}}">
                         <i class="fas fa-sign-out-alt"></i> {{ 'logout'|trans|capitalize }}

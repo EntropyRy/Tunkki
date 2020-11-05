@@ -62,12 +62,14 @@ password: Password
 email: Email
 please_sign_in: Please sign in
 sign_in: Sign in
+created_at: Created at
+updated_at: Updated at
 membership_information: Membership information
 membership_status: Membership status
 you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: You need at least 25% to be able to vote in our association meeting
 100_procent_is_honorary_member: 100% is HC member
 used_in_other_services: User in our other services
-you_can_change_your_member_information_by_loging_in: You can change your member information by loging in
+you_can_change_your_member_information_by_loging_in: You can change your member information by loging in. If you have a problem you can contact the board.
 edit: edit
 preview: Preview
 Picture: Picture
@@ -79,12 +81,14 @@ all_artists_signed_up_create_one: All of your artist have been signed up for thi
 duplicate_artist_found: Duplicate artist name found!
 widget_label_binary_content: Binary content
 widget_label_unlink: Unlink
+link_media: Add a photo from your files
 event:
     form:
         sign_up:
+            artist: Artist
             why_should_we_choose_you: Why should we choose you?
-            wish_for_playtime: Wish for playtime
-            set_length: Wish for set length
+            wish_for_playtime: At what time do you wish to play?
+            set_length: Preferred length of the set
             free_word: Free word
             save: Save
             new_artist_help_html: If you want to create a new artist you can do it from your profile page
@@ -100,20 +104,22 @@ profile:
     name: profile
     access_groups: Access groups
     application_saved: Application saved
-    paid_renting_rewards: Paid renting rewards
-    no_renting_rewards: No renting rewards, ask around how to get involved?
+    paid_renting_rewards: Rental compensations
+    no_renting_rewards: No rental compensations yet. If you wish to be involved in renting out Entropy's equipment, ask around in Mattermost about how you can get involved.
     next_reward_is_bubling_under: Next one is bubling under
     you_are_active_member_already: You are active member already
     application_for_active_member: Your application for active member
     save: save
+    apply_for_active_member: Apply to become an active member
 artist:
     not_confirmed_yet: Not confirmed (yet)
     no_artist_profile: No artist profiles
     hardware: Hardware you use
     profiles: Artist Profiles
+    information: Artist information
     form:
-        genre_help: VJ can tell what kind of visualization. This field is not translated
-        bio_help: Tell something about the artist past
+        genre_help: VJs may describe the mood of the visualization. This field is not translated.
+        bio_help: Tell something about your artist achievements.
         hardware_help: What kind of hardware are you using?
         name: Artist name
         type: Type
@@ -123,13 +129,14 @@ artist:
         promo_picture: Promo picture
         genre: Genre(s)
         information: Basic info
+        hardware: Hardware
 member:
     active:
         application_title: Apply for active membership
-        application: Your application for active membership
-        apply_help: We hope you will tell us what you have done in Entropy, what would you like to do in Entropy and why are you applying for active membership. Your application is editable until next board meeting.
+        application: Your motivation letter for active membership
+        apply_help: We hope you will tell us what you have done in Entropy, what would you like to do in Entropy and why are you applying for active membership. Your application is editable until the next board meeting.
         requirements: General requirements for becoming an active member
-        requirements_help: The board is not resticted by these guidelines. 
+        requirements_help: The board is not restricted by these guidelines. 
         requirements3: The board knows who you are
         requirements2: How active you have been lately
         requirements1: You have been organizing at least 3 events in Entropy

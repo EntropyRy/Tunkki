@@ -24,7 +24,7 @@ HC member: HC-jäsenyys
 Full member: Täysjäsenyys
 Member: Jäsen
 since: alkaen
-Username: Käytäjänimi
+Username: Käyttäjänimi
 stay_tuned: Pysy kuulolla!
 future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
@@ -59,16 +59,16 @@ entropy.seo.description: Elektronisen musiikin kulttuuri yhdistys
 map: Kartta
 profile_url: profiili
 reset_your_password: Vaihda salasanasi
-send_password_reset_email: Lähetä salasanan nollaus sähköposti
+send_password_reset_email: Lähetä
 reset_password_form_help: Kun annat sähköpostisi niin lähetämme sinulle sähköpostin josta löydät linkin salasanan vaihtamiseksi
-reset_password_info: Lähetimme juuri sähköpostin joka sisältää linkin josta voit nollata salasanasi. Linkki vanhentuu
+reset_password_info: Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit nollata salasanasi. Linkki vanhentuu
 hours: tunnissa
 Password Reset Email Sent: Salasanan nollaus sähköposti lähetetty
 reset_password_email_info: Jos et saanut sähköpostia tarkista roskapostisi tai
 try_again: yritä uudelleen
-New password: Uusi salasanasi
-Repeat Password: Toista salasanasi
-Reset password: Vaihda salasanasi
+New password: Salasana
+Repeat Password: Toista salasana
+Reset password: Vaihda salasana
 forgot_password: Unohditko salasanasi?
 password: Salasana
 email: Sähköposti
@@ -79,7 +79,7 @@ membership_status: Jäsentilanne
 you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitset vähintään 25 %, jotta voit äänestää yhdistyskokouksessa
 100_procent_is_honorary_member: 100 % on HC-jäsen
 used_in_other_services: Käytetään meidän muissa palveluissa
-you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla sisään
+you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
 edit: muokkaa
 add_new_artist: lisää uusi artistiprofiili
 preview: Esikatselu
@@ -87,8 +87,9 @@ picture: Kuva
 widget_headline_information: informaatio
 widget_label_type: tyyppi
 widget_label_context: konteksti
-widget_label_binary_content: tiedosto
-widget_label_unlink: poista linkitys
+widget_label_binary_content: Tiedosto
+widget_label_unlink: Poista kuva profiilista
+link_media: Lisää kuva tiedostoista
 created_at: luotu
 updated_at: päivitetty
 no_linked_media: Ei linkitettyä mediaa
@@ -105,12 +106,13 @@ Locale: Kieli
 event:
     form:
         sign_up:
+            artist: Artisti
             why_should_we_choose_you: Miksi valitsisimme sinut?
             wish_for_playtime: Toive soittojankohdasta
             set_length: Toive setin pituudesta
             free_word: Vapaa sana
             save: Tallenna
-            new_artist_help_html: Jos haluat luoda uuden artistin voit tehdä sen profiili sivultasi
+            new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
 url:
     form:
         open_in_new_window: Avaa uudessa ikkunassa
@@ -126,7 +128,7 @@ profile:
     apply_for_active_member: Hae aktiivijäsenyyttä
     application_saved: Hakemus tallennettu
     paid_renting_rewards: Vuokratehtävien kompensaatiot
-    no_renting_rewards: Ei tapahtumia. Kysele vaikka Mattermostissa, miten voit osallistua.
+    no_renting_rewards: Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa, miten voit osallistua.
     next_reward_is_bubling_under: Seuraava on tulossa..
     you_are_active_member_already: Olet jo aktiivijäsen
     application_for_active_member: Aktiivijäsen hakemuksesi
@@ -139,15 +141,15 @@ artist:
     form:
         name: Artistinimi
         type: Tyyppi
-        bio: Bio Suomeksi
-        bio_en: Bio Englanniksi
+        bio: Bio suomeksi
+        bio_en: Bio englanniksi
         genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
         bio_help: Kerro lyhyesti saavutuksistasi 
         hardware_help: Mitä tekniikkaa käytät esiintymiseen?
-        promo_picture: Promo kuva
+        promo_picture: Promokuva
         genre: Genre(t)
         hardware: Laitteisto
-        links: Linkit media näytteisiin ja muihin palveluihin
+        links: Linkit medianäytteisiin ja muihin palveluihin
 
 member:
     active:
