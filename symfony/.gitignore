@@ -9,7 +9,8 @@
 /phpunit.xml
 /node_modules
 /public/build/
-
+/config/secrets/dev/dev.decrypt.private.php
+/config/secrets/oauth
 
 ###> symfony/framework-bundle ###
 /.env.local
