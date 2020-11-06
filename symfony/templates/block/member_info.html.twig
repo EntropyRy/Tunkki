@@ -93,7 +93,9 @@
         <li><span class="fa-li"><i class="fas fa-users-cog"></i></span>
             {{ 'profile.access_groups'|trans }}:
             {% for group in member.user.AccessGroups %}
-            {{ group }}{% if not loop.last %}, {% endif %}
+                {% if group.active %}
+                    {{ group }}{% if not loop.last %}, {% endif %}
+                {% endif %}
             {% endfor %}
         </li>
         </ul>
