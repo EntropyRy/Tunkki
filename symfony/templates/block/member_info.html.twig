@@ -49,11 +49,11 @@
                 aria-valuemin="0" 
                 aria-valuemax="100">
                 {% if member.acceptedAsHonoraryMember %}
-                HC
+                    {{'HC member'|trans}} 
                 {% elseif member.isActiveMember %}
-                Active
+                    {{'Active member'|trans}} 
                 {% else %}
-                Member
+                    {{'Member'|trans}}
                 {% endif %}
             </div>
         </div>
