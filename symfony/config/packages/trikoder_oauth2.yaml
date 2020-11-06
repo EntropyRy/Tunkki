@@ -1,13 +1,13 @@
 trikoder_oauth2:
 
     authorization_server:
-        private_key: config/secret/oauth/private.key                     # Change this
+        private_key: /var/www/symfony/config/secrets/oauth/private.key                     # Change this
         private_key_passphrase: null                            # Passphrase of the private key, if any
 
         encryption_key: '%env(string:OAUTH2_ENCRYPTION_KEY)%'   # (Optional) Change this
 
     resource_server:
-        public_key: config/secret/oauth/public.key                       # Change this
+        public_key: /var/www/symfony/config/secrets/oauth/public.key                       # Change this
 
     persistence:
         doctrine: null

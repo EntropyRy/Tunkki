@@ -94,7 +94,14 @@ security:
                 path: app_logout
                 # where to redirect after logout
                 # target: app_any_route
-
+        api_token:
+            pattern: ^/api/token$
+            security: false
+        api:
+            pattern: ^/api
+            security: true
+            stateless: true
+            oauth2: true        
 #        api:
 #            pattern:            /api(.*)
 #            context:            user
