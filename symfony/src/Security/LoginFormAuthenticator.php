@@ -106,9 +106,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
             return new RedirectResponse($this->urlGenerator->generate('sonata_admin_dashboard'));
         } else {
-            return new RedirectResponse($this->urlGenerator->generate('entropy_profile.'.$user->getMember()->getLocale()));
+            if( $user->getMember()->getLocale()){
+                return new RedirectResponse($this->urlGenerator->generate('entropy_profile.'.$user->getMember()->getLocale()));
+            } else {
+                return new RedirectResponse($this->urlGenerator->generate('entropy_profile.'.$request->getLocale()));
+            }
         }
-
     }
 
     protected function getLoginUrl()
