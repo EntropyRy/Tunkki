@@ -76,8 +76,6 @@ please_sign_in: Kirjaudu sisään!
 sign_in: Kirjaudu sisään
 membership_information: Jäsentiedot
 membership_status: Jäsentilanne
-you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: Tarvitset vähintään 25 %, jotta voit äänestää yhdistyskokouksessa
-100_procent_is_honorary_member: 100 % on HC-jäsen
 used_in_other_services: Käytetään meidän muissa palveluissa
 you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
 edit: muokkaa
@@ -124,7 +122,7 @@ profile:
     member_data_changed: Salasana ja tiedot muutettu
     name: Profiili
     add_new_artist: Lisää uusi artistiprofiili
-    access_groups: Oikeudet
+    access_groups: Tämän sivuston erityisoikeudet
     apply_for_active_member: Hae aktiivijäsenyyttä
     application_saved: Hakemus tallennettu
     paid_renting_rewards: Vuokratehtävien kompensaatiot
@@ -152,6 +150,7 @@ artist:
         links: Linkit medianäytteisiin ja muihin palveluihin
 
 member:
+    can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
     active:
         application_title: Hae aktiivijäseneksi
         application: Hakemuksesi Entropyn aktiivijäseneksi

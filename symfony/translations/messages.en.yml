@@ -66,8 +66,6 @@ created_at: Created at
 updated_at: Updated at
 membership_information: Membership information
 membership_status: Membership status
-you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting: You need at least 25% to be able to vote in our association meeting
-100_procent_is_honorary_member: 100% is HC member
 used_in_other_services: User in our other services
 you_can_change_your_member_information_by_loging_in: You can change your member information by loging in. If you have a problem you can contact the board.
 edit: edit
@@ -102,7 +100,7 @@ profile:
     member_data_changed: Password and member data changed
     add_new_artist: Add new artist profile
     name: profile
-    access_groups: Access groups
+    access_groups: Access groups for this site
     application_saved: Application saved
     paid_renting_rewards: Rental compensations
     no_renting_rewards: No rental compensations yet. If you wish to be involved in renting out Entropy's equipment, ask around in Mattermost about how you can get involved.
@@ -131,6 +129,7 @@ artist:
         information: Basic info
         hardware: Hardware
 member:
+    can_vote: Can vote (Student union member or board has accepted as full member)
     active:
         application_title: Apply for active membership
         application: Your motivation letter for active membership

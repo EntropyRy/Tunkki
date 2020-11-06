@@ -47,29 +47,49 @@
                 style="width: {{member.ProgressP}}%" 
                 aria-valuenow="{{member.ProgressP}}" 
                 aria-valuemin="0" 
-                aria-valuemax="100">{{member.ProgressP}}%</div>
+                aria-valuemax="100">
+                {% if member.acceptedAsHonoraryMember %}
+                HC
+                {% elseif member.isActiveMember %}
+                Active
+                {% else %}
+                Member
+                {% endif %}
+            </div>
         </div>
-        <div>
-        {{'you_need_at_least_25_procent_to_be_able_to_vote_in_our_association_meeting'|trans}},
-        {{'100_procent_is_honorary_member'|trans}}
-        </div>
-        <span>
-            <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-            {{'Member'|trans}}, {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
-        </span>
-        <span>
-            <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-            {{'Active member'|trans}}{% if member.ApplicationHandledDate %}, {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
-        </span>
-        <span>
-            <i class="{% if member.isFullMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-            {{'Full member'|trans}}
-        </span>
-        <span>
-            <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-            {{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %}, {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
-        </span>
         </li>
+        </ul>
+        <div class="row">
+        <div class="col-md-4">
+            <ul class="fa-ul">
+                <li>
+                    <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+                    {{'Member'|trans}}<br> {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
+                </li>
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <span>
+                <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+                {{'Active member'|trans}}{% if member.ApplicationHandledDate %}<br> {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
+            </span>
+        </div>
+        <div class="col-md-4">
+            <span>
+                <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+                {{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %}<br> {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
+            </span>
+        </div>
+        <div class="col-md-12">
+            <ul class="fa-ul">
+                <li>
+                    <i class="{% if member.canVote %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
+                    {{'member.can_vote'|trans}}
+                </li>
+            </ul>
+        </div>
+        </div>
+        <ul class="fa-ul">
         <li><span class="fa-li"><i class="fas fa-users-cog"></i></span>
             {{ 'profile.access_groups'|trans }}:
             {% for group in member.user.AccessGroups %}

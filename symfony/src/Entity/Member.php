@@ -595,14 +595,22 @@ class Member
     {
         if($this->AcceptedAsHonoraryMember)
             return '100';
-        if(!$this->isActiveMember && !$this->StudentUnionMember)
-            return '10';
-        if(!$this->isActiveMember && $this->StudentUnionMember)
-            return '25';
-        if($this->isActiveMember && !$this->isFullMember && !$this->StudentUnionMember)
-            return '24';
-        if($this->isActiveMember && ($this->isFullMember || $this->StudentUnionMember))
-            return '75';
+        if($this->isActiveMember){
+            return '66';
+        } else {
+            return '33';
+        }
+    }
+
+    public function canVote(): bool
+    {
+        if($this->StudentUnionMember){
+            return true;
+        }
+        if($this->isFullMember){
+            return true;
+        }
+        return false;
     }
 
     public function getLocale(): ?string
