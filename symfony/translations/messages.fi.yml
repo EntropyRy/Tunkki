@@ -101,6 +101,8 @@ all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapa
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
+menu:
+    logon_to: Kirjaudu
 event:
     form:
         sign_up:
@@ -131,6 +133,7 @@ profile:
     you_are_active_member_already: Olet jo aktiivijäsen
     application_for_active_member: Aktiivijäsen hakemuksesi
     save: tallenna
+    only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     no_artist_profile: Ei yhtään profiilia

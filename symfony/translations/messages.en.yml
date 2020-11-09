@@ -80,6 +80,8 @@ duplicate_artist_found: Duplicate artist name found!
 widget_label_binary_content: Binary content
 widget_label_unlink: Unlink
 link_media: Add a photo from your files
+menu:
+    logon_to: Log on to
 event:
     form:
         sign_up:
@@ -109,6 +111,7 @@ profile:
     application_for_active_member: Your application for active member
     save: save
     apply_for_active_member: Apply to become an active member
+    only_for_active_members: This service is only for active members
 artist:
     not_confirmed_yet: Not confirmed (yet)
     no_artist_profile: No artist profiles
