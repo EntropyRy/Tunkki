@@ -64,7 +64,10 @@
             <ul class="fa-ul">
                 <li>
                     <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-                    {{'Member'|trans}}<br> {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
+                    {{'Member'|trans}}<br> 
+                    {% if member.ApplicationHandledDate is empty or member.createdAt < member.ApplicationHandledDate %}
+                    {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
+                    {% endif %}
                 </li>
             </ul>
         </div>

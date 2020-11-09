@@ -1,2 +1,9 @@
-oauth2:
-    resource: '@TrikoderOAuth2Bundle/Resources/config/routes.xml'
+oauth2_authorization_code:
+   controller: Trikoder\Bundle\OAuth2Bundle\Controller\AuthorizationController::indexAction
+   path: /oauth/authorize
+
+oauth2_token:
+    controller: Trikoder\Bundle\OAuth2Bundle\Controller\TokenController::indexAction
+    path: /oauth/token
+    methods: ['POST']
+

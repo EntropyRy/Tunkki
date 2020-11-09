@@ -1,0 +1,3 @@
+api_me:
+    controller: App\Controller\OauthJsonController:me
+    path: /api/me

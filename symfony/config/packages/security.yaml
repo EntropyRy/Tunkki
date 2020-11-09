@@ -95,31 +95,19 @@ security:
                 # where to redirect after logout
                 # target: app_any_route
         api_token:
-            pattern: ^/api/token$
+            pattern: ^/oauth/token$
             security: false
         api:
-            pattern: ^/api
+            pattern: ^/api/me
             security: true
             stateless: true
             oauth2: true        
-#        api:
-#            pattern:            /api(.*)
-#            context:            user
-#            form_login:
-#                provider:       fos_userbundle
-#                login_path:     /admin/login
-#                use_forward:    false
-#                check_path:     /admin/login_check
-#                failure_path:   null
-#            logout:
-#                path:           /admin/logout
-#            anonymous:          true
 
     access_control:
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
         - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
