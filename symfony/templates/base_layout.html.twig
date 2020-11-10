@@ -4,7 +4,7 @@
 {% endblock %}
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>
-
+            <link rel="icon" type="image/svg+xml" href="/favicon.ico">
             <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             {% if block('title') is defined %}
                 <title>{{ block('title') }}</title>
@@ -20,7 +20,6 @@
                     <link rel="stylesheet" href="{{ asset(stylesheet) }}" media="all">
                 {% endfor %}
             {% endblock %}
-
             {% block sonata_page_javascripts %}
                 <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
                 <!--[if lt IE 9]>
