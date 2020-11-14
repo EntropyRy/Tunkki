@@ -22,5 +22,12 @@ $(document).ready(function() {
         });
     });
 });
+$(document).on('click','.icopy', function(event) {
+    event.preventDefault();
+    var iconclass = $(this).data('i');
+    $(this).parent().prev().val(iconclass);
+    return false;
+});
+
 
 //console.log('Hello Webpack Encore');
