@@ -11,7 +11,12 @@ require('typeface-spacegrotesk')
 
 $(document).ready(function() {
     bsCustomFileInput.init();
-    a2lix_lib.sfCollection.init();
+    a2lix_lib.sfCollection.init({
+        lang: {
+            add: 'Add/Lisää',
+            remove: 'Remove/Poista'
+        }
+    });
     $('#clubroomSwitch').click(function() {
         $('.post').each(function() {
             if ($(this).data('type') == 'clubroom'){

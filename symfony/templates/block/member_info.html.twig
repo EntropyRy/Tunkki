@@ -72,7 +72,7 @@
             </ul>
         </div>
         <div class="col-md-4">
-            <span>
+            <span class="ml-5 ml-md-0">
                 <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
                 {{'Active member'|trans}}{% if member.ApplicationHandledDate %}<br> {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
             </span>

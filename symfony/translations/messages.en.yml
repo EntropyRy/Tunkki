@@ -127,7 +127,7 @@ artist:
         bio: Bio in Finnish
         bio_en: Bio in English
         links: Links to media and other stuff
-        promo_picture: Promo picture
+        promo_picture: Promo picture (is going to scaled to square which side is 800px. Recommended that you do it before upload)
         genre: Genre(s)
         information: Basic info
         hardware: Hardware

@@ -147,7 +147,7 @@ artist:
         genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
         bio_help: Kerro lyhyesti saavutuksistasi 
         hardware_help: Mitä tekniikkaa käytät esiintymiseen?
-        promo_picture: Promokuva
+        promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
         genre: Genre(t)
         hardware: Laitteisto
         links: Linkit medianäytteisiin ja muihin palveluihin
