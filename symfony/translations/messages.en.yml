@@ -112,6 +112,8 @@ profile:
     save: save
     apply_for_active_member: Apply to become an active member
     only_for_active_members: This service is only for active members
+    logout: logout
+    no_access_groups: No special privileges
 artist:
     not_confirmed_yet: Not confirmed (yet)
     no_artist_profile: No artist profiles

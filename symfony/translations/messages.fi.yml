@@ -134,6 +134,8 @@ profile:
     application_for_active_member: Aktiivijäsen hakemuksesi
     save: tallenna
     only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
+    logout: Uloskirjautuminen
+    no_access_groups: Ei erityis oikeuksia
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     no_artist_profile: Ei yhtään profiilia
