@@ -107,8 +107,8 @@ security:
         - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
-        - { path: ^/profile/door$, role: ROLE_USER_HOST, host: e-werk\.entropy\.fi$ }
-        - { path: ^/profiili/ovi$, role: ROLE_USER_HOST, host: e-werk\.entropy\.fi$ }
+        - { path: ^/profile/door$, role: ROLE_USER_HOST, host: entropy\.fi$ }
+        - { path: ^/profiili/ovi$, role: ROLE_USER_HOST, host: entropy\.fi$ }
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
         - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }

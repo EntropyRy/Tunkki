@@ -120,6 +120,7 @@ profile:
         opener: Clubroom door opener
         open_the_door: Open the door
         latest: Latest
+        not_active_member: Not allowed. You are not active member.
 
 artist:
     not_confirmed_yet: Not confirmed (yet)
