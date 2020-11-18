@@ -101,6 +101,7 @@ all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapa
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
+Message: Viesti
 menu:
     logon_to: Kirjaudu
 event:
@@ -136,6 +137,12 @@ profile:
     only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
     logout: Uloskirjautuminen
     no_access_groups: Ei erityis oikeuksia
+    door:
+        opener: Kertsin oven avaaja
+        no_message: Ei viestiä
+        opened: Ovi avattu
+        open_the_door: Avaa ovi
+        latest: Viimeisin
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     no_artist_profile: Ei yhtään profiilia

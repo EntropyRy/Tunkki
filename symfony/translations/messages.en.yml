@@ -114,6 +114,13 @@ profile:
     only_for_active_members: This service is only for active members
     logout: logout
     no_access_groups: No special privileges
+    door:
+        no_message: No message
+        opened: Door opened
+        opener: Clubroom door opener
+        open_the_door: Open the door
+        latest: Latest
+
 artist:
     not_confirmed_yet: Not confirmed (yet)
     no_artist_profile: No artist profiles

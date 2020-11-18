@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=DoorLogRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class DoorLog
 {
@@ -72,5 +73,12 @@ class DoorLog
         $this->message = $message;
 
         return $this;
+    }
+    /**
+     * @ORM\PrePersist
+     */
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTime();
     }
 }

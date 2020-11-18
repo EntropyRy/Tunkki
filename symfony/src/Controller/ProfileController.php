@@ -5,6 +5,8 @@ namespace App\Controller;
 
 use App\Form\MemberType;
 use App\Form\ActiveMemberType;
+use App\Form\OpenDoorType;
+use App\Entity\DoorLog;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,6 +26,28 @@ class ProfileController extends AbstractController
     {
         $member = $security->getUser()->getMember();
         return $this->render('profile/main.html.twig', [
+            'member' => $member,
+        ]);
+    }
+    public function door(Request $request, Security $security, FormFactoryInterface $formF)
+    {
+        $member = $security->getUser()->getMember();
+        $DoorLog = new DoorLog();
+        $DoorLog->setMember($member);
+        $em = $this->getDoctrine()->getManager();
+        $logs = $em->getRepository(DoorLog::class)->getLatest();
+        $form = $formF->create(OpenDoorType::class, $DoorLog);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $doorlog = $form->getData();
+            $em->persist($doorlog);
+            $em->flush();
+            $this->addFlash('success', 'profile.door_opened');
+            return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
+        }
+        return $this->render('profile/door.html.twig', [
+            'form' => $form->createView(),
+            'logs' => $logs,
             'member' => $member,
         ]);
     }

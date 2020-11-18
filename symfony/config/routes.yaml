@@ -31,6 +31,11 @@ entropy_profile:
         en: /profile/
         fi: /profiili/
     controller: App\Controller\ProfileController:index
+entropy_profile_door:
+    path:
+        en: /profile/door
+        fi: /profiili/ovi
+    controller: App\Controller\ProfileController:door
 entropy_profile_edit:
     path:
         en: /profile/edit
@@ -41,8 +46,6 @@ entropy_artist_create:
         en: /profile/artist/create
         fi: /profiili/artisti/uusi
     controller: App\Controller\ArtistController:create
-    requirements:
-        id: '\d+'
 entropy_profile_active_member:
     path:
         en: /profile/apply

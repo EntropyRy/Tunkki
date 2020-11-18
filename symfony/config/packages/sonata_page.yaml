@@ -47,6 +47,7 @@ sonata_page:
         - entropy_profile
         - entropy_profile_edit
         - entropy_profile_active_member
+        - entropy_profile_door
         - entropy_artist_create
         - entropy_artist_edit
         - entropy_artist_delete

@@ -3,6 +3,7 @@
 {% block content %}
 <div class="col-md-12">
       {{ form_start(form) }}
+      {{ form_errors(form) }}
 		  <div class="form-row">
           {{ form_row(form.firstname, {'row_attr': {'class':'col-md-6'}}) }}
           {{ form_row(form.lastname, {'row_attr': {'class':'col-md-6'}}) }}

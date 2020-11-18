@@ -19,6 +19,18 @@ class DoorLogRepository extends ServiceEntityRepository
         parent::__construct($registry, DoorLog::class);
     }
 
+    /**
+     * @return DoorLog[] Returns an array of DoorLog objects
+     */
+    public function getLatest()
+    {
+        return $this->createQueryBuilder('d')
+            ->orderBy('d.createdAt', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return DoorLog[] Returns an array of DoorLog objects
     //  */
