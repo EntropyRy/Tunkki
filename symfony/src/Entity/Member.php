@@ -160,9 +160,15 @@ class Member
      */
     private $artist;
 
+    /**
+     * @ORM\OneToMany(targetEntity=DoorLog::class, mappedBy="member", orphanRemoval=true)
+     */
+    private $doorLogs;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
+        $this->doorLogs = new ArrayCollection();
     }
 
     /**
@@ -657,6 +663,36 @@ class Member
             // set the owning side to null (unless already changed)
             if ($artist->getMember() === $this) {
                 $artist->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DoorLog[]
+     */
+    public function getDoorLogs(): Collection
+    {
+        return $this->doorLogs;
+    }
+
+    public function addDoorLog(DoorLog $doorLog): self
+    {
+        if (!$this->doorLogs->contains($doorLog)) {
+            $this->doorLogs[] = $doorLog;
+            $doorLog->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDoorLog(DoorLog $doorLog): self
+    {
+        if ($this->doorLogs->removeElement($doorLog)) {
+            // set the owning side to null (unless already changed)
+            if ($doorLog->getMember() === $this) {
+                $doorLog->setMember(null);
             }
         }
 
