@@ -1,0 +1,34 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{'profile.door.opener'|trans|capitalize }} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    <h1>{{'profile.door.opener'|trans|capitalize }}</h1>
+</div>
+{% if not member.isActiveMember %}
+<div class="col-md-12">
+    <ul class="fa-ul">
+    {% for log in logs %}
+    {% if loop.last %}
+    <li class="pt-2"><span class="fa-li"><i class="fas fa-arrow-down"></i></span>
+        {{ 'profile.door.latest'|trans }} 
+    </li>
+    {% endif %}
+    <li><span class="fa-li"><i class="fas fa-key"></i></span>
+        {{ log.createdAt|date }} {{ log.member }}: {{log.message|default('profile.door.no_message')|trans}}
+    </li>
+    {% endfor %}
+    </ul>
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input class="btn btn-primary" type="submit" value="{{'profile.door.open_the_door'|trans|capitalize}}" />
+    {{ form_end(form) }}
+</div>
+{% else %}
+
+{% endif %}
+{% endblock %}
+
+
