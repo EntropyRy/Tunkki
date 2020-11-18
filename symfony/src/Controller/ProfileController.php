@@ -14,6 +14,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Helper\Mattermost;
 
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -29,7 +30,7 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function door(Request $request, Security $security, FormFactoryInterface $formF)
+    public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
     {
         $member = $security->getUser()->getMember();
         $DoorLog = new DoorLog();
@@ -42,7 +43,13 @@ class ProfileController extends AbstractController
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $this->addFlash('success', 'profile.door_opened');
+            $this->addFlash('success', 'profile.door.opened');
+            $text = '**Kerde door opened by '.$doorlog->getMember();
+            if ($doorlog->getMessage()){
+                $text .=' - '. $doorlog->getMessage();
+                }
+            $text.='**';
+            $mm->SendToMattermost($text);
             return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
         return $this->render('profile/door.html.twig', [
