@@ -8,7 +8,7 @@
     <h1>{{'profile.door.opener'|trans|capitalize }}</h1>
 {% if member.isActiveMember %}
     <ul class="fa-ul">
-    {% for log in logs %}
+    {% for log in logs|reverse%}
     {% if loop.last %}
     <li class="pt-2"><span class="fa-li"><i class="fas fa-arrow-down"></i></span>
         {{ 'profile.door.latest'|trans }} 

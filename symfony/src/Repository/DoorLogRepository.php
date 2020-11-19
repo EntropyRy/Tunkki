@@ -25,7 +25,7 @@ class DoorLogRepository extends ServiceEntityRepository
     public function getLatest()
     {
         return $this->createQueryBuilder('d')
-            ->orderBy('d.createdAt', 'ASC')
+            ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
