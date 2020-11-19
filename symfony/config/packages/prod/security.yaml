@@ -1,0 +1,4 @@
+security:
+    access_control:
+        - { path: ^/profile/door$, role: ROLE_USER_HOST, host: entropy\.fi$ }
+        - { path: ^/profiili/ovi$, role: ROLE_USER_HOST, host: entropy\.fi$ }

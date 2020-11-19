@@ -59,7 +59,7 @@
                 <hr>
                 {% for link in ar.links %}
                 <span>
-                    <a {% if link.open_in_new_window %}target="_blank"{% endif %}href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
+                    <a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
                 </span>
                 {% endfor %}
             </div>
