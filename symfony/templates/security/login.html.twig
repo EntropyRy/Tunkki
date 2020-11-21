@@ -9,7 +9,7 @@
 
     {% if app.user %}
         <div class="mb-3">
-            You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+            {{'logged_in_as'|trans }} {{ app.user.username }} <a class="btn btn-secondary" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{'profile.logout'|trans}}</a>
         </div>
     {% endif %}
 
@@ -34,11 +34,18 @@
         </div>
     #}
     <br>
-    <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
-    <a class="btn btn-secondary" href="{{ path('_entropy_mattermost_auth') }}">{{ 'Mattermost login'|trans }}</a>
-    <button class="btn float-right btn-primary" type="submit">
-        {{ 'sign_in'|trans }}
-    </button>
+    <div class="d-flex flex-row justify-content-around">
+        <div class="flex-fill">
+            <button class="btn btn-primary" type="submit">
+                {{ 'sign_in'|trans }}
+            </button>
+            <a class="btn btn-secondary" 
+               href="{{ path('_entropy_mattermost_auth') }}"><img height="20" src="{{ asset('images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}</a>
+        </div>
+        <div class="">
+                <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
+        </div>
+    </div>
 </form>
 </div>
 {% endblock %}

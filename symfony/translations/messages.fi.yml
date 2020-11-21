@@ -102,6 +102,7 @@ duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
 Message: Viesti
+logged_in_as: Olet kirjautuneena käyttäjänä
 menu:
     logon_to: Kirjaudu
 event:
