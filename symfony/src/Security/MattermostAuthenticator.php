@@ -12,11 +12,13 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use App\Entity\Member;
 use App\Entity\User;
 
 class MattermostAuthenticator extends SocialAuthenticator
 {
+    use TargetPathTrait;
     private $clientRegistry;
     private $em;
     private $urlG;
