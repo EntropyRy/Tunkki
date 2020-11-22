@@ -49,11 +49,11 @@
     {% endblock %}
 
         {% block sonata_page_top_bar %}
-            {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_PREVIOUS_ADMIN') ) %}
+            {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_SONATA_PAGE_ADMIN_PAGE_ALL') ) %}
             <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="banner">
                 <span class="navbar-text" style="color: white;">ADMIN MENU:</span>
                         <ul style="width: 70%" class="navbar-nav justify-content-left">
-                            {% if sonata_page.isEditor and is_granted('CONTENT') or is_granted('ROLE_SUPER_ADMIN') %}
+                            {% if sonata_page.isEditor and (is_granted('ROLE_SONATA_PAGE_ADMIN_PAGE_ALL') or is_granted('ROLE_SUPER_ADMIN')) %}
                                 {% set sites = sonata_page.siteavailables %}
 
                                 {% if sites|length > 1 and site is defined %}

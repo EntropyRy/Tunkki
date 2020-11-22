@@ -45,7 +45,7 @@
             {% endif %}
         </div>
         {% endfor %}
-        {% if is_granted('RENTERS') or is_granted('ROLE_SUPER_ADMIN') %}
+        {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL') or is_granted('ROLE_SUPER_ADMIN') %}
          <a class="mt-2 btn btn-primary" href="{{path('admin_app_item_list')}}">{{ 'block.bookings.manage'|trans }}</a>
         {% else %}
         <div class="mt-2">{{'block.items.help'|trans }}</div>
