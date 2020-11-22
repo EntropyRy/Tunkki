@@ -26,11 +26,21 @@ entropy_event_slug_artist_signup:
     controller: App\Controller\EventController:artistSignUp
     requirements:
         year: '\d+'
+entropy_user_dashboard:
+    path:
+        en: /dashboard/
+        fi: /yleiskatsaus/
+    controller: App\Controller\ProfileController:dashboard
 entropy_profile:
     path:
         en: /profile/
         fi: /profiili/
     controller: App\Controller\ProfileController:index
+entropy_artist_profile:
+    path:
+        en: /profile/artist
+        fi: /profiili/artisti
+    controller: App\Controller\ArtistController:index
 entropy_profile_door:
     path:
         en: /profile/door

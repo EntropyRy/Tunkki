@@ -17,7 +17,7 @@ sonata_admin:
     dashboard:
         blocks:
             - { position: right, type: entropy_tunkki.block.bookings}
-            - { position: right, type: entropy_tunkki.block.brokenitems}
+            - { position: right, type: entropy.block.brokenitems}
             - { position: left, type: sonata.admin.block.admin_list }
               #- { position: left, type: entropy.block.future_events }
               #- { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
@@ -77,7 +77,6 @@ sonata_admin:
                     - entropy.admin.menu
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
-                roles: [CONTENT, SONATA_SUPER_ADMIN]
             sonata.admin.group.members:
                 label:           Members
                 label_catalogue: SonataAdminBundle

@@ -22,6 +22,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class ArtistController extends AbstractController
 {
+    public function index(Request $request, Security $security)
+    {
+        $member = $security->getUser()->getMember();
+        return $this->render('artist/main.html.twig', [
+            'member' => $member,
+        ]);
+    }
     public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans)
     {
         $member = $security->getUser()->getMember();

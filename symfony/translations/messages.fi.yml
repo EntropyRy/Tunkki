@@ -13,6 +13,7 @@ fi: Suomi
 en: Englanti
 
 # Entropy.fi
+entropy_user_dashboard: Yleiskatsaus
 Firstname: Etunimi
 Lastname: Sukunimi
 Email: Sähköposti
@@ -26,7 +27,6 @@ Member: Jäsen
 since: alkaen
 Username: Käyttäjänimi
 stay_tuned: Pysy kuulolla!
-future_events: Tulevat tapahtumat
 event_not_found: Tapahtumaa ei löytynyt
 released: Julkaistu
 older_from_archive: Vanhemmat löydät arkistosta
@@ -103,6 +103,18 @@ Please enter a password: Anna salasana
 Locale: Kieli
 Message: Viesti
 logged_in_as: Olet kirjautuneena käyttäjänä
+block:
+    events:
+        manage: Hallitse
+        future_events: Tulevat tapahtumat
+    bookings:
+        manage: Hallitse
+        no_bookings: Ei kesken olevia vuokracaseja
+        bookings: Kesken olevat vuokratapahtumat
+        help: Tule auttamaan vuokrauksessa?
+    items:
+        title: Huollettava laitteisto
+        help: Tule auttamaan huoltotöissä?
 menu:
     logon_to: Kirjaudu
 event:
@@ -139,6 +151,7 @@ profile:
     logout: Uloskirjautuminen
     no_access_groups: Ei erityis oikeuksia
     door:
+        log: Kertsin ovilogi
         opener: Kertsin oven avaaja
         no_message: Ei viestiä
         opened: Ovi avattu

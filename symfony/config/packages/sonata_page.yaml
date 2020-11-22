@@ -44,6 +44,8 @@ sonata_page:
         - app_reset_password
         - app_login
         - app_logout
+        - entropy_user_dashboard
+        - entropy_artist_profile
         - entropy_profile
         - entropy_profile_edit
         - entropy_profile_active_member

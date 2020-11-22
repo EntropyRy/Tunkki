@@ -119,6 +119,7 @@ $enable-responsive-font-sizes: true;
 		border-bottom-right-radius: 3px;
 		border-bottom-left-radius: 3px;
 		padding: 10px;
+        overflow: hidden;
 	}
 }
 @include media-breakpoint-down(lg) {

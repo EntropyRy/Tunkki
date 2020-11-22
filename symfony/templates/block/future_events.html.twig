@@ -1,19 +1,34 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-    <h5>{{'future_events'|trans}}</h5>
-    <ul class="fa-ul">
-    {% set name = 'name_attribute'|trans %}
-    {% for event in events %}
-    <li><span class="fa-li"><i class="fas fa-link"></i></span>
-        <a href="
-        {% if event.url %}
-        {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
-        {% else %}
-        {{ path('entropy_event',{'id': event.id}) }}
-        {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
-        </li>
+    {% if settings.box|default(false) %}
+    <div class="box">
+        <div class="box-header">
+            <h5>{{'block.events.future_events'|trans}}</h5>
+        </div>
+        <div class="box-body">
     {% else %}
-    <li><span class="fa-li"><i class="fas fa-exclamation"></i></span> {{ 'stay_tuned'|trans}}</li>
-    {% endfor %}
-    </ul>
+        <h5>{{'block.events.future_events'|trans}}</h5>
+    {% endif %}
+        <ul class="fa-ul">
+        {% set name = 'name_attribute'|trans %}
+        {% for event in events %}
+        <li><span class="fa-li"><i class="fas fa-link"></i></span>
+            <a href="
+            {% if event.url %}
+            {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+            {% else %}
+            {{ path('entropy_event',{'id': event.id}) }}
+            {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
+            </li>
+        {% else %}
+        <li><span class="fa-li"><i class="fas fa-exclamation"></i></span> {{ 'stay_tuned'|trans}}</li>
+        {% endfor %}
+        </ul>
+        {% if is_granted('CONTENT') or is_granted('ROLE_SUPER_ADMIN') %}
+        <a class="btn btn-primary" href="{{path('admin_app_event_list')}}">{{ 'block.events.manage'|trans }}</a>
+        {% endif %}
+    {% if settings.box|default(false) %}
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}

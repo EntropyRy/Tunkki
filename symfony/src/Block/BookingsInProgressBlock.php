@@ -10,18 +10,22 @@ use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
-use App\Entity\Event;
+use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
-class FutureEventsBlock extends BaseBlockService {
+class BookingsInProgressBlock extends BaseBlockService {
 
     protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $events = $this->em->getRepository(Event::class)->getFutureEvents();
-                 
+        $bookings = $this->em->getRepository(Booking::class)->findBy([
+            'itemsReturned' => false,
+            'cancelled' => false
+        ],[
+            'bookingDate' => 'DESC'
+        ]); 
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
-            'events'  => $events,
+            'bookings'  => $bookings,
             'settings' => $blockContext->getSettings()
         ), $response);
     }
@@ -34,7 +38,7 @@ class FutureEventsBlock extends BaseBlockService {
 
     public function configureSettings(OptionsResolver $resolver) {
         $resolver->setDefaults([
-            'template' => 'block/future_events.html.twig',
+            'template' => 'block/bookings_in_progress.html.twig',
             'box' => false
         ]);
     }
@@ -55,7 +59,7 @@ class FutureEventsBlock extends BaseBlockService {
     }
     public function getName()
     {
-        return 'Future Events Block';
+        return 'Future Bookings Block';
     }
 }
 

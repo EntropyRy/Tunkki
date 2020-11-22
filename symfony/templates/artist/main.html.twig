@@ -1,16 +1,13 @@
 {% extends 'onecolumn.html.twig' %}
 {% block title %}
-{{member.name}} | Entropy ry
+{{'artist.profiles'|trans}} | Entropy ry
 {% endblock %}
 
 {% block content %}
-<div class="col-md-12">
-    <h1>{{'profile.name'|trans|capitalize }}</h1>
-</div>
 {% if not member.isActiveMember %}
     {#{ sonata_block_render({'type':'entropy.block.door'}) }#}
 {% endif %}
-    {{ sonata_block_render({'type':'entropy.block.member_info'}) }}
+    {{ sonata_block_render({'type':'entropy.block.artist_info'}) }}
 {% endblock %}
 
 

@@ -230,6 +230,13 @@ services:
         tags:
             - { name: sonata.block, alias: artistblock }
         public: true
+    entropy.block.door_info:
+        class: App\Block\DoorInfoBlock
+        arguments:
+            - "@twig" 
+        tags:
+            - { name: sonata.block, alias: doorblock }
+        public: true
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
         arguments:
@@ -238,7 +245,7 @@ services:
             - { name: sonata.block, alias: linklistblock }
         public: true
 
-    entropy_tunkki.block.brokenitems:
+    entropy.block.brokenitems:
         class: App\Block\BrokenItemsBlock
         arguments:
             - "@twig" 
@@ -251,6 +258,13 @@ services:
             - "@twig" 
         tags:
             - { name: sonata.block, alias: futureeventsblock }
+        public: true
+    entropy.block.bookings_in_progress:
+        class: App\Block\BookingsInProgressBlock
+        arguments:
+            - "@twig" 
+        tags:
+            - { name: sonata.block, alias: bookingsinprogressblock }
         public: true
 
     entropy_tunkki.admin.who_can_rent_choice:

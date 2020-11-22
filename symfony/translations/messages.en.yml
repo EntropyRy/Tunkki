@@ -12,6 +12,7 @@ tree_catalog_title: Tree Menu Hierarchy
 fi: Finnish
 en: English
 # Entropy.fi
+entropy_user_dashboard: Dashboard
 Firstname: First name
 Lastname: Last name
 Email: Email
@@ -24,7 +25,6 @@ since: since
 Username: Username
 active.member.application: Your application for Entropy active member
 stay_tuned: Stay Tuned!
-future_events: Future Events
 event_not_found: Event cannot be found
 released: Released
 older_from_archive: Older events you can find in the archive
@@ -81,6 +81,18 @@ widget_label_binary_content: Binary content
 widget_label_unlink: Unlink
 link_media: Add a photo from your files
 logged_in_as: You are logged in as
+block:
+    events:
+        manage: Manage
+        future_events: Future Events
+    bookings:
+        manage: Manage
+        no_bookings: Bookings in progress
+        bookings: No bookings in progress
+        help: Come and help us with the bookings?
+    items:
+        title: Broken items
+        help: Come and help us fix things?
 menu:
     logon_to: Log on to
 event:
@@ -116,6 +128,7 @@ profile:
     logout: logout
     no_access_groups: No special privileges
     door:
+        log: Clubroom door log
         no_message: No message
         opened: Door opened
         opener: Clubroom door opener

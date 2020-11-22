@@ -1,0 +1,19 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{'entropy_user_dashboard'|trans}} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-6">
+    {{ sonata_block_render({'type':'entropy.block.future_events'}, {'box':true}) }}
+    {{ sonata_block_render({'type':'entropy.block.bookings_in_progress'},{'box':true}) }}
+    {{ sonata_block_render({'type':'entropy.block.brokenitems'},{'bs3':false, 'random': true}) }}
+</div>
+{% if member.isActiveMember %}
+<div class="col-md-6">
+    {{ sonata_block_render({'type':'entropy.block.door_info'}) }}
+</div>
+{% endif %}
+{% endblock %}
+
+

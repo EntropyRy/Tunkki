@@ -1,0 +1,30 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+    {% if settings.box|default(false) %}
+    <div class="box">
+        <div class="box-header">
+            <h5>{{'block.bookings.bookings'|trans}}</h5>
+        </div>
+        <div class="box-body">
+    {% else %}
+        <h5>{{'block.bookings.bookings'|trans}}</h5>
+    {% endif %}
+        <ul class="fa-ul">
+        {% set name = 'name_attribute'|trans %}
+        {% for booking in bookings %}
+            <li><span class="fa-li"><i class="fas fa-link"></i></span>
+                {{ booking }}</li>
+            {%else %}
+            {{'block.bookings.no_bookings'|trans }}
+        {% endfor %}
+        </ul>
+        {% if is_granted('RENTERS') or is_granted('ROLE_SUPER_ADMIN') %}
+        <a class="btn btn-primary" href="{{path('admin_app_booking_list')}}">{{ 'block.bookings.manage'|trans }}</a>
+        {% else %}
+            {{ 'block.bookings.help'|trans }}
+        {% endif %}
+    {% if settings.box|default(false) %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

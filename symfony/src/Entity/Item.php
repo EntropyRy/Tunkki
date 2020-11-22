@@ -54,7 +54,7 @@ class Item
      *
      * @ORM\Column(name="Url", type="string", length=500, nullable=true)
      */
-	private $url;
+    private $url;
 
     /**
      * @var string
@@ -139,7 +139,7 @@ class Item
      *
      * @ORM\Column(name="CannotBeRented", type="boolean")
      */
-	private $cannotBeRented = false;
+    private $cannotBeRented = false;
 
     /**
      * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="item", cascade={"all"}, fetch="LAZY")
@@ -191,7 +191,7 @@ class Item
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
-	private $creator;
+    private $creator;
 
     /**
      * @var \DateTime
@@ -205,7 +205,7 @@ class Item
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
-	private $modifier;
+    private $modifier;
 
     /**
      * @var \DateTime
@@ -553,22 +553,23 @@ class Item
      * @return string
      */
     public function getFixingHistoryMessages($count, $endofline = null)
-	{
-		if($endofline == 'html'){
-			$eol = "<br>";
-		} else {
-			$eol = PHP_EOL;
-		}
-		$messages = '';
-		foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()),0,$count) as $event){
-			$messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$event->getCreator().': '.$event->getDescription().''.$eol;
-		}
-		if($messages != NULL){
-	        return $messages;
-		} else {
-			return 'no messages';
-		}
-	}
+    {
+        if($endofline == 'html'){
+            $eol = "<br>";
+        } else {
+            $eol = PHP_EOL;
+        }
+        $messages = '';
+        foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()),0,$count) as $event){
+            $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';
+            $messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$user.': '.$event->getDescription().''.$eol;
+        }
+        if($messages != NULL){
+            return $messages;
+        } else {
+            return 'no messages';
+        }
+    }
 
     /**
      * reset fixingHistory

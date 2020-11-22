@@ -23,6 +23,13 @@ use App\Helper\Mattermost;
  */
 class ProfileController extends AbstractController
 {
+    public function dashboard(Request $request, Security $security)
+    {
+        $member = $security->getUser()->getMember();
+        return $this->render('profile/dashboard.html.twig', [
+            'member' => $member,
+        ]);
+    }
     public function index(Request $request, Security $security)
     {
         $member = $security->getUser()->getMember();

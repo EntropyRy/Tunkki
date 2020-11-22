@@ -2753,16 +2753,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "8ede9725f8b0d9b6ef5c93f991da8a205d911d5f"
+                "reference": "5e5919bf321f76121df93c55fdbf82a0c481bd5f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/8ede9725f8b0d9b6ef5c93f991da8a205d911d5f",
-                "reference": "8ede9725f8b0d9b6ef5c93f991da8a205d911d5f",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/5e5919bf321f76121df93c55fdbf82a0c481bd5f",
+                "reference": "5e5919bf321f76121df93c55fdbf82a0c481bd5f",
                 "shasum": ""
             },
             "require": {
@@ -2806,7 +2806,7 @@
                 "oauth",
                 "oauth2"
             ],
-            "time": "2020-10-10T14:22:54+00:00"
+            "time": "2020-11-21T16:21:33+00:00"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -4226,16 +4226,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.81.0",
+            "version": "3.81.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "53ac9a80cf6252bc4c0bab29d12c52da88a3474a"
+                "reference": "e6d46fee8785172ec161712af454465e2a70147b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/53ac9a80cf6252bc4c0bab29d12c52da88a3474a",
-                "reference": "53ac9a80cf6252bc4c0bab29d12c52da88a3474a",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/e6d46fee8785172ec161712af454465e2a70147b",
+                "reference": "e6d46fee8785172ec161712af454465e2a70147b",
                 "shasum": ""
             },
             "require": {
@@ -4289,7 +4289,6 @@
                 "jms/translation-bundle": "^1.4",
                 "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.1",
-                "phpdocumentor/reflection-docblock": "^5.2",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12.29",
                 "phpstan/phpstan-symfony": "^0.12.10",
@@ -4306,7 +4305,6 @@
             },
             "suggest": {
                 "jms/translation-bundle": "Extract message keys from Admins",
-                "kunicmarko/sonata-auto-configure-bundle": "Auto configures Admin classes",
                 "twig/extra-bundle": "Auto configures the Twig Intl extension"
             },
             "type": "symfony-bundle",
@@ -4363,7 +4361,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-15T18:45:36+00:00"
+            "time": "2020-11-21T15:15:22+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -4845,16 +4843,16 @@
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
-            "version": "3.25.0",
+            "version": "3.26.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "1580c460d87dcc0f7b8d4e6e685d33e1c0b964eb"
+                "reference": "3a49e1ec1c999c8c66dbcae14001ee1004124d96"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/1580c460d87dcc0f7b8d4e6e685d33e1c0b964eb",
-                "reference": "1580c460d87dcc0f7b8d4e6e685d33e1c0b964eb",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/3a49e1ec1c999c8c66dbcae14001ee1004124d96",
+                "reference": "3a49e1ec1c999c8c66dbcae14001ee1004124d96",
                 "shasum": ""
             },
             "require": {
@@ -4955,7 +4953,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-15T20:07:09+00:00"
+            "time": "2020-11-19T13:13:14+00:00"
         },
         {
             "name": "sonata-project/exporter",
@@ -5049,30 +5047,30 @@
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "1.6.0",
+            "version": "1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "0feec89e2770fb5ddd84eae14bfe45cf5437e1c8"
+                "reference": "df411d39cbd4468a080098e17ec042e87e45cde8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/0feec89e2770fb5ddd84eae14bfe45cf5437e1c8",
-                "reference": "0feec89e2770fb5ddd84eae14bfe45cf5437e1c8",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/df411d39cbd4468a080098e17ec042e87e45cde8",
+                "reference": "df411d39cbd4468a080098e17ec042e87e45cde8",
                 "shasum": ""
             },
             "require": {
                 "jms/metadata": "^2.1",
                 "jms/serializer": "^2.0 || ^3.0",
-                "php": "^7.2",
-                "sonata-project/doctrine-extensions": "^1.1",
-                "symfony/event-dispatcher": "^4.4 || ^5.0",
-                "symfony/form": "^4.4 || ^5.0",
-                "symfony/options-resolver": "^4.4 || ^5.0",
-                "symfony/property-access": "^4.4 || ^5.0",
-                "symfony/security-csrf": "^4.4 || ^5.0",
-                "symfony/translation": "^4.4 || ^5.0",
-                "symfony/validator": "^4.4 || ^5.0",
+                "php": "^7.3",
+                "sonata-project/doctrine-extensions": "^1.10.1",
+                "symfony/event-dispatcher": "^4.4 || ^5.1",
+                "symfony/form": "^4.4 || ^5.1",
+                "symfony/options-resolver": "^4.4 || ^5.1",
+                "symfony/property-access": "^4.4 || ^5.1",
+                "symfony/security-csrf": "^4.4 || ^5.1",
+                "symfony/translation": "^4.4 || ^5.1",
+                "symfony/validator": "^4.4 || ^5.1",
                 "twig/twig": "^2.12 || ^3.0"
             },
             "conflict": {
@@ -5080,15 +5078,15 @@
             },
             "require-dev": {
                 "doctrine/persistence": "^1.1",
-                "matthiasnoback/symfony-config-test": "^4.0",
+                "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0",
-                "symfony/config": "^4.4 || ^5.0",
-                "symfony/dependency-injection": "^4.4 || ^5.0",
-                "symfony/framework-bundle": "^4.4 || ^5.0",
-                "symfony/http-foundation": "^4.4 || ^5.0",
-                "symfony/http-kernel": "^4.4 || ^5.0",
-                "symfony/phpunit-bridge": "^5.1",
-                "symfony/twig-bridge": "^4.4 || ^5.0"
+                "symfony/config": "^4.4 || ^5.1",
+                "symfony/dependency-injection": "^4.4 || ^5.1",
+                "symfony/framework-bundle": "^4.4 || ^5.1",
+                "symfony/http-foundation": "^4.4 || ^5.1",
+                "symfony/http-kernel": "^4.4 || ^5.1",
+                "symfony/phpunit-bridge": "^5.1.8",
+                "symfony/twig-bridge": "^4.4 || ^5.1"
             },
             "suggest": {
                 "doctrine/persistence": "If you want to use BaseDoctrineORMSerializationType"
@@ -5125,7 +5123,25 @@
                 "form",
                 "symfony"
             ],
-            "time": "2020-08-05T19:56:22+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/VincentLanglet",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/core23",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/wbloszyk",
+                    "type": "github"
+                }
+            ],
+            "time": "2020-11-16T10:19:10+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",

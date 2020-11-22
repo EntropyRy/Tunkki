@@ -1,0 +1,46 @@
+{% apply spaceless %}
+{% if app.user %}
+{% set loc = app.request.locale %}
+<nav style="border-top: 0px" class="navbar navbar-expand-lg navbar-light">
+    <a class="navbar-brand d-lg-none" href="{{ url('entropy_profile.'~loc)}}">{{ member.username }}</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="userContent">
+        <ul class="navbar-nav">
+            {% if is_granted('ROLE_SONATA_ADMIN') %}
+             <li class="nav-item">
+                <a class="nav-link" href="{{ url('entropy_user_dashboard')}}">
+                    {{ 'entropy_user_dashboard'|trans }}
+                </a>
+             </li>
+            {% endif %}
+             <li class="nav-item">
+                <a class="nav-link" href="{{ url('entropy_profile.'~loc)}}">
+                    {{ 'profile.name'|trans|capitalize }}
+                </a>
+             </li>
+             <li class="nav-item">
+                <a class="nav-link" href="{{ url('entropy_artist_profile.'~loc)}}">
+                    {{ 'artist.profiles'|trans|capitalize }}
+                </a>
+             </li>
+             <li class="nav-item dropdown">
+                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
+                 <div class="dropdown-menu">
+                    {% if app.user.member.isActiveMember %}
+                    <a class="dropdown-item" target="_blank" 
+                        href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
+                    {% endif %}
+                 </div>
+             </li>
+             <li class="nav-item">
+                <a class="nav-link" href="{{ url('app_logout')}}">
+                    <i class="fas fa-sign-out-alt"></i> {{ 'profile.logout'|trans|capitalize }}
+                </a>
+             </li>
+        </ul>
+  </div>
+</nav>
+{% endif %}
+{% endapply %}

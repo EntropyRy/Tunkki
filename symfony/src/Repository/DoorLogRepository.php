@@ -22,11 +22,14 @@ class DoorLogRepository extends ServiceEntityRepository
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */
-    public function getLatest()
+    public function getLatest($count)
     {
+        if(is_null($count)){
+            $count = 10;
+        }
         return $this->createQueryBuilder('d')
             ->orderBy('d.createdAt', 'DESC')
-            ->setMaxResults(10)
+            ->setMaxResults($count)
             ->getQuery()
             ->getResult()
         ;

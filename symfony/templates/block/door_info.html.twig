@@ -1,0 +1,29 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+    <div class="box">
+        <div class="box-header">
+            <h5>{{'profile.door.log'|trans|capitalize }}</h5>
+        </div>
+        <div class="box-body">
+            {% if member.isActiveMember %}
+                <ul class="fa-ul">
+                {% for log in logs%}
+                {% if loop.last %}
+                </ul>
+                <div class="linetext">
+                    <span style="font-size: 1em">{{ 'profile.door.latest'|trans }}</span>
+                </div>
+                <ul class="fa-ul">
+                {% endif %}
+                <li><span class="fa-li"><i class="fas fa-key"></i></span>
+                    {{ log.createdAt|date }} {{ log.member }}: {{log.message|default('profile.door.no_message')|trans}}
+                </li>
+                {% endfor %}
+                </ul>
+                <a class="btn btn-primary disabled" href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door'|trans}}</a> < not working yet
+            {% else %}
+                <h4>{{'profile.door.not_active_member'|trans }}</h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

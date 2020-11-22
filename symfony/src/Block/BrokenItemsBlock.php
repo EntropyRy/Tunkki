@@ -29,10 +29,21 @@ class BrokenItemsBlock extends BaseBlockService {
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         $broken = $this->em->getRepository('App:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
-        //$broken = null; 
+        $settings = $blockContext->getSettings();
+        if ($settings['random']){
+
+            shuffle($broken);
+            if (count($broken)>5){
+                $l = 3;
+            } else {
+                $l = count($broken);
+            }
+            $broken = array_splice($broken, 0, $l);
+        }
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
-            'broken'  => $broken
+            'broken'  => $broken,
+            'settings' => $settings
         ), $response);
     }
 
@@ -45,6 +56,8 @@ class BrokenItemsBlock extends BaseBlockService {
     public function configureSettings(OptionsResolver $resolver) {
         $resolver->setDefaults(array(
             'position' => '1',
+            'random' => false,
+            'bs3' => true,
             'template' => 'block/brokenitems.html.twig',
         ));
     }
