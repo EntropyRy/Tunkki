@@ -2,7 +2,7 @@
 {% if app.user %}
 {% set loc = app.request.locale %}
 <nav style="border-top: 0px" class="navbar navbar-expand-lg navbar-light">
-    <a class="navbar-brand d-lg-none" href="{{ url('entropy_profile.'~loc)}}">{{ member.username }}</a>
+    <a class="navbar-brand d-lg-none" href="{{ url('entropy_profile.'~loc)}}">{{ app.user.member.username }}</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
