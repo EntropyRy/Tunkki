@@ -12,8 +12,14 @@
         <ul class="fa-ul">
         {% set name = 'name_attribute'|trans %}
         {% for booking in bookings %}
-            <li><span class="fa-li"><i class="fas fa-link"></i></span>
-                {{ booking }}</li>
+            <li>
+                <span class="fa-li"><i class="fas fa-link"></i></span>
+                {% if is_granted('ROLE_ENTROPY_ADMIN_EVENT_EDIT') %}
+                <a href="{{ path('admin_app_booking_edit', {'id':booking.id}) }}">{{booking}}</a>
+                {% else %}
+                {{ booking }}
+                {% endif %}
+            </li>
             {%else %}
             {{'block.bookings.no_bookings'|trans }}
         {% endfor %}

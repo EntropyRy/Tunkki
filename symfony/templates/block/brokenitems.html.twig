@@ -34,7 +34,7 @@
         {% for item in broken %}
         <div>
             <span class="font-weight-bold"> 
-                {% if is_granted('RENTERS') or is_granted('ROLE_SUPER_ADMIN') %}
+                {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL') or is_granted('ROLE_SUPER_ADMIN') %}
                     <a href="{{ path('admin_app_item_edit', {'id':item.id}) }}">{{ item }}</a>
                 {% else %}
                     {{ item }}
