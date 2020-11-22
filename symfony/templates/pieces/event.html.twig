@@ -157,3 +157,15 @@
 {% block artist_pic %}
     <img width="100%" src="{% path artist.Picture, 'square' %}"> 
 {% endblock %}
+{% block artist_preview_info %}
+{% set bio_attribute = 'bio_attribute'|trans %}
+    <h3>{{ artist.name }}</h3>
+    <small>{{ artist.genre }}</small>
+    <div>{{ attribute(artist, bio_attribute) }}</div>
+    {% if artist.links is not empty %}
+        <hr>
+        {% for link in artist.links %}
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

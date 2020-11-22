@@ -85,6 +85,11 @@ class Artist
      */
     private $Picture;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $copyForArchive = false;
+
     public function __construct()
     {
         $this->eventArtistInfos = new ArrayCollection();
@@ -265,6 +270,18 @@ class Artist
     public function setPicture(?Media $Picture): self
     {
         $this->Picture = $Picture;
+
+        return $this;
+    }
+
+    public function getCopyForArchive(): ?bool
+    {
+        return $this->copyForArchive;
+    }
+
+    public function setCopyForArchive(?bool $copyForArchive): self
+    {
+        $this->copyForArchive = $copyForArchive;
 
         return $this;
     }

@@ -142,6 +142,8 @@ artist:
     hardware: Hardware you use
     profiles: Artist Profiles
     information: Artist information
+    random:
+        preview: One random artist preview
     form:
         genre_help: VJs may describe the mood of the visualization. This field is not translated.
         bio_help: Tell something about your artist achievements.

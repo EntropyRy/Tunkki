@@ -29,6 +29,13 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
+    public function all(Request $request, Security $security)
+    {
+        $member = $security->getUser()->getMember();
+        return $this->render('artist/main.html.twig', [
+            'artists' => $artists,
+        ]);
+    }
     public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans)
     {
         $member = $security->getUser()->getMember();

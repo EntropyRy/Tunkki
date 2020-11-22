@@ -216,6 +216,13 @@ services:
         tags:
             - { name: sonata.block, alias: joinusblock }
         public: true
+    entropy.block.random_artist:
+        class: App\Block\RandomArtistBlock
+        arguments:
+            - "@twig" 
+        tags:
+            - { name: sonata.block, alias: randomartistblock }
+        public: true
     entropy.block.member_info:
         class: App\Block\MemberInfoBlock
         arguments:

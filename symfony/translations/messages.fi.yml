@@ -163,6 +163,8 @@ artist:
     no_artist_profile: Ei yhtään profiilia
     information: Perustiedot
     profiles: Artistiprofiilit
+    random:
+        preview: Yksi satunnainen artisti esittely
     form:
         name: Artistinimi
         type: Tyyppi
