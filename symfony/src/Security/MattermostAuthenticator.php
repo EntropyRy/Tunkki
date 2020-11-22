@@ -85,7 +85,9 @@ class MattermostAuthenticator extends SocialAuthenticator
         $user->setLastLogin(new \DateTime());
         $this->em->persist($user);
         $this->em->flush();
-
+        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+            return new RedirectResponse($targetPath);
+        }
         if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
             return new RedirectResponse($this->urlG->generate('sonata_admin_dashboard'));
         } else {
