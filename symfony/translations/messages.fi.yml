@@ -164,7 +164,7 @@ artist:
     information: Perustiedot
     profiles: Artistiprofiilit
     random:
-        preview: Yksi satunnainen artisti esittely
+        preview: Yksi satunnainen artistiesittely
     form:
         name: Artistinimi
         type: Tyyppi
