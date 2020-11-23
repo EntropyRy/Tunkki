@@ -4,9 +4,6 @@
 {% endblock %}
 
 {% block content %}
-{% if not member.isActiveMember %}
-    {#{ sonata_block_render({'type':'entropy.block.door'}) }#}
-{% endif %}
     {{ sonata_block_render({'type':'entropy.block.artist_info'}) }}
 {% endblock %}
 

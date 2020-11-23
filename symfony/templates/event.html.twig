@@ -1,9 +1,7 @@
 {% extends 'onecolumn.html.twig' %}
-{% block title %}{{event.name(app.request.locale)}} | Entropy ry{% endblock %}
+{% block title %}{{event.nameByLang(app.request.locale)}} | Entropy ry{% endblock %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-    {% set content_attr = 'content_attribute'|trans %}
-    {% set name_attr = 'name_attribute'|trans %}    
     {% if app.user %}
         {% set visible = true %}
     {% else %}

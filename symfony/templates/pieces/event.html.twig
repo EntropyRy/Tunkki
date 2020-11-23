@@ -1,6 +1,4 @@
 {% block event %}
-{% set content_attr = 'content_attribute'|trans %}
-{% set name_attr = 'name_attribute'|trans %}
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head') }}
     {% else %}
@@ -36,6 +34,7 @@
     {{ block('event_banner_media') }}
 {% endblock %}
 {% block event_name %}
+{% set name_attr = 'name_attribute'|trans %}
 <h3>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
     {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
@@ -47,14 +46,17 @@
     {% endif %}
 {% endblock %}
 {% block event_content %}
+{% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
     {{ block('links')}}
 {% endblock %}
 {% block event_frontpage_content %}
+{% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': ''})|raw }}
     {{ block('links')}}
 {% endblock %}
 {% block event_media %}
+{% set name_attr = 'name_attribute'|trans %}
     <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
@@ -121,7 +123,7 @@
                 <div id="{{ name }}" class="col-md-12 pt-3">
                     <div class="row">
                         <div class="col-md-5 order-sm-last order-md-first">
-                            {{ block('artist_info') }}
+                            {{ block('artist_event_info') }}
                         </div>
                         <div class="col-md-7 order-sm-first order-md-last">
                             {{ block('artist_pic') }}
@@ -135,7 +137,7 @@
                             {{ block('artist_pic') }}
                         </div>
                         <div class="col-md-5 order-sm-last order-md-last">
-                            {{ block('artist_info') }}
+                            {{ block('artist_event_info') }}
                         </div>
                     </div>
                 </div>
@@ -143,16 +145,11 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
-{% block artist_info %}
+{% block artist_event_info %}
     <h3>{{ name }} @ {{info.StartTime|date('H:i')}}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
-    {% if artist.links is not empty %}
-        <hr>
-        {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
-        {% endfor %}
-    {% endif %}
+    {{ block('artist_links') }}
 {% endblock %}
 {% block artist_pic %}
     <img width="100%" src="{% path artist.Picture, 'square' %}"> 
@@ -162,10 +159,15 @@
     <h3>{{ artist.name }}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
+    {{ block('artist_links') }}
+{% endblock %}
+{% block artist_links %}
     {% if artist.links is not empty %}
         <hr>
         {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a></span>
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} 
+                href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
+        </span>{% if not loop.last %}|{% endif %}
         {% endfor %}
     {% endif %}
 {% endblock %}

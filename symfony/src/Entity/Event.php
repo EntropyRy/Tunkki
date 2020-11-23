@@ -445,7 +445,6 @@ color: red;
                 $eventArtistInfo->setEvent(null);
             }
         }
-
         return $this;
     }
 }

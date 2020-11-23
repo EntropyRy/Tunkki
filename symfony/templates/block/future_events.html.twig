@@ -24,10 +24,10 @@
         <li><span class="fa-li"><i class="fas fa-exclamation"></i></span> {{ 'stay_tuned'|trans}}</li>
         {% endfor %}
         </ul>
-        {% if is_granted('ROLE_ENTROPY_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}
+    {% if settings.box|default(false) %}
+        {% if is_granted('ROLE_ENTROPY_ADMIN_EVENT_EDIT') %}
         <a class="btn btn-primary" href="{{path('admin_app_event_list')}}">{{ 'block.events.manage'|trans }}</a>
         {% endif %}
-    {% if settings.box|default(false) %}
         </div>
     </div>
     {% endif %}
