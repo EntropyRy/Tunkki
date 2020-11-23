@@ -10,7 +10,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
-use App\Router\EventRouter;
 use App\Entity\Event;
 use App\Entity\Artist;
 use App\Entity\EventArtistInfo;
@@ -20,7 +19,7 @@ use App\Form\ArtistType;
 class EventController extends Controller
 {
     protected $em;
-    public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, EventRouter $router)
+    public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
     {
         $eventid = $request->get('id');
         $lang = $request->getLocale();
