@@ -19,32 +19,6 @@
         <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
         {% endif %}
         <!--        <span style="padding-left:5px;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i>{{'login'|trans|capitalize}}</a></span> -->
-    {% else %}
-        <ul class="nav nav-pills">
-             <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"><i class="fas fa-user"></i> {{ app.user.username }}</a>
-                 <div class="dropdown-menu dropdown-menu-lg-right">
-                    {% if is_granted('ROLE_SONATA_ADMIN') %}
-                    <a class="dropdown-item" href="{{ url('sonata_admin_dashboard')}}">
-                        <i class="fas fa-cogs"></i> {{ 'header.sonata_admin_dashboard'|trans({}, 'SonataPageBundle') }}
-                    </a>
-                    {% endif %}
-                    <a class="dropdown-item" href="{{ url('entropy_profile.'~loc)}}">
-                        <i class="fas fa-user-cog"></i> {{ 'profile.name'|trans|capitalize }}
-                    </a>
-                    {% if app.user.member.isActiveMember %}
-                    <div class="dropdown-divider"></div>
-                    <h6 class="dropdown-header">{{'menu.logon_to'|trans}}:</h6>
-                    <a class="dropdown-item" target="_blank" 
-                        href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
-                    {% endif %}
-                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{{ url('app_logout')}}">
-                        <i class="fas fa-sign-out-alt"></i> {{ 'logout'|trans|capitalize }}
-                    </a>
-                 </div>
-             </li>
-        </ul>
     {% endif %}
   </div>
 </nav>
