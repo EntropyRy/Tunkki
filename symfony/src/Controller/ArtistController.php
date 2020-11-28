@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Entity\Artist;
 use App\Form\ArtistType;
+use App\Helper\Mattermost;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +31,7 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans)
+    public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans, Mattermost $mm)
     {
         $member = $security->getUser()->getMember();
         $artist = new Artist();
@@ -43,12 +44,14 @@ class ArtistController extends AbstractController
             try {
                 $em->persist($artist);
                 $em->flush();
+                $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName();
+                $mm->SendToMattermost($text);
                 $referer = $request->getSession()->get('referer');
                 if($referer){
                     $request->getSession()->remove('referer');
                     return $this->redirect($referer);
                 }
-                return $this->redirectToRoute('entropy_profile');
+                return $this->redirectToRoute('entropy_artist_profile');
             } catch (UniqueConstraintViolationException $e){
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));
             }
@@ -70,7 +73,7 @@ class ArtistController extends AbstractController
             $em->persist($artist);
             $em->flush();
 
-            return $this->redirectToRoute('entropy_profile');
+            return $this->redirectToRoute('entropy_artist_profile');
         }
         return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
@@ -82,6 +85,6 @@ class ArtistController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $em->remove($artist);
         $em->flush();
-        return $this->redirectToRoute('entropy_profile');
+        return $this->redirectToRoute('entropy_artist_profile');
     }
 }
