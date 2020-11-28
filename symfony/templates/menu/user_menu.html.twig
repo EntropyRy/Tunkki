@@ -28,6 +28,8 @@
              <li class="nav-item dropdown">
                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
                  <div class="dropdown-menu">
+                    <a class="dropdown-item" target="_blank" 
+                        href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">Forum</a>
                     {% if app.user.member.isActiveMember %}
                     <a class="dropdown-item" target="_blank" 
                         href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
