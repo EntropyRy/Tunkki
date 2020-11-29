@@ -205,49 +205,49 @@ services:
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: bookingblock }
         public: true
     entropy.block.joinus:
         class: App\Block\JoinUsBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: joinusblock }
         public: true
     entropy.block.random_artist:
         class: App\Block\RandomArtistBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: randomartistblock }
         public: true
     entropy.block.member_info:
         class: App\Block\MemberInfoBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: memberblock }
         public: true
     entropy.block.artist_info:
         class: App\Block\ArtistInfoBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: artistblock }
         public: true
     entropy.block.door_info:
         class: App\Block\DoorInfoBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: doorblock }
         public: true
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: linklistblock }
         public: true
@@ -255,21 +255,21 @@ services:
     entropy.block.brokenitems:
         class: App\Block\BrokenItemsBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: brokenitemsblock }
         public: true
     entropy.block.future_events:
         class: App\Block\FutureEventsBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: futureeventsblock }
         public: true
     entropy.block.bookings_in_progress:
         class: App\Block\BookingsInProgressBlock
         arguments:
-            - "@twig" 
+            - "@twig"
         tags:
             - { name: sonata.block, alias: bookingsinprogressblock }
         public: true
