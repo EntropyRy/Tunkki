@@ -99,7 +99,7 @@
 
                                 {% if page is defined and page.edited %}
                                     <li class="nav-item">
-                                        <span class="nav-link"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span>
+                                        <span class="nav-link" style="color:red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span>
                                     </li>
                                 {% endif %}
                                 {% if page is defined and not page.enabled %}

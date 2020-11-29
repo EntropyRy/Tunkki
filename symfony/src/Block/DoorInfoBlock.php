@@ -20,6 +20,10 @@ class DoorInfoBlock extends BaseBlockService {
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
+        if (is_null($this->security->getUser())){
+            return $this->renderResponse($blockContext->getTemplate(), [
+            ], $response);
+        }
         $member = $this->security->getUser()->getMember();
         $logs = $this->em->getRepository('App:DoorLog')->getLatest(3);
         return $this->renderResponse($blockContext->getTemplate(), [

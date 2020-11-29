@@ -1,5 +1,6 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
+{% if member is defined %}
     <div class="box">
         <div class="box-header">
             <h5>{{'profile.door.log'|trans|capitalize }}</h5>
@@ -26,4 +27,5 @@
             {% endif %}
         </div>
     </div>
+    {%endif%}
 {% endblock %}
