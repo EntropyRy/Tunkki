@@ -40,8 +40,9 @@ class LinkListBlock extends BaseBlockService {
                     ]],
                     ['show', ChoiceType::class,[
                         'choices' => [ 
-                            'Everybody can see this' => false,
-                            'Show only to logged in user' => true,
+                            'Everybody can see this' => 'everybody',
+                            'Show only to logged in user' => 'in',
+                            'Show only to logged out user' => 'out',
                         ]
                     ]],
                     ['urls', CollectionType::class, [
