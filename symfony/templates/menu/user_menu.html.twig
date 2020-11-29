@@ -7,14 +7,12 @@
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="userContent">
-        <ul class="navbar-nav">
-            {% if is_granted('ROLE_SONATA_ADMIN') %}
+        <ul class="navbar-nav mr-auto">
              <li class="nav-item">
                 <a class="nav-link" href="{{ url('entropy_user_dashboard')}}">
                     {{ 'entropy_user_dashboard'|trans }}
                 </a>
              </li>
-            {% endif %}
              <li class="nav-item">
                 <a class="nav-link" href="{{ url('entropy_profile.'~loc)}}">
                     {{ 'profile.name'|trans|capitalize }}
@@ -36,6 +34,8 @@
                     {% endif %}
                  </div>
              </li>
+        </ul>
+        <ul class="navbar-nav">
              <li class="nav-item">
                 <a class="nav-link" href="{{ url('app_logout')}}">
                     <i class="fas fa-sign-out-alt"></i> {{ 'profile.logout'|trans|capitalize }}
