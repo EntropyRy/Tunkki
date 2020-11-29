@@ -111,6 +111,8 @@ class EventRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'))
              ->where('b.cancelled = :is')
+             ->andWhere('b.type != :val')
+             ->setParameter('val', 'announcement')
              ->setParameter('is', false);
         return $qb->getQuery()->getSingleScalarResult();
     }
