@@ -106,5 +106,12 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-
+    public function countDone()
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->select($qb->expr()->count('b'))
+             ->where('b.cancelled = :is')
+             ->setParameter('is', false);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

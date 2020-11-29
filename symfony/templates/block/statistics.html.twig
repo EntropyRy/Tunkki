@@ -1,0 +1,16 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+    <div class="box">
+        <div class="box-header">
+            <h5>{{'block.stats.name'|trans}}</h5>
+        </div>
+        <div class="box-body">
+            <dl class="row">
+            {% for name, stat in stats %}
+            <dt class="col-10">{{name|trans }}</dt>
+            <dd class="col-2 text-right">{{ stat }}</dd>
+            {% endfor %}
+            </dl>
+        </div>
+    </div>
+{% endblock %}

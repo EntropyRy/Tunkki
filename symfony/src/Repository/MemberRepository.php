@@ -26,4 +26,18 @@ class MemberRepository extends \Doctrine\ORM\EntityRepository
         ->setParameter('lastname', $lastname);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
+    public function countByActiveMember()
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select($qb->expr()->count('m'))
+        ->where('m.isActiveMember = :is')
+        ->setParameter('is', true);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
+    public function countByMember()
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->select($qb->expr()->count('m'));
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

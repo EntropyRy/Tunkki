@@ -105,6 +105,12 @@ Locale: Kieli
 Message: Viesti
 logged_in_as: Olet kirjautuneena käyttäjänä
 block:
+    stats:
+        name: Statistiikkaa
+        members: Jäseniä
+        active_members: Aktiivijäseniä
+        bookings: Hoidetut vuokratapahtumat
+        events: Tapahtumat
     events:
         manage: Hallitse
         future_events: Tulevat tapahtumat

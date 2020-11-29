@@ -74,5 +74,13 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
         } else {
             return 'error';
         }
-	}
+    }
+    public function countHandled()
+    {
+        $qb = $this->createQueryBuilder('b');
+        $qb->select($qb->expr()->count('b'))
+             ->where('b.cancelled = :is')
+             ->setParameter('is', false);
+        return $qb->getQuery()->getSingleScalarResult();
+    }
 }

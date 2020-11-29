@@ -10,9 +10,10 @@
     {{ sonata_block_render({'type':'entropy.block.brokenitems'},{'bs3':false, 'random': true}) }}
 </div>
 <div class="col-md-6">
-{% if member.isActiveMember %}
-    {{ sonata_block_render({'type':'entropy.block.door_info'}) }}
-{% endif %}
+    {{ sonata_block_render({'type':'entropy.block.statistics'}) }}
+    {% if member.isActiveMember %}
+        {{ sonata_block_render({'type':'entropy.block.door_info'}) }}
+    {% endif %}
     {{ sonata_block_render({'type':'entropy.block.random_artist'}, {'box':true}) }}
 </div>
 {% endblock %}

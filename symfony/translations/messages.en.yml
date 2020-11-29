@@ -82,6 +82,12 @@ widget_label_unlink: Unlink
 link_media: Add a photo from your files
 logged_in_as: You are logged in as
 block:
+    stats: 
+        name: Statistics
+        members: Members
+        active_members: Active Members
+        bookings: Handled rentalcases
+        events: Events
     events:
         manage: Manage
         future_events: Future Events
