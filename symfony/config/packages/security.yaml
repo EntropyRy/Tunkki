@@ -107,9 +107,9 @@ security:
         - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
-          # in prod
-        - { path: ^/profile/door$, role: ROLE_USER_IP, host: 82.130.59.52}
-        - { path: ^/profiili/ovi$, role: ROLE_USER_IP, host: 82.130.59.52}
+        - { path: ^/profile/door$, roles: ROLE_USER_IP, ip: '%env(TRUSTED_DOOR_IPS)%'}
+        - { path: ^/profiili/ovi$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
+        - { path: ^/profiili/ovi$, roles: ROLE_NO_ACCESS}
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
         - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
