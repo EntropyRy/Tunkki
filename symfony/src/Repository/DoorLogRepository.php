@@ -22,7 +22,7 @@ class DoorLogRepository extends ServiceEntityRepository
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */
-    public function getLatest($count)
+    public function getLatest($count = null)
     {
         if(is_null($count)){
             $count = 10;
