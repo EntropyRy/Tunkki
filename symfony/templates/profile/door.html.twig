@@ -5,9 +5,8 @@
 
 {% block content %}
 <div class="col-md-12">
-    <h1>{{'profile.door.opener'|trans|capitalize }}</h1>
+    <h1>{{'profile.door.opener'|trans|capitalize }} <small>Status: {{ status }}</small></h1>
 {% if member.isActiveMember %}
-    {{ status }}
     <ul class="fa-ul">
     {% for log in logs|reverse%}
     {% if loop.last %}

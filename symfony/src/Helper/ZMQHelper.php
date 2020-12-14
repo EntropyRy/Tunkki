@@ -15,6 +15,8 @@ class ZMQHelper {
         $hook = $this->bag->get('door_socket');
         $context = new \ZMQContext();
         $socket = $context->getSocket(ZMQ::SOCKET_REQ);
+        $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, 100);
+        $socket->setSockOpt(ZMQ::SOCKOPT_LINGER, 200);
         $socket->connect($hook);
         return $socket;
     }
