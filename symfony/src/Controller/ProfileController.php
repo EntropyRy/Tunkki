@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Helper\Mattermost;
+use App\Helper\ZMQHelper;
 
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -37,7 +38,7 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
+    public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm, ZMQHelper $zmq)
     {
         $member = $security->getUser()->getMember();
         $DoorLog = new DoorLog();
@@ -45,6 +46,7 @@ class ProfileController extends AbstractController
         $em = $this->getDoctrine()->getManager();
         $logs = $em->getRepository(DoorLog::class)->getLatest();
         $form = $formF->create(OpenDoorType::class, $DoorLog);
+        $status = $zmq->send('Moro');
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
@@ -63,6 +65,7 @@ class ProfileController extends AbstractController
             'form' => $form->createView(),
             'logs' => $logs,
             'member' => $member,
+            'status' => $status
         ]);
     }
     public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
