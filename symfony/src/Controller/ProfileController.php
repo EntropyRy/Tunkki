@@ -47,13 +47,13 @@ class ProfileController extends AbstractController
         $logs = $em->getRepository(DoorLog::class)->getLatest();
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTime('now');
-        $status = $zmq->send('init: '.$member->getUsername().' '.$now->getTimestamp());
+        $status = $zmq->send($this->getParameter('kernel.environment').' init: '.$member->getUsername().' '.$now->getTimestamp());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $status = $zmq->send('open: '.$member->getUsername().' '.$now->getTimestamp());
+            $status = $zmq->send($this->getParameter('kernel.environment').' open: '.$member->getUsername().' '.$now->getTimestamp());
             $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
             $text = '**Kerde door opened by '.$doorlog->getMember();
