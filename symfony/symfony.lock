@@ -93,6 +93,9 @@
     "egulias/email-validator": {
         "version": "2.1.11"
     },
+    "friendsofphp/proxy-manager-lts": {
+        "version": "v1.0.1"
+    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "1.2.0"
     },
@@ -209,9 +212,6 @@
     "ocramius/package-versions": {
         "version": "1.5.1"
     },
-    "ocramius/proxy-manager": {
-        "version": "2.2.3"
-    },
     "paragonie/random_compat": {
         "version": "v2.0.18"
     },
@@ -220,6 +220,9 @@
     },
     "php-http/message-factory": {
         "version": "v1.0.2"
+    },
+    "phpstan/phpdoc-parser": {
+        "version": "0.4.10"
     },
     "psr/cache": {
         "version": "1.0.1"
@@ -809,9 +812,6 @@
     },
     "twig/twig": {
         "version": "v2.12.2"
-    },
-    "webimpress/safe-writer": {
-        "version": "2.0.0"
     },
     "zendframework/zend-code": {
         "version": "3.4.1"
