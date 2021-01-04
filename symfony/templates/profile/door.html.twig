@@ -5,7 +5,8 @@
 
 {% block content %}
 <div class="col-md-12">
-    <h1>{{'profile.door.opener'|trans|capitalize }} <small>{{ 'profile.door.last'|trans }}: {{ status }}</small></h1>
+    <h1>{{'profile.door.opener'|trans|capitalize }}</h1> 
+    <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
 {% if member.isActiveMember %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
