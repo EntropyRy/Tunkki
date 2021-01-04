@@ -5,24 +5,19 @@
 
 {% block content %}
 <div class="col-md-12">
-    <h1>{{'profile.door.opener'|trans|capitalize }} <small>Status: {{ status }}</small></h1>
+    <h1>{{'profile.door.opener'|trans|capitalize }} <small>{{ 'profile.door.last'|trans }}: {{ status }}</small></h1>
 {% if member.isActiveMember %}
-    <ul class="fa-ul">
-    {% for log in logs|reverse%}
-    {% if loop.last %}
-    <li class="pt-2"><span class="fa-li"><i class="fas fa-arrow-down"></i></span>
-        {{ 'profile.door.latest'|trans }} 
-    </li>
-    {% endif %}
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <input class="btn btn-primary" type="submit" value="{{'profile.door.open_the_door'|trans|capitalize}}" />
+    {{ form_end(form) }}
+    <ul class="fa-ul mt-3">
+    {% for log in logs%}
     <li><span class="fa-li"><i class="fas fa-key"></i></span>
         {{ log.createdAt|date }} {{ log.member }}: {{log.message|default('profile.door.no_message')|trans}}
     </li>
     {% endfor %}
     </ul>
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input class="btn btn-primary" type="submit" value="{{'profile.door.open_the_door'|trans|capitalize}}" />
-    {{ form_end(form) }}
 {% else %}
 <h4>{{'profile.door.not_active_member'|trans }}</h4>
 {% endif %}

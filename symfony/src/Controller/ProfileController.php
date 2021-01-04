@@ -44,7 +44,7 @@ class ProfileController extends AbstractController
         $DoorLog = new DoorLog();
         $DoorLog->setMember($member);
         $em = $this->getDoctrine()->getManager();
-        $logs = $em->getRepository(DoorLog::class)->getLatest();
+        $logs = $em->getRepository(DoorLog::class)->getLatest(20);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTime('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';

@@ -165,6 +165,7 @@ profile:
         open_the_door: Avaa ovi
         latest: Viimeisin
         not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
+        last: lukon viimeinen muutos
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     no_artist_profile: Ei yhtään profiilia
