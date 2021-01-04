@@ -13,7 +13,7 @@
                     {{ 'entropy_user_dashboard'|trans }}
                 </a>
              </li>
-             {% if app.request.server.get("HTTP_X_REAL_IP") != door_ip %}
+             {% if app.request.server.get("HTTP_X_REAL_IP") == door_ip %}
              <li class="nav-item">
                 <a class="nav-link" href="{{ path('entropy_profile_door.'~app.request.locale)}}">
                     {{'profile.door.open_the_door'|trans}}
