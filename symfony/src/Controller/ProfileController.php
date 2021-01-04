@@ -63,7 +63,7 @@ class ProfileController extends AbstractController
                 }
             $text.='**';
             $mm->SendToMattermost($text);
-            return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
+            //return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
         return $this->render('profile/door.html.twig', [
             'form' => $form->createView(),
