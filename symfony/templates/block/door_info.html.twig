@@ -21,7 +21,9 @@
                 </li>
                 {% endfor %}
                 </ul>
-                <a class="btn btn-primary disabled" href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door'|trans}}</a> < not working yet
+                <a class="btn btn-primary 
+                             {% if app.request.server.get("REMOTE_ADDR") != door_ip %}disabled{%endif%}
+                    " href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door'|trans}}</a>
             {% else %}
                 <h4>{{'profile.door.not_active_member'|trans }}</h4>
             {% endif %}

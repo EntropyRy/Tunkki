@@ -29,6 +29,9 @@ class ZMQHelper {
         } catch (\ZMQSocketException $e) {
             $resp = $e;
         }
+        if (empty($resp)){
+            $resp = 'broken';
+        }
         return $resp;
     }
 }
