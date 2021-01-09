@@ -62,7 +62,7 @@ class ProfileController extends AbstractController
                 $text .=' - '. $doorlog->getMessage();
                 }
             $text.='**';
-            $mm->SendToMattermost($text);
+            $mm->SendToMattermost($text, 'kerde');
             if ($member->getLocale()){
                 return $this->redirectToRoute('entropy_profile_door.'. $member->getLocale());
             } else {

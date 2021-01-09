@@ -9,14 +9,14 @@ class Mattermost {
     public function __construct(ParameterBagInterface $bag) {
         $this->bag = $bag;
     }
-    public function SendToMattermost($text, $Item = null, $username = null)
+    public function SendToMattermost($text, $channel = null)
     {
         $xcURL = $this->bag->get('mm_tunkki_hook');
         $botname = $this->bag->get('mm_tunkki_botname');
         $botimg = $this->bag->get('mm_tunkki_img');
 
         $curl = curl_init($xcURL);
-        $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","text":"'.$text.'"}';
+        $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","channel":"'.$channel.'","text":"'.$text.'"}';
         $cOptArr = array (
             CURLOPT_URL => $xcURL,
             CURLOPT_TIMEOUT => 10,
