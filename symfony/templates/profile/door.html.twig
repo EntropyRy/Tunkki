@@ -5,6 +5,11 @@
 
 {% block content %}
 <div class="col-md-12">
+    <div class="mx-auto" style="width:480px;">
+        {{ barcode.1|raw }}
+        <p class="text-center">Code: {{barcode.0}}</p>
+    </div>
+    <hr>
     <h1>{{'profile.door.opener'|trans|capitalize }}</h1> 
     <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
 {% if member.isActiveMember %}

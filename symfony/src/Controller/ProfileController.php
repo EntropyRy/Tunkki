@@ -16,6 +16,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Helper\Mattermost;
 use App\Helper\ZMQHelper;
+use Picqer\Barcode\BarcodeGeneratorHTML;
 
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -49,6 +50,9 @@ class ProfileController extends AbstractController
         $now = new \DateTime('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
         $status = $zmq->send($env.' init: '.$member->getUsername().' '.$now->getTimestamp());
+        $generator = new BarcodeGeneratorHTML();
+        $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();
+        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_39, 3, 50); 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
@@ -73,7 +77,8 @@ class ProfileController extends AbstractController
             'form' => $form->createView(),
             'logs' => $logs,
             'member' => $member,
-            'status' => $status
+            'status' => $status,
+            'barcode' => [$code, $barcode]
         ]);
     }
     public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
