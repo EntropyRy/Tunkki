@@ -17,6 +17,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use App\Helper\Mattermost;
 use App\Helper\ZMQHelper;
 use Picqer\Barcode\BarcodeGeneratorHTML;
+use Hashids\Hashids;
 
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -50,9 +51,6 @@ class ProfileController extends AbstractController
         $now = new \DateTime('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
         $status = $zmq->send($env.' init: '.$member->getUsername().' '.$now->getTimestamp());
-        $generator = new BarcodeGeneratorHTML();
-        $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();
-        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_39, 3, 50); 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
@@ -73,12 +71,13 @@ class ProfileController extends AbstractController
                 return $this->redirectToRoute('entropy_profile_door.'. $request->getLocale());
             }
         }
+        $barcode = $this->getBarcode($member);
         return $this->render('profile/door.html.twig', [
             'form' => $form->createView(),
             'logs' => $logs,
             'member' => $member,
             'status' => $status,
-            'barcode' => [$code, $barcode]
+            'barcode' => $barcode
         ]);
     }
     public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
@@ -124,5 +123,14 @@ class ProfileController extends AbstractController
         return $this->render('profile/apply.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+    public function getBarcode($member)
+    {
+        $generator = new BarcodeGeneratorHTML();
+        $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();
+        $hashids = new Hashids($code,8);
+        $code = strtolower($hashids->encode($code));
+        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_39, 3, 50);
+        return [$code, $barcode];
     }
 }
