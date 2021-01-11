@@ -64,7 +64,11 @@ class ProfileController extends AbstractController
                 $text .=' - '. $doorlog->getMessage();
                 }
             $text.='**';
-            $mm->SendToMattermost($text, 'kerde');
+            if($env != 'dev'){
+                $mm->SendToMattermost($text, 'kerde');
+            } else {
+                $mm->SendToMattermost($text);
+            }
             if ($member->getLocale()){
                 return $this->redirectToRoute('entropy_profile_door.'. $member->getLocale());
             } else {
