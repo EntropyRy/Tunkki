@@ -129,7 +129,7 @@ class ProfileController extends AbstractController
         $generator = new BarcodeGeneratorHTML();
         $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();
         $hashids = new Hashids($code,8);
-        $code = strtolower($hashids->encode($code));
+        $code = $hashids->encode($code);
         $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_39, 3, 50);
         return [$code, $barcode];
     }
