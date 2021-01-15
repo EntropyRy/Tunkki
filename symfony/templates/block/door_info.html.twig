@@ -3,7 +3,14 @@
 {% if member is defined %}
     <div class="box">
         <div class="box-header">
-            <h5>{{'profile.door.log'|trans|capitalize }}</h5>
+            <h5>{{'profile.door.log'|trans|capitalize }},
+            status:
+            {% if status == 'broken' %}
+            <span class="text-danger">Connection problems!</span>
+            {% else %}
+            <span class="text-success">Connection ok!</span>
+            {% endif %}
+            </h5>
         </div>
         <div class="box-body">
             {% if member.isActiveMember %}
