@@ -6,9 +6,9 @@
             <h5>{{'profile.door.log'|trans|capitalize }},
             status:
             {% if status == 'broken' %}
-            <span class="text-danger">Connection problems!</span>
+            <span class="text-danger">{{'profile.door.connection_problems'|trans}}!</span>
             {% else %}
-            <span class="text-success">Connection ok!</span>
+            <span class="text-success">{{'profile.door.connection_ok'|trans}}!</span>
             {% endif %}
             </h5>
         </div>
@@ -28,9 +28,12 @@
                 </li>
                 {% endfor %}
                 </ul>
-                <a class="btn btn-primary 
-                             {% if app.request.server.get("HTTP_X_REAL_IP") != door_ip %}disabled{%endif%}
-                    " href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door'|trans}}</a>
+                {% if app.request.server.get("HTTP_X_REAL_IP") != door_ip %}
+                    <a class="btn btn-primary disabled" href="">{{'profile.door.open_the_door_page'|trans}}</a>
+                    <p>{{'profile.door.wifi'|trans}}</p>
+                {% else %}
+                    <a class="btn btn-primary" href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door_page'|trans}}</a>
+                {% endif %}
             {% else %}
                 <h4>{{'profile.door.not_active_member'|trans }}</h4>
             {% endif %}

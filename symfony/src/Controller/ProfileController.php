@@ -57,18 +57,30 @@ class ProfileController extends AbstractController
             $em->persist($doorlog);
             $em->flush();
             $status = $zmq->send($env.' open: '.$member->getUsername().' '.$now->getTimestamp());
-            $this->addFlash('success', 'profile.door.opened');
+            // $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
+
+            $send = true;
             $text = '**Kerde door opened by '.$doorlog->getMember();
             if ($doorlog->getMessage()){
                 $text .=' - '. $doorlog->getMessage();
-                }
-            $text.='**';
-            if($env != 'dev'){
-                $mm->SendToMattermost($text, 'kerde');
             } else {
-                $mm->SendToMattermost($text);
+                foreach($logs as $log){
+                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimeStamp() < 60*60*4)){
+                        $send = false;
+                        break;
+                    }
+                }
             }
+            $text.='**';
+            if($send){
+                if($env != 'dev'){
+                    $mm->SendToMattermost($text, 'kerde');
+                } else {
+                    $mm->SendToMattermost($text);
+                }
+            }
+            
             if ($member->getLocale()){
                 return $this->redirectToRoute('entropy_profile_door.'. $member->getLocale());
             } else {

@@ -163,9 +163,13 @@ profile:
         no_message: Ei viestiä
         opened: Ovi avattu
         open_the_door: Avaa ovi
+        open_the_door_page: Oven avaus sivu
         latest: Viimeisin
         not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
         last: lukon viimeisin muutos
+        connection_problems: Yhteys ongelma
+        connection_ok: Yhteys ok
+        wifi: Tarvitsee kertsin wifiyhteyden toimiakseen
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
     no_artist_profile: Ei yhtään profiilia
