@@ -3,8 +3,8 @@
         {% set _bg_class          = "bg-light-blue" %}
         {% set _logout_uri        = url('app_logout') %}
         {% set _logout_text       = 'profile.logout'|trans %}
-        {% set _profile_uri       = path('entropy_profile.'~app.request.locale) %}
-        {% set _profile_text      = 'profile.name'|trans %}
+        {% set _profile_uri       = path('entropy_user_dashboard.'~app.request.locale) %}
+        {% set _profile_text      = 'entropy_user_dashboard'|trans %}
         {#% set _user_image        = sonata_user.defaultAvatar ? asset(sonata_user.defaultAvatar) : null %#}
         {# Customize this with your profile picture implementation, see below for example #}
         {#{% set _user_image  = app.user.profilePicture|default(asset(sonata_user.defaultAvatar)) %}#}
@@ -30,7 +30,7 @@
 
         <li class="user-footer">
             <div class="pull-left">
-                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {{ _profile_text }}</a>
+                <a href="{{ _profile_uri }}" class="btn btn-default btn-flat"><i class="fa fa-user"></i> {#{ _profile_text }#}</a>
             </div>
 
             <div class="pull-right">

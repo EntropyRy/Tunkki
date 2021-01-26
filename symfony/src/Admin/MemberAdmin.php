@@ -59,9 +59,9 @@ final class MemberAdmin extends AbstractAdmin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
-                    'makeuser' => [
+                    /*'makeuser' => [
                         'template' => 'admin/crud/list__action_makeuser.html.twig'
-                    ],
+                    ],*/
                     'sendrejectreason' => [
                         'template' => 'admin/crud/list__action_sendrejectreason.html.twig'
                     ],
@@ -144,7 +144,7 @@ final class MemberAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollection $collection)
     {
-        $collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
+        //$collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
         $collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }   

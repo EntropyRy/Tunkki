@@ -1984,16 +1984,16 @@
         },
         {
             "name": "gedmo/doctrine-extensions",
-            "version": "v3.0.0",
+            "version": "v3.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Atlantic18/DoctrineExtensions.git",
-                "reference": "be551985759946a45d052777c2906aa52db64532"
+                "reference": "b4302ede2e247a6cc884b302a5f7146e08bd1b18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/be551985759946a45d052777c2906aa52db64532",
-                "reference": "be551985759946a45d052777c2906aa52db64532",
+                "url": "https://api.github.com/repos/Atlantic18/DoctrineExtensions/zipball/b4302ede2e247a6cc884b302a5f7146e08bd1b18",
+                "reference": "b4302ede2e247a6cc884b302a5f7146e08bd1b18",
                 "shasum": ""
             },
             "require": {
@@ -2003,7 +2003,7 @@
                 "doctrine/collections": "^1.0",
                 "doctrine/common": "^2.13 || ^3.0",
                 "doctrine/event-manager": "^1.0",
-                "php": "^7.2"
+                "php": "^7.2 || ^8.0"
             },
             "conflict": {
                 "doctrine/mongodb": "<1.3",
@@ -2074,10 +2074,10 @@
             "support": {
                 "email": "gediminas.morkevicius@gmail.com",
                 "issues": "https://github.com/Atlantic18/DoctrineExtensions/issues",
-                "source": "https://github.com/Atlantic18/DoctrineExtensions/tree/v3.0.0",
-                "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/master/doc"
+                "source": "https://github.com/Atlantic18/DoctrineExtensions/tree/v3.0.3",
+                "wiki": "https://github.com/Atlantic18/DoctrineExtensions/tree/main/doc"
             },
-            "time": "2020-09-23T16:40:45+00:00"
+            "time": "2021-01-23T23:40:14+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2600,28 +2600,28 @@
         },
         {
             "name": "jms/serializer-bundle",
-            "version": "3.7.0",
+            "version": "3.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/schmittjoh/JMSSerializerBundle.git",
-                "reference": "0ee8b75bfc484a342aa0471e3c6d9ad96fb430cf"
+                "reference": "5ba2675b9174659013fd93c3cbc8edf12189c9af"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/0ee8b75bfc484a342aa0471e3c6d9ad96fb430cf",
-                "reference": "0ee8b75bfc484a342aa0471e3c6d9ad96fb430cf",
+                "url": "https://api.github.com/repos/schmittjoh/JMSSerializerBundle/zipball/5ba2675b9174659013fd93c3cbc8edf12189c9af",
+                "reference": "5ba2675b9174659013fd93c3cbc8edf12189c9af",
                 "shasum": ""
             },
             "require": {
                 "jms/metadata": "^2.3",
                 "jms/serializer": "^3.0",
-                "php": "^7.2",
+                "php": "^7.2 || ^8.0",
                 "symfony/dependency-injection": "^3.3 || ^4.0 || ^5.0",
                 "symfony/framework-bundle": "^3.0 || ^4.0 || ^5.0"
             },
             "require-dev": {
                 "doctrine/orm": "^2.4",
-                "phpunit/phpunit": "^6.0|^7.0",
+                "phpunit/phpunit": "^8.0 || ^9.0",
                 "symfony/expression-language": "^3.0 || ^4.0 || ^5.0",
                 "symfony/finder": "^3.0 || ^4.0 || ^5.0",
                 "symfony/form": "^3.0 || ^4.0 || ^5.0",
@@ -2632,12 +2632,13 @@
             },
             "suggest": {
                 "jms/di-extra-bundle": "Required to get lazy loading (de)serialization visitors, ^1.3",
+                "symfony/expression-language": "Required for opcache preloading, ^3.0 || ^4.0 || ^5.0",
                 "symfony/finder": "Required for cache warmup, supported versions ^3.0|^4.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.7-dev"
+                    "dev-master": "3.8-dev"
                 }
             },
             "autoload": {
@@ -2672,7 +2673,7 @@
             ],
             "support": {
                 "issues": "https://github.com/schmittjoh/JMSSerializerBundle/issues",
-                "source": "https://github.com/schmittjoh/JMSSerializerBundle/tree/master"
+                "source": "https://github.com/schmittjoh/JMSSerializerBundle/tree/3.8.0"
             },
             "funding": [
                 {
@@ -2680,7 +2681,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-06-28T11:26:21+00:00"
+            "time": "2021-01-23T20:13:28+00:00"
         },
         {
             "name": "knplabs/gaufrette",
@@ -4671,16 +4672,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.87.0",
+            "version": "3.88.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "301c375ddf394fe02972848fea219553c2a88e29"
+                "reference": "789107257f0ed4ef1a38fef4a687be84aef31793"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/301c375ddf394fe02972848fea219553c2a88e29",
-                "reference": "301c375ddf394fe02972848fea219553c2a88e29",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/789107257f0ed4ef1a38fef4a687be84aef31793",
+                "reference": "789107257f0ed4ef1a38fef4a687be84aef31793",
                 "shasum": ""
             },
             "require": {
@@ -4691,7 +4692,7 @@
                 "ext-json": "*",
                 "knplabs/knp-menu": "^3.1",
                 "knplabs/knp-menu-bundle": "^3.0",
-                "php": "^7.3",
+                "php": "^7.3 || ^8.0",
                 "sonata-project/block-bundle": "^3.20 || ^4.0",
                 "sonata-project/exporter": "^1.11 || ^2.0",
                 "sonata-project/form-extensions": "^0.1.1 || ^1.4",
@@ -4743,7 +4744,7 @@
                 "symfony/browser-kit": "^4.4 || ^5.1",
                 "symfony/css-selector": "^4.4 || ^5.1",
                 "symfony/filesystem": "^4.4 || ^5.1",
-                "symfony/maker-bundle": "^1.17",
+                "symfony/maker-bundle": "^1.25",
                 "symfony/phpunit-bridge": "^5.1.8",
                 "symfony/yaml": "^4.4 || ^5.1",
                 "vimeo/psalm": "^4.3.2"
@@ -4790,7 +4791,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.87.0"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.88.0"
             },
             "funding": [
                 {
@@ -4810,29 +4811,29 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-01-12T12:15:07+00:00"
+            "time": "2021-01-19T08:35:51+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
-            "version": "3.21.0",
+            "version": "3.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataBlockBundle.git",
-                "reference": "d78985b743dbe4f1ea2b5bd94090cf89e14ac3c0"
+                "reference": "a0b4881f78b39aba4c20b0a122ab8842084afad2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/d78985b743dbe4f1ea2b5bd94090cf89e14ac3c0",
-                "reference": "d78985b743dbe4f1ea2b5bd94090cf89e14ac3c0",
+                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/a0b4881f78b39aba4c20b0a122ab8842084afad2",
+                "reference": "a0b4881f78b39aba4c20b0a122ab8842084afad2",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "^1.6",
                 "doctrine/common": "^2.7.1 || ^3.0",
-                "php": "^7.2",
+                "php": "^7.3 || ^8.0",
                 "psr/cache": "^1.0",
                 "sonata-project/cache": "^1.0 || ^2.0",
-                "sonata-project/doctrine-extensions": "^1.1",
+                "sonata-project/doctrine-extensions": "^1.10.1",
                 "sonata-project/form-extensions": "^0.1.1 || ^1.4",
                 "symfony/asset": "^4.4",
                 "symfony/config": "^4.4",
@@ -4855,12 +4856,16 @@
             "require-dev": {
                 "knplabs/knp-menu": "^3.1",
                 "knplabs/knp-menu-bundle": "^3.0",
+                "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.1",
-                "phpspec/prophecy": "^1.10",
+                "phpstan/phpstan": "^0.12.29",
+                "phpstan/phpstan-symfony": "^0.12.10",
+                "psalm/plugin-symfony": "^2.0",
                 "sonata-project/admin-bundle": "^3.28",
                 "symfony/debug": "^4.4",
-                "symfony/phpunit-bridge": "^5.1.1",
-                "symfony/stopwatch": "^4.4 || ^5.1"
+                "symfony/phpunit-bridge": "^5.1.8",
+                "symfony/stopwatch": "^4.4 || ^5.1",
+                "vimeo/psalm": "^4.1"
             },
             "suggest": {
                 "knplabs/knp-menu-bundle": "In order to use MenuBlockService."
@@ -4902,9 +4907,27 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataBlockBundle/issues",
-                "source": "https://github.com/sonata-project/SonataBlockBundle/tree/3.x"
+                "source": "https://github.com/sonata-project/SonataBlockBundle/tree/3.22.0"
             },
-            "time": "2020-08-27T14:25:46+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/VincentLanglet",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/core23",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/wbloszyk",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-01-19T09:03:49+00:00"
         },
         {
             "name": "sonata-project/cache",
