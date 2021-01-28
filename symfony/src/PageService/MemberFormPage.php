@@ -73,7 +73,7 @@ class MemberFormPage implements PageServiceInterface
                 $this->em->persist($member);
                 $this->em->flush();
                 $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
-                $code = $this->addToInfoMailingList($member);
+                //$code = $this->addToInfoMailingList($member);
                 $this->announceToMattermost($member);
                 $state = 'added';
             } else {
@@ -109,10 +109,10 @@ class MemberFormPage implements PageServiceInterface
     public function addToInfoMailingList($member)
     {
         $client = HttpClient::create();
-        $response = $client->request('POST', 'https://list.ayy.fi/mailman/subscribe/entropy-tiedotus',[
+        $response = $client->request('POST', 'https://list.ayy.fi/postorius/lists/tiedotus.entropy.fi/subscribe',[
             'query' => [
                 'email' => $member->getEmail(),
-                'fullname' => $member->getName()
+                'display_name' => $member->getName()
             ]
         ]);
         return $response->getStatusCode();
