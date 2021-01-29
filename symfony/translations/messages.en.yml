@@ -99,6 +99,12 @@ block:
     items:
         title: Broken items
         help: Come and help us fix things?
+    email_lists:
+        name: Mailing lists
+        tiedotus: News list
+        aktiivit: Active member list
+        vuokra: Renting list
+        control: Control
 menu:
     logon_to: Log on to
 event:

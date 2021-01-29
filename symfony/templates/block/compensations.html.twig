@@ -1,0 +1,19 @@
+{% extends sonata_block.templates.block_base %}
+{% block block %}
+    <div class="box">
+        <div class="box-header">
+            <h5 class="box-title">{{'profile.paid_renting_rewards'|trans}}</h5>
+        </div>
+        <div class="box-body">
+            {% for reward in member.user.rewards|reverse|slice(0,5) %}
+                {% if reward.PaidDate %}
+                {{ reward.PaidDate|date('d.m.Y') }}: {{ reward.Evenout }}€<br>
+                {% else %}
+                {{ 'profile.next_reward_is_bubling_under'|trans }}<br>
+                {% endif %}
+            {% else %}
+            {{'profile.no_renting_rewards'|trans }}
+            {% endfor %}
+        </div>
+    </div>        
+{% endblock %}

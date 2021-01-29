@@ -4,13 +4,17 @@
 {% endblock %}
 
 {% block content %}
-<div class="col-md-12">
-    <h1>{{'profile.name'|trans|capitalize }}</h1>
-</div>
 {% if not member.isActiveMember %}
     {#{ sonata_block_render({'type':'entropy.block.door'}) }#}
 {% endif %}
-    {{ sonata_block_render({'type':'entropy.block.member_info'}) }}
+<div class="col-sm-4">
+    {{ sonata_block_render({'type':'entropy.block.member.info'}) }}
+    {{ sonata_block_render({'type':'entropy.block.compensations'}) }}
+</div>
+<div class="col-sm-8">
+    {{ sonata_block_render({'type':'entropy.block.member.situation'}) }}
+    {{ sonata_block_render({'type':'entropy.block.email_lists'}) }}
+</div>
 {% endblock %}
 
 

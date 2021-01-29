@@ -209,6 +209,20 @@ services:
         tags:
             - { name: sonata.block, alias: bookingblock }
         public: true
+    entropy.block.compensations:
+        class: App\Block\Compensations
+        arguments:
+            - "@twig"
+        tags:
+            - { name: sonata.block, alias: compensationsblock }
+        public: true
+    entropy.block.member.situation:
+        class: App\Block\MemberSituation
+        arguments:
+            - "@twig"
+        tags:
+            - { name: sonata.block, alias: membersituationblock }
+        public: true
     entropy.block.joinus:
         class: App\Block\JoinUsBlock
         arguments:
@@ -230,7 +244,7 @@ services:
         tags:
             - { name: sonata.block, alias: randomartistblock }
         public: true
-    entropy.block.member_info:
+    entropy.block.member.info:
         class: App\Block\MemberInfoBlock
         arguments:
             - "@twig"
@@ -243,6 +257,13 @@ services:
             - "@twig"
         tags:
             - { name: sonata.block, alias: artistblock }
+        public: true
+    entropy.block.email_lists:
+        class: App\Block\EmailLists
+        arguments:
+            - "@twig"
+        tags:
+            - { name: sonata.block, alias: emaillistsblock }
         public: true
     entropy.block.door_info:
         class: App\Block\DoorInfoBlock
