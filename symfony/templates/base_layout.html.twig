@@ -55,6 +55,12 @@
                         <ul style="width: 70%" class="navbar-nav justify-content-left">
                             {% if sonata_page.isEditor and (is_granted('ROLE_SONATA_PAGE_ADMIN_PAGE_ALL') or is_granted('ROLE_SUPER_ADMIN')) %}
                                 {% set sites = sonata_page.siteavailables %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{ path('sonata_admin_dashboard') }}">
+                                            <i class="fa fa-magic"></i>
+                                            {{ 'Dashboard'|trans}}
+                                        </a>
+                                    </li>
 
                                 {% if sites|length > 1 and site is defined %}
                                     <li class="dropdown nav-item">
