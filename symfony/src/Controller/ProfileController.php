@@ -74,11 +74,7 @@ class ProfileController extends AbstractController
             }
             $text.='**';
             if($send){
-                if($env != 'dev'){
-                    $mm->SendToMattermost($text, 'kerde');
-                } else {
-                    $mm->SendToMattermost($text);
-                }
+                $mm->SendToMattermost($text, 'kerde');
             }
             
             if ($member->getLocale()){

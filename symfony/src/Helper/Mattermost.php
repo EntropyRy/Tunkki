@@ -14,7 +14,9 @@ class Mattermost {
         $xcURL = $this->bag->get('mm_tunkki_hook');
         $botname = $this->bag->get('mm_tunkki_botname');
         $botimg = $this->bag->get('mm_tunkki_img');
-
+        if ($_ENV["APP_ENV"] == 'dev'){
+            $channel = null;
+        }
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","channel":"'.$channel.'","text":"'.$text.'"}';
         $cOptArr = array (
