@@ -152,4 +152,9 @@ final class MemberAdmin extends AbstractAdmin
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];
     }
+    public function preDelete($member)
+    {
+        $text = '**Member deleted: '.$member.'**';
+        $this->mm->SendToMattermost($text, 'yhdistys');
+    }
 }

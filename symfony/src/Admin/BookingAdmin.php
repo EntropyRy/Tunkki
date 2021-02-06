@@ -347,7 +347,7 @@ class BookingAdmin extends AbstractAdmin
         $text = '#### BOOKING: <'.$this->generateUrl('edit', ['id'=> $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL).'|'.$booking->getName().'> on '.
             $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
-        $this->mm->SendToMattermost($text);
+        $this->mm->SendToMattermost($text, 'vuokraus');
         //$this->sendNotificationMail($booking);
     }
     public function preUpdate($booking)

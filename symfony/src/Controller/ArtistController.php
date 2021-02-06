@@ -45,7 +45,7 @@ class ArtistController extends AbstractController
                 $em->persist($artist);
                 $em->flush();
                 $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName();
-                $mm->SendToMattermost($text);
+                $mm->SendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');
                 if($referer){
                     $request->getSession()->remove('referer');

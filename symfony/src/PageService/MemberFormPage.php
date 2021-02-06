@@ -120,7 +120,7 @@ class MemberFormPage implements PageServiceInterface
     protected function announceToMattermost($member)
     {
         $text = '**New Member: '.$member.'**';
-        $this->mm->SendToMattermost($text);
+        $this->mm->SendToMattermost($text, 'yhdistys');
     }
     
 }

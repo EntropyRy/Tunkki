@@ -155,7 +155,7 @@ class StatusEventAdmin extends AbstractAdmin
 	{
         $user = $Event->getCreator();
 		$text = $this->getMMtext($Event, $user);
-        $this->mm->SendToMattermost($text);
+        $this->mm->SendToMattermost($text, 'vuokraus');
     }
     public function preUpdate($Event)
     {
@@ -166,7 +166,7 @@ class StatusEventAdmin extends AbstractAdmin
 	{
         $user = $Event->getModifier();
 		$text = $this->getMMtext($Event, $user);
-        $this->mm->SendToMattermost($text);
+        $this->mm->SendToMattermost($text, 'vuokraus');
 	}
 	private function getMMtext($Event, $user)
     {

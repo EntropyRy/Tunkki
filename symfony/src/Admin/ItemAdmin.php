@@ -233,7 +233,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $user = $this->ts->getToken()->getUser();
         $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
-        $this->mm->SendToMattermost($text);
+        $this->mm->SendToMattermost($text, 'vuokraus');
 	}
     public function preUpdate($Item)
     {
@@ -245,25 +245,14 @@ class ItemAdmin extends AbstractAdmin
         if($original['name']!= $Item->getName()) {
             $text .= ' renamed from '.$original['name'];
 			$text .= ' by '. $user;
-			$this->mm->SendToMattermost($text);
+			$this->mm->SendToMattermost($text, 'vuokraus');
         }
-/*        if($original['needsFixing'] == false && $Item->getNeedsFixing() == true){
-            $text .= ' **_BROKEN_**';
-			$text .= ' by '. $user;
-			$this->mm->SendToMattermost($text);
-        }
-        elseif($original['needsFixing'] == true && $Item->getNeedsFixing() == false){
-            $text .= ' **_FIXED_**';
-			$text .= ' by '. $user;
-			$this->mm->SendToMattermost($text);
-        }
- */
     }
 	public function preRemove($Item)
 	{
 		$user = $this->ts->getToken()->getUser();
         $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
-		$this->mm->SendToMattermost($text);
+		$this->mm->SendToMattermost($text, 'vuokraus');
 	}
     protected function configureRoutes(RouteCollection $collection)
     {
