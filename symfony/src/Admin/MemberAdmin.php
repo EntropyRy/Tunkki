@@ -15,10 +15,13 @@ use Sonata\Form\Type\DateRangeType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Doctrine\Types\JsonType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Helper\Mattermost;
 
 final class MemberAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'member';
+    protected $mm; // Mattermost helper
+
     protected $datagridValues = [
         '_page' => 1,
         '_sort_order' => 'DESC',
@@ -152,9 +155,14 @@ final class MemberAdmin extends AbstractAdmin
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];
     }
-    public function preDelete($member)
+    public function preRemove($member)
     {
         $text = '**Member deleted: '.$member.'**';
         $this->mm->SendToMattermost($text, 'yhdistys');
+    }
+    public function setMattermostHelper(Mattermost $mm): self 
+    { 
+        $this->mm = $mm;
+        return $this;
     }
 }
