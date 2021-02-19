@@ -16,6 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  * @ORM\Table(name="Item")
  * @ORM\Entity(repositoryClass="App\Repository\ItemsRepository")
  * @ORM\HasLifecycleCallbacks
+ * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
 class Item
 {
