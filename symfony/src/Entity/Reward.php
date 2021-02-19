@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\RewardRepository")
+ * @ORM\Entity
  */
 class Reward
 {
