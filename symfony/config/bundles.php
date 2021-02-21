@@ -35,11 +35,11 @@ return [
     App\Application\Sonata\PageBundle\ApplicationSonataPageBundle::class => ['all' => true],
     App\Application\Sonata\NotificationBundle\ApplicationSonataNotificationBundle::class => ['all' => true],
     Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle::class => ['all' => true],
-    SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
     Symfony\WebpackEncoreBundle\WebpackEncoreBundle::class => ['all' => true],
     Sonata\Twig\Bridge\Symfony\SonataTwigBundle::class => ['all' => true],
     Sonata\Form\Bridge\Symfony\SonataFormBundle::class => ['all' => true],
     Symfony\Bundle\DebugBundle\DebugBundle::class => ['dev' => true, 'test' => true],
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     Trikoder\Bundle\OAuth2Bundle\TrikoderOAuth2Bundle::class => ['all' => true],
+    SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
 ];

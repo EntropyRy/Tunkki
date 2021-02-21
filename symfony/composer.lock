@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6b5de3c666b4bde771a6b836edd5f0c8",
+    "content-hash": "d72e782f569edb9c14ed897a90f7d121",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -328,16 +328,16 @@
         },
         {
             "name": "doctrine/annotations",
-            "version": "1.11.1",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/annotations.git",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad"
+                "reference": "ebec9b1708c95d7602245c8172773f6b4e0c3be1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/annotations/zipball/ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
-                "reference": "ce77a7ba1770462cd705a91a151b6c3746f9c6ad",
+                "url": "https://api.github.com/repos/doctrine/annotations/zipball/ebec9b1708c95d7602245c8172773f6b4e0c3be1",
+                "reference": "ebec9b1708c95d7602245c8172773f6b4e0c3be1",
                 "shasum": ""
             },
             "require": {
@@ -352,11 +352,6 @@
                 "phpunit/phpunit": "^7.5 || ^9.1.5"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.11.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\Common\\Annotations\\": "lib/Doctrine/Common/Annotations"
@@ -397,9 +392,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/annotations/issues",
-                "source": "https://github.com/doctrine/annotations/tree/1.11.1"
+                "source": "https://github.com/doctrine/annotations/tree/1.12.0"
             },
-            "time": "2020-10-26T10:28:16+00:00"
+            "time": "2021-02-14T13:22:18+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -3336,16 +3331,16 @@
         },
         {
             "name": "lcobucci/jwt",
-            "version": "4.1.1",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/lcobucci/jwt.git",
-                "reference": "7959c5ee8d50e75b8e39ff9e11041208c22a542a"
+                "reference": "c544710aa18e079baf0027ca4c8236913f46945b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/7959c5ee8d50e75b8e39ff9e11041208c22a542a",
-                "reference": "7959c5ee8d50e75b8e39ff9e11041208c22a542a",
+                "url": "https://api.github.com/repos/lcobucci/jwt/zipball/c544710aa18e079baf0027ca4c8236913f46945b",
+                "reference": "c544710aa18e079baf0027ca4c8236913f46945b",
                 "shasum": ""
             },
             "require": {
@@ -3394,7 +3389,7 @@
             ],
             "support": {
                 "issues": "https://github.com/lcobucci/jwt/issues",
-                "source": "https://github.com/lcobucci/jwt/tree/4.1.1"
+                "source": "https://github.com/lcobucci/jwt/tree/4.1.2"
             },
             "funding": [
                 {
@@ -3406,7 +3401,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-02-16T09:59:04+00:00"
+            "time": "2021-02-19T19:37:15+00:00"
         },
         {
             "name": "league/event",
@@ -4506,63 +4501,6 @@
             "time": "2020-08-25T19:10:18+00:00"
         },
         {
-            "name": "simplethings/entity-audit-bundle",
-            "version": "v1.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/sonata-project/EntityAuditBundle.git",
-                "reference": "5725ecab2d132288842d9a075d1a8662520829c5"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/5725ecab2d132288842d9a075d1a8662520829c5",
-                "reference": "5725ecab2d132288842d9a075d1a8662520829c5",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/dbal": "~2.5",
-                "doctrine/orm": "~2.4",
-                "php": "^5.3.9|~7.0"
-            },
-            "conflict": {
-                "doctrine/dbal": "2.7.0",
-                "doctrine/doctrine-bundle": "<1.4",
-                "gedmo/doctrine-extensions": "<2.3.1",
-                "symfony/framework-bundle": "<2.7"
-            },
-            "require-dev": {
-                "doctrine/doctrine-bundle": "~1.4",
-                "fabpot/php-cs-fixer": "^1.11",
-                "gedmo/doctrine-extensions": "^2.3.1",
-                "matthiasnoback/symfony-dependency-injection-test": "^1.0",
-                "phpunit/phpunit": "^4.8",
-                "symfony/framework-bundle": "~2.7|~3.0",
-                "symfony/var-dumper": "^2.7"
-            },
-            "type": "symfony-bundle",
-            "autoload": {
-                "psr-4": {
-                    "SimpleThings\\EntityAudit\\": "src/SimpleThings/EntityAudit"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "LGPL-2.1"
-            ],
-            "description": "Audit for Doctrine Entities",
-            "keywords": [
-                "Audit",
-                "database",
-                "persistence"
-            ],
-            "support": {
-                "issues": "https://github.com/sonata-project/EntityAuditBundle/issues",
-                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/v1.0.9"
-            },
-            "abandoned": "sonata-project/entity-audit-bundle",
-            "time": "2018-04-10T08:14:31+00:00"
-        },
-        {
             "name": "sonata-project/admin-bundle",
             "version": "3.89.1",
             "source": {
@@ -5397,6 +5335,80 @@
                 }
             ],
             "time": "2021-02-08T16:55:19+00:00"
+        },
+        {
+            "name": "sonata-project/entity-audit-bundle",
+            "version": "v1.0.9",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sonata-project/EntityAuditBundle.git",
+                "reference": "5725ecab2d132288842d9a075d1a8662520829c5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/5725ecab2d132288842d9a075d1a8662520829c5",
+                "reference": "5725ecab2d132288842d9a075d1a8662520829c5",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/dbal": "~2.5",
+                "doctrine/orm": "~2.4",
+                "php": "^5.3.9|~7.0"
+            },
+            "conflict": {
+                "doctrine/dbal": "2.7.0",
+                "doctrine/doctrine-bundle": "<1.4",
+                "gedmo/doctrine-extensions": "<2.3.1",
+                "symfony/framework-bundle": "<2.7"
+            },
+            "require-dev": {
+                "doctrine/doctrine-bundle": "~1.4",
+                "fabpot/php-cs-fixer": "^1.11",
+                "gedmo/doctrine-extensions": "^2.3.1",
+                "matthiasnoback/symfony-dependency-injection-test": "^1.0",
+                "phpunit/phpunit": "^4.8",
+                "symfony/framework-bundle": "~2.7|~3.0",
+                "symfony/var-dumper": "^2.7"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "SimpleThings\\EntityAudit\\": "src/SimpleThings/EntityAudit"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "LGPL-2.1"
+            ],
+            "description": "Audit for Doctrine Entities",
+            "keywords": [
+                "Audit",
+                "database",
+                "persistence"
+            ],
+            "support": {
+                "issues": "https://github.com/sonata-project/EntityAuditBundle/issues",
+                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/v1.0.9"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/VincentLanglet",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/core23",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/wbloszyk",
+                    "type": "github"
+                }
+            ],
+            "time": "2018-04-10T08:14:31+00:00"
         },
         {
             "name": "sonata-project/exporter",
