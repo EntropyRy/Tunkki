@@ -67,14 +67,19 @@ class BookingAdminListener
                             if ($booking->getGivenAwayBy() == $booking->getReceivedBy()){
                                 $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
                                 $gr->addWeight(2);
+                                $this->em->persist($gr);
                             } else {
                                 $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
+                                if($gr){
+                                    $gr->addWeight(1);
+                                    $this->em->persist($gr);
+                                }
                                 $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
-                                $gr->addWeight(1);
-                                $rr->addWeight(1);
-                                $this->em->persist($rr);
+                                if($rr){
+                                    $rr->addWeight(1);
+                                    $this->em->persist($rr);
+                                }
                             }
-                            $this->em->persist($gr);
                             $this->em->flush();
                         }
                     }
@@ -84,22 +89,24 @@ class BookingAdminListener
     }
     private function giveRewardToUser($amount, $booking, $user)
     {
-        $all = $user->getRewards();
-        foreach($all as $reward){
-            if(!$reward->getPaid()){
-                $r = $reward;
-                break;
+        if($user){
+            $all = $user->getRewards();
+            foreach($all as $reward){
+                if(!$reward->getPaid()){
+                    $r = $reward;
+                    break;
+                }
             }
+            if(!isset($r)){ // doesnt exists
+                // create new reward for the user
+                $r = new Reward();
+                $r->setUser($user);
+            }
+            if (!$r->getBookings()->contains($booking)){
+                $r->addBooking($booking);
+            }
+            $r->addReward($amount);
+            return $r;
         }
-        if(!isset($r)){ // doesnt exists
-            // create new reward for the user
-            $r = new Reward();
-            $r->setUser($user);
-        }
-        if (!$r->getBookings()->contains($booking)){
-            $r->addBooking($booking);
-        }
-        $r->addReward($amount);
-        return $r;
     }
 }
