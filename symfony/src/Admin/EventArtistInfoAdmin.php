@@ -53,8 +53,8 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('StartTime', DateTimePickerType::class, [
                 'dp_side_by_side' => true,
                 'format' => 'd.M.y H:mm',
-                'required' => false,
-                'help' => 'please select right date so that we can order the artist right. This also tells the artist they have been chosen to play in their profile page'
+                'required' => true,
+                'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page'
             ])
             ;
     }
