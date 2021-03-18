@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\Form\Type\DateTimePickerType;
@@ -40,23 +41,32 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
+                    'update' => [
+                        'template' => 'admin/crud/list__action_update_artist.html.twig'
+                    ],
                 ],
             ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
-        $formMapper
-            ->add('Artist')
-            ->add('WishForPlayTime', TextType::class, ['disabled' => true])
-            ->add('SetLength')
-            ->add('StartTime', DateTimePickerType::class, [
-                'dp_side_by_side' => true,
-                'format' => 'd.M.y H:mm',
-                'required' => true,
-                'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page'
-            ])
-            ;
+        $subject = $this->getSubject();
+        if (empty($subject->getArtist())){
+            $formMapper
+                ->add('Artist');
+        } else {
+            $formMapper
+                ->add('Artist', null, ['disabled' => true])
+                ->add('WishForPlayTime', TextType::class, ['disabled' => true])
+                ->add('SetLength')
+                ->add('StartTime', DateTimePickerType::class, [
+                    'dp_side_by_side' => true,
+                    'format' => 'd.M.y H:mm',
+                    'required' => true,
+                    'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page'
+                ])
+                ;
+        }
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -73,5 +83,9 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $artistClone->setCopyForArchive(true);
         $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName());
         $eventinfo->setArtistClone($artistClone);
+    }
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('update', $this->getRouterIdParameter().'/update');
     }
 }

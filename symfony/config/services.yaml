@@ -373,7 +373,7 @@ services:
         public: true
     admin.event_artist_info:
         class: App\Admin\EventArtistInfoAdmin
-        arguments: [~, App\Entity\EventArtistInfo, ~]
+        arguments: [~, App\Entity\EventArtistInfo, App\Controller\EventArtistInfoAdminController]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: EventArtistInfo }
         public: true
