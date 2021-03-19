@@ -29,13 +29,21 @@ sonata_formatter:
             service: sonata.formatter.text.twigengine
             extensions: [] # Twig formatter cannot have extensions
 fos_ck_editor:
+    #    plugins:
+    #        html5audio:
+    #            path: "/bundles/fosckeditor/plugins/html5audio/dialogs/"
+    #            filename: "html5audio.js"
+    #
     configs:
         default: 
             toolbar: 'standard'
+            extraPlugins: 'html5audio'
+    toolbars:
+        items:
+            standard.links: ['Link', 'Unlink', 'Anchor', "-", "Html5audio"]
 sonata_admin:
     assets:
         extra_javascripts:
-            # ...
             - bundles/fosckeditor/ckeditor.js
             - bundles/sonataformatter/vendor/markitup-markitup/markitup/jquery.markitup.js
             - bundles/sonataformatter/markitup/sets/markdown/set.js
@@ -43,7 +51,6 @@ sonata_admin:
             - bundles/sonataformatter/markitup/sets/textile/set.js
 
         extra_stylesheets:
-            # ...
             - bundles/sonataformatter/markitup/skins/sonata/style.css
             - bundles/sonataformatter/markitup/sets/markdown/style.css
             - bundles/sonataformatter/markitup/sets/html/style.css
