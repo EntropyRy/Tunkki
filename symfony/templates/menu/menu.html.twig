@@ -15,10 +15,10 @@
     {% if not app.user %}
         {% if event is defined and event.url is not empty and not event.externalUrl %}
         <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
-        {% else %}
+    {% else %}
         <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
-        {% endif %}
-        <!--        <span style="padding-left:5px;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i>{{'login'|trans|capitalize}}</a></span> -->
+    {% endif %}
+       <span class="d-lg-none" style="float:right;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a></span> 
     {% endif %}
   </div>
 </nav>
