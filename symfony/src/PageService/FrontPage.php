@@ -24,19 +24,24 @@ class FrontPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
-        $announcement = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('announcement');
-        $event = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('event');
-        $clubroom = $this->em->getRepository('App:Event')->findOneEventByTypeWithSticky('clubroom');
-        if ($clubroom->getEventDate() > $event->getEventDate()){
+        $r = $this->em->getRepository('App:Event');
+        $events =[];
+        $future = $r->getFutureEvents();        
+        $announcement = $r->findOneEventByTypeWithSticky('announcement');
+        //$event = $r->findOneEventByTypeWithSticky('event');
+        //$clubroom = $r->findOneEventByTypeWithSticky('clubroom');
+        /*if ($clubroom->getEventDate() > $event->getEventDate()){
             $events = [$clubroom, $event];
         } else {
             $events = [$event, $clubroom];
-        }
-        if ($announcement->getEventDate() > $events[0]->getEventDate()){
+        }*/
+        /*if ($announcement->getEventDate() > $events[0]->getEventDate()){
             $events = array_merge([$announcement], $events);
         } else {
             $events = array_merge($events, [$announcement]);
-		}
+        }*/
+        $events = array_merge($future, [$announcement]);
+        
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
             array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 
