@@ -152,7 +152,11 @@
     {{ block('artist_links') }}
 {% endblock %}
 {% block artist_pic %}
+    {% if artist.Picture %}
     <img width="100%" src="{% path artist.Picture, 'square' %}"> 
+    {% else %}
+    <img width="100%" src="/images/thumb_artist_square.jpg"> 
+    {% endif %}
 {% endblock %}
 {% block artist_preview_info %}
 {% set bio_attribute = 'bio_attribute'|trans %}
