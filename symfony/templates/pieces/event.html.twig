@@ -145,8 +145,9 @@
         {% endif %}
     {% endfor %}
 {% endblock %}
+
 {% block artist_event_info %}
-    <h3>{{ name }} @ {{info.StartTime|date('H:i')}}</h3>
+<h3>{{ name }} {% if info is defined%}@ {{info.StartTime|date('H:i')}}{% endif %}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
@@ -174,4 +175,18 @@
         </span>{% if not loop.last %}|{% endif %}
         {% endfor %}
     {% endif %}
+{% endblock %}
+{% block public_artist_info %}
+    {% set name = artist.name %}
+    {% set bio_attribute = 'bio_attribute'|trans %}
+    <div id="{{ name }}" class="col-md-12 pt-3">
+        <div class="row">
+            <div class="col-md-5 order-sm-last order-md-first">
+                {{ block('artist_event_info') }}
+            </div>
+            <div class="col-md-7 order-sm-first order-md-last">
+                {{ block('artist_pic') }}
+            </div>
+        </div>
+    </div>
 {% endblock %}

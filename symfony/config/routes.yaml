@@ -41,6 +41,11 @@ entropy_artist_profile:
         en: /profile/artist
         fi: /profiili/artisti
     controller: App\Controller\ArtistController:index
+entropy_public_artist:
+    path:
+        en: /artist/{name}
+        fi: /artisti/{name}
+    controller: App\Controller\PublicArtistController:index
 entropy_profile_door:
     path:
         en: /profile/door

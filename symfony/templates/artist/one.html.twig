@@ -1,0 +1,13 @@
+{% extends 'onecolumn.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% block title %}
+{{artist}} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-sm-12">
+                {{ block('public_artist_info') }}
+</div>    
+{% endblock %}
+
+

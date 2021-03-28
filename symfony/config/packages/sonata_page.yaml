@@ -53,6 +53,7 @@ sonata_page:
         - entropy_artist_create
         - entropy_artist_edit
         - entropy_artist_delete
+        - entropy_public_artist
         - entropy_event_slug_artist_signup
 
     ignore_uri_patterns:
