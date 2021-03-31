@@ -127,7 +127,7 @@ class EventController extends Controller
     }
     private function setMetaData($lang, $eventdata, $page, $seo)
     {
-        $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('Y-m-d H:i');
+        $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('d.m.Y, H:i');
         $page->setTitle($title);
         $seo->addMeta('property', 'og:title',$title)
             ->addMeta('property', 'og:description', $eventdata->getAbstract($lang))
