@@ -6,7 +6,9 @@ import bsCustomFileInput from 'bs-custom-file-input'
 import a2lix_lib from '@a2lix/symfony-collection/src/a2lix_sf_collection';
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
-require('@fortawesome/fontawesome-free/js/all.js');
+//require('@fortawesome/fontawesome-free/js/brands.js');
+//require('@fortawesome/fontawesome-free/js/solid.js');
+//require('@fortawesome/fontawesome-free/js/fontawesome.js');
 require('typeface-spacegrotesk')
 
 $(document).ready(function() {
