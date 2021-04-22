@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Require ROLE_USER for *every* controller method in this class.
@@ -44,7 +45,9 @@ class ArtistController extends AbstractController
             try {
                 $em->persist($artist);
                 $em->flush();
-                $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName();
+                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL );
+                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL );
+                $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName().'; **LINKS**: [FI]('. $url_fi .'), [EN]('. $url_en .')' ;
                 $mm->SendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');
                 if($referer){
