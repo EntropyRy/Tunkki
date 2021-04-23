@@ -1,4 +1,5 @@
 import '../css/custom.scss';
+import '../css/polaroid.scss';
 import '../css/app.css';
 
 import 'bootstrap';

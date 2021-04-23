@@ -110,13 +110,11 @@
 {% set bio_attribute = 'bio_attribute'|trans %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
+            {% set name = info.artist.name %}
             {% if info.artistClone is null %}
                 {% set artist = info.artist %}
-                {% set name = info.artist.name %}
             {% else %}
                 {% set artist = info.artistClone %}
-                {% set redact = ' for '~event.name %}
-                {% set name = artist.name|replace({(redact): ' '}) %}
             {% endif %}
             {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
                 {% if thecycle == 'even' %}
@@ -153,11 +151,17 @@
     {{ block('artist_links') }}
 {% endblock %}
 {% block artist_pic %}
-    {% if artist.Picture %}
-    <img width="100%" src="{% path artist.Picture, 'square' %}"> 
-    {% else %}
-    <img width="100%" src="/images/thumb_artist_square.jpg"> 
+    {% if name is not defined %}
+        {% set name = artist.name %}
     {% endif %}
+    <span class="polaroid">
+    {% if artist.Picture %}
+    <img width="100%" title="{{name}}" src="{% path artist.Picture, 'square' %}"> 
+    {% else %}
+    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}"> 
+    {% endif %}
+    <div class="caption">{{ name }}</div>
+    </span>
 {% endblock %}
 {% block artist_preview_info %}
 {% set bio_attribute = 'bio_attribute'|trans %}
