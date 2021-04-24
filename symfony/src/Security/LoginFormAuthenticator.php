@@ -103,14 +103,10 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-        if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
-            return new RedirectResponse($this->urlGenerator->generate('sonata_admin_dashboard'));
+        if( $user->getMember()->getLocale()){
+            return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
         } else {
-            if( $user->getMember()->getLocale()){
-                return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
-            } else {
-                return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
-            }
+            return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
         }
     }
 

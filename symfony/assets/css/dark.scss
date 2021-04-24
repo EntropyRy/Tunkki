@@ -16,4 +16,10 @@ body.dark {
         -ms-filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
         filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
     }
+    .invert {
+        background: black;
+        .barcode{
+            filter: invert(1);
+        }
+    }
 }
