@@ -32,7 +32,12 @@ class MemberType extends AbstractType
                 'label_attr' => ['class'=>'switch-custom'],
                 'required' => false
             ])
-            //->add('Submit', SubmitType::class)
+            ->add('theme', ChoiceType::class,[
+                'choices' => [
+                    'bright' => '',
+                    'dark' => 'dark'
+                ]
+            ])
         ;
     }
 

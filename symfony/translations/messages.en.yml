@@ -186,4 +186,5 @@ member:
         requirements3: The board knows who you are
         requirements2: How active you have been lately
         requirements1: You have been organizing at least 3 events in Entropy
-
+dark: Dark
+bright: Bright

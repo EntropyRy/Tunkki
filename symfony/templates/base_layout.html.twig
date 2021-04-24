@@ -45,7 +45,7 @@
     {% endblock %}
 
     {% block sonata_page_body_tag %}
-        <body class="entropy">
+    <body class="entropy {% if app.user %}{{app.user.member.theme}}{% endif %}">
     {% endblock %}
 
         {% block sonata_page_top_bar %}

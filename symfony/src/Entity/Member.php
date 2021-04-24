@@ -165,6 +165,11 @@ class Member
      */
     private $doorLogs;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $theme;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -695,6 +700,18 @@ class Member
                 $doorLog->setMember(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTheme(): ?string
+    {
+        return $this->theme;
+    }
+
+    public function setTheme(?string $theme): self
+    {
+        $this->theme = $theme;
 
         return $this;
     }

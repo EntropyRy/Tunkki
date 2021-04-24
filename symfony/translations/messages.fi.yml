@@ -210,4 +210,6 @@ member:
         requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
 You have already requested a reset password email. Please check your email or try again soon.: Olet jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin uudelleen.
 The reset password link is invalid. Please try to reset your password again.: Linkki ei kelpaa. Yritä aloittaa prosessi alusta.
-The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta. 
+The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta.
+dark: Tumma
+bright: Kirkas

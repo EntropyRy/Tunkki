@@ -1,0 +1,19 @@
+body.dark {
+    background: #000000 url(/images/bg_stripe_black.png) repeat !important;
+    -webkit-filter: invert(100%) hue-rotate(180deg) saturate(50%) sepia(10%);
+    -moz-filter: invert(100%) hue-rotate(180deg) saturate(50%) sepia(10%);
+    -ms-filter: invert(100%) hue-rotate(180deg) saturate(50%) sepia(10%);
+    filter: invert(100%) hue-rotate(180deg) saturate(50%) sepia(10%);
+    .header-img img {
+        -webkit-filter: invert(0) hue-rotate(180deg) saturate(50%) sepia(10%) !important;
+        -moz-filter: invert(0) hue-rotate(180deg) saturate(50%) sepia(10%) !important;
+        -ms-filter: invert(0) hue-rotate(180deg) saturate(50%) sepia(10%) !important;
+        filter: invert(0) hue-rotate(180deg) saturate(50%) sepia(10%) !important;
+    }
+    img {
+        -webkit-filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
+        -moz-filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
+        -ms-filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
+        filter: invert(100%) hue-rotate(-180deg) saturate(100%) sepia(0%);
+    }
+}
