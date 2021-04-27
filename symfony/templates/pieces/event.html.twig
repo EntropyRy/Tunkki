@@ -10,7 +10,7 @@
         {{ block('event_head') }}
         </a>
     {% endif %}
-    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
+    <small>{{ block('published_and_updated') }}</small>
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-md-8 order-1 order-md-0">
@@ -26,14 +26,15 @@
 {% endblock %}
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
-    <small>
-        {{ 'released'|trans }}: {{ event.publishDate|date() }}
-        {% if event.updatedAt and event.updatedAt|date('Y') != '-0001' %}
-            {% if event.publishDate|date('d.m') < event.updatedAt|date('d.m') %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
-        {% endif %}
-        {% endif %}
-    </small>
+    <small>{{ block('published_and_updated') }}</small>
     {{ block('event_name') }}
+{% endblock %}
+{% block published_and_updated %}
+    {{ 'released'|trans }}: {{ event.publishDate|date() }}
+    {% if event.updatedAt and event.updatedAt|date('Y') != '-0001' %}
+        {% if event.publishDate|date('d.m') < event.updatedAt|date('d.m') %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
+    {% endif %}
+    {% endif %}
 {% endblock %}
 {% block event_head %}
     {{ block('event_name') }}
