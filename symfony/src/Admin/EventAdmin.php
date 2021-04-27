@@ -102,9 +102,6 @@ final class EventAdmin extends AbstractAdmin
             'Clubroom Event' => 'clubroom',
             'Announcement' => 'announcement',
         ];
-        $PlaceChoices = [
-            'All' => 'all',
-        ];
         $PicChoices = [
             'Banner' => 'banner',
             'Right side of the text' => 'right',
@@ -178,7 +175,6 @@ final class EventAdmin extends AbstractAdmin
                     'required' => false
                     ]
                 )
-                ->add('publishPlaces', ChoiceType::class, ['choices' => $PlaceChoices])
                 ->add('externalUrl', null, [
                     'label' => 'External Url/No add at all if url is empty',
                     'help'=>'Is the add hosted here?'

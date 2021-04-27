@@ -26,7 +26,13 @@
 {% endblock %}
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
-    <small>{{ 'released'|trans }}: {{ event.publishDate|date() }}</small>
+    <small>
+        {{ 'released'|trans }}: {{ event.publishDate|date() }}
+        {% if event.updatedAt %}
+            {% if event.publishDate|date('d.m') < event.updatedAt|date('d.m') %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
+        {% endif %}
+        {% endif %}
+    </small>
     {{ block('event_name') }}
 {% endblock %}
 {% block event_head %}

@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use function Symfony\Component\String\u;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -40,11 +41,6 @@ class Event
      * @ORM\Column(type="datetime")
      */
     private $publishDate;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $publishPlaces;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media" ,cascade={"persist"})
@@ -92,11 +88,6 @@ class Event
     private $externalUrl = false;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $until;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private $sticky = false;
@@ -126,6 +117,17 @@ class Event
      * @ORM\OrderBy({"StartTime" = "ASC"})
      */
     private $eventArtistInfos;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $until;
 
     public function getId(): ?int
     {
@@ -176,18 +178,6 @@ class Event
     public function setPublishDate(\DateTimeInterface $publishDate): self
     {
         $this->publishDate = $publishDate;
-
-        return $this;
-    }
-
-    public function getPublishPlaces(): ?string
-    {
-        return $this->publishPlaces;
-    }
-
-    public function setPublishPlaces(string $publishPlaces): self
-    {
-        $this->publishPlaces = $publishPlaces;
 
         return $this;
     }
@@ -272,17 +262,17 @@ class Event
         $this->publishDate = new \DateTime();
         $this->css = "/* If you want to play with CSS these help you. First remove this and last line
 header {
-display: none; 
+    display: none; 
 }
 footer {
-display: none !important;
+    display: none !important;
 }
 body { 
-background: black;
+    background: black;
 }
 .container {
-background: transparent;
-color: red;
+    background: transparent;
+    color: red;
 }
 .img-fluid {  
 
@@ -326,18 +316,6 @@ color: red;
     public function setExternalUrl(bool $externalUrl): self
     {
         $this->externalUrl = $externalUrl;
-
-        return $this;
-    }
-
-    public function getUntil(): ?\DateTimeInterface
-    {
-        return $this->until;
-    }
-
-    public function setUntil(?\DateTimeInterface $until): self
-    {
-        $this->until = $until;
 
         return $this;
     }
@@ -445,6 +423,30 @@ color: red;
                 $eventArtistInfo->setEvent(null);
             }
         }
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeInterface
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getUntil(): ?\DateTimeInterface
+    {
+        return $this->until;
+    }
+
+    public function setUntil(?\DateTimeInterface $until): self
+    {
+        $this->until = $until;
+
         return $this;
     }
 }
