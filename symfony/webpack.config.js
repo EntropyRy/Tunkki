@@ -43,7 +43,6 @@ Encore
         // optional target path, relative to the output dir
         to: '../images/[path][name].[ext]',
      })
-    
 ;
 
 module.exports = Encore.getWebpackConfig();
