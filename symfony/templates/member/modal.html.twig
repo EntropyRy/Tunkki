@@ -8,8 +8,8 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+      {{ form_start(form) }}
       <div class="modal-body">
-          {{ form_start(form) }}
           {{ form_row(form.username) }}
 		  <div class="form-row">
           {{ form_row(form.firstname, {'row_attr': {'class':'col-6'}}) }}
@@ -31,8 +31,8 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{'close'|trans}}</button>
           <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-info">{{ 'privacy_policy'|trans}}</a>
           <input class="btn btn-primary" type="submit" value="Submit" />
-          {{ form_end(form) }}
       </div>
+      {{ form_end(form) }}
     </div>
   </div>
 </div>

@@ -36,7 +36,8 @@ class MemberType extends AbstractType
                 'choices' => [
                     'bright' => '',
                     'dark' => 'dark'
-                ]
+                ],
+                'required' => false
             ])
         ;
     }
