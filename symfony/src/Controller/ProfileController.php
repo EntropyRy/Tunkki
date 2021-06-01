@@ -114,7 +114,7 @@ class ProfileController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    public function apply(Request $request, Security $security, FormFactoryInterface $formF)
+    public function apply(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
     {
         $member = $security->getUser()->getMember();
         if($member->getIsActiveMember()){
@@ -126,6 +126,10 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
+            if(empty($member->getApplicationDate())){
+                $text = '**Active member application by '.$member.'**';
+                $mm->SendToMattermost($text, 'yhdistys');
+            }
             $member->setApplicationDate(new \DateTime('now'));
             $em->persist($member);
             $em->flush();
