@@ -355,7 +355,7 @@ class BookingAdmin extends AbstractAdmin
         if($booking->getReferenceNumber() == NULL){
             $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         }
-        if($booking->getRenterHash() == NULL){
+        if($booking->getRenterHash() == NULL || $booking->getRenterHash() == 0){
             $booking->setRenterHash($this->calculateOwnerHash($booking));
         }
         $user = $this->ts->getToken()->getUser();
