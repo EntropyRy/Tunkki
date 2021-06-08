@@ -130,7 +130,7 @@ class ProfileController extends AbstractController
                 $text = '**Active member application by '.$member.'**';
                 $mm->SendToMattermost($text, 'yhdistys');
             }
-            $member->setApplicationDate(new \DateTime('now'));
+            $member->setApplicationDate(new \DateTime());
             $em->persist($member);
             $em->flush();
             $this->addFlash('success', 'profile.application_saved');
