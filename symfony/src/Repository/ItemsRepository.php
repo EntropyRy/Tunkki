@@ -21,7 +21,7 @@ class ItemsRepository extends \Doctrine\ORM\EntityRepository
     public function getItemChoicesWithPrivileges($privileges)
     {
         $queryBuilder = $this->createQueryBuilder('i')
-                       ->Where('i.cannotBeRented = false')
+                       //->Where('i.cannotBeRented = false')
                        ->andWhere('i.rent IS NOT NULL')
                        ->andWhere('i.toSpareParts = false')
                        ->andWhere('i.forSale = false')
