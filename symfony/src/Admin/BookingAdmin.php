@@ -398,6 +398,7 @@ class BookingAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
+        $collection->remove('delete');
     }
     public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $em=null, $cm=null)
     {
