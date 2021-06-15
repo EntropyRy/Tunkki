@@ -44,6 +44,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isActiveMember')
             ->add('isFullMember')
             ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['field_type' => DateRangeType::class])
+            ->add('user.createdAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
         ;
     }
 
