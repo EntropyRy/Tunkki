@@ -9,7 +9,7 @@
     "jquery": "^3.5.0",
     "node-sass": "^4.13.1",
     "popper.js": "^1.16.1",
-    "sass": "^1.25.0",
+    "sass": "~1.32.12",
     "sass-loader": "^11.0.0",
     "typeface-spacegrotesk": "^0.0.66"
   },
