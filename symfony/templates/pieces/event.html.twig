@@ -55,11 +55,17 @@
 {% block event_content %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
+    {% if event.rsvpSystemEnabled %}
+    {{ block('RSVP') }}
+    {% endif %}
     {{ block('links')}}
 {% endblock %}
 {% block event_frontpage_content %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': ''})|raw }}
+    {% if event.rsvpSystemEnabled %}
+    {{ block('RSVP') }}
+    {% endif %}
     {{ block('links')}}
 {% endblock %}
 {% block event_media %}
@@ -67,6 +73,19 @@
     <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
+{% endblock %}
+{% block RSVP %}
+<div class="pt-2 pb-2">
+{{'rsvp.receive_info'|trans}} <br>
+    {% if app.user %}
+    <a class="btn btn-primary" 
+        href="{{ path('entropy_event_rsvp',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}"
+        >RSVP {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){%endif%}</a>
+    {% else %}
+    <a class="btn btn-primary disabled" href="#">RSVP</a>
+    {{'rsvp.no_user'|trans}}
+    {% endif %}
+</div>
 {% endblock %}
 {% block links %}
 {% if event.attachment %}

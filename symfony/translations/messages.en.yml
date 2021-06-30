@@ -189,3 +189,8 @@ member:
         requirements1: You have been organizing at least 3 events in Entropy
 dark: Dark
 bright: Bright
+rsvp:
+    receive_info: To be able to receive the location RSVP here
+    no_user: To be able to RSVP join us!
+    already_rsvpd: You have already RSVPed to this event
+    rsvpd_succesfully: RSVP succesfully saved!

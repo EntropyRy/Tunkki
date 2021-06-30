@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\Event;
 use App\Entity\Artist;
+use App\Entity\RSVP;
 use App\Entity\EventArtistInfo;
 use App\Form\EventArtistInfoType;
 use App\Form\ArtistType;
@@ -70,6 +71,41 @@ class EventController extends Controller
                 'event' => $eventdata,
                 'page' => $page
             ]);
+    }
+	/**
+	 * @IsGranted("ROLE_USER")
+	 */
+    public function RSVP(
+        Request $request, 
+        Security $security,
+        TranslatorInterface $trans
+    ){
+        $member = $security->getUser()->getMember();
+        if(empty($member)){
+            throw new NotFoundHttpException($trans->trans("event_not_found"));
+        }
+        $slug = $request->get('slug');
+        $year = $request->get('year');
+        if(empty($slug)){
+            throw new NotFoundHttpException($trans->trans("event_not_found"));
+        }
+        $this->em = $this->getDoctrine()->getManager();
+        $event = $this->em->getRepository(Event::class)
+			->findEventBySlugAndYear($slug, $year);
+        foreach ($member->getRSVPs() as $rsvp){
+            if ($rsvp->getEvent() == $event){
+                $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
+                return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
+            } 
+        }
+        $rsvp = new RSVP();
+        $rsvp->setEvent($event);
+        $rsvp->setMember($member);
+        $this->em->persist($rsvp);
+        $this->em->flush();
+        $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
+        return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
+
     }
 	/**
 	 * @IsGranted("ROLE_USER")

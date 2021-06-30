@@ -129,6 +129,16 @@ class Event
      */
     private $until;
 
+    /**
+     * @ORM\OneToMany(targetEntity=RSVP::class, mappedBy="event", orphanRemoval=true)
+     */
+    private $RSVPs;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $rsvpSystemEnabled = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -282,6 +292,7 @@ body {
 }
 */";
 		$this->eventArtistInfos = new ArrayCollection();
+  $this->RSVPs = new ArrayCollection();
     }
 
     public function getType(): ?string
@@ -446,6 +457,48 @@ body {
     public function setUntil(?\DateTimeInterface $until): self
     {
         $this->until = $until;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RSVP[]
+     */
+    public function getRSVPs(): Collection
+    {
+        return $this->RSVPs;
+    }
+
+    public function addRSVP(RSVP $rSVP): self
+    {
+        if (!$this->RSVPs->contains($rSVP)) {
+            $this->RSVPs[] = $rSVP;
+            $rSVP->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRSVP(RSVP $rSVP): self
+    {
+        if ($this->RSVPs->removeElement($rSVP)) {
+            // set the owning side to null (unless already changed)
+            if ($rSVP->getEvent() === $this) {
+                $rSVP->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getRsvpSystemEnabled(): ?bool
+    {
+        return $this->rsvpSystemEnabled;
+    }
+
+    public function setRsvpSystemEnabled(?bool $rsvpSystemEnabled): self
+    {
+        $this->rsvpSystemEnabled = $rsvpSystemEnabled;
 
         return $this;
     }

@@ -26,6 +26,11 @@ entropy_event_slug_artist_signup:
     controller: App\Controller\EventController:artistSignUp
     requirements:
         year: '\d+'
+entropy_event_rsvp:
+    path: /{year}/{slug}/rsvp
+    controller: App\Controller\EventController:RSVP
+    requirements:
+        year: '\d+'
 entropy_user_dashboard:
     path:
         en: /dashboard/

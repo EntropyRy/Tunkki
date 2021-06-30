@@ -214,3 +214,8 @@ The reset password link is invalid. Please try to reset your password again.: Li
 The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 dark: Tumma
 bright: Kirkas
+rsvp:
+    receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
+    no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen. Liity!
+    already_rsvpd: Olet jo ilmottutunut tähän tapahtumaan
+    rsvpd_succesfully: Ilmoittauduit onnistuneesti

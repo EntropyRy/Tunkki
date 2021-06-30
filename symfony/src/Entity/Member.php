@@ -170,10 +170,16 @@ class Member
      */
     private $theme;
 
+    /**
+     * @ORM\OneToMany(targetEntity=RSVP::class, mappedBy="member", orphanRemoval=true)
+     */
+    private $RSVPs;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
         $this->doorLogs = new ArrayCollection();
+        $this->RSVPs = new ArrayCollection();
     }
 
     /**
@@ -712,6 +718,36 @@ class Member
     public function setTheme(?string $theme): self
     {
         $this->theme = $theme;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|RSVP[]
+     */
+    public function getRSVPs(): Collection
+    {
+        return $this->RSVPs;
+    }
+
+    public function addRSVP(RSVP $rSVP): self
+    {
+        if (!$this->RSVPs->contains($rSVP)) {
+            $this->RSVPs[] = $rSVP;
+            $rSVP->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRSVP(RSVP $rSVP): self
+    {
+        if ($this->RSVPs->removeElement($rSVP)) {
+            // set the owning side to null (unless already changed)
+            if ($rSVP->getMember() === $this) {
+                $rSVP->setMember(null);
+            }
+        }
 
         return $this;
     }
