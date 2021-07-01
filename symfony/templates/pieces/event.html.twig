@@ -54,19 +54,27 @@
 {% endblock %}
 {% block event_content %}
 {% set content_attr = 'content_attribute'|trans %}
-{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': block('bios') })|raw }}
-    {% if event.rsvpSystemEnabled %}
-    {{ block('RSVP') }}
-    {% endif %}
-    {{ block('links')}}
+{{ attribute(event,content_attr)|replace({
+    '{{ timetable }}': block('timetable'), 
+    '{{ bios }}': block('bios'),
+    '{{ links }}':block('links'), 
+    '{{ rsvp }}':block('RSVP') 
+})|raw }}
+{% if '{{ links }}' not in attribute(event,content_attr) %}
+    {{ block('links') }}
+{% endif %}
 {% endblock %}
 {% block event_frontpage_content %}
 {% set content_attr = 'content_attribute'|trans %}
-{{ attribute(event,content_attr)|replace({'{{ timetable }}': block('timetable'), '{{ bios }}': ''})|raw }}
-    {% if event.rsvpSystemEnabled %}
-    {{ block('RSVP') }}
-    {% endif %}
-    {{ block('links')}}
+{{ attribute(event,content_attr)|replace({
+    '{{ timetable }}': block('timetable'), 
+    '{{ bios }}':'',
+    '{{ links }}':block('links'), 
+    '{{ rsvp }}':block('RSVP') 
+})|raw }}
+{% if '{{ links }}' not in attribute(event,content_attr) %}
+    {{ block('links') }}
+{% endif %}
 {% endblock %}
 {% block event_media %}
 {% set name_attr = 'name_attribute'|trans %}
@@ -75,6 +83,7 @@
     </div>
 {% endblock %}
 {% block RSVP %}
+{% if event.rsvpSystemEnabled %}
 <div class="pt-2 pb-2">
 {{'rsvp.receive_info'|trans}} <br>
     {% if app.user %}
@@ -86,6 +95,7 @@
     {{'rsvp.no_user'|trans}}
     {% endif %}
 </div>
+{% endif %}
 {% endblock %}
 {% block links %}
 {% if event.attachment %}

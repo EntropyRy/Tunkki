@@ -55,12 +55,14 @@ class Event
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Content;
+    private $Content = "Use these: <br>
+            {{ timetable }} <br> {{ bios }} <br> {{ links }} <br> {{ rsvp }}";
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $Sisallys;
+    private $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
+            {{ timetable }} <br> {{ bios }} <br> {{ links }} <br> {{ rsvp }}";
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
