@@ -362,7 +362,6 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Contract }
         public: true
-
     entropy.admin.event:
         class: App\Admin\EventAdmin
         arguments: [~, App\Entity\Event, App\Controller\EventAdminController]
@@ -371,6 +370,7 @@ services:
         calls:
             - [addChild, ['@admin.event_artist_info', 'Event']]
         public: true
+
     admin.event_artist_info:
         class: App\Admin\EventArtistInfoAdmin
         arguments: [~, App\Entity\EventArtistInfo, App\Controller\EventArtistInfoAdminController]
@@ -395,6 +395,12 @@ services:
         arguments: [~, App\Entity\AccessGroups, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: AccessGroups }
+        public: true
+    entropy.admin.rsvp:
+        class: App\Admin\RSVPAdmin
+        arguments: [~, App\Entity\RSVP, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: RSVPs }
         public: true
     oauth.authcode.listener:
         class: App\EventListener\AuthorizationCodeListener

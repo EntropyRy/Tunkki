@@ -46,6 +46,11 @@ final class EventAdmin extends AbstractAdmin
             $menu->addChild('Artist list', [
                'uri' => $admin->generateUrl('artistList', ['id' => $id])
             ]);
+            if ($admin->getSubject()->getRsvpSystemEnabled()){
+            $menu->addChild('RSVPs', [
+               'uri' => $admin->generateUrl('rsvp', ['id' => $id])
+            ]);
+            }
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
@@ -244,5 +249,6 @@ final class EventAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
+        $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
     }
 }
