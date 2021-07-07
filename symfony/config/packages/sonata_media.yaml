@@ -66,12 +66,14 @@ sonata_media:
                 - png
                 - jpeg
                 - svg
+                - gif
             allowed_mime_types:
                 - image/pjpeg
                 - image/jpeg
                 - image/png
                 - image/x-png
                 - image/svg+xml
+                - image/gif
         file:
             allowed_mime_types:
                 - application/pdf
