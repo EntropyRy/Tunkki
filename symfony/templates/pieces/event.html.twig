@@ -173,7 +173,6 @@
                         </div>
                     </div>
                 </div>
-                <hr class="d-md-none">
                 {% else %}
                 <div id="{{ name }}" class="col-md-12 pt-3 pb-3">
                     <div class="row">
@@ -185,6 +184,8 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
+                {% if not loop.last %}
                 <hr class="d-md-none">
                 {% endif %}
         {% endif %}
