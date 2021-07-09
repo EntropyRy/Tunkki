@@ -133,10 +133,21 @@
     {% else %}
         {% set artist = info.artistClone %}
         {% set redact = ' for '~event.name %}
-        {% set name = artist.name|replace({(redact): ' '}) %}
+        {% set name = artist.name|replace({(redact): ''}) %}
     {% endif %}
     {% if info.StartTime is not empty %}
-        <li>{{ info.StartTime|date('H:i')}}: <a href="#{{ name }}">{{ name }}</a></li>
+        {% set inserted = false %}
+        {% if last is defined %}
+            {% if last == info.StartTime %}
+            B2B <a href="#{{ name }}">{{ name }}</a>
+            {% set inserted = true %}
+            {% endif %}
+        </li>
+        {% endif %}
+        {% if not inserted %}
+        <li>{{ info.StartTime|date('H:i')}}: <a href="#{{ name }}">{{ name }}</a>
+        {% endif %}
+        {% set last = info.StartTime %}
     {% endif %}
 {% endfor %}
 </ul>
