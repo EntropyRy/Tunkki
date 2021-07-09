@@ -127,13 +127,11 @@
 {% block timetable %}
 <ul>
 {% for info in event.eventArtistInfos %}
+    {% set name = info.artist.name %}
     {% if info.artistClone is null %}
         {% set artist = info.artist %}
-        {% set name = info.artist.name %}
     {% else %}
         {% set artist = info.artistClone %}
-        {% set redact = ' for '~event.name %}
-        {% set name = artist.name|replace({(redact): ''}) %}
     {% endif %}
     {% if info.StartTime is not empty %}
         {% set inserted = false %}
@@ -165,9 +163,9 @@
             {% endif %}
             {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
                 {% if thecycle == 'even' %}
-                <div id="{{ name }}" class="col-md-12 pt-3">
+                <div id="{{ name }}" class="col-md-12 pt-3 pb-3">
                     <div class="row">
-                        <div class="col-md-5 order-sm-last order-md-first">
+                        <div class="col-md-5 order-sm-last pt-sm-3 order-md-first">
                             {{ block('artist_event_info') }}
                         </div>
                         <div class="col-md-7 order-sm-first order-md-last">
@@ -175,17 +173,19 @@
                         </div>
                     </div>
                 </div>
+                <hr class="d-md-none">
                 {% else %}
-                <div id="{{ name }}" class="col-md-12 pt-3">
+                <div id="{{ name }}" class="col-md-12 pt-3 pb-3">
                     <div class="row">
                         <div class="col-md-7 order-sm-first order-md-first">
                             {{ block('artist_pic') }}
                         </div>
-                        <div class="col-md-5 order-sm-last order-md-last">
+                        <div class="col-md-5 order-sm-last pt-sm-3 order-md-last">
                             {{ block('artist_event_info') }}
                         </div>
                     </div>
                 </div>
+                <hr class="d-md-none">
                 {% endif %}
         {% endif %}
     {% endfor %}

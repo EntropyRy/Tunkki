@@ -3027,16 +3027,16 @@
         },
         {
             "name": "laminas/laminas-code",
-            "version": "4.4.0",
+            "version": "4.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-code.git",
-                "reference": "2b0bb59ade31a045fd3ff0097dc558bb896f6596"
+                "reference": "54251ab2b16c41c6980387839496b235f5f6e10b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/2b0bb59ade31a045fd3ff0097dc558bb896f6596",
-                "reference": "2b0bb59ade31a045fd3ff0097dc558bb896f6596",
+                "url": "https://api.github.com/repos/laminas/laminas-code/zipball/54251ab2b16c41c6980387839496b235f5f6e10b",
+                "reference": "54251ab2b16c41c6980387839496b235f5f6e10b",
                 "shasum": ""
             },
             "require": {
@@ -3090,20 +3090,20 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-06-17T13:39:43+00:00"
+            "time": "2021-07-09T11:58:40+00:00"
         },
         {
             "name": "laminas/laminas-diagnostics",
-            "version": "1.8.0",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-diagnostics.git",
-                "reference": "9a634ebdc6af7e92ae3b13712b22c88121709ca9"
+                "reference": "85b7981527f7a1cf6f99988aeb670cc07672b9cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/9a634ebdc6af7e92ae3b13712b22c88121709ca9",
-                "reference": "9a634ebdc6af7e92ae3b13712b22c88121709ca9",
+                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/85b7981527f7a1cf6f99988aeb670cc07672b9cc",
+                "reference": "85b7981527f7a1cf6f99988aeb670cc07672b9cc",
                 "shasum": ""
             },
             "require": {
@@ -3118,25 +3118,27 @@
             },
             "require-dev": {
                 "doctrine/migrations": "^2.0 || ^3.0",
+                "enlightn/security-checker": "^1.2",
                 "guzzlehttp/guzzle": "^5.3.3 || ^6.3.3",
                 "laminas/laminas-coding-standard": "~1.0.0",
                 "laminas/laminas-loader": "^2.0",
                 "mikey179/vfsstream": "dev-master#08a798577d677436f4f4ea3d0b3c949f64655548 as 1.6.9",
-                "php-amqplib/php-amqplib": "^2.0",
+                "php-amqplib/php-amqplib": "^2.0 || ^3.0",
                 "phpspec/prophecy-phpunit": "^2.0",
-                "phpunit/phpunit": "^9.4.1",
+                "phpunit/phpunit": "^9.5",
                 "predis/predis": "^1.0",
-                "sensiolabs/security-checker": "^5.0 || ^6.0.3",
-                "symfony/yaml": "^2.7 || ^3.0 || ^4.0 || ^5.0"
+                "psalm/plugin-phpunit": "^0.15.1",
+                "symfony/yaml": "^2.7 || ^3.0 || ^4.0 || ^5.0",
+                "vimeo/psalm": "^4.7"
             },
             "suggest": {
                 "doctrine/migrations": "Required by Check\\DoctrineMigration",
+                "enlightn/security-checker": "Required by Check\\SecurityAdvisory",
                 "ext-bcmath": "Required by Check\\CpuPerformance",
                 "guzzlehttp/guzzle": "Required by Check\\GuzzleHttpService",
+                "php-amqplib/php-amqplib": "Required by Check\\RabbitMQ",
                 "predis/predis": "Required by Check\\Redis",
-                "sensiolabs/security-checker": "Required by Check\\SecurityAdvisory",
-                "symfony/yaml": "Required by Check\\YamlFile",
-                "videlalvaro/php-amqplib": "Required by Check\\RabbitMQ"
+                "symfony/yaml": "Required by Check\\YamlFile"
             },
             "type": "library",
             "extra": {
@@ -3179,7 +3181,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-01-26T12:53:05+00:00"
+            "time": "2021-07-09T10:24:51+00:00"
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
