@@ -17,11 +17,13 @@ final class EventArtistInfoAdminController extends CRUDController
         if ($artistClone){
             $artistClone->setGenre($artist->getGenre());
             $artistClone->setType($artist->getType());
+            $artistClone->setHardware($artist->getHardware());
             $artistClone->setBio($artist->getBio());
             $artistClone->setBioEn($artist->getBioEn());
             $artistClone->setPicture($artist->getPicture());
             $artistClone->setLinks($artist->getLinks());
             $this->admin->update($artistClone);
+            $this->admin->update($info);
             $this->addFlash('sonata_flash_success', sprintf('%s info updated', $info->getArtist()->getName())); 
         } else {
             $this->addFlash('sonata_flash_warning', 'Nothing to do!'); 
