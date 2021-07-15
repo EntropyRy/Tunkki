@@ -218,6 +218,6 @@ dark: Tumma
 bright: Kirkas
 rsvp:
     receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
-    no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään. Liity!
-    already_rsvpd: Olet jo ilmottutunut tähän tapahtumaan
-    rsvpd_succesfully: Ilmoittauduit onnistuneesti
+    no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
+    already_rsvpd: Olet jo ilmottutunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä tapahtumaa.
+    rsvpd_succesfully: Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä tapahtumaa.

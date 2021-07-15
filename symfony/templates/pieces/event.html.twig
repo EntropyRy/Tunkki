@@ -96,7 +96,7 @@
         >RSVP {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){%endif%}</a>
     {% else %}
     <a class="btn btn-primary disabled" href="#">RSVP</a>
-    {{'rsvp.no_user'|trans}}
+    {{'rsvp.no_user'|trans}} {% if app.request.locale == 'fi' %}<a href="/liity">Liity!</a>{% else %}<a href="/en/join-us">Join us!</a>{% endif %}
     {% endif %}
 </div>
 {% endif %}
