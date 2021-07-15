@@ -85,7 +85,6 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $artistClone->setCopyForArchive(true);
         $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName());
         $eventinfo->setArtistClone($artistClone);
-        $eventinfo->setUpdatedAt(new \DateTime());
     }
     protected function configureRoutes(RouteCollection $collection)
     {
