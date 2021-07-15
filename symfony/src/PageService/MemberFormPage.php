@@ -17,6 +17,7 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Twig\Environment;
 
 class MemberFormPage implements PageServiceInterface
@@ -30,6 +31,7 @@ class MemberFormPage implements PageServiceInterface
     private $twig;
     private $mm;
     private $passwordEncoder;
+    private $flash;
 
     public function __construct($name, 
         TemplateManager $templateManager, 
@@ -39,7 +41,8 @@ class MemberFormPage implements PageServiceInterface
         ParameterBagInterface $bag,
         Environment $twig,
         Mattermost $mm,
-        UserPasswordEncoderInterface $passwordEncoder
+        UserPasswordEncoderInterface $passwordEncoder,
+        FlashBagInterface $flash
     )
     {
         $this->name             = $name;
@@ -50,6 +53,7 @@ class MemberFormPage implements PageServiceInterface
         $this->bag              = $bag;
         $this->twig             = $twig;
         $this->mm               = $mm;
+        $this->flash            = $flash;
         $this->passwordEncoder  = $passwordEncoder;
     }
     public function getName(){ return $this->name;}
@@ -59,33 +63,34 @@ class MemberFormPage implements PageServiceInterface
         $member = new Member();
         $form = $this->formF->create(MemberType::class, $member);
         $form->handleRequest($request);
-        $state=null;
-        if ($form->isSubmitted() && $form->isValid()) {
-            $member = $form->getData();
-            $memberRepo = $this->em->getRepository(Member::class);
-            $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
-            $email = $memberRepo->getByEmail($member->getEmail());
-            if(!$name && !$email){
-                $user = $member->getUser();
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
-                $member->setLocale($request->getlocale());
-                $this->em->persist($user);
-                $this->em->persist($member);
-                $this->em->flush();
-                $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
-                //$code = $this->addToInfoMailingList($member);
-                $this->announceToMattermost($member);
-                $state = 'added';
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $member = $form->getData();
+                $memberRepo = $this->em->getRepository(Member::class);
+                $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
+                $email = $memberRepo->getByEmail($member->getEmail());
+                if(!$name && !$email){
+                    $user = $member->getUser();
+                    $user->setPassword($this->passwordEncoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
+                    $member->setLocale($request->getlocale());
+                    $this->em->persist($user);
+                    $this->em->persist($member);
+                    $this->em->flush();
+                    $this->sendEmailToMember('member', $member, $this->em, $this->mailer);
+                    //$code = $this->addToInfoMailingList($member);
+                    $this->announceToMattermost($member);
+                    $this->flash->add('info', 'member.join.added');
+                } else {
+                    $this->flash->add('info', 'member.join.update');
+                }
             } else {
-                $state = 'update';
+                $this->flash->add('danger', 'member.join.error');
             }
-        } else {
-            $state = 'form_no';
         }
 
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(), 
-            array_merge($parameters,array('form'=>$form->createView(), 'state'=>$state)), 
+            array_merge($parameters,array('form'=>$form->createView())), 
             $response
         );
     }

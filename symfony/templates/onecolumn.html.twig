@@ -9,7 +9,7 @@
             {% for label, messages in app.flashes %}
                 <div class="col-md-12">
                 {% for message in messages %}
-                      <div class="alert alert-info">
+                    <div class="alert alert-{{ label }}">
                          <i class="fas fa-arrow-right"></i>  {{ message|trans }}
                       </div>
                 {% endfor %}

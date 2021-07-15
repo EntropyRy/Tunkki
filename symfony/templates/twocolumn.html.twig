@@ -7,6 +7,15 @@
                 {% include 'menu/menu.html.twig' %}
             </header>
             <div class="col-12 col-md-8">
+            {% for label, messages in app.flashes %}
+                <div class="col-md-12">
+                {% for message in messages %}
+                      <div class="alert alert-{{ label }}">
+                         <i class="fas fa-arrow-right"></i>  {{ message|trans }}
+                      </div>
+                {% endfor %}
+                </div>
+            {% endfor %}
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}

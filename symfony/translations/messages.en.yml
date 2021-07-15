@@ -187,6 +187,11 @@ member:
         requirements3: The board knows who you are
         requirements2: How active you have been lately
         requirements1: You have been organizing at least 3 events in Entropy
+    join:
+        error: There was an error in your request. Check the from by opening it again from the Join us button
+        added: Your information is now saved in our member registry. You'll get an email about it!
+        update: Login to change your membership details. If you cannot do it reach out for the admin or Entropy board
+
 dark: Dark
 bright: Bright
 rsvp:
@@ -194,3 +199,4 @@ rsvp:
     no_user: To be able to RSVP you need to be a member of Entropy and logged in.
     already_rsvpd: You have already RSVPed to this event. We'll send you an email before the event.
     rsvpd_succesfully: RSVP succesfully saved! We'll send ayou an email before the event.
+

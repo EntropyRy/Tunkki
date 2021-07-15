@@ -1,16 +1,5 @@
 {% extends 'twocolumn.html.twig' %}
 {% use 'member/modal.html.twig' %}
 {% block content %}
-{% if state == 'update' %}
-<div>{{'you_can_change_your_member_information_by_loging_in'|trans}}<br>
-    <a class="btn btn-primary" href="/{{'profile_url'|trans}}">{{'please_sign_in'|trans}}</a>
-</div>
-{% elseif state == 'added' %}
-<div>Tietosi on nyt tallennettu jäsenrekisteriimme. Saat vielä asiasta sähköpostin! / Your information is now saved in our member registry. You'll get an email about it!</div>
-{% elseif state == 'no' %}
-<div>Sinuun pitää olla ensin jäsen ennenkuin voit hakea aktiivijäsenyyttä / You have to be member first to apply for active membership</div>
-{% elseif state == 'form_no' %}
-<div>Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen / There was an error in your request. Check the from by opening it again from the Join us button</div>
-{% endif %}
 {{ block('modal')}}
 {% endblock %}
