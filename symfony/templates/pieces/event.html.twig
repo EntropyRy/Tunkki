@@ -53,6 +53,7 @@
     {% endif %}
 {% endblock %}
 {% block event_content %}
+{% set frontpage = false %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
@@ -66,6 +67,7 @@
 {% endif %}
 {% endblock %}
 {% block event_frontpage_content %}
+{% set frontpage = true %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
@@ -146,7 +148,8 @@
             </li>
             {% endif %}
             {% if not inserted %}
-            <li>{{ info.StartTime|date('H:i')}}: <a href="#{{ name }}">{{ name }}</a>
+            <li>{{ info.StartTime|date('H:i')}}: 
+                <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
             {% endif %}
             {% set last = info.StartTime %}
         {% endif %}
