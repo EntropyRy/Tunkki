@@ -57,7 +57,10 @@ class MattermostAuthenticator extends SocialAuthenticator
         // 2) do we have a matching user by email?
         $member = $this->em->getRepository(Member::class)
                     ->findOneBy(['email' => $email]);
-
+        if (!$member) {
+             // fail authentication with a custom error
+             throw new CustomUserMessageAuthenticationException('Email could not be found.');
+        }
         $user = $member->getUser();
         $user->setMattermostId($mattermostUser->getId());
         $this->em->persist($user);
