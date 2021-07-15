@@ -191,6 +191,6 @@ dark: Dark
 bright: Bright
 rsvp:
     receive_info: To be able to receive the location RSVP here
-    no_user: To be able to RSVP you need to be a member of Entropy and logged in. Join us!
-    already_rsvpd: You have already RSVPed to this event
-    rsvpd_succesfully: RSVP succesfully saved!
+    no_user: To be able to RSVP you need to be a member of Entropy and logged in.
+    already_rsvpd: You have already RSVPed to this event. We'll send you an email before the event.
+    rsvpd_succesfully: RSVP succesfully saved! We'll send ayou an email before the event.
