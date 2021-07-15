@@ -399,24 +399,23 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "2.0.3",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "c9622c6820d3ede1e2315a6a377ea1076e421d88"
+                "reference": "ac77408b22cc6c4d0b4947d20a3889be3043566e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/c9622c6820d3ede1e2315a6a377ea1076e421d88",
-                "reference": "c9622c6820d3ede1e2315a6a377ea1076e421d88",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/ac77408b22cc6c4d0b4947d20a3889be3043566e",
+                "reference": "ac77408b22cc6c4d0b4947d20a3889be3043566e",
                 "shasum": ""
             },
             "require": {
                 "php": "~7.1 || ^8.0"
             },
             "conflict": {
-                "doctrine/common": ">2.2,<2.4",
-                "psr/cache": ">=3"
+                "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
                 "alcaeus/mongo-php-adapter": "^1.1",
@@ -425,8 +424,9 @@
                 "mongodb/mongodb": "^1.1",
                 "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
                 "predis/predis": "~1.0",
-                "psr/cache": "^1.0 || ^2.0",
-                "symfony/cache": "^4.4 || ^5.2"
+                "psr/cache": "^1.0 || ^2.0 || ^3.0",
+                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
+                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
             },
             "suggest": {
                 "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
@@ -478,7 +478,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/cache/issues",
-                "source": "https://github.com/doctrine/cache/tree/2.0.3"
+                "source": "https://github.com/doctrine/cache/tree/2.1.0"
             },
             "funding": [
                 {
@@ -494,7 +494,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-05-25T09:43:04+00:00"
+            "time": "2021-07-14T11:22:57+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -3094,16 +3094,16 @@
         },
         {
             "name": "laminas/laminas-diagnostics",
-            "version": "1.9.0",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-diagnostics.git",
-                "reference": "85b7981527f7a1cf6f99988aeb670cc07672b9cc"
+                "reference": "cda82d226bcc9e2008b0ddf0199c24c465bc36c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/85b7981527f7a1cf6f99988aeb670cc07672b9cc",
-                "reference": "85b7981527f7a1cf6f99988aeb670cc07672b9cc",
+                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/cda82d226bcc9e2008b0ddf0199c24c465bc36c7",
+                "reference": "cda82d226bcc9e2008b0ddf0199c24c465bc36c7",
                 "shasum": ""
             },
             "require": {
@@ -3181,7 +3181,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-07-09T10:24:51+00:00"
+            "time": "2021-07-10T15:59:13+00:00"
         },
         {
             "name": "laminas/laminas-zendframework-bridge",
@@ -4481,16 +4481,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.102.0",
+            "version": "3.103.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "159ce36ff04726d7577d3de34ad878278505cd0f"
+                "reference": "e7337a41b55d1d61f39187ae40c880c9feccc7ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/159ce36ff04726d7577d3de34ad878278505cd0f",
-                "reference": "159ce36ff04726d7577d3de34ad878278505cd0f",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/e7337a41b55d1d61f39187ae40c880c9feccc7ad",
+                "reference": "e7337a41b55d1d61f39187ae40c880c9feccc7ad",
                 "shasum": ""
             },
             "require": {
@@ -4605,7 +4605,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.102.0"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.103.0"
             },
             "funding": [
                 {
@@ -4625,7 +4625,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-21T12:17:40+00:00"
+            "time": "2021-07-12T07:30:40+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -11971,16 +11971,16 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.9.0",
+            "version": "v1.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "209eed3c08607dd93c49f877045dfd34ce6179d0"
+                "reference": "775e847613737f55cf06c6a7457f4bcf8ce258e5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/209eed3c08607dd93c49f877045dfd34ce6179d0",
-                "reference": "209eed3c08607dd93c49f877045dfd34ce6179d0",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/775e847613737f55cf06c6a7457f4bcf8ce258e5",
+                "reference": "775e847613737f55cf06c6a7457f4bcf8ce258e5",
                 "shasum": ""
             },
             "require": {
@@ -12016,9 +12016,9 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.9.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.9.1"
             },
-            "time": "2021-06-30T18:42:30+00:00"
+            "time": "2021-07-12T18:59:28+00:00"
         },
         {
             "name": "trikoder/oauth2-bundle",
