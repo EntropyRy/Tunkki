@@ -56,13 +56,13 @@ class Event
      * @ORM\Column(type="text", nullable=true)
      */
     private $Content = "Use these: <br>
-            {{ timetable }} <br> {{ bios }} <br> {{ links }} <br> {{ rsvp }}";
+            {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     private $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
-            {{ timetable }} <br> {{ bios }} <br> {{ links }} <br> {{ rsvp }}";
+            {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

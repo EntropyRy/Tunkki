@@ -133,7 +133,7 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add('externalUrl', null, [
-                    'label' => 'External Url/No add at all if url is empty',
+                    'label' => 'Is the advertisement hosted somewhere else? if this is selected and url is empty it can be used to have the event in events list.',
                     'help'=>'Is the add hosted here?'
                 ])
                 ->add('url', null, [
@@ -151,7 +151,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => 'richhtml', 
                         'required' => false,
                         'ckeditor_context' => 'default',
-                        'help' => 'use special tag {{ timetable }} and {{ bios }} to insert artist infos'
+                        'help' => 'use special tags {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
                     ]);
             }
             $formMapper
@@ -164,7 +164,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => 'richhtml', 
                         'required' => false,
                         'ckeditor_context' => 'default', 
-                        'help' => 'use special tag {{ timetable }} and {{ bios }} to insert artist infos'
+                        'help' => 'käytä erikoista tagejä {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
                     ]);
             }
             $formMapper
