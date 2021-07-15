@@ -190,7 +190,7 @@ member:
     join:
         error: There was an error in your request. Check the from by opening it again from the Join us button
         added: Your information is now saved in our member registry. You'll get an email about it!
-        update: Login to change your membership details. If you cannot do it reach out for the admin or Entropy board
+        update: Looks like you are member already. Login to change your membership details. If you cannot do it reach out for the admin or Entropy board.
 
 dark: Dark
 bright: Bright

@@ -214,7 +214,7 @@ member:
     join:
         error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
         added: Tietosi on nyt tallennettu jäsenrekisteriimme. Saat vielä asiasta sähköpostin!
-        update: Kirjaudu sisään muokataksesi jäsentietojasi jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
+        update: Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi. Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
 You have already requested a reset password email. Please check your email or try again soon.: Olet jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin uudelleen.
 The reset password link is invalid. Please try to reset your password again.: Linkki ei kelpaa. Yritä aloittaa prosessi alusta.
 The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta.

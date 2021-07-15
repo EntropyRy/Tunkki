@@ -81,7 +81,7 @@ class MemberFormPage implements PageServiceInterface
                     $this->announceToMattermost($member);
                     $this->flash->add('info', 'member.join.added');
                 } else {
-                    $this->flash->add('info', 'member.join.update');
+                    $this->flash->add('warning', 'member.join.update');
                 }
             } else {
                 $this->flash->add('danger', 'member.join.error');
