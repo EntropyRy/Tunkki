@@ -142,7 +142,7 @@
             {% set inserted = false %}
             {% if last is defined %}
                 {% if last == info.StartTime %}
-                B2B <a href="#{{ name }}">{{ name }}</a>
+                B2B <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
                 {% set inserted = true %}
                 {% endif %}
             </li>
