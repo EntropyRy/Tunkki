@@ -439,9 +439,6 @@
             "config/packages/dev/debug.yaml"
         ]
     },
-    "symfony/debug-pack": {
-        "version": "v1.0.8"
-    },
     "symfony/dependency-injection": {
         "version": "v4.4.1"
     },
@@ -570,9 +567,6 @@
     "symfony/options-resolver": {
         "version": "v4.4.1"
     },
-    "symfony/orm-pack": {
-        "version": "v1.0.7"
-    },
     "symfony/polyfill-ctype": {
         "version": "v1.13.1"
     },
@@ -608,9 +602,6 @@
     },
     "symfony/process": {
         "version": "v4.4.1"
-    },
-    "symfony/profiler-pack": {
-        "version": "v1.0.4"
     },
     "symfony/property-access": {
         "version": "v4.4.1"
