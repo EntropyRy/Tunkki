@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "572ab41d648fd85e731c249162c04a1a",
+    "content-hash": "de1c62d7c0ddd1b39dde243e3b9e60bc",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -5751,16 +5751,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.33.0",
+            "version": "3.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "9c79e8466dc38fc50c36fc8ef743f491a37bc7a1"
+                "reference": "5538a013dc6c8d712296e11879e2e66fac4d0590"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/9c79e8466dc38fc50c36fc8ef743f491a37bc7a1",
-                "reference": "9c79e8466dc38fc50c36fc8ef743f491a37bc7a1",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/5538a013dc6c8d712296e11879e2e66fac4d0590",
+                "reference": "5538a013dc6c8d712296e11879e2e66fac4d0590",
                 "shasum": ""
             },
             "require": {
@@ -5837,8 +5837,6 @@
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12.84",
                 "phpstan/phpstan-phpunit": "^0.12.16",
-                "phpstan/phpstan-strict-rules": "^0.12.10",
-                "phpstan/phpstan-symfony": "^0.12.21",
                 "psalm/plugin-phpunit": "^0.15",
                 "sensio/framework-extra-bundle": "^6.1",
                 "sonata-project/admin-bundle": "^3.98.2",
@@ -5857,6 +5855,7 @@
                 "friendsofsymfony/rest-bundle": "If you want to expose a ReST API.",
                 "liip/imagine-bundle": "If you want on-the-fly thumbnail generation or image filtering (scale, crop, watermark...).",
                 "nelmio/api-doc-bundle": "If you want to provide OAS documentation for the ReST API.",
+                "rackspace/php-opencloud": "If you want to use OpenStack/Rackspace APIs.",
                 "sonata-project/classification-bundle": "If you want to categorize your media items.",
                 "sonata-project/doctrine-orm-admin-bundle": "If you want to persist entities.",
                 "sonata-project/notification-bundle": "If you want to generate thumbnails asynchronously.",
@@ -5906,7 +5905,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.33.0"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.32.0"
             },
             "funding": [
                 {
@@ -5914,11 +5913,11 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://github.com/core23",
+                    "url": "https://github.com/VincentLanglet",
                     "type": "github"
                 },
                 {
-                    "url": "https://github.com/greg0ire",
+                    "url": "https://github.com/core23",
                     "type": "github"
                 },
                 {
@@ -5926,7 +5925,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-08T07:46:29+00:00"
+            "time": "2021-06-13T16:37:32+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",

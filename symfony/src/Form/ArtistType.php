@@ -47,7 +47,7 @@ class ArtistType extends AbstractType
                 ],
                 ],['edit' => 'inline']
             )
-            ->add('picture', MediaType::class, [
+            ->add('Picture', MediaType::class, [
                     'label' => 'artist.form.promo_picture',
                     'provider' => 'sonata.media.provider.image',
                     'context' => 'artist',

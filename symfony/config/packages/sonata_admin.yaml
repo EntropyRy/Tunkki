@@ -11,7 +11,7 @@ sonata_admin:
         html5_validate: true # does use html5 validation
         pager_links: 5 # pager max links to display
         lock_protection: true
-        title_mode: single_image
+        logo_content: icon
     templates:
         user_block: 'admin/user_block.html.twig'
     dashboard:

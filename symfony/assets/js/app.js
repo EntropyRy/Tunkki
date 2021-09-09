@@ -4,7 +4,7 @@ import '../css/app.css';
 import '../css/dark.scss';
 
 import 'bootstrap';
-import bsCustomFileInput from 'bs-custom-file-input'
+import bsCustomFileInput from 'bs-custom-file-input';
 import a2lix_lib from '@a2lix/symfony-collection/src/a2lix_sf_collection';
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
