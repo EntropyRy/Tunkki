@@ -14,6 +14,7 @@ sonata_admin:
         logo_content: icon
     templates:
         user_block: 'admin/user_block.html.twig'
+        layout: 'admin/logo_block.html.twig'
     dashboard:
         blocks:
             - { position: right, type: entropy_tunkki.block.bookings}
