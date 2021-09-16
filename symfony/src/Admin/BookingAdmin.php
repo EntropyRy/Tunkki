@@ -271,6 +271,7 @@ class BookingAdmin extends AbstractAdmin
                         'required' => false,
                         'help' => 'If booking does not need to be billed: leave this empty'
                     ])
+                    ->add('reasonForDiscount', null, ['help' => 'If the actual price is discounted, let us know why'])
                 ->end()
                 ->with('Events', array('class' => 'col-md-12'))
                     ->add('billableEvents', CollectionType::class, array('required' => false, 'by_reference' => false),

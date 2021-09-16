@@ -207,6 +207,11 @@ class Booking
      */
     private $rewards;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $reasonForDiscount;
+
 
 
     /**
@@ -885,6 +890,18 @@ class Booking
             $this->rewards->removeElement($reward);
             $reward->removeBooking($this);
         }
+
+        return $this;
+    }
+
+    public function getReasonForDiscount(): ?string
+    {
+        return $this->reasonForDiscount;
+    }
+
+    public function setReasonForDiscount(?string $reasonForDiscount): self
+    {
+        $this->reasonForDiscount = $reasonForDiscount;
 
         return $this;
     }
