@@ -135,6 +135,7 @@ block:
 menu:
     logon_to: Kirjaudu palveluun
 event:
+    not_public: ei julkinen
     form:
         sign_up:
             artist: Artisti

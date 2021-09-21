@@ -110,6 +110,7 @@ block:
 menu:
     logon_to: Log on to
 event:
+    not_public: not public
     form:
         sign_up:
             artist: Artist

@@ -46,6 +46,9 @@
                         {{ attribute(event, name_attr) }}
                         </a>
                     {% endif %}
+                    {% if not event.published %}
+                        - {{'event.not_public'|trans}}
+                    {% endif %}
                 </span>
                 <span class="border-bottom flex-fill">
                     {% if event.epics %}
