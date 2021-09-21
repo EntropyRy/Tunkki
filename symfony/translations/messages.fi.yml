@@ -185,6 +185,7 @@ artist:
     no_artist_profile: Ei yhtään profiilia
     information: Perustiedot
     profiles: Artistiprofiilit
+    list: Artisti listaus
     random:
         preview: Yksi satunnainen artistiesittely
     form:

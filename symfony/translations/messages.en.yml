@@ -161,6 +161,7 @@ artist:
     hardware: Hardware you use
     profiles: Artist Profiles
     information: Artist information
+    list: Artsit list
     random:
         preview: One random artist preview
     form:

@@ -211,6 +211,13 @@ services:
         tags:
             - { name: sonata.block, alias: bookingblock }
         public: true
+    entropy.block.artist_list:
+        class: App\Block\ArtistListBlock
+        arguments:
+            - "@twig"
+        tags:
+            - { name: sonata.block, alias: artistlistblock }
+        public: true
     entropy.block.compensations:
         class: App\Block\Compensations
         arguments:
