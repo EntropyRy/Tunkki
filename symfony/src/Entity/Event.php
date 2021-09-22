@@ -395,10 +395,21 @@ body {
     public function getAbstract($lang)
     {
         if ($lang=='fi'){
-            return u(html_entity_decode(strip_tags($this->Sisallys)))->truncate(150,'..');
+            $abstract = $this->removeTwigTags($this->Sisallys);
+
         } else {
-            return u(html_entity_decode(strip_tags($this->Content)))->truncate(150,'..');
+            $abstract = $this->removeTwigTags($this->Content);
         }
+        return u(html_entity_decode(strip_tags($abstract)))->truncate(150,'..');
+    }
+    protected function removeTwigTags($message)
+    {
+        $abstract = str_replace("{{ bios }}", "",$message);
+        $abstract = str_replace("{{ timetable }}", "",$abstract);
+        $abstract = str_replace("{{ vj_bios }}", "",$abstract);
+        $abstract = str_replace("{{ rsvp }}", "",$abstract);
+        $abstract = str_replace("{{ links }}", "",$abstract);
+        return $abstract;
     }
     public function getNameByLang($lang)
     {
