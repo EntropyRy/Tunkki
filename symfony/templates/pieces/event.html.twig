@@ -73,12 +73,10 @@
     '{{ timetable }}': block('timetable'), 
     '{{ bios }}':'',
     '{{ vj_bios }}':'',
-    '{{ links }}':block('links'), 
+    '{{ links }}':'', 
     '{{ rsvp }}':block('RSVP') 
 })|raw }}
-{% if '{{ links }}' not in attribute(event,content_attr) %}
-    {{ block('links') }}
-{% endif %}
+{{ block('links') }}
 {% endblock %}
 {% block event_media %}
 {% set name_attr = 'name_attribute'|trans %}
