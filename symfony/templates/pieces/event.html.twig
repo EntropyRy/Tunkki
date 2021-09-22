@@ -245,7 +245,12 @@
 {% endblock %}
 
 {% block artist_event_info %}
-<h3>{{ name }} {% if artist.type == 'DJ' %}{% if info is defined %}@ {{info.StartTime|date('H:i')}}{% endif %}{% endif %}</h3>
+{% set content_attr = 'content_attribute'|trans %}
+{% set show = true %}
+{% if event is defined and '{{ timetable }}' not in attribute(event,content_attr) %}
+    {% set show = false %}
+{% endif %}
+<h3>{{ name }} {% if artist.type == 'DJ' %}{% if info is defined and show %}@ {{info.StartTime|date('H:i')}}{% endif %}{% endif %}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
