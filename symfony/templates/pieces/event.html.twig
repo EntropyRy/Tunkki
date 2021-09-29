@@ -54,6 +54,7 @@
 {% endblock %}
 {% block event_content %}
 {% set frontpage = false %}
+{% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
@@ -65,9 +66,11 @@
 {% if '{{ links }}' not in attribute(event,content_attr) %}
     {{ block('links') }}
 {% endif %}
+{% endapply %}
 {% endblock %}
 {% block event_frontpage_content %}
 {% set frontpage = true %}
+{% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
@@ -77,6 +80,7 @@
     '{{ rsvp }}':block('RSVP') 
 })|raw }}
 {{ block('links') }}
+{% endapply %}
 {% endblock %}
 {% block event_media %}
 {% set name_attr = 'name_attribute'|trans %}
@@ -127,6 +131,7 @@
 {% endif %}
 {% endblock %}
 {% block timetable %}
+{% if event.eventArtistInfos %}
 <ul>
 {% for info in event.eventArtistInfos %}
     {% set name = info.artist.name %}
@@ -154,6 +159,7 @@
     {% endif %}
 {% endfor %}
 </ul>
+{% endif %}
 {% endblock %}
 
 {% block vj_bios %}
