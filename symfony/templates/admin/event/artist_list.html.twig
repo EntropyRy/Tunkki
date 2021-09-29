@@ -39,8 +39,9 @@
                     <td>
                         <span class="">
                             {% if info.StartTime is not null %}
-                            {{ info.StartTime|date('H:i') }}
+                            {{ info.StartTime|date('H:i') }}:
                             {% endif %}
+                            {{ info.freeWord }}
                         </span>
                     </td>
                 </tr>
@@ -66,7 +67,7 @@
             <th scope="col">Genre</th>
             <th scope="col">Hardware</th>
             <th scope="col">links</th>
-            <th scope="col">Start Time</th>
+            <th scope="col">Free word</th>
         </tr>
     </thead>
     <tbody>
