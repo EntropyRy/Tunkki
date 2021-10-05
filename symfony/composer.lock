@@ -4523,16 +4523,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.105.1",
+            "version": "3.105.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "beca7db240e836b0034c2d5ff141d5a8d5b1e857"
+                "reference": "15aff9ddee7a1cb2da86f27b134397ae148a2491"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/beca7db240e836b0034c2d5ff141d5a8d5b1e857",
-                "reference": "beca7db240e836b0034c2d5ff141d5a8d5b1e857",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/15aff9ddee7a1cb2da86f27b134397ae148a2491",
+                "reference": "15aff9ddee7a1cb2da86f27b134397ae148a2491",
                 "shasum": ""
             },
             "require": {
@@ -4647,7 +4647,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.105.1"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.105.2"
             },
             "funding": [
                 {
@@ -4667,7 +4667,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-08T08:05:24+00:00"
+            "time": "2021-10-05T17:45:25+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -5196,20 +5196,20 @@
         },
         {
             "name": "sonata-project/doctrine-extensions",
-            "version": "1.13.1",
+            "version": "1.14.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/sonata-doctrine-extensions.git",
-                "reference": "6d41a561f066d6f055bf10dd2a3df04def8eb0d4"
+                "reference": "d54075e953c07b6b5ce05bc2770fdcfe62fc4ba5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/6d41a561f066d6f055bf10dd2a3df04def8eb0d4",
-                "reference": "6d41a561f066d6f055bf10dd2a3df04def8eb0d4",
+                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/d54075e953c07b6b5ce05bc2770fdcfe62fc4ba5",
+                "reference": "d54075e953c07b6b5ce05bc2770fdcfe62fc4ba5",
                 "shasum": ""
             },
             "require": {
-                "doctrine/dbal": "^2.6",
+                "doctrine/dbal": "^2.13 || ^3.1",
                 "doctrine/persistence": "^1.3.6 || ^2.0",
                 "php": "^7.3 || ^8.0"
             },
@@ -5276,7 +5276,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/sonata-doctrine-extensions/issues",
-                "source": "https://github.com/sonata-project/sonata-doctrine-extensions/tree/1.13.1"
+                "source": "https://github.com/sonata-project/sonata-doctrine-extensions/tree/1.14.0"
             },
             "funding": [
                 {
@@ -5292,11 +5292,11 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://github.com/wbloszyk",
+                    "url": "https://github.com/greg0ire",
                     "type": "github"
                 }
             ],
-            "time": "2021-07-19T23:45:55+00:00"
+            "time": "2021-10-05T15:19:11+00:00"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -5830,16 +5830,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.33.1",
+            "version": "3.34.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "9dd4e66a9621f707c5a7ff3617b347ee1fdf64e7"
+                "reference": "21b198ab886f017473c41cb31e742dee92b3c9b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/9dd4e66a9621f707c5a7ff3617b347ee1fdf64e7",
-                "reference": "9dd4e66a9621f707c5a7ff3617b347ee1fdf64e7",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/21b198ab886f017473c41cb31e742dee92b3c9b0",
+                "reference": "21b198ab886f017473c41cb31e742dee92b3c9b0",
                 "shasum": ""
             },
             "require": {
@@ -5928,6 +5928,7 @@
                 "sonata-project/seo-bundle": "^2.5",
                 "symfony/browser-kit": "^4.4 || ^5.2",
                 "symfony/http-client": "^4.4 || ^5.2",
+                "symfony/messenger": "^4.4 || ^5.3",
                 "symfony/phpunit-bridge": "^5.2",
                 "symfony/security-csrf": "^4.4 || ^5.2",
                 "vimeo/psalm": "^4.7.2"
@@ -5941,6 +5942,7 @@
                 "sonata-project/notification-bundle": "If you want to generate thumbnails asynchronously.",
                 "sonata-project/seo-bundle": "If you're sensible to SEO.",
                 "symfony/http-client": "If you want to load external content.",
+                "symfony/messenger": "If you want to generate thumbnails asynchronously.",
                 "symfony/monolog-bundle": "If you want to log exceptions produced when dealing with images.",
                 "tilleuls/ckeditor-sonata-media-bundle": "If you want to use CKEditor.",
                 "twig/extra-bundle": "Auto configures the Twig Intl extension."
@@ -5972,7 +5974,7 @@
                 }
             ],
             "description": "Symfony SonataMediaBundle",
-            "homepage": "https://sonata-project.org/bundles/media",
+            "homepage": "https://docs.sonata-project.org/projects/SonataMediaBundle",
             "keywords": [
                 "dailymotion",
                 "file",
@@ -5985,7 +5987,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.33.1"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.34.0"
             },
             "funding": [
                 {
@@ -6005,7 +6007,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-09-10T12:09:54+00:00"
+            "time": "2021-10-05T15:20:13+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
