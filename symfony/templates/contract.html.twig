@@ -52,7 +52,8 @@
 <div class="consent_form">
 {{ form_start(form) }}
 {{ form_widget(form) }}
-<!--<div>Actual Total: <span class="pull-right">{#{ rent['actualTotal'] }#}€</span></div> -->
+{{ form_end(form) }}
+<div>{{'Total rent price'|trans}}: <span class="pull-right">{{ bookingdata.actualTotal}}€</span></div>
 </div>
 </div>
 {% endif %}
