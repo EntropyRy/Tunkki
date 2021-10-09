@@ -2118,16 +2118,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "1.4.1",
+            "version": "1.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d"
+                "reference": "136a635e2b4a49b9d79e9c8fee267ffb257fdba0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/8e7d04f1f6450fef59366c399cfad4b9383aa30d",
-                "reference": "8e7d04f1f6450fef59366c399cfad4b9383aa30d",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/136a635e2b4a49b9d79e9c8fee267ffb257fdba0",
+                "reference": "136a635e2b4a49b9d79e9c8fee267ffb257fdba0",
                 "shasum": ""
             },
             "require": {
@@ -2139,7 +2139,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -2156,9 +2156,24 @@
             ],
             "authors": [
                 {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
                     "name": "Michael Dowling",
                     "email": "mtdowling@gmail.com",
                     "homepage": "https://github.com/mtdowling"
+                },
+                {
+                    "name": "Tobias Nyholm",
+                    "email": "tobias.nyholm@gmail.com",
+                    "homepage": "https://github.com/Nyholm"
+                },
+                {
+                    "name": "Tobias Schultze",
+                    "email": "webmaster@tubo-world.de",
+                    "homepage": "https://github.com/Tobion"
                 }
             ],
             "description": "Guzzle promises library",
@@ -2167,9 +2182,23 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/1.4.1"
+                "source": "https://github.com/guzzle/promises/tree/1.5.0"
             },
-            "time": "2021-03-07T09:25:29+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/Nyholm",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/guzzlehttp/promises",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2021-10-07T13:05:22+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -4523,16 +4552,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "3.105.2",
+            "version": "3.105.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "15aff9ddee7a1cb2da86f27b134397ae148a2491"
+                "reference": "57255c66d074a0c99997de88b01d0f531e111ddf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/15aff9ddee7a1cb2da86f27b134397ae148a2491",
-                "reference": "15aff9ddee7a1cb2da86f27b134397ae148a2491",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/57255c66d074a0c99997de88b01d0f531e111ddf",
+                "reference": "57255c66d074a0c99997de88b01d0f531e111ddf",
                 "shasum": ""
             },
             "require": {
@@ -4647,7 +4676,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.105.2"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/3.105.3"
             },
             "funding": [
                 {
@@ -4667,7 +4696,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-05T17:45:25+00:00"
+            "time": "2021-10-07T17:33:11+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -5830,16 +5859,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.34.0",
+            "version": "3.34.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "21b198ab886f017473c41cb31e742dee92b3c9b0"
+                "reference": "d959e85b3d5529357e08f5674ba6f0b11eedb9ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/21b198ab886f017473c41cb31e742dee92b3c9b0",
-                "reference": "21b198ab886f017473c41cb31e742dee92b3c9b0",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/d959e85b3d5529357e08f5674ba6f0b11eedb9ab",
+                "reference": "d959e85b3d5529357e08f5674ba6f0b11eedb9ab",
                 "shasum": ""
             },
             "require": {
@@ -5987,7 +6016,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.34.0"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.34.2"
             },
             "funding": [
                 {
@@ -6007,7 +6036,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-05T15:20:13+00:00"
+            "time": "2021-10-08T07:34:41+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
