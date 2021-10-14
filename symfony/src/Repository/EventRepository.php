@@ -25,12 +25,14 @@ class EventRepository extends ServiceEntityRepository
     
     public function getFutureEvents()
     {
-        $now = new \DateTime('now-8hours');
+        $now = new \DateTime();
         return $this->createQueryBuilder('e')
             ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
-            ->setParameter('date', $now)
+            ->andWhere('e.publishDate < :pubDate')
+            ->setParameter('date', $now->modify('-8hours'))
+            ->setParameter('pubDate', $now)
             ->setParameter('type', 'Announcement')
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'ASC')

@@ -181,13 +181,13 @@ final class EventAdmin extends AbstractAdmin
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
                 ->add('published', null, ['help' => 'Only logged in users can see if not published'])
-                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
-                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'If this needs to be released at certain time',
                     'required' => false
                     ]
                 )
+                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
+                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->add('externalUrl', null, [
                     'label' => 'External Url/No addvert at all if url is empty',
                     'help'=>'Is the add hosted here?'
