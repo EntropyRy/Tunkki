@@ -98,10 +98,15 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function findEventsByNotType($type)
+    public function findPublicEventsByNotType($type)
     {
+        $now = new \DateTime();
         return $this->createQueryBuilder('r')
             ->andWhere('r.type != :val')
+            ->andWhere('r.published = :pub')
+            ->andWhere('r.publishDate < :pubDate')
+            ->setParameter('pub', true)
+            ->setParameter('pubDate', $now)
             ->setParameter('val', $type)
             ->orderBy('r.EventDate', 'DESC')
             ->getQuery()
