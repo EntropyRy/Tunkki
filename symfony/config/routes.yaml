@@ -19,16 +19,33 @@ entropy_event_slug:
     controller: App\Controller\EventController:oneSlug
     requirements:
         year: '\d+'
+entropy_event_nakki_sign_up:
+    path:     /{year}/{slug}/nakkikone/{id}/signup
+    controller: App\Controller\EventSignUpController:nakkiSignUp
+    requirements:
+        year: '\d+'
+        id: '\d+'
+entropy_event_nakki_cancel:
+    path:     /{year}/{slug}/nakkikone/{id}/cancel
+    controller: App\Controller\EventSignUpController:nakkiCancel
+    requirements:
+        year: '\d+'
+        id: '\d+'
+entropy_event_slug_nakkikone:
+    path:     /{year}/{slug}/nakkikone
+    controller: App\Controller\EventSignUpController:nakkikone
+    requirements:
+        year: '\d+'
 entropy_event_slug_artist_signup:
     path: 
         en: /{year}/{slug}/signup
         fi: /{year}/{slug}/ilmottautuminen
-    controller: App\Controller\EventController:artistSignUp
+    controller: App\Controller\EventSignUpController:artistSignUp
     requirements:
         year: '\d+'
 entropy_event_rsvp:
     path: /{year}/{slug}/rsvp
-    controller: App\Controller\EventController:RSVP
+    controller: App\Controller\EventSignUpController:RSVP
     requirements:
         year: '\d+'
 entropy_user_dashboard:

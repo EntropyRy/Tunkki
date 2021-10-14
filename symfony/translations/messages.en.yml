@@ -78,6 +78,7 @@ no_artsit_create_one: You don't have artist profile. Create one!
 bio_attribute: BioEn
 succesfully_signed_up_for_the_party: Succesfully signed up for the party!
 all_artists_signed_up_create_one: All of your artist have been signed up for this party. Create new one?
+this_artist_signed_up_already: This artis has been signed up already.
 duplicate_artist_found: Duplicate artist name found!
 widget_label_binary_content: Binary content
 widget_label_unlink: Unlink

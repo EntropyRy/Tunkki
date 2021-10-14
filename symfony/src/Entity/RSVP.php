@@ -26,7 +26,7 @@ class RSVP
 
     /**
      * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="RSVPs")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $member;
 

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\NakkiRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -33,6 +35,32 @@ class Nakki
      */
     private $endAt;
 
+    /**
+     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="nakki", orphanRemoval=true)
+     */
+    private $nakkiBookings;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="nakkis")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $event;
+
+    /**
+     * @ORM\Column(type="dateinterval")
+     */
+    private $nakkiInterval;
+
+    public function __construct()
+    {
+        $this->nakkiBookings = new ArrayCollection();
+        $this->nakkiInterval = new \DateInterval('PT1H');;
+    }
+
+    public function __toString()
+    {
+        return $this->definition->getNameEn();
+    }
     public function getId(): ?int
     {
         return $this->id;
@@ -70,6 +98,60 @@ class Nakki
     public function setEndAt(\DateTimeImmutable $endAt): self
     {
         $this->endAt = $endAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NakkiBooking[]
+     */
+    public function getNakkiBookings(): Collection
+    {
+        return $this->nakkiBookings;
+    }
+
+    public function addNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if (!$this->nakkiBookings->contains($nakkiBooking)) {
+            $this->nakkiBookings[] = $nakkiBooking;
+            $nakkiBooking->setNakki($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
+            // set the owning side to null (unless already changed)
+            if ($nakkiBooking->getNakki() === $this) {
+                $nakkiBooking->setNakki(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getNakkiInterval(): ?\DateInterval
+    {
+        return $this->nakkiInterval;
+    }
+
+    public function setNakkiInterval(\DateInterval $nakkiInterval): self
+    {
+        $this->nakkiInterval = $nakkiInterval;
 
         return $this;
     }

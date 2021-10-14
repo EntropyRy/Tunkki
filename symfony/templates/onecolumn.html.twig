@@ -11,6 +11,7 @@
                 {% for message in messages %}
                     <div class="alert alert-{{ label }}">
                          <i class="fas fa-arrow-right"></i>  {{ message|trans }}
+                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true" aria-label="Close">×</button>
                       </div>
                 {% endfor %}
                 </div>

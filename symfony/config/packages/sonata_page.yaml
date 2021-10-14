@@ -55,6 +55,7 @@ sonata_page:
         - entropy_artist_delete
         - entropy_public_artist
         - entropy_event_slug_artist_signup
+        - entropy_event_slug_nakkikone
 
     ignore_uri_patterns:
         - ^/admin\/   

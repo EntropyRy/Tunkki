@@ -175,11 +175,17 @@ class Member
      */
     private $RSVPs;
 
+    /**
+     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="member")
+     */
+    private $nakkiBookings;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
         $this->doorLogs = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
+        $this->nakkiBookings = new ArrayCollection();
     }
 
     /**
@@ -746,6 +752,36 @@ class Member
             // set the owning side to null (unless already changed)
             if ($rSVP->getMember() === $this) {
                 $rSVP->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NakkiBooking[]
+     */
+    public function getNakkiBookings(): Collection
+    {
+        return $this->nakkiBookings;
+    }
+
+    public function addNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if (!$this->nakkiBookings->contains($nakkiBooking)) {
+            $this->nakkiBookings[] = $nakkiBooking;
+            $nakkiBooking->setMember($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
+            // set the owning side to null (unless already changed)
+            if ($nakkiBooking->getMember() === $this) {
+                $nakkiBooking->setMember(null);
             }
         }
 

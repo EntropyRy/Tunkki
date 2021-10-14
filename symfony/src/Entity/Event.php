@@ -141,6 +141,41 @@ class Event
      */
     private $rsvpSystemEnabled = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Nakki::class, mappedBy="event", orphanRemoval=true)
+     */
+    private $nakkis;
+
+    /**
+     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="event", orphanRemoval=true)
+     */
+    private $nakkiBookings;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $NakkikoneEnabled = false;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $nakkiInfoFi = 
+        '
+        <h5>Yleisinfo</h5>
+        <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
+        <h6>Saat ilmaisen sisäänpääsyn</h6>
+        ';
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $nakkiInfoEn = 
+        '
+        <h5>General information</h5>
+        <p>Choose at least two Nakkis that are 1 hour length and build up or take down</p>
+        <h6>You\'ll get free entry to the party</h6>
+        ';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -295,6 +330,8 @@ body {
 */";
 		$this->eventArtistInfos = new ArrayCollection();
   $this->RSVPs = new ArrayCollection();
+  $this->nakkis = new ArrayCollection();
+  $this->nakkiBookings = new ArrayCollection();
     }
 
     public function getType(): ?string
@@ -512,6 +549,102 @@ body {
     public function setRsvpSystemEnabled(?bool $rsvpSystemEnabled): self
     {
         $this->rsvpSystemEnabled = $rsvpSystemEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Nakki[]
+     */
+    public function getNakkis(): Collection
+    {
+        return $this->nakkis;
+    }
+
+    public function addNakki(Nakki $nakki): self
+    {
+        if (!$this->nakkis->contains($nakki)) {
+            $this->nakkis[] = $nakki;
+            $nakki->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNakki(Nakki $nakki): self
+    {
+        if ($this->nakkis->removeElement($nakki)) {
+            // set the owning side to null (unless already changed)
+            if ($nakki->getEvent() === $this) {
+                $nakki->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|NakkiBooking[]
+     */
+    public function getNakkiBookings(): Collection
+    {
+        return $this->nakkiBookings;
+    }
+
+    public function addNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if (!$this->nakkiBookings->contains($nakkiBooking)) {
+            $this->nakkiBookings[] = $nakkiBooking;
+            $nakkiBooking->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
+    {
+        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
+            // set the owning side to null (unless already changed)
+            if ($nakkiBooking->getEvent() === $this) {
+                $nakkiBooking->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getNakkikoneEnabled(): ?bool
+    {
+        return $this->NakkikoneEnabled;
+    }
+
+    public function setNakkikoneEnabled(bool $NakkikoneEnabled): self
+    {
+        $this->NakkikoneEnabled = $NakkikoneEnabled;
+
+        return $this;
+    }
+
+    public function getNakkiInfoFi(): ?string
+    {
+        return $this->nakkiInfoFi;
+    }
+
+    public function setNakkiInfoFi(?string $nakkiInfoFi): self
+    {
+        $this->nakkiInfoFi = $nakkiInfoFi;
+
+        return $this;
+    }
+
+    public function getNakkiInfoEn(): ?string
+    {
+        return $this->nakkiInfoEn;
+    }
+
+    public function setNakkiInfoEn(?string $nakkiInfoEn): self
+    {
+        $this->nakkiInfoEn = $nakkiInfoEn;
 
         return $this;
     }

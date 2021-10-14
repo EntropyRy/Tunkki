@@ -33,8 +33,7 @@ class EventArtistInfo
     private $Event;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="eventArtistInfos")
-     * @ORM\JoinColumn(nullable=true, onDelete="SET NULL")
+     * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="eventArtistInfos", cascade={"persist"})
      */
     private $Artist;
 

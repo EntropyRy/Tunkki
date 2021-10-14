@@ -62,20 +62,11 @@ footer {
     margin-right: 5px;
     margin-top: -3px;
 }
-.checkbox label, .radio label {
+/*.checkbox label, .radio label {
     font-weight: 700;
     margin-left: -20px;
-}
+}*/
 @media print {
    .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
    .no-print, .no-print * { display: none; }
 }
-body .sonata-page-top-bar {
-    position: fixed;
-    width: auto;
-    top: 40%;
-    opacity: 0.8;
-    z-index: 300;
-    background: #1a1a1a;
-}
-

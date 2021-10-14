@@ -376,6 +376,8 @@ services:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Event }
         calls:
             - [addChild, ['@admin.event_artist_info', 'Event']]
+            - [addChild, ['@entropy.admin.nakki', 'event']]
+            - [addChild, ['@entropy.admin.nakki_booking', 'event']]
         public: true
 
     admin.event_artist_info:
@@ -409,7 +411,38 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: RSVPs }
         public: true
+    entropy.admin.nakki_definition:
+        class: App\Admin\NakkiDefinitionAdmin
+        arguments: [~, App\Entity\NakkiDefinition, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Names }
+        public: true
+    entropy.admin.nakki:
+        class: App\Admin\NakkiAdmin
+        arguments:
+            - ~
+            - App\Entity\Nakki
+            - App\Controller\NakkiAdminController 
+            - "@entropy_tunkki.helper.mattermost"
+            - "@security.token_storage"
+            - "@doctrine.orm.entity_manager"
+            - "@session.flash_bag"
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakkis }
+        public: true
+    entropy.admin.nakki_booking:
+        class: App\Admin\NakkiBookingAdmin
+        arguments: [~, App\Entity\NakkiBooking, App\Controller\NakkiBookingAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Bookings }
+        public: true
     oauth.authcode.listener:
         class: App\EventListener\AuthorizationCodeListener
         tags:
             - { name: kernel.event_listener, event: 'trikoder.oauth2.authorization_request_resolve', method: onAuthorizationRequestResolve }
+    entropy.param_converter.event_year_converter:
+        class: App\ParamConverter\EventYearParamConverter
+        tags:
+            - { name: request.param_converter, converter: event_year_converter }
+        arguments:
+            - "@doctrine"

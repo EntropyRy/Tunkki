@@ -20,38 +20,87 @@ class NakkiDefinition
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private $nameFi;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $nameEn;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $description;
+    private $DescriptionFi;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $DescriptionEn;
 
     public function getId(): ?int
     {
         return $this->id;
     }
-
-    public function getName(): ?string
+    public function __toString() 
     {
-        return $this->name;
+        return $this->nameEn;
+    }
+    public function getName($lang): ?string
+    {
+        $func = 'name'. ucfirst($lang);
+        return $this->{$func};
     }
 
-    public function setName(string $name): self
+    public function getDescription($lang): ?string
     {
-        $this->name = $name;
+        $func = 'Description'. ucfirst($lang);
+        return $this->{$func};
+    }
+
+    public function getNameFi(): ?string
+    {
+        return $this->nameFi;
+    }
+
+    public function setNameFi(string $nameFi): self
+    {
+        $this->nameFi = $nameFi;
 
         return $this;
     }
 
-    public function getDescription(): ?string
+    public function getNameEn(): ?string
     {
-        return $this->description;
+        return $this->nameEn;
     }
 
-    public function setDescription(string $description): self
+    public function setNameEn(string $nameEn): self
     {
-        $this->description = $description;
+        $this->nameEn = $nameEn;
+
+        return $this;
+    }
+
+    public function getDescriptionFi(): ?string
+    {
+        return $this->DescriptionFi;
+    }
+
+    public function setDescriptionFi(string $DescriptionFi): self
+    {
+        $this->DescriptionFi = $DescriptionFi;
+
+        return $this;
+    }
+
+    public function getDescriptionEn(): ?string
+    {
+        return $this->DescriptionEn;
+    }
+
+    public function setDescriptionEn(string $DescriptionEn): self
+    {
+        $this->DescriptionEn = $DescriptionEn;
 
         return $this;
     }

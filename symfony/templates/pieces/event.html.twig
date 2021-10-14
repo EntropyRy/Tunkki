@@ -2,11 +2,7 @@
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head') }}
     {% else %}
-        {% if event.url and not event.externalUrl %}
-        <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
-        {% else %}
-        <a href="{{ path('entropy_event',{'id': event.id}) }}">
-        {% endif %}
+        <a href="{{ block('event_path') }}">
         {{ block('event_head') }}
         </a>
     {% endif %}
@@ -27,7 +23,14 @@
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
-    {{ block('event_name') }}
+    <h3>{{ block('event_name') }}</h3>
+{% endblock %}
+{% block event_path %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% else %}
+        {{ path('entropy_event',{'id': event.id}) }}
+    {% endif %}
 {% endblock %}
 {% block published_and_updated %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
@@ -37,15 +40,14 @@
     {% endif %}
 {% endblock %}
 {% block event_head %}
-    {{ block('event_name') }}
+    <h3>{{ block('event_name') }}</h3>
     {{ block('event_banner_media') }}
 {% endblock %}
 {% block event_name %}
 {% set name_attr = 'name_attribute'|trans %}
-<h3>{{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
-    {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
-    {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
-</h3>
+  {{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
+  {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
+  {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
 {% endblock %}
 {% block event_banner_media %}
     {% if event.picture is not null and event.picturePosition == 'banner' %}
@@ -106,25 +108,39 @@
 {% block links %}
 {% if event.attachment %}
 <div class="mb-2">
-<i class="fas fa-link"></i> <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">{{ event.attachment.name }}</a>
+<a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">
+    <i class="fas fa-link"></i> 
+    {{ event.attachment.name }}
+</a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls.0 is defined %}
+{% if event.epics is not empty or event.links.urls.0 is defined or event.NakkikoneEnabled%}
 <div>
 <hr>
     {% for keys in event.links %}
         {% for url in keys %}
         <span class="pr-2">
-            <i class="{{ url.icon }}"></i>
-            <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} 
-                href="{{ url.url }}">{{ url.title|trans }}</a>
+            <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ url.url }}">
+                <i class="{{ url.icon }}"></i>
+                {{ url.title|trans }}
+            </a>
         </span>
         {% endfor %}
     {% endfor %}
     {% if event.epics %}
     <span class="pr-2">
-        <i class="fas fa-image"></i>
-        <a href="{{ event.epics }}">Epics</a>
+        <a href="{{ event.epics }}">
+            <i class="fas fa-image"></i>
+            Epics
+        </a>
+    </span>
+    {% endif %}
+    {% if event.NakkikoneEnabled and event.url and app.user %}
+    <span class="pr-2">
+        <a href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+            {{"fas fa-tasks"|parse_icon }}
+            Nakkikone
+        </a>
     </span>
     {% endif %}
 </div>

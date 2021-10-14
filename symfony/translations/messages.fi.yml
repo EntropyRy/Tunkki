@@ -13,6 +13,16 @@ fi: Suomi
 en: Englanti
 
 # Entropy.fi
+Nakki reserved!: Nakki varattu!
+Nakki cancelled!: Nakki peruttu!
+Nakkikone is not enabled!: Nakkikone ei ole vielä julkaistu, jotta sitä voisi käyttää.
+Reserve: Varaa
+You cannot reserve overlapping Nakkis!: Et voi varata päällekkäisiä Nakkeja!
+Cancel: Peruuta
+Your Nakkis: Valitsemasi Nakit
+Select Nakki: Valitse Nakki
+Nakki descriptions: Nakkien kuvaukset
+Reserve your Nakki: Varaa Nakkisi
 recording: Nauhoite
 entropy_user_dashboard: Yleiskatsaus
 page_edited: Sivua muutettu!
@@ -104,11 +114,13 @@ no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnist
 bio_attribute: Bio
 succesfully_signed_up_for_the_party: Onnistuneesti ilmottauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa. Haluatko luoda uuden?
+this_artist_signed_up_already: Tämä artisti on jo ilmoitettu tapahtumaan.
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
 Locale: Kieli
 Message: Viesti
 logged_in_as: Olet kirjautuneena käyttäjänä
+Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen kuvauksen
 block:
     stats:
         name: Statistiikkaa

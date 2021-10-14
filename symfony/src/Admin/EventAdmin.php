@@ -47,10 +47,16 @@ final class EventAdmin extends AbstractAdmin
                'uri' => $admin->generateUrl('artistList', ['id' => $id])
             ]);
             if ($admin->getSubject()->getRsvpSystemEnabled()){
-            $menu->addChild('RSVPs', [
-               'uri' => $admin->generateUrl('rsvp', ['id' => $id])
-            ]);
+                $menu->addChild('RSVPs', [
+                   'uri' => $admin->generateUrl('rsvp', ['id' => $id])
+                ]);
             }
+            $menu->addChild('Nakkikone', [
+               'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
+            ]);
+            $menu->addChild('Nakit', [
+               'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki_booking.list', ['id' => $id])
+            ]);
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
@@ -126,7 +132,6 @@ final class EventAdmin extends AbstractAdmin
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
                 ->add('published', null, ['help' => 'Only logged in users can see if not published'])
-                ->add('rsvpSystemEnabled', null, ['help' => 'allow members to RSVP to the event'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'If this needs to be released at certain time',
                     'required' => false
@@ -143,6 +148,7 @@ final class EventAdmin extends AbstractAdmin
             $event = $this->getSubject();
             //if($event->getType() == 'announcement'){}
             $formMapper
+                ->tab('Event')
                 ->with('English', ['class' => 'col-md-6'])
                 ->add('Name');
             if ($event->getexternalUrl()==false){
@@ -176,14 +182,14 @@ final class EventAdmin extends AbstractAdmin
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
                 ->add('published', null, ['help' => 'Only logged in users can see if not published'])
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
-                ->add('rsvpSystemEnabled', null, ['help' => 'allow members to RSVP to the event'])
+                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'If this needs to be released at certain time',
                     'required' => false
                     ]
                 )
                 ->add('externalUrl', null, [
-                    'label' => 'External Url/No add at all if url is empty',
+                    'label' => 'External Url/No addvert at all if url is empty',
                     'help'=>'Is the add hosted here?'
                 ])
                 ->add('url', null, [
@@ -191,7 +197,7 @@ final class EventAdmin extends AbstractAdmin
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
                 ->end()
-                ->with('Eye Candy', ['class' => 'col-md-6'])
+                ->with('Eye Candy', ['class' => 'col-md-8'])
                 ->add('picture', ModelListType::class,[
                         'required' => false
                     ],[ 
@@ -227,6 +233,22 @@ final class EventAdmin extends AbstractAdmin
                             'entry_type' => UrlsType::class,
                         ]],
                     ]])
+                ->end()
+                ->end()
+                ->tab('Nakkikone config')
+                ->add('NakkikoneEnabled', null, [
+                    'help' => 'Publish nakkikone and allow members to reserve Nakkis (links are added and reservation works)',
+                ])
+                    ->add('nakkiInfoEn', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default', 
+                    ])
+                    ->add('nakkiInfoFi', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default', 
+                    ])
                 ->end()
                 ;
         }

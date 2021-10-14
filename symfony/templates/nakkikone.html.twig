@@ -1,0 +1,86 @@
+{% extends 'onecolumn.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% block content %}
+{% set l = app.request.locale %}
+    <div class="col-12">
+        <h2>Nakkikone: <a href="{{block('event_path')}}">{{ block('event_name') }}</a></h2>
+        {% if selected|length > 0 %}
+        <h3>{{ 'Your Nakkis'|trans }}</h3>
+            <div class="card-columns text-center">
+               {% for b in selected %}
+                   {% set name = b.nakki.definition.name(l) %}
+                   {% set show = true %}
+                   {% set i = loop.index %}
+                   {{ block('card') }}
+               {% endfor %}
+               {#    <li>{{ b.nakki.definition.name(l) }}: {{block('time') }}</li> #}
+            </div>
+        {% endif %}
+        {{ attribute(event, 'nakkiInfo'~l|capitalize)|raw }}
+    <hr>
+    <h3>{{ 'Select Nakki'|trans }}</h3>
+        <div class="row">
+          <div class="col-sm-6 col-md-4">
+            <div class="list-group" id="list-tab" role="tablist">
+              {% for name,nakki in nakkis %}
+              <a class="list-group-item list-group-item-action" 
+                  id="list-{{ name }}-list" 
+                  data-toggle="list"
+                  data-index="{{loop.index}}"
+                  href="#nakki{{ loop.index }}" 
+                  role="tab"
+                  aria-controls="{{ name }}"
+              >
+                  {{ name }} ({{nakki.durations|join('h, ')}}h)
+              </a>
+
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-8">
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade active show" id="list-none" role="tabpanel" aria-labelledby="list-none">
+                  <h3>{{ 'Nakki descriptions'|trans }}</h3>
+                  {{'Choose a shift ("Nakki") to see the description'|trans}}.
+              </div>
+              {% for name, nakki in nakkis %}
+              <div class="tab-pane fade" id="nakki{{loop.index}}" role="tabpanel" aria-labelledby="list-{{name}}-list">{{nakki['description']}}</div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-12 mt-3 d-none show-on-click">
+    <h3>{{ 'Reserve your Nakki'|trans }}</h3>
+            <div class="card-columns text-center">
+            {% for name, nakki in nakkis %}
+                {% set i = loop.index %}
+                {% for b in nakki.bookings %}
+                    {{ block('card') }}
+                {% endfor %}
+            {% endfor %}
+            </div>
+        </div>
+{% endblock %}
+
+{% block time %}
+{{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
+{% endblock %}
+{% block card %}
+{#{ dump(show|default(false)) }#}
+<div class="card {% if not show|default(false) %}card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
+    <div class="card-body">
+        <h5 class="card-title">{{ name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
+        {% if b.member is null %}
+        <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
+        {% else %}
+            {% if b.member == app.user.member %}
+            <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-warning">{{'Cancel'|trans }}</a>
+            {% else %}
+                {{ b.member.username }}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
