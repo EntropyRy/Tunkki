@@ -13,11 +13,12 @@ fi: Suomi
 en: Englanti
 
 # Entropy.fi
-Nakki reserved!: Nakki varattu!
-Nakki cancelled!: Nakki peruttu!
-Nakkikone is not enabled!: Nakkikone ei ole vielä julkaistu, jotta sitä voisi käyttää.
+Nakki reserved: Nakki varattu
+Nakki cancelled: Nakki peruttu
+Nakki is not reserved! Please define username in you profile: Et vaoi varata nakkia koska profiilissasi ei ole käyttäjänimeä
+Nakkikone is not enabled: Nakkikone ei ole vielä julkaistu, jotta sitä voisi käyttää.
 Reserve: Varaa
-You cannot reserve overlapping Nakkis!: Et voi varata päällekkäisiä Nakkeja!
+You cannot reserve overlapping Nakkis: Et voi varata päällekkäisiä Nakkeja
 Cancel: Peruuta
 Your Nakkis: Valitsemasi Nakit
 Select Nakki: Valitse Nakki
@@ -25,7 +26,7 @@ Nakki descriptions: Nakkien kuvaukset
 Reserve your Nakki: Varaa Nakkisi
 recording: Nauhoite
 entropy_user_dashboard: Yleiskatsaus
-page_edited: Sivua muutettu!
+page_edited: Sivua muutettu
 Firstname: Etunimi
 Lastname: Sukunimi
 Email: Sähköposti

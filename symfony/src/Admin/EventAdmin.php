@@ -57,6 +57,11 @@ final class EventAdmin extends AbstractAdmin
             $menu->addChild('Nakit', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki_booking.list', ['id' => $id])
             ]);
+            if($this->getSubject()->getNakkikoneEnabled()){
+                $menu->addChild('Printable Nakkilist', [
+                   'uri' => $admin->generateUrl('nakkiList', ['id' => $id])
+                ]);
+            }
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
@@ -272,5 +277,6 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
+        $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }
 }

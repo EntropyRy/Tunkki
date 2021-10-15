@@ -42,7 +42,7 @@ class EventSignUpController extends EventController
             $em->flush();
             $text = $text = '**Nakki reservation cancelled from event '.$booking.'**';
             $mm->SendToMattermost($text, 'nakkikone');
-            $this->addFlash('success', 'Nakki cancelled!');
+            $this->addFlash('success', 'Nakki cancelled');
         }
         return $this->redirect($request->headers->get('referer'));
         //return $this->redirectToRoute('entropy_event_slug_nakkikone', ['slug' => $slug, 'year' => $year]);
@@ -58,12 +58,16 @@ class EventSignUpController extends EventController
     ): Response
     {
         $member = $this->getUser()->getMember();
+        if (!$member->getUsername()){
+            $this->addFlash('danger', 'Nakki is not reserved! Please define username in you profile');
+            return $this->redirect($request->headers->get('referer'));
+        }
         $em = $this->getDoctrine()->getManager();
         if ($event->getNakkikoneEnabled()){
             $repo = $em->getRepository('App:NakkiBooking');
             $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
             if($sameTime){
-                $this->addFlash('danger', 'You cannot reserve overlapping Nakkis!');
+                $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
                 return $this->redirect($request->headers->get('referer'));
             }
             $booking->setMember($member);
@@ -71,9 +75,9 @@ class EventSignUpController extends EventController
             $em->flush();
             $text = $text = '**New Nakki reservation: '.$booking.'**';
             $mm->SendToMattermost($text, 'nakkikone');
-            $this->addFlash('success', 'Nakki reserved!');
+            $this->addFlash('success', 'Nakki reserved');
         } else {
-            $this->addFlash('warning', 'Nakkikone is not enabled!');
+            $this->addFlash('warning', 'Nakkikone is not enabled');
         }
         return $this->redirect($request->headers->get('referer'));
     }

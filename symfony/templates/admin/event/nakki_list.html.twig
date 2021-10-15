@@ -1,0 +1,70 @@
+{% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% block sonata_admin_content %}
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{ event }} 
+                </h1>
+            </div>
+            <div class="col-md-12">
+                    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+            {% if nakkis %}
+            <h3>Contacts</h3>
+            {{ block('tablehead') }}
+            {% for nakki in nakkis %}
+                {% if nakki.member %}
+                <tr>
+                    <td>
+                        <span class="">
+                            {{ nakki.member.username }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {{ nakki.member }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">{{ nakki.member.email }}</span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {{ nakki.member.phone }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {{ nakki.nakki.definition.name('fi') }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="">
+                            {{ nakki.startAt|date('H:i') }}
+                        </span>
+                    </td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+                    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block tablehead %}
+<table class="table table-sm table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Username</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Nakki</th>
+            <th scope="col">When</th>
+        </tr>
+    </thead>
+    <tbody>
+{% endblock %}

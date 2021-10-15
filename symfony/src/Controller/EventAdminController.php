@@ -14,6 +14,12 @@ final class EventAdminController extends CRUDController
         $infos = $event->getEventArtistInfos();
         return $this->renderWithExtraParams('admin/event/artist_list.html.twig', ['event' => $event, 'infos' => $infos]);
     }
+    public function nakkiListAction()
+    {
+        $event = $this->admin->getSubject();
+        $nakkis = $event->getNakkiBookings();
+        return $this->renderWithExtraParams('admin/event/nakki_list.html.twig', ['event' => $event, 'nakkis' => $nakkis]);
+    }
     public function rsvpAction()
     {
         $event = $this->admin->getSubject();
