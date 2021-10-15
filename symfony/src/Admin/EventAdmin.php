@@ -131,9 +131,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
-                ->add('published', null, ['help' => 'Only logged in users can see if not published'])
+                ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
-                    'help' => 'If this needs to be released at certain time',
+                    'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                     'required' => false
                     ]
                 )
@@ -180,9 +180,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('cancelled', null, ['help' => 'Event has been cancelled'])
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
-                ->add('published', null, ['help' => 'Only logged in users can see if not published'])
+                ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
-                    'help' => 'If this needs to be released at certain time',
+                    'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                     'required' => false
                     ]
                 )
