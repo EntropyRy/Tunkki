@@ -45,7 +45,9 @@ class MattermostAuthenticator extends SocialAuthenticator
         /** @var FacebookUser $facebookUser */
         $mattermostUser = $this->getMattermostClient()
             ->fetchUserFromToken($credentials);
-
+        if(!$mattermostUser){
+             throw new CustomUserMessageAuthenticationException('Email could not be found.');
+        }
         $email = $mattermostUser->getEmail();
         // 1) have they logged in with Mattermost before? Easy!
         $existingUser = $this->em->getRepository(User::class)
