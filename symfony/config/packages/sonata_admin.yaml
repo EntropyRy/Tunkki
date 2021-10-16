@@ -101,7 +101,6 @@ sonata_admin:
                     - entropy.admin.nakki_definition
                     - entropy.admin.nakki
                     - entropy.admin.nakki_booking
-                roles: [SONATA_SUPER_ADMIN]
     assets:
         extra_stylesheets:
             # Pagebundle
