@@ -415,7 +415,7 @@ services:
         class: App\Admin\NakkiDefinitionAdmin
         arguments: [~, App\Entity\NakkiDefinition, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Names }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Definitions }
         public: true
     entropy.admin.nakki:
         class: App\Admin\NakkiAdmin

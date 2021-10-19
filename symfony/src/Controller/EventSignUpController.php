@@ -97,9 +97,17 @@ class EventSignUpController extends EventController
         foreach ( $event->getNakkiBookings() as $booking ){
             $name = $booking->getNakki()->getDefinition()->getName($locale);
             $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
-            $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
-            $nakkis[$name]['bookings'][] = $booking;
-            $nakkis[$name]['durations'][$duration] = $duration;
+            if ( $booking->getNakki()->getDefinition()->getOnlyForActiveMembers() ){
+                if ($member->getIsActiveMember()) {
+                    $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
+                    $nakkis[$name]['bookings'][] = $booking;
+                    $nakkis[$name]['durations'][$duration] = $duration;
+                }
+            } else {
+                $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
+                $nakkis[$name]['bookings'][] = $booking;
+                $nakkis[$name]['durations'][$duration] = $duration;
+            }
         }
         if (!$event->getNakkikoneEnabled()){
             $this->addFlash('warning', 'Nakkikone is not enabled!');

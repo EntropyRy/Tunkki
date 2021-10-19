@@ -37,6 +37,11 @@ class NakkiDefinition
      */
     private $DescriptionEn;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $onlyForActiveMembers = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -101,6 +106,18 @@ class NakkiDefinition
     public function setDescriptionEn(string $DescriptionEn): self
     {
         $this->DescriptionEn = $DescriptionEn;
+
+        return $this;
+    }
+
+    public function getOnlyForActiveMembers(): ?bool
+    {
+        return $this->onlyForActiveMembers;
+    }
+
+    public function setOnlyForActiveMembers(?bool $onlyForActiveMembers): self
+    {
+        $this->onlyForActiveMembers = $onlyForActiveMembers;
 
         return $this;
     }

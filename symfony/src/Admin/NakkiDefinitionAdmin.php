@@ -20,6 +20,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('DescriptionFi')
             ->add('nameEn')
             ->add('DescriptionEn')
+            ->add('onlyForActiveMembers')
             ;
     }
 
@@ -30,6 +31,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('DescriptionFi')
             ->add('nameEn')
             ->add('DescriptionEn')
+            ->add('onlyForActiveMembers')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -46,6 +48,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('DescriptionFi')
             ->add('nameEn')
             ->add('DescriptionEn')
+            ->add('onlyForActiveMembers')
             ;
     }
 
@@ -56,6 +59,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('DescriptionFi')
             ->add('nameEn')
             ->add('DescriptionEn')
+            ->add('onlyForActiveMembers')
             ;
     }
 }
