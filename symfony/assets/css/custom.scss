@@ -132,3 +132,9 @@ $enable-responsive-font-sizes: true;
        border: 2px solid #DDD;
    }
 }
+blockquote {
+    margin-left: 1rem;
+    padding-left: 1rem;
+    font-style: italic;
+    border-left: 3px solid #ccc;
+}
