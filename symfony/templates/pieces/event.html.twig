@@ -179,12 +179,12 @@
             <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
         {% endif %}
     {% endif %}
+    {% set last = info.StartTime %}
     {% if last is defined %}
         {% if last != info.StartTime %}
             </li> 
         {% endif %}
     {% endif %}
-    {% set last = info.StartTime %}
 {% endfor %}
 </ul>
 {% endif %}
