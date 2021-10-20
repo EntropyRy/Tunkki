@@ -69,15 +69,17 @@ class EventController extends Controller
     }
     private function setMetaData($lang, $eventdata, $page, $seo)
     {
-        $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('d.m.Y, H:i');
-        $page->setTitle($title);
-        $seo->addMeta('property', 'og:title',$title)
-            ->addMeta('property', 'og:description', $eventdata->getAbstract($lang))
-            ;
-        if($eventdata->getType() != 'announcement'){
-            $seo->addMeta('property', 'og:type', 'event')
-                ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
+        $now = new \DateTime();
+        if( $eventdata->getPublished() && $eventdata->getPublishDate() > $now) {
+            $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('d.m.Y, H:i');
+            $page->setTitle($title);
+            $seo->addMeta('property', 'og:title',$title)
+                ->addMeta('property', 'og:description', $eventdata->getAbstract($lang))
+                ;
+            if($eventdata->getType() != 'announcement'){
+                $seo->addMeta('property', 'og:type', 'event')
+                    ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
+            }
         }
-
     }
 }

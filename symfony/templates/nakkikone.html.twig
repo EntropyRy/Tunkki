@@ -76,7 +76,7 @@
         <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
         {% else %}
             {% if b.member == app.user.member %}
-            <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-warning">{{'Cancel'|trans }}</a>
+            <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-secondary">{{'Cancel'|trans }}</a>
             {% else %}
                 {{ b.member.username }}
             {% endif %}

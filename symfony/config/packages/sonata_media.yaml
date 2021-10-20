@@ -75,6 +75,26 @@ sonata_media:
                 - image/svg+xml
                 - image/gif
         file:
+            allowed_extensions:
+                - pdf
+                - txt
+                - rtf
+                - doc
+                - docx
+                - xls
+                - xlsx
+                - ppt
+                - pptx
+                - odt
+                - odg
+                - odp
+                - ods
+                - odc
+                - odf
+                - odb
+                - csv
+                - xml
+                - mp4
             allowed_mime_types:
                 - application/pdf
                 - application/x-pdf
@@ -101,3 +121,4 @@ sonata_media:
                 - text/xml
                 - application/xml
                 - application/zip
+                - video/mp4

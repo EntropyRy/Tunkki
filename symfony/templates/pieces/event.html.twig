@@ -86,6 +86,13 @@
 {% endblock %}
 {% block event_media %}
 {% set name_attr = 'name_attribute'|trans %}
+{% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
+<div class="img-fluid" style="width: 100%">
+    <video autoplay loop muted inline width="100%">
+    <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
+    </video>
+</div>
+{% endif %}
     <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
