@@ -169,7 +169,7 @@
             <li>{{ info.StartTime|date('H:i')}}: 
         {% endif %}
     {% endif %}
-    {% if artist.type =='DJ' %}
+    {% if artist.type !='VJ' %}
         {% if info.StartTime is not empty %}
             {% if last is defined %}
                 {% if last == info.StartTime %}
