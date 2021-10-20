@@ -191,8 +191,6 @@ final class EventAdmin extends AbstractAdmin
                     'required' => false
                     ]
                 )
-                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
-                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->add('externalUrl', null, [
                     'label' => 'External Url/No addvert at all if url is empty',
                     'help'=>'Is the add hosted here?'
@@ -201,6 +199,8 @@ final class EventAdmin extends AbstractAdmin
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. 
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
+                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
+                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-8'])
                 ->add('picture', ModelListType::class,[
@@ -224,6 +224,7 @@ final class EventAdmin extends AbstractAdmin
             }
             $formMapper
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('links', ImmutableArrayType::class, [
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event.<br> 
                                 request admin to add more translations!',

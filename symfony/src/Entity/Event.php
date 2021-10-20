@@ -176,6 +176,11 @@ class Event
         <h6>You\'ll get free entry to the party</h6>
         ';
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $includeSaferSpaceGuidelines;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -645,6 +650,18 @@ body {
     public function setNakkiInfoEn(?string $nakkiInfoEn): self
     {
         $this->nakkiInfoEn = $nakkiInfoEn;
+
+        return $this;
+    }
+
+    public function getIncludeSaferSpaceGuidelines(): ?bool
+    {
+        return $this->includeSaferSpaceGuidelines;
+    }
+
+    public function setIncludeSaferSpaceGuidelines(?bool $includeSaferSpaceGuidelines): self
+    {
+        $this->includeSaferSpaceGuidelines = $includeSaferSpaceGuidelines;
 
         return $this;
     }

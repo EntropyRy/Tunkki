@@ -121,7 +121,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls.0 is defined or event.NakkikoneEnabled%}
+{% if event.epics is not empty or event.links.urls.0 is defined or event.NakkikoneEnabled or event.includeSaferSpaceGuidelines %}
 <div>
 <hr>
     {% for keys in event.links %}
@@ -140,6 +140,21 @@
             <i class="fas fa-image"></i>
             Epics
         </a>
+    </span>
+    {% endif %}
+    {% if event.includeSaferSpaceGuidelines %}
+    <span class="pr-2">
+        {% if app.request.locale =='fi' %}
+            <a href="https://entropy.fi/turvallisemman-tilan-periaatteet">
+                <i class="fas fa-hand-holding-heart"></i>
+                Turvallisemman tilan periaatteet
+            </a>
+        {%else%}
+            <a href="https://entropy.fi/en/safer-space-guidelines">
+                <i class="fas fa-hand-holding-heart"></i>
+                Safer space guidelines
+            </a>
+        {% endif %}
     </span>
     {% endif %}
     {% if event.NakkikoneEnabled and event.url and app.user %}
