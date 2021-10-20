@@ -154,6 +154,7 @@
 {% endif %}
 {% endblock %}
 {% block timetable %}
+{% set last = false %}
 {% if event.eventArtistInfos %}
 <ul>
 {% for info in event.eventArtistInfos %}
@@ -163,23 +164,27 @@
     {% else %}
         {% set artist = info.artistClone %}
     {% endif %}
-    {% if artist.type =='DJ' %}
-        {% if info.StartTime is not empty %}
-            {% set inserted = false %}
-            {% if last is defined %}
-                {% if last == info.StartTime %}
-                B2B <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
-                {% set inserted = true %}
-                {% endif %}
-            </li>
-            {% endif %}
-            {% if not inserted %}
+    {% if last is defined %}
+        {% if last != info.StartTime %}
             <li>{{ info.StartTime|date('H:i')}}: 
-                <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
-            {% endif %}
-            {% set last = info.StartTime %}
         {% endif %}
     {% endif %}
+    {% if artist.type =='DJ' %}
+        {% if info.StartTime is not empty %}
+            {% if last is defined %}
+                {% if last == info.StartTime %}
+                B2B 
+                {% endif %}
+            {% endif %}
+            <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
+        {% endif %}
+    {% endif %}
+    {% if last is defined %}
+        {% if last != info.StartTime %}
+            </li> 
+        {% endif %}
+    {% endif %}
+    {% set last = info.StartTime %}
 {% endfor %}
 </ul>
 {% endif %}
@@ -238,7 +243,7 @@
             {% else %}
                 {% set artist = info.artistClone %}
             {% endif %}
-            {% if artist.type =='DJ' %}
+            {% if artist.type !='VJ' %}
                 {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
                     {% if thecycle == 'even' %}
                     <div id="{{ name }}" class="col-md-12 pt-3 pb-3">
