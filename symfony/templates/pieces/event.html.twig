@@ -164,12 +164,12 @@
     {% else %}
         {% set artist = info.artistClone %}
     {% endif %}
-    {% if last is defined %}
-        {% if last != info.StartTime %}
-            <li>{{ info.StartTime|date('H:i')}}: 
-        {% endif %}
-    {% endif %}
     {% if artist.type !='VJ' %}
+        {% if last is defined %}
+            {% if last != info.StartTime %}
+                <li>{{ info.StartTime|date('H:i')}}: 
+            {% endif %}
+        {% endif %}
         {% if info.StartTime is not empty %}
             {% if last is defined %}
                 {% if last == info.StartTime %}
@@ -178,11 +178,11 @@
             {% endif %}
             <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
-    {% endif %}
-    {% set last = info.StartTime %}
-    {% if last is defined %}
-        {% if last != info.StartTime %}
-            </li> 
+        {% set last = info.StartTime %}
+        {% if last is defined %}
+            {% if last != info.StartTime %}
+                </li> 
+            {% endif %}
         {% endif %}
     {% endif %}
 {% endfor %}
