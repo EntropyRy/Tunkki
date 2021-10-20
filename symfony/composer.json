@@ -13,7 +13,7 @@
         "doctrine/doctrine-bundle": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^2",
         "doctrine/orm": "^2",
-        "hashids/hashids": "^3.0",
+        "hashids/hashids": "^4.0",
         "knpuniversity/oauth2-client-bundle": "^2",
         "nyholm/psr7": "^1.3",
         "picqer/php-barcode-generator": "^2.1",
