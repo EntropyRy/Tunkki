@@ -176,7 +176,7 @@
                 B2B 
                 {% endif %}
             {% endif %}
-            <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a>
+            <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a> {% if artist.type == 'LIVE' %}(LIVE){% endif %}
         {% endif %}
     {% endif %}
     {% set last = info.StartTime %}
@@ -282,7 +282,7 @@
 {% if event is defined and '{{ timetable }}' not in attribute(event,content_attr) %}
     {% set show = false %}
 {% endif %}
-<h3>{{ name }} {% if artist.type == 'DJ' %}{% if info is defined and show %}@ {{info.StartTime|date('H:i')}}{% endif %}{% endif %}</h3>
+<h3>{{ name }} {% if artist.type == 'LIVE' %}(LIVE) {% endif %}{% if artist.type != 'VJ' %}{% if info is defined and show %}@ {{info.StartTime|date('H:i')}}{% endif %}{% endif %}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
