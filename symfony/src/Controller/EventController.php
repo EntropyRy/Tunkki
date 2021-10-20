@@ -70,7 +70,7 @@ class EventController extends Controller
     private function setMetaData($lang, $eventdata, $page, $seo)
     {
         $now = new \DateTime();
-        if( $eventdata->getPublished() && $eventdata->getPublishDate() > $now) {
+        if( $eventdata->getPublished() && $eventdata->getPublishDate() < $now) {
             $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
             $seo->addMeta('property', 'og:title',$title)
