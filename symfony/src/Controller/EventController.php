@@ -70,13 +70,18 @@ class EventController extends Controller
             $form->handleRequest($request);
             if($form->isSubmitted() && $form->isValid()){
                 $rsvp = $form->getData();
-                $rsvp->setEvent($eventdata);
-                try {
-                    $this->em->persist($rsvp);
-                    $this->em->flush();
-                    $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
-                } catch (\Exception $e) {
-                    $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
+                $exists = $this->em->getRepository('App:Member')->findOneBy(['email' => $rsvp->getEmail()]);
+                if ($exists){
+                    $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
+                } else {
+                    $rsvp->setEvent($eventdata);
+                    try {
+                        $this->em->persist($rsvp);
+                        $this->em->flush();
+                        $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
+                    } catch (\Exception $e) {
+                        $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
+                    }
                 }
             }
             return $this->render('event.html.twig', [

@@ -239,6 +239,7 @@ The link in your email is expired. Please try to reset your password again.: Sä
 dark: Tumma
 bright: Kirkas
 rsvp:
+    email_in_use: Oletko jäsen? kirjaudu ensin.
     receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
     no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
     already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä tapahtumaa.
