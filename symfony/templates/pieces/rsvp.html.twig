@@ -8,11 +8,17 @@
         href="{{ path('entropy_event_rsvp',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}"
         >RSVP {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){%endif%}</a>
     {% else %}
+        {% if frontpage %}
+            <a class="btn btn-primary w-100"
+                href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}"
+                >RSVP</a>
+        {% else %}
             {{ form_start(rsvpForm) }}
             {{ form_widget(rsvpForm) }}
             <input class="btn btn-primary" type="submit" value="RSVP">
             {{ form_end(rsvpForm) }}
         {#        {{'rsvp.no_user'|trans}} {% if app.request.locale == 'fi' %}<a href="/liity">Liity!</a>{% else %}<a href="/en/join-us">Join us!</a>{% endif %} #}
+        {% endif %}
     {% endif %}
     </div>
 </div>
