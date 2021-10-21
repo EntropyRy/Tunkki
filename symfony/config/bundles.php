@@ -42,4 +42,5 @@ return [
     SymfonyCasts\Bundle\ResetPassword\SymfonyCastsResetPasswordBundle::class => ['all' => true],
     Trikoder\Bundle\OAuth2Bundle\TrikoderOAuth2Bundle::class => ['all' => true],
     SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
+    Sonata\Exporter\Bridge\Symfony\SonataExporterBundle::class => ['all' => true],
 ];

@@ -154,7 +154,7 @@ final class MemberAdmin extends AbstractAdmin
     }   
     public function getExportFields()
     {
-        return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'AcceptedAsHonoraryMember'];
+        return ['name', 'StudentUnionMember', 'isActiveMember', 'isFullMember', 'AcceptedAsHonoraryMember'];
     }
     public function preRemove($member)
     {
