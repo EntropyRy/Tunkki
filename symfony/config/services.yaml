@@ -135,7 +135,7 @@ services:
         arguments:
                 - "Member Form"
         tags:
-                - { name: sonata.page, alias: eventspage}
+                - { name: sonata.page, alias: memberformpage}
         public: true
     entropy.page.alleventspage:
         class: App\PageService\AllEventsPage
@@ -378,6 +378,7 @@ services:
             - [addChild, ['@admin.event_artist_info', 'Event']]
             - [addChild, ['@entropy.admin.nakki', 'event']]
             - [addChild, ['@entropy.admin.nakki_booking', 'event']]
+            - [addChild, ['@entropy.admin.rsvp', 'event']]
         public: true
 
     admin.event_artist_info:
@@ -403,7 +404,7 @@ services:
         class: App\Admin\AccessGroupsAdmin
         arguments: [~, App\Entity\AccessGroups, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: AccessGroups }
+            - { name: sonata.admin, manager_type: orm, group: admin, label: User Accessgroups }
         public: true
     entropy.admin.rsvp:
         class: App\Admin\RSVPAdmin

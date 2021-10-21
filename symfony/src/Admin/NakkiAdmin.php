@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use App\Entity\NakkiBooking;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 
 final class NakkiAdmin extends AbstractAdmin
 {
@@ -55,7 +56,7 @@ final class NakkiAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('definition');
+            ->add('definition', ModelListType::class);
         if (!$this->isChild()){
             $form
                 ->add('event');

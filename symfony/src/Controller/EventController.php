@@ -11,6 +11,8 @@ use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
 use App\Entity\Event;
+use App\Entity\RSVP;
+use App\Form\RSVPType;
 
 class EventController extends Controller
 {
@@ -62,9 +64,30 @@ class EventController extends Controller
         $lang = $request->getLocale();
         $page = $cms->retrieve()->getCurrentPage();
         $this->setMetaData($lang, $eventdata, $page, $seo); 
+        if($eventdata->getRsvpSystemEnabled() && !$this->getUser()){
+            $rsvp = new RSVP();
+            $form = $this->createForm(RSVPType::class, $rsvp);
+            $form->handleRequest($request);
+            if($form->isSubmitted() && $form->isValid()){
+                $rsvp = $form->getData();
+                $rsvp->setEvent($eventdata);
+                try {
+                    $this->em->persist($rsvp);
+                    $this->em->flush();
+                    $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
+                } catch (\Exception $e) {
+                    $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
+                }
+            }
+            return $this->render('event.html.twig', [
+                    'event' => $eventdata,
+                    'page' => $page,
+                    'rsvpForm' => $form->createView()
+                ]);
+        }
         return $this->render('event.html.twig', [
                 'event' => $eventdata,
-                'page' => $page
+                'page' => $page,
             ]);
     }
     private function setMetaData($lang, $eventdata, $page, $seo)

@@ -43,11 +43,16 @@ final class EventAdmin extends AbstractAdmin
             $menu->addChild('Artist editor', 
                $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
             );
-            $menu->addChild('Artist list', [
-               'uri' => $admin->generateUrl('artistList', ['id' => $id])
+            if (count($this->getSubject()->getEventArtistInfos()) > 0 ){
+                $menu->addChild('Artist list', [
+                   'uri' => $admin->generateUrl('artistList', ['id' => $id])
+                ]);
+            }
+            $menu->addChild('RSVPs', [
+               'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
             ]);
             if ($admin->getSubject()->getRsvpSystemEnabled()){
-                $menu->addChild('RSVPs', [
+                $menu->addChild('RSVP List', [
                    'uri' => $admin->generateUrl('rsvp', ['id' => $id])
                 ]);
             }
@@ -161,7 +166,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Content', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                        'ckeditor_context' => 'default',
+                    //    'ckeditor_context' => 'standard',
                         'help' => 'use special tags {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
                     ]);
             }
@@ -174,7 +179,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Sisallys', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                    //    'ckeditor_context' => 'standard', 
                         'help' => 'käytä erikoista tagejä {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
                     ]);
             }

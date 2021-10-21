@@ -29,18 +29,14 @@ sonata_formatter:
             service: sonata.formatter.text.twigengine
             extensions: [] # Twig formatter cannot have extensions
 fos_ck_editor:
-    #    plugins:
-    #        html5audio:
-    #            path: "/bundles/fosckeditor/plugins/html5audio/dialogs/"
-    #            filename: "html5audio.js"
-    #
     configs:
         default: 
             toolbar: 'standard'
             extraPlugins: 'html5audio'
     toolbars:
         items:
-            standard.links: ['Link', 'Unlink', 'Anchor', "-", "Html5audio"]
+            standard.links: [ 'Link', 'Unlink', 'Anchor', "-", "Html5audio"]
+            standard.others: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
 sonata_admin:
     assets:
         extra_javascripts:

@@ -9,7 +9,11 @@
             {% if rsvps %}
             <h3>Ilmoittautuneiden mailit ({{ rsvps|length }})</h3>
             {% for rsvp in rsvps %}
+                {% if rsvp.member %}
                 {{rsvp.member.email }};
+                {% else %}
+                {{rsvp.email}};
+                {% endif %}
             {% endfor %}
             {% endif %}
             </div>

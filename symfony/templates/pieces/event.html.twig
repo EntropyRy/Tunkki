@@ -1,3 +1,4 @@
+{% use 'pieces/rsvp.html.twig' %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head') }}
@@ -20,11 +21,13 @@
         {{ block('event_frontpage_content')}}
     {% endif %}
 {% endblock %}
+
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
     <h3>{{ block('event_name') }}</h3>
 {% endblock %}
+
 {% block event_path %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
@@ -36,6 +39,7 @@
         {% endif %}
     {% endif %}
 {% endblock %}
+
 {% block published_and_updated %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
     {% if event.updatedAt and event.updatedAt|date('Y') != '-0001' %}
@@ -43,21 +47,25 @@
     {% endif %}
     {% endif %}
 {% endblock %}
+
 {% block event_head %}
     <h3>{{ block('event_name') }}</h3>
     {{ block('event_banner_media') }}
 {% endblock %}
+
 {% block event_name %}
 {% set name_attr = 'name_attribute'|trans %}
   {{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
   {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
   {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
 {% endblock %}
+
 {% block event_banner_media %}
     {% if event.picture is not null and event.picturePosition == 'banner' %}
     {{ block('event_media') }}
     {% endif %}
 {% endblock %}
+
 {% block event_content %}
 {% set frontpage = false %}
 {% apply spaceless %}
@@ -74,6 +82,7 @@
 {% endif %}
 {% endapply %}
 {% endblock %}
+
 {% block event_frontpage_content %}
 {% set frontpage = true %}
 {% apply spaceless %}
@@ -88,10 +97,11 @@
 {{ block('links') }}
 {% endapply %}
 {% endblock %}
+
 {% block event_media %}
 {% set name_attr = 'name_attribute'|trans %}
 {% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
-<div class="img-fluid" style="width: 100%">
+<div class="img-fluid">
     <video autoplay loop muted inline width="100%">
     <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
     </video>
@@ -101,21 +111,7 @@
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
 {% endblock %}
-{% block RSVP %}
-{% if event.rsvpSystemEnabled %}
-<div class="pt-2 pb-2">
-{{'rsvp.receive_info'|trans}} <br>
-    {% if app.user %}
-    <a class="btn btn-primary" 
-        href="{{ path('entropy_event_rsvp',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}"
-        >RSVP {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){%endif%}</a>
-    {% else %}
-    <a class="btn btn-primary disabled" href="#">RSVP</a>
-    {{'rsvp.no_user'|trans}} {% if app.request.locale == 'fi' %}<a href="/liity">Liity!</a>{% else %}<a href="/en/join-us">Join us!</a>{% endif %}
-    {% endif %}
-</div>
-{% endif %}
-{% endblock %}
+
 {% block links %}
 {% if event.attachment %}
 <div class="mb-2">
@@ -149,12 +145,12 @@
     {% if event.includeSaferSpaceGuidelines %}
     <span class="pr-2">
         {% if app.request.locale =='fi' %}
-            <a href="https://entropy.fi/turvallisemman-tilan-periaatteet">
+            <a href="/turvallisemman-tilan-periaatteet">
                 <i class="fas fa-hand-holding-heart"></i>
                 Turvallisemman tilan periaatteet
             </a>
         {%else%}
-            <a href="https://entropy.fi/en/safer-space-guidelines">
+            <a href="/en/safer-space-guidelines">
                 <i class="fas fa-hand-holding-heart"></i>
                 Safer space guidelines
             </a>
@@ -172,6 +168,7 @@
 </div>
 {% endif %}
 {% endblock %}
+
 {% block timetable %}
 {% set last = false %}
 {% if event.eventArtistInfos %}
@@ -306,6 +303,7 @@
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
 {% endblock %}
+
 {% block artist_pic %}
     {% if name is not defined %}
         {% set name = artist.name %}
@@ -319,6 +317,7 @@
     <div class="caption">{{ name }}</div>
     </span>
 {% endblock %}
+
 {% block artist_preview_info %}
 {% set bio_attribute = 'bio_attribute'|trans %}
     <h3>{{ artist.name }}</h3>
@@ -326,6 +325,7 @@
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
 {% endblock %}
+
 {% block artist_links %}
     {% if artist.links is not empty %}
         <hr>
@@ -336,6 +336,7 @@
         {% endfor %}
     {% endif %}
 {% endblock %}
+
 {% block public_artist_info %}
     {% set name = artist.name %}
     {% set bio_attribute = 'bio_attribute'|trans %}

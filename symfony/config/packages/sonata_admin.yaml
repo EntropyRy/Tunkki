@@ -46,29 +46,6 @@ sonata_admin:
                     - entropy_tunkki.admin.booking
                     - entropy.admin.reward
 
-            sonata.admin.group.rentaladmin:
-                label:           Configuration
-                label_catalogue: App 
-                icon:            '<i class="fa fa-cogs"></i>'
-                items:
-                    - entropy_tunkki.admin.package
-                    - entropy_tunkki.admin.renter
-                    - entropy_tunkki.admin.who_can_rent_choice
-                    - entropy_tunkki.admin.billable_event
-                    - entropy_tunkki.admin.accessory_choices
-                    - entropy.admin.contract
-                    - sonata.classification.admin.category
-
-            sonata.admin.group.classification:
-                label:           Classification 
-                label_catalogue: SonataClassificationBundle
-                items:
-                    - sonata.classification.admin.tag
-                    - sonata.classification.admin.context
-                    - sonata.classification.admin.collection
-                    - sonata.classification.admin.category
-                roles: [SONATA_SUPER_ADMIN]
-
             sonata.admin.group.content:
                 label:           Content 
                 label_catalogue: SonataAdminBundle
@@ -87,20 +64,42 @@ sonata_admin:
                     - entropy_tunkki.admin.member
                     - admin.email
 
+            sonata.admin.group.config:
+                label:           Configuration
+                label_catalogue: App 
+                icon:            '<i class="fa fa-cogs"></i>'
+                items:
+                    - entropy_tunkki.admin.package
+                    - entropy_tunkki.admin.renter
+                    - entropy_tunkki.admin.who_can_rent_choice
+                    - entropy_tunkki.admin.billable_event
+                    - entropy_tunkki.admin.accessory_choices
+                    - entropy.admin.contract
+                    - sonata.classification.admin.category
+                    - entropy.admin.nakki_definition
+                      #            sonata.admin.group.classification:
+                      #                label:           Classification 
+                      #                label_catalogue: SonataClassificationBundle
+                      #                items:
+                      #                    - sonata.classification.admin.tag
+                      #                    - sonata.classification.admin.context
+                      #                    - sonata.classification.admin.collection
+                      #                    - sonata.classification.admin.category
+                      #                roles: [SONATA_SUPER_ADMIN]
+                      #
             sonata.admin.group.administration:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
-                    - entropy_tunkki.admin.statusevent
+                    #- entropy_tunkki.admin.statusevent
                     - sonata.page.admin.site
                     - entropy.admin.access_groups
+                    - entropy.admin.nakki_booking
+                    - entropy.admin.rsvp
                 roles: [SONATA_SUPER_ADMIN]
             sonata.admin.group.nakkikone:
                 label:           Nakkikone
                 items:
-                    - entropy.admin.nakki_definition
-                    - entropy.admin.nakki
-                    - entropy.admin.nakki_booking
     assets:
         extra_stylesheets:
             # Pagebundle

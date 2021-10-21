@@ -16,8 +16,14 @@ final class RSVPAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('member')
-            ->add('event')
+            ->add('name')
+            ->add('email')
+            ->add('member');
+        if(!$this->isChild()){
+            $filter
+                ->add('event');
+        }
+        $filter
             ->add('createdAt')
             ;
     }
@@ -25,8 +31,14 @@ final class RSVPAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('member')
-            ->add('event')
+            ->add('name')
+            ->add('email')
+            ->add('member');
+        if(!$this->isChild()){
+            $list
+                ->add('event');
+        }
+        $list
             ->add('createdAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
@@ -40,15 +52,21 @@ final class RSVPAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('member')
-            ->add('event')
-            ;
+            ->add('name')
+            ->add('email')
+            ->add('member');
+        if(!$this->isChild()){
+            $form
+                ->add('event');
+        }
     }
 
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('id')
+            ->add('name')
+            ->add('email')
             ->add('member')
             ->add('event')
             ->add('createdAt')
