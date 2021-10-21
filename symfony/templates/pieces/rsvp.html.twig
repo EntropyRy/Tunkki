@@ -1,7 +1,7 @@
 {% block RSVP %}
 {% if event.rsvpSystemEnabled %}
 <div class="pt-2 pb-2">
-    {# <p>{{'rsvp.receive_info'|trans}}</p> #}
+    <p>{{'rsvp.info'|trans|raw}}</p>
     <div class="col-md-6 mx-auto">
     {% if app.user %}
     <a class="btn btn-primary w-100"

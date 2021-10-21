@@ -202,4 +202,5 @@ rsvp:
     no_user: To be able to RSVP you need to be a member of Entropy and logged in.
     already_rsvpd: You have already RSVPed to this event. We'll send you an email before the event.
     rsvpd_succesfully: RSVP succesfully saved! We'll send ayou an email before the event.
+    info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>. If you do not want to become a member, you can sign up for the event by leaving your contact information below. You can read our related privacy policy statement <a href="/rsvp-rekisteriseloste">here</a>.
 
