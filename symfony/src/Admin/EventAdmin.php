@@ -207,7 +207,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
                 ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->end()
-                ->with('Eye Candy', ['class' => 'col-md-8'])
+                ->with('Eye Candy', ['class' => 'col-md-4'])
                 ->add('picture', ModelListType::class,[
                         'required' => false
                     ],[ 
@@ -217,7 +217,11 @@ final class EventAdmin extends AbstractAdmin
                 ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
             if ($event->getexternalUrl()==false){
                 $formMapper
-                    ->add('css')
+                    ->add('css');
+            }
+            $formMapper
+                ->end()
+                ->with('Links', ['class' => 'col-md-4'])
                     ->add('attachment', ModelListType::class,[
                         'required' => false,
                         'help' => 'added as downloadable link'
@@ -225,9 +229,7 @@ final class EventAdmin extends AbstractAdmin
                             'link_parameters'=>[
                             'context' => 'event',
                             'provider' => 'sonata.media.provider.file'
-                        ]]);
-            }
-            $formMapper
+                        ]])
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('links', ImmutableArrayType::class, [
