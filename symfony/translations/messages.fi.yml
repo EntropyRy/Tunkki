@@ -13,6 +13,8 @@ fi: Suomi
 en: Englanti
 
 # Entropy.fi
+First name: Etunimi
+Last name: Sukunimi
 Name: Nimi
 Nakki reserved: Nakki varattu
 Nakki cancelled: Nakki peruttu

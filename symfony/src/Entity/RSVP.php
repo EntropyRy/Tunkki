@@ -39,12 +39,17 @@ class RSVP
     /**
      * @ORM\Column(type="string", length=255, nullable=true, unique=true)
      */
-    private $name;
+    private $email;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    private $firstName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $lastName;
 
     public function getId(): ?int
     {
@@ -89,14 +94,7 @@ class RSVP
 
     public function getName(): ?string
     {
-        return $this->name;
-    }
-
-    public function setName(?string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
+        return $this->firstName.' '.$this->lastName;
     }
 
     public function getEmail(): ?string
@@ -107,6 +105,30 @@ class RSVP
     public function setEmail(?string $email): self
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(?string $firstName): self
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(?string $lastName): self
+    {
+        $this->lastName = $lastName;
 
         return $this;
     }

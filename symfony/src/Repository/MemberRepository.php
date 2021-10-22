@@ -10,6 +10,16 @@ namespace App\Repository;
  */
 class MemberRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByEmailOrName($email, $firstname, $lastname)
+    {
+        $qb = $this->createQueryBuilder('m')
+        ->where('m.email = :email')
+        ->orWhere('m.firstname = :firstname AND m.lastname = :lastname')
+        ->setParameter('email', $email)
+        ->setParameter('firstname', $firstname)
+        ->setParameter('lastname', $lastname);
+        return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
+    }
     public function getByEmail($email)
     {
         $qb = $this->createQueryBuilder('m')
