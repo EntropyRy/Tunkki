@@ -28,7 +28,7 @@ class EventRepository extends ServiceEntityRepository
         $now = new \DateTime();
         $end = new \DateTime();
         return $this->createQueryBuilder('e')
-            ->andWhere('e.publishDate >= :now')
+            ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
