@@ -1,6 +1,6 @@
 {% block RSVP %}
 {% if event.rsvpSystemEnabled %}
-<div class="pt-2 pb-2">
+<div class="pt-2 pb-2" id="RSVP">
     {% if not app.user %}
         <p>{{'rsvp.info'|trans|raw}}</p>
     {% endif %}
@@ -12,7 +12,7 @@
     {% else %}
         {% if frontpage %}
             <a class="btn btn-primary w-100"
-                href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}"
+                href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}#RSVP"
                 >RSVP</a>
         {% else %}
             {{ form_start(rsvpForm) }}
