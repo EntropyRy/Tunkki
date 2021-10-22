@@ -110,7 +110,7 @@ class EventSignUpController extends EventController
             }
         }
         if (!$event->getNakkikoneEnabled()){
-            $this->addFlash('warning', 'Nakkikone is not enabled!');
+            $this->addFlash('warning', 'Nakkikone is not enabled');
         }
         return $this->render('nakkikone.html.twig', [
             'selected' => $selected,
