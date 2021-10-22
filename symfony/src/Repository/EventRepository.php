@@ -105,7 +105,7 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('r')
             ->andWhere('r.type != :val')
             ->andWhere('r.published = :pub')
-            ->andWhere('r.publishDate >= :pubDate')
+            ->andWhere('r.publishDate <= :pubDate')
             ->setParameter('pub', true)
             ->setParameter('pubDate', $now)
             ->setParameter('val', $type)
