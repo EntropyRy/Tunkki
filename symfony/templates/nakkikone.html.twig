@@ -43,7 +43,7 @@
                   {{'Choose a shift ("Nakki") to see the description'|trans}}.
               </div>
               {% for name, nakki in nakkis %}
-              <div class="tab-pane fade" id="nakki{{loop.index}}" role="tabpanel" aria-labelledby="list-{{name}}-list">{{nakki['description']}}</div>
+              <div class="tab-pane fade" id="nakki{{loop.index}}" role="tabpanel" aria-labelledby="list-{{name}}-list">{{nakki['description']|raw}}</div>
               {% endfor %}
             </div>
           </div>

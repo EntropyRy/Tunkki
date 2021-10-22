@@ -251,6 +251,9 @@
 
 {% block bios %}
 {% set bio_attribute = 'bio_attribute'|trans %}
+{% if event.eventArtistInfos|length > 0 %}
+    <h3 class="artists-heading">{{'Artists'|trans}}</h3>
+{% endif %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
             {% set name = info.artist.name %}
