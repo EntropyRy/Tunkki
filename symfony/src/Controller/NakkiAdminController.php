@@ -6,6 +6,8 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController
 {
@@ -17,5 +19,18 @@ final class NakkiAdminController extends CRUDController
              $date = new \DateTimeImmutable();
         }
         $object->setStartAt($date);
+    }
+
+    public function cloneAction()
+    {
+        $object = $this->admin->getSubject();
+
+        if (!$object) {
+            throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
+        }
+        $clone = clone $object;
+        $this->admin->create($clone);
+        $this->addFlash('sonata_flash_success', 'Cloned successfully');
+        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

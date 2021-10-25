@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
+use Sonata\AdminBundle\Route\RouteCollection;
 use App\Entity\NakkiBooking;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 
@@ -48,6 +49,9 @@ final class NakkiAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => [],
                     'edit' => [],
+                    'clone' => [
+                        'template' => 'admin/crud/list__action_clone.html.twig'
+                    ],
                     'delete' => [],
                 ],
             ]);
@@ -150,5 +154,9 @@ final class NakkiAdmin extends AbstractAdmin
         $b->setEndAt($nakki->getStartAt()->modify($end.' hour'));
         $b->setEvent($nakki->getEvent());
         $this->em->persist($b);
+    }
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 }
