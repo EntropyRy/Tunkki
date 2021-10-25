@@ -62,20 +62,24 @@ class EventSignUpController extends EventController
             $this->addFlash('danger', 'Nakki is not reserved! Please define username in you profile');
             return $this->redirect($request->headers->get('referer'));
         }
-        $em = $this->getDoctrine()->getManager();
         if ($event->getNakkikoneEnabled()){
-            $repo = $em->getRepository('App:NakkiBooking');
-            $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
-            if($sameTime){
-                $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
-                return $this->redirect($request->headers->get('referer'));
+            if(is_null($booking->getMember())){
+                $em = $this->getDoctrine()->getManager();
+                $repo = $em->getRepository('App:NakkiBooking');
+                $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
+                if($sameTime){
+                    $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
+                    return $this->redirect($request->headers->get('referer'));
+                }
+                $booking->setMember($member);
+                $em->persist($booking);
+                $em->flush();
+                $text = $text = '**New Nakki reservation: '.$booking.'**';
+                $mm->SendToMattermost($text, 'nakkikone');
+                $this->addFlash('success', 'Nakki reserved');
+            } else {
+                $this->addFlash('warning', 'Sorry but someone reserved that one already');
             }
-            $booking->setMember($member);
-            $em->persist($booking);
-            $em->flush();
-            $text = $text = '**New Nakki reservation: '.$booking.'**';
-            $mm->SendToMattermost($text, 'nakkikone');
-            $this->addFlash('success', 'Nakki reserved');
         } else {
             $this->addFlash('warning', 'Nakkikone is not enabled');
         }
