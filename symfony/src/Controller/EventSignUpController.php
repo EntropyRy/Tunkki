@@ -102,11 +102,25 @@ class EventSignUpController extends EventController
                     $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
                     $nakkis[$name]['bookings'][] = $booking;
                     $nakkis[$name]['durations'][$duration] = $duration;
+                    if(is_null($booking->getMember())){
+                        if (!array_key_exists('not_reserved', $nakkis[$name])){
+                            $nakkis[$name]['not_reserved'] = 1;
+                        } else {
+                            $nakkis[$name]['not_reserved'] +=1; 
+                        }
+                    }
                 }
             } else {
                 $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
                 $nakkis[$name]['bookings'][] = $booking;
                 $nakkis[$name]['durations'][$duration] = $duration;
+                if(is_null($booking->getMember())){
+                    if (!array_key_exists('not_reserved', $nakkis[$name])){
+                        $nakkis[$name]['not_reserved'] = 1;
+                    } else {
+                        $nakkis[$name]['not_reserved'] +=1; 
+                    }
+                }
             }
         }
         if (!$event->getNakkikoneEnabled()){

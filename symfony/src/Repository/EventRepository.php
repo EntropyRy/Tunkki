@@ -85,6 +85,8 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('YEAR(r.EventDate) = :year')
             ->setParameter('val', $slug)
             ->setParameter('year', $year)
+            ->orderBy('r.EventDate', 'DESC')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
         ;
