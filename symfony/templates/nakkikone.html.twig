@@ -32,7 +32,7 @@
                   aria-controls="{{ name }}"
               >
               {{ name }} ({{nakki.durations|join('h, ')}}h)
-              <span class="badge badge-primary badge-pill float-right">{{ nakki.not_reserved }}</span>
+              <span class="badge badge-primary badge-pill float-right">{{ nakki.not_reserved|default(0) }}</span>
               </a>
               {% endfor %}
             </div>
