@@ -74,7 +74,8 @@ class EventSignUpController extends EventController
                 $booking->setMember($member);
                 $em->persist($booking);
                 $em->flush();
-                $text = $text = '**New Nakki reservation: '.$booking.'**';
+                $count = $repo->findEventNakkiCount($booking, $event);
+                $text = $text = '**Nakki reservation** '.$booking. ' ('. $count. ')';
                 $mm->SendToMattermost($text, 'nakkikone');
                 $this->addFlash('success', 'Nakki reserved');
             } else {

@@ -57,7 +57,32 @@ class NakkiBookingRepository extends ServiceEntityRepository
         ;
     }
     
-
+    public function findEventNakkiCount($booking, $event)
+    {
+        $definition = $booking->getNakki()->getDefinition();
+        $total = $this->createQueryBuilder('b')
+            ->select('count(b.id)')
+            ->leftJoin('b.nakki', 'n')
+            ->andWhere('b.event = :event')
+            ->andWhere('n.definition = :definition')
+            ->setParameter('event', $event)
+            ->setParameter('definition', $definition)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        $reserved = $this->createQueryBuilder('b')
+            ->select('count(b.id)')
+            ->leftJoin('b.nakki', 'n')
+            ->andWhere('b.event = :event')
+            ->andWhere('b.member IS NULL')
+            ->andWhere('n.definition = :definition')
+            ->setParameter('event', $event)
+            ->setParameter('definition', $definition)
+            ->getQuery()
+            ->getSingleScalarResult()
+        ;
+        return $reserved.'/'.$total;
+    }
     /*
     public function findOneBySomeField($value): ?NakkiBooking
     {
