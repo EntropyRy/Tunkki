@@ -267,7 +267,7 @@ class ItemAdmin extends AbstractAdmin
         }
         return $actions;
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $cm)
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $cm=null)
     {
         $this->mm = $mm;
         $this->ts = $ts;
