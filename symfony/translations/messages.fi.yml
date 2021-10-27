@@ -133,7 +133,7 @@ block:
         name: Statistiikkaa
         members: Jäseniä
         active_members: Aktiivijäseniä
-        bookings: Hoidetut vuokratapahtumia
+        bookings: Vuokratapahtumia
         events: Tapahtumia
     events:
         manage: Hallitse
