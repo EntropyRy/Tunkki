@@ -203,6 +203,7 @@ profile:
         wifi: Tarvitsee kertsin wifiyhteyden toimiakseen
 artist:
     not_confirmed_yet: Ei vahvistettu (vielä)
+    explanation: Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina. Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan. Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään tulevissa tapahtumissa, ja aiempi versio jää näkyville aiempaan tapahtumaan.
     no_artist_profile: Ei yhtään profiilia
     information: Perustiedot
     profiles: Artistiprofiilit
@@ -215,8 +216,8 @@ artist:
         bio: Bio suomeksi
         bio_en: Bio englanniksi
         genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
-        bio_help: Kerro lyhyesti saavutuksistasi 
-        hardware_help: Mitä tekniikkaa käytät esiintymiseen?
+        bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. 
+        hardware_help: Mitä tekniikkaa käytät esiintymiseen? (Vinyyli, CDJ)
         promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
         genre: Genre(t)
         hardware: Laitteisto

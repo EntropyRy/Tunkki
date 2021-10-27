@@ -159,6 +159,7 @@ profile:
 
 artist:
     not_confirmed_yet: Not confirmed (yet)
+    explanation: In principle, the artist profile is event-specific. This means that your profile below will appear in the next event you are an artist. If you edit your profile before the event, it will be updated for that event. If you edit your profile after an event, the edited profile will appear in future events, and the previous version will remain visible in the previous event.
     no_artist_profile: No artist profiles
     hardware: Hardware you use
     profiles: Artist Profiles
@@ -168,8 +169,8 @@ artist:
         preview: One random artist preview
     form:
         genre_help: VJs may describe the mood of the visualization. This field is not translated.
-        bio_help: Tell something about your artist achievements.
-        hardware_help: What kind of hardware are you using?
+        bio_help: Tell us briefly about yourself as an artist. For example, you can describe your background and what kind of music you will be playing at the next party.
+        hardware_help: What kind of hardware are you using? (Vinyl, CDJ)
         name: Artist name
         type: Type
         bio: Bio in Finnish
