@@ -132,4 +132,12 @@ class RSVP
 
         return $this;
     }
+
+    public function getAvailableLastName()
+    {
+        if ($this->getMember()){
+            return ucfirst($this->getMember()->getLastname());
+        }
+        return ucfirst($this->lastName);
+    }
 }

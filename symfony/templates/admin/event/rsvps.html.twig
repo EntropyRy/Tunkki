@@ -1,29 +1,64 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 {% block sonata_admin_content %}
     <div class="container-fluid">
-        <div class="row">
+        <div class="row no-print">
             <div class="col-md-12">
                 <h1>{{ event }}</h1>
             </div>
             <div class="col-md-12">
             {% if rsvps %}
             <h3>Ilmoittautuneiden mailit ({{ rsvps|length }})</h3>
-            {% apply spaceless %}
-            <p class="mails" style="display: none;">
-                {% for rsvp in rsvps %}
-                    {% if rsvp.member %}
-                    {{rsvp.member.email }};
-                    {% else %}
-                    {{rsvp.email}};
-                    {% endif %}
-                {% endfor %}
-            </p>
-            {% endapply %}
+            <p class="mails" style="display: none;">{% for rsvp in rsvps %}{% if rsvp.member %}{{rsvp.member.email }};{% else %}{{rsvp.email}};{% endif %}{% endfor %}</p>
+            <button class="btn btn-primary" onClick="copyToClipBoard()">Copy emails to clipboard</button>
+            <p>Muista lähettää maili niin että vastaanottajat on piilokopiona! (BCC)</p>
+            </div>
+            {% else %}
+                <h3>Ei osallistujia</h3>
             {% endif %}
-            <button class="btn btn-primary" onClick="copyToClipBoard()">Copy to clipboard</button>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <h3>Door list</h3>
+                {% if rsvps %}
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Arrived</th>
+                                <th>Last Name</th>
+                                <th>First Name</th>
+                                <th>Membership</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rsvp in rsvps|sort((a, b) => a.availableLastName <=> b.availableLastName) %}
+                            <tr>
+                                <td><input type="checkbox"></td>
+                                {% if rsvp.member %}
+                                    <td>{{ rsvp.member.lastName }}</td>
+                                    <td>{{ rsvp.member.firstName }}</td>
+                                    <td>
+                                        {% if rsvp.member.acceptedAsHonoraryMember %}
+                                            HC Member
+                                        {% elseif rsvp.member.isActiveMember %}
+                                            Active Member
+                                        {% else %}
+                                            Member
+                                        {% endif %}
+                                    </td>
+                                {% else %}
+                                    <td>{{ rsvp.lastName }}</td>
+                                    <td>{{ rsvp.firstName }}</td>
+                                    <td></td>
+                                {% endif %}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
             </div>
         </div>
     </div>
+
     <script>
     function copyToClipBoard(){
         navigator.clipboard.writeText($('.mails').text());
