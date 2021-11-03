@@ -72,12 +72,12 @@
                             <tbody>
                                 {% for hour in nakki.times %} 
                                 <tr>
-                                    <th>{{ hour|date('H:i')}}</th>
-                                    <th>
+                                    <td>{{ hour|date('H:i')}}</td>
+                                    <td>
                                         {% if nakki.memberByTime(hour) %}
                                         {{ nakki.memberByTime(hour) }}
                                         {% endif %}
-                                    </th>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
