@@ -58,10 +58,14 @@
                 <button class="no-print btn btn-secondary pull-right">
                     <a href="mailto:{{emails}}">Send mail to everyone</a>
                 </button>
+            </div>
+            <div class="col-md-12">
                 <div class="row">
-                    <h3>Timetable</h3>
+                    <h3>Timetable
+                        <small class="no-print">Click to hide table and reload the page to get it back</small>
+                    </h3>
                     {% for nakki in event.nakkis %}
-                    <div class="col-xs-4">
+                    <div class="col-xs-4" onClick="$(this).hide()">
                         <table class="table table-striped">
                             <thead>
                                 <tr>
