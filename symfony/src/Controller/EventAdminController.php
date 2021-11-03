@@ -12,7 +12,10 @@ final class EventAdminController extends CRUDController
     {
         $event = $this->admin->getSubject();
         $infos = $event->getEventArtistInfos();
-        return $this->renderWithExtraParams('admin/event/artist_list.html.twig', ['event' => $event, 'infos' => $infos]);
+        return $this->renderWithExtraParams('admin/event/artist_list.html.twig', [
+            'event' => $event, 
+            'infos' => $infos
+        ]);
     }
     public function nakkiListAction()
     {
@@ -28,7 +31,7 @@ final class EventAdminController extends CRUDController
         $emails = implode(';', $emails);
         return $this->renderWithExtraParams('admin/event/nakki_list.html.twig', [
             'event' => $event, 
-            'nakkis' => $nakkis, 
+            'nakkiBookings' => $nakkis, 
             'emails' => $emails
         ]);
     }

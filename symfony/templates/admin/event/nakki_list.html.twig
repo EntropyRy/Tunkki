@@ -3,65 +3,94 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <h1>{{ event }} 
-                </h1>
+                <h1>{{ event }}</h1>
             </div>
             <div class="col-md-12">
-                    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
-                    <button class="no-print btn btn-secondary pull-right">
-                        <a href="mailto:{{emails}}">Send mail to everyone</a>
-                    </button>
-            {% if nakkis %}
-            <h3>Contacts</h3>
-            {{ block('tablehead') }}
-            {% for nakki in nakkis %}
-                {% if nakki.member %}
-                <tr>
-                    <td>
-                        <span class="">
-                            {{ nakki.member.username }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="">
-                            {{ nakki.member }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="">{{ nakki.member.email }}</span>
-                    </td>
-                    <td>
-                        <span class="">
-                            {{ nakki.member.phone }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="">
-                            {{ nakki.nakki.definition.name('fi') }}
-                        </span>
-                    </td>
-                    <td>
-                        <span class="">
-                            {{ nakki.startAt|date('H:i') }}
-                        </span>
-                    </td>
-                </tr>
-                {% endif %}
-            {% endfor %}
-                </tbody>
-            </table>
-            {% endif %}
-                    <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
-                    <button class="no-print btn btn-secondary pull-right">
-                        <a href="mailto:{{emails}}">Send mail to everyone</a>
-                    </button>
+                <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+                <button class="no-print btn btn-secondary pull-right">
+                    <a href="mailto:{{emails}}">Send mail to everyone</a>
+                </button>
             </div>
+            {% if nakkiBookings %}
+                <h3>Contacts</h3>
+                <table class="table table-sm table-striped">
+                    {{ block('tablehead') }}
+                    <tbody>
+                    {% for nakki in nakkiBookings %}
+                        {% if nakki.member %}
+                        <tr>
+                            <td>
+                                <span class="">
+                                    {{ nakki.member.username }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="">
+                                    {{ nakki.member }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="">{{ nakki.member.email }}</span>
+                            </td>
+                            <td>
+                                <span class="">
+                                    {{ nakki.member.phone }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="">
+                                    {{ nakki.nakki.definition.name('fi') }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="">
+                                    {{ nakki.startAt|date('H:i') }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            {% endif %}
+            <div class="col-md-12">
+                <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+                <button class="no-print btn btn-secondary pull-right">
+                    <a href="mailto:{{emails}}">Send mail to everyone</a>
+                </button>
+                <div class="row">
+                    <h3>Timetable</h3>
+                    {% for nakki in event.nakkis %}
+                    <div class="col-xs-4">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>{{ nakki.definition.name('fi')}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for hour in nakki.times %} 
+                                <tr>
+                                    <th>{{ hour|date('H:i')}}</th>
+                                    <th>
+                                        {% if nakki.memberByTime(hour) %}
+                                        {{ nakki.memberByTime(hour) }}
+                                        {% endif %}
+                                    </th>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% endfor %}
+                </div>  
+            </div>  
         </div>
     </div>
 {% endblock %}
 
 {% block tablehead %}
-<table class="table table-sm table-striped">
     <thead>
         <tr>
             <th scope="col">Username</th>
@@ -72,5 +101,4 @@
             <th scope="col">When</th>
         </tr>
     </thead>
-    <tbody>
 {% endblock %}

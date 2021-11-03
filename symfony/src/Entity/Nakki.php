@@ -155,4 +155,29 @@ class Nakki
 
         return $this;
     }
+    
+    public function getTimes()
+    {
+        $times = [];
+        $diff = $this->getStartAt()->diff($this->getEndAt());
+        $hours = $diff->h;
+        $hours = ($hours + ($diff->days*24)) / $this->getNakkiInterval()->format('%h');
+        for ($i = 0; $i < $hours; $i++){
+            $start = $i*$this->getNakkiInterval()->format('%h');
+            $times[] = $this->getStartAt()->modify($start.' hour');
+        }
+        return $times;
+    }
+
+    public function getMemberByTime($date)
+    {
+        foreach ($this->getNakkiBookings() as $booking){
+            if($booking->getStartAt() == $date){
+                if ($booking->getMember()){
+                    return $booking->getMember();
+                }
+            }
+        }
+        return null;
+    }
 }
