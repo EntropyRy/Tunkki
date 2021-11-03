@@ -18,7 +18,19 @@ final class EventAdminController extends CRUDController
     {
         $event = $this->admin->getSubject();
         $nakkis = $event->getNakkiBookings();
-        return $this->renderWithExtraParams('admin/event/nakki_list.html.twig', ['event' => $event, 'nakkis' => $nakkis]);
+        $emails = []; 
+        foreach ($nakkis as $nakki){
+            $member = $nakki->getMember();
+            if ($member){
+                $emails[$member->getId()] = $member->getEmail();
+            }
+        }
+        $emails = implode(';', $emails);
+        return $this->renderWithExtraParams('admin/event/nakki_list.html.twig', [
+            'event' => $event, 
+            'nakkis' => $nakkis, 
+            'emails' => $emails
+        ]);
     }
     public function rsvpAction()
     {
