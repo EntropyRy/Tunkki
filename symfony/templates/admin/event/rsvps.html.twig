@@ -8,15 +8,24 @@
             <div class="col-md-12">
             {% if rsvps %}
             <h3>Ilmoittautuneiden mailit ({{ rsvps|length }})</h3>
-            {% for rsvp in rsvps %}
-                {% if rsvp.member %}
-                {{rsvp.member.email }};
-                {% else %}
-                {{rsvp.email}};
+            <p class="mails" style="display: none;">
+                {% for rsvp in rsvps %}
+                    {% if rsvp.member %}
+                    {{rsvp.member.email }};
+                    {% else %}
+                    {{rsvp.email}};
+                    {% endif %}
+                {% endfor %}
                 {% endif %}
-            {% endfor %}
-            {% endif %}
+            </p>
+            <button class="btn btn-primary" onClick="copyToClipBoard()">Copy to clipboard</button>
             </div>
         </div>
     </div>
+    <script>
+    function copyToClipBoard(){
+        navigator.clipboard.writeText($('.mails').text());
+    }
+    </script>
+    
 {% endblock %}
