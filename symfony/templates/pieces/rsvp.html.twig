@@ -24,5 +24,7 @@
     {% endif %}
     </div>
 </div>
+{% else %}
+<button class="btn btn-warning w-100 disabled">{{'rsvp.closed'|trans}}</button>
 {% endif %}
 {% endblock %}
