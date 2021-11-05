@@ -51,7 +51,7 @@ final class EventAdmin extends AbstractAdmin
             $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
             ]);
-            if ($admin->getSubject()->getRsvpSystemEnabled()){
+            if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0){
                 $menu->addChild('RSVP List', [
                    'uri' => $admin->generateUrl('rsvp', ['id' => $id])
                 ]);
