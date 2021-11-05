@@ -4710,16 +4710,16 @@
         },
         {
             "name": "sonata-project/block-bundle",
-            "version": "3.23.2",
+            "version": "3.23.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataBlockBundle.git",
-                "reference": "aeaef9fcfefc7924e19051f2dbf4a412d7fd5331"
+                "reference": "a7d97498819534f243478793db59d0f1d56740f0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/aeaef9fcfefc7924e19051f2dbf4a412d7fd5331",
-                "reference": "aeaef9fcfefc7924e19051f2dbf4a412d7fd5331",
+                "url": "https://api.github.com/repos/sonata-project/SonataBlockBundle/zipball/a7d97498819534f243478793db59d0f1d56740f0",
+                "reference": "a7d97498819534f243478793db59d0f1d56740f0",
                 "shasum": ""
             },
             "require": {
@@ -4755,6 +4755,7 @@
                 "matthiasnoback/symfony-dependency-injection-test": "^4.1",
                 "phpstan/phpstan": "^0.12.29",
                 "phpstan/phpstan-symfony": "^0.12.10",
+                "phpunit/phpunit": "^9.5",
                 "psalm/plugin-symfony": "^2.0",
                 "sonata-project/admin-bundle": "^3.28",
                 "symfony/debug": "^4.4",
@@ -4802,7 +4803,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataBlockBundle/issues",
-                "source": "https://github.com/sonata-project/SonataBlockBundle/tree/3.23.2"
+                "source": "https://github.com/sonata-project/SonataBlockBundle/tree/3.23.3"
             },
             "funding": [
                 {
@@ -4818,11 +4819,11 @@
                     "type": "github"
                 },
                 {
-                    "url": "https://github.com/wbloszyk",
+                    "url": "https://github.com/greg0ire",
                     "type": "github"
                 }
             ],
-            "time": "2021-07-19T23:40:39+00:00"
+            "time": "2021-11-04T06:52:01+00:00"
         },
         {
             "name": "sonata-project/cache",
@@ -5883,16 +5884,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.35.1",
+            "version": "3.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "50781e4290c20a50cdf46d5a9ceb2945566632d3"
+                "reference": "f3c851d779dc2a2aa87abba3370e6d3294447541"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/50781e4290c20a50cdf46d5a9ceb2945566632d3",
-                "reference": "50781e4290c20a50cdf46d5a9ceb2945566632d3",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/f3c851d779dc2a2aa87abba3370e6d3294447541",
+                "reference": "f3c851d779dc2a2aa87abba3370e6d3294447541",
                 "shasum": ""
             },
             "require": {
@@ -5943,7 +5944,7 @@
                 "friendsofsymfony/rest-bundle": "<2.6",
                 "jms/serializer": "<0.13",
                 "liip/imagine-bundle": "<1.9",
-                "nelmio/api-doc-bundle": "<2.13.5 || >=4.0",
+                "nelmio/api-doc-bundle": "<2.13.5",
                 "rackspace/php-opencloud": "<1.6",
                 "sonata-project/block-bundle": "<3.17 || >=4.0",
                 "sonata-project/classification-bundle": "<3.0 || >= 5.0",
@@ -5965,7 +5966,7 @@
                 "liip/imagine-bundle": "^1.9 || ^2.0",
                 "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0",
-                "nelmio/api-doc-bundle": "^2.13.5 || ^3.9",
+                "nelmio/api-doc-bundle": "^2.13.5 || ^3.9 || ^4.0",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.12.84",
                 "phpstan/phpstan-phpunit": "^0.12.16",
@@ -5990,7 +5991,7 @@
             "suggest": {
                 "friendsofsymfony/rest-bundle": "If you want to expose a ReST API.",
                 "liip/imagine-bundle": "If you want on-the-fly thumbnail generation or image filtering (scale, crop, watermark...).",
-                "nelmio/api-doc-bundle": "If you want to provide OAS documentation for the ReST API.",
+                "nelmio/api-doc-bundle": "If you want to provide OAS documentation for the ReST API, versions 2.x and 3.x are supported.",
                 "sonata-project/classification-bundle": "If you want to categorize your media items.",
                 "sonata-project/doctrine-orm-admin-bundle": "If you want to persist entities.",
                 "sonata-project/notification-bundle": "If you want to generate thumbnails asynchronously.",
@@ -6041,15 +6042,11 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.35.1"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.36.0"
             },
             "funding": [
                 {
                     "url": "https://github.com/OskarStark",
-                    "type": "github"
-                },
-                {
-                    "url": "https://github.com/VincentLanglet",
                     "type": "github"
                 },
                 {
@@ -6059,9 +6056,13 @@
                 {
                     "url": "https://github.com/greg0ire",
                     "type": "github"
+                },
+                {
+                    "url": "https://github.com/wbloszyk",
+                    "type": "github"
                 }
             ],
-            "time": "2021-10-18T14:27:32+00:00"
+            "time": "2021-11-04T16:33:02+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
@@ -12672,16 +12673,16 @@
     "packages-dev": [
         {
             "name": "nikic/php-parser",
-            "version": "v4.13.0",
+            "version": "v4.13.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "50953a2691a922aa1769461637869a0a2faa3f53"
+                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/50953a2691a922aa1769461637869a0a2faa3f53",
-                "reference": "50953a2691a922aa1769461637869a0a2faa3f53",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/63a79e8daa781cac14e5195e63ed8ae231dd10fd",
+                "reference": "63a79e8daa781cac14e5195e63ed8ae231dd10fd",
                 "shasum": ""
             },
             "require": {
@@ -12722,9 +12723,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.13.1"
             },
-            "time": "2021-09-20T12:20:58+00:00"
+            "time": "2021-11-03T20:52:16+00:00"
         },
         {
             "name": "symfony/debug-bundle",
