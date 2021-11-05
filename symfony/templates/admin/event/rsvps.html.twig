@@ -11,6 +11,7 @@
             <p class="mails" style="display: none;">{% for rsvp in rsvps %}{% if rsvp.member %}{{rsvp.member.email }};{% else %}{{rsvp.email}};{% endif %}{% endfor %}</p>
             <button class="btn btn-primary" onClick="copyToClipBoard()">Copy emails to clipboard</button>
             <p>Muista lähettää maili niin että vastaanottajat on piilokopiona! (BCC)</p>
+            <a href="{{ email_url }}">Lähetä RSVP mailit</a>
             </div>
             {% else %}
                 <h3>Ei osallistujia</h3>

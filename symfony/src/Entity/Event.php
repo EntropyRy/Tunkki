@@ -181,6 +181,16 @@ class Event
      */
     private $includeSaferSpaceGuidelines;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $RSVPEmailSubject;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $RSVPEmailBody;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -662,6 +672,30 @@ body {
     public function setIncludeSaferSpaceGuidelines(?bool $includeSaferSpaceGuidelines): self
     {
         $this->includeSaferSpaceGuidelines = $includeSaferSpaceGuidelines;
+
+        return $this;
+    }
+
+    public function getRSVPEmailSubject(): ?string
+    {
+        return $this->RSVPEmailSubject;
+    }
+
+    public function setRSVPEmailSubject(?string $RSVPEmailSubject): self
+    {
+        $this->RSVPEmailSubject = $RSVPEmailSubject;
+
+        return $this;
+    }
+
+    public function getRSVPEmailBody(): ?string
+    {
+        return $this->RSVPEmailBody;
+    }
+
+    public function setRSVPEmailBody(?string $RSVPEmailBody): self
+    {
+        $this->RSVPEmailBody = $RSVPEmailBody;
 
         return $this;
     }

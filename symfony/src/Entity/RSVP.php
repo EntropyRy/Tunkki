@@ -140,4 +140,11 @@ class RSVP
         }
         return ucfirst($this->lastName);
     }
+    public function getAvailableEmail()
+    {
+        if ($this->getMember()){
+            return $this->getMember()->getEmail();
+        }
+        return $this->email;
+    }
 }

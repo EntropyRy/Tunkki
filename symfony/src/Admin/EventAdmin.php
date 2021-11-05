@@ -205,7 +205,6 @@ final class EventAdmin extends AbstractAdmin
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
-                ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
                 ->add('picture', ModelListType::class,[
@@ -249,9 +248,10 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->end()
                 ->tab('Nakkikone config')
-                ->add('NakkikoneEnabled', null, [
-                    'help' => 'Publish nakkikone and allow members to reserve Nakkis (links are added and reservation works)',
-                ])
+                ->with('Config')
+                    ->add('NakkikoneEnabled', null, [
+                        'help' => 'Publish nakkikone and allow members to reserve Nakkis (links are added and reservation works)',
+                    ])
                     ->add('nakkiInfoEn', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
@@ -262,6 +262,18 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false,
                         'ckeditor_context' => 'default', 
                     ])
+                ->end()
+                ->end()
+                ->tab('RSVP')
+                ->with('Config')
+                    ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
+                    ->add('RSVPEmailSubject')
+                    ->add('RSVPEmailBody', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default', 
+                    ])
+                ->end()
                 ->end()
                 ;
         }
@@ -285,6 +297,7 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
+        $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }
 }
