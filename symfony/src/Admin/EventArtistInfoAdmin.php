@@ -55,7 +55,13 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $subject = $this->getSubject();
         if (empty($subject->getArtist())){
             $formMapper
-                ->add('Artist');
+                ->add('Artist', null, [
+                    'query_builder' => function ($repo) {
+                        return $repo->createQueryBuilder('a')
+                            ->andWhere('a.copyForArchive = :copy')
+                            ->setParameter('copy', false);
+                    }
+                ]);
         } else {
             $formMapper
                 ->add('Artist', null, ['disabled' => true])
