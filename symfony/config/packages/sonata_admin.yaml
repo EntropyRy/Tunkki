@@ -35,6 +35,7 @@ sonata_admin:
                 icon:            '<i class="fa fa-archive"></i>'
                 items:
                     - entropy_tunkki.admin.item
+                    - entropy_tunkki.admin.accessory_choices
                     - entropy_tunkki.admin.file
 
             sonata.admin.group.rentals:
