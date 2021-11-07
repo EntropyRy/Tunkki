@@ -16,7 +16,8 @@ final class RSVPAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('name')
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             ->add('member');
         if(!$this->isChild()){
