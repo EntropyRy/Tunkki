@@ -335,7 +335,7 @@
         {% for link in artist.links %}
         <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} 
          href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
-        </span>{% if not loop.last %}|{% endif %}
+        </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
     {% endif %}
 {% endblock %}
