@@ -657,16 +657,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "2.13.4",
+            "version": "2.13.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "2411a55a2a628e6d8dd598388ab13474802c7b6e"
+                "reference": "d92ddb260547c2a7b650ff140f744eb6f395d8fc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/2411a55a2a628e6d8dd598388ab13474802c7b6e",
-                "reference": "2411a55a2a628e6d8dd598388ab13474802c7b6e",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/d92ddb260547c2a7b650ff140f744eb6f395d8fc",
+                "reference": "d92ddb260547c2a7b650ff140f744eb6f395d8fc",
                 "shasum": ""
             },
             "require": {
@@ -679,13 +679,13 @@
             "require-dev": {
                 "doctrine/coding-standard": "9.0.0",
                 "jetbrains/phpstorm-stubs": "2021.1",
-                "phpstan/phpstan": "0.12.99",
+                "phpstan/phpstan": "1.1.1",
                 "phpunit/phpunit": "^7.5.20|^8.5|9.5.10",
                 "psalm/plugin-phpunit": "0.16.1",
-                "squizlabs/php_codesniffer": "3.6.0",
+                "squizlabs/php_codesniffer": "3.6.1",
                 "symfony/cache": "^4.4",
                 "symfony/console": "^2.0.5|^3.0|^4.0|^5.0",
-                "vimeo/psalm": "4.10.0"
+                "vimeo/psalm": "4.12.0"
             },
             "suggest": {
                 "symfony/console": "For helpful console commands such as SQL execution and import of files."
@@ -746,7 +746,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/2.13.4"
+                "source": "https://github.com/doctrine/dbal/tree/2.13.5"
             },
             "funding": [
                 {
@@ -762,7 +762,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-10-02T15:59:26+00:00"
+            "time": "2021-11-11T16:27:36+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -1618,16 +1618,16 @@
         },
         {
             "name": "doctrine/sql-formatter",
-            "version": "1.1.1",
+            "version": "1.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/sql-formatter.git",
-                "reference": "56070bebac6e77230ed7d306ad13528e60732871"
+                "reference": "20c39c2de286a9d3262cc8ed282a4ae60e265894"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/56070bebac6e77230ed7d306ad13528e60732871",
-                "reference": "56070bebac6e77230ed7d306ad13528e60732871",
+                "url": "https://api.github.com/repos/doctrine/sql-formatter/zipball/20c39c2de286a9d3262cc8ed282a4ae60e265894",
+                "reference": "20c39c2de286a9d3262cc8ed282a4ae60e265894",
                 "shasum": ""
             },
             "require": {
@@ -1640,11 +1640,6 @@
                 "bin/sql-formatter"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.x-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Doctrine\\SqlFormatter\\": "src"
@@ -1669,9 +1664,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/sql-formatter/issues",
-                "source": "https://github.com/doctrine/sql-formatter/tree/1.1.x"
+                "source": "https://github.com/doctrine/sql-formatter/tree/1.1.2"
             },
-            "time": "2020-07-30T16:57:33+00:00"
+            "time": "2021-11-05T11:11:14+00:00"
         },
         {
             "name": "egulias/email-validator",
@@ -5156,16 +5151,16 @@
         },
         {
             "name": "sonata-project/datagrid-bundle",
-            "version": "3.4.1",
+            "version": "3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDatagridBundle.git",
-                "reference": "2ac284e56fe5197c2cc0359d18e57a22ada79747"
+                "reference": "7e0e50fdb20e520b135c3e2d93313c7124b7da6c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDatagridBundle/zipball/2ac284e56fe5197c2cc0359d18e57a22ada79747",
-                "reference": "2ac284e56fe5197c2cc0359d18e57a22ada79747",
+                "url": "https://api.github.com/repos/sonata-project/SonataDatagridBundle/zipball/7e0e50fdb20e520b135c3e2d93313c7124b7da6c",
+                "reference": "7e0e50fdb20e520b135c3e2d93313c7124b7da6c",
                 "shasum": ""
             },
             "require": {
@@ -5223,7 +5218,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataDatagridBundle/issues",
-                "source": "https://github.com/sonata-project/SonataDatagridBundle/tree/3.4.1"
+                "source": "https://github.com/sonata-project/SonataDatagridBundle/tree/3.4.2"
             },
             "funding": [
                 {
@@ -5243,7 +5238,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-06T14:37:38+00:00"
+            "time": "2021-11-07T16:23:56+00:00"
         },
         {
             "name": "sonata-project/doctrine-extensions",
@@ -5566,16 +5561,16 @@
         },
         {
             "name": "sonata-project/exporter",
-            "version": "2.9.0",
+            "version": "2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/exporter.git",
-                "reference": "2e584ee88270ec0f32a5becf32f299ec7b3b0b19"
+                "reference": "a315acc6aec89895cef76a1dbd452dec139f385b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/2e584ee88270ec0f32a5becf32f299ec7b3b0b19",
-                "reference": "2e584ee88270ec0f32a5becf32f299ec7b3b0b19",
+                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/a315acc6aec89895cef76a1dbd452dec139f385b",
+                "reference": "a315acc6aec89895cef76a1dbd452dec139f385b",
                 "shasum": ""
             },
             "require": {
@@ -5651,7 +5646,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/exporter/issues",
-                "source": "https://github.com/sonata-project/exporter/tree/2.9.0"
+                "source": "https://github.com/sonata-project/exporter/tree/2.9.1"
             },
             "funding": [
                 {
@@ -5671,7 +5666,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-06T14:37:04+00:00"
+            "time": "2021-11-12T10:44:42+00:00"
         },
         {
             "name": "sonata-project/form-extensions",
@@ -6814,21 +6809,21 @@
         },
         {
             "name": "symfony-cmf/routing",
-            "version": "2.3.3",
+            "version": "2.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/Routing.git",
-                "reference": "3c97e7b7709b313cecfb76d691ad4cc22acbf3f5"
+                "reference": "bbcdf2f6301d740454ba9ebb8adaefd436c36a6b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/3c97e7b7709b313cecfb76d691ad4cc22acbf3f5",
-                "reference": "3c97e7b7709b313cecfb76d691ad4cc22acbf3f5",
+                "url": "https://api.github.com/repos/symfony-cmf/Routing/zipball/bbcdf2f6301d740454ba9ebb8adaefd436c36a6b",
+                "reference": "bbcdf2f6301d740454ba9ebb8adaefd436c36a6b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.2 || ^8.0",
-                "psr/log": "^1.0",
+                "psr/log": "^1.0 || ^2.0 || ^3.0",
                 "symfony/http-kernel": "^4.4 || ^5.0",
                 "symfony/routing": "^4.4 || ^5.0"
             },
@@ -6871,9 +6866,9 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony-cmf/Routing/issues",
-                "source": "https://github.com/symfony-cmf/Routing/tree/2.3.3"
+                "source": "https://github.com/symfony-cmf/Routing/tree/2.3.4"
             },
-            "time": "2020-10-06T10:15:37+00:00"
+            "time": "2021-11-08T16:33:10+00:00"
         },
         {
             "name": "symfony-cmf/routing-bundle",
