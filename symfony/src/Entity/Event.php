@@ -191,6 +191,11 @@ class Event
      */
     private $RSVPEmailBody;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $headerTheme = 'light';
+
     public function getId(): ?int
     {
         return $this->id;
@@ -323,24 +328,12 @@ class Event
     {
         $this->publishDate = new \DateTime();
         $this->css = "/* If you want to play with CSS these help you. First remove this and last line
-header {
-    display: none; 
-}
-footer {
-    display: none !important;
-}
-body { 
-    background: black;
+body {
+    background-image: url(/images/bg_stripe_black.png); 
 }
 .container {
     background: transparent;
     color: red;
-}
-.img-fluid {  
-
-}
-.img-right {  
-
 }
 */";
 		$this->eventArtistInfos = new ArrayCollection();
@@ -696,6 +689,18 @@ body {
     public function setRSVPEmailBody(?string $RSVPEmailBody): self
     {
         $this->RSVPEmailBody = $RSVPEmailBody;
+
+        return $this;
+    }
+
+    public function getHeaderTheme(): ?string
+    {
+        return $this->headerTheme;
+    }
+
+    public function setHeaderTheme(?string $headerTheme): self
+    {
+        $this->headerTheme = $headerTheme;
 
         return $this;
     }

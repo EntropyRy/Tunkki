@@ -216,6 +216,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
             if ($event->getexternalUrl()==false){
                 $formMapper
+                    ->add('headerTheme', null,[
+                        'help' => 'possible values: light and dark'
+                    ])
                     ->add('css');
             }
             $formMapper

@@ -1,24 +1,39 @@
 {% apply spaceless %}
 {% set loc = app.request.locale %}
-<nav class="navbar navbar-expand-lg navbar-light">
-<a class="navbar-brand d-lg-none d-inline-block" href="/"><img src="/images/header-logo-text.svg" width="auto" height="45" alt="Entropy"></a>
-    {% if event is defined and event.url is not empty and not event.externalUrl %}
-    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
-    {% else %}
-    <span class="d-lg-none"><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
+{% if event is defined %}
+    {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
+    {% if event.url is not empty and not event.externalUrl %}
+        {% set event_url = path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) %}
     {% endif %}
+{% else %}
+    {% set theme = 'light' %}
+{% endif %}
+<nav class="navbar navbar-expand-lg navbar-{{ theme }}">
+    <a class="navbar-brand d-lg-none d-inline-block" href="/">
+        <img src="/images/header-logo-text.svg" 
+            width="auto" height="45" alt="Entropy"
+            {% if theme == 'dark' %}
+                style="filter:invert(1);"
+            {% endif %}
+        >
+    </a>
+    <span class="d-lg-none">
+        <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
+    </span>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      {{ knp_menu_render(loc) }}
+    {{ knp_menu_render(loc) }}
     {% if not app.user %}
-        {% if event is defined and event.url is not empty and not event.externalUrl %}
-        <span><a href="/{%if loc == 'fi'%}en/{% endif %}{{event.eventDate|date('Y')}}/{{ event.url }}/">{{'lang'|trans|capitalize}}</a></span>
-    {% else %}
-        <span><a href="/{%if loc == 'fi'%}en/{%endif%}">{{'lang'|trans|capitalize}}</a></span>
-    {% endif %}
-       <span class="d-lg-none" style="float:right;"><a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a></span> 
+       <span>
+           <a href="/{%if loc == 'fi'%}en/{% endif %}
+               {% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}
+           </a>
+       </span>
+       <span class="d-lg-none" style="float:right;">
+           <a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+       </span> 
     {% endif %}
   </div>
 </nav>

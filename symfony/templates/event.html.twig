@@ -24,6 +24,11 @@
         {% endif %} 
 <style>
 {{ event.css|raw }}
+{% if event.headerTheme == 'dark' %}
+.header-img {
+    filter: invert(1);
+}
+{% endif %}
 </style>
     {% else %}
         <div clas="col-12">
