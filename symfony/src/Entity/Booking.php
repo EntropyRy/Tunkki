@@ -212,6 +212,11 @@ class Booking
      */
     private $reasonForDiscount;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $renterSignature;
+
 
 
     /**
@@ -902,6 +907,18 @@ class Booking
     public function setReasonForDiscount(?string $reasonForDiscount): self
     {
         $this->reasonForDiscount = $reasonForDiscount;
+
+        return $this;
+    }
+
+    public function getRenterSignature(): ?string
+    {
+        return $this->renterSignature;
+    }
+
+    public function setRenterSignature(?string $renterSignature): self
+    {
+        $this->renterSignature = $renterSignature;
 
         return $this;
     }

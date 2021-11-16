@@ -14,5 +14,7 @@
     "typeface-spacegrotesk": "^0.0.66"
   },
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+    "jq-signature": "^2.0.0"
+  }
 }

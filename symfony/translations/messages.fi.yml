@@ -8,7 +8,8 @@ renter: vuokraaja
 Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
 Submit: Lähetä
 submit: lähetä
-Agree: hyväksy
+Agree: Hyväksy
+Signed: Allekirjoitettu
 fi: Suomi
 en: Englanti
 
@@ -79,7 +80,7 @@ fb.event: FB tapahtuma
 entropy.seo.description: Elektronisen musiikin kulttuuri yhdistys
 map: Kartta
 profile_url: profiili
-Total rent price: Kokanais hinta
+Total rent price: Kokonaishinta
 reset_your_password: Vaihda salasanasi
 send_password_reset_email: Lähetä
 reset_password_form_help: Kun annat sähköpostisi niin lähetämme sinulle sähköpostin josta löydät linkin salasanan vaihtamiseksi

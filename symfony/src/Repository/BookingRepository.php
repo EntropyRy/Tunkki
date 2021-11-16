@@ -70,6 +70,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
             $data['accessories']=$accessories; 
             $data['rent']=$rent; 
             $data['compensation']=$compensation; 
+            $data['renterSignature']=$object->getRenterSignature(); 
             return [$data, $object];
         } else {
             return 'error';

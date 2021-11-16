@@ -33,18 +33,19 @@ class RenterHashController extends Controller
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])){
             $object = $bookingdata[1];
-            if($object->getRenterConsent()){
-                $class='hidden';
-            } else {
-                $class='btn btn-large btn-success';
-            }
             $form = $this->createForm(BookingConsentType::class, $object);
 			if($request->getMethod() == 'POST'){
 				$form->handleRequest($request);
-				if($form->isValid() && $form->isSubmitted()){
-					//$bookingdata = $form->getData();
-					$this->em->persist($object);
-					$this->em->flush();
+                if($form->isValid() && $form->isSubmitted()){
+
+                    $booking = $form->getData();
+                    if ($booking->getRenterConsent() == true && !is_null($booking->getRenterSignature())){
+                        $this->em->persist($booking);
+                        $this->em->flush();
+                        $this->addFlash('success', 'Allekirjoitettu!');
+                    } else {
+                        $this->addFlash('warning', 'Allekirjoita uudestaan ja hyväksy ehdot');
+                    }
 				}
 			}
             $page = $cms->retrieve()->getCurrentPage();
