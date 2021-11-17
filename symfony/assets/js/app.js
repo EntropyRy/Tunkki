@@ -2,6 +2,7 @@ import '../css/custom.scss';
 import '../css/polaroid.scss';
 import '../css/app.css';
 import '../css/dark.scss';
+import '../css/animations.scss';
 
 import 'bootstrap';
 import bsCustomFileInput from 'bs-custom-file-input';

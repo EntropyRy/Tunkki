@@ -107,7 +107,7 @@
     </video>
 </div>
 {% endif %}
-    <div{% if event.picture.providername == 'sonata.media.provider.youtube' %} class="video-fluid"{% endif %}>
+<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}">
         {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
 {% endblock %}

@@ -1,0 +1,13 @@
+@keyframes morph {
+    0% { background-color: red; }
+    25% { background-color: green; }
+    50% { background-color: blue; }
+    75% { background-color: green; }
+    100% { background-color: red; }
+}
+@keyframes transparent_morph {
+    0% { background-color: rgba(0, 0, 0, 0); }
+    33% { background-color: rgba(255, 0, 0, 0.5); }
+    66% { background-color: rgba(0, 255, 0, 1); }
+    100% { background-color: rgba(0, 0, 0, 0); }
+}

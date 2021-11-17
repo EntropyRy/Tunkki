@@ -332,14 +332,22 @@ body {
     background-image: url(/images/bg_stripe_black.png); 
 }
 .container {
-    background: transparent;
+    background: #220101;
     color: red;
+}
+.img-filter {
+    /* possible animations: morph and transparent_morph, still color with background */
+    /* animation: morph 8s infinite; */
+    background: #00FFFF;
+}
+.img-filter img {
+    mix-blend-mode: difference;
 }
 */";
 		$this->eventArtistInfos = new ArrayCollection();
-  $this->RSVPs = new ArrayCollection();
-  $this->nakkis = new ArrayCollection();
-  $this->nakkiBookings = new ArrayCollection();
+        $this->RSVPs = new ArrayCollection();
+        $this->nakkis = new ArrayCollection();
+        $this->nakkiBookings = new ArrayCollection();
     }
 
     public function getType(): ?string
