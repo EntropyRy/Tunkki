@@ -11,10 +11,10 @@
     "popper.js": "^1.16.1",
     "sass": "~1.32.12",
     "sass-loader": "^11.0.0",
+    "jq-signature": "^2.0.0",
     "typeface-spacegrotesk": "^0.0.66"
   },
   "private": true,
   "dependencies": {
-    "jq-signature": "^2.0.0"
   }
 }
