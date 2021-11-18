@@ -28,10 +28,10 @@ class ArtistType extends AbstractType
                     'VJ' => 'VJ'
                 ]
             ])
+            ->add('hardware', null, ['label' => 'artist.form.hardware','help' => 'artist.form.hardware_help'])
             ->add('genre', null, ['label' => 'artist.form.genre','help' => 'artist.form.genre_help'])
             ->add('bio', null, ['label' => 'artist.form.bio','help' => 'artist.form.bio_help'])
             ->add('bioEn', null, ['label' => 'artist.form.bio_en','help' => 'artist.form.bio_help'])
-            ->add('hardware', null, ['label' => 'artist.form.hardware','help' => 'artist.form.hardware_help'])
             ->add('links', CollectionType::class, [
                 'label' => 'artist.form.links',
                 'allow_add' => true,

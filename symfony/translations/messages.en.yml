@@ -169,7 +169,7 @@ artist:
         preview: One random artist preview
     form:
         genre_help: VJs may describe the mood of the visualization. This field is not translated.
-        bio_help: Tell us briefly about yourself as an artist. For example, you can describe your background and what kind of music you will be playing at the next party.
+        bio_help: Tell us briefly about yourself as an artist. For example, you can describe your background and what kind of music you will be playing at the next party. Plase don't use links here, add them to the link list.
         hardware_help: What kind of hardware are you using? (Vinyl, CDJ)
         name: Artist name
         type: Type
