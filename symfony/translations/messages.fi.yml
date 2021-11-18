@@ -219,7 +219,7 @@ artist:
         bio_en: Bio englanniksi
         genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
         bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää linkit alla olevaan linkkilistaan, ei tähän. 
-        hardware_help: Mitä tekniikkaa käytät esiintymiseen? (Vinyyli, CDJ)
+        hardware_help: Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua. (Vinyyli, CDJ)
         promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
         genre: Genre(t)
         hardware: Laitteisto
