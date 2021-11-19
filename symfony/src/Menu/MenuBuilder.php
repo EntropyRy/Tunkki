@@ -91,8 +91,13 @@ class MenuBuilder
             }
         } else {
             if($m->getPageEn()){
+                if (strpos($m->getPageEn(), '/en') !== 0){
+                    $prefix = '/en';
+                } else {
+                    $prefix = '';
+                }
                 $menu->addChild($m->getLabel(), ['route' => 'page_slug',
-                    'routeParameters' => ['path' => '/'.$m->getPageEn()->getSlug()]]);
+                    'routeParameters' => ['path' => $prefix.$m->getPageEn()->getSlug()]]);
             } else {
                 if (strpos($m->getUrl(), 'http') !== false){
                     $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
