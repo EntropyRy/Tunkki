@@ -92,7 +92,7 @@ class MenuBuilder
         } else {
             if($m->getPageEn()){
                 $menu->addChild($m->getLabel(), ['route' => 'page_slug',
-                    'routeParameters' => ['path' => '/en/'.$m->getPageEn()->getSlug()]]);
+                    'routeParameters' => ['path' => '/'.$m->getPageEn()->getSlug()]]);
             } else {
                 if (strpos($m->getUrl(), 'http') !== false){
                     $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);

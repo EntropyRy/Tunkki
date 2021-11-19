@@ -1,5 +1,5 @@
 {% apply spaceless %}
-{% set loc = app.request.locale %}
+{% set loc = app.user.member.locale ? app.user.member.locale : app.request.locale %}
 {% if event is defined %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     {% if event.url is not empty and not event.externalUrl %}
