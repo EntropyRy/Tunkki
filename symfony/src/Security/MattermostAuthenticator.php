@@ -101,9 +101,9 @@ class MattermostAuthenticator extends SocialAuthenticator
             return new RedirectResponse($this->urlG->generate('sonata_admin_dashboard'));
         } else {
             if( $user->getMember()->getLocale()){
-                return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
+                return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
             } else {
-                return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
+                return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$request->getLocale()));
             }
         }
     }
