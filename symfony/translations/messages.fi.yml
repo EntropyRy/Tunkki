@@ -150,7 +150,7 @@ block:
         help: Tule auttamaan huoltotöissä?
     email_lists:
         name: Sähköpostilistat
-        tiedotus: Tiedotus lista
+        tiedotus: Tiedotuslista
         aktiivit: Aktiivien lista
         vuokra: Vuokraajien lista
         control: Hallinnointi
@@ -189,7 +189,7 @@ profile:
     save: tallenna
     only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
     logout: Uloskirjautuminen
-    no_access_groups: Ei erityis oikeuksia
+    no_access_groups: Ei erityisoikeuksia
     door:
         log: Kertsin ovilogi
         opener: Kertsin oven avaaja
@@ -209,7 +209,7 @@ artist:
     no_artist_profile: Ei yhtään profiilia
     information: Perustiedot
     profiles: Artistiprofiilit
-    list: Artisti listaus
+    list: Artistilistaus
     random:
         preview: Yksi satunnainen artistiesittely
     form:
