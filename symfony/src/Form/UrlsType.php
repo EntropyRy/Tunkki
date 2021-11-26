@@ -30,6 +30,7 @@ final class UrlsType extends AbstractType
                 'attr' => ['placeholder' => 'Soundcloud']
             ])
             ->add('open_in_new_window', CheckboxType::class,[
+                'required' => false,
                 'label'=> 'url.form.open_in_new_window',
             ])
             ;
