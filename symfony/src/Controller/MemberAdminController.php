@@ -17,6 +17,7 @@ use App\Entity\Member;
 
 final class MemberAdminController extends CRUDController
 {
+    /* Not in use
     public function makeuserAction($id)
     {
         $object = $this->admin->getSubject();
@@ -49,11 +50,12 @@ final class MemberAdminController extends CRUDController
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
+     */
 
-    public function sendrejectreasonAction($id)
+/*    public function sendrejectreasonAction($id)
     {
         $object = $this->admin->getSubject();
-        $message = new \Swift_Message();
+        // TODO: change to symfony mailer $message = new Message();
         $message->setFrom(['hallitus@entropy.fi'], "Entropyn Hallitus");
         $message->setTo($object->getEmail());
         $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
@@ -73,7 +75,8 @@ final class MemberAdminController extends CRUDController
         $this->addFlash('sonata_flash_success', sprintf('Reject reason sent to %s', $object->getName()));
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         
-    }
+}
+ */
     public function activememberinfoAction($id)
     {
         $object = $this->admin->getSubject();

@@ -6,20 +6,19 @@ use App\Entity\StatusEvent;
 use App\Entity\Reward;
 use Sonata\AdminBundle\Event\PersistenceEvent;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 
 class BookingAdminListener
 {
-    /**
-     *
-     * @var Swift_Mailer
-     */
     private $mailer = null;
     private $email = null;
     private $fromEmail = null;
     private $twig = null;
     private $em = null;
 
-    public function __construct(string $email,string $fromEmail, \Swift_Mailer $mailer, \Twig_Environment $twig, EntityManagerInterface $em)
+    public function __construct(string $email,string $fromEmail, MailerInterface $mailer, \Twig_Environment $twig, EntityManagerInterface $em)
     {
         $this->email = $email;
         $this->fromEmail = $fromEmail;
@@ -34,21 +33,16 @@ class BookingAdminListener
            $booking = $event->getObject();
            if($booking instanceof Booking){
                $mailer = $this->mailer;
-               $message = new \Swift_Message();
-               $message->setFrom([$this->fromEmail], "Tunkki");
-               $message->setTo($this->email);
-               $message->setSubject("[Entropy Tunkki] New Booking on ". $booking->getBookingDate()->format('d.m.Y') );
-               $message->setBody(
-               $this->twig->render(
-                   'emails/notification.html.twig',
-                       [
-                           'booking' => $booking,
-                           'email' => ['addLoginLinksToFooter' => true]
-                       ] 
-                   ),
-                   'text/html'
-               );
-               $mailer->send($message);
+               $email = (new TemplatedEmail())
+                    ->from(new Address($this->fromEmail, 'Tunkki'))
+                    ->to($this->email)
+                    ->subject("[Entropy Tunkki] New Booking on ". $booking->getBookingDate()->format('d.m.Y') )
+                    ->htmlTemplate('emails/notification.html.twig')
+                    ->context([
+                        'booking' => $booking,
+                    ])
+                    ;
+               $mailer->send($email);
            }
         }
     }
