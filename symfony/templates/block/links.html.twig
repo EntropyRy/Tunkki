@@ -18,7 +18,7 @@
             {% if link.icon %}<span class="fa-li"><i class="{{link.icon }}"></i></span>
             {% else %}<span class="fa-li"><i class="fas fa-link"></i></span>
             {% endif %}
-            <a target="_blank" href="{{ link.url }}"> {{ link.title }}</a>
+            <a class="nav-link" target="_blank" href="{{ link.url }}"> {{ link.title }}</a>
         </li>
         {% endfor %}
         </ul>

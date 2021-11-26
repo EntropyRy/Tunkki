@@ -14,17 +14,12 @@
 {% endif %}
 <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
     <a class="navbar-brand d-lg-none d-inline-block" href="/{%if loc == 'en'%}en{% endif %}">
-        <img src="/images/header-logo-text.svg" 
-            width="auto" height="45" alt="Entropy"
-            {% if theme == 'dark' %}
-                style="filter:invert(1);"
-            {% endif %}
-        >
+        <img src="/images/header-logo-text.svg" width="auto" height="45" alt="Entropy" {% if theme == 'dark' %}style="filter:invert(1);" {% endif %}>
     </a>
     <span class="d-lg-none">
-        <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
+        <a class="nav-link" href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
     </span>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -34,7 +29,7 @@
            <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
        </span>
        <span class="d-lg-none" style="float:right;">
-           <a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+           <a class="btn-link" href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
        </span> 
     {% endif %}
   </div>
