@@ -224,6 +224,7 @@ final class EventAdmin extends AbstractAdmin
                             'luminosity' => 'mix-blend-mode: luminosity',
                             'multiply' => 'mix-blend-mode: multiply',
                             'exclusion' => 'mix-blend-mode: exclusion',
+                            'difference' => 'mix-blend-mode: difference',
                         ]
                 ]);
             if ($event->getexternalUrl()==false){
