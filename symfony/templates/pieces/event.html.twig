@@ -109,9 +109,17 @@
     </video>
 </div>
 {% endif %}
-<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}">
-        {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
+<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
+     {{ block('imgfilter') }}
+    >
+    {% media event.picture, 'banner' with {'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
+{% endblock %}
+
+{% block imgfilter %}
+{% if event.imgFilterColor %}
+    style="background: {{event.imgFilterColor}};"
+{% endif %}
 {% endblock %}
 
 {% block links %}

@@ -201,6 +201,16 @@ class Event
      */
     private $streamPlayerUrl;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imgFilterColor;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $imgFilterBlendMode;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -746,6 +756,30 @@ body {
     public function setStreamPlayerUrl(?string $streamPlayerUrl): self
     {
         $this->streamPlayerUrl = $streamPlayerUrl;
+
+        return $this;
+    }
+
+    public function getImgFilterColor(): ?string
+    {
+        return $this->imgFilterColor;
+    }
+
+    public function setImgFilterColor(?string $imgFilterColor): self
+    {
+        $this->imgFilterColor = $imgFilterColor;
+
+        return $this;
+    }
+
+    public function getImgFilterBlendMode(): ?string
+    {
+        return $this->imgFilterBlendMode;
+    }
+
+    public function setImgFilterBlendMode(?string $imgFilterBlendMode): self
+    {
+        $this->imgFilterBlendMode = $imgFilterBlendMode;
 
         return $this;
     }

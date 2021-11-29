@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
@@ -189,9 +190,6 @@ final class EventAdmin extends AbstractAdmin
                 ->add('cancelled', null, ['help' => 'Event has been cancelled'])
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
-                ->add('streamPlayerUrl', null, [
-                    'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
-                ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
@@ -206,6 +204,9 @@ final class EventAdmin extends AbstractAdmin
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. 
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
+                ->add('streamPlayerUrl', null, [
+                    'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
+                ])
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
@@ -215,7 +216,15 @@ final class EventAdmin extends AbstractAdmin
                         'link_parameters'=>[
                         'context' => 'event'
                     ]])
-                ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
+                ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices])
+                ->add('imgFilterColor', ColorType::class)
+                ->add('imgFilterBlendMode', ChoiceType::class, [
+                    'choices' => [
+                            'luminosity' => 'mix-blend-mode: luminosity',
+                            'multiply' => 'mix-blend-mode: multiply',
+                            'exclusion' => 'mix-blend-mode: exclusion',
+                        ]
+                ]);
             if ($event->getexternalUrl()==false){
                 $formMapper
                     ->add('headerTheme', null,[
