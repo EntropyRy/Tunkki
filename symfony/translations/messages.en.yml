@@ -113,7 +113,7 @@ menu:
 event:
     not_public: not public
     player:
-        will_appear_here_when_the_stream_is_on: Player will appear here when the stream is on
+        will_appear_here_when_the_stream_is_on: Player will appear here on page load when the stream is on
     form:
         sign_up:
             artist: Artist

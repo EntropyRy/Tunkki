@@ -159,7 +159,7 @@ menu:
 event:
     not_public: ei julkinen
     player:
-        will_appear_here_when_the_stream_is_on: Soitin ilmestyy tähän kun streami on päällä
+        will_appear_here_when_the_stream_is_on: Streamin alettua tähän ilmestyy soitin sivulatauksella
     form:
         sign_up:
             artist: Artisti
