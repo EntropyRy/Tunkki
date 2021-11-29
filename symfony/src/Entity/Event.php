@@ -196,6 +196,11 @@ class Event
      */
     private $headerTheme = 'light';
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $streamPlayerUrl;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -349,7 +354,26 @@ body {
         $this->nakkis = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
     }
-
+    public function getNowTest(): ?string
+    {
+        $now = new \DateTime();
+        if($this->until){
+            if ($now >= $this->EventDate && $now <= $this->until ){
+                return 'now';
+            } elseif ($now > $this->until) {
+                return 'after';
+            } elseif ($now < $this->EventDate) {
+                return 'before';
+            }
+        } else {
+            if ( $now < $this->EventDate ){
+                return 'before';
+            } else {
+                return 'after';
+            }
+        }
+        return false;
+    }
     public function getType(): ?string
     {
         return $this->type;
@@ -462,6 +486,7 @@ body {
         $abstract = str_replace("{{ vj_bios }}", "",$abstract);
         $abstract = str_replace("{{ rsvp }}", "",$abstract);
         $abstract = str_replace("{{ links }}", "",$abstract);
+        $abstract = str_replace("{{ streamplayer }}", "",$abstract);
         return $abstract;
     }
     public function getNameByLang($lang)
@@ -709,6 +734,18 @@ body {
     public function setHeaderTheme(?string $headerTheme): self
     {
         $this->headerTheme = $headerTheme;
+
+        return $this;
+    }
+
+    public function getStreamPlayerUrl(): ?string
+    {
+        return $this->streamPlayerUrl;
+    }
+
+    public function setStreamPlayerUrl(?string $streamPlayerUrl): self
+    {
+        $this->streamPlayerUrl = $streamPlayerUrl;
 
         return $this;
     }

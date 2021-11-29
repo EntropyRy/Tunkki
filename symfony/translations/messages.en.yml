@@ -112,6 +112,8 @@ menu:
     logon_to: Log on to
 event:
     not_public: not public
+    player:
+        will_appear_here_when_the_stream_is_on: Player will appear here when the stream is on
     form:
         sign_up:
             artist: Artist

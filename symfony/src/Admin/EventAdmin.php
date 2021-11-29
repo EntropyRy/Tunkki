@@ -122,6 +122,7 @@ final class EventAdmin extends AbstractAdmin
             'Event' => 'event',
             'Clubroom Event' => 'clubroom',
             'Announcement' => 'announcement',
+            'Stream' => 'stream',
         ];
         $PicChoices = [
             'Banner' => 'banner',
@@ -166,8 +167,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Content', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                    //    'ckeditor_context' => 'standard',
-                        'help' => 'use special tags {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
+                        'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
                     ]);
             }
             $formMapper
@@ -179,8 +179,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Sisallys', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                    //    'ckeditor_context' => 'standard', 
-                        'help' => 'käytä erikoista tagejä {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
+                        'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
                     ]);
             }
             $formMapper
@@ -190,6 +189,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('cancelled', null, ['help' => 'Event has been cancelled'])
                 ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
                 ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
+                ->add('streamPlayerUrl', null, [
+                    'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
+                ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
@@ -235,6 +237,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('links', ImmutableArrayType::class, [
+                    'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event.<br> 
                                 request admin to add more translations!',
                     'keys' => [

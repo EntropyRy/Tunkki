@@ -158,6 +158,8 @@ menu:
     logon_to: Kirjaudu palveluun
 event:
     not_public: ei julkinen
+    player:
+        will_appear_here_when_the_stream_is_on: Soitin ilmestyy tähän kun streami on päällä
     form:
         sign_up:
             artist: Artisti
