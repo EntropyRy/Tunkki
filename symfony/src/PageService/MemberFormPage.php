@@ -13,6 +13,9 @@ use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
 use Sonata\PageBundle\Page\TemplateManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -36,7 +39,7 @@ class MemberFormPage implements PageServiceInterface
     public function __construct($name, 
         TemplateManager $templateManager, 
         EntityManagerInterface $em, 
-        \Swift_Mailer $mailer, 
+        MailerInterface $mailer, 
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
         Environment $twig,
@@ -96,20 +99,17 @@ class MemberFormPage implements PageServiceInterface
     }
     protected function sendEmailToMember($purpose, $member, $em, $mailer)
     {
-        $email = $em->getRepository(Email::class)->findOneBy(['purpose' => $purpose]);
-        $message = new \Swift_Message($email->getSubject());
-        $message->setFrom([$this->bag->get('mailer_sender_address')], "Tunkki");
-        $message->setTo($member->getEmail());
-        $message->setBody(
-            $this->twig->render(
-               'emails/base.html.twig',
-                   [
-                       'email' => $email,
-                   ]
-               ),
-               'text/html'
-            );
-        $mailer->send($message);
+        $email_content = $em->getRepository(Email::class)->findOneBy(['purpose' => $purpose]);
+        $email = (new TemplatedEmail())
+            ->from(new Address($this->bag->get('mailer_sender_address'), 'Tunkki'))
+            ->to($member->getEmail())
+            ->subject( $email_content->getSubject() )
+            ->htmlTemplate('emails/base.html.twig')
+            ->context([
+                'content' => $email,
+            ])
+            ;
+        $mailer->send($email);
     }
     public function addToInfoMailingList($member)
     {

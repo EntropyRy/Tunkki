@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
@@ -122,6 +123,7 @@ final class EventAdmin extends AbstractAdmin
             'Event' => 'event',
             'Clubroom Event' => 'clubroom',
             'Announcement' => 'announcement',
+            'Stream' => 'stream',
         ];
         $PicChoices = [
             'Banner' => 'banner',
@@ -166,8 +168,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Content', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                    //    'ckeditor_context' => 'standard',
-                        'help' => 'use special tags {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
+                        'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
                     ]);
             }
             $formMapper
@@ -179,8 +180,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Sisallys', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                    //    'ckeditor_context' => 'standard', 
-                        'help' => 'käytä erikoista tagejä {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
+                        'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
                     ]);
             }
             $formMapper
@@ -204,6 +204,9 @@ final class EventAdmin extends AbstractAdmin
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. 
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
+                ->add('streamPlayerUrl', null, [
+                    'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
+                ])
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
@@ -213,7 +216,17 @@ final class EventAdmin extends AbstractAdmin
                         'link_parameters'=>[
                         'context' => 'event'
                     ]])
-                ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices]);
+                ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices])
+                ->add('imgFilterColor', ColorType::class)
+                ->add('imgFilterBlendMode', ChoiceType::class, [
+                    'required' => false, 
+                    'choices' => [
+                            'luminosity' => 'mix-blend-mode: luminosity',
+                            'multiply' => 'mix-blend-mode: multiply',
+                            'exclusion' => 'mix-blend-mode: exclusion',
+                            'difference' => 'mix-blend-mode: difference',
+                        ]
+                ]);
             if ($event->getexternalUrl()==false){
                 $formMapper
                     ->add('headerTheme', null,[
@@ -235,6 +248,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('links', ImmutableArrayType::class, [
+                    'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event.<br> 
                                 request admin to add more translations!',
                     'keys' => [

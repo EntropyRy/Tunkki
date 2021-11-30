@@ -73,6 +73,7 @@
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
     '{{ bios }}': block('bios'),
+    '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
     '{{ links }}':block('links'), 
     '{{ rsvp }}':block('RSVP') 
@@ -89,6 +90,7 @@
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
     '{{ timetable }}': block('timetable'), 
+    '{{ streamplayer }}': block('streamplayer'),
     '{{ bios }}':'',
     '{{ vj_bios }}':'',
     '{{ links }}':'', 
@@ -107,9 +109,17 @@
     </video>
 </div>
 {% endif %}
-<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}">
-        {% media event.picture, 'banner' with {'class':'img-fluid','title': attribute(event, name_attr)} %}
+<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
+     {{ block('imgfilter') }}
+    >
+    {% media event.picture, 'banner' with {'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} %}
     </div>
+{% endblock %}
+
+{% block imgfilter %}
+{% if event.imgFilterColor %}
+    style="background: {{event.imgFilterColor}};"
+{% endif %}
 {% endblock %}
 
 {% block links %}
@@ -355,4 +365,16 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block streamplayer %}
+{% if event.streamPlayerUrl and event.NowTest == 'now' %}
+    <div class="ckeditor-html5-audio" style="text-align: center;">
+        <audio controls="controls" controlslist="nodownload" src="{{ event.streamPlayerUrl }}">&nbsp;</audio>
+    </div>
+{% elseif event.streamPlayerUrl and event.NowTest == 'before'  %}
+    <div class="ckeditor-html5-audio" style="text-align: center;">
+        <p>{{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
+    </div> 
+{% elseif event.streamPlayerUrl and event.NowTest == 'after'  %}{% endif %}
 {% endblock %}
