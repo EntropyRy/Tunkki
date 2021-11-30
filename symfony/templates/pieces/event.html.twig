@@ -117,7 +117,7 @@
 {% endblock %}
 
 {% block imgfilter %}
-{% if event.imgFilterColor %}
+{% if event.imgFilterColor && event.imgFilterBlendMode %}
     style="background: {{event.imgFilterColor}};"
 {% endif %}
 {% endblock %}
