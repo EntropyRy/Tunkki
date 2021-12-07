@@ -91,13 +91,16 @@ class MenuBuilder
             }
         } else {
             if($m->getPageEn()){
-                if (strpos($m->getPageEn(), '/en') !== 0){
+                if (strpos($m->getPageEn()->getSlug(), '/en') !== false){
                     $prefix = '/en';
                 } else {
                     $prefix = '';
                 }
-                $menu->addChild($m->getLabel(), ['route' => 'page_slug',
-                    'routeParameters' => ['path' => $prefix.$m->getPageEn()->getSlug()]]);
+                $url = $prefix.'/'.$m->getPageEn()->getSlug();
+                $menu->addChild($m->getLabel(), [
+                    'route' => 'page_slug',
+                    'routeParameters' => ['path' => $url ]
+                ]);
             } else {
                 if (strpos($m->getUrl(), 'http') !== false){
                     $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
