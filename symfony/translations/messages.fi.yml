@@ -159,7 +159,7 @@ menu:
 event:
     not_public: ei julkinen
     player:
-        will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivu latauksella, kun streamaus alkaa
+        will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
     form:
         sign_up:
             artist: Artisti
