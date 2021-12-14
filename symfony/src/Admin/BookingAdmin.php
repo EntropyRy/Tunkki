@@ -317,12 +317,12 @@ class BookingAdmin extends AbstractAdmin
         ;
     }
 
-    protected function calculateOwnerHash($booking)
+    protected function calculateOwnerHash($booking): string
     {
         $hashids = new Hashids($booking->getName().$booking->getRenter(),10);
         return strtolower($hashids->encode($booking->getReferenceNumber()));
     }
-    protected function calculateReferenceNumber($booking)
+    protected function calculateReferenceNumber($booking): int
     {
         $ki = 0;
         $summa = 0;
@@ -353,7 +353,7 @@ class BookingAdmin extends AbstractAdmin
     }
     public function preUpdate($booking)
     {
-        if($booking->getReferenceNumber() == NULL){
+        if($booking->getReferenceNumber() == NULL || $booking->getReferenceNumber() == 0){
             $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         }
         if($booking->getRenterHash() == NULL || $booking->getRenterHash() == 0){
