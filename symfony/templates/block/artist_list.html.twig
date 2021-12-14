@@ -1,12 +1,12 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
     <div class="box">
-        <div class="box-header">
-            <h5 class="box-title">{{'artist.list'|trans}} ({{ artists|length }})</h5>
+        <div class="box-header" data-toggle="collapse" data-target="#artistList">
+            <h5 class="box-title btn-link">{{'artist.list'|trans}} ({{ artists|length }})</h5>
         </div>
-        <div class="box-body row">
+        <div id="artistList" class="box-body row collapse">
             <ul>
-                {% for artist in artists|sort((a,b) => (a.type <=> b.type)) %}
+                {% for artist in artists|sort((a,b) => (a.name|lower <=> b.name|lower)) %}
             <li>{{ artist.type }}: {{ artist.name }}
                   <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
                   <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
