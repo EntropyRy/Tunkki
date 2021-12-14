@@ -3175,20 +3175,20 @@
         },
         {
             "name": "laminas/laminas-diagnostics",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laminas/laminas-diagnostics.git",
-                "reference": "cf9f497fe04adb4a813503f34bc2dc6586b05d25"
+                "reference": "99acdfef836516d1830a381f6798205ec5deb45d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/cf9f497fe04adb4a813503f34bc2dc6586b05d25",
-                "reference": "cf9f497fe04adb4a813503f34bc2dc6586b05d25",
+                "url": "https://api.github.com/repos/laminas/laminas-diagnostics/zipball/99acdfef836516d1830a381f6798205ec5deb45d",
+                "reference": "99acdfef836516d1830a381f6798205ec5deb45d",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ~8.0.0"
+                "php": "^7.4 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
                 "guzzlehttp/ringphp": "<1.1.1",
@@ -3259,7 +3259,7 @@
                     "type": "community_bridge"
                 }
             ],
-            "time": "2021-12-06T04:26:03+00:00"
+            "time": "2021-12-08T09:36:41+00:00"
         },
         {
             "name": "lcobucci/clock",
@@ -4855,28 +4855,28 @@
         },
         {
             "name": "sonata-project/cache-bundle",
-            "version": "3.3.1",
+            "version": "3.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataCacheBundle.git",
-                "reference": "aa68d2f3bc5e9c66f7b9d69ac5c25fb1e66a2c3b"
+                "reference": "4df94d75cfc83252365da3ff1b4e8f072542e07d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataCacheBundle/zipball/aa68d2f3bc5e9c66f7b9d69ac5c25fb1e66a2c3b",
-                "reference": "aa68d2f3bc5e9c66f7b9d69ac5c25fb1e66a2c3b",
+                "url": "https://api.github.com/repos/sonata-project/SonataCacheBundle/zipball/4df94d75cfc83252365da3ff1b4e8f072542e07d",
+                "reference": "4df94d75cfc83252365da3ff1b4e8f072542e07d",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.1 || ^8.0",
+                "php": "^7.3 || ^8.0",
                 "sonata-project/cache": "^2.0.0",
-                "symfony/config": "^4.4 || ^5.2",
-                "symfony/dependency-injection": "^4.4 || ^5.2",
-                "symfony/filesystem": "^4.4 || ^5.2",
-                "symfony/http-foundation": "^4.4 || ^5.2",
-                "symfony/http-kernel": "^4.4 || ^5.2",
-                "symfony/process": "^4.4 || ^5.2",
-                "symfony/routing": "^4.4 || ^5.2"
+                "symfony/config": "^4.4 || ^5.3 || ^6.0",
+                "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0",
+                "symfony/filesystem": "^4.4 || ^5.3 || ^6.0",
+                "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0",
+                "symfony/http-kernel": "^4.4 || ^5.3 || ^6.0",
+                "symfony/process": "^4.4 || ^5.3 || ^6.0",
+                "symfony/routing": "^4.4 || ^5.3 || ^6.0"
             },
             "require-dev": {
                 "doctrine/orm": "^2.2",
@@ -4894,9 +4894,9 @@
                 "predis/predis": "^1.0",
                 "psalm/plugin-phpunit": "^0.16",
                 "psalm/plugin-symfony": "^3.0",
-                "symfony/console": "^4.4 || ^5.2",
-                "symfony/framework-bundle": "^4.4 || ^5.2",
-                "symfony/phpunit-bridge": "^5.2",
+                "symfony/console": "^4.4 || ^5.3 || ^6.0",
+                "symfony/framework-bundle": "^4.4 || ^5.3 || ^6.0",
+                "symfony/phpunit-bridge": "^6.0",
                 "vimeo/psalm": "^4.7.2"
             },
             "suggest": {
@@ -4941,7 +4941,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataCacheBundle/issues",
-                "source": "https://github.com/sonata-project/SonataCacheBundle/tree/3.3.1"
+                "source": "https://github.com/sonata-project/SonataCacheBundle/tree/3.4.0"
             },
             "funding": [
                 {
@@ -4961,7 +4961,8 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-04T12:27:43+00:00"
+            "abandoned": true,
+            "time": "2021-12-09T15:34:23+00:00"
         },
         {
             "name": "sonata-project/classification-bundle",
@@ -5848,16 +5849,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.37.0",
+            "version": "3.37.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "1ea115208c075495bc2d7ab5c6734f84009e9699"
+                "reference": "0dece3c869fd7ca39ac90848d4cddcf2ff2e2191"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/1ea115208c075495bc2d7ab5c6734f84009e9699",
-                "reference": "1ea115208c075495bc2d7ab5c6734f84009e9699",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/0dece3c869fd7ca39ac90848d4cddcf2ff2e2191",
+                "reference": "0dece3c869fd7ca39ac90848d4cddcf2ff2e2191",
                 "shasum": ""
             },
             "require": {
@@ -6008,7 +6009,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.37.0"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.37.1"
             },
             "funding": [
                 {
@@ -6028,7 +6029,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-11-17T19:07:17+00:00"
+            "time": "2021-12-09T21:53:34+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
@@ -11597,16 +11598,16 @@
         },
         {
             "name": "symfony/var-dumper",
-            "version": "v5.4.0",
+            "version": "v5.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/var-dumper.git",
-                "reference": "89ab66eaef230c9cd1992de2e9a1b26652b127b9"
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/89ab66eaef230c9cd1992de2e9a1b26652b127b9",
-                "reference": "89ab66eaef230c9cd1992de2e9a1b26652b127b9",
+                "url": "https://api.github.com/repos/symfony/var-dumper/zipball/2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
+                "reference": "2366ac8d8abe0c077844613c1a4f0c0a9f522dcc",
                 "shasum": ""
             },
             "require": {
@@ -11666,7 +11667,7 @@
                 "dump"
             ],
             "support": {
-                "source": "https://github.com/symfony/var-dumper/tree/v5.4.0"
+                "source": "https://github.com/symfony/var-dumper/tree/v5.4.1"
             },
             "funding": [
                 {
@@ -11682,7 +11683,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-29T15:30:56+00:00"
+            "time": "2021-12-01T15:04:08+00:00"
         },
         {
             "name": "symfony/var-exporter",
