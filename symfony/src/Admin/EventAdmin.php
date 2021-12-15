@@ -251,7 +251,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('links', ImmutableArrayType::class, [
                     'help_html' => true,
-                    'help' => 'Titles are translated automatically. examples: tickets, fb.event.<br> 
+                    'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br> 
                                 request admin to add more translations!',
                     'keys' => [
                         ['urls', CollectionType::class, [
@@ -305,7 +305,6 @@ final class EventAdmin extends AbstractAdmin
             ->add('Nimi')
             ->add('EventDate')
             ->add('publishDate')
-            ->add('publishPlaces')
             ->add('css')
             ->add('Content')
             ->add('Sisallys')
@@ -318,5 +317,18 @@ final class EventAdmin extends AbstractAdmin
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
         $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
+    }
+    public function prePersist($event)
+    {
+        if($event->getType() == 'clubroom'){
+            $event->setLinks([
+                'urls' => [0 => [
+                    'url' => 'https://reittiopas.hsl.fi/reitti/-/J%C3%A4mer%C3%A4ntaival%203%20A%2C%20Espoo%3A%3A60.18730249466484%2C24.836112856864933',
+                    'icon' => 'fas fa-map',
+                    'title' => 'map',
+                    'open_in_new_window' => true,
+                ]]
+            ]);
+        }
     }
 }
