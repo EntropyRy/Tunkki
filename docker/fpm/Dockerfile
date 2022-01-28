@@ -8,7 +8,7 @@ RUN apk upgrade --update && apk add --no-cache zlib-dev icu-dev libev libmcrypt-
     && addgroup -g 1000 -S symfony && adduser -u 1000 -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install -j$(nproc) gd \
-    && docker-php-ext-install intl iconv bcmath pdo_mysql opcache zip sockets \
+    && docker-php-ext-install intl iconv bcmath pdo_mysql opcache zip \
     && pecl channel-update pecl.php.net \
     && pecl install apcu \
     && git clone git://github.com/mkoppanen/php-zmq.git \
