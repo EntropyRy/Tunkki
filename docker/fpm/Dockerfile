@@ -19,7 +19,7 @@ RUN apk upgrade --update && apk add --no-cache zlib-dev icu-dev libev libmcrypt-
     && cd .. \
     && rm -fr php-zmq \
     && docker-php-ext-enable apcu zmq \
-    && apk del --no-cache grep build-base tar re2c make file git
+    && apk del --no-cache grep build-base tar re2c make file
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/*
 COPY ./symfony.ini /usr/local/etc/php/php.ini
