@@ -131,7 +131,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls.0 is defined or event.NakkikoneEnabled or event.includeSaferSpaceGuidelines %}
+{% if event.epics is not empty or event.links.urls|length > 0 or event.NakkikoneEnabled or event.includeSaferSpaceGuidelines %}
 <div>
 <hr>
     {% for keys in event.links %}
