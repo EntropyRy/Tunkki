@@ -12,7 +12,9 @@ require('@fortawesome/fontawesome-free/css/all.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
-require('typeface-spacegrotesk')
+import '@fontsource/space-grotesk/400.css'
+import '@fontsource/space-grotesk/700.css'
+import '@fontsource/space-grotesk/500.css'
 require('jq-signature')
 
 $(document).ready(function() {

@@ -898,6 +898,11 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.6.tgz#d5e0706cf8c6acd8c6032f8d54070af261bbbb2f"
   integrity sha512-ws57AidsDvREKrZKYffXddNkyaF14iHNHm8VQnZH6t99E8gczjNN0GpvcGny0imC80yQ0tHz1xVUKk/KFQSUyA==
 
+"@fontsource/space-grotesk@^1.1.13":
+  version "4.5.3"
+  resolved "https://registry.yarnpkg.com/@fontsource/space-grotesk/-/space-grotesk-4.5.3.tgz#8921c58f6df83796fe6a0604d362d3f40daaa472"
+  integrity sha512-uhCiGA3DXiT7BLCcbKzSDlgUp6Pct50+WObzLJvee8qnA2ezH/cfWlIU3+3ydc1poxQuR6+jJN2Cd8XjpOB9lg==
+
 "@fortawesome/fontawesome-free@^6.0.0":
   version "6.0.0"
   resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-6.0.0.tgz#6f3bd8e42997c7d536a1246877ed8bcd4f005a54"
@@ -6634,11 +6639,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typeface-spacegrotesk@^0.0.66:
-  version "0.0.66"
-  resolved "https://registry.yarnpkg.com/typeface-spacegrotesk/-/typeface-spacegrotesk-0.0.66.tgz#a6b7c14bbac96bc712c89f6b41427cac30348279"
-  integrity sha512-DuKrxTUpp9cMejLgIgCDRG/DFdm05o6z00Rwy0Dlik5R79V69caOE7j9aXR2zBxq/VlcDjed87WFkX5QSwb5pQ==
 
 uglify-js@^2.4.24:
   version "2.8.29"
