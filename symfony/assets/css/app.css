@@ -6,6 +6,7 @@ body {
     background-attachment: scroll;
     font-family: "Space Grotesk";
     color: #102c3a;
+    letter-spacing: -0.3px;
 }
 .e-container {
     margin-top: 40px;
