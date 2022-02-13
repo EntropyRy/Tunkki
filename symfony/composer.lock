@@ -5635,16 +5635,16 @@
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "1.12.4",
+            "version": "1.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "2134849d114bd140933ff080f0c73f41147b56e0"
+                "reference": "a9b9e2e8b87b8aea79b891a961f1388c91b3575c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/2134849d114bd140933ff080f0c73f41147b56e0",
-                "reference": "2134849d114bd140933ff080f0c73f41147b56e0",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/a9b9e2e8b87b8aea79b891a961f1388c91b3575c",
+                "reference": "a9b9e2e8b87b8aea79b891a961f1388c91b3575c",
                 "shasum": ""
             },
             "require": {
@@ -5725,7 +5725,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/form-extensions/issues",
-                "source": "https://github.com/sonata-project/form-extensions/tree/1.12.4"
+                "source": "https://github.com/sonata-project/form-extensions/tree/1.13.0"
             },
             "funding": [
                 {
@@ -5745,7 +5745,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-04T14:19:07+00:00"
+            "time": "2022-02-12T13:19:53+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
@@ -5862,16 +5862,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "3.37.1",
+            "version": "3.38.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "0dece3c869fd7ca39ac90848d4cddcf2ff2e2191"
+                "reference": "a053e9f9ff3bab5830c2d221bac1d75f6a93f049"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/0dece3c869fd7ca39ac90848d4cddcf2ff2e2191",
-                "reference": "0dece3c869fd7ca39ac90848d4cddcf2ff2e2191",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/a053e9f9ff3bab5830c2d221bac1d75f6a93f049",
+                "reference": "a053e9f9ff3bab5830c2d221bac1d75f6a93f049",
                 "shasum": ""
             },
             "require": {
@@ -5937,6 +5937,7 @@
             },
             "require-dev": {
                 "aws/aws-sdk-php": "^3.0",
+                "dama/doctrine-test-bundle": "^6.7",
                 "doctrine/mongodb-odm": "^2.0",
                 "doctrine/orm": "^2.5",
                 "doctrine/phpcr-odm": "^1.5",
@@ -6022,11 +6023,15 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.37.1"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/3.38.0"
             },
             "funding": [
                 {
                     "url": "https://github.com/OskarStark",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/VincentLanglet",
                     "type": "github"
                 },
                 {
@@ -6036,13 +6041,9 @@
                 {
                     "url": "https://github.com/greg0ire",
                     "type": "github"
-                },
-                {
-                    "url": "https://github.com/wbloszyk",
-                    "type": "github"
                 }
             ],
-            "time": "2021-12-09T21:53:34+00:00"
+            "time": "2022-02-12T20:10:14+00:00"
         },
         {
             "name": "sonata-project/notification-bundle",
@@ -9583,12 +9584,12 @@
                 }
             },
             "autoload": {
-                "psr-4": {
-                    "Symfony\\Polyfill\\Mbstring\\": ""
-                },
                 "files": [
                     "bootstrap.php"
-                ]
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
