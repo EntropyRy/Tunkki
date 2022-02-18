@@ -5,21 +5,26 @@ use Knp\Menu\FactoryInterface;
 use App\Entity\Menu;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+
 
 class MenuBuilder
 {
     private $factory;
     private $em;
+    private $client;
 
     /**
      * @param FactoryInterface $factory
      *
      * Add any other dependency you need
      */
-    public function __construct(FactoryInterface $factory, EntityManagerInterface $em)
+    public function __construct(FactoryInterface $factory, EntityManagerInterface $em, HttpClientInterface $client)
     {
         $this->factory  = $factory;
         $this->em       = $em;
+        $this->client   = $client;
     }
 
     public function createMainMenuFi(array $options)
@@ -49,6 +54,8 @@ class MenuBuilder
                 }
             }
         }
+        // dynamically add stream
+        $this->addStream($menu);
         return $menu;
     }
     public function createMainMenuEn(array $options)
@@ -78,6 +85,7 @@ class MenuBuilder
                 }
             }
         }
+        $this->addStream($menu);
         return $menu;
     }
     private function addItem($menu, $m,$l)
@@ -110,6 +118,21 @@ class MenuBuilder
             }
         }
         return $menu;
+    }
+    private function addStream($menu)
+    {
+        try {
+            $response = $this->client->request(
+                'GET',
+                'https://stream.entropy.fi/kerde.ogg',
+                ['max_duration' => 4]
+            );
+            if ($response->getStatusCode() == 200) {
+                $menu->addChild('Stream', ['uri' => 'https://stream.entropy.fi/']);
+            }
+        } catch (TransportExceptionInterface $e) {
+            return;
+        }
     }
     private function sortByPosition($m)
     {
