@@ -128,7 +128,7 @@ class MenuBuilder
                 ['max_duration' => 4]
             );
             if ($response->getStatusCode() == 200) {
-                $menu->addChild('Stream', ['uri' => 'https://stream.entropy.fi/']);
+                $menu->addChild('-> Stream <-', ['uri' => 'https://stream.entropy.fi/']);
             }
         } catch (TransportExceptionInterface $e) {
             return;
