@@ -411,7 +411,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "4.4",
-            "ref": "59d8cc5a923274e552412fcd51e284bba02982de"
+            "ref": "fd5340d07d4c90504843b53da41525cf42e31f5c"
         },
         "files": [
             "bin/console",
