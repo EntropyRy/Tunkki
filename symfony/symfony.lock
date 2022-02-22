@@ -751,12 +751,12 @@
         ]
     },
     "trikoder/oauth2-bundle": {
-        "version": "3.0",
+        "version": "3.2",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "master",
             "version": "3.0",
-            "ref": "a7511afeb7841ed7da530b0e11a82d245f00fb0e"
+            "ref": "43774de114904e86d18de0cea92f368d8e3c7499"
         },
         "files": [
             "config/packages/trikoder_oauth2.yaml",
