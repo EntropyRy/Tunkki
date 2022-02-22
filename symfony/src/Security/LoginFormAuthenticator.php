@@ -95,19 +95,19 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         $user = $token->getUser();
         $user->setLastLogin(new \DateTime());
-        $this->entityManager->persist($user);
-        $this->entityManager->flush();
         if(!is_null($user->getMember()->getLocale())){
             $request->setLocale($user->getMember()->getLocale());
+        } else {
+            $user->getMember()->setLocale('fi');
+            $request->setLocale('fi');
         }
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-        if( $user->getMember()->getLocale()){
-            return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
-        } else {
-            return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
-        }
+        return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
     }
 
     protected function getLoginUrl()

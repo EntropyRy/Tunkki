@@ -92,20 +92,19 @@ class MattermostAuthenticator extends SocialAuthenticator
     {
         $user = $token->getUser();
         $user->setLastLogin(new \DateTime());
+        if(!is_null($user->getMember()->getLocale())){
+            $request->setLocale($user->getMember()->getLocale());
+        } else {
+            $user->getMember()->setLocale('fi');
+            $request->setLocale('fi');
+        }
         $this->em->persist($user);
         $this->em->flush();
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
-        if(in_array("ROLE_ADMIN", $user->getRoles()) || in_array("ROLE_SUPER_ADMIN", $user->getRoles())){
-            return new RedirectResponse($this->urlG->generate('sonata_admin_dashboard'));
-        } else {
-            if( $user->getMember()->getLocale()){
-                return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$user->getMember()->getLocale()));
-            } else {
-                return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$request->getLocale()));
-            }
-        }
+        return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$request->getLocale()));
     }
    
     public function start(Request $request, AuthenticationException $authException = null)
