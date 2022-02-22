@@ -15,7 +15,7 @@
 <tr>
     <td colspan="2" style="line-height:24px; text-align: center; padding: 10px;  background: #0acfcf; border-bottom: 2px solid white;">
         <a style="color: white; text-align: center; width: 100%; height: 100%; display: block;" href="
-        {{ url('admin_app_booking_stuffList', {'id': booking.id}) }}
+        {{ path('admin_app_booking_stuffList', {'id': booking.id}) }}
         ">
             Booking stufflist >>
         </a>
@@ -24,7 +24,7 @@
 <tr>
     <td colspan="2" style="line-height:24px; text-align: center; padding: 10px;  background: #0acfcf;">
         <a style="color: white; text-align: center; width: 100%; height: 100%; display: block;" href="
-            {{ url('admin_app_booking_edit', {'id': booking.id}) }}
+            {{ path('admin_app_booking_edit', {'id': booking.id}) }}
             ">
                 Booking edit >>
         </a>

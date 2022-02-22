@@ -30,7 +30,7 @@
            <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
        </span>
        <span class="d-lg-none" style="float:right;">
-           <a href="{{ url('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+           <a href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
        </span> 
     {% endif %}
   </div>

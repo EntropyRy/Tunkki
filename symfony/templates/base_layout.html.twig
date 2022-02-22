@@ -109,7 +109,7 @@
                             {% endif %}
 
                             {% if app.user and is_granted('ROLE_PREVIOUS_ADMIN') %}
-                                <li class="nav-item"><a  class="nav-link" href="{{ url('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle')}}</a></li>
+                                <li class="nav-item"><a  class="nav-link" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle')}}</a></li>
                             {% endif %}
 
                         </ul>

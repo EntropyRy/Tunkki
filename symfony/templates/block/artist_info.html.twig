@@ -2,7 +2,7 @@
 {% use 'pieces/event.html.twig' %}
 {% block block %}
 <h2 class="col-md-12 pb-2 pt-2">{{'artist.profiles'|trans }}
-    <a class="btn btn-primary" href="{{ url('entropy_artist_create') }}">{{'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+    <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
 </h2>
  {% for artist in member.artist %}
 <div class="col-12">
@@ -24,8 +24,8 @@
                 {{'updated_at'|trans }}: {{artist.updatedAt|date('d.m.Y')}}
             </li>
             </ul>
-            <a class="btn btn-primary btn-large" href="{{ url('entropy_artist_edit',{'id':artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
-            <a class="btn btn-secondary btn-large" onclick="return ConfirmDelete();" href="{{ url('entropy_artist_delete',{'id':artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
+            <a class="btn btn-primary btn-large" href="{{ path('entropy_artist_edit',{'id':artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+            <a class="btn btn-secondary btn-large" onclick="return ConfirmDelete();" href="{{ path('entropy_artist_delete',{'id':artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
             <script>
             function ConfirmDelete()
             {
@@ -35,7 +35,7 @@
             <div class="pt-2">{{'events'|trans|capitalize}}:</div>
             <ul>
             {% for info in artist.eventArtistInfos %}
-            <li><a href="{{ url('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>
+            <li><a href="{{ path('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>
                 {% if info.StartTime %}
                 @ {{ info.StartTime|date('H:i')}}
                 {% else %}
