@@ -131,7 +131,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls|length > 0 or event.NakkikoneEnabled or event.includeSaferSpaceGuidelines %}
+{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or (event.artistSignUpEnabled and app.user) %}
 <div>
 <hr>
     {% for keys in event.links %}
@@ -165,6 +165,14 @@
                 Safer space guidelines
             </a>
         {% endif %}
+    </span>
+    {% endif %}
+    {% if event.artistSignUpEnabled and app.user %}
+    <span class="pr-2">
+        <a href="{{ path('entropy_event_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+            {{"fas fa-tasks"|parse_icon }}
+            {{'Artist signup'|trans }}
+        </a>
     </span>
     {% endif %}
     {% if event.NakkikoneEnabled and event.url and app.user %}

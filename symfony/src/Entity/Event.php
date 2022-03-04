@@ -211,6 +211,11 @@ class Event
      */
     private $imgFilterBlendMode;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $artistSignUpEnabled = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -780,6 +785,18 @@ body {
     public function setImgFilterBlendMode(?string $imgFilterBlendMode): self
     {
         $this->imgFilterBlendMode = $imgFilterBlendMode;
+
+        return $this;
+    }
+
+    public function getArtistSignUpEnabled(): ?bool
+    {
+        return $this->artistSignUpEnabled;
+    }
+
+    public function setArtistSignUpEnabled(?bool $artistSignUpEnabled): self
+    {
+        $this->artistSignUpEnabled = $artistSignUpEnabled;
 
         return $this;
     }

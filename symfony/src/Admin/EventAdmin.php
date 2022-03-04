@@ -249,6 +249,7 @@ final class EventAdmin extends AbstractAdmin
                         ]])
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
+                ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup link displayed for logged in user'])
                 ->add('links', ImmutableArrayType::class, [
                     'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br> 
