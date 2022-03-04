@@ -167,9 +167,9 @@
         {% endif %}
     </span>
     {% endif %}
-    {% if event.artistSignUpEnabled and app.user %}
+    {% if event.artistSignUpEnabled and event.url and app.user %}
     <span class="pr-2">
-        <a href="{{ path('entropy_event_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+        <a href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
             {{'Artist signup'|trans }}
         </a>
