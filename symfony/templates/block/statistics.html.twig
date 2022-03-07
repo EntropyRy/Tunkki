@@ -10,6 +10,10 @@
             <dt class="col-10">{{name|trans }}</dt>
             <dd class="col-2 text-right">{{ stat }}</dd>
             {% endfor %}
+            {% if member.isActiveMember %}
+            <dt class="col-10">{{'Kerde door opened'|trans }} ({{'times'|trans}})</dt>
+            <dd class="col-2 text-right">{{ member.doorLogs|length }}</dd>
+            {% endif %}
             </dl>
         </div>
     </div>
