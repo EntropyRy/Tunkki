@@ -216,6 +216,16 @@ class Event
      */
     private $artistSignUpEnabled = false;
 
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $artistSignUpEnd;
+
+    /**
+     * @ORM\Column(type="datetime_immutable", nullable=true)
+     */
+    private $artistSignUpStart;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -799,5 +809,40 @@ body {
         $this->artistSignUpEnabled = $artistSignUpEnabled;
 
         return $this;
+    }
+
+    public function getArtistSignUpEnd(): ?\DateTimeImmutable
+    {
+        return $this->artistSignUpEnd;
+    }
+
+    public function setArtistSignUpEnd(?\DateTimeImmutable $artistSignUpEnd): self
+    {
+        $this->artistSignUpEnd = $artistSignUpEnd;
+
+        return $this;
+    }
+
+    public function getArtistSignUpStart(): ?\DateTimeImmutable
+    {
+        return $this->artistSignUpStart;
+    }
+
+    public function setArtistSignUpStart(?\DateTimeImmutable $artistSignUpStart): self
+    {
+        $this->artistSignUpStart = $artistSignUpStart;
+
+        return $this;
+    }
+    public function getArtistSignUpNow(): bool
+    {
+        $now = new \DateTimeImmutable('now');
+        if ($this->getArtistSignUpEnabled() && 
+            $this->getArtistSignUpStart() <= $now && 
+            $this->getArtistSignUpEnd() >= $now) 
+        {
+            return true;
+        }
+        return false;
     }
 }

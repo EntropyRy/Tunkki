@@ -249,7 +249,6 @@ final class EventAdmin extends AbstractAdmin
                         ]])
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
-                ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup link displayed for logged in user'])
                 ->add('links', ImmutableArrayType::class, [
                     'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br> 
@@ -265,6 +264,21 @@ final class EventAdmin extends AbstractAdmin
                             'entry_type' => UrlsType::class,
                         ]],
                     ]])
+                ->end()
+                ->end()
+                ->tab('Artist Sign up config')
+                ->with('Config')
+                ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup enabled'])
+                ->add('artistSignUpStart', DateTimePickerType::class, [
+                    'help' => 'when the artist signup starts',
+                    'input' => 'datetime_immutable',
+                    'required' => false
+                ])
+                ->add('artistSignUpEnd', DateTimePickerType::class, [
+                    'help' => 'when the artist signup ends',
+                    'input' => 'datetime_immutable',
+                    'required' => false
+                ])
                 ->end()
                 ->end()
                 ->tab('Nakkikone config')
