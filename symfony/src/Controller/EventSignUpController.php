@@ -191,6 +191,11 @@ class EventSignUpController extends EventController
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
         }
+
+        if(!$event->getArtistSignUpNow()){
+            $this->addFlash('warning', $trans->trans('Not allowed'));
+            return new RedirectResponse($this->generateUrl('entropy_profile'));
+        }
         // TODO: remove signed up user artists
         //foreach ($artists as $artist){
         //    if( $artist->getArtistInfos()->contains($event)
