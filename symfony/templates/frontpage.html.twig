@@ -7,7 +7,7 @@
         {% if app.user %}
             {% set visible = true %}
         {% else %}
-        {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+            {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
         {% endif %}
         {% if event is not null and visible %}
         <div class="row">

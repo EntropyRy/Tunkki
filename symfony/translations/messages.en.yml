@@ -108,6 +108,9 @@ block:
         aktiivit: Active member list
         vuokra: Renting list
         control: Control
+    future_events:
+        checkout_old_events: Check out old
+        events: events
 menu:
     logon_to: Log on to
 event:

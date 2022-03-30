@@ -21,7 +21,16 @@
             {% endif %}">{{ attribute(event,name) }} - {{ event.eventDate|date() }}</a>
             </li>
         {% else %}
-        <li><span class="fa-li"><i class="fas fa-exclamation"></i></span> {{ 'stay_tuned'|trans}}</li>
+        <li>
+            <span class="fa-li">
+                <i class="fas fa-exclamation"></i>
+            </span> {{ 'stay_tuned'|trans}} 
+        </li>
+        <li>
+            <span class="fa-li">
+                <i class="fas fa-arrow-right"></i>
+            </span> {{ 'block.future_events.checkout_old_events'|trans}} <a href="{{path('_page_alias_events_'~ app.request.locale)}}">{{'block.future_events.events'|trans}}</a>
+        </li>
         {% endfor %}
         </ul>
     {% if settings.box|default(false) %}

@@ -159,6 +159,9 @@ block:
         aktiivit: Aktiivien lista
         vuokra: Vuokraajien lista
         control: Hallinnointi
+    future_events:
+        checkout_old_events: Kato vanhat
+        events: tapahtumat
 menu:
     logon_to: Kirjaudu palveluun
 event:
