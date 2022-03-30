@@ -164,7 +164,7 @@ class ResetPasswordController extends AbstractController
         }
 
         $email = (new TemplatedEmail())
-            ->from(new Address('no-reply@entropy.fi', 'Entropy password mailer'))
+            ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
             ->to($member->getEmail())
             ->subject('Salasanan vaihto pyyntö / Your password reset request')
             ->htmlTemplate('reset_password/email.html.twig')
