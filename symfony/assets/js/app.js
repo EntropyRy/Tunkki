@@ -12,41 +12,43 @@ require('@fortawesome/fontawesome-free/css/all.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
-import '@fontsource/space-grotesk/400.css'
-import '@fontsource/space-grotesk/700.css'
-import '@fontsource/space-grotesk/500.css'
-require('jq-signature')
+import '@fontsource/space-grotesk/400.css';
+import '@fontsource/space-grotesk/700.css';
+import '@fontsource/space-grotesk/500.css';
+import SignaturePad from 'signature_pad';
 
 $(document).ready(function() {
-    $('.js-signature').jqSignature({
-        height: 250,
-        autoFit: true
-    });
-    $('.clearCanvas').click(function() {
-        $(this).hide();
-        $('.saveCanvas').show();
-        $('#signature').animate({height: "0px"}, 400, function() {
-            $('#signature').empty();
-            $('.js-signature').jqSignature('clearCanvas');
-            $('.js-signature').animate({height: "250px"});
-            $('#booking_consent_Agree').prop('disabled', true);
+    const canvas = document.querySelector("canvas");
+    if (canvas){
+        const signaturePad = new SignaturePad(canvas);
+        $('.clearCanvas').click(function() {
+            $(this).hide();
+            $('.saveCanvas').show();
+            $('#signature').animate({height: "0px"}, 400, function() {
+                $('#signature').empty();
+                signaturePad.clear();
+                $('#signature').animate({height: "250px"});
+                $('#booking_consent_Agree').prop('disabled', true);
+                $('.canvas').show();
+            });
         });
-        //$('#saveBtn').attr('disabled', true);
-    });
-    $('.saveCanvas').click(function() {
-        $('.saveCanvas').hide();
-        $('.clearCanvas').show();
-        $('.js-signature').animate({height: "0px"}, 400, function(){
-            $('#signature').empty();
-            var dataUrl = $('.js-signature').jqSignature('getDataURL');
-            var img = $('<img>').attr('src', dataUrl);
-            $('#signature').append(img);
-            $('#signature').animate({height: "250px"});
-            $('#booking_consent_renterSignature').val(dataUrl);
-            $('#booking_consent_Agree').prop('disabled', false);
+        $('.saveCanvas').click(function() {
+            if (signaturePad.isEmpty()){
+                alert('Empty signature');
+            } else {
+                $('.saveCanvas').hide();
+                $('.clearCanvas').show();
+                $('.canvas').hide();
+                $('#signature').empty();
+                let dataUrl = signaturePad.toDataURL('image/png');
+                let img = $('<img>').attr('src', dataUrl);
+                $('#signature').append(img);
+                $('#signature').animate({height: "250px"});
+                $('#booking_consent_renterSignature').val(dataUrl);
+                $('#booking_consent_Agree').prop('disabled', false);
+            }
         });
-
-    });
+    }
     bsCustomFileInput.init();
     a2lix_lib.sfCollection.init({
         lang: {

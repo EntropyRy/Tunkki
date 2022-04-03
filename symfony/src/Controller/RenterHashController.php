@@ -43,6 +43,8 @@ class RenterHashController extends Controller
                         $this->em->persist($booking);
                         $this->em->flush();
                         $this->addFlash('success', 'Allekirjoitettu!');
+                        $bookingdata = $this->em->getRepository('App:Booking')
+                            ->getBookingData($bookingid, $hash, $renter);
                     } else {
                         $this->addFlash('warning', 'Allekirjoita uudestaan ja hyväksy ehdot');
                     }

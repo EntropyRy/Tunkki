@@ -55,11 +55,11 @@
 <h3>Allekirjoitus</h3>
 <div style="height: 260px">
     {% if bookingdata.renterSignature is empty %}
-        <div class='js-signature'></div>
+        <canvas class="canvas" style="touch-action: none; user-select: none;" width="800" height="260"></canvas>
     {% endif %}
     <div id="signature">
         {% if bookingdata.renterSignature is not empty %}
-        <img src="{{ bookingdata.renterSignature }}">
+        <img class="img-fluid" src="{{ bookingdata.renterSignature }}">
         {% endif %}
     </div>
 </div>
