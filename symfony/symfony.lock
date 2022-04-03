@@ -342,12 +342,12 @@
         ]
     },
     "sonata-project/page-bundle": {
-        "version": "3.9",
+        "version": "3.26",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "master",
             "version": "3.9",
-            "ref": "f355eb1ec6c3e67fce6333d5140e8b3941bb0b54"
+            "ref": "a46c459627c260caa16cf0234378d54b99c3b969"
         },
         "files": [
             "config/packages/sonata_page.yaml",
