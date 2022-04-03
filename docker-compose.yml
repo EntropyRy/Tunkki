@@ -13,7 +13,7 @@ services:
         expose:
             - "9000"
         volumes:
-            - ./symfony:/var/www/symfony
+            - .:/var/www
             - /etc/localtime:/etc/localtime:ro
     web:
         build: docker/web
