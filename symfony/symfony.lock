@@ -256,12 +256,12 @@
         ]
     },
     "sonata-project/admin-bundle": {
-        "version": "3.31",
+        "version": "3.107",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
             "branch": "master",
-            "version": "3.31",
-            "ref": "0e5931df1732e3dccfba42a20853049e5e9db6ae"
+            "version": "3.64",
+            "ref": "9909a0cc9b4683a1d98be519a890375d3342a480"
         },
         "files": [
             "config/packages/sonata_admin.yaml",
