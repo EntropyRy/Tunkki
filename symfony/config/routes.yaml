@@ -58,6 +58,11 @@ entropy_profile:
         en: /profile/
         fi: /profiili/
     controller: App\Controller\ProfileController:index
+entropy_profile_join:
+    path:
+        en: /profile/new
+        fi: /profiili/uusi
+    controller: App\Controller\ProfileController:newMember
 entropy_artist_profile:
     path:
         en: /profile/artist

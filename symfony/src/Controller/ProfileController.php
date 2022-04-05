@@ -7,25 +7,94 @@ use App\Form\MemberType;
 use App\Form\ActiveMemberType;
 use App\Form\OpenDoorType;
 use App\Entity\DoorLog;
+use App\Entity\Member;
+use App\Helper\Mattermost;
+use App\Helper\ZMQHelper;
+use App\Repository\MemberRepository;
+use App\Repository\EmailRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use App\Helper\Mattermost;
-use App\Helper\ZMQHelper;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Hashids\Hashids;
 
-/**
- * Require ROLE_USER for *every* controller method in this class.
- *
- * @IsGranted("ROLE_USER")
- */
 class ProfileController extends AbstractController
 {
+    public function newMember(
+        Request $request, 
+        FormFactoryInterface $formF, 
+        MemberRepository $memberRepo,
+        EmailRepository $emailRepo,
+        UserPasswordEncoderInterface $encoder,
+        Mattermost $mm,
+        MailerInterface $mailer
+    )
+    {
+        $member = new Member();
+        $email_content = null;
+        $form = $formF->create(MemberType::class, $member);
+        $form->handleRequest($request);
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $member = $form->getData();
+                $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
+                $email = $memberRepo->getByEmail($member->getEmail());
+                if(!$name && !$email){
+                    $user = $member->getUser();
+                    $user->setPassword($encoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
+                    $member->setLocale($request->getlocale());
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($user);
+                    $em->persist($member);
+                    $em->flush();
+
+                    $email_content = $emailRepo->findOneBy(['purpose' => 'member']);
+                    $this->announceToMattermost($mm, $member);
+                    $this->sendEmailToMember($email_content, $member, $mailer);
+                    // TODO: 
+                    //$code = $this->addToInfoMailingList($member);
+                    $this->addFlash('info', 'member.join.added');
+                    $this->redirect('app_login');
+                } else {
+                    $this->addFlash('warning', 'member.join.update');
+                }
+            } else {
+                $this->addFlash('danger', $form->getErrors());
+            }
+        }
+        return $this->render('member/new.html.twig', [
+            'form' => $form->createView(),
+            'email' => $email_content
+        ]);
+    }
+    protected function sendEmailToMember($email_content, $member, $mailer)
+    {
+        $email = (new TemplatedEmail())
+            ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
+            ->to($member->getEmail())
+            ->subject( $email_content->getSubject() )
+            ->htmlTemplate('emails/member.html.twig')
+            ->context([
+                'email_data' => $email_content,
+            ])
+            ;
+        $mailer->send($email);
+    }
+    protected function announceToMattermost($mm, $member)
+    {
+        $text = '**New Member: '.$member.'**';
+        $mm->SendToMattermost($text, 'yhdistys');
+    }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     public function dashboard(Request $request, Security $security)
     {
         $member = $security->getUser()->getMember();
@@ -33,6 +102,9 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     public function index(Request $request, Security $security)
     {
         $member = $security->getUser()->getMember();
@@ -40,6 +112,9 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm, ZMQHelper $zmq)
     {
         $member = $security->getUser()->getMember();
@@ -92,6 +167,9 @@ class ProfileController extends AbstractController
             'barcode' => $barcode
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
     {
         $member = $security->getUser()->getMember();
@@ -114,6 +192,9 @@ class ProfileController extends AbstractController
             'form' => $form->createView()
         ]);
     }
+    /**
+     * @IsGranted("ROLE_USER")
+     */
     public function apply(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
     {
         $member = $security->getUser()->getMember();
@@ -140,7 +221,7 @@ class ProfileController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    public function getBarcode($member)
+    private function getBarcode($member)
     {
         $generator = new BarcodeGeneratorHTML();
         $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();

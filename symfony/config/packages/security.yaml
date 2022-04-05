@@ -109,6 +109,8 @@ security:
         - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profile/new, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/profiili/uusi, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/door$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
         - { path: ^/profile/door$, roles: ROLE_NO_ACCESS}

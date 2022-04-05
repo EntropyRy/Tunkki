@@ -1,7 +1,7 @@
 {% extends 'onecolumn.html.twig' %}
 
 {% block content %}
-<div class="col-12">
+<div class="col-xl-6 col-md-10 mx-auto">
 <form method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
@@ -36,14 +36,14 @@
     <br>
     <div class="d-flex flex-row justify-content-around">
         <div class="flex-fill">
+                <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
+        </div>
+        <div>
             <button class="btn btn-primary" type="submit">
                 {{ 'sign_in'|trans }}
             </button>
-            <a class="btn btn-secondary" 
+            <a class="btn mt-2 mt-md-0 btn-secondary" 
                href="{{ path('_entropy_mattermost_auth') }}"><img height="20" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}</a>
-        </div>
-        <div class="">
-                <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
         </div>
     </div>
 </form>

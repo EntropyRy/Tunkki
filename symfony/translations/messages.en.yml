@@ -197,8 +197,9 @@ member:
         requirements2: How active you have been lately
         requirements1: You have been organizing at least 3 events in Entropy
     join:
+        info: This the email we just sent you. Hope you got it and read it. English below like in almost all of our emails.
         error: There was an error in your request. Check the from by opening it again from the Join us button
-        added: Your information is now saved in our member registry. You'll get an email about it!
+        added: Your information is now saved in our member registry.
         update: Looks like you are member already. Login to change your membership details. If you cannot do it reach out for the admin or Entropy board.
 
 dark: Dark

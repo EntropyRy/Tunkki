@@ -104,9 +104,9 @@ class MemberFormPage implements PageServiceInterface
             ->from(new Address($this->bag->get('mailer_sender_address'), 'Tunkki'))
             ->to($member->getEmail())
             ->subject( $email_content->getSubject() )
-            ->htmlTemplate('emails/base.html.twig')
+            ->htmlTemplate('emails/member.html.twig')
             ->context([
-                'content' => $email,
+                'email_data' => $email_content,
             ])
             ;
         $mailer->send($email);
