@@ -249,7 +249,7 @@ final class EventAdmin extends AbstractAdmin
                         ]])
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
-                ->add('webMeetingUrl', null, ['help' => 'Will be shown only on they day of the happening'])
+                ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time'])
                 ->add('links', ImmutableArrayType::class, [
                     'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br> 
