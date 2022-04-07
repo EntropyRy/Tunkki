@@ -226,6 +226,11 @@ class Event
      */
     private $artistSignUpStart;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $webMeetingUrl;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -844,5 +849,17 @@ body {
             return true;
         }
         return false;
+    }
+
+    public function getWebMeetingUrl(): ?string
+    {
+        return $this->webMeetingUrl;
+    }
+
+    public function setWebMeetingUrl(?string $webMeetingUrl): self
+    {
+        $this->webMeetingUrl = $webMeetingUrl;
+
+        return $this;
     }
 }

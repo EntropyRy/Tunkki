@@ -131,7 +131,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow %}
+{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now')) %}
 <div>
 <hr>
     {% for keys in event.links %}
@@ -150,6 +150,21 @@
             <i class="fas fa-image"></i>
             Epics
         </a>
+    </span>
+    {% endif %}
+    {% if event.webMeetingUrl %}
+    <span class="pr-2">
+        {% if event.EventDate == date('now') %}
+        <a href="{{ event.webMeetingUrl }}">
+            <i class="fas fa-laptop"></i>
+            {{'Join remotely'|trans }}
+        </a>
+        {% elseif event.EventDate > date('now')%}
+        <a>
+            <i class="fas fa-laptop"></i>
+            {{'Join remotely'|trans }}
+        </a>
+        {% endif %}
     </span>
     {% endif %}
     {% if event.includeSaferSpaceGuidelines %}
