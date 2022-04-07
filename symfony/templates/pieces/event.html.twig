@@ -131,7 +131,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now')) %}
+{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now-8hours')) %}
 <div>
 <hr>
     {% for keys in event.links %}
@@ -154,12 +154,12 @@
     {% endif %}
     {% if event.webMeetingUrl %}
     <span class="pr-2">
-        {% if event.EventDate == date('now') %}
+        {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U')%}
         <a href="{{ event.webMeetingUrl }}">
             <i class="fas fa-laptop"></i>
             {{'Join remotely'|trans }}
         </a>
-        {% elseif event.EventDate > date('now')%}
+        {% elseif event.EventDate|date_modify('-8hours') > date('now')%}
         <a>
             <i class="fas fa-laptop"></i>
             {{'Join remotely'|trans }}
