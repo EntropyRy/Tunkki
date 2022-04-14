@@ -10,7 +10,7 @@
     "jquery": "^3.5.0",
     "node-sass": "^7.0.1",
     "popper.js": "^1.16.1",
-    "sass": "~1.49.9",
+    "sass": "~1.50.0",
     "sass-loader": "^12.6.0",
     "signature_pad": "^4.0.3"
   },
