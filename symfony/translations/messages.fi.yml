@@ -146,6 +146,7 @@ block:
     events:
         manage: Hallitse
         upcoming_events: Tulevat tapahtumat
+        future_events: Tulevat tapahtumat
     bookings:
         manage: Hallitse
         no_bookings: Ei kesken olevia vuokracaseja

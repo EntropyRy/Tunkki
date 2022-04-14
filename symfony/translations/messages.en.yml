@@ -94,6 +94,7 @@ block:
     events:
         manage: Manage
         upcoming_events: Upcoming Events
+        future_events: Upcoming Events
     bookings:
         manage: Manage
         no_bookings: Bookings in progress
