@@ -93,7 +93,7 @@ block:
         events: Events
     events:
         manage: Manage
-        future_events: Future Events
+        upcoming_events: Upcoming Events
     bookings:
         manage: Manage
         no_bookings: Bookings in progress
