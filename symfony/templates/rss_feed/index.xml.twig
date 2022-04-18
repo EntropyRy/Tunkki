@@ -20,8 +20,8 @@
         {% else %}
             {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id }) %}
         {% endif %}
-        {% if event.externalUrl and event.url is null %}
-            {% set link = event.externalUrl %}
+        {% if event.externalUrl and event.url %}
+            {% set link = event.url %}
         {% else %}
             {% set link = 'https://entropy.fi'~ block('event_path') %}
         {% endif %}
