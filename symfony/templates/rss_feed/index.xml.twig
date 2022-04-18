@@ -21,7 +21,7 @@
         {% set guid = 'https://entropy.fi/en/event' ~path('entropy_event_en',  {'id': event.id }) %}
         {% endif %}
     <item>
-      <title>{{ event.name(locale)|escape }}</title>
+      <title>{{ event.nameByLang(locale)|escape }}</title>
       <link>https://entropy.fi{{ block('event_path') }}</link>
       <guid>{{ guid }}</guid>
       <pubDate>{{ event.publishDate | date('r') }}</pubDate>
