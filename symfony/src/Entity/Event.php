@@ -527,6 +527,14 @@ body {
             return $this->Name;
         }
     }
+    public function getNameAndDateByLang($lang)
+    {
+        if($lang=='fi'){
+            return $this->Nimi. ' - '. $this->EventDate->format('j.n.Y, H:i');
+        } else {
+            return $this->Name. ' - '. $this->EventDate->format('j.n.Y, H:i');
+        }
+    }
 
     /**
      * @return Collection|EventArtistInfo[]

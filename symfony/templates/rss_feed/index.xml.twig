@@ -16,18 +16,27 @@
     </image>
     {% for event in events %}
         {% if locale == 'fi' %}
-        {% set guid = 'https://entropy.fi' ~path('entropy_event',  {'id': event.id }) %}
+            {% set guid = 'https://entropy.fi' ~path('entropy_event',  {'id': event.id }) %}
         {% else %}
-        {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id }) %}
+            {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id }) %}
         {% endif %}
-    <item>
-      <title>{{ event.nameByLang(locale)|escape }}</title>
-      <link>https://entropy.fi{{ block('event_path') }}</link>
-      <guid>{{ guid }}</guid>
-      <pubDate>{{ event.publishDate | date('r') }}</pubDate>
-      <description>{{ event.abstract(locale) }}</description>
-      <category>{{ event.type|trans }}</category>
-    </item>
+        {% if event.externalUrl and event.url is null %}
+            {% set link = event.externalUrl %}
+        {% else %}
+            {% set link = 'https://entropy.fi'~ block('event_path') %}
+        {% endif %}
+        <item>
+            {% if event.type != 'announcement' %}
+              <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
+            {% else %}
+              <title>{{ event.nameByLang(locale)|escape }}</title>
+            {% endif %}
+          <link>{{link}}</link>
+          <guid>{{ guid }}</guid>
+          <pubDate>{{ event.publishDate | date('r') }}</pubDate>
+          <description>{{ event.abstract(locale) }}</description>
+          <category>{{ event.type|trans }}</category>
+        </item>
     {% endfor %}
   </channel>
 </rss>
