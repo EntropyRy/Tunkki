@@ -35,7 +35,8 @@
           <guid>{{ guid }}</guid>
           <pubDate>{{ event.publishDate | date('r') }}</pubDate>
           <updated>{{ event.updatedAt | date('r') }}</updated>
-          <description>{{ event.abstract(locale) }}</description>
+          <description>{{ event.abstract(locale) }}
+          {{'updated'|trans }}:{{event.updatedAt|date() }} </description>
           <category>{{ event.type|trans }}</category>
         </item>
     {% endfor %}
