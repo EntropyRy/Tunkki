@@ -92,7 +92,7 @@ rss_feed_fi:
     path: /feed.rss
     controller: App\Controller\RssFeedController:index
 rss_feed_en:
-    path: /en/feed.rss
+    path: /feed.rss
     controller: App\Controller\RssFeedController:index
 entropy_profile_active_member:
     path:

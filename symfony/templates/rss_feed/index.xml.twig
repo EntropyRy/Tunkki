@@ -4,8 +4,8 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" >
   <channel>
     <title>Entropy RSS</title>
-    <link>https://entropy.fi/</link>
-    <atom:link href="{{ path('rss_feed_'~locale) }}" rel="self" type="application/rss+xml" />
+    <link>https://entropy.fi{% if locale =='en' %}/en{% endif %}</link>
+    <atom:link href="https://entropy.fi{{ path('rss_feed_'~locale) }}" rel="self" type="application/rss+xml" />
     <description>{{'rss_desc'|trans}}</description>
     <lastBuildDate>{{'now'|date('r') }}</lastBuildDate>
     <language>{{ locale }}</language>
