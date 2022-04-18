@@ -16,9 +16,9 @@
     </image>
     {% for event in events %}
         {% if locale == 'fi' %}
-            {% set guid = 'https://entropy.fi' ~path('entropy_event',  {'id': event.id }) %}
+            {% set guid = 'https://entropy.fi' ~path('entropy_event',  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
         {% else %}
-            {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id }) %}
+            {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
         {% endif %}
         {% if event.externalUrl and event.url %}
             {% set link = event.url %}
@@ -31,9 +31,10 @@
             {% else %}
               <title>{{ event.nameByLang(locale)|escape }}</title>
             {% endif %}
-          <link>{{link}}</link>
+          <link>{{ link }}</link>
           <guid>{{ guid }}</guid>
           <pubDate>{{ event.publishDate | date('r') }}</pubDate>
+          <updated>{{ event.updatedAt | date('r') }}</updated>
           <description>{{ event.abstract(locale) }}</description>
           <category>{{ event.type|trans }}</category>
         </item>
