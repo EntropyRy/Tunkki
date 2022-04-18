@@ -19,10 +19,19 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    /**
-     * @return Event[] Returns an array of Event objects
-     */
-    
+    public function getRSSEvents()
+    {
+        $now = new \DateTime();
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.publishDate <= :now')
+            ->andWhere('e.published = :pub')
+            ->setParameter('now', $now)
+            ->setParameter('pub', true)
+            ->orderBy('e.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     public function getFutureEvents()
     {
         $now = new \DateTime();

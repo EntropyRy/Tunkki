@@ -1,0 +1,48 @@
+{% use 'pieces/event.html.twig' %}
+{% apply spaceless %}
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" >
+  <channel>
+    <title>Entropy RSS</title>
+    <link>https://entropy.fi/</link>
+    <atom:link href="{{ url('rss_feed') }}" rel="self" type="application/rss+xml" />
+    <description>{{'Upcoming and past events and announcements of Entropy ry'|trans}}</description>
+    <lastBuildDate>{{'now'|date('r') }}</lastBuildDate>
+    <language>{{ locale }}</language>
+    {% for event in events %}
+        {% if locale == 'fi' %}
+        {% set guid = url('entropy_event',  {'id': event.id }) %}
+        {% else %}
+        {% set guid = url('entropy_event_en',  {'id': event.id }) %}
+        {% endif %}
+    <item>
+      <title>{{ event.name(locale) }}</title>
+      <link>https://entropy.fi{{ block('event_path') }}</link>
+      <guid>{{ guid }}</guid>
+      <pubDate>{{ event.publishDate | date('r') }}</pubDate>
+      <description>{{ event.abstract(locale) }}</description>
+      <category>{{ event.type|trans }}</category>
+    </item>
+    {% endfor %}
+
+{# 
+    <item>
+      <title>Creativity (Mark 2:18-22)</title>
+      <link>http://www.irvingbible.org/sermons/11-10-2015/creativity</link>
+      <pubDate>Sun, 10 Nov 2015 11:00:00 -0600</pubDate>
+      <enclosure url="https://ibcmedia.s3.amazonaws.com/sermons/2015/10/15-10-18_mcquitty.mp3" type="audio/mp3"></enclosure>
+      <guid>http://www.irvingbible.org/sermons/11-10-2015/creativity</guid>
+      <description>A Sermon from Sunday, January 19, 2014: The Church and the Gospel (1 Thessalonians 1:1-8) by Andy McQuitty</description>
+      <category>Podcasts</category>
+      <category>Christianity</category>
+      <author>Andy McQuitty</author>
+      <itunes:explicit>No</itunes:explicit>
+      <itunes:author>Andy McQuitty</itunes:author>
+      <itunes:keywords>Irving Bible Church,Sermons,Christianity,Jesus Christ,Bible Teaching,Discipleship,Service</itunes:keywords>
+    </item>
+ #}
+
+    
+  </channel>
+</rss>
+{% endapply %}

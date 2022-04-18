@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% block event_path %}
+{% apply spaceless %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
     {% else %}
@@ -38,6 +39,7 @@
         {{ path('entropy_event_en',{'id': event.id}) }}
         {% endif %}
     {% endif %}
+{% endapply %}
 {% endblock %}
 
 {% block published_and_updated %}
