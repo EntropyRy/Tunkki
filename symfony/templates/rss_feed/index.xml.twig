@@ -5,15 +5,15 @@
   <channel>
     <title>Entropy RSS</title>
     <link>https://entropy.fi/</link>
-    <atom:link href="{{ url('rss_feed') }}" rel="self" type="application/rss+xml" />
-    <description>{{'Upcoming and past events and announcements of Entropy ry'|trans}}</description>
+    <atom:link href="{{ path('rss_feed_'~locale) }}" rel="self" type="application/rss+xml" />
+    <description>{{'rss_desc'|trans}}</description>
     <lastBuildDate>{{'now'|date('r') }}</lastBuildDate>
     <language>{{ locale }}</language>
     {% for event in events %}
         {% if locale == 'fi' %}
-        {% set guid = url('entropy_event',  {'id': event.id }) %}
+        {% set guid = 'https://entropy.fi/tapahtuma' ~path('entropy_event',  {'id': event.id }) %}
         {% else %}
-        {% set guid = url('entropy_event_en',  {'id': event.id }) %}
+        {% set guid = 'https://entropy.fi/en/event' ~path('entropy_event_en',  {'id': event.id }) %}
         {% endif %}
     <item>
       <title>{{ event.name(locale) }}</title>

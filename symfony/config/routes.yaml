@@ -88,10 +88,11 @@ entropy_artist_create:
         en: /profile/artist/create
         fi: /profiili/artisti/uusi
     controller: App\Controller\ArtistController:create
-rss_feed:
-    path:
-        en: /feed.rss
-        fi: /feed.rss
+rss_feed_fi:
+    path: /feed.rss
+    controller: App\Controller\RssFeedController:index
+rss_feed_en:
+    path: /en/feed.rss
     controller: App\Controller\RssFeedController:index
 entropy_profile_active_member:
     path:

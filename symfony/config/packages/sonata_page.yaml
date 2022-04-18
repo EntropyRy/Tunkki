@@ -44,7 +44,8 @@ sonata_page:
         - app_reset_password
         - app_login
         - app_logout
-        - rss_feed
+        - rss_feed_en
+        - rss_feed_fi
         - entropy_user_dashboard
         - entropy_artist_profile
         - entropy_profile
