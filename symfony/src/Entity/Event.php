@@ -231,6 +231,11 @@ class Event
      */
     private $webMeetingUrl;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $showArtistSignUpOnlyForLoggedInMembers = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -867,6 +872,18 @@ body {
     public function setWebMeetingUrl(?string $webMeetingUrl): self
     {
         $this->webMeetingUrl = $webMeetingUrl;
+
+        return $this;
+    }
+
+    public function getShowArtistSignUpOnlyForLoggedInMembers(): ?bool
+    {
+        return $this->showArtistSignUpOnlyForLoggedInMembers;
+    }
+
+    public function setShowArtistSignUpOnlyForLoggedInMembers(?bool $showArtistSignUpOnlyForLoggedInMembers): self
+    {
+        $this->showArtistSignUpOnlyForLoggedInMembers = $showArtistSignUpOnlyForLoggedInMembers;
 
         return $this;
     }

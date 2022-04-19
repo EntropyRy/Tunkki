@@ -270,6 +270,7 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Artist Sign up config')
                 ->with('Config')
                 ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup enabled'])
+                ->add('showArtistSignUpOnlyForLoggedInMembers', null, ['help' => 'Do you have to be logged in to see artist sign up link for the event'])
                 ->add('artistSignUpStart', DateTimePickerType::class, [
                     'help' => 'when the artist signup starts',
                     'input' => 'datetime_immutable',

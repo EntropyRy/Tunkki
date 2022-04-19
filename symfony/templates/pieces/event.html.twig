@@ -184,7 +184,8 @@
         {% endif %}
     </span>
     {% endif %}
-    {% if event.artistSignUpNow and event.url %}
+    {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
+
     <span class="pr-2">
         <a href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
