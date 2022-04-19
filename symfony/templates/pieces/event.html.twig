@@ -45,7 +45,7 @@
 {% block published_and_updated %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
     {% if event.updatedAt and event.updatedAt|date('Y') != '-0001' %}
-        {% if event.publishDate|date('d.m') < event.updatedAt|date('d.m') %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
+        {% if event.publishDate < event.updatedAt %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
     {% endif %}
     {% endif %}
 {% endblock %}

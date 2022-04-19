@@ -3,7 +3,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" >
   <channel>
-    <title>Entropy RSS</title>
+    <title>Entropy.fi</title>
     <link>https://entropy.fi{% if locale =='en' %}/en{% endif %}</link>
     <atom:link href="https://entropy.fi{{ path('rss_feed_'~locale) }}" rel="self" type="application/rss+xml" />
     <description>{{'rss_desc'|trans}}</description>
@@ -16,15 +16,16 @@
     </image>
     {% for event in events %}
         {% if locale == 'fi' %}
-            {% set guid = 'https://entropy.fi' ~path('entropy_event',  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
+            {% set eventpath = 'entropy_event' %}
         {% else %}
-            {% set guid = 'https://entropy.fi' ~path('entropy_event_en',  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
+            {% set eventpath = 'entropy_event_en' %}
         {% endif %}
         {% if event.externalUrl and event.url %}
             {% set link = event.url %}
         {% else %}
             {% set link = 'https://entropy.fi'~ block('event_path') %}
         {% endif %}
+        {% set guid = 'https://entropy.fi' ~path(eventpath,  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
         <item>
             {% if event.type != 'announcement' %}
               <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
@@ -36,7 +37,10 @@
           <pubDate>{{ event.publishDate | date('r') }}</pubDate>
           <updated>{{ event.updatedAt | date('r') }}</updated>
           <description>{{ event.abstract(locale) }}
-          {{'updated'|trans }}:{{event.updatedAt|date() }} </description>
+          {% if event.updatedAt|date('Y') != '-0001' %}
+          {{'updated'|trans }}:{{event.updatedAt|date() }}
+          {% endif %}
+          </description>
           <category>{{ event.type|trans }}</category>
         </item>
     {% endfor %}

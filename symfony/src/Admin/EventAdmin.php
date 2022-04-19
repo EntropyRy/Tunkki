@@ -324,7 +324,8 @@ final class EventAdmin extends AbstractAdmin
             ->add('css')
             ->add('Content')
             ->add('Sisallys')
-            ->add('url')
+            ->add('updatedAt')
+       
             ;
     }
     protected function configureRoutes(RouteCollection $collection)
