@@ -3,6 +3,7 @@
 {% block content %}
 <div class="col-12">
     <div class="col-12">
+        <h3>{{'event.form.sign_up.ends'|trans}}: {{ event.artistSignUpEnd|date }}</h3>
 {{ form_start(form) }}
 {{ form_widget(form) }}
 <input class="btn btn-primary" type="submit" value="{{'event.form.sign_up.save'|trans}}">

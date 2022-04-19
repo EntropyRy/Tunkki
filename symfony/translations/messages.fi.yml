@@ -78,7 +78,7 @@ videos: Videot
 pictures: Kuvat
 association: Yhdistys
 tickets: Liput
-Artist signup: Artisti ilmottautuminen
+Artist signup: Artisti-ilmottautuminen
 updated: Päivitetty
 fb.event: FB tapahtuma
 Kerde door opened by you: Olet avannut kertsin oven
@@ -175,11 +175,12 @@ event:
         sign_up:
             artist: Artisti
             why_should_we_choose_you: Miksi valitsisimme sinut?
-            wish_for_playtime: Toive soittojankohdasta
+            wish_for_playtime: Toive soittoajankohdasta
             set_length: Toive setin pituudesta
             free_word: Vapaa sana
             save: Tallenna
             new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
+            ends: Ilmottautuminen suljetaan
 url:
     form:
         open_in_new_window: Avaa uudessa ikkunassa
