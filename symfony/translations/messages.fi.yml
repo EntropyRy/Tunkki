@@ -174,7 +174,7 @@ event:
     form:
         sign_up:
             artist: Artisti
-            description: Teethän muokkaukset artisti profiiliisi ennen ilmoittautumista, koska profilli on aina tapahtuma kohtainen
+            description: Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista, koska profilli on aina tapahtumakohtainen
             why_should_we_choose_you: Miksi valitsisimme sinut?
             wish_for_playtime: Toive soittoajankohdasta
             set_length: Toive setin pituudesta
