@@ -62,8 +62,6 @@ sonata_page:
 
     ignore_uri_patterns:
         - ^/admin\/   
-        - ^/profiilii\/  
-        - ^/profile\/  
 
     default_template: default
     templates:
