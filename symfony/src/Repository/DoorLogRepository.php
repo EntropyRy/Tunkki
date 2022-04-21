@@ -34,6 +34,19 @@ class DoorLogRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
+    /**
+     * @return DoorLog[] Returns an array of DoorLog objects
+     */
+    public function getSince($since)
+    {
+        return $this->createQueryBuilder('d')
+            ->where('d.createdAt >= :since')
+            ->setParameter('since', $since)
+            ->orderBy('d.createdAt', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
     // /**
     //  * @return DoorLog[] Returns an array of DoorLog objects
     //  */
