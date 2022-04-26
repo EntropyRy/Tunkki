@@ -32,8 +32,8 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $listMapper
             ->add('Artist')
             ->add('Artist.updatedAt')
-            ->add('artistClone')
             ->add('artistClone.updatedAt')
+            ->add('user')
             ->add('WishForPlayTime')
             ->add('freeWord')
             ->add('SetLength')
