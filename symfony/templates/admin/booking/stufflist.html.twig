@@ -51,7 +51,18 @@
                 <tr>
                     <td>
                         <div class="checkbox">
-                            <label><input type="checkbox"> {{ item }} {% if item.manufacturer and item.model %}({{item.manufacturer}} - {{item.model}}){%endif%}</label>
+                            <label><input type="checkbox"> {{ item }} 
+                                {% if item.manufacturer or item.model %}(
+                                    {% if item.manufacturer %} 
+                                        {{item.manufacturer}}
+                                    {% endif %}
+                                    {% if item.manufacturer and item.model %}-{%endif %}
+                                    {% if item.model %} 
+                                        {{item.model}}
+                                    {%endif%}
+                                    )
+                                {%endif%}
+                            </label>
                         </div>
                     </td>
                     <td>
