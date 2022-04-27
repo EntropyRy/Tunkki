@@ -63,6 +63,7 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
             $rent['total'] = $rent['items'] + $rent['packages']; //+ $rent['accessories']; 
 
             $data['actualTotal']=$object->getActualPrice(); 
+            $rent['actualTotal']=$object->getActualPrice(); 
             $data['name']=$object->getName(); 
             $data['date']=$object->getBookingDate()->format('j.n.Y'); 
             $data['items']=$items; 
