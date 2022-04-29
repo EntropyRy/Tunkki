@@ -14,7 +14,7 @@
         {% for booking in bookings %}
             <li>
                 <span class="fa-li">
-                    {% if booking.BookingDate|date('U') > 'now'|date('U') %}
+                    {% if booking.BookingDate|date('U') > 'now-1day'|date('U') %}
                     <i class="fas fa-link"></i>
                     {% else %}
                     <i class="fas fa-history" style="color:red"></i>
