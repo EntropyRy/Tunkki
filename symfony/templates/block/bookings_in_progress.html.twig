@@ -13,7 +13,13 @@
         {% set name = 'name_attribute'|trans %}
         {% for booking in bookings %}
             <li>
-                <span class="fa-li"><i class="fas fa-link"></i></span>
+                <span class="fa-li">
+                    {% if booking.BookingDate|date('U') > 'now'|date('U') %}
+                    <i class="fas fa-link"></i>
+                    {% else %}
+                    <i class="fas fa-history" style="color:red"></i>
+                    {% endif %}
+                </span>
                 {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}
                 <a href="{{ path('admin_app_booking_edit', {'id':booking.id}) }}">{{booking}}</a>
                 {% else %}
