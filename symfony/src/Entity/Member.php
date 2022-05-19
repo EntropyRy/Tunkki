@@ -655,13 +655,14 @@ class Member
     {
         return $this->artist;
     }
-    public function getArtistWithId($id): Artist
+    public function getArtistWithId($id): ?Artist
     {
         foreach ($this->getArtist() as $artist){
             if($artist->getId() == $id){
                 return $artist;
             }
         }
+        return null;
     }
     public function addArtist(Artist $artist): self
     {

@@ -962,31 +962,6 @@ class Item
         return $this->whoCanRent;
     }
 
-
-    /**
-     * Set commissionPrice
-     *
-     * @param string $commissionPrice
-     *
-     * @return Item
-     */
-    public function setCommissionPrice($commissionPrice)
-    {
-        $this->commissionPrice = $commissionPrice;
-
-        return $this;
-    }
-
-    /**
-     * Get commissionPrice
-     *
-     * @return string
-     */
-    public function getCommissionPrice()
-    {
-        return $this->commissionPrice;
-    }
-
     /**
      * Set url.
      *
