@@ -7,6 +7,7 @@ namespace App\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController

@@ -3,6 +3,8 @@ twig:
         door_ip: '%env(TRUSTED_DOOR_IPS)%'
 
 parameters:
+    symfony:
+        containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml 
     mm_tunkki_hook: '%env(MM_TUNKKI_HOOK)%'
     mm_tunkki_img: '%env(MM_TUNKKI_IMG)%'
     mm_tunkki_botname: '%env(MM_TUNKKI_BOTNAME)%'

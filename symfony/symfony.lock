@@ -225,6 +225,12 @@
     "phpstan/phpdoc-parser": {
         "version": "0.4.10"
     },
+    "phpstan/phpstan": {
+        "version": "1.6.8"
+    },
+    "phpstan/phpstan-symfony": {
+        "version": "1.1.8"
+    },
     "picqer/php-barcode-generator": {
         "version": "v2.1.0"
     },

@@ -1,4 +1,5 @@
 <?php
+/*
 
 namespace App\Command;
 
@@ -67,3 +68,4 @@ class EntropyMemberImportCommand extends Command
     }
 
 }
+ */
