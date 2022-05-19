@@ -124,7 +124,7 @@ class MenuBuilder
         try {
             $response = $this->client->request(
                 'GET',
-                'https://stream.entropy.fi/kerde.ogg',
+                'https://stream.entropy.fi/kerde.opus',
                 ['max_duration' => 4]
             );
             if ($response->getStatusCode() == 200) {
