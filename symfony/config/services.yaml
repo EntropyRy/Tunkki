@@ -449,3 +449,10 @@ services:
             - { name: request.param_converter, converter: event_year_converter }
         arguments:
             - "@doctrine"
+
+    admin.door_log:
+        class: App\Admin\DoorLogAdmin
+        arguments: [~, App\Entity\DoorLog, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Door Log }
+        public: true

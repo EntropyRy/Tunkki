@@ -64,6 +64,7 @@ sonata_admin:
                 items:
                     - entropy_tunkki.admin.member
                     - admin.email
+                    - admin.door_log
 
             sonata.admin.group.config:
                 label:           Configuration

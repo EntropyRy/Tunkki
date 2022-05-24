@@ -399,16 +399,16 @@
         },
         {
             "name": "doctrine/cache",
-            "version": "2.1.1",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/cache.git",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce"
+                "reference": "1ca8f21980e770095a31456042471a57bc4c68fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/cache/zipball/331b4d5dbaeab3827976273e9356b3b453c300ce",
-                "reference": "331b4d5dbaeab3827976273e9356b3b453c300ce",
+                "url": "https://api.github.com/repos/doctrine/cache/zipball/1ca8f21980e770095a31456042471a57bc4c68fb",
+                "reference": "1ca8f21980e770095a31456042471a57bc4c68fb",
                 "shasum": ""
             },
             "require": {
@@ -418,18 +418,12 @@
                 "doctrine/common": ">2.2,<2.4"
             },
             "require-dev": {
-                "alcaeus/mongo-php-adapter": "^1.1",
                 "cache/integration-tests": "dev-master",
-                "doctrine/coding-standard": "^8.0",
-                "mongodb/mongodb": "^1.1",
-                "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0",
-                "predis/predis": "~1.0",
+                "doctrine/coding-standard": "^9",
+                "phpunit/phpunit": "^7.5 || ^8.5 || ^9.5",
                 "psr/cache": "^1.0 || ^2.0 || ^3.0",
-                "symfony/cache": "^4.4 || ^5.2 || ^6.0@dev",
-                "symfony/var-exporter": "^4.4 || ^5.2 || ^6.0@dev"
-            },
-            "suggest": {
-                "alcaeus/mongo-php-adapter": "Required to use legacy MongoDB driver"
+                "symfony/cache": "^4.4 || ^5.4 || ^6",
+                "symfony/var-exporter": "^4.4 || ^5.4 || ^6"
             },
             "type": "library",
             "autoload": {
@@ -478,7 +472,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/cache/issues",
-                "source": "https://github.com/doctrine/cache/tree/2.1.1"
+                "source": "https://github.com/doctrine/cache/tree/2.2.0"
             },
             "funding": [
                 {
@@ -494,7 +488,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-07-17T14:49:29+00:00"
+            "time": "2022-05-20T20:07:39+00:00"
         },
         {
             "name": "doctrine/collections",
@@ -5610,16 +5604,16 @@
         },
         {
             "name": "sonata-project/entity-audit-bundle",
-            "version": "1.7.0",
+            "version": "1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/EntityAuditBundle.git",
-                "reference": "7acb33123ae1e6df7f8886151a64d7c3b7971dc5"
+                "reference": "eca748309d1cc46052bc3e82aa2aed6ccc520a54"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/7acb33123ae1e6df7f8886151a64d7c3b7971dc5",
-                "reference": "7acb33123ae1e6df7f8886151a64d7c3b7971dc5",
+                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/eca748309d1cc46052bc3e82aa2aed6ccc520a54",
+                "reference": "eca748309d1cc46052bc3e82aa2aed6ccc520a54",
                 "shasum": ""
             },
             "require": {
@@ -5628,8 +5622,8 @@
                 "doctrine/dbal": "^2.13 || ^3.0",
                 "doctrine/event-manager": "^1.1",
                 "doctrine/orm": "^2.10",
-                "doctrine/persistence": "^2.2",
-                "php": "^7.3 || ^8.0",
+                "doctrine/persistence": "^2.2 || ^3.0",
+                "php": "^7.4 || ^8.0",
                 "symfony/config": "^4.4 || ^5.3 || ^6.0",
                 "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0",
                 "symfony/http-kernel": "^4.4 || ^5.3 || ^6.0",
@@ -5637,13 +5631,15 @@
                 "twig/twig": "^2.6 || ^3.0"
             },
             "conflict": {
-                "doctrine/doctrine-bundle": "<1.12.8",
+                "doctrine/annotations": "<1.7",
+                "doctrine/doctrine-bundle": "<2.4.4",
                 "gedmo/doctrine-extensions": "<3.0",
                 "symfony/framework-bundle": "<4.4"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "^1.12.8 || ^2.3.2",
+                "doctrine/doctrine-bundle": "^2.4.4",
                 "doctrine/doctrine-fixtures-bundle": "^3.4",
+                "friendsofphp/php-cs-fixer": "^3.4",
                 "gedmo/doctrine-extensions": "^3.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.2.1",
                 "phpstan/extension-installer": "^1.1",
@@ -5651,7 +5647,7 @@
                 "phpstan/phpstan-doctrine": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-symfony": "^1.0",
-                "phpunit/phpunit": "^9.5",
+                "phpunit/phpunit": "^9.5.13",
                 "psalm/plugin-phpunit": "^0.16.1",
                 "psalm/plugin-symfony": "^3.0",
                 "symfony/browser-kit": "^4.4 || ^5.3 || ^6.0",
@@ -5673,7 +5669,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-2.1"
+                "MIT"
             ],
             "description": "Audit for Doctrine Entities",
             "keywords": [
@@ -5683,7 +5679,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/EntityAuditBundle/issues",
-                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/1.7.0"
+                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/1.8.0"
             },
             "funding": [
                 {
@@ -5695,11 +5691,15 @@
                     "type": "github"
                 },
                 {
+                    "url": "https://github.com/jordisala1991",
+                    "type": "github"
+                },
+                {
                     "url": "https://github.com/wbloszyk",
                     "type": "github"
                 }
             ],
-            "time": "2022-02-03T21:25:24+00:00"
+            "time": "2022-05-21T09:24:19+00:00"
         },
         {
             "name": "sonata-project/exporter",
@@ -6723,16 +6723,16 @@
         },
         {
             "name": "sonata-project/twig-extensions",
-            "version": "1.9.1",
+            "version": "1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/twig-extensions.git",
-                "reference": "adb0257fdd134bd09d3e3b95661edee9907a5d18"
+                "reference": "377e03357d2476d3d8fd4c795c8658ae749e11ad"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/twig-extensions/zipball/adb0257fdd134bd09d3e3b95661edee9907a5d18",
-                "reference": "adb0257fdd134bd09d3e3b95661edee9907a5d18",
+                "url": "https://api.github.com/repos/sonata-project/twig-extensions/zipball/377e03357d2476d3d8fd4c795c8658ae749e11ad",
+                "reference": "377e03357d2476d3d8fd4c795c8658ae749e11ad",
                 "shasum": ""
             },
             "require": {
@@ -6747,6 +6747,7 @@
                 "sonata-project/core-bundle": ">=3.13"
             },
             "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.4",
                 "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0",
                 "phpstan/extension-installer": "^1.0",
@@ -6802,7 +6803,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/twig-extensions/issues",
-                "source": "https://github.com/sonata-project/twig-extensions/tree/1.9.1"
+                "source": "https://github.com/sonata-project/twig-extensions/tree/1.10.0"
             },
             "funding": [
                 {
@@ -6822,7 +6823,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-12-04T14:20:14+00:00"
+            "time": "2022-05-21T21:48:39+00:00"
         },
         {
             "name": "stella-maris/clock",
@@ -12690,16 +12691,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.6.8",
+            "version": "1.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "d76498c5531232cb8386ceb6004f7e013138d3ba"
+                "reference": "e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d76498c5531232cb8386ceb6004f7e013138d3ba",
-                "reference": "d76498c5531232cb8386ceb6004f7e013138d3ba",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719",
+                "reference": "e3baed2ee2ef322e0f9b8fe8f87fdbe024c7c719",
                 "shasum": ""
             },
             "require": {
@@ -12725,7 +12726,7 @@
             "description": "PHPStan - PHP Static Analysis Tool",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.6.8"
+                "source": "https://github.com/phpstan/phpstan/tree/1.7.1"
             },
             "funding": [
                 {
@@ -12745,7 +12746,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-10T06:54:21+00:00"
+            "time": "2022-05-24T09:05:09+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
