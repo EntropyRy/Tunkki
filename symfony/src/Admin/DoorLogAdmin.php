@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class DoorLogAdmin extends AbstractAdmin
 {
+    protected $baseRoutePattern = 'doorlog';
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
