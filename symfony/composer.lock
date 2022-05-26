@@ -2016,16 +2016,16 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.4.2",
+            "version": "7.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "ac1ec1cd9b5624694c3a40be801d94137afb12b4"
+                "reference": "74a8602c6faec9ef74b7a9391ac82c5e65b1cdab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ac1ec1cd9b5624694c3a40be801d94137afb12b4",
-                "reference": "ac1ec1cd9b5624694c3a40be801d94137afb12b4",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/74a8602c6faec9ef74b7a9391ac82c5e65b1cdab",
+                "reference": "74a8602c6faec9ef74b7a9391ac82c5e65b1cdab",
                 "shasum": ""
             },
             "require": {
@@ -2120,7 +2120,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.4.2"
+                "source": "https://github.com/guzzle/guzzle/tree/7.4.3"
             },
             "funding": [
                 {
@@ -2136,7 +2136,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-03-20T14:16:28+00:00"
+            "time": "2022-05-25T13:24:33+00:00"
         },
         {
             "name": "guzzlehttp/promises",
@@ -3011,16 +3011,16 @@
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
-            "version": "v2.10.0",
+            "version": "v2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/knpuniversity/oauth2-client-bundle.git",
-                "reference": "eb260409723a7bf204c2aa842b3488980372e874"
+                "reference": "0f4b238f16793ea6d2225044cfeae41b148a5c49"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/eb260409723a7bf204c2aa842b3488980372e874",
-                "reference": "eb260409723a7bf204c2aa842b3488980372e874",
+                "url": "https://api.github.com/repos/knpuniversity/oauth2-client-bundle/zipball/0f4b238f16793ea6d2225044cfeae41b148a5c49",
+                "reference": "0f4b238f16793ea6d2225044cfeae41b148a5c49",
                 "shasum": ""
             },
             "require": {
@@ -3065,9 +3065,9 @@
             ],
             "support": {
                 "issues": "https://github.com/knpuniversity/oauth2-client-bundle/issues",
-                "source": "https://github.com/knpuniversity/oauth2-client-bundle/tree/v2.10.0"
+                "source": "https://github.com/knpuniversity/oauth2-client-bundle/tree/v2.10.1"
             },
-            "time": "2022-02-23T15:00:49+00:00"
+            "time": "2022-05-24T17:36:38+00:00"
         },
         {
             "name": "kriswallsmith/buzz",
@@ -5703,20 +5703,20 @@
         },
         {
             "name": "sonata-project/exporter",
-            "version": "2.11.0",
+            "version": "2.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/exporter.git",
-                "reference": "9c0a4afe26f00f2b7a30030d7585b864a9734208"
+                "reference": "0a2550ef3a2ff93e34d09f4eaa860de2186065de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/9c0a4afe26f00f2b7a30030d7585b864a9734208",
-                "reference": "9c0a4afe26f00f2b7a30030d7585b864a9734208",
+                "url": "https://api.github.com/repos/sonata-project/exporter/zipball/0a2550ef3a2ff93e34d09f4eaa860de2186065de",
+                "reference": "0a2550ef3a2ff93e34d09f4eaa860de2186065de",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.3 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "conflict": {
                 "doctrine/mongodb-odm": "<2.0",
@@ -5727,6 +5727,7 @@
                 "doctrine/dbal": "^2.13 || ^3.0",
                 "doctrine/mongodb-odm": "^2.0",
                 "doctrine/orm": "^2.9",
+                "friendsofphp/php-cs-fixer": "^3.4",
                 "matthiasnoback/symfony-config-test": "^4.2",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0",
                 "phpoffice/phpspreadsheet": "^1.0",
@@ -5739,6 +5740,7 @@
                 "propel/propel1": "^1.6",
                 "psalm/plugin-phpunit": "^0.16",
                 "psalm/plugin-symfony": "^3.0",
+                "rector/rector": "^0.12",
                 "symfony/config": "^4.4 || ^5.3 || ^6.0",
                 "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0",
                 "symfony/http-foundation": "^4.4 || ^5.3 || ^6.0",
@@ -5791,7 +5793,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/exporter/issues",
-                "source": "https://github.com/sonata-project/exporter/tree/2.11.0"
+                "source": "https://github.com/sonata-project/exporter/tree/2.12.0"
             },
             "funding": [
                 {
@@ -5811,20 +5813,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-02-13T18:46:26+00:00"
+            "time": "2022-05-25T06:46:31+00:00"
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "1.16.0",
+            "version": "1.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "f3d3b1164a571cfb715df561a38b5965dbd0d36e"
+                "reference": "8e4b38e9344dd2fe336d7dab69b3ceda08a9d10f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/f3d3b1164a571cfb715df561a38b5965dbd0d36e",
-                "reference": "f3d3b1164a571cfb715df561a38b5965dbd0d36e",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/8e4b38e9344dd2fe336d7dab69b3ceda08a9d10f",
+                "reference": "8e4b38e9344dd2fe336d7dab69b3ceda08a9d10f",
                 "shasum": ""
             },
             "require": {
@@ -5908,7 +5910,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/form-extensions/issues",
-                "source": "https://github.com/sonata-project/form-extensions/tree/1.16.0"
+                "source": "https://github.com/sonata-project/form-extensions/tree/1.16.1"
             },
             "funding": [
                 {
@@ -5928,7 +5930,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-14T08:35:05+00:00"
+            "time": "2022-05-24T20:47:33+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
