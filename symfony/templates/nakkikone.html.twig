@@ -6,7 +6,7 @@
         <h2>Nakkikone: <a href="{{block('event_path')}}">{{ block('event_name') }}</a></h2>
         {% if selected|length > 0 %}
         <h3>{{ 'Your Nakkis'|trans }}</h3>
-            <div class="card-columns text-center">
+            <div class="card-group text-center">
                 {% for b in selected %}
                     {% set name = b.nakki.definition.name(l) %}
                     {% set show = true %}
@@ -25,7 +25,7 @@
               {% for name,nakki in nakkis %}
               <a class="list-group-item list-group-item-action" 
                   id="list-{{ name }}-list" 
-                  data-toggle="list"
+                  data-bs-toggle="list"
                   data-index="{{loop.index}}"
                   href="#nakki{{ loop.index }}" 
                   role="tab"
