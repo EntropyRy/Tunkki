@@ -141,12 +141,20 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Functionality', ['class' => 'col-md-4'])
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
-                ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
-                ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
+                ->add('EventDate', DateTimePickerType::class, [
+                    'label' => 'Event Date and Time',
+                    'format' => 'd.M.y H:mm',
+                ])
+                ->add('until', DateTimePickerType::class, [
+                    'format' => 'd.M.y H:mm',
+                    'label' => 'Event stop time', 
+                    'required' => false
+                ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
-                    'required' => false
+                    'required' => false,
+                    'format' => 'd.M.y H:mm',
                     ]
                 )
                 ->add('externalUrl', null, [
