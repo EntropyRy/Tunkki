@@ -11,11 +11,11 @@
         <h3>{{'register_as_member'|trans}}</h3>
         {{ form_start(form) }}
           {{ form_row(form.username) }}
-		  <div class="form-row">
+		  <div class="row">
           {{ form_row(form.firstname, {'row_attr': {'class':'col-6'}}) }}
           {{ form_row(form.lastname, {'row_attr': {'class':'col-6'}}) }}
 		  </div>
-		  <div class="form-row">
+		  <div class="row">
           {{ form_row(form.email, {'row_attr': {'class':'col-6'}}) }}
           {{ form_row(form.phone, {'row_attr': {'class':'col-6'}}) }}
 		  </div>
@@ -26,8 +26,8 @@
           {{ form_row(form.locale, {'row_attr': {'class':'d-none'}}) }}
           {{ form_row(form.theme, {'row_attr': {'class':'d-none'}}) }}
           <div class="mb-3"><small>{{'submit_and_agree'|trans}}</small></div>
-          <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-info">{{ 'privacy_policy'|trans}}</a>
-          <input class="btn btn-primary" type="submit" value="{{'Submit'|trans }}" />
+          <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-secondary">{{ 'privacy_policy'|trans}}</a>
+          <input class="btn btn-primary float-end" type="submit" value="{{'Submit'|trans }}" />
         {{ form_end(form) }}
     {% endif %}
 </div>

@@ -83,9 +83,6 @@
     "prefer-stable": true,
     "extra": {
         "symfony-assets-install": "copy",
-        "symofny": {
-            "require": "4.4.*"
-        },
         "symfony": {
             "allow-contrib": true
         }

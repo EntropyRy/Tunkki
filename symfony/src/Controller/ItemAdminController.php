@@ -16,7 +16,7 @@ class ItemAdminController extends Controller
         $object = $this->admin->getSubject();
 
         if (!$object) {
-            throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $id));
+            throw new NotFoundHttpException(sprintf('unable to find the object'));
         }
         $clonedObject = new Item;
         //$clonedObject = clone $object;

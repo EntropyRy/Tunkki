@@ -1,8 +1,9 @@
 {% apply spaceless %}
 {% if app.user %}
-<nav style="border-top: 0px" class="navbar navbar-expand-lg navbar-{{theme}}">
+<nav style="border-top: 0px" class="navbar navbar-expand-lg navbar-{{theme}} g-3">
+    <div class="container-fluid">
     <a class="navbar-brand d-lg-none" href="{{ path('entropy_profile.'~loc)}}">{{ app.user.member.username }}</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
+  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="userContent">
@@ -30,7 +31,7 @@
                 </a>
              </li>
              <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
+                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
                  <div class="dropdown-menu">
                     <a class="dropdown-item" target="_blank" 
                         href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">Forum</a>
@@ -48,6 +49,7 @@
                 </a>
              </li>
         </ul>
+  </div>
   </div>
 </nav>
 {% endif %}

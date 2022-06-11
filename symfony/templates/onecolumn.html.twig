@@ -2,7 +2,7 @@
 {% block sonata_page_container %}
     <div class="container e-container">
         <div class="content row">
-            <header class="header">
+            <header class="header g-0">
                 {{ sonata_page_render_container('header', 'global') }}
                 {% include 'menu/menu.html.twig' %}
             </header>
@@ -29,10 +29,9 @@
                     {% endif %}
                 {% endif %}
             {% endblock %}
+            <footer class="col-12 mt-3">
+                {{ sonata_page_render_container('footer', 'global') }}
+            </footer>
         </div>
-
-        <footer class="row mt-3">
-            {{ sonata_page_render_container('footer', 'global') }}
-        </footer>
     </div>
 {% endblock %}

@@ -6,7 +6,7 @@ twig:
     form_themes:
         - '@SonataForm/Form/datepicker.html.twig'
         - '@SonataFormatter/Form/formatter.html.twig'
-        - 'bootstrap_4_layout.html.twig'
+        - 'symfony5/bootstrap_5_forms.html.twig'
         - 'media_widgets.html.twig'
     globals:
         tunkki_img: '%env(MM_TUNKKI_IMG)%'

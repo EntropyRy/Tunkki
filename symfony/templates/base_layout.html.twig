@@ -53,7 +53,7 @@
 
                                 {% if sites|length > 1 and site is defined %}
                                     <li class="dropdown nav-item">
-                                        <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
+                                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
                                         <ul class="dropdown-menu">
                                             {% for site in sites %}
                                                 <li class="dropdown-item"><a href="{{ site.url ? site.url : '/'}}">{{ site.name }}</a></li>
@@ -63,7 +63,7 @@
                                 {% endif %}
 
                                 <li class="dropdown nav-item">
-                                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">Page <span class="caret"></span></a>
+                                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         {% if page is defined %}
                                             <li class="dropdown-item"><a href="{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a></li>

@@ -69,30 +69,6 @@ class AccessoryChoice
         return $this->name;
     }
 
-    /**
-     * Set price
-     *
-     * @param integer $price
-     *
-     * @return AccessoryChoices
-     */
-    public function setPrice($price)
-    {
-        $this->price = $price;
-
-        return $this;
-    }
-
-    /**
-     * Get price
-     *
-     * @return integer
-     */
-    public function getPrice()
-    {
-        return $this->price;
-    }
-
     public function __toString()
     {
         return $this->name ? $this->name : '';

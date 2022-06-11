@@ -13,7 +13,15 @@
         </div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">{{'please_sign_in'|trans}}</h1>
+    <h1 class="h3 mb-3 font-weight-normal">{{'Choose login method'|trans}}</h1>
+    <div class="col-12">
+        <a class="btn btn-lg btn-primary w-100" href="{{ path('_entropy_mattermost_auth') }}">
+            <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}
+        </a>
+    </div>
+    <div class="linetext">
+        <span>{{'OR'|trans}}</span>
+    </div>
     <label for="inputEmail">{{ 'email'|trans }}</label>
     <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
     <label for="inputPassword">{{ 'password'|trans }}</label>
@@ -36,14 +44,12 @@
     <br>
     <div class="d-flex flex-row justify-content-around">
         <div class="flex-fill">
-                <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
+            <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
         </div>
         <div>
             <button class="btn btn-primary" type="submit">
-                {{ 'sign_in'|trans }}
+                <i class="fas fa-sign-in-alt"></i> {{ 'sign_in'|trans }}
             </button>
-            <a class="btn mt-2 mt-md-0 btn-secondary" 
-               href="{{ path('_entropy_mattermost_auth') }}"><img height="20" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}</a>
         </div>
     </div>
 </form>
