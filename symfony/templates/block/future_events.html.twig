@@ -7,6 +7,7 @@
         </div>
         <div class="box-body">
     {% else %}
+    <div class="col">
         <h5>{{'block.events.future_events'|trans}}</h5>
     {% endif %}
         <ul class="fa-ul">
@@ -38,6 +39,8 @@
         <a class="btn btn-primary" href="{{path('admin_app_event_list')}}">{{ 'block.events.manage'|trans }}</a>
         {% endif %}
         </div>
+    </div>
+    {% else %}
     </div>
     {% endif %}
 {% endblock %}

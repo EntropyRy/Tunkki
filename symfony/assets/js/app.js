@@ -77,7 +77,7 @@ $(document).ready(function() {
             }
         });
     });
-    $('a[data-toggle="list"]').on('shown.bs.tab', function (e) {
+    $('a[data-bs-toggle="list"]').on('shown.bs.tab', function (e) {
         /*if(e.relatedTarget){
           var oldNakki = $(e.relatedTarget).attr('aria-controls')
         }*/
