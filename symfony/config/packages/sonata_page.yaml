@@ -208,6 +208,8 @@ sonata_page:
                     name: Right Content
                 footer:
                     name: Footer
+                footer2:
+                    name: Footer 2
             matrix:
                 layout: |
                     TTTTTTTT
@@ -216,13 +218,14 @@ sonata_page:
                     CCCCCSSS
                     CCCCCSSS
                     BBBBBBBB
-                    BBBBBBBB
+                    FFFFFFFF 
 
                 mapping:
                     T: header
                     C: content
                     S: rcontent
                     B: footer
+                    F: footer2
         fix:
             path: 'fix.html.twig'
             name: 'Fix Page'

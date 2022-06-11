@@ -11,7 +11,8 @@
         {% endif %}
     {% endif %}
     {% if show %}
-        <h5>{{ settings.title }}</h5>
+    <div class="linklist col">
+        <h5 class="text-center text-sm-start">{{ settings.title }}</h5>
         <ul class="fa-ul">
         {% for link in settings.urls %}
         <li> 
@@ -23,5 +24,6 @@
         </li>
         {% endfor %}
         </ul>
+    </div>
     {% endif %}
 {% endblock %}

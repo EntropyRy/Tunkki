@@ -10,11 +10,13 @@ Submit: Lähetä
 submit: lähetä
 Agree: Hyväksy
 Signed: Allekirjoitettu
+Address: Osoite
 fi: Suomi
 en: Englanti
 OR: TAI
 Choose login method: Valitse kirjautumistapa
 # Entropy.fi
+cookie_policy: Käytämme vain välttämättömiä keksejä jotta kirjautuminen toimii.
 Artists: Artistit
 Artist: Artisti
 First name: Etunimi
@@ -80,6 +82,7 @@ pictures: Kuvat
 association: Yhdistys
 tickets: Liput
 Artist signup: Artisti-ilmottautuminen
+Finland: Suomi
 updated: Päivitetty
 fb.event: FB tapahtuma
 Kerde door opened by you: Olet avannut kertsin oven

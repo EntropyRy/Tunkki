@@ -1,4 +1,4 @@
-{% extends 'twocolumn.html.twig' %}
+{% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
     {% set name_attr = 'name_attribute'|trans %}
@@ -10,8 +10,9 @@
             {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
         {% endif %}
         {% if event is not null and visible %}
-        <div class="row">
-            <div class="col-1">
+        <div class="col-12">
+            <div class="row">
+            <div class="col-1 text-center">
                 <h3>
                 {% if event.type == 'announcement' %}
                     <i class="fas fa-bullhorn"></i>
@@ -31,6 +32,7 @@
             <div class="post col-11">
                 {{ block('event') }}
             <hr>
+            </div>
             </div>
         </div>
         {% endif %}    

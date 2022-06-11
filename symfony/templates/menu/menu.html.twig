@@ -19,21 +19,30 @@
         >
     </a>
     <span class="d-lg-none">
-        <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
+        <a {% if loc == 'en'%}href="/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>FI</a> |
+           <a {% if loc == 'fi'%}href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>ENG</a>
+           {% if not app.user %}
+           | <a href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+           {% endif %}
     </span>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+  <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
     {{ knp_menu_render(loc) }}
-    {% if not app.user %}
-       <span>
-           <a href="/{%if loc == 'fi'%}en/{% endif %}{% if event_url is defined %}{{ event_url }}{% endif %}">{{'lang'|trans|capitalize}}</a>
-       </span>
-       <span class="d-lg-none" style="float:right;">
-           <a href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
-       </span> 
-    {% endif %}
+    <ul class="navbar-nav d-none d-lg-flex">
+        {% if not app.user %}
+            <li class="nav-item">
+               <a class="nav-link" href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+            </li>
+        {% endif %}
+        <li class="nav-item{% if loc == 'fi'%} current{%endif%}">
+            <a class="nav-link" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
+        </li>
+        <li class="nav-item{% if loc == 'en'%} current{%endif%}">
+           <a class="nav-link" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
+        </li>
+    </ul>
   </div>
 </div>
 </nav>

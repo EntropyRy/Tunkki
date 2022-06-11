@@ -2,20 +2,9 @@
 {% block sonata_page_container %}
     <div class="container e-container">
         <div class="content row">
-            <header class="header g-0">
-                {{ sonata_page_render_container('header', 'global') }}
-                {% include 'menu/menu.html.twig' %}
-            </header>
+            {% include 'header.html.twig' %}
+            {% include 'flashmessages.html.twig' %}
             <div class="col-12 col-md-8">
-            {% for label, messages in app.flashes %}
-                <div class="col-md-12">
-                {% for message in messages %}
-                      <div class="alert alert-{{ label }}">
-                         <i class="fas fa-arrow-right"></i>  {{ message|trans }}
-                      </div>
-                {% endfor %}
-                </div>
-            {% endfor %}
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}
@@ -40,9 +29,7 @@
                 {{ sonata_page_render_container('rcontent', page) }}
                 {% endif %}
             </div>
-            <footer class="col-12 mt-3">
-                {{ sonata_page_render_container('footer', 'global') }}
-            </footer>
+            {% include 'footer.html.twig' %}
         </div>
     </div>
 {% endblock %}
