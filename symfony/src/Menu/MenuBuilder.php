@@ -32,25 +32,27 @@ class MenuBuilder
         $locale = 'fi';
         $roots = $this->em->getRepository(Menu::class)->getRootNodes();
         $menu = $this->factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
+        $menu->setChildrenAttribute('class', 'navbar-nav');
         foreach ($roots as $m){
             $menu = $this->addItem($menu, $m, $locale);
             $m = $this->sortByPosition($m);
             foreach ($m as $item){
-                if($item->getUrl() == '#'){
-                    $dropdown = $menu->addChild(
-                        $item->getNimi(),
-                        [
-                            'attributes' => [
-                                'dropdown' => true,
-                            ],
-                        ]
-                    );
-                    foreach ($item->getChildren() as $subitem){
-                        $dropdown = $this->addItem($dropdown, $subitem, $locale);
+                if($m->getEnabled()){
+                    if($item->getUrl() == '#'){
+                        $dropdown = $menu->addChild(
+                            $item->getNimi(),
+                            [
+                                'attributes' => [
+                                    'dropdown' => true,
+                                ],
+                            ]
+                        );
+                        foreach ($item->getChildren() as $subitem){
+                            $dropdown = $this->addItem($dropdown, $subitem, $locale);
+                        }
+                    } else {
+                        $menu = $this->addItem($menu, $item, $locale);
                     }
-                } else {
-                    $menu = $this->addItem($menu, $item, $locale);
                 }
             }
         }
