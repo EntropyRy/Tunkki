@@ -1,4 +1,8 @@
 {% extends 'onecolumn.html.twig' %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('signature') }}
+{% endblock %}
 {% block title %}
 {{bookingdata.name}} - {{ bookingdata.date }}
 {% endblock %}

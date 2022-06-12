@@ -1,4 +1,8 @@
 {% extends 'onecolumn.html.twig' %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('artist_signup') }}
+{% endblock %}
 
 {% block content %}
 <div class="col-12">

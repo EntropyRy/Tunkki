@@ -26,9 +26,6 @@
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                 <![endif]-->
                 {{ encore_entry_script_tags('app') }}
-                {% if 'nakki' in app.request.attributes.get('_route') %}
-                    {{ encore_entry_script_tags('nakkikone') }}
-                {% endif %}
                 {% for js in sonata_page.assets.javascripts %}
                     <script src="{{ asset(js) }}"></script>
                 {% endfor %}

@@ -1,5 +1,9 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nakkikone') }}
+{% endblock %}
 {% block content %}
 <style>
 {{ event.css|raw }}
