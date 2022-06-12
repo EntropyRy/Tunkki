@@ -77,14 +77,6 @@ $(document).ready(function() {
             }
         });
     });
-    $('a[data-bs-toggle="list"]').on('shown.bs.tab', function (e) {
-        /*if(e.relatedTarget){
-          var oldNakki = $(e.relatedTarget).attr('aria-controls')
-        }*/
-        var nakki = $(this).data('index');
-        $('.card-hide').addClass('d-none').filter('#card-'+nakki).removeClass('d-none');
-        $('.show-on-click').removeClass('d-none');
-    })
 });
 $(document).on('click','.icopy', function(event) {
     event.preventDefault();
@@ -93,5 +85,3 @@ $(document).on('click','.icopy', function(event) {
     return false;
 });
 
-
-//console.log('Hello Webpack Encore');

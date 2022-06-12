@@ -1,13 +1,18 @@
-
 $primary: #2b7093;
 $secondary: #6c757d;
+$success: #28a745;
 $danger: #ff4136;
+$warning: #ffc107;
 $dark: #343a40;
+$info: #17a2b8;
 $theme-colors: (
   "primary": $primary,
   "secondary": $secondary,
+  "success": $success,
   "danger": $danger,
-  "dark": $dark
+  "warning": $warning,
+  "dark": $dark,
+  "info": $info
 );
 
 $enable-responsive-font-sizes: true;

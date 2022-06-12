@@ -1,4 +1,11 @@
 var Encore = require('@symfony/webpack-encore');
+var PurgeCssPlugin = require('purgecss-webpack-plugin');
+var glob = require('glob-all');
+var path = require('path');
+
+if (!Encore.isRuntimeEnvironmentConfigured()) {
+        Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
+}
 
 Encore
     // directory where compiled assets will be stored
@@ -18,6 +25,7 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/js/app.js')
+    .addEntry('nakkikone', './assets/js/nakkikone.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
@@ -43,6 +51,20 @@ Encore
         // optional target path, relative to the output dir
         to: '../images/[path][name].[ext]',
      })
+//     .addPlugin(new PurgeCssPlugin({
+//         paths: glob.sync([
+//             path.join(__dirname, 'templates/**/*.html.twig')
+//         ]),
+//         content: ["**/*.twig"],
+//         defaultExtractor: (content) => {
+//             return content.match(/[\w-/:]+(?<!:)/g) || [];
+//         },
+//         safelist: {
+//             standard: [],
+//             deep: [],
+//             greedy: [/info$/, /success$/, /warning$/, /danger$/, /fa/]
+//         }
+//     }))   
 ;
 
 module.exports = Encore.getWebpackConfig();

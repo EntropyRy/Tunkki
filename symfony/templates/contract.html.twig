@@ -4,7 +4,7 @@
 {% endblock %}
 {% block content %}
 <div class="col-md-12">
-    <input type="button" value="Print" class="no-print btn btn-primary float-right" onClick="window.print()">
+    <input type="button" value="Print" class="no-print btn btn-primary float-end" onClick="window.print()">
     {% set loc = 'content'~((app.request.locale)|capitalize) %}
 {{attribute(contract, loc)|raw }}
 <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
@@ -50,7 +50,7 @@
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}
 {{ renter.email }}
 <hr>
-<div class="text-center">{{'Total rent price'|trans}}: <span class="pull-right">{{ bookingdata.actualTotal}}€</span></div>
+<div class="text-center">{{'Total rent price'|trans}}: <span>{{ bookingdata.actualTotal}}€</span></div>
 <hr>
 <h3>Allekirjoitus</h3>
 <div style="height: 260px">
@@ -73,7 +73,7 @@
 {{ form_widget(form) }}
 {{ form_end(form) }}
 </div>
-    <input type="button" value="Print" class="no-print btn btn-primary float-right" onClick="window.print()">
+    <input type="button" value="Print" class="no-print btn btn-primary float-end" onClick="window.print()">
 </div>
 {% endif %}
 {% endblock %}

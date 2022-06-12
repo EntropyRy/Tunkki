@@ -26,6 +26,9 @@
                     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
                 <![endif]-->
                 {{ encore_entry_script_tags('app') }}
+                {% if 'nakki' in app.request.attributes.get('_route') %}
+                    {{ encore_entry_script_tags('nakkikone') }}
+                {% endif %}
                 {% for js in sonata_page.assets.javascripts %}
                     <script src="{{ asset(js) }}"></script>
                 {% endfor %}
@@ -36,7 +39,6 @@
     {% block sonata_page_body_tag %}
     <body class="entropy {% if app.user %}{{app.user.member.theme}}{% endif %}">
     {% endblock %}
-
         {% block sonata_page_top_bar %}
             {% if sonata_page.isEditor or ( app.user and is_granted('ROLE_SONATA_PAGE_ADMIN_PAGE_ALL') ) %}
             <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="banner">

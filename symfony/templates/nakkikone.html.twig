@@ -1,6 +1,14 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
+<style>
+{{ event.css|raw }}
+{% if event.headerTheme == 'dark' %}
+.header-img {
+    filter: invert(1);
+}
+{% endif %}
+</style>
 {% set l = app.request.locale %}
     <div class="col-12">
         <h2>Nakkikone: <a href="{{block('event_path')}}">{{ block('event_name') }}</a></h2>
@@ -32,7 +40,7 @@
                   aria-controls="{{ name }}"
               >
               {{ name }} ({{nakki.durations|join('h, ')}}h)
-              <span class="badge badge-info badge-pill float-right">{{ nakki.not_reserved|default(0) }}</span>
+              <span class="badge bg-info rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
               </a>
               {% endfor %}
             </div>
@@ -52,7 +60,7 @@
     </div>
     <div class="col-12 mt-3 d-none show-on-click">
     <h3>{{ 'Reserve your Nakki'|trans }}</h3>
-            <div class="card-group text-center">
+            <div class="row row-cols-2 row-cols-md-4 text-center">
             {% for name, nakki in nakkis %}
                 {% set i = loop.index %}
                 {% for b in nakki.bookings %}
@@ -66,9 +74,11 @@
 {% block time %}
 {{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
 {% endblock %}
+
 {% block card %}
 {#{ dump(show|default(false)) }#}
-<div class="card {% if not show|default(false) %}card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
+<div class="col mb-3{% if not show|default(false) %} card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
+<div class="card">
     <div class="card-body">
         <h5 class="card-title">{{ name }}</h5>
         <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
@@ -83,5 +93,6 @@
             {% endif %}
         {% endif %}
     </div>
+</div>
 </div>
 {% endblock %}

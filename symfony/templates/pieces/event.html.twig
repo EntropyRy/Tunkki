@@ -59,7 +59,7 @@
 {% set name_attr = 'name_attribute'|trans %}
   {{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
   {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
-  {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-right"></i>{% endif %}
+  {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
 {% endblock %}
 
 {% block event_banner_media %}
@@ -138,7 +138,7 @@
 <hr>
     {% for keys in event.links %}
         {% for url in keys %}
-        <span class="pr-2">
+        <span class="pe-2">
             <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ url.url }}">
                 <i class="{{ url.icon }}"></i>
                 {{ url.title|trans }}
@@ -147,7 +147,7 @@
         {% endfor %}
     {% endfor %}
     {% if event.epics %}
-    <span class="pr-2">
+    <span class="pe-2">
         <a href="{{ event.epics }}">
             <i class="fas fa-image"></i>
             Epics
@@ -155,7 +155,7 @@
     </span>
     {% endif %}
     {% if event.webMeetingUrl %}
-    <span class="pr-2">
+    <span class="pe-2">
         {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U')%}
         <a href="{{ event.webMeetingUrl }}">
             <i class="fas fa-laptop"></i>
@@ -170,7 +170,7 @@
     </span>
     {% endif %}
     {% if event.includeSaferSpaceGuidelines %}
-    <span class="pr-2">
+    <span class="pe-2">
         {% if app.request.locale =='fi' %}
             <a href="/turvallisemman-tilan-periaatteet">
                 <i class="fas fa-hand-holding-heart"></i>
@@ -186,7 +186,7 @@
     {% endif %}
     {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
 
-    <span class="pr-2">
+    <span class="pe-2">
         <a href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
             {{'Artist signup'|trans }}
@@ -194,7 +194,7 @@
     </span>
     {% endif %}
     {% if event.NakkikoneEnabled and event.url and app.user %}
-    <span class="pr-2">
+    <span class="pe-2">
         <a href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
             Nakkikone

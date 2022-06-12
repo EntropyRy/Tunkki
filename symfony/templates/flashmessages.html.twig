@@ -1,7 +1,7 @@
 {% for label, messages in app.flashes %}
     <div class="col-md-8 mx-auto">
     {% for message in messages %}
-        <div class="alert alert-{{ label }}">
+        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
              <i class="fas fa-arrow-right"></i>  {{ message|trans }}
              <button type="button" class="close" data-bs-dismiss="alert" aria-hidden="true" aria-label="Close">×</button>
           </div>

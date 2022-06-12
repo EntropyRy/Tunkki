@@ -143,18 +143,18 @@ final class EventAdmin extends AbstractAdmin
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
                 ->add('EventDate', DateTimePickerType::class, [
                     'label' => 'Event Date and Time',
-                    'format' => 'd.M.y H:mm',
+                    'format' => 'd.M.yyyy HH:mm',
                 ])
                 ->add('until', DateTimePickerType::class, [
-                    'format' => 'd.M.y H:mm',
+                    'format' => 'd.M.yyyy HH:mm',
                     'label' => 'Event stop time', 
-                    'required' => false
+                    'required' => false,
                 ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                     'required' => false,
-                    'format' => 'd.M.y H:mm',
+                    'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add('externalUrl', null, [
@@ -196,12 +196,20 @@ final class EventAdmin extends AbstractAdmin
                 ->with('Functionality', ['class' => 'col-md-4'])
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
                 ->add('cancelled', null, ['help' => 'Event has been cancelled'])
-                ->add('EventDate', DateTimePickerType::class, ['label' => 'Event Date and Time'])
-                ->add('until', DateTimePickerType::class, ['label' => 'Event stop time', 'required' => false])
+                ->add('EventDate', DateTimePickerType::class, [
+                    'label' => 'Event Date and Time',
+                    'format' => 'd.M.yyyy HH:mm',
+                ])
+                ->add('until', DateTimePickerType::class, [
+                    'format' => 'd.M.yyyy HH:mm',
+                    'label' => 'Event stop time', 
+                    'required' => false,
+                ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
                 ->add('publishDate', DateTimePickerType::class, [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
-                    'required' => false
+                    'required' => false,
+                    'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add('externalUrl', null, [
