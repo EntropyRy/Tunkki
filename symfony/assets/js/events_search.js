@@ -7,16 +7,22 @@ document.addEventListener('DOMContentLoaded',function(){
       timer = setTimeout(fn.bind(this, ...args), ms || 0)
     }
   }
-  $('#nameSearchInput').keyup(delay(function (e) {
-      console.log('Time elapsed!', this.value);
+  const input = document.getElementById('nameSearchInput');
+  const posts = document.getElementsByClassName('post');
+    
+    
+  input.addEventListener('keyup', delay(function (e) {
+      //console.log('Time elapsed!', this.value);
+      //console.log(posts);
       name = this.value;
-      $(".post").filter(function (){
-          if($(this).data('name').toLowerCase().indexOf(name) > -1 || name==''){
-              $(this).addClass('show');
+      for (var i=0; i<posts.length; i++){
+          if(posts[i].dataset.name.toLowerCase().indexOf(name) > -1 || name==''){
+              //bootstrap.Carousel.getInstance(posts[i]).show();
+              posts[i].classList.add('show');
           } else {
-              $(this).removeClass('show');
+              posts[i].classList.remove('show');
             }
-      });
+      }
   }, 500));
 
 });
