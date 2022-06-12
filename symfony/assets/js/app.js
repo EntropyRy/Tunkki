@@ -28,15 +28,3 @@ import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/700.css';
 import '@fontsource/space-grotesk/500.css';
 
-document.addEventListener('DOMContentLoaded',function(){
-    $('#clubroomSwitch').click(function() {
-        $('.post').each(function() {
-            if ($(this).data('type') == 'clubroom'){
-                $(this).animate({
-                    height: "toggle"
-                });
-            }
-        });
-    });
-});
-

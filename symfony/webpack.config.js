@@ -28,6 +28,7 @@ Encore
     .addEntry('nakkikone', './assets/js/nakkikone.js')
     .addEntry('artist_signup', './assets/js/artist_signup.js')
     .addEntry('signature', './assets/js/signature.js')
+    .addEntry('events_search', './assets/js/events_search.js')
     //.addEntry('page1', './assets/js/page1.js')
     //.addEntry('page2', './assets/js/page2.js')
 
