@@ -44,7 +44,7 @@ class ArtistType extends AbstractType
                 'delete_empty' => true,
                 'prototype' => true,
                 'entry_type' => UrlsType::class,
-                'attr' => ['class' => 'form-row'],
+                'attr' => ['class' => 'row'],
                 'entry_options' => [
                     'row_attr' => ['class' => 'col-md-6 col-12'],
                     'label' => false
