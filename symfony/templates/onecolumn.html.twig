@@ -4,6 +4,7 @@
         <div class="content row">
             {% include 'header.html.twig' %}
             {% include 'flashmessages.html.twig' %}
+            <div class="col-12">
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}
@@ -20,6 +21,7 @@
                     {% endif %}
                 {% endif %}
             {% endblock %}
+            </div>
             {% include 'footer.html.twig' %}
         </div>
     </div>
