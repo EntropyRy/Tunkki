@@ -30,7 +30,7 @@
                         {{ 'artist.profiles'|trans|capitalize }}
                     </a>
                  </li>
-                 <li class="nav-item dropdown">
+                 {#                 <li class="nav-item dropdown">
                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
                      <div class="dropdown-menu">
                         <a class="dropdown-item" target="_blank" 
@@ -40,7 +40,27 @@
                             href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
                         {% endif %}
                      </div>
+                 </li> #}
+                 <li class="nav-item">
+                    <a class="nav-link" 
+                       target="_blank" 
+                       href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy"
+                       >
+                       <i class="fa-solid fa-up-right-from-square"></i>
+                       Forum
+                    </a>
                  </li>
+                 {% if app.user.member.isActiveMember %}
+                 <li class="nav-item">
+                    <a class="nav-link" 
+                       target="_blank" 
+                       href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect"
+                       >
+                       <i class="fa-solid fa-up-right-from-square"></i>
+                       Wiki
+                    </a>
+                 </li>
+                 {% endif %}
             </ul>
             <ul class="navbar-nav">
                  <li class="nav-item">
