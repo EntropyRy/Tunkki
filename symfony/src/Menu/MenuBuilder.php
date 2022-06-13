@@ -70,6 +70,7 @@ class MenuBuilder
             $menu = $this->addItem($menu, $m, $locale);
             $m = $this->sortByPosition($m);
             foreach ($m as $item){
+                if($item->getEnabled()){
                 if($item->getUrl() == '#'){
                     $dropdown = $menu->addChild(
                         $item->getLabel(),
@@ -84,6 +85,7 @@ class MenuBuilder
                     }
                 } else {
                     $menu = $this->addItem($menu, $item, $locale);
+                }
                 }
             }
         }
