@@ -4,7 +4,7 @@
         <div class="content row">
             {% include 'header.html.twig' %}
             {% include 'flashmessages.html.twig' %}
-            <div class="col-12">
+            <div class="col-12 col-xl-8 col-xxl-6 mx-auto">
             {% block page_content %}
                 {% if content is defined %}
                     {{ content|raw }}

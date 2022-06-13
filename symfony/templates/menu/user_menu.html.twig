@@ -2,54 +2,54 @@
 {% if app.user %}
 <nav style="border-top: 0px" class="navbar navbar-expand-lg navbar-{{theme}} g-3">
     <div class="container-fluid">
-    <a class="navbar-brand d-lg-none" href="{{ path('entropy_profile.'~loc)}}">{{ app.user.member.username }}</a>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="userContent">
-        <ul class="navbar-nav mr-auto">
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('entropy_user_dashboard.'~loc)}}">
-                    {{ 'entropy_user_dashboard'|trans }}
-                </a>
-             </li>
-             {% if app.request.server.get("HTTP_X_REAL_IP") == door_ip %}
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('entropy_profile_door.'~loc)}}">
-                    {{'profile.door.open_the_door'|trans}}
-                </a>
-             </li>
-             {% endif %}
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('entropy_profile.'~loc)}}">
-                    {{ 'profile.name'|trans|capitalize }}
-                </a>
-             </li>
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('entropy_artist_profile.'~loc)}}">
-                    {{ 'artist.profiles'|trans|capitalize }}
-                </a>
-             </li>
-             <li class="nav-item dropdown">
-                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
-                 <div class="dropdown-menu">
-                    <a class="dropdown-item" target="_blank" 
-                        href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">Forum</a>
-                    {% if app.user.member.isActiveMember %}
-                    <a class="dropdown-item" target="_blank" 
-                        href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
-                    {% endif %}
-                 </div>
-             </li>
-        </ul>
-        <ul class="navbar-nav">
-             <li class="nav-item">
-                <a class="nav-link" href="{{ path('app_logout')}}">
-                    <i class="fas fa-sign-out-alt"></i> {{ 'profile.logout'|trans|capitalize }}
-                </a>
-             </li>
-        </ul>
-  </div>
+        <a class="navbar-brand d-lg-none" href="{{ path('entropy_profile.'~loc)}}">{{ app.user.member.username }}</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#userContent" aria-controls="userContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-between" id="userContent">
+            <ul class="navbar-nav">
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('entropy_user_dashboard.'~loc)}}">
+                        {{ 'entropy_user_dashboard'|trans }}
+                    </a>
+                 </li>
+                 {% if app.request.server.get("HTTP_X_REAL_IP") == door_ip %}
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('entropy_profile_door.'~loc)}}">
+                        {{'profile.door.open_the_door'|trans}}
+                    </a>
+                 </li>
+                 {% endif %}
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('entropy_profile.'~loc)}}">
+                        {{ 'profile.name'|trans|capitalize }}
+                    </a>
+                 </li>
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('entropy_artist_profile.'~loc)}}">
+                        {{ 'artist.profiles'|trans|capitalize }}
+                    </a>
+                 </li>
+                 <li class="nav-item dropdown">
+                     <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
+                     <div class="dropdown-menu">
+                        <a class="dropdown-item" target="_blank" 
+                            href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">Forum</a>
+                        {% if app.user.member.isActiveMember %}
+                        <a class="dropdown-item" target="_blank" 
+                            href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">Wiki</a>
+                        {% endif %}
+                     </div>
+                 </li>
+            </ul>
+            <ul class="navbar-nav">
+                 <li class="nav-item">
+                    <a class="nav-link" href="{{ path('app_logout')}}">
+                        <i class="fas fa-sign-out-alt"></i> {{ 'profile.logout'|trans|capitalize }}
+                    </a>
+                 </li>
+            </ul>
+      </div>
   </div>
 </nav>
 {% endif %}

@@ -7,6 +7,7 @@
 {% if not member.isActiveMember %}
     {#{ sonata_block_render({'type':'entropy.block.door'}) }#}
 {% endif %}
+<div class="row">
 <div class="col-sm-4">
     {{ sonata_block_render({'type':'entropy.block.member.info'}) }}
     {{ sonata_block_render({'type':'entropy.block.compensations'}) }}
@@ -14,6 +15,7 @@
 <div class="col-sm-8">
     {{ sonata_block_render({'type':'entropy.block.member.situation'}) }}
     {{ sonata_block_render({'type':'entropy.block.email_lists'}) }}
+</div>
 </div>
 {% endblock %}
 

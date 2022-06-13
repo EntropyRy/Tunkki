@@ -14,13 +14,6 @@ body {
     background: white;
     box-shadow: 0 0 20px 0px;
 }
-.header {
-    width: 100%;
-    margin-bottom: 2%;
-}
-a {
-    color: #2b7093;
-}
 nav {
     border-top: 1px solid #afafaf;
     border-bottom: 1px solid #afafaf;
@@ -33,40 +26,12 @@ footer {
     background: #191919;
     color: #666;
 }
-#colophon{
-    padding: 20px;
-    width: 100%;
-}
-#site-info a {
-    color: #999999;
-    text-decoration: none;
-}
-#site-info {
-/*    font-family: georgia;*/
-    font-size: 18px;
-    font-weight: normal;
-/* letter-spacing: 7px; */
-    padding-bottom: 10px;
-    width: 100%;
-}
-#streetaddress {
-    display: block;
-    float: left;
-    width: 250px;
-}
-.some {
-    float: right;
-}
 .checkbox div[class^="icheckbox"], .checkbox-inline div[class^="icheckbox"], .radio div[class^="iradio"], .radio-inline div[class^="iradio"] {
     position: relative;
     margin-top: 4px \9;
     margin-right: 5px;
     margin-top: -3px;
 }
-/*.checkbox label, .radio label {
-    font-weight: 700;
-    margin-left: -20px;
-}*/
 @media print {
    .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
    .no-print, .no-print * { display: none; }

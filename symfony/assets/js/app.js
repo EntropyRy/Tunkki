@@ -1,6 +1,6 @@
 import '../css/bs.scss';
 import '../css/polaroid.scss';
-import '../css/app.css';
+import '../css/app.scss';
 import '../css/dark.scss';
 import '../css/animations.scss';
 
@@ -16,9 +16,6 @@ import 'bootstrap/js/dist/dropdown';
 import 'bootstrap/js/dist/tab';
 // import 'bootstrap/js/dist/toast';
 // import 'bootstrap/js/dist/tooltip';
-
-//import bsCustomFileInput from 'bs-custom-file-input';
-//import a2lix_lib from '@a2lix/symfony-collection/src/a2lix_sf_collection';
 
 require('@fortawesome/fontawesome-free/css/all.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');

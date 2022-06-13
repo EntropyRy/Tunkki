@@ -4,6 +4,7 @@
 {% endblock %}
 
 {% block content %}
+<div class="row">
 <div class="col-md-6">
     {% if member.isActiveMember %}
         {{ sonata_block_render({'type':'entropy.block.door_info'}) }}
@@ -16,6 +17,7 @@
     {{ sonata_block_render({'type':'entropy.block.future_events'}, {'box':true}) }}
     {{ sonata_block_render({'type':'entropy.block.bookings_in_progress'},{'box':true}) }}
     {{ sonata_block_render({'type':'entropy.block.brokenitems'},{'bs3':false, 'random': true}) }}
+</div>
 </div>
 {% endblock %}
 
