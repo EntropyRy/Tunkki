@@ -19,7 +19,7 @@
             {% if link.icon %}
                 <span class="fa-li"><i class="{{ link.icon }}"></i></span>
             {% else %}
-                {% if link.url in app.request.attributes.get('uri') %}
+                {% if app.request.attributes.get('path') in link.url %}
                     <span class="fa-li"><i class="fas fa-arrow-right"></i></span>
                 {% else %}
                     <span class="fa-li"><i class="fas fa-link"></i></span>
