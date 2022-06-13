@@ -16,8 +16,14 @@
         <ul class="fa-ul">
         {% for link in settings.urls %}
         <li> 
-            {% if link.icon %}<span class="fa-li"><i class="{{link.icon }}"></i></span>
-            {% else %}<span class="fa-li"><i class="fas fa-link"></i></span>
+            {% if link.icon %}
+                <span class="fa-li"><i class="{{ link.icon }}"></i></span>
+            {% else %}
+                {% if link.url in app.request.attributes.get('uri') %}
+                    <span class="fa-li"><i class="fas fa-arrow-right"></i></span>
+                {% else %}
+                    <span class="fa-li"><i class="fas fa-link"></i></span>
+                {% endif %}
             {% endif %}
             <a {% if link.openInNewWindow|default(false) %}target="_blank"{% endif %}
                 href="{{ link.url }}"> {{ link.title }}</a>
