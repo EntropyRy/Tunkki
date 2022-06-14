@@ -67,6 +67,8 @@
     {% if event.until is defined %}
         {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
             ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
+        {% else %}
+            ~ {{ event.eventdate|date() }}
         {% endif %}
     {% else %}
     ~ {{ event.eventdate|date() }}
