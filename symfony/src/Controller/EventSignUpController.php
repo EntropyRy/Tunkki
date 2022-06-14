@@ -216,6 +216,7 @@ class EventSignUpController extends EventController
             $artistClone->setCopyForArchive(true);
             $artistClone->setName($artist->getName().' for '.$event->getName());
             $artistClone->setPicture($artist->getPicture());
+            $artistClone->setHardware($artist->getHardware());
             $artistClone->setBio($artist->getBio());
             $artistClone->setBioEn($artist->getBioEn());
             $artistClone->setLinks($artist->getLinks());
