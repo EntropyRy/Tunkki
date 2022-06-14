@@ -1,10 +1,10 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
-        {{ block('event_head') }}
+        {{ block('event_head_frontpage') }}
     {% else %}
         <a href="{{ block('event_path') }}">
-        {{ block('event_head') }}
+        {{ block('event_head_frontpage') }}
         </a>
     {% endif %}
     <small>{{ block('published_and_updated') }}</small>
@@ -25,7 +25,7 @@
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
-    <h3>{{ block('event_name') }}</h3>
+    <h2 class="mt-2">{{ block('event_name') }} <span class="">{{ block('event_time') }}<span></h2>
 {% endblock %}
 
 {% block event_path %}
@@ -50,23 +50,28 @@
     {% endif %}
 {% endblock %}
 
-{% block event_head %}
-    <h3>{{ block('event_name') }}</h3>
+{% block event_head_frontpage %}
+    <h3 class="mt-2">{{ block('event_name') }} <span>{{ block('event_time') }}<span></h3>
     {{ block('event_banner_media') }}
 {% endblock %}
 
 {% block event_name %}
 {% set name_attr = 'name_attribute'|trans %}
   {{ attribute(event, name_attr) }}
-  {% if event.type != 'announcement' %} - {{ event.eventdate|date() }}
-    {% if event.until is defined %}
-        {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
-            - {{ event.until|date() }}
-        {% endif %}
-    {% endif %}
-  {% endif %}
   {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
   {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
+{% endblock %}
+
+{% block event_time %}
+  {% if event.type != 'announcement' %} 
+    {% if event.until is defined %}
+        {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
+            ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
+        {% endif %}
+    {% else %}
+    ~ {{ event.eventdate|date() }}
+    {% endif %}
+  {% endif %}
 {% endblock %}
 
 {% block event_banner_media %}
