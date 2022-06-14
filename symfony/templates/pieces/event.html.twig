@@ -64,7 +64,7 @@
 
 {% block event_time %}
   {% if event.type != 'announcement' %} 
-    {% if event.until is defined %}
+    {% if event.until is not null and event.until is not empty %}
         {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
             ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
         {% else %}
