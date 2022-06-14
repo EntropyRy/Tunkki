@@ -35,6 +35,7 @@
             <div class="pt-2">{{'events'|trans|capitalize}}:</div>
             <ul>
             {% for info in artist.eventArtistInfos %}
+            {% if info.event.eventDate > 'now'|date %}
             <li><a href="{{ path('entropy_event_slug', {'year':info.event.eventDate|date('Y'),'slug': info.event.url})}}">{{ info.event }}</a>
                 {% if info.StartTime %}
                 @ {{ info.StartTime|date('H:i')}}
@@ -42,6 +43,7 @@
                 : {{ 'artist.not_confirmed_yet'|trans }}
                 {% endif %}
             </li>
+            {% endif %}
             {% endfor %}
             </ul>
         </div>

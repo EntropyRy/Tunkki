@@ -76,6 +76,7 @@
 {% endblock %}
 
 {% block time %}
+{{ b.startAt|date('d.m.') }}<br>
 {{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
 {% endblock %}
 
