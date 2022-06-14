@@ -57,7 +57,14 @@
 
 {% block event_name %}
 {% set name_attr = 'name_attribute'|trans %}
-  {{ attribute(event, name_attr) }}{% if event.type != 'announcement' %} - {{ event.eventdate|date() }}{% endif %}
+  {{ attribute(event, name_attr) }}
+  {% if event.type != 'announcement' %} - {{ event.eventdate|date() }}
+    {% if event.until is defined %}
+        {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
+            - {{ event.until|date() }}
+        {% endif %}
+    {% endif %}
+  {% endif %}
   {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
   {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
 {% endblock %}
