@@ -64,14 +64,10 @@
 
 {% block event_time %}
   {% if event.type != 'announcement' %} 
-    {% if event.until is not null and event.until is not empty %}
-        {% if event.multiday %}
-            ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
-        {% else %}
-            ~ {{ event.eventdate|date() }}
-        {% endif %}
+    {% if event.multiday %}
+        ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
     {% else %}
-    ~ {{ event.eventdate|date() }}
+        ~ {{ event.eventdate|date() }}
     {% endif %}
   {% endif %}
 {% endblock %}
@@ -345,7 +341,7 @@
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
 {% if event.multiday == true %}
-    {% set datestring = 'l, H:i' %}
+    {% set datestring = 'D, H:i' %}
 {% else %}
     {% set datestring = 'H:i' %}
 {% endif %}
