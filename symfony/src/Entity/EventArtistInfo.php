@@ -52,6 +52,11 @@ class EventArtistInfo
      */
     private $freeWord;
 
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $stage;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -142,6 +147,18 @@ class EventArtistInfo
     public function setFreeWord(?string $freeWord): self
     {
         $this->freeWord = $freeWord;
+
+        return $this;
+    }
+
+    public function getStage(): ?string
+    {
+        return $this->stage;
+    }
+
+    public function setStage(?string $stage): self
+    {
+        $this->stage = $stage;
 
         return $this;
     }

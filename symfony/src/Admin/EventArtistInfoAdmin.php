@@ -23,6 +23,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $datagridMapper
             ->add('Artist')
             ->add('SetLength')
+            ->add('stage')
             ->add('StartTime')
             ;
     }
@@ -36,6 +37,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('Artist.member')
             ->add('WishForPlayTime')
             ->add('freeWord')
+            ->add('stage')
             ->add('SetLength')
             ->add('StartTime')
             ->add('_action', null, [
@@ -67,6 +69,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                 ->add('Artist', null, ['disabled' => true])
                 ->add('WishForPlayTime', TextType::class, ['disabled' => true])
                 ->add('SetLength')
+                ->add('stage')
                 ->add('StartTime', DateTimePickerType::class, [
                     'dp_side_by_side' => true,
                     'format' => 'd.M.y H:mm',

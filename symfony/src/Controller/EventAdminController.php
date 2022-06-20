@@ -81,7 +81,7 @@ final class EventAdminController extends CRUDController
             $req_tickets = $event->getTicketCount();
             if($req_tickets > 0){
                 if($tickets_now > $req_tickets){
-                    $this->addFlash('error', 'Cannot remove tickets. do it manually first and then update the count here otherwise new tickets are added');
+                    $this->addFlash('error', 'Cannot remove tickets. Please remove them manually.');
                 } else {
                     $new_tickets = $req_tickets - $tickets_now;
                     $em = $this->getDoctrine()->getManager();
@@ -89,10 +89,10 @@ final class EventAdminController extends CRUDController
                         $ticket = new Ticket();
                         $ticket->setEvent($event);
                         $ticket->setStatus('available');
-                        $ticket->setPrice($event->getTicketPrice());
+                        $ticket->setPrice($event->getTicketPrice()?$event->getTicketPrice():0);
                         $em->persist($ticket);
                         $em->flush();
-                        $ticket->setReferenceNumber($this->calculateReferenceNumber());
+                        $ticket->setReferenceNumber($this->calculateReferenceNumber($ticket));
                         $em->persist($ticket);
                         $em->flush();
 
@@ -106,13 +106,14 @@ final class EventAdminController extends CRUDController
         $ki = 0;
         $summa = 0;
         $kertoimet = [7, 3, 1];
-        $id = (int)$ticket->getId()+1220;
-        $viite = (int)'303'.$id;
+        $id = (int)$ticket->getId()+9000;
+        $viite = (int)'909'.$id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
         }
-        return $viite.''.(10 - ($summa % 10)) % 10;
+        $cast = $viite.((10 - ($summa % 10)) % 10);
+        return (int)$cast;
     }
 }
 

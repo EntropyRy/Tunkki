@@ -116,7 +116,7 @@ class Event
 
     /**
      * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Event")
-     * @ORM\OrderBy({"StartTime" = "ASC"})
+     * @ORM\OrderBy({"stage" = "ASC", "StartTime" = "ASC"})
      */
     private $eventArtistInfos;
 
@@ -990,5 +990,19 @@ body {
         $this->ticketPrice = $ticketPrice;
 
         return $this;
+    }
+
+    public function getMultiday(): bool
+    {
+        //dd( $this->EventDate->format('U') - $this->until->format('U'));
+        if ($this->until){
+            if(($this->until->format('U') - $this->EventDate->format('U')) > 86400){
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 }

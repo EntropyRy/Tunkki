@@ -65,7 +65,7 @@
 {% block event_time %}
   {% if event.type != 'announcement' %} 
     {% if event.until is not null and event.until is not empty %}
-        {% if (event.until|date('U') - event.eventdate|date('U')) > 86400 %}
+        {% if event.multiday %}
             ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
         {% else %}
             ~ {{ event.eventdate|date() }}
@@ -221,6 +221,7 @@
 
 {% block timetable %}
 {% set last = false %}
+{% set stage = null %}
 {% if event.eventArtistInfos %}
 <ul>
 {% for info in event.eventArtistInfos %}
@@ -229,6 +230,11 @@
         {% set artist = info.artist %}
     {% else %}
         {% set artist = info.artistClone %}
+    {% endif %}
+    {% if info.stage != stage %}
+    <h3 class="artists-heading">
+        {{'Timetable'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
+    </h3>
     {% endif %}
     {% if artist.type !='VJ' %}
         {% if last is defined %}
@@ -250,6 +256,7 @@
                 </li> 
             {% endif %}
         {% endif %}
+        {% set stage = info.stage %}
     {% endif %}
 {% endfor %}
 </ul>
@@ -258,8 +265,14 @@
 
 {% block vj_bios %}
 {% set bio_attribute = 'bio_attribute'|trans %}
+    {% set stage = null %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
+            {% if info.stage != stage %}
+            <h3 class="artists-heading text-center">
+                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
+            </h3>
+            {% endif %}
             {% set name = info.artist.name %}
             {% if info.artistClone is null %}
                 {% set artist = info.artist %}
@@ -268,6 +281,7 @@
             {% endif %}
             {% if artist.type =='VJ' %}
                 {{ block('cycle') }}
+                {% set stage = info.stage %}
             {% endif %}
         {% endif %}
     {% endfor %}
@@ -305,13 +319,14 @@
 
 {% block bios %}
 {% set bio_attribute = 'bio_attribute'|trans %}
-{% if event.eventArtistInfos|length > 1 %}
-    <h3 class="artists-heading">
-        {{'Artists'|trans}}
-    </h3>
-{% endif %}
+    {% set stage = null %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
+            {% if info.stage != stage %}
+            <h3 class="artists-heading text-center">
+                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
+            </h3>
+            {% endif %}
             {% set name = info.artist.name %}
             {% if info.artistClone is null %}
                 {% set artist = info.artist %}
@@ -320,6 +335,7 @@
             {% endif %}
             {% if artist.type !='VJ' %}
                 {{ block('cycle') }}
+                {% set stage = info.stage %}
             {% endif %}
         {% endif %}
     {% endfor %}
@@ -328,10 +344,21 @@
 {% block artist_event_info %}
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
+{% if event.multiday == true %}
+    {% set datestring = 'l, H:i' %}
+{% else %}
+    {% set datestring = 'H:i' %}
+{% endif %}
 {% if event is defined and '{{ timetable }}' not in attribute(event,content_attr) %}
     {% set show = false %}
 {% endif %}
-<h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}{% if artist.type != 'VJ' %}{% if info is defined and show %}@ {{info.StartTime|date('H:i')}}{% endif %}{% endif %}</h3>
+<h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
+    {% if artist.type != 'VJ' %}
+        {% if info is defined and show %}
+            @ {{info.StartTime|date(datestring)}}
+        {% endif %}
+    {% endif %}
+</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
