@@ -1,2 +1,6 @@
 /.env.*.local
 logs/
+.env
+docker/data
+dev.sql
+

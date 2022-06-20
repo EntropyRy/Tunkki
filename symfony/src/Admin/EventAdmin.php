@@ -49,23 +49,30 @@ final class EventAdmin extends AbstractAdmin
                    'uri' => $admin->generateUrl('artistList', ['id' => $id])
                 ]);
             }
+            if($this->getSubject()->getRsvpSystemEnabled()){
             $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
             ]);
-            if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0){
-                $menu->addChild('RSVP List', [
-                   'uri' => $admin->generateUrl('rsvp', ['id' => $id])
-                ]);
+                if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0){
+                    $menu->addChild('RSVP List', [
+                       'uri' => $admin->generateUrl('rsvp', ['id' => $id])
+                    ]);
+                }
             }
-            $menu->addChild('Nakkikone', [
-               'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
-            ]);
-            $menu->addChild('Nakit', [
-               'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki_booking.list', ['id' => $id])
-            ]);
             if($this->getSubject()->getNakkikoneEnabled()){
+                $menu->addChild('Nakkikone', [
+                   'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
+                ]);
+                $menu->addChild('Nakit', [
+                   'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki_booking.list', ['id' => $id])
+                ]);
                 $menu->addChild('Printable Nakkilist', [
                    'uri' => $admin->generateUrl('nakkiList', ['id' => $id])
+                ]);
+            }
+            if($this->getSubject()->getTicketsEnabled()){
+                $menu->addChild('Tickets', [
+                   'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                 ]);
             }
             $menu->addChild('Preview', [
@@ -323,6 +330,18 @@ final class EventAdmin extends AbstractAdmin
                     ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                     ->add('RSVPEmailSubject')
                     ->add('RSVPEmailBody', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default', 
+                    ])
+                ->end()
+                ->end()
+                ->tab('Tickets')
+                ->with('Config')
+                    ->add('ticketsEnabled', null, ['help' => 'allow tikets to the event'])
+                    ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated this amount will be created'])
+                    ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
+                    ->add('ticketInfo', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
                         'ckeditor_context' => 'default', 

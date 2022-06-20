@@ -12,7 +12,8 @@ sonata_page:
     use_streamed_response: true
     hide_disabled_blocks: true
     page_defaults:
-        decorate: true 
+        decorate: true
+    skip_redirection: true
     router_auto_register:
         enabled: true
         priority: 200

@@ -381,6 +381,7 @@ services:
             - [addChild, ['@entropy.admin.nakki', 'event']]
             - [addChild, ['@entropy.admin.nakki_booking', 'event']]
             - [addChild, ['@entropy.admin.rsvp', 'event']]
+            - [addChild, ['@admin.ticket', 'event']]
         public: true
 
     admin.event_artist_info:
@@ -455,4 +456,11 @@ services:
         arguments: [~, App\Entity\DoorLog, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, label: Door Log }
+        public: true
+
+    admin.ticket:
+        class: App\Admin\TicketAdmin
+        arguments: [~, App\Entity\Ticket, App\Controller\TicketAdminController]
+        tags:
+            - { name: sonata.admin, manager_type: orm, group: admin, label: Ticket }
         public: true

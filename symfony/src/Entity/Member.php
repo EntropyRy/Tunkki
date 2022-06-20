@@ -180,12 +180,18 @@ class Member
      */
     private $nakkiBookings;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="owner")
+     */
+    private $tickets;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
         $this->doorLogs = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
 
     /**
@@ -783,6 +789,36 @@ class Member
             // set the owning side to null (unless already changed)
             if ($nakkiBooking->getMember() === $this) {
                 $nakkiBooking->setMember(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getOwner() === $this) {
+                $ticket->setOwner(null);
             }
         }
 

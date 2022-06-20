@@ -36,10 +36,10 @@ class EventController extends Controller
             if($eventdata->getexternalUrl()){
                 return new RedirectResponse($eventdata->getUrl());
             }
-            return new RedirectResponse($this->generateUrl('entropy_event_slug', [
+            return $this->redirectToRoute('entropy_event_slug', [
                 'year' => $eventdata->getEventDate()->format('Y'),
                 'slug' => $eventdata->getUrl()
-            ]));
+            ]);
         }
         $page = $cms->retrieve()->getCurrentPage();
         $this->setMetaData($lang, $eventdata, $page, $seo); 

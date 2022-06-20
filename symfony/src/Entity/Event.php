@@ -236,6 +236,31 @@ class Event
      */
     private $showArtistSignUpOnlyForLoggedInMembers = false;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="event", orphanRemoval=true)
+     */
+    private $tickets;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $ticketCount = 0;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $ticketsEnabled = false;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $ticketInfo;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $ticketPrice;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -388,6 +413,7 @@ body {
         $this->RSVPs = new ArrayCollection();
         $this->nakkis = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -884,6 +910,84 @@ body {
     public function setShowArtistSignUpOnlyForLoggedInMembers(?bool $showArtistSignUpOnlyForLoggedInMembers): self
     {
         $this->showArtistSignUpOnlyForLoggedInMembers = $showArtistSignUpOnlyForLoggedInMembers;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): self
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets[] = $ticket;
+            $ticket->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): self
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            // set the owning side to null (unless already changed)
+            if ($ticket->getEvent() === $this) {
+                $ticket->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTicketCount(): ?int
+    {
+        return $this->ticketCount;
+    }
+
+    public function setTicketCount(int $ticketCount): self
+    {
+        $this->ticketCount = $ticketCount;
+
+        return $this;
+    }
+
+    public function getTicketsEnabled(): ?bool
+    {
+        return $this->ticketsEnabled;
+    }
+
+    public function setTicketsEnabled(?bool $ticketsEnabled): self
+    {
+        $this->ticketsEnabled = $ticketsEnabled;
+
+        return $this;
+    }
+
+    public function getTicketInfo(): ?string
+    {
+        return $this->ticketInfo;
+    }
+
+    public function setTicketInfo(?string $ticketInfo): self
+    {
+        $this->ticketInfo = $ticketInfo;
+
+        return $this;
+    }
+
+    public function getTicketPrice(): ?int
+    {
+        return $this->ticketPrice;
+    }
+
+    public function setTicketPrice(?int $ticketPrice): self
+    {
+        $this->ticketPrice = $ticketPrice;
 
         return $this;
     }

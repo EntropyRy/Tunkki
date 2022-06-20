@@ -93,6 +93,7 @@ sonata_admin:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
+                    - admin.ticket
                     #- entropy_tunkki.admin.statusevent
                     - sonata.page.admin.site
                     - entropy.admin.access_groups
