@@ -252,14 +252,29 @@ class Event
     private $ticketsEnabled = false;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $ticketInfo;
-
-    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private $ticketPrice;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $ticketInfoFi;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $ticketInfoEn;
+
+    /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $ticketPresaleStart;
+
+    /**
+     * @ORM\Column(type="date_immutable", nullable=true)
+     */
+    private $ticketPresaleEnd;
 
     public function getId(): ?int
     {
@@ -968,16 +983,10 @@ body {
         return $this;
     }
 
-    public function getTicketInfo(): ?string
+    public function getTicketInfo($lang): ?string
     {
-        return $this->ticketInfo;
-    }
-
-    public function setTicketInfo(?string $ticketInfo): self
-    {
-        $this->ticketInfo = $ticketInfo;
-
-        return $this;
+        $func = 'ticketInfo'. ucfirst($lang);
+        return $this->{$func};
     }
 
     public function getTicketPrice(): ?int
@@ -1005,4 +1014,74 @@ body {
             return false;
         }
     }
+
+    public function getDjArtistInfos(): array
+    {
+        $bystage = [];
+        foreach ($this->eventArtistInfos as $info){
+            if (!is_null($info->getStartTime())){
+                if($info->getArtist()->getType() != 'VJ'){
+                    $bystage[$info->getStage()][]=$info;
+                }
+            }
+        }
+        return $bystage;
+    }
+
+    public function getTicketInfoFi(): ?string
+    {
+        return $this->ticketInfoFi;
+    }
+
+    public function setTicketInfoFi(?string $ticketInfoFi): self
+    {
+        $this->ticketInfoFi = $ticketInfoFi;
+
+        return $this;
+    }
+
+    public function getTicketInfoEn(): ?string
+    {
+        return $this->ticketInfoEn;
+    }
+
+    public function setTicketInfoEn(?string $ticketInfoEn): self
+    {
+        $this->ticketInfoEn = $ticketInfoEn;
+
+        return $this;
+    }
+
+    public function getTicketPresaleStart(): ?\DateTimeImmutable
+    {
+        return $this->ticketPresaleStart;
+    }
+
+    public function setTicketPresaleStart(?\DateTimeImmutable $ticketPresaleStart): self
+    {
+        $this->ticketPresaleStart = $ticketPresaleStart;
+
+        return $this;
+    }
+
+    public function getTicketPresaleEnd(): ?\DateTimeImmutable
+    {
+        return $this->ticketPresaleEnd;
+    }
+
+    public function setTicketPresaleEnd(?\DateTimeImmutable $ticketPresaleEnd): self
+    {
+        $this->ticketPresaleEnd = $ticketPresaleEnd;
+
+        return $this;
+    }
+
+    public function ticketPresaleEnabled()
+    {
+        $now = new \DateTime('now');
+        if ($this->ticketPresaleStart <= $now && $this->ticketPresaleEnd >= $now){
+            return true;
+        }
+        return false;
+    } 
 }

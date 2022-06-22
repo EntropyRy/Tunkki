@@ -19,6 +19,19 @@ entropy_event_slug:
     controller: App\Controller\EventController:oneSlug
     requirements:
         year: '\d+'
+entropy_event_ticket:
+    path:     /{year}/{slug}/{reference}
+    controller: App\Controller\EventTicketController:ticket
+    requirements:
+        year: '\d+'
+        reference: '\d+'
+entropy_event_ticket_presale:
+    path:
+        en: /{year}/{slug}/ticket/presale
+        fi: /{year}/{slug}/lippu/ennakkomyynti
+    controller: App\Controller\EventTicketController:presale
+    requirements:
+        year: '\d+'
 entropy_event_nakki_sign_up:
     path:     /{year}/{slug}/nakkikone/{id}/signup
     controller: App\Controller\EventSignUpController:nakkiSignUp

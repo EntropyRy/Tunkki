@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Security;
 use App\Helper\Mattermost;
+use App\Repository\NakkiBookingRepository;
 use App\Entity\Event;
 use App\Entity\Artist;
 use App\Entity\RSVP;
@@ -98,6 +99,18 @@ class EventSignUpController extends EventController
         $member = $this->getUser()->getMember();
         $repo = $this->getDoctrine()->getManager()->getRepository('App:NakkiBooking');
         $selected = $repo->findMemberEventBookings($member, $event);
+        if (!$event->getNakkikoneEnabled()){
+            $this->addFlash('warning', 'Nakkikone is not enabled');
+        }
+        return $this->render('nakkikone.html.twig', [
+            'selected' => $selected,
+            'event' => $event,
+            'nakkis' => $this->getNakkis($event, $member, $request->getLocale())
+            //'form' => $form->createView(),
+        ]);
+    }
+    protected function getNakkis($event, $member, $locale)
+    {
         $nakkis = [];
         foreach ( $event->getNakkiBookings() as $booking ){
             $name = $booking->getNakki()->getDefinition()->getName($locale);
@@ -128,15 +141,7 @@ class EventSignUpController extends EventController
                 }
             }
         }
-        if (!$event->getNakkikoneEnabled()){
-            $this->addFlash('warning', 'Nakkikone is not enabled');
-        }
-        return $this->render('nakkikone.html.twig', [
-            'selected' => $selected,
-            'event' => $event,
-            'nakkis' => $nakkis
-            //'form' => $form->createView(),
-        ]);
+        return $nakkis;
     }
     /**
      * @ParamConverter("event", class="App:Event", converter="event_year_converter")

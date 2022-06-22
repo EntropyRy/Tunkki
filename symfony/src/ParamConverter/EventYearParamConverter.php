@@ -82,7 +82,7 @@ class EventYearParamConverter implements ParamConverterInterface
         $eventRepository = $em->getRepository($this->getEntityClassName());
  
         // Try to find Event by its slug and year
-        $event = $eventRepository->findEventBySlugAndYear($slug, $year);;
+        $event = $eventRepository->findEventBySlugAndYear($slug, $year);
  
         if (null === $event || !($event instanceof Event)) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $configuration->getClass()));

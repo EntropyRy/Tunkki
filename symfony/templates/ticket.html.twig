@@ -1,0 +1,34 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}{{event.nameByLang(app.request.locale)}} | Entropy ry{% endblock %}
+{% use 'pieces/event.html.twig' %}
+{% use 'pieces/nakkikone.html.twig' %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nakkikone') }}
+{% endblock %}
+{% block content %}
+    {% if app.user %}
+        {% set visible = true %}
+    {% else %}
+        {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+    {% endif %}
+    {% if event is not null and visible %}
+    <div class="row">
+        <div class="col">
+            {{ block('event_head_reverse') }}
+            {{ event.ticketInfo(app.request.locale)|raw }}
+            {#{ block('event_content') }#}
+            {#{ render(controller('App\\Controller\\EventSignUpController::nakkikone', {'slug':event.url, 'year':event.EventDate|date('Y')})) }#}
+            {{ block('your_nakkis')}}
+            {% set show = true %}
+            {{ block('reserve_nakkis')}}
+        </div>
+    </div>
+    {% else %}
+        <div clas="col-12">
+            <br>
+            <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
+            <br>
+        </div>
+    {% endif %}
+{% endblock %}

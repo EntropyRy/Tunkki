@@ -217,3 +217,7 @@ rsvp:
     rsvpd_succesfully: RSVP succesfully saved! We'll send ayou an email before the event.
     info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>. If you do not want to become a member, you can sign up for the event by leaving your contact information below. You can read our related privacy policy statement <a href="/rsvp-rekisteriseloste">here</a>.
     closed: Sign Up Closed
+ticket:
+    not_available: There is no ticket available 
+    presale:
+        off: Presales is not in use

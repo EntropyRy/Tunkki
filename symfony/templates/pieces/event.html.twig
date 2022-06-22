@@ -1,4 +1,5 @@
 {% use 'pieces/rsvp.html.twig' %}
+{% use 'pieces/ticket.html.twig' %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head_frontpage') }}
@@ -88,7 +89,8 @@
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
     '{{ links }}':block('links'), 
-    '{{ rsvp }}':block('RSVP') 
+    '{{ rsvp }}':block('RSVP'), 
+    '{{ ticket }}':block('ticket') 
 })|raw }}
 {% if '{{ links }}' not in attribute(event,content_attr) %}
     {{ block('links') }}
@@ -216,23 +218,22 @@
 {% endblock %}
 
 {% block timetable %}
-{% set last = false %}
-{% set stage = null %}
-{% if event.eventArtistInfos %}
-<ul>
-{% for info in event.eventArtistInfos %}
-    {% set name = info.artist.name %}
-    {% if info.artistClone is null %}
-        {% set artist = info.artist %}
+{% set last = null %}
+{% if event.DjArtistInfos|length > 0 %}
+<div class="row">
+{% for stage, infos in event.DjArtistInfos %}
+    {% if event.DjArtistInfos|length > 1 %}
+    <div class="col-md-6">
     {% else %}
+    <div class="col-12">
+    {% endif %}
+    <h4 class="artists-heading">
+        {{'Timetable'|trans}} {% if stage|length>1 %}@ {{stage}} {{'Stage'|trans}}{% endif %}
+    </h4>
+    <ul>
+    {% for info in infos %}
+        {% set name = info.artist.name %}
         {% set artist = info.artistClone %}
-    {% endif %}
-    {% if info.stage != stage %}
-    <h3 class="artists-heading">
-        {{'Timetable'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
-    </h3>
-    {% endif %}
-    {% if artist.type !='VJ' %}
         {% if last is defined %}
             {% if last != info.StartTime %}
                 <li>{{ info.StartTime|date('H:i')}}: 
@@ -252,10 +253,11 @@
                 </li> 
             {% endif %}
         {% endif %}
-        {% set stage = info.stage %}
-    {% endif %}
+    {% endfor %}
+    </ul>
+    </div>
 {% endfor %}
-</ul>
+</div>
 {% endif %}
 {% endblock %}
 

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
+use App\Repository\TicketRepository;
 use App\Entity\Event;
 use App\Entity\RSVP;
 use App\Form\RSVPType;
@@ -25,30 +26,36 @@ class EventController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $this->em = $this->getDoctrine()->getManager();
-        $eventdata = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
-        if(!$eventdata){
+        $event = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
+        if(!$event){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        if(empty($eventdata->getUrl()) && $eventdata->getexternalUrl()){
+        if(empty($event->getUrl()) && $event->getexternalUrl()){
                 return new RedirectResponse("/");
         }
-        if($eventdata->getUrl()){
-            if($eventdata->getexternalUrl()){
-                return new RedirectResponse($eventdata->getUrl());
+        if($event->getUrl()){
+            if($event->getexternalUrl()){
+                return new RedirectResponse($event->getUrl());
             }
             return $this->redirectToRoute('entropy_event_slug', [
-                'year' => $eventdata->getEventDate()->format('Y'),
-                'slug' => $eventdata->getUrl()
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
             ]);
         }
         $page = $cms->retrieve()->getCurrentPage();
-        $this->setMetaData($lang, $eventdata, $page, $seo); 
+        $this->setMetaData($lang, $event, $page, $seo); 
         return $this->render('event.html.twig', [
-                'event' => $eventdata,
+                'event' => $event,
                 'page' => $page
             ]);
     }
-    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
+    public function oneSlug(
+        Request $request, 
+        CmsManagerSelector $cms, 
+        TranslatorInterface $trans, 
+        SeoPageInterface $seo,
+        TicketRepository $ticketRepo
+    )
     {
         $slug = $request->get('slug');
         $year = $request->get('year');
@@ -56,15 +63,28 @@ class EventController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $this->em = $this->getDoctrine()->getManager();
-        $eventdata = $this->em->getRepository(Event::class)
+        $event = $this->em->getRepository(Event::class)
 			->findEventBySlugAndYear($slug, $year);
-        if(!$eventdata){
+        if(!$event){
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $lang = $request->getLocale();
+        $ticket = null;
+        $formview = null;
         $page = $cms->retrieve()->getCurrentPage();
-        $this->setMetaData($lang, $eventdata, $page, $seo); 
-        if($eventdata->getRsvpSystemEnabled() && !$this->getUser()){
+        
+        if($event->getTicketsEnabled() && !$event->ticketPresaleEnabled() && $this->getUser()){
+            $member = $this->getUser()->getMember();
+            $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
+            if (is_null($ticket)){
+                $ticket = $ticketRepo->findOneBy(['event'=>$event, 'status' => 'available']);
+            }
+            if (is_null($ticket)){
+                $this->addFlash('warning', 'ticket.not_available');
+            }
+        }
+        $this->setMetaData($lang, $event, $page, $seo); 
+        if($event->getRsvpSystemEnabled() && !$this->getUser()){
             $rsvp = new RSVP();
             $form = $this->createForm(RSVPType::class, $rsvp);
             $form->handleRequest($request);
@@ -75,7 +95,7 @@ class EventController extends Controller
                 if ($exists){
                     $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
                 } else {
-                    $rsvp->setEvent($eventdata);
+                    $rsvp->setEvent($event);
                     try {
                         $this->em->persist($rsvp);
                         $this->em->flush();
@@ -85,29 +105,27 @@ class EventController extends Controller
                     }
                 }
             }
-            return $this->render('event.html.twig', [
-                    'event' => $eventdata,
-                    'page' => $page,
-                    'rsvpForm' => $form->createView()
-                ]);
+            $formview = $form->createView();
         }
         return $this->render('event.html.twig', [
-                'event' => $eventdata,
+                'event' => $event,
                 'page' => $page,
+                'rsvpForm' => $formview,
+                'ticket' => $ticket,
             ]);
     }
-    private function setMetaData($lang, $eventdata, $page, $seo)
+    private function setMetaData($lang, $event, $page, $seo)
     {
         $now = new \DateTime();
-        if( $eventdata->getPublished() && $eventdata->getPublishDate() < $now) {
-            $title = $eventdata->getNameByLang($lang).' - '. $eventdata->getEventDate()->format('d.m.Y, H:i');
+        if( $event->getPublished() && $event->getPublishDate() < $now) {
+            $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
             $seo->addMeta('property', 'og:title',$title)
-                ->addMeta('property', 'og:description', $eventdata->getAbstract($lang))
+                ->addMeta('property', 'og:description', $event->getAbstract($lang))
                 ;
-            if($eventdata->getType() != 'announcement'){
+            if($event->getType() != 'announcement'){
                 $seo->addMeta('property', 'og:type', 'event')
-                    ->addMeta('property', 'event:start_time', $eventdata->getEventDate()->format('Y-m-d H:i'));
+                    ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));
             }
         }
     }

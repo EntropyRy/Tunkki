@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use App\Entity\Ticket;
 
 /**
  * Member
@@ -825,4 +826,13 @@ class Member
         return $this;
     }
 
+    public function getTicketForEvent($event): ?Ticket
+    {
+        foreach($this->tickets as $ticket){
+            if ($ticket->getEvent() == $event){
+                return $ticket;
+            }
+        }
+        return null;
+    }
 }

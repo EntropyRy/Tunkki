@@ -4,14 +4,22 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Knp\Menu\ItemInterface as MenuItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 final class TicketAdmin extends AbstractAdmin
 {
+    protected $baseRoutePattern = 'ticket';
+    protected $datagridValues = [
+        '_sort_order' => 'DESC',
+        '_sort_by' => 'id',
+    ];
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -65,5 +73,9 @@ final class TicketAdmin extends AbstractAdmin
             ->add('referenceNumber')
             ->add('status')
             ;
+    }
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('updateTicketCount', 'countupdate');
     }
 }

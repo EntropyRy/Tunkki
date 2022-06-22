@@ -16,6 +16,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Sonata\Form\Type\DateTimePickerType;
+use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -36,7 +37,7 @@ final class EventAdmin extends AbstractAdmin
        }
        $admin = $this->isChild() ? $this->getParent() : $this;
        $id = $admin->getRequest()->get('id');
-
+       $event = $admin->getSubject();
        if ($this->isGranted('EDIT')) {
 			$menu->addChild('Event', 
                $admin->generateMenuUrl('edit', ['id' => $id])
@@ -59,7 +60,7 @@ final class EventAdmin extends AbstractAdmin
                     ]);
                 }
             }
-            if($this->getSubject()->getNakkikoneEnabled()){
+            if($event->getNakkikoneEnabled()){
                 $menu->addChild('Nakkikone', [
                    'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
                 ]);
@@ -70,10 +71,27 @@ final class EventAdmin extends AbstractAdmin
                    'uri' => $admin->generateUrl('nakkiList', ['id' => $id])
                 ]);
             }
-            if($this->getSubject()->getTicketsEnabled()){
+            if($event->getTicketsEnabled()){
                 $menu->addChild('Tickets', [
                    'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                 ]);
+                if($event->getTicketCount() != count($event->getTickets())){
+                    $menu->addChild('Update Ticket Count', [
+                        'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
+                        'attributes' => ['class' => 'btn-warning']
+                    ]);
+                }
+                if($event->ticketPresaleEnabled()){
+                    $event = $this->getSubject();
+                    $menu->addChild('Ticket Presale Preview', [
+                        'route' => 'entropy_event_ticket_presale',
+                        'routeParameters' => [
+                            'slug'=> $event->getUrl(),
+                            'year'=> $event->getEventDate()->format('Y'),
+                         ],
+                         'linkAttributes' => ['target' => '_blank']
+                    ]);
+                }
             }
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
@@ -109,12 +127,11 @@ final class EventAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('EventDate')
+            ->add('until')
             ->addIdentifier('Name')
             ->add('type')
             ->add('publishDate')
-            ->add('externalUrl')
             ->add('url')
-            ->add('sticky')
             ->add('_action', null, [
                 'actions' => [
                     'show' => [],
@@ -183,7 +200,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Content', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                        'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} as needed.'
+                        'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.'
                     ]);
             }
             $formMapper
@@ -195,7 +212,7 @@ final class EventAdmin extends AbstractAdmin
                     ->add('Sisallys', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
-                        'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }} niinkun on tarve.'
+                        'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.'
                     ]);
             }
             $formMapper
@@ -341,7 +358,24 @@ final class EventAdmin extends AbstractAdmin
                     ->add('ticketsEnabled', null, ['help' => 'allow tikets to the event'])
                     ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated this amount will be created'])
                     ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
-                    ->add('ticketInfo', SimpleFormatterType::class, [
+                    ->add('ticketPresaleStart', DatePickerType::class, [
+                        'format' => 'd.M.yyyy',
+                        'help' => 'When presale starts',
+                        'input' => 'datetime_immutable',
+                        'required' => false
+                    ])
+                    ->add('ticketPresaleEnd', DatePickerType::class, [
+                        'format' => 'd.M.yyyy',
+                        'help' => 'when presale ends',
+                        'input' => 'datetime_immutable',
+                        'required' => false
+                    ])
+                    ->add('ticketInfoFi', SimpleFormatterType::class, [
+                        'format' => 'richhtml', 
+                        'required' => false,
+                        'ckeditor_context' => 'default', 
+                    ])
+                    ->add('ticketInfoEn', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
                         'ckeditor_context' => 'default', 

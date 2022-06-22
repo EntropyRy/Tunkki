@@ -1,0 +1,53 @@
+{% block your_nakkis %}
+    {% if selected|length > 0 %}
+    <h3>{{ 'Your Nakkis'|trans }}</h3>
+        <div class="row row-cols-2 row-cols-md-4 text-center">
+            {% for b in selected %}
+                {% set name = b.nakki.definition.name(app.request.locale) %}
+                {% set show = true %}
+                {% set i = loop.index %}
+                {{ block('card') }}
+            {% endfor %}
+           {#    <li>{{ b.nakki.definition.name(l) }}: {{block('time') }}</li> #}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block reserve_nakkis %}
+    <h3>{{ 'Reserve your Nakki'|trans }}</h3>
+        <div class="row row-cols-2 row-cols-md-4 text-center">
+        {% for name, nakki in nakkis %}
+            {% set i = loop.index %}
+            {% for b in nakki.bookings %}
+                {{ block('card') }}
+            {% endfor %}
+        {% endfor %}
+        </div>
+{% endblock %}
+{% block card %}
+{#{ dump(show|default(false)) }#}
+<div class="col mb-3{% if not show|default(false) %} card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">{{ name }}</h5>
+        <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
+        {% if b.nakki.definition.onlyForActiveMembers %}<p>{{'Only for active members'|trans }}</p>{% endif %}
+        {% if b.member is null %}
+        <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
+        {% else %}
+            {% if b.member == app.user.member %}
+            <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-secondary">{{'Cancel'|trans }}</a>
+            {% else %}
+                {{ b.member.username }}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+</div>
+{% endblock %}
+
+{% block time %}
+{% if event.multiday %}
+{{ b.startAt|date('d.m.') }}<br>
+{% endif %}
+{{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
+{% endblock %}
