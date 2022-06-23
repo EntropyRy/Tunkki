@@ -30,6 +30,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
+            ->add('updatedAt')
             ;
     }
 
@@ -42,6 +43,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
+            ->add('updatedAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -60,6 +62,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
+            ->add('updatedAt')
             ;
     }
 
@@ -72,6 +75,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
+            ->add('updatedAt')
             ;
     }
     protected function configureRoutes(RouteCollection $collection)

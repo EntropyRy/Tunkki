@@ -125,7 +125,7 @@ class TicketRepository extends ServiceEntityRepository
     {
         $all = $this->findPresaleTickets($event);
         foreach ($all as $ticket){
-            if ($ticket->getStatus() == 'available'){
+            if ($ticket->getStatus() == 'available' && is_null($ticket->getOwner())){
                 return $ticket;
             }
         }

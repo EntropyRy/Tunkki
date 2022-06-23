@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass=TicketRepository::class)
@@ -47,6 +48,13 @@ class Ticket
      * @ORM\OneToOne(targetEntity=Member::class, cascade={"persist", "remove"})
      */
     private $recommendedBy;
+
+    /**
+     * @ORM\Column(type="datetime_immutable")
+     * @Gedmo\Timestampable(on="create")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $updatedAt;
 
     public function __toString()
     {
@@ -125,6 +133,18 @@ class Ticket
     public function setRecommendedBy(?Member $recommendedBy): self
     {
         $this->recommendedBy = $recommendedBy;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
 
         return $this;
     }

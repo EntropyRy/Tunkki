@@ -14,7 +14,11 @@
 {% endblock %}
 {% block reserve_nakkis %}
     <h3>{{ 'Reserve your Nakki'|trans }}</h3>
+        {% if show_definition|default(false) %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center">
+        {% else %} 
         <div class="row row-cols-2 row-cols-md-4 text-center">
+        {% endif %}
         {% for name, nakki in nakkis %}
             {% set i = loop.index %}
             {% for b in nakki.bookings %}
@@ -29,7 +33,15 @@
 <div class="card">
     <div class="card-body">
         <h5 class="card-title">{{ name }}</h5>
+        {% if not hide_time|default(false) %}
         <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
+        {% endif %}
+        {% if show_definition|default(false) %}
+        <p class="card-subtitle mb-2 text-muted">
+            {{ b.nakki.definition.description(app.request.locale) }}
+        </p>
+        {% endif %}
+
         {% if b.nakki.definition.onlyForActiveMembers %}<p>{{'Only for active members'|trans }}</p>{% endif %}
         {% if b.member is null %}
         <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
@@ -47,7 +59,7 @@
 
 {% block time %}
 {% if event.multiday %}
-{{ b.startAt|date('d.m.') }}<br>
+{{ b.startAt|date('j.m.') }}<br>
 {% endif %}
 {{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
 {% endblock %}

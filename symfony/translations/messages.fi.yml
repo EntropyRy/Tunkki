@@ -21,6 +21,7 @@ Choose login method: Valitse kirjautumistapa
 cookie_policy: Käytämme vain välttämättömiä keksejä jotta kirjautuminen toimii.
 Artists: Artistit
 Artist: Artisti
+Recommend to: Suosittele
 First name: Etunimi
 Last name: Sukunimi
 Name: Nimi
@@ -277,6 +278,14 @@ rsvp:
     info: Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>. Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
     closed: Ilmottautuminen suljettu
 ticket:
+    form:
+        reserve: Varaa
+        reserve_and_recommend: Varaa ja suosittele
+    situation: Lippusi tila
+    available: Saatavilla
+    reserved: Varattu sinulle
     not_available: Lippuja ei ole saatavilla
+    payment_info: Maksu tiedot
+    reference_number: Viite (pitää käyttää)
     presale:
         off: Ennakkomyynti ei ole käytössä

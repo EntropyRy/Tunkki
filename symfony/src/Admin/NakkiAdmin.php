@@ -86,7 +86,7 @@ final class NakkiAdmin extends AbstractAdmin
                 'minutes' => 00,
                 'dp_use_seconds' => false,
                 'dp_use_minutes' => false,
-                'dp_side_by_side' => true
+                'dp_side_by_side' => true,
             ])
             ;
     }

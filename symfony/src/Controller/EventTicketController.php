@@ -11,6 +11,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\Security\Core\Security;
 use App\Helper\Mattermost;
+use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use App\Entity\Event;
@@ -41,6 +42,8 @@ class EventTicketController extends EventSignUpController
             if (is_null($ticket)){
                 $this->addFlash('warning', 'ticket.not_available');
             } else {
+                $ticket->setOwner($member);
+                $ticketRepo->add($ticket, true);
                 return $this->redirectToRoute('entropy_event_ticket', [
                     'slug' => $event->getUrl(), 
                     'year' => $event->getEventDate()->format('Y'),
@@ -73,16 +76,23 @@ class EventTicketController extends EventSignUpController
         }
         $member = $this->getUser()->getMember();
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
-        //$nakkis = $nakkirepo->findAvailebleBookings($member, $event);
-        // käyttäjän varatut nakit + alueet
+        $form = $this->createForm(TicketType::class, $ticket);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ticket->setStatus('reserved');
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($ticket);
+            $em->flush();
+        };
         // lipun tila, ref ja testit
         // Suosittelu
         return $this->render('ticket.html.twig', [
             'selected' => $selected,
             'event' => $event,
-            'nakkis' => $this->getNakkis($event, $member, $request->getLocale())
-            //'nakkis' => $nakkis
-            //'form' => $form->createView(),
+            'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
+            'hasNakki' => count($selected)>0?true:false,
+            'ticket' => $ticket,
+            'form' => $form->createView(),
         ]);
     }
 }

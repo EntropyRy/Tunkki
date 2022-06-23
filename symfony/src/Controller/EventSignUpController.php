@@ -143,6 +143,36 @@ class EventSignUpController extends EventController
         }
         return $nakkis;
     }
+    protected function getNakkiFromGroup($event, $member, $selected, $locale)
+    {
+        $nakkis = [];
+        foreach ( $event->getNakkis() as $nakki ){
+            foreach ( $selected as $booking ){
+                if ($booking->getNakki() == $nakki){
+                    $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
+                    break;
+                }
+            }
+            if(!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)){
+                foreach ( $nakki->getNakkiBookings() as $booking ){
+                    if(is_null($booking->getMember())){ 
+                        $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
+                        break;
+                    }
+                }
+            }
+        }
+        return $nakkis;
+    }
+    protected function addNakkiToArray($nakkis, $booking, $locale)
+    {
+        $name = $booking->getNakki()->getDefinition()->getName($locale);
+        $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
+        $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
+        $nakkis[$name]['bookings'][] = $booking;
+        $nakkis[$name]['durations'][$duration] = $duration;
+        return $nakkis;
+    }
     /**
      * @ParamConverter("event", class="App:Event", converter="event_year_converter")
      */
