@@ -36,7 +36,7 @@ class EventTicketController extends EventSignUpController
             $member = $this->getUser()->getMember();
             $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
             if (is_null($ticket)){
-                $ticket = $ticketRepo->findOneBy(['event'=>$event, 'status' => 'available']);
+                $ticket = $ticketRepo->findAvailablePresaleTicket($event);
             }
             if (is_null($ticket)){
                 $this->addFlash('warning', 'ticket.not_available');

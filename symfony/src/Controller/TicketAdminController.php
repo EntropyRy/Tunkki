@@ -33,7 +33,7 @@ final class TicketAdminController extends CRUDController
                         $em->flush();
 
                     }
-                    $this->addFlash('success', $new_tickets. ' created');
+                    $this->addFlash('success', $new_tickets. ' tickets created');
                 }
             }
         }

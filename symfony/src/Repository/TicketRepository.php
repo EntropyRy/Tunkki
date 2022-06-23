@@ -75,4 +75,60 @@ class TicketRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findNotAvailableTickets($event)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.event = :event')
+            ->andWhere('t.status != :status')
+            ->setParameter('event', $event)
+            ->setParameter('status', 'available')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findAvailableTickets($event)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.event = :event')
+            ->andWhere('t.status = :status')
+            ->setParameter('event', $event)
+            ->setParameter('status', 'available')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findPresaleTickets($event)
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.event = :event')
+            //->andWhere('t.status = :status')
+            ->setParameter('event', $event)
+            //->setParameter('status', 'available')
+            ->orderBy('t.id', 'ASC')
+            ->setMaxResults($event->getTicketPresaleCount())
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+    public function findAvailableTicket($event): ?Ticket
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.event = :event')
+            ->andWhere('t.status = :status')
+            ->setParameter('event', $event)
+            ->setParameter('status', 'available')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+    public function findAvailablePresaleTicket($event): ?Ticket
+    {
+        $all = $this->findPresaleTickets($event);
+        foreach ($all as $ticket){
+            if ($ticket->getStatus() == 'available'){
+                return $ticket;
+            }
+        }
+        return null;
+    }
 }

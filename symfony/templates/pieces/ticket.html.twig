@@ -3,13 +3,18 @@
 <div class="pt-2 pb-2" id="ticket">
     {# <p>{{'ticket.info'|trans|raw}}</p> #}
     <div class="col-md-6 mx-auto">
+    {% if ticket is null %}
+        <a class="btn btn-primary w-100"
+            >{{'ticket.not_available'|trans}}</a>
+    {% else %}
         <a class="btn btn-primary w-100"
             href="{{ path('entropy_event_ticket',{
                    'slug': event.url, 
                    'year': event.eventdate|date('Y'),
                    'reference': ticket.referenceNumber
             })  }}"
-            >{{'Your Ticket'|trans}}</a>
+            >{{'Your Ticket'|trans}} {{ticket.status}}</a>
+    {% endif %}
     </div>
 </div>
 {% endif %}

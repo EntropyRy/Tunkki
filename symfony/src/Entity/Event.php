@@ -276,6 +276,11 @@ class Event
      */
     private $ticketPresaleEnd;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $ticketPresaleCount = 0;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1079,9 +1084,21 @@ body {
     public function ticketPresaleEnabled()
     {
         $now = new \DateTime('now');
-        if ($this->ticketPresaleStart <= $now && $this->ticketPresaleEnd >= $now){
+        if ($this->ticketPresaleStart <= $now && $this->ticketPresaleEnd->modify('+1day') >= $now){
             return true;
         }
         return false;
+    }
+
+    public function getTicketPresaleCount(): ?int
+    {
+        return $this->ticketPresaleCount;
+    }
+
+    public function setTicketPresaleCount(int $ticketPresaleCount): self
+    {
+        $this->ticketPresaleCount = $ticketPresaleCount;
+
+        return $this;
     } 
 }

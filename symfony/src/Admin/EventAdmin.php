@@ -370,6 +370,9 @@ final class EventAdmin extends AbstractAdmin
                         'input' => 'datetime_immutable',
                         'required' => false
                     ])
+                    ->add('ticketPresaleCount', null, [
+                        'help' => 'How many tickets can be sold in presale?'
+                    ])
                     ->add('ticketInfoFi', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,

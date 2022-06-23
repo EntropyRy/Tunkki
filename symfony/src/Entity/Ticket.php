@@ -48,6 +48,10 @@ class Ticket
      */
     private $recommendedBy;
 
+    public function __toString()
+    {
+        return $this->referenceNumber;
+    }
     public function getId(): ?int
     {
         return $this->id;
