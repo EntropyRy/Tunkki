@@ -39,7 +39,7 @@ You cannot reserve overlapping Nakkis: Et voi varata päällekkäisiä Nakkeja
 rss_desc: Entropyn tulevat ja menneet tapahtumat ja tiedotukset
 Cancel: Peruuta
 Search by name: Etsi nimellä
-Your Nakkis: Valitsemasi Nakit
+Your Nakkis: Valitsemasi Naki(t)
 Select Nakki: Valitse Nakki
 Nakki descriptions: Nakkien kuvaukset
 Reserve your Nakki: Varaa Nakkisi
@@ -288,7 +288,7 @@ ticket:
     not_available: Lippuja ei ole saatavilla
     reserve_yours: Varaa lippusi tästä!
     details: Katso lippusi tiedot
-    payment_info: Maksu tiedot
+    payment_info: Maksutiedot
     reference_number: Viite (pitää käyttää)
     code: Liipukoodi
     paid: maksettu
