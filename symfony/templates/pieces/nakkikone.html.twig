@@ -29,21 +29,25 @@
 {% block card %}
 {#{ dump(show|default(false)) }#}
 <div class="col mb-3{% if not show|default(false) %} card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">{{ name }}</h5>
+<div class="card
+    {% if event.headerTheme == 'dark' %}
+        bg-black text-white
+    {% endif %}
+    ">
+    <div class="card-body ">
+        <h5 class="card-header">{{ name }}</h5>
         {% if not hide_time|default(false) %}
         <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
         {% endif %}
         {% if show_definition|default(false) %}
         <p class="card-subtitle mb-2 text-muted">
-            {{ b.nakki.definition.description(app.request.locale) }}
+            {{ b.nakki.definition.description(app.request.locale)|raw }}
         </p>
         {% endif %}
         {% if b.nakki.definition.onlyForActiveMembers %}<p>{{'Only for active members'|trans }}</p>{% endif %}
         <div class="btn-group">
         {% if b.nakki.mattermostChannel is not empty %}
-            <a class="btn btn-secondary" href="{{b.nakki.mattermostChannel}}"><i class="fa-solid fa-up-right-from-square"></i> Mattermost</a>
+            <a class="btn btn-secondary" target="_black" href="{{b.nakki.mattermostChannel}}"><i class="fa-solid fa-up-right-from-square"></i> Mattermost</a>
         {% endif %}
         {% if b.member is null %}
         <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
