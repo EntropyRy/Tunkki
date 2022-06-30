@@ -55,6 +55,8 @@
     <dd>FI42 7997 7997 0149 02</dd>
     <dt>{{'ticket.reference_number'|trans}}<dt>
     <dd>{{ticket.referenceNumber}}</dd>
+    <dt>{{'ticket.sum'|trans}}<dt>
+    <dd>{{ticket.price}}€</dd>
 </dt>
 {% elseif ticket.status == 'available' %}
     {{ form_start(form) }}
