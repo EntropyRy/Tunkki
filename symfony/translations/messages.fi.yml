@@ -284,6 +284,7 @@ ticket:
         reserve_and_recommend: Varaa ja suosittele
     situation: Lippusi tila
     available: Saatavilla
+    recipient: Vastaanottajan nimi
     reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
     not_available: Lippuja ei ole saatavilla
     reserve_yours: Varaa lippusi tästä!

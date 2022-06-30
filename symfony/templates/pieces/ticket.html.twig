@@ -51,7 +51,9 @@
 {% if ticket.status == 'reserved' %}
 <h4>{{'ticket.payment_info'|trans}}</h4>
 <dt>
-<dt>{{'Bank Account'|trans}}</dt>
+    <dt>{{'ticket.recipient'|trans}}</dt>
+    <dd>Entropy Ry</dd>
+    <dt>{{'Bank Account'|trans}}</dt>
     <dd>FI42 7997 7997 0149 02</dd>
     <dt>{{'ticket.reference_number'|trans}}<dt>
     <dd>{{ticket.referenceNumber}}</dd>

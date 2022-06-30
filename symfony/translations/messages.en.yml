@@ -233,5 +233,6 @@ ticket:
     paid: paid
     all_sold: Tickets sold out.
     sale_starts: Ticketsale starts
+    recipient: Recipient
     sum: Price
     reference_number: Reference Number (must be used)
