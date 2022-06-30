@@ -12,6 +12,8 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use App\Entity\Ticket;
 
 final class TicketAdmin extends AbstractAdmin
 {
@@ -46,6 +48,9 @@ final class TicketAdmin extends AbstractAdmin
             ->add('updatedAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
+                    'makePaid' => [
+                        'template' => 'admin/crud/list__action_make_ticket_paid.html.twig'
+                    ],
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
@@ -61,7 +66,13 @@ final class TicketAdmin extends AbstractAdmin
             ->add('owner')
             ->add('recommendedBy')
             ->add('referenceNumber')
-            ->add('status')
+            ->add('status', ChoiceType::class, [
+                'choices' => [
+                    'available' => 'available',
+                    'reserved' => 'reserved',
+                    'paid' => 'paid'
+                ]
+            ])
             ->add('updatedAt')
             ;
     }
@@ -81,5 +92,6 @@ final class TicketAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('updateTicketCount', 'countupdate');
+        $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
     }
 }

@@ -19,6 +19,7 @@ final class NakkiAdmin extends AbstractAdmin
     protected $em; // EntityManager
     protected $ts; // Token Storage
     protected $fl; // FlashBag
+    protected $mm; // Mattermost Helper
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -29,6 +30,7 @@ final class NakkiAdmin extends AbstractAdmin
                 ->add('event');
         }
         $filter
+            ->add('responsible')
             ->add('startAt')
             ->add('endAt')
             ;
@@ -43,6 +45,7 @@ final class NakkiAdmin extends AbstractAdmin
                 ->add('event');
         }
         $list
+            ->add('responsible')
             ->add('startAt')
             ->add('endAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
@@ -66,6 +69,8 @@ final class NakkiAdmin extends AbstractAdmin
                 ->add('event');
         }
         $form
+            ->add('responsible')
+            ->add('mattermostChannel')
             ->add('nakkiInterval', null, [
                 'with_years' => false,
                 'with_months' => false,
@@ -96,6 +101,7 @@ final class NakkiAdmin extends AbstractAdmin
         $show
             ->add('definition')
             ->add('event')
+            ->add('responsible')
             ->add('startAt')
             ->add('endAt')
             ;

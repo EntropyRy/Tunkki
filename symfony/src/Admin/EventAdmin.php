@@ -328,7 +328,13 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Nakkikone config')
                 ->with('Config')
                     ->add('NakkikoneEnabled', null, [
-                        'help' => 'Publish nakkikone and allow members to reserve Nakkis (links are added and reservation works)',
+                        'help' => 'Publish nakkikone and allow members to reserve Nakkis',
+                    ])
+                    ->add('showNakkikoneLinkInEvent', null, [
+                        'help' => 'Publish nakkikone in event',
+                    ])
+                    ->add('requireNakkiBookingsToBeDifferentTimes', null, [
+                        'help' => 'Make sure member nakki bookings do not overlap',
                     ])
                     ->add('nakkiInfoEn', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
@@ -364,8 +370,8 @@ final class EventAdmin extends AbstractAdmin
                         'input' => 'datetime_immutable',
                         'required' => false
                     ])
-                    ->add('ticketPresaleEnd', DatePickerType::class, [
-                        'format' => 'd.M.yyyy',
+                    ->add('ticketPresaleEnd', DateTimePickerType::class, [
+                        'format' => 'd.M.yyyy, HH:mm',
                         'help' => 'when presale ends',
                         'input' => 'datetime_immutable',
                         'required' => false

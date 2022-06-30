@@ -71,17 +71,13 @@ class EventController extends Controller
         $lang = $request->getLocale();
         $ticket = null;
         $formview = null;
+        $ticketCount = null;
         $page = $cms->retrieve()->getCurrentPage();
         
-        if($event->getTicketsEnabled() && !$event->ticketPresaleEnabled() && $this->getUser()){
+        if($event->getTicketsEnabled() && $this->getUser()){
             $member = $this->getUser()->getMember();
-            $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
-            if (is_null($ticket)){
-                $ticket = $ticketRepo->findOneBy(['event'=>$event, 'status' => 'available']);
-            }
-            if (is_null($ticket)){
-                $this->addFlash('warning', 'ticket.not_available');
-            }
+            $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]); //own ticket
+            $ticketCount = $ticketRepo->findAvailableTicketsCount($event); 
         }
         $this->setMetaData($lang, $event, $page, $seo); 
         if($event->getRsvpSystemEnabled() && !$this->getUser()){
@@ -112,6 +108,7 @@ class EventController extends Controller
                 'page' => $page,
                 'rsvpForm' => $formview,
                 'ticket' => $ticket,
+                'ticketsAvailable' => $ticketCount,
             ]);
     }
     private function setMetaData($lang, $event, $page, $seo)

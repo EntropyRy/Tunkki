@@ -67,10 +67,12 @@ class EventSignUpController extends EventController
             if(is_null($booking->getMember())){
                 $em = $this->getDoctrine()->getManager();
                 $repo = $em->getRepository('App:NakkiBooking');
-                $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
-                if($sameTime){
-                    $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
-                    return $this->redirect($request->headers->get('referer'));
+                if ($event->getRequireNakkiBookingsToBeDifferentTimes()){
+                    $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
+                    if($sameTime){
+                        $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
+                        return $this->redirect($request->headers->get('referer'));
+                    }
                 }
                 $booking->setMember($member);
                 $em->persist($booking);

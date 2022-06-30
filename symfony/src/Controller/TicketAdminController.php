@@ -10,6 +10,18 @@ use App\Entity\Ticket;
 
 final class TicketAdminController extends CRUDController
 {
+    public function makePaidAction()
+    {
+        $ticket = $this->admin->getSubject();
+        if(is_null($ticket->getOwner())){
+            $this->addFlash('warning', 'ticket does not have owner!');
+        } else {
+            $ticket->setStatus('paid');
+            $ticketR = $this->getDoctrine()->getManager()->getRepository(Ticket::class);
+            $ticketR->add($ticket, true);
+        }
+        return $this->redirect($this->admin->generateUrl('list'));
+    }
     public function updateTicketCountAction(Event $event)
     {
         if($event->getTicketsEnabled()){

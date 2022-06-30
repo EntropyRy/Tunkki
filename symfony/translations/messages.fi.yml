@@ -1,4 +1,5 @@
 # Tunkki
+Bank Account: Pankkitili
 name_attribute: nimi
 content_attribute: Sisallys
 packages: paketit
@@ -283,9 +284,16 @@ ticket:
         reserve_and_recommend: Varaa ja suosittele
     situation: Lippusi tila
     available: Saatavilla
-    reserved: Varattu sinulle
+    reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
     not_available: Lippuja ei ole saatavilla
+    reserve_yours: Varaa lippusi tästä!
+    details: Katso lippusi tiedot
     payment_info: Maksu tiedot
     reference_number: Viite (pitää käyttää)
+    code: Liipukoodi
+    paid: maksettu
+    all_sold: Kaikki liput on myyty.
+    sale_starts: Lipunmyynti alkaa
     presale:
         off: Ennakkomyynti ei ole käytössä
+

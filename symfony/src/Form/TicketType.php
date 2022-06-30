@@ -12,12 +12,12 @@ class TicketType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder
+/*        $builder
             ->add('recommendTo', TextType::class, [
                 'mapped' => false,
                 'required' => false
             ])
-        ;
+            ;*/
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -90,7 +90,7 @@
     '{{ vj_bios }}': block('vj_bios'),
     '{{ links }}':block('links'), 
     '{{ rsvp }}':block('RSVP'), 
-    '{{ ticket }}':block('ticket') 
+    '{{ ticket }}':block('ticket_for_event_page') 
 })|raw }}
 {% if '{{ links }}' not in attribute(event,content_attr) %}
     {{ block('links') }}
@@ -145,7 +145,7 @@
 </a>
 </div>
 {% endif %}
-{% if event.epics is not empty or event.links.urls|length > 0 or (event.NakkikoneEnabled and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now-8hours')) %}
+{% if event.epics is not empty or event.links.urls|length > 0 or (event.showNakkikoneLinkInEvent|default(false) and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now-8hours')) %}
 <div>
 <hr>
     {% for keys in event.links %}
@@ -205,7 +205,7 @@
         </a>
     </span>
     {% endif %}
-    {% if event.NakkikoneEnabled and event.url and app.user %}
+    {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
     <span class="pe-2">
         <a href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}

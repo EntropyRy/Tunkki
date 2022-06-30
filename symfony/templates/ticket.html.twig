@@ -1,11 +1,8 @@
 {% extends 'onecolumn.html.twig' %}
 {% block title %}{{event.nameByLang(app.request.locale)}} | Entropy ry{% endblock %}
+{% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {#{ encore_entry_script_tags('nakkikone') }#}
-{% endblock %}
 {% block content %}
     {% if app.user %}
         {% set visible = true %}
@@ -15,18 +12,18 @@
     {% if event is not null and visible %}
     <div class="row">
         <div class="col">
-            {{ block('event_head_reverse') }}
-            {{ event.ticketInfo(app.request.locale)|raw }}
-            {#{ block('event_content') }#}
-            {#{ render(controller('App\\Controller\\EventSignUpController::nakkikone', {'slug':event.url, 'year':event.EventDate|date('Y')})) }#}
+            <a href="{{ block('event_path') }}">
+                <h3 class="mt-2">{{ block('event_name') }} <span>{{ block('event_time') }}<span></h3>
+            </a>
             {#{ block('your_nakkis')}#}
             {% set show = true %}
             {% set hide_time = true %}
             {% set show_definition = true %}
+            {% set allow_nakki_cancel = (ticket.status == 'available') %}
+            {{ event.nakkiInfo(app.request.locale)|raw }}
             {{ block('reserve_nakkis')}}
             <hr>
             {{ block('ticket') }}
-
         </div>
     </div>
     {% else %}
@@ -38,31 +35,3 @@
     {% endif %}
 {% endblock %}
 
-{% block ticket %}
-<div class="col-md-6 mx-auto">
-<h3>{{'ticket.situation'|trans}}: {{ ('ticket.'~ticket.status)|trans }}</h3>
-{% if ticket.status == 'reserved' %}
-<h4>{{'ticket.payment_info'|trans}}</h4>
-<dt>
-<dt>{{'Account'|trans}}</dt>
-    <dd>FI42 7997 7997 0149 02</dd>
-    <dt>{{'ticket.reference_number'|trans}}<dt>
-    <dd>{{ticket.referenceNumber}}</dd>
-</dt>
-{% else %}
-    {{ form_start(form) }}
-    {% if not event.ticketPresaleEnabled %}
-    {{ form_row(form.recommendTo) }}
-    <input class="btn btn-primary w-100 
-                   {% if not hasNakki %}disabled" disabled{%else%}"{% endif %} 
-           type="submit" value="{{'ticket.form.reserve_and_recommend'|trans}}">
-    {% else %}
-    <input class="btn btn-primary w-100 
-                   {% if not hasNakki %}disabled" disabled{%else%}"{% endif %} 
-           type="submit" value="{{'ticket.form.reserve'|trans}}">
-    {% endif %}
-    {{ form_rest(form) }}
-    {{ form_end(form) }}
-{% endif %}
-</div>
-{% endblock %}

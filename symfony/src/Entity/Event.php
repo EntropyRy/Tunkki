@@ -272,7 +272,7 @@ class Event
     private $ticketPresaleStart;
 
     /**
-     * @ORM\Column(type="date_immutable", nullable=true)
+     * @ORM\Column(type="datetime_immutable", nullable=true)
      */
     private $ticketPresaleEnd;
 
@@ -280,6 +280,16 @@ class Event
      * @ORM\Column(type="integer")
      */
     private $ticketPresaleCount = 0;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $showNakkikoneLinkInEvent = true;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $requireNakkiBookingsToBeDifferentTimes = true;
 
     public function getId(): ?int
     {
@@ -993,6 +1003,11 @@ body {
         $func = 'ticketInfo'. ucfirst($lang);
         return $this->{$func};
     }
+    public function getNakkiInfo($lang): ?string
+    {
+        $func = 'nakkiInfo'. ucfirst($lang);
+        return $this->{$func};
+    }
 
     public function getTicketPrice(): ?int
     {
@@ -1084,7 +1099,8 @@ body {
     public function ticketPresaleEnabled()
     {
         $now = new \DateTime('now');
-        if ($this->ticketPresaleStart <= $now && $this->ticketPresaleEnd->modify('+1day') >= $now){
+        if (is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now && 
+            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now){
             return true;
         }
         return false;
@@ -1098,6 +1114,30 @@ body {
     public function setTicketPresaleCount(int $ticketPresaleCount): self
     {
         $this->ticketPresaleCount = $ticketPresaleCount;
+
+        return $this;
+    }
+
+    public function getShowNakkikoneLinkInEvent(): ?bool
+    {
+        return $this->showNakkikoneLinkInEvent;
+    }
+
+    public function setShowNakkikoneLinkInEvent(?bool $showNakkikoneLinkInEvent): self
+    {
+        $this->showNakkikoneLinkInEvent = $showNakkikoneLinkInEvent;
+
+        return $this;
+    }
+
+    public function getRequireNakkiBookingsToBeDifferentTimes(): ?bool
+    {
+        return $this->requireNakkiBookingsToBeDifferentTimes;
+    }
+
+    public function setRequireNakkiBookingsToBeDifferentTimes(?bool $requireNakkiBookingsToBeDifferentTimes): self
+    {
+        $this->requireNakkiBookingsToBeDifferentTimes = $requireNakkiBookingsToBeDifferentTimes;
 
         return $this;
     } 

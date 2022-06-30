@@ -5,12 +5,16 @@ namespace App\Entity;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=TicketRepository::class)
  */
 class Ticket
 {
+    const STATUSES = ['available', 'reserved', 'paid'];
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -41,8 +45,9 @@ class Ticket
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Choice(choices=Ticket::STATUSES)
      */
-    private $status;
+    private $status = 'available';
 
     /**
      * @ORM\OneToOne(targetEntity=Member::class, cascade={"persist", "remove"})
@@ -51,11 +56,14 @@ class Ticket
 
     /**
      * @ORM\Column(type="datetime_immutable")
-     * @Gedmo\Timestampable(on="create")
      * @Gedmo\Timestampable(on="update")
      */
     private $updatedAt;
 
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
     public function __toString()
     {
         return $this->referenceNumber;

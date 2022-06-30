@@ -29,29 +29,38 @@ class EventTicketController extends EventSignUpController
     public function presale(
         Request $request,
         Event $event,
-        TranslatorInterface $trans,
         TicketRepository $ticketRepo
     ): RedirectResponse
     {
         if($event->ticketPresaleEnabled()){
-            $member = $this->getUser()->getMember();
-            $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
-            if (is_null($ticket)){
-                $ticket = $ticketRepo->findAvailablePresaleTicket($event);
-            }
-            if (is_null($ticket)){
-                $this->addFlash('warning', 'ticket.not_available');
-            } else {
-                $ticket->setOwner($member);
-                $ticketRepo->add($ticket, true);
-                return $this->redirectToRoute('entropy_event_ticket', [
-                    'slug' => $event->getUrl(), 
-                    'year' => $event->getEventDate()->format('Y'),
-                    'reference' => $ticket->getReferenceNumber()
-                ]);
+            $this->freeAvailableTickets($event, $ticketRepo);
+            $response = $this->ticketChecks('presale', $event, $ticketRepo);
+            if (!is_null($response)){
+                return $response;
             }
         } else {
             $this->addFlash('warning', 'ticket.presale.off');
+        }
+        return $this->redirectToRoute('entropy_event_slug', [
+            'slug' => $event->getUrl(), 
+            'year' => $event->getEventDate()->format('Y')
+        ]);
+    }
+    /**
+     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
+     */
+    public function sale(
+        Request $request,
+        Event $event,
+        TicketRepository $ticketRepo
+    ): RedirectResponse
+    {
+        if(!$event->ticketPresaleEnabled()){
+            $this->freeAvailableTickets($event, $ticketRepo);
+            $response = $this->ticketChecks('sale', $event, $ticketRepo);
+            if (!is_null($response)){
+                return $response;
+            }
         }
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $event->getUrl(), 
@@ -75,17 +84,19 @@ class EventTicketController extends EventSignUpController
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $member = $this->getUser()->getMember();
+        if ($ticket->getOwner() != $member) {
+            throw new NotFoundHttpException($trans->trans("event_not_found"));
+        }
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
         $form = $this->createForm(TicketType::class, $ticket);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $ticket->setStatus('reserved');
+            $this->addFlash('success', 'ticket.reserved');
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
         };
-        // lipun tila, ref ja testit
-        // Suosittelu
         return $this->render('ticket.html.twig', [
             'selected' => $selected,
             'event' => $event,
@@ -94,5 +105,41 @@ class EventTicketController extends EventSignUpController
             'ticket' => $ticket,
             'form' => $form->createView(),
         ]);
+    }
+    private function ticketChecks($for, $event, $ticketRepo)
+    {
+        $member = $this->getUser()->getMember();
+        $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
+        if (is_null($ticket)){
+            if ($for == 'presale'){
+                $ticket = $ticketRepo->findAvailablePresaleTicket($event);
+            } else {
+                $ticket = $ticketRepo->findAvailableTicket($event);
+            }
+        }
+        if (is_null($ticket)){
+            $this->addFlash('warning', 'ticket.not_available');
+        } else {
+            $ticket->setOwner($member);
+            $ticketRepo->add($ticket, true);
+            return $this->redirectToRoute('entropy_event_ticket', [
+                'slug' => $event->getUrl(), 
+                'year' => $event->getEventDate()->format('Y'),
+                'reference' => $ticket->getReferenceNumber()
+            ]);
+        }
+        return null;
+    }
+    private function freeAvailableTickets($event, $ticketRepo)
+    {
+        $now = new \DateTime('now');
+        foreach($event->getTickets() as $ticket){
+            if($ticket->getStatus() == 'available' && !is_null($ticket->getOwner())){
+                if (($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800){
+                    $ticket->setOwner(null);
+                    $ticketRepo->add($ticket, true);
+                }
+            }
+        }
     }
 }

@@ -20,7 +20,9 @@ entropy_event_slug:
     requirements:
         year: '\d+'
 entropy_event_ticket:
-    path:     /{year}/{slug}/{reference}
+    path:     
+        en: /{year}/{slug}/ticket/{reference}
+        fi: /{year}/{slug}/lippu/{reference}
     controller: App\Controller\EventTicketController:ticket
     requirements:
         year: '\d+'
@@ -30,6 +32,13 @@ entropy_event_ticket_presale:
         en: /{year}/{slug}/ticket/presale
         fi: /{year}/{slug}/lippu/ennakkomyynti
     controller: App\Controller\EventTicketController:presale
+    requirements:
+        year: '\d+'
+entropy_event_ticket_sale:
+    path:
+        en: /{year}/{slug}/ticket/sale
+        fi: /{year}/{slug}/lippu/myynti
+    controller: App\Controller\EventTicketController:sale
     requirements:
         year: '\d+'
 entropy_event_nakki_sign_up:

@@ -75,22 +75,22 @@ class TicketRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findNotAvailableTickets($event)
+    public function findAvailableTicketsCount($event)
     {
-        return $this->createQueryBuilder('t')
+        $qb = $this->createQueryBuilder('t');
+        $qb->select($qb->expr()->count('t'))
             ->andWhere('t.event = :event')
             ->andWhere('t.status != :status')
             ->setParameter('event', $event)
-            ->setParameter('status', 'available')
-            ->getQuery()
-            ->getResult()
-        ;
+            ->setParameter('status', 'paid');
+        return $qb->getQuery()->getSingleScalarResult();
     }
     public function findAvailableTickets($event)
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
             ->andWhere('t.status = :status')
+            ->andWhere('t.owner IS NULL')
             ->setParameter('event', $event)
             ->setParameter('status', 'available')
             ->getQuery()
@@ -115,6 +115,7 @@ class TicketRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
             ->andWhere('t.status = :status')
+            ->andWhere('t.owner IS NULL')
             ->setParameter('event', $event)
             ->setParameter('status', 'available')
             ->getQuery()

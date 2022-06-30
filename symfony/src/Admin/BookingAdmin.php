@@ -129,6 +129,7 @@ class BookingAdmin extends AbstractAdmin
     {
         $root = $this->cm->getRootCategory('item');
         // map categories
+        $cats = [];
         foreach($choices as $choice) {
             foreach($root->getChildren() as $cat) {
                 if($choice->getCategory() == $cat){

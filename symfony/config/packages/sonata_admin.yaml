@@ -48,6 +48,7 @@ sonata_admin:
                     - entropy.admin.reward
 
             sonata.admin.group.content:
+                keep_open:  true
                 label:           Content 
                 label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-sitemap"></i>'

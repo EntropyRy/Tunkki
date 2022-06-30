@@ -90,5 +90,6 @@ class EventYearParamConverter implements ParamConverterInterface
  
         // Map found Event to the route's parameter
         $request->attributes->set($configuration->getName(), $event);
+        return true;
     }
 }

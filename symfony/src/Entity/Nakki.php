@@ -51,6 +51,16 @@ class Nakki
      */
     private $nakkiInterval;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="responsibleForNakkis")
+     */
+    private $responsible;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $mattermostChannel;
+
     public function __construct()
     {
         $this->nakkiBookings = new ArrayCollection();
@@ -180,4 +190,29 @@ class Nakki
         }
         return null;
     }
+
+    public function getResponsible(): ?Member
+    {
+        return $this->responsible;
+    }
+
+    public function setResponsible(?Member $responsible): self
+    {
+        $this->responsible = $responsible;
+
+        return $this;
+    }
+
+    public function getMattermostChannel(): ?string
+    {
+        return $this->mattermostChannel;
+    }
+
+    public function setMattermostChannel(?string $mattermostChannel): self
+    {
+        $this->mattermostChannel = $mattermostChannel;
+
+        return $this;
+    }
+
 }

@@ -222,8 +222,15 @@ ticket:
         reserve: Reserve
         reserve_and_recommend: Reserve and recommend
     payment_info: Payment information
-    not_available: There is no ticket available 
+    not_available: There is no ticket available
+    reserved: The ticket has been reserved for you! Payment details below.
+    reserve_yours: Reserve your ticket here!
+    details: See ticket details
     presale:
         off: Presales is not in use
     situation: Your tickets situation
+    code: Ticket code
+    paid: paid
+    all_sold: Tickets sold out.
+    sale_starts: Ticketsale starts
     reference_number: Reference Number (must be used)

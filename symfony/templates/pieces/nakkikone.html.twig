@@ -13,9 +13,8 @@
     {% endif %}
 {% endblock %}
 {% block reserve_nakkis %}
-    <h3>{{ 'Reserve your Nakki'|trans }}</h3>
         {% if show_definition|default(false) %}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 text-center">
         {% else %} 
         <div class="row row-cols-2 row-cols-md-4 text-center">
         {% endif %}
@@ -41,17 +40,21 @@
             {{ b.nakki.definition.description(app.request.locale) }}
         </p>
         {% endif %}
-
         {% if b.nakki.definition.onlyForActiveMembers %}<p>{{'Only for active members'|trans }}</p>{% endif %}
+        <div class="btn-group">
+        {% if b.nakki.mattermostChannel is not empty %}
+            <a class="btn btn-secondary" href="{{b.nakki.mattermostChannel}}"><i class="fa-solid fa-up-right-from-square"></i> Mattermost</a>
+        {% endif %}
         {% if b.member is null %}
         <a href="{{ path('entropy_event_nakki_sign_up', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-primary">{{'Reserve'|trans }}</a>
         {% else %}
-            {% if b.member == app.user.member %}
+            {% if b.member == app.user.member and allow_nakki_cancel|default(false)%}
             <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-secondary">{{'Cancel'|trans }}</a>
             {% else %}
-                {{ b.member.username }}
+            <button class="btn">{{ b.member.username }}</button>
             {% endif %}
         {% endif %}
+        </div>
     </div>
 </div>
 </div>

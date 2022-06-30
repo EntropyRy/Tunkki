@@ -186,6 +186,11 @@ class Member
      */
     private $tickets;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Nakki::class, mappedBy="responsible")
+     */
+    private $responsibleForNakkis;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -193,6 +198,7 @@ class Member
         $this->RSVPs = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
         $this->tickets = new ArrayCollection();
+        $this->responsibleForNakkis = new ArrayCollection();
     }
 
     /**
@@ -834,5 +840,35 @@ class Member
             }
         }
         return null;
+    }
+
+    /**
+     * @return Collection<int, Nakki>
+     */
+    public function getResponsibleForNakkis(): Collection
+    {
+        return $this->responsibleForNakkis;
+    }
+
+    public function addResponsibleForNakki(Nakki $responsibleForNakki): self
+    {
+        if (!$this->responsibleForNakkis->contains($responsibleForNakki)) {
+            $this->responsibleForNakkis[] = $responsibleForNakki;
+            $responsibleForNakki->setResponsible($this);
+        }
+
+        return $this;
+    }
+
+    public function removeResponsibleForNakki(Nakki $responsibleForNakki): self
+    {
+        if ($this->responsibleForNakkis->removeElement($responsibleForNakki)) {
+            // set the owning side to null (unless already changed)
+            if ($responsibleForNakki->getResponsible() === $this) {
+                $responsibleForNakki->setResponsible(null);
+            }
+        }
+
+        return $this;
     }
 }
