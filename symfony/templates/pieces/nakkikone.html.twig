@@ -1,7 +1,11 @@
 {% block your_nakkis %}
     {% if selected|length > 0 %}
     <h3>{{ 'Your Nakkis'|trans }}</h3>
+        {% if show_definition|default(false) %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 text-center">
+        {% else %} 
         <div class="row row-cols-2 row-cols-md-4 text-center">
+        {% endif %}
             {% for b in selected %}
                 {% set name = b.nakki.definition.name(app.request.locale) %}
                 {% set show = true %}
@@ -34,8 +38,8 @@
         bg-black text-white
     {% endif %}
     ">
-    <div class="card-body ">
-        <h5 class="card-header">{{ name }}</h5>
+    <h5 class="card-header">{{ name }}</h5>
+    <div class="card-body">
         {% if not hide_time|default(false) %}
         <h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>
         {% endif %}
@@ -55,7 +59,7 @@
             {% if b.member == app.user.member and allow_nakki_cancel|default(false)%}
             <a href="{{ path('entropy_event_nakki_cancel', {'id': b.id, 'slug': event.url, 'year': event.eventdate|date('Y') }) }}" class="btn btn-secondary">{{'Cancel'|trans }}</a>
             {% else %}
-            <button class="btn">{{ b.member.username }}</button>
+            <button class="btn btn-success">{{ b.member.username }}</button>
             {% endif %}
         {% endif %}
         </div>
