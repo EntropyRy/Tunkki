@@ -1,16 +1,5 @@
-{% extends 'onecolumn.html.twig' %}
+{% extends 'event.html.twig' %}
 {% block title %}{{event.nameByLang(app.request.locale)}} | Entropy ry{% endblock %}
-{% block sonata_page_stylesheets %}
-    {{ parent() }}
-    <style>
-    {{ event.css|raw }}
-    {% if event.headerTheme == 'dark' %}
-    .header-img {
-        filter: invert(1);
-    }
-    {% endif %}
-    </style>
-{% endblock %}
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}

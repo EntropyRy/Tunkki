@@ -1,17 +1,6 @@
-{% extends 'onecolumn.html.twig' %}
+{% extends 'event.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
-{% block sonata_page_stylesheets %}
-    {{ parent() }}
-    <style>
-    {{ event.css|raw }}
-    {% if event.headerTheme == 'dark' %}
-    .header-img {
-        filter: invert(1);
-    }
-    {% endif %}
-    </style>
-{% endblock %}
 {% block sonata_page_javascripts %}
     {{ parent() }}
     {{ encore_entry_script_tags('nakkikone') }}
