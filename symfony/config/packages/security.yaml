@@ -14,6 +14,8 @@ security:
             - ROLE_ENTROPY_ADMIN_EVENT_LIST
             - ROLE_ENTROPY_ADMIN_EVENT_CREATE
             - ROLE_ENTROPY_ADMIN_EVENT_VIEW
+            - ROLE_ADMIN_TICKET_ALL
+            - ROLE_ADMIN_RSVP_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_BOOKING_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_DEFINITION_ALL
@@ -118,6 +120,7 @@ security:
         - { path: ^/profiili/ovi$, roles: ROLE_NO_ACCESS}
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
+        - { path: ^/2022/aktiiviloma-2, role: ROLE_USER }
         - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
