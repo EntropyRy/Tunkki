@@ -103,6 +103,9 @@ class EventController extends Controller
             }
             $formview = $form->createView();
         }
+        if (!$event->getPublished() && is_null($this->getUser())){
+            throw $this->createAccessDeniedException('');
+        }
         return $this->render('event.html.twig', [
                 'event' => $event,
                 'page' => $page,
