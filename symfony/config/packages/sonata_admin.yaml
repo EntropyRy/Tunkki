@@ -47,6 +47,17 @@ sonata_admin:
                     - entropy_tunkki.admin.booking
                     - entropy.admin.reward
 
+            sonata.admin.group.events:
+                keep_open:  true
+                label:           Events
+                label_catalogue: SonataAdminBundle
+                icon:            '<i class="fa fa-sitemap"></i>'
+                items:
+                    - entropy.admin.event
+                    - entropy.admin.nakki_definition
+                    - entropy.admin.nakki_booking
+                    - entropy.admin.rsvp
+                    - admin.ticket
             sonata.admin.group.content:
                 keep_open:  true
                 label:           Content 
@@ -54,7 +65,6 @@ sonata_admin:
                 icon:            '<i class="fa fa-sitemap"></i>'
                 items:
                     - sonata.page.admin.page
-                    - entropy.admin.event
                     - entropy.admin.menu
                     - sonata.media.admin.media
                     - sonata.media.admin.gallery
@@ -79,7 +89,6 @@ sonata_admin:
                     - entropy_tunkki.admin.accessory_choices
                     - entropy.admin.contract
                     - sonata.classification.admin.category
-                    - entropy.admin.nakki_definition
                       #            sonata.admin.group.classification:
                       #                label:           Classification 
                       #                label_catalogue: SonataClassificationBundle
@@ -94,12 +103,9 @@ sonata_admin:
                 label:           Administration
                 label_catalogue: SonataAdminBundle
                 items:
-                    - admin.ticket
                     #- entropy_tunkki.admin.statusevent
                     - sonata.page.admin.site
                     - entropy.admin.access_groups
-                    - entropy.admin.nakki_booking
-                    - entropy.admin.rsvp
                 roles: [SONATA_SUPER_ADMIN]
             sonata.admin.group.nakkikone:
                 label:           Nakkikone

@@ -360,10 +360,12 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->end()
                 ->tab('Tickets')
-                ->with('Config')
+                ->with('Config', ['class' => 'col-md-6'])
                     ->add('ticketsEnabled', null, ['help' => 'allow tikets to the event'])
                     ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated this amount will be created'])
                     ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
+                ->end()
+                ->with('Presales', ['class' => 'col-md-6'])
                     ->add('ticketPresaleStart', DatePickerType::class, [
                         'format' => 'd.M.yyyy',
                         'help' => 'When presale starts',
@@ -372,13 +374,15 @@ final class EventAdmin extends AbstractAdmin
                     ])
                     ->add('ticketPresaleEnd', DateTimePickerType::class, [
                         'format' => 'd.M.yyyy, HH:mm',
-                        'help' => 'when presale ends',
+                        'help' => 'when presale ends. If start of the ticket sale needs to be timed: define start and end seconds apart',
                         'input' => 'datetime_immutable',
                         'required' => false
                     ])
                     ->add('ticketPresaleCount', null, [
                         'help' => 'How many tickets can be sold in presale?'
                     ])
+                ->end()
+                ->with('Info', ['class' => 'col-md-12'])
                     ->add('ticketInfoFi', SimpleFormatterType::class, [
                         'format' => 'richhtml', 
                         'required' => false,
