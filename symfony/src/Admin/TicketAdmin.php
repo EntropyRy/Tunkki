@@ -25,9 +25,12 @@ final class TicketAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        if (!$this->isChild()){
+            $filter
+                ->add('event');
+        }
         $filter
             ->add('price')
-            ->add('event')
             ->add('owner')
             ->add('recommendedBy')
             ->add('referenceNumber')
@@ -38,9 +41,12 @@ final class TicketAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $list): void
     {
+        if (!$this->isChild()){
+            $list
+                ->add('event');
+        }
         $list
             ->add('price')
-            ->add('event')
             ->add('owner')
             ->add('recommendedBy')
             ->add('referenceNumber')
@@ -60,9 +66,12 @@ final class TicketAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
+        if (!$this->isChild()){
+            $form
+                ->add('event');
+        }
         $form
             ->add('price')
-            ->add('event')
             ->add('owner')
             ->add('recommendedBy')
             ->add('referenceNumber')
