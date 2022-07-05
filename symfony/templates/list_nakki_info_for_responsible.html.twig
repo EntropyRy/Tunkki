@@ -7,6 +7,7 @@
 {{ block('infos') }}
 {% if infos|length == 0 %}
 {% set infos = event.memberNakkis(app.user.member) %}
+{% set gdpr = true %}
 {{ block('infos') }}
 {% endif %}
 {% endblock %}
@@ -27,8 +28,10 @@
     <tr>
       <th scope="col">{{'Username'|trans}}</th>
       <th scope="col">{{'Name'|trans}}</th>
+      {% if not gdpr|default(false) %}
       <th scope="col">{{'Phone'|trans}}</th>
       <th scope="col">Email</th>
+      {% endif %}
       {# <th scope="col">Time</th> #}
     </tr>
   </thead>
@@ -38,8 +41,10 @@
 		<tr>
 			<th>{{b.member.username}}</th>
 			<td>{{b.member.name}}</td>
+              {% if not gdpr|default(false) %}
 			<td>{{b.member.phone}}</td> 	    
 			<td>{{b.member.email}}</td> 	    
+              {% endif %}
             {# <td>{{b.startAt|date}}</th> #}
 		</tr>
         {% endif %}
