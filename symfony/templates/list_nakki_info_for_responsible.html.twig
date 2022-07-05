@@ -8,7 +8,11 @@
 {% block content %}
 {% for name, bookings in event.responsibleMemberNakkis(app.user.member) %}
 <h3>Nakki: {{ name }}</h3>
-<table class="table table-striped">
+<table class="table table-striped
+    {% if event.headerTheme == 'dark' %}
+        table-dark 
+    {% endif %}
+    ">
   <thead>
     <tr>
       <th scope="col">{{'Username'|trans}}</th>
