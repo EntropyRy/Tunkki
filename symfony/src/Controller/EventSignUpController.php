@@ -94,12 +94,12 @@ class EventSignUpController extends EventController
      */
     public function nakkikone(
         Request $request,
-        Event $event 
+        Event $event,
+        NakkiBookingRepository $repo 
     ): Response
     {
         $locale = $request->getLocale();
         $member = $this->getUser()->getMember();
-        $repo = $this->getDoctrine()->getManager()->getRepository('App:NakkiBooking');
         $selected = $repo->findMemberEventBookings($member, $event);
         if (!$event->getNakkikoneEnabled()){
             $this->addFlash('warning', 'Nakkikone is not enabled');
@@ -108,6 +108,19 @@ class EventSignUpController extends EventController
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkis($event, $member, $request->getLocale())
+            //'form' => $form->createView(),
+        ]);
+    }
+    /**
+     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
+     */
+    public function responsible(
+        Request $request,
+        Event $event 
+    ): Response
+    {
+        return $this->render('list_nakki_info_for_responsible.html.twig', [
+            'event' => $event,
             //'form' => $form->createView(),
         ]);
     }

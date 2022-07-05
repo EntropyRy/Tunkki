@@ -1,0 +1,36 @@
+{% extends 'event.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% use 'pieces/nakkikone.html.twig' %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('nakkikone') }}
+{% endblock %}
+{% block content %}
+{% for name, bookings in event.responsibleMemberNakkis(app.user.member) %}
+<h3>Nakki: {{ name }}</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">{{'Username'|trans}}</th>
+      <th scope="col">{{'Name'|trans}}</th>
+      <th scope="col">{{'Phone'|trans}}</th>
+      <th scope="col">Email</th>
+      {# <th scope="col">Time</th> #}
+    </tr>
+  </thead>
+  <tbody>
+        {% for b in bookings %}    
+		<tr>
+			<th>{{b.member.username}}</th>
+			<th>{{b.member.name}}</th>
+			<td>{{b.member.phone}}</th> 	    
+			<td>{{b.member.email}}</th> 	    
+            {# <td>{{b.startAt|date}}</th> #}
+		</tr>
+        {% endfor %}
+  </tbody>
+</table>
+{% else %}
+{{ 'You are not responsible of any nakkis'|trans }} 
+{% endfor %}
+{% endblock %}

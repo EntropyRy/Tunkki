@@ -1140,5 +1140,15 @@ body {
         $this->requireNakkiBookingsToBeDifferentTimes = $requireNakkiBookingsToBeDifferentTimes;
 
         return $this;
-    } 
+    }
+    public function responsibleMemberNakkis($member)
+    {
+        $bookings = [];
+        foreach ($this->getNakkis() as $nakki){
+            if($nakki->getResponsible() == $member){
+                $bookings[$nakki->getDefinition()->getName($member->getLocale())] = $nakki->getNakkiBookings();
+            }
+        }
+        return $bookings;
+    }
 }

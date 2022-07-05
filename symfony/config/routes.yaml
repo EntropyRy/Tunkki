@@ -34,6 +34,13 @@ entropy_event_ticket_presale:
     controller: App\Controller\EventTicketController:presale
     requirements:
         year: '\d+'
+entropy_event_responsible:
+    path:
+        en: /{year}/{slug}/nakkikone/responsible
+        fi: /{year}/{slug}/nakkikone/vastuuhenkilo
+    controller: App\Controller\EventSignUpController:responsible
+    requirements:
+        year: '\d+'
 entropy_event_ticket_sale:
     path:
         en: /{year}/{slug}/ticket/sale
