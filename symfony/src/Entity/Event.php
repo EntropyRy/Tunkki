@@ -1145,7 +1145,7 @@ body {
     {
         $bookings = [];
         foreach ($this->getNakkis() as $nakki){
-            if($nakki->getResponsible() == $member){
+            if($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())){
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())] = $nakki->getNakkiBookings();
             }
         }
