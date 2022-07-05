@@ -156,7 +156,10 @@ class EventSignUpController extends EventController
                 }
             }
             if(!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)){
-                foreach ( $nakki->getNakkiBookings() as $booking ){
+                // try to prevent displaying same nakki to 2 different users using the system at the same time
+                $bookings = $nakki->getNakkiBookings()->toArray();
+                shuffle($bookings);
+                foreach ( $bookings as $booking ){
                     if(is_null($booking->getMember())){ 
                         $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
                         break;
