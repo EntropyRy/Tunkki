@@ -1,13 +1,23 @@
 {% extends 'event.html.twig' %}
-{% use 'pieces/event.html.twig' %}
-{% use 'pieces/nakkikone.html.twig' %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('nakkikone') }}
-{% endblock %}
 {% block content %}
-{% for name, bookings in event.responsibleMemberNakkis(app.user.member) %}
+{% if is_granted('ROLE_SUPER_ADMIN') %}
+<h2 class="text-success">Sinä olet ADMIN joten näet kaikki tiedot</h2>
+{% endif %}
+{% set infos = event.responsibleMemberNakkis(app.user.member) %}
+{{ block('infos') }}
+{% if infos|length == 0 %}
+{% set infos = event.memberNakkis(app.user.member) %}
+{{ block('infos') }}
+{% endif %}
+{% endblock %}
+
+{% block infos %}
+{% for name, bookings in infos %}
 <h3>Nakki: {{ name }}</h3>
+{% if bookings.0.nakki.responsible is not null %}
+{% set r = bookings.0.nakki.responsible %}
+<h5 class="text-success">{{'Responsible'|trans}}: {{ r.username }}, {{r.name}}, {{r.phone}}, {{r.email}}</h5>
+{% endif %}
 <table class="table table-striped
     {% if event.headerTheme == 'dark' %}
         table-dark 
@@ -36,7 +46,5 @@
         {% endfor %}
   </tbody>
 </table>
-{% else %}
-{{ 'You are not responsible of any nakkis'|trans }} 
 {% endfor %}
 {% endblock %}

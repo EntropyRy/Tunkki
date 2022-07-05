@@ -1151,4 +1151,14 @@ body {
         }
         return $bookings;
     }
+    public function memberNakkis($member)
+    {
+        $bookings = [];
+        $booking = $member->getEventNakkiBooking($this);
+        if ($booking){
+            $nakki = $booking->getNakki();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())] = $nakki->getNakkiBookings();
+        }
+        return $bookings;
+    }
 }

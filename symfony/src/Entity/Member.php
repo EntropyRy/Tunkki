@@ -871,4 +871,15 @@ class Member
 
         return $this;
     }
+
+    public function getEventNakkiBooking($event)
+    {
+        $bookings = $this->getNakkiBookings();
+        foreach ($bookings as $b) {
+            if ($b->getEvent() == $event){
+                return $b;
+            }
+        }
+        return null;
+    }
 }
