@@ -112,12 +112,14 @@ class TicketRepository extends ServiceEntityRepository
     }
     public function findAvailableTicket($event): ?Ticket
     {
+
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
             ->andWhere('t.status = :status')
             ->andWhere('t.owner IS NULL')
             ->setParameter('event', $event)
             ->setParameter('status', 'available')
+            ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
         ;
