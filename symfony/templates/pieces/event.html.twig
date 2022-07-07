@@ -220,6 +220,11 @@
 {% block timetable %}
 {% set last = null %}
 {% if event.DjArtistInfos|length > 0 %}
+{% if event.multiday == true %}
+    {% set datestring = 'E, H:mm' %}
+{% else %}
+    {% set datestring = 'H:mm' %}
+{% endif %}
 <div class="row">
 {% for stage, infos in event.DjArtistInfos %}
     {% if event.DjArtistInfos|length > 1 %}
@@ -236,7 +241,7 @@
         {% set artist = info.artistClone %}
         {% if last is defined %}
             {% if last != info.StartTime %}
-                <li>{{ info.StartTime|date('H:i')}}: 
+                <li>{{info.StartTime|format_datetime(pattern=datestring)}}:
             {% endif %}
         {% endif %}
         {% if info.StartTime is not empty %}
@@ -343,9 +348,9 @@
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
 {% if event.multiday == true %}
-    {% set datestring = 'D, H:i' %}
+    {% set datestring = 'E, H:mm' %}
 {% else %}
-    {% set datestring = 'H:i' %}
+    {% set datestring = 'H:mm' %}
 {% endif %}
 {% if event is defined and '{{ timetable }}' not in attribute(event,content_attr) %}
     {% set show = false %}
@@ -353,7 +358,7 @@
 <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
     {% if artist.type != 'VJ' %}
         {% if info is defined and show %}
-            @ {{info.StartTime|date(datestring)}}
+            @ {{info.StartTime|format_datetime(pattern=datestring)}}
         {% endif %}
     {% endif %}
 </h3>

@@ -42,4 +42,5 @@ return [
     Trikoder\Bundle\OAuth2Bundle\TrikoderOAuth2Bundle::class => ['all' => true],
     SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
     Sonata\Exporter\Bridge\Symfony\SonataExporterBundle::class => ['all' => true],
+    Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
 ];
