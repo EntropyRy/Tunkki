@@ -233,7 +233,7 @@
     <div class="col-12">
     {% endif %}
     <h4 class="artists-heading">
-        {{'Timetable'|trans}} {% if stage|length>1 %}@ {{stage}} {{'Stage'|trans}}{% endif %}
+        {{'Timetable'|trans}} {% if stage|length>1 %}@ {{stage}}{% endif %}
     </h4>
     <ul>
     {% for info in infos %}
@@ -273,7 +273,7 @@
         {% if info.StartTime is not empty %}
             {% if info.stage != stage %}
             <h3 class="artists-heading text-center">
-                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
+                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}}{% endif %}
             </h3>
             {% endif %}
             {% set name = info.artist.name %}
@@ -327,7 +327,7 @@
         {% if info.StartTime is not empty %}
             {% if info.stage != stage %}
             <h3 class="artists-heading text-center">
-                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}} {{'Stage'|trans}}{% endif %}
+                {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}}{% endif %}
             </h3>
             {% endif %}
             {% set name = info.artist.name %}
