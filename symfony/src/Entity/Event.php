@@ -1146,7 +1146,9 @@ body {
         $bookings = [];
         foreach ($this->getNakkis() as $nakki){
             if($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())){
-                $bookings[$nakki->getDefinition()->getName($member->getLocale())] = $nakki->getNakkiBookings();
+                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'] = $nakki->getNakkiBookings();
+                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
+                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
             }
         }
         return $bookings;
@@ -1157,7 +1159,9 @@ body {
         $booking = $member->getEventNakkiBooking($this);
         if ($booking){
             $nakki = $booking->getNakki();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())] = $nakki->getNakkiBookings();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'] = $nakki->getNakkiBookings();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
         }
         return $bookings;
     }
