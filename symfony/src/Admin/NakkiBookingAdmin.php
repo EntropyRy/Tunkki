@@ -58,8 +58,12 @@ final class NakkiBookingAdmin extends AbstractAdmin
         }
         $form
             ->add('member')
-            ->add('startAt', DateTimePickerType::class)
-            ->add('endAt', DateTimePickerType::class)
+            ->add('startAt', DateTimePickerType::class, [
+                'input' => 'datetime_immutable',
+            ])
+            ->add('endAt', DateTimePickerType::class,[
+                'input' => 'datetime_immutable',
+            ])
             ;
     }
 
