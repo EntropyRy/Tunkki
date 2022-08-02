@@ -321,7 +321,7 @@ class Member
      *
      * @param bool|null $studentUnionMember
      *
-     * @return User
+     * @return Member
      */
     public function setStudentUnionMember($studentUnionMember = null)
     {
@@ -345,7 +345,7 @@ class Member
      *
      * @param string|null $application
      *
-     * @return User
+     * @return Member
      */
     public function setApplication($application = null)
     {
@@ -369,7 +369,7 @@ class Member
      *
      * @param \DateTime|null $applicationDate
      *
-     * @return User
+     * @return Member 
      */
     public function setApplicationDate($applicationDate = null)
     {
