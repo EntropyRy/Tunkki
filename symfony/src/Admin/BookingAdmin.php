@@ -149,6 +149,10 @@ class BookingAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $subject = $this->getSubject();
+        $bookings = null;
+        $itemCats = null;
+        $itemChoices = null;
+        $packageChoices = null;
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
             $bookingsrepo = $this->em->getRepository(Booking::class);

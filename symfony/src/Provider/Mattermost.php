@@ -75,7 +75,7 @@ class Mattermost extends AbstractProvider
      * @param array       $response
      * @param AccessToken $token
      *
-     * @return SlackResourceOwner
+     * @return MattermostResourceOwner
      */
     protected function createResourceOwner(array $response, AccessToken $token)
     {

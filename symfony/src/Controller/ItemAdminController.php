@@ -82,6 +82,7 @@ class ItemAdminController extends Controller
         unset($selectedModels[0]);
 
         try {
+            $selectedModel = null;
             foreach ($selectedModels as $selectedModel) {
                 $selectedModel->resetWhoCanRent();
                 foreach ($sourceModel->getWhoCanRent() as $who){
