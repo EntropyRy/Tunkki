@@ -3,4 +3,4 @@ logs/
 .env
 docker/data
 dev.sql
-
+.php-cs-fixer.cache
