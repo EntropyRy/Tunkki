@@ -23,7 +23,7 @@ final class RewardAdmin extends AbstractAdmin
             ->add('paid')
             ->add('paidDate')
             ->add('updatedAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -50,14 +50,14 @@ final class RewardAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('bookings', null , ['disabled' => true])
-            ->add('user', null , ['disabled' => true])
-            ->add('reward', null , ['disabled' => true])
+            ->add('bookings', null, ['disabled' => true])
+            ->add('user', null, ['disabled' => true])
+            ->add('reward', null, ['disabled' => true])
             ->add('paid')
             ->add('paidDate', DateTimePickerType::class, ['disabled' => true])
-            ->add('PaymentHandledBy', null , ['disabled' => true])
+            ->add('PaymentHandledBy', null, ['disabled' => true])
             ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -72,7 +72,7 @@ final class RewardAdmin extends AbstractAdmin
             ->add('paidDate')
             ->add('paymentHandledBy')
             ->add('updatedAt')
-            ;
+        ;
     }
     public function preUpdate($reward)
     {
@@ -85,9 +85,8 @@ final class RewardAdmin extends AbstractAdmin
     }
     public function configureSideMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null)
     {
-        $menu->addChild($this->trans('evenout'),[
+        $menu->addChild($this->trans('evenout'), [
             'route'=> 'admin_app_reward_PrepareEvenout',
         ])->setAttribute('icon', 'fa fa-balance-scale');
     }
-    
 }

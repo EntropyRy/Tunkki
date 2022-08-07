@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -12,8 +13,9 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Artist;
 use Doctrine\ORM\EntityManagerInterface;
-class RandomArtistBlock extends BaseBlockService {
 
+class RandomArtistBlock extends BaseBlockService
+{
     protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
@@ -33,7 +35,8 @@ class RandomArtistBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/random_artist.html.twig',
             'box' => false
@@ -59,4 +62,3 @@ class RandomArtistBlock extends BaseBlockService {
         return 'Random Artist Block';
     }
 }
-

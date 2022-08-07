@@ -11,7 +11,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  *
  * @ORM\Table(name="StatusEvent")
  * @ORM\Entity
- * @ORM\HasLifecycleCallbacks 
+ * @ORM\HasLifecycleCallbacks
  */
 class StatusEvent
 {
@@ -25,13 +25,13 @@ class StatusEvent
     private $id;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="fixingHistory")
      */
     private $item;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Booking", inversedBy="statusEvents")
      */
     private $booking;
@@ -183,9 +183,9 @@ class StatusEvent
 
     public function __toString()
     {
-        if(is_object($this->getItem())){
+        if (is_object($this->getItem())) {
             return 'Event for '.$this->getItem()->getName();
-        } elseif(is_object($this->getBooking())){
+        } elseif (is_object($this->getBooking())) {
             return 'Event for '.$this->getBooking()->getName();
         } else {
             return 'No associated item';

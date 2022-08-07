@@ -36,7 +36,10 @@ class ArtistType extends AbstractType
             ->add('genre', null, ['label' => 'artist.form.genre','help' => 'artist.form.genre_help'])
             ->add('bio', null, ['label' => 'artist.form.bio','help' => 'artist.form.bio_help'])
             ->add('bioEn', null, ['label' => 'artist.form.bio_en','help' => 'artist.form.bio_help'])
-            ->add('links', CollectionType::class, [
+            ->add(
+                'links',
+                CollectionType::class,
+                [
                 'label' => 'artist.form.links',
                 'allow_add' => true,
                 'by_reference' => false,
@@ -49,7 +52,8 @@ class ArtistType extends AbstractType
                     'row_attr' => ['class' => 'col-md-6 col-12'],
                     'label' => false
                 ],
-                ],['edit' => 'inline']
+                ],
+                ['edit' => 'inline']
             )
             ->add('Picture', MediaType::class, [
                     'label' => 'artist.form.promo_picture',

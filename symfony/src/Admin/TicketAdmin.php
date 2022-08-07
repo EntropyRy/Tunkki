@@ -25,7 +25,7 @@ final class TicketAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $filter
                 ->add('event');
         }
@@ -36,12 +36,12 @@ final class TicketAdmin extends AbstractAdmin
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $list
                 ->add('event');
         }
@@ -66,7 +66,7 @@ final class TicketAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $form): void
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $form
                 ->add('event');
         }
@@ -83,7 +83,7 @@ final class TicketAdmin extends AbstractAdmin
                 ]
             ])
             ->add('updatedAt')
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -96,7 +96,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt')
-            ;
+        ;
     }
     protected function configureRoutes(RouteCollection $collection)
     {

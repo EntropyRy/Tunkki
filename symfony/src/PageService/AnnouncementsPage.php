@@ -20,14 +20,17 @@ class AnnouncementsPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName(){ return $this->name;}
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
         $events = $this->em->getRepository('App:Event')->findEventsByType('announcement');
         return $this->templateManager->renderResponse(
-            $page->getTemplateCode(), 
-            array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 
+            $page->getTemplateCode(),
+            array_merge($parameters, array('events'=>$events)), //'clubroom'=>$clubroom)),
             $response
         );
     }

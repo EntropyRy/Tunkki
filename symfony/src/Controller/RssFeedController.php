@@ -14,10 +14,10 @@ class RssFeedController extends AbstractController
     {
         $events = $eRepo->getRSSEvents();
         $locale = $request->getLocale();
-        $response = new Response( $this->renderView('rss_feed/index.xml.twig', [
+        $response = new Response($this->renderView('rss_feed/index.xml.twig', [
             'events' => $events,
             'locale' => $locale
-        ]) );
+        ]));
         $response->headers->set('Content-Type', 'application/xml; charset=utf-8');
         return $response;
     }

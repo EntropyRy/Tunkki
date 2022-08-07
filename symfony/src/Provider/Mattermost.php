@@ -1,10 +1,13 @@
 <?php
+
 namespace App\Provider;
+
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
+
 /**
  * Class Mattermost
  *
@@ -43,13 +46,12 @@ class Mattermost extends AbstractProvider
      */
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-     /*   $params = [
-            'token' => $token->getToken(),
-        ];
-        return 'https://chat.entropy.fi/api/v4/user/'.http_build_query($params);
-        */
+        /*   $params = [
+               'token' => $token->getToken(),
+           ];
+           return 'https://chat.entropy.fi/api/v4/user/'.http_build_query($params);
+           */
         return 'https://chat.entropy.fi/api/v4/users/me';
-
     }
     /**
      * Checks a provider response for errors.
@@ -89,4 +91,3 @@ class Mattermost extends AbstractProvider
         return [];
     }
 }
-

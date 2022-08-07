@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
-class MemberInfoBlock extends BaseBlockService {
-
+class MemberInfoBlock extends BaseBlockService
+{
     protected $security;
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
@@ -31,33 +32,35 @@ class MemberInfoBlock extends BaseBlockService {
             'member'    => $member
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
         $this->buildCreateForm($formMapper, $block);
     }
-	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
-/*		$formMapper
-			->add('settings', ImmutableArrayType::class, [
-				'keys' => [
-                    ['title', TextType::class, [
-                        'label' => 'List Title',
-                    ]],
-                    ['show', ChoiceType::class,[
-                        'choices' => [ 
-                            'Everybody can see this' => false,
-                            'Show only to logged in user' => true,
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
+        /*		$formMapper
+                    ->add('settings', ImmutableArrayType::class, [
+                        'keys' => [
+                            ['title', TextType::class, [
+                                'label' => 'List Title',
+                            ]],
+                            ['show', ChoiceType::class,[
+                                'choices' => [
+                                    'Everybody can see this' => false,
+                                    'Show only to logged in user' => true,
+                                ]
+                            ]],
+                            ['urls', CollectionType::class, [
+                                'required' => false,
+                                'allow_add' => true,
+                                'allow_delete' => true,
+                                'prototype' => true,
+                                'by_reference' => false,
+                                'allow_extra_fields' => true,
+                                'entry_type' => UrlsType::class,
+                            ]],
                         ]
-                    ]],
-                    ['urls', CollectionType::class, [
-                        'required' => false,
-                        'allow_add' => true,
-                        'allow_delete' => true,
-                        'prototype' => true,
-                        'by_reference' => false,
-                        'allow_extra_fields' => true,
-                        'entry_type' => UrlsType::class,                        
-                    ]],
-                ]
-            ]);*/
+                    ]);*/
     }
 
     public function __construct($twig, Security $security) //, EntityManagerInterface $em)
@@ -66,7 +69,8 @@ class MemberInfoBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/member_info.html.twig',
         ]);
@@ -84,6 +88,4 @@ class MemberInfoBlock extends BaseBlockService {
     {
         return 'Member Info Block';
     }
-
 }
-

@@ -14,14 +14,13 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class ContractAdmin extends AbstractAdmin
 {
-
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('purpose')
             ->add('updatedAt')
             ->add('createdAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -51,7 +50,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('ContentEn', CKEditorType::class, [
                 'config' => ['full']
             ])
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -62,7 +61,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('ContentEn')
             ->add('createdAt')
             ->add('updatedAt')
-            ;
+        ;
     }
     private function getPurposeChoices()
     {

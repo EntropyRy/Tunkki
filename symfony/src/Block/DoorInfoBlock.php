@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -14,15 +15,15 @@ use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\ZMQHelper;
 
-class DoorInfoBlock extends BaseBlockService {
-
+class DoorInfoBlock extends BaseBlockService
+{
     protected $security;
     protected $em;
     protected $zmq;
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        if (is_null($this->security->getUser())){
+        if (is_null($this->security->getUser())) {
             return $this->renderResponse($blockContext->getTemplate(), [
             ], $response);
         }
@@ -38,10 +39,12 @@ class DoorInfoBlock extends BaseBlockService {
             'status'    => $status
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
         $this->buildCreateForm($formMapper, $block);
     }
-	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
     }
 
     public function __construct($twig, Security $security, EntityManagerInterface $em, ZMQHelper $zmq)
@@ -52,7 +55,8 @@ class DoorInfoBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/door_info.html.twig',
         ]);
@@ -70,6 +74,4 @@ class DoorInfoBlock extends BaseBlockService {
     {
         return 'Door Info Block';
     }
-
 }
-

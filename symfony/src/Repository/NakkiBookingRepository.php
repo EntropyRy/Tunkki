@@ -23,7 +23,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
 
-    public function findMemberEventBookings($member, $event)
+    public function findMemberEventBookings($member, $event): ?array
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.event = :event')
@@ -36,12 +36,12 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function findMemberEventBookingsAtSameTime($member, $event, $start, $end)
+    public function findMemberEventBookingsAtSameTime($member, $event, $start, $end): ?array
     {
         return $this->createQueryBuilder('n')
             //->where('n.startAt BETWEEN :start and :end OR n.endAt BETWEEN :start and :end' )
             ->where('n.startAt = :start OR n.endAt = :end')
-            ->orWhere ('n.startAt BETWEEN :startMod and :endMod OR n.endAt BETWEEN :startMod and :endMod')
+            ->orWhere('n.startAt BETWEEN :startMod and :endMod OR n.endAt BETWEEN :startMod and :endMod')
             ->andWhere('n.event = :event')
             ->andWhere('n.member = :member')
             ->setParameter('event', $event)
@@ -57,7 +57,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
         ;
     }
 
-    public function findEventNakkiCount($booking, $event)
+    public function findEventNakkiCount($booking, $event): ?string
     {
         $definition = $booking->getNakki()->getDefinition();
         $total = $this->createQueryBuilder('b')

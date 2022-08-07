@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -28,15 +29,14 @@ use Hashids\Hashids;
 class ProfileController extends AbstractController
 {
     public function newMember(
-        Request $request, 
-        FormFactoryInterface $formF, 
+        Request $request,
+        FormFactoryInterface $formF,
         MemberRepository $memberRepo,
         EmailRepository $emailRepo,
         UserPasswordEncoderInterface $encoder,
         Mattermost $mm,
         MailerInterface $mailer
-    )
-    {
+    ) {
         $member = new Member();
         $email_content = null;
         $form = $formF->create(MemberType::class, $member);
@@ -46,7 +46,7 @@ class ProfileController extends AbstractController
                 $member = $form->getData();
                 $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
                 $email = $memberRepo->getByEmail($member->getEmail());
-                if(!$name && !$email){
+                if (!$name && !$email) {
                     $user = $member->getUser();
                     $user->setPassword($encoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getlocale());
@@ -58,7 +58,7 @@ class ProfileController extends AbstractController
                     $email_content = $emailRepo->findOneBy(['purpose' => 'member']);
                     $this->announceToMattermost($mm, $member);
                     $this->sendEmailToMember($email_content, $member, $mailer);
-                    // TODO: 
+                    // TODO:
                     //$code = $this->addToInfoMailingList($member);
                     $this->addFlash('info', 'member.join.added');
                     $this->redirect('app_login');
@@ -79,12 +79,12 @@ class ProfileController extends AbstractController
         $email = (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
             ->to($member->getEmail())
-            ->subject( $email_content->getSubject() )
+            ->subject($email_content->getSubject())
             ->htmlTemplate('emails/member.html.twig')
             ->context([
                 'email_data' => $email_content,
             ])
-            ;
+        ;
         $mailer->send($email);
     }
     protected function announceToMattermost($mm, $member)
@@ -122,7 +122,7 @@ class ProfileController extends AbstractController
         $DoorLog->setMember($member);
         $em = $this->getDoctrine()->getManager();
         $since = new \DateTime('now-1day');
-        if ($request->get('since')){
+        if ($request->get('since')) {
             //$datestring = strtotime($request->get('since'));
             $since = new \DateTime($request->get('since'));
         }
@@ -142,22 +142,22 @@ class ProfileController extends AbstractController
 
             $send = true;
             $text = '**Kerde door opened by '.$doorlog->getMember();
-            if ($doorlog->getMessage()){
+            if ($doorlog->getMessage()) {
                 $text .=' - '. $doorlog->getMessage();
             } else {
-                foreach($logs as $log){
-                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimeStamp() < 60*60*4)){
+                foreach ($logs as $log) {
+                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimeStamp() < 60*60*4)) {
                         $send = false;
                         break;
                     }
                 }
             }
             $text.='**';
-            if($send){
+            if ($send) {
                 $mm->SendToMattermost($text, 'kerde');
             }
-            
-            if ($member->getLocale()){
+
+            if ($member->getLocale()) {
                 return $this->redirectToRoute('entropy_profile_door.'. $member->getLocale());
             } else {
                 return $this->redirectToRoute('entropy_profile_door.'. $request->getLocale());
@@ -203,7 +203,7 @@ class ProfileController extends AbstractController
     public function apply(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
     {
         $member = $security->getUser()->getMember();
-        if($member->getIsActiveMember()){
+        if ($member->getIsActiveMember()) {
             $this->addFlash('success', 'profile.you_are_active_member_already');
             return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
@@ -212,7 +212,7 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
-            if(empty($member->getApplicationDate())){
+            if (empty($member->getApplicationDate())) {
                 $text = '**Active member application by '.$member.'**';
                 $mm->SendToMattermost($text, 'yhdistys');
             }
@@ -230,7 +230,7 @@ class ProfileController extends AbstractController
     {
         $generator = new BarcodeGeneratorHTML();
         $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();
-        $hashids = new Hashids($code,8);
+        $hashids = new Hashids($code, 8);
         $code = $hashids->encode($code);
         $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_128, 2, 90);
         return [$code, $barcode];

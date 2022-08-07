@@ -18,7 +18,7 @@ class ItemAdminController extends Controller
         if (!$object) {
             throw new NotFoundHttpException(sprintf('unable to find the object'));
         }
-        $clonedObject = new Item;
+        $clonedObject = new Item();
         //$clonedObject = clone $object;
         $clonedObject->setName($object->getName().' (Clone)');
         $clonedObject->setManufacturer($object->getManufacturer());
@@ -28,7 +28,7 @@ class ItemAdminController extends Controller
         $clonedObject->setCommission($object->getCommission());
         $clonedObject->setCommissionPrice($object->getCommissionPrice());
         $clonedObject->setURL($object->getURL());
-        foreach ($object->getWhoCanRent() as $who){
+        foreach ($object->getWhoCanRent() as $who) {
             $clonedObject->addWhoCanRent($who);
         }
         $clonedObject->setRent($object->getRent());
@@ -54,23 +54,21 @@ class ItemAdminController extends Controller
         if ($allEntitiesSelected) {
             return true;
         }
-        
-        if(count($selectedIds) < 2){
+
+        if (count($selectedIds) < 2) {
             return "not enough selected";
-        }
-        else {
+        } else {
             return true;
         }
-
     }
 
 
-   /**
-     * @param ProxyQueryInterface $selectedModelQuery
-     * @param Request             $request
-     *
-     * @return RedirectResponse
-     */
+    /**
+      * @param ProxyQueryInterface $selectedModelQuery
+      * @param Request             $request
+      *
+      * @return RedirectResponse
+      */
     public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery, Request $request = null)
     {
         $this->admin->checkAccess('edit');
@@ -85,7 +83,7 @@ class ItemAdminController extends Controller
             $selectedModel = null;
             foreach ($selectedModels as $selectedModel) {
                 $selectedModel->resetWhoCanRent();
-                foreach ($sourceModel->getWhoCanRent() as $who){
+                foreach ($sourceModel->getWhoCanRent() as $who) {
                     $selectedModel->addWhoCanRent($who);
                 }
                 $selectedModel->setDescription($sourceModel->getDescription());
@@ -108,5 +106,4 @@ class ItemAdminController extends Controller
             $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
         );
     }
-
 }

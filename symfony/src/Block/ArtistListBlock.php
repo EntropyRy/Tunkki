@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -13,8 +14,8 @@ use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Artist;
 use Doctrine\ORM\EntityManagerInterface;
 
-class ArtistListBlock extends BaseBlockService {
-
+class ArtistListBlock extends BaseBlockService
+{
     protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
@@ -32,7 +33,8 @@ class ArtistListBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/artist_list.html.twig',
             'box' => false
@@ -58,4 +60,3 @@ class ArtistListBlock extends BaseBlockService {
         return 'Artist List Block';
     }
 }
-

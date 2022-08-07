@@ -208,16 +208,16 @@ class Package
     {
         return $this->name;
     }
-    
+
     public function __toString()
     {
-        $return = $this->name ? $this->name: 'n/a';
-    /*    if ($return != 'n/a'){
-            $return .= ' = ';
-            foreach ($this->getItems() as $item){
-                $return .= $item->getName().', ';
-            }
-        }*/
+        $return = $this->name ? $this->name : 'n/a';
+        /*    if ($return != 'n/a'){
+                $return .= ' = ';
+                foreach ($this->getItems() as $item){
+                    $return .= $item->getName().', ';
+                }
+            }*/
         return $return;
     }
 
@@ -243,7 +243,7 @@ class Package
     {
         $needsfix = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($this->getItems() as $item) {
-            if ($item->getneedsFixing()){
+            if ($item->getneedsFixing()) {
                 $needsfix[] = $item;
                 $this->setNeedsFixing(true);
             }
@@ -258,9 +258,9 @@ class Package
      */
     public function getIsSomethingBroken()
     {
-        if($this->getItems()){
+        if ($this->getItems()) {
             foreach ($this->getItems() as $item) {
-                if($item->getNeedsFixing() == true){
+                if ($item->getNeedsFixing() == true) {
                     return true;
                 }
             }

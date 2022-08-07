@@ -95,7 +95,7 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
     {
         $user = $token->getUser();
         $user->setLastLogin(new \DateTime());
-        if(!is_null($user->getMember()->getLocale())){
+        if (!is_null($user->getMember()->getLocale())) {
             $request->setLocale($user->getMember()->getLocale());
         } else {
             $user->getMember()->setLocale('fi');

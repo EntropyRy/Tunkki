@@ -17,7 +17,7 @@ class BookingConsentType extends AbstractType
         $builder
             ->add('renterSignature', HiddenType::class)
             ->add('renterConsent');
-        if ($builder->getData()->getRenterConsent()){
+        if ($builder->getData()->getRenterConsent()) {
             $builder
                 ->add('Signed', SubmitType::class, [
                     'disabled' => true,

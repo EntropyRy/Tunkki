@@ -13,7 +13,6 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
 final class NakkiDefinitionAdmin extends AbstractAdmin
 {
-
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -22,7 +21,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('nameEn')
             ->add('DescriptionEn')
             ->add('onlyForActiveMembers')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -46,15 +45,15 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
     {
         $form
             ->add('nameFi')
-            ->add('DescriptionFi', SimpleFormatterType::class,[
+            ->add('DescriptionFi', SimpleFormatterType::class, [
                 'format' => 'richhtml'
             ])
             ->add('nameEn')
-            ->add('DescriptionEn', SimpleFormatterType::class,[
+            ->add('DescriptionEn', SimpleFormatterType::class, [
                 'format' => 'richhtml'
             ])
             ->add('onlyForActiveMembers')
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -65,6 +64,6 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ->add('nameEn')
             ->add('DescriptionEn')
             ->add('onlyForActiveMembers')
-            ;
+        ;
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\EventController;
@@ -30,19 +31,18 @@ class EventTicketController extends EventSignUpController
         Request $request,
         Event $event,
         TicketRepository $ticketRepo
-    ): RedirectResponse
-    {
-        if($event->ticketPresaleEnabled()){
+    ): RedirectResponse {
+        if ($event->ticketPresaleEnabled()) {
             $this->freeAvailableTickets($event, $ticketRepo);
             $response = $this->ticketChecks('presale', $event, $ticketRepo);
-            if (!is_null($response)){
+            if (!is_null($response)) {
                 return $response;
             }
         } else {
             $this->addFlash('warning', 'ticket.presale.off');
         }
         return $this->redirectToRoute('entropy_event_slug', [
-            'slug' => $event->getUrl(), 
+            'slug' => $event->getUrl(),
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
@@ -53,17 +53,16 @@ class EventTicketController extends EventSignUpController
         Request $request,
         Event $event,
         TicketRepository $ticketRepo
-    ): RedirectResponse
-    {
-        if(!$event->ticketPresaleEnabled()){
+    ): RedirectResponse {
+        if (!$event->ticketPresaleEnabled()) {
             $this->freeAvailableTickets($event, $ticketRepo);
             $response = $this->ticketChecks('sale', $event, $ticketRepo);
-            if (!is_null($response)){
+            if (!is_null($response)) {
                 return $response;
             }
         }
         return $this->redirectToRoute('entropy_event_slug', [
-            'slug' => $event->getUrl(), 
+            'slug' => $event->getUrl(),
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
@@ -74,12 +73,11 @@ class EventTicketController extends EventSignUpController
     public function ticket(
         Request $request,
         Event $event,
-        Mattermost $mm, 
-        Ticket $ticket, 
+        Mattermost $mm,
+        Ticket $ticket,
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo
-    ): Response
-    {
+    ): Response {
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -101,7 +99,7 @@ class EventTicketController extends EventSignUpController
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count($selected)>0?true:false,
+            'hasNakki' => count($selected)>0 ? true : false,
             'ticket' => $ticket,
             'form' => $form->createView(),
         ]);
@@ -110,20 +108,20 @@ class EventTicketController extends EventSignUpController
     {
         $member = $this->getUser()->getMember();
         $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
-        if (is_null($ticket)){
-            if ($for == 'presale'){
+        if (is_null($ticket)) {
+            if ($for == 'presale') {
                 $ticket = $ticketRepo->findAvailablePresaleTicket($event);
             } else {
                 $ticket = $ticketRepo->findAvailableTicket($event);
             }
         }
-        if (is_null($ticket)){
+        if (is_null($ticket)) {
             $this->addFlash('warning', 'ticket.not_available');
         } else {
             $ticket->setOwner($member);
             $ticketRepo->add($ticket, true);
             return $this->redirectToRoute('entropy_event_ticket', [
-                'slug' => $event->getUrl(), 
+                'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
                 'reference' => $ticket->getReferenceNumber()
             ]);
@@ -133,9 +131,9 @@ class EventTicketController extends EventSignUpController
     private function freeAvailableTickets($event, $ticketRepo)
     {
         $now = new \DateTime('now');
-        foreach($event->getTickets() as $ticket){
-            if($ticket->getStatus() == 'available' && !is_null($ticket->getOwner())){
-                if (($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800){
+        foreach ($event->getTickets() as $ticket) {
+            if ($ticket->getStatus() == 'available' && !is_null($ticket->getOwner())) {
+                if (($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
                     $ticket->setOwner(null);
                     $ticketRepo->add($ticket, true);
                 }

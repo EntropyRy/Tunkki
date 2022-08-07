@@ -18,7 +18,7 @@ final class EventAdminController extends CRUDController
         $event = $this->admin->getSubject();
         $infos = $event->getEventArtistInfos();
         return $this->renderWithExtraParams('admin/event/artist_list.html.twig', [
-            'event' => $event, 
+            'event' => $event,
             'infos' => $infos
         ]);
     }
@@ -26,17 +26,17 @@ final class EventAdminController extends CRUDController
     {
         $event = $this->admin->getSubject();
         $nakkis = $event->getNakkiBookings();
-        $emails = []; 
-        foreach ($nakkis as $nakki){
+        $emails = [];
+        foreach ($nakkis as $nakki) {
             $member = $nakki->getMember();
-            if ($member){
+            if ($member) {
                 $emails[$member->getId()] = $member->getEmail();
             }
         }
         $emails = implode(';', $emails);
         return $this->renderWithExtraParams('admin/event/nakki_list.html.twig', [
-            'event' => $event, 
-            'nakkiBookings' => $nakkis, 
+            'event' => $event,
+            'nakkiBookings' => $nakkis,
             'emails' => $emails
         ]);
     }
@@ -52,11 +52,11 @@ final class EventAdminController extends CRUDController
     public function rsvpEmailAction()
     {
         $event = $this->admin->getSubject();
-		$subject = $event->getRSVPEmailSubject();
-		$body = $event->getRSVPEmailBody();
+        $subject = $event->getRSVPEmailSubject();
+        $body = $event->getRSVPEmailBody();
         $rsvps = $event->getRSVPs();
         if ($subject && $body) {
-            foreach ($rsvps as $rsvp){
+            foreach ($rsvps as $rsvp) {
                 $to = $rsvp->getAvailableEmail();
                 $message = (new TemplatedEmail())
                     ->from(new Address('hallitus@entropy.fi', 'Entropyn Hallitus'))
@@ -66,7 +66,7 @@ final class EventAdminController extends CRUDController
                     ->context(['body' => $body ])
                 ;
                 $this->get('symfony.mailer')->send($message);
-            } 
+            }
             $this->addFlash('sonata_flash_success', sprintf('%s RSVP info packages sent.', count($rsvps)));
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         } else {
@@ -75,4 +75,3 @@ final class EventAdminController extends CRUDController
         }
     }
 }
-

@@ -53,7 +53,7 @@ final class MenuAdmin extends AbstractAdmin
             ->add('parent')
             ->add('position')
             ->add('enabled')
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -63,6 +63,6 @@ final class MenuAdmin extends AbstractAdmin
             ->add('nimi')
             ->add('url')
             ->add('enabled')
-            ;
+        ;
     }
 }

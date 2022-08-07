@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -15,9 +16,9 @@ use Sonata\ClassificationBundle\Model\CategoryManagerInterface as Category;
 
 class ItemsType extends AbstractType
 {
-   /**
-     * @var PropertyAccessorInterface
-     */
+    /**
+      * @var PropertyAccessorInterface
+      */
     protected $em;
     protected $cm;
 
@@ -42,18 +43,16 @@ class ItemsType extends AbstractType
         $root = $this->cm->getRootCategory('item');
         // map categories
         $cats = [];
-        foreach($choices as $choice) {
-            foreach($root->getChildren() as $cat) {
-                if($choice->getCategory() == $cat){
+        foreach ($choices as $choice) {
+            foreach ($root->getChildren() as $cat) {
+                if ($choice->getCategory() == $cat) {
+                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                } elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
                     $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
                 }
-                elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())){
-                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
-                }
-            }   
+            }
         }
         return $cats;
-
     }
     public function configureOptions(OptionsResolver $resolver)
     {
@@ -85,6 +84,4 @@ class ItemsType extends AbstractType
     {
         return 'entropy_type_items';
     }
-
 }
-

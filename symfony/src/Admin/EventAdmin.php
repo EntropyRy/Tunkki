@@ -32,35 +32,37 @@ final class EventAdmin extends AbstractAdmin
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
     {
-       if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
-           return;
-       }
-       $admin = $this->isChild() ? $this->getParent() : $this;
-       $id = $admin->getRequest()->get('id');
-       $event = $admin->getSubject();
-       if ($this->isGranted('EDIT')) {
-			$menu->addChild('Event', 
-               $admin->generateMenuUrl('edit', ['id' => $id])
+        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+            return;
+        }
+        $admin = $this->isChild() ? $this->getParent() : $this;
+        $id = $admin->getRequest()->get('id');
+        $event = $admin->getSubject();
+        if ($this->isGranted('EDIT')) {
+            $menu->addChild(
+                'Event',
+                $admin->generateMenuUrl('edit', ['id' => $id])
             );
-            $menu->addChild('Artist editor', 
-               $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
+            $menu->addChild(
+                'Artist editor',
+                $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
             );
-            if (count($this->getSubject()->getEventArtistInfos()) > 0 ){
+            if (count($this->getSubject()->getEventArtistInfos()) > 0) {
                 $menu->addChild('Artist list', [
                    'uri' => $admin->generateUrl('artistList', ['id' => $id])
                 ]);
             }
-            if($this->getSubject()->getRsvpSystemEnabled()){
-            $menu->addChild('RSVPs', [
+            if ($this->getSubject()->getRsvpSystemEnabled()) {
+                $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
             ]);
-                if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0){
+                if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0) {
                     $menu->addChild('RSVP List', [
                        'uri' => $admin->generateUrl('rsvp', ['id' => $id])
                     ]);
                 }
             }
-            if($event->getNakkikoneEnabled()){
+            if ($event->getNakkikoneEnabled()) {
                 $menu->addChild('Nakkikone', [
                    'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
                 ]);
@@ -71,17 +73,17 @@ final class EventAdmin extends AbstractAdmin
                    'uri' => $admin->generateUrl('nakkiList', ['id' => $id])
                 ]);
             }
-            if($event->getTicketsEnabled()){
+            if ($event->getTicketsEnabled()) {
                 $menu->addChild('Tickets', [
                    'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                 ]);
-                if($event->getTicketCount() != count($event->getTickets())){
+                if ($event->getTicketCount() != count($event->getTickets())) {
                     $menu->addChild('Update Ticket Count', [
                         'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
                         'attributes' => ['class' => 'btn-warning']
                     ]);
                 }
-                if($event->ticketPresaleEnabled()){
+                if ($event->ticketPresaleEnabled()) {
                     $event = $this->getSubject();
                     $menu->addChild('Ticket Presale Preview', [
                         'route' => 'entropy_event_ticket_presale',
@@ -100,7 +102,7 @@ final class EventAdmin extends AbstractAdmin
                  ],
                  'linkAttributes' => ['target' => '_blank']
             ]);
-       }
+        }
     }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -114,13 +116,13 @@ final class EventAdmin extends AbstractAdmin
             ->add('Content')
             ->add('Nimi')
             ->add('Sisallys')
-            ->add('type',null,[],ChoiceType::class, ['choices' => $TypeChoices])
+            ->add('type', null, [], ChoiceType::class, ['choices' => $TypeChoices])
             ->add('EventDate')
             ->add('publishDate')
             ->add('css')
             ->add('url')
             ->add('sticky')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -171,11 +173,14 @@ final class EventAdmin extends AbstractAdmin
                 ])
                 ->add('until', DateTimePickerType::class, [
                     'format' => 'd.M.yyyy HH:mm',
-                    'label' => 'Event stop time', 
+                    'label' => 'Event stop time',
                     'required' => false,
                 ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
-                ->add('publishDate', DateTimePickerType::class, [
+                ->add(
+                    'publishDate',
+                    DateTimePickerType::class,
+                    [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                     'required' => false,
                     'format' => 'd.M.yyyy HH:mm',
@@ -195,10 +200,10 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Event')
                 ->with('English', ['class' => 'col-md-6'])
                 ->add('Name');
-            if ($event->getexternalUrl()==false){
+            if ($event->getexternalUrl()==false) {
                 $formMapper
                     ->add('Content', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
                         'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.'
                     ]);
@@ -207,10 +212,10 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Finnish', ['class' => 'col-md-6'])
                 ->add('Nimi');
-            if ($event->getexternalUrl()==false){
+            if ($event->getexternalUrl()==false) {
                 $formMapper
                     ->add('Sisallys', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
                         'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.'
                     ]);
@@ -226,11 +231,14 @@ final class EventAdmin extends AbstractAdmin
                 ])
                 ->add('until', DateTimePickerType::class, [
                     'format' => 'd.M.yyyy HH:mm',
-                    'label' => 'Event stop time', 
+                    'label' => 'Event stop time',
                     'required' => false,
                 ])
                 ->add('published', null, ['help' => 'The addvert will be available when the publish date has been reached otherwise not'])
-                ->add('publishDate', DateTimePickerType::class, [
+                ->add(
+                    'publishDate',
+                    DateTimePickerType::class,
+                    [
                     'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                     'required' => false,
                     'format' => 'd.M.yyyy HH:mm',
@@ -250,9 +258,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
-                ->add('picture', ModelListType::class,[
+                ->add('picture', ModelListType::class, [
                         'required' => false
-                    ],[ 
+                    ], [
                         'link_parameters'=>[
                         'context' => 'event'
                     ]])
@@ -260,7 +268,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('imgFilterColor', ColorType::class)
                 ->add('imgFilterBlendMode', ChoiceType::class, [
                     'required' => false,
-                    'help' => 'Color does not work if you dont choose here how it should work', 
+                    'help' => 'Color does not work if you dont choose here how it should work',
                     'choices' => [
                             'luminosity' => 'mix-blend-mode: luminosity',
                             'multiply' => 'mix-blend-mode: multiply',
@@ -269,9 +277,9 @@ final class EventAdmin extends AbstractAdmin
                             'screen' => 'mix-blend-mode: screen',
                         ]
                 ]);
-            if ($event->getexternalUrl()==false){
+            if ($event->getexternalUrl()==false) {
                 $formMapper
-                    ->add('headerTheme', null,[
+                    ->add('headerTheme', null, [
                         'help' => 'possible values: light and dark'
                     ])
                     ->add('css');
@@ -279,10 +287,10 @@ final class EventAdmin extends AbstractAdmin
             $formMapper
                 ->end()
                 ->with('Links', ['class' => 'col-md-4'])
-                    ->add('attachment', ModelListType::class,[
+                    ->add('attachment', ModelListType::class, [
                         'required' => false,
                         'help' => 'added as downloadable link'
-                        ],[ 
+                        ], [
                             'link_parameters'=>[
                             'context' => 'event',
                             'provider' => 'sonata.media.provider.file'
@@ -337,14 +345,14 @@ final class EventAdmin extends AbstractAdmin
                         'help' => 'Make sure member nakki bookings do not overlap',
                     ])
                     ->add('nakkiInfoEn', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                        'ckeditor_context' => 'default',
                     ])
                     ->add('nakkiInfoFi', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                        'ckeditor_context' => 'default',
                     ])
                 ->end()
                 ->end()
@@ -353,9 +361,9 @@ final class EventAdmin extends AbstractAdmin
                     ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
                     ->add('RSVPEmailSubject')
                     ->add('RSVPEmailBody', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                        'ckeditor_context' => 'default',
                     ])
                 ->end()
                 ->end()
@@ -384,18 +392,18 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Info', ['class' => 'col-md-12'])
                     ->add('ticketInfoFi', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                        'ckeditor_context' => 'default',
                     ])
                     ->add('ticketInfoEn', SimpleFormatterType::class, [
-                        'format' => 'richhtml', 
+                        'format' => 'richhtml',
                         'required' => false,
-                        'ckeditor_context' => 'default', 
+                        'ckeditor_context' => 'default',
                     ])
                 ->end()
                 ->end()
-                ;
+            ;
         }
     }
 
@@ -410,8 +418,8 @@ final class EventAdmin extends AbstractAdmin
             ->add('Content')
             ->add('Sisallys')
             ->add('updatedAt')
-       
-            ;
+
+        ;
     }
     protected function configureRoutes(RouteCollection $collection)
     {
@@ -422,7 +430,7 @@ final class EventAdmin extends AbstractAdmin
     }
     public function prePersist($event)
     {
-        if($event->getType() == 'clubroom'){
+        if ($event->getType() == 'clubroom') {
             $event->setLinks([
                 'urls' => [0 => [
                     'url' => 'https://reittiopas.hsl.fi/reitti/-/J%C3%A4mer%C3%A4ntaival%203%20A%2C%20Espoo%3A%3A60.18730249466484%2C24.836112856864933',

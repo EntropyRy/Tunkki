@@ -20,7 +20,7 @@ final class DoorLogAdmin extends AbstractAdmin
             ->add('member')
             ->add('createdAt')
             ->add('message')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -41,7 +41,7 @@ final class DoorLogAdmin extends AbstractAdmin
         $form
             ->add('createdAt')
             ->add('message')
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -50,9 +50,10 @@ final class DoorLogAdmin extends AbstractAdmin
             ->add('user')
             ->add('createdAt')
             ->add('message')
-            ;
+        ;
     }
-    public function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection)  {
+    public function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection)
+    {
         $collection->remove('edit');
         $collection->remove('delete');
         $collection->remove('create');

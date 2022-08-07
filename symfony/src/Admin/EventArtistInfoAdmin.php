@@ -25,7 +25,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('SetLength')
             ->add('stage')
             ->add('StartTime')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -55,7 +55,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
-        if (empty($subject->getArtist())){
+        if (empty($subject->getArtist())) {
             $formMapper
                 ->add('Artist', null, [
                     'query_builder' => function ($repo) {
@@ -76,7 +76,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     'required' => true,
                     'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page'
                 ])
-                ;
+            ;
         }
     }
 
@@ -85,7 +85,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $showMapper
             ->add('SetLength')
             ->add('StartTime')
-            ;
+        ;
     }
     public function prePersist($eventinfo): void
     {

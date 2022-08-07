@@ -23,7 +23,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ->add('name')
             ->add('users')
             ->add('roles')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -44,8 +44,8 @@ final class AccessGroupsAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
-		$roles = $this->bag->get('security.role_hierarchy.roles');
-		$rolesChoices = self::flattenRoles($roles);
+        $roles = $this->bag->get('security.role_hierarchy.roles');
+        $rolesChoices = self::flattenRoles($roles);
         $formMapper
             ->add('name')
             ->add('active')
@@ -53,10 +53,10 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ->add('roles', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,
-				'choices'  => $rolesChoices,
+                'choices'  => $rolesChoices,
             ])
 
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -65,7 +65,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ->add('name')
             ->add('users')
             ->add('roles')
-            ;
+        ;
     }
 
     public function __construct($code, $class, $baseControllerName, ParameterBagInterface $bag=null)
@@ -73,21 +73,21 @@ final class AccessGroupsAdmin extends AbstractAdmin
         $this->bag = $bag;
         parent::__construct($code, $class, $baseControllerName);
     }
-	/**
-	 * Turns the role's array keys into string <ROLES_NAME> keys.
-	 */
-	protected static function flattenRoles($rolesHierarchy) 
-	{
+    /**
+     * Turns the role's array keys into string <ROLES_NAME> keys.
+     */
+    protected static function flattenRoles($rolesHierarchy)
+    {
         $flatRoles = array();
-		foreach($rolesHierarchy as $key => $roles) {
-			if(empty($roles)) {
-				continue;
+        foreach ($rolesHierarchy as $key => $roles) {
+            if (empty($roles)) {
+                continue;
             }
-            if($key == 'ROLE_ADMIN' || $key == 'ROLE_SUPER_ADMIN'){
+            if ($key == 'ROLE_ADMIN' || $key == 'ROLE_SUPER_ADMIN') {
                 continue;
             }
             $flatRoles[$key] = $key;
-		}
-		return $flatRoles;
-	}
+        }
+        return $flatRoles;
+    }
 }

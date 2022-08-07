@@ -13,10 +13,9 @@ use Sonata\Form\Type\DateTimePickerType;
 
 final class NakkiBookingAdmin extends AbstractAdmin
 {
-
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $filter
                 ->add('event');
         }
@@ -24,14 +23,14 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('member')
             ->add('startAt')
             ->add('endAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('nakki');
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $list
                 ->add('event');
         }
@@ -52,7 +51,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
     {
         $form
             ->add('nakki');
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $form
                 ->add('event');
         }
@@ -61,10 +60,10 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('startAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
             ])
-            ->add('endAt', DateTimePickerType::class,[
+            ->add('endAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
             ])
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -75,6 +74,6 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('member')
             ->add('startAt')
             ->add('endAt')
-            ;
+        ;
     }
 }

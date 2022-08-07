@@ -50,18 +50,18 @@ class UserCommand extends Command
                 $member->setEmail($email);
                 $member->setUser($user);
             }*/
-            if($input->getOption('password')){
+            if ($input->getOption('password')) {
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');
                 $question->setHidden(true);
                 $question->setHiddenFallback(false);
                 $pass = $helper->ask($input, $output, $question);
-                $user->setPassword($this->passwordEncoder->encodePassword($user,$pass));
+                $user->setPassword($this->passwordEncoder->encodePassword($user, $pass));
             }
-            if($input->getOption('super-admin')){
+            if ($input->getOption('super-admin')) {
                 $user->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']);
             }
-            if($input->getOption('permissions')){
+            if ($input->getOption('permissions')) {
                 $user->setRoles([$input->getOption('permissions')]);
             }
             $this->em->persist($user);

@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -79,12 +80,11 @@ class RenterAdmin extends AbstractAdmin
             ->add('zipcode')
             ->add('city')
         ;
-	}
+    }
     public function validate(ErrorElement $errorElement, $object)
     {
-        if(empty($object->getEmail())){
+        if (empty($object->getEmail())) {
             $errorElement->with('email')->addViolation('Email is needed for the billing')->end();
         }
     }
-
 }

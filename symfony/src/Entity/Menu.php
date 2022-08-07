@@ -51,7 +51,7 @@ class Menu
      */
     private $enabled;
 
-        /**
+    /**
      * @Gedmo\TreeLeft
      * @ORM\Column(type="integer")
      */

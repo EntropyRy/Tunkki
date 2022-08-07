@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -13,15 +14,15 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use Doctrine\ORM\EntityManagerInterface;
 
-class JoinUsBlock extends BaseBlockService {
-
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) 
+class JoinUsBlock extends BaseBlockService
+{
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) 
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
-    public function getName() 
+    public function getName()
     {
         return 'Join Us Block';
     }
@@ -32,7 +33,8 @@ class JoinUsBlock extends BaseBlockService {
             'block'     => $blockContext->getBlock(),
         ), $response);
     }
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'position' => '1',
             'template' => 'member/joinus_block.html.twig',
@@ -47,6 +49,4 @@ class JoinUsBlock extends BaseBlockService {
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
     }
-
 }
-

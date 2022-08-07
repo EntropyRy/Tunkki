@@ -12,7 +12,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class RSVPAdmin extends AbstractAdmin
 {
-
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -20,13 +19,13 @@ final class RSVPAdmin extends AbstractAdmin
             ->add('lastName')
             ->add('email')
             ->add('member');
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $filter
                 ->add('event');
         }
         $filter
             ->add('createdAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -35,7 +34,7 @@ final class RSVPAdmin extends AbstractAdmin
             ->add('name')
             ->add('email')
             ->add('member');
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $list
                 ->add('event');
         }
@@ -56,7 +55,7 @@ final class RSVPAdmin extends AbstractAdmin
             ->add('name')
             ->add('email')
             ->add('member');
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $form
                 ->add('event');
         }
@@ -71,6 +70,6 @@ final class RSVPAdmin extends AbstractAdmin
             ->add('member')
             ->add('event')
             ->add('createdAt')
-            ;
+        ;
     }
 }

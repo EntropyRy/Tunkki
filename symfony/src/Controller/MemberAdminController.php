@@ -41,10 +41,10 @@ final class MemberAdminController extends CRUDController
             $em->flush();
             $this->admin->update($object);
             //$userEditLink = $this->get('router')->generate('admin_app_user_edit', ['id' => $user->getId()]);
-            $this->addFlash('sonata_flash_success', 
-                sprintf('User created successfully' 
+            $this->addFlash('sonata_flash_success',
+                sprintf('User created successfully'
             ));
-            //$this->addFlash('sonata_flash_error', 
+            //$this->addFlash('sonata_flash_error',
             //    sprintf('Please define user groups manually!: <a href="%s">Here</a>', $userEditLink
             //));
         }
@@ -52,31 +52,31 @@ final class MemberAdminController extends CRUDController
     }
      */
 
-/*    public function sendrejectreasonAction($id)
-    {
-        $object = $this->admin->getSubject();
-        // TODO: change to symfony mailer $message = new Message();
-        $message->setFrom(['hallitus@entropy.fi'], "Entropyn Hallitus");
-        $message->setTo($object->getEmail());
-        $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
-        $message->setBody(
-            $this->renderView(
-                'emails/member.html.twig',
-                    [
-                        'user' => $object,
-                        'email' => ['addLoginLinksToFooter'=>false],
-                    ]
-                ),
-                'text/html'
-        );
-        $this->get('mailer')->send($message);
-        $object->setRejectReasonSent(1);
-        $this->admin->update($object);
-        $this->addFlash('sonata_flash_success', sprintf('Reject reason sent to %s', $object->getName()));
-        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
-        
-}
- */
+    /*    public function sendrejectreasonAction($id)
+        {
+            $object = $this->admin->getSubject();
+            // TODO: change to symfony mailer $message = new Message();
+            $message->setFrom(['hallitus@entropy.fi'], "Entropyn Hallitus");
+            $message->setTo($object->getEmail());
+            $message->setSubject("[Entropy] Hakumuksesi hylättiin / Your application was rejected" );
+            $message->setBody(
+                $this->renderView(
+                    'emails/member.html.twig',
+                        [
+                            'user' => $object,
+                            'email' => ['addLoginLinksToFooter'=>false],
+                        ]
+                    ),
+                    'text/html'
+            );
+            $this->get('mailer')->send($message);
+            $object->setRejectReasonSent(1);
+            $this->admin->update($object);
+            $this->addFlash('sonata_flash_success', sprintf('Reject reason sent to %s', $object->getName()));
+            return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+
+    }
+     */
     public function activememberinfoAction($id)
     {
         $object = $this->admin->getSubject();

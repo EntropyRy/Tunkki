@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -13,19 +14,19 @@ use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
 
-class BookingsBlock extends BaseBlockService {
-
+class BookingsBlock extends BaseBlockService
+{
     protected $em;
 
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
-            'itemsReturned' => false, 
+            'itemsReturned' => false,
             'cancelled' => false
-        ],[
+        ], [
             'bookingDate' => 'DESC'
         ]);
-         
+
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
             'bookings'  => $bookings
@@ -38,7 +39,8 @@ class BookingsBlock extends BaseBlockService {
         parent::__construct($name);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'position' => '1',
             'template' => 'block/bookings.html.twig',
@@ -63,6 +65,4 @@ class BookingsBlock extends BaseBlockService {
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
     {
     }
-
 }
-

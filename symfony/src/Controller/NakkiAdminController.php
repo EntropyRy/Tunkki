@@ -12,12 +12,12 @@ use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController
 {
-	protected function preCreate(Request $request, $object)
+    protected function preCreate(Request $request, $object)
     {
-        if($object->getEvent()){
-             $date = new \DateTimeImmutable($object->getEvent()->getEventDate()->format('Y-m-d H:i'));
+        if ($object->getEvent()) {
+            $date = new \DateTimeImmutable($object->getEvent()->getEventDate()->format('Y-m-d H:i'));
         } else {
-             $date = new \DateTimeImmutable();
+            $date = new \DateTimeImmutable();
         }
         $object->setStartAt($date);
     }

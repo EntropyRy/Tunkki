@@ -21,12 +21,13 @@ final class RewardAdminController extends CRUDController
         $this->admin->update($reward);
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
-    public function prepareEvenoutAction(){
+    public function prepareEvenoutAction()
+    {
         $link = $this->admin->generateUrl('Evenout');
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
         $total['sum'] = 0;
-        foreach($rewards as $reward){
+        foreach ($rewards as $reward) {
             $total['pool'] += $reward->getReward();
             $total['sum'] += $reward->getWeight();
         }
@@ -41,15 +42,15 @@ final class RewardAdminController extends CRUDController
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
         $total['sum'] = 0;
-        foreach($rewards as $reward){
+        foreach ($rewards as $reward) {
             $total['pool'] += $reward->getReward();
             $total['sum'] += $reward->getWeight();
         }
-        foreach($rewards as $reward){
+        foreach ($rewards as $reward) {
             $reward->setEvenout(strval($total['pool'] * $reward->getWeight() / $total['sum']));
             $this->admin->update($reward);
         }
-        $this->addFlash('sonata_flash_success', sprintf('Nee Distribution calculated!')); 
+        $this->addFlash('sonata_flash_success', sprintf('Nee Distribution calculated!'));
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

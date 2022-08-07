@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -12,13 +13,14 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Event;
 use Doctrine\ORM\EntityManagerInterface;
-class FutureEventsBlock extends BaseBlockService {
 
+class FutureEventsBlock extends BaseBlockService
+{
     protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         $events = $this->em->getRepository(Event::class)->getFutureEvents();
-                 
+
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
             'events'  => $events,
@@ -32,7 +34,8 @@ class FutureEventsBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/future_events.html.twig',
             'box' => false
@@ -58,4 +61,3 @@ class FutureEventsBlock extends BaseBlockService {
         return 'Future Events Block';
     }
 }
-

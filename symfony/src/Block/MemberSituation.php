@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -14,8 +15,8 @@ use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
-class MemberSituation extends BaseBlockService {
-
+class MemberSituation extends BaseBlockService
+{
     protected $security;
     protected $em;
 
@@ -28,15 +29,17 @@ class MemberSituation extends BaseBlockService {
             'member'    => $member,
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
         $this->buildCreateForm($formMapper, $block);
     }
-	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
-/*		$formMapper
-			->add('settings', ImmutableArrayType::class, [
-				'keys' => [
-                ]
-            ]);*/
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
+        /*		$formMapper
+                    ->add('settings', ImmutableArrayType::class, [
+                        'keys' => [
+                        ]
+                    ]);*/
     }
 
     public function __construct($twig, Security $security, EntityManagerInterface $em)
@@ -46,7 +49,8 @@ class MemberSituation extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'template' => 'block/member_situation.html.twig',
         ]);
@@ -64,6 +68,4 @@ class MemberSituation extends BaseBlockService {
     {
         return 'Member Situation Block';
     }
-
 }
-

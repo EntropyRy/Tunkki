@@ -20,13 +20,16 @@ class FrontPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName(){ return $this->name;}
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
         $r = $this->em->getRepository('App:Event');
         $events =[];
-        $future = $r->getFutureEvents();        
+        $future = $r->getFutureEvents();
         $announcement = $r->findOneEventByTypeWithSticky('announcement');
         //$event = $r->findOneEventByTypeWithSticky('event');
         //$clubroom = $r->findOneEventByTypeWithSticky('clubroom');
@@ -41,10 +44,10 @@ class FrontPage implements PageServiceInterface
             $events = array_merge($events, [$announcement]);
         }*/
         $events = array_merge($future, [$announcement]);
-        
+
         return $this->templateManager->renderResponse(
-            $page->getTemplateCode(), 
-            array_merge($parameters,array('events'=>$events)), //'clubroom'=>$clubroom)), 
+            $page->getTemplateCode(),
+            array_merge($parameters, array('events'=>$events)), //'clubroom'=>$clubroom)),
             $response
         );
     }

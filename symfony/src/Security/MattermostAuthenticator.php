@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Security;
 
 use KnpU\OAuth2ClientBundle\Security\Authenticator\SocialAuthenticator;
@@ -33,7 +34,7 @@ class MattermostAuthenticator extends SocialAuthenticator
     }
     public function supports(Request $request)
     {
-                        // continue ONLY if the current ROUTE matches the check ROUTE
+        // continue ONLY if the current ROUTE matches the check ROUTE
         return $request->attributes->get('_route') === '_entropy_mattermost_check';
     }
     public function getCredentials(Request $request)
@@ -46,8 +47,8 @@ class MattermostAuthenticator extends SocialAuthenticator
         /** @var FacebookUser $facebookUser */
         $mattermostUser = $this->getMattermostClient()
             ->fetchUserFromToken($credentials);
-        if(!$mattermostUser){
-             throw new CustomUserMessageAuthenticationException('Email could not be found.');
+        if (!$mattermostUser) {
+            throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
         $email = $mattermostUser->getEmail();
         // 1) have they logged in with Mattermost before? Easy!
@@ -61,8 +62,8 @@ class MattermostAuthenticator extends SocialAuthenticator
         $member = $this->em->getRepository(Member::class)
                     ->findOneBy(['email' => $email]);
         if (!$member) {
-             // fail authentication with a custom error
-             throw new CustomUserMessageAuthenticationException('Email could not be found.');
+            // fail authentication with a custom error
+            throw new CustomUserMessageAuthenticationException('Email could not be found.');
         }
         $user = $member->getUser();
         $user->setMattermostId($mattermostUser->getId());
@@ -71,7 +72,7 @@ class MattermostAuthenticator extends SocialAuthenticator
 
         return $user;
     }
-    
+
     /**
      * @return SlackClient
      */
@@ -92,7 +93,7 @@ class MattermostAuthenticator extends SocialAuthenticator
     {
         $user = $token->getUser();
         $user->setLastLogin(new \DateTime());
-        if(!is_null($user->getMember()->getLocale())){
+        if (!is_null($user->getMember()->getLocale())) {
             $request->setLocale($user->getMember()->getLocale());
         } else {
             $user->getMember()->setLocale('fi');
@@ -106,12 +107,12 @@ class MattermostAuthenticator extends SocialAuthenticator
         }
         return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$request->getLocale()));
     }
-   
+
     public function start(Request $request, AuthenticationException $authException = null)
     {
         return new RedirectResponse(
             '/login/', // might be the site, where users choose their oauth provider
             Response::HTTP_TEMPORARY_REDIRECT
         );
-    } 
+    }
 }

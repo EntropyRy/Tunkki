@@ -5,9 +5,10 @@ namespace App\Entity;
 use App\Application\Sonata\MediaBundle\Entity\Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use function Symfony\Component\String\u;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+
+use function Symfony\Component\String\u;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
@@ -159,7 +160,7 @@ class Event
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $nakkiInfoFi = 
+    private $nakkiInfoFi =
         '
         <h5>Yleisinfo</h5>
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
@@ -169,7 +170,7 @@ class Event
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $nakkiInfoEn = 
+    private $nakkiInfoEn =
         '
         <h5>General information</h5>
         <p>Choose at least two Nakkis that are 1 hour length and build up or take down</p>
@@ -439,7 +440,7 @@ body {
     mix-blend-mode: difference;
 }
 */";
-		$this->eventArtistInfos = new ArrayCollection();
+        $this->eventArtistInfos = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
         $this->nakkis = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
@@ -448,8 +449,8 @@ body {
     public function getNowTest(): ?string
     {
         $now = new \DateTime();
-        if($this->until){
-            if ($now >= $this->EventDate && $now <= $this->until ){
+        if ($this->until) {
+            if ($now >= $this->EventDate && $now <= $this->until) {
                 return 'now';
             } elseif ($now > $this->until) {
                 return 'after';
@@ -457,7 +458,7 @@ body {
                 return 'before';
             }
         } else {
-            if ( $now < $this->EventDate ){
+            if ($now < $this->EventDate) {
                 return 'before';
             } else {
                 return 'after';
@@ -562,27 +563,26 @@ body {
     }
     public function getAbstract($lang)
     {
-        if ($lang=='fi'){
+        if ($lang=='fi') {
             $abstract = $this->removeTwigTags($this->Sisallys);
-
         } else {
             $abstract = $this->removeTwigTags($this->Content);
         }
-        return u(html_entity_decode(strip_tags($abstract)))->truncate(150,'..');
+        return u(html_entity_decode(strip_tags($abstract)))->truncate(150, '..');
     }
     protected function removeTwigTags($message)
     {
-        $abstract = str_replace("{{ bios }}", "",$message);
-        $abstract = str_replace("{{ timetable }}", "",$abstract);
-        $abstract = str_replace("{{ vj_bios }}", "",$abstract);
-        $abstract = str_replace("{{ rsvp }}", "",$abstract);
-        $abstract = str_replace("{{ links }}", "",$abstract);
-        $abstract = str_replace("{{ streamplayer }}", "",$abstract);
+        $abstract = str_replace("{{ bios }}", "", $message);
+        $abstract = str_replace("{{ timetable }}", "", $abstract);
+        $abstract = str_replace("{{ vj_bios }}", "", $abstract);
+        $abstract = str_replace("{{ rsvp }}", "", $abstract);
+        $abstract = str_replace("{{ links }}", "", $abstract);
+        $abstract = str_replace("{{ streamplayer }}", "", $abstract);
         return $abstract;
     }
     public function getNameByLang($lang)
     {
-        if($lang=='fi'){
+        if ($lang=='fi') {
             return $this->Nimi;
         } else {
             return $this->Name;
@@ -590,7 +590,7 @@ body {
     }
     public function getNameAndDateByLang($lang)
     {
-        if($lang=='fi'){
+        if ($lang=='fi') {
             return $this->Nimi. ' - '. $this->EventDate->format('j.n.Y, H:i');
         } else {
             return $this->Name. ' - '. $this->EventDate->format('j.n.Y, H:i');
@@ -911,10 +911,9 @@ body {
     public function getArtistSignUpNow(): bool
     {
         $now = new \DateTimeImmutable('now');
-        if ($this->getArtistSignUpEnabled() && 
-            $this->getArtistSignUpStart() <= $now && 
-            $this->getArtistSignUpEnd() >= $now) 
-        {
+        if ($this->getArtistSignUpEnabled() &&
+            $this->getArtistSignUpStart() <= $now &&
+            $this->getArtistSignUpEnd() >= $now) {
             return true;
         }
         return false;
@@ -1024,8 +1023,8 @@ body {
     public function getMultiday(): bool
     {
         //dd( $this->EventDate->format('U') - $this->until->format('U'));
-        if ($this->until){
-            if(($this->until->format('U') - $this->EventDate->format('U')) > 86400){
+        if ($this->until) {
+            if (($this->until->format('U') - $this->EventDate->format('U')) > 86400) {
                 return true;
             } else {
                 return false;
@@ -1038,9 +1037,9 @@ body {
     public function getDjArtistInfos(): array
     {
         $bystage = [];
-        foreach ($this->eventArtistInfos as $info){
-            if (!is_null($info->getStartTime())){
-                if($info->getArtist()->getType() != 'VJ'){
+        foreach ($this->eventArtistInfos as $info) {
+            if (!is_null($info->getStartTime())) {
+                if ($info->getArtist()->getType() != 'VJ') {
                     $bystage[$info->getStage()][]=$info;
                 }
             }
@@ -1099,8 +1098,8 @@ body {
     public function ticketPresaleEnabled()
     {
         $now = new \DateTime('now');
-        if (is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now && 
-            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now){
+        if (is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
+            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now) {
             return true;
         }
         return false;
@@ -1144,8 +1143,8 @@ body {
     public function responsibleMemberNakkis($member)
     {
         $bookings = [];
-        foreach ($this->getNakkis() as $nakki){
-            if($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())){
+        foreach ($this->getNakkis() as $nakki) {
+            if ($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())) {
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'] = $nakki->getNakkiBookings();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
@@ -1157,7 +1156,7 @@ body {
     {
         $bookings = [];
         $booking = $member->getEventNakkiBooking($this);
-        if ($booking){
+        if ($booking) {
             $nakki = $booking->getNakki();
             $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'] = $nakki->getNakkiBookings();
             $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();

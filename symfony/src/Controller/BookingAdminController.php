@@ -7,7 +7,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 class BookingAdminController extends CRUDController
 {
     protected $em;
-    public function stuffListAction() 
+    public function stuffListAction()
     {
         $object = $this->admin->getSubject();
         $this->em = $this->getDoctrine()->getManager();
@@ -15,5 +15,4 @@ class BookingAdminController extends CRUDController
               ->getBookingData($object->getId(), $object->getRenterHash(), $object->getRenter());
         return $this->renderWithExtraParams('admin/booking/stufflist.html.twig', $bookingdata[0]);
     }
-
 }

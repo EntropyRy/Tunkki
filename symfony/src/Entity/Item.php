@@ -178,7 +178,7 @@ class Item
 
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="Commission", type="datetime", nullable=true)
      */
     private $commission;
@@ -196,7 +196,7 @@ class Item
 
     /**
      * @var \DateTime
-     * 
+     *
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="CreatedAt", type="datetime", nullable=true)
      */
@@ -464,10 +464,11 @@ class Item
 
     public function __toString()
     {
-        if ($this->name){
+        if ($this->name) {
             return $this->name;
+        } else {
+            return 'N/A';
         }
-        else{ return 'N/A';}
     }
 
     /**
@@ -555,17 +556,17 @@ class Item
      */
     public function getFixingHistoryMessages($count, $endofline = null)
     {
-        if($endofline == 'html'){
+        if ($endofline == 'html') {
             $eol = "<br>";
         } else {
             $eol = PHP_EOL;
         }
         $messages = '';
-        foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()),0,$count) as $event){
+        foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
             $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';
             $messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$user.': '.$event->getDescription().''.$eol;
         }
-        if($messages != NULL){
+        if ($messages != null) {
             return $messages;
         } else {
             return 'no messages';
@@ -579,18 +580,18 @@ class Item
      */
     public function resetFixingHistory()
     {
-        foreach ($this->getFixingHistory() as $fix){
+        foreach ($this->getFixingHistory() as $fix) {
             $this->removeFixingHistory($fix);
         }
     }
     /**
-     * reset whocanrent 
+     * reset whocanrent
      *
      * @return null
      */
     public function resetWhoCanRent()
     {
-        foreach ($this->getWhoCanRent() as $who){
+        foreach ($this->getWhoCanRent() as $who) {
             $this->removeWhoCanRent($who);
         }
     }
@@ -899,7 +900,7 @@ class Item
      */
     public function resetRentHistory()
     {
-        foreach ($this->getRentHistory() as $rent){
+        foreach ($this->getRentHistory() as $rent) {
             $this->removeRentHistory($rent);
         }
     }

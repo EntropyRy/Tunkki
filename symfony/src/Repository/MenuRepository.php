@@ -15,11 +15,11 @@ use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
  */
 class MenuRepository extends NestedTreeRepository
 {
-/*    public function __construct(ManagerRegistry $registry)
-    {
-        parent::__construct($registry, Menu::class);
-    }
- */
+    /*    public function __construct(ManagerRegistry $registry)
+        {
+            parent::__construct($registry, Menu::class);
+        }
+     */
     // /**
     //  * @return Menu[] Returns an array of Menu objects
     //  */

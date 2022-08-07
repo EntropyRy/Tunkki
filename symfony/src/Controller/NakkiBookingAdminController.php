@@ -6,6 +6,6 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 
-final class NakkiBookingAdminController extends CRUDController{
-
+final class NakkiBookingAdminController extends CRUDController
+{
 }

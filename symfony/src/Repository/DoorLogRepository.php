@@ -24,7 +24,7 @@ class DoorLogRepository extends ServiceEntityRepository
      */
     public function getLatest($count = null)
     {
-        if(is_null($count)){
+        if (is_null($count)) {
             $count = 10;
         }
         return $this->createQueryBuilder('d')

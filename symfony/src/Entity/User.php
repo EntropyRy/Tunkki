@@ -100,14 +100,14 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        if ($this->member){
+        if ($this->member) {
             if ($this->member->getUsername()) {
                 return $this->member->getUsername();
             }
             if ($this->member->getEmail()) {
                 return $this->member->getEmail();
             }
-        } 
+        }
         return 'N/A';
     }
     /**
@@ -118,9 +118,9 @@ class User implements UserInterface
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-        foreach($this->accessGroups as $group){
-            if($group->getActive()){
-                foreach($group->getRoles() as $role){
+        foreach ($this->accessGroups as $group) {
+            if ($group->getActive()) {
+                foreach ($group->getRoles() as $role) {
                     $roles[] = $role;
                 }
             }
@@ -217,7 +217,7 @@ class User implements UserInterface
     }
     public function __toString()
     {
-        if ($this->member){
+        if ($this->member) {
             return $this->member->getName();
         } else {
             return 'user: '.$this->id;
@@ -272,7 +272,7 @@ class User implements UserInterface
     public function setPlainPassword($plainPassword)
     {
         $this->plainPassword = $plainPassword;
-		$this->password = null;
+        $this->password = null;
     }
 
     /**

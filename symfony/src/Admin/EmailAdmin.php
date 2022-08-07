@@ -22,7 +22,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('purpose')
             ->add('subject')
             ->add('body')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -45,22 +45,22 @@ final class EmailAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('purpose', ChoiceType::class,[
+            ->add('purpose', ChoiceType::class, [
                 'choices' => [
                     'Automatic email to new Member on registration' => 'member',
                     'Automatic thank you email to member who requests Active Member status' => 'active_member',
                     'New Active Member info package (can be sent from the member list)' => 'active_member_info_package',
                     //'Booking Email' => 'booking',
                     //'Other' => 'other'
-                ], 
-                'expanded' => true, 
+                ],
+                'expanded' => true,
                 'multiple' => false,
                 'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ])
             ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to tunkki login, usually not needed in emails defined here'])
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -72,7 +72,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('addLoginLinksToFooter')
             ->add('createdAt')
             ->add('updatedAt')
-            ;
+        ;
     }
 
     protected function configureRoutes(RouteCollection $collection)

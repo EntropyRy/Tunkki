@@ -228,7 +228,7 @@ class Booking
      */
     public function addPackage(\App\Entity\Package $package)
     {
-        foreach ($package->getItems() as $item){
+        foreach ($package->getItems() as $item) {
             $item->addRentHistory($this);
         }
         $this->packages[] = $package;
@@ -243,7 +243,7 @@ class Booking
      */
     public function removePackage(\App\Entity\Package $package)
     {
-        foreach ($package->getItems() as $item){
+        foreach ($package->getItems() as $item) {
             $item->removeRentHistory($this);
         }
         $this->packages->removeElement($package);
@@ -260,7 +260,7 @@ class Booking
     }
     public function __toString()
     {
-        return $this->name ? $this->name.' - '.date_format($this->bookingDate,'d.m.Y') : 'n/a';
+        return $this->name ? $this->name.' - '.date_format($this->bookingDate, 'd.m.Y') : 'n/a';
     }
 
 
@@ -324,7 +324,7 @@ class Booking
         foreach ($this->getItems() as $item) {
             $price += $item->getRent();
         }
-        if ($this->getPackages()){
+        if ($this->getPackages()) {
             foreach ($this->getPackages() as $package) {
                 $price += $package->getRent();
             }
@@ -339,16 +339,16 @@ class Booking
      */
     public function getIsSomethingBroken()
     {
-        if ($this->getItems()){
+        if ($this->getItems()) {
             foreach ($this->getItems() as $item) {
-                if($item->getNeedsFixing()==true){
+                if ($item->getNeedsFixing()==true) {
                     return true;
                 }
             }
         }
-        if ($this->getPackages()){
+        if ($this->getPackages()) {
             foreach ($this->getPackages() as $package) {
-                if($package->getIsSomethingBroken()){
+                if ($package->getIsSomethingBroken()) {
                     return true;
                 }
             }
@@ -364,11 +364,11 @@ class Booking
     {
         $return = '';
         foreach ($this->getItems() as $item) {
-			if($item->getRentNotice()){
-	            $return .= $item->getName().': '.$item->getRentNotice().' '. PHP_EOL;
-			}
+            if ($item->getRentNotice()) {
+                $return .= $item->getName().': '.$item->getRentNotice().' '. PHP_EOL;
+            }
         }
-        if ($this->getPackages()){
+        if ($this->getPackages()) {
             foreach ($this->getPackages() as $package) {
                 foreach ($package->getItems() as $item) {
                     $return .= $item->getName().': '.$item->getRentNotice().' ';

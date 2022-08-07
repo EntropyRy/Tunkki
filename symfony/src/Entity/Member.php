@@ -99,7 +99,7 @@ class Member
      */
     private $rejectReasonSent = false;
 
-	/**
+    /**
      * @var boolean
      *
      * @ORM\Column(name="StudentUnionMember", type="boolean")
@@ -108,28 +108,28 @@ class Member
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="Application", type="text", nullable=true)
      */
     private $Application;
 
     /**
      * @var string
-     * 
+     *
      * @ORM\Column(name="reject_reason", type="text", nullable=true)
      */
     private $rejectReason;
 
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="ApplicationDate", type="datetime", nullable=true)
      */
     private $ApplicationDate;
 
     /**
      * @var \DateTime
-     * 
+     *
      * @ORM\Column(name="ApplicationHandledDate", type="datetime", nullable=true)
      */
     private $ApplicationHandledDate;
@@ -369,7 +369,7 @@ class Member
      *
      * @param \DateTime|null $applicationDate
      *
-     * @return Member 
+     * @return Member
      */
     public function setApplicationDate($applicationDate = null)
     {
@@ -629,9 +629,10 @@ class Member
     }
     public function getProgressP(): string
     {
-        if($this->AcceptedAsHonoraryMember)
+        if ($this->AcceptedAsHonoraryMember) {
             return '100';
-        if($this->isActiveMember){
+        }
+        if ($this->isActiveMember) {
             return '66';
         } else {
             return '33';
@@ -640,10 +641,10 @@ class Member
 
     public function canVote(): bool
     {
-        if($this->StudentUnionMember){
+        if ($this->StudentUnionMember) {
             return true;
         }
-        if($this->isFullMember){
+        if ($this->isFullMember) {
             return true;
         }
         return false;
@@ -670,8 +671,8 @@ class Member
     }
     public function getArtistWithId($id): ?Artist
     {
-        foreach ($this->getArtist() as $artist){
-            if($artist->getId() == $id){
+        foreach ($this->getArtist() as $artist) {
+            if ($artist->getId() == $id) {
                 return $artist;
             }
         }
@@ -834,8 +835,8 @@ class Member
 
     public function getTicketForEvent($event): ?Ticket
     {
-        foreach($this->tickets as $ticket){
-            if ($ticket->getEvent() == $event){
+        foreach ($this->tickets as $ticket) {
+            if ($ticket->getEvent() == $event) {
                 return $ticket;
             }
         }
@@ -876,7 +877,7 @@ class Member
     {
         $bookings = $this->getNakkiBookings();
         foreach ($bookings as $b) {
-            if ($b->getEvent() == $event){
+            if ($b->getEvent() == $event) {
                 return $b;
             }
         }

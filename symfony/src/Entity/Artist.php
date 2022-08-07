@@ -232,9 +232,9 @@ class Artist
     public function setMember(?Member $member): self
     {
         $this->member = $member;
-        if(!is_null($member)){
+        if (!is_null($member)) {
             $member->addArtist($this);
-        } 
+        }
         return $this;
     }
 

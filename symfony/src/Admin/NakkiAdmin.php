@@ -25,7 +25,7 @@ final class NakkiAdmin extends AbstractAdmin
     {
         $filter
             ->add('definition');
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $filter
                 ->add('event');
         }
@@ -33,14 +33,14 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('responsible')
             ->add('startAt')
             ->add('endAt')
-            ;
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
     {
         $list
             ->add('definition');
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $list
                 ->add('event');
         }
@@ -64,7 +64,7 @@ final class NakkiAdmin extends AbstractAdmin
     {
         $form
             ->add('definition', ModelListType::class);
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $form
                 ->add('event');
         }
@@ -77,7 +77,7 @@ final class NakkiAdmin extends AbstractAdmin
                 'with_days' => false,
                 'with_hours' => true
             ])
-            ->add('startAt', DateTimePickerType::class,[
+            ->add('startAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
                 'format' => 'd.M.y, H:00',
                 'dp_use_seconds' => false,
@@ -85,7 +85,7 @@ final class NakkiAdmin extends AbstractAdmin
                 'minutes' => 00,
                 'dp_side_by_side' => true,
             ])
-            ->add('endAt', DateTimePickerType::class,[
+            ->add('endAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
                 'format' => 'd.M.y, H:00',
                 'minutes' => 00,
@@ -93,7 +93,7 @@ final class NakkiAdmin extends AbstractAdmin
                 'dp_use_minutes' => false,
                 'dp_side_by_side' => true,
             ])
-            ;
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -104,7 +104,7 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('responsible')
             ->add('startAt')
             ->add('endAt')
-            ;
+        ;
     }
     public function postPersist($nakki)
     {
@@ -112,9 +112,9 @@ final class NakkiAdmin extends AbstractAdmin
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         $hours = $diff->h;
         $hours = ($hours + ($diff->days*24)) / $nakki->getNakkiInterval()->format('%h');
-        for ($i = 0; $i < $hours; $i++){
+        for ($i = 0; $i < $hours; $i++) {
             $this->createBooking($nakki, $i);
-        } 
+        }
         $this->em->flush();
     }
     public function postUpdate($nakki)
@@ -122,23 +122,21 @@ final class NakkiAdmin extends AbstractAdmin
         $bookings = $nakki->getNakkiBookings();
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         foreach ($bookings as $booking) {
-            if ($booking->getMember()){
+            if ($booking->getMember()) {
                 $this->fl->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
                 return;
             }
         }
         $this->postDelete($nakki);
         $this->postPersist($nakki);
-
     }
     public function postDelete($nakki)
     {
         $bookings = $this->em->getRepository('App:NakkiBooking')->findBy(['nakki'=>$nakki]);
-        foreach($bookings as $b){
+        foreach ($bookings as $b) {
             $this->em->remove($b);
         }
         $this->em->flush();
-
     }
 
     public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $em=null, $flash=null)

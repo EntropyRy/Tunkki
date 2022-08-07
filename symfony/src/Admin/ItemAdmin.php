@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Admin;
 
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -23,8 +24,7 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class ItemAdmin extends AbstractAdmin
 {
-
-	protected $baseRoutePattern = 'item';
+    protected $baseRoutePattern = 'item';
     protected $mm; // Mattermost helper
     protected $ts; // Token Storage
     protected $cm; // Context Manager
@@ -36,7 +36,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $context = 'item';
         $currentContext = $this->cm->find($context);
-		$categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
+        $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
 
         $datagridMapper
             ->add('name')
@@ -53,9 +53,14 @@ class ItemAdmin extends AbstractAdmin
             ->add('needsFixing')
             ->add('cannotBeRented')
             ->add('forSale')
-            ->add('category',  null, [
+            ->add(
+                'category',
+                null,
+                [
                     'label' => 'Category'
-                ], CategorySelectorType::class,  [
+                ],
+                CategorySelectorType::class,
+                [
                     'class' => $categoryAdmin->getClass(),
                     'context' =>  $currentContext,
                     'model_manager' => $categoryAdmin->getModelManager(),
@@ -87,7 +92,7 @@ class ItemAdmin extends AbstractAdmin
                 'actions' => array(
                     'status' => array(
                         'template' => 'admin/crud/list__action_status.html.twig'
-                    ),                    
+                    ),
                     'clone' => array(
                         'template' => 'admin/crud/list__action_clone.html.twig'
                     ),
@@ -106,7 +111,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $context = 'item';
         $currentContext = $this->cm->find($context);
-		$categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
+        $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
 
         $formMapper
         ->tab('General')
@@ -118,10 +123,10 @@ class ItemAdmin extends AbstractAdmin
                 ->add('placeinstorage')
                 ->add('url')
                 ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
-				->add('commission', DatePickerType::class, [
-					'required' => false, 
-					'format' => 'd.M.y'
-				])
+                ->add('commission', DatePickerType::class, [
+                    'required' => false,
+                    'format' => 'd.M.y'
+                ])
                 ->add('purchasePrice')
                 ->add('tags', ModelAutocompleteType::class, [
                     'property' => 'name',
@@ -141,7 +146,7 @@ class ItemAdmin extends AbstractAdmin
             ->end()
             ->with('Rent Information', array('class' => 'col-md-6'))
                 ->add('whoCanRent', null, [
-                    'multiple' => true, 
+                    'multiple' => true,
                     'expanded' => true,
                     'help' => 'Select all fitting groups!'
                 ])
@@ -153,11 +158,11 @@ class ItemAdmin extends AbstractAdmin
                 ->add('forSale')
                 ->add('toSpareParts')
                 ->add('needsFixing', null, ['disabled' => true, 'help' => 'to change this use the fixing history'])
-				->end() */
+                ->end() */
         ->end();
         $subject = $this->getSubject();
-        if($subject){
-            if($subject->getCreatedAt()){
+        if ($subject) {
+            if ($subject->getCreatedAt()) {
                 $formMapper
                     ->tab('Meta')
                     ->with('history')
@@ -169,7 +174,7 @@ class ItemAdmin extends AbstractAdmin
                         ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
                         ->add('modifier', null, ['disabled' => true])
                     ->end()
-                    ;
+                ;
             }
         }
     }
@@ -234,7 +239,7 @@ class ItemAdmin extends AbstractAdmin
         $user = $this->ts->getToken()->getUser();
         $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
         $this->mm->SendToMattermost($text, 'vuokraus');
-	}
+    }
     public function preUpdate($Item)
     {
         $user = $this->ts->getToken()->getUser();
@@ -242,18 +247,18 @@ class ItemAdmin extends AbstractAdmin
         $em = $this->getModelManager()->getEntityManager($this->getClass());
         $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
         $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>:';
-        if($original['name']!= $Item->getName()) {
+        if ($original['name']!= $Item->getName()) {
             $text .= ' renamed from '.$original['name'];
-			$text .= ' by '. $user;
-			$this->mm->SendToMattermost($text, 'vuokraus');
+            $text .= ' by '. $user;
+            $this->mm->SendToMattermost($text, 'vuokraus');
         }
     }
-	public function preRemove($Item)
-	{
-		$user = $this->ts->getToken()->getUser();
+    public function preRemove($Item)
+    {
+        $user = $this->ts->getToken()->getUser();
         $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
-		$this->mm->SendToMattermost($text, 'vuokraus');
-	}
+        $this->mm->SendToMattermost($text, 'vuokraus');
+    }
     protected function configureRoutes(RouteCollection $collection)
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');

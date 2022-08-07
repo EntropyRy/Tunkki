@@ -1,21 +1,21 @@
 <?php
 
 namespace App\ParamConverter;
- 
+
 use App\Entity\Event;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
- 
+
 class EventYearParamConverter implements ParamConverterInterface
 {
     /**
      * @var Registry $registry Manager registry
      */
     private $registry;
- 
+
     /**
      * @param Registry $registry Manager registry
      */
@@ -29,7 +29,7 @@ class EventYearParamConverter implements ParamConverterInterface
     protected function getEntityClassName()
     {
         return Event::class;
-    } 
+    }
     /**
      * {@inheritdoc}
      *
@@ -49,15 +49,15 @@ class EventYearParamConverter implements ParamConverterInterface
         }
         // Get actual entity manager for class
         $em = $this->registry->getManagerForClass($this->getEntityClassName());
-		$name = $em->getClassMetadata($this->getEntityClassName())->getName();
+        $name = $em->getClassMetadata($this->getEntityClassName())->getName();
         // Check, if class name is what we need
-        if ('App\Entity\Event' !== $name ) {
+        if ('App\Entity\Event' !== $name) {
             return false;
         }
- 
+
         return true;
     }
- 
+
     /**
      * {@inheritdoc}
      *
@@ -70,24 +70,24 @@ class EventYearParamConverter implements ParamConverterInterface
     {
         $slug = $request->attributes->get('slug');
         $year  = $request->attributes->get('year');
- 
+
         // Check, if route attributes exists
         if (null === $slug || null === $year) {
             throw new \InvalidArgumentException('Route attribute is missing');
         }
- 
+
         // Get actual entity manager for class
         $em = $this->registry->getManagerForClass($this->getEntityClassName());
- 
+
         $eventRepository = $em->getRepository($this->getEntityClassName());
- 
+
         // Try to find Event by its slug and year
         $event = $eventRepository->findEventBySlugAndYear($slug, $year);
- 
+
         if (null === $event || !($event instanceof Event)) {
             throw new NotFoundHttpException(sprintf('%s object not found.', $configuration->getClass()));
         }
- 
+
         // Map found Event to the route's parameter
         $request->attributes->set($configuration->getName(), $event);
         return true;

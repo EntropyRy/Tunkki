@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
-class LinkListBlock extends BaseBlockService {
-
+class LinkListBlock extends BaseBlockService
+{
     protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
@@ -28,18 +29,20 @@ class LinkListBlock extends BaseBlockService {
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block) {
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    {
         $this->buildCreateForm($formMapper, $block);
     }
-	public function buildCreateForm(FormMapper $formMapper, BlockInterface $block) {
-		$formMapper
-			->add('settings', ImmutableArrayType::class, [
-				'keys' => [
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    {
+        $formMapper
+            ->add('settings', ImmutableArrayType::class, [
+                'keys' => [
                     ['title', TextType::class, [
                         'label' => 'List Title',
                     ]],
                     ['show', ChoiceType::class,[
-                        'choices' => [ 
+                        'choices' => [
                             'Everybody can see this' => 'everybody',
                             'Show only to logged in user' => 'in',
                             'Show only to logged out user' => 'out',
@@ -52,7 +55,7 @@ class LinkListBlock extends BaseBlockService {
                         'prototype' => true,
                         'by_reference' => false,
                         'allow_extra_fields' => true,
-                        'entry_type' => UrlsType::class,                        
+                        'entry_type' => UrlsType::class,
                     ]],
                 ]
             ]);
@@ -64,7 +67,8 @@ class LinkListBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults([
             'title' => null,
             'show' => false,
@@ -85,6 +89,4 @@ class LinkListBlock extends BaseBlockService {
     {
         return 'Link List Block';
     }
-
 }
-

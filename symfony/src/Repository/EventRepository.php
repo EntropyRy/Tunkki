@@ -54,7 +54,7 @@ class EventRepository extends ServiceEntityRepository
     public function findOneEventByTypeWithSticky($type)
     {
         $e = $this->findOneStickyEventByType($type);
-        if (is_null($e)){
+        if (is_null($e)) {
             $e = $this->findOneEventByType($type);
         }
         return $e;
@@ -70,7 +70,7 @@ class EventRepository extends ServiceEntityRepository
            ->setMaxResults(1)
            ->getQuery()
            ->getOneOrNullResult()
-           ;
+        ;
     }
     public function findOneStickyEventByType($type)
     {
@@ -85,9 +85,9 @@ class EventRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult()
-            ;
+        ;
     }
-    public function findEventBySlugAndYear($slug,$year)
+    public function findEventBySlugAndYear($slug, $year)
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.url = :val')

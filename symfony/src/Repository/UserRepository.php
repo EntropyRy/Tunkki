@@ -39,12 +39,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     public function loadUserByUsername($usernameOrEmail)
     {
         return $this->_em->createQuery(
-                'SELECT u
+            'SELECT u
                 FROM App\Entity\User u
 				INNER JOIN u.member m
                 WHERE m.username = :query
                 OR m.email = :query'
-            )
+        )
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
     }

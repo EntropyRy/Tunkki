@@ -1,13 +1,16 @@
 <?php
+
 namespace App\Helper;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use \ZMQ;
+use ZMQ;
 
-class ZMQHelper {
+class ZMQHelper
+{
     protected $bag;
 
-    public function __construct(ParameterBagInterface $bag) {
+    public function __construct(ParameterBagInterface $bag)
+    {
         $this->bag = $bag;
     }
     public function connect()
@@ -29,7 +32,7 @@ class ZMQHelper {
         } catch (\ZMQSocketException $e) {
             $resp = $e;
         }
-        if (empty($resp)){
+        if (empty($resp)) {
             $resp = 'broken';
         }
         return $resp;

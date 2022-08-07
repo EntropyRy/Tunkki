@@ -1,6 +1,9 @@
 <?php
+
 namespace App\Provider;
+
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
+
 /**
  * Class MattermostResourceOwner
  *

@@ -39,7 +39,7 @@ class StatusEventAdmin extends AbstractAdmin
      */
     protected function configureListFields(ListMapper $listMapper)
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $listMapper->add('item');
             $listMapper->add('booking');
         }
@@ -52,7 +52,7 @@ class StatusEventAdmin extends AbstractAdmin
                     'show' => [],
                     'edit' => [],
                 ]])
-            
+
         ;
     }
 
@@ -61,70 +61,70 @@ class StatusEventAdmin extends AbstractAdmin
      */
     protected function configureFormFields(FormMapper $formMapper)
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $formMapper
                 ->with('Item', ['class'=>'col-md-12'])
-				->add('item')
-				->end()
+                ->add('item')
+                ->end()
             ;
             $formMapper
                 ->with('Booking', ['class'=>'col-md-12'])
-				->add('booking')
-				->end()
+                ->add('booking')
+                ->end()
             ;
-		}
-		if ($this->getSubject()->getItem() != NULL ){
-			$events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0,5));
-			$help = '';
-			if($events){
-				foreach ($events as $event){
-					$help .= "[".$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
-				}
-			}
-			$formMapper
-				->with('Status', ['class'=>'col-md-4'])
-				->add('item.cannotBeRented', CheckboxType::class,['required' => false])
-				->add('item.needsFixing', CheckboxType::class,['required' => false])
-				->add('item.forSale', CheckboxType::class,['required' => false])
-				->add('item.toSpareParts', CheckboxType::class,['required' => false])
-				->end()
-				->with('Message', ['class' => 'col-md-8'])
-				->add('description',TextareaType::class, [
-					'required' => true,
-					'help' => $help,
-					])
-				->end()
-                ;
         }
-		if ($this->getSubject()->getBooking() != NULL ){
-			$formMapper
-				->with('Status', ['class'=>'col-md-4'])
-				->add('booking.cancelled', CheckboxType::class,['required' => false])
-				->add('booking.renterConsent', CheckboxType::class,['required' => false, 'disabled' => true])
-				->add('booking.itemsReturned', CheckboxType::class,['required' => false])
-				->add('booking.invoiceSent', CheckboxType::class,['required' => false])
-                ->add('booking.paid', CheckboxType::class,[
+        if ($this->getSubject()->getItem() != null) {
+            $events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0, 5));
+            $help = '';
+            if ($events) {
+                foreach ($events as $event) {
+                    $help .= "[".$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
+                }
+            }
+            $formMapper
+                ->with('Status', ['class'=>'col-md-4'])
+                ->add('item.cannotBeRented', CheckboxType::class, ['required' => false])
+                ->add('item.needsFixing', CheckboxType::class, ['required' => false])
+                ->add('item.forSale', CheckboxType::class, ['required' => false])
+                ->add('item.toSpareParts', CheckboxType::class, ['required' => false])
+                ->end()
+                ->with('Message', ['class' => 'col-md-8'])
+                ->add('description', TextareaType::class, [
+                    'required' => true,
+                    'help' => $help,
+                    ])
+                ->end()
+            ;
+        }
+        if ($this->getSubject()->getBooking() != null) {
+            $formMapper
+                ->with('Status', ['class'=>'col-md-4'])
+                ->add('booking.cancelled', CheckboxType::class, ['required' => false])
+                ->add('booking.renterConsent', CheckboxType::class, ['required' => false, 'disabled' => true])
+                ->add('booking.itemsReturned', CheckboxType::class, ['required' => false])
+                ->add('booking.invoiceSent', CheckboxType::class, ['required' => false])
+                ->add('booking.paid', CheckboxType::class, [
                     'required' => false,
                     'help' => 'please make sure booking handler has been selected'
                 ])
-				->add('booking.givenAwayBy', null, ['disabled' => true])
-				->add('booking.receivedBy', null, ['disabled' => true])
-				->end()
-				->with('Message', ['class' => 'col-md-8'])
-				->add('description',TextareaType::class, [
+                ->add('booking.givenAwayBy', null, ['disabled' => true])
+                ->add('booking.receivedBy', null, ['disabled' => true])
+                ->end()
+                ->with('Message', ['class' => 'col-md-8'])
+                ->add('description', TextareaType::class, [
                     'required' => true,
                     'help' => 'Describe in more detail. Will be visible for others in Mattermost.',
-					])
-				->end()
-                ;
+                    ])
+                ->end()
+            ;
         }
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $formMapper
                 ->with('Meta')
                 ->add('creator', null, array('disabled' => true))
-                ->add('createdAt',DateTimePickerType::class, array('disabled' => true))
+                ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
                 ->add('modifier', null, array('disabled' => true))
-                ->add('updatedAt',DateTimePickerType::class, array('disabled' => true))
+                ->add('updatedAt', DateTimePickerType::class, array('disabled' => true))
                 ->end()
             ;
         }
@@ -152,56 +152,56 @@ class StatusEventAdmin extends AbstractAdmin
         $Event->setModifier($user);
     }
     public function postPersist($Event)
-	{
+    {
         $user = $Event->getCreator();
-		$text = $this->getMMtext($Event, $user);
+        $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
     public function preUpdate($Event)
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
-	}
+    }
     public function postUpdate($Event)
-	{
+    {
         $user = $Event->getModifier();
-		$text = $this->getMMtext($Event, $user);
+        $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text, 'vuokraus');
-	}
-	private function getMMtext($Event, $user)
+    }
+    private function getMMtext($Event, $user)
     {
         $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|';
         $fix = null;
         $rent = null;
-        if(!empty($Event->getItem())){
+        if (!empty($Event->getItem())) {
             $thing = $Event->getItem();
             $fix = $thing->getNeedsFixing();
             $rent = $thing->getCannotBeRented();
             $text .= $thing->getName().'> ';
-            if($fix === true){
+            if ($fix === true) {
                 $text .= '**_NEEDS FIXING_** ';
-            } elseif ($fix === false){
+            } elseif ($fix === false) {
                 $text .= '**_FIXED_** ';
             }
-            if($rent === true){
+            if ($rent === true) {
                 $text .= 'cannot be rented ';
-            } elseif ($fix === false){
+            } elseif ($fix === false) {
                 $text .= 'can be rented ';
             }
         } else {
             $thing = $Event->getBooking();
             $text .= $thing->getName().'> ';
         }
-		if($Event->getDescription()){
-			$text .= 'with comment: '.$Event->getDescription();
-		}
-		$text .= ' by '. $user;
-		return $text;
-	}
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null) 
-    { 
-        $this->mm = $mm; 
-        $this->ts = $ts; 
-        parent::__construct($code, $class, $baseControllerName); 
-	}
+        if ($Event->getDescription()) {
+            $text .= 'with comment: '.$Event->getDescription();
+        }
+        $text .= ' by '. $user;
+        return $text;
+    }
+    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
+    {
+        $this->mm = $mm;
+        $this->ts = $ts;
+        parent::__construct($code, $class, $baseControllerName);
+    }
 }

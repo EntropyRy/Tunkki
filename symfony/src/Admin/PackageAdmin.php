@@ -39,7 +39,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('rentFromItems')
             ->add('whoCanRent')
   //          ->add('needsFixing')
-            ->add('itemsNeedingFixing','array')
+            ->add('itemsNeedingFixing', 'array')
             ->add('notes')
             ->add('_action', null, array(
                 'actions' => array(
@@ -58,7 +58,7 @@ class PackageAdmin extends AbstractAdmin
     {
         $p = $this->getSubject();
         $em = $this->modelManager->getEntityManager(Item::class);
-        if(is_null($p->getId())){
+        if (is_null($p->getId())) {
             $query = $em->createQueryBuilder('i')->select('i')
                     ->from('App:Item', 'i')
                     ->andWhere('i.packages is empty')
@@ -77,9 +77,9 @@ class PackageAdmin extends AbstractAdmin
             ->add('name')
             ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
             ->add('items', ModelType::class, [
-                'btn_add'=> false, 
-                'multiple'=>true, 
-                'expanded' => false, 
+                'btn_add'=> false,
+                'multiple'=>true,
+                'expanded' => false,
                 'by_reference' => false,
                 'query' => $query,
                 'help' => 'Item cannot be in two packages at the same time'

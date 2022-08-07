@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
@@ -11,17 +12,17 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 
-class BrokenItemsBlock extends BaseBlockService {
-
+class BrokenItemsBlock extends BaseBlockService
+{
     protected $em;
 
-    public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block) 
+    public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
-    public function buildiEditForm(FormMapper $formMapper, BlockInterface $block) 
+    public function buildiEditForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
-    public function getName() 
+    public function getName()
     {
         return 'Broken Items Block';
     }
@@ -30,10 +31,9 @@ class BrokenItemsBlock extends BaseBlockService {
     {
         $broken = $this->em->getRepository('App:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         $settings = $blockContext->getSettings();
-        if ($settings['random']){
-
+        if ($settings['random']) {
             shuffle($broken);
-            if (count($broken)>5){
+            if (count($broken)>5) {
                 $l = 3;
             } else {
                 $l = count($broken);
@@ -53,7 +53,8 @@ class BrokenItemsBlock extends BaseBlockService {
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver) {
+    public function configureSettings(OptionsResolver $resolver)
+    {
         $resolver->setDefaults(array(
             'position' => '1',
             'random' => false,
@@ -62,4 +63,3 @@ class BrokenItemsBlock extends BaseBlockService {
         ));
     }
 }
-

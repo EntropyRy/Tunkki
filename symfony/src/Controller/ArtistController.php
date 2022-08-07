@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Controller;
@@ -27,7 +28,7 @@ class ArtistController extends AbstractController
     public function index(Request $request, Security $security)
     {
         $member = $security->getUser()->getMember();
-        
+
         return $this->render('artist/main.html.twig', [
             'member' => $member,
         ]);
@@ -45,17 +46,17 @@ class ArtistController extends AbstractController
             try {
                 $em->persist($artist);
                 $em->flush();
-                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL );
-                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL );
+                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
                 $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName().'; **LINKS**: [FI]('. $url_fi .'), [EN]('. $url_en .')' ;
                 $mm->SendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');
-                if($referer){
+                if ($referer) {
                     $request->getSession()->remove('referer');
                     return $this->redirect($referer);
                 }
                 return $this->redirectToRoute('entropy_artist_profile');
-            } catch (UniqueConstraintViolationException $e){
+            } catch (UniqueConstraintViolationException $e) {
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));
             }
         }
@@ -63,7 +64,6 @@ class ArtistController extends AbstractController
             'artist' => $artist,
             'form' => $form->createView()
         ]);
-
     }
     public function edit(Request $request, Security $security, FormFactoryInterface $formF)
     {

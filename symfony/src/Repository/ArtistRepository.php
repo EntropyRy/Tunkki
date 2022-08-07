@@ -35,7 +35,7 @@ class ArtistRepository extends ServiceEntityRepository
         ;
     }
     */
-   
+
     /*
     public function findOneBySomeField($value): ?Artist
     {

@@ -36,18 +36,18 @@ class MemberFormPage implements PageServiceInterface
     private $passwordEncoder;
     private $flash;
 
-    public function __construct($name, 
-        TemplateManager $templateManager, 
-        EntityManagerInterface $em, 
-        MailerInterface $mailer, 
+    public function __construct(
+        $name,
+        TemplateManager $templateManager,
+        EntityManagerInterface $em,
+        MailerInterface $mailer,
         FormFactoryInterface $formF,
         ParameterBagInterface $bag,
         Environment $twig,
         Mattermost $mm,
         UserPasswordEncoderInterface $passwordEncoder,
         FlashBagInterface $flash
-    )
-    {
+    ) {
         $this->name             = $name;
         $this->templateManager  = $templateManager;
         $this->em               = $em;
@@ -59,7 +59,10 @@ class MemberFormPage implements PageServiceInterface
         $this->flash            = $flash;
         $this->passwordEncoder  = $passwordEncoder;
     }
-    public function getName(){ return $this->name;}
+    public function getName()
+    {
+        return $this->name;
+    }
 
     public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
     {
@@ -72,7 +75,7 @@ class MemberFormPage implements PageServiceInterface
                 $memberRepo = $this->em->getRepository(Member::class);
                 $name = $memberRepo->getByName($member->getFirstname(), $member->getLastname());
                 $email = $memberRepo->getByEmail($member->getEmail());
-                if(!$name && !$email){
+                if (!$name && !$email) {
                     $user = $member->getUser();
                     $user->setPassword($this->passwordEncoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getlocale());
@@ -92,8 +95,8 @@ class MemberFormPage implements PageServiceInterface
         }
 
         return $this->templateManager->renderResponse(
-            $page->getTemplateCode(), 
-            array_merge($parameters,array('form'=>$form->createView())), 
+            $page->getTemplateCode(),
+            array_merge($parameters, array('form'=>$form->createView())),
             $response
         );
     }
@@ -103,18 +106,18 @@ class MemberFormPage implements PageServiceInterface
         $email = (new TemplatedEmail())
             ->from(new Address($this->bag->get('mailer_sender_address'), 'Tunkki'))
             ->to($member->getEmail())
-            ->subject( $email_content->getSubject() )
+            ->subject($email_content->getSubject())
             ->htmlTemplate('emails/member.html.twig')
             ->context([
                 'email_data' => $email_content,
             ])
-            ;
+        ;
         $mailer->send($email);
     }
     public function addToInfoMailingList($member)
     {
         $client = HttpClient::create();
-        $response = $client->request('POST', 'https://list.ayy.fi/postorius/lists/tiedotus.entropy.fi/subscribe',[
+        $response = $client->request('POST', 'https://list.ayy.fi/postorius/lists/tiedotus.entropy.fi/subscribe', [
             'query' => [
                 'email' => $member->getEmail(),
                 'display_name' => $member->getName()
@@ -127,5 +130,4 @@ class MemberFormPage implements PageServiceInterface
         $text = '**New Member: '.$member.'**';
         $this->mm->SendToMattermost($text, 'yhdistys');
     }
-    
 }

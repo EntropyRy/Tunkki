@@ -7,13 +7,12 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-
 /**
  * @ORM\Entity(repositoryClass=TicketRepository::class)
  */
 class Ticket
 {
-    const STATUSES = ['available', 'reserved', 'paid'];
+    public const STATUSES = ['available', 'reserved', 'paid'];
 
     /**
      * @ORM\Id

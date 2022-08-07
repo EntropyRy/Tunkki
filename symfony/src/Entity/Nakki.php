@@ -64,7 +64,8 @@ class Nakki
     public function __construct()
     {
         $this->nakkiBookings = new ArrayCollection();
-        $this->nakkiInterval = new \DateInterval('PT1H');;
+        $this->nakkiInterval = new \DateInterval('PT1H');
+        ;
     }
 
     public function __toString()
@@ -165,14 +166,14 @@ class Nakki
 
         return $this;
     }
-    
+
     public function getTimes()
     {
         $times = [];
         $diff = $this->getStartAt()->diff($this->getEndAt());
         $hours = $diff->h;
         $hours = ($hours + ($diff->days*24)) / $this->getNakkiInterval()->format('%h');
-        for ($i = 0; $i < $hours; $i++){
+        for ($i = 0; $i < $hours; $i++) {
             $start = $i*$this->getNakkiInterval()->format('%h');
             $times[] = $this->getStartAt()->modify($start.' hour');
         }
@@ -181,9 +182,9 @@ class Nakki
 
     public function getMemberByTime($date)
     {
-        foreach ($this->getNakkiBookings() as $booking){
-            if($booking->getStartAt() == $date){
-                if ($booking->getMember()){
+        foreach ($this->getNakkiBookings() as $booking) {
+            if ($booking->getStartAt() == $date) {
+                if ($booking->getMember()) {
                     return $booking->getMember();
                 }
             }
@@ -214,5 +215,4 @@ class Nakki
 
         return $this;
     }
-
 }

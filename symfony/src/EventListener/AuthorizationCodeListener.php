@@ -1,7 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\EventListener;
+
 use Nyholm\Psr7\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -26,7 +28,7 @@ final class AuthorizationCodeListener
     public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event)
     {
         if (null !== $event->getUser()) {
-            if ($event->getUser()->getMember()->getIsActiveMember()){
+            if ($event->getUser()->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
                 $this->session->getFlashbag()->add('warning', 'profile.only_for_active_members');
@@ -38,7 +40,6 @@ final class AuthorizationCodeListener
                     )
                 );
             }
-
         } else {
             $event->setResponse(
                 new Response(

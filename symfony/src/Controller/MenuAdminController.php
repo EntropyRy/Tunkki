@@ -6,13 +6,12 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
-
 class MenuAdminController extends CRUDController
 {
     protected $em;
     public function listAction(Request $request = null)
     {
-         return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));
+        return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));
     }
     /**
      * @return Response
@@ -35,5 +34,4 @@ class MenuAdminController extends CRUDController
             'csrf_token' => $this->getCsrfToken('sonata.batch'),
         ]);
     }
-
 }

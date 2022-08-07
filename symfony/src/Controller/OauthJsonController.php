@@ -19,11 +19,11 @@ class OauthJsonController extends AbstractController
     public function me(Request $request, Security $security): JsonResponse
     {
         $user = $security->getUser();
-        $hash = new Hashids('dalt',6);
+        $hash = new Hashids('dalt', 6);
         $id = $hash->encode($user->getId());
         return new JsonResponse([
             'id' => $id,
-            'username' => $user->getUsername(), 
+            'username' => $user->getUsername(),
             'email' => $user->getEmail(),
             'active_member' => $user->getMember()->getIsActiveMember()
         ]);

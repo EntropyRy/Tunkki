@@ -10,14 +10,14 @@ namespace App\Repository;
  */
 class PackagesRepository extends \Doctrine\ORM\EntityRepository
 {
-	public function getPackageChoicesWithPrivileges($privileges)
-	{
-		$queryBuilder = $this->createQueryBuilder('p')
-				   ->andWhere('p.rent >= 0.00')
-				   ->leftJoin('p.whoCanRent', 'r')
-				   ->andWhere('r = :privilege')
-				   ->setParameter('privilege', $privileges)
-				   ->orderBy('p.name', 'ASC');
-		return $queryBuilder->getQuery()->getResult();
-	}
+    public function getPackageChoicesWithPrivileges($privileges)
+    {
+        $queryBuilder = $this->createQueryBuilder('p')
+                   ->andWhere('p.rent >= 0.00')
+                   ->leftJoin('p.whoCanRent', 'r')
+                   ->andWhere('r = :privilege')
+                   ->setParameter('privilege', $privileges)
+                   ->orderBy('p.name', 'ASC');
+        return $queryBuilder->getQuery()->getResult();
+    }
 }

@@ -112,7 +112,6 @@ class TicketRepository extends ServiceEntityRepository
     }
     public function findAvailableTicket($event): ?Ticket
     {
-
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
             ->andWhere('t.status = :status')
@@ -127,8 +126,8 @@ class TicketRepository extends ServiceEntityRepository
     public function findAvailablePresaleTicket($event): ?Ticket
     {
         $all = $this->findPresaleTickets($event);
-        foreach ($all as $ticket){
-            if ($ticket->getStatus() == 'available' && is_null($ticket->getOwner())){
+        foreach ($all as $ticket) {
+            if ($ticket->getStatus() == 'available' && is_null($ticket->getOwner())) {
                 return $ticket;
             }
         }

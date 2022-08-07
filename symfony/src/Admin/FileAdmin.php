@@ -21,7 +21,7 @@ class FileAdmin extends AbstractAdmin
             ->add('fileinfo')
             ->add('file')
         ;
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $datagridMapper
                 ->add('product')
             ;
@@ -37,7 +37,7 @@ class FileAdmin extends AbstractAdmin
             ->addIdentifier('fileinfo')
             ->add('file', null, ['template' => 'admin/file/_image_preview.html.twig'])
             ->add('downloadLink', 'html');
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $listMapper->add('product');
         }
         $listMapper
@@ -66,7 +66,7 @@ class FileAdmin extends AbstractAdmin
                 ]
             ])
         ;
-        if(!$this->isChild()){
+        if (!$this->isChild()) {
             $formMapper
                 ->add('product')
             ;

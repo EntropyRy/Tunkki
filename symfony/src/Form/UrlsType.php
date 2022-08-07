@@ -25,14 +25,14 @@ final class UrlsType extends AbstractType
                 'help' => 'Click: <a class="icopy" data-i="fab fa-soundcloud" href="#"><i class="fab fa-soundcloud"></i></a> | <a class="icopy" data-i="fab fa-facebook" href="#"><i class="fab fa-facebook"></i></a> | <a class="icopy" data-i="fas fa-music" href="#"><i class="fas fa-music"></i></a> | Check the <a target=_blank href="https://fontawesome.com/icons">icon list</a>',
                 'attr' => ['placeholder' => 'fab fa-soundcloud']
             ])
-            ->add('title', TextType::class,[
+            ->add('title', TextType::class, [
                 'label' => 'url.form.title',
                 'attr' => ['placeholder' => 'Soundcloud']
             ])
-            ->add('open_in_new_window', CheckboxType::class,[
+            ->add('open_in_new_window', CheckboxType::class, [
                 'required' => false,
                 'label'=> 'url.form.open_in_new_window',
             ])
-            ;
+        ;
     }
 }

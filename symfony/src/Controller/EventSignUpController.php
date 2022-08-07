@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use App\Controller\EventController;
@@ -30,13 +31,12 @@ class EventSignUpController extends EventController
      */
     public function nakkiCancel(
         Request $request,
-        Event $event, 
-        Mattermost $mm, 
-        NakkiBooking $booking 
-    ): Response
-    {
+        Event $event,
+        Mattermost $mm,
+        NakkiBooking $booking
+    ): Response {
         $member = $this->getUser()->getMember();
-        if ($booking->getMember() == $member){
+        if ($booking->getMember() == $member) {
             $booking->setMember(null);
             $em = $this->getDoctrine()->getManager();
             $em->persist($booking);
@@ -53,23 +53,22 @@ class EventSignUpController extends EventController
      */
     public function nakkiSignUp(
         Request $request,
-        Event $event, 
-        Mattermost $mm, 
-        NakkiBooking $booking 
-    ): Response
-    {
+        Event $event,
+        Mattermost $mm,
+        NakkiBooking $booking
+    ): Response {
         $member = $this->getUser()->getMember();
-        if (!$member->getUsername()){
+        if (!$member->getUsername()) {
             $this->addFlash('danger', 'Nakki is not reserved! Please define username in you profile');
             return $this->redirect($request->headers->get('referer'));
         }
-        if ($event->getNakkikoneEnabled()){
-            if(is_null($booking->getMember())){
+        if ($event->getNakkikoneEnabled()) {
+            if (is_null($booking->getMember())) {
                 $em = $this->getDoctrine()->getManager();
                 $repo = $em->getRepository('App:NakkiBooking');
-                if ($event->getRequireNakkiBookingsToBeDifferentTimes()){
+                if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
                     $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
-                    if($sameTime){
+                    if ($sameTime) {
                         $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
                         return $this->redirect($request->headers->get('referer'));
                     }
@@ -95,13 +94,12 @@ class EventSignUpController extends EventController
     public function nakkikone(
         Request $request,
         Event $event,
-        NakkiBookingRepository $repo 
-    ): Response
-    {
+        NakkiBookingRepository $repo
+    ): Response {
         $locale = $request->getLocale();
         $member = $this->getUser()->getMember();
         $selected = $repo->findMemberEventBookings($member, $event);
-        if (!$event->getNakkikoneEnabled()){
+        if (!$event->getNakkikoneEnabled()) {
             $this->addFlash('warning', 'Nakkikone is not enabled');
         }
         return $this->render('nakkikone.html.twig', [
@@ -116,9 +114,8 @@ class EventSignUpController extends EventController
      */
     public function responsible(
         Request $request,
-        Event $event 
-    ): Response
-    {
+        Event $event
+    ): Response {
         return $this->render('list_nakki_info_for_responsible.html.twig', [
             'event' => $event,
             //'form' => $form->createView(),
@@ -127,19 +124,19 @@ class EventSignUpController extends EventController
     protected function getNakkis($event, $member, $locale)
     {
         $nakkis = [];
-        foreach ( $event->getNakkiBookings() as $booking ){
+        foreach ($event->getNakkiBookings() as $booking) {
             $name = $booking->getNakki()->getDefinition()->getName($locale);
             $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
-            if ( $booking->getNakki()->getDefinition()->getOnlyForActiveMembers() ){
+            if ($booking->getNakki()->getDefinition()->getOnlyForActiveMembers()) {
                 if ($member->getIsActiveMember()) {
                     $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
                     $nakkis[$name]['bookings'][] = $booking;
                     $nakkis[$name]['durations'][$duration] = $duration;
-                    if(is_null($booking->getMember())){
-                        if (!array_key_exists('not_reserved', $nakkis[$name])){
+                    if (is_null($booking->getMember())) {
+                        if (!array_key_exists('not_reserved', $nakkis[$name])) {
                             $nakkis[$name]['not_reserved'] = 1;
                         } else {
-                            $nakkis[$name]['not_reserved'] +=1; 
+                            $nakkis[$name]['not_reserved'] +=1;
                         }
                     }
                 }
@@ -147,11 +144,11 @@ class EventSignUpController extends EventController
                 $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
                 $nakkis[$name]['bookings'][] = $booking;
                 $nakkis[$name]['durations'][$duration] = $duration;
-                if(is_null($booking->getMember())){
-                    if (!array_key_exists('not_reserved', $nakkis[$name])){
+                if (is_null($booking->getMember())) {
+                    if (!array_key_exists('not_reserved', $nakkis[$name])) {
                         $nakkis[$name]['not_reserved'] = 1;
                     } else {
-                        $nakkis[$name]['not_reserved'] +=1; 
+                        $nakkis[$name]['not_reserved'] +=1;
                     }
                 }
             }
@@ -161,19 +158,19 @@ class EventSignUpController extends EventController
     protected function getNakkiFromGroup($event, $member, $selected, $locale)
     {
         $nakkis = [];
-        foreach ( $event->getNakkis() as $nakki ){
-            foreach ( $selected as $booking ){
-                if ($booking->getNakki() == $nakki){
+        foreach ($event->getNakkis() as $nakki) {
+            foreach ($selected as $booking) {
+                if ($booking->getNakki() == $nakki) {
                     $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
                     break;
                 }
             }
-            if(!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)){
+            if (!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)) {
                 // try to prevent displaying same nakki to 2 different users using the system at the same time
                 $bookings = $nakki->getNakkiBookings()->toArray();
                 shuffle($bookings);
-                foreach ( $bookings as $booking ){
-                    if(is_null($booking->getMember())){ 
+                foreach ($bookings as $booking) {
+                    if (is_null($booking->getMember())) {
                         $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
                         break;
                     }
@@ -195,16 +192,15 @@ class EventSignUpController extends EventController
      * @ParamConverter("event", class="App:Event", converter="event_year_converter")
      */
     public function RSVP(
-        Request $request, 
-        Event $event, 
+        Request $request,
+        Event $event,
         TranslatorInterface $trans
-    ): Response
-    {
+    ): Response {
         $member = $this->getUser()->getMember();
-        if(empty($member)){
+        if (empty($member)) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        
+
         $slug = $event->getUrl();
         $year = $request->get('year');
         /*
@@ -213,11 +209,11 @@ class EventSignUpController extends EventController
         }
         $event = $this->em->getRepository(Event::class)
                           ->findEventBySlugAndYear($slug, $year);*/
-        foreach ($member->getRSVPs() as $rsvp){
-            if ($rsvp->getEvent() == $event){
+        foreach ($member->getRSVPs() as $rsvp) {
+            if ($rsvp->getEvent() == $event) {
                 $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
                 return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
-            } 
+            }
         }
         $this->em = $this->getDoctrine()->getManager();
         $rsvp = new RSVP();
@@ -227,25 +223,23 @@ class EventSignUpController extends EventController
         $this->em->flush();
         $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
         return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
-
     }
     /**
      * @ParamConverter("event", class="App:Event", converter="event_year_converter")
      */
     public function artistSignUp(
-        Request $request, 
-        Event $event, 
+        Request $request,
+        Event $event,
         TranslatorInterface $trans
-    ): Response
-    {
+    ): Response {
         $artists = $this->getUser()->getMember()->getArtist();
-        if (count($artists)==0){
+        if (count($artists)==0) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
         }
 
-        if(!$event->getArtistSignUpNow()){
+        if (!$event->getArtistSignUpNow()) {
             $this->addFlash('warning', $trans->trans('Not allowed'));
             return new RedirectResponse($this->generateUrl('entropy_profile'));
         }
@@ -284,7 +278,6 @@ class EventSignUpController extends EventController
                 return new RedirectResponse($this->generateUrl('entropy_profile'));
             } catch (\Exception $e) {
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
-
             }
         }
         //$page = $cms->retrieve()->getCurrentPage();

@@ -126,7 +126,7 @@ class BillableEvent
 
     public function __toString()
     {
-        if (!empty($this->getUnitPrice())){
+        if (!empty($this->getUnitPrice())) {
             return $this->description ? $this->description.': '.$this->getUnitPrice() : '';
         } else {
             return '';

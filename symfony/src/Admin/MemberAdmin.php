@@ -82,11 +82,11 @@ final class MemberAdmin extends AbstractAdmin
     {
         $editable = false;
         $object = $this->getSubject();
-        if ($object and !empty($object->getApplication())){
+        if ($object and !empty($object->getApplication())) {
             $editable = true;
         }
         $formMapper
-            ->with('Base',['class' => 'col-md-4'])
+            ->with('Base', ['class' => 'col-md-4'])
             ->add('artist')
             ->add('username')
             ->add('firstname')
@@ -96,33 +96,33 @@ final class MemberAdmin extends AbstractAdmin
             ->add('CityOfResidence')
             ->add('locale')
             ->end()
-            ->with('Membership status',['class' => 'col-md-4'])
+            ->with('Membership status', ['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
-            ->add('isActiveMember',null, ['help' => 'Grants access to Entropy systems'])
-            ->add('isFullMember',null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
+            ->add('isActiveMember', null, ['help' => 'Grants access to Entropy systems'])
+            ->add('isFullMember', null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
             ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
                 'required' => false,
                 'help' => 'Grants free access to Entropy parties'
             ])
             //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
-            ->with('Membership info',['class' => 'col-md-4'])
+            ->with('Membership info', ['class' => 'col-md-4'])
             ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
             ->add('ApplicationHandledDate', DatePickerType::class, [
-                'required' => false, 
+                'required' => false,
                 'help'=>'doubles as accepted as active member date'
             ])
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
-            ;
+        ;
         //if (is_null($this->getSubject()->getApplicationHandledDate())){
-            $formMapper
+        $formMapper
                 ->with('Membership info')
                 ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
                 ->add('rejectReasonSent')
                 ->end()
-                ;
+        ;
         //}
     }
 
@@ -152,7 +152,7 @@ final class MemberAdmin extends AbstractAdmin
         //$collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
         //$collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
-    }   
+    }
     public function getExportFields()
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'isFullMember', 'AcceptedAsHonoraryMember'];
@@ -162,8 +162,8 @@ final class MemberAdmin extends AbstractAdmin
         $text = '**Member deleted: '.$member.'**';
         $this->mm->SendToMattermost($text, 'yhdistys');
     }
-    public function setMattermostHelper(Mattermost $mm): self 
-    { 
+    public function setMattermostHelper(Mattermost $mm): self
+    {
         $this->mm = $mm;
         return $this;
     }

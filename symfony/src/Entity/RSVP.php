@@ -135,14 +135,14 @@ class RSVP
 
     public function getAvailableLastName()
     {
-        if ($this->getMember()){
+        if ($this->getMember()) {
             return ucfirst($this->getMember()->getLastname());
         }
         return ucfirst($this->lastName);
     }
     public function getAvailableEmail()
     {
-        if ($this->getMember()){
+        if ($this->getMember()) {
             return $this->getMember()->getEmail();
         }
         return $this->email;
