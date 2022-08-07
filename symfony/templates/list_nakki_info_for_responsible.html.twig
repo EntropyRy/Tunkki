@@ -16,7 +16,10 @@
 {% for name,nakki in infos %}
 <h3>Nakki: {{ name }}
     {% if nakki.mattermost is not empty %}
-        <a class="btn btn-secondary float-end" target="_black" href="{{nakki.mattermost}}"><i class="fa-solid fa-up-right-from-square"></i> Mattermost</a>
+        <a class="btn btn-secondary float-end"
+            target="_black" href="{{nakki.mattermost}}">
+            <i class="fa-solid fa-up-right-from-square"></i> Mattermost
+        </a>
     {% endif %}
 </h3>
 {% if nakki.responsible is not null %}
@@ -25,7 +28,7 @@
 {% endif %}
 <table class="table table-striped
     {% if event.headerTheme == 'dark' %}
-        table-dark 
+        table-dark
     {% endif %}
     ">
   <thead>
@@ -46,8 +49,8 @@
 			<th>{{b.member.username}}</th>
 			<td>{{b.member.name}}</td>
               {% if not gdpr|default(false) %}
-			<td>{{b.member.phone}}</td> 	    
-			<td>{{b.member.email}}</td> 	    
+			<td>{{b.member.phone}}</td>
+			<td>{{b.member.email}}</td>
               {% endif %}
             {# <td>{{b.startAt|date}}</th> #}
 		</tr>

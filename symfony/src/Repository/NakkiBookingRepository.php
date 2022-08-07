@@ -22,7 +22,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
     /**
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
-    
+
     public function findMemberEventBookings($member, $event)
     {
         return $this->createQueryBuilder('n')
@@ -56,7 +56,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    
+
     public function findEventNakkiCount($booking, $event)
     {
         $definition = $booking->getNakki()->getDefinition();
