@@ -113,4 +113,9 @@ class NakkiBooking
 
         return $this;
     }
+
+    public function getMemberEmail(): ?string
+    {
+        return $this->member?$this->member->getEmail():null;
+    }
 }

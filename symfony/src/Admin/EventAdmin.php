@@ -95,6 +95,9 @@ final class EventAdmin extends AbstractAdmin
                     ]);
                 }
             }
+            $menu->addChild('Emails', [
+               'uri' => $admin->generateUrl('entropy.admin.event|admin.email.list', ['id' => $id])
+            ]);
             $menu->addChild('Preview', [
                 'route' => 'entropy_event',
                 'routeParameters' => [
@@ -425,8 +428,6 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
-        $collection->add('email', $this->getRouterIdParameter().'/email');
-        $collection->add('emailSend', $this->getRouterIdParameter().'/email/send');
         $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }

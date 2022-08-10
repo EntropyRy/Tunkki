@@ -382,6 +382,7 @@ services:
             - [addChild, ['@entropy.admin.nakki_booking', 'event']]
             - [addChild, ['@entropy.admin.rsvp', 'event']]
             - [addChild, ['@admin.ticket', 'event']]
+            - [addChild, ['@admin.email', 'event']]
         public: true
 
     admin.event_artist_info:

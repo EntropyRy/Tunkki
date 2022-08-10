@@ -292,6 +292,11 @@ class Event
      */
     private $requireNakkiBookingsToBeDifferentTimes = true;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Email::class, mappedBy="event")
+     */
+    private $emails;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -445,6 +450,7 @@ body {
         $this->nakkis = new ArrayCollection();
         $this->nakkiBookings = new ArrayCollection();
         $this->tickets = new ArrayCollection();
+        $this->emails = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1163,5 +1169,35 @@ body {
             $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
         }
         return $bookings;
+    }
+
+    /**
+     * @return Collection<int, Email>
+     */
+    public function getEmails(): Collection
+    {
+        return $this->emails;
+    }
+
+    public function addEmail(Email $email): self
+    {
+        if (!$this->emails->contains($email)) {
+            $this->emails[] = $email;
+            $email->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEmail(Email $email): self
+    {
+        if ($this->emails->removeElement($email)) {
+            // set the owning side to null (unless already changed)
+            if ($email->getEvent() === $this) {
+                $email->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

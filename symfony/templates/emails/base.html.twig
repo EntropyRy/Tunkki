@@ -64,5 +64,8 @@
 </td>
 </tr>
 </table>
+{% if admin is defined and admin.isChild %}
+    <a href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a></p>
+{% endif %}
 </body></html>
 

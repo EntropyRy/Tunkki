@@ -20,6 +20,7 @@ final class EmailAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('purpose')
+            ->add('event')
             ->add('subject')
             ->add('body')
         ;
@@ -27,8 +28,15 @@ final class EmailAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-        $listMapper
-            ->addIdentifier('purpose')
+        if (!$this->isChild()){
+            $listMapper
+                ->add('event')
+                ->addIdentifier('purpose');
+        } else {
+            $listMapper
+                ->addIdentifier('purpose');
+        }
+            $listMapper
             ->add('subject')
             ->add('body', 'html')
             ->add('updatedAt', 'datetime')
@@ -44,6 +52,7 @@ final class EmailAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
+        if (!$this->isChild()){
         $formMapper
             ->add('purpose', ChoiceType::class, [
                 'choices' => [
@@ -53,13 +62,35 @@ final class EmailAdmin extends AbstractAdmin
                     //'Booking Email' => 'booking',
                     //'Other' => 'other'
                 ],
+                'required' => false,
+                'expanded' => true,
+                'multiple' => false,
+                'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
+            ]);
+        } else {
+        $formMapper
+            ->add('purpose', ChoiceType::class, [
+                'choices' => [
+                    'To RSVP' => 'rsvp',
+                    'To reserved and paid tickets holders' => 'ticket',
+                    'To people who have reserved Nakki' => 'nakkikone',
+                    //'Booking Email' => 'booking',
+                    //'Other' => 'other'
+                ],
+                'required' => false,
                 'expanded' => true,
                 'multiple' => false,
                 'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ])
+                ->add('replyTo', null, [
+                    'help' => 'Empty defaults to hallitus@entropy.fi'
+                ]);
+
+        }
+        $formMapper
             ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
-            ->add('addLoginLinksToFooter', null, ['help' => 'adds links to tunkki login, usually not needed in emails defined here'])
+            ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login'])
         ;
     }
 
@@ -75,8 +106,9 @@ final class EmailAdmin extends AbstractAdmin
         ;
     }
 
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('preview', $this->getRouterIdParameter().'/preview');
+        $collection->add('send', $this->getRouterIdParameter().'/send');
     }
 }

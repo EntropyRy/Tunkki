@@ -28,7 +28,7 @@ class Email
     private $body;
 
     /**
-     * @ORM\Column(type="string", length=255, unique=true)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $purpose;
 
@@ -48,6 +48,16 @@ class Email
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $addLoginLinksToFooter;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="emails")
+     */
+    private $event;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $replyTo;
 
     public function getId(): ?int
     {
@@ -127,6 +137,30 @@ class Email
     }
     public function __toString()
     {
-        return $this->purpose;
+        return $this->purpose ? $this->purpose : 'Email for '.$this->event;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): self
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function getReplyTo(): ?string
+    {
+        return $this->replyTo;
+    }
+
+    public function setReplyTo(?string $replyTo): self
+    {
+        $this->replyTo = $replyTo;
+
+        return $this;
     }
 }
