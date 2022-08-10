@@ -76,6 +76,7 @@ sonata_admin:
                     - entropy_tunkki.admin.member
                     - admin.email
                     - admin.door_log
+                roles: [SONATA_SUPER_ADMIN, MEMBERS]
 
             sonata.admin.group.config:
                 label:           Configuration
