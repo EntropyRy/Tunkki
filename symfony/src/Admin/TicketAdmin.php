@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use App\Entity\Ticket;
 
 final class TicketAdmin extends AbstractAdmin
@@ -34,7 +35,17 @@ final class TicketAdmin extends AbstractAdmin
             ->add('owner')
             ->add('recommendedBy')
             ->add('referenceNumber')
-            ->add('status')
+            ->add('status', ChoiceFilter::class, [
+                'field_type' => ChoiceType::class, 
+                'field_options' =>
+                [
+                    'multiple' => true,
+                    'choices' => [
+                        'available' => 'available',
+                        'reserved' => 'reserved',
+                        'paid' => 'paid'
+                    ]
+                ]])
             ->add('updatedAt')
         ;
     }

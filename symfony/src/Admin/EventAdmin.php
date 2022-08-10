@@ -425,6 +425,8 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
+        $collection->add('email', $this->getRouterIdParameter().'/email');
+        $collection->add('emailSend', $this->getRouterIdParameter().'/email/send');
         $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }

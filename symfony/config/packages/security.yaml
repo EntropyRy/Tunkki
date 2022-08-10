@@ -15,7 +15,7 @@ security:
             - ROLE_ENTROPY_ADMIN_EVENT_CREATE
             - ROLE_ENTROPY_ADMIN_EVENT_VIEW
             - ROLE_ADMIN_TICKET_ALL
-            - ROLE_ADMIN_RSVP_ALL
+            - ROLE_ENTROPY_ADMIN_RSVP_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_BOOKING_ALL
             - ROLE_ENTROPY_ADMIN_NAKKI_DEFINITION_ALL
@@ -89,7 +89,7 @@ security:
             pattern: ^/api/me
             security: true
             stateless: true
-            oauth2: true        
+            oauth2: true
         main:
             user_checker: security.user_checker
             pattern:            .*
