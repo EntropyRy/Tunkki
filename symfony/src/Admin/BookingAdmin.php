@@ -14,16 +14,12 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\AdminBundle\Route\RouteCollection;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\DateRangePickerType;
 use Sonata\Form\Type\DateTimeRangePickerType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\CollectionType;
-use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use App\Form\ItemsType;
 use App\Form\PackagesType;
@@ -48,7 +44,7 @@ class BookingAdmin extends AbstractAdmin
         '_sort_by' => 'createdAt',
     ];
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
             return;
@@ -79,7 +75,7 @@ class BookingAdmin extends AbstractAdmin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('name')
@@ -101,7 +97,7 @@ class BookingAdmin extends AbstractAdmin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('name')
@@ -124,7 +120,7 @@ class BookingAdmin extends AbstractAdmin
             ))
         ;
     }
-    private function getCategories($choices = null)
+    private function getCategories($choices = null): array
     {
         $root = $this->cm->getRootCategory('item');
         // map categories
@@ -144,7 +140,7 @@ class BookingAdmin extends AbstractAdmin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper):void
     {
         $subject = $this->getSubject();
         $bookings = null;
@@ -303,7 +299,7 @@ class BookingAdmin extends AbstractAdmin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('name')
