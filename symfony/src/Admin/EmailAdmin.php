@@ -80,7 +80,6 @@ final class EmailAdmin extends AbstractAdmin
                 'required' => false,
                 'expanded' => true,
                 'multiple' => false,
-                'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ])
                 ->add('replyTo', null, [
                     'help' => 'Empty defaults to hallitus@entropy.fi'

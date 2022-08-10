@@ -87,7 +87,7 @@ final class MemberAdminController extends CRUDController
             ->to($object->getEmail())
             ->subject($email->getSubject())
             ->htmlTemplate('emails/member.html.twig')
-            ->context(['email_data' => $email ])
+            ->context(['body' => $email->getBody() ])
         ;
         $this->get('symfony.mailer')->send($message);
         //$this->admin->update($object);

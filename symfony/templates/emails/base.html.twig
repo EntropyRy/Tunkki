@@ -26,13 +26,15 @@
                             <table border="0" cellpadding="0" cellspacing="0" style="padding: 20px 50px 0; text-align: center; width: 100%;">
                                 <tr>
                                     <td style="border-bottom: 1px solid #ddd; margin: 10px 0 20px;">
-<table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
-                                    </td>
-                                    <td style="text-align: left">
-                                        {% set content = block('content') is defined ? block('content') : email.body|raw %}
-                                        {% if content|length > 0 %}
-                                            {{ content|raw }}
-                                        {% endif %}
+                                        <table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
+                                        <tr>
+                                        <td style="text-align: left">
+                                            {% set content = block('content') is defined ? block('content') : body|raw %}
+                                            {% if content|length > 0 %}
+                                                {{ content|raw }}
+                                            {% endif %}
+                                        </td>
+                                        </tr>
                                     </td>
                                 </tr>
                             </table>
@@ -44,8 +46,7 @@
                             <a href="https://entropy.fi">entropy.fi</a>
                         </td>
                     </tr>
-                    {% if email.addLoginLinksToFooter is defined %}
-                    {% if email.addLoginLinksToFooter %}
+                    {% if email.addLoginLinksToFooter|default(false) or links|default(false) %}
                     <tr>
                         <td style="text-align: center;color: #AAA; font-size: 11px; padding-bottom: 10px;">
                             <p style="padding: 0 50px;">
@@ -56,7 +57,6 @@
                         </td>
                     </tr>
                     {% endif %}
-                    {% endif %}
                 </table>
             </td>
         </tr>
@@ -65,7 +65,21 @@
 </tr>
 </table>
 {% if admin is defined and admin.isChild %}
-    <a href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a></p>
+<style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  width: 80%;
+  margin: 40px auto;
+}
+</style>
+    <a class="button" href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a></p>
 {% endif %}
 </body></html>
 
