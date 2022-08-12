@@ -65,18 +65,18 @@
                                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         {% if page is defined %}
-                                            <li class="dropdown-item"><a href="{{ sonata_admin.objectUrl('sonata.page.admin.page', 'edit', page) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a></li>
-                                            <li class="dropdown-item"><a href="{{ sonata_admin.objectUrl('sonata.page.admin.page|sonata.page.admin.snapshot', 'list', page) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a></li>
+                                            <li class="dropdown-item"><a href="{{ path('admin_sonata_page_page_edit', {'id':page.id})}}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a></li>
+                                            <li class="dropdown-item"><a href="{{ path('admin_sonata_page_snapshot_list', {'id':page.id}) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a></li>
                                             <div class="dropdown-divider"></div>
                                         {% endif %}
 
-                                        <li class="dropdown-item"><a href="{{ sonata_admin.url('sonata.page.admin.page', 'list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
+                                        <li class="dropdown-item"><a href="{{ path('admin_sonata_page_page_list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
                                     </ul>
                                 </li>
 
                                 {% if page is defined and event is not defined %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ sonata_admin.url('sonata.page.admin.page', 'compose', {'id': page.id}) }}">
+                                        <a class="nav-link" href="{{ path('admin_sonata_page_page_compose', {'id': page.id}) }}">
                                             <i class="fa fa-magic"></i>
                                             {{ 'header.compose_page'|trans({}, 'SonataPageBundle')}}
                                         </a>
@@ -84,7 +84,7 @@
                                 {% endif %}
                                 {% if event is defined %}
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ sonata_admin.url('entropy.admin.event', 'edit', {'id': event.id}) }}">
+                                        <a class="nav-link" href="{{ path('entropy_admin_event_edit', {'id': event.id}) }}">
                                             <i class="fa fa-magic"></i>
                                             {{ 'edit_event'|trans}}
                                         </a>
