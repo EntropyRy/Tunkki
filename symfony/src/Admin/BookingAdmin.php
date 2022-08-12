@@ -140,7 +140,7 @@ class BookingAdmin extends AbstractAdmin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper):void
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
         $bookings = null;
@@ -341,12 +341,12 @@ class BookingAdmin extends AbstractAdmin
         }
         return $viite.''.(10 - ($summa % 10)) % 10;
     }
-    public function prePersist($booking)
+    public function prePersist($booking): void
     {
         $user = $this->ts->getToken()->getUser();
         $booking->setCreator($user);
     }
-    public function postPersist($booking)
+    public function postPersist($booking): void
     {
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $booking->setRenterHash($this->calculateOwnerHash($booking));
@@ -360,7 +360,7 @@ class BookingAdmin extends AbstractAdmin
         $this->mm->SendToMattermost($text, 'vuokraus');
         //$this->sendNotificationMail($booking);
     }
-    public function preUpdate($booking)
+    public function preUpdate($booking): void
     {
         if ($booking->getReferenceNumber() == null || $booking->getReferenceNumber() == 0) {
             $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
@@ -372,7 +372,7 @@ class BookingAdmin extends AbstractAdmin
         $booking->setModifier($user);
     }
 
-    public function getFormTheme()
+    public function getFormTheme(): array
     {
         $themes = array_merge(
             parent::getFormTheme(),
@@ -380,7 +380,7 @@ class BookingAdmin extends AbstractAdmin
         );
         return $themes;
     }
-    public function validate(ErrorElement $errorElement, $object)
+    public function validate(ErrorElement $errorElement, $object): void
     {
         $errorElement
             ->with('bookingDate')
@@ -405,7 +405,7 @@ class BookingAdmin extends AbstractAdmin
             }
         }
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
         $collection->remove('delete');

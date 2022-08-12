@@ -147,17 +147,17 @@ final class MemberAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         //$collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
         //$collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }
-    public function getExportFields()
+    public function getExportFields(): array
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'isFullMember', 'AcceptedAsHonoraryMember'];
     }
-    public function preRemove($member)
+    public function preRemove($member): void
     {
         $text = '**Member deleted: '.$member.'**';
         $this->mm->SendToMattermost($text, 'yhdistys');

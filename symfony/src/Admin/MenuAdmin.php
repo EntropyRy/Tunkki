@@ -17,7 +17,7 @@ final class MenuAdmin extends AbstractAdmin
     protected $accessMapping = [
         'tree' => 'LIST',
     ];
-    public function configureRoutes(RouteCollection $collection)
+    public function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('tree', 'tree');
     }

@@ -28,7 +28,7 @@ final class EmailAdmin extends AbstractAdmin
 
     protected function configureListFields(ListMapper $listMapper): void
     {
-        if (!$this->isChild()){
+        if (!$this->isChild()) {
             $listMapper
                 ->add('event')
                 ->addIdentifier('purpose');
@@ -36,7 +36,7 @@ final class EmailAdmin extends AbstractAdmin
             $listMapper
                 ->addIdentifier('purpose');
         }
-            $listMapper
+        $listMapper
             ->add('subject')
             ->add('body', 'html')
             ->add('updatedAt', 'datetime')
@@ -52,8 +52,8 @@ final class EmailAdmin extends AbstractAdmin
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
-        if (!$this->isChild()){
-        $formMapper
+        if (!$this->isChild()) {
+            $formMapper
             ->add('purpose', ChoiceType::class, [
                 'choices' => [
                     'Automatic email to new Member on registration' => 'member',
@@ -68,7 +68,7 @@ final class EmailAdmin extends AbstractAdmin
                 'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
             ]);
         } else {
-        $formMapper
+            $formMapper
             ->add('purpose', ChoiceType::class, [
                 'choices' => [
                     'To RSVP' => 'rsvp',
@@ -84,7 +84,6 @@ final class EmailAdmin extends AbstractAdmin
                 ->add('replyTo', null, [
                     'help' => 'Empty defaults to hallitus@entropy.fi'
                 ]);
-
         }
         $formMapper
             ->add('subject', null, ['help' => 'start by "[Entropy]"?'])

@@ -8,6 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
 use App\Entity\Artist;
+use Symfony\Component\HttpFoundation\Response;
 
 //use Symfony\Component\Security\Core\Security;
 //use Symfony\Component\Form\FormFactoryInterface;
@@ -17,7 +18,7 @@ use App\Entity\Artist;
 
 class PublicArtistController extends AbstractController
 {
-    public function index(Artist $artist, Request $request)
+    public function index(Artist $artist, Request $request): Response
     {
         return $this->render('artist/one.html.twig', [
             'artist' => $artist,

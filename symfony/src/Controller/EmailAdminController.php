@@ -21,7 +21,7 @@ final class EmailAdminController extends CRUDController
         //      ->findOneBy('id' => $object->getId());
         return $this->renderWithExtraParams('emails/email.html.twig', ['body' => $email->getBody(), 'email' => $email, 'admin' => $admin]);
     }
-    public function sendAction()
+    public function sendAction(): RedirectResponse
     {
         $email = $this->admin->getSubject();
         $links = $email->getAddLoginLinksToFooter();
@@ -30,11 +30,11 @@ final class EmailAdminController extends CRUDController
         $event = $email->getEvent();
         $body = $email->getBody();
         $count = 0;
-        $replyto = $email->getReplyTo()?$email->getReplyTo():'hallitus@entropy.fi';
+        $replyto = $email->getReplyTo() ? $email->getReplyTo() : 'hallitus@entropy.fi';
         if ($subject && $body && $event) {
-            if ($purpose == 'rsvp'){
+            if ($purpose == 'rsvp') {
                 $rsvps = $event->getRSVPs();
-                if(count($rsvps) > 0){
+                if (count($rsvps) > 0) {
                     foreach ($rsvps as $rsvp) {
                         $to = $rsvp->getAvailableEmail();
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links);
@@ -42,20 +42,19 @@ final class EmailAdminController extends CRUDController
                         $count += 1;
                     }
                 }
-                
-            } elseif ($purpose == 'ticket'){
+            } elseif ($purpose == 'ticket') {
                 $tickets = $event->getTickets();
                 foreach ($tickets as $ticket) {
-                    if ($ticket->getStatus() == 'paid' || $ticket->getStatus() == 'reserved'){
+                    if ($ticket->getStatus() == 'paid' || $ticket->getStatus() == 'reserved') {
                         $to = $ticket->getOwnerEmail();
-                        if($to) {
+                        if ($to) {
                             $message = $this->generateMail($to, $replyto, $subject, $body, $links);
                             $this->get('symfony.mailer')->send($message);
                             $count += 1;
                         }
                     }
                 }
-            } elseif ($purpose == 'nakkikone'){
+            } elseif ($purpose == 'nakkikone') {
                 $nakkis = $event->getNakkiBookings();
                 $emails = [];
                 foreach ($nakkis as $nakki) {
@@ -65,13 +64,13 @@ final class EmailAdminController extends CRUDController
                     }
                 }
                 foreach ($emails as $to) {
-                    if($to){
+                    if ($to) {
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links);
                         $this->get('symfony.mailer')->send($message);
                         $count += 1;
                     }
                 }
-            } 
+            }
 
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));

@@ -127,7 +127,7 @@ class Ticket
 
     public function getOwnerEmail(): ?string
     {
-        return $this->owner?$this->owner->getEmail():null;
+        return $this->owner ? $this->owner->getEmail() : null;
     }
 
     public function setStatus(string $status): self

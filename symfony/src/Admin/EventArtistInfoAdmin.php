@@ -95,7 +95,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName());
         $eventinfo->setArtistClone($artistClone);
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('update', $this->getRouterIdParameter().'/update');
     }

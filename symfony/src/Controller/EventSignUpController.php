@@ -121,7 +121,7 @@ class EventSignUpController extends EventController
             //'form' => $form->createView(),
         ]);
     }
-    protected function getNakkis($event, $member, $locale)
+    protected function getNakkis($event, $member, $locale): array
     {
         $nakkis = [];
         foreach ($event->getNakkiBookings() as $booking) {

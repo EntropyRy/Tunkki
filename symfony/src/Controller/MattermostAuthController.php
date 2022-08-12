@@ -30,7 +30,7 @@ class MattermostAuthController extends Controller
             ->getClient('mattermost')
             ->redirect();
     }
-    public function connectCheckAction(Request $request)
+    public function connectCheckAction(Request $request): void
     {
         /*    $client = $this->registry->getClient('mattermost');
 

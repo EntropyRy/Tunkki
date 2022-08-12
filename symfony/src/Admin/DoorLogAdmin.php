@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 final class DoorLogAdmin extends AbstractAdmin
@@ -52,7 +53,7 @@ final class DoorLogAdmin extends AbstractAdmin
             ->add('message')
         ;
     }
-    public function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection)
+    public function configureRoutes(\Sonata\AdminBundle\Route\RouteCollection $collection): void
     {
         $collection->remove('edit');
         $collection->remove('delete');

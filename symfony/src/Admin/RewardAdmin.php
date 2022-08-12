@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -74,16 +76,16 @@ final class RewardAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    public function preUpdate($reward)
+    public function preUpdate($reward): void
     {
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('makepaid', $this->getRouterIdParameter().'/makepaid');
         $collection->add('PrepareEvenout', 'evenout/prepare');
         $collection->add('Evenout', 'evenout/make');
     }
-    public function configureSideMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null)
+    public function configureSideMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
         $menu->addChild($this->trans('evenout'), [
             'route'=> 'admin_app_reward_PrepareEvenout',

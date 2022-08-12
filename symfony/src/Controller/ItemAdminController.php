@@ -11,7 +11,7 @@ use App\Entity\Item;
 
 class ItemAdminController extends Controller
 {
-    public function cloneAction()
+    public function cloneAction(): RedirectResponse
     {
         $object = $this->admin->getSubject();
 
@@ -69,7 +69,7 @@ class ItemAdminController extends Controller
       *
       * @return RedirectResponse
       */
-    public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery, Request $request = null)
+    public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery, Request $request = null): RedirectResponse
     {
         $this->admin->checkAccess('edit');
 

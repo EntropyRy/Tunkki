@@ -7,10 +7,11 @@ namespace App\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use App\Entity\Event;
 use App\Entity\Ticket;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class TicketAdminController extends CRUDController
 {
-    public function makePaidAction()
+    public function makePaidAction(): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
         if (is_null($ticket->getOwner())) {
@@ -22,7 +23,7 @@ final class TicketAdminController extends CRUDController
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }
-    public function updateTicketCountAction(Event $event)
+    public function updateTicketCountAction(Event $event): RedirectResponse
     {
         if ($event->getTicketsEnabled()) {
             $tickets_now = count($event->getTickets());

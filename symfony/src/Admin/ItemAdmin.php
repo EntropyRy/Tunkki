@@ -32,7 +32,7 @@ class ItemAdmin extends AbstractAdmin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $context = 'item';
         $currentContext = $this->cm->find($context);
@@ -74,7 +74,7 @@ class ItemAdmin extends AbstractAdmin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('name')
@@ -107,7 +107,7 @@ class ItemAdmin extends AbstractAdmin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         $context = 'item';
         $currentContext = $this->cm->find($context);
@@ -182,7 +182,7 @@ class ItemAdmin extends AbstractAdmin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('name')
@@ -207,7 +207,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('modifier')
         ;
     }
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
             return;
@@ -228,19 +228,19 @@ class ItemAdmin extends AbstractAdmin
             ));
         }
     }
-    public function prePersist($Item)
+    public function prePersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
         $Item->setCreator($user);
     }
-    public function postPersist($Item)
+    public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
-    public function preUpdate($Item)
+    public function preUpdate($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
@@ -253,13 +253,13 @@ class ItemAdmin extends AbstractAdmin
             $this->mm->SendToMattermost($text, 'vuokraus');
         }
     }
-    public function preRemove($Item)
+    public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }

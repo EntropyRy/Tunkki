@@ -3,11 +3,12 @@
 namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookingAdminController extends CRUDController
 {
     protected $em;
-    public function stuffListAction()
+    public function stuffListAction(): Response
     {
         $object = $this->admin->getSubject();
         $this->em = $this->getDoctrine()->getManager();

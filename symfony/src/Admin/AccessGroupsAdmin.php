@@ -9,7 +9,6 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Form\Type\CollectionType;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
@@ -76,7 +75,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
     /**
      * Turns the role's array keys into string <ROLES_NAME> keys.
      */
-    protected static function flattenRoles($rolesHierarchy)
+    protected static function flattenRoles($rolesHierarchy): array
     {
         $flatRoles = array();
         foreach ($rolesHierarchy as $key => $roles) {

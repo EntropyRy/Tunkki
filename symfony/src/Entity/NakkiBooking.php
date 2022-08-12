@@ -116,6 +116,6 @@ class NakkiBooking
 
     public function getMemberEmail(): ?string
     {
-        return $this->member?$this->member->getEmail():null;
+        return $this->member ? $this->member->getEmail() : null;
     }
 }

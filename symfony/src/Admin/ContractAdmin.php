@@ -63,7 +63,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    private function getPurposeChoices()
+    private function getPurposeChoices(): array
     {
         return [ 'Rent Contract' => 'rent' ];
     }

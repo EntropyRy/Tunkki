@@ -8,10 +8,11 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Reward;
+use Symfony\Component\HttpFoundation\Response;
 
 final class RewardAdminController extends CRUDController
 {
-    public function makepaidAction()
+    public function makepaidAction(): RedirectResponse
     {
         $reward = $this->admin->getSubject();
         $reward->setPaid(true);
@@ -21,7 +22,7 @@ final class RewardAdminController extends CRUDController
         $this->admin->update($reward);
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
-    public function prepareEvenoutAction()
+    public function prepareEvenoutAction(): Response
     {
         $link = $this->admin->generateUrl('Evenout');
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
@@ -37,7 +38,7 @@ final class RewardAdminController extends CRUDController
 
         return $this->render('admin/reward/prepare.html.twig', $data);
     }
-    public function EvenoutAction()
+    public function EvenoutAction(): RedirectResponse
     {
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -50,13 +51,7 @@ class EventController extends Controller
                 'page' => $page
             ]);
     }
-    public function oneSlug(
-        Request $request,
-        CmsManagerSelector $cms,
-        TranslatorInterface $trans,
-        SeoPageInterface $seo,
-        TicketRepository $ticketRepo
-    ) {
+    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo): Response {
         $slug = $request->get('slug');
         $year = $request->get('year');
         if (empty($slug)) {
@@ -114,7 +109,7 @@ class EventController extends Controller
                 'ticketsAvailable' => $ticketCount,
             ]);
     }
-    private function setMetaData($lang, $event, $page, $seo)
+    private function setMetaData($lang, $event, $page, $seo): void
     {
         $now = new \DateTime();
         if ($event->getPublished() && $event->getPublishDate() < $now) {

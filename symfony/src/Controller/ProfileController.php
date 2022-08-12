@@ -16,8 +16,10 @@ use App\Repository\EmailRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -28,15 +30,7 @@ use Hashids\Hashids;
 
 class ProfileController extends AbstractController
 {
-    public function newMember(
-        Request $request,
-        FormFactoryInterface $formF,
-        MemberRepository $memberRepo,
-        EmailRepository $emailRepo,
-        UserPasswordEncoderInterface $encoder,
-        Mattermost $mm,
-        MailerInterface $mailer
-    ) {
+    public function newMember(Request $request, FormFactoryInterface $formF, MemberRepository $memberRepo, EmailRepository $emailRepo, UserPasswordEncoderInterface $encoder, Mattermost $mm, MailerInterface $mailer): Response {
         $member = new Member();
         $email_content = null;
         $form = $formF->create(MemberType::class, $member);
@@ -74,7 +68,7 @@ class ProfileController extends AbstractController
             'email' => $email_content
         ]);
     }
-    protected function sendEmailToMember($email_content, $member, $mailer)
+    protected function sendEmailToMember($email_content, $member, $mailer): void
     {
         $email = (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
@@ -87,7 +81,7 @@ class ProfileController extends AbstractController
         ;
         $mailer->send($email);
     }
-    protected function announceToMattermost($mm, $member)
+    protected function announceToMattermost($mm, $member): void
     {
         $text = '**New Member: '.$member.'**';
         $mm->SendToMattermost($text, 'yhdistys');
@@ -95,7 +89,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function dashboard(Request $request, Security $security)
+    public function dashboard(Request $request, Security $security): Response
     {
         $member = $security->getUser()->getMember();
         return $this->render('profile/dashboard.html.twig', [
@@ -105,7 +99,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function index(Request $request, Security $security)
+    public function index(Request $request, Security $security): Response
     {
         $member = $security->getUser()->getMember();
         return $this->render('profile/main.html.twig', [
@@ -226,7 +220,7 @@ class ProfileController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    private function getBarcode($member)
+    private function getBarcode($member): array
     {
         $generator = new BarcodeGeneratorHTML();
         $code = $member->getId().''.$member->getId().''.$member->getUser()->getId();

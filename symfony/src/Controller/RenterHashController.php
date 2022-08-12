@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 
@@ -13,7 +14,7 @@ use App\Form\BookingConsentType;
 class RenterHashController extends Controller
 {
     protected $em;
-    public function indexAction(Request $request, CmsManagerSelector $cms)
+    public function indexAction(Request $request, CmsManagerSelector $cms): Response
     {
         $bookingid = $request->get('bookingid');
         $hash = $request->get('hash');

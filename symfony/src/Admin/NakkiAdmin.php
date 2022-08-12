@@ -106,7 +106,7 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('endAt')
         ;
     }
-    public function postPersist($nakki)
+    public function postPersist($nakki): void
     {
         // create booking nakkis
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
@@ -117,7 +117,7 @@ final class NakkiAdmin extends AbstractAdmin
         }
         $this->em->flush();
     }
-    public function postUpdate($nakki)
+    public function postUpdate($nakki): void
     {
         $bookings = $nakki->getNakkiBookings();
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
@@ -130,7 +130,7 @@ final class NakkiAdmin extends AbstractAdmin
         $this->postDelete($nakki);
         $this->postPersist($nakki);
     }
-    public function postDelete($nakki)
+    public function postDelete($nakki): void
     {
         $bookings = $this->em->getRepository('App:NakkiBooking')->findBy(['nakki'=>$nakki]);
         foreach ($bookings as $b) {
@@ -148,7 +148,7 @@ final class NakkiAdmin extends AbstractAdmin
         parent::__construct($code, $class, $baseControllerName);
     }
 
-    protected function createBooking($nakki, $i)
+    protected function createBooking($nakki, $i): void
     {
         $b = new NakkiBooking();
         $b->setNakki($nakki);
@@ -159,7 +159,7 @@ final class NakkiAdmin extends AbstractAdmin
         $b->setEvent($nakki->getEvent());
         $this->em->persist($b);
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }

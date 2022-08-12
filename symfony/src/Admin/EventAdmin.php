@@ -30,7 +30,7 @@ final class EventAdmin extends AbstractAdmin
         '_sort_by' => 'EventDate',
     ];
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null)
+    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
             return;
@@ -424,14 +424,14 @@ final class EventAdmin extends AbstractAdmin
 
         ;
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
         $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }
-    public function prePersist($event)
+    public function prePersist($event): void
     {
         if ($event->getType() == 'clubroom') {
             $event->setLinks([

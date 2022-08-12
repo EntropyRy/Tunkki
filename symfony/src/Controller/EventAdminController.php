@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,7 +14,7 @@ use App\Entity\Ticket;
 
 final class EventAdminController extends CRUDController
 {
-    public function artistListAction()
+    public function artistListAction(): Response
     {
         $event = $this->admin->getSubject();
         $infos = $event->getEventArtistInfos();
@@ -22,7 +23,7 @@ final class EventAdminController extends CRUDController
             'infos' => $infos
         ]);
     }
-    public function nakkiListAction()
+    public function nakkiListAction(): Response
     {
         $event = $this->admin->getSubject();
         $nakkis = $event->getNakkiBookings();
@@ -40,7 +41,7 @@ final class EventAdminController extends CRUDController
             'emails' => $emails
         ]);
     }
-    public function rsvpAction()
+    public function rsvpAction(): Response
     {
         $event = $this->admin->getSubject();
         $rsvps = $event->getRSVPs();
@@ -49,7 +50,7 @@ final class EventAdminController extends CRUDController
             'event' => $event, 'rsvps' => $rsvps, 'email_url' => $email_url
         ]);
     }
-    public function rsvpEmailAction()
+    public function rsvpEmailAction(): RedirectResponse
     {
         $event = $this->admin->getSubject();
         $subject = $event->getRSVPEmailSubject();

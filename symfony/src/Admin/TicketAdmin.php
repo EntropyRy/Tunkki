@@ -36,7 +36,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status', ChoiceFilter::class, [
-                'field_type' => ChoiceType::class, 
+                'field_type' => ChoiceType::class,
                 'field_options' =>
                 [
                     'multiple' => true,
@@ -109,7 +109,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    protected function configureRoutes(RouteCollection $collection)
+    protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('makePaid', $this->getRouterIdParameter().'/bought');

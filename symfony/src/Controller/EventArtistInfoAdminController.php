@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class EventArtistInfoAdminController extends CRUDController
 {
-    public function updateAction()
+    public function updateAction(): RedirectResponse
     {
         $info = $this->admin->getSubject();
         $artistClone = $info->getArtistClone();

@@ -22,7 +22,7 @@ class StatusEventAdmin extends AbstractAdmin
     /**
      * @param DatagridMapper $datagridMapper
      */
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('item')
@@ -37,7 +37,7 @@ class StatusEventAdmin extends AbstractAdmin
     /**
      * @param ListMapper $listMapper
      */
-    protected function configureListFields(ListMapper $listMapper)
+    protected function configureListFields(ListMapper $listMapper): void
     {
         if (!$this->isChild()) {
             $listMapper->add('item');
@@ -59,7 +59,7 @@ class StatusEventAdmin extends AbstractAdmin
     /**
      * @param FormMapper $formMapper
      */
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $formMapper): void
     {
         if (!$this->isChild()) {
             $formMapper
@@ -133,7 +133,7 @@ class StatusEventAdmin extends AbstractAdmin
     /**
      * @param ShowMapper $showMapper
      */
-    protected function configureShowFields(ShowMapper $showMapper)
+    protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('item')
@@ -145,24 +145,24 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    public function prePersist($Event)
+    public function prePersist($Event): void
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setCreator($user);
         $Event->setModifier($user);
     }
-    public function postPersist($Event)
+    public function postPersist($Event): void
     {
         $user = $Event->getCreator();
         $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
-    public function preUpdate($Event)
+    public function preUpdate($Event): void
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
     }
-    public function postUpdate($Event)
+    public function postUpdate($Event): void
     {
         $user = $Event->getModifier();
         $text = $this->getMMtext($Event, $user);

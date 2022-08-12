@@ -9,8 +9,10 @@ use App\Form\ArtistType;
 use App\Helper\Mattermost;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -25,7 +27,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
  */
 class ArtistController extends AbstractController
 {
-    public function index(Request $request, Security $security)
+    public function index(Request $request, Security $security): Response
     {
         $member = $security->getUser()->getMember();
 
@@ -83,7 +85,7 @@ class ArtistController extends AbstractController
             'form' => $form->createView()
         ]);
     }
-    public function delete(Artist $artist)
+    public function delete(Artist $artist): RedirectResponse
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($artist);

@@ -104,7 +104,7 @@ class EventTicketController extends EventSignUpController
             'form' => $form->createView(),
         ]);
     }
-    private function ticketChecks($for, $event, $ticketRepo)
+    private function ticketChecks($for, $event, $ticketRepo): ?RedirectResponse
     {
         $member = $this->getUser()->getMember();
         $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
@@ -128,7 +128,7 @@ class EventTicketController extends EventSignUpController
         }
         return null;
     }
-    private function freeAvailableTickets($event, $ticketRepo)
+    private function freeAvailableTickets($event, $ticketRepo): void
     {
         $now = new \DateTime('now');
         foreach ($event->getTickets() as $ticket) {
