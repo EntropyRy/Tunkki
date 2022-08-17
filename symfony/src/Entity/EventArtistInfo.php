@@ -112,7 +112,7 @@ class EventArtistInfo
     }
     public function __toString()
     {
-        return $this->Artist;
+        return $this->Artist ? $this->Artist : 'n/a';
     }
 
     public function getWishForPlayTime(): ?string
