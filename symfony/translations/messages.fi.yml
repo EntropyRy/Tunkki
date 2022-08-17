@@ -88,7 +88,7 @@ videos: Videot
 pictures: Kuvat
 association: Yhdistys
 tickets: Liput
-Artist signup: Artisti-ilmottautuminen
+Artist signup: Artisti-ilmoittautuminen
 Finland: Suomi
 updated: Päivitetty
 fb.event: FB tapahtuma
@@ -279,7 +279,7 @@ rsvp:
     already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä tapahtumaa.
     rsvpd_succesfully: Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä tapahtumaa.
     info: Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>. Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
-    closed: Ilmottautuminen suljettu
+    closed: Ilmoittautuminen suljettu
 ticket:
     form:
         reserve: Varaa
