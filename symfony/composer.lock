@@ -114,21 +114,21 @@
         },
         {
             "name": "cocur/slugify",
-            "version": "v4.1.0",
+            "version": "v4.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/cocur/slugify.git",
-                "reference": "2611e6081dbbb05837a16ed339c0451923d4046e"
+                "reference": "7e7d03067d1075b1147090b3e1df672dfffb9dc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/cocur/slugify/zipball/2611e6081dbbb05837a16ed339c0451923d4046e",
-                "reference": "2611e6081dbbb05837a16ed339c0451923d4046e",
+                "url": "https://api.github.com/repos/cocur/slugify/zipball/7e7d03067d1075b1147090b3e1df672dfffb9dc3",
+                "reference": "7e7d03067d1075b1147090b3e1df672dfffb9dc3",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": ">=7.1"
+                "php": "^7.1 || ~8.0.0 || ~8.1.0"
             },
             "conflict": {
                 "symfony/config": "<3.4 || >=4,<4.3",
@@ -182,9 +182,9 @@
             ],
             "support": {
                 "issues": "https://github.com/cocur/slugify/issues",
-                "source": "https://github.com/cocur/slugify/tree/v4.1.0"
+                "source": "https://github.com/cocur/slugify/tree/v4.2.0"
             },
-            "time": "2022-01-11T20:51:10+00:00"
+            "time": "2022-08-13T15:23:32+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
@@ -5265,16 +5265,16 @@
         },
         {
             "name": "sonata-project/doctrine-extensions",
-            "version": "1.17.0",
+            "version": "1.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/sonata-doctrine-extensions.git",
-                "reference": "9c1703f93fec4692e6abf94e4d66a245c34fbcba"
+                "reference": "c35df491b75f6626ef2434b343745615117b4557"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/9c1703f93fec4692e6abf94e4d66a245c34fbcba",
-                "reference": "9c1703f93fec4692e6abf94e4d66a245c34fbcba",
+                "url": "https://api.github.com/repos/sonata-project/sonata-doctrine-extensions/zipball/c35df491b75f6626ef2434b343745615117b4557",
+                "reference": "c35df491b75f6626ef2434b343745615117b4557",
                 "shasum": ""
             },
             "require": {
@@ -5303,10 +5303,11 @@
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpunit/phpunit": "^9.5.13",
                 "psalm/plugin-phpunit": "^0.16",
-                "symfony/dependency-injection": "^4.4 || ^5.3 || ^6.0",
-                "symfony/expression-language": "^4.4 || ^5.3 || ^6.0",
-                "symfony/framework-bundle": "^4.4 || ^5.3 || ^6.0",
-                "symfony/phpunit-bridge": "^6.0",
+                "rector/rector": "^0.13",
+                "symfony/dependency-injection": "^4.4 || ^5.4 || ^6.0",
+                "symfony/expression-language": "^4.4 || ^5.4 || ^6.0",
+                "symfony/framework-bundle": "^4.4 || ^5.4 || ^6.0",
+                "symfony/phpunit-bridge": "^6.1",
                 "vimeo/psalm": "^4.1"
             },
             "suggest": {
@@ -5350,7 +5351,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/sonata-doctrine-extensions/issues",
-                "source": "https://github.com/sonata-project/sonata-doctrine-extensions/tree/1.17.0"
+                "source": "https://github.com/sonata-project/sonata-doctrine-extensions/tree/1.18.0"
             },
             "funding": [
                 {
@@ -5370,7 +5371,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-05-11T07:02:31+00:00"
+            "time": "2022-08-17T07:30:17+00:00"
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
@@ -6262,16 +6263,16 @@
         },
         {
             "name": "sonata-project/page-bundle",
-            "version": "3.27.0",
+            "version": "3.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "b66fa8ffc8d1364a640ea2b458612174fc678c52"
+                "reference": "f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/b66fa8ffc8d1364a640ea2b458612174fc678c52",
-                "reference": "b66fa8ffc8d1364a640ea2b458612174fc678c52",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb",
+                "reference": "f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb",
                 "shasum": ""
             },
             "require": {
@@ -6373,7 +6374,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataPageBundle/issues",
-                "source": "https://github.com/sonata-project/SonataPageBundle/tree/3.27.0"
+                "source": "https://github.com/sonata-project/SonataPageBundle/tree/3.28.0"
             },
             "funding": [
                 {
@@ -6393,7 +6394,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-07-26T13:42:00+00:00"
+            "time": "2022-08-15T13:44:31+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",

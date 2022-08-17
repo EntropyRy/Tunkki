@@ -89,10 +89,17 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     }
     public function prePersist($eventinfo): void
     {
+        $event = $eventinfo->getEvent();
+        $i = 1;
+        foreach ($event->getEventArtistInfos() as $info){
+            if($info->getArtist() == $eventinfo->getArtist()){
+                $i+=1;
+            }
+        }
         $artistClone = clone $eventinfo->getArtist();
         $artistClone->setMember(null);
         $artistClone->setCopyForArchive(true);
-        $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName());
+        $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName(). ' #'. $i);
         $eventinfo->setArtistClone($artistClone);
     }
     protected function configureRoutes(RouteCollection $collection): void
