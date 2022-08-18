@@ -351,9 +351,9 @@
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
 {% if event.multiday == true %}
-    {% set datestring = 'E, H:mm' %}
+    {% set datestring = 'E, HH:mm' %}
 {% else %}
-    {% set datestring = 'H:mm' %}
+    {% set datestring = 'HH:mm' %}
 {% endif %}
 {% if event is defined and '{{ timetable }}' not in attribute(event,content_attr) %}
     {% set show = false %}
