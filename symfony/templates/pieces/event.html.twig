@@ -240,6 +240,9 @@
         {% set name = info.artist.name %}
         {% set artist = info.artistClone %}
         {% if last is defined %}
+            {% if info.timediff(last) > 4%}
+                <hr>
+            {% endif %}
             {% if last != info.StartTime %}
                 <li>{{info.StartTime|format_datetime(pattern=datestring)}}:
             {% endif %}
