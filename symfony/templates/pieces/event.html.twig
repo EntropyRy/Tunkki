@@ -221,9 +221,9 @@
 {% set last = null %}
 {% if event.DjArtistInfos|length > 0 %}
 {% if event.multiday == true %}
-    {% set datestring = 'E, H:mm' %}
+    {% set datestring = 'E, HH:mm' %}
 {% else %}
-    {% set datestring = 'H:mm' %}
+    {% set datestring = 'HH:mm' %}
 {% endif %}
 <div class="row">
 {% for stage, infos in event.DjArtistInfos %}
@@ -240,7 +240,7 @@
         {% set name = info.artist.name %}
         {% set artist = info.artistClone %}
         {% if last is defined %}
-            {% if info.timediff(last) > 4%}
+            {% if info.timediff(last) > 4 and event.multiday %}
                 <hr>
             {% endif %}
             {% if last != info.StartTime %}
