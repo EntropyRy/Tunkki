@@ -166,7 +166,7 @@ class EventArtistInfo
     public function timediff(?\DateTimeInterface $date): ?int
     {
         if($date){
-            return $this->StartTime->diff($date)->format('%h');
+            return $date->diff($this->StartTime)->format('%r%h');
         }
         return null;
     }
