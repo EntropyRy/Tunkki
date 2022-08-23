@@ -2,6 +2,7 @@
 
 namespace App\PageService;
 
+use App\Entity\Event;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
@@ -20,14 +21,14 @@ class EventsPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
+    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): ?Response
     {
-        $events = $this->em->getRepository('App:Event')->findPublicEventsByNotType('announcement');
+        $events = $this->em->getRepository(Event::class)->findPublicEventsByNotType('announcement');
         //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
