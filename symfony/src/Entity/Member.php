@@ -191,6 +191,11 @@ class Member
      */
     private $responsibleForNakkis;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $denyKerdeAccess;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -882,5 +887,17 @@ class Member
             }
         }
         return null;
+    }
+
+    public function getDenyKerdeAccess(): ?bool
+    {
+        return $this->denyKerdeAccess;
+    }
+
+    public function setDenyKerdeAccess(?bool $denyKerdeAccess): self
+    {
+        $this->denyKerdeAccess = $denyKerdeAccess;
+
+        return $this;
     }
 }

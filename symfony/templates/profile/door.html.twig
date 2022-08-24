@@ -11,10 +11,11 @@
         <p class="text-center">Code: {{barcode.0}}</p>
     </div>
     </div>
+    
     <hr>
     <h1>{{'profile.door.opener'|trans|capitalize }}</h1> 
     <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
-{% if member.isActiveMember %}
+{% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
     <input class="btn btn-primary" type="submit" value="{{'profile.door.open_the_door'|trans|capitalize}}" />
