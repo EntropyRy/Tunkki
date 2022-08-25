@@ -1,5 +1,5 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
-{% block sonata_admin_content %}
+{% block show %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -7,9 +7,9 @@
             </div>
             <div class="col-md-12">
                 <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
-                <button class="no-print btn btn-secondary pull-right">
+                {# <button class="no-print btn btn-secondary pull-right">
                     <a href="mailto:{{emails}}">Send mail to everyone</a>
-                </button>
+                </button> #}
             </div>
             {% if nakkiBookings %}
                 <h3>Contacts</h3>
@@ -55,9 +55,9 @@
             {% endif %}
             <div class="col-md-12" style="page-break-after: always;">
                 <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
-                <button class="no-print btn btn-secondary pull-right">
+                {# <button class="no-print btn btn-secondary pull-right">
                     <a href="mailto:{{emails}}">Send mail to everyone</a>
-                </button>
+                </button> #}
             </div>
             <div class="col-md-12">
                 <div class="row">

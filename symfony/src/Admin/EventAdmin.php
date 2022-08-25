@@ -52,15 +52,13 @@ final class EventAdmin extends AbstractAdmin
                    'uri' => $admin->generateUrl('artistList', ['id' => $id])
                 ]);
             }
-            if ($this->getSubject()->getRsvpSystemEnabled()) {
+            if (count($admin->getSubject()->getRSVPs()) > 0) {
                 $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
-            ]);
-                if ($admin->getSubject()->getRsvpSystemEnabled() || count($admin->getSubject()->getRSVPs()) > 0) {
-                    $menu->addChild('RSVP List', [
-                       'uri' => $admin->generateUrl('rsvp', ['id' => $id])
-                    ]);
-                }
+                ]);
+                $menu->addChild('RSVP List', [
+                   'uri' => $admin->generateUrl('rsvp', ['id' => $id])
+                ]);
             }
             if ($event->getNakkikoneEnabled()) {
                 $menu->addChild('Nakkikone', [
@@ -362,12 +360,6 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('RSVP')
                 ->with('Config')
                     ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
-                    ->add('RSVPEmailSubject')
-                    ->add('RSVPEmailBody', SimpleFormatterType::class, [
-                        'format' => 'richhtml',
-                        'required' => false,
-                        'ckeditor_context' => 'default',
-                    ])
                 ->end()
                 ->end()
                 ->tab('Tickets')
@@ -428,7 +420,6 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
-        $collection->add('rsvpEmail', $this->getRouterIdParameter().'/send_rsvp_email');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }
     public function prePersist($event): void
