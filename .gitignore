@@ -4,3 +4,4 @@ logs/
 docker/data
 dev.sql
 .php-cs-fixer.cache
+.phpactor.yml

@@ -5,11 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Ticket;
 
 final class EventAdminController extends CRUDController
@@ -47,8 +43,8 @@ final class EventAdminController extends CRUDController
         $rsvps = $event->getRSVPs();
         //$email_url = $this->admin->generateUrl('rsvpEmail', ['id' => $event->getId()]);
         return $this->renderWithExtraParams('admin/event/rsvps.html.twig', [
-            'event' => $event, 
-            'rsvps' => $rsvps, 
+            'event' => $event,
+            'rsvps' => $rsvps,
             //'email_url' => $email_url
         ]);
     }

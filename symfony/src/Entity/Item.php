@@ -255,7 +255,7 @@ class Item
      *
      * @param string $manufacturer
      *
-     * @return Items
+     * @return Item
      */
     public function setManufacturer($manufacturer)
     {
@@ -279,7 +279,7 @@ class Item
      *
      * @param string $model
      *
-     * @return Items
+     * @return Item
      */
     public function setModel($model)
     {
@@ -303,7 +303,7 @@ class Item
      *
      * @param string $description
      *
-     * @return Items
+     * @return Item
      */
     public function setDescription($description)
     {
@@ -327,7 +327,7 @@ class Item
      *
      * @param float $rent
      *
-     * @return Items
+     * @return Item
      */
     public function setRent($rent)
     {
@@ -351,7 +351,7 @@ class Item
      *
      * @param string $rentNotice
      *
-     * @return Items
+     * @return Item
      */
     public function setRentNotice($rentNotice)
     {
@@ -375,7 +375,7 @@ class Item
      *
      * @param boolean $needsFixing
      *
-     * @return Items
+     * @return Item
      */
     public function setNeedsFixing($needsFixing)
     {
@@ -399,7 +399,7 @@ class Item
      *
      * @param string $history
      *
-     * @return Items
+     * @return Item
      */
     public function setHistory($history)
     {
@@ -423,7 +423,7 @@ class Item
      *
      * @param boolean $forSale
      *
-     * @return Items
+     * @return Item
      */
     public function setForSale($forSale)
     {
@@ -490,7 +490,7 @@ class Item
      *
      * @param \App\Entity\StatusEvent $fixingHistory
      *
-     * @return Items
+     * @return Item
      */
     public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
@@ -516,7 +516,7 @@ class Item
      *
      * @param \DateTime $createdAt
      *
-     * @return Items
+     * @return Item
      */
     public function setCreatedAt($createdAt)
     {
@@ -530,7 +530,7 @@ class Item
      *
      * @param \DateTime $updatedAt
      *
-     * @return Items
+     * @return Item
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -600,7 +600,7 @@ class Item
      *
      * @param \DateTime $commission
      *
-     * @return Items
+     * @return Item
      */
     public function setCommission($commission)
     {
@@ -624,7 +624,7 @@ class Item
      *
      * @param string $serialnumber
      *
-     * @return Items
+     * @return Item
      */
     public function setSerialnumber($serialnumber)
     {
@@ -649,7 +649,7 @@ class Item
      *
      * @param \App\Entity\File $file
      *
-     * @return Items
+     * @return Item
      */
     public function addFile(\App\Entity\File $file)
     {
@@ -685,7 +685,7 @@ class Item
      *
      * @param string $placeinstorage
      *
-     * @return Items
+     * @return Item
      */
     public function setPlaceinstorage($placeinstorage)
     {
@@ -709,7 +709,7 @@ class Item
      *
      * @param \App\Application\Sonata\ClassificationBundle\Entity\Tag $tag
      *
-     * @return Items
+     * @return Item
      */
     public function addTag(\App\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
     {

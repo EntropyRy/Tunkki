@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\EventController;
+use App\Controller\EventSignUpController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -10,14 +10,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Security\Core\Security;
 use App\Helper\Mattermost;
 use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use App\Entity\Event;
 use App\Entity\Ticket;
-use App\Entity\NakkiBooking;
 
 /**
  * @IsGranted("ROLE_USER")
