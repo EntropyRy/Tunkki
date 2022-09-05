@@ -44,7 +44,6 @@ class MattermostAuthenticator extends SocialAuthenticator
 
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        /** @var FacebookUser $facebookUser */
         $mattermostUser = $this->getMattermostClient()
             ->fetchUserFromToken($credentials);
         if (!$mattermostUser) {
