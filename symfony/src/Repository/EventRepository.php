@@ -19,7 +19,7 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
-    public function getRSSEvents()
+    public function getRSSEvents(): mixed
     {
         $now = new \DateTime();
         return $this->createQueryBuilder('e')
@@ -32,13 +32,14 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function getFutureEvents()
+    public function getFutureEvents(): mixed
     {
         $now = new \DateTime();
         $end = new \DateTime();
-        return $this->createQueryBuilder('e')
+        $futu =  $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
+            ->andWhere('e.until IS NULL')
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
             ->setParameter('now', $now)
@@ -50,8 +51,23 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+        $future =  $this->createQueryBuilder('e')
+            ->andWhere('e.publishDate <= :now')
+            ->andWhere('e.until > :date')
+            ->andWhere('e.type != :type')
+            ->andWhere('e.published = :pub')
+            ->setParameter('now', $now)
+            ->setParameter('date', $end->modify('-1 hours'))
+            ->setParameter('type', 'Announcement')
+            ->setParameter('pub', true)
+            ->orderBy('e.EventDate', 'ASC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
+        return array_merge($futu, $future);
     }
-    public function findOneEventByTypeWithSticky($type)
+    public function findOneEventByTypeWithSticky($type): mixed
     {
         $e = $this->findOneStickyEventByType($type);
         if (is_null($e)) {
@@ -59,7 +75,7 @@ class EventRepository extends ServiceEntityRepository
         }
         return $e;
     }
-    public function findOneEventByType($type)
+    public function findOneEventByType($type): mixed
     {
         return $this->createQueryBuilder('c')
            ->andWhere('c.type = :val')
@@ -72,7 +88,7 @@ class EventRepository extends ServiceEntityRepository
            ->getOneOrNullResult()
         ;
     }
-    public function findOneStickyEventByType($type)
+    public function findOneStickyEventByType($type): mixed
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.type = :val')
@@ -87,7 +103,7 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    public function findEventBySlugAndYear($slug, $year)
+    public function findEventBySlugAndYear($slug, $year): mixed
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.url = :val')
@@ -100,7 +116,7 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    public function findEventsByType($type)
+    public function findEventsByType($type):mixed
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.type = :val')
@@ -110,7 +126,7 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function findPublicEventsByNotType($type)
+    public function findPublicEventsByNotType($type):mixed
     {
         $now = new \DateTime();
         return $this->createQueryBuilder('r')
@@ -125,7 +141,7 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function countDone()
+    public function countDone(): mixed
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'))
