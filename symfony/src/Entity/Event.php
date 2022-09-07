@@ -275,7 +275,7 @@ class Event
     /**
      * @ORM\Column(type="boolean", nullable=true)
      */
-    private $showNakkikoneLinkInEvent = true;
+    private $showNakkikoneLinkInEvent = false;
 
     /**
      * @ORM\Column(type="boolean", nullable=true)
