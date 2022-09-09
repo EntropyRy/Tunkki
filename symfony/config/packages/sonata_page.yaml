@@ -248,25 +248,6 @@ sonata_page:
     catch_exceptions:
         not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
         fatal:     [500]    # so you can use the same page for different http errors or specify specific page for each error
-    assets:
-        stylesheets:
-            #- '/css/fontawesome-free-5.12.1-web/css/all.min.css'
-            #- 'bundles/sonatacore/vendor/bootstrap/dist/css/bootstrap.min.css'
-            #- 'bundles/sonataadmin/vendor/iCheck/skins/square/blue.css'
-              #- 'css/bs4/bootstrap.min.css'
-              #- 'bundles/sonatapage/sonata-page.front.css'
-              #  - 'css/front.css'
-        javascripts:
-            #- 'bundles/sonatacore/vendor/jquery/dist/jquery.min.js'
-            #- 'bundles/sonatacore/vendor/bootstrap/dist/js/bootstrap.min.js'
-            #- 'js/bs4/jquery-3.4.1.slim.min.js'
-            #- 'js/bs4/bootstrap.min.js'
-            #- 'js/bs4/popper.min.js'
-            #- 'bundles/sonataadmin/vendor/iCheck/icheck.min.js'
-              #- 'bundles/sonatapage/sonata-page.front.js'
-              #- 'js/front.js'
-
-
     class:
         page: 'App\Application\Sonata\PageBundle\Entity\Page'
         snapshot: 'App\Application\Sonata\PageBundle\Entity\Snapshot'

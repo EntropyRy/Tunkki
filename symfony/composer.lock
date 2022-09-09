@@ -6269,16 +6269,16 @@
         },
         {
             "name": "sonata-project/page-bundle",
-            "version": "3.28.0",
+            "version": "3.29.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb"
+                "reference": "e42f43670494049368eaf8f5a642dc22406379b7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb",
-                "reference": "f6d3d78e20a51c4a6c9b73347b5bd07272fb81fb",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/e42f43670494049368eaf8f5a642dc22406379b7",
+                "reference": "e42f43670494049368eaf8f5a642dc22406379b7",
                 "shasum": ""
             },
             "require": {
@@ -6293,7 +6293,7 @@
                 "sonata-project/doctrine-orm-admin-bundle": "^3.19",
                 "sonata-project/form-extensions": "^0.1.1 || ^1.4",
                 "sonata-project/notification-bundle": "^3.8",
-                "sonata-project/seo-bundle": "^2.11",
+                "sonata-project/seo-bundle": "^2.14",
                 "sonata-project/twig-extensions": "^0.1.1 || ^1.3",
                 "symfony-cmf/routing-bundle": "^2.1",
                 "symfony/config": "^4.4",
@@ -6339,6 +6339,7 @@
                 "sonata-project/cache-bundle": "^3.3",
                 "symfony/browser-kit": "^4.4",
                 "symfony/css-selector": "^4.4",
+                "symfony/filesystem": "^4.4",
                 "symfony/phpunit-bridge": "^5.1.4",
                 "vimeo/psalm": "^4.7.2"
             },
@@ -6380,7 +6381,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataPageBundle/issues",
-                "source": "https://github.com/sonata-project/SonataPageBundle/tree/3.28.0"
+                "source": "https://github.com/sonata-project/SonataPageBundle/tree/3.29.0"
             },
             "funding": [
                 {
@@ -6400,7 +6401,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-08-15T13:44:31+00:00"
+            "time": "2022-09-08T10:26:34+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",
@@ -12606,16 +12607,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.4",
+            "version": "1.8.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "eed4c9da531f6ebb4787235b6fb486e2c20f34e5"
+                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/eed4c9da531f6ebb4787235b6fb486e2c20f34e5",
-                "reference": "eed4c9da531f6ebb4787235b6fb486e2c20f34e5",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
+                "reference": "f6598a5ff12ca4499a836815e08b4d77a2ddeb20",
                 "shasum": ""
             },
             "require": {
@@ -12645,7 +12646,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.4"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.5"
             },
             "funding": [
                 {
@@ -12661,7 +12662,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-03T13:08:04+00:00"
+            "time": "2022-09-07T16:05:32+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
