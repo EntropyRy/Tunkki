@@ -120,8 +120,11 @@ class EventController extends Controller
         if ($event->getPublished() && $event->getPublishDate() < $now) {
             $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
-            if (!is_null($event->getPicture())){
+            if (!is_null($mediaUrl)){
                 $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
+                $seo->addMeta('property', 'og:image', 'https://entropy.fi'.$mediaUrl);
+                $seo->addMeta('property', 'og:image:height', null);
+                $seo->addMeta('property', 'og:image:widht', null);
             }
             $seo->addMeta('property', 'twitter:card', "summary_large_image");
             //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
