@@ -121,9 +121,12 @@ class EventController extends Controller
             $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
             if (!is_null($event->getPicture())){
-                $seo->addMeta('property', 'twitter:card', "summary_large_image");
                 $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
             }
+            $seo->addMeta('property', 'twitter:card', "summary_large_image");
+            //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
+            $seo->addMeta('property', 'twitter:title', $title);
+            $seo->addMeta('property', 'twitter:desctiption', "$event->getAbstract($lang)");
             $seo->addMeta('property', 'og:title', $title)
                 ->addMeta('property', 'og:description', $event->getAbstract($lang))
             ;
