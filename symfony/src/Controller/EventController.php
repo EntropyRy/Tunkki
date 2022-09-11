@@ -122,7 +122,7 @@ class EventController extends Controller
             $page->setTitle($title);
             if (!is_null($event->getPicture())){
                 $seo->addMeta('property', 'twitter:card', "summary_large_image");
-                $seo->addMeta('property', 'twitter:image', $mediaUrl);
+                $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
             }
             $seo->addMeta('property', 'og:title', $title)
                 ->addMeta('property', 'og:description', $event->getAbstract($lang))
