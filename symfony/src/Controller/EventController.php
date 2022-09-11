@@ -126,7 +126,7 @@ class EventController extends Controller
             $seo->addMeta('property', 'twitter:card', "summary_large_image");
             //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
             $seo->addMeta('property', 'twitter:title', $title);
-            $seo->addMeta('property', 'twitter:desctiption', "$event->getAbstract($lang)");
+            $seo->addMeta('property', 'twitter:desctiption', $event->getAbstract($lang));
             $seo->addMeta('property', 'og:title', $title)
                 ->addMeta('property', 'og:description', $event->getAbstract($lang))
             ;
