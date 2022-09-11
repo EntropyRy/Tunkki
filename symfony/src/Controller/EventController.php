@@ -13,6 +13,7 @@ use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\TicketRepository;
+use Sonata\MediaBundle\Provider\ImageProvider;
 use App\Entity\Event;
 use App\Entity\RSVP;
 use App\Form\RSVPType;
@@ -45,13 +46,13 @@ class EventController extends Controller
             ]);
         }
         $page = $cms->retrieve()->getCurrentPage();
-        $this->setMetaData($lang, $event, $page, $seo);
+        $this->setMetaData($lang, $event, $page, $seo, null);
         return $this->render('event.html.twig', [
                 'event' => $event,
                 'page' => $page
             ]);
     }
-    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo): Response {
+    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo, ImageProvider $mediaPro): Response {
         $slug = $request->get('slug');
         $year = $request->get('year');
         if (empty($slug)) {
@@ -68,13 +69,16 @@ class EventController extends Controller
         $formview = null;
         $ticketCount = null;
         $page = $cms->retrieve()->getCurrentPage();
+        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()){
+            $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), 'banner');
+        }
+        $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
 
         if ($event->getTicketsEnabled() && $this->getUser()) {
             $member = $this->getUser()->getMember();
             $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]); //own ticket
             $ticketCount = $ticketRepo->findAvailableTicketsCount($event);
         }
-        $this->setMetaData($lang, $event, $page, $seo);
         if ($event->getRsvpSystemEnabled() && !$this->getUser()) {
             $rsvp = new RSVP();
             $form = $this->createForm(RSVPType::class, $rsvp);
@@ -109,12 +113,17 @@ class EventController extends Controller
                 'ticketsAvailable' => $ticketCount,
             ]);
     }
-    private function setMetaData($lang, $event, $page, $seo): void
+    private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void
     {
         $now = new \DateTime();
+        // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
         if ($event->getPublished() && $event->getPublishDate() < $now) {
             $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
+            if (!is_null($event->getPicture())){
+                $seo->addMeta('property', 'twitter:card', "summary_large_image");
+                $seo->addMeta('property', 'twitter:image', $mediaUrl);
+            }
             $seo->addMeta('property', 'og:title', $title)
                 ->addMeta('property', 'og:description', $event->getAbstract($lang))
             ;
