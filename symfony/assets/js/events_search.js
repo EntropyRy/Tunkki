@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded',function(){
       //console.log(posts);
       name = this.value;
       for (var i=0; i<posts.length; i++){
-          if(posts[i].dataset.name.toLowerCase().indexOf(name) > -1 || name==''){
+          if(posts[i].dataset.name.toLowerCase().indexOf(name.toLowerCase()) > -1 || name==''){
               //bootstrap.Carousel.getInstance(posts[i]).show();
               posts[i].classList.add('show');
           } else {
