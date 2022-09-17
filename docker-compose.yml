@@ -36,7 +36,7 @@ services:
             - back-tier
             - front-tier
         ports:
-            - "3011:80"
+            - "8090:80"
         links:
             - fpm
         volumes:
