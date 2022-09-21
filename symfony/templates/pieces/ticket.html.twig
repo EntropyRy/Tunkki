@@ -1,3 +1,21 @@
+{% block ticket_for_frontpage %}
+{% apply spaceless %}
+{% if event.ticketsEnabled and app.user %}
+<div class="pt-2 pb-2" id="ticket">
+    <div class="col-md-6 mx-auto">
+        <a class="btn btn-primary w-100"
+            href="{{ path('entropy_event_slug',{
+                   'slug': event.url, 
+                   'year': event.eventdate|date('Y')
+            })  }}"
+            >
+            {{'ticket.go_to_event_page'|trans}}
+            </a>
+    </div>
+</div>
+{% endif %}
+{% endapply %}
+{% endblock %}
 {% block ticket_for_event_page %}
 {% apply spaceless %}
 {% if event.ticketsEnabled and app.user %}

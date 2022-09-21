@@ -11,73 +11,73 @@
         {% set route = 'entropy_event' %}
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
-	  <div class="input-group mb-3">
-		  <input type="text" id="nameSearchInput" class="form-control" placeholder="{{'Search by name'|trans}}"/>
-		  <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
-	  </div>
+    <div class="input-group mb-3">
+        <input type="text" id="nameSearchInput" class="form-control" placeholder="{{'Search by name'|trans}}"/>
+        <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+    </div>
 
     <div class="form-check">
-      <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked data-bs-toggle="collapse" data-bs-target=".clubroom">
-      <label class="form-check-label" for="clubroomSwitch"> {{'include_clubroom_events'|trans}}</label>
+        <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked data-bs-toggle="collapse" data-bs-target=".clubroom">
+        <label class="form-check-label" for="clubroomSwitch"> {{'include_clubroom_events'|trans}}</label>
     </div>
     <div id="events">
-    {% for event in events %}
-        {% if app.user %}
-            {% set visible = true %}
-        {% else %}
-            {% set visible = app.user is null and event.published %}
-        {% endif %}
-        {% set year = event.eventdate|date('Y') %}
-        {% if year != newyear %}
-            <div class="linetext"><span>{{year}}</span></div>
-        {% endif %}
-        {% if event is not null and visible %}
-            <div class="post {{event.type}} collapse show" data-name="{{ attribute(event, name_attr) }}">
-                {{ block('events') }}
-            </div>
-        {% endif %}
-        {% set newyear = event.eventdate|date('Y') %}
-    {% endfor %}
+        {% for event in events %}
+            {% if app.user %}
+                {% set visible = true %}
+            {% else %}
+                {% set visible = app.user is null and event.published %}
+            {% endif %}
+            {% set year = event.eventdate|date('Y') %}
+            {% if year != newyear %}
+                <div class="linetext"><span>{{year}}</span></div>
+            {% endif %}
+            {% if event is not null and visible %}
+                <div class="post {{event.type}} collapse show" data-name="{{ attribute(event, name_attr) }}">
+                    {{ block('events') }}
+                </div>
+            {% endif %}
+            {% set newyear = event.eventdate|date('Y') %}
+        {% endfor %}
     </div>
 {% endblock %}
 
 {% block events %}
-            <h5 class="d-flex justify-content-between">
-                <span {% if event.cancelled%}style="text-decoration: line-through;"{% endif %}>
-                    {% if event.url is empty and event.externalUrl %}
-                        {{ attribute(event, name_attr) }}
-                    {% else %}
-                        {% if event.url and not event.externalUrl %}
-                        <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
-                        {% else %}
-                        <a href="{{ path(route,{'id': event.id}) }}">
-                        {% endif %}
-                        {{ attribute(event, name_attr) }}
-                        </a>
-                    {% endif %}
-                    {% if not event.published %}
-                        - {{'event.not_public'|trans}}
-                    {% endif %}
-                </span>
-                <span class="border-bottom flex-fill">
-                    {% if event.epics %}
-                    <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
-                    {% endif %}
-                </span>
-                <span>
-                    {% apply spaceless %}
-                    {% if event.until %}
-                        {% if event.until|date('n') != event.eventdate|date('n') %}
-                            {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                        {% elseif (event.until|date('j')-event.eventdate|date('j'))>1 %}
-                            {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
-                        {% else %}
-                            {{ event.eventdate|date('j.n.') }}
-                        {% endif %}
-                    {% else %}
+    <h5 class="d-flex justify-content-between">
+        <span {% if event.cancelled%}style="text-decoration: line-through;"{% endif %}>
+            {% if event.url is empty and event.externalUrl %}
+                {{ attribute(event, name_attr) }}
+            {% else %}
+                {% if event.url and not event.externalUrl %}
+                    <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+                {% else %}
+                    <a href="{{ path(route,{'id': event.id}) }}">
+                {% endif %}
+                {{ attribute(event, name_attr) }}
+                    </a>
+            {% endif %}
+            {% if not event.published %}
+                - {{'event.not_public'|trans}}
+            {% endif %}
+        </span>
+        <span class="border-bottom flex-fill">
+            {% if event.epics %}
+                <a style="position: relative; float: right; right: 30%;" href="{{ event.epics }}"><i class="fas fa-image"></i></a>
+            {% endif %}
+        </span>
+        <span>
+            {% apply spaceless %}
+            {% if event.until %}
+                {% if event.until|date('n') != event.eventdate|date('n') %}
+                    {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
+                {% elseif (event.until|date('j')-event.eventdate|date('j'))>1 %}
+                    {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
+                {% else %}
                     {{ event.eventdate|date('j.n.') }}
-                    {% endif %}
-                    {% endapply %}
-                </span>
-            </h5>
+                {% endif %}
+            {% else %}
+                {{ event.eventdate|date('j.n.') }}
+            {% endif %}
+            {% endapply %}
+        </span>
+    </h5>
 {% endblock %}

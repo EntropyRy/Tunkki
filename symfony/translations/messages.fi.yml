@@ -298,6 +298,7 @@ ticket:
     all_sold: Kaikki liput on myyty.
     sale_starts: Lipunmyynti alkaa
     sum: Hinta
+    go_to_event_page: Lippu tapahtuma sivulta
     presale:
         off: Ennakkomyynti ei ole käytössä
 
