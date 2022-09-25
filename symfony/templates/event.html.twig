@@ -4,11 +4,6 @@
     {{ parent() }}
     <style>
     {{ event.css|raw }}
-    {% if event.headerTheme == 'dark' %}
-    .header-img {
-        filter: invert(1);
-    }
-    {% endif %}
     </style>
 {% endblock %}
 {% use 'pieces/event.html.twig' %}
@@ -33,7 +28,7 @@
             <div class="img-after mb-2 mt-3">
                 {{ block('event_media') }}
             </div>
-        {% endif %} 
+        {% endif %}
     <style>
     {{ event.css|raw }}
     {% if event.headerTheme == 'dark' %}
