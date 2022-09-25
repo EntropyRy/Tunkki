@@ -14,6 +14,12 @@ body.dark {
                 color: #ddedf6;
             }
         }
+        .linetext {
+            border-bottom: 1px solid #fff;
+            .span {
+                background: #000;
+            }
+        }
     }
     .invert {
         background: black;
