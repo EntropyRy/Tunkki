@@ -1,12 +1,16 @@
 {% apply spaceless %}
 {% set loc = app.request.locale %}
 {% if event is defined %}
-    {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
+    {% if app.user %}
+        {% set theme = event.headerTheme ? event.headerTheme : (app.user.member.theme ? app.user.member.theme : 'light') %}
+    {% else %}
+        {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
+    {% endif %}
     {% if event.url is not empty and not event.externalUrl %}
         {% set event_url = event.eventDate|date('Y')~"/"~ event.url ~"/" %}
     {% endif %}
 {% else %}
-    {% set theme = 'light' %}
+    {% set theme = app.user.member.theme ? app.user.member.theme : 'light' %}
 {% endif %}
 <nav class="navbar navbar-expand-lg navbar-{{ theme }} g-4">
     <div class="container-fluid">
