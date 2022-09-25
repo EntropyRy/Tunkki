@@ -20,6 +20,9 @@ body.dark {
                 background: #000;
             }
         }
+        table {
+            filter: invert(0.8);
+        }
     }
     .invert {
         background: black;
