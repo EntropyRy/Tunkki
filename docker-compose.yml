@@ -10,6 +10,7 @@ services:
         restart: unless-stopped
         networks:
             - back-tier
+        user: ${UID}:${GID}
         environment:
             MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
             MYSQL_DATABASE: ${DB_NAME}
@@ -18,7 +19,11 @@ services:
         volumes:
             - ./docker/data/db:/var/lib/mysql
     fpm:
-        build: docker/fpm
+        build: 
+          context: docker/fpm
+          args:
+            UID: ${UID}
+            GID: ${GID}
         restart: unless-stopped
         environment:
             DATABASE_URL: "mysql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_NAME}?serverVersion=mariadb-${DB_IMAGE_VERSION}"
