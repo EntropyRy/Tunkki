@@ -134,7 +134,7 @@ class MenuBuilder
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            fn($a, $b) => $a->getPosition() <=> $b->getPosition()
+            fn ($a, $b) => $a->getPosition() <=> $b->getPosition()
         );
         return $array;
     }

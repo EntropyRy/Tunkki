@@ -24,8 +24,8 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class ItemAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'item'; 
-    
+    protected $baseRoutePattern = 'item';
+
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $context = 'item';

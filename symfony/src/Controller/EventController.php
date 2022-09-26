@@ -52,7 +52,8 @@ class EventController extends Controller
                 'page' => $page
             ]);
     }
-    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo, ImageProvider $mediaPro): Response {
+    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo, ImageProvider $mediaPro): Response
+    {
         $mediaUrl = null;
         $slug = $request->get('slug');
         $year = $request->get('year');
@@ -70,7 +71,7 @@ class EventController extends Controller
         $formview = null;
         $ticketCount = null;
         $page = $cms->retrieve()->getCurrentPage();
-        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()){
+        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
             $format = $mediaPro->getFormatName($event->getPicture(), 'banner');
             $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
         }
@@ -122,7 +123,7 @@ class EventController extends Controller
         if ($event->getPublished() && $event->getPublishDate() < $now) {
             $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
-            if (!is_null($mediaUrl)){
+            if (!is_null($mediaUrl)) {
                 $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
                 $seo->addMeta('property', 'og:image', 'https://entropy.fi'.$mediaUrl);
                 $seo->addMeta('property', 'og:image:height', null);

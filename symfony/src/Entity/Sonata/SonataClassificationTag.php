@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Entity\Sonata;
 
 use Doctrine\ORM\Mapping as ORM;

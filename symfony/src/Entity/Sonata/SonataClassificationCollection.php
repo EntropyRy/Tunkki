@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Entity\Sonata;
+
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\ClassificationBundle\Entity\BaseCollection;
 

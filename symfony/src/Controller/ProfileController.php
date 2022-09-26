@@ -30,7 +30,8 @@ use Hashids\Hashids;
 
 class ProfileController extends AbstractController
 {
-    public function newMember(Request $request, FormFactoryInterface $formF, MemberRepository $memberRepo, EmailRepository $emailRepo, UserPasswordEncoderInterface $encoder, Mattermost $mm, MailerInterface $mailer): Response {
+    public function newMember(Request $request, FormFactoryInterface $formF, MemberRepository $memberRepo, EmailRepository $emailRepo, UserPasswordEncoderInterface $encoder, Mattermost $mm, MailerInterface $mailer): Response
+    {
         $member = new Member();
         $email_content = null;
         $form = $formF->create(MemberType::class, $member);

@@ -32,7 +32,7 @@ class BookingsInProgressBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver):void
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'template' => 'block/bookings_in_progress.html.twig',

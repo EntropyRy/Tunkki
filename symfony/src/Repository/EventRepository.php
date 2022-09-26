@@ -116,7 +116,7 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult()
         ;
     }
-    public function findEventsByType($type):mixed
+    public function findEventsByType($type): mixed
     {
         return $this->createQueryBuilder('r')
             ->andWhere('r.type = :val')
@@ -126,7 +126,7 @@ class EventRepository extends ServiceEntityRepository
             ->getResult()
         ;
     }
-    public function findPublicEventsByNotType($type):mixed
+    public function findPublicEventsByNotType($type): mixed
     {
         $now = new \DateTime();
         return $this->createQueryBuilder('r')

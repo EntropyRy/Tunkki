@@ -145,7 +145,7 @@ class EventArtistInfo implements \Stringable
 
     public function timediff(?\DateTimeInterface $date): ?int
     {
-        if($date){
+        if ($date) {
             return $date->diff($this->StartTime)->format('%r%h');
         }
         return null;

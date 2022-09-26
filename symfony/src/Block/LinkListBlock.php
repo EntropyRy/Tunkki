@@ -27,7 +27,7 @@ class LinkListBlock extends BaseBlockService
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
-    public function configureEditForm(FormMapper $formMapper, BlockInterface $block):void
+    public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->configureCreateForm($formMapper, $block);
     }

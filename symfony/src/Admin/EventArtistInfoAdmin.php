@@ -58,7 +58,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         if (empty($subject->getArtist())) {
             $formMapper
                 ->add('Artist', null, [
-                    'query_builder' => fn($repo) => $repo->createQueryBuilder('a')
+                    'query_builder' => fn ($repo) => $repo->createQueryBuilder('a')
                         ->andWhere('a.copyForArchive = :copy')
                         ->setParameter('copy', false)
                 ]);
@@ -89,8 +89,8 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     {
         $event = $eventinfo->getEvent();
         $i = 1;
-        foreach ($event->getEventArtistInfos() as $info){
-            if($info->getArtist() == $eventinfo->getArtist()){
+        foreach ($event->getEventArtistInfos() as $info) {
+            if ($info->getArtist() == $eventinfo->getArtist()) {
                 $i+=1;
             }
         }
