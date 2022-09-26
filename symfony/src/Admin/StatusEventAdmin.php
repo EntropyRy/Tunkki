@@ -39,7 +39,7 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('description')
             ->add('creator')
             ->add('createdAt')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

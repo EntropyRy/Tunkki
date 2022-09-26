@@ -10,8 +10,9 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
-use App\Application\Sonata\ClassificationBundle\Entity\Category;
+use App\Entity\Sonata\SonataClassificationCategory as Category;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
@@ -49,11 +50,16 @@ class ItemAdmin extends AbstractAdmin
             ->add('forSale')
             ->add(
                 'category',
-                null,
-                [
-                    'label' => 'Category'
+                ChoiceFilter::class, [
+                    'field_type' => CategorySelectorType::class,
+                    'label' => 'Category',
+                    'field_options' => [
+                        'class' => $categoryAdmin->getClass(),
+                        'context' => $currentContext,
+                        'model_manager' => $categoryAdmin->getModelManager(),
+                        'multiple' => true,
+                    ]
                 ],
-                CategorySelectorType::class
             )
         ;
     }
@@ -70,7 +76,15 @@ class ItemAdmin extends AbstractAdmin
 //            ->add('createdAt')
             ->add('updatedAt')
 //            ->add('creator')
-            ->add('_action', null, ['actions' => ['status' => ['template' => 'admin/crud/list__action_status.html.twig'], 'clone' => ['template' => 'admin/crud/list__action_clone.html.twig'], 'show' => [], 'edit' => [], 'delete' => []]])
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => [
+                    'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
+                    'clone' => ['template' => 'admin/crud/list__action_clone.html.twig'],
+                    'show' => [],
+                    'edit' => [],
+                    'delete' => []
+                ]
+            ])
         ;
     }
 

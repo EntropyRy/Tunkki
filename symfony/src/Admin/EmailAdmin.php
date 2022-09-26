@@ -40,7 +40,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('subject')
             ->add('body', 'html')
             ->add('updatedAt', 'datetime')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'preview' => ['template' => 'admin/crud/list__action_email_preview.html.twig'],
                     'show' => [],

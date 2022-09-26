@@ -32,7 +32,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ->add('active', null, ['editable' => true])
             ->add('users')
             ->add('roles')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

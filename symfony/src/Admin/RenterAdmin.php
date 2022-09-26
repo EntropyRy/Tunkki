@@ -34,7 +34,8 @@ class RenterAdmin extends AbstractAdmin
             ->add('streetadress')
             ->add('zipcode')
             ->add('city')
-            ->add('_action', null, ['actions' => ['show' => [], 'edit' => [], 'delete' => []]])
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 

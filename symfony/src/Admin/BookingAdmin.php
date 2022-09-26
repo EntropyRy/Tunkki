@@ -102,12 +102,13 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('itemsReturned')
             ->add('paid')
-            ->add('_action', null, ['actions' => [
-                'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
-                'stuffList' => ['template' => 'admin/crud/list__action_stuff.html.twig'],
-                //        'show' => array(),
-                'edit' => [],
-                'delete' => [],
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => [
+                    'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
+                    'stuffList' => ['template' => 'admin/crud/list__action_stuff.html.twig'],
+                    //        'show' => array(),
+                    'edit' => [],
+                    'delete' => [],
             ]])
         ;
     }

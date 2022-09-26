@@ -16,10 +16,6 @@ use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 final class TicketAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'ticket';
-    protected array $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'id',
-    ];
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {

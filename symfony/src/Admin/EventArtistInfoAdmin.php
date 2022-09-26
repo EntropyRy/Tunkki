@@ -40,7 +40,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('stage')
             ->add('SetLength')
             ->add('StartTime')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

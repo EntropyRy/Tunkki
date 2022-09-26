@@ -24,7 +24,8 @@ class AccessoryChoiceAdmin extends AbstractAdmin
         $listMapper
             ->add('name')
             ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
-            ->add('_action', null, ['actions' => ['show' => [], 'edit' => [], 'delete' => []]])
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 

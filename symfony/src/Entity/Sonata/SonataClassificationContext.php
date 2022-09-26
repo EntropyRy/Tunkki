@@ -12,8 +12,8 @@ class SonataClassificationContext extends BaseContext
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    protected $id;
-    public function getId(): int|string|null
+    protected ?string $id;
+    public function getId(): ?string
     {
         return $this->id;
     }

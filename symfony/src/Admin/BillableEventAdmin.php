@@ -23,7 +23,8 @@ class BillableEventAdmin extends AbstractAdmin
         $listMapper
             ->add('description')
             ->add('unitPrice')
-            ->add('_action', null, ['actions' => ['show' => [], 'edit' => [], 'delete' => []]])
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 

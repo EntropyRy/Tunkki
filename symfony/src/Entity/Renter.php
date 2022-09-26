@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Entity\Booking;
 
 /**
  * Renter
@@ -21,7 +22,7 @@ class Renter implements \Stringable
     /**
      * @var string
      */
-    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\Booking::class, mappedBy: 'renter')]
+    #[ORM\OneToMany(targetEntity:Booking::class, mappedBy: 'renter')]
     private $bookings;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]

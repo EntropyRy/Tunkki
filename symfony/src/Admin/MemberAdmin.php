@@ -64,7 +64,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isActiveMember')
             ->add('isFullMember')
             ->add('user.LastLogin')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

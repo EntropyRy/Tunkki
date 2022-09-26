@@ -31,7 +31,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('ContentEn')
             ->add('updatedAt')
             ->add('createdAt')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

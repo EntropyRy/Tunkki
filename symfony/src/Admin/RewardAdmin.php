@@ -39,7 +39,7 @@ final class RewardAdmin extends AbstractAdmin
             ->add('paidDate')
             ->add('PaymentHandledBy')
             ->add('updatedAt')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'makepaid' => [

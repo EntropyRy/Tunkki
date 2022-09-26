@@ -6,7 +6,7 @@
 {% for file in object.files %}
     {% if file is defined and loaded %}
         {% if file.file.providerName == "sonata.media.provider.image" %}
-            {% media file.file, 'small' %}
+            {{ sonata_media(file.file, 'small') }}
             {% set loaded = 0 %}
         {% endif %}
     {% endif %}

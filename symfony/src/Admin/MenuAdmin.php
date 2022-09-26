@@ -33,7 +33,7 @@ final class MenuAdmin extends AbstractAdmin
             ->add('nimi')
             ->add('url')
             ->add('enabled')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],

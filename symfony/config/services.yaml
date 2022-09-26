@@ -48,7 +48,7 @@ services:
             - App\Controller\ItemAdminController 
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
-              #            - "@sonata.classification.manager.context"
+            - "@sonata.classification.manager.context"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Items }
         calls:
@@ -160,7 +160,7 @@ services:
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
             - "@doctrine.orm.entity_manager"
-              #            - "@sonata.classification.manager.category"
+            - "@sonata.classification.manager.category"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Bookings, show_mosaic_button: false }
         calls:
@@ -172,24 +172,19 @@ services:
 
     entropy_tunkki.admin.package:
         class: App\Admin\PackageAdmin
-        arguments: [~, App\Entity\Package, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Packages }
+            - { name: sonata.admin, model_class: App\Entity\Package, manager_type: orm, group: admin, label: Packages }
         public: true
 
     entropy_tunkki.admin.renter:
         class: App\Admin\RenterAdmin
-        arguments: [~, App\Entity\Renter, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Renters }
-        public: true
+            - { name: sonata.admin, model_class: App\Entity\Renter, manager_type: orm, group: admin, label: Renters }
     entropy_tunkki.admin.billable_event:
         class: App\Admin\BillableEventAdmin
-        arguments: [~, App\Entity\BillableEvent, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Billable Events }
-        public: true
-
+            - { name: sonata.admin, model_class: App\Entity\BillableEvent, manager_type: orm, group: admin, label: Billable Events }
+              
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
         arguments:
@@ -299,22 +294,19 @@ services:
 
     entropy_tunkki.admin.who_can_rent_choice:
         class: App\Admin\WhoCanRentChoiceAdmin
-        arguments: [~, App\Entity\WhoCanRentChoice, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Who Can Rent Choices }
+            - { name: sonata.admin, model_class: App\Entity\WhoCanRentChoice, manager_type: orm, group: admin, label: Who Can Rent Choices }
         public: true
 
     entropy_tunkki.admin.accessory:
         class: App\Admin\AccessoryAdmin
-        arguments: [~, App\Entity\Accessory, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Accessory }
+            - { name: sonata.admin, model_class: App\Entity\Accessory, manager_type: orm, group: admin, label: Accessory }
         public: true
     entropy_tunkki.admin.accessory_choices:
         class: App\Admin\AccessoryChoiceAdmin
-        arguments: [~, App\Entity\AccessoryChoice, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Accessory Choices }
+            - { name: sonata.admin, model_class: App\Entity\AccessoryChoice, manager_type: orm, group: admin, label: Accessory Choices }
         public: true
 
     entropy_tunkki.admin.email_notification:
@@ -337,9 +329,8 @@ services:
 
     admin.email:
         class: App\Admin\EmailAdmin
-        arguments: [~, App\Entity\Email, App\Controller\EmailAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Emails }
+          - { name: sonata.admin, model_class: App\Entity\Email, controller: App\Controller\EmailAdminController, manager_type: orm, group: admin, label: Emails }
         public: true
 
     entropy.admin.reward:
