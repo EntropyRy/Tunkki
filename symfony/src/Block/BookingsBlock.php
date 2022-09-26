@@ -16,8 +16,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BookingsBlock extends BaseBlockService
 {
-    protected $em;
-
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
@@ -27,28 +25,21 @@ class BookingsBlock extends BaseBlockService
             'bookingDate' => 'DESC'
         ]);
 
-        return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-            'bookings'  => $bookings
-        ), $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'bookings'  => $bookings], $response);
     }
 
-    public function __construct($name, EntityManagerInterface $em)
+    public function __construct($name, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
         parent::__construct($name);
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'position' => '1',
-            'template' => 'block/bookings.html.twig',
-        ));
+        $resolver->setDefaults(['position' => '1', 'template' => 'block/bookings.html.twig']);
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-book',
         ]);
     }

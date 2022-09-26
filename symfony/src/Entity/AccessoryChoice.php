@@ -6,34 +6,21 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * AccessoryChoices
- *
- * @ORM\Table("AccessoryChoice")
- * @ORM\Entity
  */
-class AccessoryChoice
+#[ORM\Table('AccessoryChoice')]
+#[ORM\Entity]
+class AccessoryChoice implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    private string $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="compensationPrice", type="integer")
-     */
-    private $compensationPrice;
+    #[ORM\Column(name: 'compensationPrice', type: 'integer')]
+    private string $compensationPrice;
 
     /**
      * Get id
@@ -69,9 +56,9 @@ class AccessoryChoice
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->name ? $this->name : '';
+        return $this->name ?: '';
     }
 
     /**

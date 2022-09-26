@@ -14,9 +14,6 @@ use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -27,9 +24,6 @@ class PackageAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -41,19 +35,10 @@ class PackageAdmin extends AbstractAdmin
   //          ->add('needsFixing')
             ->add('itemsNeedingFixing', 'array')
             ->add('notes')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                ),
-            ))
+            ->add('_action', null, ['actions' => ['show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $p = $this->getSubject();
@@ -75,7 +60,7 @@ class PackageAdmin extends AbstractAdmin
         $formMapper
             ->with('Package')
             ->add('name')
-            ->add('whoCanRent', null, array('multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'))
+            ->add('whoCanRent', null, ['multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'])
             ->add('items', ModelType::class, [
                 'btn_add'=> false,
                 'multiple'=>true,
@@ -84,7 +69,7 @@ class PackageAdmin extends AbstractAdmin
                 'query' => $query,
                 'help' => 'Item cannot be in two packages at the same time'
             ])
-            ->add('rentFromItems', TextType::class, array('disabled' => true))
+            ->add('rentFromItems', TextType::class, ['disabled' => true])
             ->add('rent')
             ->add('compensationPrice')
             ->add('notes')
@@ -92,9 +77,6 @@ class PackageAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

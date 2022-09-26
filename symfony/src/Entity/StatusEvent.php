@@ -8,71 +8,50 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Events
- *
- * @ORM\Table(name="StatusEvent")
- * @ORM\Entity
- * @ORM\HasLifecycleCallbacks
  */
-class StatusEvent
+#[ORM\Table(name: 'StatusEvent')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
+class StatusEvent implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="fixingHistory")
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'fixingHistory')]
     private $item;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Booking", inversedBy="statusEvents")
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Booking::class, inversedBy: 'statusEvents')]
     private $booking;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Description", type="string", length=5000, nullable=true)
-     */
-    private $description;
+    #[ORM\Column(name: 'Description', type: 'string', length: 5000, nullable: true)]
+    private string $description;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="CreatedAt", type="datetime")
      */
-    private $createdAt;
+    #[ORM\Column(name: 'CreatedAt', type: 'datetime')]
+    private \DateTime $createdAt;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="UpdatedAt", type="datetime")
      */
-    private $updatedAt;
+    #[ORM\Column(name: 'UpdatedAt', type: 'datetime')]
+    private \DateTime $updatedAt;
 
     /**
      * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="\App\Entity\User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $creator;
 
     /**
      * @var string
-     *
-     * @ORM\ManyToOne(targetEntity="\App\Entity\User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
+    #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $modifier;
 
     /**
@@ -160,7 +139,6 @@ class StatusEvent
     /**
      * Set item
      *
-     * @param \App\Entity\Item $item
      *
      * @return Events
      */
@@ -181,7 +159,7 @@ class StatusEvent
         return $this->item;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if (is_object($this->getItem())) {
             return 'Event for '.$this->getItem()->getName();
@@ -195,7 +173,6 @@ class StatusEvent
     /**
      * Set creator
      *
-     * @param \App\Entity\User $creator
      *
      * @return Event
      */
@@ -219,7 +196,6 @@ class StatusEvent
     /**
      * Set modifier
      *
-     * @param \App\Entity\User $modifier
      *
      * @return Event
      */

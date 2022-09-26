@@ -10,211 +10,125 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Booking
- *
- * @ORM\Table("Booking")
- * @ORM\Entity(repositoryClass="App\Repository\BookingRepository")
  */
-class Booking
+#[ORM\Table('Booking')]
+#[ORM\Entity(repositoryClass: \App\Repository\BookingRepository::class)]
+class Booking implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    private ?string $name = null;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="referenceNumber", type="string", length=190)
-     */
-    private $referenceNumber = 0;
+    #[ORM\Column(name: 'referenceNumber', type: 'string', length: 190)]
+    private int|string $referenceNumber = 0;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="renterHash", type="string", length=199)
-     */
-    private $renterHash = 0;
+    #[ORM\Column(name: 'renterHash', type: 'string', length: 199)]
+    private int|string $renterHash = 0;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="renterConsent", type="boolean")
-     */
-    private $renterConsent = false;
+    #[ORM\Column(name: 'renterConsent', type: 'boolean')]
+    private bool $renterConsent = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="itemsReturned", type="boolean")
-     */
-    private $itemsReturned = false;
+    #[ORM\Column(name: 'itemsReturned', type: 'boolean')]
+    private bool $itemsReturned = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="invoiceSent", type="boolean")
-     */
-    private $invoiceSent = false;
+    #[ORM\Column(name: 'invoiceSent', type: 'boolean')]
+    private bool $invoiceSent = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="paid", type="boolean")
-     */
-    private $paid = false;
+    #[ORM\Column(name: 'paid', type: 'boolean')]
+    private bool $paid = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="cancelled", type="boolean")
-     */
-    private $cancelled = false;
+    #[ORM\Column(name: 'cancelled', type: 'boolean')]
+    private bool $cancelled = false;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="retrieval", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'retrieval', type: 'datetime', nullable: true)]
     private $retrieval;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="return_date", type="datetime", nullable=true)
      */
+    #[ORM\Column(name: 'return_date', type: 'datetime', nullable: true)]
     private $returning;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="paid_date", type="datetime", nullable=true)
-     */
-    private $paid_date;
+    #[ORM\Column(name: 'paid_date', type: 'datetime', nullable: true)]
+    private \DateTime $paid_date;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="\App\Entity\Item")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $items;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="\App\Entity\Package")
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
-     */
+    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Package::class)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $packages;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="\App\Entity\Accessory", cascade={"persist"})
-     */
+    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Accessory::class, cascade: ['persist'])]
     private $accessories;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="\App\Entity\WhoCanRentChoice", cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
     private $rentingPrivileges;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="Renter", inversedBy="bookings")
-     */
+    #[ORM\ManyToOne(targetEntity: 'Renter', inversedBy: 'bookings')]
     private $renter;
 
-    /**
-     *
-     * @ORM\OneToMany(targetEntity="BillableEvent", mappedBy="booking", cascade={"persist"}, orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: 'BillableEvent', mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
     private $billableEvents;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private $givenAwayBy;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private $receivedBy;
 
-    /**
-     * @ORM\Column(name="actualPrice", type="decimal", precision=7, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'actualPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $actualPrice;
 
-    /**
-     * @ORM\Column(name="numberOfRentDays", type="integer")
-     */
-    private $numberOfRentDays = 1;
+    #[ORM\Column(name: 'numberOfRentDays', type: 'integer')]
+    private int $numberOfRentDays = 1;
 
-    /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="booking", cascade={"all"}, fetch="LAZY")
-     */
+    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
     private $statusEvents;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private $creator;
 
     /**
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="created_at", type="datetime")
      */
+    #[ORM\Column(name: 'created_at', type: 'datetime')]
     private $createdAt;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private $modifier;
 
     /**
      * @var \DateTime
      *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="modified_at", type="datetime")
      */
+    #[ORM\Column(name: 'modified_at', type: 'datetime')]
     private $modifiedAt;
 
     /**
      * @var \DateTime
-     *
-     * @ORM\Column(name="booking_date", type="date")
      */
+    #[ORM\Column(name: 'booking_date', type: 'date')]
     private $bookingDate;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Reward", mappedBy="bookings")
-     */
+    #[ORM\ManyToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'bookings')]
     private $rewards;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $reasonForDiscount;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $renterSignature;
 
 
@@ -222,7 +136,6 @@ class Booking
     /**
      * Add package
      *
-     * @param \App\Entity\Package $package
      *
      * @return Booking
      */
@@ -238,8 +151,6 @@ class Booking
 
     /**
      * Remove package
-     *
-     * @param \App\Entity\Package $package
      */
     public function removePackage(\App\Entity\Package $package)
     {
@@ -258,7 +169,7 @@ class Booking
     {
         return $this->packages;
     }
-    public function __toString()
+    public function __toString(): string
     {
         return $this->name ? $this->name.' - '.date_format($this->bookingDate, 'd.m.Y') : 'n/a';
     }
@@ -416,7 +327,6 @@ class Booking
     /**
      * Add item
      *
-     * @param \App\Entity\Item $item
      *
      * @return Booking
      */
@@ -430,8 +340,6 @@ class Booking
 
     /**
      * Remove item
-     *
-     * @param \App\Entity\Item $item
      */
     public function removeItem(\App\Entity\Item $item)
     {
@@ -476,7 +384,6 @@ class Booking
     /**
      * Add billableEvent
      *
-     * @param \App\Entity\BillableEvent $billableEvent
      *
      * @return Booking
      */
@@ -490,8 +397,6 @@ class Booking
 
     /**
      * Remove billableEvent
-     *
-     * @param \App\Entity\BillableEvent $billableEvent
      */
     public function removeBillableEvent(\App\Entity\BillableEvent $billableEvent)
     {
@@ -512,7 +417,6 @@ class Booking
     /**
      * Set rentingPrivileges
      *
-     * @param \App\Entity\WhoCanRentChoice $rentingPrivileges
      *
      * @return Booking
      */
@@ -670,7 +574,6 @@ class Booking
     /**
      * Add statusEvent.
      *
-     * @param \App\Entity\StatusEvent $statusEvent
      *
      * @return Booking
      */

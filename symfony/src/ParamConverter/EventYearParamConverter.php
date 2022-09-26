@@ -3,7 +3,7 @@
 namespace App\ParamConverter;
 
 use App\Entity\Event;
-use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Persistence\ManagerRegistry as Registry;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,16 +12,10 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 class EventYearParamConverter implements ParamConverterInterface
 {
     /**
-     * @var Registry $registry Manager registry
-     */
-    private $registry;
-
-    /**
      * @param Registry $registry Manager registry
      */
-    public function __construct(Registry $registry = null)
+    public function __construct(private readonly Registry $registry)
     {
-        $this->registry = $registry;
     }
     /**
      * {@inheritdoc}
@@ -51,7 +45,7 @@ class EventYearParamConverter implements ParamConverterInterface
         $em = $this->registry->getManagerForClass($this->getEntityClassName());
         $name = $em->getClassMetadata($this->getEntityClassName())->getName();
         // Check, if class name is what we need
-        if ('App\Entity\Event' !== $name) {
+        if (\App\Entity\Event::class !== $name) {
             return false;
         }
 

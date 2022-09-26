@@ -19,7 +19,7 @@
             {% if _user_image|default(false) %}
                 <img src="{{ _user_image }}" class="img-circle" alt="Avatar" />
             {% endif %}
-            <p>{{ app.user }}</p>
+            <p>{{ app.user.member.name }}</p>
         </li>
 
 {#

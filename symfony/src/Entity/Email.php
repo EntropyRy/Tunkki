@@ -5,58 +5,42 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\EmailRepository")
- */
-class Email
+#[ORM\Entity(repositoryClass: \App\Repository\EmailRepository::class)]
+class Email implements \Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $subject;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $body;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $purpose;
 
     /**
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private $createdAt;
 
     /**
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(type="datetime")
      */
+    #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $addLoginLinksToFooter;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="emails")
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]
     private $event;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $replyTo;
 
     public function getId(): ?int
@@ -135,9 +119,9 @@ class Email
 
         return $this;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->purpose ? $this->purpose : 'Email for '.$this->event;
+        return (string) ($this->purpose ?: 'Email for '.$this->event);
     }
 
     public function getEvent(): ?Event

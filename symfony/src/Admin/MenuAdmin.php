@@ -14,7 +14,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 final class MenuAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'menu';
-    protected $accessMapping = [
+    protected array $accessMapping = [
         'tree' => 'LIST',
     ];
     public function configureRoutes(RouteCollectionInterface $collection): void

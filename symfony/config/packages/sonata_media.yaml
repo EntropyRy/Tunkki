@@ -3,7 +3,7 @@ sonata_media:
     class:
         media: App\Entity\Sonata\SonataMediaMedia
         gallery: App\Entity\Sonata\SonataMediaGallery
-        gallery_item: App\Entity\Sonata\Sonata\MediaGalleryItem
+        gallery_item: App\Entity\Sonata\SonataMediaGalleryItem
     default_context: item
     force_disable_category: true
     contexts:

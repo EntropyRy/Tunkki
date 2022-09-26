@@ -10,27 +10,20 @@ use Sonata\PageBundle\Page\TemplateManager;
 
 class AnnouncementsPage implements PageServiceInterface
 {
-    private $templateManager;
-    private $em;
-    private $name;
-
-    public function __construct($name, TemplateManager $templateManager, $em)
+    public function __construct(private $name, private readonly TemplateManager $templateManager, private $em)
     {
-        $this->name             = $name;
-        $this->templateManager  = $templateManager;
-        $this->em               = $em;
     }
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
         $events = $this->em->getRepository('App:Event')->findEventsByType('announcement');
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            array_merge($parameters, array('events'=>$events)), //'clubroom'=>$clubroom)),
+            [...$parameters, ...['events'=>$events]], //'clubroom'=>$clubroom)),
             $response
         );
     }

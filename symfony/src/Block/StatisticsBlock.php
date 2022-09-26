@@ -17,11 +17,9 @@ use App\Form\UrlsType;
 
 class StatisticsBlock extends BaseBlockService
 {
-    protected $security;
-    protected $em;
-
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
+        $stats = [];
         $memberR = $this->em->getRepository('App:Member');
         $stats['block.stats.members'] = $memberR->countByMember();
         $stats['block.stats.active_members'] = $memberR->countByActiveMember();
@@ -66,10 +64,8 @@ class StatisticsBlock extends BaseBlockService
                     ]);*/
     }
 
-    public function __construct($twig, Security $security, EntityManagerInterface $em)
+    public function __construct($twig, protected Security $security, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
-        $this->security = $security;
         parent::__construct($twig);
     }
 
@@ -81,7 +77,7 @@ class StatisticsBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }

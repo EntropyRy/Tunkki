@@ -17,10 +17,6 @@ use App\Helper\ZMQHelper;
 
 class DoorInfoBlock extends BaseBlockService
 {
-    protected $security;
-    protected $em;
-    protected $zmq;
-
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         if (is_null($this->security->getUser())) {
@@ -47,11 +43,8 @@ class DoorInfoBlock extends BaseBlockService
     {
     }
 
-    public function __construct($twig, Security $security, EntityManagerInterface $em, ZMQHelper $zmq)
+    public function __construct($twig, protected Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
     {
-        $this->em = $em;
-        $this->security = $security;
-        $this->zmq = $zmq;
         parent::__construct($twig);
     }
 
@@ -63,7 +56,7 @@ class DoorInfoBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }

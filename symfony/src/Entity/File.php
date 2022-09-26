@@ -7,38 +7,23 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Files
- *
- * @ORM\Table(name="File")
- * @ORM\Entity
  */
-class File
+#[ORM\Table(name: 'File')]
+#[ORM\Entity]
+class File implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="tiedostoinfo", type="string", length=190, nullable=true)
-     */
-    private $fileinfo;
+    #[ORM\Column(name: 'tiedostoinfo', type: 'string', length: 190, nullable: true)]
+    private string $fileinfo;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="files")
-     *
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'files')]
     private $product;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="Media::class",  cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
     private $file;
 
 
@@ -79,7 +64,6 @@ class File
     /**
      * Set product
      *
-     * @param \App\Entity\Item $product
      *
      * @return Files
      */
@@ -103,7 +87,6 @@ class File
     /**
      * Set file
      *
-     * @param Media $file
      *
      * @return Files
      */
@@ -142,8 +125,8 @@ class File
         }
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->fileinfo ? $this->fileinfo : '' ;
+        return $this->fileinfo ?: '' ;
     }
 }

@@ -38,7 +38,7 @@ final class TicketAdminController extends CRUDController
                         $ticket = new Ticket();
                         $ticket->setEvent($event);
                         $ticket->setStatus('available');
-                        $ticket->setPrice($event->getTicketPrice() ? $event->getTicketPrice() : 0);
+                        $ticket->setPrice($event->getTicketPrice() ?: 0);
                         $em->persist($ticket);
                         $em->flush();
                         $ticket->setReferenceNumber($this->calculateReferenceNumber($ticket));

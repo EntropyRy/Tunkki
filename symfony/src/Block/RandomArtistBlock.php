@@ -16,22 +16,16 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class RandomArtistBlock extends BaseBlockService
 {
-    protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
         shuffle($artists);
         $artist = array_pop($artists);
-        return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-            'artist'  => $artist,
-            'settings' => $blockContext->getSettings()
-        ), $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'artist'  => $artist, 'settings' => $blockContext->getSettings()], $response);
     }
 
-    public function __construct($twig, EntityManagerInterface $em)
+    public function __construct($twig, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
         parent::__construct($twig);
     }
 
@@ -44,7 +38,7 @@ class RandomArtistBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-music',
         ]);
     }

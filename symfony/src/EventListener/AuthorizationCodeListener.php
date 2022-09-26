@@ -12,18 +12,8 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 final class AuthorizationCodeListener
 {
-    private $urlGenerator;
-    private $requestStack;
-    private $session;
-
-    public function __construct(
-        UrlGeneratorInterface $urlGenerator,
-        RequestStack $requestStack,
-        SessionInterface $session
-    ) {
-        $this->urlGenerator = $urlGenerator;
-        $this->requestStack = $requestStack;
-        $this->session      = $session;
+    public function __construct(private readonly UrlGeneratorInterface $urlGenerator, private readonly RequestStack $requestStack, private readonly SessionInterface $session)
+    {
     }
     public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event)
     {

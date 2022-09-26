@@ -7,63 +7,43 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Entity
- */
-class Reward
+#[ORM\Entity]
+class Reward implements \Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User", inversedBy="rewards")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'rewards')]
+    #[ORM\JoinColumn(nullable: false)]
     private $user;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Booking", inversedBy="rewards")
-     */
+    #[ORM\ManyToMany(targetEntity: \App\Entity\Booking::class, inversedBy: 'rewards')]
     private $bookings;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private $reward;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $paid = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $paid = false;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $paidDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
     private $PaymentHandledBy;
 
     /**
-     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
+    #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $Weight = 0;
+    #[ORM\Column(type: 'integer')]
+    private int $Weight = 0;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private $Evenout;
 
     public function __construct()
@@ -179,7 +159,7 @@ class Reward
 
         return $this;
     }
-    public function __toString()
+    public function __toString(): string
     {
         return '#'.$this->id. ' for '.$this->user;
     }

@@ -5,47 +5,33 @@ namespace App\Entity;
 use App\Repository\NakkiBookingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=NakkiBookingRepository::class)
- */
-class NakkiBooking
+#[ORM\Entity(repositoryClass: NakkiBookingRepository::class)]
+class NakkiBooking implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Nakki::class, inversedBy="nakkiBookings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Nakki::class, inversedBy: 'nakkiBookings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $nakki;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="nakkiBookings")
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
+    #[ORM\JoinColumn(nullable: true)]
     private $member;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $startAt;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $endAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="nakkiBookings")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkiBookings')]
+    #[ORM\JoinColumn(nullable: false)]
     private $event;
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->event.': '.$this->nakki.' at '. $this->startAt->format('H:i');
     }

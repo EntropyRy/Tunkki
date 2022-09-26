@@ -13,19 +13,8 @@ use Symfony\Component\Mime\Address;
 
 class BookingAdminListener
 {
-    private $mailer = null;
-    private $email = null;
-    private $fromEmail = null;
-    private $twig = null;
-    private $em = null;
-
-    public function __construct(string $email, string $fromEmail, MailerInterface $mailer, \Twig_Environment $twig, EntityManagerInterface $em)
+    public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly \Twig\Environment $twig, private readonly EntityManagerInterface $em)
     {
-        $this->email = $email;
-        $this->fromEmail = $fromEmail;
-        $this->mailer = $mailer;
-        $this->twig = $twig;
-        $this->em = $em;
     }
 
     public function sendEmailNotification(PersistenceEvent $event)

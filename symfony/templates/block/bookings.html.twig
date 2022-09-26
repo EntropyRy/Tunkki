@@ -35,7 +35,7 @@
                     <div class="col-md-3">
                         <div>Given away <br>{%if booking.retrieval %} {{ booking.retrieval|date('d.m.Y H:i') }}<br>{%endif %} 
                             {% if booking.givenAwayBy %}
-                                {{ booking.givenAwayBy }}
+                                {{ booking.givenAwayBy.username }}
                             {% else %}
                                 nobody?
                             {% endif %}
@@ -43,7 +43,7 @@
                         <hr>
                         <div>Returning <br> {%if booking.returning %}{{ booking.returning|date('d.m.Y H:i') }} <br>{%endif %}
                             {% if booking.receivedBy %}
-                                {{ booking.receivedBy }}
+                                {{ booking.receivedBy.username }}
                             {% else %}
                                 nobody?
                             {% endif %}

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Entity\Sonata\SonataMediaMedia;
+use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -10,281 +10,195 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 use function Symfony\Component\String\u;
 
-/**
- * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="event")
- */
-class Event
+#[ORM\Entity(repositoryClass: \App\Repository\EventRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
+class Event implements \Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $Name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $Nimi;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $EventDate;
 
-    /**
-     * @ORM\Column(type="datetime")
-     */
+    #[ORM\Column(type: 'datetime')]
     private $publishDate;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="SonataMediaMedia" ,cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
     private $picture;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $css;
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
+body {
+    background-image: url(/images/bg_stripe_black.png); 
+}
+.container {
+    background: #220101;
+    color: red;
+}
+.img-filter {
+    /* possible animations: morph and transparent_morph, still color with background */
+    /* animation: morph 8s infinite; */
+    background: #00FFFF;
+}
+.img-filter img {
+    mix-blend-mode: difference;
+}
+*/";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $Content = "Use these: <br>
+    #[ORM\Column(type: 'text', nullable: true)]
+    private string $Content = "Use these: <br>
             {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
+    #[ORM\Column(type: 'text', nullable: true)]
+    private string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
             {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $url;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $published = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $published = false;
 
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
+    #[ORM\Column(type: 'string', length: 180)]
     private $type;
 
-    /**
-     * @ORM\Column(type="string", length=180, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private $epics;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $externalUrl = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $externalUrl = false;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $sticky = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $sticky = false;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $picturePosition = 'banner';
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $picturePosition = 'banner';
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $cancelled = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $cancelled = false;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="SonataMediaMedia::class")
-     */
+    #[ORM\ManyToOne(targetEntity: Media::class)]
     private $attachment;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
+    #[ORM\Column(type: 'array', nullable: true)]
     private $links = [];
 
-    /**
-     * @ORM\OneToMany(targetEntity=EventArtistInfo::class, mappedBy="Event")
-     * @ORM\OrderBy({"stage" = "ASC", "StartTime" = "ASC"})
-     */
+    #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: \Event::class)]
+    #[ORM\OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
     private $eventArtistInfos;
 
     /**
-     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
+    #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $until;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RSVP::class, mappedBy="event", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'event', orphanRemoval: true)]
     private $RSVPs;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $rsvpSystemEnabled = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $rsvpSystemEnabled = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Nakki::class, mappedBy="event", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
     private $nakkis;
 
-    /**
-     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="event", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
     private $nakkiBookings;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $NakkikoneEnabled = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $NakkikoneEnabled = false;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $nakkiInfoFi =
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $nakkiInfoFi =
         '
         <h5>Yleisinfo</h5>
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
         <h6>Saat ilmaisen sisäänpääsyn</h6>
         ';
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $nakkiInfoEn =
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $nakkiInfoEn =
         '
         <h5>General information</h5>
         <p>Choose at least two Nakkis that are 1 hour length and build up or take down</p>
         <h6>You\'ll get free entry to the party</h6>
         ';
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $includeSaferSpaceGuidelines;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $headerTheme = 'light';
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $headerTheme = 'light';
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $streamPlayerUrl;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $imgFilterColor;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $imgFilterBlendMode;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $artistSignUpEnabled = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $artistSignUpEnabled = false;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $artistSignUpEnd;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $artistSignUpStart;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $webMeetingUrl;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $showArtistSignUpOnlyForLoggedInMembers = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="event", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
     private $tickets;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $ticketCount = 0;
+    #[ORM\Column(type: 'integer')]
+    private int $ticketCount = 0;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $ticketsEnabled = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $ticketsEnabled = false;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $ticketPrice;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $ticketInfoFi;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $ticketInfoEn;
 
-    /**
-     * @ORM\Column(type="date_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'date_immutable', nullable: true)]
     private $ticketPresaleStart;
 
-    /**
-     * @ORM\Column(type="datetime_immutable", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private $ticketPresaleEnd;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $ticketPresaleCount = 0;
+    #[ORM\Column(type: 'integer')]
+    private int $ticketPresaleCount = 0;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $showNakkikoneLinkInEvent = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $showNakkikoneLinkInEvent = false;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $requireNakkiBookingsToBeDifferentTimes = true;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Email::class, mappedBy="event")
-     */
+    #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
     private $emails;
 
     public function getId(): ?int
@@ -340,12 +254,12 @@ class Event
         return $this;
     }
 
-    public function getPicture(): ?SonataMediaMedia
+    public function getPicture(): ?Media
     {
         return $this->picture;
     }
 
-    public function setPicture(?SonataMediaMedia $picture): self
+    public function setPicture(?Media $picture): self
     {
         $this->picture = $picture;
 
@@ -399,9 +313,9 @@ class Event
 
         return $this;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->getName() ? $this->getName() : 'Happening';
+        return $this->getName() ?: 'Happening';
     }
 
     public function getPublished(): ?bool
@@ -418,23 +332,6 @@ class Event
     public function __construct()
     {
         $this->publishDate = new \DateTime();
-        $this->css = "/* If you want to play with CSS these help you. First remove this and last line
-body {
-    background-image: url(/images/bg_stripe_black.png); 
-}
-.container {
-    background: #220101;
-    color: red;
-}
-.img-filter {
-    /* possible animations: morph and transparent_morph, still color with background */
-    /* animation: morph 8s infinite; */
-    background: #00FFFF;
-}
-.img-filter img {
-    mix-blend-mode: difference;
-}
-*/";
         $this->eventArtistInfos = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
         $this->nakkis = new ArrayCollection();
@@ -534,12 +431,12 @@ body {
         return $this;
     }
 
-    public function getAttachment(): ?SonataMediaMedia
+    public function getAttachment(): ?Media
     {
         return $this->attachment;
     }
 
-    public function setAttachment(?SonataMediaMedia $attachment): self
+    public function setAttachment(?Media $attachment): self
     {
         $this->attachment = $attachment;
 
@@ -564,11 +461,11 @@ body {
         } else {
             $abstract = $this->removeTwigTags($this->Content);
         }
-        return u(html_entity_decode(strip_tags($abstract)))->truncate(150, '..');
+        return u(html_entity_decode(strip_tags((string) $abstract)))->truncate(150, '..');
     }
     protected function removeTwigTags($message)
     {
-        $abstract = str_replace("{{ bios }}", "", $message);
+        $abstract = str_replace("{{ bios }}", "", (string) $message);
         $abstract = str_replace("{{ timetable }}", "", $abstract);
         $abstract = str_replace("{{ vj_bios }}", "", $abstract);
         $abstract = str_replace("{{ rsvp }}", "", $abstract);
@@ -972,12 +869,12 @@ body {
 
     public function getTicketInfo($lang): ?string
     {
-        $func = 'ticketInfo'. ucfirst($lang);
+        $func = 'ticketInfo'. ucfirst((string) $lang);
         return $this->{$func};
     }
     public function getNakkiInfo($lang): ?string
     {
-        $func = 'nakkiInfo'. ucfirst($lang);
+        $func = 'nakkiInfo'. ucfirst((string) $lang);
         return $this->{$func};
     }
 

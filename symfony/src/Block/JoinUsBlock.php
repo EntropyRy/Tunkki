@@ -29,20 +29,15 @@ class JoinUsBlock extends BaseBlockService
 
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-        ), $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock()], $response);
     }
     public function configureSettings(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'position' => '1',
-            'template' => 'member/joinus_block.html.twig',
-        ));
+        $resolver->setDefaults(['position' => '1', 'template' => 'member/joinus_block.html.twig']);
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-user',
         ]);
     }

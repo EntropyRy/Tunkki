@@ -7,47 +7,35 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=AccessGroupsRepository::class)
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
- */
-class AccessGroups
+#[ORM\Entity(repositoryClass: AccessGroupsRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+class AccessGroups implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $name;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=User::class, inversedBy="accessGroups")
-     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'accessGroups')]
     private $users;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $active = true;
+    #[ORM\Column(type: 'boolean')]
+    private bool $active = true;
 
     public function __construct()
     {
         $this->users = new ArrayCollection();
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->name;
+        return (string) $this->name;
     }
 
     public function getId(): ?int

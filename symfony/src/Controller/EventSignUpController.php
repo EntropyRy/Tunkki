@@ -233,7 +233,7 @@ class EventSignUpController extends EventController
         TranslatorInterface $trans
     ): Response {
         $artists = $this->getUser()->getMember()->getArtist();
-        if (count($artists)==0) {
+        if ((is_countable($artists) ? count($artists) : 0)==0) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
@@ -276,7 +276,7 @@ class EventSignUpController extends EventController
                 $this->em->flush();
                 $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));
                 return new RedirectResponse($this->generateUrl('entropy_profile'));
-            } catch (\Exception $e) {
+            } catch (\Exception) {
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
             }
         }

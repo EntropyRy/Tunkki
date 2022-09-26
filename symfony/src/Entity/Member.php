@@ -11,189 +11,104 @@ use App\Entity\Ticket;
 
 /**
  * Member
- *
- * @ORM\Table(name="member")
- * @ORM\Entity(repositoryClass="App\Repository\MemberRepository")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
  */
-class Member
+#[ORM\Table(name: 'member')]
+#[ORM\Entity(repositoryClass: \App\Repository\MemberRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+class Member implements \Stringable
 {
-    /**
-     * @var int
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
+
+    #[ORM\Column(name: 'firstname', type: 'string', length: 190)]
+    private string $firstname;
+
+    #[ORM\Column(name: 'lastname', type: 'string', length: 190)]
+    private string $lastname;
+
+    #[ORM\Column(name: 'email', type: 'string', length: 190, unique: true)]
+    private string $email;
+
+    #[ORM\Column(name: 'username', type: 'string', length: 190, nullable: true)]
+    private string $username;
+
+    #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
+    private ?string $phone = null;
+
+    #[ORM\Column(name: 'CityOfResidence', type: 'string', length: 190, nullable: true)]
+    private ?string $CityOfResidence = null;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="firstname", type="string", length=190)
-     */
-    private $firstname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="lastname", type="string", length=190)
-     */
-    private $lastname;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=190, unique=true)
-     */
-    private $email;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="username", type="string", length=190, nullable=true)
-     */
-    private $username;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="phone", type="string", length=190, nullable=true)
-     */
-    private $phone;
-
-    /**
-     * @var string|null
-     *
-     * @ORM\Column(name="CityOfResidence", type="string", length=190, nullable=true)
-     */
-    private $CityOfResidence;
-
-    /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="createdAt", type="datetime")
      */
-    private $createdAt;
+    #[ORM\Column(name: 'createdAt', type: 'datetime')]
+    private \DateTime $createdAt;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="updatedAt", type="datetime")
      */
-    private $updatedAt;
+    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
+    private \DateTime $updatedAt;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="isActiveMember", type="boolean")
-     */
-    private $isActiveMember = false;
+    #[ORM\Column(name: 'isActiveMember', type: 'boolean')]
+    private bool $isActiveMember = false;
 
-    /**
-     * @var bool
-     *
-     * @ORM\Column(name="rejectReasonSent", type="boolean")
-     */
-    private $rejectReasonSent = false;
+    #[ORM\Column(name: 'rejectReasonSent', type: 'boolean')]
+    private bool $rejectReasonSent = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="StudentUnionMember", type="boolean")
-     */
-    private $StudentUnionMember = false;
+    #[ORM\Column(name: 'StudentUnionMember', type: 'boolean')]
+    private bool $StudentUnionMember = false;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Application", type="text", nullable=true)
-     */
-    private $Application;
+    #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
+    private string $Application;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reject_reason", type="text", nullable=true)
-     */
-    private $rejectReason;
+    #[ORM\Column(name: 'reject_reason', type: 'text', nullable: true)]
+    private string $rejectReason;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="ApplicationDate", type="datetime", nullable=true)
-     */
-    private $ApplicationDate;
+    #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
+    private \DateTime $ApplicationDate;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="ApplicationHandledDate", type="datetime", nullable=true)
-     */
-    private $ApplicationHandledDate;
+    #[ORM\Column(name: 'ApplicationHandledDate', type: 'datetime', nullable: true)]
+    private \DateTime $ApplicationHandledDate;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $AcceptedAsHonoraryMember;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    private $isFullMember = false;
+    #[ORM\Column(type: 'boolean')]
+    private bool $isFullMember = false;
 
-    /**
-     * @ORM\OneToOne(targetEntity=User::class, mappedBy="member", cascade={"persist", "remove"})
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
-     */
+    #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private $user;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $locale = 'fi';
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private ?string $locale = 'fi';
 
-    /**
-     * @ORM\OneToMany(targetEntity=Artist::class, mappedBy="member", orphanRemoval=true)
-     * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
-     */
+    #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private $artist;
 
-    /**
-     * @ORM\OneToMany(targetEntity=DoorLog::class, mappedBy="member", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: DoorLog::class, mappedBy: 'member', orphanRemoval: true)]
     private $doorLogs;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $theme;
 
-    /**
-     * @ORM\OneToMany(targetEntity=RSVP::class, mappedBy="member", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]
     private $RSVPs;
 
-    /**
-     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="member")
-     */
+    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
     private $nakkiBookings;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Ticket::class, mappedBy="owner")
-     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
     private $tickets;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Nakki::class, mappedBy="responsible")
-     */
+    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
     private $responsibleForNakkis;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
+    #[ORM\Column(type: 'boolean', nullable: true)]
     private $denyKerdeAccess;
 
     public function __construct()
@@ -417,7 +332,7 @@ class Member
         return $this->CityOfResidence;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getName();
     }

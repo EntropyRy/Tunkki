@@ -97,7 +97,7 @@ class EventTicketController extends EventSignUpController
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count($selected)>0 ? true : false,
+            'hasNakki' => count((array) $selected)>0 ? true : false,
             'ticket' => $ticket,
             'form' => $form->createView(),
         ]);

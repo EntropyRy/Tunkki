@@ -53,6 +53,7 @@ class EventController extends Controller
             ]);
     }
     public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo, ImageProvider $mediaPro): Response {
+        $mediaUrl = null;
         $slug = $request->get('slug');
         $year = $request->get('year');
         if (empty($slug)) {
@@ -96,7 +97,7 @@ class EventController extends Controller
                         $this->em->persist($rsvp);
                         $this->em->flush();
                         $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
-                    } catch (\Exception $e) {
+                    } catch (\Exception) {
                         $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
                     }
                 }

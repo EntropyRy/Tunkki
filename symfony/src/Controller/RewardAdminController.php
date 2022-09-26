@@ -24,6 +24,8 @@ final class RewardAdminController extends CRUDController
     }
     public function prepareEvenoutAction(): Response
     {
+        $total = [];
+        $data = [];
         $link = $this->admin->generateUrl('Evenout');
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
@@ -40,6 +42,7 @@ final class RewardAdminController extends CRUDController
     }
     public function EvenoutAction(): RedirectResponse
     {
+        $total = [];
         $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
         $total['sum'] = 0;

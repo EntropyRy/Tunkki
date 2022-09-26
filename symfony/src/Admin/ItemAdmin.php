@@ -24,14 +24,8 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 
 class ItemAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'item';
-    protected $mm; // Mattermost helper
-    protected $ts; // Token Storage
-    protected $cm; // Context Manager
-
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
+    protected $baseRoutePattern = 'item'; 
+    
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $context = 'item';
@@ -59,54 +53,27 @@ class ItemAdmin extends AbstractAdmin
                 [
                     'label' => 'Category'
                 ],
-                CategorySelectorType::class,
-                [
-                    'class' => $categoryAdmin->getClass(),
-                    'context' =>  $currentContext,
-                    'model_manager' => $categoryAdmin->getModelManager(),
-                    'category' => new Category(),
-                    'multiple' => true,
-                ]
+                CategorySelectorType::class
             )
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->addIdentifier('name')
-            ->add('rent', 'currency', array(
-                'currency' => 'Eur'
-                ))
-            ->add('needsFixing', null, array('editable'=>true, 'inverse' => true))
+            ->add('rent', 'currency', ['currency' => 'Eur'])
+            ->add('needsFixing', null, ['editable'=>true, 'inverse' => true])
 //            ->add('rentHistory')
 //            ->add('history')
 //            ->add('forSale', null, array('editable'=>true))
 //            ->add('createdAt')
             ->add('updatedAt')
 //            ->add('creator')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'status' => array(
-                        'template' => 'admin/crud/list__action_status.html.twig'
-                    ),
-                    'clone' => array(
-                        'template' => 'admin/crud/list__action_clone.html.twig'
-                    ),
-                    'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
+            ->add('_action', null, ['actions' => ['status' => ['template' => 'admin/crud/list__action_status.html.twig'], 'clone' => ['template' => 'admin/crud/list__action_clone.html.twig'], 'show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $context = 'item';
@@ -144,7 +111,7 @@ class ItemAdmin extends AbstractAdmin
                         'btn_add' => false
                     ])
             ->end()
-            ->with('Rent Information', array('class' => 'col-md-6'))
+            ->with('Rent Information', ['class' => 'col-md-6'])
                 ->add('whoCanRent', null, [
                     'multiple' => true,
                     'expanded' => true,
@@ -179,9 +146,6 @@ class ItemAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -209,7 +173,7 @@ class ItemAdmin extends AbstractAdmin
     }
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
 
@@ -219,13 +183,9 @@ class ItemAdmin extends AbstractAdmin
 //        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
 
         if ($this->isGranted('EDIT')) {
-            $menu->addChild('Edit Item', array('uri' => $admin->generateUrl('edit', array('id' => $id))));
-            $menu->addChild('Status', array(
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', array('id' => $id))
-            ));
-            $menu->addChild('Files', array(
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', array('id' => $id))
-            ));
+            $menu->addChild('Edit Item', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
+            $menu->addChild('Status', ['uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', ['id' => $id])]);
+            $menu->addChild('Files', ['uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', ['id' => $id])]);
         }
     }
     public function prePersist($Item): void
@@ -266,17 +226,12 @@ class ItemAdmin extends AbstractAdmin
     public function configureBatchActions(array $actions): array
     {
         if ($this->hasRoute('edit') && $this->hasAccess('edit')) {
-            $actions['batchEdit'] = array(
-                'ask_confirmation' => true
-            );
+            $actions['batchEdit'] = ['ask_confirmation' => true];
         }
         return $actions;
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $cm=null)
+    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $cm=null)
     {
-        $this->mm = $mm;
-        $this->ts = $ts;
-        $this->cm = $cm;
         parent::__construct($code, $class, $baseControllerName);
     }
 }

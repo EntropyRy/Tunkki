@@ -6,33 +6,21 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Accessory
- *
- * @ORM\Table(name="Accessory")
- * @ORM\Entity
  */
-class Accessory
+#[ORM\Table(name: 'Accessory')]
+#[ORM\Entity]
+class Accessory implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\AccessoryChoice", cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: \App\Entity\AccessoryChoice::class, cascade: ['persist'])]
     private $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="count", type="string", length=50)
-     */
-    private $count;
+    #[ORM\Column(name: 'count', type: 'string', length: 50)]
+    private string $count;
 
 
     /**
@@ -72,7 +60,6 @@ class Accessory
     /**
      * Set name
      *
-     * @param \App\Entity\AccessoryChoice $name
      *
      * @return Accessory
      */
@@ -93,10 +80,10 @@ class Accessory
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $name = $this->name ? $this->name : 'n/a';
-        $count = $this->count ? $this->count : '';
+        $name = $this->name ?: 'n/a';
+        $count = $this->count ?: '';
         return $count .' X '.$name;
     }
 }

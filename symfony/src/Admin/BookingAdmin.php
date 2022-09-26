@@ -33,11 +33,7 @@ use Hashids\Hashids;
 
 class BookingAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'booking';
-    protected $mm; // Mattermost helper
-    protected $ts; // Token Storage
-    protected $em; // E manager
-    protected $cm; // Category manager
+    protected $baseRoutePattern = 'booking'; // Category manager
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {
@@ -53,7 +49,7 @@ class BookingAdmin extends AbstractAdmin
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
@@ -79,9 +75,6 @@ class BookingAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -101,9 +94,6 @@ class BookingAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -112,19 +102,13 @@ class BookingAdmin extends AbstractAdmin
             ->add('bookingDate')
             ->add('itemsReturned')
             ->add('paid')
-            ->add('_action', null, array(
-                'actions' => array(
-                    'status' => array(
-                        'template' => 'admin/crud/list__action_status.html.twig'
-                    ),
-                    'stuffList' => array(
-                        'template' => 'admin/crud/list__action_stuff.html.twig'
-                    ),
-            //        'show' => array(),
-                    'edit' => array(),
-                    'delete' => array(),
-                ),
-            ))
+            ->add('_action', null, ['actions' => [
+                'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
+                'stuffList' => ['template' => 'admin/crud/list__action_stuff.html.twig'],
+                //        'show' => array(),
+                'edit' => [],
+                'delete' => [],
+            ]])
         ;
     }
     private function getCategories($choices = null): array
@@ -144,9 +128,6 @@ class BookingAdmin extends AbstractAdmin
         return $cats;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
@@ -170,7 +151,7 @@ class BookingAdmin extends AbstractAdmin
         }
         $formMapper
             ->tab('General')
-            ->with('Booking', array('class' => 'col-md-6'))
+            ->with('Booking', ['class' => 'col-md-6'])
                 ->add('name', null, ['help' => "Event name or name we use to talk about this case."])
                 ->add('bookingDate', DatePickerType::class, [
                         'format' => 'd.M.y',
@@ -283,14 +264,14 @@ class BookingAdmin extends AbstractAdmin
                     ])
                     ->add('reasonForDiscount', null, ['help' => 'If the actual price is discounted, let us know why'])
                 ->end()
-                ->with('Events', array('class' => 'col-md-12'))
+                ->with('Events', ['class' => 'col-md-12'])
                     ->add(
                         'billableEvents',
                         CollectionType::class,
-                        array('required' => false, 'by_reference' => false),
-                        array('edit' => 'inline', 'inline' => 'table')
+                        ['required' => false, 'by_reference' => false],
+                        ['edit' => 'inline', 'inline' => 'table']
                     )
-                    ->add('paid_date', DateTimePickerType::class, array('disabled' => false, 'required' => false))
+                    ->add('paid_date', DateTimePickerType::class, ['disabled' => false, 'required' => false])
                 ->end()
                 ->end()
                 ->tab('Meta')
@@ -303,9 +284,6 @@ class BookingAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -383,10 +361,10 @@ class BookingAdmin extends AbstractAdmin
     {
         $errorElement
             ->with('bookingDate')
-                ->assertNotNull(array())
+                ->assertNotNull([])
             ->end()
             ->with('renter')
-                ->assertNotNull(array())
+                ->assertNotNull([])
             ->end()
         ;
         if ($object->getRetrieval() > $object->getReturning()) {
@@ -409,12 +387,8 @@ class BookingAdmin extends AbstractAdmin
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
         $collection->remove('delete');
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $em=null, $cm=null)
+    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $em=null, protected $cm=null)
     {
-        $this->mm = $mm;
-        $this->ts = $ts;
-        $this->em = $em;
-        $this->cm = $cm;
         parent::__construct($code, $class, $baseControllerName);
     }
 }

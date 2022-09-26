@@ -6,40 +6,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * BillableEvent
- *
- * @ORM\Table(name="BillableEvent")
- * @ORM\Entity
  */
-class BillableEvent
+#[ORM\Table(name: 'BillableEvent')]
+#[ORM\Entity]
+class BillableEvent implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     *
-     * @ORM\ManyToOne(targetEntity="\App\Entity\Booking", inversedBy="billableEvents")
-     */
+    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\Booking::class, inversedBy: 'billableEvents')]
     private $booking;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="description", type="text")
-     */
-    private $description;
+    #[ORM\Column(name: 'description', type: 'text')]
+    private string $description;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="unitPrice", type="decimal", precision=7, scale=2)
-     */
-    private $unitPrice;
+    #[ORM\Column(name: 'unitPrice', type: 'decimal', precision: 7, scale: 2)]
+    private string $unitPrice;
 
 
     /**
@@ -103,7 +87,6 @@ class BillableEvent
     /**
      * Set booking
      *
-     * @param \App\Entity\Booking $booking
      *
      * @return BillableEvent
      */
@@ -124,10 +107,10 @@ class BillableEvent
         return $this->booking;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if (!empty($this->getUnitPrice())) {
-            return $this->description ? $this->description.': '.$this->getUnitPrice() : '';
+            return (string) ($this->description ? $this->description.': '.$this->getUnitPrice() : '');
         } else {
             return '';
         }

@@ -17,14 +17,10 @@ use App\Entity\Member;
 class UserCommand extends Command
 {
     protected static $defaultName = 'entropy:user';
-    private $passwordEncoder;
-    private $em;
 
-    public function __construct(UserPasswordEncoderInterface $passwordEncoder, EntityManagerInterface $em)
+    public function __construct(private readonly UserPasswordEncoderInterface $passwordEncoder, private readonly EntityManagerInterface $em)
     {
         parent::__construct();
-        $this->passwordEncoder = $passwordEncoder;
-        $this->em = $em;
     }
     protected function configure()
     {

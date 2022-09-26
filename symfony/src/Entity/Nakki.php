@@ -7,58 +7,38 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=NakkiRepository::class)
- */
-class Nakki
+#[ORM\Entity(repositoryClass: NakkiRepository::class)]
+class Nakki implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=NakkiDefinition::class)
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private $definition;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $startAt;
 
-    /**
-     * @ORM\Column(type="datetime_immutable")
-     */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $endAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity=NakkiBooking::class, mappedBy="nakki", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'nakki', orphanRemoval: true)]
     private $nakkiBookings;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="nakkis")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
+    #[ORM\JoinColumn(nullable: false)]
     private $event;
 
-    /**
-     * @ORM\Column(type="dateinterval")
-     */
+    #[ORM\Column(type: 'dateinterval')]
     private $nakkiInterval;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="responsibleForNakkis")
-     */
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
     private $responsible;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $mattermostChannel;
 
     public function __construct()
@@ -68,9 +48,9 @@ class Nakki
         ;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->definition->getNameEn();
+        return (string) $this->definition->getNameEn();
     }
     public function getId(): ?int
     {

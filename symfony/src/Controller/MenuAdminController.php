@@ -14,9 +14,6 @@ class MenuAdminController extends CRUDController
     {
         return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));
     }
-    /**
-     * @return Response
-     */
     public function treeAction(Request $request): Response
     {
         $this->em = $this->getDoctrine()->getManager();

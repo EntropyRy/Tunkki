@@ -58,7 +58,7 @@ class ArtistController extends AbstractController
                     return $this->redirect($referer);
                 }
                 return $this->redirectToRoute('entropy_artist_profile');
-            } catch (UniqueConstraintViolationException $e) {
+            } catch (UniqueConstraintViolationException) {
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));
             }
         }

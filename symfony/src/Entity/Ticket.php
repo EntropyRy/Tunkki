@@ -7,65 +7,49 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=TicketRepository::class)
- */
-class Ticket
+#[ORM\Entity(repositoryClass: TicketRepository::class)]
+class Ticket implements \Stringable
 {
-    public const STATUSES = ['available', 'reserved', 'paid'];
+    final public const STATUSES = ['available', 'reserved', 'paid'];
 
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="tickets")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: false)]
     private $event;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="tickets")
-     */
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
     private $owner;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $price;
 
-    /**
-     * @ORM\Column(type="integer", nullable=true)
-     */
+    #[ORM\Column(type: 'integer', nullable: true)]
     private $referenceNumber;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     * @Assert\Choice(choices=Ticket::STATUSES)
-     */
-    private $status = 'available';
+    #[ORM\Column(type: 'string', length: 255)]
+    #[Assert\Choice(choices: Ticket::STATUSES)]
+    private string $status = 'available';
 
-    /**
-     * @ORM\OneToOne(targetEntity=Member::class, cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Member::class, cascade: ['persist', 'remove'])]
     private $recommendedBy;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
      * @Gedmo\Timestampable(on="update")
      */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $updatedAt;
 
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->referenceNumber;
+        return (string) $this->referenceNumber;
     }
     public function getId(): ?int
     {

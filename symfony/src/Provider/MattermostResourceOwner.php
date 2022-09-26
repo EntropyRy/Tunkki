@@ -11,18 +11,10 @@ use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 class MattermostResourceOwner implements ResourceOwnerInterface
 {
     /**
-     * @var array
-     */
-    protected $response;
-
-    /**
      * MattermostResourceOwner constructor.
-     *
-     * @param array $response
      */
-    public function __construct(array $response)
+    public function __construct(protected array $response)
     {
-        $this->response = $response;
     }
     /**
      * Return all of the owner details available as an array.

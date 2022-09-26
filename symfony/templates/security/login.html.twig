@@ -7,12 +7,6 @@
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    {% if app.user %}
-        <div class="mb-3">
-            {{'logged_in_as'|trans }} {{ app.user.username }} <a class="btn btn-secondary" href="{{ path('app_logout') }}"><i class="fas fa-sign-out-alt"></i> {{'profile.logout'|trans}}</a>
-        </div>
-    {% endif %}
-
     <h1 class="h3 mb-3 font-weight-normal">{{'Choose login method'|trans}}</h1>
     <div class="col-12">
         <a class="btn btn-lg btn-primary w-100" href="{{ path('_entropy_mattermost_auth') }}">

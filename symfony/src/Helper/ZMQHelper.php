@@ -7,11 +7,8 @@ use ZMQ;
 
 class ZMQHelper
 {
-    protected $bag;
-
-    public function __construct(ParameterBagInterface $bag)
+    public function __construct(protected ParameterBagInterface $bag)
     {
-        $this->bag = $bag;
     }
     public function connect()
     {

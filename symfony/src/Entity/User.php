@@ -7,74 +7,57 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity(repositoryClass=UserRepository::class)
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE", region="member")
- */
-class User implements UserInterface
+#[ORM\Entity(repositoryClass: UserRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+class User implements UserInterface, PasswordAuthenticatedUserInterface 
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="json")
-     */
-    private $roles = [];
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
-     * @Assert\Length(min=8)
      */
-    private $password;
+    #[ORM\Column(type: 'string')]
+    #[Assert\Length(min: 8)]
+    private ?string $password = null;
 
-    /**
-     * @Assert\Length(min=8)
-     */
+    #[Assert\Length(min: 8)]
     private $plainPassword;
 
-    /**
-     * @ORM\OneToOne(targetEntity=Member::class, inversedBy="user", cascade={"persist", "remove"})
-     */
+    #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
     private $member;
 
     /**
-     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="create")
      */
+    #[ORM\Column(type: 'datetime')]
     private $CreatedAt;
 
     /**
-     * @ORM\Column(type="datetime")
      * @Gedmo\Timestampable(on="update")
      */
+    #[ORM\Column(type: 'datetime')]
     private $UpdatedAt;
 
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Reward", mappedBy="user", orphanRemoval=true)
-     */
+    #[ORM\OneToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'user', orphanRemoval: true)]
     private $rewards;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $LastLogin;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $MattermostId;
 
-    /**
-     * @ORM\ManyToMany(targetEntity=AccessGroups::class, mappedBy="users")
-     */
+    #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]
     private $accessGroups;
 
     public function __construct()
@@ -214,14 +197,6 @@ class User implements UserInterface
         $this->LastLogin = $LastLogin;
 
         return $this;
-    }
-    public function __toString()
-    {
-        if ($this->member) {
-            return $this->member->getName();
-        } else {
-            return 'user: '.$this->id;
-        }
     }
     /**
      * @return Collection|Reward[]

@@ -17,11 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 class StatusEventAdmin extends AbstractAdmin
 {
-    protected $ts;
-    protected $mm;
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -34,9 +29,6 @@ class StatusEventAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         if (!$this->isChild()) {
@@ -56,9 +48,6 @@ class StatusEventAdmin extends AbstractAdmin
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if (!$this->isChild()) {
@@ -121,18 +110,15 @@ class StatusEventAdmin extends AbstractAdmin
         if (!$this->isChild()) {
             $formMapper
                 ->with('Meta')
-                ->add('creator', null, array('disabled' => true))
-                ->add('createdAt', DateTimePickerType::class, array('disabled' => true))
-                ->add('modifier', null, array('disabled' => true))
-                ->add('updatedAt', DateTimePickerType::class, array('disabled' => true))
+                ->add('creator', null, ['disabled' => true])
+                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('modifier', null, ['disabled' => true])
+                ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
                 ->end()
             ;
         }
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -198,10 +184,8 @@ class StatusEventAdmin extends AbstractAdmin
         $text .= ' by '. $user;
         return $text;
     }
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null)
+    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null)
     {
-        $this->mm = $mm;
-        $this->ts = $ts;
         parent::__construct($code, $class, $baseControllerName);
     }
 }

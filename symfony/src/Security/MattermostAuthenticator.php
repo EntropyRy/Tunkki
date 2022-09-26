@@ -22,15 +22,9 @@ use App\Entity\User;
 class MattermostAuthenticator extends SocialAuthenticator
 {
     use TargetPathTrait;
-    private $clientRegistry;
-    private $em;
-    private $urlG;
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $em, UrlGeneratorInterface $urlG)
+    public function __construct(private readonly ClientRegistry $clientRegistry, private readonly EntityManagerInterface $em, private readonly UrlGeneratorInterface $urlG)
     {
-        $this->clientRegistry = $clientRegistry;
-        $this->em = $em;
-        $this->urlG = $urlG;
     }
     public function supports(Request $request)
     {

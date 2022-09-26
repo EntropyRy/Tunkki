@@ -377,7 +377,7 @@
     {% endif %}
     <span class="polaroid">
     {% if artist.Picture %}
-    <img width="100%" title="{{name}}" src="{% path artist.Picture, 'square' %}"> 
+    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}"> 
     {% else %}
     <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}"> 
     {% endif %}

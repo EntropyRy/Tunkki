@@ -6,27 +6,18 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * WhoCanRentCoice
- *
- * @ORM\Table(name="WhoCanRentChoice")
- * @ORM\Entity
  */
-class WhoCanRentChoice
+#[ORM\Table(name: 'WhoCanRentChoice')]
+#[ORM\Entity]
+class WhoCanRentChoice implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    private string $name;
 
     /**
      * Get id
@@ -61,8 +52,8 @@ class WhoCanRentChoice
     {
         return $this->name;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->name ? $this->name : '';
+        return $this->name ?: '';
     }
 }

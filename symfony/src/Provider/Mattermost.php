@@ -29,7 +29,6 @@ class Mattermost extends AbstractProvider
     /**
      * Returns the base URL for requesting an access token.
      *
-     * @param array $params
      *
      * @return string
      */
@@ -40,7 +39,6 @@ class Mattermost extends AbstractProvider
     /**
      * Returns the URL for requesting the resource owner's details.
      *
-     * @param AccessToken $token
      *
      * @return string
      */
@@ -58,15 +56,13 @@ class Mattermost extends AbstractProvider
      *
      * @throws IdentityProviderException
      *
-     * @param ResponseInterface $response
      * @param array|string      $data     Parsed response data
-     *
      * @return void
      */
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if (!empty($data['error'])) {
-            $error = isset($data['error']['message']) ? $data['error']['message'] : '';
+            $error = $data['error']['message'] ?? '';
             $code = isset($data['error']['code']) ? intval($data['error']['code']) : 0;
             throw new IdentityProviderException($error, $code, $data);
         }
@@ -74,8 +70,6 @@ class Mattermost extends AbstractProvider
     /**
      * Create new resources owner using the generated access token.
      *
-     * @param array       $response
-     * @param AccessToken $token
      *
      * @return MattermostResourceOwner
      */

@@ -5,56 +5,36 @@ namespace App\Entity;
 use App\Repository\EventArtistInfoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=EventArtistInfoRepository::class)
- */
-class EventArtistInfo
+#[ORM\Entity(repositoryClass: EventArtistInfoRepository::class)]
+class EventArtistInfo implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $SetLength;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=true)
-     */
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private $StartTime;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="eventArtistInfos")
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
     private $Event;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Artist::class, inversedBy="eventArtistInfos", cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'eventArtistInfos', cascade: ['persist'])]
     private $Artist;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $WishForPlayTime;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Artist::class, cascade={"persist"})
-     */
+    #[ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'])]
     private $artistClone;
 
-    /**
-     * @ORM\Column(type="text", nullable=true)
-     */
+    #[ORM\Column(type: 'text', nullable: true)]
     private $freeWord;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $stage;
 
     public function getId(): ?int
@@ -110,9 +90,9 @@ class EventArtistInfo
 
         return $this;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->Artist ? $this->Artist : 'n/a';
+        return (string) ($this->Artist ?: 'n/a');
     }
 
     public function getWishForPlayTime(): ?string

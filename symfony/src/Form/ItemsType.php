@@ -16,16 +16,8 @@ use Sonata\ClassificationBundle\Model\CategoryManagerInterface as Category;
 
 class ItemsType extends AbstractType
 {
-    /**
-      * @var PropertyAccessorInterface
-      */
-    protected $em;
-    protected $cm;
-
-    public function __construct(EntityManagerInterface $em, Category $cm)
+    public function __construct(protected EntityManagerInterface $em, protected Category $cm)
     {
-        $this->em = $em;
-        $this->cm = $cm;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

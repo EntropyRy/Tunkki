@@ -5,60 +5,46 @@ namespace App\Entity;
 use App\Repository\NakkiDefinitionRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity(repositoryClass=NakkiDefinitionRepository::class)
- */
-class NakkiDefinition
+#[ORM\Entity(repositoryClass: NakkiDefinitionRepository::class)]
+class NakkiDefinition implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $nameFi;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: 'string', length: 255)]
     private $nameEn;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $DescriptionFi;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: 'text')]
     private $DescriptionEn;
 
-    /**
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $onlyForActiveMembers = false;
+    #[ORM\Column(type: 'boolean', nullable: true)]
+    private ?bool $onlyForActiveMembers = false;
 
     public function getId(): ?int
     {
         return $this->id;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->nameEn;
+        return (string) $this->nameEn;
     }
     public function getName($lang): ?string
     {
-        $func = 'name'. ucfirst($lang);
+        $func = 'name'. ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getDescription($lang): ?string
     {
-        $func = 'Description'. ucfirst($lang);
+        $func = 'Description'. ucfirst((string) $lang);
         return $this->{$func};
     }
 

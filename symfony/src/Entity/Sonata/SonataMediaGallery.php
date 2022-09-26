@@ -1,20 +1,42 @@
 <?php
 
-namespace App\Entity\Sonata
+declare(strict_types=1);
+
+namespace App\Entity\Sonata;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 use Sonata\MediaBundle\Entity\BaseGallery;
 
-/**
- * @ORM\Entity
- * @ORM\Table(name="media__gallery")
- */
+#[ORM\Table(name: 'media__gallery')]
+#[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class SonataMediaGallery extends BaseGallery
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @Serializer\Groups(groups={"sonata_api_read", "sonata_api_write", "sonata_search"})
+     *
+     * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer')]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
+
+    public function getId(): int|string|null
+    {
+        return $this->id;
+    }
+
+    #[ORM\PrePersist]
+    public function prePersist(): void
+    {
+        parent::prePersist();
+    }
+
+    #[ORM\PreUpdate]
+    public function preUpdate(): void
+    {
+        parent::preUpdate();
+    }
 }

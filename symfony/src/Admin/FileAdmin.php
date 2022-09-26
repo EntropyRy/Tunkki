@@ -12,9 +12,6 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 class FileAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'file';
-    /**
-     * @param DatagridMapper $datagridMapper
-     */
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -28,9 +25,6 @@ class FileAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param ListMapper $listMapper
-     */
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -41,18 +35,10 @@ class FileAdmin extends AbstractAdmin
             $listMapper->add('product');
         }
         $listMapper
-            ->add('_action', null, array(
-                'actions' => array(
-                    'edit' => array(),
-                    'delete' => array(),
-                )
-            ))
+            ->add('_action', null, ['actions' => ['edit' => [], 'delete' => []]])
         ;
     }
 
-    /**
-     * @param FormMapper $formMapper
-     */
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -73,9 +59,6 @@ class FileAdmin extends AbstractAdmin
         }
     }
 
-    /**
-     * @param ShowMapper $showMapper
-     */
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

@@ -20,7 +20,6 @@ use App\Form\UrlsType;
 
 class LinkListBlock extends BaseBlockService
 {
-    protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         return $this->renderResponse($blockContext->getTemplate(), [
@@ -60,9 +59,8 @@ class LinkListBlock extends BaseBlockService
             ]);
     }
 
-    public function __construct($twig, EntityManagerInterface $em)
+    public function __construct($twig, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
         parent::__construct($twig);
     }
 
@@ -77,7 +75,7 @@ class LinkListBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }

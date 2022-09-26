@@ -6,49 +6,35 @@ use App\Repository\RSVPRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
-/**
- * @ORM\Entity(repositoryClass=RSVPRepository::class)
- */
+#[ORM\Entity(repositoryClass: RSVPRepository::class)]
 class RSVP
 {
-    /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Event::class, inversedBy="RSVPs")
-     * @ORM\JoinColumn(nullable=false)
-     */
+    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
+    #[ORM\JoinColumn(nullable: false)]
     private $event;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Member::class, inversedBy="RSVPs")
-     * @ORM\JoinColumn(nullable=true)
-     */
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'RSVPs')]
+    #[ORM\JoinColumn(nullable: true)]
     private $member;
 
     /**
-     * @ORM\Column(type="datetime_immutable")
      * @Gedmo\Timestampable(on="create")
      */
+    #[ORM\Column(type: 'datetime_immutable')]
     private $createdAt;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true, unique=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
     private $email;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $firstName;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private $lastName;
 
     public function getId(): ?int
@@ -138,7 +124,7 @@ class RSVP
         if ($this->getMember()) {
             return ucfirst($this->getMember()->getLastname());
         }
-        return ucfirst($this->lastName);
+        return ucfirst((string) $this->lastName);
     }
     public function getAvailableEmail()
     {

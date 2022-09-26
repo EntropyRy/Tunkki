@@ -7,14 +7,15 @@ namespace App\Admin;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\DatePickerType;
@@ -26,14 +27,22 @@ use App\Form\UrlsType;
 final class EventAdmin extends AbstractAdmin
 {
     protected $baseRoutePattern = 'event';
-    protected $datagridValues = [
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'EventDate',
-    ];
+
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        // display the first page (default = 1)
+        $sortValues[DatagridInterface::PAGE] = 1;
+
+        // reverse order (default = 'ASC')
+        $sortValues[DatagridInterface::SORT_ORDER] = 'DESC';
+
+        // name of the ordered field (default = the model's id field, if any)
+        $sortValues[DatagridInterface::SORT_BY] = 'EventDate';
+    }
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
-        if (!$childAdmin && !in_array($action, array('edit', 'show'))) {
+        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
@@ -41,19 +50,19 @@ final class EventAdmin extends AbstractAdmin
         $event = $admin->getSubject();
         if ($this->isGranted('EDIT')) {
             $menu->addChild(
-                'Event',
+                \Event::class,
                 $admin->generateMenuUrl('edit', ['id' => $id])
             );
             $menu->addChild(
                 'Artist editor',
                 $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
             );
-            if (count($this->getSubject()->getEventArtistInfos()) > 0) {
+            if ((is_countable($this->getSubject()->getEventArtistInfos()) ? count($this->getSubject()->getEventArtistInfos()) : 0) > 0) {
                 $menu->addChild('Artist list', [
                    'uri' => $admin->generateUrl('artistList', ['id' => $id])
                 ]);
             }
-            if (count($admin->getSubject()->getRSVPs()) > 0) {
+            if ((is_countable($admin->getSubject()->getRSVPs()) ? count($admin->getSubject()->getRSVPs()) : 0) > 0) {
                 $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
                 ]);
@@ -76,7 +85,7 @@ final class EventAdmin extends AbstractAdmin
                 $menu->addChild('Tickets', [
                    'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                 ]);
-                if ($event->getTicketCount() != count($event->getTickets())) {
+                if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
                     $menu->addChild('Update Ticket Count', [
                         'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
                         'attributes' => ['class' => 'btn-warning']
@@ -118,7 +127,10 @@ final class EventAdmin extends AbstractAdmin
             ->add('Content')
             ->add('Nimi')
             ->add('Sisallys')
-            ->add('type', null, [], ChoiceType::class, ['choices' => $TypeChoices])
+            ->add('type', ChoiceFilter::class, [
+                'field_type' => ChoiceType::class,
+                'field_options' => ['choices' => $TypeChoices]
+            ])
             ->add('EventDate')
             ->add('publishDate')
             ->add('css')
@@ -136,7 +148,7 @@ final class EventAdmin extends AbstractAdmin
             ->add('type')
             ->add('publishDate')
             ->add('url')
-            ->add('_action', null, [
+            ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -199,7 +211,7 @@ final class EventAdmin extends AbstractAdmin
             $event = $this->getSubject();
             //if($event->getType() == 'announcement'){}
             $formMapper
-                ->tab('Event')
+                ->tab(\Event::class)
                 ->with('English', ['class' => 'col-md-6'])
                 ->add('Name');
             if ($event->getexternalUrl()==false) {
@@ -251,7 +263,7 @@ final class EventAdmin extends AbstractAdmin
                     'help'=>'Is the add hosted here?'
                 ])
                 ->add('url', null, [
-                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event. 
+                    'help' => '\'event\' resolves to https://entropy.fi/(year)/event.
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ])
                 ->add('streamPlayerUrl', null, [
@@ -302,7 +314,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time'])
                 ->add('links', ImmutableArrayType::class, [
                     'help_html' => true,
-                    'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br> 
+                    'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br>
                                 request admin to add more translations!',
                     'keys' => [
                         ['urls', CollectionType::class, [

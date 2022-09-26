@@ -15,11 +15,8 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class PackagesType extends AbstractType
 {
-    protected $em;
-
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(protected EntityManagerInterface $em)
     {
-        $this->em = $em;
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options)

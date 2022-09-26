@@ -26,6 +26,9 @@ class BookingRepository extends \Doctrine\ORM\EntityRepository
     }
     public function getBookingData($id, $hash = null, $renter = null)
     {
+        $rent = [];
+        $compensation = [];
+        $data = [];
         $queryBuilder = $this->createQueryBuilder('b')
                        ->andWhere('b.renterHash = :hash')
                        ->andWhere('b.id = :id')

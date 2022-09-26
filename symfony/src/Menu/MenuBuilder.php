@@ -11,20 +11,11 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class MenuBuilder
 {
-    private $factory;
-    private $em;
-    private $client;
-
     /**
-     * @param FactoryInterface $factory
-     *
      * Add any other dependency you need
      */
-    public function __construct(FactoryInterface $factory, EntityManagerInterface $em, HttpClientInterface $client)
+    public function __construct(private readonly FactoryInterface $factory, private readonly EntityManagerInterface $em, private readonly HttpClientInterface $client)
     {
-        $this->factory  = $factory;
-        $this->em       = $em;
-        $this->client   = $client;
     }
 
     public function createMainMenuFi(array $options)
@@ -103,7 +94,7 @@ class MenuBuilder
             }
         } else {
             if ($m->getPageEn()) {
-                if (strpos($m->getPageEn()->getSlug(), '/en') !== false) {
+                if (str_contains((string) $m->getPageEn()->getSlug(), '/en')) {
                     $prefix = '/en';
                 } else {
                     $prefix = '';
@@ -114,7 +105,7 @@ class MenuBuilder
                     'routeParameters' => ['path' => $url ]
                 ]);
             } else {
-                if (strpos($m->getUrl(), 'http') !== false) {
+                if (str_contains((string) $m->getUrl(), 'http')) {
                     $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
                 } else {
                     $menu->addChild($m->getLabel(), ['uri' => '/en'.$m->getUrl()]);
@@ -134,7 +125,7 @@ class MenuBuilder
             if ($response->getStatusCode() == 200) {
                 $menu->addChild('Stream', ['uri' => 'https://stream.entropy.fi/'])->setLinkAttribute('class', 'hilight');
             }
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface) {
             return;
         }
     }
@@ -143,9 +134,7 @@ class MenuBuilder
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            function ($a, $b) {
-                return $a->getPosition() <=> $b->getPosition();
-            }
+            fn($a, $b) => $a->getPosition() <=> $b->getPosition()
         );
         return $array;
     }

@@ -63,12 +63,6 @@ class ItemAdminController extends Controller
     }
 
 
-    /**
-      * @param ProxyQueryInterface $selectedModelQuery
-      * @param Request             $request
-      *
-      * @return RedirectResponse
-      */
     public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery, Request $request = null): RedirectResponse
     {
         $this->admin->checkAccess('edit');
@@ -92,18 +86,18 @@ class ItemAdminController extends Controller
             }
 
             $modelManager->update($selectedModel);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
 
             return new RedirectResponse(
-                $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
+                $this->admin->generateUrl('list', ['filter' => $this->admin->getFilterParameters()])
             );
         }
 
         $this->addFlash('sonata_flash_success', 'Batch edit success! who can rent, description, rent and rent notice copied! from:'.$sourceModel->getName());
 
         return new RedirectResponse(
-            $this->admin->generateUrl('list', array('filter' => $this->admin->getFilterParameters()))
+            $this->admin->generateUrl('list', ['filter' => $this->admin->getFilterParameters()])
         );
     }
 }

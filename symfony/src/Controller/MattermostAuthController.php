@@ -14,15 +14,9 @@ use App\Entity\User;
 class MattermostAuthController extends Controller
 {
     protected $em;
-    protected $registry;
-    protected $authenticator;
-    protected $guard;
 
-    public function __construct(ClientRegistry $registry, LoginFormAuthenticator $authenticator, GuardAuthenticatorHandler $guard)
+    public function __construct(protected ClientRegistry $registry, protected LoginFormAuthenticator $authenticator, protected GuardAuthenticatorHandler $guard)
     {
-        $this->guard = $guard;
-        $this->registry = $registry;
-        $this->authenticator = $authenticator;
     }
     public function connectAction()
     {

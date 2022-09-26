@@ -10,84 +10,66 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @Gedmo\Tree(type="nested")
- * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
  */
-class Menu
+#[ORM\Entity(repositoryClass: \App\Repository\MenuRepository::class)]
+class Menu implements \Stringable
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
+    #[ORM\Column(type: 'string', length: 180)]
     private $label;
 
-    /**
-     * @ORM\Column(type="string", length=180)
-     */
+    #[ORM\Column(type: 'string', length: 180)]
     private $nimi;
 
-    /**
-     * @ORM\Column(type="string", length=180, nullable=true)
-     */
+    #[ORM\Column(type: 'string', length: 180, nullable: true)]
     private $url;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Page::class")
-     */
+    #[ORM\ManyToOne(targetEntity: Page::class)]
     private $pageFi;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Page::class")
-     */
+    #[ORM\ManyToOne(targetEntity: Page::class)]
     private $pageEn;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: 'boolean')]
     private $enabled;
 
     /**
      * @Gedmo\TreeLeft
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     private $lft;
 
     /**
      * @Gedmo\TreeLevel
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     private $lvl;
 
     /**
      * @Gedmo\TreeRight
-     * @ORM\Column(type="integer")
      */
+    #[ORM\Column(type: 'integer')]
     private $rgt;
     /**
      * @Gedmo\TreeRoot
-     * @ORM\ManyToOne(targetEntity="Menu")
-     * @ORM\JoinColumn(referencedColumnName="id", onDelete="CASCADE")
      */
+    #[ORM\ManyToOne(targetEntity: 'Menu')]
+    #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $root;
 
-    /**
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Column(type: 'integer')]
     private $position;
     /**
      * @Gedmo\TreeParent
-     * @ORM\ManyToOne(targetEntity="Menu", inversedBy="children")
-     * @ORM\JoinColumn(name="parent_id", referencedColumnName="id", onDelete="CASCADE")
      */
+    #[ORM\ManyToOne(targetEntity: 'Menu', inversedBy: 'children')]
+    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private $parent;
-    /**
-     * @ORM\OneToMany(targetEntity="Menu", mappedBy="parent")
-     */
+    #[ORM\OneToMany(targetEntity: 'Menu', mappedBy: 'parent')]
     private $children;
 
     public function __construct()
@@ -250,9 +232,9 @@ class Menu
 
         return $this;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        return $this->label ? $this->label : 'n/a';
+        return (string) ($this->label ?: 'n/a');
     }
 
     public function getPageFi(): ?Page

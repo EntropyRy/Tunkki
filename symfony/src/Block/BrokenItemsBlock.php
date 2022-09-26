@@ -11,11 +11,10 @@ use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Item;
 
 class BrokenItemsBlock extends BaseBlockService
 {
-    protected $em;
-
     public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
@@ -29,37 +28,27 @@ class BrokenItemsBlock extends BaseBlockService
 
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $broken = $this->em->getRepository('App:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
+        $broken = $this->em->getRepository(Item::class)->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         $settings = $blockContext->getSettings();
         if ($settings['random']) {
             shuffle($broken);
-            if (count($broken)>5) {
+            if ((is_countable($broken) ? count($broken) : 0)>5) {
                 $l = 3;
             } else {
-                $l = count($broken);
+                $l = is_countable($broken) ? count($broken) : 0;
             }
             $broken = array_splice($broken, 0, $l);
         }
-        return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-            'broken'  => $broken,
-            'settings' => $settings
-        ), $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'broken'  => $broken, 'settings' => $settings], $response);
     }
 
-    public function __construct($twig, EntityManagerInterface $em)
+    public function __construct($twig, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
         parent::__construct($twig);
     }
 
     public function configureSettings(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(array(
-            'position' => '1',
-            'random' => false,
-            'bs3' => true,
-            'template' => 'block/brokenitems.html.twig',
-        ));
+        $resolver->setDefaults(['position' => '1', 'random' => false, 'bs3' => true, 'template' => 'block/brokenitems.html.twig']);
     }
 }

@@ -1,7 +1,6 @@
 security:
-    encoders:
-        App\Entity\User:
-            algorithm: auto
+    password_hashers:
+        App\Entity\User: auto
 
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
@@ -110,11 +109,11 @@ security:
                 # target: app_any_route
 
     access_control:
-        - { path: ^/oauth$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/oauth/check.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/profile/new, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/profiili/uusi, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/oauth$, role: PUBLIC_ACCESS }
+        - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
+        - { path: ^/login$, role: PUBLIC_ACCESS }
+        - { path: ^/profile/new, role: PUBLIC_ACCESS }
+        - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
         - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         - { path: ^/profile/door$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
         - { path: ^/profile/door$, roles: ROLE_NO_ACCESS}
@@ -122,6 +121,6 @@ security:
         - { path: ^/profiili/ovi$, roles: ROLE_NO_ACCESS}
         - { path: ^/profile, role: ROLE_USER }
         - { path: ^/profiili, role: ROLE_USER }
-        - { path: ^/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/logout$, role: PUBLIC_ACCESS }
         - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/.*, role: PUBLIC_ACCESS }

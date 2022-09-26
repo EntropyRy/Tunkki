@@ -12,209 +12,113 @@ use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Item
- *
- * @ORM\Table(name="Item")
- * @ORM\Entity(repositoryClass="App\Repository\ItemsRepository")
- * @ORM\HasLifecycleCallbacks
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Item
+#[ORM\Table(name: 'Item')]
+#[ORM\Entity(repositoryClass: \App\Repository\ItemsRepository::class)]
+#[ORM\HasLifecycleCallbacks]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+class Item implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'Name', type: 'string', length: 190)]
+    private string $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Manufacturer", type="string", length=190, nullable=true)
-     */
-    private $manufacturer;
+    #[ORM\Column(name: 'Manufacturer', type: 'string', length: 190, nullable: true)]
+    private string $manufacturer;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Model", type="string", length=190, nullable=true)
-     */
-    private $model;
+    #[ORM\Column(name: 'Model', type: 'string', length: 190, nullable: true)]
+    private string $model;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Url", type="string", length=500, nullable=true)
-     */
-    private $url;
+    #[ORM\Column(name: 'Url', type: 'string', length: 500, nullable: true)]
+    private string $url;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="SerialNumber", type="string", length=190, nullable=true)
-     */
-    private $serialnumber;
+    #[ORM\Column(name: 'SerialNumber', type: 'string', length: 190, nullable: true)]
+    private string $serialnumber;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="PlaceInStorage", type="string", length=190, nullable=true)
-     */
-    private $placeinstorage;
+    #[ORM\Column(name: 'PlaceInStorage', type: 'string', length: 190, nullable: true)]
+    private string $placeinstorage;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="Description", type="string", length=4000, nullable=true)
-     */
-    private $description;
+    #[ORM\Column(name: 'Description', type: 'string', length: 4000, nullable: true)]
+    private string $description;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\WhoCanRentChoice", cascade={"persist"})
-     */
+    #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
     private $whoCanRent;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Category::class", cascade={"persist"})
-     * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
-     */
+    #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private $category;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Tag::class", cascade={"persist"})
-     * @ORM\JoinTable(
-     *      name="Item_tags",
-     *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     * )
-     */
+    #[ORM\JoinTable(name: 'Item_tags')]
+    #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
+    #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
     private $tags;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="Rent", type="decimal", precision=7, scale=2, nullable=true)
-     */
-    private $rent;
+    #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
+    private float $rent;
 
-    /**
-     * @var float
-     *
-     * @ORM\Column(name="compensationPrice", type="decimal", precision=7, scale=2, nullable=true)
-     */
-    private $compensationPrice;
+    #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
+    private float $compensationPrice;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="RentNotice", type="string", length=5000, nullable=true)
-     */
-    private $rentNotice;
+    #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
+    private string $rentNotice;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="NeedsFixing", type="boolean", nullable=true)
-     */
-    private $needsFixing = false;
+    #[ORM\Column(name: 'NeedsFixing', type: 'boolean', nullable: true)]
+    private bool $needsFixing = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="ToSpareParts", type="boolean")
-     */
-    private $toSpareParts = false;
+    #[ORM\Column(name: 'ToSpareParts', type: 'boolean')]
+    private bool $toSpareParts = false;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="CannotBeRented", type="boolean")
-     */
-    private $cannotBeRented = false;
+    #[ORM\Column(name: 'CannotBeRented', type: 'boolean')]
+    private bool $cannotBeRented = false;
 
-    /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\StatusEvent", mappedBy="item", cascade={"all"}, fetch="LAZY")
-     */
+    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
     private $fixingHistory;
 
-    /**
-     * @ORM\OneToMany(targetEntity="\App\Entity\File", mappedBy="product", cascade={"all"})
-     */
+    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\File::class, mappedBy: 'product', cascade: ['all'])]
     private $files;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="\App\Entity\Booking", cascade={"all"})
-     */
+    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Booking::class, cascade: ['all'])]
     private $rentHistory;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="History", type="string", length=190, nullable=true)
-     */
-    private $history;
+    #[ORM\Column(name: 'History', type: 'string', length: 190, nullable: true)]
+    private string $history;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="ForSale", type="boolean", nullable=true)
-     */
-    private $forSale = false;
+    #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
+    private bool $forSale = false;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="Package", inversedBy="items")
-     */
+    #[ORM\ManyToMany(targetEntity: 'Package', inversedBy: 'items')]
     private $packages;
 
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="Commission", type="datetime", nullable=true)
-     */
-    private $commission;
+    #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
+    private \DateTime $commission;
 
-    /**
-     * @ORM\Column(name="purchasePrice", type="decimal", precision=7, scale=2, nullable=true)
-     */
+    #[ORM\Column(name: 'purchasePrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $purchasePrice;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="creator_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $creator;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
-     * @ORM\Column(name="CreatedAt", type="datetime", nullable=true)
      */
-    private $createdAt;
+    #[ORM\Column(name: 'CreatedAt', type: 'datetime', nullable: true)]
+    private \DateTime $createdAt;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="modifier_id", referencedColumnName="id", onDelete="SET NULL")
-     */
+    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $modifier;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
-     * @ORM\Column(name="UpdatedAt", type="datetime", nullable=true)
      */
-    private $updatedAt;
+    #[ORM\Column(name: 'UpdatedAt', type: 'datetime', nullable: true)]
+    private \DateTime $updatedAt;
 
     /**
      * Get id
@@ -462,7 +366,7 @@ class Item
         return $this->updatedAt;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         if ($this->name) {
             return $this->name;
@@ -478,7 +382,6 @@ class Item
     {
         $this->fixingHistory = new \Doctrine\Common\Collections\ArrayCollection();
         $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->toSpareParts = false;
         $this->whoCanRent = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->rentHistory = new ArrayCollection();
@@ -488,7 +391,6 @@ class Item
     /**
      * Add fixingHistory
      *
-     * @param \App\Entity\StatusEvent $fixingHistory
      *
      * @return Item
      */
@@ -502,8 +404,6 @@ class Item
 
     /**
      * Remove fixingHistory
-     *
-     * @param \App\Entity\StatusEvent $fixingHistory
      */
     public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
@@ -647,7 +547,6 @@ class Item
     /**
      * Add file
      *
-     * @param \App\Entity\File $file
      *
      * @return Item
      */
@@ -661,8 +560,6 @@ class Item
 
     /**
      * Remove file
-     *
-     * @param \App\Entity\File $file
      */
     public function removeFile(\App\Entity\File $file)
     {
@@ -707,7 +604,6 @@ class Item
     /**
      * Add tag
      *
-     * @param Tag $tag
      *
      * @return Item
      */
@@ -720,8 +616,6 @@ class Item
 
     /**
      * Remove tag
-     *
-     * @param Tag $tag
      */
     public function removeTag(Tag $tag)
     {
@@ -741,7 +635,6 @@ class Item
     /**
      * Set creator
      *
-     * @param \App\Entity\User $creator
      *
      * @return Item
      */
@@ -765,7 +658,6 @@ class Item
     /**
      * Set modifier
      *
-     * @param \App\Entity\User $modifier
      *
      * @return Item
      */
@@ -790,7 +682,6 @@ class Item
     /**
      * Add package
      *
-     * @param \App\Entity\Package $package
      *
      * @return Item
      */
@@ -803,8 +694,6 @@ class Item
 
     /**
      * Remove package
-     *
-     * @param \App\Entity\Package $package
      */
     public function removePackage(\App\Entity\Package $package)
     {
@@ -848,7 +737,6 @@ class Item
     /**
      * Set packages
      *
-     * @param \App\Entity\Package $packages
      *
      * @return Item
      */
@@ -862,7 +750,6 @@ class Item
     /**
      * Add rentHistory
      *
-     * @param \App\Entity\Booking $rentHistory
      *
      * @return Item
      */
@@ -875,8 +762,6 @@ class Item
 
     /**
      * Remove rentHistory
-     *
-     * @param \App\Entity\Booking $rentHistory
      */
     public function removeRentHistory(\App\Entity\Booking $rentHistory)
     {
@@ -908,7 +793,6 @@ class Item
     /**
      * Set category
      *
-     * @param Category $category
      *
      * @return Item
      */
@@ -932,7 +816,6 @@ class Item
     /**
      * Add whoCanRent
      *
-     * @param \App\Entity\WhoCanRentChoice $whoCanRent
      *
      * @return Item
      */
@@ -945,8 +828,6 @@ class Item
 
     /**
      * Remove whoCanRent
-     *
-     * @param \App\Entity\WhoCanRentChoice $whoCanRent
      */
     public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
     {

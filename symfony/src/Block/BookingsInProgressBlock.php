@@ -16,7 +16,6 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class BookingsInProgressBlock extends BaseBlockService
 {
-    protected $em;
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
@@ -25,16 +24,11 @@ class BookingsInProgressBlock extends BaseBlockService
         ], [
             'bookingDate' => 'DESC'
         ]);
-        return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-            'bookings'  => $bookings,
-            'settings' => $blockContext->getSettings()
-        ), $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'bookings'  => $bookings, 'settings' => $blockContext->getSettings()], $response);
     }
 
-    public function __construct($twig, EntityManagerInterface $em)
+    public function __construct($twig, protected EntityManagerInterface $em)
     {
-        $this->em = $em;
         parent::__construct($twig);
     }
 
@@ -47,7 +41,7 @@ class BookingsInProgressBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-bullhorn',
         ]);
     }

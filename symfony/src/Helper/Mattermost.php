@@ -6,11 +6,8 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class Mattermost
 {
-    protected $bag;
-
-    public function __construct(ParameterBagInterface $bag)
+    public function __construct(protected ParameterBagInterface $bag)
     {
-        $this->bag = $bag;
     }
     public function SendToMattermost($text, $channel = null)
     {
@@ -22,14 +19,9 @@ class Mattermost
         }
         $curl = curl_init($xcURL);
         $payload = '{"username":"'.$botname.'", "icon_url":"'.$botimg.'","channel":"'.$channel.'","text":"'.$text.'"}';
-        $cOptArr = array(
-            CURLOPT_URL => $xcURL,
-            CURLOPT_TIMEOUT => 10,
-            CURLOPT_RETURNTRANSFER => 1,
-            CURLOPT_POST => 1
-        );
+        $cOptArr = [CURLOPT_URL => $xcURL, CURLOPT_TIMEOUT => 10, CURLOPT_RETURNTRANSFER => 1, CURLOPT_POST => 1];
         curl_setopt_array($curl, $cOptArr);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(array('payload' => $payload)));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query(['payload' => $payload]));
         if (! $result = curl_exec($curl)) {
             trigger_error(curl_error($curl));
         }

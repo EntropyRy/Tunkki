@@ -16,10 +16,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 final class NakkiAdmin extends AbstractAdmin
 {
-    protected $em; // EntityManager
-    protected $ts; // Token Storage
-    protected $fl; // FlashBag
-    protected $mm; // Mattermost Helper
+    // Mattermost Helper
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
@@ -139,12 +136,8 @@ final class NakkiAdmin extends AbstractAdmin
         $this->em->flush();
     }
 
-    public function __construct($code, $class, $baseControllerName, $mm=null, $ts=null, $em=null, $flash=null)
+    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $em=null, protected $fl=null)
     {
-        $this->mm = $mm;
-        $this->ts = $ts;
-        $this->em = $em;
-        $this->fl = $flash;
         parent::__construct($code, $class, $baseControllerName);
     }
 

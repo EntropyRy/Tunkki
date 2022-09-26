@@ -8,76 +8,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Renter
- *
- * @ORM\Table(name="Renter")
- * @ORM\Entity
  */
-class Renter
+#[ORM\Table(name: 'Renter')]
+#[ORM\Entity]
+class Renter implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
     /**
      * @var string
-     *
-     * @ORM\OneToMany(targetEntity="\App\Entity\Booking", mappedBy="renter")
      */
+    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\Booking::class, mappedBy: 'renter')]
     private $bookings;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    private string $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="streetadress", type="string", length=190, nullable=true)
-     */
-    private $streetadress;
+    #[ORM\Column(name: 'streetadress', type: 'string', length: 190, nullable: true)]
+    private string $streetadress;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="organization", type="string", length=190, nullable=true)
-     */
-    private $organization;
+    #[ORM\Column(name: 'organization', type: 'string', length: 190, nullable: true)]
+    private string $organization;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="zipcode", type="string", length=190, nullable=true)
-     */
-    private $zipcode;
+    #[ORM\Column(name: 'zipcode', type: 'string', length: 190, nullable: true)]
+    private string $zipcode;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="city", type="string", length=190, nullable=true)
-     */
-    private $city;
+    #[ORM\Column(name: 'city', type: 'string', length: 190, nullable: true)]
+    private string $city;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="phone", type="string", length=190, nullable=true)
-     */
-    private $phone;
+    #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
+    private string $phone;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="email", type="string", length=190, nullable=true)
-     */
-    private $email;
+    #[ORM\Column(name: 'email', type: 'string', length: 190, nullable: true)]
+    private string $email;
 
     /**
      * Get id
@@ -236,7 +202,6 @@ class Renter
     /**
      * Set bookings
      *
-     * @param \App\Entity\Booking $bookings
      *
      * @return Renter
      */
@@ -256,9 +221,9 @@ class Renter
     {
         return $this->bookings;
     }
-    public function __toString()
+    public function __toString(): string
     {
-        $name = $this->name ? $this->name : 'N/A';
+        $name = $this->name ?: 'N/A';
         $org = $this->organization;
         return ($org ? $this->name.' / '.$org : $name);
     }
@@ -297,7 +262,6 @@ class Renter
     /**
      * Add booking
      *
-     * @param \App\Entity\Booking $booking
      *
      * @return Renter
      */
@@ -310,8 +274,6 @@ class Renter
 
     /**
      * Remove booking
-     *
-     * @param \App\Entity\Booking $booking
      */
     public function removeBooking(\App\Entity\Booking $booking)
     {

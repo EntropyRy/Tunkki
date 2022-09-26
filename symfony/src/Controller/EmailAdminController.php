@@ -30,11 +30,11 @@ final class EmailAdminController extends CRUDController
         $event = $email->getEvent();
         $body = $email->getBody();
         $count = 0;
-        $replyto = $email->getReplyTo() ? $email->getReplyTo() : 'hallitus@entropy.fi';
+        $replyto = $email->getReplyTo() ?: 'hallitus@entropy.fi';
         if ($subject && $body && $event) {
             if ($purpose == 'rsvp') {
                 $rsvps = $event->getRSVPs();
-                if (count($rsvps) > 0) {
+                if ((is_countable($rsvps) ? count($rsvps) : 0) > 0) {
                     foreach ($rsvps as $rsvp) {
                         $to = $rsvp->getAvailableEmail();
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links);

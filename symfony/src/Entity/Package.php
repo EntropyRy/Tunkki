@@ -8,64 +8,36 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Package
- *
- * @ORM\Table(name="Package")
- * @ORM\Entity(repositoryClass="App\Repository\PackagesRepository")
- * @ORM\Cache(usage="NONSTRICT_READ_WRITE")
  */
-class Package
+#[ORM\Table(name: 'Package')]
+#[ORM\Entity(repositoryClass: \App\Repository\PackagesRepository::class)]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
+class Package implements \Stringable
 {
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
-     */
-    private $id;
+    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Id]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private readonly int $id;
 
-    /**
-     * @ORM\ManyToMany(targetEntity="\App\Entity\Item", mappedBy="packages", orphanRemoval=false, fetch="EAGER")
-     */
+    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
     private $items;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="name", type="string", length=190)
-     */
-    private $name;
+    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    private string $name;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="rent", type="string", length=190)
-     */
-    private $rent;
+    #[ORM\Column(name: 'rent', type: 'string', length: 190)]
+    private string $rent;
 
-    /**
-     * @var boolean
-     *
-     * @ORM\Column(name="needs_fixing", type="boolean")
-     */
-    private $needsFixing = false;
+    #[ORM\Column(name: 'needs_fixing', type: 'boolean')]
+    private bool $needsFixing = false;
 
-    /**
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\WhoCanRentChoice", cascade={"persist"})
-     */
+    #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
     private $whoCanRent;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="notes", type="text", nullable=true)
-     */
-    private $notes;
+    #[ORM\Column(name: 'notes', type: 'text', nullable: true)]
+    private string $notes;
 
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     */
+    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private $compensationPrice;
 
 
@@ -162,7 +134,6 @@ class Package
     /**
      * Add item
      *
-     * @param \App\Entity\Item $item
      *
      * @return Package
      */
@@ -176,8 +147,6 @@ class Package
 
     /**
      * Remove item
-     *
-     * @param \App\Entity\Item $item
      */
     public function removeItem(\App\Entity\Item $item)
     {
@@ -209,9 +178,9 @@ class Package
         return $this->name;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        $return = $this->name ? $this->name : 'n/a';
+        $return = $this->name ?: 'n/a';
         /*    if ($return != 'n/a'){
                 $return .= ' = ';
                 foreach ($this->getItems() as $item){
@@ -271,7 +240,6 @@ class Package
     /**
      * Add whoCanRent
      *
-     * @param \App\Entity\WhoCanRentChoice $whoCanRent
      *
      * @return Package
      */
@@ -284,8 +252,6 @@ class Package
 
     /**
      * Remove whoCanRent
-     *
-     * @param \App\Entity\WhoCanRentChoice $whoCanRent
      */
     public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
     {
