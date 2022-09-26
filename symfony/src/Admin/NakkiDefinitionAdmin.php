@@ -13,6 +13,7 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
 final class NakkiDefinitionAdmin extends AbstractAdmin
 {
+    protected $baseRoutePattern = 'nakki_definition';
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter

@@ -54,11 +54,11 @@ body {
 */";
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private string $Content = "Use these: <br>
+    private ?string $Content = "Use these: <br>
             {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
+    private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
             {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

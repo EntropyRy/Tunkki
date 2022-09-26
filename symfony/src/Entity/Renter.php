@@ -29,22 +29,22 @@ class Renter implements \Stringable
     private string $name;
 
     #[ORM\Column(name: 'streetadress', type: 'string', length: 190, nullable: true)]
-    private string $streetadress;
+    private ?string $streetadress;
 
     #[ORM\Column(name: 'organization', type: 'string', length: 190, nullable: true)]
-    private string $organization;
+    private ?string $organization;
 
     #[ORM\Column(name: 'zipcode', type: 'string', length: 190, nullable: true)]
-    private string $zipcode;
+    private ?string $zipcode;
 
     #[ORM\Column(name: 'city', type: 'string', length: 190, nullable: true)]
-    private string $city;
+    private ?string $city;
 
     #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
-    private string $phone;
+    private ?string $phone;
 
     #[ORM\Column(name: 'email', type: 'string', length: 190, nullable: true)]
-    private string $email;
+    private ?string $email;
 
     /**
      * Get id

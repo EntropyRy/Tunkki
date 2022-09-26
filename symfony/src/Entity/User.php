@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
-class User implements UserInterface, PasswordAuthenticatedUserInterface
+class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -275,5 +275,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+    public function __toString()
+    {
+        if ($this->member) {
+            return $this->member->getName();
+        } else {
+            return 'user: '.$this->id;
+        }
     }
 }

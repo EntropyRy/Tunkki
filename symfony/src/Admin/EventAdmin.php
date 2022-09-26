@@ -40,7 +40,7 @@ final class EventAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::SORT_BY] = 'EventDate';
     }
 
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
+    protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

@@ -85,9 +85,9 @@ final class RewardAdmin extends AbstractAdmin
         $collection->add('PrepareEvenout', 'evenout/prepare');
         $collection->add('Evenout', 'evenout/make');
     }
-    public function configureSideMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
+    public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
-        $menu->addChild($this->trans('evenout'), [
+        $menu->addChild('Evenout', [
             'route'=> 'admin_app_reward_PrepareEvenout',
         ])->setAttribute('icon', 'fa fa-balance-scale');
     }

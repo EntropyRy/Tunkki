@@ -185,7 +185,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('modifier')
         ;
     }
-    protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
+    protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
             return;

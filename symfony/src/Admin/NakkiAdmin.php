@@ -16,7 +16,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 final class NakkiAdmin extends AbstractAdmin
 {
-    // Mattermost Helper
+    protected $baseRoutePattern = 'nakki';
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
