@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
 use Sonata\Form\Type\DatePickerType;
-use Sonata\Doctrine\Types\JsonType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Helper\Mattermost;
 
 final class MemberAdmin extends AbstractAdmin
@@ -22,11 +21,17 @@ final class MemberAdmin extends AbstractAdmin
     protected $baseRoutePattern = 'member';
     protected $mm; // Mattermost helper
 
-    protected $datagridValues = [
-        '_page' => 1,
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'createdAt',
-    ];
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        // display the first page (default = 1)
+        $sortValues[DatagridInterface::PAGE] = 1;
+
+        // reverse order (default = 'ASC')
+        $sortValues[DatagridInterface::SORT_ORDER] = 'DESC';
+
+        // name of the ordered field (default = the model's id field, if any)
+        $sortValues[DatagridInterface::SORT_BY] = 'createdAt';
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -148,13 +153,11 @@ final class MemberAdmin extends AbstractAdmin
             ->add('updatedAt')
         ;
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        //$collection->add('makeuser', $this->getRouterIdParameter().'/makeuser');
-        //$collection->add('sendrejectreason', $this->getRouterIdParameter().'/sendrejectreason');
         $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
     }
-    public function getExportFields(): array
+    public function configureExportFields(): array
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'isFullMember', 'AcceptedAsHonoraryMember'];
     }

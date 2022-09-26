@@ -127,25 +127,8 @@
     "jms/serializer": {
         "version": "3.3.0"
     },
-    "jms/serializer-bundle": {
-        "version": "3.0",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "384cec52df45f3bfd46a09930d6960a58872b268"
-        },
-        "files": [
-            "config/packages/dev/jms_serializer.yaml",
-            "config/packages/jms_serializer.yaml",
-            "config/packages/prod/jms_serializer.yaml"
-        ]
-    },
     "knplabs/gaufrette": {
         "version": "v0.8.3"
-    },
-    "knplabs/knp-markdown-bundle": {
-        "version": "1.8.1"
     },
     "knplabs/knp-menu": {
         "version": "2.6.0"
@@ -165,14 +148,8 @@
             "config/packages/knpu_oauth2_client.yaml"
         ]
     },
-    "kriswallsmith/buzz": {
-        "version": "v0.16.1"
-    },
     "laminas/laminas-code": {
         "version": "3.4.1"
-    },
-    "laminas/laminas-diagnostics": {
-        "version": "1.6.0"
     },
     "lcobucci/clock": {
         "version": "2.1.0"
@@ -194,9 +171,6 @@
     },
     "league/uri-interfaces": {
         "version": "2.3.0"
-    },
-    "michelf/php-markdown": {
-        "version": "1.9.0"
     },
     "monolog/monolog": {
         "version": "1.25.2"
@@ -306,9 +280,6 @@
             "src/Entity/SonataClassificationTag.php"
         ]
     },
-    "sonata-project/datagrid-bundle": {
-        "version": "2.5.0"
-    },
     "sonata-project/doctrine-extensions": {
         "version": "1.4.0"
     },
@@ -341,18 +312,6 @@
             "public/upload/media/.gitignore"
         ]
     },
-    "sonata-project/notification-bundle": {
-        "version": "3.4",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.4",
-            "ref": "222a1549f627f9faef39c0dd3cba1194a5175c00"
-        },
-        "files": [
-            "config/packages/sonata_notification.yaml"
-        ]
-    },
     "sonata-project/page-bundle": {
         "version": "3.26",
         "recipe": {
@@ -372,18 +331,6 @@
     },
     "sonata-project/seo-bundle": {
         "version": "2.9.0"
-    },
-    "sonata-project/translation-bundle": {
-        "version": "2.3",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "2.3",
-            "ref": "65f0e544ca19d262268e1f1ce2b4cbbe459a4a97"
-        },
-        "files": [
-            "config/packages/sonata_translation.yaml"
-        ]
     },
     "sonata-project/twig-extensions": {
         "version": "0.1.0"
@@ -433,9 +380,6 @@
             "bin/console",
             "config/bootstrap.php"
         ]
-    },
-    "symfony/debug": {
-        "version": "v4.4.1"
     },
     "symfony/debug-bundle": {
         "version": "5.1",
@@ -663,9 +607,6 @@
     },
     "symfony/string": {
         "version": "v5.0.7"
-    },
-    "symfony/templating": {
-        "version": "v4.4.1"
     },
     "symfony/translation": {
         "version": "3.3",

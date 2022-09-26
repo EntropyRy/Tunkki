@@ -28,12 +28,12 @@ class ItemPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
+    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): Response
     {
         $needsfix = $this->em->getRepository('App:Item')->findBy(array('needsFixing' => true, 'toSpareParts' => false));
         return $this->templateManager->renderResponse($page->getTemplateCode(), array_merge($parameters, array('fix'=>$needsfix)), $response);

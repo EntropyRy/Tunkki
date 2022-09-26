@@ -17,7 +17,7 @@ use Doctrine\ORM\EntityManagerInterface;
 class FutureEventsBlock extends BaseBlockService
 {
     protected $em;
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $events = $this->em->getRepository(Event::class)->getFutureEvents();
 
@@ -34,29 +34,29 @@ class FutureEventsBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'template' => 'block/future_events.html.twig',
             'box' => false
         ]);
     }
-    public function getBlockMetadata($code = null)
+    public function getBlockMetadata($code = null): Metadata
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
             'class' => 'fa fa-bullhorn',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function getName()
+    public function getName(): string
     {
         return 'Future Events Block';
     }

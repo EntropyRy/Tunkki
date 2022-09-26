@@ -16,37 +16,37 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class JoinUsBlock extends BaseBlockService
 {
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function getName()
+    public function getName(): string
     {
         return 'Join Us Block';
     }
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         return $this->renderResponse($blockContext->getTemplate(), array(
             'block'     => $blockContext->getBlock(),
         ), $response);
     }
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'position' => '1',
             'template' => 'member/joinus_block.html.twig',
         ));
     }
-    public function getBlockMetadata($code = null)
+    public function getBlockMetadata($code = null): Metadata
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
             'class' => 'fa fa-user',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
 }

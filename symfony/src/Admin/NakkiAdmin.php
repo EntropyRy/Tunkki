@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 
@@ -159,7 +159,7 @@ final class NakkiAdmin extends AbstractAdmin
         $b->setEvent($nakki->getEvent());
         $this->em->persist($b);
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }

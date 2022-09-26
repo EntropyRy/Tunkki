@@ -6,8 +6,6 @@ sonata_admin:
             - bundles/sonatapage/sonata-page.back.min.css
 
 sonata_page:
-    is_inline_edition_on: false
-    slugify_service: sonata.page.slugify.cocur
     multisite: host_with_path_by_locale
     use_streamed_response: true
     hide_disabled_blocks: true
@@ -249,7 +247,7 @@ sonata_page:
         not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
         fatal:     [500]    # so you can use the same page for different http errors or specify specific page for each error
     class:
-        page: 'App\Application\Sonata\PageBundle\Entity\Page'
-        snapshot: 'App\Application\Sonata\PageBundle\Entity\Snapshot'
-        block: 'App\Application\Sonata\PageBundle\Entity\Block'
-        site: 'App\Application\Sonata\PageBundle\Entity\Site'
+        page: 'App\Entity\Sonata\SonataPagePage'
+        snapshot: 'App\Entity\Sonata\SonataPageSnapshot'
+        block: 'App\Entity\Sonata\SonataPageBlock'
+        site: 'App\Entity\Sonata\SonataPageSite'

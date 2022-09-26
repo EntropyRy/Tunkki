@@ -16,18 +16,18 @@ class BrokenItemsBlock extends BaseBlockService
 {
     protected $em;
 
-    public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function buildiEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildiEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function getName()
+    public function getName(): string
     {
         return 'Broken Items Block';
     }
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $broken = $this->em->getRepository('App:Item')->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         $settings = $blockContext->getSettings();
@@ -53,7 +53,7 @@ class BrokenItemsBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(array(
             'position' => '1',

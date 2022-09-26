@@ -9,7 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\Form\Type\DateTimePickerType;
@@ -102,7 +102,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName(). ' #'. $i);
         $eventinfo->setArtistClone($artistClone);
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('update', $this->getRouterIdParameter().'/update');
     }

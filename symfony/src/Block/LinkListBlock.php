@@ -15,25 +15,24 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
 class LinkListBlock extends BaseBlockService
 {
     protected $em;
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function configureEditForm(FormMapper $formMapper, BlockInterface $block):void
     {
-        $this->buildCreateForm($formMapper, $block);
+        $this->configureCreateForm($formMapper, $block);
     }
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $formMapper
             ->add('settings', ImmutableArrayType::class, [
@@ -67,7 +66,7 @@ class LinkListBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'title' => null,
@@ -76,16 +75,16 @@ class LinkListBlock extends BaseBlockService
             'template' => 'block/links.html.twig',
         ]);
     }
-    public function getBlockMetadata($code = null)
+    public function getBlockMetadata($code = null): Metadata
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
-    public function getName()
+    public function getName(): string
     {
         return 'Link List Block';
     }

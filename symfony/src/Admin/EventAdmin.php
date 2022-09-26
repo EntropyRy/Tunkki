@@ -7,6 +7,7 @@ namespace App\Admin;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Route\RouteCollection;
@@ -416,7 +417,7 @@ final class EventAdmin extends AbstractAdmin
 
         ;
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');

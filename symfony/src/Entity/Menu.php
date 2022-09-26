@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\PageBundle\Entity\Page;
+use App\Entity\Sonata\SonataPagePage as Page;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -37,12 +37,12 @@ class Menu
     private $url;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\PageBundle\Entity\Page")
+     * @ORM\ManyToOne(targetEntity="Page::class")
      */
     private $pageFi;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\PageBundle\Entity\Page")
+     * @ORM\ManyToOne(targetEntity="Page::class")
      */
     private $pageEn;
 

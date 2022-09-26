@@ -11,7 +11,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\Form\Type\DateTimePickerType;
 
 final class RewardAdmin extends AbstractAdmin
@@ -79,7 +79,7 @@ final class RewardAdmin extends AbstractAdmin
     public function preUpdate($reward): void
     {
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('makepaid', $this->getRouterIdParameter().'/makepaid');
         $collection->add('PrepareEvenout', 'evenout/prepare');

@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\MediaBundle\Entity\Media;
+use App\Entity\Sonata\SonataMediaMedia;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -44,7 +44,7 @@ class Event
     private $publishDate;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media" ,cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="SonataMediaMedia" ,cascade={"persist"})
      */
     private $picture;
 
@@ -106,7 +106,7 @@ class Event
     private $cancelled = false;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media")
+     * @ORM\ManyToOne(targetEntity="SonataMediaMedia::class")
      */
     private $attachment;
 
@@ -340,12 +340,12 @@ class Event
         return $this;
     }
 
-    public function getPicture(): ?Media
+    public function getPicture(): ?SonataMediaMedia
     {
         return $this->picture;
     }
 
-    public function setPicture(?Media $picture): self
+    public function setPicture(?SonataMediaMedia $picture): self
     {
         $this->picture = $picture;
 
@@ -534,12 +534,12 @@ body {
         return $this;
     }
 
-    public function getAttachment(): ?Media
+    public function getAttachment(): ?SonataMediaMedia
     {
         return $this->attachment;
     }
 
-    public function setAttachment(?Media $attachment): self
+    public function setAttachment(?SonataMediaMedia $attachment): self
     {
         $this->attachment = $attachment;
 

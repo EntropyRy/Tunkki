@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\MediaBundle\Entity\Media;
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -81,7 +81,7 @@ class Artist
     private $links = [];
 
     /**
-     * @ORM\ManyToOne(targetEntity=Media::class, cascade={"persist", "detach"})
+     * @ORM\ManyToOne(targetEntity=SonataMediaMedia::class, cascade={"persist", "detach"})
      */
     private $Picture;
 
@@ -262,12 +262,12 @@ class Artist
         return $this;
     }
 
-    public function getPicture(): ?Media
+    public function getPicture(): ?SonataMediaMedia
     {
         return $this->Picture;
     }
 
-    public function setPicture(?Media $Picture): self
+    public function setPicture(?SonataMediaMedia $Picture): self
     {
         $this->Picture = $Picture;
 

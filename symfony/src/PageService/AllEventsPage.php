@@ -20,12 +20,12 @@ class AllEventsPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null)
+    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): Response
     {
         $events = $this->em->getRepository('App:Event')->findBy(['published' => true, 'sticky'=> false]);
         $sticky = $this->em->getRepository('App:Event')->findOneBy(['published' => true, 'sticky' => true]);

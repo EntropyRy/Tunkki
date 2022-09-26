@@ -2,7 +2,7 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\MediaBundle\Entity\Media;
+use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -37,7 +37,7 @@ class File
 
     /**
      *
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\MediaBundle\Entity\Media",  cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Media::class",  cascade={"persist"})
      */
     private $file;
 
@@ -103,11 +103,11 @@ class File
     /**
      * Set file
      *
-     * @param \App\Application\Sonata\MediaBundle\Entity\Media $file
+     * @param Media $file
      *
      * @return Files
      */
-    public function setFile(\App\Application\Sonata\MediaBundle\Entity\Media $file = null)
+    public function setFile(Media $file = null)
     {
         $this->file = $file;
 
@@ -117,7 +117,7 @@ class File
     /**
      * Get file
      *
-     * @return \App\Application\Sonata\MediaBundle\Entity\Media
+     * @return Media
      */
     public function getFile()
     {

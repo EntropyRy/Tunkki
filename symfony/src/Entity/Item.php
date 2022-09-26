@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use App\Application\Sonata\ClassificationBundle\Entity\Category;
-use App\Application\Sonata\ClassificationBundle\Entity\Tag;
+use App\Entity\Sonata\SonataClassificationCategory as Category;
+use App\Entity\Sonata\SonataClassificationTag as Tag;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -85,13 +85,13 @@ class Item
     private $whoCanRent;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Application\Sonata\ClassificationBundle\Entity\Category", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="Category::class", cascade={"persist"})
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
     private $category;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Application\Sonata\ClassificationBundle\Entity\Tag", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Tag::class", cascade={"persist"})
      * @ORM\JoinTable(
      *      name="Item_tags",
      *      joinColumns={@ORM\JoinColumn(name="item_id", referencedColumnName="id")},
@@ -707,11 +707,11 @@ class Item
     /**
      * Add tag
      *
-     * @param \App\Application\Sonata\ClassificationBundle\Entity\Tag $tag
+     * @param Tag $tag
      *
      * @return Item
      */
-    public function addTag(\App\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
+    public function addTag(Tag $tag)
     {
         $this->tags[] = $tag;
 
@@ -721,9 +721,9 @@ class Item
     /**
      * Remove tag
      *
-     * @param \App\Application\Sonata\ClassificationBundle\Entity\Tag $tag
+     * @param Tag $tag
      */
-    public function removeTag(\App\Application\Sonata\ClassificationBundle\Entity\Tag $tag)
+    public function removeTag(Tag $tag)
     {
         $this->tags->removeElement($tag);
     }
@@ -908,11 +908,11 @@ class Item
     /**
      * Set category
      *
-     * @param \App\Application\Sonata\ClassificationBundle\Entity\Category $category
+     * @param Category $category
      *
      * @return Item
      */
-    public function setCategory(\App\Application\Sonata\ClassificationBundle\Entity\Category $category = null)
+    public function setCategory(Category $category = null)
     {
         $this->category = $category;
 
@@ -922,7 +922,7 @@ class Item
     /**
      * Get category
      *
-     * @return \App\Application\Sonata\ClassificationBundle\Entity\Category
+     * @return Category
      */
     public function getCategory()
     {

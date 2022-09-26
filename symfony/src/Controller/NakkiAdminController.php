@@ -7,12 +7,13 @@ namespace App\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController
 {
-    protected function preCreate(Request $request, $object): void
+    protected function preCreate(Request $request, $object): Response
     {
         if ($object->getEvent()) {
             $date = new \DateTimeImmutable($object->getEvent()->getEventDate()->format('Y-m-d H:i'));

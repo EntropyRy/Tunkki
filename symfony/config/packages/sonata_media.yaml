@@ -1,10 +1,9 @@
 sonata_media:
     db_driver: doctrine_orm
     class:
-        media:              App\Application\Sonata\MediaBundle\Entity\Media
-        gallery:            App\Application\Sonata\MediaBundle\Entity\Gallery
-        gallery_has_media:       App\Application\Sonata\MediaBundle\Entity\GalleryHasMedia
-        #category:           App\Application\Sonata\ClassificationBundle\Entity\Category
+        media: App\Entity\Sonata\SonataMediaMedia
+        gallery: App\Entity\Sonata\SonataMediaGallery
+        gallery_item: App\Entity\Sonata\Sonata\MediaGalleryItem
     default_context: item
     force_disable_category: true
     contexts:

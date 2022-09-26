@@ -11,7 +11,8 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -38,11 +39,17 @@ class BookingAdmin extends AbstractAdmin
     protected $em; // E manager
     protected $cm; // Category manager
 
-    protected $datagridValues = [
-        '_page' => 1,
-        '_sort_order' => 'DESC',
-        '_sort_by' => 'createdAt',
-    ];
+    protected function configureDefaultSortValues(array &$sortValues): void
+    {
+        // display the first page (default = 1)
+        $sortValues[DatagridInterface::PAGE] = 1;
+
+        // reverse order (default = 'ASC')
+        $sortValues[DatagridInterface::SORT_ORDER] = 'DESC';
+
+        // name of the ordered field (default = the model's id field, if any)
+        $sortValues[DatagridInterface::SORT_BY] = 'createdAt';
+    }
 
     protected function configureSideMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
@@ -372,14 +379,6 @@ class BookingAdmin extends AbstractAdmin
         $booking->setModifier($user);
     }
 
-    public function getFormTheme(): array
-    {
-        $themes = array_merge(
-            parent::getFormTheme(),
-            array('admin/booking/_edit_rentals.html.twig')
-        );
-        return $themes;
-    }
     public function validate(ErrorElement $errorElement, $object): void
     {
         $errorElement

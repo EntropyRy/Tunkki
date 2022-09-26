@@ -9,7 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollection;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
 use App\Application\Sonata\ClassificationBundle\Entity\Category;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -259,11 +259,11 @@ class ItemAdmin extends AbstractAdmin
         $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
-    protected function configureRoutes(RouteCollection $collection): void
+    protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
-    public function configureBatchActions($actions)
+    public function configureBatchActions(array $actions): array
     {
         if ($this->hasRoute('edit') && $this->hasAccess('edit')) {
             $actions['batchEdit'] = array(

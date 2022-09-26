@@ -23,7 +23,7 @@ class MemberInfoBlock extends BaseBlockService
 {
     protected $security;
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $member = $this->security->getUser()->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
@@ -32,11 +32,11 @@ class MemberInfoBlock extends BaseBlockService
             'member'    => $member
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->buildCreateForm($formMapper, $block);
     }
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block)
+    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
         /*		$formMapper
                     ->add('settings', ImmutableArrayType::class, [
@@ -69,22 +69,22 @@ class MemberInfoBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'template' => 'block/member_info.html.twig',
         ]);
     }
-    public function getBlockMetadata($code = null)
+    public function getBlockMetadata($code = null): Metadata
     {
         return new Metadata($this->getName(), (null !== $code ? $code : $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block)
+    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
-    public function getName()
+    public function getName(): string
     {
         return 'Member Info Block';
     }

@@ -26,12 +26,8 @@ services:
         tags: ['controller.service_arguments']
     App\:
         resource: '../src/*'
-        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php,Application}'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
 
-
-    Sonata\ClassificationBundle\Model\CategoryManagerInterface: '@sonata.classification.manager.category'
-    Sonata\PageBundle\CmsManager\CmsManagerSelector: '@sonata.page.cms_manager_selector'
-    Sonata\PageBundle\Page\TemplateManager: '@sonata.page.template_manager'
     symfony.mailer:
         alias: Symfony\Component\Mailer\MailerInterface
         public: true
@@ -52,7 +48,7 @@ services:
             - App\Controller\ItemAdminController 
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
-            - "@sonata.classification.manager.context"
+              #            - "@sonata.classification.manager.context"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Items }
         calls:
@@ -67,12 +63,6 @@ services:
 
     my_mattermost_authenticator:
         class: App\Security\MattermostAuthenticator
-        #autowire: true
-        # use autowiring, OR you can specify the argument manually
-        #        arguments:
-        #    - '@oauth2.registry'
-        #    - '@doctrine.orm.entity_manager'
-        #    - '@router'
 
     entropy_tunkki.admin.statusevent:
         class: App\Admin\StatusEventAdmin
@@ -132,13 +122,6 @@ services:
         tags:
                 - { name: sonata.page, alias: eventspage}
         public: true
-    entropy.page.member.form:
-        class: App\PageService\MemberFormPage
-        arguments:
-                - "Member Form"
-        tags:
-                - { name: sonata.page, alias: memberformpage}
-        public: true
     entropy.page.alleventspage:
         class: App\PageService\AllEventsPage
         arguments:
@@ -177,10 +160,11 @@ services:
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
             - "@doctrine.orm.entity_manager"
-            - "@sonata.classification.manager.category"
+              #            - "@sonata.classification.manager.category"
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Bookings, show_mosaic_button: false }
         calls:
+            - [setTemplate, ['edit', 'admin/booking/_edit_rentals.html.twig']]
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
             - [addChild, ['@entropy_tunkki.admin.statusevent', 'booking']]

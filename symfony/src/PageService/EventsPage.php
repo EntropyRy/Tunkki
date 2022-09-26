@@ -21,12 +21,12 @@ class EventsPage implements PageServiceInterface
         $this->templateManager  = $templateManager;
         $this->em               = $em;
     }
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): ?Response
+    public function execute(PageInterface $page, Request $request, array $parameters = array(), Response $response = null): Response
     {
         $events = $this->em->getRepository(Event::class)->findPublicEventsByNotType('announcement');
         //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
