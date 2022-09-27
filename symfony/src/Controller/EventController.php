@@ -14,6 +14,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Security\Core\Security;
 use App\Repository\TicketRepository;
 use Sonata\MediaBundle\Provider\ImageProvider;
+use App\Entity\Member;
 use App\Entity\Event;
 use App\Entity\RSVP;
 use App\Form\RSVPType;
@@ -88,7 +89,7 @@ class EventController extends Controller
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $rsvp = $form->getData();
-                $repo = $this->em->getRepository('App:Member');
+                $repo = $this->em->getRepository(Member::class);
                 $exists = $repo->findByEmailOrName($rsvp->getEmail(), $rsvp->getFirstName(), $rsvp->getLastName());
                 if ($exists) {
                     $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
@@ -126,8 +127,8 @@ class EventController extends Controller
             if (!is_null($mediaUrl)) {
                 $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
                 $seo->addMeta('property', 'og:image', 'https://entropy.fi'.$mediaUrl);
-                $seo->addMeta('property', 'og:image:height', null);
-                $seo->addMeta('property', 'og:image:widht', null);
+                $seo->addMeta('property', 'og:image:height', '');
+                $seo->addMeta('property', 'og:image:widht', '');
             }
             $seo->addMeta('property', 'twitter:card', "summary_large_image");
             //$seo->addMeta('property', 'twitter:site', "@entropy.fi");

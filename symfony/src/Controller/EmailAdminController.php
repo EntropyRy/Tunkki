@@ -7,6 +7,7 @@ namespace App\Controller;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -21,7 +22,7 @@ final class EmailAdminController extends CRUDController
         //      ->findOneBy('id' => $object->getId());
         return $this->renderWithExtraParams('emails/email.html.twig', ['body' => $email->getBody(), 'email' => $email, 'admin' => $admin]);
     }
-    public function sendAction(): RedirectResponse
+    public function sendAction(MailerInterface $mailer): RedirectResponse
     {
         $email = $this->admin->getSubject();
         $links = $email->getAddLoginLinksToFooter();
@@ -38,7 +39,7 @@ final class EmailAdminController extends CRUDController
                     foreach ($rsvps as $rsvp) {
                         $to = $rsvp->getAvailableEmail();
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links);
-                        $this->get('symfony.mailer')->send($message);
+                        $mailer->send($message);
                         $count += 1;
                     }
                 }
@@ -49,7 +50,7 @@ final class EmailAdminController extends CRUDController
                         $to = $ticket->getOwnerEmail();
                         if ($to) {
                             $message = $this->generateMail($to, $replyto, $subject, $body, $links);
-                            $this->get('symfony.mailer')->send($message);
+                            $mailer->send($message);
                             $count += 1;
                         }
                     }
@@ -66,7 +67,7 @@ final class EmailAdminController extends CRUDController
                 foreach ($emails as $to) {
                     if ($to) {
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links);
-                        $this->get('symfony.mailer')->send($message);
+                        $mailer->send($message);
                         $count += 1;
                     }
                 }

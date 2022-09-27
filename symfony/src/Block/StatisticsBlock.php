@@ -14,17 +14,20 @@ use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
+use App\Entity\Member;
+use App\Entity\Event;
+use App\Entity\Booking;
 
 class StatisticsBlock extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $stats = [];
-        $memberR = $this->em->getRepository('App:Member');
+        $memberR = $this->em->getRepository(Member::class);
         $stats['block.stats.members'] = $memberR->countByMember();
         $stats['block.stats.active_members'] = $memberR->countByActiveMember();
-        $stats['block.stats.bookings'] = $this->em->getRepository('App:Booking')->countHandled();
-        $stats['block.stats.events'] = $this->em->getRepository('App:Event')->countDone();
+        $stats['block.stats.bookings'] = $this->em->getRepository(Booking::class)->countHandled();
+        $stats['block.stats.events'] = $this->em->getRepository(Event::class)->countDone();
         $member = $this->security->getUser()->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),

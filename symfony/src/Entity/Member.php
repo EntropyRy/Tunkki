@@ -32,7 +32,7 @@ class Member implements \Stringable
     private string $email;
 
     #[ORM\Column(name: 'username', type: 'string', length: 190, nullable: true)]
-    private string $username;
+    private ?string $username;
 
     #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
     private ?string $phone = null;
@@ -62,16 +62,16 @@ class Member implements \Stringable
     private bool $StudentUnionMember = false;
 
     #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
-    private string $Application;
+    private ?string $Application;
 
     #[ORM\Column(name: 'reject_reason', type: 'text', nullable: true)]
-    private string $rejectReason;
+    private ?string $rejectReason;
 
     #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
-    private \DateTime $ApplicationDate;
+    private ?\DateTime $ApplicationDate;
 
     #[ORM\Column(name: 'ApplicationHandledDate', type: 'datetime', nullable: true)]
-    private \DateTime $ApplicationHandledDate;
+    private ?\DateTime $ApplicationHandledDate;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private $AcceptedAsHonoraryMember;
@@ -94,7 +94,7 @@ class Member implements \Stringable
     private $doorLogs;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $theme;
+    private ?string $theme;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]
     private $RSVPs;
@@ -109,7 +109,7 @@ class Member implements \Stringable
     private $responsibleForNakkis;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $denyKerdeAccess;
+    private ?bool $denyKerdeAccess = false;
 
     public function __construct()
     {

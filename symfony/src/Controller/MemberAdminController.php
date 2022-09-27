@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
@@ -77,7 +78,7 @@ final class MemberAdminController extends CRUDController
 
     }
      */
-    public function activememberinfoAction($id): RedirectResponse
+    public function activememberinfoAction( MailerInterface $mailer ): RedirectResponse
     {
         $object = $this->admin->getSubject();
         $em = $this->getDoctrine()->getManager();
@@ -89,7 +90,7 @@ final class MemberAdminController extends CRUDController
             ->htmlTemplate('emails/member.html.twig')
             ->context(['body' => $email->getBody() ])
         ;
-        $this->get('symfony.mailer')->send($message);
+        $mailer->send($message);
         //$this->admin->update($object);
         $this->addFlash('sonata_flash_success', sprintf('Member info package sent to %s', $object->getName()));
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));

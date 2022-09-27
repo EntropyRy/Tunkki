@@ -7,7 +7,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
-
+use App\Entity\Contract;
+use App\Entity\Renter;
+use App\Entity\Booking;
 // Form
 use App\Form\BookingConsentType;
 
@@ -23,14 +25,14 @@ class RenterHashController extends Controller
             throw new NotFoundHttpException();
         }
         $this->em = $this->getDoctrine()->getManager();
-        $renter = $this->em->getRepository('App:Renter')
+        $renter = $this->em->getRepository(Renter::class)
             ->findOneBy(['id' => $renterid]);
         if (is_null($renter)) {
             $renter = 0;
         }
-        $contract = $this->em->getRepository('App:Contract')
+        $contract = $this->em->getRepository(Contract::class)
             ->findOneBy(['purpose' => 'rent']);
-        $bookingdata = $this->em->getRepository('App:Booking')
+        $bookingdata = $this->em->getRepository(Booking::class)
             ->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])) {
             $object = $bookingdata[1];
@@ -43,7 +45,7 @@ class RenterHashController extends Controller
                         $this->em->persist($booking);
                         $this->em->flush();
                         $this->addFlash('success', 'Allekirjoitettu!');
-                        $bookingdata = $this->em->getRepository('App:Booking')
+                        $bookingdata = $this->em->getRepository(Booking::class)
                             ->getBookingData($bookingid, $hash, $renter);
                     } else {
                         $this->addFlash('warning', 'Allekirjoita uudestaan ja hyväksy ehdot');

@@ -14,6 +14,7 @@ use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\ZMQHelper;
+use App\Entity\Doorlog;
 
 class DoorInfoBlock extends BaseBlockService
 {
@@ -26,7 +27,7 @@ class DoorInfoBlock extends BaseBlockService
         $member = $this->security->getUser()->getMember();
         $now = new \DateTime('now');
         $status = $this->zmq->send('dev'.' init: '.$member->getUsername().' '.$now->getTimestamp());
-        $logs = $this->em->getRepository('App:DoorLog')->getLatest(3);
+        $logs = $this->em->getRepository(DoorLog::class)->getLatest(3);
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings(),

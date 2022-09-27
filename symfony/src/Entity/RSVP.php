@@ -133,4 +133,8 @@ class RSVP
         }
         return $this->email;
     }
+    public function __toString(): string
+    {
+        return 'ID: '.$this->id;
+    }
 }

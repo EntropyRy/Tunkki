@@ -1,8 +1,8 @@
-{% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
+{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 {% block field %}
 <div>
     {% if object != null %}
-    <img src="{% path object.file, 'small' %}">
+    <img src="{{ sonata_path( object.file, 'small') }}">
     {% else %}
     <span>No picture</span>
     {% endif %}

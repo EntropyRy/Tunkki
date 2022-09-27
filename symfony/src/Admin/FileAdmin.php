@@ -29,13 +29,14 @@ class FileAdmin extends AbstractAdmin
     {
         $listMapper
             ->addIdentifier('fileinfo')
-            ->add('file', null, ['template' => 'admin/file/_image_preview.html.twig'])
+            ->add('file', null, ['template' => 'admin/item/_image_preview.html.twig'])
             ->add('downloadLink', 'html');
         if (!$this->isChild()) {
             $listMapper->add('product');
         }
         $listMapper
-            ->add('_action', null, ['actions' => ['edit' => [], 'delete' => []]])
+            ->add(ListMapper::NAME_ACTIONS, null, [
+                'actions' => ['edit' => [], 'delete' => []]])
         ;
     }
 

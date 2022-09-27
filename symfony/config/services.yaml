@@ -27,7 +27,8 @@ services:
     App\:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-
+    Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
+    Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image" 
     symfony.mailer:
         alias: Symfony\Component\Mailer\MailerInterface
         public: true

@@ -65,7 +65,7 @@ class EventSignUpController extends EventController
         if ($event->getNakkikoneEnabled()) {
             if (is_null($booking->getMember())) {
                 $em = $this->getDoctrine()->getManager();
-                $repo = $em->getRepository('App:NakkiBooking');
+                $repo = $em->getRepository(NakkiBooking::class);
                 if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
                     $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
                     if ($sameTime) {
