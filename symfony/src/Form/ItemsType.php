@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Item;
 
@@ -47,7 +46,7 @@ class ItemsType extends AbstractType
         }
         return $cats;
     }
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $choices = $this->em->getRepository(Item::class)->getAllItemChoices();
         $categories = $this->getCategories($choices);
@@ -68,12 +67,12 @@ class ItemsType extends AbstractType
             'btn_catalogue' => 'SonataAdminBundle',
         ]);
     }
-    public function getParent()
+    public function getParent(): string
     {
         return EntityType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'entropy_type_items';
     }

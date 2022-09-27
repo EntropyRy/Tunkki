@@ -59,7 +59,7 @@ class Item implements \Stringable
     private $tags;
 
     #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
-    private ?float $rent;
+    private $rent;
 
     #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private ?float $compensationPrice;

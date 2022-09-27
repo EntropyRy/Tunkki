@@ -43,7 +43,7 @@ class PackageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $p = $this->getSubject();
-        $em = $this->modelManager->getEntityManager(Item::class);
+        $em = $this->getModelManager()->getEntityManager(Item::class);
         if (is_null($p->getId())) {
             $query = $em->createQueryBuilder('i')->select('i')
                     ->from('App:Item', 'i')

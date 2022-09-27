@@ -7,7 +7,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Package;
 
@@ -19,7 +18,7 @@ class PackagesType extends AbstractType
     {
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
         $view->vars['bookings'] = $options['bookings'];
@@ -28,7 +27,7 @@ class PackagesType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
     }
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'class' => Package::class,
@@ -45,12 +44,12 @@ class PackagesType extends AbstractType
             'btn_catalogue' => 'SonataAdminBundle',
         ]);
     }
-    public function getParent()
+    public function getParent(): string
     {
         return EntityType::class;
     }
 
-    public function getBlockPrefix()
+    public function getBlockPrefix(): string
     {
         return 'entropy_type_packages';
     }

@@ -113,7 +113,4 @@ sonata_admin:
                 items:
     assets:
         extra_stylesheets:
-            # Pagebundle
-            - bundles/sonatacore/vendor/components-font-awesome/css/font-awesome.min.css
-            - bundles/sonataadmin/vendor/jqueryui/themes/flick/jquery-ui.min.css
             - css/admin.css

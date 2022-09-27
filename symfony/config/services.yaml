@@ -163,7 +163,7 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Bookings, show_mosaic_button: false }
         calls:
-            - [setTemplate, ['edit', 'admin/booking/_edit_rentals.html.twig']]
+            - [setTemplate, [edit, admin/booking/_edit_rentals.html.twig]]
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
             - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
             - [addChild, ['@entropy_tunkki.admin.statusevent', 'booking']]

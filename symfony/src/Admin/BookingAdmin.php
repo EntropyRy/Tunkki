@@ -218,8 +218,10 @@ class BookingAdmin extends AbstractAdmin
                     ])
                     ->add(
                         'accessories',
-                        CollectionType::class,
-                        ['required' => false, 'by_reference' => false],
+                        CollectionType::class, [
+                            'required' => false, 
+                            'by_reference' => false
+                        ],
                         ['edit' => 'inline', 'inline' => 'table']
                     )
                 ->end()

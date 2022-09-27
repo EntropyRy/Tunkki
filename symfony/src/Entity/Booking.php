@@ -57,7 +57,7 @@ class Booking implements \Stringable
     private $returning;
 
     #[ORM\Column(name: 'paid_date', type: 'datetime', nullable: true)]
-    private \DateTime $paid_date;
+    private ?\DateTime $paid_date;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
