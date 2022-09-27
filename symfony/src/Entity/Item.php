@@ -28,22 +28,22 @@ class Item implements \Stringable
     private string $name;
 
     #[ORM\Column(name: 'Manufacturer', type: 'string', length: 190, nullable: true)]
-    private string $manufacturer;
+    private ?string $manufacturer;
 
     #[ORM\Column(name: 'Model', type: 'string', length: 190, nullable: true)]
-    private string $model;
+    private ?string $model;
 
     #[ORM\Column(name: 'Url', type: 'string', length: 500, nullable: true)]
-    private string $url;
+    private ?string $url;
 
     #[ORM\Column(name: 'SerialNumber', type: 'string', length: 190, nullable: true)]
-    private string $serialnumber;
+    private ?string $serialnumber;
 
     #[ORM\Column(name: 'PlaceInStorage', type: 'string', length: 190, nullable: true)]
-    private string $placeinstorage;
+    private ?string $placeinstorage;
 
     #[ORM\Column(name: 'Description', type: 'string', length: 4000, nullable: true)]
-    private string $description;
+    private ?string $description;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
     private $whoCanRent;
@@ -59,16 +59,16 @@ class Item implements \Stringable
     private $tags;
 
     #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
-    private float $rent;
+    private ?float $rent;
 
     #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
-    private float $compensationPrice;
+    private ?float $compensationPrice;
 
     #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
-    private string $rentNotice;
+    private ?string $rentNotice;
 
     #[ORM\Column(name: 'NeedsFixing', type: 'boolean', nullable: true)]
-    private bool $needsFixing = false;
+    private ?bool $needsFixing = false;
 
     #[ORM\Column(name: 'ToSpareParts', type: 'boolean')]
     private bool $toSpareParts = false;
@@ -86,10 +86,10 @@ class Item implements \Stringable
     private $rentHistory;
 
     #[ORM\Column(name: 'History', type: 'string', length: 190, nullable: true)]
-    private string $history;
+    private ?string $history;
 
     #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
-    private bool $forSale = false;
+    private ?bool $forSale = false;
 
     #[ORM\ManyToMany(targetEntity: 'Package', inversedBy: 'items')]
     private $packages;

@@ -111,7 +111,7 @@ class ItemAdmin extends AbstractAdmin
                 ->add('purchasePrice')
                 ->add('tags', ModelAutocompleteType::class, [
                     'property' => 'name',
-                    'multiple' => 'true',
+                    'multiple' => true,
                     'required' => false,
                     'minimum_input_length' => 2
                 ])

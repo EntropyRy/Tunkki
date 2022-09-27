@@ -90,16 +90,14 @@ services:
 
     entropy_tunkki.admin.file:
         class: App\Admin\FileAdmin
-        arguments: [~, App\Entity\File, SonataAdminBundle:CRUD]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Files, show_mosaic_button: false }
+          - { name: sonata.admin, model_class: App\Entity\File, manager_type: orm, group: admin, label: Files, show_mosaic_button: false }
         public: true
 
     entropy_tunkki.admin.member:
         class: App\Admin\MemberAdmin
-        arguments: [~, App\Entity\Member, App\Controller\MemberAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Members}
+          - { name: sonata.admin, model_class: App\Entity\Member, controller: App\Controller\MemberAdminController, manager_type: orm, group: admin, label: Members}
         public: true
         calls:
             - [ setMattermostHelper, ["@entropy_tunkki.helper.mattermost"] ]

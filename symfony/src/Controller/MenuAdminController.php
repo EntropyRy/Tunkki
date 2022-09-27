@@ -6,6 +6,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use App\Entity\Menu;
 
 class MenuAdminController extends CRUDController
 {
@@ -17,7 +18,7 @@ class MenuAdminController extends CRUDController
     public function treeAction(Request $request): Response
     {
         $this->em = $this->getDoctrine()->getManager();
-        $menudata = $this->em->getRepository('App:Menu')->getRootNodes();
+        $menudata = $this->em->getRepository(Menu::class)->getRootNodes();
 
         $datagrid = $this->admin->getDatagrid();
 
