@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
 use Sonata\PageBundle\Page\TemplateManager;
+use App\Entity\Event;
 
 class AllEventsPage implements PageServiceInterface
 {
@@ -20,8 +21,8 @@ class AllEventsPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
-        $events = $this->em->getRepository('App:Event')->findBy(['published' => true, 'sticky'=> false]);
-        $sticky = $this->em->getRepository('App:Event')->findOneBy(['published' => true, 'sticky' => true]);
+        $events = $this->em->getRepository(Event::class)->findBy(['published' => true, 'sticky'=> false]);
+        $sticky = $this->em->getRepository(Event::class)->findOneBy(['published' => true, 'sticky' => true]);
         if ($sticky) {
             $events = array_merge([$sticky], $events);
         }

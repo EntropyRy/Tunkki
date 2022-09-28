@@ -78,7 +78,7 @@ final class MemberAdminController extends CRUDController
 
     }
      */
-    public function activememberinfoAction( MailerInterface $mailer ): RedirectResponse
+    public function activememberinfoAction(MailerInterface $mailer): RedirectResponse
     {
         $object = $this->admin->getSubject();
         $em = $this->getDoctrine()->getManager();

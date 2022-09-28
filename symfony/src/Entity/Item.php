@@ -840,14 +840,14 @@ class Item implements \Stringable
     {
         return $this->purchasePrice;
     }
-    
+
     #[ORM\PrePersist]
     public function prePersist()
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }
-    
+
     #[ORM\PreUpdate]
     public function preUpdate()
     {

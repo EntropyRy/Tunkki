@@ -19,7 +19,7 @@ class ItemsType extends AbstractType
     {
     }
 
-    public function buildView(FormView $view, FormInterface $form, array $options):void
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
         $view->vars['bookings'] = $options['bookings'];
@@ -29,7 +29,7 @@ class ItemsType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
     }
-    private function getCategories($choices):array
+    private function getCategories($choices): array
     {
         $slug = $this->cm->getBySlug('item');
         $root = $this->cm->getRootCategoryWithChildren($slug);

@@ -17,9 +17,6 @@ final class EmailAdminController extends CRUDController
     {
         $email = $this->admin->getSubject();
         $admin = $this->admin;
-        //$em = $this->getDoctrine()->getManager();
-        //$email = $em->getRepository('App:Email')
-        //      ->findOneBy('id' => $object->getId());
         return $this->renderWithExtraParams('emails/email.html.twig', ['body' => $email->getBody(), 'email' => $email, 'admin' => $admin]);
     }
     public function sendAction(MailerInterface $mailer): RedirectResponse

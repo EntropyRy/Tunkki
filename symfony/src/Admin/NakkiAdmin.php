@@ -129,7 +129,7 @@ final class NakkiAdmin extends AbstractAdmin
     }
     public function postDelete($nakki): void
     {
-        $bookings = $this->em->getRepository('App:NakkiBooking')->findBy(['nakki'=>$nakki]);
+        $bookings = $this->em->getRepository(NakkiBooking::class)->findBy(['nakki'=>$nakki]);
         foreach ($bookings as $b) {
             $this->em->remove($b);
         }

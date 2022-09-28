@@ -50,7 +50,8 @@ class ItemAdmin extends AbstractAdmin
             ->add('forSale')
             ->add(
                 'category',
-                ChoiceFilter::class, [
+                ChoiceFilter::class,
+                [
                     'field_type' => CategorySelectorType::class,
                     'label' => 'Category',
                     'field_options' => [

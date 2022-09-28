@@ -8,6 +8,7 @@ use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
 use Sonata\PageBundle\Page\TemplateManager;
 use App\Entity\Item;
+
 class ItemPage implements PageServiceInterface
 {
     /**
