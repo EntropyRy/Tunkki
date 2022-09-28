@@ -5,10 +5,11 @@ namespace App\Block;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
-use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
@@ -19,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
-class ArtistInfoBlock extends BaseBlockService
+class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
@@ -30,35 +31,12 @@ class ArtistInfoBlock extends BaseBlockService
             'member'    => $member
         ], $response);
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
+    public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
-        $this->buildCreateForm($formMapper, $block);
+        $this->configureCreateForm($formMapper, $block);
     }
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
+    public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
-        /*		$formMapper
-                    ->add('settings', ImmutableArrayType::class, [
-                        'keys' => [
-                            ['title', TextType::class, [
-                                'label' => 'List Title',
-                            ]],
-                            ['show', ChoiceType::class,[
-                                'choices' => [
-                                    'Everybody can see this' => false,
-                                    'Show only to logged in user' => true,
-                                ]
-                            ]],
-                            ['urls', CollectionType::class, [
-                                'required' => false,
-                                'allow_add' => true,
-                                'allow_delete' => true,
-                                'prototype' => true,
-                                'by_reference' => false,
-                                'allow_extra_fields' => true,
-                                'entry_type' => UrlsType::class,
-                            ]],
-                        ]
-                    ]);*/
     }
 
     public function __construct($twig, protected Security $security) //, EntityManagerInterface $em)
@@ -72,13 +50,13 @@ class ArtistInfoBlock extends BaseBlockService
             'template' => 'block/artist_info.html.twig',
         ]);
     }
-    public function getBlockMetadata($code = null): Metadata
+    public function getMetadata($code = null): Metadata
     {
         return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
+    public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
     public function getName(): string

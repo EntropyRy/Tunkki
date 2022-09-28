@@ -1,5 +1,5 @@
 sonata_block:
-    default_contexts: [sonata_page_bundle]
+    default_contexts: [sonata_page_bundle, frontend]
     http_cache: false
     #    listener: true
 #        "SonataDemoBundle:Builder:mainMenu": "Main Menu"
@@ -9,5 +9,7 @@ sonata_block:
         entropy.block.future_events: ~
         entropy.block.member_info: ~
         entropy.block.artist_info: ~
+        entropy.block.compensations:
+            context: [frontend] 
         sonata.media.block.media:
             settings: { template: 'block\media.html.twig' }
