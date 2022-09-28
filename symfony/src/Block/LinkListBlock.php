@@ -5,10 +5,11 @@ namespace App\Block;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\CollectionType;
+use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
@@ -18,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
-class LinkListBlock extends BaseBlockService
+class LinkListBlock extends BaseBlockService implements EditableBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
@@ -73,13 +74,13 @@ class LinkListBlock extends BaseBlockService
             'template' => 'block/links.html.twig',
         ]);
     }
-    public function getBlockMetadata($code = null): Metadata
+    public function getMetadata(): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), null, null, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
+    public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
     public function getName(): string

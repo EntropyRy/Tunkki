@@ -67,8 +67,8 @@ class Item implements \Stringable
     #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
     private ?string $rentNotice;
 
-    #[ORM\Column(name: 'NeedsFixing', type: 'boolean', nullable: true)]
-    private ?bool $needsFixing = false;
+    #[ORM\Column(name: 'NeedsFixing', type: 'boolean')]
+    private bool $needsFixing = false;
 
     #[ORM\Column(name: 'ToSpareParts', type: 'boolean')]
     private bool $toSpareParts = false;
@@ -95,7 +95,7 @@ class Item implements \Stringable
     private $packages;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
-    private \DateTime $commission;
+    private ?\DateTime $commission;
 
     #[ORM\Column(name: 'purchasePrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $purchasePrice;
@@ -108,7 +108,7 @@ class Item implements \Stringable
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(name: 'CreatedAt', type: 'datetime', nullable: true)]
-    private \DateTime $createdAt;
+    private ?\DateTime $createdAt;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
@@ -118,7 +118,7 @@ class Item implements \Stringable
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(name: 'UpdatedAt', type: 'datetime', nullable: true)]
-    private \DateTime $updatedAt;
+    private ?\DateTime $updatedAt;
 
     /**
      * Get id
