@@ -351,7 +351,7 @@
 {% block artist_event_info %}
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
-{% if event.multiday == true %}
+{% if event is defined and event.multiday == true %}
     {% set datestring = 'E, HH:mm' %}
 {% else %}
     {% set datestring = 'HH:mm' %}
