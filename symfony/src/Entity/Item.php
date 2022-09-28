@@ -8,10 +8,9 @@ use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
- * Item
+ * item
  */
 #[ORM\Table(name: 'Item')]
 #[ORM\Entity(repositoryClass: \App\Repository\ItemsRepository::class)]
@@ -62,7 +61,7 @@ class Item implements \Stringable
     private $rent;
 
     #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
-    private ?float $compensationPrice;
+    private $compensationPrice;
 
     #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
     private ?string $rentNotice;
@@ -85,9 +84,6 @@ class Item implements \Stringable
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Booking::class, cascade: ['all'])]
     private $rentHistory;
 
-    #[ORM\Column(name: 'History', type: 'string', length: 190, nullable: true)]
-    private ?string $history;
-
     #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
     private ?bool $forSale = false;
 
@@ -104,21 +100,15 @@ class Item implements \Stringable
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $creator;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
-    #[ORM\Column(name: 'CreatedAt', type: 'datetime', nullable: true)]
-    private ?\DateTime $createdAt;
-
     #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private $modifier;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
-    #[ORM\Column(name: 'UpdatedAt', type: 'datetime', nullable: true)]
-    private ?\DateTime $updatedAt;
+    #[ORM\Column(name: 'createdAt', type: 'datetime')]
+    private $createdAt;
+
+    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
+    private $updatedAt;
 
     /**
      * Get id
@@ -299,30 +289,6 @@ class Item implements \Stringable
     }
 
     /**
-     * Set history
-     *
-     * @param string $history
-     *
-     * @return Item
-     */
-    public function setHistory($history)
-    {
-        $this->history = $history;
-
-        return $this;
-    }
-
-    /**
-     * Get history
-     *
-     * @return string
-     */
-    public function getHistory()
-    {
-        return $this->history;
-    }
-
-    /**
      * Set forSale
      *
      * @param boolean $forSale
@@ -346,24 +312,28 @@ class Item implements \Stringable
         return $this->forSale;
     }
 
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
     }
 
     public function __toString(): string
@@ -388,12 +358,6 @@ class Item implements \Stringable
         $this->packages = new ArrayCollection();
     }
 
-    /**
-     * Add fixingHistory
-     *
-     *
-     * @return Item
-     */
     public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
         $fixingHistory->setProduct($this);
@@ -402,58 +366,17 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove fixingHistory
-     */
     public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory)
     {
         $fixingHistory->setProduct(null);
         $this->fixingHistory->removeElement($fixingHistory);
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Item
-     */
-    public function setCreatedAt($createdAt)
-    {
-        $this->createdAt = $createdAt;
-
-        return $this;
-    }
-
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Item
-     */
-    public function setUpdatedAt($updatedAt)
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
-    /**
-     * Get fixingHistory
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getFixingHistory()
     {
         return $this->fixingHistory;
     }
 
-    /**
-     * Get fixingHistoryMessages
-     *
-     * @return string
-     */
     public function getFixingHistoryMessages($count, $endofline = null)
     {
         if ($endofline == 'html') {
@@ -473,35 +396,18 @@ class Item implements \Stringable
         }
     }
 
-    /**
-     * reset fixingHistory
-     *
-     * @return null
-     */
     public function resetFixingHistory()
     {
         foreach ($this->getFixingHistory() as $fix) {
             $this->removeFixingHistory($fix);
         }
     }
-    /**
-     * reset whocanrent
-     *
-     * @return null
-     */
     public function resetWhoCanRent()
     {
         foreach ($this->getWhoCanRent() as $who) {
             $this->removeWhoCanRent($who);
         }
     }
-    /**
-     * Set commission
-     *
-     * @param \DateTime $commission
-     *
-     * @return Item
-     */
     public function setCommission($commission)
     {
         $this->commission = $commission;
@@ -509,11 +415,6 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get commission
-     *
-     * @return \DateTime
-     */
     public function getCommission()
     {
         return $this->commission;
@@ -938,5 +839,18 @@ class Item implements \Stringable
     public function getPurchasePrice()
     {
         return $this->purchasePrice;
+    }
+    
+    #[ORM\PrePersist]
+    public function prePersist()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+    
+    #[ORM\PreUpdate]
+    public function preUpdate()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
     }
 }
