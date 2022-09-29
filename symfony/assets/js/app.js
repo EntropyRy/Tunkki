@@ -17,11 +17,14 @@ import 'bootstrap/js/dist/tab';
 // import 'bootstrap/js/dist/toast';
 // import 'bootstrap/js/dist/tooltip';
 
-require('@fortawesome/fontawesome-free/css/all.min.css');
+require('@fortawesome/fontawesome-free/css/fontawesome.min.css');
+require('@fortawesome/fontawesome-free/css/solid.min.css');
+require('@fortawesome/fontawesome-free/css/brands.min.css');
+require('@fortawesome/fontawesome-free/css/regular.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
 import '@fontsource/space-grotesk/400.css';
 import '@fontsource/space-grotesk/700.css';
-import '@fontsource/space-grotesk/500.css';
+//import '@fontsource/space-grotesk/500.css';
 
