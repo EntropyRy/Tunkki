@@ -11,7 +11,7 @@
         "beberlei/doctrineextensions": "^1.2",
         "composer/package-versions-deprecated": "1.11.99.3",
         "doctrine/doctrine-bundle": "^2.0",
-        "doctrine/doctrine-migrations-bundle": "^2",
+        "doctrine/doctrine-migrations-bundle": "^3",
         "doctrine/orm": "^2",
         "gedmo/doctrine-extensions": "^3.9",
         "hashids/hashids": "^4.0",
