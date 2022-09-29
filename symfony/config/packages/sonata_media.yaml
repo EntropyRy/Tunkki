@@ -36,7 +36,8 @@ sonata_media:
                 - sonata.media.provider.image
                 - sonata.media.provider.file
             formats:
-                small: { width: 500 , quality: 90}
+                small: { width: 500 , quality: 70}
+                normal: { width: 800 , quality: 90}
                 banner:   { width: 1200 , quality: 100}
         artist: 
             download:

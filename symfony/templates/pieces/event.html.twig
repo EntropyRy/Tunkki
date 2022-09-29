@@ -127,7 +127,7 @@
 <div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
      {{ block('imgfilter') }}
     >
-    {{ sonata_media( event.picture, 'banner', {'picture': ['small', 'banner'], 'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} ) }}
+    {{ sonata_media( event.picture, 'banner', {'picture': ['small', 'normal', 'banner'], 'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} ) }}
     </div>
 {% endblock %}
 
