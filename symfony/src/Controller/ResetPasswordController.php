@@ -46,8 +46,8 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('reset_password/request.html.twig', [
-            'requestForm' => $form->createView(),
+        return $this->renderForm('reset_password/request.html.twig', [
+            'requestForm' => $form,
         ]);
     }
 
@@ -121,8 +121,8 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
-            'resetForm' => $form->createView(),
+        return $this->renderForm('reset_password/reset.html.twig', [
+            'resetForm' => $form,
         ]);
     }
 

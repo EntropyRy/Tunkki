@@ -124,29 +124,6 @@ sonata_page:
                 mapping:
                     C: content
                     O: acontent
-        memberform:
-            path: 'member/formpage.html.twig'
-            name: Member Form Page
-
-            containers:
-                content:
-                    name: Content
-                acontent:
-                    name: After Content
-                rcontent:
-                    name: Right Content
-            matrix:
-                layout: |
-                    CCCCCSSS
-                    CCCCCSSS
-                    CCCCCSSS
-                    OOOOOSSS
-                    OOOOOSSS
-
-                mapping:
-                    C: content
-                    S: rcontent
-                    O: acontent
         events:
             path: 'events.html.twig'
             name: Events Page

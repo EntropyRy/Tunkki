@@ -33,4 +33,5 @@ return [
     SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle::class => ['all' => true],
     Sonata\Exporter\Bridge\Symfony\SonataExporterBundle::class => ['all' => true],
     Twig\Extra\TwigExtraBundle\TwigExtraBundle::class => ['all' => true],
+    Symfony\UX\Turbo\TurboBundle::class => ['all' => true],
 ];

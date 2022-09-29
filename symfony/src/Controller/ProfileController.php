@@ -64,8 +64,8 @@ class ProfileController extends AbstractController
                 $this->addFlash('danger', $form->getErrors());
             }
         }
-        return $this->render('member/new.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('member/new.html.twig', [
+            'form' => $form,
             'email' => $email_content
         ]);
     }
@@ -159,8 +159,8 @@ class ProfileController extends AbstractController
             }
         }
         $barcode = $this->getBarcode($member);
-        return $this->render('profile/door.html.twig', [
-            'form' => $form->createView(),
+        return $this->renderForm('profile/door.html.twig', [
+            'form' => $form,
             'logs' => $logs,
             'member' => $member,
             'status' => $status,
@@ -187,9 +187,9 @@ class ProfileController extends AbstractController
             $this->addFlash('success', 'profile.member_data_changed');
             return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
-        return $this->render('profile/edit.html.twig', [
+        return $this->renderForm('profile/edit.html.twig', [
             'member' => $member,
-            'form' => $form->createView()
+            'form' => $form
         ]);
     }
     /**
@@ -217,8 +217,8 @@ class ProfileController extends AbstractController
             $this->addFlash('success', 'profile.application_saved');
             return $this->redirectToRoute('entropy_profile.'. $member->getLocale());
         }
-        return $this->render('profile/apply.html.twig', [
-            'form' => $form->createView()
+        return $this->renderForm('profile/apply.html.twig', [
+            'form' => $form
         ]);
     }
     private function getBarcode($member): array

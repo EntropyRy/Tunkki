@@ -11,11 +11,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -62,9 +60,9 @@ class ArtistController extends AbstractController
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));
             }
         }
-        return $this->render('artist/edit.html.twig', [
+        return $this->renderForm('artist/edit.html.twig', [
             'artist' => $artist,
-            'form' => $form->createView()
+            'form' => $form
         ]);
     }
     public function edit(Request $request, Security $security, FormFactoryInterface $formF)
@@ -80,9 +78,9 @@ class ArtistController extends AbstractController
 
             return $this->redirectToRoute('entropy_artist_profile');
         }
-        return $this->render('artist/edit.html.twig', [
+        return $this->renderForm('artist/edit.html.twig', [
             'artist' => $artist,
-            'form' => $form->createView()
+            'form' => $form
         ]);
     }
     public function delete(Artist $artist): RedirectResponse

@@ -281,9 +281,9 @@ class EventSignUpController extends EventController
             }
         }
         //$page = $cms->retrieve()->getCurrentPage();
-        return $this->render('artist/signup.html.twig', [
+        return $this->renderForm('artist/signup.html.twig', [
             'event' => $event,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
 }

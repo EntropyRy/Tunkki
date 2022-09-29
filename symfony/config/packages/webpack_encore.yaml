@@ -9,10 +9,10 @@ webpack_encore:
         defer: true
         # Uncomment (also under link_attributes) if using Turbo Drive
         # https://turbo.hotwired.dev/handbook/drive#reloading-when-assets-change
-        # 'data-turbo-track': reload
-    # link_attributes:
+        'data-turbo-track': reload
+    link_attributes:
         # Uncomment if using Turbo Drive
-        # 'data-turbo-track': reload
+        'data-turbo-track': reload
 
     # If using Encore.enableIntegrityHashes() and need the crossorigin attribute (default: false, or use 'anonymous' or 'use-credentials')
     # crossorigin: 'anonymous'
@@ -38,11 +38,11 @@ framework:
     assets:
         json_manifest_path: '%kernel.project_dir%/public/build/manifest.json'
 
-#when@prod:
-#    webpack_encore:
+when@prod:
+    webpack_encore:
 #        # Cache the entrypoints.json (rebuild Symfony's cache when entrypoints.json changes)
 #        # Available in version 1.2
-#        cache: true
+        cache: true
 
 #when@test:
 #    webpack_encore:

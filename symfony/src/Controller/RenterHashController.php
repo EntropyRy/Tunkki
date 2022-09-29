@@ -53,11 +53,11 @@ class RenterHashController extends Controller
                 }
             }
             $page = $cms->retrieve()->getCurrentPage();
-            return $this->render('contract.html.twig', [
+            return $this->renderForm('contract.html.twig', [
                 'contract' => $contract,
                 'renter' => $renter,
                 'bookingdata' => $bookingdata[0],
-                'form' => $form->createView(),
+                'form' => $form,
                 'page' => $page
             ]);
         } else {
