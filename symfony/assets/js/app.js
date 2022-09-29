@@ -20,7 +20,7 @@ import 'bootstrap/js/dist/tab';
 require('@fortawesome/fontawesome-free/css/fontawesome.min.css');
 require('@fortawesome/fontawesome-free/css/solid.min.css');
 require('@fortawesome/fontawesome-free/css/brands.min.css');
-require('@fortawesome/fontawesome-free/css/regular.min.css');
+//require('@fortawesome/fontawesome-free/css/regular.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
