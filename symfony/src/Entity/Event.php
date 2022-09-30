@@ -138,7 +138,7 @@ body {
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $includeSaferSpaceGuidelines;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 255)]
     private ?string $headerTheme = 'light';
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]

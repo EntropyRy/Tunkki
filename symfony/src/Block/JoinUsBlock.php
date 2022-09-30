@@ -7,19 +7,20 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\Templating\EngineInterface;
-use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use Doctrine\ORM\EntityManagerInterface;
 
-class JoinUsBlock extends BaseBlockService
+class JoinUsBlock extends BaseBlockService implements EditableBlockService
 {
-    public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
+    public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
-    public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
+    public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
     public function getName(): string
@@ -35,13 +36,13 @@ class JoinUsBlock extends BaseBlockService
     {
         $resolver->setDefaults(['position' => '1', 'template' => 'member/joinus_block.html.twig']);
     }
-    public function getBlockMetadata($code = null): Metadata
+    public function getMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), null,null, 'messages', [
             'class' => 'fa fa-user',
         ]);
     }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
+    public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
 }
