@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@a2lix/symfony-collection": "^0.4",
+    "@a2lix/symfony-collection": "^0.5.1",
     "@babel/core": "^7.19.3",
     "@babel/preset-env": "^7.19.3",
     "@fontsource/space-grotesk": "^4.5.9",
@@ -24,7 +24,5 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }

@@ -21,9 +21,10 @@ final class UrlsType extends AbstractType
             ])
             ->add('icon', TextType::class, [
                 'label' => 'url.form.icon',
+                'attr' => ['placeholder' => 'fab fa-soundcloud', 'data-icopy-target' => 'input'],
+                'row_attr' => ['data-controller'=>'icopy'],
                 'help_html' => true,
-                'help' => 'Click: <a class="icopy" data-i="fab fa-soundcloud" href="#"><i class="fab fa-soundcloud"></i></a> | <a class="icopy" data-i="fab fa-facebook" href="#"><i class="fab fa-facebook"></i></a> | <a class="icopy" data-i="fas fa-music" href="#"><i class="fas fa-music"></i></a> | Check the <a target=_blank href="https://fontawesome.com/icons">icon list</a>',
-                'attr' => ['placeholder' => 'fab fa-soundcloud']
+                'help' => 'Click: <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fab fa-soundcloud" href="#"><i class="fab fa-soundcloud"></i></a> | <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fab fa-facebook" href="#"><i class="fab fa-facebook"></i></a> | <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fas fa-music" href="#"><i class="fas fa-music"></i></a> | Check the <a target=_blank href="https://fontawesome.com/icons">icon list</a>',
             ])
             ->add('title', TextType::class, [
                 'label' => 'url.form.title',

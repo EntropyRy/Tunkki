@@ -1,8 +1,4 @@
 {% extends 'onecolumn.html.twig' %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('signature') }}
-{% endblock %}
 {% block title %}
 {{bookingdata.name}} - {{ bookingdata.date }}
 {% endblock %}
@@ -57,11 +53,12 @@
 <div class="text-center">{{'Total rent price'|trans}}: <span>{{ bookingdata.actualTotal}}€</span></div>
 <hr>
 <h3>Allekirjoitus</h3>
+<div {{ stimulus_controller('signature') }}>
 <div style="height: 260px">
     {% if bookingdata.renterSignature is empty %}
-        <canvas class="canvas" style="touch-action: none; user-select: none;" width="800" height="260"></canvas>
+        <canvas data-signature-target="canvas" {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %} style="touch-action: none; user-select: none;" width="800" height="260"></canvas>
     {% endif %}
-    <div id="signature" {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %}>
+    <div id="signature" data-signature-target="signature" {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %}>
         {% if bookingdata.renterSignature is not empty %}
         <img class="img-fluid" src="{{ bookingdata.renterSignature }}">
         {% endif %}
@@ -69,9 +66,10 @@
 </div>
 <div class="consent_form">
 {% if bookingdata.renterSignature is empty %}
-    <button style="display: none;" class="btn btn-secondary clearCanvas">Poista ja tee uusi allekirjoitus</button>
-    <button class="btn btn-primary saveCanvas">Tallenna allekirjoitus</button>
+    <button style="display: none;" data-signature-target="clearBtn" data-action="signature#clearCanvas" class="btn btn-secondary">Poista ja tee uusi allekirjoitus</button>
+    <button data-action="signature#saveCanvas" data-signature-target="saveBtn" class="btn btn-primary">Tallenna allekirjoitus</button>
 {% endif %}
+</div>
 <hr>
 {{ form_start(form) }}
 {{ form_widget(form) }}

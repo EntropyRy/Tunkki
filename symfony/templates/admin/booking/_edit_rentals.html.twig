@@ -1,3 +1,5 @@
 {% extends '@SonataAdmin/CRUD/base_edit.html.twig' %}
+{% if form.packages is defined %}
 {% form_theme form.packages 'admin/booking/edit_packages.html.twig' %}
 {% form_theme form.items 'admin/booking/edit_items.html.twig' %}
+{% endif %}

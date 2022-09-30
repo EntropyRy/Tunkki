@@ -23,7 +23,6 @@ Encore
     .addEntry('app', './assets/app.js')
     .addEntry('nakkikone', './assets/js/nakkikone.js')
     .addEntry('artist_signup', './assets/js/artist_signup.js')
-    .addEntry('signature', './assets/js/signature.js')
     .addEntry('events_search', './assets/js/events_search.js')
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     .enableStimulusBridge('./assets/controllers.json')
@@ -77,7 +76,7 @@ Encore
         to: '../images/[path][name].[ext]',
      })
     // uncomment if you're having problems with a jQuery plugin
-    .autoProvidejQuery()
+    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();

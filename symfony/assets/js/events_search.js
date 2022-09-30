@@ -9,8 +9,8 @@ document.addEventListener('DOMContentLoaded',function(){
   }
   const input = document.getElementById('nameSearchInput');
   const posts = document.getElementsByClassName('post');
-    
-    
+
+
   input.addEventListener('keyup', delay(function (e) {
       //console.log('Time elapsed!', this.value);
       //console.log(posts);
@@ -26,4 +26,3 @@ document.addEventListener('DOMContentLoaded',function(){
   }, 500));
 
 });
-
