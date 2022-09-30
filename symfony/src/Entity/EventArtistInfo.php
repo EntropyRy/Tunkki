@@ -150,4 +150,8 @@ class EventArtistInfo implements \Stringable
         }
         return null;
     }
+    public function getArtistDataHasUpdate()
+    {
+        return ($this->getArtistClone()->getUpdatedAt() >= $this->getArtist()->getUpdatedAt()) ? false : true;
+    }
 }

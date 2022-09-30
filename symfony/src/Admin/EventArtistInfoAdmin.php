@@ -32,8 +32,9 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     {
         $listMapper
             ->add('Artist')
-            ->add('Artist.updatedAt')
-            ->add('artistClone.updatedAt')
+            ->add('artistDataHasUpdate', null, [
+                'template' => 'admin/crud/list__update_artist.html.twig'
+            ])
             ->add('Artist.member')
             ->add('WishForPlayTime')
             ->add('freeWord')
