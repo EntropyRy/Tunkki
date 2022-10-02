@@ -323,9 +323,13 @@ services:
 
     entropy.admin.contract:
         class: App\Admin\ContractAdmin
-        arguments: [~, App\Entity\Contract, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Contract }
+            -
+                name: sonata.admin
+                model_class: App\Entity\Contract
+                manager_type: orm
+                group: admin
+                label: Contract
         public: true
     entropy.admin.event:
         class: App\Admin\EventAdmin
@@ -374,16 +378,14 @@ services:
         public: true
     entropy.admin.nakki:
         class: App\Admin\NakkiAdmin
-        arguments:
-            - ~
-            - App\Entity\Nakki
-            - App\Controller\NakkiAdminController
-            - "@entropy_tunkki.helper.mattermost"
-            - "@security.token_storage"
-            - "@doctrine.orm.entity_manager"
-            - "@session.flash_bag"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakkis }
+            -
+                name: sonata.admin
+                manager_type: orm
+                group: admin,
+                label: Nakkis
+                model_class: App\Entity\Nakki
+                controller: App\Controller\NakkiAdminController
         public: true
     entropy.admin.nakki_booking:
         class: App\Admin\NakkiBookingAdmin

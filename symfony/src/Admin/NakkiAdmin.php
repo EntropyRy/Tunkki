@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,6 +14,8 @@ use Sonata\Form\Type\DateTimePickerType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class NakkiAdmin extends AbstractAdmin
 {
@@ -136,9 +139,8 @@ final class NakkiAdmin extends AbstractAdmin
         $this->em->flush();
     }
 
-    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $em=null, protected $fl=null)
+    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts, protected EntityManagerInterface $em, protected FlashBagInterface $fl)
     {
-        parent::__construct($code, $class, $baseControllerName);
     }
 
     protected function createBooking($nakki, $i): void
