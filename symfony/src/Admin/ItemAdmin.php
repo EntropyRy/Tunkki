@@ -11,17 +11,16 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
-use Symfony\Component\Form\ChoiceList\Loader\ChoiceLoaderInterface;
+use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-use Sonata\ClassificationBundle\Form\ChoiceList\CategoryChoiceLoader;
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ItemAdmin extends AbstractAdmin
 {
@@ -243,8 +242,7 @@ class ItemAdmin extends AbstractAdmin
         }
         return $actions;
     }
-    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $cm=null)
+    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts, protected CategoryManagerInterface $cm)
     {
-        parent::__construct($code, $class, $baseControllerName);
     }
 }

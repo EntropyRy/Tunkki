@@ -8,12 +8,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Sonata\AdminBundle\Route\RouteCollection;
-
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class StatusEventAdmin extends AbstractAdmin
 {
@@ -184,8 +182,7 @@ class StatusEventAdmin extends AbstractAdmin
         $text .= ' by '. $user;
         return $text;
     }
-    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null)
+    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts)
     {
-        parent::__construct($code, $class, $baseControllerName);
     }
 }

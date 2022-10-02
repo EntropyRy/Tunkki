@@ -31,7 +31,6 @@ sonata_admin:
             sonata.admin.group.inventory:
                 keep_open:  true
                 label:           Inventory 
-                label_catalogue: App 
                 icon:            '<i class="fa fa-archive"></i>'
                 items:
                     - entropy_tunkki.admin.item
@@ -41,7 +40,6 @@ sonata_admin:
             sonata.admin.group.rentals:
                 keep_open:  true
                 label:           Rentals 
-                label_catalogue: App 
                 icon:            '<i class="fa fa-sign-out"></i>'
                 items:
                     - entropy_tunkki.admin.booking
@@ -50,7 +48,6 @@ sonata_admin:
             sonata.admin.group.events:
                 keep_open:  true
                 label:           Events
-                label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-sitemap"></i>'
                 items:
                     - entropy.admin.event
@@ -61,7 +58,6 @@ sonata_admin:
             sonata.admin.group.content:
                 keep_open:  true
                 label:           Content 
-                label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-sitemap"></i>'
                 items:
                     - sonata.page.admin.page
@@ -70,7 +66,6 @@ sonata_admin:
                     - sonata.media.admin.gallery
             sonata.admin.group.members:
                 label:           Members
-                label_catalogue: SonataAdminBundle
                 icon:            '<i class="fa fa-users"></i>'
                 items:
                     - entropy_tunkki.admin.member
@@ -80,7 +75,6 @@ sonata_admin:
 
             sonata.admin.group.config:
                 label:           Configuration
-                label_catalogue: App 
                 icon:            '<i class="fa fa-cogs"></i>'
                 items:
                     - entropy_tunkki.admin.package
@@ -102,15 +96,11 @@ sonata_admin:
                       #
             sonata.admin.group.administration:
                 label:           Administration
-                label_catalogue: SonataAdminBundle
                 items:
                     #- entropy_tunkki.admin.statusevent
                     - sonata.page.admin.site
                     - entropy.admin.access_groups
                 roles: [SONATA_SUPER_ADMIN]
-            sonata.admin.group.nakkikone:
-                label:           Nakkikone
-                items:
     assets:
         extra_stylesheets:
             - css/admin.css

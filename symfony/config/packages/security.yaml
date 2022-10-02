@@ -92,21 +92,21 @@ security:
             stateless: true
             oauth2: true
         main:
-            user_checker: security.user_checker
-            pattern:            .*
-            context:            user
-            anonymous:          true
-            switch_user:        true
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                username_parameter: email
+                password_parameter: password
+            logout:
+                path: app_logout
+
             guard:
                 entry_point: App\Security\LoginFormAuthenticator
                 authenticators:
                     - App\Security\LoginFormAuthenticator
                     - App\Security\MattermostAuthenticator
-
-            logout:
-                path: app_logout
-                # where to redirect after logout
-                # target: app_any_route
 
     access_control:
         - { path: ^/oauth$, role: PUBLIC_ACCESS }

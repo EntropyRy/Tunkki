@@ -2,12 +2,14 @@
 
 namespace App\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
@@ -30,6 +32,7 @@ use App\Entity\Booking;
 use App\Entity\Package;
 // Hash
 use Hashids\Hashids;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class BookingAdmin extends AbstractAdmin
 {
@@ -391,8 +394,7 @@ class BookingAdmin extends AbstractAdmin
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
         $collection->remove('delete');
     }
-    public function __construct($code, $class, $baseControllerName, protected $mm=null, protected $ts=null, protected $em=null, protected $cm=null)
+    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts, protected EntityManagerInterface $em, protected CategoryManagerInterface $cm)
     {
-        parent::__construct($code, $class, $baseControllerName);
     }
 }

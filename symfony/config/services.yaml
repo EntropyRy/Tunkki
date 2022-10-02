@@ -4,7 +4,7 @@ twig:
 
 parameters:
     symfony:
-        containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml 
+        containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml
     mm_tunkki_hook: '%env(MM_TUNKKI_HOOK)%'
     mm_tunkki_img: '%env(MM_TUNKKI_IMG)%'
     mm_tunkki_botname: '%env(MM_TUNKKI_BOTNAME)%'
@@ -28,7 +28,7 @@ services:
         resource: '../src/*'
         exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
     Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
-    Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image" 
+    Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
     symfony.mailer:
         alias: Symfony\Component\Mailer\MailerInterface
         public: true
@@ -43,15 +43,15 @@ services:
             - { name: knp_menu.menu_builder, method: createMainMenuEn, alias: en }
     entropy_tunkki.admin.item:
         class: App\Admin\ItemAdmin
-        arguments:
-            - ~
-            - App\Entity\Item
-            - App\Controller\ItemAdminController 
-            - "@entropy_tunkki.helper.mattermost"
-            - "@security.token_storage"
-            - "@sonata.classification.manager.context"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Items }
+            -
+              name: sonata.admin
+              manager_type: orm
+              group: admin
+              audit: true
+              label: Items
+              model_class: App\Entity\Item
+              controller: App\Controller\ItemAdminController
         calls:
             - [setTemplate, [outer_list_rows_mosaic, admin/item/list_outer_rows_mosaic.html.twig]]
             - [setTemplate, [inner_list_row, admin/item/list.html.twig]]
@@ -67,27 +67,9 @@ services:
 
     entropy_tunkki.admin.statusevent:
         class: App\Admin\StatusEventAdmin
-        arguments:
-            - ~
-            - App\Entity\StatusEvent
-            - ~ 
-            - "@entropy_tunkki.helper.mattermost"
-            - "@security.token_storage"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Status Events, show_mosaic_button: false  }
+          - { name: sonata.admin, model_class: App\Entity\StatusEvent, manager_type: orm, group: admin, label: Status Events, show_mosaic_button: false  }
         public: true
-
-        #    entropy_tunkki.admin.user:
-        #        class: App\Admin\UserAdmin
-        #        arguments:
-        #            - ~
-        #            - App\Entity\User
-        #            - ~ 
-        #            - "@entropy_tunkki.helper.mattermost"
-        #            - "@security.token_storage"
-        #        tags:
-        #            - { name: sonata.admin, manager_type: orm, group: admin, label: Users }
-        #        public: true
 
     entropy_tunkki.admin.file:
         class: App\Admin\FileAdmin
@@ -153,15 +135,16 @@ services:
     entropy_tunkki.admin.booking:
         class: App\Admin\BookingAdmin
         arguments:
-            - ~
-            - App\Entity\Booking
-            - App\Controller\BookingAdminController 
-            - "@entropy_tunkki.helper.mattermost"
-            - "@security.token_storage"
-            - "@doctrine.orm.entity_manager"
-            - "@sonata.classification.manager.category"
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, audit: true, label: Bookings, show_mosaic_button: false }
+            -
+              name: sonata.admin
+              model_class: App\Entity\Booking
+              controller: App\Entity\BookingAdminController
+              manager_type: orm
+              group: admin
+              audit: true
+              label: Bookings
+              show_mosaic_button: false
         calls:
             - [setTemplate, [edit, admin/booking/_edit_rentals.html.twig]]
             - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
@@ -183,7 +166,7 @@ services:
         class: App\Admin\BillableEventAdmin
         tags:
             - { name: sonata.admin, model_class: App\Entity\BillableEvent, manager_type: orm, group: admin, label: Billable Events }
-              
+
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
         arguments:
@@ -334,9 +317,8 @@ services:
 
     entropy.admin.reward:
         class: App\Admin\RewardAdmin
-        arguments: [~, App\Entity\Reward, App\Controller\RewardAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Rewards }
+          - { name: sonata.admin, model_class: App\Entity\Reward, controller: App\Controller\RewardAdminController, manager_type: orm, group: admin, label: Rewards }
         public: true
 
     entropy.admin.contract:
@@ -347,9 +329,8 @@ services:
         public: true
     entropy.admin.event:
         class: App\Admin\EventAdmin
-        arguments: [~, App\Entity\Event, App\Controller\EventAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Event }
+          - { name: sonata.admin, model_class: App\Entity\Event, controller: App\Controller\EventAdminController, manager_type: orm, group: admin, label: Event }
         calls:
             - [addChild, ['@admin.event_artist_info', 'Event']]
             - [addChild, ['@entropy.admin.nakki', 'event']]
@@ -361,15 +342,13 @@ services:
 
     admin.event_artist_info:
         class: App\Admin\EventArtistInfoAdmin
-        arguments: [~, App\Entity\EventArtistInfo, App\Controller\EventArtistInfoAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: EventArtistInfo }
+          - { name: sonata.admin, model_class: App\Entity\EventArtistInfo, controller: App\Controller\EventArtistInfoController, manager_type: orm, group: admin, label: EventArtistInfo }
         public: true
     entropy.admin.menu:
         class: App\Admin\MenuAdmin
-        arguments: [~, App\Entity\Menu, App\Controller\MenuAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Menu }
+          - { name: sonata.admin, model_class: App\Entity\Menu, controller: App\Controller\MenuAdminController, manager_type: orm, group: admin, label: Menu }
         public: true
     gedmo.listener.tree:
         class: Gedmo\Tree\TreeListener
@@ -380,28 +359,25 @@ services:
 
     entropy.admin.access_groups:
         class: App\Admin\AccessGroupsAdmin
-        arguments: [~, App\Entity\AccessGroups, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: User Accessgroups }
+          - { name: sonata.admin, model_class: App\Entity\AccessGroups, manager_type: orm, group: admin, label: User Accessgroups }
         public: true
     entropy.admin.rsvp:
         class: App\Admin\RSVPAdmin
-        arguments: [~, App\Entity\RSVP, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: RSVPs }
+          - { name: sonata.admin, model_class: App\Entity\RSVP, manager_type: orm, group: admin, label: RSVPs }
         public: true
     entropy.admin.nakki_definition:
         class: App\Admin\NakkiDefinitionAdmin
-        arguments: [~, App\Entity\NakkiDefinition, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Definitions }
+          - { name: sonata.admin, model_class: App\Entity\NakkiDefinition, manager_type: orm, group: admin, label: Nakki Definitions }
         public: true
     entropy.admin.nakki:
         class: App\Admin\NakkiAdmin
         arguments:
             - ~
             - App\Entity\Nakki
-            - App\Controller\NakkiAdminController 
+            - App\Controller\NakkiAdminController
             - "@entropy_tunkki.helper.mattermost"
             - "@security.token_storage"
             - "@doctrine.orm.entity_manager"
@@ -411,9 +387,8 @@ services:
         public: true
     entropy.admin.nakki_booking:
         class: App\Admin\NakkiBookingAdmin
-        arguments: [~, App\Entity\NakkiBooking, App\Controller\NakkiBookingAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Nakki Bookings }
+          - { name: sonata.admin, model_class: App\Entity\NakkiBooking, controller: App\Controller\NakkiBookingAdminController, manager_type: orm, group: admin, label: Nakki Bookings }
         public: true
     oauth.authcode.listener:
         class: App\EventListener\AuthorizationCodeListener
@@ -428,14 +403,12 @@ services:
 
     admin.door_log:
         class: App\Admin\DoorLogAdmin
-        arguments: [~, App\Entity\DoorLog, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Door Log }
+          - { name: sonata.admin, model_class: App\Entity\Doorlog, manager_type: orm, group: admin, label: Door Log }
         public: true
 
     admin.ticket:
         class: App\Admin\TicketAdmin
-        arguments: [~, App\Entity\Ticket, App\Controller\TicketAdminController]
         tags:
-            - { name: sonata.admin, manager_type: orm, group: admin, label: Ticket }
+          - { name: sonata.admin, model_class: App\Entity\Ticket, controller: App\Entity\TicketAdminController, manager_type: orm, group: admin, label: Ticket }
         public: true

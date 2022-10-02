@@ -14,8 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class AccessGroupsAdmin extends AbstractAdmin
 {
-    protected $bag;
-
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -67,10 +65,8 @@ final class AccessGroupsAdmin extends AbstractAdmin
         ;
     }
 
-    public function __construct($code, $class, $baseControllerName, ParameterBagInterface $bag=null)
+    public function __construct(protected ParameterBagInterface $bag)
     {
-        $this->bag = $bag;
-        parent::__construct($code, $class, $baseControllerName);
     }
     /**
      * Turns the role's array keys into string <ROLES_NAME> keys.
