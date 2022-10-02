@@ -38,7 +38,7 @@ class JoinUsBlock extends BaseBlockService implements EditableBlockService
     }
     public function getMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), null,null, 'messages', [
+        return new Metadata($this->getName(), null, null, 'messages', [
             'class' => 'fa fa-user',
         ]);
     }

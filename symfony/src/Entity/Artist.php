@@ -259,4 +259,15 @@ class Artist implements \Stringable
 
         return $this;
     }
+    public function getLinkUrls(): ?string
+    {
+        $ret = '';
+        foreach ($this->links as $link) {
+            $ret .= '<a href="'.$link['url'].'">'.$link['title'].'</a>';
+            if (end($this->links) !== $link) {
+                $ret .= ' | ';
+            }
+        }
+        return $ret;
+    }
 }

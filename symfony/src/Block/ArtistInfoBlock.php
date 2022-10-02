@@ -24,7 +24,8 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $member = $this->security->getUser()->getMember();
+        $user = $this->security->getUser();
+        $member = $user->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings(),
@@ -50,9 +51,9 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
             'template' => 'block/artist_info.html.twig',
         ]);
     }
-    public function getMetadata($code = null): Metadata
+    public function getMetadata(): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), null, null, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }

@@ -84,8 +84,7 @@
     "extra": {
         "symfony-assets-install": "copy",
         "symfony": {
-            "allow-contrib": true,
-            "require": "5.4.*"
+            "allow-contrib": true
         }
     }
 }

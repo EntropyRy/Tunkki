@@ -57,11 +57,6 @@ final class EventAdmin extends AbstractAdmin
                 'Artist editor',
                 $admin->generateMenuUrl('admin.event_artist_info.list', ['id' => $id])
             );
-            if ((is_countable($this->getSubject()->getEventArtistInfos()) ? count($this->getSubject()->getEventArtistInfos()) : 0) > 0) {
-                $menu->addChild('Artist list', [
-                   'uri' => $admin->generateUrl('artistList', ['id' => $id])
-                ]);
-            }
             if ((is_countable($admin->getSubject()->getRSVPs()) ? count($admin->getSubject()->getRSVPs()) : 0) > 0) {
                 $menu->addChild('RSVPs', [
                'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
@@ -431,7 +426,6 @@ final class EventAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('artistList', $this->getRouterIdParameter().'/artistlist');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }

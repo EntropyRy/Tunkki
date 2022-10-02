@@ -10,7 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
-
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\Form\Type\DateTimePickerType;
 
@@ -31,10 +31,14 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('Artist')
             ->add('artistDataHasUpdate', null, [
                 'template' => 'admin/crud/list__update_artist.html.twig'
             ])
+            ->add('Artist')
+            ->add('Artist.hardware')
+            ->add('Artist.linkUrls', FieldDescriptionInterface::TYPE_HTML, [
+            ])
+            ->add('Artist.genre')
             ->add('Artist.member')
             ->add('WishForPlayTime')
             ->add('freeWord')
@@ -43,7 +47,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('StartTime')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'show' => [],
+//                    'show' => [],
                     'edit' => [],
                     'delete' => [],
                     'update' => [

@@ -2,6 +2,7 @@
 
 namespace App\PageService;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
@@ -12,9 +13,9 @@ use App\Entity\Item;
 class ItemPage implements PageServiceInterface
 {
     /**
-     * @param EntityManager $em
+     * @param EntityManagerInterface $em
      */
-    public function __construct(private $name, private readonly TemplateManager $templateManager, private $em)
+    public function __construct(private $name, private readonly TemplateManager $templateManager, private EntityManagerInterface $em)
     {
     }
     public function getName(): string
