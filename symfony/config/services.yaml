@@ -139,7 +139,7 @@ services:
             -
               name: sonata.admin
               model_class: App\Entity\Booking
-              controller: App\Entity\BookingAdminController
+              controller: App\Controller\BookingAdminController
               manager_type: orm
               group: admin
               audit: true
