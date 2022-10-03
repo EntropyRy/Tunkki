@@ -13,7 +13,7 @@ use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController
 {
-    protected function preCreate(Request $request, $object): Response
+    protected function preCreate(Request $request, $object): ?Response
     {
         if ($object->getEvent()) {
             $date = new \DateTimeImmutable($object->getEvent()->getEventDate()->format('Y-m-d H:i'));
@@ -21,6 +21,7 @@ final class NakkiAdminController extends CRUDController
             $date = new \DateTimeImmutable();
         }
         $object->setStartAt($date);
+        return null;
     }
 
     public function cloneAction(): RedirectResponse

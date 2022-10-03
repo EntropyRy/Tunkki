@@ -347,7 +347,7 @@ services:
     admin.event_artist_info:
         class: App\Admin\EventArtistInfoAdmin
         tags:
-          - { name: sonata.admin, model_class: App\Entity\EventArtistInfo, controller: App\Controller\EventArtistInfoController, manager_type: orm, group: admin, label: EventArtistInfo }
+          - { name: sonata.admin, model_class: App\Entity\EventArtistInfo, controller: App\Controller\EventArtistInfoAdminController, manager_type: orm, group: admin, label: EventArtistInfo }
         public: true
     entropy.admin.menu:
         class: App\Admin\MenuAdmin
