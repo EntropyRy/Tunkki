@@ -23,6 +23,18 @@ body.dark {
         table {
             filter: invert(0.8);
         }
+        footer {
+            color: #888;
+            a {
+                color: #64AEC1;
+            }
+            a:visited {
+                color: #BC92E5;
+            }
+            a:hover{
+                color: #8CC3D1;
+            }
+        }
     }
     .invert {
         filter: invert(0.8);
