@@ -117,7 +117,8 @@ class BookingAdmin extends AbstractAdmin
     }
     private function getCategories($choices = null): array
     {
-        $root = $this->cm->getRootCategory('item');
+        $slug = $this->cm->getBySlug('item');
+        $root = $this->cm->getRootCategoryWithChildren($slug);
         // map categories
         $cats = [];
         foreach ($choices as $choice) {
