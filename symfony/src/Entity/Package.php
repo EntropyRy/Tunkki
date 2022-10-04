@@ -35,7 +35,7 @@ class Package implements \Stringable
     private $whoCanRent;
 
     #[ORM\Column(name: 'notes', type: 'text', nullable: true)]
-    private string $notes;
+    private ?string $notes;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private $compensationPrice;
