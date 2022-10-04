@@ -11,7 +11,6 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class FileAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'file';
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper

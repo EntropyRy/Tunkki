@@ -15,7 +15,10 @@ use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 
 final class TicketAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'ticket';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'ticket';
+    }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {

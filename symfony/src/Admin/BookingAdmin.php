@@ -36,7 +36,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class BookingAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'booking'; // Category manager
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'booking';
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {

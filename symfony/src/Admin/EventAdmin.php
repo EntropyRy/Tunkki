@@ -26,7 +26,10 @@ use App\Form\UrlsType;
 
 final class EventAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'event';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'event';
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {

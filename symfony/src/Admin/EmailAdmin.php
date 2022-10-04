@@ -15,7 +15,10 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
 final class EmailAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'email';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'email';
+    }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper

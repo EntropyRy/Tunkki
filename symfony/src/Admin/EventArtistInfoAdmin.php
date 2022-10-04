@@ -16,7 +16,10 @@ use Sonata\Form\Type\DateTimePickerType;
 
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'artists';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'artists';
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

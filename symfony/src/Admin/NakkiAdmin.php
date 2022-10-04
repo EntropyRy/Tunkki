@@ -19,7 +19,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 final class NakkiAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'nakki';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'nakki';
+    }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {

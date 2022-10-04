@@ -16,7 +16,10 @@ use Sonata\Form\Type\DateTimePickerType;
 
 final class RewardAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'reward';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'reward';
+    }
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper

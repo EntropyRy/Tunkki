@@ -24,7 +24,10 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class ItemAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'item';
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'item';
+    }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {

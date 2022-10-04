@@ -18,8 +18,11 @@ use App\Helper\Mattermost;
 
 final class MemberAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'member';
     protected $mm; // Mattermost helper
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'member';
+    }
 
     protected function configureDefaultSortValues(array &$sortValues): void
     {

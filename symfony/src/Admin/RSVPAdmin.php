@@ -12,7 +12,10 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class RSVPAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'rsvp'; // Category manager
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'rsvp';
+    }
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
