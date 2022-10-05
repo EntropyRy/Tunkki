@@ -24,8 +24,8 @@ use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Picqer\Barcode\BarcodeGeneratorHTML;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Hashids\Hashids;
 
 class ProfileController extends AbstractController
