@@ -54,7 +54,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 }
 
                 // 2) do we have a matching user by email?
-                $user = $this->entityManager->getRepository(Member::class)->findOneBy(['email' => $email]);
+                $user = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
                 $user = $member->getUser();
                 $user->setMattermostId($mattermostUser->getId());
                 $this->em->persist($user);
