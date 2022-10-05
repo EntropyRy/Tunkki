@@ -94,6 +94,23 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         return 'N/A';
     }
     /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        if ($this->member) {
+            if ($this->member->getUsername()) {
+                return $this->member->getUsername();
+            }
+            if ($this->member->getEmail()) {
+                return $this->member->getEmail();
+            }
+        }
+        return 'N/A';
+    }
+    /**
      * @see UserInterface
      */
     public function getRoles(): array
