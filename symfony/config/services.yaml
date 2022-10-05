@@ -395,7 +395,10 @@ services:
     oauth.authcode.listener:
         class: App\EventListener\AuthorizationCodeListener
         tags:
-            - { name: kernel.event_listener, event: 'trikoder.oauth2.authorization_request_resolve', method: onAuthorizationRequestResolve }
+            -
+                name: kernel.event_listener
+                event: league.oauth2_server.event.authorization_request_resolve
+                method: onAuthorizationRequestResolve
     entropy.param_converter.event_year_converter:
         class: App\ParamConverter\EventYearParamConverter
         tags:

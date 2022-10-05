@@ -12,7 +12,7 @@ use Hashids\Hashids;
 class OauthJsonController extends AbstractController
 {
     /**
-     * @SA("is_granted('ROLE_OAUTH2_USER.VIEW') or is_granted('ROLE_OAUTH2_FORUM')")
+     * @SA("is_granted('ROLE_OAUTH2_WIKI') or is_granted('ROLE_OAUTH2_FORUM')")
      */
     public function me(Request $request, Security $security): JsonResponse
     {

@@ -1,7 +1,7 @@
 security:
     password_hashers:
         App\Entity\User: auto
-
+    enable_authenticator_manager: true
     role_hierarchy:
         ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
         ROLE_ADMIN: [ROLE_USER, ROLE_SONATA_ADMIN]
@@ -102,11 +102,9 @@ security:
             logout:
                 path: app_logout
 
-            guard:
-                entry_point: App\Security\LoginFormAuthenticator
-                authenticators:
-                    - App\Security\LoginFormAuthenticator
-                    - App\Security\MattermostAuthenticator
+            entry_point: App\Security\LoginFormAuthenticator
+            custom_authenticators:
+                - App\Security\MattermostAuthenticator
 
     access_control:
         - { path: ^/oauth$, role: PUBLIC_ACCESS }

@@ -166,6 +166,9 @@
     "league/oauth2-server": {
         "version": "8.1.1"
     },
+    "league/oauth2-server-bundle": {
+        "version": "v0.4.0"
+    },
     "league/uri": {
         "version": "6.5.0"
     },
@@ -709,19 +712,6 @@
         },
         "files": [
             "config/packages/reset_password.yaml"
-        ]
-    },
-    "trikoder/oauth2-bundle": {
-        "version": "3.2",
-        "recipe": {
-            "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.0",
-            "ref": "43774de114904e86d18de0cea92f368d8e3c7499"
-        },
-        "files": [
-            "config/packages/trikoder_oauth2.yaml",
-            "config/routes/trikoder_oauth2.yaml"
         ]
     },
     "twig/extra-bundle": {

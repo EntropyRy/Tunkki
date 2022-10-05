@@ -1,0 +1,14 @@
+league_oauth2_server:
+#trikoder_oauth2:
+    authorization_server:
+        private_key: /var/www/symfony/config/secrets/oauth/private.key # Change this
+        private_key_passphrase: null # Passphrase of the private key, if any
+        encryption_key: '%env(string:OAUTH2_ENCRYPTION_KEY)%' # (Optional) Change this
+
+    resource_server:
+        public_key: /var/www/symfony/config/secrets/oauth/public.key # Change this
+    scopes: 
+        available: [wiki, forum]
+        default: [wiki, forum]
+    persistence:
+        doctrine: null

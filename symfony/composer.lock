@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "90d749c607bc3e202058b55d6af8398b",
+    "content-hash": "8a5c70f2113d71137887bc05e7c93bf4",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -3333,6 +3333,79 @@
             "time": "2022-05-03T21:21:28+00:00"
         },
         {
+            "name": "league/oauth2-server-bundle",
+            "version": "v0.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/oauth2-server-bundle.git",
+                "reference": "ef1d5e55a0ffb6253591e5f6ec9500879180be04"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server-bundle/zipball/ef1d5e55a0ffb6253591e5f6ec9500879180be04",
+                "reference": "ef1d5e55a0ffb6253591e5f6ec9500879180be04",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/doctrine-bundle": "^2.0.8",
+                "doctrine/orm": "^2.7.1",
+                "league/oauth2-server": "^8.3",
+                "nyholm/psr7": "^1.4",
+                "php": ">=7.2",
+                "psr/http-factory": "^1.0",
+                "symfony/event-dispatcher": "^5.3|^6.0",
+                "symfony/framework-bundle": "^5.3|^6.0",
+                "symfony/polyfill-php81": "^1.22",
+                "symfony/psr-http-message-bridge": "^2.0",
+                "symfony/security-bundle": "^5.3|^6.0"
+            },
+            "require-dev": {
+                "ext-pdo": "*",
+                "ext-pdo_sqlite": "*",
+                "symfony/browser-kit": "^5.3|^6.0",
+                "symfony/phpunit-bridge": "^5.3|^6.0"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Bundle\\OAuth2ServerBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Robin Chalas",
+                    "email": "robin.chalas@gmail.com"
+                },
+                {
+                    "name": "All contributors",
+                    "homepage": "https://github.com/thephpleague/oauth2-server-bundle/graphs/contributors"
+                }
+            ],
+            "description": "Symfony bundle .",
+            "homepage": "https://github.com/thephpleague/oauth2-server-bundle",
+            "keywords": [
+                "auth",
+                "authorization",
+                "bundle",
+                "oauth2",
+                "server"
+            ],
+            "support": {
+                "issues": "https://github.com/thephpleague/oauth2-server-bundle/issues",
+                "source": "https://github.com/thephpleague/oauth2-server-bundle/tree/v0.4.0"
+            },
+            "time": "2022-06-21T09:59:32+00:00"
+        },
+        {
             "name": "league/uri",
             "version": "6.8.0",
             "source": {
@@ -5734,12 +5807,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "5e171c3daece13b798fa6a34e6f0380b46f3001c"
+                "reference": "dc3481a382cd2d5d47271fcbd9fb7226065957dd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/5e171c3daece13b798fa6a34e6f0380b46f3001c",
-                "reference": "5e171c3daece13b798fa6a34e6f0380b46f3001c",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/dc3481a382cd2d5d47271fcbd9fb7226065957dd",
+                "reference": "dc3481a382cd2d5d47271fcbd9fb7226065957dd",
                 "shasum": ""
             },
             "require": {
@@ -5851,7 +5924,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-10-03T07:17:16+00:00"
+            "time": "2022-10-04T08:22:36+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",
@@ -11713,16 +11786,16 @@
         },
         {
             "name": "symfonycasts/reset-password-bundle",
-            "version": "v1.15.0",
+            "version": "v1.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/SymfonyCasts/reset-password-bundle.git",
-                "reference": "0c524ef609899cb6cdccec662f19780fbb404167"
+                "reference": "05216bfd80d4019a155d326501f00bf92b9cd439"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/0c524ef609899cb6cdccec662f19780fbb404167",
-                "reference": "0c524ef609899cb6cdccec662f19780fbb404167",
+                "url": "https://api.github.com/repos/SymfonyCasts/reset-password-bundle/zipball/05216bfd80d4019a155d326501f00bf92b9cd439",
+                "reference": "05216bfd80d4019a155d326501f00bf92b9cd439",
                 "shasum": ""
             },
             "require": {
@@ -11757,91 +11830,9 @@
             "description": "Symfony bundle that adds password reset functionality.",
             "support": {
                 "issues": "https://github.com/SymfonyCasts/reset-password-bundle/issues",
-                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.15.0"
+                "source": "https://github.com/SymfonyCasts/reset-password-bundle/tree/v1.16.0"
             },
-            "time": "2022-09-13T15:02:12+00:00"
-        },
-        {
-            "name": "trikoder/oauth2-bundle",
-            "version": "v3.2.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/trikoder/oauth2-bundle.git",
-                "reference": "58788136d3856a3e0c7fb41364943af8bc89101c"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/trikoder/oauth2-bundle/zipball/58788136d3856a3e0c7fb41364943af8bc89101c",
-                "reference": "58788136d3856a3e0c7fb41364943af8bc89101c",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/doctrine-bundle": "^1.8|^2.0",
-                "doctrine/orm": "^2.7",
-                "league/oauth2-server": "^8.0",
-                "php": ">=7.2",
-                "psr/http-factory": "^1.0",
-                "sensio/framework-extra-bundle": "^5.5",
-                "symfony/framework-bundle": "^4.4|^5.0",
-                "symfony/psr-http-message-bridge": "^2.0",
-                "symfony/security-bundle": "^4.4|^5.0"
-            },
-            "require-dev": {
-                "ext-timecop": "*",
-                "ext-xdebug": "*",
-                "laminas/laminas-diactoros": "^2.2",
-                "nyholm/psr7": "^1.2",
-                "phpunit/phpunit": "^8.5|^9.4",
-                "symfony/browser-kit": "^4.4|^5.0",
-                "symfony/phpunit-bridge": "^5.0"
-            },
-            "suggest": {
-                "defuse/php-encryption": "For better performance when doing encryption",
-                "nelmio/cors-bundle": "For handling CORS requests",
-                "nyholm/psr7": "For a super lightweight PSR-7/17 implementation"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Trikoder\\Bundle\\OAuth2Bundle\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Antonio Pauletich",
-                    "email": "antonio.pauletich@trikoder.net"
-                },
-                {
-                    "name": "Berislav Balogović",
-                    "email": "berislav.balogovic@trikoder.net"
-                },
-                {
-                    "name": "Petar Obradović",
-                    "email": "petar.obradovic@trikoder.net"
-                }
-            ],
-            "description": "Symfony bundle which provides OAuth 2.0 authorization/resource server capabilities.",
-            "homepage": "https://www.trikoder.net/",
-            "keywords": [
-                "oauth2"
-            ],
-            "support": {
-                "issues": "https://github.com/trikoder/oauth2-bundle/issues",
-                "source": "https://github.com/trikoder/oauth2-bundle/tree/v3.2.0"
-            },
-            "time": "2020-10-26T15:54:32+00:00"
+            "time": "2022-10-04T08:38:58+00:00"
         },
         {
             "name": "twig/extra-bundle",
@@ -12244,16 +12235,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.8.6",
+            "version": "1.8.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618"
+                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c386ab2741e64cc9e21729f891b28b2b10fe6618",
-                "reference": "c386ab2741e64cc9e21729f891b28b2b10fe6618",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
+                "reference": "536ff0ed719b5679e9f09c17aeaee9b31969cb8e",
                 "shasum": ""
             },
             "require": {
@@ -12283,7 +12274,7 @@
             ],
             "support": {
                 "issues": "https://github.com/phpstan/phpstan/issues",
-                "source": "https://github.com/phpstan/phpstan/tree/1.8.6"
+                "source": "https://github.com/phpstan/phpstan/tree/1.8.7"
             },
             "funding": [
                 {
@@ -12299,7 +12290,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-23T09:54:39+00:00"
+            "time": "2022-10-04T14:09:33+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
@@ -12511,16 +12502,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.46.0",
+            "version": "v1.47.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "682ce4fc6602acad33653ba0194d922356fd81f9"
+                "reference": "e607f129d29a6c1e9a9e1ef3d229d653311d58f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/682ce4fc6602acad33653ba0194d922356fd81f9",
-                "reference": "682ce4fc6602acad33653ba0194d922356fd81f9",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/e607f129d29a6c1e9a9e1ef3d229d653311d58f3",
+                "reference": "e607f129d29a6c1e9a9e1ef3d229d653311d58f3",
                 "shasum": ""
             },
             "require": {
@@ -12584,7 +12575,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.46.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.47.0"
             },
             "funding": [
                 {
@@ -12600,7 +12591,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-09-23T13:30:21+00:00"
+            "time": "2022-10-04T15:05:10+00:00"
         },
         {
             "name": "symfony/web-profiler-bundle",

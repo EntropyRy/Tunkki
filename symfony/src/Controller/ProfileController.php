@@ -30,7 +30,15 @@ use Hashids\Hashids;
 
 class ProfileController extends AbstractController
 {
-    public function newMember(Request $request, FormFactoryInterface $formF, MemberRepository $memberRepo, EmailRepository $emailRepo, UserPasswordEncoderInterface $encoder, Mattermost $mm, MailerInterface $mailer): Response
+    public function newMember(
+        Request $request, 
+        FormFactoryInterface $formF, 
+        MemberRepository $memberRepo, 
+        EmailRepository $emailRepo, 
+        UserPasswordHasherInterface $hasher, 
+        Mattermost $mm, 
+        MailerInterface $mailer
+    ): Response
     {
         $member = new Member();
         $email_content = null;
@@ -43,7 +51,7 @@ class ProfileController extends AbstractController
                 $email = $memberRepo->getByEmail($member->getEmail());
                 if (!$name && !$email) {
                     $user = $member->getUser();
-                    $user->setPassword($encoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
+                    $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getlocale());
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
@@ -170,7 +178,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordEncoderInterface $encoder)
+    public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordHasherInterface $hasher)
     {
         $member = $security->getUser()->getMember();
         $form = $formF->create(MemberType::class, $member);
@@ -179,7 +187,7 @@ class ProfileController extends AbstractController
             $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
             $user = $member->getUser();
-            $user->setPassword($encoder->encodePassword($user, $form->get('user')->get('plainPassword')->getData()));
+            $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
             $em->persist($user);
             $em->persist($member);
             $em->flush();

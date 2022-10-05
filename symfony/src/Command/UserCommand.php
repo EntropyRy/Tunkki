@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Console\Question\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
@@ -18,7 +18,9 @@ class UserCommand extends Command
 {
     protected static $defaultName = 'entropy:user';
 
-    public function __construct(private readonly UserPasswordEncoderInterface $passwordEncoder, private readonly EntityManagerInterface $em)
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordEncoder, 
+        private readonly EntityManagerInterface $em)
     {
         parent::__construct();
     }
@@ -52,7 +54,7 @@ class UserCommand extends Command
                 $question->setHidden(true);
                 $question->setHiddenFallback(false);
                 $pass = $helper->ask($input, $output, $question);
-                $user->setPassword($this->passwordEncoder->encodePassword($user, $pass));
+                $user->setPassword($this->passwordEncoder->hashPassword($user, $pass));
             }
             if ($input->getOption('super-admin')) {
                 $user->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_ADMIN']);
