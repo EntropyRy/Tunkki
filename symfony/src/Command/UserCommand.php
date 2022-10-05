@@ -19,8 +19,9 @@ class UserCommand extends Command
     protected static $defaultName = 'entropy:user';
 
     public function __construct(
-        private readonly UserPasswordHasherInterface $passwordEncoder, 
-        private readonly EntityManagerInterface $em)
+        private readonly UserPasswordHasherInterface $passwordEncoder,
+        private readonly EntityManagerInterface $em
+    )
     {
         parent::__construct();
     }

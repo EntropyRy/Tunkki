@@ -31,15 +31,14 @@ use Hashids\Hashids;
 class ProfileController extends AbstractController
 {
     public function newMember(
-        Request $request, 
-        FormFactoryInterface $formF, 
-        MemberRepository $memberRepo, 
-        EmailRepository $emailRepo, 
-        UserPasswordHasherInterface $hasher, 
-        Mattermost $mm, 
+        Request $request,
+        FormFactoryInterface $formF,
+        MemberRepository $memberRepo,
+        EmailRepository $emailRepo,
+        UserPasswordHasherInterface $hasher,
+        Mattermost $mm,
         MailerInterface $mailer
-    ): Response
-    {
+    ): Response {
         $member = new Member();
         $email_content = null;
         $form = $formF->create(MemberType::class, $member);

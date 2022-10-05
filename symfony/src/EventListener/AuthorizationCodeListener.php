@@ -14,10 +14,9 @@ final class AuthorizationCodeListener
     public function __construct(
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly RequestStack $requestStack
-    )
-    {
+    ) {
     }
-    public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event):void
+    public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event): void
     {
         if (null !== $event->getUser()) {
             if ($event->getUser()->getMember()->getIsActiveMember()) {

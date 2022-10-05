@@ -29,7 +29,8 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         private readonly EntityManagerInterface $em,
         private readonly RouterInterface $router,
         private readonly UrlGeneratorInterface $urlG
-    ) { }
+    ) {
+    }
     public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
@@ -41,7 +42,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         $accessToken = $this->fetchAccessToken($client);
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
+            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
                 $mmUser = $client->fetchUserFromToken($accessToken);
                 $email = $mmUser->getEmail();
 
@@ -54,10 +55,10 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
 
                 // 2) do we have a matching user by email?
                 $user = $this->entityManager->getRepository(Member::class)->findOneBy(['email' => $email]);
-		$user = $member->getUser();
-		$user->setMattermostId($mattermostUser->getId());
-		$this->em->persist($user);
-		$this->em->flush();
+                $user = $member->getUser();
+                $user->setMattermostId($mattermostUser->getId());
+                $this->em->persist($user);
+                $this->em->flush();
 
                 return $user;
             })

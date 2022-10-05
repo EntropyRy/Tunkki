@@ -27,8 +27,7 @@ class EventController extends Controller
         TranslatorInterface $trans,
         SeoPageInterface $seo,
         EventRepository $eRepo
-    ): Response
-    {
+    ): Response {
         $eventid = $request->get('id');
         $lang = $request->getLocale();
         if (empty($eventid)) {
@@ -66,8 +65,7 @@ class EventController extends Controller
         TicketRepository $ticketRepo,
         ImageProvider $mediaPro,
         EntityManagerInterface $em
-    ): Response
-    {
+    ): Response {
         $mediaUrl = null;
         $slug = $request->get('slug');
         $year = $request->get('year');

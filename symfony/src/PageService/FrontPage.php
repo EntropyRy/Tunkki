@@ -16,8 +16,7 @@ class FrontPage implements PageServiceInterface
         private $name,
         private readonly TemplateManager $templateManager,
         private readonly EntityManagerInterface $em
-    )
-    {
+    ) {
     }
     public function getName(): string
     {

@@ -147,7 +147,8 @@ final class NakkiAdmin extends AbstractAdmin
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
         protected RequestStack $rs
-    ) { }
+    ) {
+    }
 
     protected function createBooking($nakki, $i): void
     {
