@@ -29,7 +29,7 @@ class Member implements \Stringable
     private string $lastname;
 
     #[ORM\Column(name: 'email', type: 'string', length: 190, unique: true)]
-    private string $email;
+    private $email;
 
     #[ORM\Column(name: 'username', type: 'string', length: 190, nullable: true)]
     private ?string $username = null;
@@ -62,10 +62,10 @@ class Member implements \Stringable
     private bool $StudentUnionMember = false;
 
     #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
-    private ?string $Application;
+    private ?string $Application = null;
 
     #[ORM\Column(name: 'reject_reason', type: 'text', nullable: true)]
-    private ?string $rejectReason;
+    private ?string $rejectReason = null;
 
     #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
     private ?\DateTime $ApplicationDate;
