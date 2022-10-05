@@ -32,7 +32,7 @@ class Member implements \Stringable
     private string $email;
 
     #[ORM\Column(name: 'username', type: 'string', length: 190, nullable: true)]
-    private ?string $username;
+    private ?string $username = null;
 
     #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
     private ?string $phone = null;
