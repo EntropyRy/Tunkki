@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,35 +11,38 @@ use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Component\Security\Core\Security;
 use App\Repository\TicketRepository;
+use App\Repository\EventRepository;
 use Sonata\MediaBundle\Provider\ImageProvider;
 use App\Entity\Member;
-use App\Entity\Event;
 use App\Entity\RSVP;
 use App\Form\RSVPType;
 
 class EventController extends Controller
 {
     protected $em;
-    public function oneId(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo)
+    public function oneId(
+        Request $request,
+        CmsManagerSelector $cms,
+        TranslatorInterface $trans,
+        SeoPageInterface $seo,
+        EventRepository $eRepo
+    ): Response
     {
         $eventid = $request->get('id');
         $lang = $request->getLocale();
         if (empty($eventid)) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        $this->em = $this->getDoctrine()->getManager();
-        $event = $this->em->getRepository(Event::class)->findOneBy(['id' => $eventid]);
+        $event = $eRepo->findOneBy(['id' => $eventid]);
         if (!$event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        if (empty($event->getUrl()) && $event->getexternalUrl()) {
+        if (empty($event->getUrl()) && $event->getExternalUrl()) {
             return new RedirectResponse("/");
         }
         if ($event->getUrl()) {
-            if ($event->getexternalUrl()) {
+            if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
             }
             return $this->redirectToRoute('entropy_event_slug', [
@@ -53,7 +57,16 @@ class EventController extends Controller
                 'page' => $page
             ]);
     }
-    public function oneSlug(Request $request, CmsManagerSelector $cms, TranslatorInterface $trans, SeoPageInterface $seo, TicketRepository $ticketRepo, ImageProvider $mediaPro): Response
+    public function oneSlug(
+        Request $request,
+        CmsManagerSelector $cms,
+        TranslatorInterface $trans,
+        SeoPageInterface $seo,
+        EventRepository $eRepo,
+        TicketRepository $ticketRepo,
+        ImageProvider $mediaPro,
+        EntityManagerInterface $em
+    ): Response
     {
         $mediaUrl = null;
         $slug = $request->get('slug');
@@ -61,9 +74,7 @@ class EventController extends Controller
         if (empty($slug)) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        $this->em = $this->getDoctrine()->getManager();
-        $event = $this->em->getRepository(Event::class)
-            ->findEventBySlugAndYear($slug, $year);
+        $event = $eRepo->findEventBySlugAndYear($slug, $year);
         if (!$event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -96,8 +107,8 @@ class EventController extends Controller
                 } else {
                     $rsvp->setEvent($event);
                     try {
-                        $this->em->persist($rsvp);
-                        $this->em->flush();
+                        $em->persist($rsvp);
+                        $em->flush();
                         $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
                     } catch (\Exception) {
                         $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
