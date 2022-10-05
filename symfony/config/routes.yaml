@@ -1,29 +1,29 @@
 entropy_tunkki_booking_hash:
     path:     /booking/{bookingid}/renter/{renterid}/{hash}
-    controller: App\Controller\RenterHashController:indexAction 
+    controller: App\Controller\RenterHashController::indexAction 
     requirements:
         bookingid: '\d+'
         renterid: '\d+'
 entropy_event:
     path:     /tapahtuma/{id}/
-    controller: App\Controller\EventController:oneId 
+    controller: App\Controller\EventController::oneId 
     requirements:
         id: '\d+'
 entropy_event_en:
     path:     /event/{id}/
-    controller: App\Controller\EventController:oneId 
+    controller: App\Controller\EventController::oneId 
     requirements:
         id: '\d+'
 entropy_event_slug:
     path:     /{year}/{slug}/
-    controller: App\Controller\EventController:oneSlug
+    controller: App\Controller\EventController::oneSlug
     requirements:
         year: '\d+'
 entropy_event_ticket:
     path:     
         en: /{year}/{slug}/ticket/{reference}
         fi: /{year}/{slug}/lippu/{reference}
-    controller: App\Controller\EventTicketController:ticket
+    controller: App\Controller\EventTicketController::ticket
     requirements:
         year: '\d+'
         reference: '\d+'
@@ -31,124 +31,124 @@ entropy_event_ticket_presale:
     path:
         en: /{year}/{slug}/ticket/presale
         fi: /{year}/{slug}/lippu/ennakkomyynti
-    controller: App\Controller\EventTicketController:presale
+    controller: App\Controller\EventTicketController::presale
     requirements:
         year: '\d+'
 entropy_event_responsible:
     path:
         en: /{year}/{slug}/nakkikone/responsible
         fi: /{year}/{slug}/nakkikone/vastuuhenkilo
-    controller: App\Controller\EventSignUpController:responsible
+    controller: App\Controller\EventSignUpController::responsible
     requirements:
         year: '\d+'
 entropy_event_ticket_sale:
     path:
         en: /{year}/{slug}/ticket/sale
         fi: /{year}/{slug}/lippu/myynti
-    controller: App\Controller\EventTicketController:sale
+    controller: App\Controller\EventTicketController::sale
     requirements:
         year: '\d+'
 entropy_event_nakki_sign_up:
     path:     /{year}/{slug}/nakkikone/{id}/signup
-    controller: App\Controller\EventSignUpController:nakkiSignUp
+    controller: App\Controller\EventSignUpController::nakkiSignUp
     requirements:
         year: '\d+'
         id: '\d+'
 entropy_event_nakki_cancel:
     path:     /{year}/{slug}/nakkikone/{id}/cancel
-    controller: App\Controller\EventSignUpController:nakkiCancel
+    controller: App\Controller\EventSignUpController::nakkiCancel
     requirements:
         year: '\d+'
         id: '\d+'
 entropy_event_slug_nakkikone:
     path:     /{year}/{slug}/nakkikone
-    controller: App\Controller\EventSignUpController:nakkikone
+    controller: App\Controller\EventSignUpController::nakkikone
     requirements:
         year: '\d+'
 entropy_event_slug_artist_signup:
     path: 
         en: /{year}/{slug}/signup
         fi: /{year}/{slug}/ilmottautuminen
-    controller: App\Controller\EventSignUpController:artistSignUp
+    controller: App\Controller\EventSignUpController::artistSignUp
     requirements:
         year: '\d+'
 entropy_event_rsvp:
     path: /{year}/{slug}/rsvp
-    controller: App\Controller\EventSignUpController:RSVP
+    controller: App\Controller\EventSignUpController::RSVP
     requirements:
         year: '\d+'
 entropy_user_dashboard:
     path:
         en: /dashboard/
         fi: /yleiskatsaus/
-    controller: App\Controller\ProfileController:dashboard
+    controller: App\Controller\ProfileController::dashboard
 entropy_profile:
     path:
         en: /profile/
         fi: /profiili/
-    controller: App\Controller\ProfileController:index
+    controller: App\Controller\ProfileController::index
 entropy_profile_join:
     path:
         en: /profile/new
         fi: /profiili/uusi
-    controller: App\Controller\ProfileController:newMember
+    controller: App\Controller\ProfileController::newMember
 entropy_artist_profile:
     path:
         en: /profile/artist
         fi: /profiili/artisti
-    controller: App\Controller\ArtistController:index
+    controller: App\Controller\ArtistController::index
 entropy_public_artist:
     path:
         en: /artist/{name}
         fi: /artisti/{name}
-    controller: App\Controller\PublicArtistController:index
+    controller: App\Controller\PublicArtistController::index
 entropy_profile_door:
     path:
         en: /profile/door
         fi: /profiili/ovi
-    controller: App\Controller\ProfileController:door
+    controller: App\Controller\ProfileController::door
 entropy_profile_edit:
     path:
         en: /profile/edit
         fi: /profiili/muokkaa
-    controller: App\Controller\ProfileController:edit
+    controller: App\Controller\ProfileController::edit
 entropy_artist_create:
     path:
         en: /profile/artist/create
         fi: /profiili/artisti/uusi
-    controller: App\Controller\ArtistController:create
+    controller: App\Controller\ArtistController::create
 rss_feed_fi:
     path: /feed.rss
-    controller: App\Controller\RssFeedController:index
+    controller: App\Controller\RssFeedController::index
 rss_feed_en:
     path: /feed.rss
-    controller: App\Controller\RssFeedController:index
+    controller: App\Controller\RssFeedController::index
 entropy_profile_active_member:
     path:
         en: /profile/apply
         fi: /profiili/aktiiviksi
-    controller: App\Controller\ProfileController:apply
+    controller: App\Controller\ProfileController::apply
 entropy_artist_edit:
     path:
         en: /profile/artist/{id}/edit
         fi: /profiili/artisti/{id}/muokkaa
-    controller: App\Controller\ArtistController:edit
+    controller: App\Controller\ArtistController::edit
     requirements:
         id: '\d+'
 entropy_artist_delete:
     path: /profile/artist/{id}/delete
-    controller: App\Controller\ArtistController:delete
+    controller: App\Controller\ArtistController::delete
     requirements:
         id: '\d+'
 _entropy_mattermost_auth:
     path:     /oauth
-    controller: App\Controller\MattermostAuthController:connectAction
+    controller: App\Controller\MattermostAuthController::connectAction
 _entropy_mattermost_check:
     path:     /oauth/check
-    controller: App\Controller\MattermostAuthController:connectCheckAction
+    controller: App\Controller\MattermostAuthController::connectCheckAction
 _entropy_mattermost_check_ssl:
     path:     /oauth/check
-    controller: App\Controller\MattermostAuthController:connectCheckAction
+    controller: App\Controller\MattermostAuthController::connectCheckAction
     schemes:  [https]
     #_member_form:
     #path:    /member/join

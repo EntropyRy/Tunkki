@@ -14,7 +14,7 @@ use Sonata\Form\Type\DateTimePickerType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
 use Sonata\AdminBundle\Form\Type\ModelListType;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class NakkiAdmin extends AbstractAdmin
@@ -126,7 +126,7 @@ final class NakkiAdmin extends AbstractAdmin
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         foreach ($bookings as $booking) {
             if ($booking->getMember()) {
-                $this->session->getBag('flashes')->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
+                $this->rs->getSession()->getFlashBag()->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
                 return;
             }
         }
@@ -146,7 +146,7 @@ final class NakkiAdmin extends AbstractAdmin
         protected \App\Helper\Mattermost $mm,
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
-        protected SessionInterface $session
+        protected RequestStack $rs
     ) { }
 
     protected function createBooking($nakki, $i): void
