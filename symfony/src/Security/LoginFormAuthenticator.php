@@ -57,7 +57,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
+        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
         return new RedirectResponse($this->urlGenerator->generate('entropy_user_dashboard.'.$request->getLocale()));
