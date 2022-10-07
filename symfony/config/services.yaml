@@ -14,6 +14,7 @@ parameters:
     booking_notification_email: '%env(BOOKING_NOTIFICATION_EMAIL)%'
     mailer_sender_address: 'webmaster@entropy.fi'
     door_socket: '%env(DOOR_SOCKET)%'
+    router.request_context.scheme: '%env(SCHEME)%'
 
 services:
     _defaults:
