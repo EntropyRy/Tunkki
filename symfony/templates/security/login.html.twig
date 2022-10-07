@@ -2,7 +2,7 @@
 
 {% block content %}
 <div class="col-xl-6 col-md-10 mx-auto">
-<form method="post">
+<form method="post" data-turbo="false">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
