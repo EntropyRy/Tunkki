@@ -110,6 +110,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->remove('delete');
         $collection->add('update', $this->getRouterIdParameter().'/update');
     }
 }
