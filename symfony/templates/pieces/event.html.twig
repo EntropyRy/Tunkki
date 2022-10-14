@@ -1,5 +1,17 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% use 'pieces/ticket.html.twig' %}
+{% block event_tile %} {# not in use #}
+    <div class="event_tile col-12 p-2">
+        <a href="{{ block('event_path') }}">
+        {{ block('event_media') }}
+        <h4>{{ block('event_name') }}</h4>
+        <h6>{{ block('event_time') }}</h6>
+        </a>
+        <div class="justify-content-between">
+            <a class="btn btn-primary" href="{{ block('event_path') }}">Info</a>
+        </div>
+    </div>
+{% endblock %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head_frontpage') }}
@@ -52,7 +64,7 @@
 {% endblock %}
 
 {% block event_head_frontpage %}
-    <h3 class="mt-2">{{ block('event_name') }} <span>{{ block('event_time') }}<span></h3>
+    <h3 class="mt-2">{{ block('event_name') }} ~ <span>{{ block('event_time') }}<span></h3>
     {{ block('event_banner_media') }}
 {% endblock %}
 
@@ -64,11 +76,11 @@
 {% endblock %}
 
 {% block event_time %}
-  {% if event.type != 'announcement' %} 
+  {% if event.type != 'announcement' %}
     {% if event.multiday %}
-        ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
+        {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
     {% else %}
-        ~ {{ event.eventdate|date() }}
+        {{ event.eventdate|date() }}
     {% endif %}
   {% endif %}
 {% endblock %}
@@ -84,13 +96,13 @@
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
-    '{{ timetable }}': block('timetable'), 
+    '{{ timetable }}': block('timetable'),
     '{{ bios }}': block('bios'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
-    '{{ links }}':block('links'), 
-    '{{ rsvp }}':block('RSVP'), 
-    '{{ ticket }}':block('ticket_for_event_page') 
+    '{{ links }}':block('links'),
+    '{{ rsvp }}':block('RSVP'),
+    '{{ ticket }}':block('ticket_for_event_page')
 })|raw }}
 {% if '{{ links }}' not in attribute(event,content_attr) %}
     {{ block('links') }}
@@ -103,32 +115,36 @@
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
-    '{{ timetable }}': block('timetable'), 
+    '{{ timetable }}': block('timetable'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ bios }}':'',
     '{{ vj_bios }}':'',
-    '{{ links }}':'', 
-    '{{ ticket }}':block('ticket_for_frontpage'), 
-    '{{ rsvp }}':block('RSVP') 
+    '{{ links }}':'',
+    '{{ ticket }}':block('ticket_for_frontpage'),
+    '{{ rsvp }}':block('RSVP')
 })|raw }}
 {{ block('links') }}
 {% endapply %}
 {% endblock %}
 
 {% block event_media %}
-{% set name_attr = 'name_attribute'|trans %}
-{% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
-<div class="img-fluid">
-    <video autoplay loop muted inline width="100%">
-    <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
-    </video>
-</div>
-{% endif %}
-<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
-     {{ block('imgfilter') }}
-    >
-    {{ sonata_media( event.picture, 'banner', {'picture': ['small', 'normal', 'banner'], 'loading': 'lazy', 'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} ) }}
-    </div>
+    {% if event.picture is not null %}
+        {% set name_attr = 'name_attribute'|trans %}
+        {% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
+        <div class="img-fluid">
+            <video autoplay loop muted inline width="100%">
+            <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
+            </video>
+        </div>
+        {% endif %}
+        <div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
+             {{ block('imgfilter') }}
+            >
+            {{ sonata_media( event.picture, 'banner', {'picture': ['small', 'normal', 'banner'], 'loading': 'lazy', 'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} ) }}
+        </div>
+    {% else %}
+        <div style="height: 200px; background: gray;">IMAGE PLACEHOLDER</div>
+    {% endif %}
 {% endblock %}
 
 {% block imgfilter %}
@@ -141,7 +157,7 @@
 {% if event.attachment %}
 <div class="mb-2">
 <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">
-    <i class="fas fa-link"></i> 
+    <i class="fas fa-link"></i>
     {{ event.attachment.name }}
 </a>
 </div>
@@ -251,7 +267,7 @@
         {% if info.StartTime is not empty %}
             {% if last is defined %}
                 {% if last == info.StartTime %}
-                B2B 
+                B2B
                 {% endif %}
             {% endif %}
             <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
@@ -259,7 +275,7 @@
         {% set last = info.StartTime %}
         {% if last is defined %}
             {% if last != info.StartTime %}
-                </li> 
+                </li>
             {% endif %}
         {% endif %}
     {% endfor %}
@@ -377,9 +393,9 @@
     {% endif %}
     <span class="polaroid">
     {% if artist.Picture %}
-    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}"> 
+    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}">
     {% else %}
-    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}"> 
+    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}">
     {% endif %}
     <div class="caption">{{ name }}</div>
     </span>
@@ -397,7 +413,7 @@
     {% if artist.links is not empty %}
         <hr>
         {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} 
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
          href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
         </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
@@ -427,6 +443,6 @@
 {% elseif event.streamPlayerUrl and event.NowTest == 'before'  %}
     <div class="ckeditor-html5-audio" style="text-align: center; border: #aaa solid; margin: 0 auto; width: 60%">
         {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
-    </div> 
+    </div>
 {% elseif event.streamPlayerUrl and event.NowTest == 'after'  %}{% endif %}
 {% endblock %}

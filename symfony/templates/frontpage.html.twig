@@ -1,8 +1,11 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
+    <turbo-frame id="test">
+    <h1>TEST</h1>
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3">
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}
@@ -10,32 +13,26 @@
             {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
         {% endif %}
         {% if event is not null and visible %}
-        <div class="col-12">
-            <div class="row">
-            <div class="col-1 text-center mt-2">
-                <h3>
-                {% if event.type == 'announcement' %}
-                    <i class="fas fa-bullhorn"></i>
-                    <hr>
-                    <a href="{% if app.request.locale == 'en' %}/en{%endif%}/{{'announcements_url'|trans}}">
-                        <i class="fas fa-history"></i>
-                    </a>
-                {% else %}
-                    {% if event.cancelled %}
-                    <i class="far fa-calendar-times"></i>
-                    {% else %}
-                    <i class="far fa-calendar"></i>
-                    {% endif %}
-                {% endif %}
-                </h3>
-            </div>
-            <div class="post col-11">
-                {{ block('event') }}
-            <hr>
-            </div>
-            </div>
+        <div class="col p-2">
+        {{ block('event_tile') }}
         </div>
-        {% endif %}    
+        {% endif %}
     {% endfor %}
+    {% if epic is not null %}
+        <div class="col p-2">
+        {{ block('tile') }}
+        </div>
+    {% endif %}
+    </div>
+    </turbo-frame>
 {% endblock %}
 
+{% block tile %}
+    <div class="tile col-12 p-2">
+        <img src="{{ epic }}" class="img-fluid" title="{{'Random event picture'|trans}}">
+        <h4>{{'Random event picture'|trans}}</h4>
+        <div class="justify-content-between">
+            <a class="btn btn-primary" href="https://epics.entropy.fi">ePics</a>
+        </div>
+    </div>
+{% endblock %}
