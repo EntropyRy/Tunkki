@@ -48,8 +48,8 @@
         </div>
         <h4>{{'Random photos from our events'|trans}}</h4>
         <div class="justify-content-between d-flex">
-            <a class="btn btn-primary" href="{{ path('_page_alias_events_'~app.request.locale) }}">{{'Events'|trans}}</a>
-            <a class="btn btn-primary" href="https://epics.entropy.fi">ePics</a>
+            <a class="btn btn-link" href="{{ path('_page_alias_events_'~app.request.locale) }}">{{'Events'|trans}}</a>
+            <a class="btn btn-link" href="https://epics.entropy.fi">ePics</a>
         </div>
     </div>
 {% endblock %}
@@ -90,8 +90,8 @@
             {% else %}
                 {% set artist_url = '/en/artists'%}
             {% endif %}
-            <a class="btn btn-primary" href="{{ block('event_path') }}">{{'artist.tile.button_event'|trans}}</a>
-            <a class="btn btn-primary" href="{{artist_url}}">{{'artist.tile.button_artists'|trans}}</a>
+            <a class="btn btn-link" href="{{ block('event_path') }}">{{'artist.tile.button_event'|trans}}</a>
+            <a class="btn btn-link" href="{{artist_url}}">{{'artist.tile.button_artists'|trans}}</a>
         </div>
     </div>
 {% endblock %}
