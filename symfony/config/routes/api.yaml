@@ -1,6 +1,6 @@
 epics_random_pic:
-    controller: App\Controller\EPicsController:getRandomPic
+    controller: App\Controller\EPicsController::getRandomPic
     path: /api/epics/random
 api_me:
-    controller: App\Controller\OauthJsonController:me
+    controller: App\Controller\OauthJsonController::me
     path: /api/me
