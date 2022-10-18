@@ -25,7 +25,5 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }
