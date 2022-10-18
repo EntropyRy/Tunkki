@@ -39,7 +39,6 @@ privacy_policy: Privacy Policy
 submit_and_agree: By submitting this form you agree on our privacy policy. We reserve the right to delete accounts with wrong information.
 cancelled: CANCELLED
 announcements_url: announcements
-join_us: Join us
 about_us: about us
 lang: suomi
 artists: Artists
@@ -87,7 +86,7 @@ widget_label_unlink: Unlink
 link_media: Add a photo from your files
 logged_in_as: You are logged in as
 block:
-    stats: 
+    stats:
         name: Statistics
         members: Members
         active_members: Active Members
@@ -118,6 +117,7 @@ menu:
     logon_to: Log on to
 event:
     not_public: not public
+    in_future: Upcoming event
     player:
         will_appear_here_when_the_stream_is_on: Player will appear here on page load when the stream is on
     form:
@@ -175,6 +175,10 @@ artist:
     profiles: Artist Profiles
     information: Artist information
     list: Artsit list
+    tile:
+        button_event: The event
+        heading: One random artist profile from our events
+        button_artists: Artists
     random:
         preview: One random artist preview
     form:
@@ -197,7 +201,7 @@ member:
         application: Your motivation letter for active membership
         apply_help: We hope you will tell us what you have done in Entropy, what would you like to do in Entropy and why are you applying for active membership. Your application is editable until the next board meeting.
         requirements: General requirements for becoming an active member
-        requirements_help: The board is not restricted by these guidelines. 
+        requirements_help: The board is not restricted by these guidelines.
         requirements3: The board knows who you are
         requirements2: How active you have been lately
         requirements1: You have been organizing at least 3 events in Entropy
@@ -237,3 +241,10 @@ ticket:
     recipient: Recipient
     sum: Price
     reference_number: Reference Number (must be used)
+join_us:
+    title: Join us!
+    button: Join us
+    1: Entropy ry, founded in 1993, is a electronic music cultural association and one of the AYY (Aalto University Student Union) music associations. We strive to advance and promote the electronic music culture by eg.
+    2: Organizing events
+    3: Instructing event technology
+    4: Renting sound and light equipment

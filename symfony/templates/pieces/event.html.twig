@@ -1,5 +1,30 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% use 'pieces/ticket.html.twig' %}
+{% block event_tile %}
+    <div class="tile event_tile col-12 p-2">
+        <a href="{{ block('event_path') }}">
+            {{ block('rect_img') }}
+            <h5 class="my-2">{{ block('event_time') }}</h5>
+            <h4>{{ block('event_name') }}</h4>
+        </a>
+        <div class="justify-content-between">
+            {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
+            <span class="pe-2">
+                <a class="btn btn-primary" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                    {{"fas fa-tasks"|parse_icon }}
+                    Nakkikone
+                </a>
+            </span>
+            {% endif %}
+            {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
+                <a class="btn btn-primary" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                    {{"fas fa-tasks"|parse_icon }}
+                    {{'Artist signup'|trans }}
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
         {{ block('event_head_frontpage') }}
@@ -52,7 +77,7 @@
 {% endblock %}
 
 {% block event_head_frontpage %}
-    <h3 class="mt-2">{{ block('event_name') }} <span>{{ block('event_time') }}<span></h3>
+    <h3 class="mt-2">{{ block('event_name') }} ~ <span>{{ block('event_time') }}<span></h3>
     {{ block('event_banner_media') }}
 {% endblock %}
 
@@ -64,11 +89,11 @@
 {% endblock %}
 
 {% block event_time %}
-  {% if event.type != 'announcement' %} 
+  {% if event.type != 'announcement' %}
     {% if event.multiday %}
-        ~ {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
+        {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
     {% else %}
-        ~ {{ event.eventdate|date() }}
+        {{ event.eventdate|date() }}
     {% endif %}
   {% endif %}
 {% endblock %}
@@ -84,13 +109,13 @@
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
-    '{{ timetable }}': block('timetable'), 
+    '{{ timetable }}': block('timetable'),
     '{{ bios }}': block('bios'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
-    '{{ links }}':block('links'), 
-    '{{ rsvp }}':block('RSVP'), 
-    '{{ ticket }}':block('ticket_for_event_page') 
+    '{{ links }}':block('links'),
+    '{{ rsvp }}':block('RSVP'),
+    '{{ ticket }}':block('ticket_for_event_page')
 })|raw }}
 {% if '{{ links }}' not in attribute(event,content_attr) %}
     {{ block('links') }}
@@ -103,32 +128,87 @@
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event,content_attr)|replace({
-    '{{ timetable }}': block('timetable'), 
+    '{{ timetable }}': block('timetable'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ bios }}':'',
     '{{ vj_bios }}':'',
-    '{{ links }}':'', 
-    '{{ ticket }}':block('ticket_for_frontpage'), 
-    '{{ rsvp }}':block('RSVP') 
+    '{{ links }}':'',
+    '{{ ticket }}':block('ticket_for_frontpage'),
+    '{{ rsvp }}':block('RSVP')
 })|raw }}
 {{ block('links') }}
 {% endapply %}
 {% endblock %}
 
-{% block event_media %}
-{% set name_attr = 'name_attribute'|trans %}
-{% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
-<div class="img-fluid">
-    <video autoplay loop muted inline width="100%">
-    <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
-    </video>
-</div>
-{% endif %}
-<div class="{% if event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}"
-     {{ block('imgfilter') }}
-    >
-    {{ sonata_media( event.picture, 'banner', {'picture': ['small', 'normal', 'banner'], 'loading': 'lazy', 'style': event.imgFilterBlendMode, 'class':'img-fluid','title': attribute(event, name_attr)} ) }}
+{% block rect_img %}
+    {% set rect = true %}
+    {{ block('event_media') }}
+{% endblock %}
+
+{% block event_badge %}
+    <div class="badge-container">
+        <span class="shadow badge bg-secondary">{{ event.badgeText|trans }}</span>
     </div>
+{% endblock %}
+{% block event_img_title %}
+    {% apply spaceless %}
+    {{ event.badgeText|trans ~':'~ block('event_name') ~ block('event_time') }}
+    {% endapply %}
+{% endblock %}
+{% block event_media %}
+    {% if event.picture is not null %}
+        {% set name_attr = 'name_attribute'|trans %}
+        {% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
+            {% if rect|default(false) %}
+                <div class="rect-img-container">
+                    <div class="rect-img">
+            {% else %}
+                <div class="img-fluid">
+            {% endif %}
+                    <video autoplay loop muted inline width="100%">
+                    <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
+                    </video>
+                </div>
+                {% if rect|default(false) %}
+                {{ block('event_badge') }}
+                </div>
+                {% endif %}
+        {% else %}
+        <div class="
+            {% if event.picture.providername == 'sonata.media.provider.youtube' %}
+                video-fluid
+            {% else %}
+                img-filter
+                {% if rect|default(false)%}
+                    rect-img-container
+                {% endif %}
+            {% endif %}"
+             {{ block('imgfilter') }}
+            >
+            {% if rect|default(false)%}
+                {% set class = 'rect-img' %}
+            {%else%}
+                {% set class = 'img-fluid' %}
+            {%endif%}
+            {{ sonata_media( event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
+                'loading': 'lazy',
+                'style': event.imgFilterBlendMode,
+                'class': class,
+                'title': block('event_img_title')
+                } ) }}
+            {% if rect|default(false)%}
+            {{ block('event_badge') }}
+            {%endif%}
+        </div>
+        {% endif %}
+    {% else %}
+        <div class="rect-img-container">
+            <img class="rect-img" src="/images/header-logo.svg" title="{{ block('event_img_title') }}">
+            {% if rect|default(false)%}
+            {{ block('event_badge') }}
+            {%endif%}
+        </div>
+    {% endif %}
 {% endblock %}
 
 {% block imgfilter %}
@@ -141,7 +221,7 @@
 {% if event.attachment %}
 <div class="mb-2">
 <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">
-    <i class="fas fa-link"></i> 
+    <i class="fas fa-link"></i>
     {{ event.attachment.name }}
 </a>
 </div>
@@ -251,7 +331,7 @@
         {% if info.StartTime is not empty %}
             {% if last is defined %}
                 {% if last == info.StartTime %}
-                B2B 
+                B2B
                 {% endif %}
             {% endif %}
             <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
@@ -259,7 +339,7 @@
         {% set last = info.StartTime %}
         {% if last is defined %}
             {% if last != info.StartTime %}
-                </li> 
+                </li>
             {% endif %}
         {% endif %}
     {% endfor %}
@@ -325,7 +405,6 @@
 {% endblock %}
 
 {% block bios %}
-{% set bio_attribute = 'bio_attribute'|trans %}
     {% set stage = null %}
     {% for info in event.eventArtistInfos %}
         {% if info.StartTime is not empty %}
@@ -349,6 +428,7 @@
 {% endblock %}
 
 {% block artist_event_info %}
+{% set bio_attribute = 'bio_attribute'|trans %}
 {% set content_attr = 'content_attribute'|trans %}
 {% set show = true %}
 {% if event is defined and event.multiday == true %}
@@ -375,11 +455,11 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <span class="polaroid">
+    <span class="{% if frontpage|default(false) %}rect-img{%else%}polaroid{% endif %}">
     {% if artist.Picture %}
-    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}"> 
+    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}">
     {% else %}
-    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}"> 
+    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}">
     {% endif %}
     <div class="caption">{{ name }}</div>
     </span>
@@ -397,7 +477,7 @@
     {% if artist.links is not empty %}
         <hr>
         {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %} 
+        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
          href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
         </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
@@ -427,6 +507,6 @@
 {% elseif event.streamPlayerUrl and event.NowTest == 'before'  %}
     <div class="ckeditor-html5-audio" style="text-align: center; border: #aaa solid; margin: 0 auto; width: 60%">
         {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
-    </div> 
+    </div>
 {% elseif event.streamPlayerUrl and event.NowTest == 'after'  %}{% endif %}
 {% endblock %}

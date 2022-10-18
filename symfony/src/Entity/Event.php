@@ -37,7 +37,7 @@ class Event implements \Stringable
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
 body {
-    background-image: url(/images/bg_stripe_black.png); 
+    background-image: url(/images/bg_stripe_black.png);
 }
 .container {
     background: #220101;
@@ -1063,5 +1063,14 @@ body {
         }
 
         return $this;
+    }
+    public function getBadgeText(): ?string
+    {
+        if ($this->type == 'announcement') {
+            return 'Announcement';
+        } else {
+            return 'event.in_future';
+        }
+        return null;
     }
 }

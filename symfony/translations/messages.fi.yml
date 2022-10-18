@@ -1,3 +1,4 @@
+Announcement: Tiedote
 Responsible: Vastaava
 # Tunkki
 Bank Account: Pankkitili
@@ -11,6 +12,7 @@ Renter consent: Vuokraaja on lukenut ja hyväksynyt ehdot
 Submit: Lähetä
 submit: lähetä
 Agree: Hyväksy
+Events: Tapahtumat
 Signed: Allekirjoitettu
 Address: Osoite
 Stage: lava
@@ -74,8 +76,7 @@ submit_and_agree: Lähettämällä tämän lomakkeen hyväksyt rekisteriselostee
 cancelled: PERUTTU
 announcements_url: tiedotukset
 frontpage: Etusivu
-join_us: Liity
-events: Tapahtumat 
+events: Tapahtumat
 contact: Yhteystiedot
 history: Historiaa
 archive: Arkisto
@@ -180,6 +181,7 @@ menu:
     logon_to: Kirjaudu
 event:
     not_public: ei julkinen
+    in_future: Tuleva tapahtuma
     player:
         will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
     form:
@@ -196,7 +198,7 @@ event:
 url:
     form:
         open_in_new_window: Avaa uudessa ikkunassa
-        title: Linkin teksti 
+        title: Linkin teksti
         url: Url-osoite
         icon: Iconin luokka (class)
 
@@ -236,6 +238,10 @@ artist:
     information: Perustiedot
     profiles: Artistiprofiilit
     list: Artistilistaus
+    tile:
+        button_event: Tapahtuma
+        heading: Yksi satunnainen artisti profiili meidän tapahtumasta
+        button_artists: Artistit
     random:
         preview: Yksi satunnainen artistiesittely
     form:
@@ -244,7 +250,7 @@ artist:
         bio: Bio suomeksi
         bio_en: Bio englanniksi
         genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
-        bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää linkit alla olevaan linkkilistaan, ei tähän. 
+        bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää linkit alla olevaan linkkilistaan, ei tähän.
         hardware_help: Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua. (Vinyyli, CDJ)
         promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
         genre: Genre(t)
@@ -301,4 +307,11 @@ ticket:
     go_to_event_page: Lippu tapahtuma sivulta
     presale:
         off: Ennakkomyynti ei ole käytössä
-
+join_us:
+    title: Liity jäseneksi!
+    button: Liity
+    1: Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme kuuluu muun muassa
+    2: Tapahtumien järjestäminen
+    3: Tapahtumatekniikan koulutus
+    4: Tekniikan vuokraus
+Random photos from our events: Satunnaisia kuvia meidän tapahtumista
