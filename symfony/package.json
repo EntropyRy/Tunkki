@@ -6,7 +6,7 @@
     "@fontsource/space-grotesk": "^4.5.9",
     "@fortawesome/fontawesome-free": "^6.1.0",
     "@hotwired/stimulus": "^3.0.0",
-    "@hotwired/turbo": "^7.2.2",
+    "@hotwired/turbo": "^7.0.1",
     "@popperjs/core": "^2.11.6",
     "@symfony/stimulus-bridge": "^3.2.1",
     "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
@@ -25,5 +25,7 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+
+  }
 }
