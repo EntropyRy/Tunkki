@@ -17,14 +17,14 @@
         </div>
         {% endif %}
     {% endfor %}
-    {% if info is not null %}
-        <div class="col p-2">
-        {{ block('artist_tile') }}
-        </div>
-    {% endif %}
     {% if epic is not null %}
         <div class="col p-2">
         {{ block('epic_tile') }}
+        </div>
+    {% endif %}
+    {% if info is not null %}
+        <div class="col p-2">
+        {{ block('artist_tile') }}
         </div>
     {% endif %}
     {% if not app.user %}
@@ -80,18 +80,21 @@
     <div class="rect-img-container">
         {% set frontpage = true %}
         {{block('artist_pic')}}
+        <div class="badge-container">
+            <span class="badge bg-secondary">{{'artist.tile.heading'|trans}}</span>
+        </div>
     </div>
     </a>
-    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4>
-    {#{block('artist_event_info')}#}
-        <div class="justify-content-between d-flex">
-            {% if app.request.locale =='fi'%}
-                {% set artist_url = '/artistit'%}
-            {% else %}
-                {% set artist_url = '/en/artists'%}
-            {% endif %}
-            <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{'artist.tile.button_event'|trans}}</a>
-            <a class="btn btn-outline-primary" href="{{artist_url}}">{{'artist.tile.button_artists'|trans}}</a>
-        </div>
+    {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
+    <div class="mb-2 justify-content-between d-flex">
+        {% if app.request.locale =='fi'%}
+            {% set artist_url = '/artistit'%}
+        {% else %}
+            {% set artist_url = '/en/artists'%}
+        {% endif %}
+        <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{'artist.tile.button_event'|trans}}</a>
+        <a class="btn btn-outline-primary" href="{{artist_url}}">{{'artist.tile.button_artists'|trans}}</a>
+    </div>
+    {{block('artist_event_info')}}
     </div>
 {% endblock %}

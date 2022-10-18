@@ -177,7 +177,7 @@ artist:
     list: Artsit list
     tile:
         button_event: The event
-        heading: One random artist profile from our events
+        heading: One random artist
         button_artists: Artists
     random:
         preview: One random artist preview

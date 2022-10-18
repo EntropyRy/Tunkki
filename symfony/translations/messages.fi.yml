@@ -240,7 +240,7 @@ artist:
     list: Artistilistaus
     tile:
         button_event: Tapahtuma
-        heading: Yksi satunnainen artisti profiili meidän tapahtumasta
+        heading: Yksi satunnainen artisti
         button_artists: Artistit
     random:
         preview: Yksi satunnainen artistiesittely

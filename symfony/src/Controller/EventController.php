@@ -78,7 +78,7 @@ class EventController extends Controller
         }
         $lang = $request->getLocale();
         $ticket = null;
-        $formview = null;
+        $form = null;
         $ticketCount = null;
         $page = $cms->retrieve()->getCurrentPage();
         if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
