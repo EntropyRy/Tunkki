@@ -41,7 +41,7 @@
          data-epics-url-value="/api/epics/random"
          data-epics-refresh-interval-value="8000">
         <div class="rect-img-container">
-        <img  data-epics-target="pic" src="{{ epic.url }}" class="rect-img" title="{{'epics.tile.title'|trans}}">
+        <img  data-epics-target="pic" src="{{ epic.url }}" loading="lazy" class="rect-img" title="{{'epics.tile.title'|trans}}">
         <div class="badge-container">
             <span data-epics-target="badge" class="badge bg-secondary">{{epic.taken|date}}</span>
         </div>
