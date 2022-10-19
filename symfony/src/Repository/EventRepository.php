@@ -42,7 +42,7 @@ class EventRepository extends ServiceEntityRepository
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
             ->setParameter('now', $now)
-            ->setParameter('date', $end->modify('-2 days'))
+            ->setParameter('date', $end->modify('-30 hours'))
             ->setParameter('type', 'Announcement')
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'ASC')
