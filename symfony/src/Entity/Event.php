@@ -201,6 +201,9 @@ body {
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
     private $emails;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $rsvpOnlyToActiveMembers = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1072,5 +1075,17 @@ body {
             return 'event.in_future';
         }
         return null;
+    }
+
+    public function isRsvpOnlyToActiveMembers(): ?bool
+    {
+        return $this->rsvpOnlyToActiveMembers;
+    }
+
+    public function setRsvpOnlyToActiveMembers(?bool $rsvpOnlyToActiveMembers): self
+    {
+        $this->rsvpOnlyToActiveMembers = $rsvpOnlyToActiveMembers;
+
+        return $this;
     }
 }
