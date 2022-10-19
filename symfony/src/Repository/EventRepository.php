@@ -38,11 +38,11 @@ class EventRepository extends ServiceEntityRepository
         $end = new \DateTime();
         $future =  $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
-            ->andWhere('e.until > :date')
+            ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
             ->setParameter('now', $now)
-            ->setParameter('date', $end->modify('-1 day'))
+            ->setParameter('date', $end->modify('-2 days'))
             ->setParameter('type', 'Announcement')
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'ASC')
