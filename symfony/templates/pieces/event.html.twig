@@ -482,9 +482,9 @@
     {% endif %}
     <span class="{% if frontpage|default(false) %}rect-img{%else%}polaroid{% endif %}">
     {% if artist.Picture %}
-    <img width="100%" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}">
+    <img width="100%" loading="lazy" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}">
     {% else %}
-    <img width="100%" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}">
+    <img width="100%" loading="lazy" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}">
     {% endif %}
     <div class="caption">{{ name }}</div>
     </span>
