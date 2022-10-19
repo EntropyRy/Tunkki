@@ -52,15 +52,7 @@ class EventRepository extends ServiceEntityRepository
         ;
         return $future;
     }
-    public function findOneEventByTypeWithSticky($type): mixed
-    {
-        $e = $this->findOneStickyEventByType($type);
-        if (is_null($e)) {
-            $e = $this->findOneEventByType($type);
-        }
-        return $e;
-    }
-    public function findOneEventByType($type): mixed
+    public function findOneEventByType($type): ?Event
     {
         return $this->createQueryBuilder('c')
            ->andWhere('c.type = :val')
@@ -71,21 +63,6 @@ class EventRepository extends ServiceEntityRepository
            ->setMaxResults(1)
            ->getQuery()
            ->getOneOrNullResult()
-        ;
-    }
-    public function findOneStickyEventByType($type): mixed
-    {
-        return $this->createQueryBuilder('r')
-            ->andWhere('r.type = :val')
-            ->andWhere('r.published = :pub')
-            ->andWhere('r.sticky = :sticky')
-            ->setParameter('val', $type)
-            ->setParameter('pub', true)
-            ->setParameter('sticky', 1)
-            ->orderBy('r.EventDate', 'DESC')
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
     }
     public function findEventBySlugAndYear($slug, $year): mixed

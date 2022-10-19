@@ -33,7 +33,7 @@ class FrontPage implements PageServiceInterface
         $events =[];
         $future = $r->getFutureEvents();
         $info = $a->findOnePublicEventArtistInfo();
-        $announcement = $r->findOneEventByTypeWithSticky('announcement');
+        $announcement = $r->findOneEventByType('announcement');
         //$event = $r->findOneEventByTypeWithSticky('event');
         //$clubroom = $r->findOneEventByTypeWithSticky('clubroom');
         /*if ($clubroom->getEventDate() > $event->getEventDate()){
