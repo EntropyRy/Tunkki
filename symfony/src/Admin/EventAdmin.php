@@ -142,7 +142,7 @@ final class EventAdmin extends AbstractAdmin
         $listMapper
             ->add('EventDate')
             ->add('until')
-            ->addIdentifier('Name')
+            ->addIdentifier('Name', null, ['route' => ['name' => 'edit']])
             ->add('type')
             ->add('publishDate')
             ->add('url')
@@ -428,6 +428,8 @@ final class EventAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->remove('show');
+        $collection->remove('delete');
         $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
         $collection->add('nakkiList', $this->getRouterIdParameter().'/nakkilist');
     }
