@@ -4,7 +4,7 @@
     <turbo-frame id="home">
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}
