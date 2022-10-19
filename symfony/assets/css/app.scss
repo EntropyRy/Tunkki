@@ -39,31 +39,37 @@ footer {
    .icheckbox_square-blue, .iradio_square-blue { background: #fff !important; border: 1px solid #000 !important; }
    .no-print, .no-print * { display: none; }
 }
-.rect-img-container {
-    position: relative;
-    margin-bottom: 0.5rem;
-    .badge-container {
-        z-index: 100;
-        position: absolute;
-        right: 2%;
-        bottom: 2%;
-    }
-}
-.rect-img-container::after{
-    content: "";
-    display: block;
-    padding-bottom: 100%;
-}
-.rect-img {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    overflow: hidden;
-}
 .tile {
     transition: all ease 0.5s;
     border-radius: 0.375rem;
+    .rect-img-container {
+        position: relative;
+        margin-bottom: 0.5rem;
+        .badge-container {
+            z-index: 100;
+            position: absolute;
+            right: 2%;
+            bottom: 2%;
+        }
+    }
+    .rect-img-container::after{
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+    }
+    .rect-img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        overflow: hidden;
+    }
+    a {
+        text-decoration:none;
+    }
+    a:hover {
+        text-decoration:underline;
+    }
 }
 .tile:hover {
     box-shadow: 0px 10px 20px 2px rgba(0, 0, 0, 0.25);
