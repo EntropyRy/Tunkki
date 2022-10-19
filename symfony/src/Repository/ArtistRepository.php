@@ -35,5 +35,4 @@ class ArtistRepository extends ServiceEntityRepository
         ;
     }
     */
-
 }

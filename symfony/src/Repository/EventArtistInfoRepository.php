@@ -50,7 +50,7 @@ class EventArtistInfoRepository extends ServiceEntityRepository
     public function findOnePublicEventArtistInfo(): ?EventArtistInfo
     {
         $infos = $this->createQueryBuilder('i')
-            ->leftJoin('i.Event','e')
+            ->leftJoin('i.Event', 'e')
             ->where('e.published = :bool')
             ->andWhere('i.artistClone IS NOT NULL')
             ->andWhere('i.StartTime IS NOT NULL')

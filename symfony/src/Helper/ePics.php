@@ -9,7 +9,8 @@ class ePics
 {
     public function __construct(
         private readonly HttpClientInterface $client
-    ) { }
+    ) {
+    }
     public function getRandomPic(): ?array
     {
         try {
@@ -41,11 +42,13 @@ class ePics
                 );
                 if ($response->getStatusCode() == 200) {
                     $array = json_decode($response->getContent(), true);
-                    if (!is_null($array['size_variants']['thumb2x'])){
+                    if (!is_null($array['size_variants']['thumb2x'])) {
                         $pic['url'] = 'https://epics.entropy.fi/'. $array['size_variants']['thumb2x']['url'];
                         $pic['taken'] = $array['taken_at'];
                         return $pic;
-                    } else { return null; }
+                    } else {
+                        return null;
+                    }
                 }
             }
         } catch (TransportExceptionInterface $e) {

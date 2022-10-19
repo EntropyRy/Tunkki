@@ -110,9 +110,9 @@
 {% block event_time_small %}
   {% if event.type != 'announcement' %}
     {% if event.multiday %}
-        {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.') }}
+        {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
     {% else %}
-        {{ event.eventdate|date('j.n, H:i') }}
+        {{ event.eventdate|format_datetime(pattern='E, d.M. @ HH:mm') }}
     {% endif %}
     {% if badge|default(false) %}
         {{ block('event_time_badge') }}
@@ -169,7 +169,13 @@
 
 {% block event_badge %}
     <div class="badge-container">
+        {% if event.badgeText == 'event.now'%}
+        <span class="shadow badge bg-success">{{ event.badgeText|trans }}</span>
+        {% elseif event.badgeText == 'event.after'%}
+        <span class="shadow badge bg-danger">{{ event.badgeText|trans }}</span>
+        {% else %}
         <span class="shadow badge bg-secondary">{{ event.badgeText|trans }}</span>
+        {% endif %}
     </div>
 {% endblock %}
 {% block event_img_title %}

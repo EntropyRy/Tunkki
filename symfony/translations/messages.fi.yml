@@ -182,6 +182,8 @@ menu:
 event:
     not_public: ei julkinen
     in_future: Tuleva tapahtuma
+    after: Mennyt tapahtuma
+    now: Tapahtuma meneillään
     player:
         will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
     form:

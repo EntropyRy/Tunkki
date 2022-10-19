@@ -118,6 +118,8 @@ menu:
 event:
     not_public: not public
     in_future: Upcoming event
+    after: Past event
+    now: Event is now
     player:
         will_appear_here_when_the_stream_is_on: Player will appear here on page load when the stream is on
     form:
