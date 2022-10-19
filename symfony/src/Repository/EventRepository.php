@@ -36,28 +36,13 @@ class EventRepository extends ServiceEntityRepository
     {
         $now = new \DateTime();
         $end = new \DateTime();
-        $futu =  $this->createQueryBuilder('e')
-            ->andWhere('e.publishDate <= :now')
-            ->andWhere('e.EventDate > :date')
-            ->andWhere('e.until IS NULL')
-            ->andWhere('e.type != :type')
-            ->andWhere('e.published = :pub')
-            ->setParameter('now', $now)
-            ->setParameter('date', $end->modify('-8 hours'))
-            ->setParameter('type', 'Announcement')
-            ->setParameter('pub', true)
-            ->orderBy('e.EventDate', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
         $future =  $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.until > :date')
             ->andWhere('e.type != :type')
             ->andWhere('e.published = :pub')
             ->setParameter('now', $now)
-            ->setParameter('date', $end->modify('-1 hours'))
+            ->setParameter('date', $end->modify('-1 day'))
             ->setParameter('type', 'Announcement')
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'ASC')
@@ -65,7 +50,7 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
-        return array_merge($futu, $future);
+        return $future;
     }
     public function findOneEventByTypeWithSticky($type): mixed
     {

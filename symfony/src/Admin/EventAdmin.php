@@ -267,7 +267,6 @@ final class EventAdmin extends AbstractAdmin
                 ->add('streamPlayerUrl', null, [
                     'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
                 ])
-                ->add('sticky', null, ['help' => 'Shown first on frontpage. There can only be one!'])
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
                 ->add('picture', ModelListType::class, [
