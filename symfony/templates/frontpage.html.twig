@@ -39,17 +39,18 @@
 {% block epic_tile %}
     <div class="tile col-12 p-2" {{ stimulus_controller('epics') }}
          data-epics-url-value="/api/epics/random"
-         data-epics-refresh-interval-value="9000">
+         data-epics-refresh-interval-value="8000">
         <div class="rect-img-container">
-        <img  data-epics-target="pic" src="{{ epic.url }}" class="rect-img" title="{{'Random photos from our events'|trans}}">
+        <img  data-epics-target="pic" src="{{ epic.url }}" class="rect-img" title="{{'epics.tile.img_title'|trans}}">
         <div class="badge-container">
             <span data-epics-target="badge" class="badge bg-secondary">{{epic.taken|date}}</span>
         </div>
         </div>
-        <h4>{{'Random photos from our events'|trans}}</h4>
+        <h4>{{'epics.tile.heading'|trans}}
+            <a href="{{ path('_page_alias_events_'~app.request.locale) }}">{{'epics.tile.heading_events'|trans}}</a>.
+        </h4>
         <div class="justify-content-between d-flex">
-            <a class="btn btn-outline-primary" href="{{ path('_page_alias_events_'~app.request.locale) }}">{{'Events'|trans}}</a>
-            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">ePics</a>
+            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{'epics.tile.more_button'|trans}}</a>
         </div>
     </div>
 {% endblock %}

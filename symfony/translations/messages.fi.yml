@@ -256,7 +256,12 @@ artist:
         genre: Genre(t)
         hardware: Laitteisto
         links: Linkit medianäytteisiin ja muihin palveluihin
-
+epics:
+    tile:
+        heading: Satunnaisia kuvia Entropyn
+        heading_events: tapahtumista
+        more_button: Lisää
+        title: Satunnaisia kuvia Entropyn tapahtumista
 member:
     can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
     active:

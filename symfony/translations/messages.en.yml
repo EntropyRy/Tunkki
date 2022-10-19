@@ -167,6 +167,12 @@ profile:
         connection_ok: Connection ok
         wifi: Needs clubroom wifi connection to work
 
+epics:
+    tile:
+        heading: Random photos from
+        heading_events: our events
+        more_button: More
+        title: Random photos from our events
 artist:
     not_confirmed_yet: Not confirmed (yet)
     explanation: In principle, the artist profile is event-specific. This means that your profile below will appear in the next event you are an artist. If you edit your profile before the event, it will be updated for that event. If you edit your profile after an event, the edited profile will appear in future events, and the previous version will remain visible in the previous event.
