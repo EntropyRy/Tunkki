@@ -4,8 +4,10 @@
     <div class="tile event_tile col-12 p-2">
         <a href="{{ block('event_path') }}">
             {{ block('rect_img') }}
-            <h5 class="my-2">{{ block('event_time') }}</h5>
-            <h4>{{ block('event_name') }}</h4>
+            <h5 class="my-2">{{ block('event_time') }}
+            </h5>
+            <h4>{{ block('event_name') }}
+            </h4>
         </a>
         <div class="justify-content-between">
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
@@ -95,6 +97,13 @@
     {% else %}
         {{ event.eventdate|date() }}
     {% endif %}
+                <span class="badge bg-info text-wrap float-end" style="font-size:0.7rem"
+                    {{ stimulus_controller('moment') }}
+                     data-moment-date-value="{{ event.eventDate|date('c') }}"
+                     data-moment-target="badge"
+                     data-moment-refresh-interval-value="1000"
+                     data-moment-locale-value="{{ app.request.locale }}"
+                     ></span>
   {% endif %}
 {% endblock %}
 
