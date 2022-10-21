@@ -5,6 +5,10 @@ twig:
 parameters:
     symfony:
         containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml
+    recording.host: '%env(RECORDING_HOST)%'
+    recording.port: '%env(RECORDING_PORT)%'
+    recording.user: '%env(RECORDING_USER)%'
+    recording.pass: '%env(RECORDING_PASS)%'
     mm_tunkki_hook: '%env(MM_TUNKKI_HOOK)%'
     mm_tunkki_img: '%env(MM_TUNKKI_IMG)%'
     mm_tunkki_botname: '%env(MM_TUNKKI_BOTNAME)%'

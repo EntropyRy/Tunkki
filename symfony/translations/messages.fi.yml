@@ -149,6 +149,9 @@ Message: Viesti
 Full list: Koko lista
 logged_in_as: Olet kirjautuneena käyttäjänä
 Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen kuvauksen
+stream:
+    command:
+        successful: Stream käsky OK
 block:
     stats:
         name: Statistiikkaa

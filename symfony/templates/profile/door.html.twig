@@ -11,9 +11,9 @@
         <p class="text-center">Code: {{barcode.0}}</p>
     </div>
     </div>
-    
+
     <hr>
-    <h1>{{'profile.door.opener'|trans|capitalize }}</h1> 
+    <h1>{{'profile.door.opener'|trans|capitalize }}</h1>
     <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
 {% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
     {{ form_start(form) }}
@@ -27,10 +27,14 @@
     </li>
     {% endfor %}
     </ul>
+    <hr>
+    <h1>Stream</h1>
+    <div class="d-flex justify-content-between">
+    <a class="btn btn-danger" href="{{path('app_recording_start')}}"><i class="fas fa-play"></i> Start Stream</a>
+    <a class="btn btn-danger" href="{{path('app_recording_stop')}}"><i class="fas fa-stop"></i> Stop Stream</a>
+    </div>
 {% else %}
 <h4>{{'profile.door.not_active_member'|trans }}</h4>
 {% endif %}
 </div>
 {% endblock %}
-
-
