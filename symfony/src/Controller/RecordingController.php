@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Helper\SSH;
+
 /**
  * @IsGranted("ROLE_USER")
  */
@@ -17,9 +18,9 @@ class RecordingController extends AbstractController
     public function start(Request $request, SSH $ssh): RedirectResponse
     {
         $member = $this->getUser()->getMember();
-        if ($member->getIsActiveMember()){
+        if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('start');
-            if($err){
+            if ($err) {
                 $this->addFlash('warning', 'Error: '.$err);
             } else {
                 $this->addFlash('success', 'stream.command.successful');
@@ -31,9 +32,9 @@ class RecordingController extends AbstractController
     public function stop(Request $request, SSH $ssh): RedirectResponse
     {
         $member = $this->getUser()->getMember();
-        if ($member->getIsActiveMember()){
+        if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('stop');
-            if($err){
+            if ($err) {
                 $this->addFlash('warning', 'Error: '.$err);
             } else {
                 $this->addFlash('success', 'stream.command.successful');
