@@ -19,7 +19,7 @@ class Artist implements \Stringable
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 190, unique: true)]
+    #[ORM\Column(type: 'string', length: 190)]
     private $name;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -37,15 +37,11 @@ class Artist implements \Stringable
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: 'Artist', cascade: ['persist', 'detach'])]
     private $eventArtistInfos;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
+    #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime')]
     private $createdAt;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
+    #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime')]
     private $updatedAt;
 

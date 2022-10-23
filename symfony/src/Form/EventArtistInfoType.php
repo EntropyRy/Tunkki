@@ -7,6 +7,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
+use App\Entity\Artist;
 
 class EventArtistInfoType extends AbstractType
 {
@@ -15,7 +16,9 @@ class EventArtistInfoType extends AbstractType
         $builder
             ->add('Artist', null, [
                 'choices' => $options['artists'],
-                'choice_value' => 'name',
+                'choice_label' => function (Artist $artist){
+                    return $artist->getGenre() ? $artist->getName().' ('.$artist->getGenre().')' : $artist->getName();
+                },
                 'required' => true,
                 'label' => 'event.form.sign_up.artist',
                 'help' => 'event.form.sign_up.new_artist_help_html',

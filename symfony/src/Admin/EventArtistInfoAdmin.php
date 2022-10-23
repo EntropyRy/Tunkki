@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Sonata\Form\Type\DateTimePickerType;
+use App\Entity\Artist;
 
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
@@ -68,7 +69,10 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                 ->add('Artist', null, [
                     'query_builder' => fn ($repo) => $repo->createQueryBuilder('a')
                         ->andWhere('a.copyForArchive = :copy')
-                        ->setParameter('copy', false)
+                        ->setParameter('copy', false),
+                    'choice_label' => function (Artist $artist){
+                        return $artist->getGenre() ? $artist->getName().' ('.$artist->getGenre().')' : $artist->getName();
+                    },
                 ]);
         } else {
             $formMapper
