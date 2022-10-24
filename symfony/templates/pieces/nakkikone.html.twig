@@ -1,11 +1,7 @@
 {% block your_nakkis %}
     {% if selected|length > 0 %}
     <h3>{{ 'Your Nakkis'|trans }}</h3>
-        {% if show_definition|default(false) %}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 text-center">
-        {% else %} 
-        <div class="row row-cols-2 row-cols-md-4 text-center">
-        {% endif %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center">
             {% for b in selected %}
                 {% set name = b.nakki.definition.name(app.request.locale) %}
                 {% set show = true %}
@@ -17,11 +13,7 @@
     {% endif %}
 {% endblock %}
 {% block reserve_nakkis %}
-        {% if show_definition|default(false) %}
-        <div class="row row-cols-1 row-cols-md-2 row-cols-xxl-3 text-center">
-        {% else %} 
-        <div class="row row-cols-2 row-cols-md-4 text-center">
-        {% endif %}
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 text-center">
         {% for name, nakki in nakkis %}
             {% set i = loop.index %}
             {% for b in nakki.bookings %}
