@@ -20,7 +20,7 @@ class EventYearParamConverter implements ParamConverterInterface
     /**
      * {@inheritdoc}
      */
-    protected function getEntityClassName()
+    protected function getEntityClassName(): string
     {
         return Event::class;
     }
@@ -29,7 +29,7 @@ class EventYearParamConverter implements ParamConverterInterface
      *
      * Check, if object supported by our converter
      */
-    public function supports(ParamConverter $configuration)
+    public function supports(ParamConverter $configuration): bool
     {
         // If there is no manager, this means that only Doctrine DBAL is configured
         // In this case we can do nothing and just return
@@ -60,7 +60,7 @@ class EventYearParamConverter implements ParamConverterInterface
      * @throws \InvalidArgumentException When route attributes are missing
      * @throws NotFoundHttpException     When object not found
      */
-    public function apply(Request $request, ParamConverter $configuration)
+    public function apply(Request $request, ParamConverter $configuration): bool
     {
         $slug = $request->attributes->get('slug');
         $year  = $request->attributes->get('year');
