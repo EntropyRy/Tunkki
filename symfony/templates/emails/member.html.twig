@@ -1,12 +1,6 @@
 {% extends 'emails/base.html.twig'%}
 {% block content %}
-    {% if user is defined %}
-    <div>
-        {{ user.rejectReason|nl2br }}
-    </div>
-    {% else %}
     <div>
         {{ body|raw }}
     </div>
-    {% endif %}
 {% endblock %}
