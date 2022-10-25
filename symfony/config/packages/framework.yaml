@@ -6,7 +6,7 @@ framework:
         name: tunkki
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
         cookie_lifetime: 1209600 
-        cookie_secure: false
+        cookie_secure: auto
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
     #esi: true
@@ -22,5 +22,7 @@ framework:
                 adapter: cache.adapter.apcu
 when@prod:
     framework:
+        trusted_proxies: '%env(TRUSTED_PROXIES)%'
+        trusted_headers: ['x-forwarded-for', 'x-forwarded-proto']
         session:
             cookie_secure: true
