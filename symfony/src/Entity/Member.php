@@ -20,7 +20,7 @@ class Member implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private int $id;
 
     #[ORM\Column(name: 'firstname', type: 'string', length: 190)]
     private string $firstname;
