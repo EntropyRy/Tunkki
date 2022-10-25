@@ -98,7 +98,7 @@ class EventController extends Controller
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $rsvp = $form->getData();
-                $repo = $this->em->getRepository(Member::class);
+                $repo = $em->getRepository(Member::class);
                 $exists = $repo->findByEmailOrName($rsvp->getEmail(), $rsvp->getFirstName(), $rsvp->getLastName());
                 if ($exists) {
                     $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
