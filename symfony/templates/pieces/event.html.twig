@@ -8,7 +8,7 @@
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
             <h4>{{ block('event_name') }}</h4>
         </a>
-        <div class="justify-content-between">
+        <div class="d-flex justify-content-between">
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
             <span class="pe-2">
                 <a class="btn btn-primary" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
