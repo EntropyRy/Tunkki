@@ -26,8 +26,8 @@
         >
     </a>
     <span class="d-lg-none">
-        <a {% if loc == 'en'%}href="/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>FI</a> |
-           <a {% if loc == 'fi'%}href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>ENG</a>
+        <a data-turbo="false" {% if loc == 'en'%}href="/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>FI</a> |
+           <a data-turbo="false" {% if loc == 'fi'%}href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>ENG</a>
            {% if not app.user %}
            | <a href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
            {% endif %}
