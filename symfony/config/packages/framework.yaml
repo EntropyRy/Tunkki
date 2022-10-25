@@ -26,3 +26,4 @@ when@prod:
         trusted_headers: ['x-forwarded-for', 'x-forwarded-proto']
         session:
             cookie_secure: true
+            cookie_httponly: false
