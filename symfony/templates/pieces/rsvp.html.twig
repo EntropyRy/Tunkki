@@ -15,7 +15,7 @@
                 href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')})  }}#RSVP"
                 >RSVP</a>
         {% else %}
-            {{ form_start(rsvpForm) }}
+            {{ form_start(rsvpForm, {'attr': {'data-turbo':'false'}}) }}
             {{ form_widget(rsvpForm) }}
             <input class="btn btn-primary" type="submit" value="RSVP">
             {{ form_end(rsvpForm) }}
