@@ -82,7 +82,7 @@ class EventController extends Controller
         $ticketCount = null;
         $page = $cms->retrieve()->getCurrentPage();
         if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
-            $format = $mediaPro->getFormatName($event->getPicture(), 'banner');
+            $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
             $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
         }
         $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
