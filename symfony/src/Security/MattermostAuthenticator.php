@@ -46,7 +46,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 $mmUser = $client->fetchUserFromToken($accessToken);
                 $email = $mmUser->getEmail();
 
-                // 1) have they logged in with Facebook before? Easy!
+                // 1) have they logged in with Mattermost before? Easy!
                 $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $mmUser->getId()]);
 
                 if ($existingUser) {
@@ -55,12 +55,14 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
 
                 // 2) do we have a matching user by email?
                 $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
-                $user = $member->getUser();
-                $user->setMattermostId($mmUser->getId());
-                $this->em->persist($user);
-                $this->em->flush();
-
-                return $user;
+                if ($member) {
+                    $user = $member->getUser();
+                    $user->setMattermostId($mmUser->getId());
+                    $this->em->persist($user);
+                    $this->em->flush();
+                    return $user;
+                }
+                $this->addFlash('warning', 'user not found');
             })
         );
     }
