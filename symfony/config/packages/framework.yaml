@@ -22,8 +22,8 @@ framework:
                 adapter: cache.adapter.apcu
 when@prod:
     framework:
+        trusted_hosts: '%env(TRUSTED_HOSTS)%'
         trusted_proxies: '%env(TRUSTED_PROXIES)%'
         trusted_headers: ['x-forwarded-for', 'x-forwarded-proto']
         session:
-            cookie_secure: true
             cookie_httponly: false
