@@ -6,6 +6,7 @@ use App\Repository\NakkiRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NakkiRepository::class)]
 class Nakki implements \Stringable
@@ -17,6 +18,7 @@ class Nakki implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private $definition;
 
     #[ORM\Column(type: 'datetime_immutable')]

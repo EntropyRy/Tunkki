@@ -14,7 +14,7 @@ final class EventArtistInfoAdminController extends CRUDController
         $info = $this->admin->getSubject();
         $artistClone = $info->getArtistClone();
         $artist = $info->getArtist();
-        if ($artistClone) {
+        if ($artistClone && $artist) {
             $artistClone->setName($artist->getName());
             $artistClone->setGenre($artist->getGenre());
             $artistClone->setType($artist->getType());
@@ -27,7 +27,7 @@ final class EventArtistInfoAdminController extends CRUDController
             $this->admin->update($info);
             $this->addFlash('sonata_flash_success', sprintf('%s info updated', $info->getArtist()->getName()));
         } else {
-            $this->addFlash('sonata_flash_warning', 'Nothing to do!');
+            $this->addFlash('warning', 'Nothing to do!');
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

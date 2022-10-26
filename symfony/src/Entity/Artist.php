@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ArtistRepository;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,6 +36,7 @@ class Artist implements \Stringable
     private $hardware;
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: 'Artist', cascade: ['persist', 'detach'])]
+    #[ORM\JoinColumn(nullable:true, onDelete:"CASCADE")]
     private $eventArtistInfos;
 
     #[Gedmo\Timestampable(on: 'create')]
@@ -161,7 +163,7 @@ class Artist implements \Stringable
         return $this;
     }
 
-    public function clearEventArtistInfos()
+    public function clearEventArtistInfos(): void
     {
         $this->eventArtistInfos->clear();
     }

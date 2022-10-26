@@ -1,15 +1,15 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-    <turbo-frame id="home">
+{% set name_attr = 'name_attribute'|trans %}
+{% set content_attr = 'content_attribute'|trans %}
+<turbo-frame id="home">
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
-    <turbo-frame id="stream">
+{#    <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
         </div>
-    </turbo-frame>
-    {% set name_attr = 'name_attribute'|trans %}
-    {% set content_attr = 'content_attribute'|trans %}
+    </turbo-frame> #}
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}
@@ -38,7 +38,7 @@
         </div>
     {% endif %}
     </div>
-    </turbo-frame>
+</turbo-frame>
 {% endblock %}
 
 {% block epic_tile %}

@@ -90,6 +90,12 @@ class EventArtistInfo implements \Stringable
 
         return $this;
     }
+    public function removeArtist(): self
+    {
+        $this->Artist = null;
+
+        return $this;
+    }
     public function __toString(): string
     {
         return (string) ($this->Artist ?: 'n/a');
@@ -152,6 +158,13 @@ class EventArtistInfo implements \Stringable
     }
     public function getArtistDataHasUpdate()
     {
-        return ($this->getArtistClone()->getUpdatedAt() >= $this->getArtist()->getUpdatedAt()) ? false : true;
+        if ($this->getArtist()) {
+            return ($this->getArtistClone()->getUpdatedAt() >= $this->getArtist()->getUpdatedAt()) ? false : true;
+        }
+        return false;
+    }
+    public function getArtistName(): string
+    {
+        return $this->getArtist() ? $this->getArtist()->getName() : $this->getArtistClone()->getName();
     }
 }

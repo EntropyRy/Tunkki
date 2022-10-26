@@ -368,8 +368,9 @@ class BookingAdmin extends AbstractAdmin
         $booking->setModifier($user);
     }
 
-    public function validate(ErrorElement $errorElement, $object): void
+    public function preValidate(object $object): void
     {
+        /*
         $errorElement
             ->with('bookingDate')
                 ->assertNotNull([])
@@ -392,6 +393,7 @@ class BookingAdmin extends AbstractAdmin
                 }
             }
         }
+         */
     }
     protected function configureRoutes(RouteCollection $collection): void
     {

@@ -38,12 +38,12 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('artistDataHasUpdate', null, [
                 'template' => 'admin/crud/list__update_artist.html.twig'
             ])
-            ->add('Artist')
-            ->add('Artist.hardware')
-            ->add('Artist.linkUrls', FieldDescriptionInterface::TYPE_HTML, [
+            ->add('ArtistName')
+            ->add('ArtistClone.hardware')
+            ->add('ArtistClone.linkUrls', FieldDescriptionInterface::TYPE_HTML, [
             ])
-            ->add('Artist.genre')
-            ->add('Artist.member')
+            ->add('ArtistClone.genre')
+            ->add('ArtistClone.member')
             ->add('WishForPlayTime')
             ->add('freeWord')
             ->add('stage')
@@ -64,19 +64,20 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
-        if (empty($subject->getArtist())) {
+        if (empty($subject->getArtist()) && empty($subject->getArtistClone())) {
             $formMapper
                 ->add('Artist', null, [
                     'query_builder' => fn ($repo) => $repo->createQueryBuilder('a')
                         ->andWhere('a.copyForArchive = :copy')
                         ->setParameter('copy', false),
-                    'choice_label' => function (Artist $artist){
+                    'choice_label' => function (Artist $artist) {
                         return $artist->getGenre() ? $artist->getName().' ('.$artist->getGenre().')' : $artist->getName();
                     },
                 ]);
         } else {
             $formMapper
                 ->add('Artist', null, ['disabled' => true])
+                ->add('ArtistClone', null, ['disabled' => true])
                 ->add('WishForPlayTime', TextType::class, ['disabled' => true])
                 ->add('SetLength')
                 ->add('stage')

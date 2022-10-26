@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Artist;
 use App\Form\ArtistType;
 use App\Helper\Mattermost;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -33,7 +34,7 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans, Mattermost $mm)
+    public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans, Mattermost $mm): RedirectResponse|Response
     {
         $member = $security->getUser()->getMember();
         $artist = new Artist();
@@ -65,13 +66,13 @@ class ArtistController extends AbstractController
             'form' => $form
         ]);
     }
-    public function edit(Request $request, Security $security, FormFactoryInterface $formF)
+    public function edit(Request $request, Security $security, FormFactoryInterface $formF): RedirectResponse|Response
     {
         $artist = $security->getUser()->getMember()->getArtistWithId($request->get('id'));
-        $em = $this->getDoctrine()->getManager();
         $form = $formF->create(ArtistType::class, $artist);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
             $artist = $form->getData();
             $em->persist($artist);
             $em->flush();
@@ -83,11 +84,15 @@ class ArtistController extends AbstractController
             'form' => $form
         ]);
     }
-    public function delete(Artist $artist): RedirectResponse
+    public function delete(EntityManagerInterface $em, Artist $artist): RedirectResponse
     {
-        $em = $this->getDoctrine()->getManager();
+        foreach ($artist->getEventArtistInfos() as $info) {
+            $info->removeArtist();
+        }
+        $em->persist($artist);
         $em->remove($artist);
         $em->flush();
+        $this->addFlash('warning', $trans->trans('DELETED'));
         return $this->redirectToRoute('entropy_artist_profile');
     }
 }

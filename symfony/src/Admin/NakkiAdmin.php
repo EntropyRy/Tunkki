@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\Form\Validator\ErrorElement;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
@@ -66,7 +67,9 @@ final class NakkiAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('definition', ModelListType::class);
+            ->add('definition', ModelListType::class, [
+                'required' => true
+            ]);
         if (!$this->isChild()) {
             $form
                 ->add('event');
@@ -164,5 +167,12 @@ final class NakkiAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
+    }
+    public function validate(ErrorElement $errorElement, $object): void
+    {
+        $errorElement
+            ->with('definition')
+                ->assertNotNull(['definition cannot be null'])
+            ->end();
     }
 }
