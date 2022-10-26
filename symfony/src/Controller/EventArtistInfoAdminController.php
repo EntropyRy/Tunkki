@@ -15,6 +15,7 @@ final class EventArtistInfoAdminController extends CRUDController
         $artistClone = $info->getArtistClone();
         $artist = $info->getArtist();
         if ($artistClone) {
+            $artistClone->setName($artist->getName());
             $artistClone->setGenre($artist->getGenre());
             $artistClone->setType($artist->getType());
             $artistClone->setHardware($artist->getHardware());
