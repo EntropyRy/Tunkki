@@ -2,9 +2,14 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
     <turbo-frame id="home">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+    <turbo-frame id="stream">
+        <div class="col p-2">
+            {{ block('stream_tile') }}
+        </div>
+    </turbo-frame>
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
     {% for event in events %}
         {% if app.user %}
             {% set visible = true %}
@@ -75,11 +80,11 @@
 {% block artist_tile %}
     {% set artist = info.artistClone %}
     {% set event = info.event %}
-    {% set name = info.artist.name %}
+    {% set name = (artist.name|split(' for')).0 %}
+    {% set frontpage = true %}
     <div class="tile col-12 p-2">
     <a href="{{ block('event_path') }}">
     <div class="rect-img-container">
-        {% set frontpage = true %}
         {{block('artist_pic')}}
         <div class="badge-container">
             <span class="badge bg-secondary">{{'artist.tile.heading'|trans}}</span>
@@ -98,4 +103,6 @@
     </div>
     {{block('artist_event_info')}}
     </div>
+{% endblock %}
+{% block stream_tile %}
 {% endblock %}

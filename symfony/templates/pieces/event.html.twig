@@ -346,8 +346,8 @@
     </h4>
     <ul>
     {% for info in infos %}
-        {% set name = info.artist.name %}
         {% set artist = info.artistClone %}
+        {% set name = (artist.name|split(' for')).0 %}
         {% if last is defined %}
             {% if info.timediff(last) > 4 and event.multiday %}
                 <hr>
@@ -388,12 +388,8 @@
                 {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}}{% endif %}
             </h3>
             {% endif %}
-            {% set name = info.artist.name %}
-            {% if info.artistClone is null %}
-                {% set artist = info.artist %}
-            {% else %}
-                {% set artist = info.artistClone %}
-            {% endif %}
+            {% set artist = info.artistClone %}
+            {% set name = (artist.name|split(' for')).0 %}
             {% if artist.type =='VJ' %}
                 {{ block('cycle') }}
                 {% set stage = info.stage %}
@@ -441,12 +437,8 @@
                 {{'Artists'|trans}} {% if info.stage %}@ {{info.stage}}{% endif %}
             </h3>
             {% endif %}
-            {% set name = info.artist.name %}
-            {% if info.artistClone is null %}
-                {% set artist = info.artist %}
-            {% else %}
-                {% set artist = info.artistClone %}
-            {% endif %}
+            {% set artist = info.artistClone %}
+            {% set name = (artist.name|split(' for')).0 %}
             {% if artist.type !='VJ' %}
                 {{ block('cycle') }}
                 {% set stage = info.stage %}
