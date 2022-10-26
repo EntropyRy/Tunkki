@@ -97,12 +97,9 @@ security:
             form_login:
                 login_path: app_login
                 check_path: app_login
-                username_parameter: email
-                password_parameter: password
             logout:
                 path: app_logout
-
-            entry_point: App\Security\LoginFormAuthenticator
+            entry_point: form_login
             custom_authenticators:
                 - App\Security\MattermostAuthenticator
 

@@ -16,6 +16,7 @@ use App\Repository\EmailRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Security;
@@ -57,11 +58,13 @@ class ProfileController extends AbstractController
 
                     $email_content = $emailRepo->findOneBy(['purpose' => 'member']);
                     $this->announceToMattermost($mm, $member);
-                    $this->sendEmailToMember($email_content, $member, $mailer);
+                    if ($email_content) {
+                        $this->sendEmailToMember($email_content, $member, $mailer);
+                    }
                     // TODO:
                     //$code = $this->addToInfoMailingList($member);
                     $this->addFlash('info', 'member.join.added');
-                    $this->redirect('app_login');
+                    $this->redirectToRoute('app_login');
                 } else {
                     $this->addFlash('warning', 'member.join.update');
                 }
@@ -82,7 +85,7 @@ class ProfileController extends AbstractController
             ->subject($email_content->getSubject())
             ->htmlTemplate('emails/member.html.twig')
             ->context([
-                'email_data' => $email_content,
+                'body' => $email_content,
             ])
         ;
         $mailer->send($email);
@@ -115,7 +118,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm, ZMQHelper $zmq)
+    public function door(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm, ZMQHelper $zmq): RedirectResponse|Response
     {
         $member = $security->getUser()->getMember();
         $DoorLog = new DoorLog();
@@ -175,7 +178,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordHasherInterface $hasher)
+    public function edit(Request $request, Security $security, FormFactoryInterface $formF, UserPasswordHasherInterface $hasher): RedirectResponse|Response
     {
         $member = $security->getUser()->getMember();
         $form = $formF->create(MemberType::class, $member);
@@ -200,7 +203,7 @@ class ProfileController extends AbstractController
     /**
      * @IsGranted("ROLE_USER")
      */
-    public function apply(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm)
+    public function apply(Request $request, Security $security, FormFactoryInterface $formF, Mattermost $mm): RedirectResponse|Response
     {
         $member = $security->getUser()->getMember();
         if ($member->getIsActiveMember()) {

@@ -84,11 +84,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     public function getUsername(): string
     {
         if ($this->member) {
-            if ($this->member->getUsername()) {
-                return $this->member->getUsername();
-            }
             if ($this->member->getEmail()) {
-                return $this->member->getEmail();
+                return (string) $this->member->getEmail();
             }
         }
         return 'N/A';
@@ -101,11 +98,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     public function getUserIdentifier(): string
     {
         if ($this->member) {
-            if ($this->member->getUsername()) {
-                return $this->member->getUsername();
-            }
             if ($this->member->getEmail()) {
-                return $this->member->getEmail();
+                return (string) $this->member->getEmail();
             }
         }
         return 'N/A';
@@ -154,9 +148,9 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @see UserInterface
      */
-    public function getSalt()
+    public function getSalt(): ?string
     {
-        // not needed when using the "bcrypt" algorithm in security.yaml
+        return null;
     }
 
     /**

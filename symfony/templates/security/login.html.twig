@@ -2,28 +2,26 @@
 
 {% block content %}
 <div class="col-xl-6 col-md-10 mx-auto">
-<form method="post">
+<h1 class="h3 mb-3 font-weight-normal">{{'Choose login method'|trans}}</h1>
+<div class="col-12">
+    <a class="btn btn-lg btn-primary w-100" href="{{ path('_entropy_mattermost_auth') }}">
+        <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}
+    </a>
+</div>
+    <div class="linetext">
+        <span>{{'OR'|trans}}</span>
+    </div>
+<form action="{{ path('app_login') }}" method="post">
     {% if error %}
         <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
     {% endif %}
 
-    <h1 class="h3 mb-3 font-weight-normal">{{'Choose login method'|trans}}</h1>
-    <div class="col-12">
-        <a class="btn btn-lg btn-primary w-100" href="{{ path('_entropy_mattermost_auth') }}">
-            <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}
-        </a>
-    </div>
-    <div class="linetext">
-        <span>{{'OR'|trans}}</span>
-    </div>
     <label for="inputEmail">{{ 'email'|trans }}</label>
-    <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control" required autofocus>
+    <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" required autofocus>
     <label for="inputPassword">{{ 'password'|trans }}</label>
-    <input type="password" name="password" id="inputPassword" class="form-control" required>
+    <input type="password" name="_password" id="inputPassword" class="form-control" required>
 
-    <input type="hidden" name="_csrf_token"
-           value="{{ csrf_token('authenticate') }}"
-    >
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
