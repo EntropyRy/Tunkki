@@ -77,16 +77,6 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
     }
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-        $user = $token->getUser();
-        $user->setLastLogin(new \DateTime());
-        if (!is_null($user->getMember()->getLocale())) {
-            $request->setLocale($user->getMember()->getLocale());
-        } else {
-            $user->getMember()->setLocale('fi');
-            $request->setLocale('fi');
-        }
-        $this->em->persist($user);
-        $this->em->flush();
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }

@@ -84,8 +84,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     public function getUsername(): string
     {
         if ($this->member) {
-            if ($this->member->getEmail()) {
-                return (string) $this->member->getEmail();
+            if ($this->member->getUsername()) {
+                return (string) $this->member->getUsername();
             }
         }
         return 'N/A';
