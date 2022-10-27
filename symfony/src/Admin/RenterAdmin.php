@@ -42,9 +42,9 @@ class RenterAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('name')
+            ->add('name', null, ['required' => true])
             ->add('phone')
-            ->add('email')
+            ->add('email', null, ['required' => true])
             ->add('organization')
             ->add('streetadress')
             ->add('zipcode')
