@@ -32,6 +32,7 @@ class Nakki implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotBlank]
     private $event;
 
     #[ORM\Column(type: 'dateinterval')]
@@ -52,7 +53,7 @@ class Nakki implements \Stringable
 
     public function __toString(): string
     {
-        return (string) $this->definition->getNameEn();
+        return (string) $this->definition ? $this->definition->getNameEn() : 'N/A';
     }
     public function getId(): ?int
     {

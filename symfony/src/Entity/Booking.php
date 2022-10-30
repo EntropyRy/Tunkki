@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Booking
@@ -74,6 +75,7 @@ class Booking implements \Stringable
     private $rentingPrivileges;
 
     #[ORM\ManyToOne(targetEntity: 'Renter', inversedBy: 'bookings')]
+    #[Assert\NotBlank]
     private $renter;
 
     #[ORM\OneToMany(targetEntity: 'BillableEvent', mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
@@ -120,6 +122,7 @@ class Booking implements \Stringable
      * @var \DateTime
      */
     #[ORM\Column(name: 'booking_date', type: 'date')]
+    #[Assert\NotBlank]
     private $bookingDate;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'bookings')]
