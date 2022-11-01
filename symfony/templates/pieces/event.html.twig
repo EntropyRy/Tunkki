@@ -2,7 +2,7 @@
 {% use 'pieces/ticket.html.twig' %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
-        <a href="{{ block('event_path') }}">
+        <a {% if event.externalUrl %}data-turbo="false"{%endif%} href="{{ block('event_path') }}">
             {{ block('rect_img') }}
             {% set badge = true %}
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
