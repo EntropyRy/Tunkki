@@ -1,5 +1,5 @@
 {% block RSVP %}
-{% if event.rsvpSystemEnabled && event.nowTest != 'after' %}
+{% if event.rsvpSystemEnabled and event.nowTest != 'after' %}
 <div class="pt-2 pb-2" id="RSVP">
     {% if not app.user %}
         <p>{{'rsvp.info'|trans|raw}}</p>
