@@ -19,9 +19,6 @@ class Renter implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private readonly int $id;
 
-    /**
-     * @var string
-     */
     #[ORM\OneToMany(targetEntity:Booking::class, mappedBy: 'renter')]
     private $bookings;
 
@@ -32,7 +29,7 @@ class Renter implements \Stringable
     private ?string $streetadress;
 
     #[ORM\Column(name: 'organization', type: 'string', length: 190, nullable: true)]
-    private ?string $organization;
+    private ?string $organization = null;
 
     #[ORM\Column(name: 'zipcode', type: 'string', length: 190, nullable: true)]
     private ?string $zipcode;
@@ -224,9 +221,7 @@ class Renter implements \Stringable
     }
     public function __toString(): string
     {
-        $name = $this->name ?: 'N/A';
-        $org = $this->organization;
-        return ($org ? $this->name.' / '.$org : $name);
+        return ($this->organization ? $this->name.' / '.$this->organization : $this->name);
     }
     /**
      * Constructor
