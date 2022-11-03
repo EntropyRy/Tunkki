@@ -15,6 +15,8 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -370,6 +372,13 @@ class BookingAdmin extends AbstractAdmin
 
     public function preValidate(object $object): void
     {
+        if ($object->getAccessories() != null) {
+            foreach ($object->getAccessories() as $line) {
+                if ($line->getCount() == null or $line->getName() == null) {
+                    $this->rs->getSession()->getFlashBag()->add('warning', 'Dont leave empty lines in accessories');
+                }
+            }
+        }
         /*
         $errorElement
             ->with('bookingDate')
@@ -386,13 +395,6 @@ class BookingAdmin extends AbstractAdmin
         if (($object->getItemsReturned() == true) and ($object->getReceivedBy() == null)) {
             $errorElement->with('receivedBy')->addViolation('Who checked the rentals back to storage?')->end();
         }
-        if ($object->getAccessories() != null) {
-            foreach ($object->getAccessories() as $line) {
-                if ($line->getCount() == null and $line->getName() == null) {
-                    $errorElement->with('accessories')->addViolation('Dont leave empty lines in accessories')->end();
-                }
-            }
-        }
          */
     }
     protected function configureRoutes(RouteCollection $collection): void
@@ -400,7 +402,12 @@ class BookingAdmin extends AbstractAdmin
         $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
         $collection->remove('delete');
     }
-    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts, protected EntityManagerInterface $em, protected CategoryManagerInterface $cm)
-    {
+    public function __construct(
+        protected \App\Helper\Mattermost $mm,
+        protected TokenStorageInterface $ts,
+        protected EntityManagerInterface $em,
+        protected CategoryManagerInterface $cm,
+        protected RequestStack $rs
+    ) {
     }
 }

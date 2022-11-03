@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Accessory
@@ -20,7 +21,8 @@ class Accessory implements \Stringable
     private $name;
 
     #[ORM\Column(name: 'count', type: 'string', length: 50)]
-    private string $count;
+    #[Assert\NotBlank]
+    private ?string $count = null;
 
 
     /**
