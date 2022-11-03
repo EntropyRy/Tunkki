@@ -18,7 +18,7 @@ class File implements \Stringable
     private readonly int $id;
 
     #[ORM\Column(name: 'tiedostoinfo', type: 'string', length: 190, nullable: true)]
-    private string $fileinfo;
+    private ?string $fileinfo = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'files')]
     private $product;
