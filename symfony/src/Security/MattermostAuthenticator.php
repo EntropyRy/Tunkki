@@ -4,6 +4,7 @@ namespace App\Security;
 
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -31,7 +32,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         private readonly EntityManagerInterface $em,
         private readonly RouterInterface $router,
         private readonly UrlGeneratorInterface $urlG,
-        private readonly SessionInterface $session
+        private readonly RequestStack $rs
     ) {
     }
     public function supports(Request $request): ?bool
@@ -65,7 +66,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     $this->em->flush();
                     return $user;
                 }
-                $this->session->getFlashBag()->addFlash('warning', 'user not found');
+                $this->rs->getSession()->getFlashBag()->addFlash('warning', 'user not found');
             })
         );
     }
