@@ -38,6 +38,7 @@ final class MemberAdmin extends AbstractAdmin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
+        $now = new \DateTime();
         $datagridMapper
             ->add('artist')
             ->add('username')
@@ -47,11 +48,31 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->add('ApplicationDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
-            ->add('ApplicationHandledDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
+            ->add('ApplicationHandledDate', DateRangeFilter::class, [
+                'field_type' => DateRangeType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'years' => range(1993, $now->format('Y'))
+                    ],
+                    'field_options_end' => [
+                        'years' => range(1993, $now->format('Y'))
+                    ],
+                ]
+            ])
             ->add('StudentUnionMember')
             ->add('isActiveMember')
             ->add('isFullMember')
-            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, ['field_type' => DateRangeType::class])
+            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, [
+                'field_type' => DateRangeType::class,
+                'field_options' => [
+                    'field_options_start' => [
+                        'years' => range(1993, $now->format('Y'))
+                    ],
+                    'field_options_end' => [
+                        'years' => range(1993, $now->format('Y'))
+                    ],
+                ]
+            ])
             //->add('user.CreatedAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
             ->add('createdAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
         ;
