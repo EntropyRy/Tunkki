@@ -420,5 +420,5 @@ services:
     admin.ticket:
         class: App\Admin\TicketAdmin
         tags:
-          - { name: sonata.admin, model_class: App\Entity\Ticket, controller: App\Entity\TicketAdminController, manager_type: orm, group: admin, label: Ticket }
+          - { name: sonata.admin, model_class: App\Entity\Ticket, controller: App\Controller\TicketAdminController, manager_type: orm, group: admin, label: Ticket }
         public: true
