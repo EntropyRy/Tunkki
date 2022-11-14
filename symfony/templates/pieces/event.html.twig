@@ -231,7 +231,7 @@
         {% endif %}
     {% else %}
         <div class="rect-img-container">
-            <img class="rect-img" src="/images/header-logo.svg" title="{{ block('event_img_title') }}">
+            <img class="rect-img fill" src="/images/header-logo.svg" title="{{ block('event_img_title') }}">
             {% if rect|default(false)%}
             {{ block('event_badge') }}
             {%endif%}
