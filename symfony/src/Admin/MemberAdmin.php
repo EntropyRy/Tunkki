@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -18,7 +19,6 @@ use App\Helper\Mattermost;
 
 final class MemberAdmin extends AbstractAdmin
 {
-    protected $mm; // Mattermost helper
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'member';
@@ -116,7 +116,7 @@ final class MemberAdmin extends AbstractAdmin
         }
         $formMapper
             ->with('Base', ['class' => 'col-md-4'])
-            ->add('artist')
+            ->add('artist', null, ['disabled' => true])
             ->add('username')
             ->add('firstname')
             ->add('lastname')
@@ -187,12 +187,21 @@ final class MemberAdmin extends AbstractAdmin
     }
     public function preRemove($member): void
     {
+        foreach ($member->getArtist() as $artist) {
+            foreach ($artist->getEventArtistInfos() as $info) {
+                $info->removeArtist();
+            }
+            $this->em->persist($artist);
+            $this->em->remove($artist);
+        }
+        $this->em->flush();
+    }
+    public function postRemove($member): void
+    {
         $text = '**Member deleted: '.$member.'**';
         $this->mm->SendToMattermost($text, 'yhdistys');
     }
-    public function setMattermostHelper(Mattermost $mm): self
+    public function __construct(protected Mattermost $mm, protected EntityManagerInterface $em)
     {
-        $this->mm = $mm;
-        return $this;
     }
 }

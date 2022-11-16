@@ -87,9 +87,6 @@ services:
         tags:
           - { name: sonata.admin, model_class: App\Entity\Member, controller: App\Controller\MemberAdminController, manager_type: orm, group: admin, label: Members}
         public: true
-        calls:
-            - [ setMattermostHelper, ["@entropy_tunkki.helper.mattermost"] ]
-
     entropy_tunkki.page.itempage:
         class: App\PageService\ItemPage
         arguments:
