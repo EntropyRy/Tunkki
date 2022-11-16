@@ -18,7 +18,7 @@ class NakkiBooking implements \Stringable
     private $nakki;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
-    #[ORM\JoinColumn(nullable: true)]
+    #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
     private $member;
 
     #[ORM\Column(type: 'datetime_immutable')]
