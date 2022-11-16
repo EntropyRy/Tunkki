@@ -912,7 +912,7 @@ body {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
             if (!is_null($info->getStartTime())) {
-                if ($info->getArtist()->getType() != 'VJ') {
+                if ($info->getArtistClone()->getType() != 'VJ') {
                     $bystage[$info->getStage()][]=$info;
                 }
             }
