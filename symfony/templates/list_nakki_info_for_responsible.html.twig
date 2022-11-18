@@ -39,7 +39,9 @@
         <th scope="col">{{'Phone'|trans}}</th>
         <th scope="col">Email</th>
       {% endif %}
-      {# <th scope="col">Time</th> #}
+      {% if event.requireNakkiBookingsToBeDifferentTimes %}
+        <th scope="col">Time</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -49,11 +51,13 @@
 		    <tr>
 			    <th>{{b.member.username}}</th>
 			    <td>{{b.member.name}}</td>
-                  {% if not gdpr|default(false) %}
-			    <td>{{b.member.phone}}</td>
-			    <td>{{b.member.email}}</td>
-                  {% endif %}
-                {# <td>{{b.startAt|date}}</th> #}
+          {% if not gdpr|default(false) %}
+			      <td>{{b.member.phone}}</td>
+			      <td>{{b.member.email}}</td>
+          {% endif %}
+          {% if event.requireNakkiBookingsToBeDifferentTimes %}
+                <td>{{b.startAt|date}}</th>
+          {% endif %}
 		    </tr>
       {% endif %}
     {% endfor %}
