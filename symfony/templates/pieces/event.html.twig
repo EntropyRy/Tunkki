@@ -470,7 +470,7 @@
     {% endif %}
 </h3>
     <small>{{ artist.genre }}</small>
-    <div>{{ attribute(artist, bio_attribute) }}</div>
+    <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
     {{ block('artist_links') }}
 {% endblock %}
 
