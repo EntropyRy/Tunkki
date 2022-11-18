@@ -36,26 +36,28 @@
       <th scope="col">{{'Username'|trans}}</th>
       <th scope="col">{{'Name'|trans}}</th>
       {% if not gdpr|default(false) %}
-      <th scope="col">{{'Phone'|trans}}</th>
-      <th scope="col">Email</th>
+        <th scope="col">{{'Phone'|trans}}</th>
+        <th scope="col">Email</th>
       {% endif %}
       {# <th scope="col">Time</th> #}
     </tr>
   </thead>
   <tbody>
-        {% for b in nakki.b %}
-        {% if b.member is not null %}
-		<tr>
-			<th>{{b.member.username}}</th>
-			<td>{{b.member.name}}</td>
-              {% if not gdpr|default(false) %}
-			<td>{{b.member.phone}}</td>
-			<td>{{b.member.email}}</td>
-              {% endif %}
-            {# <td>{{b.startAt|date}}</th> #}
-		</tr>
-        {% endif %}
-        {% endfor %}
+    {% for bookings in nakki.b %}
+    {% for b in bookings %}
+      {% if b.member is not null %}
+		    <tr>
+			    <th>{{b.member.username}}</th>
+			    <td>{{b.member.name}}</td>
+                  {% if not gdpr|default(false) %}
+			    <td>{{b.member.phone}}</td>
+			    <td>{{b.member.email}}</td>
+                  {% endif %}
+                {# <td>{{b.startAt|date}}</th> #}
+		    </tr>
+      {% endif %}
+    {% endfor %}
+    {% endfor %}
   </tbody>
 </table>
 {% endfor %}
