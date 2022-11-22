@@ -15,7 +15,7 @@ class File implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private int $id;
 
     #[ORM\Column(name: 'tiedostoinfo', type: 'string', length: 190, nullable: true)]
     private ?string $fileinfo = null;
@@ -32,7 +32,7 @@ class File implements \Stringable
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -44,7 +44,7 @@ class File implements \Stringable
      *
      * @return Files
      */
-    public function setFileinfo($fileinfo)
+    public function setFileinfo($fileinfo): File
     {
         $this->fileinfo = $fileinfo;
 
@@ -56,7 +56,7 @@ class File implements \Stringable
      *
      * @return string
      */
-    public function getFileinfo()
+    public function getFileinfo(): ?string
     {
         return $this->fileinfo;
     }
@@ -67,7 +67,7 @@ class File implements \Stringable
      *
      * @return Files
      */
-    public function setProduct(\App\Entity\Item $product = null)
+    public function setProduct(\App\Entity\Item $product = null): File
     {
         $this->product = $product;
 
@@ -79,7 +79,7 @@ class File implements \Stringable
      *
      * @return \App\Entity\Item
      */
-    public function getProduct()
+    public function getProduct(): ?Item
     {
         return $this->product;
     }
@@ -90,7 +90,7 @@ class File implements \Stringable
      *
      * @return Files
      */
-    public function setFile(Media $file = null)
+    public function setFile(Media $file = null): File
     {
         $this->file = $file;
 
@@ -112,7 +112,7 @@ class File implements \Stringable
      *
      * @return string
      */
-    public function getDownloadLink()
+    public function getDownloadLink(): string
     {
         if (is_object($this->getFile())) {
             if (is_string($this->getFileinfo())) {
