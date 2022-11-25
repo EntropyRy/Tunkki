@@ -100,8 +100,8 @@ class ProfileController extends AbstractController
      */
     public function dashboard(Request $request, Security $security): Response
     {
-        $barcode = $this->getBarcode($member);
         $member = $security->getUser()->getMember();
+        $barcode = $this->getBarcode($member);
         return $this->render('profile/dashboard.html.twig', [
             'member' => $member,
             'barcode' => $barcode
