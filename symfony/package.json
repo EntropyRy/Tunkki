@@ -9,7 +9,7 @@
     "@hotwired/turbo": "^7.0.1",
     "@popperjs/core": "^2.11.6",
     "@symfony/stimulus-bridge": "^3.2.1",
-    "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/Resources/assets",
+    "@symfony/ux-turbo": "file:vendor/symfony/ux-turbo/assets",
     "@symfony/webpack-encore": "^4.1.2",
     "bootstrap": "^5.2.3",
     "core-js": "^3.23.0",
@@ -25,5 +25,7 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+
+  }
 }
