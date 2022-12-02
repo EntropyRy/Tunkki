@@ -59,7 +59,6 @@ class ArtistType extends AbstractType
                     'label' => 'artist.form.promo_picture',
                     'provider' => 'sonata.media.provider.image',
                     'context' => 'artist',
-                    'new_on_update' => true,
                     'translation_domain' => 'messages',
                 ])
 /*            ->add('eventArtistInfos', CollectionType::class, [

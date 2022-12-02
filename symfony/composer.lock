@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3a0fdbd9fe91117ed93e8765ac645a96",
+    "content-hash": "0869c24ed3ebaf93c2de357a4dbeabd5",
     "packages": [
         {
             "name": "beberlei/doctrineextensions",
@@ -4518,6 +4518,7 @@
                 "issues": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/issues",
                 "source": "https://github.com/sensiolabs/SensioFrameworkExtraBundle/tree/v5.6.1"
             },
+            "abandoned": "Symfony",
             "time": "2020-08-25T19:10:18+00:00"
         },
         {
@@ -5118,16 +5119,16 @@
         },
         {
             "name": "sonata-project/doctrine-orm-admin-bundle",
-            "version": "4.8.0",
+            "version": "4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git",
-                "reference": "aa238002c2457789f12b10d806be27736f2ff37c"
+                "reference": "4b589d769d9b01b38127370b50ccb82145be4561"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/aa238002c2457789f12b10d806be27736f2ff37c",
-                "reference": "aa238002c2457789f12b10d806be27736f2ff37c",
+                "url": "https://api.github.com/repos/sonata-project/SonataDoctrineORMAdminBundle/zipball/4b589d769d9b01b38127370b50ccb82145be4561",
+                "reference": "4b589d769d9b01b38127370b50ccb82145be4561",
                 "shasum": ""
             },
             "require": {
@@ -5160,6 +5161,7 @@
                 "sonata-project/admin-bundle-persistency-layer": "1.0.0"
             },
             "require-dev": {
+                "dama/doctrine-test-bundle": "^6.7",
                 "doctrine/doctrine-fixtures-bundle": "^3.4",
                 "friendsofphp/php-cs-fixer": "^3.4",
                 "phpstan/extension-installer": "^1.0",
@@ -5168,8 +5170,8 @@
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpstan/phpstan-symfony": "^1.0",
                 "phpunit/phpunit": "^9.5",
-                "psalm/plugin-phpunit": "^0.17",
-                "psalm/plugin-symfony": "^3.0",
+                "psalm/plugin-phpunit": "^0.18",
+                "psalm/plugin-symfony": "^4.0",
                 "rector/rector": "^0.14",
                 "sonata-project/block-bundle": "^4.2",
                 "sonata-project/entity-audit-bundle": "^1.1",
@@ -5224,7 +5226,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/tree/4.8.0"
+                "source": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/tree/4.9.0"
             },
             "funding": [
                 {
@@ -5244,7 +5246,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-09-28T20:15:56+00:00"
+            "time": "2022-12-01T16:57:53+00:00"
         },
         {
             "name": "sonata-project/entity-audit-bundle",
@@ -5854,16 +5856,16 @@
         },
         {
             "name": "sonata-project/page-bundle",
-            "version": "4.0.0-alpha-1",
+            "version": "4.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataPageBundle.git",
-                "reference": "134a92183f2f9e8869f41ddad692f77e1c8fa6bd"
+                "reference": "54f7b16d4d16596b8f7b34246a86d3a00fda8308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/134a92183f2f9e8869f41ddad692f77e1c8fa6bd",
-                "reference": "134a92183f2f9e8869f41ddad692f77e1c8fa6bd",
+                "url": "https://api.github.com/repos/sonata-project/SonataPageBundle/zipball/54f7b16d4d16596b8f7b34246a86d3a00fda8308",
+                "reference": "54f7b16d4d16596b8f7b34246a86d3a00fda8308",
                 "shasum": ""
             },
             "require": {
@@ -5955,7 +5957,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataPageBundle/issues",
-                "source": "https://github.com/sonata-project/SonataPageBundle/tree/4.0.0-alpha-1"
+                "source": "https://github.com/sonata-project/SonataPageBundle/tree/4.0.0"
             },
             "funding": [
                 {
@@ -5975,7 +5977,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-10-22T13:20:02+00:00"
+            "time": "2022-12-01T15:01:17+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",
@@ -12724,9 +12726,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "sonata-project/page-bundle": 15
-    },
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
