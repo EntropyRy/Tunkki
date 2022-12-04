@@ -92,14 +92,20 @@ class EventTicketController extends EventSignUpController
             $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
+            return $this->redirectToRoute('entropy_event_ticket', [
+                'slug' => $event->getUrl(),
+                'year' => $event->getEventDate()->format('Y'),
+                'reference' => $ticket->getReferenceNumber()
+            ]);
         };
-        return $this->render('ticket.html.twig', [
+        return $this->renderForm('ticket.html.twig', [
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
             'hasNakki' => count((array) $selected)>0 ? true : false,
+            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation() ? true : false,
             'ticket' => $ticket,
-            'form' => $form->createView(),
+            'form' => $form,
         ]);
     }
     private function ticketChecks($for, $event, $ticketRepo): ?RedirectResponse

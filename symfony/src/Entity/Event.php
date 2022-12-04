@@ -204,6 +204,9 @@ body {
     #[ORM\Column(nullable: true)]
     private ?bool $rsvpOnlyToActiveMembers = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $nakkiRequiredForTicketReservation = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1090,6 +1093,18 @@ body {
     public function setRsvpOnlyToActiveMembers(?bool $rsvpOnlyToActiveMembers): self
     {
         $this->rsvpOnlyToActiveMembers = $rsvpOnlyToActiveMembers;
+
+        return $this;
+    }
+
+    public function isNakkiRequiredForTicketReservation(): ?bool
+    {
+        return $this->nakkiRequiredForTicketReservation;
+    }
+
+    public function setNakkiRequiredForTicketReservation(?bool $nakkiRequiredForTicketReservation): self
+    {
+        $this->nakkiRequiredForTicketReservation = $nakkiRequiredForTicketReservation;
 
         return $this;
     }

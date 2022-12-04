@@ -375,6 +375,7 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Tickets')
                 ->with('Config', ['class' => 'col-md-6'])
                     ->add('ticketsEnabled', null, ['help' => 'allow tikets to the event'])
+                    ->add('nakkiRequiredForTicketReservation', null, ['help' => 'allow tikets to be reserved only after nakki reservation'])
                     ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated this amount will be created'])
                     ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
                 ->end()

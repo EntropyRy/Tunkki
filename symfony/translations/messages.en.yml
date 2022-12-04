@@ -240,6 +240,7 @@ ticket:
     not_available: There is no ticket available
     reserved: The ticket has been reserved for you! Payment details below.
     reserve_yours: Reserve your ticket here!
+    available: Available
     details: See ticket details
     go_to_event_page: Ticket in Event Page
     presale:
