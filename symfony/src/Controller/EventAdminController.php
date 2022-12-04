@@ -6,7 +6,6 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
-use App\Entity\Ticket;
 
 final class EventAdminController extends CRUDController
 {

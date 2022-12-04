@@ -64,9 +64,7 @@ final class TicketAdmin extends AbstractAdmin
                     'makePaid' => [
                         'template' => 'admin/crud/list__action_make_ticket_paid.html.twig'
                     ],
-                    'show' => [],
                     'edit' => [],
-                    'delete' => [],
                 ],
             ]);
     }
@@ -80,8 +78,8 @@ final class TicketAdmin extends AbstractAdmin
         $form
             ->add('price')
             ->add('owner')
+            ->add('referenceNumber', null, ['disabled' => true])
             ->add('recommendedBy')
-            ->add('referenceNumber')
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'available' => 'available',
@@ -89,7 +87,6 @@ final class TicketAdmin extends AbstractAdmin
                     'paid' => 'paid'
                 ]
             ])
-            ->add('updatedAt')
         ;
     }
 
@@ -107,6 +104,8 @@ final class TicketAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->remove('delete');
+        $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
     }

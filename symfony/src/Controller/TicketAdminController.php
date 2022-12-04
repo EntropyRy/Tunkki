@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use App\Entity\Event;
 use App\Entity\Ticket;
@@ -23,18 +24,30 @@ final class TicketAdminController extends CRUDController
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }
-    public function updateTicketCountAction(Event $event): RedirectResponse
+    public function updateTicketCountAction(Event $event, EntityManagerInterface $em): RedirectResponse
     {
         if ($event->getTicketsEnabled()) {
             $tickets_now = count($event->getTickets());
-            $req_tickets = $event->getTicketCount();
-            if ($req_tickets > 0) {
-                if ($tickets_now > $req_tickets) {
-                    $this->addFlash('error', 'Cannot remove tickets. Please remove them manually.');
+            $eventTicketCount = $event->getTicketCount();
+            if ($eventTicketCount > 0) {
+                $reqTickets = $eventTicketCount - $tickets_now;
+                if ($tickets_now > $eventTicketCount) {
+                    foreach ($event->getTickets() as $ticket){
+                        if (is_null($ticket->getOwner()) && $ticket->getStatus()=='available'){
+                            $em->remove($ticket);
+                            $reqTickets +=1;
+                        }
+                        if ($reqTickets == 0) {
+                            $em->flush();
+                            $this->addFlash('success', 'Tickets removed');
+                            break;
+                        }
+                    }
+                    if ($reqTickets != 0) {
+                        $this->addFlash('error', 'Cannot remove tickets because someone owns them and/or they are not available.');
+                    }
                 } else {
-                    $new_tickets = $req_tickets - $tickets_now;
-                    $em = $this->getDoctrine()->getManager();
-                    for ($i=0;$i<$new_tickets;++$i) {
+                    for ($i=0;$i<$reqTickets;++$i) {
                         $ticket = new Ticket();
                         $ticket->setEvent($event);
                         $ticket->setStatus('available');
@@ -45,7 +58,7 @@ final class TicketAdminController extends CRUDController
                         $em->persist($ticket);
                         $em->flush();
                     }
-                    $this->addFlash('success', $new_tickets. ' tickets created');
+                    $this->addFlash('success', $reqTickets. ' tickets created');
                 }
             }
         }
