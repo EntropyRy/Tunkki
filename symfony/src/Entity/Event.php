@@ -166,6 +166,7 @@ body {
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
+    #[ORM\OrderBy(['id'=>'DESC'])]
     private $tickets;
 
     #[ORM\Column(type: 'integer')]
