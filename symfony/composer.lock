@@ -11319,16 +11319,16 @@
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.6.0",
+            "version": "v2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "dbcca8a6c6ed8bca8dfb454f5727a8959146c6d3"
+                "reference": "0e16016aeb0e0b837649812b5d6de2f3a662931c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/dbcca8a6c6ed8bca8dfb454f5727a8959146c6d3",
-                "reference": "dbcca8a6c6ed8bca8dfb454f5727a8959146c6d3",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/0e16016aeb0e0b837649812b5d6de2f3a662931c",
+                "reference": "0e16016aeb0e0b837649812b5d6de2f3a662931c",
                 "shasum": ""
             },
             "require": {
@@ -11366,8 +11366,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Symfony\\UX\\Turbo\\": "src/",
-                    "Symfony\\UX\\Turbo\\Bridge\\Mercure\\": "src/Bridge/Mercure/src"
+                    "Symfony\\UX\\Turbo\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -11395,7 +11394,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.6.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.6.1"
             },
             "funding": [
                 {
@@ -11411,7 +11410,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-11-22T21:09:47+00:00"
+            "time": "2022-12-02T14:42:01+00:00"
         },
         {
             "name": "symfony/validator",

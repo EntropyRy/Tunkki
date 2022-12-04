@@ -15,17 +15,19 @@
             <a href="{{ block('event_path') }}">
                 <h3 class="mt-2">{{ block('event_name') }} <span>{{ block('event_time') }}<span></h3>
             </a>
-            {% set show = true %}
-            {% set hide_time = true %}
-            {% set show_definition = true %}
-            {% set allow_nakki_cancel = (ticket.status == 'available') %}
-            {{ event.nakkiInfo(app.request.locale)|raw }}
-            {% if hasNakki and ticket.status != 'available' %}
-            {{ block('your_nakkis')}}
-            {% else %}
-            {{ block('reserve_nakkis')}}
+            {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes|default(true) == false %}
+                {% set show = true %}
+                {% set hide_time = true %}
+                {% set show_definition = true %}
+                {% set allow_nakki_cancel = (ticket.status == 'available') %}
+                {{ event.nakkiInfo(app.request.locale)|raw }}
+                {% if hasNakki and ticket.status != 'available' %}
+                {{ block('your_nakkis')}}
+                {% else %}
+                {{ block('reserve_nakkis')}}
+                {% endif %}
+                <hr>
             {% endif %}
-            <hr>
             {{ block('ticket') }}
         </div>
     </div>
