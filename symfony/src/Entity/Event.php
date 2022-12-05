@@ -206,7 +206,7 @@ body {
     private ?bool $rsvpOnlyToActiveMembers = null;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $nakkiRequiredForTicketReservation = null;
+    private ?bool $nakkiRequiredForTicketReservation = false;
 
     public function getId(): ?int
     {
