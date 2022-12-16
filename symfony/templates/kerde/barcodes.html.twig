@@ -1,0 +1,17 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+{{ 'kerde.barcodes'|trans|capitalize }} | Entropy ry
+{% endblock %}
+
+{% block content %}
+<div class="col-md-12">
+    {% for name, code in barcodes %}
+    <div class="my-3 {% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
+        <div class="mx-auto barcode" style="width:246px;">
+            {{ code|raw }}
+            <p class="text-center {% if app.user.member.theme == 'dark' %}text-black{% endif %}">{{ name }}</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
