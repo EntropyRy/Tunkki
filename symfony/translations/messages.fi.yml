@@ -1,7 +1,7 @@
 Announcement: Tiedote
 Responsible: Vastaava
 # Tunkki
-Control Barcodes: Kontrolli Koodit
+Control barcodes: Kontrolli Koodit
 Bank Account: Pankkitili
 name_attribute: nimi
 content_attribute: Sisallys
@@ -151,178 +151,178 @@ Full list: Koko lista
 logged_in_as: Olet kirjautuneena käyttäjänä
 Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen kuvauksen
 stream:
-    command:
-        successful: Stream käsky OK
+  command:
+    successful: Stream käsky OK
 block:
-    stats:
-        name: Statistiikkaa
-        members: Jäseniä
-        active_members: Aktiivijäseniä
-        bookings: Vuokratapahtumia
-        events: Tapahtumia
-    events:
-        manage: Hallitse
-        upcoming_events: Tulevat tapahtumat
-        future_events: Tulevat tapahtumat
-    bookings:
-        manage: Hallitse
-        no_bookings: Ei kesken olevia vuokracaseja
-        bookings: Kesken olevat vuokratapahtumat
-        help: Tule auttamaan vuokrauksessa?
-    items:
-        title: Huollettava laitteisto
-        help: Tule auttamaan huoltotöissä?
-    email_lists:
-        name: Sähköpostilistat
-        tiedotus: Tiedotuslista
-        aktiivit: Aktiivien lista
-        vuokra: Vuokraajien lista
-        control: Hallinnointi
-    future_events:
-        checkout_old_events: Kato vanhat
-        events: tapahtumat
+  stats:
+    name: Statistiikkaa
+    members: Jäseniä
+    active_members: Aktiivijäseniä
+    bookings: Vuokratapahtumia
+    events: Tapahtumia
+  events:
+    manage: Hallitse
+    upcoming_events: Tulevat tapahtumat
+    future_events: Tulevat tapahtumat
+  bookings:
+    manage: Hallitse
+    no_bookings: Ei kesken olevia vuokracaseja
+    bookings: Kesken olevat vuokratapahtumat
+    help: Tule auttamaan vuokrauksessa?
+  items:
+    title: Huollettava laitteisto
+    help: Tule auttamaan huoltotöissä?
+  email_lists:
+    name: Sähköpostilistat
+    tiedotus: Tiedotuslista
+    aktiivit: Aktiivien lista
+    vuokra: Vuokraajien lista
+    control: Hallinnointi
+  future_events:
+    checkout_old_events: Kato vanhat
+    events: tapahtumat
 menu:
-    logon_to: Kirjaudu
+  logon_to: Kirjaudu
 event:
-    not_public: ei julkinen
-    in_future: Tuleva tapahtuma
-    after: Mennyt tapahtuma
-    now: Tapahtuma meneillään
-    player:
-        will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
-    form:
-        sign_up:
-            artist: Artisti
-            description: Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista, koska profilli on aina tapahtumakohtainen
-            why_should_we_choose_you: Miksi valitsisimme sinut?
-            wish_for_playtime: Toive soittoajankohdasta
-            set_length: Toive setin pituudesta
-            free_word: Vapaa sana
-            save: Tallenna
-            new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
-            ends: Ilmoittautuminen suljetaan
+  not_public: ei julkinen
+  in_future: Tuleva tapahtuma
+  after: Mennyt tapahtuma
+  now: Tapahtuma meneillään
+  player:
+    will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
+  form:
+    sign_up:
+      artist: Artisti
+      description: Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista, koska profilli on aina tapahtumakohtainen
+      why_should_we_choose_you: Miksi valitsisimme sinut?
+      wish_for_playtime: Toive soittoajankohdasta
+      set_length: Toive setin pituudesta
+      free_word: Vapaa sana
+      save: Tallenna
+      new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
+      ends: Ilmoittautuminen suljetaan
 url:
-    form:
-        open_in_new_window: Avaa uudessa ikkunassa
-        title: Linkin teksti
-        url: Url-osoite
-        icon: Iconin luokka (class)
+  form:
+    open_in_new_window: Avaa uudessa ikkunassa
+    title: Linkin teksti
+    url: Url-osoite
+    icon: Iconin luokka (class)
 
 profile:
-    member_data_changed: Salasana ja tiedot muutettu
-    name: Profiili
-    add_new_artist: Lisää uusi artistiprofiili
-    access_groups: Tämän sivuston erityisoikeudet
-    apply_for_active_member: Hae aktiivijäsenyyttä
-    application_saved: Hakemus tallennettu
-    paid_renting_rewards: Vuokratehtävien kompensaatiot
-    no_renting_rewards: Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa, miten voit osallistua.
-    next_reward_is_bubling_under: Seuraava on tulossa..
-    you_are_active_member_already: Olet jo aktiivijäsen
-    application_for_active_member: Aktiivijäsen hakemuksesi
-    save: tallenna
-    only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
-    logout: Uloskirjautuminen
-    no_access_groups: Ei erityisoikeuksia
-    door:
-        log: Kertsin ovilogi
-        opener: Kertsin oven avaaja
-        no_message: Ei viestiä
-        opened: Ovi avattu
-        open_the_door: Avaa ovi
-        open_the_door_page: Ovenavaussivu
-        latest: Viimeisin
-        not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
-        last: lukon viimeisin muutos
-        connection_problems: Yhteys ongelma
-        connection_ok: Yhteys ok
-        wifi: Tarvitsee kertsin wifiyhteyden toimiakseen
+  member_data_changed: Salasana ja tiedot muutettu
+  name: Profiili
+  add_new_artist: Lisää uusi artistiprofiili
+  access_groups: Tämän sivuston erityisoikeudet
+  apply_for_active_member: Hae aktiivijäsenyyttä
+  application_saved: Hakemus tallennettu
+  paid_renting_rewards: Vuokratehtävien kompensaatiot
+  no_renting_rewards: Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa, miten voit osallistua.
+  next_reward_is_bubling_under: Seuraava on tulossa..
+  you_are_active_member_already: Olet jo aktiivijäsen
+  application_for_active_member: Aktiivijäsen hakemuksesi
+  save: tallenna
+  only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
+  logout: Uloskirjautuminen
+  no_access_groups: Ei erityisoikeuksia
+  door:
+    log: Kertsin ovilogi
+    opener: Kertsin oven avaaja
+    no_message: Ei viestiä
+    opened: Ovi avattu
+    open_the_door: Avaa ovi
+    open_the_door_page: Ovenavaussivu
+    latest: Viimeisin
+    not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
+    last: lukon viimeisin muutos
+    connection_problems: Yhteys ongelma
+    connection_ok: Yhteys ok
+    wifi: Tarvitsee kertsin wifiyhteyden toimiakseen
 artist:
-    not_confirmed_yet: Ei vahvistettu (vielä)
-    explanation: Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina. Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan. Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään tulevissa tapahtumissa, ja aiempi versio jää näkyville aiempaan tapahtumaan.
-    no_artist_profile: Ei yhtään profiilia
-    information: Perustiedot
-    profiles: Artistiprofiilit
-    list: Artistilistaus
-    tile:
-        button_event: Tapahtuma
-        heading: Yksi satunnainen artisti
-        button_artists: Artistit
-    random:
-        preview: Yksi satunnainen artistiesittely
-    form:
-        name: Artistinimi
-        type: Tyyppi
-        bio: Bio suomeksi
-        bio_en: Bio englanniksi
-        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
-        bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää linkit alla olevaan linkkilistaan, ei tähän.
-        hardware_help: Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua. (Vinyyli, CDJ)
-        promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
-        genre: Genre(t)
-        hardware: Laitteisto
-        links: Linkit medianäytteisiin ja muihin palveluihin
+  not_confirmed_yet: Ei vahvistettu (vielä)
+  explanation: Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina. Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan. Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään tulevissa tapahtumissa, ja aiempi versio jää näkyville aiempaan tapahtumaan.
+  no_artist_profile: Ei yhtään profiilia
+  information: Perustiedot
+  profiles: Artistiprofiilit
+  list: Artistilistaus
+  tile:
+    button_event: Tapahtuma
+    heading: Yksi satunnainen artisti
+    button_artists: Artistit
+  random:
+    preview: Yksi satunnainen artistiesittely
+  form:
+    name: Artistinimi
+    type: Tyyppi
+    bio: Bio suomeksi
+    bio_en: Bio englanniksi
+    genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä.
+    bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää linkit alla olevaan linkkilistaan, ei tähän.
+    hardware_help: Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua. (Vinyyli, CDJ)
+    promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa tehdä se ennen kuin lisäät tänne)
+    genre: Genre(t)
+    hardware: Laitteisto
+    links: Linkit medianäytteisiin ja muihin palveluihin
 epics:
-    tile:
-        heading: Satunnaisia kuvia Entropyn
-        heading_events: tapahtumista
-        more_button: Lisää
-        title: Satunnaisia kuvia Entropyn tapahtumista
+  tile:
+    heading: Satunnaisia kuvia Entropyn
+    heading_events: tapahtumista
+    more_button: Lisää
+    title: Satunnaisia kuvia Entropyn tapahtumista
 member:
-    can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
-    active:
-        application_title: Hae aktiivijäseneksi
-        application: Hakemuksesi Entropyn aktiivijäseneksi
-        apply_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
-        requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
-        requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
-        requirements3: Hallitus tietää kuka olet
-        requirements2: Viimeaikainen aktiivisuutesi
-        requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
-    join:
-        error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
-        info: Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli perille.
-        added: Tietosi on nyt tallennettu jäsenrekisteriimme.
-        update: Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi. Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
+  can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
+  active:
+    application_title: Hae aktiivijäseneksi
+    application: Hakemuksesi Entropyn aktiivijäseneksi
+    apply_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa, mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan asti.
+    requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
+    requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
+    requirements3: Hallitus tietää kuka olet
+    requirements2: Viimeaikainen aktiivisuutesi
+    requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
+  join:
+    error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
+    info: Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli perille.
+    added: Tietosi on nyt tallennettu jäsenrekisteriimme.
+    update: Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi. Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
 You have already requested a reset password email. Please check your email or try again soon.: Olet jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin uudelleen.
 The reset password link is invalid. Please try to reset your password again.: Linkki ei kelpaa. Yritä aloittaa prosessi alusta.
 The link in your email is expired. Please try to reset your password again.: Sähköpostisi linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 dark: Tumma
 bright: Kirkas
 rsvp:
-    email_in_use: Oletko jäsen? kirjaudu ensin.
-    receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
-    no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
-    already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä tapahtumaa.
-    rsvpd_succesfully: Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä tapahtumaa.
-    info: Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>. Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
-    closed: Ilmoittautuminen suljettu
+  email_in_use: Oletko jäsen? kirjaudu ensin.
+  receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
+  no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
+  already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä tapahtumaa.
+  rsvpd_succesfully: Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä tapahtumaa.
+  info: Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>. Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
+  closed: Ilmoittautuminen suljettu
 ticket:
-    form:
-        reserve: Varaa
-        reserve_and_recommend: Varaa ja suosittele
-    situation: Lippusi tila
-    available: Saatavilla
-    recipient: Vastaanottajan nimi
-    reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
-    not_available: Lippuja ei ole saatavilla
-    reserve_yours: Varaa lippusi tästä!
-    details: Katso lippusi tiedot
-    payment_info: Maksutiedot
-    reference_number: Viite (pitää käyttää)
-    code: Liipukoodi
-    paid: maksettu
-    all_sold: Kaikki liput on myyty.
-    sale_starts: Lipunmyynti alkaa
-    sum: Hinta
-    go_to_event_page: Lippu tapahtuma sivulta
-    presale:
-        off: Ennakkomyynti ei ole käytössä
+  form:
+    reserve: Varaa
+    reserve_and_recommend: Varaa ja suosittele
+  situation: Lippusi tila
+  available: Saatavilla
+  recipient: Vastaanottajan nimi
+  reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
+  not_available: Lippuja ei ole saatavilla
+  reserve_yours: Varaa lippusi tästä!
+  details: Katso lippusi tiedot
+  payment_info: Maksutiedot
+  reference_number: Viite (pitää käyttää)
+  code: Liipukoodi
+  paid: maksettu
+  all_sold: Kaikki liput on myyty.
+  sale_starts: Lipunmyynti alkaa
+  sum: Hinta
+  go_to_event_page: Lippu tapahtuma sivulta
+  presale:
+    off: Ennakkomyynti ei ole käytössä
 join_us:
-    title: Liity jäseneksi!
-    button: Liity
-    1: Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme kuuluu muun muassa
-    2: Tapahtumien järjestäminen
-    3: Tapahtumatekniikan koulutus
-    4: Tekniikan vuokraus
+  title: Liity jäseneksi!
+  button: Liity
+  1: Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme kuuluu muun muassa
+  2: Tapahtumien järjestäminen
+  3: Tapahtumatekniikan koulutus
+  4: Tekniikan vuokraus
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
