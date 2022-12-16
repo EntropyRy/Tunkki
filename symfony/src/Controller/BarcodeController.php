@@ -21,7 +21,7 @@ class BarcodeController extends AbstractController
         $barcodes['20€'] = $generator->getBarcode('_20e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['Cancel'] = $generator->getBarcode('_CANCEL_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['Manual'] = $generator->getBarcode('1812271001', $generator::TYPE_CODE_128, 2, 90);
-        $barcodes['Statistics'] = $generator->getBarcode('0348030005', $generator::TYPE_CODE_128, 2, 90);
+        // $barcodes['Statistics'] = $generator->getBarcode('0348030005', $generator::TYPE_CODE_128, 2, 90);
         return $this->render('kerde/barcodes.html.twig', [
             'barcodes' => $barcodes
         ]);
