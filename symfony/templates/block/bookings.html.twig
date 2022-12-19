@@ -16,14 +16,14 @@
                 <div class="pull-left">
                     {{ booking.bookingdate|date('d.m.Y') }}
                     {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
-                    <br> 
-                    <a href="{{ path('admin_app_booking_show', {'id':booking.id}) }}">{{ booking.name }}</a>
+                    <br>
+                    <a href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">{{ booking.name }}</a>
                 </div>
                 <div class="box-tools pull-right" style="position:relative">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_edit', {'id':booking.id}) }}">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">
                         <i class="fa fa-pencil-square-o"></i> edit
                     </a>
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_statusevent_create', {'id':booking.id}) }}">
+                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_statusevent_create', {'id': booking.id}) }}">
                         <i class="fa fa-pencil-square-o"></i>
                         Change Status
                     </a>
@@ -33,7 +33,7 @@
             <div style="display: none;" class="box-body">
                 <div class="row">
                     <div class="col-md-3">
-                        <div>Given away <br>{%if booking.retrieval %} {{ booking.retrieval|date('d.m.Y H:i') }}<br>{%endif %} 
+                        <div>Given away <br>{%if booking.retrieval %} {{ booking.retrieval|date('d.m.Y H:i') }}<br>{% endif %} 
                             {% if booking.givenAwayBy %}
                                 {{ booking.givenAwayBy.username }}
                             {% else %}
@@ -41,7 +41,7 @@
                             {% endif %}
                         </div>
                         <hr>
-                        <div>Returning <br> {%if booking.returning %}{{ booking.returning|date('d.m.Y H:i') }} <br>{%endif %}
+                        <div>Returning <br> {%if booking.returning %}{{ booking.returning|date('d.m.Y H:i') }} <br>{% endif %}
                             {% if booking.receivedBy %}
                                 {{ booking.receivedBy.username }}
                             {% else %}
@@ -57,7 +57,8 @@
                             {% for item in package.items %}
                             <li>
                                 {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-                                {{ item }}</li>
+                                {{ item }}
+                            </li>
                             {% endfor %}
                             </ul>
                         {% endif %}
@@ -78,7 +79,8 @@
                         {% for item in booking.items %}
                         <li>
                             {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-                            {{ item }}</li>
+                            {{ item }}
+                        </li>
                         {% endfor %}
                         </ul>
                     {% endif %}
@@ -89,5 +91,5 @@
     {% endfor %}
     {# dump(bookings) #}
     </div>
-</div>        
+</div>
 {% endblock %}

@@ -315,7 +315,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('paid')
             ->add('paid_date')
             ->add('creator')
-            ->add('creatededAt')
+            ->add('createdAt')
             ->add('modifier')
             ->add('modifiedAt')
         ;
