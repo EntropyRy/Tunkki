@@ -11,12 +11,10 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\Form\Validator\ErrorElement;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -75,9 +73,9 @@ class BookingAdmin extends AbstractAdmin
             $menu->addChild('Contract', [
                 'route' => 'entropy_tunkki_booking_hash',
                 'routeParameters' => [
-                     'bookingid'=> $id,
-                     'renterid' => $object->getRenter()->getId(),
-                     'hash' => $object->getRenterHash()
+                    'bookingid' => $id,
+                    'renterid' => $object->getRenter()->getId(),
+                    'hash' => $object->getRenterHash()
                 ]
             ]);
         }
@@ -87,19 +85,18 @@ class BookingAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('name')
-            ->add('bookingDate', DateTimeRangeFilter::class, ['field_type'=>DateRangePickerType::class])
+            ->add('bookingDate', DateTimeRangeFilter::class, ['field_type' => DateRangePickerType::class])
             ->add('items')
             ->add('packages')
             ->add('renter')
             ->add('renterHash')
-            ->add('retrieval', DateTimeRangeFilter::class, ['field_type'=>DateTimeRangePickerType::class])
+            ->add('retrieval', DateTimeRangeFilter::class, ['field_type' => DateTimeRangePickerType::class])
             ->add('givenAwayBy')
-            ->add('returning', DateTimeRangeFilter::class, ['field_type'=>DateTimeRangePickerType::class])
+            ->add('returning', DateTimeRangeFilter::class, ['field_type' => DateTimeRangePickerType::class])
             ->add('receivedBy')
             ->add('itemsReturned')
             ->add('invoiceSent')
-            ->add('paid')
-        ;
+            ->add('paid');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -117,8 +114,8 @@ class BookingAdmin extends AbstractAdmin
                     //        'show' => array(),
                     'edit' => [],
                     'delete' => [],
-            ]])
-        ;
+                ]
+            ]);
     }
     private function getCategories($choices = null): array
     {
@@ -129,9 +126,9 @@ class BookingAdmin extends AbstractAdmin
         foreach ($choices as $choice) {
             foreach ($root->getChildren() as $cat) {
                 if ($choice->getCategory() == $cat) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 } elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 }
             }
         }
@@ -162,99 +159,98 @@ class BookingAdmin extends AbstractAdmin
         $formMapper
             ->tab('General')
             ->with('Booking', ['class' => 'col-md-6'])
-                ->add('name', null, ['help' => "Event name or name we use to talk about this case."])
-                ->add('bookingDate', DatePickerType::class, [
-                        'format' => 'd.M.y',
-                    ])
-                ->add('retrieval', DateTimePickerType::class, [
-                        'required' => false,
-                        'format' => 'd.M.y H:mm',
-                        'dp_side_by_side' => true,
-                        'dp_use_seconds' => false,
-                        'label' => 'Pickup Time'
-                    ])
-                ->add('givenAwayBy', null, [ // ModelListType::class, [
-                        /*'btn_add' => false,
+            ->add('name', null, ['help' => "Event name or name we use to talk about this case."])
+            ->add('bookingDate', DatePickerType::class, [
+                'format' => 'd.M.y',
+            ])
+            ->add('retrieval', DateTimePickerType::class, [
+                'required' => false,
+                'format' => 'd.M.y H:mm',
+                'dp_side_by_side' => true,
+                'dp_use_seconds' => false,
+                'label' => 'Pickup Time'
+            ])
+            ->add('givenAwayBy', null, [ // ModelListType::class, [
+                /*'btn_add' => false,
                         'btn_delete' => 'Unassign', */
-                        'required' => false,
-                        'disabled' => $changerewardownner
-                    ])
-                ->add('returning', DateTimePickerType::class, [
-                        'required' => false,
-                        'format' => 'd.M.y H:mm',
-                        'dp_side_by_side' => true,
-                        'dp_use_seconds' => false,
-                        'label' => 'Return Time'
-                    ])
-                ->add('receivedBy', null, [ //ModelListType::class, [
-                        'required' => false,
-                        /*'btn_add' => false,
+                'required' => false,
+                'disabled' => $changerewardownner
+            ])
+            ->add('returning', DateTimePickerType::class, [
+                'required' => false,
+                'format' => 'd.M.y H:mm',
+                'dp_side_by_side' => true,
+                'dp_use_seconds' => false,
+                'label' => 'Return Time'
+            ])
+            ->add('receivedBy', null, [ //ModelListType::class, [
+                'required' => false,
+                /*'btn_add' => false,
                         'btn_delete' => 'Unassign', */
-                        'disabled' => $changerewardownner
-                    ])
+                'disabled' => $changerewardownner
+            ])
             ->end()
             ->with('Who is Renting?', ['class' => 'col-md-6'])
-                ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
-                ->add('rentingPrivileges', null, [
-                    'placeholder' => false,
-                    'expanded' => true,
-                ])
-                ->add('renterHash', null, ['disabled' => true])
+            ->add('renter', ModelListType::class, ['btn_delete' => 'Unassign'])
+            ->add('rentingPrivileges', null, [
+                'placeholder' => false,
+                'expanded' => true,
+            ])
+            ->add('renterHash', null, ['disabled' => true])
             ->end()
             ->end();
         if (is_object($subject->getRenter()) && $subject->getRenter()->getId() == 1) {
             $formMapper
-            ->tab('General')
-            ->with('Who is Renting?', ['class' => 'col-md-6'])
+                ->tab('General')
+                ->with('Who is Renting?', ['class' => 'col-md-6'])
                 ->add('rentingPrivileges', null, [
                     'placeholder' => 'Show everything!',
                     'expanded' => true,
                 ])
                 ->end()
-                ->end()
-            ;
+                ->end();
         }
 
         if (!empty($subject->getName()) && empty($forWho)) {
             $formMapper
                 ->tab('Rentals')
                 ->with('The Stuff')
-                    ->add('packages', PackagesType::class, [
-                        'bookings' => $bookings,
-                    ])
-                    ->add('items', ItemsType::class, [
-                        'bookings' => $bookings,
-                    ])
-                    ->add(
-                        'accessories',
-                        CollectionType::class,
-                        [
-                            'required' => false,
-                            'by_reference' => false
-                        ],
-                        ['edit' => 'inline', 'inline' => 'table']
-                    )
+                ->add('packages', PackagesType::class, [
+                    'bookings' => $bookings,
+                ])
+                ->add('items', ItemsType::class, [
+                    'bookings' => $bookings,
+                ])
+                ->add(
+                    'accessories',
+                    CollectionType::class,
+                    [
+                        'required' => false,
+                        'by_reference' => false
+                    ],
+                    ['edit' => 'inline', 'inline' => 'table']
+                )
                 ->end()
                 ->end();
         } elseif (!empty($subject->getName()) && !empty($forWho)) {
             $formMapper
                 ->tab('Rentals')
                 ->with('The Stuff')
-                    ->add('packages', PackagesType::class, [
-                        'bookings' => $bookings,
-                        'choices' => $packageChoices,
-                    ])
-                    ->add('items', ItemsType::class, [
-                        'bookings' => $bookings,
-                        'categories' => $itemCats,
-                        'choices' => $itemChoices
-                    ])
-                    ->add(
-                        'accessories',
-                        CollectionType::class,
-                        ['required' => false, 'by_reference' => false],
-                        ['edit' => 'inline', 'inline' => 'table']
-                    )
+                ->add('packages', PackagesType::class, [
+                    'bookings' => $bookings,
+                    'choices' => $packageChoices,
+                ])
+                ->add('items', ItemsType::class, [
+                    'bookings' => $bookings,
+                    'categories' => $itemCats,
+                    'choices' => $itemChoices
+                ])
+                ->add(
+                    'accessories',
+                    CollectionType::class,
+                    ['required' => false, 'by_reference' => false],
+                    ['edit' => 'inline', 'inline' => 'table']
+                )
                 ->end()
                 ->end();
         }
@@ -263,37 +259,36 @@ class BookingAdmin extends AbstractAdmin
             $formMapper
                 ->tab('Payment')
                 ->with('Payment Information')
-                    ->add('referenceNumber', null, ['disabled' => true])
-                    ->add('calculatedTotalPrice', TextType::class, ['disabled' => true])
-                    ->add('numberOfRentDays', null, [
-                        'help' => 'How many days are actually billed',
-                        'disabled' => false,
-                        'required' => true
-                        ])
-                    ->add('actualPrice', null, [
-                        'disabled' => false,
-                        'required' => false,
-                        'help' => 'If booking does not need to be billed: leave this empty'
-                    ])
-                    ->add('reasonForDiscount', null, ['help' => 'If the actual price is discounted, let us know why'])
+                ->add('referenceNumber', null, ['disabled' => true])
+                ->add('calculatedTotalPrice', TextType::class, ['disabled' => true])
+                ->add('numberOfRentDays', null, [
+                    'help' => 'How many days are actually billed',
+                    'disabled' => false,
+                    'required' => true
+                ])
+                ->add('actualPrice', null, [
+                    'disabled' => false,
+                    'required' => false,
+                    'help' => 'If booking does not need to be billed: leave this empty'
+                ])
+                ->add('reasonForDiscount', null, ['help' => 'If the actual price is discounted, let us know why'])
                 ->end()
                 ->with('Events', ['class' => 'col-md-12'])
-                    ->add(
-                        'billableEvents',
-                        CollectionType::class,
-                        ['required' => false, 'by_reference' => false],
-                        ['edit' => 'inline', 'inline' => 'table']
-                    )
-                    ->add('paid_date', DateTimePickerType::class, ['disabled' => false, 'required' => false])
+                ->add(
+                    'billableEvents',
+                    CollectionType::class,
+                    ['required' => false, 'by_reference' => false],
+                    ['edit' => 'inline', 'inline' => 'table']
+                )
+                ->add('paid_date', DateTimePickerType::class, ['disabled' => false, 'required' => false])
                 ->end()
                 ->end()
                 ->tab('Meta')
-                    ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
-                    ->add('creator', null, ['disabled' => true])
-                    ->add('modifiedAt', DateTimePickerType::class, ['disabled' => true])
-                    ->add('modifier', null, ['disabled' => true])
-                ->end()
-            ;
+                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('creator', null, ['disabled' => true])
+                ->add('modifiedAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('modifier', null, ['disabled' => true])
+                ->end();
         }
     }
 
@@ -317,13 +312,12 @@ class BookingAdmin extends AbstractAdmin
             ->add('creator')
             ->add('createdAt')
             ->add('modifier')
-            ->add('modifiedAt')
-        ;
+            ->add('modifiedAt');
     }
 
     protected function calculateOwnerHash($booking): string
     {
-        $hashids = new Hashids($booking->getName().$booking->getRenter(), 10);
+        $hashids = new Hashids($booking->getName() . $booking->getRenter(), 10);
         return strtolower($hashids->encode($booking->getReferenceNumber()));
     }
     protected function calculateReferenceNumber($booking): int
@@ -331,13 +325,13 @@ class BookingAdmin extends AbstractAdmin
         $ki = 0;
         $summa = 0;
         $kertoimet = [7, 3, 1];
-        $id = (int)$booking->getId()+1220;
-        $viite = (int)'303'.$id;
+        $id = (int)$booking->getId() + 1220;
+        $viite = (int)'303' . $id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
         }
-        return $viite.''.(10 - ($summa % 10)) % 10;
+        return $viite . '' . (10 - ($summa % 10)) % 10;
     }
     public function prePersist($booking): void
     {
@@ -349,12 +343,12 @@ class BookingAdmin extends AbstractAdmin
         $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
         $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
-        $text = '#### BOOKING: <'.$this->generateUrl(
+        $text = '#### BOOKING: <' . $this->generateUrl(
             'edit',
-            ['id'=> $booking->getId()],
+            ['id' => $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL
-        ).'|'.$booking->getName().'> on '.
-            $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
+        ) . '|' . $booking->getName() . '> on ' .
+            $booking->getBookingDate()->format('d.m.Y') . ' created by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
         //$this->sendNotificationMail($booking);
     }
@@ -399,7 +393,7 @@ class BookingAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollection $collection): void
     {
-        $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
+        $collection->add('stuffList', $this->getRouterIdParameter() . '/stufflist');
         $collection->remove('delete');
     }
     public function __construct(
