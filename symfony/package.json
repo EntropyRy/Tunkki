@@ -17,7 +17,7 @@
     "jquery": "^3.6.2",
     "moment": "^2.29.4",
     "regenerator-runtime": "^0.13.11",
-    "sass": "~1.56.2",
+    "sass": "~1.57.1",
     "sass-loader": "^13.0.2",
     "signature_pad": "^4.0.10",
     "webpack": "^5.74.0",
@@ -25,5 +25,11 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {}
+  "dependencies": {},
+  "scripts": {
+    "dev-server": "encore dev-server",
+    "dev": "encore dev",
+    "watch": "encore dev --watch",
+    "build": "encore production --progress"
+  }
 }
