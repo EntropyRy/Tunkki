@@ -4,7 +4,7 @@
 {% set name_attr = 'name_attribute'|trans %}
 {% set content_attr = 'content_attribute'|trans %}
 <turbo-frame id="home">
-    <div class="row row-cols-1 row-cols-md-2 {% if events|lenght > 1 %}row-cols-xl-3{% endif %}">
+    <div class="row row-cols-1 row-cols-md-2 {% if events|length > 1 %}row-cols-xl-3{% endif %}">
 {#    <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
