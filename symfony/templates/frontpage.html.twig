@@ -4,7 +4,7 @@
 {% set name_attr = 'name_attribute'|trans %}
 {% set content_attr = 'content_attribute'|trans %}
 <turbo-frame id="home">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3">
+    <div class="row row-cols-1 row-cols-md-2 {% if events|lenght > 1 %}row-cols-xl-3{% endif %}">
 {#    <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
@@ -46,33 +46,33 @@
          data-epics-url-value="/api/epics/random"
          data-epics-refresh-interval-value="8000">
         <div class="rect-img-container">
-        <img  data-epics-target="pic" src="{{ epic.url }}" loading="lazy" class="rect-img" title="{{'epics.tile.title'|trans}}">
+        <img  data-epics-target="pic" src="{{ epic.url }}" loading="lazy" class="rect-img" title="{{ 'epics.tile.title'|trans }}">
         <div class="badge-container">
-            <span data-epics-target="badge" class="badge bg-secondary">{{epic.taken|date}}</span>
+            <span data-epics-target="badge" class="badge bg-secondary">{{ epic.taken|date }}</span>
         </div>
         </div>
-        <h4>{{'epics.tile.heading'|trans}}
-            <a href="{{ path('_page_alias_events_'~app.request.locale) }}">{{'epics.tile.heading_events'|trans}}</a>.
+        <h4>{{ 'epics.tile.heading'|trans }}
+            <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.heading_events'|trans }}</a>.
         </h4>
         <div class="justify-content-between d-flex">
-            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{'epics.tile.more_button'|trans}}</a>
+            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
         </div>
     </div>
 {% endblock %}
 {% block join_us_tile %}
     <div class="tile col-12 p-2">
         <div class="rect-img-container">
-            <img src="{{ asset('/images/golden-logo.svg')}}" class="rect-img fill" title="{{'Join us'|trans}}">
+            <img src="{{ asset('/images/golden-logo.svg') }}" class="rect-img fill" title="{{ 'Join us'|trans }}">
         </div>
-        <h4>{{'join_us.title'|trans}}</h4>
-        <p>{{'join_us.1'|trans}}</p>
+        <h4>{{ 'join_us.title'|trans }}</h4>
+        <p>{{ 'join_us.1'|trans }}</p>
         <ul>
-            <li>{{'join_us.2'|trans}}</li>
-            <li>{{'join_us.3'|trans}}</li>
-            <li>{{'join_us.4'|trans}}</li>
+            <li>{{ 'join_us.2'|trans }}</li>
+            <li>{{ 'join_us.3'|trans }}</li>
+            <li>{{ 'join_us.4'|trans }}</li>
         </ul>
         <div class="justify-content-between d-flex">
-            <a class="btn btn-primary" href="{{ path('_page_alias_join_us_'~app.request.locale) }}">{{'join_us.button'|trans}}</a>
+            <a class="btn btn-primary" href="{{ path('_page_alias_join_us_' ~ app.request.locale) }}">{{ 'join_us.button'|trans }}</a>
             <a data-turbo="false" class="btn btn-primary" href="https://entropy.fi/mm">Mattermost</a>
         </div>
     </div>
@@ -87,21 +87,21 @@
     <div class="rect-img-container">
         {{block('artist_pic')}}
         <div class="badge-container">
-            <span class="badge bg-secondary">{{'artist.tile.heading'|trans}}</span>
+            <span class="badge bg-secondary">{{ 'artist.tile.heading'|trans }}</span>
         </div>
     </div>
     </a>
     {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
     <div class="mb-2 justify-content-between d-flex">
-        {% if app.request.locale =='fi'%}
-            {% set artist_url = '/artistit'%}
+        {% if app.request.locale ==' fi' %}
+            {% set artist_url = '/artistit' %}
         {% else %}
-            {% set artist_url = '/en/artists'%}
+            {% set artist_url = '/en/artists' %}
         {% endif %}
-        <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{'artist.tile.button_event'|trans}}</a>
-        <a class="btn btn-outline-primary" href="{{artist_url}}">{{'artist.tile.button_artists'|trans}}</a>
+        <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{ 'artist.tile.button_event'|trans }}</a>
+        <a class="btn btn-outline-primary" href="{{ artist_url }}">{{ 'artist.tile.button_artists'|trans }}</a>
     </div>
-    {{block('artist_event_info')}}
+    {{ block('artist_event_info') }}
     </div>
 {% endblock %}
 {% block stream_tile %}
