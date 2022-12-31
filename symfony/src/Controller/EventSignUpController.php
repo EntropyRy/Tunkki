@@ -10,7 +10,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\Security\Core\Security;
 use App\Helper\Mattermost;
 use App\Repository\NakkiBookingRepository;
 use App\Entity\Event;
@@ -41,7 +40,7 @@ class EventSignUpController extends EventController
             $em = $this->getDoctrine()->getManager();
             $em->persist($booking);
             $em->flush();
-            $text = $text = '**Nakki reservation cancelled from event '.$booking.'**';
+            $text = $text = '**Nakki reservation cancelled from event ' . $booking . '**';
             $mm->SendToMattermost($text, 'nakkikone');
             $this->addFlash('success', 'Nakki cancelled');
         }
@@ -77,7 +76,7 @@ class EventSignUpController extends EventController
                 $em->persist($booking);
                 $em->flush();
                 $count = $repo->findEventNakkiCount($booking, $event);
-                $text = $text = '**Nakki reservation** '.$booking. ' ('. $count. ')';
+                $text = $text = '**Nakki reservation** ' . $booking . ' (' . $count . ')';
                 $mm->SendToMattermost($text, 'nakkikone');
                 $this->addFlash('success', 'Nakki reserved');
             } else {
@@ -96,7 +95,6 @@ class EventSignUpController extends EventController
         Event $event,
         NakkiBookingRepository $repo
     ): Response {
-        $locale = $request->getLocale();
         $member = $this->getUser()->getMember();
         $selected = $repo->findMemberEventBookings($member, $event);
         if (!$event->getNakkikoneEnabled()) {
@@ -136,7 +134,7 @@ class EventSignUpController extends EventController
                         if (!array_key_exists('not_reserved', $nakkis[$name])) {
                             $nakkis[$name]['not_reserved'] = 1;
                         } else {
-                            $nakkis[$name]['not_reserved'] +=1;
+                            $nakkis[$name]['not_reserved'] += 1;
                         }
                     }
                 }
@@ -148,7 +146,7 @@ class EventSignUpController extends EventController
                     if (!array_key_exists('not_reserved', $nakkis[$name])) {
                         $nakkis[$name]['not_reserved'] = 1;
                     } else {
-                        $nakkis[$name]['not_reserved'] +=1;
+                        $nakkis[$name]['not_reserved'] += 1;
                     }
                 }
             }
@@ -233,7 +231,7 @@ class EventSignUpController extends EventController
         TranslatorInterface $trans
     ): Response {
         $artists = $this->getUser()->getMember()->getArtist();
-        if ((is_countable($artists) ? count($artists) : 0)==0) {
+        if ((is_countable($artists) ? count($artists) : 0) == 0) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
@@ -243,14 +241,6 @@ class EventSignUpController extends EventController
             $this->addFlash('warning', $trans->trans('Not allowed'));
             return new RedirectResponse($this->generateUrl('entropy_profile'));
         }
-        // TODO: remove signed up user artists
-        //foreach ($artists as $artist){
-        //    if( $artist->getArtistInfos()->contains($event)
-        /*if (count($form_artists)==0){
-            $this->addFlash('warning', $trans->trans('all_artists_signed_up_create_one'));
-            $request->getSession()->set('referer', $request->getPathInfo());
-            return new RedirectResponse($this->generateUrl('entropy_artist_create'));
-        }*/
         $this->em = $this->getDoctrine()->getManager();
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
@@ -261,7 +251,7 @@ class EventSignUpController extends EventController
             $artist = $info->getArtist();
             $artistClone = new Artist();
             $artistClone->setCopyForArchive(true);
-            $artistClone->setName($artist->getName().' for '.$event->getName());
+            $artistClone->setName($artist->getName() . ' for ' . $event->getName());
             $artistClone->setPicture($artist->getPicture());
             $artistClone->setHardware($artist->getHardware());
             $artistClone->setBio($artist->getBio());

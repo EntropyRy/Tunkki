@@ -1,9 +1,23 @@
-FROM php:8.1-fpm-alpine
+FROM php:8.2-fpm-alpine
 ARG UID
 ARG GID
-RUN apk upgrade --update && apk add --no-cache zlib-dev icu-dev libev libmcrypt-dev libzip libzip-dev autoconf \
-    libjpeg libpng libpng-dev libwebp-dev libwebp freetype libltdl libxml2-dev libjpeg-turbo-dev freetype-dev gnupg curl \
-    bash grep build-base tar re2c make file libzmq zeromq zeromq-dev git icu icu-data-full libssh2 libssh2-dev \
+RUN apk upgrade --update \
+    && apk add --no-cache \
+        libwebp freetype libltdl \ 
+        libjpeg libpng \
+        libzip \ 
+        gnupg curl \
+        libzmq zeromq \ 
+        git icu icu-data-full libssh2 \
+        libev \
+    && apk add --virtual build-deps \
+        bash grep build-base tar re2c make file \ 
+        zeromq-dev libpng-dev libwebp-dev \ 
+        libxml2-dev libjpeg-turbo-dev freetype-dev \
+        libssh2-dev zlib-dev icu-dev \ 
+        libmcrypt-dev \
+        autoconf libzip-dev \
+        linux-headers \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
@@ -18,8 +32,7 @@ RUN apk upgrade --update && apk add --no-cache zlib-dev icu-dev libev libmcrypt-
     && cd .. \
     && rm -fr php-zmq \
     && docker-php-ext-enable apcu zmq ssh2 \
-    && apk del --no-cache grep build-base tar re2c make file freetype-dev autoconf icu-dev \
-        libxml2-dev libzip-dev libjpeg-turbo-dev freetype-dev zeromq-dev libssh2-dev \
+    && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/*
 COPY ./symfony.ini /usr/local/etc/php/php.ini
 ADD symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
