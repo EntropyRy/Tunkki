@@ -1,4 +1,4 @@
-FROM php:8.2-fpm-alpine
+FROM php:8.2-fpm-alpine as dev
 ARG UID
 ARG GID
 RUN apk upgrade --update \
@@ -9,7 +9,7 @@ RUN apk upgrade --update \
         gnupg curl \
         libzmq zeromq \ 
         git icu icu-data-full libssh2 \
-        libev \
+        libev composer \
     && apk add --virtual build-deps \
         bash grep build-base tar re2c make file \ 
         zeromq-dev libpng-dev libwebp-dev \ 
@@ -34,10 +34,15 @@ RUN apk upgrade --update \
     && docker-php-ext-enable apcu zmq ssh2 \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/*
-COPY ./symfony.ini /usr/local/etc/php/php.ini
+COPY ./dev.ini /usr/local/etc/php/php.ini
 ADD symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
 USER symfony
 WORKDIR /var/www/symfony
 CMD ["php-fpm", "-F"]
 EXPOSE 9000
 
+FROM dev as prod
+USER root
+RUN apk del --no-cache git composer
+USER symfony
+COPY ./symfony.ini /usr/local/etc/php/php.ini
