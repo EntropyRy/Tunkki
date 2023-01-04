@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@a2lix/symfony-collection@^0.5.1":
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/@a2lix/symfony-collection/-/symfony-collection-0.5.2.tgz#f38287683c7bff8aa024d60a76d6c163117e2b03"
-  integrity sha512-NCGUR77nKkRX6Rfe4YyhXrzjrZfqfXYfQKcBxHJZWzJDqXP1vTMFXFzHRbYgLNrqUNgBPS/sCij5G4VG00Pdlg==
+"@a2lix/symfony-collection@^0.6.1":
+  version "0.6.1"
+  resolved "https://registry.yarnpkg.com/@a2lix/symfony-collection/-/symfony-collection-0.6.1.tgz#cdb64d89c5be34418debf05a3c2afe9a296e3bfc"
+  integrity sha512-JUvd3POKziCtqtmDE28qHoa7s/EqvBxP0JoThtrZKkt6OZ2/9EqddXTXWQcDNETZEtIEacMK6s0j2HUyVNboVg==
 
 "@ampproject/remapping@^2.1.0":
   version "2.2.0"

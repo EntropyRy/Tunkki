@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "@a2lix/symfony-collection": "^0.5.1",
+    "@a2lix/symfony-collection": "^0.6.1",
     "@babel/core": "^7.20.5",
     "@babel/preset-env": "^7.19.4",
     "@fontsource/space-grotesk": "^4.5.9",
