@@ -5,7 +5,7 @@ RUN apk upgrade --update \
     && apk add --no-cache \
         libwebp freetype libltdl \ 
         libjpeg libpng \
-        libzip \ 
+        libzip libxml2 \ 
         gnupg curl \
         libzmq zeromq \ 
         git icu icu-data-full libssh2 \

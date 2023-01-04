@@ -17,7 +17,7 @@
         "knpuniversity/oauth2-client-bundle": "^2",
         "picqer/php-barcode-generator": "^2.2",
         "sensio/framework-extra-bundle": "^5.0",
-        "sonata-project/admin-bundle": "^4",
+        "sonata-project/admin-bundle": "4.21.0",
         "sonata-project/classification-bundle": "^4",
         "sonata-project/doctrine-orm-admin-bundle": "^4",
         "sonata-project/entity-audit-bundle": "^1.8",
