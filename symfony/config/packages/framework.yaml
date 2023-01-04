@@ -1,16 +1,15 @@
 framework:
     secret: '%env(APP_SECRET)%'
     csrf_protection: true
-    #http_method_override: true
     session:
         name: tunkki
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
-        cookie_lifetime: 1209600 
+        cookie_lifetime: 1209600
         cookie_secure: auto
         cookie_samesite: lax
         storage_factory_id: session.storage.factory.native
     #esi: true
-    #fragments: true
+    fragments: true
     php_errors:
         log: true
     cache:
