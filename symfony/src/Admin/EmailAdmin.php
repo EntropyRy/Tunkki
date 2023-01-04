@@ -25,8 +25,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('purpose')
             ->add('event')
             ->add('subject')
-            ->add('body')
-        ;
+            ->add('body');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -46,7 +45,6 @@ final class EmailAdmin extends AbstractAdmin
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'preview' => ['template' => 'admin/crud/list__action_email_preview.html.twig'],
-                    'show' => [],
                     'edit' => [],
                     'delete' => [],
                 ],
@@ -57,33 +55,33 @@ final class EmailAdmin extends AbstractAdmin
     {
         if (!$this->isChild()) {
             $formMapper
-            ->add('purpose', ChoiceType::class, [
-                'choices' => [
-                    'Automatic email to new Member on registration' => 'member',
-                    'Automatic thank you email to member who requests Active Member status' => 'active_member',
-                    'New Active Member info package (can be sent from the member list)' => 'active_member_info_package',
-                    //'Booking Email' => 'booking',
-                    //'Other' => 'other'
-                ],
-                'required' => false,
-                'expanded' => true,
-                'multiple' => false,
-                'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
-            ]);
+                ->add('purpose', ChoiceType::class, [
+                    'choices' => [
+                        'Automatic email to new Member on registration' => 'member',
+                        'Automatic thank you email to member who requests Active Member status' => 'active_member',
+                        'New Active Member info package (can be sent from the member list)' => 'active_member_info_package',
+                        //'Booking Email' => 'booking',
+                        //'Other' => 'other'
+                    ],
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => false,
+                    'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
+                ]);
         } else {
             $formMapper
-            ->add('purpose', ChoiceType::class, [
-                'choices' => [
-                    'To RSVP' => 'rsvp',
-                    'To reserved and paid tickets holders' => 'ticket',
-                    'To people who have reserved Nakki' => 'nakkikone',
-                    //'Booking Email' => 'booking',
-                    //'Other' => 'other'
-                ],
-                'required' => false,
-                'expanded' => true,
-                'multiple' => false,
-            ])
+                ->add('purpose', ChoiceType::class, [
+                    'choices' => [
+                        'To RSVP' => 'rsvp',
+                        'To reserved and paid tickets holders' => 'ticket',
+                        'To people who have reserved Nakki' => 'nakkikone',
+                        //'Booking Email' => 'booking',
+                        //'Other' => 'other'
+                    ],
+                    'required' => false,
+                    'expanded' => true,
+                    'multiple' => false,
+                ])
                 ->add('replyTo', null, [
                     'help' => 'Empty defaults to hallitus@entropy.fi'
                 ]);
@@ -91,8 +89,7 @@ final class EmailAdmin extends AbstractAdmin
         $formMapper
             ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
-            ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login'])
-        ;
+            ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -103,13 +100,13 @@ final class EmailAdmin extends AbstractAdmin
             ->add('body', 'html')
             ->add('addLoginLinksToFooter')
             ->add('createdAt')
-            ->add('updatedAt')
-        ;
+            ->add('updatedAt');
     }
 
     protected function configureRoutes(RouteCollection $collection): void
     {
-        $collection->add('preview', $this->getRouterIdParameter().'/preview');
-        $collection->add('send', $this->getRouterIdParameter().'/send');
+        $collection->remove('show');
+        $collection->add('preview', $this->getRouterIdParameter() . '/preview');
+        $collection->add('send', $this->getRouterIdParameter() . '/send');
     }
 }

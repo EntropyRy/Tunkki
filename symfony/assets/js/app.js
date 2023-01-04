@@ -1,8 +1,8 @@
-import '../css/bs.scss';
-import '../css/polaroid.scss';
-import '../css/app.scss';
-import '../css/dark.scss';
-import '../css/animations.scss';
+import '../styles/bs.scss';
+import '../styles/polaroid.scss';
+import '../styles/app.scss';
+import '../styles/dark.scss';
+import '../styles/animations.scss';
 
 //import 'bootstrap';
 import 'bootstrap/js/dist/alert';
