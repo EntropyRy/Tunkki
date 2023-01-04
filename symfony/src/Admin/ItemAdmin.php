@@ -13,6 +13,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
+use App\Repository\ItemRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
@@ -63,8 +64,7 @@ class ItemAdmin extends AbstractAdmin
                         'multiple' => true,
                     ]
                 ],
-            )
-        ;
+            );
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -72,12 +72,12 @@ class ItemAdmin extends AbstractAdmin
         $listMapper
             ->addIdentifier('name')
             ->add('rent', 'currency', ['currency' => 'Eur'])
-            ->add('needsFixing', null, ['editable'=>true, 'inverse' => true])
-//            ->add('rentHistory')
-//            ->add('forSale', null, array('editable'=>true))
-//            ->add('createdAt')
+            ->add('needsFixing', null, ['editable' => true, 'inverse' => true])
+            //            ->add('rentHistory')
+            //            ->add('forSale', null, array('editable'=>true))
+            //            ->add('createdAt')
             ->add('updatedAt')
-//            ->add('creator')
+            //            ->add('creator')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
@@ -86,8 +86,7 @@ class ItemAdmin extends AbstractAdmin
                     'edit' => [],
                     'delete' => []
                 ]
-            ])
-        ;
+            ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -97,52 +96,52 @@ class ItemAdmin extends AbstractAdmin
         $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
 
         $formMapper
-        ->tab('General')
+            ->tab('General')
             ->with('General Information', ['class' => 'col-md-6'])
-                ->add('name', null, ['help' => 'used in spoken language'])
-                ->add('manufacturer')
-                ->add('model')
-                ->add('serialnumber')
-                ->add('placeinstorage')
-                ->add('url')
-                ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
-                ->add('commission', DatePickerType::class, [
-                    'required' => false,
-                    'format' => 'd.M.y'
-                ])
-                ->add('purchasePrice')
-                ->add('tags', ModelAutocompleteType::class, [
-                    'property' => 'name',
-                    'multiple' => true,
-                    'required' => false,
-                    'minimum_input_length' => 2
-                ])
-              ->add('category', CategorySelectorType::class, [
-                        'class' => $categoryAdmin->getClass(),
-                        'required' => false,
-                        'by_reference' => false,
-                        'context' => $currentContext,
-                        'model_manager' => $categoryAdmin->getModelManager(),
-                        'category' => new Category(),
-                        'btn_add' => false
-                    ])
+            ->add('name', null, ['help' => 'used in spoken language'])
+            ->add('manufacturer')
+            ->add('model')
+            ->add('serialnumber')
+            ->add('placeinstorage')
+            ->add('url')
+            ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
+            ->add('commission', DatePickerType::class, [
+                'required' => false,
+                'format' => 'd.M.y'
+            ])
+            ->add('purchasePrice')
+            ->add('tags', ModelAutocompleteType::class, [
+                'property' => 'name',
+                'multiple' => true,
+                'required' => false,
+                'minimum_input_length' => 2
+            ])
+            ->add('category', CategorySelectorType::class, [
+                'class' => $categoryAdmin->getClass(),
+                'required' => false,
+                'by_reference' => false,
+                'context' => $currentContext,
+                'model_manager' => $categoryAdmin->getModelManager(),
+                'category' => new Category(),
+                'btn_add' => false
+            ])
             ->end()
             ->with('Rent Information', ['class' => 'col-md-6'])
-                ->add('whoCanRent', null, [
-                    'multiple' => true,
-                    'expanded' => true,
-                    'help' => 'Select all fitting groups!'
-                ])
-                ->add('rent', null, ['label' => 'Rental price (€)'])
-                ->add('rentNotice', TextareaType::class, ['required' => false,'label' => 'Rental Notice'])
-                ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
+            ->add('whoCanRent', null, [
+                'multiple' => true,
+                'expanded' => true,
+                'help' => 'Select all fitting groups!'
+            ])
+            ->add('rent', null, ['label' => 'Rental price (€)'])
+            ->add('rentNotice', TextareaType::class, ['required' => false, 'label' => 'Rental Notice'])
+            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
             ->end()
-/*            ->with('Condition', array('class' => 'col-md-6'))
+            /*            ->with('Condition', array('class' => 'col-md-6'))
                 ->add('forSale')
                 ->add('toSpareParts')
                 ->add('needsFixing', null, ['disabled' => true, 'help' => 'to change this use the fixing history'])
                 ->end() */
-        ->end();
+            ->end();
         $subject = $this->getSubject();
         if ($subject) {
             if ($subject->getCreatedAt()) {
@@ -152,12 +151,11 @@ class ItemAdmin extends AbstractAdmin
                     ->add('rentHistory', null, ['disabled' => true])
                     ->end()
                     ->with('Meta')
-                        ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
-                        ->add('creator', null, ['disabled' => true])
-                        ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
-                        ->add('modifier', null, ['disabled' => true])
-                    ->end()
-                ;
+                    ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                    ->add('creator', null, ['disabled' => true])
+                    ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
+                    ->add('modifier', null, ['disabled' => true])
+                    ->end();
             }
         }
     }
@@ -183,8 +181,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt')
             ->add('creator')
-            ->add('modifier')
-        ;
+            ->add('modifier');
     }
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
@@ -195,7 +192,7 @@ class ItemAdmin extends AbstractAdmin
         $admin = $this->isChild() ? $this->getParent() : $this;
         $id = $admin->getRequest()->get('id');
 
-//        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
+        //        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Item', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
@@ -212,31 +209,31 @@ class ItemAdmin extends AbstractAdmin
     public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
-        $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
+        $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '> created by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
     public function preUpdate($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
-        $em = $this->getModelManager()->getEntityManager($this->getClass());
-        $original = $em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = 'ITEM: <'.$this->generateUrl('show', ['id'=> $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>:';
-        if ($original['name']!= $Item->getName()) {
-            $text .= ' renamed from '.$original['name'];
-            $text .= ' by '. $user;
+        //$em = $this->getModelManager()->getEntityManager($this->getClass());
+        $original = $this->repo->getUnitOfWork()->getOriginalEntityData($Item);
+        $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '>:';
+        if ($original['name'] != $Item->getName()) {
+            $text .= ' renamed from ' . $original['name'];
+            $text .= ' by ' . $user;
             $this->mm->SendToMattermost($text, 'vuokraus');
         }
     }
     public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
-        $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
+        $text = '#### ITEM: ' . $Item->getName() . ' deleted by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('clone', $this->getRouterIdParameter().'/clone');
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
     public function configureBatchActions(array $actions): array
     {
@@ -245,7 +242,11 @@ class ItemAdmin extends AbstractAdmin
         }
         return $actions;
     }
-    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts, protected CategoryManagerInterface $cm)
-    {
+    public function __construct(
+        protected \App\Helper\Mattermost $mm,
+        protected TokenStorageInterface $ts,
+        protected CategoryManagerInterface $cm,
+        protected ItemRepository $em
+    ) {
     }
 }

@@ -4,7 +4,8 @@ namespace App\Entity;
 
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
-use App\Entity\User;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -13,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  * item
  */
 #[ORM\Table(name: 'Item')]
-#[ORM\Entity(repositoryClass: \App\Repository\ItemsRepository::class)]
+#[ORM\Entity(repositoryClass: \App\Repository\ItemRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Item implements \Stringable
@@ -115,7 +116,7 @@ class Item implements \Stringable
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -125,9 +126,9 @@ class Item implements \Stringable
      *
      * @param string $name
      *
-     * @return Items
+     * @return Item
      */
-    public function setName($name)
+    public function setName($name): Item
     {
         $this->name = $name;
 
@@ -139,7 +140,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -151,7 +152,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setManufacturer($manufacturer)
+    public function setManufacturer($manufacturer): Item
     {
         $this->manufacturer = $manufacturer;
 
@@ -163,7 +164,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getManufacturer()
+    public function getManufacturer(): ?string
     {
         return $this->manufacturer;
     }
@@ -175,7 +176,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setModel($model)
+    public function setModel($model): Item
     {
         $this->model = $model;
 
@@ -187,7 +188,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getModel()
+    public function getModel(): ?string
     {
         return $this->model;
     }
@@ -199,7 +200,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setDescription($description)
+    public function setDescription($description): Item
     {
         $this->description = $description;
 
@@ -211,7 +212,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -223,7 +224,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setRent($rent)
+    public function setRent($rent): Item
     {
         $this->rent = $rent;
 
@@ -247,7 +248,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setRentNotice($rentNotice)
+    public function setRentNotice($rentNotice): Item
     {
         $this->rentNotice = $rentNotice;
 
@@ -259,7 +260,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getRentNotice()
+    public function getRentNotice(): ?string
     {
         return $this->rentNotice;
     }
@@ -271,7 +272,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setNeedsFixing($needsFixing)
+    public function setNeedsFixing($needsFixing): Item
     {
         $this->needsFixing = $needsFixing;
 
@@ -283,7 +284,7 @@ class Item implements \Stringable
      *
      * @return boolean
      */
-    public function getNeedsFixing()
+    public function getNeedsFixing(): bool
     {
         return $this->needsFixing;
     }
@@ -295,7 +296,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setForSale($forSale)
+    public function setForSale($forSale): Item
     {
         $this->forSale = $forSale;
 
@@ -307,7 +308,7 @@ class Item implements \Stringable
      *
      * @return boolean
      */
-    public function getForSale()
+    public function getForSale(): ?bool
     {
         return $this->forSale;
     }
@@ -358,7 +359,7 @@ class Item implements \Stringable
         $this->packages = new ArrayCollection();
     }
 
-    public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory)
+    public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory): Item
     {
         $fixingHistory->setProduct($this);
         $this->fixingHistory[] = $fixingHistory;
@@ -366,7 +367,7 @@ class Item implements \Stringable
         return $this;
     }
 
-    public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory)
+    public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory): void
     {
         $fixingHistory->setProduct(null);
         $this->fixingHistory->removeElement($fixingHistory);
@@ -377,7 +378,7 @@ class Item implements \Stringable
         return $this->fixingHistory;
     }
 
-    public function getFixingHistoryMessages($count, $endofline = null)
+    public function getFixingHistoryMessages($count, $endofline = null): ?string
     {
         if ($endofline == 'html') {
             $eol = "<br>";
@@ -387,7 +388,7 @@ class Item implements \Stringable
         $messages = '';
         foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
             $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';
-            $messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$user.': '.$event->getDescription().''.$eol;
+            $messages .= '[' . $event->getCreatedAt()->format('j.n.Y H:m') . '] ' . $user . ': ' . $event->getDescription() . '' . $eol;
         }
         if ($messages != null) {
             return $messages;
@@ -396,26 +397,26 @@ class Item implements \Stringable
         }
     }
 
-    public function resetFixingHistory()
+    public function resetFixingHistory(): void
     {
         foreach ($this->getFixingHistory() as $fix) {
             $this->removeFixingHistory($fix);
         }
     }
-    public function resetWhoCanRent()
+    public function resetWhoCanRent(): void
     {
         foreach ($this->getWhoCanRent() as $who) {
             $this->removeWhoCanRent($who);
         }
     }
-    public function setCommission($commission)
+    public function setCommission($commission): Item
     {
         $this->commission = $commission;
 
         return $this;
     }
 
-    public function getCommission()
+    public function getCommission(): ?DateTime
     {
         return $this->commission;
     }
@@ -427,7 +428,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setSerialnumber($serialnumber)
+    public function setSerialnumber($serialnumber): Item
     {
         $this->serialnumber = $serialnumber;
 
@@ -439,7 +440,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getSerialnumber()
+    public function getSerialnumber(): ?string
     {
         return $this->serialnumber;
     }
@@ -451,7 +452,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function addFile(\App\Entity\File $file)
+    public function addFile(\App\Entity\File $file): Item
     {
         $file->setProduct($this);
         $this->files[] = $file;
@@ -462,7 +463,7 @@ class Item implements \Stringable
     /**
      * Remove file
      */
-    public function removeFile(\App\Entity\File $file)
+    public function removeFile(\App\Entity\File $file): void
     {
         $file->setProduct(null);
         $this->files->removeElement($file);
@@ -485,7 +486,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setPlaceinstorage($placeinstorage)
+    public function setPlaceinstorage($placeinstorage): Item
     {
         $this->placeinstorage = $placeinstorage;
 
@@ -497,7 +498,7 @@ class Item implements \Stringable
      *
      * @return string
      */
-    public function getPlaceinstorage()
+    public function getPlaceinstorage(): ?string
     {
         return $this->placeinstorage;
     }
@@ -508,7 +509,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function addTag(Tag $tag)
+    public function addTag(Tag $tag): Item
     {
         $this->tags[] = $tag;
 
@@ -518,7 +519,7 @@ class Item implements \Stringable
     /**
      * Remove tag
      */
-    public function removeTag(Tag $tag)
+    public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
     }
@@ -539,7 +540,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setCreator(\App\Entity\User $creator = null)
+    public function setCreator(\App\Entity\User $creator = null): Item
     {
         $this->creator = $creator;
 
@@ -562,7 +563,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setModifier(\App\Entity\User $modifier = null)
+    public function setModifier(\App\Entity\User $modifier = null): Item
     {
         $this->modifier = $modifier;
 
@@ -586,7 +587,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function addPackage(\App\Entity\Package $package)
+    public function addPackage(\App\Entity\Package $package): Item
     {
         $this->packages[] = $package;
 
@@ -596,7 +597,7 @@ class Item implements \Stringable
     /**
      * Remove package
      */
-    public function removePackage(\App\Entity\Package $package)
+    public function removePackage(\App\Entity\Package $package): void
     {
         $this->packages->removeElement($package);
     }
@@ -618,7 +619,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setToSpareParts($toSpareParts)
+    public function setToSpareParts($toSpareParts): Item
     {
         $this->toSpareParts = $toSpareParts;
 
@@ -630,7 +631,7 @@ class Item implements \Stringable
      *
      * @return boolean
      */
-    public function getToSpareParts()
+    public function getToSpareParts(): bool
     {
         return $this->toSpareParts;
     }
@@ -641,7 +642,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setPackages(\App\Entity\Package $packages = null)
+    public function setPackages(\App\Entity\Package $packages = null): Item
     {
         $this->packages = $packages;
 
@@ -654,7 +655,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function addRentHistory(\App\Entity\Booking $rentHistory)
+    public function addRentHistory(\App\Entity\Booking $rentHistory): Item
     {
         $this->rentHistory[] = $rentHistory;
 
@@ -664,7 +665,7 @@ class Item implements \Stringable
     /**
      * Remove rentHistory
      */
-    public function removeRentHistory(\App\Entity\Booking $rentHistory)
+    public function removeRentHistory(\App\Entity\Booking $rentHistory): void
     {
         $this->rentHistory->removeElement($rentHistory);
     }
@@ -684,7 +685,7 @@ class Item implements \Stringable
      *
      * @return null
      */
-    public function resetRentHistory()
+    public function resetRentHistory(): void
     {
         foreach ($this->getRentHistory() as $rent) {
             $this->removeRentHistory($rent);
@@ -697,7 +698,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setCategory(Category $category = null)
+    public function setCategory(Category $category = null): Item
     {
         $this->category = $category;
 
@@ -720,7 +721,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
+    public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): Item
     {
         $this->whoCanRent[] = $whoCanRent;
 
@@ -730,7 +731,7 @@ class Item implements \Stringable
     /**
      * Remove whoCanRent
      */
-    public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
+    public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): void
     {
         $this->whoCanRent->removeElement($whoCanRent);
     }
@@ -752,7 +753,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setUrl($url = null)
+    public function setUrl($url = null): Item
     {
         $this->url = $url;
 
@@ -764,7 +765,7 @@ class Item implements \Stringable
      *
      * @return string|null
      */
-    public function getUrl()
+    public function getUrl(): ?string
     {
         return $this->url;
     }
@@ -776,7 +777,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setCannotBeRented($cannotBeRented)
+    public function setCannotBeRented($cannotBeRented): Item
     {
         $this->cannotBeRented = $cannotBeRented;
 
@@ -788,7 +789,7 @@ class Item implements \Stringable
      *
      * @return bool
      */
-    public function getCannotBeRented()
+    public function getCannotBeRented(): bool
     {
         return $this->cannotBeRented;
     }
@@ -800,7 +801,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setCompensationPrice($compensationPrice = null)
+    public function setCompensationPrice($compensationPrice = null): Item
     {
         $this->compensationPrice = $compensationPrice;
 
@@ -824,7 +825,7 @@ class Item implements \Stringable
      *
      * @return Item
      */
-    public function setPurchasePrice($purchasePrice = null)
+    public function setPurchasePrice($purchasePrice = null): Item
     {
         $this->purchasePrice = $purchasePrice;
 
@@ -842,14 +843,14 @@ class Item implements \Stringable
     }
 
     #[ORM\PrePersist]
-    public function prePersist()
+    public function prePersist(): void
     {
         $this->createdAt = new \DateTimeImmutable();
         $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
-    public function preUpdate()
+    public function preUpdate(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
     }

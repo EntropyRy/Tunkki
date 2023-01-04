@@ -6,19 +6,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
-use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
-use Sonata\Form\Type\ImmutableArrayType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Form\UrlsType;
+use Twig\Environment;
 
 class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
 {
@@ -40,7 +34,7 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
     {
     }
 
-    public function __construct($twig, protected Security $security) //, EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected Security $security) //, EntityManagerInterface $em)
     {
         parent::__construct($twig);
     }

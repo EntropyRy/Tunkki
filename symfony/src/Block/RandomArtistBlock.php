@@ -13,6 +13,7 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Artist;
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Environment;
 
 class RandomArtistBlock extends BaseBlockService
 {
@@ -24,7 +25,7 @@ class RandomArtistBlock extends BaseBlockService
         return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'artist'  => $artist, 'settings' => $blockContext->getSettings()], $response);
     }
 
-    public function __construct($twig, protected EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected EntityManagerInterface $em)
     {
         parent::__construct($twig);
     }
