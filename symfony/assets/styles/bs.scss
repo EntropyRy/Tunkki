@@ -52,6 +52,11 @@ $theme-colors: (
 @import "~bootstrap/scss/list-group";
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "~bootstrap/scss/utilities/api";
+// 8. fontawesome fonts 
+$fa-font-display: swap;
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
 
 .navbar-nav .current, .navbar-nav .current_ancestor.dropdown .nav-link {
     text-decoration: underline;
