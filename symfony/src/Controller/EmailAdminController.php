@@ -16,8 +16,18 @@ final class EmailAdminController extends CRUDController
     public function previewAction(): Response
     {
         $email = $this->admin->getSubject();
+        $event = $email->getEvent();
+        $img = null;
+        if (!is_null($event)) {
+            $img = $event->getPicture();
+        }
         $admin = $this->admin;
-        return $this->renderWithExtraParams('emails/email.html.twig', ['body' => $email->getBody(), 'email' => $email, 'admin' => $admin]);
+        return $this->renderWithExtraParams('emails/email.html.twig', [
+            'body' => $email->getBody(),
+            'email' => $email,
+            'admin' => $admin,
+            'img' => $img
+        ]);
     }
     public function sendAction(MailerInterface $mailer): RedirectResponse
     {
@@ -35,7 +45,7 @@ final class EmailAdminController extends CRUDController
                 if ((is_countable($rsvps) ? count($rsvps) : 0) > 0) {
                     foreach ($rsvps as $rsvp) {
                         $to = $rsvp->getAvailableEmail();
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links);
+                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
                         $mailer->send($message);
                         $count += 1;
                     }
@@ -46,7 +56,7 @@ final class EmailAdminController extends CRUDController
                     if ($ticket->getStatus() == 'paid' || $ticket->getStatus() == 'reserved') {
                         $to = $ticket->getOwnerEmail();
                         if ($to) {
-                            $message = $this->generateMail($to, $replyto, $subject, $body, $links);
+                            $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
                             $mailer->send($message);
                             $count += 1;
                         }
@@ -63,7 +73,7 @@ final class EmailAdminController extends CRUDController
                 }
                 foreach ($emails as $to) {
                     if ($to) {
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links);
+                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
                         $mailer->send($message);
                         $count += 1;
                     }
@@ -74,7 +84,7 @@ final class EmailAdminController extends CRUDController
             return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
     }
-    private function generateMail($to, $replyto, $subject, $body, $links): TemplatedEmail
+    private function generateMail($to, $replyto, $subject, $body, $links, $img): TemplatedEmail
     {
         return (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy Ry'))
@@ -82,7 +92,6 @@ final class EmailAdminController extends CRUDController
             ->replyTo($replyto)
             ->subject($subject)
             ->htmlTemplate('emails/email.html.twig')
-            ->context(['body' => $body, 'links' => $links])
-        ;
+            ->context(['body' => $body, 'links' => $links, 'img' => $img]);
     }
 }
