@@ -2,15 +2,15 @@ sonata_admin:
   title: Tunkki
   security:
     handler: sonata.admin.security.handler.role
-  title_logo: images/logo.png
+  title_logo: /images/header-logo-text.svg
   global_search:
     empty_boxes: hide
   persist_filters: true
   options:
     use_select2: true
     use_stickyforms: false
-    html5_validate: true # does use html5 validation
-    pager_links: 5 # pager max links to display
+    html5_validate: true
+    pager_links: 5
     lock_protection: true
     logo_content: icon
   templates:
@@ -21,8 +21,6 @@ sonata_admin:
       - { position: right, type: entropy_tunkki.block.bookings }
       - { position: right, type: entropy.block.brokenitems }
       - { position: left, type: sonata.admin.block.admin_list }
-      #- { position: left, type: entropy.block.future_events }
-      #- { position: right, type: sonata.timeline.block.timeline, settings: { context: GLOBAL, max_per_page: 12, paginate: true }}
       - {
           position: top,
           type: sonata.admin.block.stats,
