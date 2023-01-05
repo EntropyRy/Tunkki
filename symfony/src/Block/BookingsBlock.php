@@ -13,6 +13,7 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
+use Twig\Environment;
 
 class BookingsBlock extends BaseBlockService
 {
@@ -28,9 +29,9 @@ class BookingsBlock extends BaseBlockService
         return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'bookings'  => $bookings], $response);
     }
 
-    public function __construct($name, protected EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected EntityManagerInterface $em)
     {
-        parent::__construct($name);
+        parent::__construct($twig);
     }
 
     public function configureSettings(OptionsResolver $resolver): void

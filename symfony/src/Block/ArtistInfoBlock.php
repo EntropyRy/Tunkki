@@ -2,6 +2,7 @@
 
 namespace App\Block;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
@@ -19,6 +20,7 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
+        assert($user instanceof User);
         $member = $user->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),

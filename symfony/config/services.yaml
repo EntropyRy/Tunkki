@@ -203,38 +203,26 @@ services:
             }
     entropy_tunkki.block.bookings:
         class: App\Block\BookingsBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: bookingblock}
     entropy.block.artist_list:
         class: App\Block\ArtistListBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: artistlistblock}
     entropy.block.compensations:
         class: App\Block\Compensations
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: compensationsblock}
     entropy.block.member.situation:
         class: App\Block\MemberSituation
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: membersituationblock}
     entropy.block.joinus:
         class: App\Block\JoinUsBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: joinusblock}
     entropy.block.statistics:
         class: App\Block\StatisticsBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: statisticsblock}
     entropy.block.random_artist:
@@ -243,8 +231,6 @@ services:
             - {name: sonata.block, alias: randomartistblock}
     entropy.block.member.info:
         class: App\Block\MemberInfoBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: memberblock}
     entropy.block.artist_info:
@@ -253,38 +239,26 @@ services:
             - {name: sonata.block, alias: artistblock}
     entropy.block.email_lists:
         class: App\Block\EmailLists
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: emaillistsblock}
     entropy.block.door_info:
         class: App\Block\DoorInfoBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: doorblock}
     entropy_tunkki.block.linklist:
         class: App\Block\LinkListBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: linklistblock}
     entropy.block.brokenitems:
         class: App\Block\BrokenItemsBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: brokenitemsblock}
     entropy.block.future_events:
         class: App\Block\FutureEventsBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: futureeventsblock}
     entropy.block.bookings_in_progress:
         class: App\Block\BookingsInProgressBlock
-        arguments:
-            - "@twig"
         tags:
             - {name: sonata.block, alias: bookingsinprogressblock}
     entropy_tunkki.admin.who_can_rent_choice:

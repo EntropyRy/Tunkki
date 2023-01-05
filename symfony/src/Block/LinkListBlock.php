@@ -16,7 +16,6 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Form\UrlsType;
 
 class LinkListBlock extends BaseBlockService implements EditableBlockService
@@ -40,7 +39,7 @@ class LinkListBlock extends BaseBlockService implements EditableBlockService
                     ['title', TextType::class, [
                         'label' => 'List Title',
                     ]],
-                    ['show', ChoiceType::class,[
+                    ['show', ChoiceType::class, [
                         'choices' => [
                             'Everybody can see this' => 'everybody',
                             'Show only to logged in user' => 'in',
@@ -58,11 +57,6 @@ class LinkListBlock extends BaseBlockService implements EditableBlockService
                     ]],
                 ]
             ]);
-    }
-
-    public function __construct($twig, protected EntityManagerInterface $em)
-    {
-        parent::__construct($twig);
     }
 
     public function configureSettings(OptionsResolver $resolver): void

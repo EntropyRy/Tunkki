@@ -6,14 +6,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Form\UrlsType;
+use Twig\Environment;
 
 class MemberSituation extends BaseBlockService
 {
@@ -32,14 +30,9 @@ class MemberSituation extends BaseBlockService
     }
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
-        /*		$formMapper
-                    ->add('settings', ImmutableArrayType::class, [
-                        'keys' => [
-                        ]
-                    ]);*/
     }
 
-    public function __construct($twig, protected Security $security, protected EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected Security $security)
     {
         parent::__construct($twig);
     }

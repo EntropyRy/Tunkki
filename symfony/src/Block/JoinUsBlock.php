@@ -9,11 +9,9 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\Service\EditableBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\Templating\EngineInterface;
 use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
-use Doctrine\ORM\EntityManagerInterface;
 
 class JoinUsBlock extends BaseBlockService implements EditableBlockService
 {

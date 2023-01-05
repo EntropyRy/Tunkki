@@ -15,18 +15,18 @@ use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\ZMQHelper;
 use App\Entity\Doorlog;
+use Twig\Environment;
 
 class DoorInfoBlock extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         if (is_null($this->security->getUser())) {
-            return $this->renderResponse($blockContext->getTemplate(), [
-            ], $response);
+            return $this->renderResponse($blockContext->getTemplate(), [], $response);
         }
         $member = $this->security->getUser()->getMember();
         $now = new \DateTime('now');
-        $status = $this->zmq->send('dev'.' init: '.$member->getUsername().' '.$now->getTimestamp());
+        $status = $this->zmq->send('dev' . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
         $logs = $this->em->getRepository(DoorLog::class)->getLatest(3);
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
@@ -44,7 +44,7 @@ class DoorInfoBlock extends BaseBlockService
     {
     }
 
-    public function __construct($twig, protected Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
+    public function __construct(Environment $twig, protected Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
     {
         parent::__construct($twig);
     }
