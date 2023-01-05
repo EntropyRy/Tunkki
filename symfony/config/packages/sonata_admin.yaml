@@ -18,9 +18,9 @@ sonata_admin:
     layout: "admin/logo_block.html.twig"
   dashboard:
     blocks:
-      - { position: right, type: entropy_tunkki.block.bookings }
-      - { position: right, type: entropy.block.brokenitems }
-      - { position: left, type: sonata.admin.block.admin_list }
+      - {position: right, type: entropy_tunkki.block.bookings}
+      - {position: right, type: entropy.block.brokenitems}
+      - {position: left, type: sonata.admin.block.admin_list}
       - {
           position: top,
           type: sonata.admin.block.stats,
@@ -64,8 +64,6 @@ sonata_admin:
         icon: '<i class="fa fa-sitemap"></i>'
         items:
           - entropy.admin.event
-          - entropy.admin.nakki_definition
-          - entropy.admin.nakki_booking
           - entropy.admin.rsvp
           - admin.ticket
       sonata.admin.group.content:
@@ -82,7 +80,6 @@ sonata_admin:
         icon: '<i class="fa fa-users"></i>'
         items:
           - entropy_tunkki.admin.member
-          - admin.email
           - admin.door_log
         roles: [SONATA_SUPER_ADMIN, MEMBERS]
       sonata.admin.group.config:
@@ -96,6 +93,8 @@ sonata_admin:
           - entropy_tunkki.admin.accessory_choices
           - entropy.admin.contract
           - sonata.classification.admin.category
+          - entropy.admin.nakki_definition
+          - entropy.admin.nakki_booking
           #            sonata.admin.group.classification:
           #                label:           Classification
           #                label_catalogue: SonataClassificationBundle
@@ -110,6 +109,7 @@ sonata_admin:
         label: Administration
         items:
           #- entropy_tunkki.admin.statusevent
+          - admin.email
           - sonata.page.admin.site
           - entropy.admin.access_groups
         roles: [SONATA_SUPER_ADMIN]
