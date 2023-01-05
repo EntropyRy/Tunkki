@@ -192,6 +192,7 @@ event:
     will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
   form:
     sign_up:
+      request_edited: Ilmottautumista muokattu
       artist: Artisti
       description: Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista, koska profilli on aina tapahtumakohtainen
       why_should_we_choose_you: Miksi valitsisimme sinut?

@@ -6,22 +6,16 @@ use App\Entity\EventArtistInfo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Artist;
 
-class EventArtistInfoType extends AbstractType
+class EventArtistInfoEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('Artist', null, [
-                'choices' => $options['artists'],
-                'choice_label' => function (Artist $artist) {
-                    return $artist->getGenre() ? $artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName();
-                },
+                'disabled' => true,
                 'required' => true,
                 'label' => 'event.form.sign_up.artist',
-                'help' => 'event.form.sign_up.new_artist_help_html',
-                'help_html' => true,
             ])
             ->add('WishForPlayTime', null, [
                 'label' => 'event.form.sign_up.wish_for_playtime'

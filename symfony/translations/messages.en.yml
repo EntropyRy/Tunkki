@@ -127,6 +127,7 @@ event:
         will_appear_here_when_the_stream_is_on: Player will appear here on page load when the stream is on
     form:
         sign_up:
+            request_edited: Signup request edited
             artist: Artist
             why_should_we_choose_you: Why should we choose you?
             wish_for_playtime: At what time do you wish to play?

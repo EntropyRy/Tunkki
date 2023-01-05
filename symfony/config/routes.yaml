@@ -66,10 +66,17 @@ entropy_event_slug_nakkikone:
     requirements:
         year: '\d+'
 entropy_event_slug_artist_signup:
-    path: 
+    path:
         en: /{year}/{slug}/signup
         fi: /{year}/{slug}/ilmottautuminen
     controller: App\Controller\EventSignUpController::artistSignUp
+    requirements:
+        year: '\d+'
+entropy_event_slug_artist_signup_edit:
+    path:
+        en: /{year}/{slug}/signup/{id}/edit
+        fi: /{year}/{slug}/ilmottautuminen/{id}/muokkaa
+    controller: App\Controller\EventSignUpController::artistSignUpEdit
     requirements:
         year: '\d+'
 entropy_event_rsvp:

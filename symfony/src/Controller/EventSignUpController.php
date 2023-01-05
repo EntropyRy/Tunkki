@@ -18,7 +18,9 @@ use App\Entity\RSVP;
 use App\Entity\EventArtistInfo;
 use App\Entity\NakkiBooking;
 use App\Form\EventArtistInfoType;
+use App\Form\EventArtistInfoEditType;
 use App\Form\ArtistType;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * @IsGranted("ROLE_USER")
@@ -228,7 +230,8 @@ class EventSignUpController extends EventController
     public function artistSignUp(
         Request $request,
         Event $event,
-        TranslatorInterface $trans
+        TranslatorInterface $trans,
+        EntityManagerInterface $em
     ): Response {
         $artists = $this->getUser()->getMember()->getArtist();
         if ((is_countable($artists) ? count($artists) : 0) == 0) {
@@ -236,12 +239,10 @@ class EventSignUpController extends EventController
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));
         }
-
         if (!$event->getArtistSignUpNow()) {
             $this->addFlash('warning', $trans->trans('Not allowed'));
             return new RedirectResponse($this->generateUrl('entropy_profile'));
         }
-        $this->em = $this->getDoctrine()->getManager();
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
         $form = $this->createForm(EventArtistInfoType::class, $artisteventinfo, ['artists' => $artists]);
@@ -260,14 +261,43 @@ class EventSignUpController extends EventController
             $artistClone->setGenre($artist->getGenre());
             $artistClone->setType($artist->getType());
             $info->setArtistClone($artistClone);
-            $this->em->persist($artistClone);
-            $this->em->persist($info);
+            $em->persist($artistClone);
+            $em->persist($info);
             try {
-                $this->em->flush();
+                $em->flush();
                 $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));
                 return new RedirectResponse($this->generateUrl('entropy_profile'));
             } catch (\Exception) {
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
+            }
+        }
+        //$page = $cms->retrieve()->getCurrentPage();
+        return $this->renderForm('artist/signup.html.twig', [
+            'event' => $event,
+            'form' => $form,
+        ]);
+    }
+    /**
+     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
+     */
+    public function artistSignUpEdit(
+        Request $request,
+        Event $event,
+        EventArtistInfo $artisteventinfo,
+        TranslatorInterface $trans,
+        EntityManagerInterface $em
+    ): Response {
+        $form = $this->createForm(EventArtistInfoEditType::class, $artisteventinfo);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $info = $form->getData();
+            $em->persist($info);
+            try {
+                $em->flush();
+                $this->addFlash('success', $trans->trans('event.form.sign_up.request_edited'));
+                return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
+            } catch (\Exception) {
+                $this->addFlash('warning', $trans->trans('Something went wrong!'));
             }
         }
         //$page = $cms->retrieve()->getCurrentPage();
