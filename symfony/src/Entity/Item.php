@@ -46,7 +46,7 @@ class Item implements \Stringable
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $whoCanRent;
+    private $whoCanRent;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
@@ -56,7 +56,7 @@ class Item implements \Stringable
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $tags;
+    private $tags;
 
     #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $rent;
@@ -77,19 +77,19 @@ class Item implements \Stringable
     private bool $cannotBeRented = false;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $fixingHistory;
+    private $fixingHistory;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\File::class, mappedBy: 'product', cascade: ['all'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $files;
+    private $files;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Booking::class, cascade: ['all'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $rentHistory;
+    private $rentHistory;
 
     #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
     private ?bool $forSale = false;
 
     #[ORM\ManyToMany(targetEntity: 'Package', inversedBy: 'items')]
-    private \Doctrine\Common\Collections\ArrayCollection|array|\App\Entity\Package|null $packages = null;
+    private $packages = null;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
     private ?\DateTime $commission = null;

@@ -20,7 +20,7 @@ class Package implements \Stringable
     private readonly int $id;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $items;
+    private $items;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -32,7 +32,7 @@ class Package implements \Stringable
     private bool $needsFixing = false;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $whoCanRent;
+    private $whoCanRent;
 
     #[ORM\Column(name: 'notes', type: 'text', nullable: true)]
     private ?string $notes = null;

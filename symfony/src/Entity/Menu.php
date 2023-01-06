@@ -70,7 +70,7 @@ class Menu implements \Stringable
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $parent = null;
     #[ORM\OneToMany(targetEntity: 'Menu', mappedBy: 'parent')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $children;
+    private $children = null;
 
     public function __construct()
     {

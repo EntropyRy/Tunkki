@@ -20,7 +20,7 @@ class AccessGroups implements \Stringable
     private ?string $name = null;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'accessGroups')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $users;
+    private $users;
 
     #[ORM\Column(type: 'json')]
     private array $roles = [];

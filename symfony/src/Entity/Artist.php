@@ -37,7 +37,7 @@ class Artist implements \Stringable
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: 'Artist', cascade: ['persist', 'detach'])]
     #[ORM\JoinColumn(nullable:true, onDelete:"CASCADE")]
-    private \Doctrine\Common\Collections\ArrayCollection|array $eventArtistInfos;
+    private $eventArtistInfos;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime')]

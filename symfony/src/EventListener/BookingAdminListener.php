@@ -13,11 +13,16 @@ use Symfony\Component\Mime\Address;
 
 class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
-    public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly \Twig\Environment $twig, private readonly EntityManagerInterface $em)
+    private $email;
+    private $fromEmail;
+
+    public function __construct(string $email, string $fromEmail, private readonly MailerInterface $mailer, private readonly \Twig\Environment $twig, private readonly EntityManagerInterface $em)
     {
+        $this->email = $email;
+        $this->fromEmail = $fromEmail;
     }
 
-    public function sendEmailNotification(PersistenceEvent $event)
+    public function sendEmailNotification(PersistenceEvent $event): void
     {
         if ($this->email) {
             $booking = $event->getObject();
@@ -35,7 +40,7 @@ class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSu
             }
         }
     }
-    public function updateRewards(PersistenceEvent $args)
+    public function updateRewards(PersistenceEvent $args): void
     {
         $event = $args->getObject();
         if ($event instanceof StatusEvent) {
@@ -70,7 +75,7 @@ class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSu
             }
         }
     }
-    private function giveRewardToUser($amount, $booking, $user)
+    private function giveRewardToUser($amount, $booking, $user): Reward
     {
         if ($user) {
             $all = $user->getRewards();

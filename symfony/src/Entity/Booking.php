@@ -56,14 +56,14 @@ class Booking implements \Stringable
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $items;
+    private $items;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Package::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private array|\Doctrine\Common\Collections\ArrayCollection $packages;
+    private $packages;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Accessory::class, cascade: ['persist'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $accessories;
+    private $accessories;
 
     #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
     private ?\App\Entity\WhoCanRentChoice $rentingPrivileges = null;
@@ -73,7 +73,7 @@ class Booking implements \Stringable
     private ?\App\Entity\Renter $renter = null;
 
     #[ORM\OneToMany(targetEntity: 'BillableEvent', mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $billableEvents;
+    private $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
     private ?\App\Entity\User $givenAwayBy = null;
@@ -88,7 +88,7 @@ class Booking implements \Stringable
     private int $numberOfRentDays = 1;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $statusEvents;
+    private $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
     private ?\App\Entity\User $creator = null;
@@ -113,7 +113,7 @@ class Booking implements \Stringable
     private ?\DateTimeInterface $bookingDate = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'bookings')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $rewards;
+    private $rewards;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $reasonForDiscount = null;

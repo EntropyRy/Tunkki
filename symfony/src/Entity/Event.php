@@ -93,7 +93,7 @@ body {
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: \Event::class)]
     #[ORM\OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $eventArtistInfos;
+    private $eventArtistInfos;
 
     /**
      * @Gedmo\Timestampable(on="update")
@@ -105,16 +105,16 @@ body {
     private ?\DateTimeInterface $until = null;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'event', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $RSVPs;
+    private $RSVPs;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $nakkis;
+    private $nakkis;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
+    private $nakkiBookings;
 
     #[ORM\Column(type: 'boolean')]
     private bool $NakkikoneEnabled = false;
@@ -167,7 +167,7 @@ body {
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
     #[ORM\OrderBy(['id'=>'DESC'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $tickets;
+    private $tickets;
 
     #[ORM\Column(type: 'integer')]
     private int $ticketCount = 0;
@@ -200,7 +200,7 @@ body {
     private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $emails;
+    private $emails;
 
     #[ORM\Column(nullable: true)]
     private ?bool $rsvpOnlyToActiveMembers = null;

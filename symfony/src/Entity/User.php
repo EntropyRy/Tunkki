@@ -49,7 +49,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     private ?\DateTimeInterface $UpdatedAt = null;
 
     #[ORM\OneToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'user', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $rewards;
+    private $rewards;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $LastLogin = null;
@@ -58,7 +58,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     private ?string $MattermostId = null;
 
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $accessGroups;
+    private $accessGroups;
 
     public function __construct()
     {

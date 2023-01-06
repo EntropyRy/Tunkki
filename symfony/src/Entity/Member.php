@@ -88,25 +88,25 @@ class Member implements \Stringable
 
     #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $artist;
+    private $artist;
 
     #[ORM\OneToMany(targetEntity: DoorLog::class, mappedBy: 'member', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $doorLogs;
+    private $doorLogs;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $theme = null;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $RSVPs;
+    private $RSVPs;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
+    private $nakkiBookings;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $tickets;
+    private $tickets;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $responsibleForNakkis;
+    private $responsibleForNakkis;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $denyKerdeAccess = false;

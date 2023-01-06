@@ -262,24 +262,10 @@ services:
         manager_type: orm
         group: admin
         label: Accessory Choices
-  entropy_tunkki.admin.email_notification:
-    class: App\EventListener\BookingAdminListener
+  App\EventListener\BookingAdminListener:
     arguments:
-      - "%booking_notification_email%"
-      - "%mailer_sender_address%"
-    tags:
-      - name: kernel.event_listener
-        event: sonata.admin.event.persistence.post_persist
-        method: sendEmailNotification
-  entropy_tunkki.admin.booking.reward:
-    class: App\EventListener\BookingAdminListener
-    arguments:
-      - "%booking_notification_email%"
-      - "%mailer_sender_address%"
-    tags:
-      - name: kernel.event_listener
-        event: sonata.admin.event.persistence.pre_persist
-        method: updateRewards
+      $email: '%booking_notification_email%'
+      $fromEmail: '%mailer_sender_address%'
   admin.email:
     class: App\Admin\EmailAdmin
     tags:
