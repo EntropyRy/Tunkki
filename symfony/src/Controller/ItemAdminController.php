@@ -63,7 +63,7 @@ class ItemAdminController extends Controller
     }
 
 
-    public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery, Request $request = null): RedirectResponse
+    public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery): RedirectResponse
     {
         $this->admin->checkAccess('edit');
 

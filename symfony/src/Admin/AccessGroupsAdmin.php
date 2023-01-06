@@ -73,7 +73,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
      */
     protected static function flattenRoles($rolesHierarchy): array
     {
-        $flatRoles = array();
+        $flatRoles = [];
         foreach ($rolesHierarchy as $key => $roles) {
             if (empty($roles)) {
                 continue;

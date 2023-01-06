@@ -14,16 +14,16 @@ class NakkiDefinition implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nameFi;
+    private ?string $nameFi = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $nameEn;
+    private ?string $nameEn = null;
 
     #[ORM\Column(type: 'text')]
-    private $DescriptionFi;
+    private ?string $DescriptionFi = null;
 
     #[ORM\Column(type: 'text')]
-    private $DescriptionEn;
+    private ?string $DescriptionEn = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $onlyForActiveMembers = false;

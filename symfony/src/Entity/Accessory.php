@@ -18,7 +18,7 @@ class Accessory implements \Stringable
     private readonly int $id;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\AccessoryChoice::class, cascade: ['persist'])]
-    private $name;
+    private ?\App\Entity\AccessoryChoice $name = null;
 
     #[ORM\Column(name: 'count', type: 'string', length: 50)]
     #[Assert\NotBlank]

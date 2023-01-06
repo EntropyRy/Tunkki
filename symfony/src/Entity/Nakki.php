@@ -19,31 +19,31 @@ class Nakki implements \Stringable
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private $definition;
+    private ?\App\Entity\NakkiDefinition $definition = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $startAt;
+    private ?\DateTimeImmutable $startAt = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private $endAt;
+    private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'nakki', orphanRemoval: true)]
-    private $nakkiBookings;
+    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private $event;
+    private ?\App\Entity\Event $event = null;
 
     #[ORM\Column(type: 'dateinterval')]
-    private $nakkiInterval;
+    private \DateInterval $nakkiInterval;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
     #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
-    private $responsible;
+    private ?\App\Entity\Member $responsible = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $mattermostChannel;
+    private ?string $mattermostChannel = null;
 
     public function __construct()
     {

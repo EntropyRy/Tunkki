@@ -34,31 +34,31 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     private $plainPassword;
 
     #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private $member;
+    private ?\App\Entity\Member $member = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(type: 'datetime')]
-    private $CreatedAt;
+    private ?\DateTimeInterface $CreatedAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime')]
-    private $UpdatedAt;
+    private ?\DateTimeInterface $UpdatedAt = null;
 
     #[ORM\OneToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'user', orphanRemoval: true)]
-    private $rewards;
+    private \Doctrine\Common\Collections\ArrayCollection|array $rewards;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $LastLogin;
+    private ?\DateTimeInterface $LastLogin = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $MattermostId;
+    private ?string $MattermostId = null;
 
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]
-    private $accessGroups;
+    private \Doctrine\Common\Collections\ArrayCollection|array $accessGroups;
 
     public function __construct()
     {

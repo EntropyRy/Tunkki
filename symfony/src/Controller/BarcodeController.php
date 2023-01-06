@@ -4,18 +4,17 @@ namespace App\Controller;
 
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class BarcodeController extends AbstractController
 {
     #[Route('/kerde/barcodes', name: 'entropy_kerde_barcodes')]
     public function index(): Response
     {
+        $barcodes = [];
         $generator = new BarcodeGeneratorHTML();
         $barcodes['10€'] = $generator->getBarcode('_10e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['20€'] = $generator->getBarcode('_20e_', $generator::TYPE_CODE_128, 2, 90);

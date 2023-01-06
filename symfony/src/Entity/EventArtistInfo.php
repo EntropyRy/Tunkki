@@ -14,28 +14,28 @@ class EventArtistInfo implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $SetLength;
+    private ?string $SetLength = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $StartTime;
+    private ?\DateTimeInterface $StartTime = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
-    private $Event;
+    private ?\App\Entity\Event $Event = null;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'eventArtistInfos', cascade: ['persist'])]
-    private $Artist;
+    private ?\App\Entity\Artist $Artist = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $WishForPlayTime;
+    private ?string $WishForPlayTime = null;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'])]
-    private $artistClone;
+    private ?\App\Entity\Artist $artistClone = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $freeWord;
+    private ?string $freeWord = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $stage;
+    private ?string $stage = null;
 
     public function getId(): ?int
     {

@@ -21,43 +21,43 @@ class Artist implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 190)]
-    private $name;
+    private ?string $name = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $genre;
+    private ?string $genre = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $type;
+    private ?string $type = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $bio;
+    private ?string $bio = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $hardware;
+    private ?string $hardware = null;
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: 'Artist', cascade: ['persist', 'detach'])]
     #[ORM\JoinColumn(nullable:true, onDelete:"CASCADE")]
-    private $eventArtistInfos;
+    private \Doctrine\Common\Collections\ArrayCollection|array $eventArtistInfos;
 
     #[Gedmo\Timestampable(on: 'create')]
     #[ORM\Column(type: 'datetime')]
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[Gedmo\Timestampable(on: 'update')]
     #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
-    private $member;
+    private ?\App\Entity\Member $member = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $bioEn;
+    private ?string $bioEn = null;
 
     #[ORM\Column(type: 'array', nullable: true)]
-    private $links = [];
+    private ?array $links = [];
 
     #[ORM\ManyToOne(targetEntity: SonataMediaMedia::class, cascade: ['persist', 'detach'])]
-    private $Picture;
+    private ?\App\Entity\Sonata\SonataMediaMedia $Picture = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $copyForArchive = false;

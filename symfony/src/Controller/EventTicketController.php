@@ -8,8 +8,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use App\Helper\Mattermost;
 use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
@@ -17,16 +17,11 @@ use App\Repository\TicketRepository;
 use App\Entity\Event;
 use App\Entity\Ticket;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventTicketController extends EventSignUpController
 {
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function presale(
-        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TicketRepository $ticketRepo
     ): RedirectResponse {
@@ -44,11 +39,8 @@ class EventTicketController extends EventSignUpController
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function sale(
-        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TicketRepository $ticketRepo
     ): RedirectResponse {
@@ -64,12 +56,9 @@ class EventTicketController extends EventSignUpController
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     * @ParamConverter("ticket", options={"mapping": {"reference": "referenceNumber"}})
-     */
     public function ticket(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
         Ticket $ticket,
@@ -98,11 +87,11 @@ class EventTicketController extends EventSignUpController
                 'reference' => $ticket->getReferenceNumber()
             ]);
         };
-        return $this->renderForm('ticket.html.twig', [
+        return $this->render('ticket.html.twig', [
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count((array) $selected)>0 ? true : false,
+            'hasNakki' => count((array) $selected) > 0 ? true : false,
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation() ? true : false,
             'ticket' => $ticket,
             'form' => $form,

@@ -45,47 +45,41 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'cancelled', type: 'boolean')]
     private bool $cancelled = false;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'retrieval', type: 'datetime', nullable: true)]
-    private $retrieval;
+    private ?\DateTimeInterface $retrieval = null;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'return_date', type: 'datetime', nullable: true)]
-    private $returning;
+    private ?\DateTimeInterface $returning = null;
 
     #[ORM\Column(name: 'paid_date', type: 'datetime', nullable: true)]
-    private ?\DateTime $paid_date;
+    private ?\DateTime $paid_date = null;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private $items;
+    private \Doctrine\Common\Collections\ArrayCollection|array $items;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Package::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private $packages;
+    private array|\Doctrine\Common\Collections\ArrayCollection $packages;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Accessory::class, cascade: ['persist'])]
-    private $accessories;
+    private \Doctrine\Common\Collections\ArrayCollection|array $accessories;
 
     #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
-    private $rentingPrivileges;
+    private ?\App\Entity\WhoCanRentChoice $rentingPrivileges = null;
 
     #[ORM\ManyToOne(targetEntity: 'Renter', inversedBy: 'bookings')]
     #[Assert\NotBlank]
-    private $renter;
+    private ?\App\Entity\Renter $renter = null;
 
     #[ORM\OneToMany(targetEntity: 'BillableEvent', mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
-    private $billableEvents;
+    private \Doctrine\Common\Collections\ArrayCollection|array $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
-    private $givenAwayBy;
+    private ?\App\Entity\User $givenAwayBy = null;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
-    private $receivedBy;
+    private ?\App\Entity\User $receivedBy = null;
 
     #[ORM\Column(name: 'actualPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $actualPrice;
@@ -94,45 +88,38 @@ class Booking implements \Stringable
     private int $numberOfRentDays = 1;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
-    private $statusEvents;
+    private \Doctrine\Common\Collections\ArrayCollection|array $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
-    private $creator;
+    private ?\App\Entity\User $creator = null;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(name: 'created_at', type: 'datetime')]
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
-    private $modifier;
+    private ?\App\Entity\User $modifier = null;
 
     /**
-     * @var \DateTime
-     *
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(name: 'modified_at', type: 'datetime')]
-    private $modifiedAt;
+    private ?\DateTimeInterface $modifiedAt = null;
 
-    /**
-     * @var \DateTime
-     */
     #[ORM\Column(name: 'booking_date', type: 'date')]
     #[Assert\NotBlank]
-    private $bookingDate;
+    private ?\DateTimeInterface $bookingDate = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'bookings')]
-    private $rewards;
+    private \Doctrine\Common\Collections\ArrayCollection|array $rewards;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $reasonForDiscount;
+    private ?string $reasonForDiscount = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $renterSignature;
+    private ?string $renterSignature = null;
 
 
 

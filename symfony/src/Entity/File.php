@@ -21,16 +21,14 @@ class File implements \Stringable
     private ?string $fileinfo = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'files')]
-    private $product;
+    private ?\App\Entity\Item $product = null;
 
     #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
-    private $file;
+    private ?\App\Entity\Sonata\SonataMediaMedia $file = null;
 
 
     /**
      * Get id
-     *
-     * @return integer
      */
     public function getId(): int
     {
@@ -109,8 +107,6 @@ class File implements \Stringable
 
     /**
      * Get Download
-     *
-     * @return string
      */
     public function getDownloadLink(): string
     {

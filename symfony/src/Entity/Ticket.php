@@ -19,30 +19,30 @@ class Ticket implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    private $event;
+    private ?\App\Entity\Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
-    private $owner;
+    private ?\App\Entity\Member $owner = null;
 
     #[ORM\Column(type: 'integer')]
-    private $price;
+    private ?int $price = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $referenceNumber;
+    private ?int $referenceNumber = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Choice(choices: Ticket::STATUSES)]
     private string $status = 'available';
 
     #[ORM\OneToOne(targetEntity: Member::class, cascade: ['persist', 'remove'])]
-    private $recommendedBy;
+    private ?\App\Entity\Member $recommendedBy = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private $updatedAt;
+    private \DateTimeImmutable $updatedAt;
 
     public function __construct()
     {

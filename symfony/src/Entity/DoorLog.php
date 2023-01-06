@@ -16,13 +16,13 @@ class DoorLog
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'doorLogs')]
     #[ORM\JoinColumn(nullable: false)]
-    private $member;
+    private ?\App\Entity\Member $member = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $createdAt;
+    private \DateTimeInterface|\DateTime|null $createdAt = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $message;
+    private ?string $message = null;
 
     public function getId(): ?int
     {

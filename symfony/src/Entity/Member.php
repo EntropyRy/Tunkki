@@ -68,45 +68,45 @@ class Member implements \Stringable
     private ?string $rejectReason = null;
 
     #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
-    private ?\DateTime $ApplicationDate;
+    private ?\DateTime $ApplicationDate = null;
 
     #[ORM\Column(name: 'ApplicationHandledDate', type: 'datetime', nullable: true)]
-    private ?\DateTime $ApplicationHandledDate;
+    private ?\DateTime $ApplicationHandledDate = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $AcceptedAsHonoraryMember;
+    private ?\DateTimeInterface $AcceptedAsHonoraryMember = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isFullMember = false;
 
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
-    private $user;
+    private ?\App\Entity\User $user = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $locale = 'fi';
 
     #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
-    private $artist;
+    private \Doctrine\Common\Collections\ArrayCollection|array $artist;
 
     #[ORM\OneToMany(targetEntity: DoorLog::class, mappedBy: 'member', orphanRemoval: true)]
-    private $doorLogs;
+    private \Doctrine\Common\Collections\ArrayCollection|array $doorLogs;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private ?string $theme;
+    private ?string $theme = null;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]
-    private $RSVPs;
+    private \Doctrine\Common\Collections\ArrayCollection|array $RSVPs;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
-    private $nakkiBookings;
+    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
-    private $tickets;
+    private \Doctrine\Common\Collections\ArrayCollection|array $tickets;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
-    private $responsibleForNakkis;
+    private \Doctrine\Common\Collections\ArrayCollection|array $responsibleForNakkis;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $denyKerdeAccess = false;

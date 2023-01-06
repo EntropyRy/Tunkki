@@ -17,34 +17,34 @@ class Reward implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'rewards')]
     #[ORM\JoinColumn(nullable: false)]
-    private $user;
+    private ?\App\Entity\User $user = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\Booking::class, inversedBy: 'rewards')]
-    private $bookings;
+    private \Doctrine\Common\Collections\ArrayCollection|array $bookings;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    private $reward;
+    private ?string $reward = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $paid = false;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $paidDate;
+    private ?\DateTimeInterface $paidDate = null;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
-    private $PaymentHandledBy;
+    private ?\App\Entity\User $PaymentHandledBy = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'integer')]
     private int $Weight = 0;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
-    private $Evenout;
+    private ?string $Evenout = null;
 
     public function __construct()
     {

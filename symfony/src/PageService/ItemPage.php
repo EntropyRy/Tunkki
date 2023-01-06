@@ -12,10 +12,7 @@ use App\Entity\Item;
 
 class ItemPage implements PageServiceInterface
 {
-    /**
-     * @param EntityManagerInterface $em
-     */
-    public function __construct(private $name, private readonly TemplateManager $templateManager, private EntityManagerInterface $em)
+    public function __construct(private $name, private readonly TemplateManager $templateManager, private readonly EntityManagerInterface $em)
     {
     }
     public function getName(): string

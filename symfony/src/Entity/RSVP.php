@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: RSVPRepository::class)]
-class RSVP
+class RSVP implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -16,26 +16,26 @@ class RSVP
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: false)]
-    private $event;
+    private ?\App\Entity\Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: true)]
-    private $member;
+    private ?\App\Entity\Member $member = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private $createdAt;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true, unique: true)]
-    private $email;
+    private ?string $email = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $firstName;
+    private ?string $firstName = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $lastName;
+    private ?string $lastName = null;
 
     public function getId(): ?int
     {

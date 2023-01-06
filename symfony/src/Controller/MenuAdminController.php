@@ -15,17 +15,13 @@ class MenuAdminController extends CRUDController
     {
         return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));
     }
-    public function treeAction(Request $request): Response
+    public function treeAction(): Response
     {
         $this->em = $this->getDoctrine()->getManager();
         $menudata = $this->em->getRepository(Menu::class)->getRootNodes();
-
         $datagrid = $this->admin->getDatagrid();
-
         $formView = $datagrid->getForm()->createView();
-
         //$this->setFormTheme($formView, $this->admin->getFilterTheme());
-
         return $this->renderWithExtraParams('admin/menutree.html.twig', [
             'action' => 'tree',
             'menu' => $menudata,

@@ -11,6 +11,7 @@ class SSH
     }
     public function sendCommand($text): string|bool
     {
+        $stream = null;
         $connection = $this->getConnection();
         if ($text == 'start') {
             $stream = ssh2_exec($connection, 'systemctl --user start es_streaming.target');

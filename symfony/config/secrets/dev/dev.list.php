@@ -1,6 +1,3 @@
 <?php
 
-return array (
-  'DATABASE_URL' => NULL,
-  'TRUSTED_IPS' => NULL,
-);
+return ['DATABASE_URL' => NULL, 'TRUSTED_IPS' => NULL];

@@ -20,19 +20,19 @@ class Event implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $Name;
+    private ?string $Name = null;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $Nimi;
+    private ?string $Nimi = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $EventDate;
+    private ?\DateTimeInterface $EventDate = null;
 
     #[ORM\Column(type: 'datetime')]
-    private $publishDate;
+    private \DateTimeInterface|\DateTime $publishDate;
 
     #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
-    private $picture;
+    private ?\App\Entity\Sonata\SonataMediaMedia $picture = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
@@ -62,16 +62,16 @@ body {
             {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $url;
+    private ?string $url = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $published = false;
 
     #[ORM\Column(type: 'string', length: 180)]
-    private $type;
+    private ?string $type = null;
 
     #[ORM\Column(type: 'string', length: 180, nullable: true)]
-    private $epics;
+    private ?string $epics = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $externalUrl = false;
@@ -86,35 +86,35 @@ body {
     private bool $cancelled = false;
 
     #[ORM\ManyToOne(targetEntity: Media::class)]
-    private $attachment;
+    private ?\App\Entity\Sonata\SonataMediaMedia $attachment = null;
 
     #[ORM\Column(type: 'array', nullable: true)]
-    private $links = [];
+    private ?array $links = [];
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: \Event::class)]
     #[ORM\OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
-    private $eventArtistInfos;
+    private \Doctrine\Common\Collections\ArrayCollection|array $eventArtistInfos;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private $until;
+    private ?\DateTimeInterface $until = null;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'event', orphanRemoval: true)]
-    private $RSVPs;
+    private \Doctrine\Common\Collections\ArrayCollection|array $RSVPs;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
-    private $nakkis;
+    private \Doctrine\Common\Collections\ArrayCollection|array $nakkis;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
-    private $nakkiBookings;
+    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
 
     #[ORM\Column(type: 'boolean')]
     private bool $NakkikoneEnabled = false;
@@ -136,38 +136,38 @@ body {
         ';
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $includeSaferSpaceGuidelines;
+    private ?bool $includeSaferSpaceGuidelines = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $headerTheme = 'light';
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $streamPlayerUrl;
+    private ?string $streamPlayerUrl = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $imgFilterColor;
+    private ?string $imgFilterColor = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $imgFilterBlendMode;
+    private ?string $imgFilterBlendMode = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $artistSignUpEnabled = false;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $artistSignUpEnd;
+    private ?\DateTimeImmutable $artistSignUpEnd = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $artistSignUpStart;
+    private ?\DateTimeImmutable $artistSignUpStart = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $webMeetingUrl;
+    private ?string $webMeetingUrl = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
     #[ORM\OrderBy(['id'=>'DESC'])]
-    private $tickets;
+    private \Doctrine\Common\Collections\ArrayCollection|array $tickets;
 
     #[ORM\Column(type: 'integer')]
     private int $ticketCount = 0;
@@ -176,19 +176,19 @@ body {
     private ?bool $ticketsEnabled = false;
 
     #[ORM\Column(type: 'integer', nullable: true)]
-    private $ticketPrice;
+    private ?int $ticketPrice = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $ticketInfoFi;
+    private ?string $ticketInfoFi = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $ticketInfoEn;
+    private ?string $ticketInfoEn = null;
 
     #[ORM\Column(type: 'date_immutable', nullable: true)]
-    private $ticketPresaleStart;
+    private ?\DateTimeImmutable $ticketPresaleStart = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
-    private $ticketPresaleEnd;
+    private ?\DateTimeImmutable $ticketPresaleEnd = null;
 
     #[ORM\Column(type: 'integer')]
     private int $ticketPresaleCount = 0;
@@ -200,7 +200,7 @@ body {
     private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
-    private $emails;
+    private \Doctrine\Common\Collections\ArrayCollection|array $emails;
 
     #[ORM\Column(nullable: true)]
     private ?bool $rsvpOnlyToActiveMembers = null;

@@ -14,34 +14,34 @@ class Email implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 255)]
-    private $subject;
+    private ?string $subject = null;
 
     #[ORM\Column(type: 'text')]
-    private $body;
+    private ?string $body = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $purpose;
+    private ?string $purpose = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(type: 'datetime')]
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private $addLoginLinksToFooter;
+    private ?bool $addLoginLinksToFooter = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]
-    private $event;
+    private ?\App\Entity\Event $event = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $replyTo;
+    private ?string $replyTo = null;
 
     public function getId(): ?int
     {

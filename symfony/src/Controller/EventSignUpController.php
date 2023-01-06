@@ -3,13 +3,14 @@
 namespace App\Controller;
 
 use App\Controller\EventController;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Helper\Mattermost;
 use App\Repository\NakkiBookingRepository;
 use App\Entity\Event;
@@ -22,16 +23,12 @@ use App\Form\EventArtistInfoEditType;
 use App\Form\ArtistType;
 use Doctrine\ORM\EntityManagerInterface;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventSignUpController extends EventController
 {
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function nakkiCancel(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
         NakkiBooking $booking
@@ -49,11 +46,9 @@ class EventSignUpController extends EventController
         return $this->redirect($request->headers->get('referer'));
         //return $this->redirectToRoute('entropy_event_slug_nakkikone', ['slug' => $slug, 'year' => $year]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function nakkiSignUp(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
         NakkiBooking $booking
@@ -89,11 +84,9 @@ class EventSignUpController extends EventController
         }
         return $this->redirect($request->headers->get('referer'));
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function nakkikone(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         NakkiBookingRepository $repo
     ): Response {
@@ -109,12 +102,9 @@ class EventSignUpController extends EventController
             //'form' => $form->createView(),
         ]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function responsible(
-        Request $request,
-        Event $event
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
     ): Response {
         return $this->render('list_nakki_info_for_responsible.html.twig', [
             'event' => $event,
@@ -188,11 +178,9 @@ class EventSignUpController extends EventController
         $nakkis[$name]['durations'][$duration] = $duration;
         return $nakkis;
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function RSVP(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TranslatorInterface $trans
     ): Response {
@@ -224,11 +212,9 @@ class EventSignUpController extends EventController
         $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
         return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
     public function artistSignUp(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TranslatorInterface $trans,
         EntityManagerInterface $em
@@ -272,21 +258,32 @@ class EventSignUpController extends EventController
             }
         }
         //$page = $cms->retrieve()->getCurrentPage();
-        return $this->renderForm('artist/signup.html.twig', [
+        return $this->render('artist/signup.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
     }
-    /**
-     * @ParamConverter("event", class="App:Event", converter="event_year_converter")
-     */
+    #[Route(
+        '/{year}/{slug}/signup/{id}/edit',
+        name: 'entropy_event_slug_artist_signup_edit',
+        requirements: [
+          'slug' => '\w+',
+          'year' => '\d+',
+          'id' => '\d+',
+        ]
+    )]
     public function artistSignUpEdit(
         Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         EventArtistInfo $artisteventinfo,
         TranslatorInterface $trans,
         EntityManagerInterface $em
     ): Response {
+		if ($artisteventinfo->getMember() != $this->getUser()->getMember()) {
+			$this->addFlash('warning', $trans->trans('Not allowed!'));
+			return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
+		}
         $form = $this->createForm(EventArtistInfoEditType::class, $artisteventinfo);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -301,7 +298,7 @@ class EventSignUpController extends EventController
             }
         }
         //$page = $cms->retrieve()->getCurrentPage();
-        return $this->renderForm('artist/signup.html.twig', [
+        return $this->render('artist/signup.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);

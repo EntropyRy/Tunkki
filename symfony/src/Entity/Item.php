@@ -28,35 +28,35 @@ class Item implements \Stringable
     private string $name;
 
     #[ORM\Column(name: 'Manufacturer', type: 'string', length: 190, nullable: true)]
-    private ?string $manufacturer;
+    private ?string $manufacturer = null;
 
     #[ORM\Column(name: 'Model', type: 'string', length: 190, nullable: true)]
-    private ?string $model;
+    private ?string $model = null;
 
     #[ORM\Column(name: 'Url', type: 'string', length: 500, nullable: true)]
-    private ?string $url;
+    private ?string $url = null;
 
     #[ORM\Column(name: 'SerialNumber', type: 'string', length: 190, nullable: true)]
-    private ?string $serialnumber;
+    private ?string $serialnumber = null;
 
     #[ORM\Column(name: 'PlaceInStorage', type: 'string', length: 190, nullable: true)]
-    private ?string $placeinstorage;
+    private ?string $placeinstorage = null;
 
     #[ORM\Column(name: 'Description', type: 'string', length: 4000, nullable: true)]
-    private ?string $description;
+    private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
-    private $whoCanRent;
+    private \Doctrine\Common\Collections\ArrayCollection|array $whoCanRent;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    private $category;
+    private ?\App\Entity\Sonata\SonataClassificationCategory $category = null;
 
     #[ORM\JoinTable(name: 'Item_tags')]
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
-    private $tags;
+    private \Doctrine\Common\Collections\ArrayCollection|array $tags;
 
     #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $rent;
@@ -65,7 +65,7 @@ class Item implements \Stringable
     private $compensationPrice;
 
     #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
-    private ?string $rentNotice;
+    private ?string $rentNotice = null;
 
     #[ORM\Column(name: 'NeedsFixing', type: 'boolean')]
     private bool $needsFixing = false;
@@ -77,44 +77,42 @@ class Item implements \Stringable
     private bool $cannotBeRented = false;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
-    private $fixingHistory;
+    private \Doctrine\Common\Collections\ArrayCollection|array $fixingHistory;
 
     #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\File::class, mappedBy: 'product', cascade: ['all'])]
-    private $files;
+    private \Doctrine\Common\Collections\ArrayCollection|array $files;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Booking::class, cascade: ['all'])]
-    private $rentHistory;
+    private \Doctrine\Common\Collections\ArrayCollection|array $rentHistory;
 
     #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
     private ?bool $forSale = false;
 
     #[ORM\ManyToMany(targetEntity: 'Package', inversedBy: 'items')]
-    private $packages;
+    private \Doctrine\Common\Collections\ArrayCollection|array|\App\Entity\Package|null $packages = null;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
-    private ?\DateTime $commission;
+    private ?\DateTime $commission = null;
 
     #[ORM\Column(name: 'purchasePrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $purchasePrice;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private $creator;
+    private ?\App\Entity\User $creator = null;
 
     #[ORM\ManyToOne(targetEntity: 'User')]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private $modifier;
+    private ?\App\Entity\User $modifier = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime')]
-    private $createdAt;
+    private \DateTimeInterface|\DateTimeImmutable|null $createdAt = null;
 
     #[ORM\Column(name: 'updatedAt', type: 'datetime')]
-    private $updatedAt;
+    private \DateTimeInterface|\DateTimeImmutable|null $updatedAt = null;
 
     /**
      * Get id
-     *
-     * @return integer
      */
     public function getId(): int
     {
@@ -125,8 +123,6 @@ class Item implements \Stringable
      * Set name
      *
      * @param string $name
-     *
-     * @return Item
      */
     public function setName($name): Item
     {
@@ -137,8 +133,6 @@ class Item implements \Stringable
 
     /**
      * Get name
-     *
-     * @return string
      */
     public function getName(): string
     {
@@ -149,8 +143,6 @@ class Item implements \Stringable
      * Set manufacturer
      *
      * @param string $manufacturer
-     *
-     * @return Item
      */
     public function setManufacturer($manufacturer): Item
     {
@@ -173,8 +165,6 @@ class Item implements \Stringable
      * Set model
      *
      * @param string $model
-     *
-     * @return Item
      */
     public function setModel($model): Item
     {
@@ -197,8 +187,6 @@ class Item implements \Stringable
      * Set description
      *
      * @param string $description
-     *
-     * @return Item
      */
     public function setDescription($description): Item
     {
@@ -221,8 +209,6 @@ class Item implements \Stringable
      * Set rent
      *
      * @param float $rent
-     *
-     * @return Item
      */
     public function setRent($rent): Item
     {
@@ -245,8 +231,6 @@ class Item implements \Stringable
      * Set rentNotice
      *
      * @param string $rentNotice
-     *
-     * @return Item
      */
     public function setRentNotice($rentNotice): Item
     {
@@ -269,8 +253,6 @@ class Item implements \Stringable
      * Set needsFixing
      *
      * @param boolean $needsFixing
-     *
-     * @return Item
      */
     public function setNeedsFixing($needsFixing): Item
     {
@@ -281,8 +263,6 @@ class Item implements \Stringable
 
     /**
      * Get needsFixing
-     *
-     * @return boolean
      */
     public function getNeedsFixing(): bool
     {
@@ -293,8 +273,6 @@ class Item implements \Stringable
      * Set forSale
      *
      * @param boolean $forSale
-     *
-     * @return Item
      */
     public function setForSale($forSale): Item
     {
@@ -425,8 +403,6 @@ class Item implements \Stringable
      * Set serialnumber
      *
      * @param string $serialnumber
-     *
-     * @return Item
      */
     public function setSerialnumber($serialnumber): Item
     {
@@ -449,8 +425,6 @@ class Item implements \Stringable
     /**
      * Add file
      *
-     *
-     * @return Item
      */
     public function addFile(\App\Entity\File $file): Item
     {
@@ -483,8 +457,6 @@ class Item implements \Stringable
      * Set placeinstorage
      *
      * @param string $placeinstorage
-     *
-     * @return Item
      */
     public function setPlaceinstorage($placeinstorage): Item
     {
@@ -506,8 +478,6 @@ class Item implements \Stringable
     /**
      * Add tag
      *
-     *
-     * @return Item
      */
     public function addTag(Tag $tag): Item
     {
@@ -537,8 +507,6 @@ class Item implements \Stringable
     /**
      * Set creator
      *
-     *
-     * @return Item
      */
     public function setCreator(\App\Entity\User $creator = null): Item
     {
@@ -560,8 +528,6 @@ class Item implements \Stringable
     /**
      * Set modifier
      *
-     *
-     * @return Item
      */
     public function setModifier(\App\Entity\User $modifier = null): Item
     {
@@ -584,8 +550,6 @@ class Item implements \Stringable
     /**
      * Add package
      *
-     *
-     * @return Item
      */
     public function addPackage(\App\Entity\Package $package): Item
     {
@@ -616,8 +580,6 @@ class Item implements \Stringable
      * Set toSpareParts
      *
      * @param boolean $toSpareParts
-     *
-     * @return Item
      */
     public function setToSpareParts($toSpareParts): Item
     {
@@ -628,8 +590,6 @@ class Item implements \Stringable
 
     /**
      * Get toSpareParts
-     *
-     * @return boolean
      */
     public function getToSpareParts(): bool
     {
@@ -639,8 +599,6 @@ class Item implements \Stringable
     /**
      * Set packages
      *
-     *
-     * @return Item
      */
     public function setPackages(\App\Entity\Package $packages = null): Item
     {
@@ -652,8 +610,6 @@ class Item implements \Stringable
     /**
      * Add rentHistory
      *
-     *
-     * @return Item
      */
     public function addRentHistory(\App\Entity\Booking $rentHistory): Item
     {
@@ -695,8 +651,6 @@ class Item implements \Stringable
     /**
      * Set category
      *
-     *
-     * @return Item
      */
     public function setCategory(Category $category = null): Item
     {
@@ -718,8 +672,6 @@ class Item implements \Stringable
     /**
      * Add whoCanRent
      *
-     *
-     * @return Item
      */
     public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): Item
     {
@@ -750,8 +702,6 @@ class Item implements \Stringable
      * Set url.
      *
      * @param string|null $url
-     *
-     * @return Item
      */
     public function setUrl($url = null): Item
     {
@@ -762,8 +712,6 @@ class Item implements \Stringable
 
     /**
      * Get url.
-     *
-     * @return string|null
      */
     public function getUrl(): ?string
     {
@@ -774,8 +722,6 @@ class Item implements \Stringable
      * Set cannotBeRented.
      *
      * @param bool $cannotBeRented
-     *
-     * @return Item
      */
     public function setCannotBeRented($cannotBeRented): Item
     {
@@ -786,8 +732,6 @@ class Item implements \Stringable
 
     /**
      * Get cannotBeRented.
-     *
-     * @return bool
      */
     public function getCannotBeRented(): bool
     {
@@ -798,8 +742,6 @@ class Item implements \Stringable
      * Set compensationPrice.
      *
      * @param string|null $compensationPrice
-     *
-     * @return Item
      */
     public function setCompensationPrice($compensationPrice = null): Item
     {
@@ -822,8 +764,6 @@ class Item implements \Stringable
      * Set purchasePrice.
      *
      * @param string|null $purchasePrice
-     *
-     * @return Item
      */
     public function setPurchasePrice($purchasePrice = null): Item
     {

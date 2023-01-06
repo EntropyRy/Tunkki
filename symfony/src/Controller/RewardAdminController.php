@@ -12,12 +12,15 @@ use Symfony\Component\HttpFoundation\Response;
 
 final class RewardAdminController extends CRUDController
 {
+    public function __construct(private readonly \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $usageTrackingTokenStorage)
+    {
+    }
     public function makepaidAction(): RedirectResponse
     {
         $reward = $this->admin->getSubject();
         $reward->setPaid(true);
         $reward->setPaidDate(new \Datetime());
-        $handler = $this->get('security.token_storage')->getToken()->getUser();
+        $handler = $this->usageTrackingTokenStorage->getToken()->getUser();
         $reward->setPaymentHandledBy($handler);
         $this->admin->update($reward);
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));

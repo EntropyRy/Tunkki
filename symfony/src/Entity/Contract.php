@@ -14,25 +14,25 @@ class Contract implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'text')]
-    private $ContentFi;
+    private ?string $ContentFi = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
      */
     #[ORM\Column(type: 'datetime')]
-    private $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
-    private $purpose;
+    private ?string $purpose = null;
 
     /**
      * @Gedmo\Timestampable(on="create")
      */
     #[ORM\Column(type: 'datetime')]
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private $ContentEn;
+    private ?string $ContentEn = null;
 
     public function getId(): ?int
     {

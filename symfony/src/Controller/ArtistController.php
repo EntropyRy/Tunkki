@@ -9,7 +9,7 @@ use App\Form\ArtistType;
 use App\Helper\Mattermost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,14 +19,10 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-/**
- * Require ROLE_USER for *every* controller method in this class.
- *
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ArtistController extends AbstractController
 {
-    public function index(Request $request, Security $security): Response
+    public function index(\Symfony\Bundle\SecurityBundle\Security $security): Response
     {
         $member = $security->getUser()->getMember();
 
@@ -34,7 +30,7 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
-    public function create(Request $request, Security $security, FormFactoryInterface $formF, TranslatorInterface $trans, Mattermost $mm): RedirectResponse|Response
+    public function create(Request $request, \Symfony\Bundle\SecurityBundle\Security $security, FormFactoryInterface $formF, TranslatorInterface $trans, Mattermost $mm): RedirectResponse|Response
     {
         $member = $security->getUser()->getMember();
         $artist = new Artist();
@@ -61,12 +57,12 @@ class ArtistController extends AbstractController
                 $this->addFlash('warning', $trans->trans('duplicate_artist_found'));
             }
         }
-        return $this->renderForm('artist/edit.html.twig', [
+        return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
             'form' => $form
         ]);
     }
-    public function edit(Request $request, Security $security, FormFactoryInterface $formF): RedirectResponse|Response
+    public function edit(Request $request, \Symfony\Bundle\SecurityBundle\Security $security, FormFactoryInterface $formF): RedirectResponse|Response
     {
         $artist = $security->getUser()->getMember()->getArtistWithId($request->get('id'));
         $form = $formF->create(ArtistType::class, $artist);
@@ -79,13 +75,14 @@ class ArtistController extends AbstractController
 
             return $this->redirectToRoute('entropy_artist_profile');
         }
-        return $this->renderForm('artist/edit.html.twig', [
+        return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
             'form' => $form
         ]);
     }
     public function delete(EntityManagerInterface $em, Artist $artist): RedirectResponse
     {
+        $trans = null;
         foreach ($artist->getEventArtistInfos() as $info) {
             $info->removeArtist();
         }

@@ -36,7 +36,7 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
     {
     }
 
-    public function __construct(Environment $twig, protected Security $security) //, EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security) //, EntityManagerInterface $em)
     {
         parent::__construct($twig);
     }

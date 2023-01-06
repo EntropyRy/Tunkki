@@ -3,19 +3,19 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security as SA;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\ExpressionLanguage\Expression;
 use Symfony\Component\Security\Core\Security;
 use Hashids\Hashids;
 
 class OauthJsonController extends AbstractController
 {
-    /**
-     * @SA("is_granted('ROLE_OAUTH2_WIKI') or is_granted('ROLE_OAUTH2_FORUM')")
-     */
-    public function me(Request $request, Security $security): JsonResponse
+    public function me(\Symfony\Bundle\SecurityBundle\Security $security): JsonResponse
     {
+        $this->denyAccessUnlessGranted(new Expression(
+            '"ROLE_OAUTH2_WIKI" in role_names or "ROLE_OAUTH2_FORUM" in role_names'
+        ));
         $user = $security->getUser();
         $hash = new Hashids('dalt', 6);
         $id = $hash->encode($user->getId());

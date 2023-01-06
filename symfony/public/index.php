@@ -11,7 +11,7 @@ if ($_SERVER['APP_DEBUG'] && in_array(@$_SERVER['REMOTE_ADDR'], [$_ENV['TRUSTED_
     $_SERVER['APP_ENV'] = 'prod';
 }
 if ($trustedProxies = $_SERVER['TRUSTED_PROXIES'] ?? $_ENV['TRUSTED_PROXIES'] ?? false) {
-    Request::setTrustedProxies(explode(',', $trustedProxies), Request::HEADER_X_FORWARDED_FOR ^ Request::HEADER_X_FORWARDED_HOST);
+    Request::setTrustedProxies(explode(',', (string) $trustedProxies), Request::HEADER_X_FORWARDED_FOR ^ Request::HEADER_X_FORWARDED_HOST);
 }
 if ($trustedHosts = $_SERVER['TRUSTED_HOSTS'] ?? $_ENV['TRUSTED_HOSTS'] ?? false) {
     Request::setTrustedHosts([$trustedHosts]);

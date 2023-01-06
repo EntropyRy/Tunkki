@@ -20,10 +20,10 @@ class StatusEvent implements \Stringable
     private readonly int $id;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'fixingHistory')]
-    private $item;
+    private ?\App\Entity\Item $item = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Booking::class, inversedBy: 'statusEvents')]
-    private $booking;
+    private ?\App\Entity\Booking $booking = null;
 
     #[ORM\Column(name: 'Description', type: 'string', length: 5000, nullable: true)]
     private string $description;
@@ -40,19 +40,13 @@ class StatusEvent implements \Stringable
     #[ORM\Column(name: 'UpdatedAt', type: 'datetime')]
     private \DateTime $updatedAt;
 
-    /**
-     * @var string
-     */
     #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private $creator;
+    private ?\App\Entity\User $creator = null;
 
-    /**
-     * @var string
-     */
     #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private $modifier;
+    private ?\App\Entity\User $modifier = null;
 
     /**
      * Get id

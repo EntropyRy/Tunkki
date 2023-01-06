@@ -17,7 +17,7 @@ class BillableEvent implements \Stringable
     private readonly int $id;
 
     #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\Booking::class, inversedBy: 'billableEvents')]
-    private $booking;
+    private ?\App\Entity\Booking $booking = null;
 
     #[ORM\Column(name: 'description', type: 'text')]
     private string $description;

@@ -44,7 +44,7 @@ class DoorInfoBlock extends BaseBlockService
     {
     }
 
-    public function __construct(Environment $twig, protected Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
+    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
     {
         parent::__construct($twig);
     }

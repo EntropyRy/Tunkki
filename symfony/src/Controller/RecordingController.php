@@ -5,13 +5,11 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Helper\SSH;
 
-/**
- * @IsGranted("ROLE_USER")
- */
+#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class RecordingController extends AbstractController
 {
     #[Route('/kerde/recording/start', name: 'app_recording_start')]

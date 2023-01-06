@@ -13,6 +13,7 @@ class ePics
     }
     public function getRandomPic(): ?array
     {
+        $pic = [];
         try {
             $response = $this->client->request(
                 'POST',
@@ -41,7 +42,7 @@ class ePics
                     ]
                 );
                 if ($response->getStatusCode() == 200) {
-                    $array = json_decode($response->getContent(), true);
+                    $array = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
                     if (!is_null($array['size_variants']['thumb2x'])) {
                         $pic['url'] = 'https://epics.entropy.fi/'. $array['size_variants']['thumb2x']['url'];
                         $pic['taken'] = $array['taken_at'];
@@ -51,7 +52,7 @@ class ePics
                     }
                 }
             }
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface) {
             // return $e->getMessage();
             return null;
         }

@@ -11,7 +11,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
 
-class BookingAdminListener
+class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly \Twig\Environment $twig, private readonly EntityManagerInterface $em)
     {
@@ -26,12 +26,11 @@ class BookingAdminListener
                 $email = (new TemplatedEmail())
                     ->from(new Address($this->fromEmail, 'Tunkki'))
                     ->to($this->email)
-                    ->subject("[Entropy Tunkki] New Booking on ". $booking->getBookingDate()->format('d.m.Y'))
+                    ->subject("[Entropy Tunkki] New Booking on " . $booking->getBookingDate()->format('d.m.Y'))
                     ->htmlTemplate('emails/notification.html.twig')
                     ->context([
                         'booking' => $booking,
-                    ])
-                ;
+                    ]);
                 $mailer->send($email);
             }
         }
@@ -42,7 +41,7 @@ class BookingAdminListener
         if ($event instanceof StatusEvent) {
             if ($event->getBooking() instanceof Booking) {
                 $booking = $event->getBooking();
-                if ($booking->getPaid() && $booking->getActualPrice()>0) { // now it is paid
+                if ($booking->getPaid() && $booking->getActualPrice() > 0) { // now it is paid
                     $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
                     if (!$old['paid']) { // earlier it was not paid
                         // give reward
@@ -92,5 +91,12 @@ class BookingAdminListener
             $r->addReward($amount);
             return $r;
         }
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['sonata.admin.event.persistence.post_persist' => 'sendEmailNotification', 'sonata.admin.event.persistence.pre_persist' => 'updateRewards'];
     }
 }

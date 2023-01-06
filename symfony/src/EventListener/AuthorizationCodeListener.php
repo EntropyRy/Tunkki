@@ -9,11 +9,11 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 
-final class AuthorizationCodeListener
+final readonly class AuthorizationCodeListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
 {
     public function __construct(
-        private readonly UrlGeneratorInterface $urlGenerator,
-        private readonly RequestStack $requestStack
+        private UrlGeneratorInterface $urlGenerator,
+        private RequestStack $requestStack
     ) {
     }
     public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event): void
@@ -27,7 +27,7 @@ final class AuthorizationCodeListener
                 $event->setResponse(
                     new Response(
                         302,
-                        ['Location' => $this->urlGenerator->generate('entropy_profile.'. $event->getUser()->getMember()->getLocale())]
+                        ['Location' => $this->urlGenerator->generate('entropy_profile.' . $event->getUser()->getMember()->getLocale())]
                     )
                 );
             }
@@ -46,5 +46,12 @@ final class AuthorizationCodeListener
                 )
             );
         }
+    }
+    /**
+     * @return array<string, mixed>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return ['league.oauth2_server.event.authorization_request_resolve' => 'onAuthorizationRequestResolve'];
     }
 }

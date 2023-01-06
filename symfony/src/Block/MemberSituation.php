@@ -32,7 +32,7 @@ class MemberSituation extends BaseBlockService
     {
     }
 
-    public function __construct(Environment $twig, protected Security $security)
+    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security)
     {
         parent::__construct($twig);
     }

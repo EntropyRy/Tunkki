@@ -20,28 +20,28 @@ class Renter implements \Stringable
     private readonly int $id;
 
     #[ORM\OneToMany(targetEntity:Booking::class, mappedBy: 'renter')]
-    private $bookings;
+    private \App\Entity\Booking|null|\Doctrine\Common\Collections\ArrayCollection|array $bookings = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
 
     #[ORM\Column(name: 'streetadress', type: 'string', length: 190, nullable: true)]
-    private ?string $streetadress;
+    private ?string $streetadress = null;
 
     #[ORM\Column(name: 'organization', type: 'string', length: 190, nullable: true)]
     private ?string $organization = null;
 
     #[ORM\Column(name: 'zipcode', type: 'string', length: 190, nullable: true)]
-    private ?string $zipcode;
+    private ?string $zipcode = null;
 
     #[ORM\Column(name: 'city', type: 'string', length: 190, nullable: true)]
-    private ?string $city;
+    private ?string $city = null;
 
     #[ORM\Column(name: 'phone', type: 'string', length: 190, nullable: true)]
-    private ?string $phone;
+    private ?string $phone = null;
 
     #[ORM\Column(name: 'email', type: 'string', length: 190, nullable: true)]
-    private ?string $email;
+    private ?string $email = null;
 
     /**
      * Get id

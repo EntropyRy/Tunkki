@@ -38,7 +38,7 @@ class EmailLists extends BaseBlockService
                     ]);*/
     }
 
-    public function __construct(Environment $twig, protected Security $security, protected EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security, protected EntityManagerInterface $em)
     {
         parent::__construct($twig);
     }

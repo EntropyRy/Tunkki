@@ -20,57 +20,57 @@ class Menu implements \Stringable
     private $id;
 
     #[ORM\Column(type: 'string', length: 180)]
-    private $label;
+    private ?string $label = null;
 
     #[ORM\Column(type: 'string', length: 180)]
-    private $nimi;
+    private ?string $nimi = null;
 
     #[ORM\Column(type: 'string', length: 180, nullable: true)]
-    private $url;
+    private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Page::class)]
-    private $pageFi;
+    private ?\App\Entity\Sonata\SonataPagePage $pageFi = null;
 
     #[ORM\ManyToOne(targetEntity: Page::class)]
-    private $pageEn;
+    private ?\App\Entity\Sonata\SonataPagePage $pageEn = null;
 
     #[ORM\Column(type: 'boolean')]
-    private $enabled;
+    private ?bool $enabled = null;
 
     /**
      * @Gedmo\TreeLeft
      */
     #[ORM\Column(type: 'integer')]
-    private $lft;
+    private ?int $lft = null;
 
     /**
      * @Gedmo\TreeLevel
      */
     #[ORM\Column(type: 'integer')]
-    private $lvl;
+    private ?int $lvl = null;
 
     /**
      * @Gedmo\TreeRight
      */
     #[ORM\Column(type: 'integer')]
-    private $rgt;
+    private ?int $rgt = null;
     /**
      * @Gedmo\TreeRoot
      */
     #[ORM\ManyToOne(targetEntity: 'Menu')]
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $root;
+    private ?\App\Entity\Menu $root = null;
 
     #[ORM\Column(type: 'integer')]
-    private $position;
+    private ?int $position = null;
     /**
      * @Gedmo\TreeParent
      */
     #[ORM\ManyToOne(targetEntity: 'Menu', inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
-    private $parent;
+    private ?\App\Entity\Menu $parent = null;
     #[ORM\OneToMany(targetEntity: 'Menu', mappedBy: 'parent')]
-    private $children;
+    private \Doctrine\Common\Collections\ArrayCollection|array $children;
 
     public function __construct()
     {
