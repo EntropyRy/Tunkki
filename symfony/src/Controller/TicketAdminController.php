@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use App\Entity\Event;
@@ -12,15 +13,14 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class TicketAdminController extends CRUDController
 {
-    public function makePaidAction(): RedirectResponse
+    public function makePaidAction(TicketRepository $repo): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
         if (is_null($ticket->getOwner())) {
             $this->addFlash('warning', 'ticket does not have owner!');
         } else {
             $ticket->setStatus('paid');
-            $ticketR = $this->getDoctrine()->getManager()->getRepository(Ticket::class);
-            $ticketR->add($ticket, true);
+            $repo->add($ticket, true);
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }
@@ -32,10 +32,10 @@ final class TicketAdminController extends CRUDController
             if ($eventTicketCount > 0) {
                 $reqTickets = $eventTicketCount - $tickets_now;
                 if ($tickets_now > $eventTicketCount) {
-                    foreach ($event->getTickets() as $ticket){
-                        if (is_null($ticket->getOwner()) && $ticket->getStatus()=='available'){
+                    foreach ($event->getTickets() as $ticket) {
+                        if (is_null($ticket->getOwner()) && $ticket->getStatus() == 'available') {
                             $em->remove($ticket);
-                            $reqTickets +=1;
+                            $reqTickets += 1;
                         }
                         if ($reqTickets == 0) {
                             $em->flush();
@@ -47,7 +47,7 @@ final class TicketAdminController extends CRUDController
                         $this->addFlash('error', 'Cannot remove tickets because someone owns them and/or they are not available.');
                     }
                 } else {
-                    for ($i=0;$i<$reqTickets;++$i) {
+                    for ($i = 0; $i < $reqTickets; ++$i) {
                         $ticket = new Ticket();
                         $ticket->setEvent($event);
                         $ticket->setStatus('available');
@@ -58,7 +58,7 @@ final class TicketAdminController extends CRUDController
                         $em->persist($ticket);
                         $em->flush();
                     }
-                    $this->addFlash('success', $reqTickets. ' tickets created');
+                    $this->addFlash('success', $reqTickets . ' tickets created');
                 }
             }
         }
@@ -69,13 +69,13 @@ final class TicketAdminController extends CRUDController
         $ki = 0;
         $summa = 0;
         $kertoimet = [7, 3, 1];
-        $id = (int)$ticket->getId()+9000;
-        $viite = (int)'909'.$id;
+        $id = (int)$ticket->getId() + 9000;
+        $viite = (int)'909' . $id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
         }
-        $cast = $viite.((10 - ($summa % 10)) % 10);
+        $cast = $viite . ((10 - ($summa % 10)) % 10);
         return (int)$cast;
     }
 }

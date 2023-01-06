@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Menu;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Common\Persistence\ManagerRegistry;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method Menu|null find($id, $lockMode = null, $lockVersion = null)

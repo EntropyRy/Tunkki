@@ -28,7 +28,7 @@ class Nakki implements \Stringable
     private ?\DateTimeImmutable $endAt = null;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'nakki', orphanRemoval: true)]
-    private \Doctrine\Common\Collections\ArrayCollection|array $nakkiBookings;
+    private $nakkiBookings;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
     #[ORM\JoinColumn(nullable: false)]
@@ -39,7 +39,7 @@ class Nakki implements \Stringable
     private \DateInterval $nakkiInterval;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
-    #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?\App\Entity\Member $responsible = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -49,7 +49,6 @@ class Nakki implements \Stringable
     {
         $this->nakkiBookings = new ArrayCollection();
         $this->nakkiInterval = new \DateInterval('PT1H');
-        ;
     }
 
     public function __toString(): string
@@ -156,10 +155,10 @@ class Nakki implements \Stringable
         $times = [];
         $diff = $this->getStartAt()->diff($this->getEndAt());
         $hours = $diff->h;
-        $hours = ($hours + ($diff->days*24)) / $this->getNakkiInterval()->format('%h');
+        $hours = ($hours + ($diff->days * 24)) / $this->getNakkiInterval()->format('%h');
         for ($i = 0; $i < $hours; $i++) {
-            $start = $i*$this->getNakkiInterval()->format('%h');
-            $times[] = $this->getStartAt()->modify($start.' hour');
+            $start = $i * $this->getNakkiInterval()->format('%h');
+            $times[] = $this->getStartAt()->modify($start . ' hour');
         }
         return $times;
     }

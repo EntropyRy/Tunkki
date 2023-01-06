@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -10,15 +11,13 @@ use App\Entity\Menu;
 
 class MenuAdminController extends CRUDController
 {
-    protected $em;
     public function listAction(Request $request = null): RedirectResponse
     {
         return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));
     }
-    public function treeAction(): Response
+    public function treeAction(EntityManagerInterface $em): Response
     {
-        $this->em = $this->getDoctrine()->getManager();
-        $menudata = $this->em->getRepository(Menu::class)->getRootNodes();
+        $menudata = $em->getRepository(Menu::class)->getRootNodes();
         $datagrid = $this->admin->getDatagrid();
         $formView = $datagrid->getForm()->createView();
         //$this->setFormTheme($formView, $this->admin->getFilterTheme());

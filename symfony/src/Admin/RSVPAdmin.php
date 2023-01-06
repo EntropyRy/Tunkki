@@ -28,8 +28,7 @@ final class RSVPAdmin extends AbstractAdmin
                 ->add('event');
         }
         $filter
-            ->add('createdAt')
-        ;
+            ->add('createdAt');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -56,7 +55,8 @@ final class RSVPAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('name')
+            ->add('firstName')
+            ->add('lastName')
             ->add('email')
             ->add('member');
         if (!$this->isChild()) {
@@ -73,7 +73,6 @@ final class RSVPAdmin extends AbstractAdmin
             ->add('email')
             ->add('member')
             ->add('event')
-            ->add('createdAt')
-        ;
+            ->add('createdAt');
     }
 }

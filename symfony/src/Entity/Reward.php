@@ -20,7 +20,7 @@ class Reward implements \Stringable
     private ?\App\Entity\User $user = null;
 
     #[ORM\ManyToMany(targetEntity: \App\Entity\Booking::class, inversedBy: 'rewards')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $bookings;
+    private $bookings;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $reward = null;

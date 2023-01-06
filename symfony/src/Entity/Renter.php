@@ -19,8 +19,8 @@ class Renter implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private readonly int $id;
 
-    #[ORM\OneToMany(targetEntity:Booking::class, mappedBy: 'renter')]
-    private \App\Entity\Booking|null|\Doctrine\Common\Collections\ArrayCollection|array $bookings = null;
+    #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'renter')]
+    private $bookings = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -221,7 +221,7 @@ class Renter implements \Stringable
     }
     public function __toString(): string
     {
-        return ($this->organization ? $this->name.' / '.$this->organization : $this->name);
+        return ($this->organization ? $this->name . ' / ' . $this->organization : $this->name);
     }
     /**
      * Constructor

@@ -280,7 +280,7 @@ class EventSignUpController extends EventController
         TranslatorInterface $trans,
         EntityManagerInterface $em
     ): Response {
-		if ($artisteventinfo->getMember() != $this->getUser()->getMember()) {
+		if ($artisteventinfo->getArtist()->getMember() != $this->getUser()->getMember()) {
 			$this->addFlash('warning', $trans->trans('Not allowed!'));
 			return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
 		}

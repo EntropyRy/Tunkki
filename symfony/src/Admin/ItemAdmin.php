@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -13,7 +14,6 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
-use App\Repository\ItemRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
@@ -216,8 +216,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
-        //$em = $this->getModelManager()->getEntityManager($this->getClass());
-        $original = $this->repo->getUnitOfWork()->getOriginalEntityData($Item);
+        $original = $this->em->getUnitOfWork()->getOriginalEntityData($Item);
         $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '>:';
         if ($original['name'] != $Item->getName()) {
             $text .= ' renamed from ' . $original['name'];
@@ -246,7 +245,7 @@ class ItemAdmin extends AbstractAdmin
         protected \App\Helper\Mattermost $mm,
         protected TokenStorageInterface $ts,
         protected CategoryManagerInterface $cm,
-        protected ItemRepository $em
+        protected EntityManagerInterface $em
     ) {
     }
 }

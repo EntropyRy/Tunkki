@@ -6,14 +6,17 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use App\Entity\Reward;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class RewardAdminController extends CRUDController
 {
-    public function __construct(private readonly \Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface $usageTrackingTokenStorage)
-    {
+    public function __construct(
+        private readonly TokenStorageInterface $usageTrackingTokenStorage,
+        private readonly EntityManagerInterface $em
+    ) {
     }
     public function makepaidAction(): RedirectResponse
     {
@@ -30,14 +33,14 @@ final class RewardAdminController extends CRUDController
         $total = [];
         $data = [];
         $link = $this->admin->generateUrl('Evenout');
-        $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
+        $rewards = $this->em->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
         $total['sum'] = 0;
         foreach ($rewards as $reward) {
             $total['pool'] += $reward->getReward();
             $total['sum'] += $reward->getWeight();
         }
-        $data['button'] = '<a class="btn btn-primary" role="button" href="'.$link.'">EVENOUT</a>';
+        $data['button'] = '<a class="btn btn-primary" role="button" href="' . $link . '">EVENOUT</a>';
         $data['rewards'] = $rewards;
         $data['total'] = $total;
 
@@ -46,7 +49,7 @@ final class RewardAdminController extends CRUDController
     public function EvenoutAction(): RedirectResponse
     {
         $total = [];
-        $rewards = $this->getDoctrine()->getManager()->getRepository(Reward::class)->findBy(['paid' => false]);
+        $rewards = $this->em->getRepository(Reward::class)->findBy(['paid' => false]);
         $total['pool'] = 0;
         $total['sum'] = 0;
         foreach ($rewards as $reward) {
@@ -57,7 +60,7 @@ final class RewardAdminController extends CRUDController
             $reward->setEvenout(strval($total['pool'] * $reward->getWeight() / $total['sum']));
             $this->admin->update($reward);
         }
-        $this->addFlash('sonata_flash_success', sprintf('Nee Distribution calculated!'));
+        $this->addFlash('sonata_flash_success', sprintf('New distribution calculated!'));
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
