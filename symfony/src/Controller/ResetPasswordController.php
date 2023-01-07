@@ -6,6 +6,7 @@ use App\Entity\User;
 use App\Entity\Member;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
+use App\Repository\MemberRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,8 +72,12 @@ class ResetPasswordController extends AbstractController
      * Validates and process the reset URL that the user clicked in their email.
      */
     #[Route(path: '/reset/{token}', name: 'app_reset_password')]
-    public function reset(Request $request, TranslatorInterface $trans, UserPasswordHasherInterface $passwordHasher, string $token = null): Response
-    {
+    public function reset(
+        Request $request,
+        TranslatorInterface $trans,
+        UserPasswordHasherInterface $passwordHasher,
+        string $token = null
+    ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
             // loaded in a browser and potentially leaking the token to 3rd party JavaScript.
@@ -126,9 +131,9 @@ class ResetPasswordController extends AbstractController
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, MemberRepository $repo): RedirectResponse
     {
-        $member = $this->getDoctrine()->getRepository(Member::class)->findOneBy([
+        $member = $repo->findOneBy([
             'email' => $emailFormData,
         ]);
 
@@ -163,8 +168,7 @@ class ResetPasswordController extends AbstractController
             ->context([
                 'resetToken' => $resetToken,
                 'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-            ])
-        ;
+            ]);
 
         $mailer->send($email);
 

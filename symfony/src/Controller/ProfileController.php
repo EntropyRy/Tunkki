@@ -9,16 +9,18 @@ use App\Form\ActiveMemberType;
 use App\Form\OpenDoorType;
 use App\Entity\DoorLog;
 use App\Entity\Member;
+use App\Entity\User;
 use App\Helper\Mattermost;
 use App\Helper\ZMQHelper;
+use App\Repository\DoorLogRepository;
 use App\Repository\MemberRepository;
 use App\Repository\EmailRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -35,7 +37,8 @@ class ProfileController extends AbstractController
         EmailRepository $emailRepo,
         UserPasswordHasherInterface $hasher,
         Mattermost $mm,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        EntityManagerInterface $em
     ): Response {
         $member = new Member();
         $email_content = null;
@@ -50,7 +53,6 @@ class ProfileController extends AbstractController
                     $user = $member->getUser();
                     $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getlocale());
-                    $em = $this->getDoctrine()->getManager();
                     $em->persist($user);
                     $em->persist($member);
                     $em->flush();
@@ -93,34 +95,45 @@ class ProfileController extends AbstractController
         $text = '**New Member: ' . $member . '**';
         $mm->SendToMattermost($text, 'yhdistys');
     }
-    public function dashboard(\Symfony\Bundle\SecurityBundle\Security $security): Response
+    public function dashboard(): Response
     {
-        $member = $security->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $barcode = $this->getBarcode($member);
         return $this->render('profile/dashboard.html.twig', [
             'member' => $member,
             'barcode' => $barcode
         ]);
     }
-    public function index(\Symfony\Bundle\SecurityBundle\Security $security): Response
+    public function index(): Response
     {
-        $member = $security->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         return $this->render('profile/main.html.twig', [
             'member' => $member,
         ]);
     }
-    public function door(Request $request, \Symfony\Bundle\SecurityBundle\Security $security, FormFactoryInterface $formF, Mattermost $mm, ZMQHelper $zmq): RedirectResponse|Response
-    {
-        $member = $security->getUser()->getMember();
+    public function door(
+        Request $request,
+        FormFactoryInterface $formF,
+        Mattermost $mm,
+        ZMQHelper $zmq,
+        EntityManagerInterface $em,
+        DoorLogRepository $doorlogrepo
+    ): RedirectResponse|Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $DoorLog = new DoorLog();
         $DoorLog->setMember($member);
-        $em = $this->getDoctrine()->getManager();
         $since = new \DateTime('now-1day');
         if ($request->get('since')) {
             //$datestring = strtotime($request->get('since'));
             $since = new \DateTime($request->get('since'));
         }
-        $logs = $em->getRepository(DoorLog::class)->getSince($since);
+        $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTime('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
@@ -166,13 +179,18 @@ class ProfileController extends AbstractController
             'barcode' => $barcode
         ]);
     }
-    public function edit(Request $request, \Symfony\Bundle\SecurityBundle\Security $security, FormFactoryInterface $formF, UserPasswordHasherInterface $hasher): RedirectResponse|Response
-    {
-        $member = $security->getUser()->getMember();
+    public function edit(
+        Request $request,
+        FormFactoryInterface $formF,
+        UserPasswordHasherInterface $hasher,
+        EntityManagerInterface $em
+    ): RedirectResponse|Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $form = $formF->create(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
             $user = $member->getUser();
             $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
@@ -188,9 +206,15 @@ class ProfileController extends AbstractController
             'form' => $form
         ]);
     }
-    public function apply(Request $request, \Symfony\Bundle\SecurityBundle\Security $security, FormFactoryInterface $formF, Mattermost $mm): RedirectResponse|Response
-    {
-        $member = $security->getUser()->getMember();
+    public function apply(
+        Request $request,
+        FormFactoryInterface $formF,
+        Mattermost $mm,
+        EntityManagerInterface $em
+    ): RedirectResponse|Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         if ($member->getIsActiveMember()) {
             $this->addFlash('success', 'profile.you_are_active_member_already');
             return $this->redirectToRoute('entropy_profile.' . $member->getLocale());
@@ -198,7 +222,6 @@ class ProfileController extends AbstractController
         $form = $formF->create(ActiveMemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
             $member = $form->getData();
             if (empty($member->getApplicationDate())) {
                 $text = '**Active member application by ' . $member . '**';

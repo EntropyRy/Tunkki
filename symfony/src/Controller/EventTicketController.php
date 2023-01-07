@@ -10,6 +10,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\Mattermost;
 use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
@@ -63,7 +64,8 @@ class EventTicketController extends EventSignUpController
         Mattermost $mm,
         Ticket $ticket,
         TranslatorInterface $trans,
-        NakkiBookingRepository $nakkirepo
+        NakkiBookingRepository $nakkirepo,
+        EntityManagerInterface $em
     ): Response {
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
@@ -78,7 +80,6 @@ class EventTicketController extends EventSignUpController
         if ($form->isSubmitted() && $form->isValid()) {
             $ticket->setStatus('reserved');
             $this->addFlash('success', 'ticket.reserved');
-            $em = $this->getDoctrine()->getManager();
             $em->persist($ticket);
             $em->flush();
             return $this->redirectToRoute('entropy_event_ticket', [

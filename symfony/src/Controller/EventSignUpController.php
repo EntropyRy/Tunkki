@@ -13,6 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use App\Helper\Mattermost;
 use App\Repository\NakkiBookingRepository;
+use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Artist;
 use App\Entity\RSVP;
@@ -20,7 +21,6 @@ use App\Entity\EventArtistInfo;
 use App\Entity\NakkiBooking;
 use App\Form\EventArtistInfoType;
 use App\Form\EventArtistInfoEditType;
-use App\Form\ArtistType;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -31,12 +31,14 @@ class EventSignUpController extends EventController
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
-        NakkiBooking $booking
+        NakkiBooking $booking,
+        EntityManagerInterface $em
     ): Response {
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         if ($booking->getMember() == $member) {
             $booking->setMember(null);
-            $em = $this->getDoctrine()->getManager();
             $em->persist($booking);
             $em->flush();
             $text = $text = '**Nakki reservation cancelled from event ' . $booking . '**';
@@ -51,16 +53,18 @@ class EventSignUpController extends EventController
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
-        NakkiBooking $booking
+        NakkiBooking $booking,
+        EntityManagerInterface $em
     ): Response {
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         if (!$member->getUsername()) {
             $this->addFlash('danger', 'Nakki is not reserved! Please define username in you profile');
             return $this->redirect($request->headers->get('referer'));
         }
         if ($event->getNakkikoneEnabled()) {
             if (is_null($booking->getMember())) {
-                $em = $this->getDoctrine()->getManager();
                 $repo = $em->getRepository(NakkiBooking::class);
                 if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
                     $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
@@ -90,7 +94,9 @@ class EventSignUpController extends EventController
         Event $event,
         NakkiBookingRepository $repo
     ): Response {
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $selected = $repo->findMemberEventBookings($member, $event);
         if (!$event->getNakkikoneEnabled()) {
             $this->addFlash('warning', 'Nakkikone is not enabled');
@@ -169,7 +175,7 @@ class EventSignUpController extends EventController
         }
         return $nakkis;
     }
-    protected function addNakkiToArray($nakkis, $booking, $locale)
+    protected function addNakkiToArray($nakkis, $booking, $locale): array
     {
         $name = $booking->getNakki()->getDefinition()->getName($locale);
         $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
@@ -182,9 +188,13 @@ class EventSignUpController extends EventController
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
-        TranslatorInterface $trans
+        TranslatorInterface $trans,
+        EntityManagerInterface $em
     ): Response {
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+
         if (empty($member)) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -203,12 +213,11 @@ class EventSignUpController extends EventController
                 return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
             }
         }
-        $this->em = $this->getDoctrine()->getManager();
         $rsvp = new RSVP();
         $rsvp->setEvent($event);
         $rsvp->setMember($member);
-        $this->em->persist($rsvp);
-        $this->em->flush();
+        $em->persist($rsvp);
+        $em->flush();
         $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
         return $this->redirectToRoute('entropy_event_slug', ['slug' => $slug, 'year' => $year]);
     }
@@ -219,7 +228,10 @@ class EventSignUpController extends EventController
         TranslatorInterface $trans,
         EntityManagerInterface $em
     ): Response {
-        $artists = $this->getUser()->getMember()->getArtist();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        $artists = $member->getArtist();
         if ((is_countable($artists) ? count($artists) : 0) == 0) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
@@ -267,9 +279,9 @@ class EventSignUpController extends EventController
         '/{year}/{slug}/signup/{id}/edit',
         name: 'entropy_event_slug_artist_signup_edit',
         requirements: [
-          'slug' => '\w+',
-          'year' => '\d+',
-          'id' => '\d+',
+            'slug' => '\w+',
+            'year' => '\d+',
+            'id' => '\d+',
         ]
     )]
     public function artistSignUpEdit(
@@ -280,10 +292,13 @@ class EventSignUpController extends EventController
         TranslatorInterface $trans,
         EntityManagerInterface $em
     ): Response {
-		if ($artisteventinfo->getArtist()->getMember() != $this->getUser()->getMember()) {
-			$this->addFlash('warning', $trans->trans('Not allowed!'));
-			return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
-		}
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        if ($artisteventinfo->getArtist()->getMember() != $member) {
+            $this->addFlash('warning', $trans->trans('Not allowed!'));
+            return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
+        }
         $form = $this->createForm(EventArtistInfoEditType::class, $artisteventinfo);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
