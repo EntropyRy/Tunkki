@@ -8,7 +8,7 @@
         {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     {% endif %}
     {% if event.url is not empty and not event.externalUrl %}
-        {% set event_url = event.eventDate|date('Y')~"/"~ event.url ~"/" %}
+        {% set event_url = event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
     {% endif %}
 {% else %}
     {% if app.user %}
@@ -18,7 +18,7 @@
 <nav class="navbar navbar-expand-lg navbar-{{ theme }} g-4">
     <div class="container-fluid">
     <a class="navbar-brand d-lg-none d-inline-block" href="/{%if loc == 'en'%}en{% endif %}">
-        <img src="{{ asset('/images/header-logo-text.svg') }}" 
+        <img src="{{ asset('/images/header-logo-text.svg') }}"
             width="auto" height="45" alt="Entropy"
             {% if theme == 'dark' %}
                 style="filter:invert(1);"
@@ -29,7 +29,7 @@
         <a data-turbo="false" {% if loc == 'en'%}href="/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>FI</a> |
            <a data-turbo="false" {% if loc == 'fi'%}href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>ENG</a>
            {% if not app.user %}
-           | <a href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+           | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
            {% endif %}
     </span>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,13 +40,13 @@
     <ul class="navbar-nav d-none d-lg-flex">
         {% if not app.user %}
             <li class="nav-item">
-               <a class="nav-link" href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+               <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </li>
         {% endif %}
-        <li class="nav-item{% if loc == 'fi'%} current{%endif%}">
+        <li class="nav-item{% if loc == 'fi' %} current{% endif %}">
             <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
         </li>
-        <li class="nav-item{% if loc == 'en'%} current{%endif%}">
+        <li class="nav-item{% if loc == 'en' %} current{% endif %}">
            <a class="nav-link" data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
         </li>
     </ul>

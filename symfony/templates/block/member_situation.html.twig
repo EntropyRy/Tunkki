@@ -2,24 +2,24 @@
 {% block block %}
 <div class="box">
     <div class="box-header">
-        <h5 class="box-title">{{'membership_status'|trans}}</h5>
+        <h5 class="box-title">{{ 'membership_status'|trans }}</h5>
     </div>
     <div class="box-body">
         <ul class="fa-ul">
         <li><span class="fa-li"><i class="fas fa-trophy"></i></span>
             <div class="progress" style="height: 25px;">
-                <div class="progress-bar" 
-                    role="progressbar" 
-                    style="width: {{member.ProgressP}}%" 
-                    aria-valuenow="{{member.ProgressP}}" 
-                    aria-valuemin="0" 
+                <div class="progress-bar"
+                    role="progressbar"
+                    style="width: {{ member.ProgressP }}%"
+                    aria-valuenow="{{ member.ProgressP }}"
+                    aria-valuemin="0"
                     aria-valuemax="100">
                     {% if member.acceptedAsHonoraryMember %}
-                        {{'HC member'|trans}} 
+                        {{ 'HC member'|trans }}
                     {% elseif member.isActiveMember %}
-                        {{'Active member'|trans}} 
+                        {{ 'Active member'|trans }}
                     {% else %}
-                        {{'Member'|trans}}
+                        {{ 'Member'|trans }}
                     {% endif %}
                 </div>
             </div>
@@ -27,31 +27,30 @@
         </ul>
         <div class="row offset-1 pb-2">
             <div class="col-md-4">
-                        <i class="{% if member %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-                        {{'Member'|trans}} 
-                        {% if member.ApplicationHandledDate is empty or member.createdAt < member.ApplicationHandledDate %}
-                        {{'since'|trans}} {{member.createdAt|date('d.m.Y')}}
-                        {% endif %}
+                    <i class="{% if member %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {{ 'Member'|trans }}
+                    {% if member.ApplicationHandledDate is empty or member.createdAt < member.ApplicationHandledDate %}
+                    {{ 'since'|trans }} {{ member.createdAt|date('d.m.Y') }}
+                    {% endif %}
             </div>
             <div class="col-md-4">
                 <span>
-                    <i class="{% if member.isActiveMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-                    {{'Active member'|trans}}{% if member.ApplicationHandledDate %} {{'since'|trans}} {{member.ApplicationHandledDate|date('d.m.Y')}}{% endif %}
+                    <i class="{% if member.isActiveMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {{ 'Active member'|trans }}{% if member.ApplicationHandledDate %} {{ 'since'|trans }} {{ member.ApplicationHandledDate|date('d.m.Y') }}{% endif %}
                     {% if not member.isActiveMember %}
                     <a class="btn btn-primary btn-sm" href="{{ path('entropy_profile_active_member') }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
                     {% endif %}
-
                 </span>
             </div>
             <div class="col-md-4">
                 <span>
-                    <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-                    {{'HC member'|trans}}{% if member.AcceptedAsHonoraryMember %} {{'since'|trans}} {{member.AcceptedAsHonoraryMember|date('d.m.Y')}}{% endif %}
+                    <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {{ 'HC member'|trans }}{% if member.AcceptedAsHonoraryMember %} {{ 'since'|trans }} {{ member.AcceptedAsHonoraryMember|date('d.m.Y') }}{% endif %}
                 </span>
             </div>
             <div class="col-md-11 justify-content-end">
-                    <i class="{% if member.canVote %}far fa-check-square{%else%}far fa-square{%endif%}"></i>
-                    {{'member.can_vote'|trans}}
+                    <i class="{% if member.canVote %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {{ 'member.can_vote'|trans }}
             </div>
         </div>
         <hr>
@@ -63,7 +62,7 @@
                     {{ group }}{% if not loop.last %}, {% endif %}
                 {% endif %}
                 {% else %}
-                {{'profile.no_access_groups'|trans}}
+                {{ 'profile.no_access_groups'|trans }}
             {% endfor %}
         </li>
         </ul>

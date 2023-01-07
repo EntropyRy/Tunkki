@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded',function(){
             var nakki = event.target.dataset.index;
             cards.forEach(function(card) {
                 card.classList.add('d-none')
-                console.log(card.id);
+                //console.log(card.id);
                 if(card.id == 'card-'+nakki){
                     card.classList.remove('d-none')
                 }
