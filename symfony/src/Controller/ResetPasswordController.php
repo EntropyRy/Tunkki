@@ -7,6 +7,7 @@ use App\Entity\Member;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\MemberRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -26,8 +27,11 @@ class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
 
-    public function __construct(private readonly ResetPasswordHelperInterface $resetPasswordHelper)
-    {
+    public function __construct(
+        private readonly ResetPasswordHelperInterface $resetPasswordHelper,
+        private readonly EntityManagerInterface $em,
+        private readonly MemberRepository $repo
+    ) {
     }
 
     /**
@@ -47,7 +51,7 @@ class ResetPasswordController extends AbstractController
             );
         }
 
-        return $this->render('reset_password/request.html.twig', [
+        return $this->renderForm('reset_password/request.html.twig', [
             'requestForm' => $form,
         ]);
     }
@@ -59,12 +63,13 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
-        if (!$this->canCheckEmail()) {
-            return $this->redirectToRoute('app_forgot_password_request');
+        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
+            $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
         return $this->render('reset_password/check_email.html.twig', [
             'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
+            'resetToken' => $resetToken
         ]);
     }
 
@@ -118,7 +123,7 @@ class ResetPasswordController extends AbstractController
             );
 
             $user->setPassword($hashedPassword);
-            $this->getDoctrine()->getManager()->flush();
+            $this->em->flush();
 
             // The session is cleaned up after the password has been changed.
             $this->cleanSessionAfterReset();
@@ -126,19 +131,16 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
-        return $this->render('reset_password/reset.html.twig', [
+        return $this->renderForm('reset_password/reset.html.twig', [
             'resetForm' => $form,
         ]);
     }
 
-    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer, MemberRepository $repo): RedirectResponse
+    private function processSendingPasswordResetEmail(string $emailFormData, MailerInterface $mailer): RedirectResponse
     {
-        $member = $repo->findOneBy([
+        $member = $this->repo->findOneBy([
             'email' => $emailFormData,
         ]);
-
-        // Marks that you are allowed to see the app_check_email page.
-        $this->setCanCheckEmailInSession();
 
         // Do not reveal whether a user account was found or not.
         if (!$member) {
@@ -171,7 +173,7 @@ class ResetPasswordController extends AbstractController
             ]);
 
         $mailer->send($email);
-
+        $this->setTokenObjectInSession($resetToken);
         return $this->redirectToRoute('app_check_email');
     }
 }

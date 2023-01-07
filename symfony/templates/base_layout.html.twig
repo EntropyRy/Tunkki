@@ -5,7 +5,7 @@
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>
             <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
-            <link rel="preload" as="image" href="{{ asset("/images/header-logo.svg") }}>
+            <link rel="preload" as="image" href="{{ asset("/images/header-logo.svg") }}">
             <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             {% if block('title') is defined %}
                 <title>{{ block('title') }}</title>
