@@ -1,5 +1,5 @@
 {% extends 'event.html.twig' %}
-{% block title %}{{event.nameByLang(app.request.locale)}} | Entropy ry{% endblock %}
+{% block title %}{{ event.nameByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
@@ -22,9 +22,9 @@
                 {% set allow_nakki_cancel = (ticket.status == 'available') %}
                 {{ event.nakkiInfo(app.request.locale)|raw }}
                 {% if hasNakki and ticket.status != 'available' %}
-                {{ block('your_nakkis')}}
+                {{ block('your_nakkis') }}
                 {% else %}
-                {{ block('reserve_nakkis')}}
+                {{ block('reserve_nakkis') }}
                 {% endif %}
                 <hr>
             {% endif %}

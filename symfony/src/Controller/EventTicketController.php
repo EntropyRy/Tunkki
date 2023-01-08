@@ -15,6 +15,7 @@ use App\Helper\Mattermost;
 use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Ticket;
 
@@ -62,6 +63,7 @@ class EventTicketController extends EventSignUpController
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         Mattermost $mm,
+        #[MapEntity(mapping: ['reference' => 'referenceNumber'])]
         Ticket $ticket,
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
@@ -70,7 +72,9 @@ class EventTicketController extends EventSignUpController
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         if ($ticket->getOwner() != $member) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
@@ -100,7 +104,9 @@ class EventTicketController extends EventSignUpController
     }
     private function ticketChecks($for, $event, $ticketRepo): ?RedirectResponse
     {
-        $member = $this->getUser()->getMember();
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
         if (is_null($ticket)) {
             if ($for == 'presale') {

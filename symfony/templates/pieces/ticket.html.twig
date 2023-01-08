@@ -4,12 +4,8 @@
 <div class="pt-2 pb-2" id="ticket">
     <div class="col-md-6 mx-auto">
         <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_slug',{
-                   'slug': event.url, 
-                   'year': event.eventdate|date('Y')
-            })  }}"
-            >
-            {{'ticket.go_to_event_page'|trans}}
+            href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+            {{ 'ticket.go_to_event_page'|trans }}
             </a>
     </div>
 </div>
@@ -24,36 +20,36 @@
     <div class="col-md-6 mx-auto">
     {% if ticket is not null %}
         <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_ticket',{
-                   'slug': event.url, 
+            href="{{ path('entropy_event_ticket', {
+                   'slug': event.url,
                    'year': event.eventdate|date('Y'),
                    'reference': ticket.referenceNumber
-            })  }}"
+            }) }}"
             >
             {% if ticket.owner == app.user.member %}
-            {{'ticket.details'|trans}}
+            {{ 'ticket.details'|trans }}
             {% else %}
-            {{'ticket.reserve_yours'|trans}}
+            {{ 'ticket.reserve_yours'|trans }}
             {% endif %}
             </a>
     {% else %}
         {% if event.ticketPresaleEnabled %}
             <a class="btn btn-primary w-100"
-               >{{'ticket.sale_starts'|trans}}: {{ event.ticketPresaleEnd|date }}</a>
+               >{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
         {% else %}
             {% if ticketsAvailable > 0 %}
                 <a class="btn btn-primary w-100"
-                    href="{{ path('entropy_event_ticket_sale',{
-                           'slug': event.url, 
+                    href="{{ path('entropy_event_ticket_sale', {
+                           'slug': event.url,
                            'year': event.eventdate|date('Y'),
-                    })  }}"
+                    }) }}"
                     >
-                    {{'ticket.reserve_yours'|trans}}
-                    {% if app.user.member.isActiveMember %}(jäljellä: {{ticketsAvailable}}){%endif%}
+                    {{ 'ticket.reserve_yours'|trans }}
+                    {% if app.user.member.isActiveMember %}(jäljellä: {{ ticketsAvailable }}){% endif %}
                 </a>
             {% else %}
                 <a class="btn btn-danger w-100"
-                   >{{'ticket.all_sold'|trans}}</a>
+                   >{{ 'ticket.all_sold'|trans }}</a>
             {% endif %}
         {% endif %}
     {% endif %}
@@ -64,28 +60,28 @@
 {% endblock %}
 
 {% block ticket %}
-<h3>{{'ticket.situation'|trans}}: {{ ('ticket.'~ticket.status)|trans }}</h3>
+<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }}</h3>
 {{ event.ticketInfo(app.request.locale)|raw }}
 {% if ticket.status == 'reserved' %}
-<h4>{{'ticket.payment_info'|trans}}</h4>
+<h4>{{ 'ticket.payment_info'|trans }}</h4>
 <dt>
-    <dt>{{'ticket.recipient'|trans}}</dt>
+    <dt>{{ 'ticket.recipient'|trans }}</dt>
     <dd>Entropy Ry</dd>
-    <dt>{{'Bank Account'|trans}}</dt>
+    <dt>{{ 'Bank Account'|trans }}</dt>
     <dd>FI42 7997 7997 0149 02</dd>
-    <dt>{{'ticket.reference_number'|trans}}<dt>
-    <dd>{{ticket.referenceNumber}}</dd>
-    <dt>{{'ticket.sum'|trans}}<dt>
-    <dd>{{ticket.price}}€</dd>
+    <dt>{{ 'ticket.reference_number'|trans }}<dt>
+    <dd>{{ ticket.referenceNumber }}</dd>
+    <dt>{{ 'ticket.sum'|trans }}<dt>
+    <dd>{{ ticket.price }}€</dd>
 </dt>
 {% elseif ticket.status == 'available' %}
     {{ form_start(form) }}
-    <input class="btn w-100 
-       {% if not hasNakki and not nakkiRequired %}btn-danger disabled" disabled{%else%}btn-success"{% endif %} 
-       type="submit" value="{{'ticket.form.reserve'|trans}}">
+    <input class="btn w-100
+       {% if not hasNakki and not nakkiRequired %}btn-danger disabled" disabled{% else %}btn-success"{% endif %}
+       type="submit" value="{{ 'ticket.form.reserve'|trans }}">
     {{ form_rest(form) }}
     {{ form_end(form) }}
 {% elseif ticket.status == 'paid' %}
-<h4>{{ 'ticket.code'|trans }}: {{ticket.referenceNumber}}</h4>
+<h4>{{ 'ticket.code'|trans }}: {{ ticket.referenceNumber }}</h4>
 {% endif %}
 {% endblock %}
