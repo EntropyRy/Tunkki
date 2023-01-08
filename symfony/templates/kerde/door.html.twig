@@ -11,7 +11,7 @@
         <p class="text-center">Code: {{ barcode.0 }}</p>
     </div>
     </div>
-    <a class="btn w-100 btn-primary" href="{{ path('entropy_kerde_barcodes') }}">{{ 'Control barcodes'|trans }}</a>
+    <a class="btn w-100 btn-primary" href="{{ path('kerde_barcodes') }}">{{ 'Control barcodes'|trans }}</a>
     <hr>
     <h1>{{ 'profile.door.opener'|trans|capitalize }}</h1>
     <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
@@ -30,8 +30,8 @@
     <hr>
     <h1>Stream</h1>
     <div class="d-flex justify-content-between">
-    <a class="btn btn-danger" href="{{ path('app_recording_start') }}"><i class="fas fa-play"></i> Start Stream</a>
-    <a class="btn btn-danger" href="{{ path('app_recording_stop') }}"><i class="fas fa-stop"></i> Stop Stream</a>
+    <a class="btn btn-danger" href="{{ path('recording_start') }}"><i class="fas fa-play"></i> Start Stream</a>
+    <a class="btn btn-danger" href="{{ path('recording_stop') }}"><i class="fas fa-stop"></i> Stop Stream</a>
     </div>
 {% else %}
 <h4>{{ 'profile.door.not_active_member'|trans }}</h4>

@@ -15,7 +15,7 @@
                  </li>
                  {% if app.request.server.get("HTTP_X_REAL_IP") == door_ip %}
                  <li class="nav-item">
-                    <a class="nav-link" href="{{ path('entropy_profile_door.'~loc)}}">
+                    <a class="nav-link" href="{{ path('kerde_door.'~loc)}}">
                         {{'profile.door.open_the_door'|trans}}
                     </a>
                  </li>

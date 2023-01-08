@@ -6,13 +6,10 @@ namespace App\Controller;
 
 use App\Form\MemberType;
 use App\Form\ActiveMemberType;
-use App\Form\OpenDoorType;
-use App\Entity\DoorLog;
 use App\Entity\Member;
 use App\Entity\User;
+use App\Helper\Barcode;
 use App\Helper\Mattermost;
-use App\Helper\ZMQHelper;
-use App\Repository\DoorLogRepository;
 use App\Repository\MemberRepository;
 use App\Repository\EmailRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -24,9 +21,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Picqer\Barcode\BarcodeGeneratorHTML;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Hashids\Hashids;
 
 class ProfileController extends AbstractController
 {
@@ -95,12 +90,12 @@ class ProfileController extends AbstractController
         $text = '**New Member: ' . $member . '**';
         $mm->SendToMattermost($text, 'yhdistys');
     }
-    public function dashboard(): Response
+    public function dashboard(Barcode $bc): Response
     {
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $barcode = $this->getBarcode($member);
+        $barcode = $bc->getBarcode($member);
         return $this->render('profile/dashboard.html.twig', [
             'member' => $member,
             'barcode' => $barcode
@@ -113,70 +108,6 @@ class ProfileController extends AbstractController
         $member = $user->getMember();
         return $this->render('profile/main.html.twig', [
             'member' => $member,
-        ]);
-    }
-    public function door(
-        Request $request,
-        FormFactoryInterface $formF,
-        Mattermost $mm,
-        ZMQHelper $zmq,
-        EntityManagerInterface $em,
-        DoorLogRepository $doorlogrepo
-    ): RedirectResponse|Response {
-        $user = $this->getUser();
-        assert($user instanceof User);
-        $member = $user->getMember();
-        $DoorLog = new DoorLog();
-        $DoorLog->setMember($member);
-        $since = new \DateTime('now-1day');
-        if ($request->get('since')) {
-            //$datestring = strtotime($request->get('since'));
-            $since = new \DateTime($request->get('since'));
-        }
-        $logs = $doorlogrepo->getSince($since);
-        $form = $formF->create(OpenDoorType::class, $DoorLog);
-        $now = new \DateTime('now');
-        $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
-        $status = $zmq->send($env . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $doorlog = $form->getData();
-            $em->persist($doorlog);
-            $em->flush();
-            $status = $zmq->send($env . ' open: ' . $member->getUsername() . ' ' . $now->getTimestamp());
-            // $this->addFlash('success', 'profile.door.opened');
-            $this->addFlash('success', $status);
-
-            $send = true;
-            $text = '**Kerde door opened by ' . $doorlog->getMember();
-            if ($doorlog->getMessage()) {
-                $text .= ' - ' . $doorlog->getMessage();
-            } else {
-                foreach ($logs as $log) {
-                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimeStamp() < 60 * 60 * 4)) {
-                        $send = false;
-                        break;
-                    }
-                }
-            }
-            $text .= '**';
-            if ($send) {
-                $mm->SendToMattermost($text, 'kerde');
-            }
-
-            if ($member->getLocale()) {
-                return $this->redirectToRoute('entropy_profile_door.' . $member->getLocale());
-            } else {
-                return $this->redirectToRoute('entropy_profile_door.' . $request->getLocale());
-            }
-        }
-        $barcode = $this->getBarcode($member);
-        return $this->render('profile/door.html.twig', [
-            'form' => $form,
-            'logs' => $logs,
-            'member' => $member,
-            'status' => $status,
-            'barcode' => $barcode
         ]);
     }
     public function edit(
@@ -236,14 +167,5 @@ class ProfileController extends AbstractController
         return $this->render('profile/apply.html.twig', [
             'form' => $form
         ]);
-    }
-    private function getBarcode($member): array
-    {
-        $generator = new BarcodeGeneratorHTML();
-        $code = $member->getId() . '' . $member->getId() . '' . $member->getUser()->getId();
-        $hashids = new Hashids($code, 8);
-        $code = $hashids->encode($code);
-        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_128, 2, 90);
-        return [$code, $barcode];
     }
 }
