@@ -218,7 +218,7 @@ url:
     icon: Iconin luokka (class)
 profile:
   change_password: Vaihda salasana
-  member_data_changed: Salasana ja tiedot muutettu
+  member_data_changed: Salasana tai tiedot muutettu
   name: Profiili
   add_new_artist: Lisää uusi artistiprofiili
   access_groups: Tämän sivuston erityisoikeudet
@@ -316,6 +316,7 @@ The link in your email is expired. Please try to reset your password again.: Sä
   linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 dark: Tumma
 bright: Kirkas
+light: Kirkas
 rsvp:
   email_in_use: Oletko jäsen? kirjaudu ensin.
   receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä

@@ -2,7 +2,7 @@
 
 {% block logo %}
 {% apply spaceless %}
-    <a class="logo" href="{{ path('entropy_user_dashboard.' ~ app.user.member.locale|default('fi')) }}">
+    <a class="logo" href="{{ path('dashboard.' ~ app.user.member.locale|default('fi')) }}">
         <img src="{{ asset(sonata_config.logo) }}" alt="{{ sonata_config.title }}" width="100%" style="max-width:100%;">
     </a>
 {% endapply %}

@@ -81,7 +81,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        return new RedirectResponse($this->urlG->generate('entropy_user_dashboard.'.$request->getLocale()));
+        return new RedirectResponse($this->urlG->generate('dashboard.'.$request->getLocale()));
     }
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse

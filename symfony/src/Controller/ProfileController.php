@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\MemberType;
+use App\Form\MemberEditType;
 use App\Form\ActiveMemberType;
 use App\Entity\Member;
 use App\Entity\User;
@@ -134,7 +135,7 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $form = $formF->create(MemberType::class, $member);
+        $form = $formF->create(MemberEditType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();

@@ -13,7 +13,7 @@ class SecurityController extends AbstractController
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
         if ($this->getUser()) {
-            return $this->redirectToRoute('entropy_user_dashboard.'.$this->getUser()->getMember()->getLocale());
+            return $this->redirectToRoute('dashboard.'.$this->getUser()->getMember()->getLocale());
         }
 
         // get the login error if there is one

@@ -3,7 +3,7 @@
         {% set _bg_class          = "bg-light-blue" %}
         {% set _logout_uri        = path('app_logout') %}
         {% set _logout_text       = 'profile.logout'|trans %}
-        {% set _profile_uri       = path('entropy_user_dashboard.'~app.request.locale) %}
+        {% set _profile_uri       = path('dashboard.'~app.request.locale) %}
         {% set _profile_text      = 'entropy_user_dashboard'|trans %}
         {#% set _user_image        = sonata_user.defaultAvatar ? asset(sonata_user.defaultAvatar) : null %#}
         {# Customize this with your profile picture implementation, see below for example #}

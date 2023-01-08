@@ -49,7 +49,7 @@ sonata_page:
         - kerde_barcodes
         - kerde_door
         - profile
-        - profile_join
+        - profile_new
         - profile_edit
         - profile_password_edit
         - apply_for_active_member
