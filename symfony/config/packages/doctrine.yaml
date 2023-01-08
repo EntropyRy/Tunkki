@@ -3,8 +3,6 @@ doctrine:
         url: '%env(DATABASE_URL)%'
         # IMPORTANT: You MUST configure your server version,
         # either here or in the DATABASE_URL env var (see .env file)
-        server_version: 'mariadb-10.7.6'
-
         # only needed for MySQL
         charset: utf8mb4
         default_table_options:
@@ -28,3 +26,29 @@ doctrine:
         dql:
             string_functions:
                 YEAR: DoctrineExtensions\Query\Mysql\Year
+
+when@test:
+    doctrine:
+        dbal:
+            # "TEST_TOKEN" is typically set by ParaTest
+            dbname_suffix: '_test%env(default::TEST_TOKEN)%'
+
+when@prod:
+    doctrine:
+        orm:
+            auto_generate_proxy_classes: false
+            proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+            query_cache_driver:
+                type: pool
+                pool: doctrine.system_cache_pool
+            result_cache_driver:
+                type: pool
+                pool: doctrine.result_cache_pool
+
+    framework:
+        cache:
+            pools:
+                doctrine.result_cache_pool:
+                    adapter: cache.app
+                doctrine.system_cache_pool:
+                    adapter: cache.system
