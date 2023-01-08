@@ -14,9 +14,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\User;
 use App\Entity\Member;
 
+#[\Symfony\Component\Console\Attribute\AsCommand('entropy:user')]
 class UserCommand extends Command
 {
-    protected static $defaultName = 'entropy:user';
 
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordEncoder,
