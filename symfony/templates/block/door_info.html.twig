@@ -3,12 +3,12 @@
 {% if member is defined %}
     <div class="box">
         <div class="box-header">
-            <h5>{{'profile.door.log'|trans|capitalize }},
+            <h5>{{ 'profile.door.log'|trans|capitalize }},
             status:
             {% if status == 'broken' %}
-            <span class="text-danger">{{'profile.door.connection_problems'|trans}}!</span>
+            <span class="text-danger">{{ 'profile.door.connection_problems'|trans }}!</span>
             {% else %}
-            <span class="text-success">{{'profile.door.connection_ok'|trans}}!</span>
+            <span class="text-success">{{ 'profile.door.connection_ok'|trans }}!</span>
             {% endif %}
             </h5>
         </div>
@@ -24,20 +24,20 @@
                 <ul class="fa-ul">
                 {% endif %}
                 <li><span class="fa-li"><i class="fas fa-key"></i></span>
-                    {{ log.createdAt|date }} {{ log.member }}: {{log.message|default('profile.door.no_message')|trans}}
+                    {{ log.createdAt|date }} {{ log.member }}: {{ log.message|default('profile.door.no_message')|trans }}
                 </li>
                 {% endfor %}
                 </ul>
                 {% if app.request.server.get("HTTP_X_REAL_IP") != door_ip %}
-                    <a class="btn btn-primary disabled" href="">{{'profile.door.open_the_door_page'|trans}}</a>
-                    <p>{{'profile.door.wifi'|trans}}</p>
+                    <a class="btn btn-primary disabled" href="">{{ 'profile.door.open_the_door_page'|trans }}</a>
+                    <p>{{ 'profile.door.wifi'|trans }}</p>
                 {% else %}
-                    <a class="btn btn-primary" href="{{ path('entropy_profile_door.'~app.request.locale)}}">{{'profile.door.open_the_door_page'|trans}}</a>
+                    <a class="btn btn-primary" href="{{ path('kerde_door.' ~ app.request.locale) }}">{{ 'profile.door.open_the_door_page'|trans }}</a>
                 {% endif %}
             {% else %}
-                <h4>{{'profile.door.not_active_member'|trans }}</h4>
+                <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
             {% endif %}
         </div>
     </div>
-    {%endif%}
+    {% endif %}
 {% endblock %}
