@@ -239,7 +239,7 @@ class EventSignUpController extends EventController
         }
         if (!$event->getArtistSignUpNow()) {
             $this->addFlash('warning', $trans->trans('Not allowed'));
-            return new RedirectResponse($this->generateUrl('entropy_profile'));
+            return new RedirectResponse($this->generateUrl('profile'));
         }
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
@@ -264,7 +264,7 @@ class EventSignUpController extends EventController
             try {
                 $em->flush();
                 $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));
-                return new RedirectResponse($this->generateUrl('entropy_profile'));
+                return new RedirectResponse($this->generateUrl('profile'));
             } catch (\Exception) {
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
             }

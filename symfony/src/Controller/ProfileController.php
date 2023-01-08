@@ -8,6 +8,7 @@ use App\Form\MemberType;
 use App\Form\ActiveMemberType;
 use App\Entity\Member;
 use App\Entity\User;
+use App\Form\UserPasswordType;
 use App\Helper\Barcode;
 use App\Helper\Mattermost;
 use App\Repository\MemberRepository;
@@ -18,6 +19,7 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
@@ -25,6 +27,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class ProfileController extends AbstractController
 {
+    #[Route(path: [
+        'en' => '/profile/new',
+        'fi' => '/profiili/uusi
+    '], name: 'profile_new')]
     public function newMember(
         Request $request,
         FormFactoryInterface $formF,
@@ -90,6 +96,10 @@ class ProfileController extends AbstractController
         $text = '**New Member: ' . $member . '**';
         $mm->SendToMattermost($text, 'yhdistys');
     }
+    #[Route(path: [
+        'en' => '/dashboard',
+        'fi' => '/yleiskatsaus
+    '], name: 'dashboard')]
     public function dashboard(Barcode $bc): Response
     {
         $user = $this->getUser();
@@ -101,6 +111,10 @@ class ProfileController extends AbstractController
             'barcode' => $barcode
         ]);
     }
+    #[Route(path: [
+        'en' => '/profile',
+        'fi' => '/profiili
+    '], name: 'profile')]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -110,6 +124,7 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
+    #[Route(path: ['en' => '/profile/edit', 'fi' => '/profiili/muokkaa'], name: 'profile_edit')]
     public function edit(
         Request $request,
         FormFactoryInterface $formF,
@@ -123,20 +138,46 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
-            $user = $member->getUser();
-            $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
-            $em->persist($user);
             $em->persist($member);
             $em->flush();
             $request->setLocale($member->getLocale());
             $this->addFlash('success', 'profile.member_data_changed');
-            return $this->redirectToRoute('entropy_profile.' . $member->getLocale());
+            return $this->redirectToRoute('profile.' . $member->getLocale());
         }
-        return $this->render('profile/edit.html.twig', [
+        return $this->renderForm('profile/edit.html.twig', [
             'member' => $member,
             'form' => $form
         ]);
     }
+    #[Route(path: [
+        'en' => '/profile/password',
+        'fi' => '/profiili/salasana
+    '], name: 'profile_password_edit')]
+    public function password(
+        Request $request,
+        FormFactoryInterface $formF,
+        UserPasswordHasherInterface $hasher,
+        EntityManagerInterface $em
+    ): RedirectResponse|Response {
+        $user = $this->getUser();
+        $form = $formF->create(UserPasswordType::class, $user);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user = $form->getData();
+            $user->setPassword($hasher->hashPassword($user, $form->get('plainPassword')->getData()));
+            $em->persist($user);
+            $em->flush();
+            $this->addFlash('success', 'profile.member_data_changed');
+            return $this->redirectToRoute('profile');
+        }
+        return $this->renderForm('profile/password.html.twig', [
+            'form' => $form
+        ]);
+    }
+    #[Route(path: [
+        'en' => '/profile/apply',
+        'fi' => '/profiili/aktiiviksi
+    '], name: 'apply_for_active_member')]
     public function apply(
         Request $request,
         FormFactoryInterface $formF,
@@ -148,7 +189,7 @@ class ProfileController extends AbstractController
         $member = $user->getMember();
         if ($member->getIsActiveMember()) {
             $this->addFlash('success', 'profile.you_are_active_member_already');
-            return $this->redirectToRoute('entropy_profile.' . $member->getLocale());
+            return $this->redirectToRoute('profile.' . $member->getLocale());
         }
         $form = $formF->create(ActiveMemberType::class, $member);
         $form->handleRequest($request);
@@ -162,7 +203,7 @@ class ProfileController extends AbstractController
             $em->persist($member);
             $em->flush();
             $this->addFlash('success', 'profile.application_saved');
-            return $this->redirectToRoute('entropy_profile.' . $member->getLocale());
+            return $this->redirectToRoute('profile.' . $member->getLocale());
         }
         return $this->render('profile/apply.html.twig', [
             'form' => $form

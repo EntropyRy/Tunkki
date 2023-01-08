@@ -20,7 +20,6 @@ use App\Form\RSVPType;
 
 class EventController extends Controller
 {
-    protected $em;
     public function oneId(
         Request $request,
         CmsManagerSelector $cms,

@@ -11,7 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class UserType extends AbstractType
+class UserPasswordType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -40,7 +40,7 @@ class UserType extends AbstractType
                 // this is read and encoded in the controller
                 'mapped' => false,
             ])
-            ->add('MattermostId');
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

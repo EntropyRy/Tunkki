@@ -77,21 +77,6 @@ entropy_event_rsvp:
   controller: App\Controller\EventSignUpController::RSVP
   requirements:
     year: '\d+'
-entropy_user_dashboard:
-  path:
-    en: /dashboard/
-    fi: /yleiskatsaus/
-  controller: App\Controller\ProfileController::dashboard
-entropy_profile:
-  path:
-    en: /profile/
-    fi: /profiili/
-  controller: App\Controller\ProfileController::index
-entropy_profile_join:
-  path:
-    en: /profile/new
-    fi: /profiili/uusi
-  controller: App\Controller\ProfileController::newMember
 entropy_artist_profile:
   path:
     en: /profile/artist
@@ -102,11 +87,6 @@ entropy_public_artist:
     en: /artist/{name}
     fi: /artisti/{name}
   controller: App\Controller\PublicArtistController::index
-entropy_profile_edit:
-  path:
-    en: /profile/edit
-    fi: /profiili/muokkaa
-  controller: App\Controller\ProfileController::edit
 entropy_artist_create:
   path:
     en: /profile/artist/create
@@ -118,11 +98,6 @@ rss_feed_fi:
 rss_feed_en:
   path: /feed.rss
   controller: App\Controller\RssFeedController::index
-entropy_profile_active_member:
-  path:
-    en: /profile/apply
-    fi: /profiili/aktiiviksi
-  controller: App\Controller\ProfileController::apply
 entropy_artist_edit:
   path:
     en: /profile/artist/{id}/edit

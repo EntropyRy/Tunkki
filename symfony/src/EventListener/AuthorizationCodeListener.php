@@ -27,7 +27,7 @@ final readonly class AuthorizationCodeListener implements \Symfony\Component\Eve
                 $event->setResponse(
                     new Response(
                         302,
-                        ['Location' => $this->urlGenerator->generate('entropy_profile.' . $event->getUser()->getMember()->getLocale())]
+                        ['Location' => $this->urlGenerator->generate('profile.' . $event->getUser()->getMember()->getLocale())]
                     )
                 );
             }

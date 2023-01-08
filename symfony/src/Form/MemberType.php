@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Member;
-use App\Form\UserType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -22,7 +21,6 @@ class MemberType extends AbstractType
             ->add('lastname', TextType::class)
             ->add('email', EmailType::class)
             ->add('phone', TextType::class)
-            ->add('user', UserType::class)
             ->add('locale', ChoiceType::class, [
                 'choices' => ['fi' => 'fi', 'en' => 'en']
             ])

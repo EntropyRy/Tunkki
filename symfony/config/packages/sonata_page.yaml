@@ -45,14 +45,15 @@ sonata_page:
         - app_logout
         - rss_feed_en
         - rss_feed_fi
-        - entropy_user_dashboard
-        - entropy_artist_profile
+        - dashboard
         - kerde_barcodes
         - kerde_door
-        - entropy_profile
-        - entropy_profile_join
-        - entropy_profile_edit
-        - entropy_profile_active_member
+        - profile
+        - profile_join
+        - profile_edit
+        - profile_password_edit
+        - apply_for_active_member
+        - entropy_artist_profile
         - entropy_artist_create
         - entropy_artist_edit
         - entropy_artist_delete
