@@ -37,7 +37,8 @@ class Event implements \Stringable
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
 body {
-    background-image: url(/images/bg_stripe_black.png);
+    background-image: url(/images/bg_stripe_transparent.png);
+    background-color: yellow;
 }
 .container {
     background: #220101;
