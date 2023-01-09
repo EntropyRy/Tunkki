@@ -1,3 +1,8 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
 entropy_tunkki_booking_hash:
   path: /booking/{bookingid}/renter/{renterid}/{hash}
   controller: App\Controller\RenterHashController::indexAction
