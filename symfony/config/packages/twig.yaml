@@ -13,3 +13,7 @@ twig:
     date:
         format: j.n.Y, H:i
         timezone: Europe/Helsinki
+
+when@test:
+    twig:
+        strict_variables: true
