@@ -283,12 +283,12 @@
         "version": "4.1.3"
     },
     "sonata-project/media-bundle": {
-        "version": "3.13",
+        "version": "4.5",
         "recipe": {
             "repo": "github.com/symfony/recipes-contrib",
-            "branch": "master",
-            "version": "3.13",
-            "ref": "e25412e53b20827db07abb6f2aa0b8e4d26c284c"
+            "branch": "main",
+            "version": "4.0",
+            "ref": "8aa2decd8995752594ac6a304fb3ccafe1fa10cf"
         },
         "files": [
             "config/packages/sonata_media.yaml",
