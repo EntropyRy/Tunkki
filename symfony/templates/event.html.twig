@@ -4,7 +4,18 @@
     {{ parent() }}
     <style data-turbo-track="reload">
     {{ event.css|raw }}
+    {% if event.headerTheme == 'dark' %}
+    .header-img {
+        filter: invert(1);
+    }
+    {% endif %}
     </style>
+{% endblock %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {% if event.backgroundEffect is defined %}
+    {{ encore_entry_script_tags(event.backgroundEffect) }}
+    {% endif %}
 {% endblock %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
@@ -29,21 +40,13 @@
                 {{ block('event_media') }}
             </div>
         {% endif %}
-    <style>
-    {{ event.css|raw }}
-    {% if event.headerTheme == 'dark' %}
-    .header-img {
-        filter: invert(1);
-    }
-    {% endif %}
-    </style>
     </div>
     {% else %}
         <div clas="col-12">
             <br>
             <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
             <div class="col-6 mx-auto">
-               <a class="btn btn-primary w-100" href="{{ path('app_login')}}"><i class="fas fa-sign-in-alt"></i> {{'login'|trans|capitalize}}</a>
+               <a class="btn btn-primary w-100" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </div>
             <br>
         </div>

@@ -209,6 +209,12 @@ body {
     #[ORM\Column(nullable: true)]
     private ?bool $nakkiRequiredForTicketReservation = false;
 
+    #[ORM\Column(length: 30, nullable: true)]
+    private ?string $backgroundEffect = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $backgroundEffectOpacity = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1107,6 +1113,30 @@ body {
     public function setNakkiRequiredForTicketReservation(?bool $nakkiRequiredForTicketReservation): self
     {
         $this->nakkiRequiredForTicketReservation = $nakkiRequiredForTicketReservation;
+
+        return $this;
+    }
+
+    public function getBackgroundEffect(): ?string
+    {
+        return $this->backgroundEffect;
+    }
+
+    public function setBackgroundEffect(?string $backgroundEffect): self
+    {
+        $this->backgroundEffect = $backgroundEffect;
+
+        return $this;
+    }
+
+    public function getBackgroundEffectOpacity(): ?int
+    {
+        return $this->backgroundEffectOpacity;
+    }
+
+    public function setBackgroundEffectOpacity(?int $backgroundEffectOpacity): self
+    {
+        $this->backgroundEffectOpacity = $backgroundEffectOpacity;
 
         return $this;
     }

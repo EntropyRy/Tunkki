@@ -19,10 +19,6 @@
                 {{ encore_entry_link_tags('app') }}
             {% endblock %}
             {% block sonata_page_javascripts %}
-                <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-                <!--[if lt IE 9]>
-                    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-                <![endif]-->
                 {{ encore_entry_script_tags('app') }}
             {% endblock %}
         </head>
@@ -30,6 +26,9 @@
 
     {% block sonata_page_body_tag %}
     <body class="entropy {% if app.user and event is not defined %}{{ app.user.member.theme }}{% endif %}">
+    {% if event is defined and event.backgroundEffect is defined %}
+    <canvas id="{{ event.backgroundEffect }}" style="opacity: {{ event.backgroundEffectOpacity|default(100)/100 }};width: 100%; height: 100%; position: fixed; left:0; top:0; z-index:-1"></canvas>
+    {% endif %}
     {% endblock %}
         {% block sonata_page_top_bar %}
             {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}

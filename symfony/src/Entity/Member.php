@@ -83,7 +83,7 @@ class Member implements \Stringable
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private ?\App\Entity\User $user = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: 'string', length: 8)]
     private ?string $locale = 'fi';
 
     #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
