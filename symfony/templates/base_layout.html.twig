@@ -27,7 +27,7 @@
     {% block sonata_page_body_tag %}
     <body class="entropy {% if app.user and event is not defined %}{{ app.user.member.theme }}{% endif %}">
     {% if event is defined and event.backgroundEffect is defined %}
-    <canvas id="{{ event.backgroundEffect }}" style="opacity: {{ event.backgroundEffectOpacity|default(100)/100 }};width: 100%; height: 100%; position: fixed; left:0; top:0; z-index:-1"></canvas>
+    <canvas data-turbo-permanent id="{{ event.backgroundEffect }}" style="opacity: {{ event.backgroundEffectOpacity|default(100)/100 }};width: 100%; height: 100%; position: fixed; left:0; top:0; z-index:-1"></canvas>
     {% endif %}
     {% endblock %}
         {% block sonata_page_top_bar %}
