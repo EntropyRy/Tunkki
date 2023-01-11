@@ -63,42 +63,49 @@ final class EventAdmin extends AbstractAdmin
             );
             if ((is_countable($admin->getSubject()->getRSVPs()) ? count($admin->getSubject()->getRSVPs()) : 0) > 0) {
                 $menu->addChild(
-                    'RSVPs', [
+                    'RSVPs',
+                    [
                     'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
                     ]
                 );
                 $menu->addChild(
-                    'RSVP List', [
+                    'RSVP List',
+                    [
                     'uri' => $admin->generateUrl('rsvp', ['id' => $id])
                     ]
                 );
             }
             if ($event->getNakkikoneEnabled()) {
                 $menu->addChild(
-                    'Nakkikone', [
+                    'Nakkikone',
+                    [
                     'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki.list', ['id' => $id])
                     ]
                 );
                 $menu->addChild(
-                    'Nakit', [
+                    'Nakit',
+                    [
                     'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.nakki_booking.list', ['id' => $id])
                     ]
                 );
                 $menu->addChild(
-                    'Printable Nakkilist', [
+                    'Printable Nakkilist',
+                    [
                     'uri' => $admin->generateUrl('nakkiList', ['id' => $id])
                     ]
                 );
             }
             if ($event->getTicketsEnabled()) {
                 $menu->addChild(
-                    'Tickets', [
+                    'Tickets',
+                    [
                     'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                     ]
                 );
                 if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
                     $menu->addChild(
-                        'Update Ticket Count', [
+                        'Update Ticket Count',
+                        [
                         'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
                         'attributes' => ['class' => 'btn-warning']
                         ]
@@ -107,7 +114,8 @@ final class EventAdmin extends AbstractAdmin
                 if ($event->ticketPresaleEnabled()) {
                     $event = $this->getSubject();
                     $menu->addChild(
-                        'Ticket Presale Preview', [
+                        'Ticket Presale Preview',
+                        [
                         'route' => 'entropy_event_ticket_presale',
                         'routeParameters' => [
                             'slug'=> $event->getUrl(),
@@ -119,12 +127,14 @@ final class EventAdmin extends AbstractAdmin
                 }
             }
             $menu->addChild(
-                'Emails', [
+                'Emails',
+                [
                 'uri' => $admin->generateUrl('entropy.admin.event|admin.email.list', ['id' => $id])
                 ]
             );
             $menu->addChild(
-                'Preview', [
+                'Preview',
+                [
                 'route' => 'entropy_event',
                 'routeParameters' => [
                     'id'=> $id,
@@ -147,7 +157,9 @@ final class EventAdmin extends AbstractAdmin
             ->add('Nimi')
             ->add('Sisallys')
             ->add(
-                'type', ChoiceFilter::class, [
+                'type',
+                ChoiceFilter::class,
+                [
                 'field_type' => ChoiceType::class,
                 'field_options' => ['choices' => $TypeChoices]
                 ]
@@ -169,7 +181,9 @@ final class EventAdmin extends AbstractAdmin
             ->add('publishDate')
             ->add('url')
             ->add(
-                ListMapper::NAME_ACTIONS, null, [
+                ListMapper::NAME_ACTIONS,
+                null,
+                [
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -204,13 +218,17 @@ final class EventAdmin extends AbstractAdmin
                 ->with('Functionality', ['class' => 'col-md-4'])
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
                 ->add(
-                    'EventDate', DateTimePickerType::class, [
+                    'EventDate',
+                    DateTimePickerType::class,
+                    [
                     'label' => 'Event Date and Time',
                     'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
-                    'until', DateTimePickerType::class, [
+                    'until',
+                    DateTimePickerType::class,
+                    [
                     'format' => 'd.M.yyyy HH:mm',
                     'label' => 'Event stop time',
                     'required' => false,
@@ -227,13 +245,17 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add(
-                    'externalUrl', null, [
+                    'externalUrl',
+                    null,
+                    [
                     'label' => 'Is the advertisement hosted somewhere else? if this is selected and url is empty it can be used to have the event in events list.',
                     'help'=>'Is the add hosted here?'
                     ]
                 )
                 ->add(
-                    'url', null, [
+                    'url',
+                    null,
+                    [
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1']
                 )
                 ->end();
@@ -247,7 +269,9 @@ final class EventAdmin extends AbstractAdmin
             if ($event->getexternalUrl()==false) {
                 $formMapper
                     ->add(
-                        'Content', SimpleFormatterType::class, [
+                        'Content',
+                        SimpleFormatterType::class,
+                        [
                         'format' => 'richhtml',
                         'required' => false,
                         'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.'
@@ -261,7 +285,9 @@ final class EventAdmin extends AbstractAdmin
             if ($event->getexternalUrl()==false) {
                 $formMapper
                     ->add(
-                        'Sisallys', SimpleFormatterType::class, [
+                        'Sisallys',
+                        SimpleFormatterType::class,
+                        [
                         'format' => 'richhtml',
                         'required' => false,
                         'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.'
@@ -274,13 +300,17 @@ final class EventAdmin extends AbstractAdmin
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
                 ->add('cancelled', null, ['help' => 'Event has been cancelled'])
                 ->add(
-                    'EventDate', DateTimePickerType::class, [
+                    'EventDate',
+                    DateTimePickerType::class,
+                    [
                     'label' => 'Event Date and Time',
                     'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
-                    'until', DateTimePickerType::class, [
+                    'until',
+                    DateTimePickerType::class,
+                    [
                     'format' => 'd.M.yyyy HH:mm',
                     'label' => 'Event stop time',
                     'required' => false,
@@ -297,28 +327,37 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add(
-                    'externalUrl', null, [
+                    'externalUrl',
+                    null,
+                    [
                     'label' => 'External Url/No addvert at all if url is empty',
                     'help'=>'Is the add hosted here?'
                     ]
                 )
                 ->add(
-                    'url', null, [
+                    'url',
+                    null,
+                    [
                     'help' => '\'event\' resolves to https://entropy.fi/(year)/event.
                      In case of external need whole url like: https://entropy.fi/rave/bunka1'
                     ]
                 )
                 ->add(
-                    'streamPlayerUrl', null, [
+                    'streamPlayerUrl',
+                    null,
+                    [
                     'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
                     ]
                 )
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
                 ->add(
-                    'picture', ModelListType::class, [
+                    'picture',
+                    ModelListType::class,
+                    [
                         'required' => false
-                    ], [
+                    ],
+                    [
                         'link_parameters'=>[
                         'context' => 'event'
                         ]]
@@ -326,7 +365,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('picturePosition', ChoiceType::class, ['choices' => $PicChoices])
                 ->add('imgFilterColor', ColorType::class)
                 ->add(
-                    'imgFilterBlendMode', ChoiceType::class, [
+                    'imgFilterBlendMode',
+                    ChoiceType::class,
+                    [
                     'required' => false,
                     'help' => 'Color does not work if you dont choose here how it should work',
                     'choices' => [
@@ -341,7 +382,9 @@ final class EventAdmin extends AbstractAdmin
             if ($event->getexternalUrl()==false) {
                 $formMapper
                     ->add(
-                        'headerTheme', ChoiceType::class, [
+                        'headerTheme',
+                        ChoiceType::class,
+                        [
                         'required' => true,
                         'choices' => [
                             'light' => 'light',
@@ -350,15 +393,20 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add(
-                        'backgroundEffect', ChoiceType::class, [
+                        'backgroundEffect',
+                        ChoiceType::class,
+                        [
                         'required' => false,
                         'choices' => [
-                            'VHS' => 'vhs',
+                            'VHS static' => 'vhs',
+                            'Snowfall' => 'snow',
                         ]
                         ]
                     )
                     ->add(
-                        'backgroundEffectOpacity', RangeType::class, [
+                        'backgroundEffectOpacity',
+                        RangeType::class,
+                        [
                         'required' => false,
                         'attr' => [
                             'min' => 0,
@@ -373,10 +421,13 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Links', ['class' => 'col-md-4'])
                 ->add(
-                    'attachment', ModelListType::class, [
+                    'attachment',
+                    ModelListType::class,
+                    [
                         'required' => false,
                         'help' => 'added as downloadable link'
-                        ], [
+                        ],
+                    [
                             'link_parameters'=>[
                             'context' => 'event',
                             'provider' => 'sonata.media.provider.file'
@@ -386,7 +437,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time'])
                 ->add(
-                    'links', ImmutableArrayType::class, [
+                    'links',
+                    ImmutableArrayType::class,
+                    [
                     'help_html' => true,
                     'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br>
                                 request admin to add more translations!',
@@ -409,7 +462,9 @@ final class EventAdmin extends AbstractAdmin
                 ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup enabled'])
                 ->add('showArtistSignUpOnlyForLoggedInMembers', null, ['help' => 'Do you have to be logged in to see artist sign up link for the event'])
                 ->add(
-                    'artistSignUpStart', DateTimePickerType::class, [
+                    'artistSignUpStart',
+                    DateTimePickerType::class,
+                    [
                     'format' => 'd.M.yyyy HH:mm',
                     'help' => 'when the artist signup starts',
                     'input' => 'datetime_immutable',
@@ -417,7 +472,9 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add(
-                    'artistSignUpEnd', DateTimePickerType::class, [
+                    'artistSignUpEnd',
+                    DateTimePickerType::class,
+                    [
                     'format' => 'd.M.yyyy HH:mm',
                     'help' => 'when the artist signup ends',
                     'input' => 'datetime_immutable',
@@ -429,29 +486,39 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Nakkikone config')
                 ->with('Config')
                 ->add(
-                    'NakkikoneEnabled', null, [
+                    'NakkikoneEnabled',
+                    null,
+                    [
                         'help' => 'Publish nakkikone and allow members to reserve Nakkis',
                         ]
                 )
                 ->add(
-                    'showNakkikoneLinkInEvent', null, [
+                    'showNakkikoneLinkInEvent',
+                    null,
+                    [
                         'help' => 'Publish nakkikone in event',
                         ]
                 )
                 ->add(
-                    'requireNakkiBookingsToBeDifferentTimes', null, [
+                    'requireNakkiBookingsToBeDifferentTimes',
+                    null,
+                    [
                         'help' => 'Make sure member nakki bookings do not overlap',
                         ]
                 )
                 ->add(
-                    'nakkiInfoEn', SimpleFormatterType::class, [
+                    'nakkiInfoEn',
+                    SimpleFormatterType::class,
+                    [
                         'format' => 'richhtml',
                         'required' => false,
                         'ckeditor_context' => 'default',
                         ]
                 )
                 ->add(
-                    'nakkiInfoFi', SimpleFormatterType::class, [
+                    'nakkiInfoFi',
+                    SimpleFormatterType::class,
+                    [
                         'format' => 'richhtml',
                         'required' => false,
                         'ckeditor_context' => 'default',
@@ -473,7 +540,9 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Presales', ['class' => 'col-md-6'])
                 ->add(
-                    'ticketPresaleStart', DatePickerType::class, [
+                    'ticketPresaleStart',
+                    DatePickerType::class,
+                    [
                         'format' => 'd.M.yyyy',
                         'help' => 'When presale starts',
                         'input' => 'datetime_immutable',
@@ -481,7 +550,9 @@ final class EventAdmin extends AbstractAdmin
                         ]
                 )
                 ->add(
-                    'ticketPresaleEnd', DateTimePickerType::class, [
+                    'ticketPresaleEnd',
+                    DateTimePickerType::class,
+                    [
                         'format' => 'd.M.yyyy, HH:mm',
                         'help' => 'when presale ends. If start of the ticket sale needs to be timed: define start and end seconds apart',
                         'input' => 'datetime_immutable',
@@ -489,21 +560,27 @@ final class EventAdmin extends AbstractAdmin
                         ]
                 )
                 ->add(
-                    'ticketPresaleCount', null, [
+                    'ticketPresaleCount',
+                    null,
+                    [
                         'help' => 'How many tickets can be sold in presale?'
                         ]
                 )
                 ->end()
                 ->with('Info', ['class' => 'col-md-12'])
                 ->add(
-                    'ticketInfoFi', SimpleFormatterType::class, [
+                    'ticketInfoFi',
+                    SimpleFormatterType::class,
+                    [
                         'format' => 'richhtml',
                         'required' => false,
                         'ckeditor_context' => 'default',
                         ]
                 )
                 ->add(
-                    'ticketInfoEn', SimpleFormatterType::class, [
+                    'ticketInfoEn',
+                    SimpleFormatterType::class,
+                    [
                         'format' => 'richhtml',
                         'required' => false,
                         'ckeditor_context' => 'default',

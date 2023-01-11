@@ -22,6 +22,7 @@ Encore
    */
   .addEntry("app", "./assets/app.js")
   .addEntry("vhs", "./assets/js/vhs.js")
+  .addEntry("snow", "./assets/js/snow.js")
   .addEntry("nakkikone", "./assets/js/nakkikone.js")
   .addEntry("artist_signup", "./assets/js/artist_signup.js")
   .addEntry("events_search", "./assets/js/events_search.js")
