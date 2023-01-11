@@ -126,7 +126,8 @@ class KerdeController extends AbstractController
         assert($user instanceof User);
         $member = $user->getMember();
         $generator = new BarcodeGeneratorHTML();
-        $barcodes['Your Code'] = $gen->getBarcode($member);
+        $code = $gen->getBarcode($member);
+        $barcodes['Your Code'] = $code[1];
         $barcodes['10€'] = $generator->getBarcode('_10e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['20€'] = $generator->getBarcode('_20e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['Cancel'] = $generator->getBarcode('_CANCEL_', $generator::TYPE_CODE_128, 2, 90);
