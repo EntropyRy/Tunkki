@@ -1,10 +1,10 @@
 framework:
-  secret: '%env(APP_SECRET)%'
+  secret: "%env(APP_SECRET)%"
   csrf_protection: true
   http_method_override: false
   session:
     name: tunkki
-    save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
+    save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
     cookie_lifetime: 1209600
     cookie_secure: auto
     cookie_samesite: lax
@@ -22,8 +22,8 @@ framework:
         adapter: cache.adapter.apcu
 when@prod:
   framework:
-    trusted_hosts: '%env(TRUSTED_HOSTS)%'
-    trusted_proxies: '%env(TRUSTED_PROXIES)%'
-    trusted_headers: ['x-forwarded-for', 'x-forwarded-proto']
+    trusted_hosts: "%env(TRUSTED_HOSTS)%"
+    trusted_proxies: "%env(TRUSTED_PROXIES)%"
+    trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
     session:
       cookie_httponly: false

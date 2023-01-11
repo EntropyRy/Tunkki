@@ -8,7 +8,7 @@ var w = window.innerWidth,
   amountOfSnow = 500,
   size = 2,
   speed = 5,
-  snowColor = "rgba(230, 230, 230, 0.8)",
+  snowColor = "rgba(230, 230, 230,1)",
   snowflake = new Array(),
   time,
   count;
