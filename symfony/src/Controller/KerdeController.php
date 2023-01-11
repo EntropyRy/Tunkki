@@ -119,10 +119,14 @@ class KerdeController extends AbstractController
         return $this->redirectToRoute('kerde_door');
     }
     #[Route('/kerde/barcodes', name: 'kerde_barcodes')]
-    public function index(): Response
+    public function index(Barcode $gen): Response
     {
         $barcodes = [];
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         $generator = new BarcodeGeneratorHTML();
+        $barcodes['Your Code'] = $gen->getBarcode($member);
         $barcodes['10€'] = $generator->getBarcode('_10e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['20€'] = $generator->getBarcode('_20e_', $generator::TYPE_CODE_128, 2, 90);
         $barcodes['Cancel'] = $generator->getBarcode('_CANCEL_', $generator::TYPE_CODE_128, 2, 90);

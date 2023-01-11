@@ -48,7 +48,10 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->add('ApplicationDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
-            ->add('ApplicationHandledDate', DateRangeFilter::class, [
+            ->add(
+                'ApplicationHandledDate',
+                DateRangeFilter::class,
+                [
                 'field_type' => DateRangeType::class,
                 'field_options' => [
                     'field_options_start' => [
@@ -58,11 +61,15 @@ final class MemberAdmin extends AbstractAdmin
                         'years' => range(1993, $now->format('Y'))
                     ],
                 ]
-            ])
+                ]
+            )
             ->add('StudentUnionMember')
             ->add('isActiveMember')
             ->add('isFullMember')
-            ->add('AcceptedAsHonoraryMember', DateRangeFilter::class, [
+            ->add(
+                'AcceptedAsHonoraryMember',
+                DateRangeFilter::class,
+                [
                 'field_type' => DateRangeType::class,
                 'field_options' => [
                     'field_options_start' => [
@@ -72,10 +79,10 @@ final class MemberAdmin extends AbstractAdmin
                         'years' => range(1993, $now->format('Y'))
                     ],
                 ]
-            ])
+                ]
+            )
             //->add('user.CreatedAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
-            ->add('createdAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
-        ;
+            ->add('createdAt', DateRangeFilter::class, ['field_type' => DateRangeType::class]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -88,7 +95,10 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isActiveMember')
             ->add('isFullMember')
             ->add('user.LastLogin')
-            ->add(ListMapper::NAME_ACTIONS, null, [
+            ->add(
+                ListMapper::NAME_ACTIONS,
+                null,
+                [
                 'actions' => [
                     'show' => [],
                     'edit' => [],
@@ -103,8 +113,8 @@ final class MemberAdmin extends AbstractAdmin
                         'template' => 'admin/crud/list__action_email_active_member_info.html.twig'
                     ],
                 ],
-            ])
-        ;
+                ]
+            );
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -130,29 +140,35 @@ final class MemberAdmin extends AbstractAdmin
             ->add('isActiveMember', null, ['help' => 'Grants access to Entropy systems'])
             ->add('denyKerdeAccess', null, ['help' => 'Denies access to Entropy Kerde'])
             ->add('isFullMember', null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
-            ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
+            ->add(
+                'AcceptedAsHonoraryMember',
+                DatePickerType::class,
+                [
                 'required' => false,
                 'help' => 'Grants free access to Entropy parties'
-            ])
+                ]
+            )
             //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
             ->with('Membership info', ['class' => 'col-md-4'])
             ->add('Application', null, ['disabled' => $editable])
             ->add('ApplicationDate', DatePickerType::class, ['required' => false])
-            ->add('ApplicationHandledDate', DatePickerType::class, [
+            ->add(
+                'ApplicationHandledDate',
+                DatePickerType::class,
+                [
                 'required' => false,
                 'help'=>'doubles as accepted as active member date'
-            ])
+                ]
+            )
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
-            ->end()
-        ;
+            ->end();
         //if (is_null($this->getSubject()->getApplicationHandledDate())){
         $formMapper
-                ->with('Membership info')
-                ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
-                ->add('rejectReasonSent')
-                ->end()
-        ;
+            ->with('Membership info')
+            ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
+            ->add('rejectReasonSent')
+            ->end();
         //}
     }
 
@@ -170,12 +186,17 @@ final class MemberAdmin extends AbstractAdmin
             ->add('ApplicationHandledDate')
             ->add('isActiveMember')
             ->add('isFullMember')
-            ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
+            ->add(
+                'rejectReason',
+                null,
+                [
+                'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'
+                ]
+            )
             ->add('rejectReasonSent')
             ->add('user')
             ->add('createdAt')
-            ->add('updatedAt')
-        ;
+            ->add('updatedAt');
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
