@@ -6,9 +6,9 @@
 {% block content %}
 <div class="col-md-12">
     <h1>ZOOM</h1>
-    <p>{{ 'barcode.expl'trans }}</p>
+    <p>{{ 'barcode.expl'|trans }}</p>
     {% for name, code in barcodes %}
-    <div class="my-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}" style="width:400px;">
+    <div class="m-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}" style="width:400px;">
         <div class="mx-auto barcode" style="width:246px;">
             {{ code|raw }}
             <p class="text-center {% if app.user.member.theme == 'dark' %}text-black{% endif %}">{{ name }}</p>
