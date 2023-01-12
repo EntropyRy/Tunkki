@@ -404,6 +404,17 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add(
+                        'backgroundEffectPosition',
+                        ChoiceType::class,
+                        [
+                        'required' => true,
+                        'choices' => [
+                            'Background' => 'z-index:0;',
+                            'In front' => 'z-index:1;',
+                        ]
+                        ]
+                    )
+                    ->add(
                         'backgroundEffectOpacity',
                         RangeType::class,
                         [

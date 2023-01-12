@@ -215,6 +215,9 @@ body {
     #[ORM\Column(nullable: true)]
     private ?int $backgroundEffectOpacity = null;
 
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $backgroundEffectPosition = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1137,6 +1140,18 @@ body {
     public function setBackgroundEffectOpacity(?int $backgroundEffectOpacity): self
     {
         $this->backgroundEffectOpacity = $backgroundEffectOpacity;
+
+        return $this;
+    }
+
+    public function getBackgroundEffectPosition(): ?string
+    {
+        return $this->backgroundEffectPosition;
+    }
+
+    public function setBackgroundEffectPosition(?string $backgroundEffectPosition): self
+    {
+        $this->backgroundEffectPosition = $backgroundEffectPosition;
 
         return $this;
     }
