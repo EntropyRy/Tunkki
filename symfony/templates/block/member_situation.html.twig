@@ -28,10 +28,8 @@
         <div class="row offset-1 pb-2">
             <div class="col-md-4">
                     <i class="{% if member %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
-                    {{ 'Member'|trans }}
-                    {% if member.ApplicationHandledDate is empty or member.createdAt < member.ApplicationHandledDate %}
-                    {{ 'since'|trans }} {{ member.createdAt|date('d.m.Y') }}
-                    {% endif %}
+                    {{ 'Member account created'|trans }}:
+                    {{ member.createdAt|date('d.m.Y') }}
             </div>
             <div class="col-md-4">
                 <span>
