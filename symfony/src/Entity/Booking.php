@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use DateTime;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -129,7 +131,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function addPackage(\App\Entity\Package $package)
+    public function addPackage(\App\Entity\Package $package): Booking
     {
         foreach ($package->getItems() as $item) {
             $item->addRentHistory($this);
@@ -142,7 +144,7 @@ class Booking implements \Stringable
     /**
      * Remove package
      */
-    public function removePackage(\App\Entity\Package $package)
+    public function removePackage(\App\Entity\Package $package): void
     {
         foreach ($package->getItems() as $item) {
             $item->removeRentHistory($this);
@@ -161,7 +163,7 @@ class Booking implements \Stringable
     }
     public function __toString(): string
     {
-        return $this->name ? $this->name.' - '.date_format($this->bookingDate, 'd.m.Y') : 'n/a';
+        return $this->name ? $this->name . ' - ' . date_format($this->bookingDate, 'd.m.Y') : 'n/a';
     }
 
 
@@ -172,7 +174,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setPaid($paid)
+    public function setPaid($paid): Booking
     {
         $this->setPaidDate(new \DateTime());
         $this->paid = $paid;
@@ -185,7 +187,7 @@ class Booking implements \Stringable
      *
      * @return boolean
      */
-    public function getPaid()
+    public function getPaid(): bool
     {
         return $this->paid;
     }
@@ -197,7 +199,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setPaidDate($paidDate)
+    public function setPaidDate($paidDate): Booking
     {
         $this->paid_date = $paidDate;
 
@@ -209,7 +211,7 @@ class Booking implements \Stringable
      *
      * @return \DateTime
      */
-    public function getPaidDate()
+    public function getPaidDate(): ?DateTime
     {
         return $this->paid_date;
     }
@@ -219,7 +221,7 @@ class Booking implements \Stringable
      *
      * @return int
      */
-    public function getCalculatedTotalPrice()
+    public function getCalculatedTotalPrice(): int
     {
         $price = 0;
         foreach ($this->getItems() as $item) {
@@ -238,11 +240,11 @@ class Booking implements \Stringable
      *
      * @return boolean
      */
-    public function getIsSomethingBroken()
+    public function getIsSomethingBroken(): bool
     {
         if ($this->getItems()) {
             foreach ($this->getItems() as $item) {
-                if ($item->getNeedsFixing()==true) {
+                if ($item->getNeedsFixing() == true) {
                     return true;
                 }
             }
@@ -261,18 +263,18 @@ class Booking implements \Stringable
      *
      * @return string
      */
-    public function getRentInformation()
+    public function getRentInformation(): string
     {
         $return = '';
         foreach ($this->getItems() as $item) {
             if ($item->getRentNotice()) {
-                $return .= $item->getName().': '.$item->getRentNotice().' '. PHP_EOL;
+                $return .= $item->getName() . ': ' . $item->getRentNotice() . ' ' . PHP_EOL;
             }
         }
         if ($this->getPackages()) {
             foreach ($this->getPackages() as $package) {
                 foreach ($package->getItems() as $item) {
-                    $return .= $item->getName().': '.$item->getRentNotice().' ';
+                    $return .= $item->getName() . ': ' . $item->getRentNotice() . ' ';
                 }
             }
         }
@@ -285,7 +287,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setActualPrice($actualPrice)
+    public function setActualPrice($actualPrice): Booking
     {
         $this->actualPrice = $actualPrice;
 
@@ -320,7 +322,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function addItem(\App\Entity\Item $item)
+    public function addItem(\App\Entity\Item $item): Booking
     {
         $item->addRentHistory($this);
         $this->items[] = $item;
@@ -331,7 +333,7 @@ class Booking implements \Stringable
     /**
      * Remove item
      */
-    public function removeItem(\App\Entity\Item $item)
+    public function removeItem(\App\Entity\Item $item): void
     {
         $item->removeRentHistory($this);
         $this->items->removeElement($item);
@@ -354,7 +356,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setNumberOfRentDays($numberOfRentDays)
+    public function setNumberOfRentDays($numberOfRentDays): Booking
     {
         $this->numberOfRentDays = $numberOfRentDays;
 
@@ -366,7 +368,7 @@ class Booking implements \Stringable
      *
      * @return integer
      */
-    public function getNumberOfRentDays()
+    public function getNumberOfRentDays(): int
     {
         return $this->numberOfRentDays;
     }
@@ -377,7 +379,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function addBillableEvent(\App\Entity\BillableEvent $billableEvent)
+    public function addBillableEvent(\App\Entity\BillableEvent $billableEvent): Booking
     {
         $billableEvent->setBooking($this);
         $this->billableEvents[] = $billableEvent;
@@ -388,7 +390,7 @@ class Booking implements \Stringable
     /**
      * Remove billableEvent
      */
-    public function removeBillableEvent(\App\Entity\BillableEvent $billableEvent)
+    public function removeBillableEvent(\App\Entity\BillableEvent $billableEvent): void
     {
         $this->billableEvents->removeElement($billableEvent);
     }
@@ -410,7 +412,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setRentingPrivileges(\App\Entity\WhoCanRentChoice $rentingPrivileges = null)
+    public function setRentingPrivileges(\App\Entity\WhoCanRentChoice $rentingPrivileges = null): Booking
     {
         $this->rentingPrivileges = $rentingPrivileges;
 
@@ -424,7 +426,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setRenter(\App\Entity\Renter $renter = null)
+    public function setRenter(\App\Entity\Renter $renter = null): Booking
     {
         $this->renter = $renter;
 
@@ -436,7 +438,7 @@ class Booking implements \Stringable
      *
      * @return \App\Entity\Renter|null
      */
-    public function getRenter()
+    public function getRenter(): ?Renter
     {
         return $this->renter;
     }
@@ -448,7 +450,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setInvoiceSent($invoiceSent)
+    public function setInvoiceSent($invoiceSent): Booking
     {
         $this->invoiceSent = $invoiceSent;
 
@@ -460,7 +462,7 @@ class Booking implements \Stringable
      *
      * @return bool
      */
-    public function getInvoiceSent()
+    public function getInvoiceSent(): bool
     {
         return $this->invoiceSent;
     }
@@ -472,7 +474,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setItemsReturned($itemsReturned)
+    public function setItemsReturned($itemsReturned): Booking
     {
         $this->itemsReturned = $itemsReturned;
 
@@ -484,7 +486,7 @@ class Booking implements \Stringable
      *
      * @return bool
      */
-    public function getItemsReturned()
+    public function getItemsReturned(): bool
     {
         return $this->itemsReturned;
     }
@@ -496,7 +498,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setRenterHash($renterHash)
+    public function setRenterHash($renterHash): Booking
     {
         $this->renterHash = $renterHash;
 
@@ -508,7 +510,7 @@ class Booking implements \Stringable
      *
      * @return string
      */
-    public function getRenterHash()
+    public function getRenterHash(): int|string
     {
         return $this->renterHash;
     }
@@ -520,7 +522,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setRenterConsent($renterConsent)
+    public function setRenterConsent($renterConsent): Booking
     {
         $this->renterConsent = $renterConsent;
 
@@ -532,7 +534,7 @@ class Booking implements \Stringable
      *
      * @return bool
      */
-    public function getRenterConsent()
+    public function getRenterConsent(): bool
     {
         return $this->renterConsent;
     }
@@ -544,7 +546,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function setCancelled($cancelled)
+    public function setCancelled($cancelled): Booking
     {
         $this->cancelled = $cancelled;
 
@@ -556,7 +558,7 @@ class Booking implements \Stringable
      *
      * @return bool
      */
-    public function getCancelled()
+    public function getCancelled(): bool
     {
         return $this->cancelled;
     }
@@ -567,7 +569,7 @@ class Booking implements \Stringable
      *
      * @return Booking
      */
-    public function addStatusEvent(\App\Entity\StatusEvent $statusEvent)
+    public function addStatusEvent(\App\Entity\StatusEvent $statusEvent): Booking
     {
         $this->statusEvents[] = $statusEvent;
 
@@ -579,7 +581,6 @@ class Booking implements \Stringable
      *
      * @param \App\Entity\Event $statusEvent
      *
-     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
     public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent)
     {

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
 use DateTime;
+use DateTimeImmutable;
 use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -520,7 +521,7 @@ class Item implements \Stringable
      *
      * @return \App\Entity\User
      */
-    public function getCreator()
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
@@ -541,7 +542,7 @@ class Item implements \Stringable
      *
      * @return \App\Entity\User
      */
-    public function getModifier()
+    public function getModifier(): ?User
     {
         return $this->modifier;
     }
@@ -638,8 +639,6 @@ class Item implements \Stringable
 
     /**
      * reset rentHistory
-     *
-     * @return null
      */
     public function resetRentHistory(): void
     {
@@ -664,7 +663,7 @@ class Item implements \Stringable
      *
      * @return Category
      */
-    public function getCategory()
+    public function getCategory(): ?Category
     {
         return $this->category;
     }

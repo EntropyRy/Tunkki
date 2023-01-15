@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Entity\User;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -53,7 +54,7 @@ class StatusEvent implements \Stringable
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -63,9 +64,9 @@ class StatusEvent implements \Stringable
      *
      * @param string $description
      *
-     * @return Events
+     * @return StatusEvent
      */
-    public function setDescription($description)
+    public function setDescription($description): StatusEvent
     {
         $this->description = $description;
 
@@ -77,7 +78,7 @@ class StatusEvent implements \Stringable
      *
      * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -87,9 +88,9 @@ class StatusEvent implements \Stringable
      *
      * @param \DateTime $createdAt
      *
-     * @return Events
+     * @return StatusEvent
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): StatusEvent
     {
         $this->createdAt = $createdAt;
 
@@ -101,7 +102,7 @@ class StatusEvent implements \Stringable
      *
      * @return \DateTime
      */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -111,9 +112,9 @@ class StatusEvent implements \Stringable
      *
      * @param \DateTime $updatedAt
      *
-     * @return Events
+     * @return StatusEvent
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): StatusEvent
     {
         $this->updatedAt = $updatedAt;
 
@@ -125,7 +126,7 @@ class StatusEvent implements \Stringable
      *
      * @return \DateTime
      */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
     }
@@ -133,9 +134,9 @@ class StatusEvent implements \Stringable
     /**
      * Set item
      *
-     * @return Events
+     * @return StatusEvent
      */
-    public function setItem(\App\Entity\Item $item = null)
+    public function setItem(\App\Entity\Item $item = null): StatusEvent
     {
         $this->item = $item;
 
@@ -147,7 +148,7 @@ class StatusEvent implements \Stringable
      *
      * @return \App\Entity\Item
      */
-    public function getItem()
+    public function getItem(): ?Item
     {
         return $this->item;
     }
@@ -155,9 +156,9 @@ class StatusEvent implements \Stringable
     public function __toString(): string
     {
         if (is_object($this->getItem())) {
-            return 'Event for '.$this->getItem()->getName();
+            return 'Event for ' . $this->getItem()->getName();
         } elseif (is_object($this->getBooking())) {
-            return 'Event for '.$this->getBooking()->getName();
+            return 'Event for ' . $this->getBooking()->getName();
         } else {
             return 'No associated item';
         }
@@ -166,9 +167,9 @@ class StatusEvent implements \Stringable
     /**
      * Set creator
      *
-     * @return Event
+     * @return StatusEvent
      */
-    public function setCreator(\App\Entity\User $creator = null)
+    public function setCreator(\App\Entity\User $creator = null): StatusEvent
     {
         $this->creator = $creator;
 
@@ -180,7 +181,7 @@ class StatusEvent implements \Stringable
      *
      * @return \App\Entity\User
      */
-    public function getCreator()
+    public function getCreator(): ?User
     {
         return $this->creator;
     }
@@ -188,9 +189,9 @@ class StatusEvent implements \Stringable
     /**
      * Set modifier
      *
-     * @return Event
+     * @return StatusEvent
      */
-    public function setModifier(\App\Entity\User $modifier = null)
+    public function setModifier(\App\Entity\User $modifier = null): StatusEvent
     {
         $this->modifier = $modifier;
 
@@ -202,7 +203,7 @@ class StatusEvent implements \Stringable
      *
      * @return \App\Entity\User
      */
-    public function getModifier()
+    public function getModifier(): ?User
     {
         return $this->modifier;
     }
@@ -212,9 +213,9 @@ class StatusEvent implements \Stringable
      *
      * @param \App\Entity\Booking|null $booking
      *
-     * @return Event
+     * @return StatusEvent
      */
-    public function setBooking(\App\Entity\Booking $booking = null)
+    public function setBooking(\App\Entity\Booking $booking = null): StatusEvent
     {
         $this->booking = $booking;
 
@@ -226,7 +227,7 @@ class StatusEvent implements \Stringable
      *
      * @return \App\Entity\Booking|null
      */
-    public function getBooking()
+    public function getBooking(): ?Booking
     {
         return $this->booking;
     }

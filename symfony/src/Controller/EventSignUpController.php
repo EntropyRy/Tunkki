@@ -54,6 +54,7 @@ class EventSignUpController extends EventController
         Event $event,
         Mattermost $mm,
         NakkiBooking $booking,
+        NakkiBookingRepository $NakkiBookingR,
         EntityManagerInterface $em
     ): Response {
         $user = $this->getUser();
@@ -65,9 +66,8 @@ class EventSignUpController extends EventController
         }
         if ($event->getNakkikoneEnabled()) {
             if (is_null($booking->getMember())) {
-                $repo = $em->getRepository(NakkiBooking::class);
                 if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
-                    $sameTime = $repo->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
+                    $sameTime = $NakkiBookingR->findMemberEventBookingsAtSameTime($member, $event, $booking->getStartAt(), $booking->getEndAt());
                     if ($sameTime) {
                         $this->addFlash('danger', 'You cannot reserve overlapping Nakkis');
                         return $this->redirect($request->headers->get('referer'));
@@ -76,7 +76,7 @@ class EventSignUpController extends EventController
                 $booking->setMember($member);
                 $em->persist($booking);
                 $em->flush();
-                $count = $repo->findEventNakkiCount($booking, $event);
+                $count = $NakkiBookingR->findEventNakkiCount($booking, $event);
                 $text = $text = '**Nakki reservation** ' . $booking . ' (' . $count . ')';
                 $mm->SendToMattermost($text, 'nakkikone');
                 $this->addFlash('success', 'Nakki reserved');

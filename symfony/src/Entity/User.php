@@ -295,4 +295,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
             return 'user: '.$this->id;
         }
     }
+    public function getLocale(): string
+    {
+        return $this->member->getLocale();
+    }
 }

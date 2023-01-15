@@ -2,22 +2,22 @@
 
 namespace App\PageService;
 
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\EventRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
 use Sonata\PageBundle\Page\TemplateManager;
-use App\Entity\Event;
-use App\Entity\EventArtistInfo;
 use App\Helper\ePics;
+use App\Repository\EventArtistInfoRepository;
 
 class FrontPage implements PageServiceInterface
 {
     public function __construct(
         private $name,
         private readonly TemplateManager $templateManager,
-        private readonly EntityManagerInterface $em,
+        private readonly EventArtistInfoRepository $eventArtistR,
+        private readonly EventRepository $eventR,
         private readonly ePics $ePics,
     ) {
     }
@@ -28,12 +28,10 @@ class FrontPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
-        $r = $this->em->getRepository(Event::class);
-        $a = $this->em->getRepository(EventArtistInfo::class);
-        $events =[];
-        $future = $r->getFutureEvents();
-        $info = $a->findOnePublicEventArtistInfo();
-        $announcement = $r->findOneEventByType('announcement');
+        $events = [];
+        $future = $this->eventR->getFutureEvents();
+        $info = $this->eventArtistR->findOnePublicEventArtistInfo();
+        $announcement = $this->eventR->findOneEventByType('announcement');
         //$event = $r->findOneEventByTypeWithSticky('event');
         //$clubroom = $r->findOneEventByTypeWithSticky('clubroom');
         /*if ($clubroom->getEventDate() > $event->getEventDate()){
@@ -52,8 +50,8 @@ class FrontPage implements PageServiceInterface
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
             [...$parameters, ...[
-                'events'=>$events,
-                'epic'=>$epic,
+                'events' => $events,
+                'epic' => $epic,
                 'info' => $info
             ]], //'clubroom'=>$clubroom)),
             $response

@@ -40,7 +40,7 @@ class File implements \Stringable
      *
      * @param string $fileinfo
      *
-     * @return Files
+     * @return File
      */
     public function setFileinfo($fileinfo): File
     {
@@ -110,9 +110,9 @@ class File implements \Stringable
     {
         if (is_object($this->getFile())) {
             if (is_string($this->getFileinfo())) {
-                return '<a href="/media/download/'.$this->getFile()->getId().'">'.$this->getFileinfo().'</a>';
+                return '<a href="/media/download/' . $this->getFile()->getId() . '">' . $this->getFileinfo() . '</a>';
             } else {
-                return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
+                return '<a href="/media/download/' . $this->getFile()->getId() . '">Download</a>';
             }
         } else {
             return 'X';
@@ -121,6 +121,6 @@ class File implements \Stringable
 
     public function __toString(): string
     {
-        return $this->fileinfo ?: '' ;
+        return $this->fileinfo ?: '';
     }
 }

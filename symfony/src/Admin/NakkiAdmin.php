@@ -14,6 +14,7 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
+use App\Helper\Mattermost;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -36,8 +37,7 @@ final class NakkiAdmin extends AbstractAdmin
         $filter
             ->add('responsible')
             ->add('startAt')
-            ->add('endAt')
-        ;
+            ->add('endAt');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -98,8 +98,7 @@ final class NakkiAdmin extends AbstractAdmin
                 'dp_use_seconds' => false,
                 'dp_use_minutes' => false,
                 'dp_side_by_side' => true,
-            ])
-        ;
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -109,15 +108,14 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('event')
             ->add('responsible')
             ->add('startAt')
-            ->add('endAt')
-        ;
+            ->add('endAt');
     }
     public function postPersist($nakki): void
     {
         // create booking nakkis
         $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         $hours = $diff->h;
-        $hours = ($hours + ($diff->days*24)) / $nakki->getNakkiInterval()->format('%h');
+        $hours = ($hours + ($diff->days * 24)) / $nakki->getNakkiInterval()->format('%h');
         for ($i = 0; $i < $hours; $i++) {
             $this->createBooking($nakki, $i);
         }
@@ -126,7 +124,7 @@ final class NakkiAdmin extends AbstractAdmin
     public function postUpdate($nakki): void
     {
         $bookings = $nakki->getNakkiBookings();
-        $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
+        // $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         foreach ($bookings as $booking) {
             if ($booking->getMember()) {
                 $this->rs->getSession()->getFlashBag()->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
@@ -138,7 +136,7 @@ final class NakkiAdmin extends AbstractAdmin
     }
     public function postDelete($nakki): void
     {
-        $bookings = $this->em->getRepository(NakkiBooking::class)->findBy(['nakki'=>$nakki]);
+        $bookings = $this->em->getRepository(NakkiBooking::class)->findBy(['nakki' => $nakki]);
         foreach ($bookings as $b) {
             $this->em->remove($b);
         }
@@ -146,7 +144,7 @@ final class NakkiAdmin extends AbstractAdmin
     }
 
     public function __construct(
-        protected \App\Helper\Mattermost $mm,
+        protected Mattermost $mm,
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
         protected RequestStack $rs
@@ -157,22 +155,22 @@ final class NakkiAdmin extends AbstractAdmin
     {
         $b = new NakkiBooking();
         $b->setNakki($nakki);
-        $start = $i*$nakki->getNakkiInterval()->format('%h');
-        $b->setStartAt($nakki->getStartAt()->modify($start.' hour'));
-        $end = $start+$nakki->getNakkiInterval()->format('%h');
-        $b->setEndAt($nakki->getStartAt()->modify($end.' hour'));
+        $start = $i * $nakki->getNakkiInterval()->format('%h');
+        $b->setStartAt($nakki->getStartAt()->modify($start . ' hour'));
+        $end = $start + $nakki->getNakkiInterval()->format('%h');
+        $b->setEndAt($nakki->getStartAt()->modify($end . ' hour'));
         $b->setEvent($nakki->getEvent());
         $this->em->persist($b);
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('clone', $this->getRouterIdParameter().'/clone');
+        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
     public function validate(ErrorElement $errorElement, $object): void
     {
         $errorElement
             ->with('definition')
-                ->assertNotNull(['definition cannot be null'])
+            ->assertNotNull(['definition cannot be null'])
             ->end();
     }
 }

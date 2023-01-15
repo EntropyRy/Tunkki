@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\NakkiRepository;
+use DateInterval;
+use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -150,20 +152,20 @@ class Nakki implements \Stringable
         return $this;
     }
 
-    public function getTimes()
+    public function getTimes(): array
     {
         $times = [];
         $diff = $this->getStartAt()->diff($this->getEndAt());
         $hours = $diff->h;
-        $hours = ($hours + ($diff->days * 24)) / $this->getNakkiInterval()->format('%h');
+        $hours = ($hours + ($diff->days * 24)) / ((int) $this->getNakkiInterval()->format('%h'));
         for ($i = 0; $i < $hours; $i++) {
-            $start = $i * $this->getNakkiInterval()->format('%h');
+            $start = (int) $i * (int) $this->getNakkiInterval()->format('%h');
             $times[] = $this->getStartAt()->modify($start . ' hour');
         }
         return $times;
     }
 
-    public function getMemberByTime($date)
+    public function getMemberByTime($date): ?Member
     {
         foreach ($this->getNakkiBookings() as $booking) {
             if ($booking->getStartAt() == $date) {

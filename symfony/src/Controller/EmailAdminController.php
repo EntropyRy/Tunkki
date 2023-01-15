@@ -81,8 +81,8 @@ final class EmailAdminController extends CRUDController
             }
 
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
-            return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
         }
+        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
     private function generateMail($to, $replyto, $subject, $body, $links, $img): TemplatedEmail
     {

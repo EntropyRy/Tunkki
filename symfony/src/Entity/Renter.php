@@ -17,7 +17,7 @@ class Renter implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'renter')]
     private $bookings = null;
