@@ -112,6 +112,8 @@ security:
     - {path: ^/kerde/door$, roles: ROLE_NO_ACCESS}
     - {path: ^/kerde/ovi$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
     - {path: ^/kerde/ovi$, roles: ROLE_NO_ACCESS}
+    - {path: ^/dashboard, role: ROLE_USER}
+    - {path: ^/yleiskatsaus, role: ROLE_USER}
     - {path: ^/profile, role: ROLE_USER}
     - {path: ^/profiili, role: ROLE_USER}
     - {path: ^/logout$, role: PUBLIC_ACCESS}
