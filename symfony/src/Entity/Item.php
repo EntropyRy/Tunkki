@@ -22,7 +22,7 @@ class Item implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'Name', type: 'string', length: 190)]
     private string $name;
@@ -339,7 +339,7 @@ class Item implements \Stringable
 
     public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory): Item
     {
-        $fixingHistory->setProduct($this);
+        $fixingHistory->setItem($this);
         $this->fixingHistory[] = $fixingHistory;
 
         return $this;
@@ -347,7 +347,7 @@ class Item implements \Stringable
 
     public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory): void
     {
-        $fixingHistory->setProduct(null);
+        $fixingHistory->setItem(null);
         $this->fixingHistory->removeElement($fixingHistory);
     }
 

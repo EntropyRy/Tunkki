@@ -14,7 +14,7 @@ class AccessoryChoice implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -37,7 +37,7 @@ class AccessoryChoice implements \Stringable
      *
      * @param string $name
      *
-     * @return AccessoryChoices
+     * @return AccessoryChoice
      */
     public function setName($name)
     {

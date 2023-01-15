@@ -16,14 +16,10 @@ class LoginListener implements EventSubscriberInterface
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         $user = $event->getUser();
+        assert($user instanceof User);
         $request = $event->getRequest();
         $user->setLastLogin(new \DateTime());
-        if (!is_null($user->getMember()->getLocale())) {
-            $request->setLocale($user->getMember()->getLocale());
-        } else {
-            $user->getMember()->setLocale('fi');
-            $request->setLocale('fi');
-        }
+        $request->setLocale($user->getMember()->getLocale());
         $this->em->persist($user);
         $this->em->flush();
     }

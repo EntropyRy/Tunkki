@@ -17,7 +17,7 @@ class StatusEvent implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'fixingHistory')]
     private ?\App\Entity\Item $item = null;
@@ -133,7 +133,6 @@ class StatusEvent implements \Stringable
     /**
      * Set item
      *
-     *
      * @return Events
      */
     public function setItem(\App\Entity\Item $item = null)
@@ -167,7 +166,6 @@ class StatusEvent implements \Stringable
     /**
      * Set creator
      *
-     *
      * @return Event
      */
     public function setCreator(\App\Entity\User $creator = null)
@@ -189,7 +187,6 @@ class StatusEvent implements \Stringable
 
     /**
      * Set modifier
-     *
      *
      * @return Event
      */

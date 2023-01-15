@@ -17,12 +17,10 @@ use App\Entity\Member;
 #[\Symfony\Component\Console\Attribute\AsCommand('entropy:user')]
 class UserCommand extends Command
 {
-
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordEncoder,
         private readonly EntityManagerInterface $em
-    )
-    {
+    ) {
         parent::__construct();
     }
     protected function configure()

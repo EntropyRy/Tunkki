@@ -13,7 +13,7 @@ class Reward implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'rewards')]
     #[ORM\JoinColumn(nullable: false)]

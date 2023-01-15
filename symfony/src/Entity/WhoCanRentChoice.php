@@ -14,7 +14,7 @@ class WhoCanRentChoice implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -34,7 +34,7 @@ class WhoCanRentChoice implements \Stringable
      *
      * @param string $name
      *
-     * @return WhoCanRentCoice
+     * @return WhoCanRentChoice
      */
     public function setName($name)
     {

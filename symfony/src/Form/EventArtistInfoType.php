@@ -15,7 +15,7 @@ class EventArtistInfoType extends AbstractType
         $builder
             ->add('Artist', null, [
                 'choices' => $options['artists'],
-                'choice_label' => fn(Artist $artist) => $artist->getGenre() ? $artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName(),
+                'choice_label' => fn (Artist $artist) => $artist->getGenre() ? $artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName(),
                 'required' => true,
                 'label' => 'event.form.sign_up.artist',
                 'help' => 'event.form.sign_up.new_artist_help_html',

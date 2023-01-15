@@ -14,7 +14,7 @@ use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\ZMQHelper;
-use App\Entity\Doorlog;
+use App\Entity\DoorLog;
 use Twig\Environment;
 
 class DoorInfoBlock extends BaseBlockService

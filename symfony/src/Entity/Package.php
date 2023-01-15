@@ -17,7 +17,7 @@ class Package implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
     private $items;

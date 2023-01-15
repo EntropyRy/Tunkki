@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\EventListener;
 
 use Nyholm\Psr7\Response;
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-final readonly class AuthorizationCodeListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+final class AuthorizationCodeListener implements EventSubscriberInterface
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
@@ -18,16 +20,18 @@ final readonly class AuthorizationCodeListener implements \Symfony\Component\Eve
     }
     public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event): void
     {
-        if (null !== $event->getUser()) {
-            if ($event->getUser()->getMember()->getIsActiveMember()) {
+        $user = $event->getUser();
+        assert($user instanceof User);
+        if (null !== $user) {
+            if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
-                $this->requestStack->getSession()->getFlashbag()->add('warning', 'profile.only_for_active_members');
+                $this->requestStack->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
                 $event->setResponse(
                     new Response(
                         302,
-                        ['Location' => $this->urlGenerator->generate('profile.' . $event->getUser()->getMember()->getLocale())]
+                        ['Location' => $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale())]
                     )
                 );
             }

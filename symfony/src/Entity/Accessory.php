@@ -15,7 +15,7 @@ class Accessory implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private readonly int $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\AccessoryChoice::class, cascade: ['persist'])]
     private ?\App\Entity\AccessoryChoice $name = null;
@@ -61,7 +61,6 @@ class Accessory implements \Stringable
 
     /**
      * Set name
-     *
      *
      * @return Accessory
      */

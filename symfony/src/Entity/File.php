@@ -6,7 +6,7 @@ use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Files
+ * File
  */
 #[ORM\Table(name: 'File')]
 #[ORM\Entity]
@@ -15,7 +15,7 @@ class File implements \Stringable
     #[ORM\Column(name: 'id', type: 'integer')]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private int $id;
+    private ?int $id = null;
 
     #[ORM\Column(name: 'tiedostoinfo', type: 'string', length: 190, nullable: true)]
     private ?string $fileinfo = null;
@@ -62,8 +62,7 @@ class File implements \Stringable
     /**
      * Set product
      *
-     *
-     * @return Files
+     * @return File
      */
     public function setProduct(\App\Entity\Item $product = null): File
     {
@@ -85,8 +84,7 @@ class File implements \Stringable
     /**
      * Set file
      *
-     *
-     * @return Files
+     * @return File
      */
     public function setFile(Media $file = null): File
     {

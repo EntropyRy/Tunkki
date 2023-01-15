@@ -9,14 +9,17 @@ use Symfony\Component\Form\FormView;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Item;
+use App\Repository\ItemRepository;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface as Category;
 
 class ItemsType extends AbstractType
 {
-    public function __construct(protected EntityManagerInterface $em, protected Category $cm)
-    {
+    public function __construct(
+        protected ItemRepository $itemR,
+        protected Category $cm
+    ) {
     }
 
     public function buildView(FormView $view, FormInterface $form, array $options): void
@@ -48,10 +51,11 @@ class ItemsType extends AbstractType
     }
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $choices = $this->em->getRepository(Item::class)->getAllItemChoices();
+        $choices = $this->itemR->getAllItemChoices();
         $categories = $this->getCategories($choices);
 
-        $resolver->setDefaults([
+        $resolver->setDefaults(
+            [
             'class' => Item::class,
             'required' => false,
             'choices' => $choices,
@@ -65,7 +69,8 @@ class ItemsType extends AbstractType
             'btn_list' => 'link_list',
             'btn_delete' => 'link_delete',
             'btn_catalogue' => 'SonataAdminBundle',
-        ]);
+            ]
+        );
     }
     public function getParent(): string
     {
