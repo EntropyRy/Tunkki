@@ -26,7 +26,8 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
             if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
-                $this->requestStack->getFlashbag()->add('warning', 'profile.only_for_active_members');
+                $session = $this->requestStack->getSession();
+                $session->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
                 $event->setResponse(
                     new Response(
@@ -43,7 +44,7 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
                         'Location' => $this->urlGenerator->generate(
                             'app_login',
                             [
-                                'returnUrl' => $this->requestStack->getMasterRequest()->getUri(),
+                                'returnUrl' => $this->requestStack->getMainRequest()->getUri(),
                             ]
                         ),
                     ]
