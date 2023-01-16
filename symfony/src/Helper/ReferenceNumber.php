@@ -18,7 +18,7 @@ class ReferenceNumber
         $viite = (int)$start . $id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
-            $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
+            $summa += (int) substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
         }
         $cast = $viite . ((10 - ($summa % 10)) % 10);
         return (int)$cast;

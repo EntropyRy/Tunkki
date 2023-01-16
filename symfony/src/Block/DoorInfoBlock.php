@@ -10,7 +10,6 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
-use Sonata\Form\Validator\ErrorElement;
 use App\Helper\ZMQHelper;
 use App\Entity\User;
 use Twig\Environment;
@@ -20,10 +19,10 @@ class DoorInfoBlock extends BaseBlockService
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
-        assert($user instanceof User);
         if (is_null($user)) {
             return $this->renderResponse($blockContext->getTemplate(), [], $response);
         }
+        assert($user instanceof User);
         $member = $user->getMember();
         $now = new \DateTime('now');
         $status = $this->zmq->send('dev' . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());

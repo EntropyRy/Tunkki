@@ -18,7 +18,9 @@ class EmailLists extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $member = $this->security->getUser()->getMember();
+        $user = $this->security->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings(),

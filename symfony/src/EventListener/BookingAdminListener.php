@@ -10,14 +10,19 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
-class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSubscriberInterface
+class BookingAdminListener implements EventSubscriberInterface
 {
     private $email;
     private $fromEmail;
 
-    public function __construct(string $email, string $fromEmail, private readonly MailerInterface $mailer, private readonly \Twig\Environment $twig, private readonly EntityManagerInterface $em)
-    {
+    public function __construct(
+        string $email,
+        string $fromEmail,
+        private readonly MailerInterface $mailer,
+        private readonly EntityManagerInterface $em
+    ) {
         $this->email = $email;
         $this->fromEmail = $fromEmail;
     }
@@ -58,15 +63,11 @@ class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSu
                                 $this->em->persist($gr);
                             } else {
                                 $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
-                                if ($gr) {
-                                    $gr->addWeight(1);
-                                    $this->em->persist($gr);
-                                }
+                                $gr->addWeight(1);
+                                $this->em->persist($gr);
                                 $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
-                                if ($rr) {
-                                    $rr->addWeight(1);
-                                    $this->em->persist($rr);
-                                }
+                                $rr->addWeight(1);
+                                $this->em->persist($rr);
                             }
                             $this->em->flush();
                         }
@@ -77,25 +78,23 @@ class BookingAdminListener implements \Symfony\Component\EventDispatcher\EventSu
     }
     private function giveRewardToUser($amount, $booking, $user): Reward
     {
-        if ($user) {
-            $all = $user->getRewards();
-            foreach ($all as $reward) {
-                if (!$reward->getPaid()) {
-                    $r = $reward;
-                    break;
-                }
+        $all = $user->getRewards();
+        foreach ($all as $reward) {
+            if (!$reward->getPaid()) {
+                $r = $reward;
+                break;
             }
-            if (!isset($r)) { // doesnt exists
-                // create new reward for the user
-                $r = new Reward();
-                $r->setUser($user);
-            }
-            if (!$r->getBookings()->contains($booking)) {
-                $r->addBooking($booking);
-            }
-            $r->addReward($amount);
-            return $r;
         }
+        if (!isset($r)) { // doesnt exists
+            // create new reward for the user
+            $r = new Reward();
+            $r->setUser($user);
+        }
+        if (!$r->getBookings()->contains($booking)) {
+            $r->addBooking($booking);
+        }
+        $r->addReward($amount);
+        return $r;
     }
     /**
      * @return array<string, mixed>
