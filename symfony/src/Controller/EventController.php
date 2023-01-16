@@ -81,7 +81,6 @@ class EventController extends Controller
         $form = null;
         $ticketCount = null;
         $user = $this->getUser();
-        assert($user instanceof User);
         $page = $cms->retrieve()->getCurrentPage();
         if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
             $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
@@ -90,11 +89,12 @@ class EventController extends Controller
         $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
 
         if ($event->getTicketsEnabled() && $user) {
+            assert($user instanceof User);
             $member = $user->getMember();
             $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]); //own ticket
             $ticketCount = $ticketRepo->findAvailableTicketsCount($event);
         }
-        if ($event->getRsvpSystemEnabled() && !$this->getUser()) {
+        if ($event->getRsvpSystemEnabled() && is_null($user)) {
             $rsvp = new RSVP();
             $form = $this->createForm(RSVPType::class, $rsvp);
             $form->handleRequest($request);
@@ -116,7 +116,7 @@ class EventController extends Controller
                 }
             }
         }
-        if (!$event->getPublished() && is_null($this->getUser())) {
+        if (!$event->getPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
         return $this->render('event.html.twig', [
