@@ -31,7 +31,8 @@ class ProfileController extends AbstractController
     #[Route(path: [
         'en' => '/profile/new',
         'fi' => '/profiili/uusi
-    '], name: 'profile_new')]
+    '
+    ], name: 'profile_new')]
     public function newMember(
         Request $request,
         FormFactoryInterface $formF,
@@ -100,22 +101,24 @@ class ProfileController extends AbstractController
     #[Route(path: [
         'en' => '/dashboard',
         'fi' => '/yleiskatsaus
-    '], name: 'dashboard')]
+    '
+    ], name: 'dashboard')]
     public function dashboard(Barcode $bc): Response
     {
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $barcode = $bc->getBarcode($member);
+        // $barcode = $bc->getBarcode($member);
         return $this->render('profile/dashboard.html.twig', [
             'member' => $member,
-            'barcode' => $barcode
+            //'barcode' => $barcode
         ]);
     }
     #[Route(path: [
         'en' => '/profile',
         'fi' => '/profiili
-    '], name: 'profile')]
+    '
+    ], name: 'profile')]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -153,7 +156,8 @@ class ProfileController extends AbstractController
     #[Route(path: [
         'en' => '/profile/password',
         'fi' => '/profiili/salasana
-    '], name: 'profile_password_edit')]
+    '
+    ], name: 'profile_password_edit')]
     public function password(
         Request $request,
         FormFactoryInterface $formF,
@@ -178,7 +182,8 @@ class ProfileController extends AbstractController
     #[Route(path: [
         'en' => '/profile/apply',
         'fi' => '/profiili/aktiiviksi
-    '], name: 'apply_for_active_member')]
+    '
+    ], name: 'apply_for_active_member')]
     public function apply(
         Request $request,
         FormFactoryInterface $formF,

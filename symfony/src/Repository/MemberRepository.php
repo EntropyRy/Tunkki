@@ -18,41 +18,41 @@ class MemberRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Member::class);
     }
-    public function findByEmailOrName($email, $firstname, $lastname)
+    public function findByEmailOrName($email, $firstname, $lastname): mixed
     {
         $qb = $this->createQueryBuilder('m')
-        ->where('m.email = :email')
-        ->orWhere('m.firstname = :firstname AND m.lastname = :lastname')
-        ->setParameter('email', $email)
-        ->setParameter('firstname', $firstname)
-        ->setParameter('lastname', $lastname);
+            ->where('m.email = :email')
+            ->orWhere('m.firstname = :firstname AND m.lastname = :lastname')
+            ->setParameter('email', $email)
+            ->setParameter('firstname', $firstname)
+            ->setParameter('lastname', $lastname);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
-    public function getByEmail($email)
+    public function getByEmail($email): mixed
     {
         $qb = $this->createQueryBuilder('m')
-        ->where('m.email = :email')
-        ->setParameter('email', $email);
+            ->where('m.email = :email')
+            ->setParameter('email', $email);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
-    public function getByName($firstname, $lastname)
+    public function getByName($firstname, $lastname): mixed
     {
         $qb = $this->createQueryBuilder('m')
-        ->where('m.firstname = :firstname')
-        ->andWhere('m.lastname = :lastname')
-        ->setParameter('firstname', $firstname)
-        ->setParameter('lastname', $lastname);
+            ->where('m.firstname = :firstname')
+            ->andWhere('m.lastname = :lastname')
+            ->setParameter('firstname', $firstname)
+            ->setParameter('lastname', $lastname);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
-    public function countByActiveMember()
+    public function countByActiveMember(): mixed
     {
         $qb = $this->createQueryBuilder('m');
         $qb->select($qb->expr()->count('m'))
-        ->where('m.isActiveMember = :is')
-        ->setParameter('is', true);
+            ->where('m.isActiveMember = :is')
+            ->setParameter('is', true);
         return $qb->getQuery()->getSingleScalarResult();
     }
-    public function countByMember()
+    public function countByMember(): mixed
     {
         $qb = $this->createQueryBuilder('m');
         $qb->select($qb->expr()->count('m'));

@@ -75,7 +75,7 @@ class TicketRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findAvailableTicketsCount($event)
+    public function findAvailableTicketsCount($event): mixed
     {
         $qb = $this->createQueryBuilder('t');
         $qb->select($qb->expr()->count('t'))
@@ -85,7 +85,7 @@ class TicketRepository extends ServiceEntityRepository
             ->setParameter('status', 'paid');
         return $qb->getQuery()->getSingleScalarResult();
     }
-    public function findAvailableTickets($event)
+    public function findAvailableTickets($event): mixed
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
@@ -94,10 +94,9 @@ class TicketRepository extends ServiceEntityRepository
             ->setParameter('event', $event)
             ->setParameter('status', 'available')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    public function findPresaleTickets($event)
+    public function findPresaleTickets($event): mixed
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
@@ -107,8 +106,7 @@ class TicketRepository extends ServiceEntityRepository
             ->orderBy('t.id', 'ASC')
             ->setMaxResults($event->getTicketPresaleCount())
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function findAvailableTicket($event): ?Ticket
     {
@@ -120,8 +118,7 @@ class TicketRepository extends ServiceEntityRepository
             ->setParameter('status', 'available')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
     public function findAvailablePresaleTicket($event): ?Ticket
     {

@@ -13,6 +13,7 @@ use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
+use App\Entity\User;
 
 class EmailLists extends BaseBlockService
 {

@@ -7,12 +7,14 @@
 <div class="row">
 <div class="col-md-6">
     {% if member.isActiveMember %}
-    <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
-    <div class="mx-auto barcode" style="width:246px;">
-        {{ barcode.1|raw }}
-        <p class="text-center">Code: {{ barcode.0 }}</p>
-    </div>
-    </div>
+        {% if barcode is defined %}
+            <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
+            <div class="mx-auto barcode" style="width:246px;">
+                {{ barcode.1|raw }}
+                <p class="text-center">Code: {{ barcode.0 }}</p>
+            </div>
+            </div>
+        {% endif %}
         {{ sonata_block_render({'type': 'entropy.block.door_info'}) }}
     {% endif %}
     {{ sonata_block_render({'type': 'entropy.block.statistics'}) }}
