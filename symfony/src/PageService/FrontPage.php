@@ -49,11 +49,11 @@ class FrontPage implements PageServiceInterface
 
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...[
+            [
                 'events' => $events,
                 'epic' => $epic,
                 'info' => $info
-            ]], //'clubroom'=>$clubroom)),
+            ],
             $response
         );
     }

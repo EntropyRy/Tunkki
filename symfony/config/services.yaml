@@ -114,12 +114,12 @@ services:
       - {name: sonata.page, alias: eventspage}
   App\PageService\AllEventsPage:
     arguments:
-      - $name: "All Events"
+      $name: "All Events"
     tags:
       - {name: sonata.page, alias: alleventspage}
   App\PageService\FrontPage:
     arguments:
-      - $namme: "Front Page"
+      $name: "Front Page"
     tags:
       - {name: sonata.page, alias: frontpage}
   entropy.page.announcementspage:

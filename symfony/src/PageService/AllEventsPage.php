@@ -31,7 +31,7 @@ class AllEventsPage implements PageServiceInterface
         }
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...['events' => $events]],
+            ['events' => $events],
             $response
         );
     }
