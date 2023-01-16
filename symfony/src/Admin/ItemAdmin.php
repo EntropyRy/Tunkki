@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
+use App\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
@@ -209,12 +210,14 @@ class ItemAdmin extends AbstractAdmin
     public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
+        assert($user instanceof User);
         $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '> created by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
     public function preUpdate($Item): void
     {
         $user = $this->ts->getToken()->getUser();
+        assert($user instanceof User);
         $Item->setModifier($user);
         $original = $this->em->getUnitOfWork()->getOriginalEntityData($Item);
         $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '>:';
@@ -227,6 +230,7 @@ class ItemAdmin extends AbstractAdmin
     public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
+        assert($user instanceof User);
         $text = '#### ITEM: ' . $Item->getName() . ' deleted by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }

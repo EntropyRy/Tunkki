@@ -579,10 +579,10 @@ class Booking implements \Stringable
     /**
      * Remove statusEvent.
      *
-     * @param \App\Entity\Event $statusEvent
+     * @param \App\Entity\StatusEvent $statusEvent
      *
      */
-    public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent)
+    public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent): bool
     {
         return $this->statusEvents->removeElement($statusEvent);
     }

@@ -122,7 +122,7 @@ body {
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoFi =
-        '
+    '
         <h5>Yleisinfo</h5>
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
         <h6>Saat ilmaisen sisäänpääsyn</h6>
@@ -130,7 +130,7 @@ body {
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoEn =
-        '
+    '
         <h5>General information</h5>
         <p>Choose at least two Nakkis that are 1 hour length and build up or take down</p>
         <h6>You\'ll get free entry to the party</h6>
@@ -167,7 +167,7 @@ body {
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
-    #[ORM\OrderBy(['id'=>'DESC'])]
+    #[ORM\OrderBy(['id' => 'DESC'])]
     private $tickets;
 
     #[ORM\Column(type: 'integer')]
@@ -374,7 +374,7 @@ body {
                 return 'after';
             }
         }
-        return false;
+        return 'undefined';
     }
     public function getType(): ?string
     {
@@ -473,7 +473,7 @@ body {
     }
     public function getAbstract($lang)
     {
-        if ($lang=='fi') {
+        if ($lang == 'fi') {
             $abstract = $this->removeTwigTags($this->Sisallys);
         } else {
             $abstract = $this->removeTwigTags($this->Content);
@@ -493,7 +493,7 @@ body {
     }
     public function getNameByLang($lang)
     {
-        if ($lang=='fi') {
+        if ($lang == 'fi') {
             return $this->Nimi;
         } else {
             return $this->Name;
@@ -501,10 +501,10 @@ body {
     }
     public function getNameAndDateByLang($lang)
     {
-        if ($lang=='fi') {
-            return $this->Nimi. ' - '. $this->EventDate->format('j.n.Y, H:i');
+        if ($lang == 'fi') {
+            return $this->Nimi . ' - ' . $this->EventDate->format('j.n.Y, H:i');
         } else {
-            return $this->Name. ' - '. $this->EventDate->format('j.n.Y, H:i');
+            return $this->Name . ' - ' . $this->EventDate->format('j.n.Y, H:i');
         }
     }
 
@@ -798,9 +798,11 @@ body {
     public function getArtistSignUpNow(): bool
     {
         $now = new \DateTimeImmutable('now');
-        if ($this->getArtistSignUpEnabled() &&
+        if (
+            $this->getArtistSignUpEnabled() &&
             $this->getArtistSignUpStart() <= $now &&
-            $this->getArtistSignUpEnd() >= $now) {
+            $this->getArtistSignUpEnd() >= $now
+        ) {
             return true;
         }
         return false;
@@ -886,12 +888,12 @@ body {
 
     public function getTicketInfo($lang): ?string
     {
-        $func = 'ticketInfo'. ucfirst((string) $lang);
+        $func = 'ticketInfo' . ucfirst((string) $lang);
         return $this->{$func};
     }
     public function getNakkiInfo($lang): ?string
     {
-        $func = 'nakkiInfo'. ucfirst((string) $lang);
+        $func = 'nakkiInfo' . ucfirst((string) $lang);
         return $this->{$func};
     }
 
@@ -927,7 +929,7 @@ body {
         foreach ($this->eventArtistInfos as $info) {
             if (!is_null($info->getStartTime())) {
                 if ($info->getArtistClone()->getType() != 'VJ') {
-                    $bystage[$info->getStage()][]=$info;
+                    $bystage[$info->getStage()][] = $info;
                 }
             }
         }
@@ -985,8 +987,10 @@ body {
     public function ticketPresaleEnabled()
     {
         $now = new \DateTime('now');
-        if (is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
-            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now) {
+        if (
+            is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
+            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now
+        ) {
             return true;
         }
         return false;

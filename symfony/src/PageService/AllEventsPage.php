@@ -2,17 +2,20 @@
 
 namespace App\PageService;
 
+use Sonata\PageBundle\Page\TemplateManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
-use Sonata\PageBundle\Page\TemplateManager;
-use App\Entity\Event;
+use App\Repository\EventRepository;
 
 class AllEventsPage implements PageServiceInterface
 {
-    public function __construct(private $name, private readonly TemplateManager $templateManager, private $em)
-    {
+    public function __construct(
+        private $name,
+        private readonly TemplateManagerInterface $templateManager,
+        private readonly EventRepository $eventR
+    ) {
     }
     public function getName(): string
     {
@@ -21,14 +24,14 @@ class AllEventsPage implements PageServiceInterface
 
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
-        $events = $this->em->getRepository(Event::class)->findBy(['published' => true, 'sticky'=> false]);
-        $sticky = $this->em->getRepository(Event::class)->findOneBy(['published' => true, 'sticky' => true]);
+        $events = $this->eventR->findBy(['published' => true, 'sticky' => false]);
+        $sticky = $this->eventR->findOneBy(['published' => true, 'sticky' => true]);
         if ($sticky) {
             $events = array_merge([$sticky], $events);
         }
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...['events'=>$events]],
+            [...$parameters, ...['events' => $events]],
             $response
         );
     }

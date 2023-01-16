@@ -16,6 +16,7 @@ use App\Repository\EventRepository;
 use Sonata\MediaBundle\Provider\ImageProvider;
 use App\Entity\Member;
 use App\Entity\RSVP;
+use App\Entity\User;
 use App\Form\RSVPType;
 
 class EventController extends Controller
@@ -51,9 +52,9 @@ class EventController extends Controller
         $page = $cms->retrieve()->getCurrentPage();
         $this->setMetaData($lang, $event, $page, $seo, null);
         return $this->render('event.html.twig', [
-                'event' => $event,
-                'page' => $page
-            ]);
+            'event' => $event,
+            'page' => $page
+        ]);
     }
     public function oneSlug(
         Request $request,
@@ -79,6 +80,8 @@ class EventController extends Controller
         $ticket = null;
         $form = null;
         $ticketCount = null;
+        $user = $this->getUser();
+        assert($user instanceof User);
         $page = $cms->retrieve()->getCurrentPage();
         if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
             $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
@@ -86,8 +89,8 @@ class EventController extends Controller
         }
         $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
 
-        if ($event->getTicketsEnabled() && $this->getUser()) {
-            $member = $this->getUser()->getMember();
+        if ($event->getTicketsEnabled() && $user) {
+            $member = $user->getMember();
             $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]); //own ticket
             $ticketCount = $ticketRepo->findAvailableTicketsCount($event);
         }
@@ -117,23 +120,23 @@ class EventController extends Controller
             throw $this->createAccessDeniedException('');
         }
         return $this->render('event.html.twig', [
-                'event' => $event,
-                'page' => $page,
-                'rsvpForm' => $form,
-                'ticket' => $ticket,
-                'ticketsAvailable' => $ticketCount,
-            ]);
+            'event' => $event,
+            'page' => $page,
+            'rsvpForm' => $form,
+            'ticket' => $ticket,
+            'ticketsAvailable' => $ticketCount,
+        ]);
     }
     private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void
     {
         $now = new \DateTime();
         // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
         if ($event->getPublished() && $event->getPublishDate() < $now) {
-            $title = $event->getNameByLang($lang).' - '. $event->getEventDate()->format('d.m.Y, H:i');
+            $title = $event->getNameByLang($lang) . ' - ' . $event->getEventDate()->format('d.m.Y, H:i');
             $page->setTitle($title);
             if (!is_null($mediaUrl)) {
-                $seo->addMeta('property', 'twitter:image', 'https://entropy.fi'.$mediaUrl);
-                $seo->addMeta('property', 'og:image', 'https://entropy.fi'.$mediaUrl);
+                $seo->addMeta('property', 'twitter:image', 'https://entropy.fi' . $mediaUrl);
+                $seo->addMeta('property', 'og:image', 'https://entropy.fi' . $mediaUrl);
                 $seo->addMeta('property', 'og:image:height', '');
                 $seo->addMeta('property', 'og:image:widht', '');
             }
@@ -142,8 +145,7 @@ class EventController extends Controller
             $seo->addMeta('property', 'twitter:title', $title);
             $seo->addMeta('property', 'twitter:desctiption', $event->getAbstract($lang));
             $seo->addMeta('property', 'og:title', $title)
-                ->addMeta('property', 'og:description', $event->getAbstract($lang))
-            ;
+                ->addMeta('property', 'og:description', $event->getAbstract($lang));
             if ($event->getType() != 'announcement') {
                 $seo->addMeta('property', 'og:type', 'event')
                     ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));

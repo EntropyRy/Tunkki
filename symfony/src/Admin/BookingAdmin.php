@@ -2,6 +2,8 @@
 
 namespace App\Admin;
 
+use App\Helper\ReferenceNumber;
+use App\Helper\Mattermost;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -27,6 +29,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use App\Form\ItemsType;
 use App\Form\PackagesType;
 // Entity
+use App\Entity\User;
 use App\Entity\Item;
 use App\Entity\Booking;
 use App\Entity\Package;
@@ -320,19 +323,6 @@ class BookingAdmin extends AbstractAdmin
         $hashids = new Hashids($booking->getName() . $booking->getRenter(), 10);
         return strtolower($hashids->encode($booking->getReferenceNumber()));
     }
-    protected function calculateReferenceNumber($booking): int
-    {
-        $ki = 0;
-        $summa = 0;
-        $kertoimet = [7, 3, 1];
-        $id = (int)$booking->getId() + 1220;
-        $viite = (int)'303' . $id;
-
-        for ($i = strlen($viite); $i > 0; $i--) {
-            $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
-        }
-        return $viite . '' . (10 - ($summa % 10)) % 10;
-    }
     public function prePersist($booking): void
     {
         $user = $this->ts->getToken()->getUser();
@@ -340,9 +330,10 @@ class BookingAdmin extends AbstractAdmin
     }
     public function postPersist($booking): void
     {
-        $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+        $booking->setReferenceNumber($this->rn->calculateReferenceNumber($booking, 1220, 303));
         $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
+        assert($user instanceof User);
         $text = '#### BOOKING: <' . $this->generateUrl(
             'edit',
             ['id' => $booking->getId()],
@@ -355,7 +346,7 @@ class BookingAdmin extends AbstractAdmin
     public function preUpdate($booking): void
     {
         if ($booking->getReferenceNumber() == null || $booking->getReferenceNumber() == 0) {
-            $booking->setReferenceNumber($this->calculateReferenceNumber($booking));
+            $booking->setReferenceNumber($this->rn->calculateReferenceNumber($booking, 1220, 303));
         }
         if ($booking->getRenterHash() == null || $booking->getRenterHash() == 0) {
             $booking->setRenterHash($this->calculateOwnerHash($booking));
@@ -397,11 +388,12 @@ class BookingAdmin extends AbstractAdmin
         $collection->remove('delete');
     }
     public function __construct(
-        protected \App\Helper\Mattermost $mm,
+        protected Mattermost $mm,
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
         protected CategoryManagerInterface $cm,
-        protected RequestStack $rs
+        protected RequestStack $rs,
+        protected ReferenceNumber $rn
     ) {
     }
 }

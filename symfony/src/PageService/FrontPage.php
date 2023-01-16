@@ -3,11 +3,11 @@
 namespace App\PageService;
 
 use App\Repository\EventRepository;
+use Sonata\PageBundle\Page\TemplateManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
-use Sonata\PageBundle\Page\TemplateManager;
 use App\Helper\ePics;
 use App\Repository\EventArtistInfoRepository;
 
@@ -15,7 +15,7 @@ class FrontPage implements PageServiceInterface
 {
     public function __construct(
         private $name,
-        private readonly TemplateManager $templateManager,
+        private readonly TemplateManagerInterface $templateManager,
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
         private readonly ePics $ePics,

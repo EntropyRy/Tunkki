@@ -87,8 +87,10 @@ class MenuBuilder
     {
         if ($l == 'fi') {
             if ($m->getPageFi()) {
-                $menu->addChild($m->getNimi(), ['route' => 'page_slug',
-                    'routeParameters' => ['path' => '/'.$m->getPageFi()->getSlug()]]);
+                $menu->addChild($m->getNimi(), [
+                    'route' => 'page_slug',
+                    'routeParameters' => ['path' => '/' . $m->getPageFi()->getSlug()]
+                ]);
             } else {
                 $menu->addChild($m->getNimi(), ['uri' => $m->getUrl()]);
             }
@@ -99,16 +101,16 @@ class MenuBuilder
                 } else {
                     $prefix = '';
                 }
-                $url = $prefix.'/'.$m->getPageEn()->getSlug();
+                $url = $prefix . '/' . $m->getPageEn()->getSlug();
                 $menu->addChild($m->getLabel(), [
                     'route' => 'page_slug',
-                    'routeParameters' => ['path' => $url ]
+                    'routeParameters' => ['path' => $url]
                 ]);
             } else {
                 if (str_contains((string) $m->getUrl(), 'http')) {
                     $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
                 } else {
-                    $menu->addChild($m->getLabel(), ['uri' => '/en'.$m->getUrl()]);
+                    $menu->addChild($m->getLabel(), ['uri' => '/en' . $m->getUrl()]);
                 }
             }
         }
@@ -129,7 +131,7 @@ class MenuBuilder
             return;
         }
     }
-    private function sortByPosition($m)
+    private function sortByPosition($m): array
     {
         $array = $m->getChildren()->toArray();
         usort(

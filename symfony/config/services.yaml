@@ -3,7 +3,7 @@ twig:
     door_ip: '%env(TRUSTED_DOOR_IPS)%'
 parameters:
   symfony:
-    containerXmlPath: var/cache/dev/srcApp_KernelDevDebugContainer.xml
+    containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
   recording.host: '%env(RECORDING_HOST)%'
   recording.port: '%env(RECORDING_PORT)%'
   recording.user: '%env(RECORDING_USER)%'
@@ -112,20 +112,14 @@ services:
       - "@doctrine.orm.entity_manager"
     tags:
       - {name: sonata.page, alias: eventspage}
-  entropy.page.alleventspage:
-    class: App\PageService\AllEventsPage
+  App\PageService\AllEventsPage:
     arguments:
-      - "All Events"
-      - "@sonata.page.template_manager"
-      - "@doctrine.orm.entity_manager"
+      - $name: "All Events"
     tags:
       - {name: sonata.page, alias: alleventspage}
-  entropy.page.frontpage:
-    class: App\PageService\FrontPage
+  App\PageService\FrontPage:
     arguments:
-      - "Front Page"
-      - "@sonata.page.template_manager"
-      - "@doctrine.orm.entity_manager"
+      - $namme: "Front Page"
     tags:
       - {name: sonata.page, alias: frontpage}
   entropy.page.announcementspage:

@@ -9,6 +9,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use App\Entity\Event;
 use App\Entity\Ticket;
+use App\Helper\ReferenceNumber;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class TicketAdminController extends CRUDController
@@ -24,7 +25,7 @@ final class TicketAdminController extends CRUDController
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }
-    public function updateTicketCountAction(Event $event, EntityManagerInterface $em): RedirectResponse
+    public function updateTicketCountAction(Event $event, EntityManagerInterface $em, ReferenceNumber $rn): RedirectResponse
     {
         if ($event->getTicketsEnabled()) {
             $tickets_now = count($event->getTickets());
@@ -54,7 +55,7 @@ final class TicketAdminController extends CRUDController
                         $ticket->setPrice($event->getTicketPrice() ?: 0);
                         $em->persist($ticket);
                         $em->flush();
-                        $ticket->setReferenceNumber($this->calculateReferenceNumber($ticket));
+                        $ticket->setReferenceNumber($rn->calculateReferenceNumber($ticket, 9000, 909));
                         $em->persist($ticket);
                         $em->flush();
                     }
@@ -63,19 +64,5 @@ final class TicketAdminController extends CRUDController
             }
         }
         return $this->redirect($this->admin->generateUrl('list'));
-    }
-    protected function calculateReferenceNumber($ticket): int
-    {
-        $ki = 0;
-        $summa = 0;
-        $kertoimet = [7, 3, 1];
-        $id = (int)$ticket->getId() + 9000;
-        $viite = (int)'909' . $id;
-
-        for ($i = strlen($viite); $i > 0; $i--) {
-            $summa += substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];
-        }
-        $cast = $viite . ((10 - ($summa % 10)) % 10);
-        return (int)$cast;
     }
 }

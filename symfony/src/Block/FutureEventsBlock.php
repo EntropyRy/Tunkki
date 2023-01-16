@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Event;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Twig\Environment;
 
@@ -19,7 +20,9 @@ class FutureEventsBlock extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $events = $this->em->getRepository(Event::class)->getFutureEvents();
+        $repo = $this->em->getRepository(Event::class);
+        assert($repo instanceof EventRepository);
+        $events = $repo->getFutureEvents();
 
         return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'events'  => $events, 'settings' => $blockContext->getSettings()], $response);
     }

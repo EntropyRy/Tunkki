@@ -2,32 +2,32 @@
 
 namespace App\Block;
 
+use App\Repository\DoorLogRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
 use Sonata\Form\Validator\ErrorElement;
-use Doctrine\ORM\EntityManagerInterface;
 use App\Helper\ZMQHelper;
-use App\Entity\DoorLog;
+use App\Entity\User;
 use Twig\Environment;
 
 class DoorInfoBlock extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        if (is_null($this->security->getUser())) {
+        $user = $this->security->getUser();
+        assert($user instanceof User);
+        if (is_null($user)) {
             return $this->renderResponse($blockContext->getTemplate(), [], $response);
         }
-        $member = $this->security->getUser()->getMember();
+        $member = $user->getMember();
         $now = new \DateTime('now');
         $status = $this->zmq->send('dev' . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
-        $logs = $this->em->getRepository(DoorLog::class)->getLatest(3);
+        $logs = $this->doorLogR->getLatest(3);
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings(),
@@ -44,8 +44,12 @@ class DoorInfoBlock extends BaseBlockService
     {
     }
 
-    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security, protected EntityManagerInterface $em, protected ZMQHelper $zmq)
-    {
+    public function __construct(
+        Environment $twig,
+        protected \Symfony\Bundle\SecurityBundle\Security $security,
+        protected DoorLogRepository $doorLogR,
+        protected ZMQHelper $zmq
+    ) {
         parent::__construct($twig);
     }
 
@@ -60,9 +64,6 @@ class DoorInfoBlock extends BaseBlockService
         return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
             'class' => 'fa fa-link',
         ]);
-    }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
-    {
     }
     public function getName(): string
     {

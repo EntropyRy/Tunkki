@@ -2,9 +2,9 @@
 
 namespace App\Block;
 
+use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
@@ -17,7 +17,9 @@ class MemberSituation extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $member = $this->security->getUser()->getMember();
+        $user = $this->security->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),
             'settings'  => $blockContext->getSettings(),
