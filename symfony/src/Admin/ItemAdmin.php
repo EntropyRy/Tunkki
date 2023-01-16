@@ -144,7 +144,7 @@ class ItemAdmin extends AbstractAdmin
                 ->end() */
             ->end();
         $subject = $this->getSubject();
-        if ($subject) {
+        if ($subject->getId()) {
             if ($subject->getCreatedAt()) {
                 $formMapper
                     ->tab('Meta')
