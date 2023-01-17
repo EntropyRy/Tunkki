@@ -18,6 +18,7 @@ use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\RSVPType;
+use App\Repository\MemberRepository;
 
 class EventController extends Controller
 {
@@ -101,6 +102,7 @@ class EventController extends Controller
             if ($form->isSubmitted() && $form->isValid()) {
                 $rsvp = $form->getData();
                 $repo = $em->getRepository(Member::class);
+                assert($repo instanceof MemberRepository);
                 $exists = $repo->findByEmailOrName($rsvp->getEmail(), $rsvp->getFirstName(), $rsvp->getLastName());
                 if ($exists) {
                     $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
