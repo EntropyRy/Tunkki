@@ -38,6 +38,12 @@ nav.navbar-light .nav-item a.nav-link {
 footer {
   background: #191919;
   color: #a6a6a6;
+  .e-text {
+    color: #eee;
+  }
+  a {
+    color: #65aed2;
+  }
 }
 .checkbox div[class^="icheckbox"],
 .checkbox-inline div[class^="icheckbox"],
