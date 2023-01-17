@@ -9,11 +9,7 @@ export default class extends Controller {
     this.changePic();
 
     if (this.hasRefreshIntervalValue) {
-      if (!document.hidden) {
-        this.startRefreshing();
-      } else {
-        this.stopRefreshing();
-      }
+      this.startRefreshing();
     }
   }
   disconnect() {
@@ -25,11 +21,14 @@ export default class extends Controller {
       .then((data) => this.setPic(data));
   }
   startRefreshing() {
-    this.refreshTimer = setInterval(() => {
-      this.changePic();
-    }, this.refreshIntervalValue);
+    if (!document.hidden) {
+      this.refreshTimer = setInterval(() => {
+        this.changePic();
+      }, this.refreshIntervalValue);
+    } else {
+      this.stopRefreshing();
+    }
   }
-
   stopRefreshing() {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);

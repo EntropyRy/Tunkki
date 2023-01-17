@@ -1,3 +1,4 @@
+{% block menu %}
 {% apply spaceless %}
 {% set loc = app.request.locale %}
 {% set theme = 'light' %}
@@ -26,11 +27,10 @@
         >
     </a>
     <span class="d-lg-none">
-        <a data-turbo="false" {% if loc == 'en'%}href="/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>FI</a> |
-           <a data-turbo="false" {% if loc == 'fi'%}href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}"{% endif %}>ENG</a>
-           {% if not app.user %}
-           | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
-           {% endif %}
+       {{ block('mobile_locale') }}
+       {% if not app.user %}
+       | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+       {% endif %}
     </span>
   <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -43,24 +43,39 @@
                <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </li>
         {% endif %}
-        {% if loc == 'fi' %}
-        <li class="nav-item current">
-            <span class="nav-link">FI</span>
-        </li>
-        <li class="nav-item">
-           <a class="nav-link" data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
-        </li>
-        {% else %}
-        <li class="nav-item">
-            <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
-        </li>
-        <li class="nav-item current">
-           <span class="nav-link">ENG</span>
-        </li>
-        {% endif %}
+        {{ block('locale') }}
     </ul>
   </div>
 </div>
 </nav>
 {% include 'menu/user_menu.html.twig' %}
 {% endapply %}
+{% endblock %}
+{% block locale %}
+    {% if app.request.locale == 'fi' %}
+        <li class="nav-item current">
+            <span class="nav-link">FI</span>
+        </li>
+        <li class="nav-item">
+           <a class="nav-link" data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
+        </li>
+        <li class="nav-item current">
+           <span class="nav-link">ENG</span>
+        </li>
+    {% endif %}
+{% endblock %}
+{% block mobile_locale %}
+{% apply spaceless %}
+    {% if app.request.locale == 'fi' %}
+        <span>FI</span> |
+        <a data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
+    {% else %}
+        <a data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a> |
+        <span>ENG</span>
+    {% endif %}
+{% endapply %}
+{% endblock %}
