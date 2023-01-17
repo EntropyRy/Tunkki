@@ -6,6 +6,7 @@ Bank Account: Pankkitili
 name_attribute: nimi
 content_attribute: Sisallys
 packages: paketit
+loading: ladataan
 items: tavarat
 accessories: tarvikkeet
 renter: vuokraaja
