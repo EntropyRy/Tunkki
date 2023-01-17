@@ -43,12 +43,21 @@
                <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </li>
         {% endif %}
-        <li class="nav-item{% if loc == 'fi' %} current{% endif %}">
-            <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
+        {% if loc == 'fi' %}
+        <li class="nav-item current">
+            <span class="nav-link">FI</span>
         </li>
-        <li class="nav-item{% if loc == 'en' %} current{% endif %}">
+        <li class="nav-item">
            <a class="nav-link" data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
         </li>
+        {% else %}
+        <li class="nav-item">
+            <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
+        </li>
+        <li class="nav-item current">
+           <span class="nav-link">ENG</span>
+        </li>
+        {% endif %}
     </ul>
   </div>
 </div>
