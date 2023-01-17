@@ -2,7 +2,12 @@ import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
   static targets = ["pic", "source", "badge", "player"];
-  static values = { url: String, refreshInterval: Number, onlineImg: String };
+  static values = {
+    url: String,
+    refreshInterval: Number,
+    onlineImg: String,
+    offlineImg: String,
+  };
   connect() {
     this.streamStatus();
 
