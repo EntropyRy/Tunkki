@@ -44,14 +44,14 @@ class FrontPage implements PageServiceInterface
         } else {
             $events = array_merge($events, [$announcement]);
         }*/
-        $epic = $this->ePics->getRandomPic();
+        // $epic = $this->ePics->getRandomPic();
         $events = array_merge($future, [$announcement]);
 
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
             [
                 'events' => $events,
-                'epic' => $epic,
+                // 'epic' => $epic,
                 'info' => $info
             ],
             $response

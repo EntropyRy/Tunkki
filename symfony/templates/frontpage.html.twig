@@ -22,11 +22,9 @@
         </div>
         {% endif %}
     {% endfor %}
-    {% if epic is not null %}
-        <div class="col p-2">
-        {{ block('epic_tile') }}
-        </div>
-    {% endif %}
+    <div class="col p-2">
+    {{ block('epic_tile') }}
+    </div>
     {% if info is not null %}
         <div class="col p-2">
         {{ block('artist_tile') }}
@@ -42,13 +40,16 @@
 {% endblock %}
 
 {% block epic_tile %}
-    <div class="tile col-12 p-2" {{ stimulus_controller('epics') }}
+    <turbo-frame 
+        {{ stimulus_controller('epics') }}
          data-epics-url-value="/api/epics/random"
+         src="/api/epics/random"
          data-epics-refresh-interval-value="8000">
+        <div class="tile col-12 p-2"> 
         <div class="rect-img-container">
-        <img  data-epics-target="pic" src="{{ epic.url }}" loading="lazy" class="rect-img" title="{{ 'epics.tile.title'|trans }}">
+        <img  data-epics-target="pic" src="{#{ epic.url }#}" loading="lazy" class="rect-img" title="{{ 'epics.tile.title'|trans }}">
         <div class="badge-container">
-            <span data-epics-target="badge" class="badge bg-secondary">{{ epic.taken|date }}</span>
+            <span data-epics-target="badge" class="badge bg-secondary">{#{ epic.taken|date }#}</span>
         </div>
         </div>
         <h4>{{ 'epics.tile.heading'|trans }}
@@ -57,7 +58,8 @@
         <div class="justify-content-between d-flex">
             <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
         </div>
-    </div>
+        </div>
+    </turbo-frame>
 {% endblock %}
 {% block join_us_tile %}
     <div class="tile col-12 p-2">
