@@ -52,15 +52,15 @@ final class MemberAdmin extends AbstractAdmin
                 'ApplicationHandledDate',
                 DateRangeFilter::class,
                 [
-                'field_type' => DateRangeType::class,
-                'field_options' => [
-                    'field_options_start' => [
-                        'years' => range(1993, $now->format('Y'))
-                    ],
-                    'field_options_end' => [
-                        'years' => range(1993, $now->format('Y'))
-                    ],
-                ]
+                    'field_type' => DateRangeType::class,
+                    'field_options' => [
+                        'field_options_start' => [
+                            'years' => range(1993, $now->format('Y'))
+                        ],
+                        'field_options_end' => [
+                            'years' => range(1993, $now->format('Y'))
+                        ],
+                    ]
                 ]
             )
             ->add('StudentUnionMember')
@@ -70,15 +70,15 @@ final class MemberAdmin extends AbstractAdmin
                 'AcceptedAsHonoraryMember',
                 DateRangeFilter::class,
                 [
-                'field_type' => DateRangeType::class,
-                'field_options' => [
-                    'field_options_start' => [
-                        'years' => range(1993, $now->format('Y'))
-                    ],
-                    'field_options_end' => [
-                        'years' => range(1993, $now->format('Y'))
-                    ],
-                ]
+                    'field_type' => DateRangeType::class,
+                    'field_options' => [
+                        'field_options_start' => [
+                            'years' => range(1993, $now->format('Y'))
+                        ],
+                        'field_options_end' => [
+                            'years' => range(1993, $now->format('Y'))
+                        ],
+                    ]
                 ]
             )
             //->add('user.CreatedAt', DateRangeFilter::class, ['field_type' => DateRangeType::class])
@@ -99,20 +99,20 @@ final class MemberAdmin extends AbstractAdmin
                 ListMapper::NAME_ACTIONS,
                 null,
                 [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
-                    'delete' => [],
-                    /*'makeuser' => [
+                    'actions' => [
+                        'show' => [],
+                        'edit' => [],
+                        'delete' => [],
+                        /*'makeuser' => [
                         'template' => 'admin/crud/list__action_makeuser.html.twig'
                     ],
                     'sendrejectreason' => [
                         'template' => 'admin/crud/list__action_sendrejectreason.html.twig'
                     ], */
-                    'activememberinfo' => [
-                        'template' => 'admin/crud/list__action_email_active_member_info.html.twig'
+                        'activememberinfo' => [
+                            'template' => 'admin/crud/list__action_email_active_member_info.html.twig'
+                        ],
                     ],
-                ],
                 ]
             );
     }
@@ -137,15 +137,15 @@ final class MemberAdmin extends AbstractAdmin
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
-            ->add('isActiveMember', null, ['help' => 'Grants access to Entropy systems'])
+            ->add('isActiveMember', null, ['help' => 'Next: Send the active member mail from the memberlist, add to aktiivit-mailinglist and add to aktiivit group in forums'])
             ->add('denyKerdeAccess', null, ['help' => 'Denies access to Entropy Kerde'])
             ->add('isFullMember', null, ['help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems'])
             ->add(
                 'AcceptedAsHonoraryMember',
                 DatePickerType::class,
                 [
-                'required' => false,
-                'help' => 'Grants free access to Entropy parties'
+                    'required' => false,
+                    'help' => 'Grants free access to Entropy parties'
                 ]
             )
             //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
@@ -157,8 +157,8 @@ final class MemberAdmin extends AbstractAdmin
                 'ApplicationHandledDate',
                 DatePickerType::class,
                 [
-                'required' => false,
-                'help'=>'doubles as accepted as active member date'
+                    'required' => false,
+                    'help' => 'doubles as accepted as active member date'
                 ]
             )
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
@@ -190,7 +190,7 @@ final class MemberAdmin extends AbstractAdmin
                 'rejectReason',
                 null,
                 [
-                'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'
+                    'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'
                 ]
             )
             ->add('rejectReasonSent')
@@ -200,7 +200,7 @@ final class MemberAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('activememberinfo', $this->getRouterIdParameter().'/activememberinfo');
+        $collection->add('activememberinfo', $this->getRouterIdParameter() . '/activememberinfo');
     }
     public function configureExportFields(): array
     {
@@ -219,7 +219,7 @@ final class MemberAdmin extends AbstractAdmin
     }
     public function postRemove($member): void
     {
-        $text = '**Member deleted: '.$member.'**';
+        $text = '**Member deleted: ' . $member . '**';
         $this->mm->SendToMattermost($text, 'yhdistys');
     }
     public function __construct(protected Mattermost $mm, protected EntityManagerInterface $em)
