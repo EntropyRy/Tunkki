@@ -42,6 +42,7 @@ export default class extends Controller {
     } else {
       this.badgeTarget.innerText = "";
     }
+    this.picTarget.classList.remove('shimmer');
     this.picTarget.setAttribute("src", data["url"]);
   }
 }
