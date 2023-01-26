@@ -49,7 +49,7 @@
          data-epics-refresh-interval-value="8000">
         <div class="tile col-12 p-2"> 
         <div class="rect-img-container">
-        <img data-epics-target="pic" src="{#{ epic.url }#}" loading="lazy" class="rect-img" title="{{ 'epics.tile.title'|trans }}">
+        <img data-epics-target="pic" src="{#{ epic.url }#}" loading="lazy" class="rect-img loading" title="{{ 'epics.tile.title'|trans }}">
         <div class="badge-container">
             <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
         </div>
@@ -121,7 +121,7 @@
                 <img data-stream-target="pic" 
                     src="{{ asset('/images/entropy-stream-offline.svg') }}" 
                     loading="lazy" 
-                    class="rect-img fill{% if app.user.member.theme == 'dark' %} invert{% endif %}" 
+                    class="rect-img fill{% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}" 
                     title="{{ 'Stream'|trans }}">
                 <div class="badge-container">
                     <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
