@@ -97,7 +97,7 @@
     </a>
     {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
     <div class="mb-2 justify-content-between d-flex">
-        {% if app.request.locale ==' fi' %}
+        {% if app.request.locale == 'fi' %}
             {% set artist_url = '/artistit' %}
         {% else %}
             {% set artist_url = '/en/artists' %}
