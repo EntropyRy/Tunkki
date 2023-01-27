@@ -31,7 +31,8 @@
         class="effect_canvas"
         data-turbo-permanent
         id="{{ event.backgroundEffect }}"
-        style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}"></canvas>
+        style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}
+    "></canvas>
     {% endif %}
     {% endblock %}
         {% block sonata_page_top_bar %}
