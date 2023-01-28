@@ -210,7 +210,7 @@ event:
       set_length: Toive setin pituudesta
       free_word: Vapaa sana
       save: Tallenna
-      new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen profiilisivultasi
+      new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen <a href="/profiili/artisti/">profiilisivultasi</a>
       ends: Ilmoittautuminen suljetaan
 url:
   form:

@@ -243,7 +243,10 @@ class EventSignUpController extends EventController
         }
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
-        $form = $this->createForm(EventArtistInfoType::class, $artisteventinfo, ['artists' => $artists]);
+        $form = $this->createForm(EventArtistInfoType::class, $artisteventinfo, [
+            'artists' => $artists,
+            'ask_time' => $event->isArtistSignUpAskSetLength()
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();

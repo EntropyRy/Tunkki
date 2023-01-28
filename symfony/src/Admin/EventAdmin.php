@@ -476,6 +476,7 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('Artist Sign up config')
                 ->with('Config')
                 ->add('artistSignUpEnabled', null, ['help' => 'Is the artist signup enabled'])
+                ->add('artistSignUpAskSetLength', null, ['label' => 'Do we ask set length?'])
                 ->add('showArtistSignUpOnlyForLoggedInMembers', null, ['help' => 'Do you have to be logged in to see artist sign up link for the event'])
                 ->add(
                     'artistSignUpStart',

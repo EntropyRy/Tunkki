@@ -218,6 +218,9 @@ body {
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $backgroundEffectPosition = null;
 
+    #[ORM\Column]
+    private ?bool $artistSignUpAskSetLength = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1156,6 +1159,18 @@ body {
     public function setBackgroundEffectPosition(?string $backgroundEffectPosition): self
     {
         $this->backgroundEffectPosition = $backgroundEffectPosition;
+
+        return $this;
+    }
+
+    public function isArtistSignUpAskSetLength(): ?bool
+    {
+        return $this->artistSignUpAskSetLength;
+    }
+
+    public function setArtistSignUpAskSetLength(bool $artistSignUpAskSetLength): self
+    {
+        $this->artistSignUpAskSetLength = $artistSignUpAskSetLength;
 
         return $this;
     }
