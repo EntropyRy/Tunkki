@@ -28,7 +28,7 @@ final class ContractAdmin extends AbstractAdmin
         $listMapper
             ->add('purpose')
             ->add('ContentFi', 'html')
-            ->add('ContentEn')
+            ->add('ContentEn', 'html')
             ->add('updatedAt')
             ->add('createdAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
