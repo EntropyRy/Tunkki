@@ -53,7 +53,7 @@ class BookingAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::SORT_ORDER] = 'DESC';
 
         // name of the ordered field (default = the model's id field, if any)
-        $sortValues[DatagridInterface::SORT_BY] = 'createdAt';
+        $sortValues[DatagridInterface::SORT_BY] = 'bookingDate';
     }
 
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
