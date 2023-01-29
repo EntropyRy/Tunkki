@@ -2,13 +2,18 @@
 
 {% block row %}
     <div class="col-xs-12" style="border-bottom: 1px solid #a2a2a2">
-        <span>
-            {{ object|render_list_element(admin.list['name']) }} - {{ object|render_list_element(admin.list['bookingDate']) }}
-        </span>
-        <span class="pull-right">
-            {% if object.actualPrice and not object.cancelled %}
-                {{ block('contract') }}
-            {% endif %}
+        <span style="display: flex; justify-content: space-between;">
+            <span style="font-size: 1.2em;">
+            {{ object.bookingDate|date('d.m.Y') }}
+            </span>
+            <span style="font-weight: 800">
+            {{ object|render_list_element(admin.list['name']) }}
+            </span>
+            <span>
+                {% if object.actualPrice and not object.cancelled %}
+                    {{ block('contract') }}
+                {% endif %}
+            </span>
         </span>
     </div>
     <div class="col-xs-2">
