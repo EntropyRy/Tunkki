@@ -44,22 +44,17 @@ sonata_admin:
         }
     groups:
       sonata.admin.group.inventory:
-        keep_open: true
         label: Inventory
         icon: '<i class="fa fa-archive"></i>'
         items:
           - entropy_tunkki.admin.item
-          - entropy_tunkki.admin.accessory_choices
-          - entropy_tunkki.admin.file
       sonata.admin.group.rentals:
-        keep_open: true
         label: Rentals
         icon: '<i class="fa fa-sign-out"></i>'
         items:
           - entropy_tunkki.admin.booking
           - entropy.admin.reward
       sonata.admin.group.events:
-        keep_open: true
         label: Events
         icon: '<i class="fa fa-sitemap"></i>'
         items:
@@ -67,7 +62,6 @@ sonata_admin:
           - entropy.admin.rsvp
           - admin.ticket
       sonata.admin.group.content:
-        keep_open: true
         label: Content
         icon: '<i class="fa fa-sitemap"></i>'
         items:
@@ -91,6 +85,7 @@ sonata_admin:
           - entropy_tunkki.admin.who_can_rent_choice
           - entropy_tunkki.admin.billable_event
           - entropy_tunkki.admin.accessory_choices
+          - entropy_tunkki.admin.file
           - entropy.admin.contract
           - sonata.classification.admin.category
           - entropy.admin.nakki_definition
