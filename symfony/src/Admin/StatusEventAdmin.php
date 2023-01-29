@@ -23,8 +23,7 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('description')
             ->add('createdAt')
             ->add('updatedAt')
-            ->add('creator')
-        ;
+            ->add('creator');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -41,35 +40,32 @@ class StatusEventAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => [],
                     'edit' => [],
-                ]])
-
-        ;
+                ]
+            ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if (!$this->isChild()) {
             $formMapper
-                ->with('Item', ['class'=>'col-md-12'])
+                ->with('Item', ['class' => 'col-md-12'])
                 ->add('item')
-                ->end()
-            ;
+                ->end();
             $formMapper
-                ->with('Booking', ['class'=>'col-md-12'])
+                ->with('Booking', ['class' => 'col-md-12'])
                 ->add('booking')
-                ->end()
-            ;
+                ->end();
         }
         if ($this->getSubject()->getItem() != null) {
             $events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0, 5));
             $help = '';
             if ($events) {
                 foreach ($events as $event) {
-                    $help .= "[".$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
+                    $help .= "[" . $event->getCreatedAt()->format('d.m.y H:i') . '] ' . $event->getCreator() . ': ' . $event->getDescription() . '<br>';
                 }
             }
             $formMapper
-                ->with('Status', ['class'=>'col-md-4'])
+                ->with('Status', ['class' => 'col-md-4'])
                 ->add('item.cannotBeRented', CheckboxType::class, ['required' => false])
                 ->add('item.needsFixing', CheckboxType::class, ['required' => false])
                 ->add('item.forSale', CheckboxType::class, ['required' => false])
@@ -79,13 +75,13 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('description', TextareaType::class, [
                     'required' => true,
                     'help' => $help,
-                    ])
-                ->end()
-            ;
+                    'help_html' => true
+                ])
+                ->end();
         }
         if ($this->getSubject()->getBooking() != null) {
             $formMapper
-                ->with('Status', ['class'=>'col-md-4'])
+                ->with('Status', ['class' => 'col-md-4'])
                 ->add('booking.cancelled', CheckboxType::class, ['required' => false])
                 ->add('booking.renterConsent', CheckboxType::class, ['required' => false, 'disabled' => true])
                 ->add('booking.itemsReturned', CheckboxType::class, ['required' => false])
@@ -101,9 +97,8 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('description', TextareaType::class, [
                     'required' => true,
                     'help' => 'Describe in more detail. Will be visible for others in Mattermost.',
-                    ])
-                ->end()
-            ;
+                ])
+                ->end();
         }
         if (!$this->isChild()) {
             $formMapper
@@ -112,8 +107,7 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
                 ->add('modifier', null, ['disabled' => true])
                 ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
-                ->end()
-            ;
+                ->end();
         }
     }
 
@@ -126,8 +120,7 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('creator')
             ->add('createdAt')
             ->add('modifier')
-            ->add('updatedAt')
-        ;
+            ->add('updatedAt');
     }
     public function prePersist($Event): void
     {
@@ -154,14 +147,14 @@ class StatusEventAdmin extends AbstractAdmin
     }
     private function getMMtext($Event, $user)
     {
-        $text = 'EVENT: <'.$this->generateUrl('show', ['id'=>$Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|';
+        $text = 'EVENT: <' . $this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|';
         $fix = null;
         $rent = null;
         if (!empty($Event->getItem())) {
             $thing = $Event->getItem();
             $fix = $thing->getNeedsFixing();
             $rent = $thing->getCannotBeRented();
-            $text .= $thing->getName().'> ';
+            $text .= $thing->getName() . '> ';
             if ($fix === true) {
                 $text .= '**_NEEDS FIXING_** ';
             } elseif ($fix === false) {
@@ -174,12 +167,12 @@ class StatusEventAdmin extends AbstractAdmin
             }
         } else {
             $thing = $Event->getBooking();
-            $text .= $thing->getName().'> ';
+            $text .= $thing->getName() . '> ';
         }
         if ($Event->getDescription()) {
-            $text .= 'with comment: '.$Event->getDescription();
+            $text .= 'with comment: ' . $Event->getDescription();
         }
-        $text .= ' by '. $user;
+        $text .= ' by ' . $user;
         return $text;
     }
     public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts)
