@@ -78,6 +78,22 @@ final class EmailAdminController extends CRUDController
                         $count += 1;
                     }
                 }
+            } elseif ($purpose == 'artist') {
+                $signups = $event->getEventArtistInfos();
+                $emails = [];
+                foreach ($signups as $signup) {
+                    $member = $signup->getArtist()->getMember();
+                    if ($member) {
+                        $emails[$member->getId()] = $member->getEmail();
+                    }
+                }
+                foreach ($emails as $to) {
+                    if ($to) {
+                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                        $mailer->send($message);
+                        $count += 1;
+                    }
+                }
             }
 
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));

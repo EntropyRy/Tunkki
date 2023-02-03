@@ -75,7 +75,7 @@ final class EmailAdmin extends AbstractAdmin
                         'To RSVP' => 'rsvp',
                         'To reserved and paid tickets holders' => 'ticket',
                         'To people who have reserved Nakki' => 'nakkikone',
-                        //'Booking Email' => 'booking',
+                        'To all artists' => 'artist',
                         //'Other' => 'other'
                     ],
                     'required' => false,
