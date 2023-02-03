@@ -9,6 +9,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -29,6 +30,10 @@ class Artist implements \Stringable
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $type = null;
 
+    #[Assert\Expression(
+        "!(!value or !this.getBioEn())",
+        message: 'artist.form.error',
+    )]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bio = null;
 

@@ -1,2 +1,5 @@
 under_password_limit: 'Salasanasi pitää olla vähintää {{ limit }} merkkiä'
 passwords_need_to_match: Salasanojen on oltava samat.
+artist:
+  form:
+    error: Käytämme molempia Bio tekstejä riippuen kielestä, joten käänäthän tekstin kummallekkin kiellle.

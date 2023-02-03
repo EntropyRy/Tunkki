@@ -1,2 +1,5 @@
 under_password_limit: 'Your password should be at least {{ limit }} characters'
 passwords_need_to_match: The password fields must match.
+artist:
+  form:
+    error: We use both of the bios as we have 2 language website. Please translate them.
