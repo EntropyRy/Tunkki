@@ -68,7 +68,7 @@ final class EventAdminController extends CRUDController
         );
 
         $telegramOptions = (new TelegramOptions())
-            ->chatId('-801641481')
+            //->chatId('-801641481')
             ->parseMode('MarkdownV2')
             ->disableWebPagePreview(false)
             ->disableNotification(false)
