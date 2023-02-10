@@ -3,10 +3,8 @@
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Symfony\Component\Security\Core\Security;
 use Hashids\Hashids;
 use App\Entity\User;
 
@@ -25,10 +23,10 @@ class OauthJsonController extends AbstractController
         $id = $hash->encode($user->getId());
         return new JsonResponse(
             [
-            'id' => $id,
-            'username' => $user->getUsername(),
-            'email' => $user->getEmail(),
-            'active_member' => $user->getMember()->getIsActiveMember()
+                'id' => $id,
+                'username' => $user->getUsername(),
+                'email' => $user->getEmail(),
+                'active_member' => $user->getMember()->getIsActiveMember()
             ]
         );
     }

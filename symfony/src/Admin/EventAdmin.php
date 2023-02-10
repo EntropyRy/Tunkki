@@ -187,7 +187,7 @@ final class EventAdmin extends AbstractAdmin
                     'actions' => [
                         'show' => [],
                         'edit' => [],
-                        'delete' => [],
+                        'telegram' => ['template' => 'admin/event/button_announce_telegram.html.twig'],
                     ],
                 ]
             );
@@ -624,6 +624,7 @@ final class EventAdmin extends AbstractAdmin
     {
         $collection->remove('show');
         $collection->remove('delete');
+        $collection->add('tg', $this->getRouterIdParameter() . '/tg');
         $collection->add('rsvp', $this->getRouterIdParameter() . '/rsvp');
         $collection->add('nakkiList', $this->getRouterIdParameter() . '/nakkilist');
     }
