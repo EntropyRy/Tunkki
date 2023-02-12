@@ -9,7 +9,7 @@
                   <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
                   <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
             </span>
-            <span class="label {% if artist.Picture is not empty %}label-success{% else %}label-warning{% endif %}">Profile img</span>
+            <span style="line-height: inherit" class="label {% if artist.Picture is not empty %}label-success{% else %}label-warning{% endif %}">Profile img</span>
             <span style="font-weight: 800">
             Member: {{ object|render_list_element(admin.list['Artist.member']) }}
             </span>
@@ -27,15 +27,15 @@
             </small>
         </span>
         <span>
-            <p>Free Word: {{ object.freeWord|raw }}</p>
+            <p>{{ object.freeWord|raw }}</p>
         </span>
     </div>
     {% if object.StartTime %}
-    <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
+    <div class="col-xs-2" style="border-left: 1px solid #a2a2a2; height: 100%">
         {% if object.stage %}
         Stage: {{ object.stage }}<br>
         {% endif %}
-        Time: {{ object.StartTime|date }}<br>
+        Time: {{ object.StartTime|date }}
     </div>
     {% endif %}
 {% endblock %}
