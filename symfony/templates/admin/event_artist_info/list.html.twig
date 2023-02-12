@@ -9,7 +9,7 @@
                   <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
                   <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
             </span>
-            <span class="label {% if artist.Picture is defined %}label-success{% else %}label-warning{% endif %}">Profile img</span>
+            <span class="label {% if artist.Picture is not empty %}label-success{% else %}label-warning{% endif %}">Profile img</span>
             <span style="font-weight: 800">
             Member: {{ object|render_list_element(admin.list['Artist.member']) }}
             </span>
