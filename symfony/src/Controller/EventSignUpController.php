@@ -105,7 +105,6 @@ class EventSignUpController extends EventController
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkis($event, $member, $request->getLocale())
-            //'form' => $form->createView(),
         ]);
     }
     public function responsible(
@@ -114,7 +113,6 @@ class EventSignUpController extends EventController
     ): Response {
         return $this->render('list_nakki_info_for_responsible.html.twig', [
             'event' => $event,
-            //'form' => $form->createView(),
         ]);
     }
     protected function getNakkis($event, $member, $locale): array
@@ -282,7 +280,6 @@ class EventSignUpController extends EventController
         '/{year}/{slug}/signup/{id}/edit',
         name: 'entropy_event_slug_artist_signup_edit',
         requirements: [
-            'slug' => '\w+',
             'year' => '\d+',
             'id' => '\d+',
         ]
