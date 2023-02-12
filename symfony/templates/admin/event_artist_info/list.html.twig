@@ -1,0 +1,37 @@
+{% extends 'admin/crud/base_list_flat_inner_row.html.twig' %}
+
+{% block row %}
+    <div class="col-xs-12" style="border-bottom: 1px solid #a2a2a2">
+        <span style="display: flex; justify-content: space-between;">
+            <span style="font-size: 1.2em;">
+            {% set artist = object.artist %}
+            {{ artist.type }}: {{ artist.name }}, Previews:
+                  <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
+                  <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
+            </span>
+            <span class="label {% if artist.Picture is defined %}label-success{% else %}label-warning{% endif %}">Profile img</span>
+            <span style="font-weight: 800">
+            Member: {{ object|render_list_element(admin.list['Artist.member']) }}
+            </span>
+        </span>
+    </div>
+    <div class="col-xs-{% if object.StartTime %}8{% else %}10{%endif%}">
+        <small>
+            Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
+            Genre: {{ object.Artist.genre }}<br>
+            Hardware: {{ object.Artist.hardware }}<br>
+            {% if not object.StartTime %}
+            Wish for Play Time: {{ object.WishForPlayTime }}<br>
+            Free Word: {{ object.freeWord|raw }}<br>
+            {% endif %}
+        </small>
+    </div>
+    {% if object.StartTime %}
+    <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
+        {% if object.stage %}
+        Stage: {{ object.stage }}<br>
+        {% endif %}
+        Time: {{ object.StartTime|date }}<br>
+    </div>
+    {% endif %}
+{% endblock %}

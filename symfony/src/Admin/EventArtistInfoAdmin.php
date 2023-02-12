@@ -34,14 +34,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('artistDataHasUpdate', null, [
-                'template' => 'admin/crud/list__update_artist.html.twig'
-            ])
-            ->add('ArtistName')
-            ->add('ArtistClone.type')
-            ->add('ArtistClone.hardware')
             ->add('ArtistClone.linkUrls', FieldDescriptionInterface::TYPE_HTML, [])
-            ->add('ArtistClone.genre')
             ->add('Artist.member')
             ->add('WishForPlayTime')
             ->add('freeWord')

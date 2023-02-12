@@ -311,6 +311,9 @@ services:
         manager_type: orm
         group: admin
         label: EventArtistInfo
+    calls:
+      - [setTemplate, [inner_list_row, admin/event_artist_info/list.html.twig]]
+      - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
   entropy.admin.menu:
     class: App\Admin\MenuAdmin
     tags:
