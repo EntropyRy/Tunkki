@@ -15,16 +15,22 @@
             </span>
         </span>
     </div>
-    <div class="col-xs-{% if object.StartTime %}8{% else %}10{%endif%}">
-        <small>
-            Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
-            Genre: {{ object.Artist.genre }}<br>
-            Hardware: {{ object.Artist.hardware }}<br>
+    <div class="col-xs-{% if object.StartTime %}10{% else %}12{%endif%}">
+        <span style="float: left; padding-right: 2em;">
+            <small>
+                Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
+                Genre: {{ object.Artist.genre }}<br>
+                Hardware: {{ object.Artist.hardware }}<br>
+                {% if not object.StartTime %}
+                Wish for Play Time: {{ object.WishForPlayTime }}<br>
+                {% endif %}
+            </small>
+        </span>
+        <span>
             {% if not object.StartTime %}
-            Wish for Play Time: {{ object.WishForPlayTime }}<br>
-            Free Word: {{ object.freeWord|raw }}<br>
+                <p>Free Word: {{ object.freeWord|raw }}</p>
             {% endif %}
-        </small>
+        </span>
     </div>
     {% if object.StartTime %}
     <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
