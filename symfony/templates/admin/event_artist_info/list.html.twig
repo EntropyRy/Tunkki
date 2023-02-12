@@ -16,7 +16,7 @@
         </span>
     </div>
     <div class="col-xs-{% if object.StartTime %}10{% else %}12{%endif%}">
-        <span style="float: left; padding-right: 2em;">
+        <span style="float: right; margin-left: 2em; padding: 5px; border-left: 1px solid #a2a2a2; border-bottom: 1px solid #a2a2a2;  ">
             <small>
                 Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
                 Genre: {{ object.Artist.genre }}<br>
@@ -27,9 +27,7 @@
             </small>
         </span>
         <span>
-            {% if not object.StartTime %}
-                <p>Free Word: {{ object.freeWord|raw }}</p>
-            {% endif %}
+            <p>Free Word: {{ object.freeWord|raw }}</p>
         </span>
     </div>
     {% if object.StartTime %}
