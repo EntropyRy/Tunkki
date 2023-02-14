@@ -939,6 +939,19 @@ body {
         return $bystage;
     }
 
+    public function getVjArtistInfos(): array
+    {
+        $bystage = [];
+        foreach ($this->eventArtistInfos as $info) {
+            if (!is_null($info->getStartTime())) {
+                if ($info->getArtistClone()->getType() == 'VJ') {
+                    $bystage[$info->getStage()][] = $info;
+                }
+            }
+        }
+        return $bystage;
+    }
+
     public function getTicketInfoFi(): ?string
     {
         return $this->ticketInfoFi;
