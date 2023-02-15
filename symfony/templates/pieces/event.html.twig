@@ -381,7 +381,7 @@
 {% block cycle %}
 {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
 {% if thecycle == 'even' %}
-<div id="{{ name }}" class="col-md-12 pt-3 pb-3">
+<div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
         <div class="col-md-5 order-last order-md-first pt-3 pt-md-0">
             {{ block('artist_event_info') }}
@@ -392,7 +392,7 @@
     </div>
 </div>
 {% else %}
-<div id="{{ name }}" class="col-md-12 pt-3 pb-3">
+<div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
         <div class="col-md-7 order-first">
             {{ block('artist_pic') }}
