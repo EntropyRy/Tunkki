@@ -15,27 +15,25 @@
             </span>
         </span>
     </div>
-    <div class="col-xs-{% if object.StartTime %}10{% else %}12{%endif%}">
+    <div class="col-xs-12">
+    {% if object.StartTime %}
+        <span>
+            <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
+            Stage: {{ object.stage|default('NOT DEFINED') }}<br>
+            Hardware: {{ object.Artist.hardware }}
+        </span>
+    {% else %}
         <span style="float: right; margin-left: 2em; padding: 5px; border-left: 1px solid #a2a2a2; border-bottom: 1px solid #a2a2a2;  ">
             <small>
                 Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
                 Genre: {{ object.Artist.genre }}<br>
                 Hardware: {{ object.Artist.hardware }}<br>
-                {% if not object.StartTime %}
                 Wish for Play Time: {{ object.WishForPlayTime }}<br>
-                {% endif %}
             </small>
         </span>
         <span>
             <p>{{ object.freeWord|raw }}</p>
         </span>
-    </div>
-    {% if object.StartTime %}
-    <div class="col-xs-2" style="border-left: 1px solid #a2a2a2; height: 100%">
-        {% if object.stage %}
-        Stage: {{ object.stage }}<br>
-        {% endif %}
-        Time: {{ object.StartTime|date }}
-    </div>
     {% endif %}
+    </div>
 {% endblock %}
