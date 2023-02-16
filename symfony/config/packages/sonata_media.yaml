@@ -26,8 +26,8 @@ sonata_media:
                 - sonata.media.provider.image
                 - sonata.media.provider.file
             formats:
-                small: { width: 500 , quality: 90}
-                big:   { width: 1200 , quality: 100}
+                small: { width: 500 , quality: 70}
+                big:   { width: 1200 , quality: 80}
         event: 
             download:
                 strategy: sonata.media.security.public_strategy
@@ -37,17 +37,17 @@ sonata_media:
                 - sonata.media.provider.file
             formats:
                 small: { width: 500 , quality: 70}
-                normal: { width: 800 , quality: 90}
-                banner:   { width: 1200 , quality: 100}
+                normal: { width: 800 , quality: 80}
+                banner:   { width: 1200 , quality: 80}
         artist: 
             download:
                 strategy: sonata.media.security.public_strategy
             providers:
                 - sonata.media.provider.image
             formats:
-                small: { width: 400 , quality: 90}
-                big:   { width: 800 , quality: 100}
-                square:   { width: 800 , height: 800, quality: 100, resizer: sonata.media.resizer.square}
+                small: { width: 400 , quality: 70}
+                big:   { width: 800 , quality: 80}
+                square:   { width: 800 , height: 800, quality: 75, resizer: sonata.media.resizer.square}
 
     cdn:
         server:
