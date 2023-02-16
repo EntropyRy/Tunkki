@@ -48,7 +48,7 @@ class MenuBuilder
             }
         }
         // dynamically add stream
-        $this->addStream($menu);
+        //$this->addStream($menu);
         return $menu;
     }
     public function createMainMenuEn(array $options)
@@ -80,7 +80,7 @@ class MenuBuilder
                 }
             }
         }
-        $this->addStream($menu);
+        //$this->addStream($menu);
         return $menu;
     }
     private function addItem($menu, $m, $l)
