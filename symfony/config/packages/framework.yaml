@@ -22,6 +22,7 @@ framework:
         adapter: cache.adapter.apcu
 when@prod:
   framework:
+    http_cache: true
     trusted_hosts: "%env(TRUSTED_HOSTS)%"
     trusted_proxies: "%env(TRUSTED_PROXIES)%"
     trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
