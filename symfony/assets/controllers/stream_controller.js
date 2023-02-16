@@ -19,7 +19,14 @@ export default class extends Controller {
     this.stopRefreshing();
   }
   streamStatus() {
-    fetch(this.urlValue).then((response) => this.setStream(response.status));
+    fetch(this.urlValue)
+	.then(response => {
+		this.setStream(response.status)
+	})
+	.catch(error => {
+		this.setStream(400);
+		this.stopRefreshing();
+	});
   }
   startRefreshing() {
     if (!document.hidden) {
