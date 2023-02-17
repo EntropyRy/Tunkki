@@ -43,6 +43,9 @@ class Email implements \Stringable
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $replyTo = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $SentAt = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,6 +147,18 @@ class Email implements \Stringable
     public function setReplyTo(?string $replyTo): self
     {
         $this->replyTo = $replyTo;
+
+        return $this;
+    }
+
+    public function getSentAt(): ?\DateTimeImmutable
+    {
+        return $this->SentAt;
+    }
+
+    public function setSentAt(?\DateTimeImmutable $SentAt): self
+    {
+        $this->SentAt = $SentAt;
 
         return $this;
     }

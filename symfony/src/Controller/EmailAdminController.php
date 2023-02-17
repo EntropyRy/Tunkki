@@ -95,7 +95,8 @@ final class EmailAdminController extends CRUDController
                     }
                 }
             }
-
+	    $email->setSentAt(new DateTimeImmutable('now'));
+	    $this->admin->update($email);
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));

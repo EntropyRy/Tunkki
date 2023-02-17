@@ -81,7 +81,8 @@ final class NakkiAdmin extends AbstractAdmin
                 'with_years' => false,
                 'with_months' => false,
                 'with_days' => false,
-                'with_hours' => true
+		'with_hours' => true,
+		'required' => true
             ])
             ->add('startAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
