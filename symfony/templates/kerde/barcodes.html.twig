@@ -8,7 +8,8 @@
     <h1>ZOOM</h1>
     <p>{{ 'barcode.expl'|trans }}</p>
     {% for name, code in barcodes %}
-    <div class="m-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}" style="width:400px;">
+    <hr class="py-5">
+    <div class="py-5 m-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}" style="width:400px;">
         <div class="mx-auto barcode" style="width:246px;">
             {{ code|raw }}
             <p class="text-center {% if app.user.member.theme == 'dark' %}text-black{% endif %}">{{ name }}</p>
