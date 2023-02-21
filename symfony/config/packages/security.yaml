@@ -111,7 +111,7 @@ security:
       #- {path: ^/kerde/door$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
       #- {path: ^/kerde/door$, roles: ROLE_NO_ACCESS}
       #- {path: ^/kerde/ovi$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
-      #- {path: ^/kerde/ovi$, roles: ROLE_NO_ACCESS}
+    - {path: ^/kerde, roles: ROLE_USER}
     - {path: ^/dashboard, role: ROLE_USER}
     - {path: ^/yleiskatsaus, role: ROLE_USER}
     - {path: ^/profile, role: ROLE_USER}
