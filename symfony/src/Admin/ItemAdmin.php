@@ -18,6 +18,7 @@ use App\Entity\User;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
+use Sonata\ClassificationBundle\Admin\Filter\CategoryFilter;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\DatePickerType;
@@ -34,9 +35,7 @@ class ItemAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $context = 'item';
-        $currentContext = $this->cm->find($context);
-        $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
-
+        //$currentContext = $this->cm->getRootCategoriesForContext($context);
         $datagridMapper
             ->add('name')
             ->add('manufacturer')
@@ -52,20 +51,9 @@ class ItemAdmin extends AbstractAdmin
             ->add('needsFixing')
             ->add('cannotBeRented')
             ->add('forSale')
-            ->add(
-                'category',
-                ChoiceFilter::class,
-                [
-                    'field_type' => CategorySelectorType::class,
-                    'label' => 'Category',
-                    'field_options' => [
-                        'class' => $categoryAdmin->getClass(),
-                        'context' => $currentContext,
-                        'model_manager' => $categoryAdmin->getModelManager(),
-                        'multiple' => true,
-                    ]
-                ],
-            );
+            ->add('category', CategoryFilter::class, [
+		    //'context' => $context,
+	    ]);
     }
 
     protected function configureListFields(ListMapper $listMapper): void
