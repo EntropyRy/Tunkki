@@ -2,6 +2,7 @@
 login:
   join_us: To be able to login you need to <a href="/en/join-us">Join us</a>
 cookie_policy: We only use functional cookies to ensure your login works.
+whisper: psst. <a href="/en/join-us">join us</a>
 name_attribute: name
 content_attribute: Content
 packages: packages
