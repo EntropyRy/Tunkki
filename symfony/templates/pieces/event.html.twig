@@ -253,14 +253,13 @@
     {{ event.attachment.name }}
 </a>
 </div>
-{% endif %}
-{% if event.epics is not empty or event.links.urls|length > 0 or (event.showNakkikoneLinkInEvent|default(false) and app.user) or event.includeSaferSpaceGuidelines or event.artistSignUpNow or (event.webMeetingUrl is not empty and event.EventDate >= date('now-8hours')) %}
-<div>
 <hr>
+{% endif %}
+<div class="d-flex">
     {% for keys in event.links %}
         {% for url in keys %}
         <span class="pe-2">
-            <a {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ url.url }}">
+            <a class="btn btn-outline-info" {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %} href="{{ url.url }}">
                 <i class="{{ url.icon }}"></i>
                 {{ url.title|trans }}
             </a>
@@ -269,7 +268,7 @@
     {% endfor %}
     {% if event.epics %}
     <span class="pe-2">
-        <a href="{{ event.epics }}">
+        <a class="btn btn-outline-info" href="{{ event.epics }}">
             <i class="fas fa-image"></i>
             Epics
         </a>
@@ -278,12 +277,12 @@
     {% if event.webMeetingUrl %}
     <span class="pe-2">
         {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U')%}
-        <a href="{{ event.webMeetingUrl }}">
+        <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
             <i class="fas fa-laptop"></i>
             {{'Join remotely'|trans }}
         </a>
         {% elseif event.EventDate|date_modify('-8hours') > date('now')%}
-        <a>
+        <a class="btn btn-outline-info">
             <i class="fas fa-laptop"></i>
             {{'Join remotely'|trans }}
         </a>
@@ -293,12 +292,12 @@
     {% if event.includeSaferSpaceGuidelines %}
     <span class="pe-2">
         {% if app.request.locale =='fi' %}
-            <a href="/turvallisemman-tilan-periaatteet">
+            <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
                 <i class="fas fa-hand-holding-heart"></i>
                 Turvallisemman tilan periaatteet
             </a>
         {%else%}
-            <a href="/en/safer-space-guidelines">
+            <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
                 <i class="fas fa-hand-holding-heart"></i>
                 Safer space guidelines
             </a>
@@ -308,7 +307,7 @@
     {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
 
     <span class="pe-2">
-        <a href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
             {{'Artist signup'|trans }}
         </a>
@@ -316,14 +315,13 @@
     {% endif %}
     {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
     <span class="pe-2">
-        <a href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
             {{"fas fa-tasks"|parse_icon }}
             Nakkikone
         </a>
     </span>
     {% endif %}
 </div>
-{% endif %}
 {% endblock %}
 
 {% block timetable %}
