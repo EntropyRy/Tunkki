@@ -18,7 +18,7 @@
 {% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
     {{ form_start(form) }}
     {{ form_widget(form) }}
-    <input class="btn btn-primary" type="submit" value="{{ 'profile.door.open_the_door'|trans|capitalize }}" />
+    <input class="btn btn-primary w-100" type="submit" value="{{ 'profile.door.open_the_door'|trans|capitalize }}" />
     {{ form_end(form) }}
     <ul class="fa-ul mt-3">
     {% for log in logs %}
