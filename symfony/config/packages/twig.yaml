@@ -10,6 +10,7 @@ twig:
         - 'media_widgets.html.twig'
     globals:
         tunkki_img: '%env(MM_TUNKKI_IMG)%'
+        email_img: '%env(EMAIL_IMG)%'
     date:
         format: j.n.Y, H:i
         timezone: Europe/Helsinki
