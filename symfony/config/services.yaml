@@ -255,7 +255,7 @@ services:
         model_class: App\Entity\AccessoryChoice
         manager_type: orm
         group: admin
-        label: Accessory Choices
+        label: Accessories
   App\EventListener\BookingAdminListener:
     arguments:
       $email: '%booking_notification_email%'

@@ -48,6 +48,7 @@ sonata_admin:
         icon: '<i class="fa fa-archive"></i>'
         items:
           - entropy_tunkki.admin.item
+          - entropy_tunkki.admin.accessory_choices
       sonata.admin.group.rentals:
         label: Rentals
         icon: '<i class="fa fa-sign-out"></i>'
@@ -84,7 +85,6 @@ sonata_admin:
           - entropy_tunkki.admin.renter
           - entropy_tunkki.admin.who_can_rent_choice
           - entropy_tunkki.admin.billable_event
-          - entropy_tunkki.admin.accessory_choices
           - entropy_tunkki.admin.file
           - entropy.admin.contract
           - sonata.classification.admin.category
