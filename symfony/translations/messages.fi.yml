@@ -249,7 +249,7 @@ profile:
     last: lukon viimeisin muutos
     connection_problems: Yhteys ongelma
     connection_ok: Yhteys ok
-    wifi: Tarvitsee kertsin wifiyhteyden toimiakseen
+    wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. Safari <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
 artist:
   not_confirmed_yet: Ei vahvistettu (vielä)
   explanation: Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla

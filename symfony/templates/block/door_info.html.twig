@@ -28,12 +28,8 @@
                 </li>
                 {% endfor %}
                 </ul>
-                {% if app.request.server.get("HTTP_X_REAL_IP") != door_ip %}
-                    <a class="btn btn-primary w-100 disabled" href="">{{ 'profile.door.open_the_door_page'|trans }}</a>
-                    <p>{{ 'profile.door.wifi'|trans }}</p>
-                {% else %}
                     <a class="btn w-100 btn-primary" href="{{ path('kerde_door.' ~ app.request.locale) }}">{{ 'profile.door.open_the_door_page'|trans }}</a>
-                {% endif %}
+                    <p>{{ 'profile.door.wifi'|trans|raw }}</p>
             {% else %}
                 <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
             {% endif %}
