@@ -18,7 +18,7 @@
     "masonry-layout": "^4.2.2",
     "moment": "^2.29.4",
     "regenerator-runtime": "^0.13.11",
-    "sass": "~1.58.3",
+    "sass": "~1.59.2",
     "sass-loader": "^13.0.2",
     "signature_pad": "^4.0.10",
     "webpack": "^5.74.0",
