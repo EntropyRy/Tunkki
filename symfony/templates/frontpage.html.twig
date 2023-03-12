@@ -3,7 +3,6 @@
 {% block content %}
 {% set name_attr = 'name_attribute'|trans %}
 {% set content_attr = 'content_attribute'|trans %}
-<turbo-frame id="home">
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" data-masonry='{"percentPosition": true }'>
 {#    <turbo-frame id="stream">
         <div class="col p-2">
@@ -39,15 +38,14 @@
     {{ block('stream_tile') }}
     </div>
     </div>
-</turbo-frame>
 {% endblock %}
 
 {% block epic_tile %}
-    <turbo-frame 
+    <turbo-frame
         {{ stimulus_controller('epics') }}
          data-epics-url-value="/api/epics/random"
          data-epics-refresh-interval-value="8000">
-        <div class="tile col-12 p-2"> 
+        <div class="tile col-12 p-2">
         <div class="rect-img-container">
         <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
         <div class="badge-container">
@@ -89,7 +87,7 @@
     <div class="tile col-12 p-2">
     <a href="{{ block('event_path') }}">
     <div class="rect-img-container">
-        {{block('artist_pic')}}
+        {{ block('artist_pic') }}
         <div class="badge-container">
             <span class="badge bg-secondary">{{ 'artist.tile.heading'|trans }}</span>
         </div>
@@ -109,7 +107,7 @@
     </div>
 {% endblock %}
 {% block stream_tile %}
-<turbo-frame 
+<turbo-frame
     {{ stimulus_controller('stream') }}
      data-stream-url-value="https://stream.entropy.fi/kerde.opus"
      data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}"
@@ -118,10 +116,10 @@
     <div class="tile col-12 p-2">
         <a href="https://stream.entropy.fi">
             <div class="rect-img-container">
-                <img data-stream-target="pic" 
-                    src="{{ asset('/images/entropy-stream-offline.svg') }}" 
-                    loading="lazy" 
-                    class="rect-img fill{% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}" 
+                <img data-stream-target="pic"
+                    src="{{ asset('/images/entropy-stream-offline.svg') }}"
+                    loading="lazy"
+                    class="rect-img fill{% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}"
                     title="{{ 'Stream'|trans }}">
                 <div class="badge-container">
                     <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
