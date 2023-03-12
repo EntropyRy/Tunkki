@@ -133,6 +133,12 @@ final class EventAdmin extends AbstractAdmin
                 ]
             );
             $menu->addChild(
+                'Notifications',
+                [
+                    'uri' => $admin->generateUrl('entropy.admin.event|admin.notification.list', ['id' => $id])
+                ]
+            );
+            $menu->addChild(
                 'Preview',
                 [
                     'route' => 'entropy_event',

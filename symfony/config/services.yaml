@@ -302,6 +302,7 @@ services:
       - [addChild, ['@entropy.admin.rsvp', 'event']]
       - [addChild, ['@admin.ticket', 'event']]
       - [addChild, ['@admin.email', 'event']]
+      - [addChild, ['@admin.notification', 'event']]
   admin.event_artist_info:
     class: App\Admin\EventArtistInfoAdmin
     tags:
@@ -392,3 +393,8 @@ services:
         manager_type: orm
         group: admin
         label: Tickets
+
+  admin.notification:
+      class: App\Admin\NotificationAdmin
+      tags:
+          - { name: sonata.admin, model_class: App\Entity\Notification, controller: App\Controller\NotificationAdminController, manager_type: orm, group: admin, label: Notification }

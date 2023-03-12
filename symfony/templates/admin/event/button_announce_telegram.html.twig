@@ -1,3 +1,7 @@
-<a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('tg', object) }}">
-    <i class="fa fa-telegram"></i> {{ 'Telegram'|trans({}, 'SonataAdminBundle') }}
+<a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('send', object) }}">
+    {% if object.sentAt is null %}
+    <i class="fa fa-telegram"></i> {{ 'Send'|trans({}, 'SonataAdminBundle') }}
+    {% else %}
+    <i class="fa fa-telegram"></i> {{ 'Update'|trans({}, 'SonataAdminBundle') }}
+    {% endif %}
 </a>

@@ -221,6 +221,9 @@ body {
     #[ORM\Column]
     private ?bool $artistSignUpAskSetLength = true;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
+    private Collection $notifications;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -358,6 +361,7 @@ body {
         $this->nakkiBookings = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->emails = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1184,6 +1188,36 @@ body {
     public function setArtistSignUpAskSetLength(bool $artistSignUpAskSetLength): self
     {
         $this->artistSignUpAskSetLength = $artistSignUpAskSetLength;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getEvent() === $this) {
+                $notification->setEvent(null);
+            }
+        }
 
         return $this;
     }

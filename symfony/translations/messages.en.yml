@@ -50,6 +50,8 @@ audio: Audio
 videos: Videos
 tickets: Tickets
 fb.event: FB Event
+tg:
+  event: The Event
 entropy.seo.description: Electronic music and culture association
 rss_desc: Upcoming and past events and announcements of Entropy ry
 map: Map
