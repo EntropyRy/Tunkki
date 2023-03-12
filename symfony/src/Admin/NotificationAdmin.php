@@ -51,7 +51,7 @@ final class NotificationAdmin extends AbstractAdmin
             ])
             ->add('message', null, [
                 'help_html' => true,
-                'help' => '*bold \*text*<br>
+                'help' => 'Message will always inclue url to the event after this text. Use these for formatting: <br>*bold \*text*<br>
 _italic \*text_<br>
 __underline__<br>
 ~strikethrough~<br>
