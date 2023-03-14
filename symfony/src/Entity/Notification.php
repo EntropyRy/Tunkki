@@ -34,7 +34,7 @@ class Notification
     private ?string $locale = 'fi';
 
     #[ORM\Column]
-    private array $options = [];
+    private array $options = ['add_event_button' => 'add_event_button'];
 
     public function __toString(): string
     {
