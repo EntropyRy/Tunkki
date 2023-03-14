@@ -19,6 +19,7 @@ final class NotificationAdminController extends CRUDController
     public function sendAction(ChatterInterface $chatter, Request $request, TranslatorInterface $ts): RedirectResponse
     {
         $notification = $this->admin->getSubject();
+        $locale = $notification->getLocale();
         $event = $notification->getEvent();
         //$name = $event->getName();
         $path =  $this->generateUrl('entropy_event_slug', [
@@ -33,8 +34,8 @@ final class NotificationAdminController extends CRUDController
             $nakkikone = $request->headers->get('host') . '/en' . $path . 'nakkikone';
         }
         $message = new ChatMessage(
-            $notification->getMessage() . ' ' .
-                $url
+            $notification->getMessage() . ' 
+' . $url
         );
         if ($notification->getMessageId()) {
             $telegramOptions = (new TelegramOptions())
@@ -53,7 +54,7 @@ final class NotificationAdminController extends CRUDController
         if (in_array('add_event_button', $options)) {
             array_push(
                 $buttons,
-                (new InlineKeyboardButton($ts->trans('tg.event')))
+                (new InlineKeyboardButton($ts->trans('tg.event', locale: $locale)))
                     ->url($url)
             );
         }
