@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Menu;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -15,17 +16,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MenuRepository extends NestedTreeRepository
 {
-    /*    public function __construct(ManagerRegistry $registry)
+        public function __construct(EntityManagerInterface $manager)
         {
-            parent::__construct($registry, Menu::class);
+                parent::__construct($manager, $manager->getClassMetadata(Menu::class));
         }
-     */
-    // /**
-    //  * @return Menu[] Returns an array of Menu objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
+        // /**
+        //  * @return Menu[] Returns an array of Menu objects
+        //  */
+        /*
+        public function findByExampleField($value)
+        {
         return $this->createQueryBuilder('m')
             ->andWhere('m.exampleField = :val')
             ->setParameter('val', $value)
@@ -34,18 +34,18 @@ class MenuRepository extends NestedTreeRepository
             ->getQuery()
             ->getResult()
         ;
-    }
-    */
+        }
+        */
 
-    /*
-    public function findOneBySomeField($value): ?Menu
-    {
+        /*
+        public function findOneBySomeField($value): ?Menu
+        {
         return $this->createQueryBuilder('m')
             ->andWhere('m.exampleField = :val')
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult()
         ;
-    }
-    */
+        }
+        */
 }

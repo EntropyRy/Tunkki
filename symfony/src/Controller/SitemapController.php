@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\EventRepository;
+use App\Repository\MenuRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -10,7 +11,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class SitemapController extends AbstractController
 {
-    public function __construct(private EventRepository $eventRepo)
+    public function __construct(private EventRepository $eventRepo, private MenuRepository $menuRepo)
     {
     }
 
@@ -19,6 +20,7 @@ class SitemapController extends AbstractController
     {
         // find published events from db
         $events = $this->eventRepo->getSitemapEvents();
+        $roots = $this->menuRepo->getRootNodes();
         $urls = [];
         $defaultLangs = ['fi', 'en'];
         foreach ($events as $event) {
@@ -32,6 +34,54 @@ class SitemapController extends AbstractController
                 'priority' => '0.5',
                 'alts' => $alt
             ];
+        }
+        foreach ($roots as $root) {
+            foreach ($defaultLangs as $lang) {
+                $page = $root->getPageByLang($lang);
+                $alt[$lang] = $page->getUrl();
+            }
+            $pageFi = $root->getPageByLang('fi');
+            $urls[] = [
+                'loc' => $pageFi->getUrl(),
+                'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
+                'changefreq' => 'weekly',
+                'priority' => '0.5',
+                'alts' => $alt
+            ];
+            foreach ($root->getChildren() as $item) {
+                if ($item->getEnabled()) {
+                    foreach ($defaultLangs as $lang) {
+                        $page = $item->getPageByLang($lang);
+                        $alt[$lang] = $page->getUrl();
+                    }
+                    $pageFi = $item->getPageByLang('fi');
+                    $urls[] = [
+                        'loc' => $pageFi->getUrl(),
+                        'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
+                        'changefreq' => 'weekly',
+                        'priority' => '0.5',
+                        'alts' => $alt
+                    ];
+                    if ($item->hasChildren()) {
+                        foreach ($item->getChildren() as $itemLv2) {
+                            if ($itemLv2->getEnabled() && empty($itemLv2->getUrl())) {
+                                foreach ($defaultLangs as $lang) {
+                                    $page = $itemLv2->getPageByLang($lang);
+                                    $alt[$lang] = $page->getUrl();
+                                }
+                                $pageFi = $itemLv2->getPageByLang('fi');
+                                $urls[] = [
+                                    'loc' => $pageFi->getUrl(),
+                                    'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
+                                    'changefreq' => 'weekly',
+                                    'priority' => '0.5',
+                                    'alts' => $alt
+                                ];
+                            }
+                        }
+                    }
+                }
+            }
         }
         // 'loc' => $this->generateUrl(
         //   'post',

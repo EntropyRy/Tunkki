@@ -220,6 +220,15 @@ class Menu implements \Stringable
         return $this;
     }
 
+    public function hasChildren(): bool
+    {
+        if (count($this->children) > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
     public function removeChild(Menu $child): self
     {
         if ($this->children->contains($child)) {
@@ -259,5 +268,10 @@ class Menu implements \Stringable
         $this->pageEn = $pageEn;
 
         return $this;
+    }
+    public function getPageByLang(string $lang)
+    {
+        $func = 'page' . ucfirst((string) $lang);
+        return $this->{$func};
     }
 }
