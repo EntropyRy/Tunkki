@@ -1221,4 +1221,23 @@ body {
 
         return $this;
     }
+    public function getUrlByLang($lang): string
+    {
+        if ($this->externalUrl && $this->url) {
+            return $this->url;
+        }
+        $year = '/' . $this->EventDate->format('Y');
+        $url = '/' . $this->url;
+        $event = '/en/event/';
+
+        if ($lang == 'fi') {
+            $event = '/tapahtuma/';
+            $lang = '';
+        }
+
+        if (empty($this->url) && !$this->externalUrl) {
+            return 'https://entropy.fi' . $event . $this->id;
+        }
+        return $lang ? 'https://entropy.fi/' . $lang . $year . $url : 'https://entropy.fi' . $year . $url;
+    }
 }

@@ -19,6 +19,20 @@ class EventRepository extends ServiceEntityRepository
         parent::__construct($registry, Event::class);
     }
 
+    public function getSitemapEvents(): mixed
+    {
+        $now = new \DateTime();
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.publishDate <= :now')
+            ->andWhere('e.published = :pub')
+            ->andWhere('e.externalUrl = :ext')
+            ->setParameter('now', $now)
+            ->setParameter('pub', true)
+            ->setParameter('ext', false)
+            ->orderBy('e.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     public function getRSSEvents(): mixed
     {
         $now = new \DateTime();
@@ -29,8 +43,7 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function getFutureEvents(): mixed
     {
@@ -48,22 +61,20 @@ class EventRepository extends ServiceEntityRepository
             ->orderBy('e.EventDate', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
         return $future;
     }
     public function findOneEventByType($type): ?Event
     {
         return $this->createQueryBuilder('c')
-           ->andWhere('c.type = :val')
-           ->andWhere('c.published = :pub')
-           ->setParameter('val', $type)
-           ->setParameter('pub', true)
-           ->orderBy('c.EventDate', 'DESC')
-           ->setMaxResults(1)
-           ->getQuery()
-           ->getOneOrNullResult()
-        ;
+            ->andWhere('c.type = :val')
+            ->andWhere('c.published = :pub')
+            ->setParameter('val', $type)
+            ->setParameter('pub', true)
+            ->orderBy('c.EventDate', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
     public function findEventBySlugAndYear($slug, $year): mixed
     {
@@ -75,8 +86,7 @@ class EventRepository extends ServiceEntityRepository
             ->orderBy('r.EventDate', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getOneOrNullResult();
     }
     public function findEventsByType($type): mixed
     {
@@ -85,8 +95,7 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter('val', $type)
             ->orderBy('r.EventDate', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function findPublicEventsByNotType($type): mixed
     {
@@ -100,17 +109,16 @@ class EventRepository extends ServiceEntityRepository
             ->setParameter('val', $type)
             ->orderBy('r.EventDate', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function countDone(): mixed
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'))
-             ->where('b.cancelled = :is')
-             ->andWhere('b.type != :val')
-             ->setParameter('val', 'announcement')
-             ->setParameter('is', false);
+            ->where('b.cancelled = :is')
+            ->andWhere('b.type != :val')
+            ->setParameter('val', 'announcement')
+            ->setParameter('is', false);
         return $qb->getQuery()->getSingleScalarResult();
     }
 }
