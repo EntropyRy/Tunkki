@@ -20,13 +20,20 @@ export default class extends Controller {
   }
   streamStatus() {
     fetch(this.urlValue)
-	.then(response => {
-		this.setStream(response.status)
-	})
-	.catch(error => {
-		this.setStream(400);
-		this.stopRefreshing();
-	});
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.status;
+        //this.setStream(response.status);
+      })
+      .then((data) => {
+        this.setStream(data);
+      })
+      .catch((error) => {
+        this.setStream(400);
+        this.stopRefreshing();
+      });
   }
   startRefreshing() {
     if (!document.hidden) {

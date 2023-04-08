@@ -16,7 +16,6 @@ import "bootstrap/js/dist/dropdown";
 import "bootstrap/js/dist/tab";
 // import 'bootstrap/js/dist/toast';
 // import 'bootstrap/js/dist/tooltip';
-
 //require('@fortawesome/fontawesome-free/css/regular.min.css');
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
@@ -24,4 +23,4 @@ import "bootstrap/js/dist/tab";
 import "@fontsource/space-grotesk/variable.css";
 //import "@fontsource/space-grotesk/700.css";
 //import '@fontsource/space-grotesk/500.css';
-import Masonry from 'masonry-layout';
+import Masonry from "masonry-layout";

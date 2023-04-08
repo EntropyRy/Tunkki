@@ -41,25 +41,25 @@
 {% endblock %}
 
 {% block epic_tile %}
+<div class="tile col-12 p-2">
     <turbo-frame
         {{ stimulus_controller('epics') }}
          data-epics-url-value="/api/epics/random"
          data-epics-refresh-interval-value="8000">
-        <div class="tile col-12 p-2">
         <div class="rect-img-container">
-        <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
-        <div class="badge-container">
-            <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
-        </div>
-        </div>
-        <h4>{{ 'epics.tile.heading'|trans }}
-            <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.heading_events'|trans }}</a>.
-        </h4>
-        <div class="justify-content-between d-flex">
-            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
-        </div>
+            <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
+            <div class="badge-container">
+                <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
+            </div>
         </div>
     </turbo-frame>
+    <h4>{{ 'epics.tile.heading'|trans }}
+        <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.heading_events'|trans }}</a>.
+    </h4>
+    <div class="justify-content-between d-flex">
+        <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
+    </div>
+</div>
 {% endblock %}
 {% block join_us_tile %}
     <div class="tile col-12 p-2">
