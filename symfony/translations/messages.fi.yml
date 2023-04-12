@@ -367,3 +367,5 @@ join_us:
   4: Tekniikan vuokraus
 barcode.expl: Ensin oma koodi ja sitte voit käyttää muita koodeja ja hyväksyminen omalla koodilla
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
+button:
+  old_announcements: Vanhat tiedotteet

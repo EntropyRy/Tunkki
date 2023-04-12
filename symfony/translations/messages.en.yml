@@ -39,7 +39,8 @@ clubroom_events: Clubroom Events (Keke)
 include_clubroom_events: Include Clubroom Events (Keke)
 edit_event: Edit Event
 privacy_policy: Privacy Policy
-submit_and_agree: By submitting this form you agree on our privacy policy. We reserve
+submit_and_agree:
+  By submitting this form you agree on our privacy policy. We reserve
   the right to delete accounts with wrong information.
 cancelled: CANCELLED
 announcements_url: announcements
@@ -58,9 +59,11 @@ map: Map
 profile_url: en/profile
 reset_your_password: Reset your password
 send_password_reset_email: Send password reset email
-reset_password_form_help: Enter your email address and we we will send you a link
+reset_password_form_help:
+  Enter your email address and we we will send you a link
   to reset your password.
-reset_password_info: An email has been sent that contains a link that you can click
+reset_password_info:
+  An email has been sent that contains a link that you can click
   to reset your password. This link will expire in
 hours: hours
 reset_password_email_info: If you did not receive the email check you junk mail or
@@ -78,7 +81,8 @@ updated_at: Updated at
 membership_information: Membership information
 membership_status: Membership status
 used_in_other_services: User in our other services
-you_can_change_your_member_information_by_loging_in: You can change your member information
+you_can_change_your_member_information_by_loging_in:
+  You can change your member information
   by loging in. If you have a problem you can contact the board.
 edit: edit
 preview: Preview
@@ -87,7 +91,8 @@ no_linked_media: No linked media
 no_artsit_create_one: You don't have artist profile. Create one!
 bio_attribute: BioEn
 succesfully_signed_up_for_the_party: Succesfully signed up for the party!
-all_artists_signed_up_create_one: All of your artist have been signed up for this
+all_artists_signed_up_create_one:
+  All of your artist have been signed up for this
   party. Create new one?
 this_artist_signed_up_already: This artis has been signed up already.
 duplicate_artist_found: Duplicate artist name found!
@@ -134,7 +139,8 @@ event:
   after: Past event
   now: Event is now
   player:
-    will_appear_here_when_the_stream_is_on: Player will appear here on page load when
+    will_appear_here_when_the_stream_is_on:
+      Player will appear here on page load when
       the stream is on
   form:
     sign_up:
@@ -145,10 +151,12 @@ event:
       set_length: Preferred length of the set
       free_word: Free word
       save: Save
-      new_artist_help_html: If you want to create a new artist you can do it from
+      new_artist_help_html:
+        If you want to create a new artist you can do it from
         <a href="/en/profile/artist">your artist profile page</a>
       ends: Sing up ends at
-      description: Please make modifications to your artist profile before the signup
+      description:
+        Please make modifications to your artist profile before the signup
         as the profiles are event specific
 url:
   form:
@@ -164,7 +172,8 @@ profile:
   access_groups: Access groups for this site
   application_saved: Application saved
   paid_renting_rewards: Rental compensations
-  no_renting_rewards: No rental compensations yet. If you wish to be involved in renting
+  no_renting_rewards:
+    No rental compensations yet. If you wish to be involved in renting
     out Entropy's equipment, ask around in Mattermost about how you can get involved.
   next_reward_is_bubling_under: Next one is bubling under
   you_are_active_member_already: You are active member already
@@ -195,7 +204,8 @@ epics:
     title: Random photos from our events
 artist:
   not_confirmed_yet: Not confirmed (yet)
-  explanation: In principle, the artist profile is event-specific. This means that
+  explanation:
+    In principle, the artist profile is event-specific. This means that
     your profile below will appear in the next event you are an artist. If you edit
     your profile before the event, it will be updated for that event. If you edit
     your profile after an event, the edited profile will appear in future events,
@@ -212,19 +222,23 @@ artist:
   random:
     preview: One random artist preview
   form:
-    genre_help: VJs may describe the mood of the visualization. This field is not
+    genre_help:
+      VJs may describe the mood of the visualization. This field is not
       translated. DO NOT ADD BPM HERE.
-    bio_help: Tell us briefly about yourself as an artist. For example, you can describe
+    bio_help:
+      Tell us briefly about yourself as an artist. For example, you can describe
       your background and what kind of music you will be playing at the next party.
       Plase don't use links here, add them to the link list. This text is public.
-    hardware_help: What kind of hardware are you using, so that we can prepare. (Vinyl,
+    hardware_help:
+      What kind of hardware are you using, so that we can prepare. (Vinyl,
       CDJ)
     name: Artist name
     type: Type
     bio: Bio in Finnish
     bio_en: Bio in English
     links: Links to media and other stuff
-    promo_picture: Promo picture (is going to scaled to square which side is 800px.
+    promo_picture:
+      Promo picture (is going to scaled to square which side is 800px.
       Recommended that you do it before upload)
     genre: Genre(s)
     information: Basic info
@@ -234,7 +248,8 @@ member:
   active:
     application_title: Apply for active membership
     application: Your motivation letter for active membership
-    apply_help: We hope you will tell us what you have done in Entropy, what would
+    apply_help:
+      We hope you will tell us what you have done in Entropy, what would
       you like to do in Entropy and why are you applying for active membership. Your
       application is editable until the next board meeting.
     requirements: General requirements for becoming an active member
@@ -243,12 +258,15 @@ member:
     requirements2: How active you have been lately
     requirements1: You have been organizing at least 3 events in Entropy
   join:
-    info: This the email we just sent you. Hope you got it and read it. English below
+    info:
+      This the email we just sent you. Hope you got it and read it. English below
       like in almost all of our emails.
-    error: There was an error in your request. Check the from by opening it again
+    error:
+      There was an error in your request. Check the from by opening it again
       from the Join us button
     added: Your information is now saved in our member registry.
-    update: Looks like you are member already. Login to change your membership details.
+    update:
+      Looks like you are member already. Login to change your membership details.
       If you cannot do it reach out for the admin or Entropy board.
 dark: Dark
 bright: Bright
@@ -256,10 +274,12 @@ rsvp:
   email_in_use: Are you an Member? Sing in first.
   receive_info: To be able to receive the location RSVP here
   no_user: To be able to RSVP you need to be a member of Entropy and logged in.
-  already_rsvpd: You have already RSVPed to this event. We'll send you an email before
+  already_rsvpd:
+    You have already RSVPed to this event. We'll send you an email before
     the event.
   rsvpd_succesfully: RSVP succesfully saved! We'll send ayou an email before the event.
-  info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
+  info:
+    You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
     If you do not want to become a member, you can sign up for the event by leaving
     your contact information below. You can read our related privacy policy statement
     <a href="/rsvp-rekisteriseloste">here</a>.
@@ -288,10 +308,13 @@ ticket:
 join_us:
   title: Join us!
   button: Join us
-  1: Entropy ry, founded in 1993, is a electronic music cultural association and one
+  1:
+    Entropy ry, founded in 1993, is a electronic music cultural association and one
     of the AYY (Aalto University Student Union) music associations. We strive to advance
     and promote the electronic music culture by eg.
   2: Organizing events
   3: Instructing event technology
   4: Renting sound and light equipment
 barcode.expl: First your code then the others and confirmation with your code
+button:
+  old_announcements: Old Announcements

@@ -52,7 +52,11 @@
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
-    <h2 class="mt-2">{{ block('event_name') }} ~ <span class="">{{ block('event_time') }}<span></h2>
+    <h2 class="mt-2">{{ block('event_name') }}
+      {% if event.type != 'announcement' %}
+        ~ <span class="">{{ block('event_time') }}<span>
+      {% endif %}
+    </h2>
 {% endblock %}
 
 {% block event_path %}
@@ -298,12 +302,12 @@
     {% endif %}
     {% if event.includeSaferSpaceGuidelines %}
     <span class="pe-2">
-        {% if app.request.locale =='fi' %}
+        {% if app.request.locale == 'fi' %}
             <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
                 <i class="fas fa-hand-holding-heart"></i>
                 Turvallisemman tilan periaatteet
             </a>
-        {%else%}
+        {% else %}
             <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
                 <i class="fas fa-hand-holding-heart"></i>
                 Safer space guidelines
@@ -311,20 +315,28 @@
         {% endif %}
     </span>
     {% endif %}
-    {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
+    {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
 
     <span class="pe-2">
-        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-            {{"fas fa-tasks"|parse_icon }}
-            {{'Artist signup'|trans }}
+        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+            {{ "fas fa-tasks"|parse_icon }}
+            {{ 'Artist signup'|trans }}
         </a>
     </span>
     {% endif %}
     {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
     <span class="pe-2">
         <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-            {{"fas fa-tasks"|parse_icon }}
+            {{ "fas fa-tasks"|parse_icon }}
             Nakkikone
+        </a>
+    </span>
+    {% endif %}
+    {% if event.type == 'announcement' %}
+    <span class="pe-2">
+        <a class="btn btn-outline-info" href="{{ path('_page_alias_announcements_'~app.request.locale) }}">
+            {{ "fas fa-list"|parse_icon }}
+            {{ 'button.old_announcements'|trans }}
         </a>
     </span>
     {% endif %}
