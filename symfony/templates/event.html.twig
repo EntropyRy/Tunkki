@@ -26,15 +26,10 @@
     {% endif %}
     {% if event is not null and visible %}
     <div class="row">
-        <div class="{% if event.picturePosition == 'right' %}col-md-8 order-1 order-md-0{% else %}col{% endif %}">
+        <div class="col">
             {{ block('event_head_reverse') }}
             {{ block('event_content') }}
         </div>
-        {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="col-md-4 order-0 order-md-1 mb-2">
-            {{ block('event_media') }}
-        </div>
-        {% endif %}
         {% if event.picture is not null and event.picturePosition == 'after' %}
             <div class="img-after mb-2 mt-3">
                 {{ block('event_media') }}

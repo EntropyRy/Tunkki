@@ -2,7 +2,7 @@
 {% use 'pieces/ticket.html.twig' %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
-        <a {% if event.externalUrl %}data-turbo="false"{%endif%} href="{{ block('event_path') }}">
+        <a {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
             {{ block('rect_img') }}
             {% set badge = true %}
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
@@ -11,16 +11,16 @@
         <div class="d-flex justify-content-between">
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
             <span class="pe-2">
-                <a class="btn btn-primary" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                    {{"fas fa-tasks"|parse_icon }}
+                <a class="btn btn-primary" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+                    {{ "fas fa-tasks"|parse_icon }}
                     Nakkikone
                 </a>
             </span>
             {% endif %}
-            {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user) )%}
-                <a class="btn btn-primary" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                    {{"fas fa-tasks"|parse_icon }}
-                    {{'Artist signup'|trans }}
+            {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
+                <a class="btn btn-primary" href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+                    {{ "fas fa-tasks"|parse_icon }}
+                    {{ 'Artist signup'|trans }}
                 </a>
             {% endif %}
         </div>
@@ -38,14 +38,14 @@
     {% if event.picture is not null and event.picturePosition == 'right' %}
     <div class="row">
         <div class="col-md-8 order-1 order-md-0">
-        {{ block('event_frontpage_content')}}
+        {{ block('event_frontpage_content') }}
         </div>
         <div class="col-md-4 order-0 order-md-1">
         {{ block('event_media') }}
         </div>
     </div>
     {% else %}
-        {{ block('event_frontpage_content')}}
+        {{ block('event_frontpage_content') }}
     {% endif %}
 {% endblock %}
 
@@ -58,12 +58,12 @@
 {% block event_path %}
 {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+        {{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
     {% else %}
         {% if app.request.locale == 'fi' %}
-        {{ path('entropy_event',{'id': event.id}) }}
+        {{ path('entropy_event', {'id': event.id}) }}
         {% else %}
-        {{ path('entropy_event_en',{'id': event.id}) }}
+        {{ path('entropy_event_en', {'id': event.id}) }}
         {% endif %}
     {% endif %}
 {% endapply %}
@@ -71,8 +71,8 @@
 
 {% block published_and_updated %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
-    {% if event.updatedAt and event.updatedAt|date('Y') != '-0001' %}
-        {% if event.publishDate < event.updatedAt %} -- {{ 'updated'|trans }}: {{event.updatedAt|date }}
+    {% if event.updatedAt %}
+        {% if event.publishDate < event.updatedAt %} -- {{ 'updated'|trans }}: {{ event.updatedAt|date }}
     {% endif %}
     {% endif %}
 {% endblock %}
@@ -85,7 +85,7 @@
 {% block event_name %}
 {% set name_attr = 'name_attribute'|trans %}
   {{ attribute(event, name_attr) }}
-  {% if event.cancelled %}*{{ 'cancelled'|trans }}*{%endif%}
+  {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
   {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
 {% endblock %}
 
@@ -98,6 +98,7 @@
      data-moment-locale-value="{{ app.request.locale }}"
      ></span>
 {% endblock %}
+
 {% block event_time %}
   {% if event.type != 'announcement' %}
     {% if event.multiday %}
@@ -107,6 +108,7 @@
     {% endif %}
   {% endif %}
 {% endblock %}
+
 {% block event_time_small %}
   {% if event.type != 'announcement' %}
     {% if event.multiday %}
@@ -128,18 +130,23 @@
 
 {% block event_content %}
 {% set frontpage = false %}
+{% if event.picture is not null and event.picturePosition == 'right' %}
+    <div class="float-end w-md-50">
+        {{ block('event_media') }}
+    </div>
+{% endif %}
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
-{{ attribute(event,content_attr)|replace({
+{{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
     '{{ bios }}': block('bios'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
-    '{{ links }}':block('links'),
-    '{{ rsvp }}':block('RSVP'),
-    '{{ ticket }}':block('ticket_for_event_page')
+    '{{ links }}': block('links'),
+    '{{ rsvp }}': block('RSVP'),
+    '{{ ticket }}': block('ticket_for_event_page')
 })|raw }}
-{% if '{{ links }}' not in attribute(event,content_attr) %}
+{% if '{{ links }}' not in attribute(event, content_attr) %}
     {{ block('links') }}
 {% endif %}
 {% endapply %}
@@ -149,14 +156,14 @@
 {% set frontpage = true %}
 {% apply spaceless %}
 {% set content_attr = 'content_attribute'|trans %}
-{{ attribute(event,content_attr)|replace({
+{{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
     '{{ streamplayer }}': block('streamplayer'),
-    '{{ bios }}':'',
-    '{{ vj_bios }}':'',
-    '{{ links }}':'',
-    '{{ ticket }}':block('ticket_for_frontpage'),
-    '{{ rsvp }}':block('RSVP')
+    '{{ bios }}': '',
+    '{{ vj_bios }}': '',
+    '{{ links }}': '',
+    '{{ ticket }}': block('ticket_for_frontpage'),
+    '{{ rsvp }}': block('RSVP')
 })|raw }}
 {{ block('links') }}
 {% endapply %}
@@ -180,7 +187,7 @@
 {% endblock %}
 {% block event_img_title %}
     {% apply spaceless %}
-    {{ event.badgeText|trans ~':'~ block('event_name') ~ block('event_time') }}
+    {{ event.badgeText|trans ~ ':' ~ block('event_name') ~ block('event_time') }}
     {% endapply %}
 {% endblock %}
 {% block event_media %}
