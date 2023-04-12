@@ -215,25 +215,25 @@
             {% else %}
                 img-filter
                 {% if rect|default(false)%}
-                    rect-img-container i16by9
+                    rect-img-container {% if event.picture.width > event.picture.height %}i16by9{% endif %}
                 {% endif %}
             {% endif %}"
              {{ block('imgfilter') }}
             >
             {% if rect|default(false)%}
                 {% set class = 'rect-img' %}
-            {%else%}
+            {% else %}
                 {% set class = 'img-fluid' %}
-            {%endif%}
-            {{ sonata_media( event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
+            {% endif %}
+            {{ sonata_media(event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
                 'loading': 'lazy',
                 'style': event.imgFilterBlendMode,
                 'class': class,
                 'title': block('event_img_title')
-                } ) }}
+                }) }}
             {% if rect|default(false)%}
             {{ block('event_badge') }}
-            {%endif%}
+            {% endif %}
         </div>
         {% endif %}
     {% else %}
@@ -241,7 +241,7 @@
             <img class="rect-img fill" src="/images/header-logo.svg" title="{{ block('event_img_title') }}">
             {% if rect|default(false)%}
             {{ block('event_badge') }}
-            {%endif%}
+            {% endif %}
         </div>
     {% endif %}
 {% endblock %}
