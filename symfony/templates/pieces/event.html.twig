@@ -131,7 +131,7 @@
 {% block event_content %}
 {% set frontpage = false %}
 {% if event.picture is not null and event.picturePosition == 'right' %}
-    <div class="float-end w-md-50">
+    <div class="float-end ms-md-4 w-md-50">
         {{ block('event_media') }}
     </div>
 {% endif %}
