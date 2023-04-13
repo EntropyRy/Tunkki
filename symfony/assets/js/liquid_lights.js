@@ -1,33 +1,33 @@
-window.requestAnimFrame = (function() {
-  return window.requestAnimationFrame ||
+window.requestAnimFrame = (function () {
+  return (
+    window.requestAnimationFrame ||
     window.webkitRequestAnimationFrame ||
     window.mozRequestAnimationFrame ||
     window.oRequestAnimationFrame ||
     window.msRequestAnimationFrame ||
-    function(callback) {
+    function (callback) {
       window.setTimeout(callback, 1000 / 60);
-    };
+    }
+  );
 })();
-var c = document.getElementById('liquid_lights');
-var $ = c.getContext('2d');
-var w = c.width = window.innerWidth;
-var h = c.height = window.innerHeight;
+var c = document.getElementById("liquid_lights");
+var $ = c.getContext("2d");
+var w = (c.width = window.innerWidth);
+var h = (c.height = window.innerHeight);
 var _w = w * 0.5;
 var _h = h * 0.5;
 var arr = [];
 var cnt = 0;
 
-window.addEventListener('load', resize);
-window.addEventListener('resize', resize, false);
+window.addEventListener("load", resize);
+window.addEventListener("resize", resize, false);
 
 function resize() {
   c.width = w = window.innerWidth;
   c.height = h = window.innerHeight;
-  c.style.position = 'absolute';
-  c.style.left = (window.innerWidth - w) *
-    .01 + 'px';
-  c.style.top = (window.innerHeight - h) *
-    .01 + 'px';
+  //c.style.position = 'absolute';
+  c.style.left = (window.innerWidth - w) * 0.01 + "px";
+  c.style.top = (window.innerHeight - h) * 0.01 + "px";
 }
 
 function anim() {
@@ -38,13 +38,12 @@ function anim() {
 anim();
 
 function draw() {
-
   var splot = {
     x: rng(_w - 900, _w + 900),
     y: rng(_h - 900, _h + 900),
     r: rng(20, 80),
     spX: rng(-1, 1),
-    spY: rng(-1, 1)
+    spY: rng(-1, 1),
   };
 
   arr.push(splot);
@@ -54,8 +53,7 @@ function draw() {
   $.clearRect(0, 0, w, h);
 
   for (var i = 0; i < arr.length; i++) {
-
-    splot = arr[i];;
+    splot = arr[i];
     $.fillStyle = rndCol();
     $.beginPath();
     $.arc(splot.x, splot.y, splot.r, 0, Math.PI * 2, true);
@@ -63,7 +61,7 @@ function draw() {
     $.shadowOffsetX = 2;
     $.shadowOffsetY = 2;
     $.shadowColor = rndCol();
-    $.globalCompositeOperation = 'lighter';
+    $.globalCompositeOperation = "lighter";
     $.fill();
 
     splot.x = splot.x + splot.spX;
