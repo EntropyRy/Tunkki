@@ -408,6 +408,7 @@ final class EventAdmin extends AbstractAdmin
                                 'TV white noise' => 'tv',
                                 'VHS static' => 'vhs',
                                 'Snowfall' => 'snow',
+                                'Liquid Lights' => 'liquid_lights',
                             ]
                         ]
                     )
