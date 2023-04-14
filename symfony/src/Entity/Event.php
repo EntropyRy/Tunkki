@@ -123,7 +123,6 @@ body {
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoFi =
     '
-        <h5>Yleisinfo</h5>
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
         <h6>Saat ilmaisen sisäänpääsyn</h6>
         ';
@@ -131,8 +130,7 @@ body {
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoEn =
     '
-        <h5>General information</h5>
-        <p>Choose at least two Nakkis that are 1 hour length and build up or take down</p>
+        <p>Choose at least two (2) Nakkis that are 1 hour length and build up or take down</p>
         <h6>You\'ll get free entry to the party</h6>
         ';
 
