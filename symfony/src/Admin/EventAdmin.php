@@ -409,6 +409,7 @@ final class EventAdmin extends AbstractAdmin
                                 'VHS static' => 'vhs',
                                 'Snowfall' => 'snow',
                                 'Liquid Lights' => 'liquid_lights',
+                                'Color Grid' => 'grid',
                             ]
                         ]
                     )
