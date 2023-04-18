@@ -90,9 +90,6 @@
     "egulias/email-validator": {
         "version": "2.1.11"
     },
-    "friendsofphp/proxy-manager-lts": {
-        "version": "v1.0.1"
-    },
     "friendsofsymfony/ckeditor-bundle": {
         "version": "1.2.0"
     },
@@ -140,9 +137,6 @@
         "files": [
             "config/packages/knpu_oauth2_client.yaml"
         ]
-    },
-    "laminas/laminas-code": {
-        "version": "3.4.1"
     },
     "lcobucci/clock": {
         "version": "2.1.0"

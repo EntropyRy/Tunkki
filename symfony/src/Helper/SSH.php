@@ -13,12 +13,8 @@ class SSH
     {
         $stream = null;
         $connection = $this->getConnection();
-        if ($text == 'start') {
-            $stream = ssh2_exec($connection, 'systemctl --user start es_streaming.target');
-        }
-        if ($text == 'stop') {
-            $stream = ssh2_exec($connection, 'systemctl --user stop es_streaming.target');
-        }
+        $cmd = $this->bag->get('recording.script.' . $text);
+        $stream = ssh2_exec($connection, $cmd);
         $error = ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
         $ret = stream_get_contents($error);
         fclose($stream);

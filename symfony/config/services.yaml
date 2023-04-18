@@ -8,6 +8,8 @@ parameters:
   recording.port: '%env(RECORDING_PORT)%'
   recording.user: '%env(RECORDING_USER)%'
   recording.pass: '%env(RECORDING_PASS)%'
+  recording.script.start: '%env(RECORDING_SCRIPT_START)%'
+  recording.script.stop: '%env(RECORDING_SCRIPT_STOP)%'
   mm_tunkki_hook: '%env(MM_TUNKKI_HOOK)%'
   mm_tunkki_img: '%env(MM_TUNKKI_IMG)%'
   mm_tunkki_botname: '%env(MM_TUNKKI_BOTNAME)%'
