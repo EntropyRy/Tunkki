@@ -168,7 +168,9 @@ window.requestAnimFrame(go);
 
 document.addEventListener('mousemove', MSMV, false);
 document.addEventListener('mousedown', MSDN, false);
+document.addEventListener('touchstart', MSDN, false);
 document.addEventListener('mouseup', MSUP, false);
+document.addEventListener('touchend', MSUP, false);
 
 function MSDN(e) {
   msdn = true;
