@@ -135,7 +135,7 @@
 {% block event_content %}
 {% set frontpage = false %}
 {% if event.picture is not null and event.picturePosition == 'right' %}
-    <div class="float-end ms-md-4 w-md-50">
+    <div class="ms-md-4 mb-md-4 float-end w-md-50">
         {{ block('event_media') }}
     </div>
 {% endif %}
@@ -252,7 +252,7 @@
 
 {% block imgfilter %}
 {% if event.imgFilterColor and event.imgFilterBlendMode %}
-    style="background: {{event.imgFilterColor}};"
+    style="background: {{ event.imgFilterColor }};"
 {% endif %}
 {% endblock %}
 
@@ -290,12 +290,12 @@
         {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U')%}
         <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
             <i class="fas fa-laptop"></i>
-            {{'Join remotely'|trans }}
+            {{ 'Join remotely'|trans }}
         </a>
         {% elseif event.EventDate|date_modify('-8hours') > date('now')%}
         <a class="btn btn-outline-info">
             <i class="fas fa-laptop"></i>
-            {{'Join remotely'|trans }}
+            {{ 'Join remotely'|trans }}
         </a>
         {% endif %}
     </span>
@@ -359,7 +359,7 @@
     <div class="col-12">
     {% endif %}
     <h4 class="artists-heading">
-        {{'Timetable'|trans}} {% if stage|length>1 %}@ {{stage}}{% endif %}
+        {{ 'Timetable'|trans }} {% if stage|length > 1 %}@ {{ stage }}{% endif %}
     </h4>
     <ul>
     {% for info in infos %}
@@ -426,10 +426,10 @@
 {% endblock %}
 
 {% block vj_bios %}
-    {% for stage,infos in event.VjArtistInfos %}
+    {% for stage, infos in event.VjArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
-            VJ {{'Artists'|trans}} {% if stage %}@ {{stage}}{% endif %}
+            VJ {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
         </h3>
         {% endif %}
         {{ block('infos') }}
@@ -437,10 +437,10 @@
 {% endblock %}
 
 {% block bios %}
-    {% for stage,infos in event.DjArtistInfos %}
+    {% for stage, infos in event.DjArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
-            DJ {{'Artists'|trans}} {% if stage %}@ {{stage}}{% endif %}
+            DJ {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
         </h3>
         {% endif %}
         {{ block('infos') }}
@@ -466,7 +466,7 @@
 {% else %}
     {% set datestring = 'HH:mm' %}
 {% endif %}
-{% if event is defined and ('{{ timetable }}' not in attribute(event,content_attr)) %}
+{% if event is defined and ('{{ timetable }}' not in attribute(event, content_attr)) %}
     {% set show = false %}
 {% endif %}
 {% if frontpage is defined and frontpage %}
@@ -475,7 +475,7 @@
 <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
     {% if artist.type != 'VJ' %}
         {% if info is defined and show %}
-            @ {{info.StartTime|format_datetime(pattern=datestring)}}
+            @ {{ info.StartTime|format_datetime(pattern=datestring) }}
         {% endif %}
     {% endif %}
 </h3>
