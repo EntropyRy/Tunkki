@@ -1,233 +1,232 @@
 sonata_admin:
-    assets:
-        extra_javascripts:
-            - bundles/sonatapage/app.js
-        extra_stylesheets:
-            - bundles/sonatapage/app.css
+  assets:
+    extra_javascripts:
+      - bundles/sonatapage/app.js
+    extra_stylesheets:
+      - bundles/sonatapage/app.css
 
 sonata_page:
-    multisite: host_with_path_by_locale
-    use_streamed_response: true
-    hide_disabled_blocks: true
-    page_defaults:
-        decorate: true
-    skip_redirection: true
-    router_auto_register:
-        enabled: true
-        priority: 200
-    ignore_route_patterns:
-        - ^(.*)admin(.*)   # ignore admin route, ie route containing 'admin'
-        - ^_(.*)          # ignore symfony routes
-    ignore_routes:
-        - sonata_page_esi_cache
-        - sonata_page_ssi_cache
-        - sonata_page_js_sync_cache
-        - sonata_page_js_async_cache
-        - sonata_cache_apc
-        - sonata_cache_esi
-        - sonata_cache_js_async
-        - sonata_cache_js_sync
-        - sonata_cache_symfony
-        - sonata_page_cache_ssi
-        - sonata_page_cache_esi
-        - sonata_page_exceptions_list
-        - sonata_page_exceptions_edit
-        - sonata_media_gallery_index
-        - sonata_media_gallery_view
-        - sonata_media_view
-        - sonata_media_download
-        - oauth2_authorize
-        - oauth2_token
-        - app_forgot_password_request
-        - app_check_email
-        - app_reset_password
-        - app_login
-        - app_logout
-        - rss_feed_en
-        - rss_feed_fi
-        - dashboard
-        - kerde_barcodes
-        - kerde_door
-        - profile
-        - profile_new
-        - profile_edit
-        - profile_password_edit
-        - apply_for_active_member
-        - entropy_artist_profile
-        - entropy_artist_create
-        - entropy_artist_edit
-        - entropy_artist_delete
-        - entropy_public_artist
-        - entropy_event_slug_artist_signup
-        - entropy_event_slug_artist_signup_edit
-        - entropy_event_slug_nakkikone
-        - entropy_event_ticket
-        - entropy_event_responsible
+  multisite: host_with_path_by_locale
+  use_streamed_response: true
+  hide_disabled_blocks: true
+  page_defaults:
+    decorate: true
+  skip_redirection: true
+  router_auto_register:
+    enabled: true
+    priority: 200
+  ignore_route_patterns:
+    - ^(.*)admin(.*) # ignore admin route, ie route containing 'admin'
+    - ^_(.*) # ignore symfony routes
+  ignore_routes:
+    - sonata_page_esi_cache
+    - sonata_page_ssi_cache
+    - sonata_page_js_sync_cache
+    - sonata_page_js_async_cache
+    - sonata_cache_apc
+    - sonata_cache_esi
+    - sonata_cache_js_async
+    - sonata_cache_js_sync
+    - sonata_cache_symfony
+    - sonata_page_cache_ssi
+    - sonata_page_cache_esi
+    - sonata_page_exceptions_list
+    - sonata_page_exceptions_edit
+    - sonata_media_gallery_index
+    - sonata_media_gallery_view
+    - sonata_media_view
+    - sonata_media_download
+    - oauth2_authorize
+    - oauth2_token
+    - app_forgot_password_request
+    - app_check_email
+    - app_reset_password
+    - app_login
+    - app_logout
+    - rss_feed_en
+    - rss_feed_fi
+    - dashboard
+    - kerde_barcodes
+    - kerde_door
+    - profile
+    - profile_new
+    - profile_edit
+    - profile_password_edit
+    - apply_for_active_member
+    - entropy_artist_profile
+    - entropy_artist_create
+    - entropy_artist_edit
+    - entropy_artist_delete
+    - entropy_public_artist
+    - entropy_event_slug_artist_signup
+    - entropy_event_slug_artist_signup_edit
+    - entropy_event_slug_nakkikone
+    - entropy_event_ticket
+    - entropy_event_responsible
+    - entropy_event_artists
+  ignore_uri_patterns:
+    - ^/admin\/
 
-    ignore_uri_patterns:
-        - ^/admin\/   
+  default_template: default
+  templates:
+    onecolumn:
+      path: "onecolumn.html.twig"
+      name: One Column
 
-    default_template: default
-    templates:
-        onecolumn:
-            path: 'onecolumn.html.twig'
-            name: One Column
+      containers:
+        content:
+          name: Content
+      matrix:
+        layout: |
+          CCCCCCCC
+          CCCCCCCC
+          CCCCCCCC
 
-            containers:
-                content:
-                    name: Content
-            matrix:
-                layout: |
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
+        mapping:
+          C: content
 
-                mapping:
-                    C: content
+    default:
+      path: "twocolumn.html.twig"
+      name: Two Column
 
-        default:
-            path: 'twocolumn.html.twig'
-            name: Two Column
+      containers:
+        content:
+          name: Content
+        acontent:
+          name: After Content
+        rcontent:
+          name: Right Content
+      matrix:
+        layout: |
+          CCCCCSSS
+          CCCCCSSS
+          CCCCCSSS
+          OOOOOSSS
+          OOOOOSSS
+        mapping:
+          C: content
+          S: rcontent
+          O: acontent
+    frontpage:
+      path: "frontpage.html.twig"
+      name: Front Page
 
-            containers:
-                content:
-                    name: Content
-                acontent:
-                    name: After Content
-                rcontent:
-                    name: Right Content
-            matrix:
-                layout: |
-                    CCCCCSSS
-                    CCCCCSSS
-                    CCCCCSSS
-                    OOOOOSSS
-                    OOOOOSSS
-                mapping:
-                    C: content
-                    S: rcontent
-                    O: acontent
-        frontpage:
-            path: 'frontpage.html.twig'
-            name: Front Page
+      containers:
+        content:
+          name: Content
+        acontent:
+          name: After Content
+      matrix:
+        layout: |
+          CCCCCCCC
+          CCCCCCCC
+          CCCCCCCC
+          OOOOOOOO
+          OOOOOOOO
 
-            containers:
-                content:
-                    name: Content
-                acontent:
-                    name: After Content
-            matrix:
-                layout: |
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
-                    OOOOOOOO
-                    OOOOOOOO
+        mapping:
+          C: content
+          O: acontent
+    events:
+      path: "events.html.twig"
+      name: Events Page
 
-                mapping:
-                    C: content
-                    O: acontent
-        events:
-            path: 'events.html.twig'
-            name: Events Page
+      containers:
+        content:
+          name: Content
+        acontent:
+          name: After Content
+        rcontent:
+          name: Right Content
+      matrix:
+        layout: |
+          CCCCCSSS
+          CCCCCSSS
+          CCCCCSSS
+          OOOOOSSS
+          OOOOOSSS
 
-            containers:
-                content:
-                    name: Content
-                acontent:
-                    name: After Content
-                rcontent:
-                    name: Right Content
-            matrix:
-                layout: |
-                    CCCCCSSS
-                    CCCCCSSS
-                    CCCCCSSS
-                    OOOOOSSS
-                    OOOOOSSS
+        mapping:
+          C: content
+          S: rcontent
+          O: acontent
+    annnouncements:
+      path: "announcements.html.twig"
+      name: Announcements Page
 
-                mapping:
-                    C: content
-                    S: rcontent
-                    O: acontent
-        annnouncements:
-            path: 'announcements.html.twig'
-            name: Announcements Page
+      containers:
+        content:
+          name: Content
+        acontent:
+          name: After Content
+        rcontent:
+          name: Right Content
+      matrix:
+        layout: |
+          CCCCCSSS
+          CCCCCSSS
+          CCCCCSSS
+          OOOOOSSS
+          OOOOOSSS
 
-            containers:
-                content:
-                    name: Content
-                acontent:
-                    name: After Content
-                rcontent:
-                    name: Right Content
-            matrix:
-                layout: |
-                    CCCCCSSS
-                    CCCCCSSS
-                    CCCCCSSS
-                    OOOOOSSS
-                    OOOOOSSS
+        mapping:
+          C: content
+          S: rcontent
+          O: acontent
+    global:
+      path: "global.html.twig"
+      name: Global
 
-                mapping:
-                    C: content
-                    S: rcontent
-                    O: acontent
-        global:
-            path: 'global.html.twig'
-            name: Global
+      containers:
+        header:
+          name: Header
+        content:
+          name: Content
+        rcontent:
+          name: Right Content
+        footer:
+          name: Footer
+        footer2:
+          name: Footer 2
+      matrix:
+        layout: |
+          TTTTTTTT
+          TTTTTTTT
+          CCCCCSSS
+          CCCCCSSS
+          CCCCCSSS
+          BBBBBBBB
+          FFFFFFFF
 
-            containers:
-                header:
-                    name: Header
-                content:
-                    name: Content
-                rcontent:
-                    name: Right Content
-                footer:
-                    name: Footer
-                footer2:
-                    name: Footer 2
-            matrix:
-                layout: |
-                    TTTTTTTT
-                    TTTTTTTT
-                    CCCCCSSS
-                    CCCCCSSS
-                    CCCCCSSS
-                    BBBBBBBB
-                    FFFFFFFF 
+        mapping:
+          T: header
+          C: content
+          S: rcontent
+          B: footer
+          F: footer2
+    fix:
+      path: "fix.html.twig"
+      name: "Fix Page"
+      containers:
+        content:
+          name: Content
+      matrix:
+        layout: |
+          CCCCCCCC
+          CCCCCCCC
+          CCCCCCCC
+          CCCCCCCC
 
-                mapping:
-                    T: header
-                    C: content
-                    S: rcontent
-                    B: footer
-                    F: footer2
-        fix:
-            path: 'fix.html.twig'
-            name: 'Fix Page'
-            containers:
-                content:
-                    name: Content
-            matrix:
-                layout: |
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
-                    CCCCCCCC
+        mapping:
+          C: content
 
-                mapping:
-                    C: content
+  direct_publication: "%kernel.debug%"
 
-
-    direct_publication: '%kernel.debug%'
-
-    catch_exceptions:
-        not_found: [404]    # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
-        fatal:     [500]    # so you can use the same page for different http errors or specify specific page for each error
-    class:
-        page: 'App\Entity\Sonata\SonataPagePage'
-        snapshot: 'App\Entity\Sonata\SonataPageSnapshot'
-        block: 'App\Entity\Sonata\SonataPageBlock'
-        site: 'App\Entity\Sonata\SonataPageSite'
+  catch_exceptions:
+    not_found: [404] # render 404 page with "not_found" key (name generated: _page_internal_error_{key})
+    fatal: [500] # so you can use the same page for different http errors or specify specific page for each error
+  class:
+    page: 'App\Entity\Sonata\SonataPagePage'
+    snapshot: 'App\Entity\Sonata\SonataPageSnapshot'
+    block: 'App\Entity\Sonata\SonataPageBlock'
+    site: 'App\Entity\Sonata\SonataPageSite'

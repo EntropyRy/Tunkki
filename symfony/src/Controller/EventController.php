@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,6 +21,7 @@ use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\RSVPType;
 use App\Repository\MemberRepository;
+use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
@@ -127,6 +130,39 @@ class EventController extends Controller
             'rsvpForm' => $form,
             'ticket' => $ticket,
             'ticketsAvailable' => $ticketCount,
+        ]);
+    }
+    #[Route(
+        '/{year}/{slug}/artists',
+        name: 'entropy_event_artists',
+        requirements: [
+            'year' => '\d+',
+            'id' => '\d+',
+        ]
+    )]
+    public function eventArtists(
+        Request $request,
+        CmsManagerSelector $cms,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+        SeoPageInterface $seo,
+        ImageProvider $mediaPro,
+    ): Response {
+        $mediaUrl = null;
+        $lang = $request->getLocale();
+        $user = $this->getUser();
+        $page = $cms->retrieve()->getCurrentPage();
+        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
+            $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
+            $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
+        }
+        //$this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
+
+        if (!$event->getPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        return $this->render('artists.html.twig', [
+            'event' => $event,
         ]);
     }
     private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void

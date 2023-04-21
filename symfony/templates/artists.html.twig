@@ -1,17 +1,5 @@
-{% extends 'onecolumn.html.twig' %}
-{% block title %}{{ event.nameByLang(app.request.locale) }} | Entropy ry{% endblock %}
-{% block sonata_page_stylesheets %}
-    {{ parent() }}
-    <style data-turbo-track="reload">
-    {{ event.css|raw }}
-    </style>
-{% endblock %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {% if event.backgroundEffect is not empty %}
-    {{ encore_entry_script_tags(event.backgroundEffect) }}
-    {% endif %}
-{% endblock %}
+{% extends 'event.html.twig' %}
+{% block title %}{{ event.nameByLang(app.request.locale) }} - {{ 'Artists'|trans }}| Entropy ry{% endblock %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
     {% if app.user %}
@@ -22,14 +10,10 @@
     {% if event is not null and visible %}
     <div class="row">
         <div class="col">
-            {{ block('event_head_reverse') }}
-            {{ block('event_content') }}
+            <h2><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h2>
+            {{ block('bios') }}
+            {{ block('vj_bios') }}
         </div>
-        {% if event.picture is not null and event.picturePosition == 'after' %}
-            <div class="img-after mb-2 mt-3">
-                {{ block('event_media') }}
-            </div>
-        {% endif %}
     </div>
     {% else %}
         <div clas="col-12">
