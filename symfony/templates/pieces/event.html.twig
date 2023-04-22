@@ -217,6 +217,7 @@
             {% if event.picture.providername == 'sonata.media.provider.youtube' %}
                 video-fluid
             {% else %}
+            {% apply spaceless %}
                 img-filter
                 {% if rect|default(false)%}
                     {% if event.picture.width > event.picture.height %}
@@ -224,8 +225,10 @@
                     {% elseif event.picture.width == event.picture.height %}
                     rect-img-container
                     {% elseif event.picture.width < event.picture.height %}
+                    img-container
                     {% endif %}
                 {% endif %}
+            {% endapply %}
             {% endif %}"
              {{ block('imgfilter') }}
             >

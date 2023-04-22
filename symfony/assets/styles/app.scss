@@ -71,7 +71,8 @@ footer {
 .tile {
   transition: all ease 0.5s;
   border-radius: 0.375rem;
-  .rect-img-container {
+  .rect-img-container,
+  .img-container {
     position: relative;
     margin-bottom: 0.5rem;
     .badge-container {
