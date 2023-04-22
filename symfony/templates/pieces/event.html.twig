@@ -219,15 +219,22 @@
             {% else %}
                 img-filter
                 {% if rect|default(false)%}
-                    rect-img-container {% if event.picture.width > event.picture.height %}i16by9{% endif %}
+                    {% if event.picture.width > event.picture.height %}
+                    rect-img-container i16by9
+                    {% elseif event.picture.width == event.picture.height %}
+                    rect-img-container
+                    {% elseif event.picture.width < event.picture.height %}
+                    {% endif %}
                 {% endif %}
             {% endif %}"
              {{ block('imgfilter') }}
             >
-            {% if rect|default(false)%}
+            {% set class = 'img-fluid' %}
+            {% if rect|default(false) %}
                 {% set class = 'rect-img' %}
-            {% else %}
-                {% set class = 'img-fluid' %}
+                {% if event.picture.width < event.picture.height %}
+                    {% set class = 'img-fluid' %}
+                {% endif %}
             {% endif %}
             {{ sonata_media(event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
                 'loading': 'lazy',
