@@ -133,7 +133,10 @@ class EventController extends Controller
         ]);
     }
     #[Route(
-        '/{year}/{slug}/artists',
+        path: [
+            'fi' => '/{year}/{slug}/artistit',
+            'en' => '/{year}/{slug}/artists',
+        ],
         name: 'entropy_event_artists',
         requirements: [
             'year' => '\d+',
