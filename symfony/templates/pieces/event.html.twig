@@ -87,10 +87,12 @@
 {% endblock %}
 
 {% block event_name %}
+{% apply spaceless %}
 {% set name_attr = 'name_attribute'|trans %}
-  {{ attribute(event, name_attr) }}
-  {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
-  {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
+{{ attribute(event, name_attr) }}
+{% if event.cancelled %} *{{ 'cancelled'|trans }}*{% endif %}
+{% if event.sticky and app.user %} <i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
+{% endapply %}
 {% endblock %}
 
 {% block event_time_badge %}
