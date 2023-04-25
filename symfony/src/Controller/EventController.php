@@ -137,27 +137,13 @@ class EventController extends Controller
         name: 'entropy_event_artists',
         requirements: [
             'year' => '\d+',
-            'id' => '\d+',
         ]
     )]
     public function eventArtists(
-        Request $request,
-        CmsManagerSelector $cms,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
-        SeoPageInterface $seo,
-        ImageProvider $mediaPro,
     ): Response {
-        $mediaUrl = null;
-        $lang = $request->getLocale();
         $user = $this->getUser();
-        $page = $cms->retrieve()->getCurrentPage();
-        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
-            $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
-            $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
-        }
-        //$this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
-
         if (!$event->getPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }

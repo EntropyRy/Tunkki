@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\EventSignUpController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,7 +20,7 @@ use App\Entity\Event;
 use App\Entity\Ticket;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-class EventTicketController extends EventSignUpController
+class EventTicketController extends Controller
 {
     public function presale(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]

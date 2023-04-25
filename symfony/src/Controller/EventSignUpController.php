@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Controller\EventController;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,7 +24,7 @@ use App\Form\EventArtistInfoEditType;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
-class EventSignUpController extends EventController
+class EventSignUpController extends Controller
 {
     public function nakkiCancel(
         Request $request,

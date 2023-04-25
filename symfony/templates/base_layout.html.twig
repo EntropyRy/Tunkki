@@ -6,7 +6,6 @@
         <head {{ sonata_seo_head_attributes() }}>
             <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
             <link rel="preload" as="image" href="{{ asset("/images/header-logo-text.svg") }}">
-            <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
             {% if block('title') is defined %}
                 <title>{{ block('title') }}</title>
             {% elseif page.title is defined %}
@@ -14,7 +13,11 @@
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}
+            {% if block('meta') is defined %}
+                {{ block('meta') }}
+            {% else %}
             {{ sonata_seo_metadatas() }}
+            {% endif %}
             {% block sonata_page_stylesheets %}
                 {{ encore_entry_link_tags('app') }}
             {% endblock %}
