@@ -382,7 +382,7 @@
                 <hr>
             {% endif %}
             {% if last != info.StartTime %}
-                <li>{{info.StartTime|format_datetime(pattern=datestring)}}:
+                <li>{{ info.StartTime|format_datetime(pattern=datestring) }}:
             {% endif %}
         {% endif %}
         {% if info.StartTime is not empty %}
@@ -391,7 +391,7 @@
                 B2B
                 {% endif %}
             {% endif %}
-            <a href="{% if frontpage %}{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
+            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
         {% set last = info.StartTime %}
         {% if last is defined %}
@@ -412,10 +412,10 @@
 {% if thecycle == 'even' %}
 <div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
-        <div class="col-md-5 order-last order-md-first pt-3 pt-md-0">
+        <div class="col-12 col-sm-6 col-md-7 col-xl-7 order-last order-sm-first pt-3 pt-md-0">
             {{ block('artist_event_info') }}
         </div>
-        <div class="col-md-7 order-first order-md-last">
+        <div class="col-12 col-sm-6 col-md-5 col-xl-5 order-first order-sm-last">
             {{ block('artist_pic') }}
         </div>
     </div>
@@ -423,10 +423,10 @@
 {% else %}
 <div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
-        <div class="col-md-7 order-first">
+        <div class="col-12 col-sm-6 col-md-5 col-xl-5 order-first order-sm-first">
             {{ block('artist_pic') }}
         </div>
-        <div class="col-md-5 order-last pt-3 pt-md-0">
+        <div class="col-12 col-sm-6 col-md-7 col-xl-7 order-last order-sm-last pt-3 pt-md-0">
             {{ block('artist_event_info') }}
         </div>
     </div>
@@ -438,6 +438,7 @@
 {% endblock %}
 
 {% block vj_bios %}
+{% apply spaceless %}
     {% for stage, infos in event.VjArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
@@ -446,9 +447,11 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
+{% endapply %}
 {% endblock %}
 
 {% block bios %}
+{% apply spaceless %}
     {% for stage, infos in event.DjArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
@@ -457,6 +460,7 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
+{% endapply %}
 {% endblock %}
 
 {% block infos %}
@@ -500,11 +504,11 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <span class="{% if frontpage|default(false) %}rect-img{%else%}polaroid{% endif %}">
+    <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
     {% if artist.Picture %}
-    <img width="100%" loading="lazy" title="{{name}}" src="{{ sonata_path(artist.Picture, 'square') }}">
+    <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
     {% else %}
-    <img width="100%" loading="lazy" title="{{name}}" src="{{ asset('images/thumb_artist_square.jpg') }}">
+    <img width="100%" loading="lazy" title="{{ name }}" src="{{ asset('images/thumb_artist_square.jpg') }}">
     {% endif %}
     <div class="caption">{{ name }}</div>
     </span>
