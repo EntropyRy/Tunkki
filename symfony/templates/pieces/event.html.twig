@@ -529,7 +529,7 @@
         <hr>
         {% for link in artist.links %}
         <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
-         href="{{ link.url }}"><i class="{{link.icon}}"></i> {{link.title}}</a>
+         href="{{ link.url }}"><i class="{{ link.icon }}"></i> {{ link.title }}</a>
         </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
     {% endif %}
@@ -540,12 +540,13 @@
     {% set bio_attribute = 'bio_attribute'|trans %}
     <div id="{{ name|slug }}" class="col-md-12 pt-3">
         <div class="row">
-            <div class="col-md-5 order-sm-last order-md-first">
+            <div class="col-6">
                 {{ block('artist_event_info') }}
             </div>
-            <div class="col-md-7 order-sm-first order-md-last">
+            <div class="col-6">
                 {{ block('artist_pic') }}
             </div>
+            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
         </div>
     </div>
 {% endblock %}
