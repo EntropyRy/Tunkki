@@ -7,6 +7,11 @@
 {% block meta %}
 {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
 {% if (event.published and event.publishDate < date('now')) %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="index, follow">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-Ua-Compatible" content="IE=EDGE">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     {% if event.Picture is not empty %}
         {% set img = app.request.getSchemeAndHttpHost() ~ sonata_path(event.Picture, 'normal') %}
         <meta property="og:image" content="{{ img }}">
