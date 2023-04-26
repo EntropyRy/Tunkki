@@ -412,10 +412,10 @@
 {% if thecycle == 'even' %}
 <div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
-        <div class="col-12 col-sm-6 col-md-7 col-xl-7 order-last order-sm-first pt-3 pt-md-0">
+        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
             {{ block('artist_event_info') }}
         </div>
-        <div class="col-12 col-sm-6 col-md-5 col-xl-5 order-first order-sm-last">
+        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
             {{ block('artist_pic') }}
         </div>
     </div>
@@ -423,10 +423,10 @@
 {% else %}
 <div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
-        <div class="col-12 col-sm-6 col-md-5 col-xl-5 order-first order-sm-first">
+        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
             {{ block('artist_pic') }}
         </div>
-        <div class="col-12 col-sm-6 col-md-7 col-xl-7 order-last order-sm-last pt-3 pt-md-0">
+        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
             {{ block('artist_event_info') }}
         </div>
     </div>
