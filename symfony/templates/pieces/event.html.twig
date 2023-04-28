@@ -106,6 +106,7 @@
 {% endblock %}
 
 {% block event_time %}
+{% apply spaceless %}
   {% if event.type != 'announcement' %}
     {% if event.multiday %}
         {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
@@ -113,6 +114,7 @@
         {{ event.eventdate|date() }}
     {% endif %}
   {% endif %}
+{% endapply %}
 {% endblock %}
 
 {% block event_time_small %}
@@ -192,9 +194,9 @@
     </div>
 {% endblock %}
 {% block event_img_title %}
-    {% apply spaceless %}
-    {{ event.badgeText|trans ~ ':' ~ block('event_name') ~ block('event_time') }}
-    {% endapply %}
+{% apply spaceless %}
+    {{ event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') }}
+{% endapply %}
 {% endblock %}
 {% block event_media %}
     {% if event.picture is not null %}

@@ -84,6 +84,8 @@
     {% set event = info.event %}
     {% set name = (artist.name|split(' for')).0 %}
     {% set frontpage = true %}
+    {% set bio_attribute = 'bio_attribute'|trans %}
+    {% set content_attr = 'content_attribute'|trans %}
     <div class="tile col-12 p-2">
     <a href="{{ block('event_path') }}">
     <div class="rect-img-container">
