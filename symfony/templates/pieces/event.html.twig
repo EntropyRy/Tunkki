@@ -412,7 +412,7 @@
 {% block cycle %}
 {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
 {% if thecycle == 'even' %}
-<div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+<div id="{% if vj|default(false)%}vj-{% endif %}{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
             {{ block('artist_event_info') }}
@@ -443,6 +443,7 @@
 
 {% block vj_bios %}
 {% apply spaceless %}
+{% set vj = true %}
     {% for stage, infos in event.VjArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
