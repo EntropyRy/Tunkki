@@ -45,10 +45,10 @@
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
             {{ block('bios') }}
             {% if block('vj_bios')|length > 0 %}
-            <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
+            <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - VJ {{ 'Artists'|trans }}</h1>
             {{ block('vj_bios') }}
             {% endif %}
-            <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
+            <h1>Back to <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
         </div>
     </div>
     {% else %}
