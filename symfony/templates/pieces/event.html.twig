@@ -393,7 +393,7 @@
                 B2B
                 {% endif %}
             {% endif %}
-            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
+            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{% if artist.type == 'vj' %}vj-{% endif %}{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
         {% set last = info.StartTime %}
         {% if last is defined %}
