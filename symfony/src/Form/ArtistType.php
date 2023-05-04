@@ -23,7 +23,8 @@ class ArtistType extends AbstractType
                 'choices' => [
                     'DJ' => 'DJ',
                     'Live' => 'Live',
-                    'VJ' => 'VJ'
+                    'VJ' => 'VJ',
+                    'ART' => 'ART'
                 ]
             ])
             ->add('hardware', null, [
