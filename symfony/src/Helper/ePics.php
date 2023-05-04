@@ -18,11 +18,13 @@ class ePics
             $response = $this->client->request(
                 'POST',
                 'https://epics.entropy.fi/api/Session::init',
-                ['max_duration' => 4,
-                'headers' => [
-                    'Content-Type' => 'application/json',
-                    'Accept' => 'application/json'
-                ]]
+                [
+                    'max_duration' => 4,
+                    'headers' => [
+                        'Content-Type' => 'application/json',
+                        'Accept' => 'application/json'
+                    ]
+                ]
             );
             if ($response->getStatusCode() == 200) {
                 $headers = $response->getHeaders();
@@ -32,9 +34,10 @@ class ePics
                 $response = $this->client->request(
                     'POST',
                     'https://epics.entropy.fi/api/Photo::getRandom',
-                    ['max_duration' => 4,
+                    [
+                        'max_duration' => 4,
                         'headers' => [
-                            'Cookie' => $headers['set-cookie'][0].'; '. $headers['set-cookie'][1],
+                            'Cookie' => $headers['set-cookie'][0] . '; ' . $headers['set-cookie'][1],
                             'X-XSRF-TOKEN' => $token,
                             'Content-Type' => 'application/json',
                             'Accept' => 'application/json'
@@ -44,8 +47,8 @@ class ePics
                 if ($response->getStatusCode() == 200) {
                     $array = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
                     if (!is_null($array['size_variants']['thumb2x'])) {
-                        $pic['url'] = 'https://epics.entropy.fi/'. $array['size_variants']['thumb2x']['url'];
-                        $pic['taken'] = $array['taken_at'];
+                        $pic['url'] = 'https://epics.entropy.fi/' . $array['size_variants']['thumb2x']['url'];
+                        $pic['taken'] = $array['taken_at'] ? $array['taken_at'] : $array['created_at'];
                         return $pic;
                     } else {
                         return null;
