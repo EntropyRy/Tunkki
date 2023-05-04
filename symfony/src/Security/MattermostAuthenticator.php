@@ -5,8 +5,6 @@ namespace App\Security;
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\RouterInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Request;
@@ -66,7 +64,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     $this->em->flush();
                     return $user;
                 }
-                $this->rs->getSession()->getFlashBag()->addFlash('warning', 'user not found');
+                $this->rs->getSession()->getFlashBag()->add('warning', 'user not found');
             })
         );
     }
@@ -81,7 +79,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
             return new RedirectResponse($targetPath);
         }
-        return new RedirectResponse($this->urlG->generate('dashboard.'.$request->getLocale()));
+        return new RedirectResponse($this->urlG->generate('dashboard.' . $request->getLocale()));
     }
 
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
