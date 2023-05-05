@@ -928,25 +928,24 @@ body {
         }
     }
 
-    public function getDjArtistInfos(): array
+    public function getMusicArtistInfos(): array
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
             if (!is_null($info->getStartTime())) {
-                if ($info->getArtistClone()->getType() != 'VJ') {
+                if ($info->getArtistClone()->getType() == 'DJ' || $info->getArtistClone()->getType() == 'Live') {
                     $bystage[$info->getStage()][] = $info;
                 }
             }
         }
         return $bystage;
     }
-
-    public function getVjArtistInfos(): array
+    public function getArtistInfosByType(string $type): array
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
             if (!is_null($info->getStartTime())) {
-                if ($info->getArtistClone()->getType() == 'VJ') {
+                if ($info->getArtistClone()->getType() == $type) {
                     $bystage[$info->getStage()][] = $info;
                 }
             }

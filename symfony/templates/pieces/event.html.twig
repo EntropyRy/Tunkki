@@ -152,7 +152,8 @@
     '{{ vj_bios }}': block('vj_bios'),
     '{{ links }}': block('links'),
     '{{ rsvp }}': block('RSVP'),
-    '{{ ticket }}': block('ticket_for_event_page')
+    '{{ ticket }}': block('ticket_for_event_page'),
+    '{{ art_artist_list }}': block('art_artist_list')
 })|raw }}
 {% if '{{ links }}' not in attribute(event, content_attr) %}
     {{ block('links') }}
@@ -340,7 +341,7 @@
     {% endif %}
     {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
     <span class="pe-2">
-        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+        <a class="btn btn-outline-info" href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
             {{ "fas fa-tasks"|parse_icon }}
             Nakkikone
         </a>
@@ -348,7 +349,7 @@
     {% endif %}
     {% if event.type == 'announcement' %}
     <span class="pe-2">
-        <a class="btn btn-outline-info" href="{{ path('_page_alias_announcements_'~app.request.locale) }}">
+        <a class="btn btn-outline-info" href="{{ path('_page_alias_announcements_' ~ app.request.locale) }}">
             {{ "fas fa-list"|parse_icon }}
             {{ 'button.old_announcements'|trans }}
         </a>
@@ -359,21 +360,22 @@
 
 {% block timetable %}
 {% set last = null %}
-{% if event.DjArtistInfos|length > 0 %}
+{% set music_bios = event.MusicArtistInfos %}
+{% if music_bios|length > 0 %}
 {% if event.multiday == true %}
     {% set datestring = 'E, HH:mm' %}
 {% else %}
     {% set datestring = 'HH:mm' %}
 {% endif %}
 <div class="row">
-{% for stage, infos in event.DjArtistInfos %}
-    {% if event.DjArtistInfos|length > 1 %}
-    <div class="col-md-6">
-    {% else %}
-    <div class="col-12">
-    {% endif %}
+{% for stage, infos in music_bios %}
+    <div class="col-12
+    {% if music_bios|length > 1 %} {# is more than one stage #}
+    col-md-6
+    {% endif %}">
+
     <h4 class="artists-heading">
-        {{ 'Timetable'|trans }} {% if stage|length > 1 %}@ {{ stage }}{% endif %}
+        {{ 'Timetable'|trans }} {% if stage %}@ {{ stage }}{% endif %}
     </h4>
     <ul>
     {% for info in infos %}
@@ -393,7 +395,7 @@
                 B2B
                 {% endif %}
             {% endif %}
-            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{% if artist.type == 'vj' %}vj-{% endif %}{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
+            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
         {% set last = info.StartTime %}
         {% if last is defined %}
@@ -409,10 +411,40 @@
 {% endif %}
 {% endblock %}
 
+{% block art_artist_list %}
+{% set bios = event.ArtistInfosByType('ART') %}
+{% if bios|length > 0 %}
+<div class="row">
+{% for stage, infos in bios %}
+    {% if bios|length > 1 %} {# is more than one stage #}
+    <div class="col-md-6">
+    {% else %}
+    <div class="col-12">
+    {% endif %}
+    <h4 class="artists-heading">
+        {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
+    </h4>
+    <ul>
+    {% for info in infos %}
+        {% set artist = info.artistClone %}
+        {% set name = (artist.name|split(' for')).0 %}
+        <li>
+        {% if info.StartTime is not empty %}
+            <a data-turbo="false" href="{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+        {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+
 {% block cycle %}
 {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
 {% if thecycle == 'even' %}
-<div id="{% if vj|default(false)%}vj-{% endif %}{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
             {{ block('artist_event_info') }}
@@ -424,7 +456,7 @@
     </div>
 </div>
 {% else %}
-<div id="{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row">
         <div class="col-6 col-sm-6 col-md-5 col-xl-5">
             {{ block('artist_pic') }}
@@ -443,8 +475,7 @@
 
 {% block vj_bios %}
 {% apply spaceless %}
-{% set vj = true %}
-    {% for stage, infos in event.VjArtistInfos %}
+    {% for stage, infos in event.ArtistInfosByType('VJ') %}
         {% if stage %}
         <h3 class="artists-heading text-center">
             VJ {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
@@ -455,9 +486,22 @@
 {% endapply %}
 {% endblock %}
 
+{% block art_bios %}
+{% apply spaceless %}
+    {% for stage, infos in event.ArtistInfosByType('ART') %}
+        {% if stage %}
+        <h3 class="artists-heading text-center">
+            {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
+        </h3>
+        {% endif %}
+        {{ block('infos') }}
+    {% endfor %}
+{% endapply %}
+{% endblock %}
+
 {% block bios %}
 {% apply spaceless %}
-    {% for stage, infos in event.DjArtistInfos %}
+    {% for stage, infos in event.MusicArtistInfos %}
         {% if stage %}
         <h3 class="artists-heading text-center">
             DJ {{ 'Artists'|trans }} {% if stage %}@ {{ stage }}{% endif %}
@@ -494,7 +538,7 @@
     {% set show = false %}
 {% endif %}
 <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
-    {% if artist.type == 'Live' and artist.type == 'DJ' %}
+    {% if artist.type == 'Live' or artist.type == 'DJ' %}
         {% if info is defined and show %}
             @ {{ info.StartTime|format_datetime(pattern=datestring) }}
         {% endif %}
@@ -532,7 +576,7 @@
         <hr>
         {% for link in artist.links %}
         <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
-         href="{{ link.url }}"><i class="{{ link.icon }}"></i> {{ link.title }}</a>
+         href="{{ link.url }}">{{ link.icon|parse_icon }} {{ link.title }}</a>
         </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
     {% endif %}
