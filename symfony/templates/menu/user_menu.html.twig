@@ -41,6 +41,7 @@
                         {% endif %}
                      </div>
                  </li> #}
+                 {% if app.user.member.isActiveMember %}
                  <li class="nav-item">
                     <a class="nav-link"
                        target="_blank"
@@ -50,7 +51,6 @@
                        Forum
                     </a>
                  </li>
-                 {% if app.user.member.isActiveMember %}
                  <li class="nav-item">
                     <a class="nav-link"
                        target="_blank"
