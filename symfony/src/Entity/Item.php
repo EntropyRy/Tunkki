@@ -5,10 +5,7 @@ namespace App\Entity;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
 use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -115,7 +112,7 @@ class Item implements \Stringable
     /**
      * Get id
      */
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
     }
