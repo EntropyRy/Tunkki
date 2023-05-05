@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class AuthorizationCodeListener implements EventSubscriberInterface
 {
@@ -34,7 +34,7 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
                 $url = $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale());
             }
         }
-        $response = new Response($url);
+        $response = new RedirectResponse($url);
         $event->setResponse($response);
     }
     /**
