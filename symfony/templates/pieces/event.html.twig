@@ -430,7 +430,7 @@
         {% set name = (artist.name|split(' for')).0 %}
         <li>
         {% if info.StartTime is not empty %}
-            <a data-turbo="false" href="{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+            <a href="{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
         {% endif %}
         </li>
     {% endfor %}
