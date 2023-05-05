@@ -22,20 +22,23 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
         assert($user instanceof User);
-        $url = $this->urlGenerator->generate('app_login', ['returnUrl' => $this->requestStack->getMainRequest()->getUri()]);
-        $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
         if (null !== $user) {
             if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
+                $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
                 $session = $this->requestStack->getSession();
                 $session->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
                 $url = $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale());
+                $response = new RedirectResponse($url);
+                $event->setResponse($response);
             }
+        } else {
+            $url = $this->urlGenerator->generate('app_login', ['returnUrl' => $this->requestStack->getMainRequest()->getUri()]);
+            $response = new RedirectResponse($url);
+            $event->setResponse($response);
         }
-        $response = new RedirectResponse($url);
-        $event->setResponse($response);
     }
     /**
      * @return array<string, mixed>
