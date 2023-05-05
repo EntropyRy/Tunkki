@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\EventListener;
 
-use Nyholm\Psr7\Response;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 final class AuthorizationCodeListener implements EventSubscriberInterface
 {
@@ -22,6 +22,8 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
         assert($user instanceof User);
+        $url = $this->urlGenerator->generate('app_login', ['returnUrl' => $this->requestStack->getMainRequest()->getUri()]);
+        $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
         if (null !== $user) {
             if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
@@ -29,28 +31,11 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
                 $session = $this->requestStack->getSession();
                 $session->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
-                $event->setResponse(
-                    new Response(
-                        302,
-                        ['Location' => $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale())]
-                    )
-                );
+                $url = $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale());
             }
-        } else {
-            $event->setResponse(
-                new Response(
-                    302,
-                    [
-                        'Location' => $this->urlGenerator->generate(
-                            'app_login',
-                            [
-                                'returnUrl' => $this->requestStack->getMainRequest()->getUri(),
-                            ]
-                        ),
-                    ]
-                )
-            );
         }
+        $response = new Response($url);
+        $event->setResponse($response);
     }
     /**
      * @return array<string, mixed>
