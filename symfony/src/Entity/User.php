@@ -156,7 +156,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @see UserInterface
      */
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
         $this->plainPassword = null;
@@ -292,7 +292,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         if ($this->member) {
             return $this->member->getName();
         } else {
-            return 'user: '.$this->id;
+            return 'user: ' . $this->id;
         }
     }
     public function getLocale(): string
