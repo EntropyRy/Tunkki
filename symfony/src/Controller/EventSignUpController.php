@@ -149,39 +149,6 @@ class EventSignUpController extends Controller
         }
         return $nakkis;
     }
-    protected function getNakkiFromGroup($event, $member, $selected, $locale)
-    {
-        $nakkis = [];
-        foreach ($event->getNakkis() as $nakki) {
-            foreach ($selected as $booking) {
-                if ($booking->getNakki() == $nakki) {
-                    $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
-                    break;
-                }
-            }
-            if (!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)) {
-                // try to prevent displaying same nakki to 2 different users using the system at the same time
-                $bookings = $nakki->getNakkiBookings()->toArray();
-                shuffle($bookings);
-                foreach ($bookings as $booking) {
-                    if (is_null($booking->getMember())) {
-                        $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
-                        break;
-                    }
-                }
-            }
-        }
-        return $nakkis;
-    }
-    protected function addNakkiToArray($nakkis, $booking, $locale): array
-    {
-        $name = $booking->getNakki()->getDefinition()->getName($locale);
-        $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
-        $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
-        $nakkis[$name]['bookings'][] = $booking;
-        $nakkis[$name]['durations'][$duration] = $duration;
-        return $nakkis;
-    }
     public function RSVP(
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
