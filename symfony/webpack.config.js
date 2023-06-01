@@ -25,7 +25,7 @@ Encore
   .addEntry("vhs", "./assets/js/vhs.js")
   .addEntry("snow", "./assets/js/snow.js")
   .addEntry("nakkikone", "./assets/js/nakkikone.js")
-  .addEntry("liquid_lights", "./assets/js/liquid_lights.js")
+  .addEntry("stars", "./assets/js/stars.js")
   .addEntry("grid", "./assets/js/grid.js")
   .addEntry("artist_signup", "./assets/js/artist_signup.js")
   .addEntry("events_search", "./assets/js/events_search.js")
