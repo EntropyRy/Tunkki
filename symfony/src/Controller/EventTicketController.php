@@ -97,7 +97,7 @@ class EventTicketController extends Controller
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
             'hasNakki' => count((array) $selected) > 0 ? true : false,
-            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation() ? true : false,
+            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'ticket' => $ticket,
             'form' => $form,
         ]);

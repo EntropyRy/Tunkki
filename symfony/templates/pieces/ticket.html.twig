@@ -77,7 +77,7 @@
 {% elseif ticket.status == 'available' %}
     {{ form_start(form) }}
     <input class="btn w-100
-       {% if not hasNakki and not nakkiRequired %}btn-danger disabled" disabled{% else %}btn-success"{% endif %}
+       {% if not hasNakki and nakkiRequired %}btn-danger disabled" disabled{% else %}btn-success"{% endif %}
        type="submit" value="{{ 'ticket.form.reserve'|trans }}">
     {{ form_rest(form) }}
     {{ form_end(form) }}
