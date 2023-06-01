@@ -10,6 +10,7 @@ $info: #17a2b8;
 $enable-responsive-font-sizes: true;
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/variables-dark";
 
 // 4. Include any default map overrides here
 $theme-colors: (
