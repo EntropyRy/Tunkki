@@ -62,17 +62,17 @@ class Meteorite {
 
 // Generate stars
 const stars = [];
-for (let i = 0; i < 200; i++) {
+for (let i = 0; i < 60; i++) {
   const x = Math.random() * canvas.width;
   const y = Math.random() * canvas.height;
   const size = Math.random() * 3;
-  const speed = 0.1 + Math.random() * 2;
+  const speed = 0.1 + Math.random();
   stars.push(new Star(x, y, size, speed));
 }
 
 // Generate meteorites
 const meteorites = [];
-for (let i = 0; i < 5; i++) {
+for (let i = 0; i < 3; i++) {
   const x = Math.random() * canvas.width;
   const y = Math.random() * canvas.height;
   const size = Math.random() * 5 + 2;
