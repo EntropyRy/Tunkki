@@ -32,6 +32,7 @@ class EventSignUpController extends Controller
         Event $event,
         Mattermost $mm,
         NakkiBooking $booking,
+        NakkiBookingRepository $NakkiBookingR,
         EntityManagerInterface $em
     ): Response {
         $user = $this->getUser();
@@ -41,7 +42,8 @@ class EventSignUpController extends Controller
             $booking->setMember(null);
             $em->persist($booking);
             $em->flush();
-            $text = $text = '**Nakki reservation cancelled from event ' . $booking . '**';
+            $count = $NakkiBookingR->findEventNakkiCount($booking, $event);
+            $text = $text = '**Nakki reservation cancelled from event ' . $booking . '** (' . $count . ')';
             $mm->SendToMattermost($text, 'nakkikone');
             $this->addFlash('success', 'Nakki cancelled');
         }
