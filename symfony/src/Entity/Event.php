@@ -6,6 +6,7 @@ use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 use function Symfony\Component\String\u;
@@ -222,6 +223,10 @@ body {
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Happening::class)]
+    #[OrderBy(['time' => 'ASC'])]
+    private Collection $happenings;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -360,6 +365,7 @@ body {
         $this->tickets = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->notifications = new ArrayCollection();
+        $this->happenings = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1236,5 +1242,35 @@ body {
             return 'https://entropy.fi' . $event . $this->id;
         }
         return $lang ? 'https://entropy.fi/' . $lang . $year . $url : 'https://entropy.fi' . $year . $url;
+    }
+
+    /**
+     * @return Collection<int, Happening>
+     */
+    public function getHappenings(): Collection
+    {
+        return $this->happenings;
+    }
+
+    public function addHappening(Happening $happening): self
+    {
+        if (!$this->happenings->contains($happening)) {
+            $this->happenings->add($happening);
+            $happening->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHappening(Happening $happening): self
+    {
+        if ($this->happenings->removeElement($happening)) {
+            // set the owning side to null (unless already changed)
+            if ($happening->getEvent() === $this) {
+                $happening->setEvent(null);
+            }
+        }
+
+        return $this;
     }
 }

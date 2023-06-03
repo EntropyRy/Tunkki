@@ -1,0 +1,28 @@
+{% extends 'event.html.twig' %}
+
+{% block title %}{{ 'happening.edit'|trans }} | Entropy ry{% endblock %}
+
+{% block content %}
+<div class="col-12">
+    <h1>{{ 'happening.edit'|trans }}</h1>
+    {{ form_start(form) }}
+    <div class="row">
+        {{ form_row(form.type) }}
+        <div class="col-6">
+            {{ form_row(form.nameFi) }}
+            {{ form_row(form.descriptionFi) }}
+            {{ form_row(form.priceFi) }}
+            {{ form_row(form.paymentInfoFi) }}
+        </div>
+        <div class="col-6">
+            {{ form_row(form.nameEn) }}
+            {{ form_row(form.descriptionEn) }}
+            {{ form_row(form.priceEn) }}
+            {{ form_row(form.paymentInfoEn) }}
+        </div>
+    </div>
+    {{ form_widget(form) }}
+    <input class="btn btn-primary" type="submit" value="{{'edit'|trans|capitalize}}">
+    {{ form_end(form) }}
+</div>
+{% endblock %}

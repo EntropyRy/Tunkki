@@ -318,3 +318,20 @@ join_us:
 barcode.expl: First your code then the others and confirmation with your code
 button:
   old_announcements: Old Announcements
+happening:
+  create: Create happening/restaurant etc.
+  edit: Edit happening/restaurant etc.
+  paymentInfo: Payment Info
+  bookings_for_admin: (You can see these because you organize this event)
+  no_reservations: No reservations
+  description_fi: Tell about the happeing. When is the sign up due? In case of resaturant list choices and allergens.
+  price_fi: Text so that you can have many prices. (tapas 10€, tapas + wine 15€)
+  payment_info_fi: Let us know how to pay if needed.
+Name fi: Name in Finnish
+Name en: Name in English
+Description fi: Description in Finnish
+Description en: Description in English
+Payment info fi: Payment info in Finnish
+Payment info en: Payment info in English
+Price fi: Price in Finnish
+Price en: Price in English

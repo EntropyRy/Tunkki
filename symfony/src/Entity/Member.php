@@ -111,6 +111,12 @@ class Member implements \Stringable
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $denyKerdeAccess = false;
 
+    #[ORM\OneToOne(mappedBy: 'member', cascade: ['persist', 'remove'])]
+    private ?HappeningBooking $happeningBooking = null;
+
+    #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
+    private Collection $happenings;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -119,6 +125,7 @@ class Member implements \Stringable
         $this->nakkiBookings = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->responsibleForNakkis = new ArrayCollection();
+        $this->happenings = new ArrayCollection();
     }
 
     /**
@@ -812,6 +819,50 @@ class Member implements \Stringable
     public function setDenyKerdeAccess(?bool $denyKerdeAccess): self
     {
         $this->denyKerdeAccess = $denyKerdeAccess;
+
+        return $this;
+    }
+
+    public function getHappeningBooking(): ?HappeningBooking
+    {
+        return $this->happeningBooking;
+    }
+
+    public function setHappeningBooking(HappeningBooking $happeningBooking): self
+    {
+        // set the owning side of the relation if necessary
+        if ($happeningBooking->getMember() !== $this) {
+            $happeningBooking->setMember($this);
+        }
+
+        $this->happeningBooking = $happeningBooking;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Happening>
+     */
+    public function getHappenings(): Collection
+    {
+        return $this->happenings;
+    }
+
+    public function addHappening(Happening $happening): self
+    {
+        if (!$this->happenings->contains($happening)) {
+            $this->happenings->add($happening);
+            $happening->addOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHappening(Happening $happening): self
+    {
+        if ($this->happenings->removeElement($happening)) {
+            $happening->removeOwner($this);
+        }
 
         return $this;
     }

@@ -1,5 +1,6 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% use 'pieces/ticket.html.twig' %}
+{% use 'pieces/happening.html.twig' %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
         <a {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
@@ -153,7 +154,8 @@
     '{{ links }}': block('links'),
     '{{ rsvp }}': block('RSVP'),
     '{{ ticket }}': block('ticket_for_event_page'),
-    '{{ art_artist_list }}': block('art_artist_list')
+    '{{ art_artist_list }}': block('art_artist_list'),
+    '{{ happening_list }}': block('happening_list')
 })|raw }}
 {% if '{{ links }}' not in attribute(event, content_attr) %}
     {{ block('links') }}

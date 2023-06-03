@@ -1,0 +1,9 @@
+{% extends 'event.html.twig' %}
+{% use 'pieces/happening.html.twig' %}
+{% block title %}
+{{ happening.name(app.request.locale) }} | Entropy ry
+{% endblock %}
+
+{% block content %}
+     {{ block('happening_info') }}
+{% endblock %}

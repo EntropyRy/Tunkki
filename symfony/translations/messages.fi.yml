@@ -41,7 +41,8 @@ Nakki reserved: Nakki varattu
 Nakki cancelled: Nakki peruttu
 Sorry but someone reserved that one already: Joku kerkesi varata kyseisen nakin jo.
 Only for active members: Vain aktiivijäsenille
-Nakki is not reserved! Please define username in you profile: Et vaoi varata nakkia
+Nakki is not reserved! Please define username in you profile:
+  Et vaoi varata nakkia
   koska profiilissasi ei ole käyttäjänimeä
 Nakkikone is not enabled: Nakkikone ei ole vielä julkaistu, jotta sitä voisi käyttää.
 Reserve: Varaa
@@ -79,7 +80,8 @@ clubroom_events: Kerhohuone tapahtumat (Keke)
 include_clubroom_events: Sisällytä kerhohuonetapahtumat (Keke)
 edit_event: Muokkaa tapahtumaa
 privacy_policy: Rekisteriseloste
-submit_and_agree: Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
+submit_and_agree:
+  Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
   Varaamme oikeuden poistaa väärät tiedot.
 cancelled: PERUTTU
 announcements_url: tiedotukset
@@ -109,9 +111,11 @@ profile_url: profiili
 Total rent price: Kokonaishinta
 reset_your_password: Vaihda salasanasi
 send_password_reset_email: Lähetä
-reset_password_form_help: Kun annat sähköpostisi niin lähetämme sinulle sähköpostin
+reset_password_form_help:
+  Kun annat sähköpostisi niin lähetämme sinulle sähköpostin
   josta löydät linkin salasanan vaihtamiseksi
-reset_password_info: Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit
+reset_password_info:
+  Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit
   nollata salasanasi. Linkki vanhentuu
 hours: tunnissa
 Password Reset Email Sent: Salasanan nollaus sähköposti lähetetty
@@ -128,7 +132,8 @@ sign_in: Kirjaudu sisään
 membership_information: Jäsentiedot
 membership_status: Jäsentilanne
 used_in_other_services: Käytetään meidän muissa palveluissa
-you_can_change_your_member_information_by_loging_in: Voit vaihtaa jäsentietojasi kirjautumalla
+you_can_change_your_member_information_by_loging_in:
+  Voit vaihtaa jäsentietojasi kirjautumalla
   sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
 edit: muokkaa
 add_new_artist: lisää uusi artistiprofiili
@@ -140,7 +145,7 @@ widget_headline_information: informaatio
 widget_label_type: tyyppi
 widget_label_context: konteksti
 widget_label_binary_content: Tiedosto
-widget_label_unlink: Poista kuva profiilista
+widget_label_unlink: Poista kuva
 link_media: Lisää kuva tiedostoista
 created_at: luotu
 updated_at: päivitetty
@@ -151,7 +156,8 @@ Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
 no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
 bio_attribute: Bio
 succesfully_signed_up_for_the_party: Onnistuneesti ilmoittauduttu tapahtumaan esiintymään!
-all_artists_signed_up_create_one: Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.
+all_artists_signed_up_create_one:
+  Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.
   Haluatko luoda uuden?
 this_artist_signed_up_already: Tämä artisti on jo ilmoitettu tapahtumaan.
 duplicate_artist_found: Saman niminen artisti löytyy jo!
@@ -200,13 +206,15 @@ event:
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
   player:
-    will_appear_here_when_the_stream_is_on: Voit kuunnella streamausta suoraan tältä
+    will_appear_here_when_the_stream_is_on:
+      Voit kuunnella streamausta suoraan tältä
       sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
   form:
     sign_up:
       request_edited: Ilmottautumista muokattu
       artist: Artisti
-      description: Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
+      description:
+        Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
         koska profilli on aina tapahtumakohtainen
       why_should_we_choose_you: Miksi valitsisimme sinut?
       wish_for_playtime: Toive soittoajankohdasta
@@ -230,7 +238,8 @@ profile:
   apply_for_active_member: Hae aktiivijäsenyyttä
   application_saved: Hakemus tallennettu
   paid_renting_rewards: Vuokratehtävien kompensaatiot
-  no_renting_rewards: Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa,
+  no_renting_rewards:
+    Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa,
     miten voit osallistua.
   next_reward_is_bubling_under: Seuraava on tulossa..
   you_are_active_member_already: Olet jo aktiivijäsen
@@ -254,7 +263,8 @@ profile:
     wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. Safari <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
 artist:
   not_confirmed_yet: Ei vahvistettu (vielä)
-  explanation: Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla
+  explanation:
+    Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla
     näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina.
     Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan.
     Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään
@@ -275,12 +285,15 @@ artist:
     bio: Bio suomeksi
     bio_en: Bio englanniksi
     genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä. ÄLÄ LAITA BPM TÄHÄN.
-    bio_help: Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
+    bio_help:
+      Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
       sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää
       linkit alla olevaan linkkilistaan, ei tähän. Tämä teksti on julkinen.
-    hardware_help: Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua.
+    hardware_help:
+      Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua.
       (Vinyyli, CDJ)
-    promo_picture: Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa
+    promo_picture:
+      Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa
       tehdä se ennen kuin lisäät tänne)
     genre: Genre(t)
     hardware: Laitteisto
@@ -296,7 +309,8 @@ member:
   active:
     application_title: Hae aktiivijäseneksi
     application: Hakemuksesi Entropyn aktiivijäseneksi
-    apply_help: Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa,
+    apply_help:
+      Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa,
       mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään
       seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan
       asti.
@@ -307,17 +321,22 @@ member:
     requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
   join:
     error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
-    info: Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli
+    info:
+      Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli
       perille.
     added: Tietosi on nyt tallennettu jäsenrekisteriimme.
-    update: Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi.
+    update:
+      Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi.
       Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
-You have already requested a reset password email. Please check your email or try again soon.: Olet
+You have already requested a reset password email. Please check your email or try again soon.:
+  Olet
   jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin
   uudelleen.
-The reset password link is invalid. Please try to reset your password again.: Linkki
+The reset password link is invalid. Please try to reset your password again.:
+  Linkki
   ei kelpaa. Yritä aloittaa prosessi alusta.
-The link in your email is expired. Please try to reset your password again.: Sähköpostisi
+The link in your email is expired. Please try to reset your password again.:
+  Sähköpostisi
   linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 login:
   join_us: Jotta voit kirjautua sinun täytyy olla jäsen, joten <a href="/liity">liity!</a>
@@ -328,11 +347,14 @@ rsvp:
   email_in_use: Oletko jäsen? kirjaudu ensin.
   receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
   no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
-  already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
+  already_rsvpd:
+    Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
     tapahtumaa.
-  rsvpd_succesfully: Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
+  rsvpd_succesfully:
+    Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
     tapahtumaa.
-  info: Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>.
+  info:
+    Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>.
     Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi
     alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
   closed: Ilmoittautuminen suljettu
@@ -360,7 +382,8 @@ ticket:
 join_us:
   title: Liity jäseneksi!
   button: Liity
-  1: Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme
+  1:
+    Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme
     kuuluu muun muassa
   2: Tapahtumien järjestäminen
   3: Tapahtumatekniikan koulutus
@@ -369,3 +392,38 @@ barcode.expl: Ensin oma koodi ja sitte voit käyttää muita koodeja ja hyväksy
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
   old_announcements: Vanhat tiedotteet
+happening:
+  create: Luo tapahtuma/ravintola yms.
+  edit: Muokkaa tapahtumaa/ravintolaa yms.
+  paymentInfo: Maksutiedot
+  bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
+  no_reservations: Ei varauksia
+  description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmottautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
+  price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
+  payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
+Name fi: Nimi suomeksi
+Name en: Nimi englanniksi
+Description fi: Kuvaus suomeksi
+Description en: Kuvaus englanniksi
+Time: Aika
+Picture: Kuva
+Needs preliminary sign up: Tarvitsee varaukset ennakkoon
+Needs preliminary payment: Tarvitsee maksut ennakkoon
+Payment info fi: Maksutiedot suomeksi
+Payment info en: Maksutiedot englanniksi
+Type: Tyyppi
+Price: Hinta
+Remove: Poista
+Restaurant: Ravintola
+Event: Tapahtuma
+Max sign ups: Maksimi määrä varauksia
+Bookings: Varaukset
+When is this happening?: Koska tapahtuma alkaa?
+seats available: paikkaa vapaana
+Comment: Kommentti
+sign up: Varaa
+Remove reservation: Poista varaus
+You have an reservation with a comment: Sinulle on varaus kommentilla
+create: Luo
+Price fi: Hinta suomeksi
+Price en: Hinta englanniksi
