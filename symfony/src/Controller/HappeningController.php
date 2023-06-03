@@ -114,6 +114,7 @@ class HappeningController extends AbstractController
         return $this->render('happening/edit.html.twig', [
             'form' => $form,
             'event' => $event,
+            'happening' => $happening
         ]);
     }
     #[Route(

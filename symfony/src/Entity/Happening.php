@@ -74,6 +74,9 @@ class Happening
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $priceEn = null;
 
+    #[ORM\Column]
+    private ?bool $releaseThisHappeningInEvent = false;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
@@ -368,6 +371,18 @@ class Happening
     public function setPriceEn(?string $priceEn): self
     {
         $this->priceEn = $priceEn;
+
+        return $this;
+    }
+
+    public function isReleaseThisHappeningInEvent(): ?bool
+    {
+        return $this->releaseThisHappeningInEvent;
+    }
+
+    public function setReleaseThisHappeningInEvent(bool $releaseThisHappeningInEvent): self
+    {
+        $this->releaseThisHappeningInEvent = $releaseThisHappeningInEvent;
 
         return $this;
     }

@@ -49,7 +49,8 @@ class HappeningType extends AbstractType
             ->add('priceEn')
             ->add('needsPreliminarySignUp')
             ->add('maxSignUps')
-            ->add('needsPreliminaryPayment');
+            ->add('needsPreliminaryPayment')
+            ->add('releaseThisHappeningInEvent');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
