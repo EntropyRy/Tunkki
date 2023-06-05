@@ -1,8 +1,8 @@
 controllers:
-    resource:
-        path: ../src/Controller/
-        namespace: App\Controller
-    type: attribute
+  resource:
+    path: ../src/Controller/
+    namespace: App\Controller
+  type: attribute
 entropy_tunkki_booking_hash:
   path: /booking/{bookingid}/renter/{renterid}/{hash}
   controller: App\Controller\RenterHashController::indexAction
@@ -72,8 +72,8 @@ entropy_event_slug_nakkikone:
     year: '\d+'
 entropy_event_slug_artist_signup:
   path:
-    en: /{year}/{slug}/signup
-    fi: /{year}/{slug}/ilmottautuminen
+    en: /{year}/{slug}/artist/signup
+    fi: /{year}/{slug}/artisti/ilmottautuminen
   controller: App\Controller\EventSignUpController::artistSignUp
   requirements:
     year: '\d+'
@@ -131,6 +131,5 @@ _entropy_mattermost_check_ssl:
   #_active_member_form:
   #path:    /member/active
   #controller: App\Controller\MemberFormController:activeMember
-
 #sonata_translation:
 #resource: '@SonataTranslationBundle/Resources/config/routes.yaml'

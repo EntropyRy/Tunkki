@@ -23,7 +23,10 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class HappeningController extends AbstractController
 {
     #[Route(
-        '/{year}/{slug}/create',
+        path: [
+            'en' => '/{year}/{slug}/happening/create',
+            'fi' => '/{year}/{slug}/tapahtuma/luo'
+        ],
         name: 'entropy_event_happening_create',
         requirements: [
             'year' => '\d+',
@@ -74,7 +77,10 @@ class HappeningController extends AbstractController
         ]);
     }
     #[Route(
-        '/{year}/{slug}/{happeningSlug}/edit',
+        path: [
+            'en' => '/{year}/{slug}/happening/{happeningSlug}/edit',
+            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}/muokkaa'
+        ],
         name: 'entropy_event_happening_edit',
         requirements: [
             'year' => '\d+',
@@ -118,7 +124,10 @@ class HappeningController extends AbstractController
         ]);
     }
     #[Route(
-        '/{year}/{slug}/{happeningSlug}',
+        path: [
+            'en' => '/{year}/{slug}/happening/{happeningSlug}',
+            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}'
+        ],
         name: 'entropy_event_happening_show',
         requirements: [
             'year' => '\d+',
