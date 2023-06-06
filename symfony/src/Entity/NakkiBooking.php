@@ -18,7 +18,7 @@ class NakkiBooking implements \Stringable
     private ?\App\Entity\Nakki $nakki = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
-    #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?\App\Entity\Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -33,7 +33,10 @@ class NakkiBooking implements \Stringable
 
     public function __toString(): string
     {
-        return $this->event.': '.$this->nakki.' at '. $this->startAt->format('H:i');
+        if ($this->event->isNakkiRequiredForTicketReservation()) {
+            return $this->event . ': ' . $this->nakki;
+        }
+        return $this->event . ': ' . $this->nakki . ' at ' . $this->startAt->format('H:i');
     }
     public function getId(): ?int
     {

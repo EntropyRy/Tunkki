@@ -43,7 +43,7 @@ class EventSignUpController extends Controller
             $em->persist($booking);
             $em->flush();
             $count = $NakkiBookingR->findEventNakkiCount($booking, $event);
-            $text = $text = '**Nakki reservation cancelled from event ' . $booking . '** (' . $count . ')';
+            $text = '**Nakki reservation cancelled from event ' . $booking . '** (' . $count . ')';
             $mm->SendToMattermost($text, 'nakkikone');
             $this->addFlash('success', 'Nakki cancelled');
         }
