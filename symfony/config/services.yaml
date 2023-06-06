@@ -305,6 +305,7 @@ services:
       - [addChild, ['@admin.ticket', 'event']]
       - [addChild, ['@admin.email', 'event']]
       - [addChild, ['@admin.notification', 'event']]
+      - [addChild, ['@admin.happening', 'event']]
   admin.event_artist_info:
     class: App\Admin\EventArtistInfoAdmin
     tags:
@@ -400,3 +401,8 @@ services:
       class: App\Admin\NotificationAdmin
       tags:
           - { name: sonata.admin, model_class: App\Entity\Notification, controller: App\Controller\NotificationAdminController, manager_type: orm, group: admin, label: Notification }
+
+  admin.happening:
+      class: App\Admin\HappeningAdmin
+      tags:
+          - { name: sonata.admin, model_class: App\Entity\Happening, controller: App\Controller\HappeningAdminController, manager_type: orm, group: admin, label: Happening }

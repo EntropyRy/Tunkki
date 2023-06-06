@@ -41,10 +41,10 @@
         {% if admin %}
         ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
         {% endif %}
+        {% if happening.releaseThisHappeningInEvent == false %}
+           ~ <span class="text-danger">{{ 'SHOWN ONLY TO YOU'|trans }}</span>
+        {% endif %}
     </h1>
-    {% if happening.releaseThisHappeningInEvent == false %}
-        <h2 class="text-danger">{{ 'SHOWN ONLY TO YOU'|trans }}</h2>
-    {% endif %}
 </div>
 {% if happening.picture %}
     <div class="col-sm-6 col-md-4">

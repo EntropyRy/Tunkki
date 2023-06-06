@@ -63,12 +63,6 @@ final class EventAdmin extends AbstractAdmin
             );
             if ((is_countable($admin->getSubject()->getRSVPs()) ? count($admin->getSubject()->getRSVPs()) : 0) > 0) {
                 $menu->addChild(
-                    'RSVPs',
-                    [
-                        'uri' => $admin->generateUrl('entropy.admin.event|entropy.admin.rsvp.list', ['id' => $id])
-                    ]
-                );
-                $menu->addChild(
                     'RSVP List',
                     [
                         'uri' => $admin->generateUrl('rsvp', ['id' => $id])
@@ -126,6 +120,12 @@ final class EventAdmin extends AbstractAdmin
                     );
                 }
             }
+            $menu->addChild(
+                'Happenings',
+                [
+                    'uri' => $admin->generateUrl('admin.happening.list', ['id' => $id])
+                ]
+            );
             $menu->addChild(
                 'Emails',
                 [
