@@ -13,7 +13,7 @@ class HappeningBooking
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\OneToOne(inversedBy: 'happeningBooking', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'happeningBooking', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Member $member = null;
 
@@ -63,5 +63,10 @@ class HappeningBooking
         $this->happening = $happening;
 
         return $this;
+    }
+
+    public function __toString()
+    {
+        return $this->member;
     }
 }
