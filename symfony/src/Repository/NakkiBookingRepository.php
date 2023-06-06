@@ -19,6 +19,24 @@ class NakkiBookingRepository extends ServiceEntityRepository
         parent::__construct($registry, NakkiBooking::class);
     }
 
+    public function save(NakkiBooking $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->persist($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
+    public function remove(NakkiBooking $entity, bool $flush = false): void
+    {
+        $this->getEntityManager()->remove($entity);
+
+        if ($flush) {
+            $this->getEntityManager()->flush();
+        }
+    }
+
     /**
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
@@ -33,8 +51,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->orderBy('n.startAt', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     public function findMemberEventBookingsAtSameTime($member, $event, $start, $end): ?array
     {
@@ -53,8 +70,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->orderBy('n.id', 'ASC')
             ->setMaxResults(10)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     public function findEventNakkiCount($booking, $event): ?string
@@ -68,8 +84,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->setParameter('event', $event)
             ->setParameter('definition', $definition)
             ->getQuery()
-            ->getSingleScalarResult()
-        ;
+            ->getSingleScalarResult();
         $reserved = $this->createQueryBuilder('b')
             ->select('count(b.id)')
             ->leftJoin('b.nakki', 'n')
@@ -79,9 +94,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->setParameter('event', $event)
             ->setParameter('definition', $definition)
             ->getQuery()
-            ->getSingleScalarResult()
-        ;
-        return $reserved.'/'.$total;
+            ->getSingleScalarResult();
+        return $reserved . '/' . $total;
     }
     /*
     public function findOneBySomeField($value): ?NakkiBooking

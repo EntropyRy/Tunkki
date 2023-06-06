@@ -25,10 +25,11 @@ class EventTicketController extends Controller
     public function presale(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
-        TicketRepository $ticketRepo
+        TicketRepository $ticketRepo,
+        NakkiBookingRepository $nakkiBookingRepo
     ): RedirectResponse {
         if ($event->ticketPresaleEnabled()) {
-            $this->freeAvailableTickets($event, $ticketRepo);
+            $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
             $response = $this->ticketChecks('presale', $event, $ticketRepo);
             if (!is_null($response)) {
                 return $response;
@@ -44,10 +45,11 @@ class EventTicketController extends Controller
     public function sale(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
-        TicketRepository $ticketRepo
+        TicketRepository $ticketRepo,
+        NakkiBookingRepository $nakkiBookingRepo
     ): RedirectResponse {
         if (!$event->ticketPresaleEnabled()) {
-            $this->freeAvailableTickets($event, $ticketRepo);
+            $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
             $response = $this->ticketChecks('sale', $event, $ticketRepo);
             if (!is_null($response)) {
                 return $response;
@@ -128,12 +130,20 @@ class EventTicketController extends Controller
         }
         return null;
     }
-    private function freeAvailableTickets($event, $ticketRepo): void
+    private function freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo): void
     {
         $now = new \DateTime('now');
         foreach ($event->getTickets() as $ticket) {
             if ($ticket->getStatus() == 'available' && !is_null($ticket->getOwner())) {
                 if (($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
+                    if ($event->isNakkiRequiredForTicketReservation()) {
+                        foreach ($event->getNakkiBookings() as $nakkiB) {
+                            if ($nakkiB->getMember() == $ticket->getOwner()) {
+                                $nakkiB->setMember(null);
+                                $nakkiBookingRepo->save($nakkiB, true);
+                            }
+                        }
+                    }
                     $ticket->setOwner(null);
                     $ticketRepo->add($ticket, true);
                 }

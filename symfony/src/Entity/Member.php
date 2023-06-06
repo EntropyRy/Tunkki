@@ -145,7 +145,7 @@ class Member implements \Stringable
      */
     public function getName()
     {
-        return $this->firstname.' '.$this->lastname;
+        return $this->firstname . ' ' . $this->lastname;
     }
 
     /**
