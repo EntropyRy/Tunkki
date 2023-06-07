@@ -9,13 +9,21 @@
                   <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
                   <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
             </span>
-            <span style="line-height: inherit" class="label {% if artist.Picture is not empty %}label-success{% else %}label-warning{% endif %}">Profile img</span>
             <span style="font-weight: 800">
             Member: {{ object|render_list_element(admin.list['Artist.member']) }}
             </span>
         </span>
     </div>
-    <div class="col-xs-12">
+    <div class="col-xs-2">
+        {% if object.artist.Picture is not empty %}
+            {{ sonata_media(object.artist.Picture, 'square') }}
+        {% else %}
+            <div style="width: 100%; padding-bottom: 100%; position: relative; text-align: center;">
+                <div style="position: absolute; top: 50%; color: red;">NO PICTURE</div>
+            </div>
+        {% endif %}
+    </div>
+    <div class="col-xs-10">
     {% if object.StartTime %}
         <span>
             <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
