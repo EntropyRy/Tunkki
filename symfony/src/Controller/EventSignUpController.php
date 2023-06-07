@@ -234,7 +234,7 @@ class EventSignUpController extends Controller
             try {
                 $em->flush();
                 $this->addFlash('success', $trans->trans('succesfully_signed_up_for_the_party'));
-                return new RedirectResponse($this->generateUrl('profile'));
+                return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
             } catch (\Exception) {
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
             }
