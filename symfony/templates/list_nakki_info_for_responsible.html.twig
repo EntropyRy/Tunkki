@@ -13,18 +13,20 @@
 {% endblock %}
 
 {% block infos %}
-{% for name,nakki in infos %}
+{% for name, nakki in infos %}
 <h3>Nakki: {{ name }}
     {% if nakki.mattermost is not empty %}
         <a class="btn btn-secondary float-end"
-            target="_black" href="{{nakki.mattermost}}">
+            target="_black" href="{{ nakki.mattermost }}">
             <i class="fa-solid fa-up-right-from-square"></i> Mattermost
         </a>
     {% endif %}
 </h3>
 {% if nakki.responsible is not null %}
 {% set r = nakki.responsible %}
-<h5 class="text-success">{{'Responsible'|trans}}: {{ r.username }}, {{r.name}}, {{r.phone}}, {{r.email}}</h5>
+<h5 class="text-success">{{ 'Responsible'|trans }}: {{ r.username }}, {{ r.name }}, {{ r.phone }}, {{ r.email }}</h5>
+{% else %}
+<h5>{{ 'Responsible'|trans }}: {{ 'missing'|trans }}</h5>
 {% endif %}
 <table class="table table-striped
     {% if event.headerTheme == 'dark' %}
@@ -33,10 +35,10 @@
     ">
   <thead>
     <tr>
-      <th scope="col">{{'Username'|trans}}</th>
-      <th scope="col">{{'Name'|trans}}</th>
+      <th scope="col">{{ 'Username'|trans }}</th>
+      <th scope="col">{{ 'Name'|trans }}</th>
       {% if not gdpr|default(false) %}
-        <th scope="col">{{'Phone'|trans}}</th>
+        <th scope="col">{{ 'Phone'|trans }}</th>
         <th scope="col">Email</th>
       {% endif %}
       {% if event.requireNakkiBookingsToBeDifferentTimes %}
@@ -46,21 +48,21 @@
   </thead>
   <tbody>
     {% for bookings in nakki.b %}
-    {% for b in bookings %}
-      {% if b.member is not null %}
-		    <tr>
-			    <th>{{b.member.username}}</th>
-			    <td>{{b.member.name}}</td>
-          {% if not gdpr|default(false) %}
-			      <td>{{b.member.phone}}</td>
-			      <td>{{b.member.email}}</td>
-          {% endif %}
-          {% if event.requireNakkiBookingsToBeDifferentTimes %}
-                <td>{{b.startAt|date}}</th>
-          {% endif %}
-		    </tr>
-      {% endif %}
-    {% endfor %}
+      {% for b in bookings %}
+        {% if b.member is not null %}
+		      <tr>
+			      <th>{{ b.member.username }}</th>
+			      <td>{{ b.member.name }}</td>
+            {% if not gdpr|default(false) %}
+			        <td>{{ b.member.phone }}</td>
+			        <td>{{ b.member.email }}</td>
+            {% endif %}
+            {% if event.requireNakkiBookingsToBeDifferentTimes %}
+                  <td>{{ b.startAt|date }}</th>
+            {% endif %}
+		      </tr>
+        {% endif %}
+      {% endfor %}
     {% endfor %}
   </tbody>
 </table>
