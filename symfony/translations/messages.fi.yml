@@ -377,6 +377,7 @@ ticket:
   sale_starts: Lipunmyynti alkaa
   sum: Hinta
   go_to_event_page: Lippu tapahtuma sivulta
+  reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaa eteenpäin.
   presale:
     off: Ennakkomyynti ei ole käytössä
 join_us:

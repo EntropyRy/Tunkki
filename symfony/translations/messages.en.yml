@@ -305,6 +305,7 @@ ticket:
   recipient: Recipient
   sum: Price
   reference_number: Reference Number (must be used)
+  reserved_for_two_hours: You have now 2 hours to complete the reservation or this ticket will be handed to next one.
 join_us:
   title: Join us!
   button: Join us

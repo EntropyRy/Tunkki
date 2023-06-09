@@ -122,6 +122,7 @@ class EventTicketController extends Controller
         } else {
             $ticket->setOwner($member);
             $ticketRepo->add($ticket, true);
+            $this->addFlash('success', 'ticket.reserved_for_two_hours');
             return $this->redirectToRoute('entropy_event_ticket', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
