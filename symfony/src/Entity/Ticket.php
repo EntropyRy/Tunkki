@@ -22,7 +22,7 @@ class Ticket implements \Stringable
     private ?\App\Entity\Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
-    #[ORM\JoinColumn(onDelete:"SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?\App\Entity\Member $owner = null;
 
     #[ORM\Column(type: 'integer')]
@@ -144,5 +144,15 @@ class Ticket implements \Stringable
         $this->updatedAt = $updatedAt;
 
         return $this;
+    }
+    public function ticketHolderHasNakki()
+    {
+        $event = $this->getEvent();
+        $member = $this->getOwner();
+        if (!is_null($event) && !is_null($member)) {
+            // find member Nakki only if it is mandatory
+            return $event->ticketHolderHasNakki($member);
+        }
+        return null;
     }
 }

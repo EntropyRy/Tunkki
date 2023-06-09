@@ -29,7 +29,6 @@ final class TicketAdmin extends AbstractAdmin
         $filter
             ->add('price')
             ->add('owner')
-            ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,
@@ -41,9 +40,9 @@ final class TicketAdmin extends AbstractAdmin
                         'reserved' => 'reserved',
                         'paid' => 'paid'
                     ]
-                ]])
-            ->add('updatedAt')
-        ;
+                ]
+            ])
+            ->add('updatedAt');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -53,9 +52,9 @@ final class TicketAdmin extends AbstractAdmin
                 ->add('event');
         }
         $list
+            ->add('ticketHolderHasNakki')
             ->add('price')
             ->add('owner')
-            ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt')
@@ -86,8 +85,7 @@ final class TicketAdmin extends AbstractAdmin
                     'reserved' => 'reserved',
                     'paid' => 'paid'
                 ]
-            ])
-        ;
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -96,17 +94,15 @@ final class TicketAdmin extends AbstractAdmin
             ->add('price')
             ->add('event')
             ->add('owner')
-            ->add('recommendedBy')
             ->add('referenceNumber')
             ->add('status')
-            ->add('updatedAt')
-        ;
+            ->add('updatedAt');
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('delete');
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
-        $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
+        $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
     }
 }

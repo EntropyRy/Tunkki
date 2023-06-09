@@ -1273,4 +1273,16 @@ body {
 
         return $this;
     }
+
+    public function ticketHolderHasNakki($member): ?NakkiBooking
+    {
+        if ($this->isNakkiRequiredForTicketReservation()) {
+            foreach ($this->getNakkiBookings() as $booking) {
+                if ($booking->getMember() == $member) {
+                    return $booking;
+                }
+            }
+        }
+        return null;
+    }
 }
