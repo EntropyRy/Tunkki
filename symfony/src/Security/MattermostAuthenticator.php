@@ -46,20 +46,35 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         return new SelfValidatingPassport(
             new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
                 $mmUser = $client->fetchUserFromToken($accessToken);
-                $email = $mmUser->getEmail();
+                $mmUserA = $mmUser->toArray();
+                $email = $mmUserA['email'];
+                $username = $mmUserA['username'];
+                $id = $mmUserA['id'];
 
                 // 1) have they logged in with Mattermost before? Easy!
-                $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $mmUser->getId()]);
+                $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $id]);
 
                 if ($existingUser) {
+                    if ($existingUser->getMember()->getUsername() != $username) {
+                        $existingUser->getMember()->setUsername($username);
+                        $this->em->persist($existingUser);
+                        $this->em->flush();
+                        $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
+                    }
                     return $existingUser;
                 }
 
                 // 2) do we have a matching user by email?
                 $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
                 if ($member) {
+                    if ($member->getUsername() != $username) {
+                        $member->setUsername($username);
+                        $this->em->persist($member);
+                        $this->em->flush();
+                        $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
+                    }
                     $user = $member->getUser();
-                    $user->setMattermostId($mmUser->getId());
+                    $user->setMattermostId($id);
                     $this->em->persist($user);
                     $this->em->flush();
                     return $user;

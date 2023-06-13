@@ -11,7 +11,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Console\Question\Question;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\User;
 use App\Entity\Member;
 
 #[\Symfony\Component\Console\Attribute\AsCommand('entropy:user')]
@@ -23,15 +22,14 @@ class UserCommand extends Command
     ) {
         parent::__construct();
     }
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setDescription('User management')
             ->addArgument('email', InputArgument::REQUIRED, 'user email')
             ->addOption('super-admin', null, InputOption::VALUE_NONE, 'make super admin')
             ->addOption('password', null, InputOption::VALUE_NONE, 'change password')
-            ->addOption('permissions', null, InputOption::VALUE_REQUIRED, 'add permissions')
-        ;
+            ->addOption('permissions', null, InputOption::VALUE_REQUIRED, 'add permissions');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -41,12 +39,6 @@ class UserCommand extends Command
         $email = $input->getArgument('email');
         if ($email) {
             $user = $this->em->getRepository(Member::class)->findOneBy(['email' => $email])->getUser();
-            /*if (!$user){
-                $user = new User();
-                $member = new Member();
-                $member->setEmail($email);
-                $member->setUser($user);
-            }*/
             if ($input->getOption('password')) {
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');

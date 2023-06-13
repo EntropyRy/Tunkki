@@ -132,7 +132,6 @@ class ProfileController extends AbstractController
     public function edit(
         Request $request,
         FormFactoryInterface $formF,
-        UserPasswordHasherInterface $hasher,
         EntityManagerInterface $em
     ): RedirectResponse|Response {
         $user = $this->getUser();
@@ -148,7 +147,7 @@ class ProfileController extends AbstractController
             $this->addFlash('success', 'profile.member_data_changed');
             return $this->redirectToRoute('profile.' . $member->getLocale());
         }
-        return $this->renderForm('profile/edit.html.twig', [
+        return $this->render('profile/edit.html.twig', [
             'member' => $member,
             'form' => $form
         ]);
