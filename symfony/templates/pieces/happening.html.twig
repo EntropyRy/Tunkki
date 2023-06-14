@@ -17,7 +17,7 @@
             {% if happening.needsPreliminarySignUp %}
                 ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
             {% endif %}
-            {{ 'SHOWN ONLY TO YOU'|trans }}
+            {{ block('shown_only_to') }}
         </a>
         {% endif %}
     {% endif %}
@@ -26,6 +26,10 @@
         href="{{ path('entropy_event_happening_create', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}"
         >{{ 'happening.create'|trans }}</a>
 </div>
+{% endblock %}
+
+{% block shown_only_to %}
+{{ 'SHOWN ONLY TO'|trans }}: {% for member in happening.owners %}{{ member.username }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endblock %}
 
 {% block happening_info %}
@@ -42,7 +46,9 @@
         ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
         {% endif %}
         {% if happening.releaseThisHappeningInEvent == false %}
-           ~ <span class="text-danger">{{ 'SHOWN ONLY TO YOU'|trans }}</span>
+           ~ <span class="text-danger">
+            {{ block('shown_only_to') }}
+           </span>
         {% endif %}
     </h1>
 </div>

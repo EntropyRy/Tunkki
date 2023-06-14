@@ -9,6 +9,7 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class HappeningAdmin extends AbstractAdmin
 {
@@ -56,19 +57,26 @@ final class HappeningAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
-            ->add('nameFi', null, ['disabled' => true])
-            ->add('nameEn', null, ['disabled' => true])
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Restaurant' => 'restaurant',
+                    'Event' => 'event'
+                ]
+            ])
+            ->add('nameFi')
+            ->add('slugFi')
             ->add('descriptionFi')
+            ->add('paymentInfoFi')
+            ->add('priceFi')
+            ->add('nameEn')
+            ->add('slugEn')
             ->add('descriptionEn')
+            ->add('paymentInfoEn')
+            ->add('priceEn')
             ->add('time')
             ->add('needsPreliminarySignUp')
             ->add('needsPreliminaryPayment')
-            ->add('paymentInfoFi')
-            ->add('paymentInfoEn')
-            ->add('type')
             ->add('maxSignUps')
-            ->add('priceFi')
-            ->add('priceEn')
             ->add('releaseThisHappeningInEvent')
             ->add('owners')
             ->add('bookings');
