@@ -65,9 +65,9 @@
 {% if happening.needsPreliminaryPayment %}
     <hr>
     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
-    <p>{{ payment_info|nl2br|replace({
+    <p>{{ payment_info|replace({
             '{{ ticket_ref }}': ticket_ref
-        }) }}</p>
+        })|nl2br }}</p>
 {% endif %}
 {% if happening.price(app.request.locale) != 0 %}
     <h5>{{ 'Price'|trans }}</h5>
