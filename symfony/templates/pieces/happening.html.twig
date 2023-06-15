@@ -90,7 +90,8 @@
             {{ form_end(form) }}
         {% endif %}
     {% else %}
-        <h4>{{ 'happening.sign_ups_have_ended'|trans }}</h4>
+        <h4>{{ space_left }} {{ 'seats available'|trans }},
+        {{ 'happening.sign_ups_have_ended'|trans }}</h4>
     {% endif %}
     {% if happening.needsPreliminarySignUp and admin %}
     <div class="row mt-4">
