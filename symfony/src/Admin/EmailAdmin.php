@@ -42,7 +42,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('subject')
             ->add('body', 'html')
             ->add('updatedAt', 'datetime')
-	    ->add('sentAt', 'datetime')
+            ->add('sentAt', 'datetime')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'preview' => ['template' => 'admin/crud/list__action_email_preview.html.twig'],
@@ -77,18 +77,19 @@ final class EmailAdmin extends AbstractAdmin
                         'To reserved and paid tickets holders' => 'ticket',
                         'To people who have reserved Nakki' => 'nakkikone',
                         'To all artists' => 'artist',
-                        //'Other' => 'other'
+                        'To tiedotus-list' => 'tiedotus',
+                        'To aktiivit-list' => 'aktiivit'
                     ],
                     'required' => false,
                     'expanded' => true,
                     'multiple' => false,
                 ])
                 ->add('replyTo', null, [
-                    'help' => 'Empty defaults to hallitus@entropy.fi'
+                    'help' => 'Empty defaults to hallitus@entropy.fi. For aktiivit list change aktiivit@entropy.fi here.'
                 ]);
         }
         $formMapper
-            ->add('subject', null, ['help' => 'start by "[Entropy]"?'])
+            ->add('subject', null, ['help' => 'start by "[Entropy]"? Include finnish and english version to same message!'])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }

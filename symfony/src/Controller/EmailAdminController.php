@@ -53,7 +53,7 @@ final class EmailAdminController extends CRUDController
             } elseif ($purpose == 'ticket') {
                 $tickets = $event->getTickets();
                 foreach ($tickets as $ticket) {
-                    if ($ticket->getStatus() == 'paid' || $ticket->getStatus() == 'reserved') {
+                    if (str_starts_with($ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
                         $to = $ticket->getOwnerEmail();
                         if ($to) {
                             $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
@@ -94,9 +94,19 @@ final class EmailAdminController extends CRUDController
                         $count += 1;
                     }
                 }
+            } elseif ($purpose == 'aktiivit') {
+                $to = 'aktiivit@entropy.fi';
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                $mailer->send($message);
+                $count += 1;
+            } elseif ($purpose == 'tiedotus') {
+                $to = 'tiedotus@entropy.fi';
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                $mailer->send($message);
+                $count += 1;
             }
-	    $email->setSentAt(new \DateTimeImmutable('now'));
-	    $this->admin->update($email);
+            $email->setSentAt(new \DateTimeImmutable('now'));
+            $this->admin->update($email);
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
