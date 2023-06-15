@@ -89,7 +89,7 @@ final class EmailAdmin extends AbstractAdmin
                 ]);
         }
         $formMapper
-            ->add('subject', null, ['help' => 'start by "[Entropy]"? Include finnish and english version to same message!'])
+            ->add('subject', null, ['help' => 'start by "[Entropy]"? but not when sending to the lists. Include finnish and english version to same message!'])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
