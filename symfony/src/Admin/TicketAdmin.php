@@ -38,7 +38,8 @@ final class TicketAdmin extends AbstractAdmin
                     'choices' => [
                         'available' => 'available',
                         'reserved' => 'reserved',
-                        'paid' => 'paid'
+                        'paid' => 'paid',
+                        'paid_with_bus' => 'paid_with_bus'
                     ]
                 ]
             ])
@@ -63,6 +64,9 @@ final class TicketAdmin extends AbstractAdmin
                     'makePaid' => [
                         'template' => 'admin/crud/list__action_make_ticket_paid.html.twig'
                     ],
+                    'addBus' => [
+                        'template' => 'admin/crud/list__action_add_bus.html.twig'
+                    ],
                     'edit' => [],
                 ],
             ]);
@@ -83,7 +87,8 @@ final class TicketAdmin extends AbstractAdmin
                 'choices' => [
                     'available' => 'available',
                     'reserved' => 'reserved',
-                    'paid' => 'paid'
+                    'paid' => 'paid',
+                    'paid_with_bus' => 'paid_with_bus'
                 ]
             ]);
     }
@@ -104,5 +109,6 @@ final class TicketAdmin extends AbstractAdmin
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
+        $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
     }
 }

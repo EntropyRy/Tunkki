@@ -373,6 +373,7 @@ ticket:
   reference_number: Viite (pitää käyttää)
   code: Liipukoodi
   paid: maksettu
+  paid_with_bus: Lippu ja bussi maksettu
   all_sold: Kaikki liput on myyty.
   sale_starts: Lipunmyynti alkaa
   sum: Hinta
@@ -402,6 +403,8 @@ happening:
   description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmottautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
   price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
   payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
+  show_payment_info: Näytä maksutiedot tapahtumassa
+  sign_ups_have_ended: Ilmottautuminen suljettu
 Name fi: Nimi suomeksi
 Name en: Nimi englanniksi
 Description fi: Kuvaus suomeksi
@@ -432,3 +435,4 @@ Release this happening in event: Julkaise tapahtuma sivulle
 SHOWN ONLY TO: NÄYTETÄÄN VAIN
 missing: puuttuu
 Your username was updated to your Mattermost username: Käyttäjänimesi vaihdettiin Mattermost käyttäjänimeksi.
+Sign ups open until: Varaukset ovat auki tähän asti

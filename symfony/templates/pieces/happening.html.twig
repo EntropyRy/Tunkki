@@ -65,7 +65,9 @@
 {% if happening.needsPreliminaryPayment %}
     <hr>
     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
-    <p>{{ payment_info|nl2br }}</p>
+    <p>{{ payment_info|nl2br|replace({
+            '{{ ticket_ref }}': ticket_ref
+        }) }}</p>
 {% endif %}
 {% if happening.price(app.request.locale) != 0 %}
     <h5>{{ 'Price'|trans }}</h5>
@@ -74,7 +76,7 @@
 </div>
 {% if event.nowTest != 'after' %}
 <div class="col-12 mt-4">
-    {% if happening.needsPreliminarySignUp %}
+    {% if happening.needsPreliminarySignUp and happening.signUpsAreOpen %}
         <h4>{{ space_left }} {{ 'seats available'|trans }}</h4>
         {% if happeningB.member == app.user.member %}
             {{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}
@@ -87,6 +89,8 @@
             <input class="btn btn-primary" type="submit" value="{{ 'sign up'|trans|capitalize }}">
             {{ form_end(form) }}
         {% endif %}
+    {% else %}
+        <h4>{{ 'happening.sign_ups_have_ended'|trans }}</h4>
     {% endif %}
     {% if happening.needsPreliminarySignUp and admin %}
     <div class="row mt-4">

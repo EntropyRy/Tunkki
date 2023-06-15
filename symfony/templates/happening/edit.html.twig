@@ -11,6 +11,7 @@
     {{ form_start(form) }}
     <div class="row">
         {{ form_row(form.type) }}
+        {{ form_row(form.time) }}
         <div class="col-6">
             {{ form_row(form.nameFi) }}
             {{ form_row(form.descriptionFi) }}
@@ -25,7 +26,7 @@
         </div>
     </div>
     {{ form_widget(form) }}
-    <input class="btn btn-primary" type="submit" value="{{'edit'|trans|capitalize}}">
+    <input class="btn btn-primary" type="submit" value="{{ 'edit'|trans|capitalize }}">
     {{ form_end(form) }}
 </div>
 {% endblock %}

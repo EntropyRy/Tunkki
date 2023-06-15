@@ -130,4 +130,18 @@ class TicketRepository extends ServiceEntityRepository
         }
         return null;
     }
+
+    public function findMemberTicketReferenceForEvent($member, $event): ?string
+    {
+        $ticket = $this->createQueryBuilder('t')
+            ->select('t.referenceNumber')
+            ->andWhere('t.event = :event')
+            ->andWhere('t.owner = :member')
+            ->setParameter('event', $event)
+            ->setParameter('member', $member)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+        return $ticket['referenceNumber'];
+    }
 }

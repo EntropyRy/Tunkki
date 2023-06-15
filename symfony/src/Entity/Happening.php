@@ -77,6 +77,9 @@ class Happening
     #[ORM\Column]
     private ?bool $releaseThisHappeningInEvent = false;
 
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $signUpsOpenUntil = null;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
@@ -390,5 +393,26 @@ class Happening
     public function __toString()
     {
         return $this->nameEn;
+    }
+
+    public function getSignUpsOpenUntil(): ?\DateTimeInterface
+    {
+        return $this->signUpsOpenUntil;
+    }
+
+    public function setSignUpsOpenUntil(?\DateTimeInterface $signUpsOpenUntil): static
+    {
+        $this->signUpsOpenUntil = $signUpsOpenUntil;
+
+        return $this;
+    }
+
+    public function signUpsAreOpen(): bool
+    {
+        $time = new \DateTime('now');
+        if ($this->signUpsOpenUntil > $time) {
+            return true;
+        }
+        return false;
     }
 }

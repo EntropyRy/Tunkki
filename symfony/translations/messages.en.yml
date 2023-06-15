@@ -295,6 +295,7 @@ ticket:
   available: Available
   details: See ticket details
   go_to_event_page: Ticket in Event Page
+  paid_with_bus: Ticket and Bus paid
   presale:
     off: Presales is not in use
   situation: Your tickets situation
@@ -328,6 +329,8 @@ happening:
   description_fi: Tell about the happeing. When is the sign up due? In case of resaturant list choices and allergens.
   price_fi: Text so that you can have many prices. (tapas 10€, tapas + wine 15€)
   payment_info_fi: Let us know how to pay if needed.
+  show_payment_info: Show payment info to the user
+  sign_ups_have_ended: Sign ups have ended
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish

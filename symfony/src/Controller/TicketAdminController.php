@@ -14,6 +14,17 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 final class TicketAdminController extends CRUDController
 {
+    public function addBusAction(TicketRepository $repo): RedirectResponse
+    {
+        $ticket = $this->admin->getSubject();
+        if (is_null($ticket->getOwner())) {
+            $this->addFlash('warning', 'ticket does not have owner!');
+        } else {
+            $ticket->setStatus('paid_with_bus');
+            $repo->add($ticket, true);
+        }
+        return $this->redirect($this->admin->generateUrl('list'));
+    }
     public function makePaidAction(TicketRepository $repo): RedirectResponse
     {
         $ticket = $this->admin->getSubject();

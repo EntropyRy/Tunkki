@@ -10,6 +10,7 @@ use App\Form\HappeningBookingType;
 use App\Form\HappeningType;
 use App\Repository\HappeningBookingRepository;
 use App\Repository\HappeningRepository;
+use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -137,7 +138,8 @@ class HappeningController extends AbstractController
         Request $request,
         #[MapEntity(expr: 'repository.findHappeningByEventSlugAndSlug(slug,happeningSlug)')]
         Happening $happening,
-        HappeningBookingRepository $HBR
+        HappeningBookingRepository $HBR,
+        TicketRepository $ticketR
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -152,6 +154,7 @@ class HappeningController extends AbstractController
             $happeningB = new HappeningBooking();
             $happeningB->setHappening($happening);
         }
+        $ticket_ref = $ticketR->findMemberTicketReferenceForEvent($member, $event);
         $form = $this->createForm(HappeningBookingType::class, $happeningB);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -165,11 +168,12 @@ class HappeningController extends AbstractController
             ]);
         }
         return $this->render('happening/show.html.twig', [
-            'event' => $happening->getEvent(),
+            'event' => $event,
             'happening' => $happening,
             'happeningB' => $happeningB,
             'admin' => $admin,
-            'form' => $form
+            'form' => $form,
+            'ticket_ref' => $ticket_ref
         ]);
     }
     #[Route(

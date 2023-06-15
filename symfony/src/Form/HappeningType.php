@@ -21,15 +21,15 @@ class HappeningType extends AbstractType
                 ],
                 'required' => true
             ])
-            ->add('picture', MediaType::class, [
-                'context' => 'artist',
-                'provider' => 'sonata.media.provider.image',
-                'translation_domain' => 'messages',
-            ])
             ->add('time', null, [
                 'help' => 'When is this happening?',
                 //'html5' => false,
                 //'date_format' => 'D, G:i'
+            ])
+            ->add('picture', MediaType::class, [
+                'context' => 'artist',
+                'provider' => 'sonata.media.provider.image',
+                'translation_domain' => 'messages',
             ])
             ->add('nameFi')
             ->add('descriptionFi', null, [
@@ -49,7 +49,10 @@ class HappeningType extends AbstractType
             ->add('priceEn')
             ->add('needsPreliminarySignUp')
             ->add('maxSignUps')
-            ->add('needsPreliminaryPayment')
+            ->add('signUpsOpenUntil')
+            ->add('needsPreliminaryPayment', null, [
+                'label' => 'happening.show_payment_info'
+            ])
             ->add('releaseThisHappeningInEvent');
     }
 
