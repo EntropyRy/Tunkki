@@ -53,7 +53,7 @@
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
-    <h2 class="mt-2">{{ block('event_name') }}
+    <h2 class="mt-2 event-name">{{ block('event_name') }}
       {% if event.type != 'announcement' %}
         ~ <span class="">{{ block('event_time') }}<span>
       {% endif %}
