@@ -12,6 +12,7 @@ use App\Repository\HappeningBookingRepository;
 use App\Repository\HappeningRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -140,7 +141,7 @@ class HappeningController extends AbstractController
         #[MapEntity(expr: 'repository.findHappeningByEventSlugAndSlug(slug,happeningSlug)')]
         Happening $happening,
         HappeningBookingRepository $HBR,
-        TicketRepository $ticketR
+        TicketRepository $ticketR,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -168,9 +169,12 @@ class HappeningController extends AbstractController
                 'happeningSlug' => $happening->getSlug($request->getLocale())
             ]);
         }
+        $converter = new GithubFlavoredMarkdownConverter();
         return $this->render('happening/show.html.twig', [
             'event' => $event,
             'happening' => $happening,
+            'description' => $converter->convert($happening->getDescription($request->getLocale())),
+            'payment_info' => $converter->convert($happening->getPaymentInfo($request->getLocale())),
             'happeningB' => $happeningB,
             'admin' => $admin,
             'form' => $form,

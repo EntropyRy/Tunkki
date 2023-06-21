@@ -34,8 +34,6 @@
 
 {% block happening_info %}
 {% set name = happening.name(app.request.locale) %}
-{% set description = happening.description(app.request.locale)|markdown_to_html %}
-{% set payment_info = happening.paymentInfo(app.request.locale)|markdown_to_html %}
 {% set space_left = happening.maxSignUps - happening.bookings|length %}
 <div class="row">
 <div class="col-12">
