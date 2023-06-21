@@ -47,7 +47,7 @@ final class HappeningAdmin extends AbstractAdmin
             ->add('bookings')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'show' => [],
+                    'preview' => ['template' => 'admin/crud/list__action_happening_preview.html.twig'],
                     'edit' => [],
                     'delete' => [],
                 ],

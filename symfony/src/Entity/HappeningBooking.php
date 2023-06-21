@@ -74,7 +74,7 @@ class HappeningBooking
 
     public function __toString()
     {
-        return $this->member;
+        return $this->createdAt->format('d.m. H:i') . ' ' . $this->member;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable
