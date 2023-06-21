@@ -406,6 +406,11 @@ happening:
   show_payment_info: Näytä maksutiedot tapahtumassa
   sign_ups_have_ended: Ilmottautuminen suljettu
   markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatointi</a> sallittu
+  you_have_signed_up: Ilmoittauduttu onnistuneesti!
+  reservation_cancelled: Ilmottautuminen poistettu!
+  created: Tapahtuma luotu
+  same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
+  edited: Muokkaukset tallennettu onnistuneesti.
 Name fi: Nimi suomeksi
 Name en: Nimi englanniksi
 Description fi: Kuvaus suomeksi

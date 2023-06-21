@@ -57,7 +57,7 @@ class HappeningController extends AbstractController
                 $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi()) ||
                 $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
             ) {
-                $this->addFlash('warning', 'Happeing with that name already exists');
+                $this->addFlash('warning', 'happening.same_name_exits');
                 return $this->redirectToRoute('entropy_event_happening_edit', [
                     'slug' => $event->getUrl(),
                     'year' => $event->getEventDate()->format('Y'),
@@ -65,7 +65,7 @@ class HappeningController extends AbstractController
                 ]);
             } else {
                 $hr->save($happening, true);
-                $this->addFlash('success', 'Created!');
+                $this->addFlash('success', 'happening.created');
                 return $this->redirectToRoute('entropy_event_happening_show', [
                     'slug' => $event->getUrl(),
                     'year' => $event->getEventDate()->format('Y'),
@@ -113,7 +113,7 @@ class HappeningController extends AbstractController
             $happening->setSlugEn($slugger->slug($happening->getNameEn())->lower());
             $em->persist($happening);
             $em->flush();
-            $this->addFlash('success', 'Edited!');
+            $this->addFlash('success', 'happening.edited');
             return $this->redirectToRoute('entropy_event_happening_show', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
@@ -162,7 +162,7 @@ class HappeningController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $happeningB->setMember($member);
             $HBR->save($happeningB, true);
-            $this->addFlash('success', 'You have singned up!');
+            $this->addFlash('success', 'happening.you_have_signed_up');
             return $this->redirectToRoute('entropy_event_happening_show', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
@@ -200,7 +200,7 @@ class HappeningController extends AbstractController
         if ($happeningB->getMember() == $member) {
             $happeningB->setMember(null);
             $hbr->remove($happeningB, true);
-            $this->addFlash('success', 'Reservation cancelled');
+            $this->addFlash('success', 'happening.reservation_cancelled');
         }
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $event->getUrl(),

@@ -332,6 +332,11 @@ happening:
   show_payment_info: Show payment info to the user
   sign_ups_have_ended: Sign ups have ended
   markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatting</a> allowed
+  you_have_signed_up: You have signed up succesfully!
+  reservation_cancelled: Reservation cancelled
+  created: Happening Created!
+  same_name_exists: Happening with the same name already exists. Please change the name.
+  edited: Changes saved succesfully!
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish
