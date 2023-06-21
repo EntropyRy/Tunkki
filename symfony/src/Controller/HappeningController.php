@@ -113,9 +113,10 @@ class HappeningController extends AbstractController
             $em->persist($happening);
             $em->flush();
             $this->addFlash('success', 'Edited!');
-            return $this->redirectToRoute('entropy_event_slug', [
+            return $this->redirectToRoute('entropy_event_happening_show', [
                 'slug' => $event->getUrl(),
-                'year' => $event->getEventDate()->format('Y')
+                'year' => $event->getEventDate()->format('Y'),
+                'happeningSlug' => $happening->getSlug($request->getLocale())
             ]);
         }
         return $this->render('happening/edit.html.twig', [
@@ -155,7 +156,7 @@ class HappeningController extends AbstractController
             $happeningB->setHappening($happening);
         }
         $ticket_ref = $ticketR->findMemberTicketReferenceForEvent($member, $event);
-        $form = $this->createForm(HappeningBookingType::class, $happeningB);
+        $form = $this->createForm(HappeningBookingType::class, $happeningB, ['comments' => $happening->isAllowSignUpComments()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $happeningB->setMember($member);

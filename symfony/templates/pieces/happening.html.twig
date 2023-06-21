@@ -10,7 +10,7 @@
         {% endif %}
     </a>
     {% else %}
-        {% if app.user.member in happening.owners %}
+        {% if app.user and app.user.member in happening.owners %}
         <a class="btn btn-danger w-100 mt-2"
             href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
             >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
@@ -34,8 +34,8 @@
 
 {% block happening_info %}
 {% set name = happening.name(app.request.locale) %}
-{% set description = happening.description(app.request.locale) %}
-{% set payment_info = happening.paymentInfo(app.request.locale) %}
+{% set description = happening.description(app.request.locale)|markdown_to_html %}
+{% set payment_info = happening.paymentInfo(app.request.locale)|markdown_to_html %}
 {% set space_left = happening.maxSignUps - happening.bookings|length %}
 <div class="row">
 <div class="col-12">
@@ -61,13 +61,13 @@
     <div class="col-12 mt-4 mt-sm-0">
 {% endif %}
 <h3>{{ name }} <small>{{ happening.time|format_datetime(pattern='E, HH:mm') }}</small></h3>
-<p>{{ description|nl2br }}</p>
+<p>{{ description|raw }}</p>
 {% if happening.needsPreliminaryPayment %}
     <hr>
     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
     <p>{{ payment_info|replace({
             '{{ ticket_ref }}': ticket_ref
-        })|nl2br }}</p>
+        })|raw }}</p>
 {% endif %}
 {% if happening.price(app.request.locale) != 0 %}
     <h5>{{ 'Price'|trans }}</h5>
@@ -81,12 +81,12 @@
         {% if happeningB.member == app.user.member %}
             {{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}
             <div>
-                <a href="{{ path('entropy_event_happening_remove', {'id': happeningB.id}) }}" class="btn btn-warning">{{ 'Remove reservation'|trans }}</a>
+                <a href="{{ path('entropy_event_happening_remove', {'id': happeningB.id}) }}" class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
             </div>
         {% else %}
             {{ form_start(form) }}
             {{ form_widget(form) }}
-            <input class="btn btn-primary" type="submit" value="{{ 'sign up'|trans|capitalize }}">
+            <input class="btn btn-primary w-100" type="submit" value="{{ 'sign up'|trans|capitalize }}">
             {{ form_end(form) }}
         {% endif %}
     {% else %}
@@ -99,7 +99,7 @@
             <h4>{{ 'Bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
             <ol>
             {% for booking in happening.bookings %}
-                <li>{{ booking.member }}: {{ booking.comment }}</li>
+                <li>{{ booking.member }}{% if booking.comment %}: {{ booking.comment }}{% endif %}</li>
             {% else %}
                 <span>{{ 'happening.no_reservations'|trans }}</span>
             {% endfor %}

@@ -33,10 +33,14 @@ class HappeningType extends AbstractType
             ])
             ->add('nameFi')
             ->add('descriptionFi', null, [
-                'attr' => ['placeholder' => 'happening.description_fi']
+                'attr' => ['placeholder' => 'happening.description_fi', 'rows' => 3],
+                'help' => 'happening.markdown_allowed',
+                'help_html' => true
             ])
             ->add('paymentInfoFi', null, [
-                'attr' => ['placeholder' => 'happening.payment_info_fi']
+                'attr' => ['placeholder' => 'happening.payment_info_fi', 'rows' => 3],
+                'help' => 'happening.markdown_allowed',
+                'help_html' => true
 
             ])
             ->add('priceFi', null, [
@@ -44,12 +48,21 @@ class HappeningType extends AbstractType
 
             ])
             ->add('nameEn', null, [])
-            ->add('descriptionEn', null, [])
-            ->add('paymentInfoEn')
+            ->add('descriptionEn', null, [
+                'attr' => ['rows' => 3],
+                'help' => 'happening.markdown_allowed',
+                'help_html' => true,
+            ])
+            ->add('paymentInfoEn', null, [
+                'attr' => ['rows' => 3],
+                'help' => 'happening.markdown_allowed',
+                'help_html' => true,
+            ])
             ->add('priceEn')
             ->add('needsPreliminarySignUp')
             ->add('maxSignUps')
             ->add('signUpsOpenUntil')
+            ->add('allowSignUpComments')
             ->add('needsPreliminaryPayment', null, [
                 'label' => 'happening.show_payment_info'
             ])

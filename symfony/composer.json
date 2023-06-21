@@ -18,6 +18,7 @@
     "gedmo/doctrine-extensions": "^3.9",
     "hashids/hashids": "^4.0",
     "knpuniversity/oauth2-client-bundle": "^2",
+    "league/commonmark": "^2.4",
     "league/oauth2-server-bundle": "^0.5",
     "picqer/php-barcode-generator": "^2.2",
     "sonata-project/admin-bundle": "^4",
@@ -46,6 +47,7 @@
     "symfonycasts/reset-password-bundle": "^1.1",
     "twig/extra-bundle": "^3.4",
     "twig/intl-extra": "^3.4",
+    "twig/markdown-extra": "^3.6",
     "twig/string-extra": "^3.0"
   },
   "conflict": {

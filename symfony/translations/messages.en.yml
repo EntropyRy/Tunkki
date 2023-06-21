@@ -331,6 +331,7 @@ happening:
   payment_info_fi: Let us know how to pay if needed.
   show_payment_info: Show payment info to the user
   sign_ups_have_ended: Sign ups have ended
+  markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatting</a> allowed
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish

@@ -12,12 +12,15 @@ class HappeningBookingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('comment');
+            ->add('comment', null, [
+                'row_attr' => ['class' => $options['comments'] ? '' : 'd-none']
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
+            'comments' => true,
             'data_class' => HappeningBooking::class,
         ]);
     }

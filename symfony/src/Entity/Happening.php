@@ -80,6 +80,9 @@ class Happening
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $signUpsOpenUntil = null;
 
+    #[ORM\Column]
+    private ?bool $allowSignUpComments = true;
+
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
@@ -409,10 +412,25 @@ class Happening
 
     public function signUpsAreOpen(): bool
     {
+        if (is_null($this->signUpsOpenUntil)) {
+            return true;
+        }
         $time = new \DateTime('now');
         if ($this->signUpsOpenUntil > $time) {
             return true;
         }
         return false;
+    }
+
+    public function isAllowSignUpComments(): ?bool
+    {
+        return $this->allowSignUpComments;
+    }
+
+    public function setAllowSignUpComments(bool $allowSignUpComments): static
+    {
+        $this->allowSignUpComments = $allowSignUpComments;
+
+        return $this;
     }
 }
