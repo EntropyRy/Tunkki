@@ -142,6 +142,9 @@ class TicketRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
-        return $ticket['referenceNumber'];
+        if ($ticket instanceof Ticket) {
+            return $ticket['referenceNumber'];
+        }
+        return null;
     }
 }

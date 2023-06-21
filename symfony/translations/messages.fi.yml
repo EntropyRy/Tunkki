@@ -411,6 +411,7 @@ happening:
   created: Tapahtuma luotu
   same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
   edited: Muokkaukset tallennettu onnistuneesti.
+  ticket_missing: Tarvitset lipun ensin.
 Name fi: Nimi suomeksi
 Name en: Nimi englanniksi
 Description fi: Kuvaus suomeksi

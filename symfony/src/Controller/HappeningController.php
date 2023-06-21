@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class HappeningController extends AbstractController
@@ -142,6 +143,7 @@ class HappeningController extends AbstractController
         Happening $happening,
         HappeningBookingRepository $HBR,
         TicketRepository $ticketR,
+        TranslatorInterface $trans
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -157,6 +159,9 @@ class HappeningController extends AbstractController
             $happeningB->setHappening($happening);
         }
         $ticket_ref = $ticketR->findMemberTicketReferenceForEvent($member, $event);
+        if (is_null($ticket_ref)) {
+            $ticket_ref = $trans->trans('happening.ticket_missing');
+        }
         $form = $this->createForm(HappeningBookingType::class, $happeningB, ['comments' => $happening->isAllowSignUpComments()]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
