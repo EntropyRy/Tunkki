@@ -99,7 +99,7 @@
             <h4>{{ 'Bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
             <ol>
             {% for booking in happening.bookings %}
-                <li>{{ booking.member }}{% if booking.comment %}: {{ booking.comment }}{% endif %}</li>
+                <li>{{ booking.member.username }}, {{ booking.member }}{% if booking.comment %}: {{ booking.comment }}{% endif %}</li>
             {% else %}
                 <span>{{ 'happening.no_reservations'|trans }}</span>
             {% endfor %}
