@@ -66,8 +66,6 @@
     <p>{{ payment_info|replace({
             '{{ ticket_ref }}': ticket_ref
         })|raw }}</p>
-{% endif %}
-{% if happening.price(app.request.locale) != 0 %}
     <h5>{{ 'Price'|trans }}</h5>
     <p>{{ happening.price(app.request.locale) }}</p>
 {% endif %}
