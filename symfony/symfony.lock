@@ -111,12 +111,6 @@
     "imagine/imagine": {
         "version": "v0.7.1"
     },
-    "jms/metadata": {
-        "version": "2.1.0"
-    },
-    "jms/serializer": {
-        "version": "3.3.0"
-    },
     "knplabs/gaufrette": {
         "version": "v0.8.3"
     },
@@ -185,9 +179,6 @@
     },
     "phpstan/extension-installer": {
         "version": "1.1.0"
-    },
-    "phpstan/phpdoc-parser": {
-        "version": "0.4.10"
     },
     "phpstan/phpstan": {
         "version": "1.6.8"
