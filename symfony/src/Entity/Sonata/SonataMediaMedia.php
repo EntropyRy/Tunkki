@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity\Sonata;
 
 use Doctrine\ORM\Mapping as ORM;
-use JMS\Serializer\Annotation as Serializer;
 use Sonata\MediaBundle\Entity\BaseMedia;
 
 #[ORM\Table(name: 'media__media')]
@@ -15,8 +14,6 @@ use Sonata\MediaBundle\Entity\BaseMedia;
 class SonataMediaMedia extends BaseMedia
 {
     /**
-     * @Serializer\Groups(groups={"sonata_api_read", "sonata_api_write", "sonata_search"})
-     *
      * @var int
      */
     #[ORM\Id]
