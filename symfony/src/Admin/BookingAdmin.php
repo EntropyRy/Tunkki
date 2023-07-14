@@ -169,6 +169,14 @@ class BookingAdmin extends AbstractAdmin
             ->add('retrieval', DateTimePickerType::class, [
                 'required' => false,
                 'format' => 'd.M.y H:mm',
+                'datepicker_options' => [
+                    'display' => [
+                        'sideBySide' => true,
+                        'components' => [
+                            'seconds' => false,
+                        ]
+                    ]
+                ],
                 'label' => 'Pickup Time'
             ])
             ->add('givenAwayBy', null, [ // ModelListType::class, [
@@ -180,6 +188,14 @@ class BookingAdmin extends AbstractAdmin
             ->add('returning', DateTimePickerType::class, [
                 'required' => false,
                 'format' => 'd.M.y H:mm',
+                'datepicker_options' => [
+                    'display' => [
+                        'sideBySide' => true,
+                        'components' => [
+                            'seconds' => false,
+                        ]
+                    ]
+                ],
                 'label' => 'Return Time'
             ])
             ->add('receivedBy', null, [ //ModelListType::class, [

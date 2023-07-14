@@ -81,24 +81,34 @@ final class NakkiAdmin extends AbstractAdmin
                 'with_years' => false,
                 'with_months' => false,
                 'with_days' => false,
-		'with_hours' => true,
-		'required' => true
+                'with_hours' => true,
+                'required' => true
             ])
             ->add('startAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
                 'format' => 'd.M.y, H:00',
-                'dp_use_seconds' => false,
-                'dp_use_minutes' => false,
+                'datepicker_options' => [
+                    'display' => [
+                        'sideBySide' => true,
+                        'components' => [
+                            'seconds' => false,
+                        ]
+                    ]
+                ],
                 'minutes' => 00,
-                'dp_side_by_side' => true,
             ])
             ->add('endAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
                 'format' => 'd.M.y, H:00',
+                'datepicker_options' => [
+                    'display' => [
+                        'sideBySide' => true,
+                        'components' => [
+                            'seconds' => false,
+                        ]
+                    ]
+                ],
                 'minutes' => 00,
-                'dp_use_seconds' => false,
-                'dp_use_minutes' => false,
-                'dp_side_by_side' => true,
             ]);
     }
 
