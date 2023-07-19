@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
 final class EventAdminController extends CRUDController

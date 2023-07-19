@@ -145,7 +145,7 @@ class Ticket implements \Stringable
 
         return $this;
     }
-    public function ticketHolderHasNakki()
+    public function ticketHolderHasNakki(): ?NakkiBooking
     {
         $event = $this->getEvent();
         $member = $this->getOwner();

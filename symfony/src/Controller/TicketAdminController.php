@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Form\ChengeTicketOwnerType;
+use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -11,6 +13,8 @@ use App\Entity\Event;
 use App\Entity\Ticket;
 use App\Helper\ReferenceNumber;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 final class TicketAdminController extends CRUDController
 {
@@ -21,9 +25,39 @@ final class TicketAdminController extends CRUDController
             $this->addFlash('warning', 'ticket does not have owner!');
         } else {
             $ticket->setStatus('paid_with_bus');
-            $repo->add($ticket, true);
+            $repo->save($ticket, true);
         }
         return $this->redirect($this->admin->generateUrl('list'));
+    }
+    public function changeOwnerAction(Request $request, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiRepo): Response
+    {
+        $ticket = $this->admin->getSubject();
+        if (is_null($ticket->getOwner())) {
+            $this->addFlash('warning', 'ticket does not have owner!');
+            return $this->redirect($this->admin->generateUrl('list'));
+        } else {
+            $nakki = $ticket->ticketHolderHasNakki();
+            $form = $this->createForm(ChengeTicketOwnerType::class, $ticket, []);
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $ticket = $form->getData();
+                $new_owner = $ticket->getOwner();
+                $info = '';
+                if (!is_null($nakki)) {
+                    $nakki->setMember($new_owner);
+                    $nakkiRepo->save($nakki, true);
+                    $info = 'Nakki and ';
+                }
+                $ticketRepo->save($ticket, true);
+                $info .= 'Ticket moved to new member: ' . $new_owner;
+                $this->addFlash('success', $info);
+                return $this->redirect($this->admin->generateUrl('list'));
+            }
+        }
+        return $this->renderWithExtraParams('admin/ticket/change_owner.html.twig', [
+            'ticket' => $ticket,
+            'form' => $form
+        ]);
     }
     public function makePaidAction(TicketRepository $repo): RedirectResponse
     {
@@ -32,7 +66,7 @@ final class TicketAdminController extends CRUDController
             $this->addFlash('warning', 'ticket does not have owner!');
         } else {
             $ticket->setStatus('paid');
-            $repo->add($ticket, true);
+            $repo->save($ticket, true);
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }

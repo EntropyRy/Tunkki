@@ -67,6 +67,9 @@ final class TicketAdmin extends AbstractAdmin
                     'addBus' => [
                         'template' => 'admin/crud/list__action_add_bus.html.twig'
                     ],
+                    'changeOwner' => [
+                        'template' => 'admin/ticket/button_change_owner.html.twig'
+                    ],
                     'edit' => [],
                 ],
             ]);
@@ -110,5 +113,6 @@ final class TicketAdmin extends AbstractAdmin
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
         $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
+        $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');
     }
 }
