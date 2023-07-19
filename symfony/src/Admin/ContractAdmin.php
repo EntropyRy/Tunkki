@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class ContractAdmin extends AbstractAdmin
@@ -18,15 +19,16 @@ final class ContractAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('purpose')
+            ->add('validFrom')
             ->add('updatedAt')
-            ->add('createdAt')
-        ;
+            ->add('createdAt');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
             ->add('purpose')
+            ->add('validFrom')
             ->add('ContentFi', 'html')
             ->add('ContentEn', 'html')
             ->add('updatedAt')
@@ -44,27 +46,38 @@ final class ContractAdmin extends AbstractAdmin
     {
         $formMapper
             ->add('purpose', ChoiceType::class, ['choices' => $this->getPurposeChoices()])
+            ->add('validFrom', DateTimePickerType::class, [
+                'required' => false,
+                'format' => 'd.M.y H:mm',
+                'datepicker_options' => [
+                    'display' => [
+                        'sideBySide' => true,
+                        'components' => [
+                            'seconds' => false,
+                        ]
+                    ]
+                ],
+            ])
             ->add('ContentFi', CKEditorType::class, [
                 'config' => ['full']
             ])
             ->add('ContentEn', CKEditorType::class, [
                 'config' => ['full']
-            ])
-        ;
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('purpose')
+            ->add('validFrom')
             ->add('ContentFi')
             ->add('ContentEn')
             ->add('createdAt')
-            ->add('updatedAt')
-        ;
+            ->add('updatedAt');
     }
     private function getPurposeChoices(): array
     {
-        return [ 'Rent Contract' => 'rent' ];
+        return ['Rent Contract' => 'rent'];
     }
 }

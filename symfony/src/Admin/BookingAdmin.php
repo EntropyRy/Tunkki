@@ -35,6 +35,7 @@ use App\Entity\Booking;
 use App\Entity\Package;
 // Hash
 use Hashids\Hashids;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class BookingAdmin extends AbstractAdmin
@@ -275,13 +276,14 @@ class BookingAdmin extends AbstractAdmin
                 ->tab('Payment')
                 ->with('Payment Information')
                 ->add('referenceNumber', null, ['disabled' => true])
-                ->add('calculatedTotalPrice', TextType::class, ['disabled' => true])
+                ->add('calculatedTotalPrice', MoneyType::class, ['disabled' => true])
                 ->add('numberOfRentDays', null, [
                     'help' => 'How many days are actually billed',
                     'disabled' => false,
                     'required' => true
                 ])
-                ->add('actualPrice', null, [
+                ->add('accessoryPrice', MoneyType::class, ['required' => false])
+                ->add('actualPrice', MoneyType::class, [
                     'disabled' => false,
                     'required' => false,
                     'help' => 'If booking does not need to be billed: leave this empty'

@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -120,6 +121,9 @@ class Booking implements \Stringable
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $renterSignature = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $accessoryPrice = null;
 
     public function addPackage(\App\Entity\Package $package): Booking
     {
@@ -601,6 +605,18 @@ class Booking implements \Stringable
     public function setRenterSignature(?string $renterSignature): self
     {
         $this->renterSignature = $renterSignature;
+
+        return $this;
+    }
+
+    public function getAccessoryPrice(): ?string
+    {
+        return $this->accessoryPrice;
+    }
+
+    public function setAccessoryPrice(?string $accessoryPrice): static
+    {
+        $this->accessoryPrice = $accessoryPrice;
 
         return $this;
     }

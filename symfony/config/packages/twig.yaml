@@ -6,6 +6,7 @@ twig:
   form_themes:
     - "@SonataForm/Form/datepicker.html.twig"
     - "@SonataFormatter/Form/formatter.html.twig"
+    - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
     - "bootstrap_5_layout.html.twig"
     - "media_widgets.html.twig"
   globals:

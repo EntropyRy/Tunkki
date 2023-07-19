@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -33,6 +34,9 @@ class Contract implements \Stringable
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $ContentEn = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTimeInterface $validFrom = null;
 
     public function getId(): ?int
     {
@@ -99,6 +103,18 @@ class Contract implements \Stringable
     public function setContentEn(?string $ContentEn): self
     {
         $this->ContentEn = $ContentEn;
+
+        return $this;
+    }
+
+    public function getValidFrom(): ?\DateTimeInterface
+    {
+        return $this->validFrom;
+    }
+
+    public function setValidFrom(\DateTimeInterface $validFrom): static
+    {
+        $this->validFrom = $validFrom;
 
         return $this;
     }
