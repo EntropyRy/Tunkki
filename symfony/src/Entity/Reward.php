@@ -15,11 +15,11 @@ class Reward implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User', inversedBy: 'rewards')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rewards')]
     #[ORM\JoinColumn(nullable: false)]
     private ?\App\Entity\User $user = null;
 
-    #[ORM\ManyToMany(targetEntity: \App\Entity\Booking::class, inversedBy: 'rewards')]
+    #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'rewards')]
     private $bookings;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
@@ -31,7 +31,7 @@ class Reward implements \Stringable
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $paidDate = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $PaymentHandledBy = null;
 
     /**
@@ -68,9 +68,6 @@ class Reward implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Booking[]
-     */
     public function getBookings(): Collection
     {
         return $this->bookings;
@@ -161,7 +158,7 @@ class Reward implements \Stringable
     }
     public function __toString(): string
     {
-        return '#'.$this->id. ' for '.$this->user;
+        return '#' . $this->id . ' for ' . $this->user;
     }
 
     public function getWeight(): ?int

@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Entity\User;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -56,31 +54,31 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'paid_date', type: 'datetime', nullable: true)]
     private ?\DateTime $paid_date = null;
 
-    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class)]
+    #[ORM\ManyToMany(targetEntity: Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $items;
 
-    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Package::class)]
+    #[ORM\ManyToMany(targetEntity: Package::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $packages;
 
-    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Accessory::class, cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private $accessories;
 
-    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
     private ?\App\Entity\WhoCanRentChoice $rentingPrivileges = null;
 
-    #[ORM\ManyToOne(targetEntity: 'Renter', inversedBy: 'bookings')]
+    #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
     #[Assert\NotBlank]
     private ?\App\Entity\Renter $renter = null;
 
-    #[ORM\OneToMany(targetEntity: 'BillableEvent', mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: BillableEvent::class, mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
     private $billableEvents;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $givenAwayBy = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $receivedBy = null;
 
     #[ORM\Column(name: 'actualPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
@@ -89,10 +87,10 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'numberOfRentDays', type: 'integer')]
     private int $numberOfRentDays = 1;
 
-    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
+    #[ORM\OneToMany(targetEntity: StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
     private $statusEvents;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $creator = null;
 
     /**
@@ -101,7 +99,7 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'created_at', type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $modifier = null;
 
     /**
@@ -123,14 +121,6 @@ class Booking implements \Stringable
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $renterSignature = null;
 
-
-
-    /**
-     * Add package
-     *
-     *
-     * @return Booking
-     */
     public function addPackage(\App\Entity\Package $package): Booking
     {
         foreach ($package->getItems() as $item) {
@@ -141,9 +131,6 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove package
-     */
     public function removePackage(\App\Entity\Package $package): void
     {
         foreach ($package->getItems() as $item) {
@@ -152,11 +139,6 @@ class Booking implements \Stringable
         $this->packages->removeElement($package);
     }
 
-    /**
-     * Get packages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getPackages()
     {
         return $this->packages;
@@ -166,14 +148,6 @@ class Booking implements \Stringable
         return $this->name ? $this->name . ' - ' . date_format($this->bookingDate, 'd.m.Y') : 'n/a';
     }
 
-
-    /**
-     * Set paid
-     *
-     * @param boolean $paid
-     *
-     * @return Booking
-     */
     public function setPaid($paid): Booking
     {
         $this->setPaidDate(new \DateTime());
@@ -182,23 +156,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get paid
-     *
-     * @return boolean
-     */
     public function getPaid(): bool
     {
         return $this->paid;
     }
 
-    /**
-     * Set paidDate
-     *
-     * @param \DateTime $paidDate
-     *
-     * @return Booking
-     */
     public function setPaidDate($paidDate): Booking
     {
         $this->paid_date = $paidDate;
@@ -206,21 +168,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get paidDate
-     *
-     * @return \DateTime
-     */
-    public function getPaidDate(): ?DateTime
+    public function getPaidDate(): ?\DateTime
     {
         return $this->paid_date;
     }
 
-    /**
-     * Get calculatedPrice
-     *
-     * @return int
-     */
     public function getCalculatedTotalPrice(): int
     {
         $price = 0;
@@ -235,11 +187,6 @@ class Booking implements \Stringable
         return $price;
     }
 
-    /**
-     * Get somethingBroken
-     *
-     * @return boolean
-     */
     public function getIsSomethingBroken(): bool
     {
         if ($this->getItems()) {
@@ -258,11 +205,7 @@ class Booking implements \Stringable
         }
         return false;
     }
-    /**
-     * Get RentNotices
-     *
-     * @return string
-     */
+
     public function getRentInformation(): string
     {
         $return = '';
@@ -280,13 +223,7 @@ class Booking implements \Stringable
         }
         return $return;
     }
-    /**
-     * Set actualPrice
-     *
-     * @param string $actualPrice
-     *
-     * @return Booking
-     */
+
     public function setActualPrice($actualPrice): Booking
     {
         $this->actualPrice = $actualPrice;
@@ -294,18 +231,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get actualPrice
-     *
-     * @return string
-     */
     public function getActualPrice()
     {
         return $this->actualPrice;
     }
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -316,12 +246,6 @@ class Booking implements \Stringable
         $this->rewards = new ArrayCollection();
     }
 
-    /**
-     * Add item
-     *
-     *
-     * @return Booking
-     */
     public function addItem(\App\Entity\Item $item): Booking
     {
         $item->addRentHistory($this);
@@ -330,32 +254,17 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove item
-     */
     public function removeItem(\App\Entity\Item $item): void
     {
         $item->removeRentHistory($this);
         $this->items->removeElement($item);
     }
 
-    /**
-     * Get items
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getItems()
     {
         return $this->items;
     }
 
-    /**
-     * Set numberOfRentDays
-     *
-     * @param integer $numberOfRentDays
-     *
-     * @return Booking
-     */
     public function setNumberOfRentDays($numberOfRentDays): Booking
     {
         $this->numberOfRentDays = $numberOfRentDays;
@@ -363,22 +272,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get numberOfRentDays
-     *
-     * @return integer
-     */
     public function getNumberOfRentDays(): int
     {
         return $this->numberOfRentDays;
     }
 
-    /**
-     * Add billableEvent
-     *
-     *
-     * @return Booking
-     */
     public function addBillableEvent(\App\Entity\BillableEvent $billableEvent): Booking
     {
         $billableEvent->setBooking($this);
@@ -387,31 +285,16 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove billableEvent
-     */
     public function removeBillableEvent(\App\Entity\BillableEvent $billableEvent): void
     {
         $this->billableEvents->removeElement($billableEvent);
     }
 
-    /**
-     * Get billableEvents
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getBillableEvents()
     {
         return $this->billableEvents;
     }
 
-
-    /**
-     * Set rentingPrivileges
-     *
-     *
-     * @return Booking
-     */
     public function setRentingPrivileges(\App\Entity\WhoCanRentChoice $rentingPrivileges = null): Booking
     {
         $this->rentingPrivileges = $rentingPrivileges;
@@ -419,13 +302,6 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Set renter.
-     *
-     * @param \App\Entity\Renter|null $renter
-     *
-     * @return Booking
-     */
     public function setRenter(\App\Entity\Renter $renter = null): Booking
     {
         $this->renter = $renter;
@@ -433,23 +309,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get renter.
-     *
-     * @return \App\Entity\Renter|null
-     */
     public function getRenter(): ?Renter
     {
         return $this->renter;
     }
 
-    /**
-     * Set invoiceSent.
-     *
-     * @param bool $invoiceSent
-     *
-     * @return Booking
-     */
     public function setInvoiceSent($invoiceSent): Booking
     {
         $this->invoiceSent = $invoiceSent;
@@ -457,23 +321,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get invoiceSent.
-     *
-     * @return bool
-     */
     public function getInvoiceSent(): bool
     {
         return $this->invoiceSent;
     }
 
-    /**
-     * Set itemsReturned.
-     *
-     * @param bool $itemsReturned
-     *
-     * @return Booking
-     */
     public function setItemsReturned($itemsReturned): Booking
     {
         $this->itemsReturned = $itemsReturned;
@@ -481,23 +333,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get itemsReturned.
-     *
-     * @return bool
-     */
     public function getItemsReturned(): bool
     {
         return $this->itemsReturned;
     }
 
-    /**
-     * Set renterHash.
-     *
-     * @param string $renterHash
-     *
-     * @return Booking
-     */
     public function setRenterHash($renterHash): Booking
     {
         $this->renterHash = $renterHash;
@@ -505,23 +345,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get renterHash.
-     *
-     * @return string
-     */
     public function getRenterHash(): int|string
     {
         return $this->renterHash;
     }
 
-    /**
-     * Set renterConsent.
-     *
-     * @param bool $renterConsent
-     *
-     * @return Booking
-     */
     public function setRenterConsent($renterConsent): Booking
     {
         $this->renterConsent = $renterConsent;
@@ -529,23 +357,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get renterConsent.
-     *
-     * @return bool
-     */
     public function getRenterConsent(): bool
     {
         return $this->renterConsent;
     }
 
-    /**
-     * Set cancelled.
-     *
-     * @param bool $cancelled
-     *
-     * @return Booking
-     */
     public function setCancelled($cancelled): Booking
     {
         $this->cancelled = $cancelled;
@@ -553,22 +369,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Get cancelled.
-     *
-     * @return bool
-     */
     public function getCancelled(): bool
     {
         return $this->cancelled;
     }
 
-    /**
-     * Add statusEvent.
-     *
-     *
-     * @return Booking
-     */
     public function addStatusEvent(\App\Entity\StatusEvent $statusEvent): Booking
     {
         $this->statusEvents[] = $statusEvent;
@@ -576,22 +381,11 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove statusEvent.
-     *
-     * @param \App\Entity\StatusEvent $statusEvent
-     *
-     */
     public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent): bool
     {
         return $this->statusEvents->removeElement($statusEvent);
     }
 
-    /**
-     * Get statusEvents.
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getStatusEvents()
     {
         return $this->statusEvents;
@@ -609,9 +403,6 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Accessory[]
-     */
     public function getAccessories(): Collection
     {
         return $this->accessories;
@@ -765,9 +556,6 @@ class Booking implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Reward[]
-     */
     public function getRewards(): Collection
     {
         return $this->rewards;

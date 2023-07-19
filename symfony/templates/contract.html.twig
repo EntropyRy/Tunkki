@@ -1,12 +1,12 @@
 {% extends 'onecolumn.html.twig' %}
 {% block title %}
-{{bookingdata.name}} - {{ bookingdata.date }}
+{{ bookingdata.name }} - {{ bookingdata.date }}
 {% endblock %}
 {% block content %}
 <div class="col-md-12">
     <input type="button" value="Print" class="no-print btn btn-primary float-end" onClick="window.print()">
-    {% set loc = 'content'~((app.request.locale)|capitalize) %}
-{{attribute(contract, loc)|raw }}
+    {% set loc = 'content' ~ ((app.request.locale)|capitalize) %}
+{{ attribute(contract, loc)|raw }}
 <h1>{{ bookingdata.name }} - {{ bookingdata.date }}
 </h1>
 {% if bookingdata.packages %}
@@ -34,7 +34,7 @@
     {% for item in bookingdata.accessories %}
     <li>
         <input type="checkbox">
-            <label><span class="lead">{{item.count}}</span> X {{ item.name }}</label>
+            <label><span class="lead">{{ item.count }}</span> X {{ item.name }}</label>
             {% if item.name.compensationPrice %}
                 <span class="float-right">{{ item.name.compensationPrice }} €/pcs</span>
             {% endif %}
@@ -50,7 +50,7 @@
 {% if renter.phone %}{{ renter.phone }}<br>{% endif %}
 {{ renter.email }}
 <hr>
-<div class="text-center">{{'Total rent price'|trans}}: <span>{{ bookingdata.actualTotal}}€</span></div>
+<div class="text-center">{{ 'Total rent price'|trans }}: <span>{{ bookingdata.actualTotal }}€</span></div>
 <hr>
 <h3>Allekirjoitus</h3>
 <div {{ stimulus_controller('signature') }}>
@@ -85,14 +85,14 @@
             <input type="checkbox">
             <label>{{ item }},
                 <small>{% if item.Manufacturer %}Manufacturer: {{ item.Manufacturer }},{% endif %}
-                {% if item.model %}Model: {{item.model}},{% endif %}
-                {% if item.serialNumber %}S/N: {{ item.serialNumber }}{%endif%}</small>
+                {% if item.model %}Model: {{ item.model }},{% endif %}
+                {% if item.serialNumber %}S/N: {{ item.serialNumber }}{% endif %}</small>
             </label>
             {% if item.compensationPrice %}
                 <span class="float-right">{{ item.compensationPrice }} €</span>
             {% endif %}
-            {% for file in item.files %} 
-            <span class="no-print">- {{ file.downloadLink|raw }}</span> 
+            {% for file in item.files %}
+            <span class="no-print">- {{ file.downloadLink|raw }}</span>
             {% endfor %}
         </div>
 {% endblock %}

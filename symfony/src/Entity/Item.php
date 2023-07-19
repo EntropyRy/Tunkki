@@ -6,6 +6,7 @@ use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -43,7 +44,7 @@ class Item implements \Stringable
     #[ORM\Column(name: 'Description', type: 'string', length: 4000, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
     private $whoCanRent;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
@@ -74,19 +75,19 @@ class Item implements \Stringable
     #[ORM\Column(name: 'CannotBeRented', type: 'boolean')]
     private bool $cannotBeRented = false;
 
-    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
+    #[ORM\OneToMany(targetEntity: StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
     private $fixingHistory;
 
-    #[ORM\OneToMany(targetEntity: '\\' . \App\Entity\File::class, mappedBy: 'product', cascade: ['all'])]
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product', cascade: ['all'])]
     private $files;
 
-    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Booking::class, cascade: ['all'])]
+    #[ORM\ManyToMany(targetEntity: Booking::class, cascade: ['all'])]
     private $rentHistory;
 
     #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
     private ?bool $forSale = false;
 
-    #[ORM\ManyToMany(targetEntity: 'Package', inversedBy: 'items')]
+    #[ORM\ManyToMany(targetEntity: Package::class, inversedBy: 'items')]
     private $packages = null;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
@@ -95,11 +96,11 @@ class Item implements \Stringable
     #[ORM\Column(name: 'purchasePrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $purchasePrice;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?\App\Entity\User $creator = null;
 
-    #[ORM\ManyToOne(targetEntity: 'User')]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?\App\Entity\User $modifier = null;
 
@@ -109,19 +110,11 @@ class Item implements \Stringable
     #[ORM\Column(name: 'updatedAt', type: 'datetime')]
     private \DateTimeInterface|\DateTimeImmutable|null $updatedAt = null;
 
-    /**
-     * Get id
-     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     */
     public function setName($name): Item
     {
         $this->name = $name;
@@ -129,19 +122,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get name
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * Set manufacturer
-     *
-     * @param string $manufacturer
-     */
     public function setManufacturer($manufacturer): Item
     {
         $this->manufacturer = $manufacturer;
@@ -149,21 +134,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get manufacturer
-     *
-     * @return string
-     */
     public function getManufacturer(): ?string
     {
         return $this->manufacturer;
     }
 
-    /**
-     * Set model
-     *
-     * @param string $model
-     */
     public function setModel($model): Item
     {
         $this->model = $model;
@@ -171,21 +146,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get model
-     *
-     * @return string
-     */
     public function getModel(): ?string
     {
         return $this->model;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     */
     public function setDescription($description): Item
     {
         $this->description = $description;
@@ -193,21 +158,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get description
-     *
-     * @return string
-     */
     public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * Set rent
-     *
-     * @param float $rent
-     */
     public function setRent($rent): Item
     {
         $this->rent = $rent;
@@ -215,21 +170,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get rent
-     *
-     * @return float
-     */
     public function getRent()
     {
         return $this->rent;
     }
 
-    /**
-     * Set rentNotice
-     *
-     * @param string $rentNotice
-     */
     public function setRentNotice($rentNotice): Item
     {
         $this->rentNotice = $rentNotice;
@@ -237,21 +182,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get rentNotice
-     *
-     * @return string
-     */
     public function getRentNotice(): ?string
     {
         return $this->rentNotice;
     }
 
-    /**
-     * Set needsFixing
-     *
-     * @param boolean $needsFixing
-     */
     public function setNeedsFixing($needsFixing): Item
     {
         $this->needsFixing = $needsFixing;
@@ -259,19 +194,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get needsFixing
-     */
     public function getNeedsFixing(): bool
     {
         return $this->needsFixing;
     }
 
-    /**
-     * Set forSale
-     *
-     * @param boolean $forSale
-     */
     public function setForSale($forSale): Item
     {
         $this->forSale = $forSale;
@@ -279,11 +206,6 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get forSale
-     *
-     * @return boolean
-     */
     public function getForSale(): ?bool
     {
         return $this->forSale;
@@ -322,13 +244,10 @@ class Item implements \Stringable
         }
     }
 
-    /**
-     * Constructor
-     */
     public function __construct()
     {
-        $this->fixingHistory = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fixingHistory = new ArrayCollection();
+        $this->tags = new ArrayCollection();
         $this->whoCanRent = new ArrayCollection();
         $this->files = new ArrayCollection();
         $this->rentHistory = new ArrayCollection();
@@ -397,11 +316,6 @@ class Item implements \Stringable
         return $this->commission;
     }
 
-    /**
-     * Set serialnumber
-     *
-     * @param string $serialnumber
-     */
     public function setSerialnumber($serialnumber): Item
     {
         $this->serialnumber = $serialnumber;
@@ -409,21 +323,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get serialnumber
-     *
-     * @return string
-     */
     public function getSerialnumber(): ?string
     {
         return $this->serialnumber;
     }
 
-
-    /**
-     * Add file
-     *
-     */
     public function addFile(\App\Entity\File $file): Item
     {
         $file->setProduct($this);
@@ -432,30 +336,17 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove file
-     */
     public function removeFile(\App\Entity\File $file): void
     {
         $file->setProduct(null);
         $this->files->removeElement($file);
     }
 
-    /**
-     * Get files
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getFiles()
+    public function getFiles(): ?Collection
     {
         return $this->files;
     }
 
-    /**
-     * Set placeinstorage
-     *
-     * @param string $placeinstorage
-     */
     public function setPlaceinstorage($placeinstorage): Item
     {
         $this->placeinstorage = $placeinstorage;
@@ -463,20 +354,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get placeinstorage
-     *
-     * @return string
-     */
     public function getPlaceinstorage(): ?string
     {
         return $this->placeinstorage;
     }
 
-    /**
-     * Add tag
-     *
-     */
     public function addTag(Tag $tag): Item
     {
         $this->tags[] = $tag;
@@ -484,28 +366,16 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove tag
-     */
     public function removeTag(Tag $tag): void
     {
         $this->tags->removeElement($tag);
     }
 
-    /**
-     * Get tags
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getTags()
+    public function getTags(): Collection
     {
         return $this->tags;
     }
 
-    /**
-     * Set creator
-     *
-     */
     public function setCreator(\App\Entity\User $creator = null): Item
     {
         $this->creator = $creator;
@@ -513,20 +383,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get creator
-     *
-     * @return \App\Entity\User
-     */
     public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    /**
-     * Set modifier
-     *
-     */
     public function setModifier(\App\Entity\User $modifier = null): Item
     {
         $this->modifier = $modifier;
@@ -534,21 +395,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get modifier
-     *
-     * @return \App\Entity\User
-     */
     public function getModifier(): ?User
     {
         return $this->modifier;
     }
 
-
-    /**
-     * Add package
-     *
-     */
     public function addPackage(\App\Entity\Package $package): Item
     {
         $this->packages[] = $package;
@@ -556,29 +407,16 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove package
-     */
     public function removePackage(\App\Entity\Package $package): void
     {
         $this->packages->removeElement($package);
     }
 
-    /**
-     * Get packages
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getPackages()
+    public function getPackages(): Collection
     {
         return $this->packages;
     }
 
-    /**
-     * Set toSpareParts
-     *
-     * @param boolean $toSpareParts
-     */
     public function setToSpareParts($toSpareParts): Item
     {
         $this->toSpareParts = $toSpareParts;
@@ -586,18 +424,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get toSpareParts
-     */
     public function getToSpareParts(): bool
     {
         return $this->toSpareParts;
     }
 
-    /**
-     * Set packages
-     *
-     */
     public function setPackages(\App\Entity\Package $packages = null): Item
     {
         $this->packages = $packages;
@@ -605,10 +436,6 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Add rentHistory
-     *
-     */
     public function addRentHistory(\App\Entity\Booking $rentHistory): Item
     {
         $this->rentHistory[] = $rentHistory;
@@ -616,27 +443,16 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove rentHistory
-     */
     public function removeRentHistory(\App\Entity\Booking $rentHistory): void
     {
         $this->rentHistory->removeElement($rentHistory);
     }
 
-    /**
-     * Get rentHistory
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getRentHistory()
+    public function getRentHistory(): Collection
     {
         return $this->rentHistory;
     }
 
-    /**
-     * reset rentHistory
-     */
     public function resetRentHistory(): void
     {
         foreach ($this->getRentHistory() as $rent) {
@@ -644,10 +460,6 @@ class Item implements \Stringable
         }
     }
 
-    /**
-     * Set category
-     *
-     */
     public function setCategory(Category $category = null): Item
     {
         $this->category = $category;
@@ -655,20 +467,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get category
-     *
-     * @return Category
-     */
     public function getCategory(): ?Category
     {
         return $this->category;
     }
 
-    /**
-     * Add whoCanRent
-     *
-     */
     public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): Item
     {
         $this->whoCanRent[] = $whoCanRent;
@@ -676,29 +479,16 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove whoCanRent
-     */
     public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): void
     {
         $this->whoCanRent->removeElement($whoCanRent);
     }
 
-    /**
-     * Get whoCanRent
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getWhoCanRent()
+    public function getWhoCanRent(): Collection
     {
         return $this->whoCanRent;
     }
 
-    /**
-     * Set url.
-     *
-     * @param string|null $url
-     */
     public function setUrl($url = null): Item
     {
         $this->url = $url;
@@ -706,19 +496,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get url.
-     */
     public function getUrl(): ?string
     {
         return $this->url;
     }
 
-    /**
-     * Set cannotBeRented.
-     *
-     * @param bool $cannotBeRented
-     */
     public function setCannotBeRented($cannotBeRented): Item
     {
         $this->cannotBeRented = $cannotBeRented;
@@ -726,19 +508,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get cannotBeRented.
-     */
     public function getCannotBeRented(): bool
     {
         return $this->cannotBeRented;
     }
 
-    /**
-     * Set compensationPrice.
-     *
-     * @param string|null $compensationPrice
-     */
     public function setCompensationPrice($compensationPrice = null): Item
     {
         $this->compensationPrice = $compensationPrice;
@@ -746,21 +520,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get compensationPrice.
-     *
-     * @return string|null
-     */
     public function getCompensationPrice()
     {
         return $this->compensationPrice;
     }
 
-    /**
-     * Set purchasePrice.
-     *
-     * @param string|null $purchasePrice
-     */
     public function setPurchasePrice($purchasePrice = null): Item
     {
         $this->purchasePrice = $purchasePrice;
@@ -768,12 +532,7 @@ class Item implements \Stringable
         return $this;
     }
 
-    /**
-     * Get purchasePrice.
-     *
-     * @return string|null
-     */
-    public function getPurchasePrice()
+    public function getPurchasePrice(): ?string
     {
         return $this->purchasePrice;
     }

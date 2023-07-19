@@ -32,10 +32,10 @@ class StatisticsBlock extends BaseBlockService
         return $this->renderResponse(
             $blockContext->getTemplate(),
             [
-            'block'     => $blockContext->getBlock(),
-            'settings'  => $blockContext->getSettings(),
-            'member'    => $member,
-            'stats'     => $stats
+                'block'     => $blockContext->getBlock(),
+                'settings'  => $blockContext->getSettings(),
+                'member'    => $member,
+                'stats'     => $stats
             ],
             $response
         );
@@ -62,7 +62,7 @@ class StatisticsBlock extends BaseBlockService
     {
         $resolver->setDefaults(
             [
-            'template' => 'block/statistics.html.twig',
+                'template' => 'block/statistics.html.twig',
             ]
         );
     }
@@ -71,10 +71,10 @@ class StatisticsBlock extends BaseBlockService
         return new Metadata(
             $this->getName(),
             ($code ?? $this->getName()),
-            false,
+            null,
             'messages',
             [
-            'class' => 'fa fa-link',
+                'class' => 'fa fa-link',
             ]
         );
     }

@@ -57,7 +57,7 @@ class Menu implements \Stringable
     /**
      * @Gedmo\TreeRoot
      */
-    #[ORM\ManyToOne(targetEntity: 'Menu')]
+    #[ORM\ManyToOne(targetEntity: Menu::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $root = null;
 
@@ -66,10 +66,10 @@ class Menu implements \Stringable
     /**
      * @Gedmo\TreeParent
      */
-    #[ORM\ManyToOne(targetEntity: 'Menu', inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $parent = null;
-    #[ORM\OneToMany(targetEntity: 'Menu', mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: 'parent')]
     private $children = null;
 
     public function __construct()
