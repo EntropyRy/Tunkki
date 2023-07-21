@@ -1,5 +1,5 @@
-{% extends '@SonataAdmin/standard_layout.html.twig' %}
-{% block sonata_admin_content %}
+{% extends '@SonataAdmin/CRUD/base_show.html.twig' %}
+{% block show %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -9,72 +9,52 @@
             </div>
             <div class="col-md-12">
 
-            {% if packages %}
-            <h3>Packages</h3>
-            {{ block('tablehead') }}
-            {% for package in packages %}
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><input type="checkbox">{{ package }}:</label>
-                            {% for item in package.items %}
-                            <small>{{ item }}</small>{% if not loop.last %},{% endif %}
-                            {% endfor %}
-                        </div>
-                    </td>
-                    <td>
-                        <span class="">{{ package.rent }}€</span>
-                    </td>
-                </tr>
-            {% endfor %}
-                <tr>
-                    <td>
-                        Subtotal:
-                    </td>
-                    <td>
-                        <span>{{ rent['packages'] }}€</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            {% endif %}
-            {% if items %}
             <h3>Items</h3>
             {{ block('tablehead') }}
-            {% for item in items %}
-                <tr>
-                    <td>
-                        <div class="checkbox">
-                            <label><input type="checkbox"> {{ item }}
-                                {% if item.manufacturer or item.model %}(
-                                    {% if item.manufacturer %}
-                                        {{ item.manufacturer }}
-                                    {% endif %}
-                                    {% if item.manufacturer and item.model %}-{% endif %}
-                                    {% if item.model %}
-                                        {{ item.model }}
-                                    {% endif %}
-                                    )
-                                {% endif %}
-                            </label>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="">{{ item.rent }}€</span>
-                    </td>
-                </tr>
-            {% endfor %}
-                <tr>
-                    <td>
-                        Subtotal:
-                    </td>
-                    <td>
-                        <span>{{ rent['items'] }}€</span>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+            {% if packages %}
+                {% for package in packages %}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox">{{ package }}:</label>
+                                {% for item in package.items %}
+                                <small>{{ item }}</small>{% if not loop.last %},{% endif %}
+                                {% endfor %}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="">{{ package.rent }}€</span>
+                        </td>
+                    </tr>
+                {% endfor %}
             {% endif %}
+            {% if items %}
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox"> {{ item }}
+                                    {% if item.manufacturer or item.model %}(
+                                        {% if item.manufacturer %}
+                                            {{ item.manufacturer }}
+                                        {% endif %}
+                                        {% if item.manufacturer and item.model %}-{% endif %}
+                                        {% if item.model %}
+                                            {{ item.model }}
+                                        {% endif %}
+                                        )
+                                    {% endif %}
+                                </label>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="">{{ item.rent }}€</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+            </tbody>
+            </table>
             {% if accessories %}
             <h3>Accessories</h3>
             {{ block('acces_tablehead') }}
@@ -90,13 +70,24 @@
                     </td>
                 </tr>
             {% endfor %}
+            </tbody>
             </table>
             {% endif %}
             <hr style="border-top: 1px solid #222;">
-            <div>Total (does not contain accessories): <span class="pull-right">{{ rent['total'] }}€</span></div>
+            <div>Items Total: <span class="pull-right">{{ rent['total'] }}€</span></div>
+            {% if object.accessoryPrice %}
+            <div>Accessories Total: <span class="pull-right">{{ object.accessoryPrice }}€</span></div>
+            {% endif %}
+            <hr style="border-top: 1px solid #222;">
+            {% if object.reasonForDiscount %}
+            <div>Reason for Discount: {{ object.reasonForDiscount }}</div>
+            {% endif %}
             {% if rent['actualTotal'] %}
             <div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div>
             {% endif %}
+            <div>
+                First day costs 100% of the total, next day is 50% of the total.
+            </div>
             </div>
         </div>
     </div>

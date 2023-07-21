@@ -13,6 +13,6 @@ class BookingAdminController extends CRUDController
         $object = $this->admin->getSubject();
         $bookingdata = $repo
             ->getBookingData($object->getId(), $object->getRenterHash(), $object->getRenter());
-        return $this->renderWithExtraParams('admin/booking/stufflist.html.twig', $bookingdata[0]);
+        return $this->renderWithExtraParams('admin/booking/stufflist.html.twig', array_merge($bookingdata[0], ['object' => $bookingdata[1], 'action' => 'show']));
     }
 }

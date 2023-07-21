@@ -227,9 +227,6 @@
     "sonata-project/block-bundle": {
         "version": "3.18.2"
     },
-    "sonata-project/cache": {
-        "version": "1.1.1"
-    },
     "sonata-project/classification-bundle": {
         "version": "3.7",
         "recipe": {
