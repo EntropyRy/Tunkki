@@ -88,12 +88,12 @@
                 {% if item.model %}Model: {{ item.model }},{% endif %}
                 {% if item.serialNumber %}S/N: {{ item.serialNumber }}{% endif %}</small>
             </label>
-            {% if item.compensationPrice %}
-                <span class="float-right">{{ item.compensationPrice }} €</span>
-            {% endif %}
             {% for file in item.files %}
             <span class="no-print">- {{ file.downloadLink|raw }}</span>
             {% endfor %}
+            {% if item.rent %}
+                <span class="float-end">{{ item.rent }} €</span>
+            {% endif %}
         </div>
 {% endblock %}
 
