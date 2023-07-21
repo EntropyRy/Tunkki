@@ -71,6 +71,7 @@ class BookingRepository extends ServiceEntityRepository
 
             $data['actualTotal'] = $object->getActualPrice();
             $rent['actualTotal'] = $object->getActualPrice();
+            $rent['accessories'] = $object->getAccessoryPrice();
             $data['name'] = $object->getName();
             $data['date'] = $object->getBookingDate()->format('j.n.Y');
             $data['items'] = $items;

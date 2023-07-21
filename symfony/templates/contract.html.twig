@@ -37,7 +37,12 @@
     {% endfor %}
 {% endif %}
 {% if bookingdata.accessories %}
-    <h3 style="text-transform: capitalize;">{{ 'accessories'|trans }}</h3>
+    <h3 style="text-transform: capitalize;" class="mt-3">{{ 'accessories'|trans }}
+        {% if bookingdata.rent.accessories %}
+        <span class="float-end fs-6 fw-normal">{{ bookingdata.rent.accessories }}€</span>
+        {% endif %}
+    </h3>
+
     <p>({{ 'contract.accessories.prices'|trans }})</p>
     <ul class="list-unstyled">
     {% for item in bookingdata.accessories %}
@@ -90,21 +95,18 @@
 {% endblock %}
 
 {% block item %}
-        <div class="form-check">
-            <input type="checkbox">
-            <label>{{ item }}
-            </label>
-            <small>
-                {% if item.Manufacturer %}, Manufacturer: {{ item.Manufacturer }}{% endif %}
-                {% if item.model %}, Model: {{ item.model }}{% endif %}
-                {% if item.serialNumber %}, S/N: {{ item.serialNumber }}{% endif %}
-            </small>
-            {% for file in item.files %}
-            <span class="no-print">- {{ file.downloadLink|raw }}</span>
-            {% endfor %}
-            {% if show_price %}
-                <span class="float-end">{{ item.rent }} €</span>
-            {% endif %}
-        </div>
+{% apply spaceless %}
+    <div class="form-check">
+        <input type="checkbox" class="me-2">
+        <label>{{ item }}</label>
+        <small>{% if item.Manufacturer %}, Manufacturer: {{ item.Manufacturer }}{% endif %}{% if item.model %}, Model: {{ item.model }}{% endif %}{% if item.serialNumber %}, S/N: {{ item.serialNumber }}{% endif %}</small>
+        {% for file in item.files %}
+        <span class="no-print">- {{ file.downloadLink|raw }}</span>
+        {% endfor %}
+        {% if show_price %}
+            <span class="float-end">{{ item.rent }} €</span>
+        {% endif %}
+    </div>
+{% endapply %}
 {% endblock %}
 
