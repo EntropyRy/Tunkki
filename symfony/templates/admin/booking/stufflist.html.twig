@@ -84,6 +84,8 @@
             {% endif %}
             {% if rent['actualTotal'] %}
             <div>Actual Total: <span class="pull-right">{{ rent['actualTotal'] }}€</span></div>
+            {% else %}
+            <div>Sum: <span class="pull-right">{{ rent['total'] + object.accessoryPrice }}€</span></div>
             {% endif %}
             <div>
                 First day costs 100% of the total, next day is 50% of the total.
