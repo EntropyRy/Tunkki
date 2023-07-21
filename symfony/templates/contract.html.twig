@@ -38,13 +38,14 @@
 {% endif %}
 {% if bookingdata.accessories %}
     <h3 style="text-transform: capitalize;">{{ 'accessories'|trans }}</h3>
+    <p>({{ 'contract.accessories.prices'|trans }})</p>
     <ul class="list-unstyled">
     {% for item in bookingdata.accessories %}
     <li>
         <input type="checkbox">
             <label><span class="lead">{{ item.count }}</span> X {{ item.name }}</label>
             {% if item.name.compensationPrice %}
-                <span class="float-right">{{ item.name.compensationPrice }} €/pcs</span>
+                <span class="float-end">{{ item.name.compensationPrice }} €/{{ 'pcs'|trans }}</span>
             {% endif %}
     </li>
     {% endfor %}

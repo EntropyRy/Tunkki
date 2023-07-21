@@ -444,3 +444,7 @@ missing: puuttuu
 Your username was updated to your Mattermost username: Käyttäjänimesi vaihdettiin Mattermost käyttäjänimeksi.
 Sign ups open until: Varaukset ovat auki tähän asti
 Allow sign up comments: Kommentti varauksen yhteydessä?
+contract:
+  accessories:
+    prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
+pcs: kpl
