@@ -20,7 +20,5 @@ import "bootstrap/js/dist/tab";
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
-import "@fontsource/space-grotesk/variable.css";
-//import "@fontsource/space-grotesk/700.css";
-//import '@fontsource/space-grotesk/500.css';
+import "@fontsource-variable/space-grotesk/index.css";
 import Masonry from "masonry-layout";
