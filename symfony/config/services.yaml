@@ -381,12 +381,6 @@ services:
       - name: kernel.event_listener
         event: league.oauth2_server.event.authorization_request_resolve
         method: onAuthorizationRequestResolve
-  entropy.param_converter.event_year_converter:
-    class: App\ParamConverter\EventYearParamConverter
-    tags:
-      - {name: request.param_converter, converter: event_year_converter}
-    arguments:
-      - "@doctrine"
   admin.ticket:
     class: App\Admin\TicketAdmin
     tags:
