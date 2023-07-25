@@ -4,7 +4,7 @@
             {% if value is not empty and value.providerReference %}
                 <div style="margin-right: 5px">
                     <div class="polaroid">
-                        <img width="100%" title="{{name}}" src="{{ sonata_path(value, 'square') }}">
+                        <img width="100%" title="{{ name }}" src="{{ sonata_path(value, 'square') }}">
                         <div class="caption">
                             <strong>{{ value.name }}</strong>
                         </div>

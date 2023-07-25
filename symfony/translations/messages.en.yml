@@ -338,6 +338,7 @@ happening:
   same_name_exists: Happening with the same name already exists. Please change the name.
   edited: Changes saved succesfully!
   ticket_missing: You need a ticket first.
+edited: Changes saved succesfully!
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish
