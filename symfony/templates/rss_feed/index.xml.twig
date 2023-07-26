@@ -4,15 +4,15 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" >
   <channel>
     <title>Entropy ry</title>
-    <link>https://entropy.fi{% if locale =='en' %}/en{% endif %}</link>
-    <atom:link href="https://entropy.fi{{ path('rss_feed_'~locale) }}" rel="self" type="application/rss+xml" />
-    <description>{{'rss_desc'|trans}}</description>
-    <lastBuildDate>{{'now'|date('r') }}</lastBuildDate>
+    <link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
+    <atom:link href="https://entropy.fi{{ path('rss_feed.' ~ locale) }}" rel="self" type="application/rss+xml" />
+    <description>{{ 'rss_desc'|trans }}</description>
+    <lastBuildDate>{{ 'now'|date('r') }}</lastBuildDate>
     <language>{{ locale }}</language>
     <image>
        <url>https://entropy.fi/images/header-logo.svg</url>
        <title>Entropy ry</title>
-       <link>https://entropy.fi{% if locale =='en' %}/en{% endif %}</link>
+       <link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
     </image>
     {% for event in events %}
         {% if locale == 'fi' %}
@@ -23,9 +23,9 @@
         {% if event.externalUrl and event.url %}
             {% set link = event.url %}
         {% else %}
-            {% set link = 'https://entropy.fi'~ block('event_path') %}
+            {% set link = 'https://entropy.fi' ~ block('event_path') %}
         {% endif %}
-        {% set guid = 'https://entropy.fi' ~path(eventpath,  {'id': event.id, 'updated': event.updatedAt|date('dmY') }) %}
+        {% set guid = 'https://entropy.fi' ~ path(eventpath, {'id': event.id, 'updated': event.updatedAt|date('dmY')}) %}
         <item>
             {% if event.type != 'announcement' %}
               <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
@@ -34,11 +34,11 @@
             {% endif %}
           <link>{{ link }}</link>
           <guid>{{ guid }}</guid>
-          <pubDate>{{ event.publishDate | date('r') }}</pubDate>
-          <updated>{{ event.updatedAt | date('r') }}</updated>
+          <pubDate>{{ event.publishDate|date('r') }}</pubDate>
+          <updated>{{ event.updatedAt|date('r') }}</updated>
           <description>{{ event.abstract(locale) }}
           {% if event.updatedAt|date('Y') != '-0001' %}
-          {{'updated'|trans }}:{{event.updatedAt|date() }}
+          {{ 'updated'|trans }}:{{ event.updatedAt|date() }}
           {% endif %}
           </description>
           <category>{{ event.type|trans }}</category>

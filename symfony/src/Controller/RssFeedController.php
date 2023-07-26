@@ -10,6 +10,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RssFeedController extends AbstractController
 {
+    #[Route(
+        path: [
+            'fi' => '/feed.rss',
+            'en' => '/feed.rss',
+        ],
+        name: 'rss_feed',
+    )]
     public function index(Request $request, EventRepository $eRepo): Response
     {
         $events = $eRepo->getRSSEvents();

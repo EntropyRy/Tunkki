@@ -8,4 +8,3 @@ RUN echo "upstream php-upstream { server fpm:9000; }" > /etc/nginx/conf.d/upstre
 RUN addgroup -g  ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony
 CMD ["nginx"]
 EXPOSE 80
-EXPOSE 443

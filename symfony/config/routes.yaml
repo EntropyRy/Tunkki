@@ -97,12 +97,6 @@ entropy_artist_create:
     en: /profile/artist/create
     fi: /profiili/artisti/uusi
   controller: App\Controller\ArtistController::create
-rss_feed_fi:
-  path: /feed.rss
-  controller: App\Controller\RssFeedController::index
-rss_feed_en:
-  path: /feed.rss
-  controller: App\Controller\RssFeedController::index
 entropy_artist_edit:
   path:
     en: /profile/artist/{id}/edit
