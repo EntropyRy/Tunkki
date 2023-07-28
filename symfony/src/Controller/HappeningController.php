@@ -179,11 +179,15 @@ class HappeningController extends AbstractController
             ]);
         }
         $converter = new GithubFlavoredMarkdownConverter();
+        $payment_info = '';
+        if (!is_null($happening->getPaymentInfo($request->getLocale()))) {
+            $payment_info = $converter->convert($happening->getPaymentInfo($request->getLocale()));
+        }
         return $this->render('happening/show.html.twig', [
             'event' => $event,
             'happening' => $happening,
             'description' => $converter->convert($happening->getDescription($request->getLocale())),
-            'payment_info' => $converter->convert($happening->getPaymentInfo($request->getLocale())),
+            'payment_info' => $payment_info,
             'happeningB' => $happeningB,
             'admin' => $admin,
             'form' => $form,
