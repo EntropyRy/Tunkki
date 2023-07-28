@@ -30,6 +30,7 @@ class FrontPage implements PageServiceInterface
     {
         $events = [];
         $future = $this->eventR->getFutureEvents();
+        $unpublished = $this->eventR->getUnpublishedFutureEvents();
         $info = $this->eventArtistR->findOnePublicEventArtistInfo();
         $announcement = $this->eventR->findOneEventByType('announcement');
         //$event = $r->findOneEventByTypeWithSticky('event');
@@ -45,6 +46,7 @@ class FrontPage implements PageServiceInterface
             $events = array_merge($events, [$announcement]);
         }*/
         // $epic = $this->ePics->getRandomPic();
+        $future = array_merge($future, $unpublished);
         $events = array_merge($future, [$announcement]);
 
         return $this->templateManager->renderResponse(
