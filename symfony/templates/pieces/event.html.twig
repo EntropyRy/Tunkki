@@ -192,7 +192,11 @@
         {% elseif event.badgeText == 'event.after'%}
         <span class="shadow badge bg-danger">{{ event.badgeText|trans }}</span>
         {% else %}
-        <span class="shadow badge bg-secondary">{{ event.badgeText|trans }}</span>
+        <span class="shadow badge bg-secondary">{{ event.badgeText|trans }}
+        {% if event.published == false %}
+        | {{ 'event.only_for_members'|trans }}
+        {% endif %}
+        </span>
         {% endif %}
     </div>
 {% endblock %}

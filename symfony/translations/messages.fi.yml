@@ -201,6 +201,7 @@ block:
 menu:
   logon_to: Kirjaudu
 event:
+  only_for_members: Vain jäsenille
   not_public: ei julkinen
   in_future: Tuleva tapahtuma
   after: Mennyt tapahtuma

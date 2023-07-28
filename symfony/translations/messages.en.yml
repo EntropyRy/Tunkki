@@ -135,6 +135,7 @@ menu:
   logon_to: Log on to
 event:
   not_public: not public
+  only_for_members: Only for members
   in_future: Upcoming event
   after: Past event
   now: Event is now
