@@ -34,7 +34,7 @@
 {% endblock %}
 
 {% block prev_next_navigation %}
-<div class="row mb-2">
+<div class="row my-2">
     <div class="col-12">
     {% if prev %}
         <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
