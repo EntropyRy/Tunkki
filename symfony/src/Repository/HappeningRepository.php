@@ -39,22 +39,30 @@ class HappeningRepository extends ServiceEntityRepository
         }
     }
 
-    //    /**
-    //     * @return Happening[] Returns an array of Happening objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('h')
-    //            ->andWhere('h.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('h.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function findPreviousAndNext(Happening $happening): ?array
+    {
+        $array = $this->createQueryBuilder('h')
+            // ->andWhere('h.time <= :time')
+            ->andWhere('h.event = :event')
+            ->andWhere('h.releaseThisHappeningInEvent = true')
+            // ->setParameter('time', $happening->getTime())
+            // ->setParameter('name', $happening->getNameFi())
+            ->setParameter('event', $happening->getEvent())
+            ->orderBy('h.time', 'ASC')
+            ->getQuery()
+            ->getResult();
+        $key = array_search($happening, $array);
+        $lenght = count($array);
+        if ($key == 0 && $lenght >= 2) {
+            return [null, $array[$key + 1]];
+        }
+        if ($key + 1 >= $lenght) {
+            return [$array[$key - 1], null];
+        }
+        return [$array[$key - 1], $array[$key + 1]];
+    }
 
-    public function findHappeningByEventSlugAndSlug($eventSlug, $slug): ?Happening
+    public function findHappeningByEventSlugAndSlug(string $eventSlug, string $slug): ?Happening
     {
         return $this->createQueryBuilder('h')
             ->leftJoin('h.event', 'e')

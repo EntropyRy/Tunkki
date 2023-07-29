@@ -145,6 +145,7 @@ class HappeningController extends AbstractController
         Request $request,
         #[MapEntity(expr: 'repository.findHappeningByEventSlugAndSlug(slug,happeningSlug)')]
         Happening $happening,
+        HappeningRepository $happeningRepository,
         HappeningBookingRepository $HBR,
         TicketRepository $ticketR,
         TranslatorInterface $trans
@@ -154,6 +155,7 @@ class HappeningController extends AbstractController
         $member = $user->getMember();
         $admin = false;
         $event = $happening->getEvent();
+        $prevAndNext = $happeningRepository->findPreviousAndNext($happening);
         if ($happening->getOwners()->contains($member)) {
             $admin = true;
         }
@@ -184,6 +186,8 @@ class HappeningController extends AbstractController
             $payment_info = $converter->convert($happening->getPaymentInfo($request->getLocale()));
         }
         return $this->render('happening/show.html.twig', [
+            'prev' => $prevAndNext[0],
+            'next' => array_key_exists(1, $prevAndNext) ? $prevAndNext[1] : null,
             'event' => $event,
             'happening' => $happening,
             'description' => $converter->convert($happening->getDescription($request->getLocale())),

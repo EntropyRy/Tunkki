@@ -33,9 +33,29 @@
 {{ 'SHOWN ONLY TO'|trans }}: {% for member in happening.owners %}{{ member.username }}{% if not loop.last %}, {% endif %}{% endfor %}
 {% endblock %}
 
+{% block prev_next_navigation %}
+<div class="row mb-2">
+    <div class="col-12">
+    {% if prev %}
+        <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
+        class="btn btn-secondary">{{ 'Previous'|trans }}: {{ prev.name(app.request.locale) }}</a>
+    {% else %}
+        <button class="btn btn-secondary btn-disabled">{{ 'Previous'|trans }}</button>
+    {% endif %}
+    {% if next %}
+        <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: next.slug(app.request.locale)}) }}"
+        class="btn btn-secondary float-end">{{ 'Next'|trans }}: {{ next.name(app.request.locale) }}</a>
+    {% else %}
+        <button class="btn btn-secondary btn-disabled float-end">{{ 'Next'|trans }}</button>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}
+
 {% block happening_info %}
 {% set name = happening.name(app.request.locale) %}
 {% set space_left = happening.maxSignUps - happening.bookings|length %}
+{{ block('prev_next_navigation') }}
 <div class="row">
 <div class="col-12">
     <h1>
@@ -111,6 +131,7 @@
 </div>
 {% endif %}
 </div>
+{{ block('prev_next_navigation') }}
 {% endblock %}
 
 {% block happening_pic %}
