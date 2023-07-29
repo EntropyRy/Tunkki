@@ -34,8 +34,6 @@
 {% endblock %}
 
 {% block prev_next_navigation %}
-<div class="row my-2">
-    <div class="col-12">
     {% if prev %}
         <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
         class="btn btn-secondary">{{ 'Previous'|trans }}: {{ prev.name(app.request.locale) }}</a>
@@ -48,14 +46,16 @@
     {% else %}
         <button class="btn btn-secondary btn-disabled float-end">{{ 'Next'|trans }}</button>
     {% endif %}
-    </div>
-</div>
 {% endblock %}
 
 {% block happening_info %}
 {% set name = happening.name(app.request.locale) %}
 {% set space_left = happening.maxSignUps - happening.bookings|length %}
-{{ block('prev_next_navigation') }}
+<div class="row mb-3">
+    <div class="col-12">
+        {{ block('prev_next_navigation') }}
+    </div>
+</div>
 <div class="row">
 <div class="col-12">
     <h1>
@@ -131,7 +131,11 @@
 </div>
 {% endif %}
 </div>
-{{ block('prev_next_navigation') }}
+<div class="row mt-3">
+    <div class="col-12">
+        {{ block('prev_next_navigation') }}
+    </div>
+</div>
 {% endblock %}
 
 {% block happening_pic %}
