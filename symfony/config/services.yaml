@@ -1,31 +1,31 @@
 twig:
   globals:
-    door_ip: '%env(TRUSTED_DOOR_IPS)%'
+    door_ip: "%env(TRUSTED_DOOR_IPS)%"
 parameters:
   symfony:
     containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
-  recording.host: '%env(RECORDING_HOST)%'
-  recording.port: '%env(RECORDING_PORT)%'
-  recording.user: '%env(RECORDING_USER)%'
-  recording.pass: '%env(RECORDING_PASS)%'
-  recording.script.start: '%env(RECORDING_SCRIPT_START)%'
-  recording.script.stop: '%env(RECORDING_SCRIPT_STOP)%'
-  mm_tunkki_hook: '%env(MM_TUNKKI_HOOK)%'
-  mm_tunkki_img: '%env(MM_TUNKKI_IMG)%'
-  mm_tunkki_botname: '%env(MM_TUNKKI_BOTNAME)%'
-  mattermost_client_id: '%env(MM_CLIENT_ID)%'
-  mattermost_client_secret: '%env(MM_CLIENT_SECRET)%'
-  mattermost_redirect_route: '%env(MM_REDIRECT)%'
-  booking_notification_email: '%env(BOOKING_NOTIFICATION_EMAIL)%'
-  mailer_sender_address: 'webmaster@entropy.fi'
-  door_socket: '%env(DOOR_SOCKET)%'
-  router.request_context.scheme: '%env(SCHEME)%'
+  recording.host: "%env(RECORDING_HOST)%"
+  recording.port: "%env(RECORDING_PORT)%"
+  recording.user: "%env(RECORDING_USER)%"
+  recording.pass: "%env(RECORDING_PASS)%"
+  recording.script.start: "%env(RECORDING_SCRIPT_START)%"
+  recording.script.stop: "%env(RECORDING_SCRIPT_STOP)%"
+  mm_tunkki_hook: "%env(MM_TUNKKI_HOOK)%"
+  mm_tunkki_img: "%env(MM_TUNKKI_IMG)%"
+  mm_tunkki_botname: "%env(MM_TUNKKI_BOTNAME)%"
+  mattermost_client_id: "%env(MM_CLIENT_ID)%"
+  mattermost_client_secret: "%env(MM_CLIENT_SECRET)%"
+  mattermost_redirect_route: "%env(MM_REDIRECT)%"
+  booking_notification_email: "%env(BOOKING_NOTIFICATION_EMAIL)%"
+  mailer_sender_address: "webmaster@entropy.fi"
+  door_socket: "%env(DOOR_SOCKET)%"
+  router.request_context.scheme: "%env(SCHEME)%"
 services:
   _defaults:
     autowire: true
     autoconfigure: true
   App\:
-    resource: '../src/'
+    resource: "../src/"
     exclude:
       - "../src/DependencyInjection/"
       - "../src/Entity/"
@@ -38,11 +38,11 @@ services:
   entropy.menu_builder.fi:
     class: App\Menu\MenuBuilder
     tags:
-      - {name: knp_menu.menu_builder, method: createMainMenuFi, alias: fi}
+      - { name: knp_menu.menu_builder, method: createMainMenuFi, alias: fi }
   entropy.menu_builder.en:
     class: App\Menu\MenuBuilder
     tags:
-      - {name: knp_menu.menu_builder, method: createMainMenuEn, alias: en}
+      - { name: knp_menu.menu_builder, method: createMainMenuEn, alias: en }
   admin.door_log:
     class: App\Admin\DoorLogAdmin
     tags:
@@ -62,11 +62,17 @@ services:
         model_class: App\Entity\Item
         controller: App\Controller\ItemAdminController
     calls:
-      - [setTemplate, [outer_list_rows_mosaic, admin/item/list_outer_rows_mosaic.html.twig]]
+      - [
+          setTemplate,
+          [outer_list_rows_mosaic, admin/item/list_outer_rows_mosaic.html.twig],
+        ]
       - [setTemplate, [inner_list_row, admin/item/list.html.twig]]
-      - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
-      - [addChild, ['@entropy_tunkki.admin.statusevent', 'item']]
-      - [addChild, ['@entropy_tunkki.admin.file', 'product']]
+      - [
+          setTemplate,
+          [base_list_field, admin/crud/base_list_flat_field.html.twig],
+        ]
+      - [addChild, ["@entropy_tunkki.admin.statusevent", "item"]]
+      - [addChild, ["@entropy_tunkki.admin.file", "product"]]
   entropy_tunkki.helper.mattermost:
     class: App\Helper\Mattermost
   my_mattermost_authenticator:
@@ -105,7 +111,7 @@ services:
       - "@sonata.page.template_manager"
       - "@doctrine.orm.entity_manager"
     tags:
-      - {name: sonata.page, alias: Item}
+      - { name: sonata.page, alias: Item }
   entropy.page.eventspage:
     class: App\PageService\EventsPage
     arguments:
@@ -113,17 +119,17 @@ services:
       - "@sonata.page.template_manager"
       - "@doctrine.orm.entity_manager"
     tags:
-      - {name: sonata.page, alias: eventspage}
+      - { name: sonata.page, alias: eventspage }
   App\PageService\AllEventsPage:
     arguments:
       $name: "All Events"
     tags:
-      - {name: sonata.page, alias: alleventspage}
+      - { name: sonata.page, alias: alleventspage }
   App\PageService\FrontPage:
     arguments:
       $name: "Front Page"
     tags:
-      - {name: sonata.page, alias: frontpage}
+      - { name: sonata.page, alias: frontpage }
   entropy.page.announcementspage:
     class: App\PageService\AnnouncementsPage
     arguments:
@@ -131,7 +137,7 @@ services:
       - "@sonata.page.template_manager"
       - "@doctrine.orm.entity_manager"
     tags:
-      - {name: sonata.page, alias: announcementspage}
+      - { name: sonata.page, alias: announcementspage }
   entropy_tunkki.admin.booking:
     class: App\Admin\BookingAdmin
     arguments:
@@ -147,8 +153,11 @@ services:
     calls:
       - [setTemplate, [edit, admin/booking/_edit_rentals.html.twig]]
       - [setTemplate, [inner_list_row, admin/booking/list.html.twig]]
-      - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
-      - [addChild, ['@entropy_tunkki.admin.statusevent', 'booking']]
+      - [
+          setTemplate,
+          [base_list_field, admin/crud/base_list_flat_field.html.twig],
+        ]
+      - [addChild, ["@entropy_tunkki.admin.statusevent", "booking"]]
     public: true
   entropy_tunkki.admin.package:
     class: App\Admin\PackageAdmin
@@ -177,63 +186,63 @@ services:
   entropy_tunkki.block.bookings:
     class: App\Block\BookingsBlock
     tags:
-      - {name: sonata.block, alias: bookingblock}
+      - { name: sonata.block, alias: bookingblock }
   entropy.block.artist_list:
     class: App\Block\ArtistListBlock
     tags:
-      - {name: sonata.block, alias: artistlistblock}
+      - { name: sonata.block, alias: artistlistblock }
   entropy.block.compensations:
     class: App\Block\Compensations
     tags:
-      - {name: sonata.block, alias: compensationsblock}
+      - { name: sonata.block, alias: compensationsblock }
   entropy.block.member.situation:
     class: App\Block\MemberSituation
     tags:
-      - {name: sonata.block, alias: membersituationblock}
+      - { name: sonata.block, alias: membersituationblock }
   entropy.block.joinus:
     class: App\Block\JoinUsBlock
     tags:
-      - {name: sonata.block, alias: joinusblock}
+      - { name: sonata.block, alias: joinusblock }
   entropy.block.statistics:
     class: App\Block\StatisticsBlock
     tags:
-      - {name: sonata.block, alias: statisticsblock}
+      - { name: sonata.block, alias: statisticsblock }
   entropy.block.random_artist:
     class: App\Block\RandomArtistBlock
     tags:
-      - {name: sonata.block, alias: randomartistblock}
+      - { name: sonata.block, alias: randomartistblock }
   entropy.block.member.info:
     class: App\Block\MemberInfoBlock
     tags:
-      - {name: sonata.block, alias: memberblock}
+      - { name: sonata.block, alias: memberblock }
   entropy.block.artist_info:
     class: App\Block\ArtistInfoBlock
     tags:
-      - {name: sonata.block, alias: artistblock}
+      - { name: sonata.block, alias: artistblock }
   entropy.block.email_lists:
     class: App\Block\EmailLists
     tags:
-      - {name: sonata.block, alias: emaillistsblock}
+      - { name: sonata.block, alias: emaillistsblock }
   entropy.block.door_info:
     class: App\Block\DoorInfoBlock
     tags:
-      - {name: sonata.block, alias: doorblock}
+      - { name: sonata.block, alias: doorblock }
   entropy_tunkki.block.linklist:
     class: App\Block\LinkListBlock
     tags:
-      - {name: sonata.block, alias: linklistblock}
+      - { name: sonata.block, alias: linklistblock }
   entropy.block.brokenitems:
     class: App\Block\BrokenItemsBlock
     tags:
-      - {name: sonata.block, alias: brokenitemsblock}
+      - { name: sonata.block, alias: brokenitemsblock }
   entropy.block.future_events:
     class: App\Block\FutureEventsBlock
     tags:
-      - {name: sonata.block, alias: futureeventsblock}
+      - { name: sonata.block, alias: futureeventsblock }
   entropy.block.bookings_in_progress:
     class: App\Block\BookingsInProgressBlock
     tags:
-      - {name: sonata.block, alias: bookingsinprogressblock}
+      - { name: sonata.block, alias: bookingsinprogressblock }
   entropy_tunkki.admin.who_can_rent_choice:
     class: App\Admin\WhoCanRentChoiceAdmin
     tags:
@@ -260,8 +269,8 @@ services:
         label: Accessories
   App\EventListener\BookingAdminListener:
     arguments:
-      $email: '%booking_notification_email%'
-      $fromEmail: '%mailer_sender_address%'
+      $email: "%booking_notification_email%"
+      $fromEmail: "%mailer_sender_address%"
   admin.email:
     class: App\Admin\EmailAdmin
     tags:
@@ -298,14 +307,14 @@ services:
         group: admin
         label: Events
     calls:
-      - [addChild, ['@admin.event_artist_info', 'Event']]
-      - [addChild, ['@entropy.admin.nakki', 'event']]
-      - [addChild, ['@entropy.admin.nakki_booking', 'event']]
-      - [addChild, ['@entropy.admin.rsvp', 'event']]
-      - [addChild, ['@admin.ticket', 'event']]
-      - [addChild, ['@admin.email', 'event']]
-      - [addChild, ['@admin.notification', 'event']]
-      - [addChild, ['@admin.happening', 'event']]
+      - [addChild, ["@admin.event_artist_info", "Event"]]
+      - [addChild, ["@entropy.admin.nakki", "event"]]
+      - [addChild, ["@entropy.admin.nakki_booking", "event"]]
+      - [addChild, ["@entropy.admin.rsvp", "event"]]
+      - [addChild, ["@admin.ticket", "event"]]
+      - [addChild, ["@admin.email", "event"]]
+      - [addChild, ["@admin.notification", "event"]]
+      - [addChild, ["@admin.happening", "event"]]
   admin.event_artist_info:
     class: App\Admin\EventArtistInfoAdmin
     tags:
@@ -317,7 +326,10 @@ services:
         label: EventArtistInfo
     calls:
       - [setTemplate, [inner_list_row, admin/event_artist_info/list.html.twig]]
-      - [setTemplate, [base_list_field, admin/crud/base_list_flat_field.html.twig]]
+      - [
+          setTemplate,
+          [base_list_field, admin/crud/base_list_flat_field.html.twig],
+        ]
   entropy.admin.menu:
     class: App\Admin\MenuAdmin
     tags:
@@ -327,10 +339,9 @@ services:
         manager_type: orm
         group: admin
         label: Menu
-  gedmo.listener.tree:
-    class: Gedmo\Tree\TreeListener
+  Gedmo\Tree\TreeListener:
     tags:
-      - {name: doctrine.event_subscriber, connection: default}
+      - { name: doctrine.event_subscriber, connection: default }
     calls:
       - [setAnnotationReader, ["@annotation_reader"]]
   entropy.admin.access_groups:
@@ -392,11 +403,25 @@ services:
         label: Tickets
 
   admin.notification:
-      class: App\Admin\NotificationAdmin
-      tags:
-          - { name: sonata.admin, model_class: App\Entity\Notification, controller: App\Controller\NotificationAdminController, manager_type: orm, group: admin, label: Notification }
+    class: App\Admin\NotificationAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Notification,
+          controller: App\Controller\NotificationAdminController,
+          manager_type: orm,
+          group: admin,
+          label: Notification,
+        }
 
   admin.happening:
-      class: App\Admin\HappeningAdmin
-      tags:
-          - { name: sonata.admin, model_class: App\Entity\Happening, controller: App\Controller\HappeningAdminController, manager_type: orm, group: admin, label: Happening }
+    class: App\Admin\HappeningAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Happening,
+          controller: App\Controller\HappeningAdminController,
+          manager_type: orm,
+          group: admin,
+          label: Happening,
+        }

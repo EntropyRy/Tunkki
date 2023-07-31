@@ -116,21 +116,6 @@ class MenuBuilder
         }
         return $menu;
     }
-    private function addStream($menu)
-    {
-        try {
-            $response = $this->client->request(
-                'GET',
-                'https://stream.entropy.fi/kerde.opus',
-                ['max_duration' => 4]
-            );
-            if ($response->getStatusCode() == 200) {
-                $menu->addChild('Stream', ['uri' => 'https://stream.entropy.fi/'])->setLinkAttribute('class', 'hilight');
-            }
-        } catch (TransportExceptionInterface) {
-            return;
-        }
-    }
     private function sortByPosition($m): array
     {
         $array = $m->getChildren()->toArray();
