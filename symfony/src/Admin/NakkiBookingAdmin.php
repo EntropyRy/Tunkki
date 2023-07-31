@@ -15,7 +15,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $list
+        $filter
             ->add('nakki');
         if (!$this->isChild()) {
             $filter
