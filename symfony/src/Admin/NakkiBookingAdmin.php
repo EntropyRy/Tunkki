@@ -15,6 +15,8 @@ final class NakkiBookingAdmin extends AbstractAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
+        $list
+            ->add('nakki');
         if (!$this->isChild()) {
             $filter
                 ->add('event');
@@ -22,8 +24,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
         $filter
             ->add('member')
             ->add('startAt')
-            ->add('endAt')
-        ;
+            ->add('endAt');
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -62,8 +63,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ])
             ->add('endAt', DateTimePickerType::class, [
                 'input' => 'datetime_immutable',
-            ])
-        ;
+            ]);
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -73,7 +73,6 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('event')
             ->add('member')
             ->add('startAt')
-            ->add('endAt')
-        ;
+            ->add('endAt');
     }
 }
