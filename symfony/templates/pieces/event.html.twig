@@ -243,8 +243,8 @@
             {% endif %}"
              {{ block('imgfilter') }}
             >
-            {% set class = 'img-fluid' %}
-            {% if rect|default(false) %}
+            {% set class = 'img-fluid w-100' %}
+            {% if rect|default(false) %} {# front page pic if true #}
                 {% set class = 'rect-img' %}
                 {% if event.picture.width < event.picture.height %}
                     {% set class = 'img-fluid' %}

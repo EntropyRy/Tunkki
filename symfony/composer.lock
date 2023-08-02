@@ -1468,16 +1468,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "2.15.4",
+            "version": "2.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "f7e4b61459692f9b747f40696e6bf72080390f2d"
+                "reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/f7e4b61459692f9b747f40696e6bf72080390f2d",
-                "reference": "f7e4b61459692f9b747f40696e6bf72080390f2d",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/495cd06b9a630f9c38a21ceb249ed008edbe8414",
+                "reference": "495cd06b9a630f9c38a21ceb249ed008edbe8414",
                 "shasum": ""
             },
             "require": {
@@ -1563,9 +1563,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/2.15.4"
+                "source": "https://github.com/doctrine/orm/tree/2.16.0"
             },
-            "time": "2023-07-18T07:50:04+00:00"
+            "time": "2023-08-01T12:07:04+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -5523,16 +5523,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.10.2",
+            "version": "4.10.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "77cb5eef1251c49bd475fbb4b5e0bd72528b57a4"
+                "reference": "4816a37633fdc7ae82ea476e4adc308683c25701"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/77cb5eef1251c49bd475fbb4b5e0bd72528b57a4",
-                "reference": "77cb5eef1251c49bd475fbb4b5e0bd72528b57a4",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/4816a37633fdc7ae82ea476e4adc308683c25701",
+                "reference": "4816a37633fdc7ae82ea476e4adc308683c25701",
                 "shasum": ""
             },
             "require": {
@@ -5661,7 +5661,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.10.2"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.10.3"
             },
             "funding": [
                 {
@@ -5681,7 +5681,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-28T22:33:19+00:00"
+            "time": "2023-08-01T19:10:41+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
@@ -5909,16 +5909,16 @@
         },
         {
             "name": "sonata-project/twig-extensions",
-            "version": "2.2.0",
+            "version": "2.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/twig-extensions.git",
-                "reference": "9ba0eba8980ef5806abdeb0ad62599f5594ae3a4"
+                "reference": "c81c17f49a76af6a0d1e4f37469315aea01eaa00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/twig-extensions/zipball/9ba0eba8980ef5806abdeb0ad62599f5594ae3a4",
-                "reference": "9ba0eba8980ef5806abdeb0ad62599f5594ae3a4",
+                "url": "https://api.github.com/repos/sonata-project/twig-extensions/zipball/c81c17f49a76af6a0d1e4f37469315aea01eaa00",
+                "reference": "c81c17f49a76af6a0d1e4f37469315aea01eaa00",
                 "shasum": ""
             },
             "require": {
@@ -5981,7 +5981,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/twig-extensions/issues",
-                "source": "https://github.com/sonata-project/twig-extensions/tree/2.2.0"
+                "source": "https://github.com/sonata-project/twig-extensions/tree/2.3.0"
             },
             "funding": [
                 {
@@ -6001,7 +6001,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-31T13:07:55+00:00"
+            "time": "2023-08-01T23:11:06+00:00"
         },
         {
             "name": "stof/doctrine-extensions-bundle",
