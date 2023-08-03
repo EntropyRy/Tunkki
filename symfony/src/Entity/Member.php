@@ -111,8 +111,8 @@ class Member implements \Stringable
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $denyKerdeAccess = false;
 
-    #[ORM\OneToOne(mappedBy: 'member', cascade: ['persist', 'remove'])]
-    private ?HappeningBooking $happeningBooking = null;
+    #[ORM\OneToMany(targetEntity: HappeningBooking::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
+    private Collection $happeningBooking;
 
     #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
     private Collection $happenings;
@@ -126,6 +126,7 @@ class Member implements \Stringable
         $this->tickets = new ArrayCollection();
         $this->responsibleForNakkis = new ArrayCollection();
         $this->happenings = new ArrayCollection();
+        $this->happeningBooking = new ArrayCollection();
     }
 
     /**
@@ -823,23 +824,29 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function getHappeningBooking(): ?HappeningBooking
+    public function getHappeningBooking(): ?Collection
     {
         return $this->happeningBooking;
     }
 
-    public function setHappeningBooking(HappeningBooking $happeningBooking): self
+    public function addHappeningBooking(HappeningBooking $happeningBooking): self
     {
-        // set the owning side of the relation if necessary
-        if ($happeningBooking->getMember() !== $this) {
+        if (!$this->happeningBooking->contains($happeningBooking)) {
+            $this->happeningBooking->add($happeningBooking);
             $happeningBooking->setMember($this);
         }
-
-        $this->happeningBooking = $happeningBooking;
 
         return $this;
     }
 
+    public function removeHappeningBooking(HappeningBooking $happeningBooking): self
+    {
+        if ($this->happeningBooking->removeElement($happeningBooking)) {
+            $happeningBooking->setMember(null);
+        }
+
+        return $this;
+    }
     /**
      * @return Collection<int, Happening>
      */

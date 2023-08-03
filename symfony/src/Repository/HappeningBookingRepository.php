@@ -2,7 +2,9 @@
 
 namespace App\Repository;
 
+use App\Entity\Happening;
 use App\Entity\HappeningBooking;
+use App\Entity\Member;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -54,7 +56,7 @@ class HappeningBookingRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findMemberBooking($member, $happening): ?HappeningBooking
+    public function findMemberBooking(Member $member, Happening $happening): ?HappeningBooking
     {
         return $this->createQueryBuilder('h')
             ->andWhere('h.member = :member')
