@@ -160,7 +160,9 @@ class EventController extends Controller
         // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
         if ($event->getPublished() && $event->getPublishDate() < $now) {
             $title = $event->getNameByLang($lang) . ' - ' . $event->getEventDate()->format('d.m.Y, H:i');
-            $page->setTitle($title);
+            if ($page) {
+                $page->setTitle($title);
+            }
             if (!is_null($mediaUrl)) {
                 $seo->addMeta('property', 'twitter:image', 'https://entropy.fi' . $mediaUrl);
                 $seo->addMeta('property', 'og:image', 'https://entropy.fi' . $mediaUrl);

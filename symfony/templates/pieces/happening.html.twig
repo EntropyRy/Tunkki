@@ -1,4 +1,5 @@
 {% block happening_list %}
+{% if event.url %}
 <div class="pt-2 pb-2 col-12 d-grid" id="happening_list">
     {% for happening in event.happenings %}
     {% if happening.releaseThisHappeningInEvent %}
@@ -27,6 +28,7 @@
         href="{{ path('entropy_event_happening_create', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}"
         >{{ 'happening.create'|trans }}</a>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block shown_only_to %}

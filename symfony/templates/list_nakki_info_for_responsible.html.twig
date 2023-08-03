@@ -1,7 +1,7 @@
 {% extends 'event.html.twig' %}
 {% block content %}
 {% if is_granted('ROLE_SUPER_ADMIN') %}
-<h2 class="text-success">Sinä olet ADMIN joten näet kaikki tiedot</h2>
+<h1 class="text-success">You are ADMIN</h1>
 {% endif %}
 {% set infos = event.responsibleMemberNakkis(app.user.member) %}
 {{ block('infos') }}
@@ -66,5 +66,7 @@
     {% endfor %}
   </tbody>
 </table>
+{% else %}
+<h1>{{ "You don't have Nakki"|trans }}</h1>
 {% endfor %}
 {% endblock %}
