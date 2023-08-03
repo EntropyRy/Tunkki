@@ -176,6 +176,7 @@ final class MemberAdmin extends AbstractAdmin
     {
         $showMapper
             ->add('username')
+            ->add('user.MattermostId')
             ->add('name')
             ->add('email')
             ->add('phone')
