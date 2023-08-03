@@ -134,6 +134,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('phone')
             ->add('CityOfResidence')
             ->add('locale')
+            ->add('user.MattermostId')
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
