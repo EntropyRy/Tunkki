@@ -18,10 +18,7 @@
   <thead>
     <tr>
       <th scope="col">Nakki</th>
-      <th scope="col">{{ 'Username'|trans }}</th>
-      <th scope="col">{{ 'Name'|trans }}</th>
-      <th scope="col">{{ 'Phone'|trans }}</th>
-      <th scope="col">Email</th>
+      <th scope="col">{{ 'Username'|trans }}, {{ 'Name'|trans }}, {{ 'Phone'|trans }}, Email</th>
       <th scope="col">Mattermost Link</th>
     </tr>
   </thead>
@@ -34,10 +31,7 @@
       {% endif %}
       <tr>
         <th scope="col">{{ name }}</th>
-        <th scope="col">{{ r.username }}</th>
-        <th scope="col">{{ r.name }}</th>
-        <th scope="col">{{ r.phone }}</th>
-        <th scope="col">{{ r.email }}</th>
+        <th scope="col">{{ r.username }}, {{ r.name }}, {{ r.phone }}, {{ r.email }}</th>
         <th scope="col">
           <a class="btn btn-success"
               target="_blank" href="{{ nakki.mattermost }}">
