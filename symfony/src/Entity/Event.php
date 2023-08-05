@@ -1054,11 +1054,11 @@ body {
 
         return $this;
     }
-    public function responsibleMemberNakkis($member)
+    public function responsibleMemberNakkis(Member $member): array
     {
         $bookings = [];
         foreach ($this->getNakkis() as $nakki) {
-            if ($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())) {
+            if ($nakki->getResponsible() == $member) { // || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())) {
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'][] = $nakki->getNakkiBookings();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
@@ -1066,7 +1066,7 @@ body {
         }
         return $bookings;
     }
-    public function memberNakkis($member)
+    public function memberNakkis(Member $member): array
     {
         $bookings = [];
         $booking = $member->getEventNakkiBooking($this);
@@ -1079,6 +1079,15 @@ body {
         return $bookings;
     }
 
+    public function getAllNakkiResponsibles(string $locale): array
+    {
+        $responsibles = [];
+        foreach ($this->getNakkis() as $nakki) {
+            $responsibles[$nakki->getDefinition()->getName($locale)]['mattermost'] = $nakki->getMattermostChannel();
+            $responsibles[$nakki->getDefinition()->getName($locale)]['responsible'] = $nakki->getResponsible();
+        }
+        return $responsibles;
+    }
     /**
      * @return Collection<int, Email>
      */

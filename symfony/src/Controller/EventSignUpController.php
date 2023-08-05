@@ -110,11 +110,25 @@ class EventSignUpController extends Controller
         ]);
     }
     public function responsible(
+        Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
     ): Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        $gdpr = false;
+        $infos = $event->responsibleMemberNakkis($member);
+        if (count($infos) == 0) {
+            $gdpr = true;
+            $infos = $event->memberNakkis($member);
+        }
+        $responsibles = $event->getAllNakkiResponsibles($request->getLocale());
         return $this->render('list_nakki_info_for_responsible.html.twig', [
+            'gdpr' => $gdpr,
             'event' => $event,
+            'infos' => $infos,
+            'responsibles' => $responsibles
         ]);
     }
     protected function getNakkis($event, $member, $locale): array

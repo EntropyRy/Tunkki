@@ -3,12 +3,51 @@
 {% if is_granted('ROLE_SUPER_ADMIN') %}
 <h1 class="text-success">You are ADMIN</h1>
 {% endif %}
-{% set infos = event.responsibleMemberNakkis(app.user.member) %}
+{{ block('responsibles') }}
 {{ block('infos') }}
-{% if infos|length == 0 %}
-{% set infos = event.memberNakkis(app.user.member) %}
-{% set gdpr = true %}
-{{ block('infos') }}
+{% endblock %}
+
+{% block responsibles %}
+{% if responsibles|length > 0 and infos|length > 0 %}
+<h3>{{ 'Responsibles'|trans }}</h3>
+<table class="table table-striped
+    {% if event.headerTheme == 'dark' %}
+        table-dark
+    {% endif %}
+    ">
+  <thead>
+    <tr>
+      <th scope="col">Nakki</th>
+      <th scope="col">{{ 'Username'|trans }}</th>
+      <th scope="col">{{ 'Name'|trans }}</th>
+      <th scope="col">{{ 'Phone'|trans }}</th>
+      <th scope="col">Email</th>
+      <th scope="col">Mattermost Link</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for name, nakki in responsibles %}
+      {% if nakki.responsible %}
+        {% set r = nakki.responsible %}
+      {% else %}
+        {% set r = {'username': 'missing'|trans, 'name': '', 'phone': '', 'email': ''} %}
+      {% endif %}
+      <tr>
+        <th scope="col">{{ name }}</th>
+        <th scope="col">{{ r.username }}</th>
+        <th scope="col">{{ r.name }}</th>
+        <th scope="col">{{ r.phone }}</th>
+        <th scope="col">{{ r.email }}</th>
+        <th scope="col">
+          <a class="btn btn-success"
+              target="_blank" href="{{ nakki.mattermost }}">
+              <i class="fa-solid fa-up-right-from-square"></i> Mattermost
+          </a>
+        </th>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
 {% endif %}
 {% endblock %}
 
@@ -17,36 +56,39 @@
 <h3>Nakki: {{ name }}
     {% if nakki.mattermost is not empty %}
         <a class="btn btn-secondary float-end"
-            target="_black" href="{{ nakki.mattermost }}">
+            target="_blank" href="{{ nakki.mattermost }}">
             <i class="fa-solid fa-up-right-from-square"></i> Mattermost
         </a>
     {% endif %}
 </h3>
 {% if nakki.responsible is not null %}
-{% set r = nakki.responsible %}
-<h5 class="text-success">{{ 'Responsible'|trans }}: {{ r.username }}, {{ r.name }}, {{ r.phone }}, {{ r.email }}</h5>
+{# {% set r = nakki.responsible %} #}
+{# <table class="table table-striped #}
+{#     {% if event.headerTheme == 'dark' %} #}
+{#         table-dark #}
+{#     {% endif %} #}
+{#     "> #}
+{#   <thead> #}
+{#     <tr> #}
+{#       <th scope="col">{{ 'Username'|trans }}</th> #}
+{#       <th scope="col">{{ 'Name'|trans }}</th> #}
+{#       <th scope="col">{{ 'Phone'|trans }}</th> #}
+{#       <th scope="col">Email</th> #}
+{#     </tr> #}
+{#   </thead> #}
+{#   <tbody> #}
+{#     <tr> #}
+{#       <th scope="col">{{ r.username }}</th> #}
+{#       <th scope="col">{{ r.name }}</th> #}
+{#       <th scope="col">{{ r.phone }}</th> #}
+{#       <th scope="col">{{ r.email }}</th> #}
+{#     </tr> #}
+{#   </tbody> #}
+{# </table> #}
 {% else %}
-<h5>{{ 'Responsible'|trans }}: {{ 'missing'|trans }}</h5>
+<h5 class="text-warning">{{ 'Responsible'|trans }}: {{ 'missing'|trans }}</h5>
 {% endif %}
-<table class="table table-striped
-    {% if event.headerTheme == 'dark' %}
-        table-dark
-    {% endif %}
-    ">
-  <thead>
-    <tr>
-      <th scope="col">{{ 'Username'|trans }}</th>
-      <th scope="col">{{ 'Name'|trans }}</th>
-      {% if not gdpr|default(false) %}
-        <th scope="col">{{ 'Phone'|trans }}</th>
-        <th scope="col">Email</th>
-      {% endif %}
-      {% if event.requireNakkiBookingsToBeDifferentTimes %}
-        <th scope="col">Time</th>
-      {% endif %}
-    </tr>
-  </thead>
-  <tbody>
+{{ block('thead') }}
     {% for bookings in nakki.b %}
       {% for b in bookings %}
         {% if b.member is not null %}
@@ -67,6 +109,28 @@
   </tbody>
 </table>
 {% else %}
-<h1>{{ "You don't have Nakki"|trans }}</h1>
+<h1>{{ "No permissions"|trans }}</h1>
 {% endfor %}
+{% endblock %}
+
+{% block thead %}
+<table class="table table-striped
+    {% if event.headerTheme == 'dark' %}
+        table-dark
+    {% endif %}
+    ">
+  <thead>
+    <tr>
+      <th scope="col">{{ 'Username'|trans }}</th>
+      <th scope="col">{{ 'Name'|trans }}</th>
+      {% if not gdpr|default(false) %}
+        <th scope="col">{{ 'Phone'|trans }}</th>
+        <th scope="col">Email</th>
+      {% endif %}
+      {% if event.requireNakkiBookingsToBeDifferentTimes %}
+        <th scope="col">Time</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
 {% endblock %}
