@@ -19,7 +19,7 @@
     <tr>
       <th scope="col">Nakki</th>
       <th scope="col">{{ 'Username'|trans }}, {{ 'Name'|trans }}, {{ 'Phone'|trans }}, Email</th>
-      <th scope="col">Mattermost Link</th>
+      <th scope="col">Channel</th>
     </tr>
   </thead>
   <tbody>
@@ -27,11 +27,11 @@
       {% if nakki.responsible %}
         {% set r = nakki.responsible %}
       {% else %}
-        {% set r = {'username': 'missing'|trans, 'name': '', 'phone': '', 'email': ''} %}
+        {% set r = 'missing' %}
       {% endif %}
       <tr>
         <th scope="col">{{ name }}</th>
-        <th scope="col">{{ r.username }}, {{ r.name }}, {{ r.phone }}, {{ r.email }}</th>
+        <th scope="col">{% if r == 'missing' %}{{ r|trans }}{% else %}{{ r.username }}, {{ r.name }}, {{ r.phone }}, {{ r.email }}{% endif %}</th>
         <th scope="col">
           <a class="btn btn-success"
               target="_blank" href="{{ nakki.mattermost }}">

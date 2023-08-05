@@ -1,5 +1,6 @@
 Announcement: Tiedote
 Responsible: Vastaava
+Responsibles: Vastaavat
 # Tunkki
 Control barcodes: Kontrolli Koodit
 Bank Account: Pankkitili
@@ -452,4 +453,3 @@ contract:
 pcs: kpl
 Previous: Edellinen
 Next: Seuraava
-
