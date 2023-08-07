@@ -227,6 +227,9 @@ body {
     #[OrderBy(['time' => 'ASC'])]
     private Collection $happenings;
 
+    #[ORM\ManyToMany(targetEntity: Member::class)]
+    private Collection $nakkiResponsibleAdmin;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -366,6 +369,7 @@ body {
         $this->emails = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->happenings = new ArrayCollection();
+        $this->nakkiResponsibleAdmin = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1058,7 +1062,7 @@ body {
     {
         $bookings = [];
         foreach ($this->getNakkis() as $nakki) {
-            if ($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())) {
+            if ($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles()) || $this->nakkiResponsibleAdmin->contains($member)) {
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'][] = $nakki->getNakkiBookings();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
                 $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
@@ -1293,5 +1297,29 @@ body {
             }
         }
         return null;
+    }
+
+    /**
+     * @return Collection<int, Member>
+     */
+    public function getNakkiResponsibleAdmin(): Collection
+    {
+        return $this->nakkiResponsibleAdmin;
+    }
+
+    public function addNakkiResponsibleAdmin(Member $nakkiResponsibleAdmin): static
+    {
+        if (!$this->nakkiResponsibleAdmin->contains($nakkiResponsibleAdmin)) {
+            $this->nakkiResponsibleAdmin->add($nakkiResponsibleAdmin);
+        }
+
+        return $this;
+    }
+
+    public function removeNakkiResponsibleAdmin(Member $nakkiResponsibleAdmin): static
+    {
+        $this->nakkiResponsibleAdmin->removeElement($nakkiResponsibleAdmin);
+
+        return $this;
     }
 }

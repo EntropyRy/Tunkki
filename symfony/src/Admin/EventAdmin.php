@@ -530,6 +530,7 @@ final class EventAdmin extends AbstractAdmin
                         'help' => 'Make sure member nakki bookings do not overlap',
                     ]
                 )
+                ->add('nakkiResponsibleAdmin')
                 ->add(
                     'nakkiInfoEn',
                     SimpleFormatterType::class,
