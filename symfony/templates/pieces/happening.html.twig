@@ -100,7 +100,7 @@
             <h4>{{ space_left }} {{ 'seats available'|trans }}</h4>
             {% if happeningB.member == app.user.member %}
                 {% if happeningB.comment %}
-                {{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}
+                <p>{{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}</p>
                 {% endif %}
                 <div>
                     <a href="{{ path('entropy_event_happening_remove', {'id': happeningB.id}) }}" class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
