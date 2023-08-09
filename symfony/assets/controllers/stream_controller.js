@@ -23,8 +23,10 @@ export default class extends Controller {
       .then((response) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
+        } else {
+          return response.json();
         }
-        return response.status;
+        // return response.status;
         //this.setStream(response.status);
       })
       .then((data) => {

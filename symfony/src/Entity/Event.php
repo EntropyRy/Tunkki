@@ -113,6 +113,7 @@ body {
     private ?bool $rsvpSystemEnabled = false;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
+    #[OrderBy(["startAt" => "ASC"])]
     private $nakkis;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
