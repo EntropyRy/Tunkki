@@ -148,6 +148,7 @@
 {% set content_attr = 'content_attribute'|trans %}
 {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
+    '{{ timetable_to_page }}': block('timetable_to_page'),
     '{{ bios }}': block('bios'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
@@ -364,6 +365,11 @@
 </div>
 {% endblock %}
 
+{% block timetable_to_page %}
+{% set page_links = true %}
+{{ block('timetable') }}
+{% endblock %}
+
 {% block timetable %}
 {% set last = null %}
 {% set music_bios = event.MusicArtistInfos %}
@@ -401,7 +407,10 @@
                 B2B
                 {% endif %}
             {% endif %}
-            <a href="{% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
+            <a href="
+                {% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+                {% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}
+                ">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
         {% set last = info.StartTime %}
         {% if last is defined %}
