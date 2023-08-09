@@ -117,6 +117,7 @@ body {
     private $nakkis;
 
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
+    #[OrderBy(["startAt" => "ASC"])]
     private $nakkiBookings;
 
     #[ORM\Column(type: 'boolean')]
