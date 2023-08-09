@@ -25,12 +25,12 @@
     </div>
     <div class="col-xs-10">
     {% if object.StartTime %}
-        <span>
+        <div>
             <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
-            Stage: {{ object.stage|default('NOT DEFINED') }}<br>
+            Stage: {{ object.stage|default('No stage') }}<br>
             Hardware: {{ object.Artist.hardware }}
-        </span>
-    {% else %}
+        </div>
+    {% endif %}
         <span style="float: right; margin-left: 2em; padding: 5px; border-left: 1px solid #a2a2a2; border-bottom: 1px solid #a2a2a2;  ">
             <small>
                 Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
@@ -42,6 +42,5 @@
         <span>
             <p>{{ object.freeWord|raw }}</p>
         </span>
-    {% endif %}
     </div>
 {% endblock %}
