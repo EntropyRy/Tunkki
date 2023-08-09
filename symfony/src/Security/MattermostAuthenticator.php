@@ -67,12 +67,12 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 // 2) do we have a matching user by email?
                 $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
                 if ($member) {
-                    // if (strtolower($member->getUsername()) != $username) {
-                    //     $member->setUsername($username);
-                    //     $this->em->persist($member);
-                    //     $this->em->flush();
-                    //     $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
-                    // }
+                    if (strtolower($member->getUsername()) != $username) {
+                        $member->setUsername($username);
+                        $this->em->persist($member);
+                        $this->em->flush();
+                        $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
+                    }
                     $user = $member->getUser();
                     $user->setMattermostId($id);
                     $this->em->persist($user);
