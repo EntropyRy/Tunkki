@@ -53,26 +53,28 @@
 {% block happening_info %}
 {% set name = happening.name(app.request.locale) %}
 {% set space_left = happening.maxSignUps - happening.bookings|length %}
+<div class="row">
+    <div class="col-12">
+        <h1>
+            <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
+            {{ happening.type|capitalize|trans }}
+            {% if admin %}
+            ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
+            {% endif %}
+            {% if happening.releaseThisHappeningInEvent == false %}
+               ~ <span class="text-danger">
+                {{ block('shown_only_to') }}
+               </span>
+            {% endif %}
+        </h1>
+    </div>
+</div>
 <div class="row mb-3">
     <div class="col-12">
         {{ block('prev_next_navigation') }}
     </div>
 </div>
 <div class="row">
-<div class="col-12">
-    <h1>
-        <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
-        {{ happening.type|capitalize|trans }}
-        {% if admin %}
-        ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
-        {% endif %}
-        {% if happening.releaseThisHappeningInEvent == false %}
-           ~ <span class="text-danger">
-            {{ block('shown_only_to') }}
-           </span>
-        {% endif %}
-    </h1>
-</div>
 {% if happening.picture %}
     <div class="col-sm-6 col-md-4">
     {{ block('happening_pic') }}
