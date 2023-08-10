@@ -540,21 +540,14 @@
 {% endblock %}
 
 {% block artist_event_info %}
-{% set show = true %}
 {% if event is defined and event.multiday == true %}
     {% set datestring = 'E, HH:mm' %}
 {% else %}
     {% set datestring = 'HH:mm' %}
 {% endif %}
-{% if event is defined and ('{{ timetable }}' not in attribute(event, content_attr)) %}
-    {% set show = false %}
-{% endif %}
-{% if frontpage is defined and frontpage %}
-    {% set show = false %}
-{% endif %}
 <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
     {% if artist.type == 'Live' or artist.type == 'DJ' %}
-        {% if info is defined and show %}
+        {% if info is defined %}
             @ {{ info.StartTime|format_datetime(pattern=datestring) }}
         {% endif %}
     {% endif %}
