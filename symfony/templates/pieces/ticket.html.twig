@@ -60,7 +60,7 @@
 {% endblock %}
 
 {% block ticket %}
-<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }}</h3>
+<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
 {{ event.ticketInfo(app.request.locale)|raw }}
 {% if ticket.status == 'reserved' %}
 <h4>{{ 'ticket.payment_info'|trans }}</h4>
