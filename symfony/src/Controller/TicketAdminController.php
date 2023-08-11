@@ -29,6 +29,17 @@ final class TicketAdminController extends CRUDController
         }
         return $this->redirect($this->admin->generateUrl('list'));
     }
+    public function giveAction(TicketRepository $repo): RedirectResponse
+    {
+        $ticket = $this->admin->getSubject();
+        if (is_null($ticket->getOwner())) {
+            $this->addFlash('warning', 'ticket does not have owner!');
+        } else {
+            $ticket->setGiven(true);
+            $repo->save($ticket, true);
+        }
+        return $this->redirect($this->admin->generateUrl('list'));
+    }
     public function changeOwnerAction(Request $request, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiRepo): Response
     {
         $ticket = $this->admin->getSubject();

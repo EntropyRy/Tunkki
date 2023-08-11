@@ -55,7 +55,9 @@ final class TicketAdmin extends AbstractAdmin
         $list
             ->add('ticketHolderHasNakki')
             ->add('price')
-            ->add('owner')
+            ->add('given', null, ['editable' => true])
+            ->add('owner.firstname')
+            ->add('owner.lastname')
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt')
@@ -70,6 +72,9 @@ final class TicketAdmin extends AbstractAdmin
                     'changeOwner' => [
                         'template' => 'admin/ticket/button_change_owner.html.twig'
                     ],
+                    'give' => [
+                        'template' => 'admin/ticket/button_give.html.twig'
+                    ],
                     'edit' => [],
                 ],
             ]);
@@ -83,6 +88,7 @@ final class TicketAdmin extends AbstractAdmin
         }
         $form
             ->add('price')
+            ->add('given')
             ->add('owner')
             ->add('referenceNumber', null, ['disabled' => true])
             ->add('recommendedBy')
@@ -111,6 +117,7 @@ final class TicketAdmin extends AbstractAdmin
         $collection->remove('delete');
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
+        $collection->add('give', $this->getRouterIdParameter() . '/give');
         $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
         $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
         $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');

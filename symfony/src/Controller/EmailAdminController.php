@@ -114,7 +114,7 @@ final class EmailAdminController extends CRUDController
     private function generateMail($to, $replyto, $subject, $body, $links, $img): TemplatedEmail
     {
         return (new TemplatedEmail())
-            ->from(new Address('webmaster@entropy.fi', 'Entropy Ry'))
+            ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyto)
             ->subject($subject)

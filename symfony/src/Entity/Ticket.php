@@ -44,6 +44,9 @@ class Ticket implements \Stringable
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $updatedAt;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $given = null;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
@@ -154,5 +157,17 @@ class Ticket implements \Stringable
             return $event->ticketHolderHasNakki($member);
         }
         return null;
+    }
+
+    public function isGiven(): ?bool
+    {
+        return $this->given;
+    }
+
+    public function setGiven(?bool $given): static
+    {
+        $this->given = $given;
+
+        return $this;
     }
 }
