@@ -29,6 +29,7 @@ final class TicketAdmin extends AbstractAdmin
         $filter
             ->add('price')
             ->add('owner')
+            ->add('given')
             ->add('referenceNumber')
             ->add('status', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,
