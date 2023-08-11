@@ -6,8 +6,8 @@
             <span style="font-size: 1.2em;">
             {% set artist = object.artist %}
             {{ artist.type }}: {{ artist.name }}, Previews:
-                  <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
-                  <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
+                  <a href="{{ path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
+                  <a href="{{ path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
             </span>
             <span style="font-weight: 800">
             Member: {{ object|render_list_element(admin.list['Artist.member']) }}
@@ -25,10 +25,9 @@
     </div>
     <div class="col-xs-10">
     {% if object.StartTime %}
-        <div>
+        <div style="border-bottom: 1px solid black">
             <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
             Stage: {{ object.stage|default('No stage') }}<br>
-            Hardware: {{ object.Artist.hardware }}
         </div>
     {% endif %}
         <span style="float: right; margin-left: 2em; padding: 5px; border-left: 1px solid #a2a2a2; border-bottom: 1px solid #a2a2a2;  ">
