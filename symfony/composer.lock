@@ -3879,16 +3879,16 @@
         },
         {
             "name": "picqer/php-barcode-generator",
-            "version": "v2.3.2",
+            "version": "v2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/picqer/php-barcode-generator.git",
-                "reference": "dab19f2afe42d2e3dda1504f5834e36f2ecf0553"
+                "reference": "10d3507e902058c62493fef0b9569d04634b1c8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/picqer/php-barcode-generator/zipball/dab19f2afe42d2e3dda1504f5834e36f2ecf0553",
-                "reference": "dab19f2afe42d2e3dda1504f5834e36f2ecf0553",
+                "url": "https://api.github.com/repos/picqer/php-barcode-generator/zipball/10d3507e902058c62493fef0b9569d04634b1c8f",
+                "reference": "10d3507e902058c62493fef0b9569d04634b1c8f",
                 "shasum": ""
             },
             "require": {
@@ -3953,7 +3953,7 @@
             ],
             "support": {
                 "issues": "https://github.com/picqer/php-barcode-generator/issues",
-                "source": "https://github.com/picqer/php-barcode-generator/tree/v2.3.2"
+                "source": "https://github.com/picqer/php-barcode-generator/tree/v2.3.3"
             },
             "funding": [
                 {
@@ -3961,7 +3961,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-25T06:37:46+00:00"
+            "time": "2023-08-14T07:50:43+00:00"
         },
         {
             "name": "psr/cache",
@@ -12190,16 +12190,16 @@
     "packages-dev": [
         {
             "name": "nikic/php-parser",
-            "version": "v4.16.0",
+            "version": "v4.17.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "19526a33fb561ef417e822e85f08a00db4059c17"
+                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/19526a33fb561ef417e822e85f08a00db4059c17",
-                "reference": "19526a33fb561ef417e822e85f08a00db4059c17",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
+                "reference": "a6303e50c90c355c7eeee2c4a8b27fe8dc8fef1d",
                 "shasum": ""
             },
             "require": {
@@ -12240,9 +12240,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v4.16.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v4.17.1"
             },
-            "time": "2023-06-25T14:52:30+00:00"
+            "time": "2023-08-13T19:53:39+00:00"
         },
         {
             "name": "phpstan/extension-installer",
@@ -12290,16 +12290,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.28",
+            "version": "1.10.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e4545b55904ebef470423d3ddddb74fa7325497a"
+                "reference": "ee5d8f2d3977fb09e55603eee6fb53bdd76ee9c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e4545b55904ebef470423d3ddddb74fa7325497a",
-                "reference": "e4545b55904ebef470423d3ddddb74fa7325497a",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ee5d8f2d3977fb09e55603eee6fb53bdd76ee9c1",
+                "reference": "ee5d8f2d3977fb09e55603eee6fb53bdd76ee9c1",
                 "shasum": ""
             },
             "require": {
@@ -12348,7 +12348,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-08T12:33:42+00:00"
+            "time": "2023-08-14T13:24:11+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
