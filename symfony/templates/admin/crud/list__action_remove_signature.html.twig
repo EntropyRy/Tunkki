@@ -1,3 +1,3 @@
-{% if object.renterConsent and object.BookingDate >= 'now'|date %}
+{% if object.renterConsent and 'now'|date('U') <= object.BookingDate|date('U') %}
 <a class="btn btn-sm btn-warning edit_link" href="{{ admin.generateObjectUrl('removeSignature', object) }}"><i class="fa fa-remove" aria-hidden="true"></i> Remove Signature</a>
 {% endif %}
