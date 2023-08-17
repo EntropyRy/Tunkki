@@ -115,9 +115,9 @@ class BookingAdmin extends AbstractAdmin
                 'actions' => [
                     'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
                     'stuffList' => ['template' => 'admin/crud/list__action_stuff.html.twig'],
-                    //        'show' => array(),
                     'edit' => [],
                     'delete' => [],
+                    'removeSignature' => ['template' => 'admin/crud/list__action_remove_signature.html.twig'],
                 ]
             ]);
     }
@@ -398,6 +398,7 @@ class BookingAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollection $collection): void
     {
+        $collection->add('removeSignature', $this->getRouterIdParameter() . '/remove-signature');
         $collection->add('stuffList', $this->getRouterIdParameter() . '/stufflist');
         $collection->remove('delete');
     }
