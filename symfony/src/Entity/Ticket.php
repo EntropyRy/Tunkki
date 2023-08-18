@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity(repositoryClass: TicketRepository::class)]
 class Ticket implements \Stringable
 {
-    final public const STATUSES = ['available', 'reserved', 'paid', 'paid_with_bus'];
+    public const STATUSES = ['available', 'reserved', 'paid', 'paid_with_bus'];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -45,7 +45,7 @@ class Ticket implements \Stringable
     private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(nullable: true)]
-    private ?bool $given = null;
+    private ?bool $given = false;
 
     public function __construct()
     {
