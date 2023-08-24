@@ -24,7 +24,11 @@ class FutureEventsBlock extends BaseBlockService
         assert($repo instanceof EventRepository);
         $events = $repo->getFutureEvents();
 
-        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'events'  => $events, 'settings' => $blockContext->getSettings()], $response);
+        return $this->renderResponse($blockContext->getTemplate(), [
+            'block' => $blockContext->getBlock(),
+            'events' => $events,
+            'settings' => $blockContext->getSettings()
+        ], $response);
     }
 
     public function __construct(Environment $twig, protected EntityManagerInterface $em)
@@ -41,12 +45,9 @@ class FutureEventsBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), null, 'messages', [
             'class' => 'fa fa-bullhorn',
         ]);
-    }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
-    {
     }
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {

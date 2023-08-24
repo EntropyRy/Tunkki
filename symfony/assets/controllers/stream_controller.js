@@ -27,13 +27,15 @@ export default class extends Controller {
         const sourceNode = xmlDoc.querySelector("source");
 
         if (sourceNode) {
-          const sourceMount = sourceNode.getAttribute("mount");
-          const sourceListeners =
-            sourceNode.querySelector("listeners").textContent;
-
+          const sourceMount = sourceNode.getAttribute("src");
+          const sourceListeners = xmlDoc.querySelectorAll("listeners");
+          let listeners = 0;
+          sourceListeners.forEach((node) => {
+            listeners += Number(node.innerText);
+          });
           if (sourceMount) {
             console.log("Icecast server is streaming on mount:", sourceMount);
-            this.setStream(200, sourceListeners);
+            this.setStream(200, listeners);
           } else {
             console.log("Icecast server is not currently streaming");
             this.setStream(404, 0);
@@ -63,7 +65,7 @@ export default class extends Controller {
   }
   setStream(code, listeners) {
     if (code == 200) {
-      this.badgeTarget.innerText = "ONLINE:" + listeners;
+      this.badgeTarget.innerText = "ONLINE: " + listeners;
       this.badgeTarget.classList.add("bg-success");
       this.playerTarget.classList.remove("d-none");
       this.picTarget.setAttribute("src", this.onlineImgValue);
