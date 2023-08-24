@@ -108,7 +108,7 @@
     </div>
 {% endblock %}
 {% block stream_tile %}
-<turbo-frame
+<div
     {{ stimulus_controller('stream') }}
      data-stream-url-value="https://stream.entropy.fi/kerde.opus"
      data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}"
@@ -120,7 +120,7 @@
                 <img data-stream-target="pic"
                     src="{{ asset('/images/entropy-stream-offline.svg') }}"
                     loading="lazy"
-                    class="rect-img fill{% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}"
+                    class="rect-img fill shimmer{% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}"
                     title="{{ 'Stream'|trans }}">
                 <div class="badge-container">
                     <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
@@ -135,5 +135,5 @@
             </div>
         </div>
     </div>
-</turbo-frame>
+</div>
 {% endblock %}

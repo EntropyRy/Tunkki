@@ -22,11 +22,14 @@ export default class extends Controller {
     fetch(this.urlValue)
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
-        } else {
-          return response.json();
+          //throw new Error("Network response was not ok");
+          if (response.status === 404) {
+            console.log("Stream is not on!");
+          } else {
+            console.log("Network error!");
+          }
         }
-        // return response.status;
+        return response.status;
         //this.setStream(response.status);
       })
       .then((data) => {
