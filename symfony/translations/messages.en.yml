@@ -201,7 +201,8 @@ epics:
   tile:
     heading: Random photos from
     heading_events: our events
-    more_button: More
+    more_button: Pictures
+    events_button: Events
     title: Random photos from our events
 artist:
   not_confirmed_yet: Not confirmed (yet)

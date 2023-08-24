@@ -304,7 +304,8 @@ epics:
   tile:
     heading: Satunnaisia kuvia Entropyn
     heading_events: tapahtumista
-    more_button: Lisää
+    more_button: Kuvia
+    events_button: Tapahtumia
     title: Satunnaisia kuvia Entropyn tapahtumista
 member:
   can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)

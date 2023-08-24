@@ -53,11 +53,10 @@
             </div>
         </div>
     </turbo-frame>
-    <h4>{{ 'epics.tile.heading'|trans }}
-        <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.heading_events'|trans }}</a>.
-    </h4>
+    <h4>{{ 'epics.tile.heading'|trans }} {{ 'epics.tile.heading_events'|trans }}.</h4>
     <div class="justify-content-between d-flex">
         <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
+        <a class="btn btn-outline-primary" href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.events_button'|trans }}</a>
     </div>
 </div>
 {% endblock %}
