@@ -18,6 +18,7 @@ Agree: Hyväksy
 Events: Tapahtumat
 tg:
   event: Tapahtuma
+  info: Telegram info kanava
 Signed: Allekirjoitettu
 Address: Osoite
 Stage: lava
@@ -455,5 +456,3 @@ contract:
 pcs: kpl
 Previous: Edellinen
 Next: Seuraava
-tg:
-  info: Telegram info kanava

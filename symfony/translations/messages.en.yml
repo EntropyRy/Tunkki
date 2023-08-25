@@ -53,6 +53,7 @@ tickets: Tickets
 fb.event: FB Event
 tg:
   event: The Event
+  info: Telegram info channel
 entropy.seo.description: Electronic music and culture association
 rss_desc: Upcoming and past events and announcements of Entropy ry
 map: Map
@@ -353,5 +354,3 @@ Price en: Price in English
 contract:
   accessories:
     prices: Costs are for damaged or missplaced accessories
-tg:
-  info: Telegram info channel
