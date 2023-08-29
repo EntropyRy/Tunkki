@@ -69,12 +69,14 @@ export default class extends Controller {
       this.badgeTarget.classList.add("bg-success");
       this.playerTarget.classList.remove("d-none");
       this.picTarget.setAttribute("src", this.onlineImgValue);
+      this.picTarget.classList.add("shimmer");
       this.sourceTarget.setAttribute("src", this.urlValue);
     } else {
       this.badgeTarget.innerText = "OFFLINE";
       this.badgeTarget.classList.remove("bg-success");
       this.playerTarget.classList.add("d-none");
       this.picTarget.setAttribute("src", this.offlineImgValue);
+      this.picTarget.classList.remove("shimmer");
       this.sourceTarget.setAttribute("src", this.urlValue);
     }
   }
