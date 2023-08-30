@@ -97,7 +97,7 @@
 {% endblock %}
 
 {% block event_time_badge %}
-<span class="badge bg-info text-wrap float-end" style="font-size:0.8rem"
+<span class="badge text-black bg-info text-wrap float-end" style="font-size:0.8rem"
     {{ stimulus_controller('moment') }}
      data-moment-date-value="{{ event.eventDate|date('c') }}"
      data-moment-target="badge"
