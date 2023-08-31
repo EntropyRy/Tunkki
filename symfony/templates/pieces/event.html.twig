@@ -232,11 +232,12 @@
             {% apply spaceless %}
                 img-filter
                 {% if rect|default(false)%}
-                    {% if event.picture.width > event.picture.height %}
+                    {% set aspect = event.picture.width / event.picture.height %}
+                    {% if aspect >= 1.2 %}
                     rect-img-container i16by9
-                    {% elseif event.picture.width == event.picture.height %}
+                    {% elseif aspect > 0.8 and aspect < 1.2 %}
                     rect-img-container
-                    {% elseif event.picture.width < event.picture.height %}
+                    {% elseif aspect <= 0.8 %}
                     img-container
                     {% endif %}
                 {% endif %}
