@@ -233,9 +233,9 @@
                 img-filter
                 {% if rect|default(false)%}
                     {% set aspect = event.picture.width / event.picture.height %}
-                    {% if aspect >= 1.35 %}
+                    {% if aspect >= 1.42 %}
                     rect-img-container i16by9
-                    {% elseif aspect > 0.8 and aspect < 1.35 %}
+                    {% elseif aspect > 0.8 and aspect < 1.42 %}
                     rect-img-container
                     {% elseif aspect <= 0.8 %}
                     img-container

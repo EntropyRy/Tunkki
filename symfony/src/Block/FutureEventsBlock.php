@@ -9,7 +9,6 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\Form\Validator\ErrorElement;
 use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Event;
 use App\Repository\EventRepository;
