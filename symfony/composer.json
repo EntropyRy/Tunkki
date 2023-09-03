@@ -73,9 +73,9 @@
       "@auto-scripts"
     ],
     "auto-scripts": {
-      "ckeditor:install --clear=drop --release=custom --custom-build-id=af60cce815fe22eaeca1943ebc8d2a25": "symfony-cmd",
-      "assets:install %PUBLIC_DIR%": "symfony-cmd",
-      "cache:clear": "symfony-cmd"
+      "cache:clear": "symfony-cmd",
+      "ckeditor:install --tag=4.22.1 --clear=drop": "symfony-cmd",
+      "assets:install %PUBLIC_DIR%": "symfony-cmd"
     }
   },
   "config": {

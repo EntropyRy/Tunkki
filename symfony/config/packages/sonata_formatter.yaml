@@ -1,27 +1,27 @@
 sonata_formatter:
-    default_formatter: richhtml
-    formatters:
-        text:
-            service: sonata.formatter.text.text
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-        richhtml:
-            service: sonata.formatter.text.raw
-            extensions:
-                - sonata.formatter.twig.control_flow
-                - sonata.formatter.twig.gist
-                - sonata.formatter.twig.media
+  default_formatter: richhtml
+  formatters:
+    text:
+      service: sonata.formatter.text.text
+      extensions:
+        - sonata.formatter.twig.control_flow
+        - sonata.formatter.twig.gist
+    richhtml:
+      service: sonata.formatter.text.raw
+      extensions:
+        - sonata.formatter.twig.control_flow
+        - sonata.formatter.twig.gist
+        - sonata.formatter.twig.media
 fos_ck_editor:
-    configs:
-        default: 
-            toolbar: 'standard'
-            extraPlugins: 'html5audio'
-    toolbars:
-        items:
-            standard.links: [ 'Link', 'Unlink', 'Anchor', "-", "Html5audio"]
-            standard.others: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock']
+  configs:
+    default:
+      toolbar:
+        "standard"
+        #extraPlugins: "html5audio"
+  toolbars:
+    items:
+      standard.links: ["Link", "Unlink", "Anchor", "-", "Html5audio"]
 sonata_admin:
-    assets:
-        extra_javascripts:
-            - bundles/fosckeditor/ckeditor.js
+  assets:
+    extra_javascripts:
+      - bundles/fosckeditor/ckeditor.js
