@@ -227,14 +227,12 @@ final class EventAdmin extends AbstractAdmin
                     DateTimePickerType::class,
                     [
                         'label' => 'Event Date and Time',
-                        'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
                     'until',
                     DateTimePickerType::class,
                     [
-                        'format' => 'd.M.yyyy HH:mm',
                         'label' => 'Event stop time',
                         'required' => false,
                     ]
@@ -246,7 +244,6 @@ final class EventAdmin extends AbstractAdmin
                     [
                         'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                         'required' => false,
-                        'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
@@ -310,14 +307,12 @@ final class EventAdmin extends AbstractAdmin
                     DateTimePickerType::class,
                     [
                         'label' => 'Event Date and Time',
-                        'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
                     'until',
                     DateTimePickerType::class,
                     [
-                        'format' => 'd.M.yyyy HH:mm',
                         'label' => 'Event stop time',
                         'required' => false,
                     ]
@@ -329,7 +324,6 @@ final class EventAdmin extends AbstractAdmin
                     [
                         'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
                         'required' => false,
-                        'format' => 'd.M.yyyy HH:mm',
                     ]
                 )
                 ->add(
@@ -489,7 +483,6 @@ final class EventAdmin extends AbstractAdmin
                     'artistSignUpStart',
                     DateTimePickerType::class,
                     [
-                        'format' => 'd.M.yyyy HH:mm',
                         'help' => 'when the artist signup starts',
                         'input' => 'datetime_immutable',
                         'required' => false
@@ -499,7 +492,6 @@ final class EventAdmin extends AbstractAdmin
                     'artistSignUpEnd',
                     DateTimePickerType::class,
                     [
-                        'format' => 'd.M.yyyy HH:mm',
                         'help' => 'when the artist signup ends',
                         'input' => 'datetime_immutable',
                         'required' => false
@@ -568,7 +560,6 @@ final class EventAdmin extends AbstractAdmin
                     'ticketPresaleStart',
                     DatePickerType::class,
                     [
-                        'format' => 'd.M.yyyy',
                         'help' => 'When presale starts',
                         'input' => 'datetime_immutable',
                         'required' => false
@@ -578,7 +569,6 @@ final class EventAdmin extends AbstractAdmin
                     'ticketPresaleEnd',
                     DateTimePickerType::class,
                     [
-                        'format' => 'd.M.yyyy, HH:mm',
                         'help' => 'when presale ends. If start of the ticket sale needs to be timed: define start and end seconds apart',
                         'input' => 'datetime_immutable',
                         'required' => false
