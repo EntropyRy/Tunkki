@@ -87,11 +87,6 @@ entropy_artist_profile:
     en: /profile/artist
     fi: /profiili/artisti
   controller: App\Controller\ArtistController::index
-entropy_public_artist:
-  path:
-    en: /artist/{name}
-    fi: /artisti/{name}
-  controller: App\Controller\PublicArtistController::index
 entropy_artist_create:
   path:
     en: /profile/artist/create

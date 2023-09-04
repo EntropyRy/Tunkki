@@ -7,13 +7,21 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use App\Entity\Artist;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
 
 class PublicArtistController extends AbstractController
 {
-    public function index(Artist $artist): Response
-    {
-        return $this->render('artist/one.html.twig', [
-            'artist' => $artist,
-        ]);
-    }
+  #[Route(
+    [
+      'fi' =>   '/artisti/{name}',
+      'en' =>   '/artist/{name}',
+    ],
+    name: 'entropy_public_artist',
+  )]
+  public function index(Artist $artist): Response
+  {
+    return $this->render('artist/one.html.twig', [
+      'artist' => $artist,
+    ]);
+  }
 }
