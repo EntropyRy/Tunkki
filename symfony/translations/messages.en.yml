@@ -356,4 +356,5 @@ contract:
     prices: Costs are for damaged or missplaced accessories
 share:
   thisurl: Share this page
-Elektronisen musiikin kulttuuriyhdistys: Electronic music and culture association
+footer:
+  sidetitle: Electronic music and culture association

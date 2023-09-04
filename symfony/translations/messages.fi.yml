@@ -19,6 +19,8 @@ Events: Tapahtumat
 tg:
   event: Tapahtuma
   info: Telegram-infokanava
+footer:
+  sidetitle: Elektronisen musiikin kulttuuriyhdistys
 Signed: Allekirjoitettu
 Address: Osoite
 Stage: lava
