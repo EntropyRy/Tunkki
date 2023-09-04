@@ -1,9 +1,5 @@
 {% extends sonata_block.templates.block_base %}
-{% block block%}
+{% block block %}
 <a href="{{ path('profile_new') }}" class="btn btn-primary">{{ 'join_us.button'|trans|capitalize }}</a>
-{# <button class="btn btn-primary"
-    role="button"
-    data-toggle="modal"
-    data-target="#MemberModal">{{ 'join_us'|trans|capitalize }}
-</button> #}
+<a data-turbo="false" class="btn btn-primary" href="https://entropy.fi/mm">{{ 'join_us.mattermost'|trans }}</a>
 {% endblock %}
