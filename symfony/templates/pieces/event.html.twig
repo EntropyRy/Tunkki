@@ -55,7 +55,13 @@
     <small>{{ block('published_and_updated') }}</small>
     <h2 class="mt-2 event-name">{{ block('event_name') }}
       {% if event.type != 'announcement' %}
-        ~ <span class="">{{ block('event_time') }}<span>
+        ~ <span class="">{{ block('event_time') }}</span>
+      {% endif %}
+      {% if event.published == false %}
+        ~ <span class="text-warning">
+            <i class="fa fa-lock"></i>
+            {{ 'event.only_for_members'|trans }}
+        </span>
       {% endif %}
     </h2>
 {% endblock %}
