@@ -1,8 +1,4 @@
 {% extends 'twocolumn.html.twig' %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags('events_search') }}
-{% endblock %}
 {% block content %}
     {% set newyear = date('Y') %}
     {% if app.request.locale == 'en' %}
@@ -12,13 +8,13 @@
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
     <div class="input-group mb-3">
-        <input type="text" id="nameSearchInput" class="form-control" placeholder="{{'Search by name'|trans}}"/>
+        <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}"/>
         <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
     </div>
 
     <div class="form-check">
         <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked data-bs-toggle="collapse" data-bs-target=".clubroom">
-        <label class="form-check-label" for="clubroomSwitch"> {{'include_clubroom_events'|trans}}</label>
+        <label class="form-check-label" for="clubroomSwitch"> {{ 'include_clubroom_events'|trans }}</label>
     </div>
     <div id="events">
         {% for event in events %}
@@ -29,10 +25,10 @@
             {% endif %}
             {% set year = event.eventdate|date('Y') %}
             {% if year != newyear %}
-                <div class="linetext"><span>{{year}}</span></div>
+                <div class="linetext"><span>{{ year }}</span></div>
             {% endif %}
             {% if event is not null and visible %}
-                <div class="post {{event.type}} collapse show" data-name="{{ attribute(event, name_attr) }}">
+                <div class="post {{ event.type }} collapse show" data-name="{{ attribute(event, name_attr) }}">
                     {{ block('events') }}
                 </div>
             {% endif %}
@@ -48,15 +44,15 @@
                 {{ attribute(event, name_attr) }}
             {% else %}
                 {% if event.url and not event.externalUrl %}
-                    <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
+                    <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
                 {% else %}
-                    <a href="{{ path(route,{'id': event.id}) }}">
+                    <a href="{{ path(route, {'id': event.id}) }}">
                 {% endif %}
                 {{ attribute(event, name_attr) }}
                     </a>
             {% endif %}
             {% if not event.published %}
-                - {{'event.not_public'|trans}}
+                - {{ 'event.not_public'|trans }}
             {% endif %}
         </span>
         <span class="border-bottom flex-fill">
@@ -69,7 +65,7 @@
             {% if event.until %}
                 {% if event.until|date('n') != event.eventdate|date('n') %}
                     {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                {% elseif (event.until|date('j')-event.eventdate|date('j'))>1 %}
+                {% elseif (event.until|date('j') - event.eventdate|date('j')) > 1 %}
                     {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
                 {% else %}
                     {{ event.eventdate|date('j.n.') }}

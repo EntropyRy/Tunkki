@@ -28,7 +28,6 @@ Encore
   .addEntry("stars", "./assets/js/stars.js")
   .addEntry("grid", "./assets/js/grid.js")
   .addEntry("artist_signup", "./assets/js/artist_signup.js")
-  .addEntry("events_search", "./assets/js/events_search.js")
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")
 
