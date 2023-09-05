@@ -3,7 +3,7 @@
 {% block content %}
 {% set name_attr = 'name_attribute'|trans %}
 {% set content_attr = 'content_attribute'|trans %}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" data-masonry='{"percentPosition": true }'>
+<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" {{ stimulus_controller('masonry') }} data-masonry-target="masonry">
 {#    <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
@@ -37,7 +37,7 @@
     <div class="col p-2">
     {{ block('stream_tile') }}
     </div>
-    </div>
+</div>
 {% endblock %}
 
 {% block epic_tile %}
