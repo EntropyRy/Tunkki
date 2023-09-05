@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
+use Sonata\SeoBundle\Seo\SeoPageInterface;
 use App\Helper\ePics;
 use App\Repository\EventArtistInfoRepository;
 
@@ -19,6 +20,7 @@ class FrontPage implements PageServiceInterface
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
         private readonly ePics $ePics,
+        private ?SeoPageInterface $seoPage = null
     ) {
     }
     public function getName(): string
@@ -49,6 +51,8 @@ class FrontPage implements PageServiceInterface
         $future = array_merge($future, $unpublished);
         $events = array_merge($future, [$announcement]);
 
+        $this->updateSeoPage($page);
+
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
             [
@@ -58,5 +62,30 @@ class FrontPage implements PageServiceInterface
             ],
             $response
         );
+    }
+    private function updateSeoPage(PageInterface $page): void
+    {
+        if (null === $this->seoPage) {
+            return;
+        }
+
+        $title = $page->getTitle();
+        if (null !== $title) {
+            $this->seoPage->setTitle($title);
+        }
+
+        $metaDescription = $page->getMetaDescription();
+        if (null !== $metaDescription) {
+            $this->seoPage->addMeta('name', 'description', $metaDescription);
+            $this->seoPage->addMeta('property', 'og:description', $metaDescription);
+        }
+
+        $metaKeywords = $page->getMetaKeyword();
+        if (null !== $metaKeywords) {
+            $this->seoPage->addMeta('name', 'keywords', $metaKeywords);
+        }
+
+        $this->seoPage->addMeta('property', 'og:type', 'article');
+        $this->seoPage->addHtmlAttributes('prefix', 'og: http://ogp.me/ns#');
     }
 }

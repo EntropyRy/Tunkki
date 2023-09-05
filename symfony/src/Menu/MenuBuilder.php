@@ -5,17 +5,13 @@ namespace App\Menu;
 use Knp\Menu\FactoryInterface;
 use App\Entity\Menu;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class MenuBuilder
 {
-    /**
-     * Add any other dependency you need
-     */
-    public function __construct(private readonly FactoryInterface $factory, private readonly EntityManagerInterface $em, private readonly HttpClientInterface $client)
-    {
+    public function __construct(
+        private readonly FactoryInterface $factory,
+        private readonly EntityManagerInterface $em,
+    ) {
     }
 
     public function createMainMenuFi(array $options)
@@ -80,7 +76,6 @@ class MenuBuilder
                 }
             }
         }
-        //$this->addStream($menu);
         return $menu;
     }
     private function addItem($menu, $m, $l)
