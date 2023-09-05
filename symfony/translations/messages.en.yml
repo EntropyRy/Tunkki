@@ -37,7 +37,6 @@ older_from_archive: Older events you can find in the archive
 register_as_member: Register as a new member
 clubroom_events: Clubroom Events (Keke)
 include_clubroom_events: Include Clubroom Events (Keke)
-edit_event: Edit Event
 privacy_policy: Privacy Policy
 submit_and_agree:
   By submitting this form you agree on our privacy policy. We reserve
@@ -135,6 +134,7 @@ block:
 menu:
   logon_to: Log on to
 event:
+  edit: Edit
   not_public: not public
   only_for_members: Only for members
   in_future: Upcoming event

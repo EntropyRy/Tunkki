@@ -82,7 +82,6 @@ register_as_member: Rekisteröidy jäseneksi
 close: Sulje
 clubroom_events: Kerhohuone tapahtumat (Keke)
 include_clubroom_events: Sisällytä kerhohuonetapahtumat (Keke)
-edit_event: Muokkaa tapahtumaa
 privacy_policy: Rekisteriseloste
 submit_and_agree:
   Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
@@ -205,6 +204,7 @@ block:
 menu:
   logon_to: Kirjaudu
 event:
+  edit: Muokkaa
   only_for_members: Vain jäsenille
   not_public: ei julkinen
   in_future: Tuleva tapahtuma
