@@ -45,19 +45,23 @@ class ArtistController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $artist = $form->getData();
-            $em->persist($artist);
-            $em->flush();
-            $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
-            $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
-            $text = 'New artist! type: ' . $artist->getType() . ', name: ' . $artist->getName() . '; **LINKS**: [FI](' . $url_fi . '), [EN](' . $url_en . ')';
-            $mm->SendToMattermost($text, 'yhdistys');
-            $referer = $request->getSession()->get('referer');
-            if ($referer) {
-                $request->getSession()->remove('referer');
-                return $this->redirect($referer);
+            if (!is_null($artist->getPicture())) {
+                $em->persist($artist);
+                $em->flush();
+                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $text = 'New artist! type: ' . $artist->getType() . ', name: ' . $artist->getName() . '; **LINKS**: [FI](' . $url_fi . '), [EN](' . $url_en . ')';
+                $mm->SendToMattermost($text, 'yhdistys');
+                $referer = $request->getSession()->get('referer');
+                if ($referer) {
+                    $request->getSession()->remove('referer');
+                    return $this->redirect($referer);
+                }
+                $this->addFlash('success', 'edited');
+                return $this->redirectToRoute('entropy_artist_profile');
+            } else {
+                $this->addFlash('warning', 'artist.form.pic_missing');
             }
-            $this->addFlash('success', 'edited');
-            return $this->redirectToRoute('entropy_artist_profile');
         }
         return $this->render('artist/edit.html.twig', [
             'artist' => $artist,

@@ -236,6 +236,7 @@ artist:
       What kind of hardware are you using, so that we can prepare. (Vinyl,
       CDJ)
     name: Artist name
+    pic_missing: Picture is missing!
     type: Type
     bio: Bio in Finnish
     bio_en: Bio in English

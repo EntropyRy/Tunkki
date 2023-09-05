@@ -289,6 +289,7 @@ artist:
     type: Tyyppi
     bio: Bio suomeksi
     bio_en: Bio englanniksi
+    pic_missing: Kuva puuttuu!
     genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä. ÄLÄ LAITA BPM TÄHÄN.
     bio_help:
       Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
