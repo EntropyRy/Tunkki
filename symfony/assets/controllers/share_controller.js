@@ -10,7 +10,7 @@ export default class extends Controller {
     this.title = document.title;
   }
   shareUrl(event) {
-    if (navigator.share) {
+    if (navigator.share && !this.isMacintosh()) {
       navigator
         .share({
           title: this.title,
@@ -23,6 +23,9 @@ export default class extends Controller {
     } else {
       this.copyToClipboard(event);
     }
+  }
+  isMacintosh() {
+    return navigator.platform.indexOf("Mac") > -1;
   }
   copyToClipboard(event) {
     var copyTest = document.queryCommandSupported("copy");
