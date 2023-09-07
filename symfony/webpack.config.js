@@ -1,5 +1,7 @@
 const Encore = require("@symfony/webpack-encore");
-
+const PurgeCssPlugin = require("purgecss-webpack-plugin").PurgeCSSPlugin;
+const glob = require("glob-all");
+const path = require("path");
 // Manually configure the runtime environment if not already configured yet by the "encore" command.
 // It's useful when you use tools that rely on webpack.config.js file.
 if (!Encore.isRuntimeEnvironmentConfigured()) {
@@ -74,6 +76,15 @@ Encore
   // uncomment to get integrity="..." attributes on your script & link tags
   // requires WebpackEncoreBundle 1.4 or higher
   .enableIntegrityHashes(Encore.isProduction())
+  .addPlugin(
+    new PurgeCssPlugin({
+      paths: glob.sync([
+        path.join(__dirname, "./templates/**/*.html.twig"), // Adjust the paths to match your project structure
+        path.join(__dirname, "./assets/**/*.js"), // Adjust the paths to match your project structure
+      ]),
+      // Other PurgeCSS options go here
+    }),
+  )
   .copyFiles({
     from: "./assets/images",
     // optional target path, relative to the output dir
