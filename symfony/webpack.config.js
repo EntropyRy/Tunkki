@@ -78,6 +78,7 @@ Encore
   .enableIntegrityHashes(Encore.isProduction())
   .addPlugin(
     new PurgeCssPlugin({
+      safelist: [/^fa/],
       paths: glob.sync([
         path.join(__dirname, "./templates/**/*.html.twig"), // Adjust the paths to match your project structure
         path.join(__dirname, "./assets/**/*.js"), // Adjust the paths to match your project structure
