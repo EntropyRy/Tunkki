@@ -118,9 +118,14 @@ class EventRepository extends ServiceEntityRepository
     }
     public function findCalendarEvents(): mixed
     {
+        $yearAgo = new \DateTime('now-1year');
         return $this->createQueryBuilder('e')
             ->andWhere('e.externalUrl = :ext')
+            ->andWhere('e.published = :pub')
+            ->andWhere('e.EventDate > :time')
             ->setParameter('ext', false)
+            ->setParameter('pub', true)
+            ->setParameter('time', $yearAgo)
             ->orderBy('e.EventDate', 'DESC')
             ->getQuery()
             ->getResult();
