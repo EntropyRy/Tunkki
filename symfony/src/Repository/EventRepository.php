@@ -116,6 +116,15 @@ class EventRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function findCalendarEvents(): mixed
+    {
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.externalUrl = :ext')
+            ->setParameter('ext', false)
+            ->orderBy('e.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
     public function findPublicEventsByNotType(string $type): mixed
     {
         $now = new \DateTime();

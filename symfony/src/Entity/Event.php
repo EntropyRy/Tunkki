@@ -488,6 +488,15 @@ body {
 
         return $this;
     }
+    public function getContentByLang($lang)
+    {
+        if ($lang == 'fi') {
+            $abstract = $this->removeTwigTags($this->Sisallys);
+        } else {
+            $abstract = $this->removeTwigTags($this->Content);
+        }
+        return html_entity_decode(strip_tags((string) $abstract));
+    }
     public function getAbstract($lang)
     {
         if ($lang == 'fi') {
