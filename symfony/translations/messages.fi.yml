@@ -461,3 +461,15 @@ Previous: Edellinen
 Next: Seuraava
 share:
   thisurl: Jaa tämä sivu
+calendar:
+  heading: Kalenterin konfigurointi
+  help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
+  add_events: Lisää tapahtumat
+  add_notifications_for_events: Lisää muistutukset tapahtumille
+  add_clubroom_events: Lisää kerhohuone tapahtumat
+  add_notifications_for_clubroom_events: Lisää muistutukset kerhohuone tapahtumille
+  add_meetings: Lisää kokoukset
+  add_notifications_for_meetings: Lisää muistutukset kokouksille
+  generate: Generoi kalenteri linkki
+  url: Kalenteri linkki
+  url_generated: Linkki generoitu

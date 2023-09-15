@@ -1,0 +1,15 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block content %}
+<div class="col-md-12">
+<h1>{{ 'calendar.heading'|trans }}</h1>
+<p>{{ 'calendar.help'|trans }}</p>
+      {{ form_start(form) }}
+      {{ form_widget(form) }}
+      <input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'calendar.generate'|trans|capitalize }}" />
+      {{ form_end(form) }}
+{% if url %}
+<h2 class="mt-4">{{ 'calendar.url'|trans }}: <a href="{{ url }}">{{ url }}</a></h2>
+{% endif %}
+</div>
+{% endblock %}

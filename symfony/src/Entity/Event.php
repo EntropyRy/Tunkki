@@ -510,11 +510,14 @@ body {
     {
         $abstract = str_replace("{{ bios }}", "", (string) $message);
         $abstract = str_replace("{{ timetable }}", "", $abstract);
+        $abstract = str_replace("{{ timetable_to_page }}", "", $abstract);
         $abstract = str_replace("{{ vj_bios }}", "", $abstract);
         $abstract = str_replace("{{ rsvp }}", "", $abstract);
         $abstract = str_replace("{{ links }}", "", $abstract);
         $abstract = str_replace("{{ streamplayer }}", "", $abstract);
         $abstract = str_replace("{{ ticket }}", "", $abstract);
+        $abstract = str_replace("{{ art_artist_list }}", "", $abstract);
+        $abstract = str_replace("{{ happeining_list }}", "", $abstract);
         return $abstract;
     }
     public function getNameByLang($lang)

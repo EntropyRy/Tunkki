@@ -359,3 +359,15 @@ share:
   thisurl: Share this page
 footer:
   side_title: Electronic music and culture association
+calendar:
+  heading: Calendar configuration
+  help: You can generate different kind of calendar links. When you add this link to your calendar you can change color of the event inside your calendar. If you add reminder your calendar will alarm you 24h before the event.
+  add_events: Add events
+  add_notifications_for_events: Add reminders for events
+  add_clubroom_events: Add clubroom events
+  add_notifications_for_clubroom_events: Add reminders for clubroom events
+  add_meetings: Add meetings
+  add_notifications_for_meetings: Add reminders for meetings
+  generate: Generate the calendar link
+  url: Calendar url
+  url_generated: Link generated

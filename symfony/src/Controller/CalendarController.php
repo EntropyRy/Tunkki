@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Form\CalendarConfigType;
 use App\Repository\EventRepository;
+use Eluceo\iCal\Domain\ValueObject\Alarm;
 use Eluceo\iCal\Domain\ValueObject\TimeSpan;
 use Eluceo\iCal\Domain\ValueObject\Timestamp;
 use Eluceo\iCal\Domain\ValueObject\UniqueIdentifier;
@@ -14,14 +16,48 @@ use Symfony\Component\Routing\Annotation\Route;
 use Eluceo\iCal\Domain\Entity\Calendar;
 use Eluceo\iCal\Domain\Entity\Event;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
+use Sqids\Sqids;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 class CalendarController extends AbstractController
 {
     #[Route(
         path: [
-            'fi' => '/kalenteri.ics',
-            'en' => '/calendar.ics',
+            'fi' => '/profiili/kalenteri',
+            'en' => '/profile/calendar',
+        ],
+        name: 'entropy_event_calendar_config',
+    )]
+    public function eventCalendarConfig(Request $request, UrlGeneratorInterface $urlG): Response
+    {
+        $user = $this->getUser();
+        if (is_null($user)) {
+            throw new UnauthorizedHttpException('now allowed');
+        }
+        $form = $this->createForm(CalendarConfigType::class);
+        $url = null;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sqid = new Sqids();
+            foreach ($form->getData() as $value) {
+                $array[] = $value ? 1 : 0;
+            }
+            $array[] = $user->getId();
+            $id = $sqid->encode($array);
+            $url = $urlG->generate('entropy_event_calendar', ['hash' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
+            $this->addFlash('success', 'calendar.url_generated');
+        }
+        return $this->render('profile/calendar.html.twig', [
+            'form' => $form,
+            'url' => $url
+        ]);
+    }
+    #[Route(
+        path: [
+            'fi' => '/{hash}/kalenteri.ics',
+            'en' => '/{hash}/calendar.ics',
         ],
         name: 'entropy_event_calendar',
     )]
@@ -29,27 +65,21 @@ class CalendarController extends AbstractController
         Request $request,
         EventRepository $eventR,
     ): Response {
+        $sqid = new Sqids();
         $locale = $request->getLocale();
+        $config = $sqid->decode($request->get('hash'));
         $cEvents = [];
         $events = $eventR->findCalendarEvents();
         foreach ($events as $event) {
-            $uid = new UniqueIdentifier('event/' . $event->getId());
-            $url = new Uri($event->getUrlByLang($locale));
-            $start = $event->getEventDate();
-            $end = $event->getUntil();
-            if (is_null($end)) {
-                $end = clone $start;
-                $end = $end->modify('+2hours');
+            if ($event->getType() == 'event' && $config[0] == 1) {
+                $cEvents[] = $this->addEvent($event, $config[1], $locale);
             }
-            $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, false));
-            $timestamp = new Timestamp($event->getUpdatedAt());
-            $e = (new Event($uid))
-                ->setSummary($event->getNameByLang($locale))
-                ->setDescription($event->getContentByLang($locale))
-                ->setOccurrence($occurance)
-                ->setUrl($url);
-            $e->touch($timestamp);
-            $cEvents[] = $e;
+            if (($event->getType() == 'clubroom' || $event->getType() == 'stream') && $config[2] == 1) {
+                $cEvents[] = $this->addEvent($event, $config[3], $locale);
+            }
+            if ($event->getType() == 'meeting' && $config[4] == 1) {
+                $cEvents[] = $this->addEvent($event, $config[5], $locale);
+            }
         }
         $calendar = new Calendar($cEvents);
         $componentFactory = new CalendarFactory();
@@ -59,5 +89,38 @@ class CalendarController extends AbstractController
         header('Content-Disposition: attachment; filename="entropy.ics"');
 
         return new Response($calendarComponent);
+    }
+    protected function addEvent($event, $notification, $locale): Event
+    {
+        $uid = new UniqueIdentifier('event/' . $event->getId());
+        $url = new Uri($event->getUrlByLang($locale));
+        $start = $event->getEventDate();
+        $end = $event->getUntil();
+        if (is_null($end)) {
+            $end = clone $start;
+            $end = $end->modify('+2hours');
+        }
+        $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, false));
+        $timestamp = new Timestamp($event->getUpdatedAt());
+        $e = (new Event($uid))
+            ->setSummary($event->getNameByLang($locale))
+            ->setDescription($event->getContentByLang($locale))
+            ->setOccurrence($occurance)
+            ->setUrl($url);
+        if ($notification == 1) {
+            if ($locale == 'fi') {
+                $text = 'Muistutus huomisesta Entropy tapahtumasta!';
+            } else {
+                $text = 'Reminder for Entropy event!';
+            }
+            $e->addAlarm(
+                new Alarm(
+                    new Alarm\DisplayAction($text),
+                    (new Alarm\RelativeTrigger(\DateInterval::createFromDateString('-1 day')))->withRelationToStart()
+                )
+            );
+        }
+        $e->touch($timestamp);
+        return $e;
     }
 }
