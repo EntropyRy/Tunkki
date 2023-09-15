@@ -205,6 +205,7 @@ final class EventAdmin extends AbstractAdmin
             'Clubroom Event' => 'clubroom',
             'Announcement' => 'announcement',
             'Stream' => 'stream',
+            'Meeting' => 'meeting',
         ];
         $PicChoices = [
             'Banner' => 'banner',
