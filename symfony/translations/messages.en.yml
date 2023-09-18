@@ -362,6 +362,7 @@ footer:
 calendar:
   heading: Calendar configuration
   help: You can generate different kind of calendar links. When you add this link to your calendar you can change color of the event inside your calendar. If you add reminder your calendar will alarm you 24h before the event.
+  help2: WARNING! If you just click the link you\'ll get the clandar file and that is probably what you don\'t want. If you want to has automatically updated calendar you need to import the calandar to your calendar softaware using this link. Here is instructions how to do that in different platforms:
   add_events: Add events
   add_notifications_for_events: Add reminders for events
   add_clubroom_events: Add clubroom events

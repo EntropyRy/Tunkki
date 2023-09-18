@@ -9,6 +9,14 @@
       <input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'calendar.generate'|trans|capitalize }}" />
       {{ form_end(form) }}
 {% if url %}
+<p class="mt-3">{{ 'calendar.help2'|trans }}</p>
+<p>
+<ul>
+<li><a href="https://support.google.com/calendar/answer/37100?hl=en&co=GENIE.Platform=Desktop">Google</a></li>
+<li><a href="https://support.microsoft.com/en-us/office/import-or-subscribe-to-a-calendar-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c">Outlook</a></li>
+<li><a href="https://proton.me/support/subscribe-to-external-calendar">Proton</a></li>
+</ul>
+</p>
 <h2 class="mt-4">{{ 'calendar.url'|trans }}: <a href="{{ url }}">{{ url }}</a></h2>
 {% endif %}
 </div>
