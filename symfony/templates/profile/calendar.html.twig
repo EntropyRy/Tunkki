@@ -18,15 +18,14 @@
 <li><a href="https://support.apple.com/en-us/HT202361">Apple</a></li>
 </ul>
 </p>
-<button class="btn btn-primary btn-lg w-100"
+<div class="input-group">
+<input type="text" class="form-control" aria-label="{{ url }}" value="{{ url }}" />
+<button class="btn btn-primary btn-lg"
       {{ stimulus_controller('share', {'url': url, 'title': 'calendar.url'|trans}) }}
       {{ stimulus_action('share', 'copyToClipboard') }}
       >{{ 'share.copy'|trans }}
 </button>
-<div class="linetext">
-  <span>{{ 'calendar.copy_this_link'|trans }}</span>
 </div>
-<h2 class="mt-4">{{ 'calendar.url'|trans }}: <a href="{{ url }}">{{ url }}</a></h2>
 {% endif %}
 </div>
 {% endblock %}

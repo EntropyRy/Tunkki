@@ -466,7 +466,7 @@ share:
 calendar:
   heading: Kalenterin konfigurointi
   help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
-  help2: HUOM! Jos klikkaat linkkiä niin lataat kalenteri tiedoston, joka on varmaan se mitä et halua. Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla:
+  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla:
   add_events: Lisää tapahtumat
   add_notifications_for_events: Lisää muistutukset tapahtumille
   add_clubroom_events: Lisää kerhohuone tapahtumat
@@ -474,6 +474,4 @@ calendar:
   add_meetings: Lisää kokoukset
   add_notifications_for_meetings: Lisää muistutukset kokouksille
   generate: Generoi kalenteri linkki
-  url: Kalenteri linkki
   url_generated: Linkki generoitu
-  copy_this_link: tai kopioi linkki tästä
