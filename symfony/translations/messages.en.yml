@@ -374,3 +374,4 @@ calendar:
   generate: Generate the calendar link
   url: Calendar url
   url_generated: Link generated
+  copy_this_link: Or copy this link

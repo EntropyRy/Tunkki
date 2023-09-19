@@ -463,7 +463,6 @@ share:
   share: Jaa tämä sivu
   copied: Linkki kopioitu leikepöydälle
   copy: Kopio linkki
-
 calendar:
   heading: Kalenterin konfigurointi
   help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
@@ -477,3 +476,4 @@ calendar:
   generate: Generoi kalenteri linkki
   url: Kalenteri linkki
   url_generated: Linkki generoitu
+  copy_this_link: tai kopioi linkki tästä
