@@ -19,6 +19,11 @@
 </ul>
 </p>
 <h2 class="mt-4">{{ 'calendar.url'|trans }}: <a href="{{ url }}">{{ url }}</a></h2>
+<button class="btn btn-primary"
+      {{ stimulus_controller('share', {'url': url, 'title': 'calendar.url'|trans}) }}
+      {{ stimulus_action('share', 'copyToClipboard') }}
+      >{{ 'share.copy'|trans }}
+</button>
 {% endif %}
 </div>
 {% endblock %}

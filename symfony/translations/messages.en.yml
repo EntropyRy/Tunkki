@@ -356,7 +356,9 @@ contract:
   accessories:
     prices: Costs are for damaged or missplaced accessories
 share:
-  thisurl: Share this page
+  share: Share this page
+  copy: Copy url
+  copied: The URL copied to your clipboard
 footer:
   side_title: Electronic music and culture association
 calendar:

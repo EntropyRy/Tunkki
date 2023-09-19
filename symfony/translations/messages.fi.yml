@@ -460,7 +460,10 @@ pcs: kpl
 Previous: Edellinen
 Next: Seuraava
 share:
-  thisurl: Jaa tämä sivu
+  share: Jaa tämä sivu
+  copied: Linkki kopioitu leikepöydälle
+  copy: Kopio linkki
+
 calendar:
   heading: Kalenterin konfigurointi
   help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.

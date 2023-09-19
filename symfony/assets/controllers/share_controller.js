@@ -1,3 +1,4 @@
+import { trans, SHARE_COPIED } from "../translator";
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
@@ -6,18 +7,20 @@ export default class extends Controller {
     title: String,
   };
   connect() {
-    this.url = document.location.href;
-    this.title = document.title;
+    if (!this.urlValue && !this.titleValue) {
+      this.urlValue = document.location.href;
+      this.titleValue = document.title;
+    }
   }
   shareUrl(event) {
     if (navigator.share && !this.isMacintosh()) {
       navigator
         .share({
-          title: this.title,
-          url: this.url,
+          title: this.titleValue,
+          url: this.urlValue,
         })
         .then(() => {
-          console.log("Thanks for sharing!");
+          // console.log("Thanks for sharing!");
         })
         .catch(console.error);
     } else {
@@ -29,19 +32,17 @@ export default class extends Controller {
   }
   copyToClipboard(event) {
     var copyTest = document.queryCommandSupported("copy");
-    var elOriginalText = this.title;
+    var elOriginalText = this.titleValue;
     var clip = navigator.clipboard;
-    var text = this.url;
-    console.log(event.currentTarget);
+    var text = this.urlValue;
+    //console.log(event.currentTarget);
 
     if (clip) {
       try {
         let successful = clip.writeText(text);
-        var msg = successful
-          ? "The URL has been copied to your clipboard"
-          : "Whoops, not copied!";
+        var msg = successful ? trans(SHARE_COPIED) : "Whoops, not copied!";
         event.currentTarget.innerText = msg;
-        console.log("Page URL copied to clipboard with Cliboard API");
+        //console.log("Page URL copied to clipboard with Cliboard API");
       } catch (err) {
         console.error("Failed to copy: ", err);
       }
@@ -52,9 +53,7 @@ export default class extends Controller {
       copyTextArea.select();
       try {
         var successful = document.execCommand("copy");
-        var msg = successful
-          ? "The URL has been copied to your clipboard"
-          : "Whoops, not copied!";
+        var msg = successful ? trans(SHARE_COPIED) : "Whoops, not copied!";
         event.currentTarget.innerText = msg;
       } catch (err) {
         console.log("Oops, unable to copy");
