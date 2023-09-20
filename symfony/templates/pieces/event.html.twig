@@ -57,12 +57,6 @@
       {% if event.type != 'announcement' %}
         ~ <span class="event_time">{{ block('event_time') }}</span>
       {% endif %}
-      {% if event.published == false %}
-        ~ <span class="only_for_members">
-            <i class="fa fa-eye-slash"></i>
-            {{ 'event.only_for_members'|trans }}
-        </span>
-      {% endif %}
     </h2>
 {% endblock %}
 
@@ -81,11 +75,20 @@
 {% endblock %}
 
 {% block published_and_updated %}
+{% apply spaceless %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
     {% if event.updatedAt %}
-        {% if event.publishDate < event.updatedAt %} -- {{ 'updated'|trans }}: {{ event.updatedAt|date }}
+        {% if event.publishDate < event.updatedAt %}
+            -- {{ 'updated'|trans }}: {{ event.updatedAt|date }}
+        {% endif %}
     {% endif %}
+    {% if event.published == false %}
+        -- <span class="only_for_members">
+            <i class="fa fa-eye-slash"></i>
+            {{ 'event.only_for_members'|trans }}
+        </span>
     {% endif %}
+{% endapply %}
 {% endblock %}
 
 {% block event_head_frontpage %}
