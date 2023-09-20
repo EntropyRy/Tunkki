@@ -517,7 +517,7 @@ body {
         $abstract = str_replace("{{ streamplayer }}", "", $abstract);
         $abstract = str_replace("{{ ticket }}", "", $abstract);
         $abstract = str_replace("{{ art_artist_list }}", "", $abstract);
-        $abstract = str_replace("{{ happeining_list }}", "", $abstract);
+        $abstract = str_replace("{{ happening_list }}", "", $abstract);
         return $abstract;
     }
     public function getNameByLang($lang)

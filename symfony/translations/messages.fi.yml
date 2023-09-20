@@ -205,7 +205,7 @@ menu:
   logon_to: Kirjaudu
 event:
   edit: Muokkaa
-  only_for_members: Vain jäsenille
+  only_for_members: tapahtuman näkyy vain jäsenille
   not_public: ei julkinen
   in_future: Tuleva tapahtuma
   after: Mennyt tapahtuma

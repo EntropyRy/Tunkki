@@ -136,7 +136,7 @@ menu:
 event:
   edit: Edit
   not_public: not public
-  only_for_members: Only for members
+  only_for_members: Event only shown to members
   in_future: Upcoming event
   after: Past event
   now: Event is now
