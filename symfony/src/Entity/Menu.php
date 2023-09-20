@@ -7,11 +7,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
-/**
- * @Gedmo\Tree(type="nested")
- */
-#[ORM\Entity(repositoryClass: \App\Repository\MenuRepository::class)]
+#[Gedmo\Tree(type: 'nested')]
+#[ORM\Entity(repositoryClass: NestedTreeRepository::class)]
 class Menu implements \Stringable
 {
     #[ORM\Id]
@@ -37,38 +36,31 @@ class Menu implements \Stringable
     #[ORM\Column(type: 'boolean')]
     private ?bool $enabled = null;
 
-    /**
-     * @Gedmo\TreeLeft
-     */
+    #[Gedmo\TreeLeft]
     #[ORM\Column(type: 'integer')]
     private ?int $lft = null;
 
-    /**
-     * @Gedmo\TreeLevel
-     */
+    #[Gedmo\TreeLevel]
     #[ORM\Column(type: 'integer')]
     private ?int $lvl = null;
 
-    /**
-     * @Gedmo\TreeRight
-     */
+    #[Gedmo\TreeRight]
     #[ORM\Column(type: 'integer')]
     private ?int $rgt = null;
-    /**
-     * @Gedmo\TreeRoot
-     */
+
+    #[Gedmo\TreeRoot]
     #[ORM\ManyToOne(targetEntity: Menu::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $root = null;
 
     #[ORM\Column(type: 'integer')]
     private ?int $position = null;
-    /**
-     * @Gedmo\TreeParent
-     */
+
+    #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'children')]
     #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $parent = null;
+
     #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: 'parent')]
     private $children = null;
 
