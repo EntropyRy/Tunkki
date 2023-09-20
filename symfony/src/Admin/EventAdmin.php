@@ -156,6 +156,8 @@ final class EventAdmin extends AbstractAdmin
             'Event' => 'event',
             'Clubroom Event' => 'clubroom',
             'Announcement' => 'announcement',
+            'Stream' => 'stream',
+            'Meeting' => 'meeting',
         ];
         $datagridMapper
             ->add('Name')
