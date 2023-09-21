@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Form\CalendarConfigType;
 use App\Repository\EventRepository;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
@@ -14,8 +15,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Eluceo\iCal\Domain\Entity\Calendar;
-use Eluceo\iCal\Domain\Entity\Event;
+use Eluceo\iCal\Domain\Entity\Event as CalendarEvent;
 use Eluceo\iCal\Domain\ValueObject\DateTime;
+use Eluceo\iCal\Domain\ValueObject\Location;
 use Sqids\Sqids;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
@@ -90,19 +92,19 @@ class CalendarController extends AbstractController
 
         return new Response($calendarComponent);
     }
-    protected function addEvent($event, $notification, $locale): Event
+    protected function addEvent(Event $event, $notification, $locale): CalendarEvent
     {
         $uid = new UniqueIdentifier('event/' . $event->getId());
         $url = new Uri($event->getUrlByLang($locale));
         $start = $event->getEventDate();
         $end = $event->getUntil();
         if (is_null($end)) {
-            $end = clone $start;
+            $end = (new \DateTimeImmutable())->createFromInterface($start);
             $end = $end->modify('+2hours');
         }
         $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, false));
         $timestamp = new Timestamp($event->getUpdatedAt());
-        $e = (new Event($uid))
+        $e = (new CalendarEvent($uid))
             ->setSummary($event->getNameByLang($locale))
             ->setDescription($event->getContentByLang($locale))
             ->setOccurrence($occurance)
@@ -111,7 +113,7 @@ class CalendarController extends AbstractController
             if ($locale == 'fi') {
                 $text = 'Muistutus huomisesta Entropy tapahtumasta!';
             } else {
-                $text = 'Reminder for Entropy event!';
+                $text = 'Reminder for Entropy event tommorrow!';
             }
             $e->addAlarm(
                 new Alarm(
@@ -119,6 +121,14 @@ class CalendarController extends AbstractController
                     (new Alarm\RelativeTrigger(\DateInterval::createFromDateString('-1 day')))->withRelationToStart()
                 )
             );
+        }
+        if ($event->getWebMeetingUrl()) {
+            $location = new Location($event->getWebMeetingUrl());
+            $e->setLocation($location);
+        }
+        if ($event->getType() == 'clubroom') {
+            $location = new Location('Jämeräntaival 3 A 1', 'Kerde');
+            $e->setLocation($location);
         }
         $e->touch($timestamp);
         return $e;
