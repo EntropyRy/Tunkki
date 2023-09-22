@@ -197,7 +197,8 @@ class BookingAdmin extends AbstractAdmin
                         ]
                     ]
                 ],
-                'label' => 'Return Time'
+                'label' => 'Return Time',
+                'help' => 'We need this time to be determine if there is overlapping bookings for the same items.'
             ])
             ->add('receivedBy', null, [ //ModelListType::class, [
                 'required' => false,
