@@ -22,6 +22,8 @@ use Sqids\Sqids;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Eluceo\iCal\Domain\Entity\TimeZone;
+use DateTimeZone as PhpDateTimeZone;
 
 class CalendarController extends AbstractController
 {
@@ -84,6 +86,12 @@ class CalendarController extends AbstractController
             }
         }
         $calendar = new Calendar($cEvents);
+        $calendar->addTimeZone(TimeZone::createFromPhpDateTimeZone(
+            new PhpDateTimeZone('Europe/Helsinki'),
+            new \DateTimeImmutable('now-30years'),
+            new \DateTimeImmutable('now+30years'),
+        ));
+
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
 
@@ -102,7 +110,7 @@ class CalendarController extends AbstractController
             $end = (new \DateTimeImmutable())->createFromInterface($start);
             $end = $end->modify('+2hours');
         }
-        $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, false));
+        $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, true));
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = (new CalendarEvent($uid))
             ->setSummary($event->getNameByLang($locale))
