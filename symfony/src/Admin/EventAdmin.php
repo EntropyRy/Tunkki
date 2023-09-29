@@ -329,6 +329,9 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false,
                     ]
                 )
+                ->add('location', null, [
+                    'help' => 'Street adress. Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.'
+                ])
                 ->add(
                     'externalUrl',
                     null,
@@ -454,7 +457,7 @@ final class EventAdmin extends AbstractAdmin
                 )
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
-                ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time'])
+                ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time. Added as an location in Calendar'])
                 ->add(
                     'links',
                     ImmutableArrayType::class,
@@ -631,16 +634,7 @@ final class EventAdmin extends AbstractAdmin
     public function prePersist($event): void
     {
         if ($event->getType() == 'clubroom') {
-            $event->setLinks(
-                [
-                    'urls' => [0 => [
-                        'url' => 'https://reittiopas.hsl.fi/reitti/-/J%C3%A4mer%C3%A4ntaival%203%20A%2C%20Espoo%3A%3A60.18730249466484%2C24.836112856864933',
-                        'icon' => 'fas fa-map',
-                        'title' => 'map',
-                        'open_in_new_window' => true,
-                    ]]
-                ]
-            );
+            $event->setLocation('Jämeräntaival 3 A 1, Kerde');
         }
     }
 }

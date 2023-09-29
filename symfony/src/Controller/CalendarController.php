@@ -134,8 +134,8 @@ class CalendarController extends AbstractController
             $location = new Location($event->getWebMeetingUrl());
             $e->setLocation($location);
         }
-        if ($event->getType() == 'clubroom') {
-            $location = new Location('Jämeräntaival 3 A 1', 'Kerde');
+        if ($event->getLocation()) {
+            $location = new Location($event->getLocation());
             $e->setLocation($location);
         }
         $e->touch($timestamp);

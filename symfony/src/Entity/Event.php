@@ -232,6 +232,9 @@ body {
     #[ORM\ManyToMany(targetEntity: Member::class)]
     private Collection $nakkiResponsibleAdmin;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $location = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -1333,6 +1336,18 @@ body {
     public function removeNakkiResponsibleAdmin(Member $nakkiResponsibleAdmin): static
     {
         $this->nakkiResponsibleAdmin->removeElement($nakkiResponsibleAdmin);
+
+        return $this;
+    }
+
+    public function getLocation(): ?string
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?string $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }
