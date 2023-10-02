@@ -173,7 +173,7 @@ class EventController extends Controller
                 if ($event->getType() == 'meeting' && is_null($event->getLocation()) && !is_null($event->getWebMeetingUrl())) {
                     $online = '-online';
                 }
-                $url = 'https://entropy.fi/images/placehoders/' . $event->getType() . $online . '.webp';
+                $url = 'https://entropy.fi/images/placeholders/' . $event->getType() . $online . '.webp';
                 $seo->addMeta('property', 'twitter:image', $url);
                 $seo->addMeta('property', 'og:image', $url);
                 $seo->addMeta('property', 'og:image:height', '1920');
