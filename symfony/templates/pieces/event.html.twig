@@ -4,7 +4,7 @@
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
         <a {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
-            {{ block('rect_img') }}
+            {{ block('frontpage_img') }}
             {% set badge = true %}
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
             <h4>{{ block('event_name') }}</h4>
@@ -141,7 +141,7 @@
 {% endblock %}
 
 {% block event_banner_media %}
-    {% if event.picture is not null and event.picturePosition == 'banner' %}
+    {% if event.picturePosition == 'banner' %}
     {{ block('event_media') }}
     {% endif %}
 {% endblock %}
@@ -190,13 +190,14 @@
 {% endapply %}
 {% endblock %}
 
-{% block rect_img %}
-    {% set rect = true %}
+{% block frontpage_img %}
+    {% set frontpage = true %}
     {{ block('event_media') }}
 {% endblock %}
 
 {% block event_badge %}
-    <div class="badge-container">
+    <div class="badge-container text-end">
+        {{ block('event_icons') }}
         {% if event.badgeText == 'event.now'%}
         <span class="shadow badge bg-success">{{ event.badgeText|trans }}</span>
         {% elseif event.badgeText == 'event.after'%}
@@ -210,77 +211,127 @@
         {% endif %}
     </div>
 {% endblock %}
+{% block event_icons %}
+<div>
+        {% if event.streamPlayerUrl or event.type == 'stream' %}
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-wifi"></i>
+        </span>
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-music"></i>
+        </span>
+        {% endif %}
+        {% if event.webMeetingUrl %}
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-globe"></i>
+        </span>
+        {% endif %}
+        {% if event.location %}
+            {% if event.type == 'clubroom' %}
+            <span class="shadow badge bg-secondary">
+                <i class="fa fa-home"></i>
+            </span>
+            {% else %}
+            <span class="shadow badge bg-secondary">
+                <i class="fa fa-location-dot"></i>
+            </span>
+            {% endif %}
+        {% endif %}
+        {% if event.type == 'meeting' %}
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-comments"></i>
+        </span>
+        {% endif %}
+        {% if event.type == 'clubroom' %}
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-music"></i>
+        </span>
+        {% endif %}
+        {% if event.type == 'announcement' %}
+        <span class="shadow badge bg-secondary">
+            <i class="fa fa-bullhorn"></i>
+        </span>
+        {% endif %}
+</div>
+{% endblock %}
+
 {% block event_img_title %}
 {% apply spaceless %}
     {{ event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') }}
 {% endapply %}
+
 {% endblock %}
 {% block event_media %}
-    {% if event.picture is not null %}
-        {% set name_attr = 'name_attribute'|trans %}
-        {% if event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
-            {% if rect|default(false) %}
-                <div class="rect-img-container i16by9">
-                    <div class="rect-img">
-            {% else %}
-                <div class="img-fluid">
-            {% endif %}
-                    <video autoplay loop muted inline width="100%">
-                    <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
-                    </video>
-                </div>
-                {% if rect|default(false) %}
-                {{ block('event_badge') }}
-                </div>
-                {% endif %}
+    {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
+        {% if frontpage|default(false) %}
+            <div class="rect-img-container i16by9">
+                <div class="rect-img">
         {% else %}
-        <div class="
-            {% if event.picture.providername == 'sonata.media.provider.youtube' %}
-                video-fluid
-            {% else %}
-            {% apply spaceless %}
-                img-filter
-                {% if rect|default(false)%}
-                    {% set aspect = event.picture.width / event.picture.height %}
-                    {% if aspect >= 1.42 %}
-                    rect-img-container i16by9
-                    {% elseif aspect > 0.8 and aspect < 1.42 %}
-                    rect-img-container
-                    {% elseif aspect <= 0.8 %}
-                    img-container
-                    {% endif %}
-                {% endif %}
-            {% endapply %}
-            {% endif %}"
-             {{ block('imgfilter') }}
-            >
-            {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
-            {% if rect|default(false) %} {# front page pic if true #}
-                {% set class = 'rect-img' %}
-                {% if event.picture.width < event.picture.height %}
-                    {% set class = 'img-fluid' %}
-                {% endif %}
+            <div class="img-fluid">
+        {% endif %}
+                <video autoplay loop muted inline width="100%">
+                <source src="{{ sonata_path(event.picture, 'reference') }}" type="video/mp4">
+                </video>
+            </div>
+            {% if frontpage|default(false) %}
+            {{ block('event_badge') }}
+            </div>
             {% endif %}
+    {% else %}
+    <div class="
+        {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}
+            video-fluid
+        {% else %}
+        {% apply spaceless %}
+            img-filter
+            {% if frontpage|default(false) and event.picture %}
+                {% set aspect = event.picture.width / event.picture.height %}
+                {% if aspect >= 1.42 %}
+                rect-img-container i16by9
+                {% elseif aspect > 0.8 and aspect < 1.42 %}
+                rect-img-container
+                {% elseif aspect <= 0.8 %}
+                img-container
+                {% endif %}
+            {% elseif frontpage|default(false) %}
+                rect-img-container i16by9
+            {% endif %}
+        {% endapply %}
+        {% endif %}"
+         {{ block('imgfilter') }}
+        >
+        {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
+        {% if frontpage|default(false) %} {# front page pic if true #}
+            {% set class = 'rect-img' %}
+            {% if event.picture and event.picture.width < event.picture.height %}
+                {% set class = 'img-fluid' %}
+            {% endif %}
+        {% endif %}
+        {% if event.picture is not null %}
             {{ sonata_media(event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
                 'loading': 'lazy',
                 'style': event.imgFilterBlendMode,
                 'class': class,
                 'title': block('event_img_title')
                 }) }}
-            {% if rect|default(false)%}
-            {{ block('event_badge') }}
+        {% else %}
+            {% set online = '' %}
+            {% if event.type == 'meeting' and not event.location and event.webMeetingUrl %}
+                {% set online = '-online' %}
             {% endif %}
-        </div>
+            <picture>
+                <source type="image/webp" srcset="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.webp') }}">
+                <source type="image/png" srcset="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}">
+                <img loading="lazy" class="rect-img img-fluid" src="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}" title="{{ block('event_img_title') }}">
+            </picture>
         {% endif %}
-    {% else %}
-        <div class="rect-img-container i16by9">
-            <img class="rect-img fill" src="/images/header-logo.svg" title="{{ block('event_img_title') }}">
-            {% if rect|default(false)%}
-            {{ block('event_badge') }}
-            {% endif %}
-        </div>
     {% endif %}
+    {% if frontpage|default(false) %}
+        {{ block('event_badge') }}
+    {% endif %}
+    </div>
 {% endblock %}
+
 
 {% block imgfilter %}
 {% if event.imgFilterColor and event.imgFilterBlendMode %}
