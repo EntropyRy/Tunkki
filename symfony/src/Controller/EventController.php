@@ -185,7 +185,7 @@ class EventController extends Controller
             $seo->addMeta('property', 'twitter:desctiption', $event->getAbstract($lang));
             $seo->addMeta('property', 'og:title', $title)
                 ->addMeta('property', 'og:description', $event->getAbstract($lang))
-                ->addMeta('property', 'description', $event->getAbstract($lang));
+                ->addMeta('name', 'description', $event->getAbstract($lang));
             if ($event->getType() != 'announcement') {
                 $seo->addMeta('property', 'og:type', 'event')
                     ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));
