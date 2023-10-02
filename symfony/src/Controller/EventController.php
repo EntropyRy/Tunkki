@@ -168,13 +168,24 @@ class EventController extends Controller
                 $seo->addMeta('property', 'og:image', 'https://entropy.fi' . $mediaUrl);
                 $seo->addMeta('property', 'og:image:height', '');
                 $seo->addMeta('property', 'og:image:widht', '');
+            } else {
+                $online = '';
+                if ($event->getType() == 'meeting' && is_null($event->getLocation()) && !is_null($event->getWebMeetingUrl())) {
+                    $online = '-online';
+                }
+                $url = 'https://entropy.fi/images/placehoders/' . $event->getType() . $online . '.webp';
+                $seo->addMeta('property', 'twitter:image', $url);
+                $seo->addMeta('property', 'og:image', $url);
+                $seo->addMeta('property', 'og:image:height', '1920');
+                $seo->addMeta('property', 'og:image:widht', '1080');
             }
             $seo->addMeta('property', 'twitter:card', "summary_large_image");
             //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
             $seo->addMeta('property', 'twitter:title', $title);
             $seo->addMeta('property', 'twitter:desctiption', $event->getAbstract($lang));
             $seo->addMeta('property', 'og:title', $title)
-                ->addMeta('property', 'og:description', $event->getAbstract($lang));
+                ->addMeta('property', 'og:description', $event->getAbstract($lang))
+                ->addMeta('property', 'description', $event->getAbstract($lang));
             if ($event->getType() != 'announcement') {
                 $seo->addMeta('property', 'og:type', 'event')
                     ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));
