@@ -61,7 +61,7 @@ body {
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
-            {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
+            {{ timetable }} <br> {{ timatable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $url = null;
@@ -235,6 +235,9 @@ body {
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $location = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $allowMembersToCreateHappenings = true;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -395,6 +398,13 @@ body {
             }
         }
         return 'undefined';
+    }
+    public function isInPast(): bool
+    {
+        if ($this->getNowTest() == 'after') {
+            return true;
+        }
+        return false;
     }
     public function getType(): ?string
     {
@@ -1348,6 +1358,18 @@ body {
     public function setLocation(?string $location): static
     {
         $this->location = $location;
+
+        return $this;
+    }
+
+    public function isAllowMembersToCreateHappenings(): ?bool
+    {
+        return $this->allowMembersToCreateHappenings;
+    }
+
+    public function setAllowMembersToCreateHappenings(?bool $allowMembersToCreateHappenings): static
+    {
+        $this->allowMembersToCreateHappenings = $allowMembersToCreateHappenings;
 
         return $this;
     }
