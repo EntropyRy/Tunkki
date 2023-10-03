@@ -38,7 +38,7 @@
           <updated>{{ event.updatedAt|date('r') }}</updated>
           <description>{{ event.abstract(locale) }}
           {% if event.updatedAt|date('Y') != '-0001' %}
-          {{ 'updated'|trans }}:{{ event.updatedAt|date() }}
+           {{ 'updated'|trans }}: {{ event.updatedAt|date() }}
           {% endif %}
           </description>
           <category>{{ event.type|trans }}</category>
