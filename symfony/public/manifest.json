@@ -1,0 +1,28 @@
+{
+  "short_name": "Entropy",
+  "name": "Entropy ry website",
+  "id": "/",
+  "icons": [
+    {
+      "purpose": "any",
+      "src": "/favicon.svg",
+      "type": "image/svg",
+      "sizes": "any"
+    },
+    {
+      "src": "/favicon-big.svg",
+      "type": "image/svg",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon-512px.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#242424"
+}
