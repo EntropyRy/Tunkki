@@ -24,7 +24,7 @@
     "purgecss": "^5.0.0",
     "purgecss-webpack-plugin": "^5.0.0",
     "regenerator-runtime": "^0.14.0",
-    "sass": "~1.68.0",
+    "sass": "~1.69.0",
     "sass-loader": "^13.0.2",
     "signature_pad": "^4.1.6",
     "webpack": "^5.88.2",
