@@ -12,7 +12,7 @@
     {
       "src": "/favicon-big.svg",
       "type": "image/svg",
-      "sizes": "512x512",
+      "sizes": "all",
       "purpose": "any"
     },
     {
