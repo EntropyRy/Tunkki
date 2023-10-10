@@ -353,7 +353,7 @@
 <div class="d-flex">
     {% if event.location %}
     <span class="pe-2">
-        {% set gps = '::' ~ event.location.longitude ~ ',' ~ event.location.latitude %}
+        {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
         <a class="btn btn-outline-info" href="https://reittiopas.hsl.fi/etusivu/-/{{ event.location.streetAddress|url_encode }}{{ gps|url_encode }}">
             <i class="fas fa-location-dot"></i>
             {{ 'map'|trans }}
