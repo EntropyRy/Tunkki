@@ -57,11 +57,11 @@ body {
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $Content = "Use these: <br>
-            {{ timetable }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }}";
+            {{ timetable }} <br> {{ timetable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
-            {{ timetable }} <br> {{ timatable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
+            {{ timetable }} <br> {{ timetable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $url = null;
@@ -632,6 +632,11 @@ body {
         }
 
         return $this;
+    }
+
+    public function isRsvpSystemEnabled(): ?bool
+    {
+        return $this->rsvpSystemEnabled;
     }
 
     public function getRsvpSystemEnabled(): ?bool

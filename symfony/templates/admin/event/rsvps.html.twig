@@ -5,18 +5,6 @@
             <div class="col-md-12">
                 <h1>{{ event }}</h1>
             </div>
-{#            <div class="col-md-12">
-            {% if rsvps %}
-            <h3>Ilmoittautuneiden mailit ({{ rsvps|length }})</h3>
-            <p class="mails" style="display: none;">{% for rsvp in rsvps %}{% if rsvp.member %}{{rsvp.member.email }};{% else %}{{rsvp.email}};{% endif %}{% endfor %}</p>
-            <button class="btn btn-primary" onClick="copyToClipBoard()">Copy emails to clipboard</button>
-            <p>Muista lähettää maili niin että vastaanottajat on piilokopiona! (BCC)</p>
-            <a href="{{ email_url }}">Lähetä RSVP mailit</a>
-            </div>
-            {% else %}
-                <h3>Ei osallistujia</h3>
-            {% endif %}
-            </div> #} 
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -67,5 +55,4 @@
         navigator.clipboard.writeText($('.mails').text());
     }
     </script>
-    
 {% endblock %}
