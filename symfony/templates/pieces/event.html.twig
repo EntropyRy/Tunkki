@@ -228,7 +228,7 @@
         </span>
         {% endif %}
         {% if event.location %}
-            {% if event.type == 'clubroom' %}
+            {% if event.type == 'clubroom' or event.location.id == 1 %}
             <span class="shadow badge bg-secondary">
                 <i class="fa fa-home"></i>
             </span>
