@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Repository\LocationRepository;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -644,7 +645,12 @@ final class EventAdmin extends AbstractAdmin
     public function prePersist($event): void
     {
         if ($event->getType() == 'clubroom') {
-            $event->setLocation('1');
+            $kerde = $this->lr->findOneBy(['id' => 1]);
+            $event->setLocation($kerde);
         }
+    }
+    public function __construct(
+        protected LocationRepository $lr,
+    ) {
     }
 }
