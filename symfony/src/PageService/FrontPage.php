@@ -19,7 +19,7 @@ class FrontPage implements PageServiceInterface
         private readonly TemplateManagerInterface $templateManager,
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
-        private readonly ePics $ePics,
+        // private readonly ePics $ePics,
         private ?SeoPageInterface $seoPage = null
     ) {
     }

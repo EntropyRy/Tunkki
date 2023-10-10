@@ -1,6 +1,3 @@
-twig:
-  globals:
-    door_ip: "%env(TRUSTED_DOOR_IPS)%"
 parameters:
   symfony:
     containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml

@@ -17,6 +17,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 // Forms
 use Symfony\Component\Form\Extension\Core\Type\TextType;
