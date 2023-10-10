@@ -40,6 +40,7 @@ class BookingAdminListener implements EventSubscriberInterface
                     ->htmlTemplate('emails/notification.html.twig')
                     ->context([
                         'booking' => $booking,
+                        'links' => true
                     ]);
                 $mailer->send($email);
             }

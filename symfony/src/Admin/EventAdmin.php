@@ -329,9 +329,14 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false,
                     ]
                 )
-                ->add('location', null, [
-                    'help' => 'Street adress. Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.'
-                ])
+                ->add(
+                    'location',
+                    ModelListType::class,
+                    [
+                        'required' => false,
+                        'help' => 'Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.'
+                    ],
+                )
                 ->add(
                     'externalUrl',
                     null,
@@ -639,7 +644,7 @@ final class EventAdmin extends AbstractAdmin
     public function prePersist($event): void
     {
         if ($event->getType() == 'clubroom') {
-            $event->setLocation('Jämeräntaival 3 A 1, Kerde');
+            $event->setLocation('1');
         }
     }
 }

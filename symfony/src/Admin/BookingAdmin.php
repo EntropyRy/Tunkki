@@ -179,7 +179,8 @@ class BookingAdmin extends AbstractAdmin
                         ]
                     ]
                 ],
-                'label' => 'Pickup Time'
+                'label' => 'Pickup Time',
+                'help' => 'This time needed to be determine if there is overlapping bookings for the same items.'
             ])
             ->add('givenAwayBy', null, [ // ModelListType::class, [
                 /*'btn_add' => false,
@@ -199,7 +200,7 @@ class BookingAdmin extends AbstractAdmin
                     ]
                 ],
                 'label' => 'Return Time',
-                'help' => 'We need this time to be determine if there is overlapping bookings for the same items.'
+                'help' => 'This time is needed to be determine if there is overlapping bookings for the same items.'
             ])
             ->add('receivedBy', null, [ //ModelListType::class, [
                 'required' => false,

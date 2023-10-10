@@ -232,11 +232,11 @@ body {
     #[ORM\ManyToMany(targetEntity: Member::class)]
     private Collection $nakkiResponsibleAdmin;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $location = null;
-
     #[ORM\Column(nullable: true)]
     private ?bool $allowMembersToCreateHappenings = true;
+
+    #[ORM\ManyToOne]
+    private ?Location $location = null;
 
     public function getId(): ?int
     {
@@ -1350,18 +1350,6 @@ body {
         return $this;
     }
 
-    public function getLocation(): ?string
-    {
-        return $this->location;
-    }
-
-    public function setLocation(?string $location): static
-    {
-        $this->location = $location;
-
-        return $this;
-    }
-
     public function isAllowMembersToCreateHappenings(): ?bool
     {
         return $this->allowMembersToCreateHappenings;
@@ -1370,6 +1358,18 @@ body {
     public function setAllowMembersToCreateHappenings(?bool $allowMembersToCreateHappenings): static
     {
         $this->allowMembersToCreateHappenings = $allowMembersToCreateHappenings;
+
+        return $this;
+    }
+
+    public function getLocation(): ?Location
+    {
+        return $this->location;
+    }
+
+    public function setLocation(?Location $location): static
+    {
+        $this->location = $location;
 
         return $this;
     }

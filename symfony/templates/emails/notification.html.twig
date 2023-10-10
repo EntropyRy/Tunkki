@@ -1,11 +1,11 @@
-{% extends 'emails/base.html.twig'%}
+{% extends 'emails/base.html.twig' %}
 {% block content %}
     <span style="font-size: 16px; font-weight: bold; color: #555; margin: 0 0 5px; display: inline-block;">
         New Booking! - {{ booking.name }} on {{ booking.bookingDate|date("d.m.Y") }}
     </span>
     <div style="margin: 5px 0 0;">
     {% if booking.retrieval %}
-        Pickup Time: {{ booking.retrieval| date("d.m.Y H:m") }}
+        Pickup Time: {{ booking.retrieval|date("d.m.Y H:m") }}
     {% endif %}
     </div>
     <div>Renter: {{ booking.renter }}</div>

@@ -135,7 +135,7 @@ class CalendarController extends AbstractController
             $e->setLocation($location);
         }
         if ($event->getLocation()) {
-            $location = new Location($event->getLocation());
+            $location = new Location($event->getLocation()->getStreetAddress(), $event->getLocation()->getName());
             $e->setLocation($location);
         }
         $e->touch($timestamp);

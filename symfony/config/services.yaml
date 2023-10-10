@@ -434,3 +434,15 @@ services:
           group: admin,
           label: Happening,
         }
+
+  admin.location:
+    class: App\Admin\LocationAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Location,
+          controller: App\Controller\LocationAdminController,
+          manager_type: orm,
+          group: admin,
+          label: Location,
+        }

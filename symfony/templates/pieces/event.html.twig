@@ -260,8 +260,8 @@
 {% apply spaceless %}
     {{ event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') }}
 {% endapply %}
-
 {% endblock %}
+
 {% block event_media %}
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
         {% if frontpage|default(false) %}
