@@ -44,7 +44,7 @@ services:
     class: App\Admin\DoorLogAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Doorlog
+        model_class: App\Entity\DoorLog
         manager_type: orm
         group: admin
         label: Door Log
