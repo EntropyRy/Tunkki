@@ -30,15 +30,15 @@
         <li>
             <span class="fa-li">
                 <i class="fas fa-arrow-right"></i>
-            </span> {{ 'block.future_events.checkout_old_events'|trans}} <a href="{{path('_page_alias_events_'~ app.request.locale)}}">{{'block.future_events.events'|trans}}</a>
+            </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'block.future_events.events'|trans }}</a>
         </li>
         {% endfor %}
         </ul>
         {% if settings.box|default(false) %}
         {% if is_granted('ROLE_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN')%}
-        <a class="btn btn-primary" href="{{path('admin_app_event_list')}}">{{ 'block.events.manage'|trans }}</a>
+        <a class="btn btn-primary" href="{{ path('admin_app_event_list') }}">{{ 'block.events.manage'|trans }}</a>
         {% endif %}
-        <a class="btn btn-primary" href="{{path('entropy_event_calendar_config')}}">{{ 'calendar.heading'|trans }}</a>
+        <a class="btn btn-primary" href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
         </div>
     </div>
     {% else %}

@@ -218,9 +218,6 @@
             <i style="rotate: -90deg; margin-right: -5px" class="fa fa-wifi"></i>
             <i style="rotate: 90deg; margin-left: -5px" class="fa fa-wifi"></i>
         </span>
-        <span class="shadow badge bg-secondary">
-            <i class="fa fa-music"></i>
-        </span>
         {% endif %}
         {% if event.webMeetingUrl %}
         <span class="shadow badge bg-secondary">
@@ -243,7 +240,7 @@
             <i class="fa fa-comments"></i>
         </span>
         {% endif %}
-        {% if event.type == 'clubroom' %}
+        {% if event.type == 'clubroom' or event.type == 'event' or event.type == 'stream' %}
         <span class="shadow badge bg-secondary">
             <i class="fa fa-music"></i>
         </span>
