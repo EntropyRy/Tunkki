@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Entity\User;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Console\Question\Question;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Member;
 
-#[\Symfony\Component\Console\Attribute\AsCommand('entropy:user')]
+#[\Symfony\Component\Console\Attribute\AsCommand('entropy:member')]
 class UserCommand extends Command
 {
     public function __construct(
@@ -25,11 +26,12 @@ class UserCommand extends Command
     protected function configure(): void
     {
         $this
-            ->setDescription('User management')
-            ->addArgument('email', InputArgument::REQUIRED, 'user email')
+            ->setDescription('Member management')
+            ->addArgument('email', InputArgument::REQUIRED, 'member email')
             ->addOption('super-admin', null, InputOption::VALUE_NONE, 'make super admin')
             ->addOption('password', null, InputOption::VALUE_NONE, 'change password')
-            ->addOption('permissions', null, InputOption::VALUE_REQUIRED, 'add permissions');
+            ->addOption('permissions', null, InputOption::VALUE_REQUIRED, 'add permissions')
+            ->addOption('create-user', null, InputOption::VALUE_NONE, 'create user too');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -38,7 +40,20 @@ class UserCommand extends Command
 
         $email = $input->getArgument('email');
         if ($email) {
-            $user = $this->em->getRepository(Member::class)->findOneBy(['email' => $email])->getUser();
+            $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
+            if (is_null($member)) {
+                if ($input->getOption('create-user')) {
+                    $member = new Member();
+                    $member->setEmail($email);
+                    $member->setFirstname('admin');
+                    $member->setLastname('padmin');
+                    $member->setLocale('fi');
+                    $user = new User();
+                    $user->setMember($member);
+                }
+            } else {
+                $user = $member->getUser();
+            }
             if ($input->getOption('password')) {
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');
