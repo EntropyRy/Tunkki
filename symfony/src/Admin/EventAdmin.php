@@ -25,6 +25,7 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Form\UrlsType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 final class EventAdmin extends AbstractAdmin
 {
@@ -648,8 +649,18 @@ final class EventAdmin extends AbstractAdmin
             $kerde = $this->lr->findOneBy(['id' => 1]);
             $event->setLocation($kerde);
         }
+        if (is_null($event->getUrl())) {
+            $event->setUrl($this->slug->slug($event->getNimi()));
+        }
+    }
+    public function preUpdate($event): void
+    {
+        if (is_null($event->getUrl())) {
+            $event->setUrl($this->slug->slug($event->getNimi())->lower()->toString());
+        }
     }
     public function __construct(
+        protected SluggerInterface $slug,
         protected LocationRepository $lr,
     ) {
     }
