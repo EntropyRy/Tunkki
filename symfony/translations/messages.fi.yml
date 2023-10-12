@@ -378,12 +378,17 @@ ticket:
   details: Katso lippusi tiedot
   payment_info: Maksutiedot
   reference_number: Viite (pitää käyttää)
-  code: Liipukoodi
+  code: Lippukoodi
   paid: maksettu
   paid_with_bus: Lippu ja bussi maksettu
   all_sold: Kaikki liput on myyty.
   sale_starts: Lipunmyynti alkaa
   sum: Hinta
+  check: Lipputarkistus
+  error: Katso oheinen virhe
+  already_given: Lippu on jo annettu
+  given_out: Lippu on nyt annettu
+  give: Anna lippu
   go_to_event_page: Lippu tapahtuma sivulta
   reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaa eteenpäin.
   presale:

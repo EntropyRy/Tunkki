@@ -399,6 +399,20 @@ body {
         }
         return 'undefined';
     }
+    public function getBadgeText(): string
+    {
+        if ($this->type == 'announcement') {
+            return 'Announcement';
+        } else {
+            if ($this->getNowTest() == 'now') {
+                return 'event.now';
+            }
+            if ($this->getNowTest() == 'after') {
+                return 'event.after';
+            }
+            return 'event.in_future';
+        }
+    }
     public function isInPast(): bool
     {
         if ($this->getNowTest() == 'after') {
@@ -848,7 +862,8 @@ body {
         if (
             $this->getArtistSignUpEnabled() &&
             $this->getArtistSignUpStart() <= $now &&
-            $this->getArtistSignUpEnd() >= $now
+            $this->getArtistSignUpEnd() >= $now &&
+            !$this->isInPast()
         ) {
             return true;
         }
@@ -1152,20 +1167,6 @@ body {
         }
 
         return $this;
-    }
-    public function getBadgeText(): string
-    {
-        if ($this->type == 'announcement') {
-            return 'Announcement';
-        } else {
-            if ($this->getNowTest() == 'now') {
-                return 'event.now';
-            }
-            if ($this->getNowTest() == 'after') {
-                return 'event.after';
-            }
-            return 'event.in_future';
-        }
     }
 
     public function isRsvpOnlyToActiveMembers(): ?bool

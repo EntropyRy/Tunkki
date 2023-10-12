@@ -22,6 +22,7 @@
     "league/commonmark": "^2.4",
     "league/oauth2-server-bundle": "^0.5",
     "picqer/php-barcode-generator": "^2.2",
+    "simplesoftwareio/simple-qrcode": "^4.2",
     "sonata-project/admin-bundle": "^4",
     "sonata-project/classification-bundle": "^4",
     "sonata-project/doctrine-orm-admin-bundle": "^4",

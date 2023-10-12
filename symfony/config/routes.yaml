@@ -24,33 +24,11 @@ entropy_event_slug:
   controller: App\Controller\EventController::oneSlug
   requirements:
     year: '\d+'
-entropy_event_ticket:
-  path:
-    en: /{year}/{slug}/ticket/{reference}
-    fi: /{year}/{slug}/lippu/{reference}
-  controller: App\Controller\EventTicketController::ticket
-  requirements:
-    year: '\d+'
-    reference: '\d+'
-entropy_event_ticket_presale:
-  path:
-    en: /{year}/{slug}/ticket/presale
-    fi: /{year}/{slug}/lippu/ennakkomyynti
-  controller: App\Controller\EventTicketController::presale
-  requirements:
-    year: '\d+'
 entropy_event_responsible:
   path:
     en: /{year}/{slug}/nakkikone/responsible
     fi: /{year}/{slug}/nakkikone/vastuuhenkilo
   controller: App\Controller\EventSignUpController::responsible
-  requirements:
-    year: '\d+'
-entropy_event_ticket_sale:
-  path:
-    en: /{year}/{slug}/ticket/sale
-    fi: /{year}/{slug}/lippu/myynti
-  controller: App\Controller\EventTicketController::sale
   requirements:
     year: '\d+'
 entropy_event_nakki_sign_up:

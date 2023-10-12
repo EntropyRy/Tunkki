@@ -42,12 +42,12 @@ export default class extends Controller {
     } else {
       this.badgeTarget.innerText = "";
     }
-    if(data["url"]){
-      this.picTarget.classList.remove('shimmer');
+    if (data["url"]) {
+      this.picTarget.classList.remove("shimmer");
       this.picTarget.setAttribute("src", data["url"]);
     } else {
-      this.picTarget.classList.add('shimmer');
-      this.picTarget.setAttribute("src", '/images/header-logo.svg');
+      this.picTarget.classList.add("shimmer");
+      this.picTarget.setAttribute("src", "/images/header-logo.svg");
     }
   }
 }

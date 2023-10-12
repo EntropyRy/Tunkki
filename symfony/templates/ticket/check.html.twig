@@ -1,0 +1,32 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}{{ event.nameByLang(app.request.locale) }} - {{ 'ticket.check'|trans }} | Entropy ry{% endblock %}
+{% use 'pieces/ticket.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ block('event_path') }}">
+                <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
+            </a>
+            {{ block('qr_scanner') }}
+        </div>
+    </div>
+{% endblock %}
+
+{% block qr_scanner %}
+<div {{ stimulus_controller("qr-scanner", {'eventId': event.id}) }}>
+  <div id="video-container">
+    <div id="video" {{ stimulus_target('qr-scanner', 'video') }} ></div>
+  </div>
+  <div {{ stimulus_target('qr-scanner', 'result') }} class="text-center fs-2 qr-result">
+      <div {{ stimulus_target('qr-scanner', 'status') }}></div>
+      <div {{ stimulus_target('qr-scanner', 'email') }}></div>
+      <div {{ stimulus_target('qr-scanner', 'referenceNumber') }}></div>
+      <div {{ stimulus_target('qr-scanner', 'given') }}></div>
+      <button class="my-4 mx-auto btn btn-primary w-50 disabled d-none"
+        {{ stimulus_target('qr-scanner', 'button') }}
+        {{ stimulus_action('qr-scanner', 'giveTicket') }}
+        >{{ 'ticket.give'|trans }}</button>
+  </div>
+</div>
+{% endblock %}

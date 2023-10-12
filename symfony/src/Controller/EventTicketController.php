@@ -2,26 +2,42 @@
 
 namespace App\Controller;
 
+use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Helper\Mattermost;
 use App\Form\TicketType;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Ticket;
+use Symfony\Component\Routing\Annotation\Route;
+
+use function Symfony\Component\Serializer\Normalizer\normalize;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventTicketController extends Controller
 {
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/presale',
+            'fi' => '/{year}/{slug}/lippu/ennakkomyynti'
+        ],
+        name: 'entropy_event_ticket_presale',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
     public function presale(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
@@ -42,6 +58,16 @@ class EventTicketController extends Controller
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/sale',
+            'fi' => '/{year}/{slug}/lippu/myynti'
+        ],
+        name: 'entropy_event_ticket_sale',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
     public function sale(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
@@ -60,16 +86,26 @@ class EventTicketController extends Controller
             'year' => $event->getEventDate()->format('Y')
         ]);
     }
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/{reference}',
+            'fi' => '/{year}/{slug}/lippu/{reference}'
+        ],
+        name: 'entropy_event_ticket',
+        requirements: [
+            'year' => '\d+',
+            'reference' => '\d+',
+        ]
+    )]
     public function ticket(
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
-        Mattermost $mm,
         #[MapEntity(mapping: ['reference' => 'referenceNumber'])]
         Ticket $ticket,
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): Response {
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
@@ -94,7 +130,9 @@ class EventTicketController extends Controller
                 'reference' => $ticket->getReferenceNumber()
             ]);
         };
-        return $this->render('ticket.html.twig', [
+        $qr = new Generator();
+
+        return $this->render('ticket/one.html.twig', [
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
@@ -102,8 +140,85 @@ class EventTicketController extends Controller
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'ticket' => $ticket,
             'form' => $form,
+            'qr' => $qr
+                ->eye('circle')
+                ->size('600')
+                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
+                ->errorCorrection('H')
+                ->generate($ticket->getReferenceNumber())
         ]);
     }
+
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/check',
+            'fi' => '/{year}/{slug}/lippu/tarkistus'
+        ],
+        name: 'entropy_event_ticket_check',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function ticketCheck(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        return $this->render('ticket/check.html.twig', [
+            'event' => $event,
+        ]);
+    }
+
+    #[Route(
+        '/api/ticket/{id}/{referenceNumber}/info',
+        name: '_entropy_event_ticket_api_check',
+        requirements: [
+            'id' => '\d+',
+            'referenceNumner' => '\d+',
+        ]
+    )]
+    public function ticketApiCheck(
+        #[MapEntity(mapping: ['id' => 'id'])]
+        Event $event,
+        #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber'])]
+        Ticket $ticket,
+    ): JsonResponse {
+        if ($ticket->getEvent() == $event) {
+            $ticketA = [
+                'email' => $ticket->getOwner() ? $ticket->getOwnerEmail() : 'email',
+                'status' => $ticket->getStatus(),
+                'given' => $ticket->isGiven(),
+                'referenceNumber' => $ticket->getReferenceNumber()
+            ];
+            $data = json_encode($ticketA);
+        } else {
+            $data = json_encode(['error' => 'not valid']);
+        }
+        return new JsonResponse($data);
+    }
+
+    #[Route(
+        '/api/ticket/{id}/{referenceNumber}/give',
+        name: '_entropy_event_ticket_api_give',
+        requirements: [
+            'referenceNumner' => '\d+',
+        ]
+    )]
+    public function ticketApiGive(
+        #[MapEntity(mapping: ['id' => 'id'])]
+        Event $event,
+        #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber'])]
+        Ticket $ticket,
+        TicketRepository $ticketR
+    ): JsonResponse {
+        try {
+            $ticket->setGiven(true);
+            $ticketR->save($ticket, true);
+            return new JsonResponse(json_encode(['ok' => 'TICKET_GIVEN_OUT']));
+        } catch (\Exception $e) {
+            return new JsonResponse(json_encode(['error' => $e->getMessage()]));
+        }
+    }
+
     private function ticketChecks($for, $event, $ticketRepo): ?RedirectResponse
     {
         $user = $this->getUser();

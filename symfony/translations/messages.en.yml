@@ -289,9 +289,14 @@ rsvp:
     <a href="/rsvp-rekisteriseloste">here</a>.
   closed: Sign Up Closed
 ticket:
+  check: Ticket Check
   form:
     reserve: Reserve
     reserve_and_recommend: Reserve and recommend
+  already_given: Ticket has been already given
+  give: Give Ticket
+  given_out: Ticket is now given out
+  error: See attached error
   payment_info: Payment information
   not_available: There is no ticket available
   reserved: The ticket has been reserved for you! Payment details below.
