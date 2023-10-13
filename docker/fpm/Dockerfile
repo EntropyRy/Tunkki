@@ -9,7 +9,7 @@ RUN apk upgrade --update \
         gnupg curl \
         libzmq zeromq \ 
         git icu icu-data-full libssh2 \
-        libev composer \
+        libev \
     && apk add --virtual build-deps \
         bash grep build-base tar re2c make file \ 
         zeromq-dev libpng-dev libwebp-dev \ 
@@ -34,6 +34,11 @@ RUN apk upgrade --update \
     && docker-php-ext-enable apcu zmq ssh2 \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/*
+# install composer
+RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
+    && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && php -r "unlink('composer-setup.php');"
+
 COPY ./dev.ini /usr/local/etc/php/php.ini
 ADD symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
 USER symfony
@@ -43,6 +48,7 @@ EXPOSE 9000
 
 FROM dev as prod
 USER root
-RUN apk del --no-cache git composer
+RUN apk del --no-cache git \
+    && rm /usr/local/bin/composer
 USER symfony
 COPY ./symfony.ini /usr/local/etc/php/php.ini
