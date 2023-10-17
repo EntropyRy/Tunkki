@@ -1,17 +1,36 @@
 # Entropy Tunkki
 
-### dev
+### initialize environment
 * copy .env.example to .env and symfony/.env to /symfony/.env.dev.local and change the defaults
 * `docker compose build; docker compose up -d;`
+
+#### draw the rest of the owl
+* docker compose exec fpm composer install
+
+#### database restore from dump
+* docker compose exec fpm ./bin/console doctrine:database:import dump.sql
+
+#### database creation
+* docker compose exec fpm ./bin/console doctrine:schema:update --force
 
 #### install assets
 * docker compose run --rm node yarn install
 * docker compose run --rm node yarn build
-#### draw the rest of the owl
-* docker compose exec fpm composer install
-* docker compose exec fpm ./bin/console doctrine:database:import dump.sql
-or create tables
-* docker compose exec fpm ./bin/console doctrine:schema:update --force
+
+### Access tunkki
+* open http://localhost:9090/ in your browser
+
+### Initial creation of new user and setting it as super admin
+* fill in the registration form at http://localhost:9090/profile/new and submit.
+* Submission will result in error with default values since mattermost values are null
+* docker compose exec fpm ./bin/console entropy:member yourEmailFilledAtTheForm --super-admin
+
+### Setting up main website
+
+* login https://localhost:9090/login
+* open http://localhost:9090/admin/dashboard
+* Leftside navigation Administration -> Site -> Add new -> Fill in the Name, check "Is Default" and "Enabled", Set Host as "localhost or 127.0.0.1", Locale: "Suomi", Relative Path: "/", Enabled From: "select some past date" -> Create -> "Update and close" -> Create Snapshots -> Create
+
 #### console commands
 * docker compose exec fpm ./bin/console 
 
