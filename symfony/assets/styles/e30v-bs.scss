@@ -1,0 +1,174 @@
+@import "~bootstrap/scss/functions";
+
+$blue: #8ba0ff;
+$dark-blue: #3f3c8a;
+$pink: #ff61d5;
+
+$primary: #2b7093;
+$secondary: #6c757d;
+$success: #28a745;
+$danger: #ff4136;
+$warning: #ffc107;
+$dark: #343a40;
+$info: #17a2b8;
+$enable-responsive-font-sizes: true;
+$border-width: 2px;
+$grid-gutter-width: 48px;
+$btn-whitespace: "nowrap";
+$body-bg: $blue;
+$body-color: #fff;
+$border-radius: 4em;
+
+// 3. Include remainder of required Bootstrap stylesheets
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "danger": $danger,
+  "warning": $warning,
+  "dark": $dark,
+  "info": $white,
+);
+
+// 5. Include remainder of required parts
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+
+// 6. Optionally include any other parts as needed
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+@import "~bootstrap/scss/progress";
+@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/buttons";
+@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/forms";
+@import "~bootstrap/scss/dropdown";
+@import "~bootstrap/scss/accordion";
+@import "~bootstrap/scss/badge";
+@import "~bootstrap/scss/list-group";
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "~bootstrap/scss/utilities/api";
+// 8. fontawesome fonts
+$fa-font-display: swap;
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "roc-grotesk-wide", "Space Grotesk Variable", sans-serif;
+  font-weight: 400;
+  height: 100%;
+  .effect_canvas {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+  .bg-img-container {
+    background: linear-gradient(125deg, $blue 0%, $dark-blue 100%);
+    background-position: left top;
+    background-size: auto;
+    background-attachment: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    z-index: -1;
+    .left-bg-img {
+      position: absolute;
+      transform-origin: center top;
+      left: -900px;
+      top: 26%;
+      scale: 0.6;
+      z-index: -1;
+    }
+    .right-bg-img {
+      position: absolute;
+      transform-origin: center bottom;
+      left: 32%;
+      scale: 0.6;
+      z-index: -1;
+    }
+  }
+  .marquee-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+    margin-top: 10%;
+    border-bottom: 2px solid #fff;
+    .marquee {
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      animation: marquee 20s linear infinite;
+      p {
+        display: inline-block;
+        margin-bottom: 0;
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.btn-outline-nav {
+  border-radius: 2em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  @include button-outline-variant($white, $pink, $white, $white);
+  &.active {
+    color: $white;
+    background: transparent;
+  }
+  &.active:before {
+    content: "";
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: $pink;
+    position: absolute;
+    left: -15px;
+    top: 7px;
+  }
+}
+.btn-buy {
+  // border-radius: 2em;
+  font-weight: bolder;
+  text-transform: uppercase;
+  @include button-variant($pink, $white, $white);
+  @include button-size(0.8em, 1em, 1em, 3em);
+}
+
+.btn-outline-info {
+  backdrop-filter: blur(10px);
+}

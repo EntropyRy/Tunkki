@@ -1,4 +1,10 @@
-import { trans, TICKET_ALREADY_GIVEN, TICKET_GIVEN_OUT } from "../translator";
+import {
+  trans,
+  TICKET_ALREADY_GIVEN,
+  TICKET_GIVEN_OUT,
+  TICKET_PAID,
+  TICKET_NOT_PAID,
+} from "../translator";
 import { Controller } from "@hotwired/stimulus";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
@@ -48,6 +54,7 @@ export default class extends Controller {
   }
 
   showTicketStatus(data) {
+    this.statusTarget.classList.remove("text-danger");
     let middle =
       -(
         this.videoTarget.offsetHeight / 2 +
@@ -56,9 +63,14 @@ export default class extends Controller {
     this.resultTarget.style.top = middle;
     this.referenceNumberTarget.innerText = data["referenceNumber"];
     this.emailTarget.innerText = data["email"];
-    this.statusTarget.innerText = data["status"];
+    if (data["status"] == "paid") {
+      this.statusTarget.innerText = trans(TICKET_PAID);
+    } else {
+      this.statusTarget.innerText = trans(TICKET_NOT_PAID);
+      this.statusTarget.classList.add("text-danger");
+    }
     // this.givenTarget.innerText = data["given"];
-    if (!data["given"]) {
+    if (!data["given"] && data["status"] == "paid") {
       this.buttonTarget.classList.remove("disabled");
       this.buttonTarget.classList.remove("d-none");
     } else {

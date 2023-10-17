@@ -55,7 +55,8 @@ class EventController extends Controller
         }
         $page = $cms->retrieve()->getCurrentPage();
         $this->setMetaData($lang, $event, $page, $seo, null);
-        return $this->render('event.html.twig', [
+        $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
+        return $this->render($template, [
             'event' => $event,
             'page' => $page
         ]);
@@ -124,7 +125,8 @@ class EventController extends Controller
         if (!$event->getPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        return $this->render('event.html.twig', [
+        $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
+        return $this->render($template, [
             'event' => $event,
             'page' => $page,
             'rsvpForm' => $form,
@@ -179,13 +181,17 @@ class EventController extends Controller
                 $seo->addMeta('property', 'og:image:height', '1920');
                 $seo->addMeta('property', 'og:image:widht', '1080');
             }
+            $abstract = $event->getAbstract($lang);
+            if (empty($abstract)) {
+                $abstract = $event->getAbstractFromContent($lang);
+            }
             $seo->addMeta('property', 'twitter:card', "summary_large_image");
             //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
             $seo->addMeta('property', 'twitter:title', $title);
-            $seo->addMeta('property', 'twitter:desctiption', $event->getAbstract($lang));
+            $seo->addMeta('property', 'twitter:desctiption', $abstract);
             $seo->addMeta('property', 'og:title', $title)
-                ->addMeta('property', 'og:description', $event->getAbstract($lang))
-                ->addMeta('name', 'description', $event->getAbstract($lang));
+                ->addMeta('property', 'og:description', $abstract)
+                ->addMeta('name', 'description', $abstract);
             if ($event->getType() != 'announcement') {
                 $seo->addMeta('property', 'og:type', 'event')
                     ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));

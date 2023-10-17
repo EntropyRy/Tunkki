@@ -238,6 +238,15 @@ body {
     #[ORM\ManyToOne]
     private ?Location $location = null;
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $template = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $abstractFi = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $abstractEn = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -515,6 +524,15 @@ body {
 
         return $this;
     }
+    public function getContentForTwig($lang)
+    {
+        if ($lang == 'fi') {
+            $content = $this->Sisallys;
+        } else {
+            $content = $this->Content;
+        }
+        return $content;
+    }
     public function getContentByLang($lang)
     {
         if ($lang == 'fi') {
@@ -524,14 +542,14 @@ body {
         }
         return html_entity_decode(strip_tags((string) $abstract));
     }
-    public function getAbstract($lang)
+    public function getAbstractFromContent($lang)
     {
         if ($lang == 'fi') {
             $abstract = $this->removeTwigTags($this->Sisallys);
         } else {
             $abstract = $this->removeTwigTags($this->Content);
         }
-        return u(html_entity_decode(strip_tags((string) $abstract)))->truncate(150, '..');
+        return u(html_entity_decode(strip_tags((string) $abstract)))->truncate(200, '..');
     }
     protected function removeTwigTags($message)
     {
@@ -1378,5 +1396,47 @@ body {
         $this->location = $location;
 
         return $this;
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(?string $template): static
+    {
+        $this->template = $template;
+
+        return $this;
+    }
+
+    public function getAbstractFi(): ?string
+    {
+        return $this->abstractFi;
+    }
+
+    public function setAbstractFi(?string $abstractFi): static
+    {
+        $this->abstractFi = $abstractFi;
+
+        return $this;
+    }
+
+    public function getAbstractEn(): ?string
+    {
+        return $this->abstractEn;
+    }
+
+    public function setAbstractEn(?string $abstractEn): static
+    {
+        $this->abstractEn = $abstractEn;
+
+        return $this;
+    }
+
+    public function getAbstract($lang): ?string
+    {
+        $func = 'abstract' . ucfirst((string) $lang);
+        return $this->{$func};
     }
 }

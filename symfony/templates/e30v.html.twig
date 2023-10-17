@@ -1,0 +1,151 @@
+{% extends 'e30v_base.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% block sonata_page_stylesheets %}
+    {{ parent() }}
+    <style data-turbo-track="reload">
+    {{ event.css|raw }}
+    </style>
+{% endblock %}
+{% block sonata_page_javascripts %}
+    {{ parent() }}
+    {% if event.backgroundEffect is not empty %}
+    {{ encore_entry_script_tags(event.backgroundEffect) }}
+    {% endif %}
+{% endblock %}
+{% block page_container %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="marquee-wrapper fs-1 col-12">
+      <div class="marquee">
+        {% for i in 0..5 %}
+        <p>
+            ENTROPY 30 {{ 'e30v.years'|trans }} / 3.2.2024 /
+        </p>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-xxl">
+  <div class="row">
+    <div class="col-12 mt-4">
+      <div class="row">
+        <div class="col-6 col-sm-7 col-md-5 col-xl-4 order-0">
+          {{ block('nav') }}
+        </div>
+        <div class="col-6 col-sm-5 d-md-none d-xl-block order-1 order-xl-2 col-xl-2">
+          <img width="100%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
+        </div>
+        <div class="col-12 col-md-7 col-xl-6 order-2 order-xl-1">
+          <div class="text-center d-none d-md-block d-xl-none">
+          <img width="50%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
+          </div>
+          <div class="mt-4 mt-xl-0">
+          {{ block('content') }}
+          {{ block('buy_button') }}
+          </div>
+          <div class="row">
+            <div class="col-6">
+              {{ block('location') }}
+            </div>
+            <div class="col-6">
+              {{ block('time') }}
+            </div>
+          </div>
+        <div>
+      </div>
+    </div>
+  </div>
+  <footer>
+    {{ block('links') }}
+  </footer>
+</div>
+{% endblock %}
+
+{% block nav %}
+{% apply spaceless %}
+{% set el = ['home', 'info', 'tickets', 'artists', 'timetable'] %}
+<nav>
+  <div class="nav" id="nav-tab" role="tablist">
+  {% for nav in el %}
+  <button
+    id="{{ nav }}-tab"
+    data-bs-toggle="tab"
+    data-bs-target="#nav-{{ nav }}"
+    type="button"
+    role="tab"
+    aria-controls="nav-{{ nav }}"
+    aria-selected="{% if loop.first %}true{% else %}false{% endif %}"
+    class="btn btn-lg btn-outline-nav w-100 {% if loop.first %}active{% endif %}"
+  >{{ ('e30v.nav.' ~ nav)|trans }}</button>
+  {% endfor %}
+  </div>
+</nav>
+{% endapply %}
+{% endblock %}
+
+{% block content %}
+{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    {{ block('content_home', input) ?? '' }}
+  </div>
+  <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
+    {{ block('content_info', input) ?? '' }}
+  </div>
+  <div class="tab-pane fade" id="nav-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
+
+    {{ block('content_tickets', input) ?? '' }}
+  </div>
+  <div class="tab-pane fade" id="nav-artists" role="tabpanel" aria-labelledby="nav-artists-tab">
+    {{ block('content_artists', input) ?? '' }}
+  </div>
+  <div class="tab-pane fade" id="nav-timetable" role="tabpanel" aria-labelledby="nav-timetable-tab">
+    {{ block('content_timetable', input) ?? '' }}
+  </div>
+</div>
+{% endblock %}
+
+{% block buy_button %}
+<button class="btn btn-lg btn-buy w-100">{{ 'e30v.buy_tickets'|trans }}</button>
+{% endblock %}
+
+{% block location %}
+<div class="flex-row d-flex">
+  <span class="mx-2" style="font-size:4em;">
+    <i class="lh-base fa fa-location-dot"></i>
+  </span>
+  <span class="flex-column align-self-center">
+    <div><strong>{{ 'location'|trans|upper }}</strong></div>
+    <div>TBA</div>
+  </span>
+</div>
+{% endblock %}
+{% block time %}
+<div class="flex-row d-flex">
+  <span class="mx-2" style="font-size:4em;">
+    <i class="lh-base fa-regular fa-clock"></i>
+  </span>
+  <span class="flex-column align-self-center">
+    <div><strong>3.2.2024</strong></div>
+    <div>TBA</div>
+  </span>
+</div>
+{% endblock %}
+
+{% block sonata_page_body_tag %}
+<body class="entropy">
+<div class="bg-img-container">
+<img class="left-bg-img" src="{{ asset('images/e30v/chrome-pattern-left.webp') }}">
+<img class="right-bg-img" src="{{ asset('images/e30v/chrome-pattern.webp') }}">
+</div>
+{% if event is defined and event.backgroundEffect is not empty %}
+<canvas
+    class="effect_canvas"
+    data-turbo-permanent
+    id="{{ event.backgroundEffect }}"
+    style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}
+"></canvas>
+{% endif %}
+{% endblock %}
+

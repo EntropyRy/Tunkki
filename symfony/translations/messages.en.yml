@@ -310,6 +310,7 @@ ticket:
   situation: Your tickets situation
   code: Ticket code
   paid: paid
+  not_paid: Not paid
   all_sold: Tickets sold out.
   sale_starts: Ticketsale starts
   recipient: Recipient
@@ -378,3 +379,13 @@ calendar:
   add_notifications_for_meetings: Add reminders for meetings
   generate: Generate the calendar link
   url_generated: Link generated
+
+e30v:
+  nav:
+    home: entropy 30 years
+    info: info
+    tickets: Tickets
+    artists: Artists
+    timetable: Timetable
+  years: years
+  buy_tickets: Buy tickets here

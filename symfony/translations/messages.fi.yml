@@ -380,6 +380,7 @@ ticket:
   reference_number: Viite (pitää käyttää)
   code: Lippukoodi
   paid: maksettu
+  not_paid: Ei maksettu
   paid_with_bus: Lippu ja bussi maksettu
   all_sold: Kaikki liput on myyty.
   sale_starts: Lipunmyynti alkaa
@@ -480,3 +481,13 @@ calendar:
   add_notifications_for_meetings: Lisää muistutukset kokouksille
   generate: Generoi kalenteri linkki
   url_generated: Linkki generoitu
+e30v:
+  nav:
+    home: entropy 30 vuotta
+    info: info
+    tickets: Liput
+    artists: Artistit
+    timetable: Aikataulu
+  buy_tickets: Osta liput tästä
+  years: vuotta
+

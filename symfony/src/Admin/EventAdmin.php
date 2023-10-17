@@ -216,6 +216,16 @@ final class EventAdmin extends AbstractAdmin
             'Right side of the text' => 'right',
             'After the post' => 'after',
         ];
+        $templates = [
+            'Normal' => 'event.html.twig',
+            'e30v' => 'e30v.html.twig'
+        ];
+        $event = $this->getSubject();
+        $format = 'richhtml';
+        if ($event->getTemplate() == 'e30v.html.twig') {
+            $format = 'raw';
+            $help = 'Help: <a href="https://twig.symfony.com/">Twig template language</a>';
+        }
         if ($this->isCurrentRoute('create')) {
             $formMapper
                 // The thumbnail field will only be added when the edited item is created
@@ -227,6 +237,11 @@ final class EventAdmin extends AbstractAdmin
                 ->end()
                 ->with('Functionality', ['class' => 'col-md-4'])
                 ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
+                ->add('template', ChoiceType::class, [
+                    'choices' => $templates,
+                    'required' => false,
+                    'placeholder' => 'Not needed usually'
+                ])
                 ->add(
                     'EventDate',
                     DateTimePickerType::class,
@@ -268,7 +283,6 @@ final class EventAdmin extends AbstractAdmin
                 )
                 ->end();
         } else {
-            $event = $this->getSubject();
             //if($event->getType() == 'announcement'){}
             $formMapper
                 ->tab(\Event::class)
@@ -280,11 +294,16 @@ final class EventAdmin extends AbstractAdmin
                         'Content',
                         SimpleFormatterType::class,
                         [
-                            'format' => 'richhtml',
+                            'format' => $format,
                             'required' => false,
-                            'help' => 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.'
+                            'help' => $help ? $help : 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.',
+                            'help_html' => true,
+                            'attr' => ['rows' => 20]
                         ]
-                    );
+                    )
+                    ->add('abstractEn', null, [
+                        'help' => 'Defines small text in some link previews. 150 chars.'
+                    ]);
             }
             $formMapper
                 ->end()
@@ -296,11 +315,16 @@ final class EventAdmin extends AbstractAdmin
                         'Sisallys',
                         SimpleFormatterType::class,
                         [
-                            'format' => 'richhtml',
+                            'format' => $format,
                             'required' => false,
-                            'help' => 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.'
+                            'help' => $help ? $help : 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.',
+                            'help_html' => true,
+                            'attr' => ['rows' => 20]
                         ]
-                    );
+                    )
+                    ->add('abstractFi', null, [
+                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.'
+                    ]);
             }
             $formMapper
                 ->end()
@@ -364,6 +388,11 @@ final class EventAdmin extends AbstractAdmin
                 )
                 ->end()
                 ->with('Eye Candy', ['class' => 'col-md-4'])
+                ->add('template', ChoiceType::class, [
+                    'choices' => $templates,
+                    'required' => false,
+                    'placeholder' => 'Not needed usually'
+                ])
                 ->add(
                     'picture',
                     ModelListType::class,
