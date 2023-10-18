@@ -99,6 +99,7 @@
   </div>
   <div class="tab-pane fade" id="nav-artists" role="tabpanel" aria-labelledby="nav-artists-tab">
     {{ block('content_artists', input) ?? '' }}
+    {{ block('bios') }}
   </div>
   <div class="tab-pane fade" id="nav-timetable" role="tabpanel" aria-labelledby="nav-timetable-tab">
     {{ block('content_timetable', input) ?? '' }}
@@ -148,4 +149,3 @@
 "></canvas>
 {% endif %}
 {% endblock %}
-

@@ -4,8 +4,8 @@ $blue: #8ba0ff;
 $dark-blue: #3f3c8a;
 $pink: #ff61d5;
 
-$primary: #2b7093;
-$secondary: #6c757d;
+$primary: $pink;
+$secondary: #b3b3b3;
 $success: #28a745;
 $danger: #ff4136;
 $warning: #ffc107;
@@ -75,7 +75,7 @@ html {
 }
 
 body {
-  font-family: "roc-grotesk-wide", "Space Grotesk Variable", sans-serif;
+  font-family: "Syne Variable", sans-serif;
   font-weight: 400;
   height: 100%;
   .effect_canvas {

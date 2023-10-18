@@ -87,7 +87,7 @@ class KerdeController extends AbstractController
         ]);
     }
     #[Route('/kerde/recording/start', name: 'recording_start')]
-    public function recordingStart(Request $request, SSH $ssh): RedirectResponse
+    public function recordingStart(SSH $ssh): RedirectResponse
     {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -103,7 +103,7 @@ class KerdeController extends AbstractController
         return $this->redirectToRoute('kerde_door');
     }
     #[Route('/kerde/recording/stop', name: 'recording_stop')]
-    public function recordingStop(Request $request, SSH $ssh): RedirectResponse
+    public function recordingStop(SSH $ssh): RedirectResponse
     {
         $user = $this->getUser();
         assert($user instanceof User);

@@ -110,9 +110,6 @@ security:
     - { path: ^/profile/new, role: PUBLIC_ACCESS }
     - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
     - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
-      #- {path: ^/kerde/door$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
-      #- {path: ^/kerde/door$, roles: ROLE_NO_ACCESS}
-      #- {path: ^/kerde/ovi$, roles: ROLE_USER, ips: ['%env(TRUSTED_DOOR_IPS)%']}
     - { path: ^/kerde, roles: ROLE_USER }
     - { path: ^/dashboard, role: ROLE_USER }
     - { path: ^/yleiskatsaus, role: ROLE_USER }

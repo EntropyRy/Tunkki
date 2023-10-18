@@ -615,7 +615,7 @@
 {% endif %}
 <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
     {% if artist.type == 'Live' or artist.type == 'DJ' %}
-        {% if info is defined %}
+        {% if info is defined and frontpage|default(false) == false %}
             @ {{ info.StartTime|format_datetime(pattern=datestring) }}
         {% endif %}
     {% endif %}

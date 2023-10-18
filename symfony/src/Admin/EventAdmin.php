@@ -266,21 +266,6 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false,
                     ]
                 )
-                ->add(
-                    'externalUrl',
-                    null,
-                    [
-                        'label' => 'Is the advertisement hosted somewhere else? if this is selected and url is empty it can be used to have the event in events list.',
-                        'help' => 'Is the add hosted here?'
-                    ]
-                )
-                ->add(
-                    'url',
-                    null,
-                    [
-                        'help' => '\'event\' resolves to https://entropy.fi/(year)/event. In case of external need whole url like: https://entropy.fi/rave/bunka1'
-                    ]
-                )
                 ->end();
         } else {
             //if($event->getType() == 'announcement'){}
@@ -375,15 +360,7 @@ final class EventAdmin extends AbstractAdmin
                     'url',
                     null,
                     [
-                        'help' => '\'event\' resolves to https://entropy.fi/(year)/event.
-                     In case of external need whole url like: https://entropy.fi/rave/bunka1'
-                    ]
-                )
-                ->add(
-                    'streamPlayerUrl',
-                    null,
-                    [
-                        'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
+                        'help' => '\'event\' resolves to /(year)/event. In case of external url whole link is needed: https://entropy.fi/rave/bunka1'
                     ]
                 )
                 ->end()
@@ -494,6 +471,13 @@ final class EventAdmin extends AbstractAdmin
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time. Added as an location in Calendar'])
+                ->add(
+                    'streamPlayerUrl',
+                    null,
+                    [
+                        'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.'
+                    ]
+                )
                 ->add(
                     'links',
                     ImmutableArrayType::class,
