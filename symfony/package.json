@@ -38,6 +38,8 @@
     "dev-server": "encore dev-server",
     "dev": "encore dev",
     "watch": "encore dev --watch",
-    "build": "encore production --progress"
+    "build": "encore production --progress",
+    "e30v-watch": "encore dev --watch --config=webpack.e30v.js",
+    "e30v-build": "encore production --progress --config=webpack.e30v.js"
   }
 }

@@ -1,6 +1,9 @@
 webpack_encore:
   # The path where Encore is building the assets - i.e. Encore.setOutputPath()
   output_path: "%kernel.project_dir%/public/build"
+  builds:
+    default: "%kernel.project_dir%/public/build"
+    e30v: "%kernel.project_dir%/public/build/e30v"
   # If multiple builds are defined (as shown below), you can disable the default build:
   # output_path: false
 
@@ -29,7 +32,11 @@ webpack_encore:
   # frontend: '%kernel.project_dir%/public/frontend/build'
 framework:
   assets:
-    json_manifest_path: "%kernel.project_dir%/public/build/manifest.json"
+    packages:
+      default:
+        json_manifest_path: "%kernel.project_dir%/public/build/manifest.json"
+      e30v:
+        json_manifest_path: "%kernel.project_dir%/public/build/e30v/manifest.json"
 when@prod:
   webpack_encore:
     #        # Cache the entrypoints.json (rebuild Symfony's cache when entrypoints.json changes)
