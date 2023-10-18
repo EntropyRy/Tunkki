@@ -21,7 +21,7 @@
 * open http://localhost:9090/ in your browser
 
 ### Initial creation of new user and setting it as super admin
-* docker compose exec fpm ./bin/console entropy:member yourEmail --super-admin
+* docker compose exec fpm ./bin/console entropy:member --create-user yourEmail --super-admin
 
 ### Setting up main website
 
