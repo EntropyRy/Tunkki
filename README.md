@@ -21,13 +21,11 @@
 * open http://localhost:9090/ in your browser
 
 ### Initial creation of new user and setting it as super admin
-* fill in the registration form at http://localhost:9090/profile/new and submit.
-* Submission will result in error with default values since mattermost values are null
-* docker compose exec fpm ./bin/console entropy:member yourEmailFilledAtTheForm --super-admin
+* docker compose exec fpm ./bin/console entropy:member yourEmail --super-admin
 
 ### Setting up main website
 
-* login https://localhost:9090/login
+* login http://localhost:9090/login
 * open http://localhost:9090/admin/dashboard
 * Leftside navigation Administration -> Site -> Add new -> Fill in the Name, check "Is Default" and "Enabled", Set Host as "localhost or 127.0.0.1", Locale: "Suomi", Relative Path: "/", Enabled From: "select some past date" -> Create -> "Update and close" -> Create Snapshots -> Create
 
