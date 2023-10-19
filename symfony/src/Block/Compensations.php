@@ -53,7 +53,7 @@ class Compensations extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), null, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }

@@ -138,10 +138,10 @@ class EventTicketController extends Controller
             'form' => $form,
             'qr' => $qr
                 ->eye('circle')
-                ->size('600')
+                ->size(600)
                 ->gradient(0, 40, 40, 40, 40, 0, 'radial')
                 ->errorCorrection('H')
-                ->generate($ticket->getReferenceNumber())
+                ->generate((string)$ticket->getReferenceNumber())
         ]);
     }
 

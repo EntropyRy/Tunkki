@@ -10,7 +10,6 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Meta\Metadata;
-use Sonata\Form\Validator\ErrorElement;
 use Twig\Environment;
 
 class MemberInfoBlock extends BaseBlockService
@@ -32,29 +31,6 @@ class MemberInfoBlock extends BaseBlockService
     }
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
-        /*		$formMapper
-                    ->add('settings', ImmutableArrayType::class, [
-                        'keys' => [
-                            ['title', TextType::class, [
-                                'label' => 'List Title',
-                            ]],
-                            ['show', ChoiceType::class,[
-                                'choices' => [
-                                    'Everybody can see this' => false,
-                                    'Show only to logged in user' => true,
-                                ]
-                            ]],
-                            ['urls', CollectionType::class, [
-                                'required' => false,
-                                'allow_add' => true,
-                                'allow_delete' => true,
-                                'prototype' => true,
-                                'by_reference' => false,
-                                'allow_extra_fields' => true,
-                                'entry_type' => UrlsType::class,
-                            ]],
-                        ]
-                    ]);*/
     }
 
     public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security) //, EntityManagerInterface $em)
@@ -70,12 +46,9 @@ class MemberInfoBlock extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), null, 'messages', [
             'class' => 'fa fa-link',
         ]);
-    }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
-    {
     }
     public function getName(): string
     {

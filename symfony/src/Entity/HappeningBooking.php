@@ -13,7 +13,7 @@ class HappeningBooking
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: "Member", inversedBy: 'happeningBooking', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'happeningBooking', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: true)]
     private ?Member $member = null;
 

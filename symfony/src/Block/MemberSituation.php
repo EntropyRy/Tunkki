@@ -47,12 +47,9 @@ class MemberSituation extends BaseBlockService
     }
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), false, 'messages', [
+        return new Metadata($this->getName(), ($code ?? $this->getName()), null, 'messages', [
             'class' => 'fa fa-link',
         ]);
-    }
-    public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
-    {
     }
     public function getName(): string
     {
