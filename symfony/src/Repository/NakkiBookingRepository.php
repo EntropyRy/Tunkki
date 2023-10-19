@@ -2,7 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\NakkiBooking;
+use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -41,7 +44,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
 
-    public function findMemberEventBookings($member, $event): ?array
+    public function findMemberEventBookings(Member $member, Event $event): ?array
     {
         return $this->createQueryBuilder('n')
             ->andWhere('n.event = :event')
@@ -53,7 +56,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findMemberEventBookingsAtSameTime($member, $event, $start, $end): ?array
+    public function findMemberEventBookingsAtSameTime(Member $member, Event $event, DateTimeImmutable $start, DateTimeImmutable $end): ?array
     {
         return $this->createQueryBuilder('n')
             //->where('n.startAt BETWEEN :start and :end OR n.endAt BETWEEN :start and :end' )
@@ -73,7 +76,7 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findEventNakkiCount($booking, $event): ?string
+    public function findEventNakkiCount(NakkiBooking $booking, Event $event): ?string
     {
         $definition = $booking->getNakki()->getDefinition();
         $total = $this->createQueryBuilder('b')

@@ -13,7 +13,7 @@ class PageSnapshotRepository extends ServiceEntityRepository
         parent::__construct($registry, SonataPageSnapshot::class);
     }
 
-    public function findEnabledByLang($lang)
+    public function findEnabledByLang(string $lang): mixed
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.publicationDateEnd is null')

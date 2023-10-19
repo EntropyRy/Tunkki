@@ -463,6 +463,8 @@ edited: Muokkaukset tallennettu onnistuneesti.
 contract:
   accessories:
     prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
+  signed: Allerkirjoitettu!
+  error: Allekirjoita uudestaan ja hyväksy ehdot
 pcs: kpl
 Previous: Edellinen
 Next: Seuraava

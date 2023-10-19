@@ -26,7 +26,10 @@ class BookingConsentType extends AbstractType
             $builder
                 ->add('Agree', SubmitType::class, [
                     'disabled' => true,
-                    'attr' => ['class' => 'btn-large btn-primary']
+                    'attr' => [
+                        'class' => 'btn-large btn-primary',
+                        'data-turbo' => "false"
+                    ]
                 ]);
         }
     }

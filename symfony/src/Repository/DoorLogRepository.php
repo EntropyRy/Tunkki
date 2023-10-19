@@ -22,7 +22,7 @@ class DoorLogRepository extends ServiceEntityRepository
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */
-    public function getLatest($count = null)
+    public function getLatest(?int $count): mixed
     {
         if (is_null($count)) {
             $count = 10;
@@ -31,21 +31,19 @@ class DoorLogRepository extends ServiceEntityRepository
             ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults($count)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */
-    public function getSince($since)
+    public function getSince(?\DateTime $since): mixed
     {
         return $this->createQueryBuilder('d')
             ->where('d.createdAt >= :since')
             ->setParameter('since', $since)
             ->orderBy('d.createdAt', 'DESC')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
     // /**
     //  * @return DoorLog[] Returns an array of DoorLog objects

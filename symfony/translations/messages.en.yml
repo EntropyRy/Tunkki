@@ -362,6 +362,8 @@ Price en: Price in English
 contract:
   accessories:
     prices: Costs are for damaged or missplaced accessories
+  signed: Signed!
+  error: Sign again and agee on terms too
 share:
   share: Share this page
   copy: Copy link

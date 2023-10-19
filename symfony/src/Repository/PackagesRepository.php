@@ -12,14 +12,14 @@ class PackagesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Package::class);
     }
-    public function getPackageChoicesWithPrivileges($privileges): mixed
+    public function getPackageChoicesWithPrivileges(string $privileges): mixed
     {
         $queryBuilder = $this->createQueryBuilder('p')
-                   ->andWhere('p.rent >= 0.00')
-                   ->leftJoin('p.whoCanRent', 'r')
-                   ->andWhere('r = :privilege')
-                   ->setParameter('privilege', $privileges)
-                   ->orderBy('p.name', 'ASC');
+            ->andWhere('p.rent >= 0.00')
+            ->leftJoin('p.whoCanRent', 'r')
+            ->andWhere('r = :privilege')
+            ->setParameter('privilege', $privileges)
+            ->orderBy('p.name', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }
 }

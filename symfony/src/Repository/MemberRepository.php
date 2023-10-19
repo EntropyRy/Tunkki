@@ -18,7 +18,7 @@ class MemberRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Member::class);
     }
-    public function findByEmailOrName($email, $firstname, $lastname): mixed
+    public function findByEmailOrName(string $email, string $firstname, string $lastname): mixed
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.email = :email')
@@ -28,14 +28,14 @@ class MemberRepository extends ServiceEntityRepository
             ->setParameter('lastname', $lastname);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
-    public function getByEmail($email): mixed
+    public function getByEmail(string $email): mixed
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.email = :email')
             ->setParameter('email', $email);
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
-    public function getByName($firstname, $lastname): mixed
+    public function getByName(string $firstname, string $lastname): mixed
     {
         $qb = $this->createQueryBuilder('m')
             ->where('m.firstname = :firstname')

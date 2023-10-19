@@ -113,7 +113,7 @@ class Booking implements \Stringable
     #[Assert\NotBlank]
     private ?\DateTimeInterface $bookingDate = null;
 
-    #[ORM\ManyToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'bookings')]
+    #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
     private $rewards;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
@@ -619,5 +619,51 @@ class Booking implements \Stringable
         $this->accessoryPrice = $accessoryPrice;
 
         return $this;
+    }
+    public function getDataArray(): array
+    {
+        $object = $this;
+        $rent = [];
+        $compensation = [];
+        $data = [];
+        $items = [];
+        $packages = [];
+        $accessories = [];
+        $rent['items'] = 0;
+        $compensation['items'] = 0;
+        $rent['packages'] = 0;
+        $compensation['packages'] = 0;
+        $rent['accessories'] = 0;
+        $compensation['accessories'] = 0;
+        foreach ($object->getItems() as $item) {
+            $items[] = $item;
+            $rent['items'] += $item->getRent();
+            $compensation['items'] += $item->getCompensationPrice();
+        }
+        foreach ($object->getPackages() as $item) {
+            $packages[] = $item;
+            $rent['packages'] += $item->getRent();
+            $compensation['packages'] += $item->getCompensationPrice();
+        }
+        foreach ($object->getAccessories() as $item) {
+            $accessories[] = $item;
+            if (is_int($item->getCount())) {
+                $compensation['accessories'] += $item->getName()->getCompensationPrice() * $item->getCount();
+            }
+        }
+        $rent['total'] = $rent['items'] + $rent['packages']; //+ $rent['accessories'];
+
+        $data['actualTotal'] = $object->getActualPrice();
+        $rent['actualTotal'] = $object->getActualPrice();
+        $rent['accessories'] = $object->getAccessoryPrice();
+        $data['name'] = $object->getName();
+        $data['date'] = $object->getBookingDate()->format('j.n.Y');
+        $data['items'] = $items;
+        $data['packages'] = $packages;
+        $data['accessories'] = $accessories;
+        $data['rent'] = $rent;
+        $data['compensation'] = $compensation;
+        $data['renterSignature'] = $object->getRenterSignature();
+        return $data;
     }
 }
