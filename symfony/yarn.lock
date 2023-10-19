@@ -949,10 +949,10 @@
   resolved "https://registry.yarnpkg.com/@fontsource-variable/space-grotesk/-/space-grotesk-5.0.13.tgz#c0ef906bdedbe5b39d7a0d78c9dcb25f65a2a180"
   integrity sha512-XZzmOrO30wUG7fIOM9Fl6y+FHOA8KZOSSa4PkcHUseX/mt6nmPStTD1WhE9JcDVrSFGl3rF69so10Prpg/+RBw==
 
-"@fontsource-variable/syne@^5.0.15":
+"@fontsource/kanit@^5.0.15":
   version "5.0.15"
-  resolved "https://registry.yarnpkg.com/@fontsource-variable/syne/-/syne-5.0.15.tgz#0610e5659c8b21e8e91dc6c12cecb514e83f7b81"
-  integrity sha512-ioGvBnYzCXlqj7sPuuJ8NuoXOl8lNoxx5l9iTFql7MqX8hXJkoRS7RfvOsk2vfn8huXpJvXPr1HmWckSudz7tA==
+  resolved "https://registry.yarnpkg.com/@fontsource/kanit/-/kanit-5.0.15.tgz#95d5ca0dbff25c01da483ee071cbf1b410ba7fc5"
+  integrity sha512-7a5DRFxA2pr/cLVwFlPtN3LvTfApXT/DBULqy35oyafSYMYarL+OmESBZ6gQKocEtox9phFtSEhW1whJdipbkg==
 
 "@formatjs/ecma402-abstract@1.17.2":
   version "1.17.2"

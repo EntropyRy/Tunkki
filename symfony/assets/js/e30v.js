@@ -16,4 +16,4 @@ import "bootstrap/js/dist/tab";
 //require('@fortawesome/fontawesome-free/js/brands.js');
 //require('@fortawesome/fontawesome-free/js/solid.js');
 //require('@fortawesome/fontawesome-free/js/fontawesome.js');
-import "@fontsource-variable/syne";
+import "@fontsource/kanit";
