@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -87,7 +89,7 @@ class TicketRepository extends ServiceEntityRepository
         ;
     }
     */
-    public function findAvailableTicketsCount($event): mixed
+    public function findAvailableTicketsCount(Event $event): mixed
     {
         $qb = $this->createQueryBuilder('t');
         $qb->select($qb->expr()->count('t'))
@@ -97,7 +99,7 @@ class TicketRepository extends ServiceEntityRepository
             ->setParameter('status', 'paid');
         return $qb->getQuery()->getSingleScalarResult();
     }
-    public function findAvailableTickets($event): mixed
+    public function findAvailableTickets(Event $event): mixed
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
@@ -108,7 +110,7 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findPresaleTickets($event): mixed
+    public function findPresaleTickets(Event $event): mixed
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
@@ -120,7 +122,7 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-    public function findAvailableTicket($event): ?Ticket
+    public function findAvailableTicket(Event $event): ?Ticket
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
@@ -132,7 +134,7 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
-    public function findAvailablePresaleTicket($event): ?Ticket
+    public function findAvailablePresaleTicket(Event $event): ?Ticket
     {
         $all = $this->findPresaleTickets($event);
         foreach ($all as $ticket) {
@@ -143,7 +145,7 @@ class TicketRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function findMemberTicketReferenceForEvent($member, $event): ?string
+    public function findMemberTicketReferenceForEvent(Member $member, Event $event): ?string
     {
         $ticket = $this->createQueryBuilder('t')
             ->select('t.referenceNumber')

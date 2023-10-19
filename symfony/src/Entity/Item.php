@@ -5,6 +5,8 @@ namespace App\Entity;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
 use DateTime;
+use DateTimeImmutable;
+use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -49,7 +51,7 @@ class Item implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
-    private ?\App\Entity\Sonata\SonataClassificationCategory $category = null;
+    private ?Category $category = null;
 
     #[ORM\JoinTable(name: 'Item_tags')]
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id')]
@@ -115,7 +117,7 @@ class Item implements \Stringable
         return $this->id;
     }
 
-    public function setName($name): Item
+    public function setName(string $name): Item
     {
         $this->name = $name;
 
@@ -127,7 +129,7 @@ class Item implements \Stringable
         return $this->name;
     }
 
-    public function setManufacturer($manufacturer): Item
+    public function setManufacturer(string $manufacturer): Item
     {
         $this->manufacturer = $manufacturer;
 
@@ -139,7 +141,7 @@ class Item implements \Stringable
         return $this->manufacturer;
     }
 
-    public function setModel($model): Item
+    public function setModel(string $model): Item
     {
         $this->model = $model;
 
@@ -151,7 +153,7 @@ class Item implements \Stringable
         return $this->model;
     }
 
-    public function setDescription($description): Item
+    public function setDescription(string $description): Item
     {
         $this->description = $description;
 
@@ -174,7 +176,9 @@ class Item implements \Stringable
     {
         return $this->rent;
     }
-
+    /**
+     * @param mixed $rentNotice
+     */
     public function setRentNotice($rentNotice): Item
     {
         $this->rentNotice = $rentNotice;
@@ -186,7 +190,9 @@ class Item implements \Stringable
     {
         return $this->rentNotice;
     }
-
+    /**
+     * @param mixed $needsFixing
+     */
     public function setNeedsFixing($needsFixing): Item
     {
         $this->needsFixing = $needsFixing;
@@ -198,7 +204,9 @@ class Item implements \Stringable
     {
         return $this->needsFixing;
     }
-
+    /**
+     * @param mixed $forSale
+     */
     public function setForSale($forSale): Item
     {
         $this->forSale = $forSale;
@@ -273,7 +281,7 @@ class Item implements \Stringable
         return $this->fixingHistory;
     }
 
-    public function getFixingHistoryMessages($count, $endofline = null): ?string
+    public function getFixingHistoryMessages(int $count, ?string $endofline = null): ?string
     {
         if ($endofline == 'html') {
             $eol = "<br>";
@@ -304,6 +312,9 @@ class Item implements \Stringable
             $this->removeWhoCanRent($who);
         }
     }
+    /**
+     * @param mixed $commission
+     */
     public function setCommission($commission): Item
     {
         $this->commission = $commission;
@@ -315,7 +326,9 @@ class Item implements \Stringable
     {
         return $this->commission;
     }
-
+    /**
+     * @param mixed $serialnumber
+     */
     public function setSerialnumber($serialnumber): Item
     {
         $this->serialnumber = $serialnumber;
@@ -346,7 +359,9 @@ class Item implements \Stringable
     {
         return $this->files;
     }
-
+    /**
+     * @param mixed $placeinstorage
+     */
     public function setPlaceinstorage($placeinstorage): Item
     {
         $this->placeinstorage = $placeinstorage;
@@ -416,7 +431,9 @@ class Item implements \Stringable
     {
         return $this->packages;
     }
-
+    /**
+     * @param mixed $toSpareParts
+     */
     public function setToSpareParts($toSpareParts): Item
     {
         $this->toSpareParts = $toSpareParts;
@@ -488,7 +505,9 @@ class Item implements \Stringable
     {
         return $this->whoCanRent;
     }
-
+    /**
+     * @param mixed $url
+     */
     public function setUrl($url = null): Item
     {
         $this->url = $url;
@@ -500,7 +519,9 @@ class Item implements \Stringable
     {
         return $this->url;
     }
-
+    /**
+     * @param mixed $cannotBeRented
+     */
     public function setCannotBeRented($cannotBeRented): Item
     {
         $this->cannotBeRented = $cannotBeRented;
@@ -512,7 +533,9 @@ class Item implements \Stringable
     {
         return $this->cannotBeRented;
     }
-
+    /**
+     * @param mixed $compensationPrice
+     */
     public function setCompensationPrice($compensationPrice = null): Item
     {
         $this->compensationPrice = $compensationPrice;
@@ -524,7 +547,9 @@ class Item implements \Stringable
     {
         return $this->compensationPrice;
     }
-
+    /**
+     * @param mixed $purchasePrice
+     */
     public function setPurchasePrice($purchasePrice = null): Item
     {
         $this->purchasePrice = $purchasePrice;
