@@ -4,6 +4,7 @@ namespace App\Command;
 
 use App\Entity\User;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -58,6 +59,7 @@ class UserCommand extends Command
             if ($input->getOption('password')) {
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');
+                assert($helper instanceof QuestionHelper);
                 $question->setHidden(true);
                 $question->setHiddenFallback(false);
                 $pass = $helper->ask($input, $output, $question);

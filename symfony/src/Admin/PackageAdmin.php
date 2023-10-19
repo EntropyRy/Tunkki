@@ -43,12 +43,12 @@ class PackageAdmin extends AbstractAdmin
     {
         $p = $this->getSubject();
         if (is_null($p->getId())) {
-            $query = $this->em->createQueryBuilder('i')->select('i')
+            $query = $this->em->createQueryBuilder()->select('i')
                 ->from('App:Item', 'i')
                 ->andWhere('i.packages is empty')
                 ->orderBy('i.name', 'ASC');
         } else {
-            $query = $this->em->createQueryBuilder('i')->select('i')
+            $query = $this->em->createQueryBuilder()->select('i')
                 ->from('App:Item', 'i')
                 ->andWhere('i.packages is empty')
                 ->leftJoin('i.packages', 'pack')

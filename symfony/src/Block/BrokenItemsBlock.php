@@ -32,10 +32,10 @@ class BrokenItemsBlock extends BaseBlockService
         $settings = $blockContext->getSettings();
         if ($settings['random']) {
             shuffle($broken);
-            if ((is_countable($broken) ? count($broken) : 0) > 5) {
+            if (count($broken) > 5) {
                 $l = 3;
             } else {
-                $l = is_countable($broken) ? count($broken) : 0;
+                $l = count($broken) ? count($broken) : 0;
             }
             $broken = array_splice($broken, 0, $l);
         }

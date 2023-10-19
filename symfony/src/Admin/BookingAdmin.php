@@ -4,6 +4,7 @@ namespace App\Admin;
 
 use App\Helper\ReferenceNumber;
 use App\Helper\Mattermost;
+use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -34,9 +35,12 @@ use App\Entity\User;
 use App\Entity\Item;
 use App\Entity\Booking;
 use App\Entity\Package;
+use App\Repository\BookingRepository;
+use App\Repository\PackagesRepository;
 // Hash
 use Hashids\Hashids;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class BookingAdmin extends AbstractAdmin
@@ -149,11 +153,10 @@ class BookingAdmin extends AbstractAdmin
         $packageChoices = null;
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
-            $bookingsrepo = $this->em->getRepository(Booking::class);
-            $bookings = $bookingsrepo->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
+            $bookings = $this->bookingRepository->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
             if (!empty($forWho)) {
-                $packageChoices = $this->em->getRepository(Package::class)->getPackageChoicesWithPrivileges($forWho);
-                $itemChoices = $this->em->getRepository(Item::class)->getItemChoicesWithPrivileges($forWho);
+                $packageChoices = $this->packagesRepository->getPackageChoicesWithPrivileges($forWho);
+                $itemChoices = $this->itemRepository->getItemChoicesWithPrivileges($forWho);
                 $itemCats = $this->getCategories($itemChoices);
             }
         }
@@ -377,7 +380,9 @@ class BookingAdmin extends AbstractAdmin
         if ($object->getAccessories() != null) {
             foreach ($object->getAccessories() as $line) {
                 if ($line->getCount() == null or $line->getName() == null) {
-                    $this->rs->getSession()->getFlashBag()->add('warning', 'Dont leave empty lines in accessories');
+                    $session = $this->rs->getSession();
+                    assert($session instanceof Session);
+                    $session->getFlashBag()->add('warning', 'Dont leave empty lines in accessories');
                 }
             }
         }
@@ -411,6 +416,9 @@ class BookingAdmin extends AbstractAdmin
         protected EntityManagerInterface $em,
         protected CategoryManagerInterface $cm,
         protected RequestStack $rs,
+        protected BookingRepository $bookingRepository,
+        protected ItemRepository $itemRepository,
+        protected PackagesRepository $packagesRepository,
         protected ReferenceNumber $rn
     ) {
     }

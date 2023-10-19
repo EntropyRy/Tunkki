@@ -21,7 +21,7 @@ class BookingAdminController extends CRUDController
         $booking = $this->admin->getSubject();
         $booking->setRenterSignature(null);
         $booking->setRenterConsent(false);
-        $this->admin->update($booking, true);
+        $this->admin->update($booking);
         $this->addFlash('sonata_flash_success', 'Signature Removed');
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

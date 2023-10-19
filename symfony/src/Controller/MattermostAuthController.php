@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
@@ -13,7 +12,7 @@ class MattermostAuthController extends Controller
     {
         return $registry
             ->getClient('mattermost')
-            ->redirect();
+            ->redirect([], []);
     }
     public function connectCheckAction(): void
     {

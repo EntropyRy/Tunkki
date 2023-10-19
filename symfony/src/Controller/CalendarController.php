@@ -39,7 +39,7 @@ class CalendarController extends AbstractController
     {
         $user = $this->getUser();
         assert($user instanceof User);
-        if (is_null($user)) {
+        if ($user == null) {
             throw new UnauthorizedHttpException('now allowed');
         }
         $form = $this->createForm(CalendarConfigType::class);

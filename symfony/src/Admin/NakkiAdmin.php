@@ -17,6 +17,7 @@ use App\Entity\NakkiBooking;
 use App\Helper\Mattermost;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 final class NakkiAdmin extends AbstractAdmin
@@ -138,7 +139,9 @@ final class NakkiAdmin extends AbstractAdmin
         // $diff = $nakki->getStartAt()->diff($nakki->getEndAt());
         foreach ($bookings as $booking) {
             if ($booking->getMember()) {
-                $this->rs->getSession()->getFlashBag()->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
+                $session = $this->rs->getSession();
+                assert($session instanceof Session);
+                $session->getFlashBag()->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
                 return;
             }
         }
