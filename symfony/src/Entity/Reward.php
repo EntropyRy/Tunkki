@@ -104,7 +104,8 @@ class Reward implements \Stringable
     }
     public function addReward(?string $reward): self
     {
-        $this->reward += $reward;
+        $new = (float)$this->reward + (float)$reward;
+        $this->reward = (string)$new;
 
         return $this;
     }

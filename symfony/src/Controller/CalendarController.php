@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Entity\User;
 use App\Form\CalendarConfigType;
 use App\Repository\EventRepository;
 use Eluceo\iCal\Domain\ValueObject\Alarm;
@@ -37,6 +38,7 @@ class CalendarController extends AbstractController
     public function eventCalendarConfig(Request $request, UrlGeneratorInterface $urlG): Response
     {
         $user = $this->getUser();
+        assert($user instanceof User);
         if (is_null($user)) {
             throw new UnauthorizedHttpException('now allowed');
         }

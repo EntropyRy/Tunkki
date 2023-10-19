@@ -2,22 +2,21 @@
 
 namespace App\Menu;
 
+use App\Repository\MenuRepository;
 use Knp\Menu\FactoryInterface;
-use App\Entity\Menu;
-use Doctrine\ORM\EntityManagerInterface;
 
 class MenuBuilder
 {
     public function __construct(
         private readonly FactoryInterface $factory,
-        private readonly EntityManagerInterface $em,
+        private readonly MenuRepository $mRepo
     ) {
     }
 
     public function createMainMenuFi(array $options)
     {
         $locale = 'fi';
-        $roots = $this->em->getRepository(Menu::class)->getRootNodes();
+        $roots = $this->mRepo->getRootNodes();
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav');
         foreach ($roots as $m) {
@@ -50,7 +49,7 @@ class MenuBuilder
     public function createMainMenuEn(array $options)
     {
         $locale = 'en';
-        $roots = $this->em->getRepository(Menu::class)->getRootNodes();
+        $roots = $this->mRepo->getRootNodes();
         $menu = $this->factory->createItem('root');
         $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
         foreach ($roots as $m) {

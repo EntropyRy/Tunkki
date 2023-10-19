@@ -40,6 +40,7 @@ class UserCommand extends Command
 
         $email = $input->getArgument('email');
         if ($email) {
+            $user = null;
             $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
             if (is_null($member)) {
                 if ($input->getOption('create-user')) {

@@ -11,7 +11,7 @@ class EventArtistInfo implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $SetLength = null;
@@ -152,7 +152,7 @@ class EventArtistInfo implements \Stringable
     public function timediff(?\DateTimeInterface $date): ?int
     {
         if ($date) {
-            return $date->diff($this->StartTime)->format('%r%h');
+            return (int)$date->diff($this->StartTime)->format('%r%h');
         }
         return null;
     }

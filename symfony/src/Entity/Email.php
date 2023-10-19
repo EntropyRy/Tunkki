@@ -11,7 +11,7 @@ class Email implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $subject = null;
@@ -124,7 +124,7 @@ class Email implements \Stringable
     }
     public function __toString(): string
     {
-        return (string) ($this->purpose ?: 'Email for '.$this->event);
+        return (string) ($this->purpose ?: 'Email for ' . $this->event);
     }
 
     public function getEvent(): ?Event

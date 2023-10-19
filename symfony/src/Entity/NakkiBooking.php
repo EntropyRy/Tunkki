@@ -11,7 +11,7 @@ class NakkiBooking implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Nakki::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(nullable: false)]

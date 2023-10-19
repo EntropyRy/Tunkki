@@ -4,9 +4,6 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * AccessoryChoices
- */
 #[ORM\Table('AccessoryChoice')]
 #[ORM\Entity]
 class AccessoryChoice implements \Stringable
@@ -20,38 +17,21 @@ class AccessoryChoice implements \Stringable
     private string $name;
 
     #[ORM\Column(name: 'compensationPrice', type: 'integer')]
-    private string $compensationPrice;
+    private int $compensationPrice;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return AccessoryChoice
-     */
-    public function setName($name)
+    public function setName($name): AccessoryChoice
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -61,26 +41,14 @@ class AccessoryChoice implements \Stringable
         return $this->name ?: '';
     }
 
-    /**
-     * Set compensationPrice.
-     *
-     * @param int $compensationPrice
-     *
-     * @return AccessoryChoice
-     */
-    public function setCompensationPrice($compensationPrice)
+    public function setCompensationPrice(int $compensationPrice): AccessoryChoice
     {
         $this->compensationPrice = $compensationPrice;
 
         return $this;
     }
 
-    /**
-     * Get compensationPrice.
-     *
-     * @return int
-     */
-    public function getCompensationPrice()
+    public function getCompensationPrice(): int
     {
         return $this->compensationPrice;
     }

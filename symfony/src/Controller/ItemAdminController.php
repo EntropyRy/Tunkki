@@ -15,12 +15,12 @@ class ItemAdminController extends Controller
     {
         $object = $this->admin->getSubject();
 
-        if (!$object) {
+        if ($object == null) {
             throw new NotFoundHttpException(sprintf('unable to find the object'));
         }
         $clonedObject = new Item();
         //$clonedObject = clone $object;
-        $clonedObject->setName($object->getName().' (Clone)');
+        $clonedObject->setName($object->getName() . ' (Clone)');
         $clonedObject->setManufacturer($object->getManufacturer());
         $clonedObject->setModel($object->getModel());
         $clonedObject->setPlaceinstorage($object->getPlaceinstorage());
@@ -94,7 +94,7 @@ class ItemAdminController extends Controller
             );
         }
 
-        $this->addFlash('sonata_flash_success', 'Batch edit success! who can rent, description, rent and rent notice copied! from:'.$sourceModel->getName());
+        $this->addFlash('sonata_flash_success', 'Batch edit success! who can rent, description, rent and rent notice copied! from:' . $sourceModel->getName());
 
         return new RedirectResponse(
             $this->admin->generateUrl('list', ['filter' => $this->admin->getFilterParameters()])

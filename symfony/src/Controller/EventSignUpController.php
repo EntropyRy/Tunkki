@@ -213,7 +213,7 @@ class EventSignUpController extends Controller
         assert($user instanceof User);
         $member = $user->getMember();
         $artists = $member->getArtist();
-        if ((is_countable($artists) ? count($artists) : 0) == 0) {
+        if (count($artists) == 0) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
             return new RedirectResponse($this->generateUrl('entropy_artist_create'));

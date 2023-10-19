@@ -4,8 +4,6 @@ namespace App\Security;
 
 use KnpU\OAuth2ClientBundle\Security\Authenticator\OAuth2Authenticator;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Routing\RouterInterface;
 use KnpU\OAuth2ClientBundle\Client\ClientRegistry;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,6 +18,7 @@ use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use App\Entity\Member;
 use App\Entity\User;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 class MattermostAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
 {
@@ -28,9 +27,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
     public function __construct(
         private readonly ClientRegistry $clientRegistry,
         private readonly EntityManagerInterface $em,
-        private readonly RouterInterface $router,
         private readonly UrlGeneratorInterface $urlG,
-        private readonly RequestStack $rs
     ) {
     }
     public function supports(Request $request): ?bool
@@ -42,9 +39,12 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
     {
         $client = $this->clientRegistry->getClient('mattermost');
         $accessToken = $this->fetchAccessToken($client);
+        $session = $request->getSession();
+        assert($session instanceof Session);
+        $fb = $session->getFlashBag();
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client) {
+            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client, $fb) {
                 $mmUser = $client->fetchUserFromToken($accessToken);
                 $mmUserA = $mmUser->toArray();
                 $email = $mmUserA['email'];
@@ -59,7 +59,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                         $existingUser->getMember()->setUsername($username);
                         $this->em->persist($existingUser);
                         $this->em->flush();
-                        $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
+                        $fb->add('success', 'Your username was updated to your Mattermost username');
                     }
                     return $existingUser;
                 }
@@ -71,7 +71,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                         $member->setUsername($username);
                         $this->em->persist($member);
                         $this->em->flush();
-                        $this->rs->getSession()->getFlashBag()->add('success', 'Your username was updated to your Mattermost username');
+                        $fb->add('success', 'Your username was updated to your Mattermost username');
                     }
                     $user = $member->getUser();
                     $user->setMattermostId($id);
@@ -79,7 +79,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     $this->em->flush();
                     return $user;
                 }
-                $this->rs->getSession()->getFlashBag()->add('warning', 'user not found');
+                $fb->add('warning', 'user not found');
             })
         );
     }

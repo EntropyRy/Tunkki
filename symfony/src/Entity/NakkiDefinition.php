@@ -11,7 +11,7 @@ class NakkiDefinition implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     private ?string $nameFi = null;
@@ -38,13 +38,13 @@ class NakkiDefinition implements \Stringable
     }
     public function getName($lang): ?string
     {
-        $func = 'name'. ucfirst((string) $lang);
+        $func = 'name' . ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getDescription($lang): ?string
     {
-        $func = 'Description'. ucfirst((string) $lang);
+        $func = 'Description' . ucfirst((string) $lang);
         return $this->{$func};
     }
 

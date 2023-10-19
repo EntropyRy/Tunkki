@@ -6,9 +6,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * Package
- */
 #[ORM\Table(name: 'Package')]
 #[ORM\Entity(repositoryClass: \App\Repository\PackagesRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
@@ -19,8 +16,8 @@ class Package implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\ManyToMany(targetEntity: '\\' . \App\Entity\Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
-    private $items;
+    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
+    private ?Collection $items;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -31,8 +28,8 @@ class Package implements \Stringable
     #[ORM\Column(name: 'needs_fixing', type: 'boolean')]
     private bool $needsFixing = false;
 
-    #[ORM\ManyToMany(targetEntity: \App\Entity\WhoCanRentChoice::class, cascade: ['persist'])]
-    private $whoCanRent;
+    #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
+    private ?Collection $whoCanRent;
 
     #[ORM\Column(name: 'notes', type: 'text', nullable: true)]
     private ?string $notes = null;
@@ -41,103 +38,54 @@ class Package implements \Stringable
     private ?string $compensationPrice = null;
 
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set rent
-     *
-     * @param string $rent
-     *
-     * @return Package
-     */
-    public function setRent($rent)
+    public function setRent($rent): self
     {
         $this->rent = $rent;
 
         return $this;
     }
 
-    /**
-     * Get rent
-     *
-     * @return string
-     */
-    public function getRent()
+    public function getRent(): string
     {
         return $this->rent;
     }
 
-    /**
-     * Set needsFixing
-     *
-     * @param boolean $needsFixing
-     *
-     * @return Package
-     */
-    public function setNeedsFixing($needsFixing)
+    public function setNeedsFixing($needsFixing): self
     {
         $this->needsFixing = $needsFixing;
 
         return $this;
     }
 
-    /**
-     * Get needsFixing
-     *
-     * @return boolean
-     */
-    public function getNeedsFixing()
+    public function getNeedsFixing(): bool
     {
         return $this->needsFixing;
     }
 
-    /**
-     * Set notes
-     *
-     * @param string $notes
-     *
-     * @return Package
-     */
-    public function setNotes($notes)
+    public function setNotes($notes): self
     {
         $this->notes = $notes;
 
         return $this;
     }
 
-    /**
-     * Get notes
-     *
-     * @return string
-     */
-    public function getNotes()
+    public function getNotes(): ?string
     {
         return $this->notes;
     }
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
-        $this->items = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->items = new ArrayCollection();
         $this->whoCanRent = new ArrayCollection();
     }
 
-    /**
-     * Add item
-     *
-     *
-     * @return Package
-     */
-    public function addItem(\App\Entity\Item $item)
+    public function addItem(Item $item): self
     {
         $item->addPackage($this);
         $this->items[] = $item;
@@ -145,35 +93,20 @@ class Package implements \Stringable
         return $this;
     }
 
-    /**
-     * Remove item
-     */
-    public function removeItem(\App\Entity\Item $item)
+    public function removeItem(\App\Entity\Item $item): void
     {
         $item->getPackages()->removeElement($this);
         $this->items->removeElement($item);
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return Package
-     */
-    public function setName($name)
+    public function setName($name): Package
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -190,17 +123,12 @@ class Package implements \Stringable
         return $return;
     }
 
-    /**
-     * Get items
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getItems()
     {
         return $this->items;
     }
 
-    public function getRentFromItems()
+    public function getRentFromItems(): int
     {
         $price = 0;
         foreach ($this->getItems() as $item) {
@@ -208,7 +136,7 @@ class Package implements \Stringable
         }
         return $price;
     }
-    public function getItemsNeedingFixing()
+    public function getItemsNeedingFixing(): ArrayCollection
     {
         $needsfix = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ($this->getItems() as $item) {
@@ -220,12 +148,7 @@ class Package implements \Stringable
         return $needsfix;
     }
 
-    /**
-     * Get somethingBroken
-     *
-     * @return boolean
-     */
-    public function getIsSomethingBroken()
+    public function getIsSomethingBroken(): bool
     {
         if ($this->getItems()) {
             foreach ($this->getItems() as $item) {
@@ -237,32 +160,18 @@ class Package implements \Stringable
         return false;
     }
 
-    /**
-     * Add whoCanRent
-     *
-     *
-     * @return Package
-     */
-    public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
+    public function addWhoCanRent(WhoCanRentChoice $whoCanRent): self
     {
         $this->whoCanRent[] = $whoCanRent;
 
         return $this;
     }
 
-    /**
-     * Remove whoCanRent
-     */
-    public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent)
+    public function removeWhoCanRent(WhoCanRentChoice $whoCanRent): void
     {
         $this->whoCanRent->removeElement($whoCanRent);
     }
 
-    /**
-     * Get whoCanRent
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
     public function getWhoCanRent()
     {
         return $this->whoCanRent;

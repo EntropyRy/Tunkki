@@ -15,12 +15,10 @@ class FileAdmin extends AbstractAdmin
     {
         $datagridMapper
             ->add('fileinfo')
-            ->add('file')
-        ;
+            ->add('file');
         if (!$this->isChild()) {
             $datagridMapper
-                ->add('product')
-            ;
+                ->add('product');
         }
     }
 
@@ -35,8 +33,8 @@ class FileAdmin extends AbstractAdmin
         }
         $listMapper
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => ['edit' => [], 'delete' => []]])
-        ;
+                'actions' => ['edit' => [], 'delete' => []]
+            ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
@@ -50,20 +48,14 @@ class FileAdmin extends AbstractAdmin
                 'link_parameters' => [
                     'context' => 'item'
                 ]
-            ])
-        ;
+            ]);
         if (!$this->isChild()) {
             $formMapper
-                ->add('product')
-            ;
+                ->add('product');
         }
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
     {
-        $showMapper
-//            ->add('id')
-//            ->add('tiedostoinfo')
-        ;
     }
 }

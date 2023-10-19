@@ -12,7 +12,7 @@ class RSVP implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: false)]
@@ -80,7 +80,7 @@ class RSVP implements \Stringable
 
     public function getName(): ?string
     {
-        return $this->firstName.' '.$this->lastName;
+        return $this->firstName . ' ' . $this->lastName;
     }
 
     public function getEmail(): ?string
@@ -135,6 +135,6 @@ class RSVP implements \Stringable
     }
     public function __toString(): string
     {
-        return 'ID: '.$this->id;
+        return 'ID: ' . $this->id;
     }
 }

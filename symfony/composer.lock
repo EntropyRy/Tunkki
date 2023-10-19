@@ -4715,16 +4715,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.27.1",
+            "version": "4.28.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "2ae0c57def6d64f9f86d9e7d63d55c6cd573f6d9"
+                "reference": "724c4fcec44b33c74aa3f3cc37627aa2e7890446"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/2ae0c57def6d64f9f86d9e7d63d55c6cd573f6d9",
-                "reference": "2ae0c57def6d64f9f86d9e7d63d55c6cd573f6d9",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/724c4fcec44b33c74aa3f3cc37627aa2e7890446",
+                "reference": "724c4fcec44b33c74aa3f3cc37627aa2e7890446",
                 "shasum": ""
             },
             "require": {
@@ -4783,7 +4783,7 @@
                 "psalm/plugin-phpunit": "^0.18",
                 "psalm/plugin-symfony": "^5.0",
                 "psr/event-dispatcher": "^1.0",
-                "rector/rector": "^0.17",
+                "rector/rector": "^0.18",
                 "symfony/browser-kit": "^5.4 || ^6.2",
                 "symfony/css-selector": "^5.4 || ^6.2",
                 "symfony/filesystem": "^5.4 || ^6.2",
@@ -4828,7 +4828,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.27.1"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.28.0"
             },
             "funding": [
                 {
@@ -4848,7 +4848,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-21T18:44:40+00:00"
+            "time": "2023-10-18T22:47:20+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -12667,16 +12667,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.38",
+            "version": "1.10.39",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691"
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/5302bb402c57f00fb3c2c015bac86e0827e4b691",
-                "reference": "5302bb402c57f00fb3c2c015bac86e0827e4b691",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/d9dedb0413f678b4d03cbc2279a48f91592c97c4",
+                "reference": "d9dedb0413f678b4d03cbc2279a48f91592c97c4",
                 "shasum": ""
             },
             "require": {
@@ -12725,7 +12725,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-10-06T14:19:14+00:00"
+            "time": "2023-10-17T15:46:26+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",

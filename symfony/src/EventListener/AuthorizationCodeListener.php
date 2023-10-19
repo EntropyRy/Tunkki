@@ -10,6 +10,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 final class AuthorizationCodeListener implements EventSubscriberInterface
 {
@@ -22,12 +23,13 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
     {
         $user = $event->getUser();
         assert($user instanceof User);
-        if (null !== $user) {
+        if ($user != null) {
             if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
                 $session = $this->requestStack->getSession();
+                assert($session instanceof Session);
                 $session->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
                 $url = $this->urlGenerator->generate('profile.' . $user->getMember()->getLocale());
@@ -40,9 +42,6 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
             $event->setResponse($response);
         }
     }
-    /**
-     * @return array<string, mixed>
-     */
     public static function getSubscribedEvents(): array
     {
         return ['league.oauth2_server.event.authorization_request_resolve' => 'onAuthorizationRequestResolve'];

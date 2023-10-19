@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use App\Entity\Nakki;
 
 final class NakkiAdminController extends CRUDController
 {
@@ -28,7 +27,7 @@ final class NakkiAdminController extends CRUDController
     {
         $object = $this->admin->getSubject();
 
-        if (!$object) {
+        if ($object == null) {
             throw new NotFoundHttpException(sprintf('unable to find the object'));
         }
         $clone = clone $object;

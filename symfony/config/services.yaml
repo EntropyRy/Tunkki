@@ -73,8 +73,6 @@ services:
       - [addChild, ["@entropy_tunkki.admin.file", "product"]]
   entropy_tunkki.helper.mattermost:
     class: App\Helper\Mattermost
-  my_mattermost_authenticator:
-    class: App\Security\MattermostAuthenticator
   entropy_tunkki.admin.statusevent:
     class: App\Admin\StatusEventAdmin
     tags:

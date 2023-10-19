@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ArtistRepository;
-use DateTimeInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +18,7 @@ class Artist implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 190)]
     private ?string $name = null;
@@ -41,7 +40,7 @@ class Artist implements \Stringable
     private ?string $hardware = null;
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: 'Artist', cascade: ['persist', 'detach'])]
-    #[ORM\JoinColumn(nullable:true, onDelete:"CASCADE")]
+    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
     private $eventArtistInfos;
 
     #[Gedmo\Timestampable(on: 'create')]
@@ -266,7 +265,7 @@ class Artist implements \Stringable
     {
         $ret = '';
         foreach ($this->links as $link) {
-            $ret .= '<a href="'.$link['url'].'">'.$link['title'].'</a>';
+            $ret .= '<a href="' . $link['url'] . '">' . $link['title'] . '</a>';
             if (end($this->links) !== $link) {
                 $ret .= ' | ';
             }

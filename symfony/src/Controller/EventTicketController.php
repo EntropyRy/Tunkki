@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -22,8 +20,6 @@ use App\Entity\User;
 use App\Entity\Event;
 use App\Entity\Ticket;
 use Symfony\Component\Routing\Annotation\Route;
-
-use function Symfony\Component\Serializer\Normalizer\normalize;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventTicketController extends Controller
@@ -266,7 +262,7 @@ class EventTicketController extends Controller
             }
         }
     }
-    protected function getNakkiFromGroup($event, $member, $selected, $locale)
+    protected function getNakkiFromGroup($event, $member, $selected, $locale): array
     {
         $nakkis = [];
         foreach ($event->getNakkis() as $nakki) {

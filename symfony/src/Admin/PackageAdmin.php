@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -10,7 +11,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
@@ -20,8 +20,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('name')
             ->add('rent')
             ->add('whoCanRent')
-            ->add('notes')
-        ;
+            ->add('notes');
     }
 
     protected function configureListFields(ListMapper $listMapper): void
@@ -32,39 +31,38 @@ class PackageAdmin extends AbstractAdmin
             ->add('items')
             ->add('rentFromItems')
             ->add('whoCanRent')
-  //          ->add('needsFixing')
+            //          ->add('needsFixing')
             ->add('itemsNeedingFixing', 'array')
             ->add('notes')
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
-        ;
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []]
+            ]);
     }
 
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $p = $this->getSubject();
-        $em = $this->getModelManager()->getEntityManager(Item::class);
         if (is_null($p->getId())) {
-            $query = $em->createQueryBuilder('i')->select('i')
-                    ->from('App:Item', 'i')
-                    ->andWhere('i.packages is empty')
-                    ->orderBy('i.name', 'ASC');
+            $query = $this->em->createQueryBuilder('i')->select('i')
+                ->from('App:Item', 'i')
+                ->andWhere('i.packages is empty')
+                ->orderBy('i.name', 'ASC');
         } else {
-            $query = $em->createQueryBuilder('i')->select('i')
-                    ->from('App:Item', 'i')
-                    ->andWhere('i.packages is empty')
-                    ->leftJoin('i.packages', 'pack')
-                    ->orWhere('pack = :p')
-                    ->orderBy('i.name', 'ASC')
-                    ->setParameter('p', $p);
+            $query = $this->em->createQueryBuilder('i')->select('i')
+                ->from('App:Item', 'i')
+                ->andWhere('i.packages is empty')
+                ->leftJoin('i.packages', 'pack')
+                ->orWhere('pack = :p')
+                ->orderBy('i.name', 'ASC')
+                ->setParameter('p', $p);
         }
         $formMapper
             ->with('Package')
             ->add('name')
-            ->add('whoCanRent', null, ['multiple'=>true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'])
+            ->add('whoCanRent', null, ['multiple' => true, 'expanded' => true, 'by_reference' => false, 'help' => 'Select all fitting groups'])
             ->add('items', ModelType::class, [
-                'btn_add'=> false,
-                'multiple'=>true,
+                'btn_add' => false,
+                'multiple' => true,
                 'expanded' => false,
                 'by_reference' => false,
                 'query' => $query,
@@ -74,8 +72,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('rent')
             ->add('compensationPrice')
             ->add('notes')
-            ->end()
-        ;
+            ->end();
     }
 
     protected function configureShowFields(ShowMapper $showMapper): void
@@ -84,9 +81,12 @@ class PackageAdmin extends AbstractAdmin
             ->add('name')
             ->add('items')
             ->add('rent')
-      //      ->add('needsFixing')
+            //      ->add('needsFixing')
             ->add('compensationPrice')
-            ->add('notes')
-        ;
+            ->add('notes');
+    }
+    public function __construct(
+        protected EntityManagerInterface $em,
+    ) {
     }
 }

@@ -222,6 +222,7 @@ final class EventAdmin extends AbstractAdmin
         ];
         $event = $this->getSubject();
         $format = 'richhtml';
+        $help = '';
         if ($event->getTemplate() == 'e30v.html.twig') {
             $format = 'raw';
             $help = 'Help: <a href="https://twig.symfony.com/">Twig template language</a>';

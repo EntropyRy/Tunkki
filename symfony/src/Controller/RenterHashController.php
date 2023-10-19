@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
@@ -10,14 +11,17 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
 use App\Entity\Contract;
 use App\Entity\Renter;
-use App\Entity\Booking;
 // Form
 use App\Form\BookingConsentType;
 
 class RenterHashController extends Controller
 {
-    public function indexAction(Request $request, CmsManagerSelector $cms, EntityManagerInterface $em): Response
-    {
+    public function indexAction(
+        Request $request,
+        CmsManagerSelector $cms,
+        EntityManagerInterface $em,
+        BookingRepository $bRepo
+    ): Response {
         $bookingid = $request->get('bookingid');
         $hash = $request->get('hash');
         $renterid = $request->get('renterid');
@@ -31,8 +35,7 @@ class RenterHashController extends Controller
         }
         $contract = $em->getRepository(Contract::class)
             ->findOneBy(['purpose' => 'rent']);
-        $bookingdata = $em->getRepository(Booking::class)
-            ->getBookingData($bookingid, $hash, $renter);
+        $bookingdata = $bRepo->getBookingData($bookingid, $hash, $renter);
         if (is_array($bookingdata[0])) {
             $object = $bookingdata[1];
             $form = $this->createForm(BookingConsentType::class, $object);
@@ -44,8 +47,7 @@ class RenterHashController extends Controller
                         $em->persist($booking);
                         $em->flush();
                         $this->addFlash('success', 'Allekirjoitettu!');
-                        $bookingdata = $em->getRepository(Booking::class)
-                            ->getBookingData($bookingid, $hash, $renter);
+                        $bookingdata = $bRepo->getBookingData($bookingid, $hash, $renter);
                     } else {
                         $this->addFlash('warning', 'Allekirjoita uudestaan ja hyväksy ehdot');
                     }

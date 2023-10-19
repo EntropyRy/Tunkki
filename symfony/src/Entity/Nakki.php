@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\NakkiRepository;
-use DateInterval;
-use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,7 +14,7 @@ class Nakki implements \Stringable
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
     #[ORM\JoinColumn(nullable: false)]
