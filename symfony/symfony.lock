@@ -1,4 +1,7 @@
 {
+    "arkounay/ux-collection": {
+        "version": "3.3.2"
+    },
     "beberlei/doctrineextensions": {
         "version": "v1.2.7"
     },

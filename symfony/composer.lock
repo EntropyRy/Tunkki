@@ -4,8 +4,57 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ed86e18a7d8801d2aae42c44fbb6176",
+    "content-hash": "588466deaeb8703fe1bbdf3807037d48",
     "packages": [
+        {
+            "name": "arkounay/ux-collection",
+            "version": "3.3.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Arkounay/ux-collection.git",
+                "reference": "b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81",
+                "reference": "b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81",
+                "shasum": ""
+            },
+            "require": {
+                "symfony/flex": ">=1.3.1",
+                "symfony/form": ">=5.4.0",
+                "symfony/twig-bundle": ">=5.4.0"
+            },
+            "require-dev": {
+                "symfony/framework-bundle": "^5.4|^6.0",
+                "symfony/webpack-encore-bundle": "^1.13"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Arkounay\\Bundle\\UxCollectionBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Antonin M",
+                    "email": "arkounay@gmail.com"
+                }
+            ],
+            "description": "Collection for Symfony forms",
+            "keywords": [
+                "symfony-ux"
+            ],
+            "support": {
+                "issues": "https://github.com/Arkounay/ux-collection/issues",
+                "source": "https://github.com/Arkounay/ux-collection/tree/3.3.2"
+            },
+            "time": "2023-10-15T16:29:33+00:00"
+        },
         {
             "name": "bacon/bacon-qr-code",
             "version": "2.0.8",
@@ -13117,5 +13166,5 @@
         "php": "^8.1"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }

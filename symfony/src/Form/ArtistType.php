@@ -6,11 +6,10 @@ use App\Entity\Artist;
 use App\Form\UrlsType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Sonata\AdminBundle\Form\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-//use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\MediaBundle\Form\Type\MediaType;
+use Arkounay\Bundle\UxCollectionBundle\Form\UxCollectionType;
 
 class ArtistType extends AbstractType
 {
@@ -37,13 +36,15 @@ class ArtistType extends AbstractType
             ->add('bioEn', null, ['label' => 'artist.form.bio_en', 'help' => 'artist.form.bio_help'])
             ->add(
                 'links',
-                CollectionType::class,
+                UxCollectionType::class,
                 [
                     'label' => 'artist.form.links',
                     'allow_add' => true,
                     'by_reference' => false,
                     'allow_delete' => true,
                     'delete_empty' => true,
+                    'allow_drag_and_drop' => true,
+                    'add_label' => 'Lisää/Add',
                     'prototype' => true,
                     'entry_type' => UrlsType::class,
                     'attr' => ['class' => 'row'],

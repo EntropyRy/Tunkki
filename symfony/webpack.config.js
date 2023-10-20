@@ -29,7 +29,6 @@ Encore
   .addEntry("nakkikone", "./assets/js/nakkikone.js")
   .addEntry("stars", "./assets/js/stars.js")
   .addEntry("grid", "./assets/js/grid.js")
-  .addEntry("artist_signup", "./assets/js/artist_signup.js")
   // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
   .enableStimulusBridge("./assets/controllers.json")
 
@@ -78,7 +77,7 @@ Encore
   .enableIntegrityHashes(Encore.isProduction())
   .addPlugin(
     new PurgeCssPlugin({
-      safelist: [/^fa/, /^alert/],
+      safelist: [/^fa/, /^alert/, /^mx/],
       paths: glob.sync([
         path.join(__dirname, "./templates/**/*.html.twig"), // Adjust the paths to match your project structure
         path.join(__dirname, "./assets/**/*.js"), // Adjust the paths to match your project structure

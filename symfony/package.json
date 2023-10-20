@@ -1,6 +1,7 @@
 {
   "devDependencies": {
     "@a2lix/symfony-collection": "^0.6.1",
+    "@arkounay/ux-collection": "file:vendor/arkounay/ux-collection/Resources/assets",
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.9",
     "@fontsource-variable/space-grotesk": "^5.0.13",
@@ -29,12 +30,15 @@
     "sass": "~1.69.1",
     "sass-loader": "^13.0.2",
     "signature_pad": "^4.1.6",
+    "sortablejs": "^1.14.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.0.1",
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+
+  },
   "scripts": {
     "dev-server": "encore dev-server",
     "dev": "encore dev",
