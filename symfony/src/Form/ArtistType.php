@@ -45,6 +45,8 @@ class ArtistType extends AbstractType
                     'delete_empty' => true,
                     'allow_drag_and_drop' => true,
                     'add_label' => 'Lisää/Add',
+                    'drag_and_drop_filter' => 'input,textarea,a,button,label',
+                    'add_class' => 'btn btn-secondary collection-add mt-2',
                     'prototype' => true,
                     'entry_type' => UrlsType::class,
                     'attr' => ['class' => 'row'],
