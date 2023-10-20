@@ -36,9 +36,7 @@
     "webpack-notifier": "^1.15.0"
   },
   "private": true,
-  "dependencies": {
-
-  },
+  "dependencies": {},
   "scripts": {
     "dev-server": "encore dev-server",
     "dev": "encore dev",
