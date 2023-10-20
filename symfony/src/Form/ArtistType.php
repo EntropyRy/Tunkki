@@ -50,9 +50,11 @@ class ArtistType extends AbstractType
                     'prototype' => true,
                     'entry_type' => UrlsType::class,
                     'attr' => ['class' => 'row'],
+                    'min' => 0,
                     'entry_options' => [
                         'row_attr' => ['class' => 'col-md-6 col-12'],
-                        'label' => false
+                        'label' => false,
+
                     ],
                 ],
             )
