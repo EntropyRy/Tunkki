@@ -947,15 +947,15 @@
   resolved "https://registry.yarnpkg.com/@discoveryjs/json-ext/-/json-ext-0.5.7.tgz#1d572bfbbe14b7704e0ba0f39b74815b84870d70"
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
+"@fontsource-variable/hanken-grotesk@^5.0.18":
+  version "5.0.18"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/hanken-grotesk/-/hanken-grotesk-5.0.18.tgz#731a5615ffe6d52a4bd993dd9d89b797d4c76145"
+  integrity sha512-OT19qFoQKlm3MieZEHHOKlWbJB6hJzofyP3jGKaXNhv72TQmWefg/yoQ9kHGdS8eqmI5WmZG+37Do8xZDFfu0w==
+
 "@fontsource-variable/space-grotesk@^5.0.13":
   version "5.0.15"
   resolved "https://registry.yarnpkg.com/@fontsource-variable/space-grotesk/-/space-grotesk-5.0.15.tgz#93067b9610960d85f35f3ed78a072f479b5239ef"
   integrity sha512-APV/HjMrlJIDbIpfMGVgG3Y6TB9HLZQzYdY3/5EieT0E5+89XuuY0VJJW2RUlg8G6NKNExdlL5QLklfexveHcA==
-
-"@fontsource/kanit@^5.0.15":
-  version "5.0.17"
-  resolved "https://registry.yarnpkg.com/@fontsource/kanit/-/kanit-5.0.17.tgz#f8e68a16fb76718c9904b22fcdcc4c313127c7b2"
-  integrity sha512-urioYe+h/lswhNFH5aYZM+y60h49OdyMwOfCWNbXItn8v65naknqjvhX1UaLEP/ATAenJieqW11RqKH4gf9fWA==
 
 "@formatjs/ecma402-abstract@1.17.2":
   version "1.17.2"
