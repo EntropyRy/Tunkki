@@ -36,4 +36,5 @@ return [
     Symfony\UX\StimulusBundle\StimulusBundle::class => ['all' => true],
     Symfony\UX\Translator\UxTranslatorBundle::class => ['all' => true],
     Arkounay\Bundle\UxCollectionBundle\ArkounayUxCollectionBundle::class => ['all' => true],
+    Fpt\StripeBundle\FptStripeBundle::class => ['all' => true],
 ];

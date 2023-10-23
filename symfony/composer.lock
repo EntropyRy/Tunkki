@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "588466deaeb8703fe1bbdf3807037d48",
+    "content-hash": "41fea4a344fee3ca5990623cdd4954f3",
     "packages": [
         {
             "name": "arkounay/ux-collection",
-            "version": "3.3.2",
+            "version": "3.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Arkounay/ux-collection.git",
-                "reference": "b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81"
+                "reference": "ae8f28982e8a7f99de7c67ab237fd650ec4762db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81",
-                "reference": "b6d1b9a4de93b37e87a5a9fb3331a5e3019e4a81",
+                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/ae8f28982e8a7f99de7c67ab237fd650ec4762db",
+                "reference": "ae8f28982e8a7f99de7c67ab237fd650ec4762db",
                 "shasum": ""
             },
             "require": {
@@ -51,9 +51,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Arkounay/ux-collection/issues",
-                "source": "https://github.com/Arkounay/ux-collection/tree/3.3.2"
+                "source": "https://github.com/Arkounay/ux-collection/tree/3.3.3"
             },
-            "time": "2023-10-15T16:29:33+00:00"
+            "time": "2023-10-23T06:47:17+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2001,6 +2001,70 @@
                 "source": "https://github.com/markuspoerschke/iCal"
             },
             "time": "2023-06-26T08:36:32+00:00"
+        },
+        {
+            "name": "fpt/stripe-bundle",
+            "version": "0.11",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/FabienPapet/stripe-bundle.git",
+                "reference": "1a3d65ff2fe9ba6b1e52d4c5899e5a158c422c15"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/FabienPapet/stripe-bundle/zipball/1a3d65ff2fe9ba6b1e52d4c5899e5a158c422c15",
+                "reference": "1a3d65ff2fe9ba6b1e52d4c5899e5a158c422c15",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^8.0",
+                "stripe/stripe-php": "^v7.121.0|^v8.0.0|^v9.0.0|^v10.0.0|^v11.0.0|^v12.0.0|^v13.0.0",
+                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
+                "symfony/http-client": "^5.4|^6.0|^7.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.9",
+                "phpstan/phpstan": "^1.8",
+                "phpunit/phpunit": "^9.5",
+                "symfony/browser-kit": "^5.4|^6.0|^7.0",
+                "twig/twig": "^v3.4.1"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-4": {
+                    "Fpt\\StripeBundle\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Papet",
+                    "email": "fabien.papet@gmail.com"
+                }
+            ],
+            "description": "Stripe bundle for Symfony 5.4 / 6 / 7",
+            "keywords": [
+                "bundle",
+                "php",
+                "stripe",
+                "symfony",
+                "webhook"
+            ],
+            "support": {
+                "issues": "https://github.com/FabienPapet/stripe-bundle/issues",
+                "source": "https://github.com/FabienPapet/stripe-bundle/tree/0.11"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/FabienPapet",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-10-22T12:06:31+00:00"
         },
         {
             "name": "friendsofsymfony/ckeditor-bundle",
@@ -6425,6 +6489,65 @@
                 "source": "https://github.com/stof/StofDoctrineExtensionsBundle/tree/v1.8.0"
             },
             "time": "2023-07-07T15:34:33+00:00"
+        },
+        {
+            "name": "stripe/stripe-php",
+            "version": "v13.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/stripe/stripe-php.git",
+                "reference": "a3d5c1677ef8bdba10800e7dc3825f56f573e039"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a3d5c1677ef8bdba10800e7dc3825f56f573e039",
+                "reference": "a3d5c1677ef8bdba10800e7dc3825f56f573e039",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.6.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "3.5.0",
+                "phpstan/phpstan": "^1.2",
+                "phpunit/phpunit": "^5.7 || ^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Stripe\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Stripe and contributors",
+                    "homepage": "https://github.com/stripe/stripe-php/contributors"
+                }
+            ],
+            "description": "Stripe PHP Library",
+            "homepage": "https://stripe.com/",
+            "keywords": [
+                "api",
+                "payment processing",
+                "stripe"
+            ],
+            "support": {
+                "issues": "https://github.com/stripe/stripe-php/issues",
+                "source": "https://github.com/stripe/stripe-php/tree/v13.0.0"
+            },
+            "time": "2023-10-16T20:28:45+00:00"
         },
         {
             "name": "symfony-cmf/routing",
