@@ -58,7 +58,8 @@ function snow() {
   if (time < speed) {
     time++;
   }
-  timerID = setTimeout(snow, 1000 / rate);
+  window.requestAnimationFrame(snow);
 }
 init();
-snow();
+window.requestAnimationFrame(snow);
+// snow();
