@@ -92,7 +92,6 @@ final class TicketAdmin extends AbstractAdmin
             ->add('given')
             ->add('owner')
             ->add('referenceNumber', null, ['disabled' => true])
-            ->add('recommendedBy')
             ->add('status', ChoiceType::class, [
                 'choices' => [
                     'available' => 'available',

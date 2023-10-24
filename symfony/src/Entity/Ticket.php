@@ -19,11 +19,11 @@ class Ticket implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\Event $event = null;
+    private ?Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
-    private ?\App\Entity\Member $owner = null;
+    private ?Member $owner = null;
 
     #[ORM\Column(type: 'integer')]
     private ?int $price = null;
@@ -34,9 +34,6 @@ class Ticket implements \Stringable
     #[ORM\Column(type: 'string', length: 255)]
     #[Assert\Choice(choices: Ticket::STATUSES)]
     private string $status = 'available';
-
-    #[ORM\OneToOne(targetEntity: Member::class, cascade: ['persist', 'remove'])]
-    private ?\App\Entity\Member $recommendedBy = null;
 
     /**
      * @Gedmo\Timestampable(on="update")
@@ -121,18 +118,6 @@ class Ticket implements \Stringable
     public function setStatus(string $status): self
     {
         $this->status = $status;
-
-        return $this;
-    }
-
-    public function getRecommendedBy(): ?Member
-    {
-        return $this->recommendedBy;
-    }
-
-    public function setRecommendedBy(?Member $recommendedBy): self
-    {
-        $this->recommendedBy = $recommendedBy;
 
         return $this;
     }
