@@ -1,6 +1,5 @@
 {
   "devDependencies": {
-    "@a2lix/symfony-collection": "^0.6.1",
     "@arkounay/ux-collection": "file:vendor/arkounay/ux-collection/Resources/assets",
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.9",
