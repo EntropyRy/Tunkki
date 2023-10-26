@@ -664,7 +664,7 @@ final class EventAdmin extends AbstractAdmin
             $event->setLocation($kerde);
         }
         if (is_null($event->getUrl())) {
-            $event->setUrl($this->slug->slug($event->getNimi()));
+            $event->setUrl($this->slug->slug($event->getNimi())->lower()->toString());
         }
     }
     public function preUpdate($event): void
