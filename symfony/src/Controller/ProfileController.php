@@ -89,7 +89,7 @@ class ProfileController extends AbstractController
             ->subject($email_content->getSubject())
             ->htmlTemplate('emails/member.html.twig')
             ->context([
-                'body' => $email_content,
+                'body' => $email_content->getBody(),
             ]);
         $mailer->send($email);
     }
