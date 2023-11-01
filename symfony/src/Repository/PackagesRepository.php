@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Package;
+use App\Entity\WhoCanRentChoice;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -12,7 +13,7 @@ class PackagesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Package::class);
     }
-    public function getPackageChoicesWithPrivileges(string $privileges): mixed
+    public function getPackageChoicesWithPrivileges(?WhoCanRentChoice $privileges): mixed
     {
         $queryBuilder = $this->createQueryBuilder('p')
             ->andWhere('p.rent >= 0.00')
