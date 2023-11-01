@@ -1,0 +1,5 @@
+{% extends event.template %}
+{% use 'pieces/event.html.twig' %}
+{% block content %}
+{{ products|join(',') }}
+{% endblock %}

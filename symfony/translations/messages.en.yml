@@ -103,7 +103,12 @@ logged_in_as: You are logged in as
 stream:
   command:
     successful: Stream command OK
+page:
+  title:
+    checkout: Checkout
 block:
+  tickets:
+    name: Your tickets
   stats:
     name: Statistics
     members: Members

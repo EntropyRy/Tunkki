@@ -42,7 +42,7 @@ final class EmailAdminController extends CRUDController
         if ($subject && $body && $event) {
             if ($purpose == 'rsvp') {
                 $rsvps = $event->getRSVPs();
-                if ((is_countable($rsvps) ? count($rsvps) : 0) > 0) {
+                if (count($rsvps) > 0) {
                     foreach ($rsvps as $rsvp) {
                         $to = $rsvp->getAvailableEmail();
                         $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());

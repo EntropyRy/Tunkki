@@ -62,7 +62,7 @@
 </div>
 {% endblock %}
 
-{% block nav %}
+{% block test_nav %}
 {% apply spaceless %}
 {% set el = ['home', 'info', 'tickets', 'artists', 'timetable'] %}
 <nav>
@@ -82,6 +82,34 @@
   </div>
 </nav>
 {% endapply %}
+{% endblock %}
+
+{% block nav %}
+{% set current_url = app.request.pathinfo %}
+{% set el = {
+  'home': block('event_path'),
+  'info': null,
+  'tickets': block('event_path_shop'),
+  'artists': block('event_path_artists'),
+  'timetable': null
+  } %}
+{% apply spaceless %}
+<nav>
+  {% for name, path in el %}
+  {% if path is not null %}
+  <a href={{ path }}
+    type="button"
+    aria-selected="{{ block('active_url') }}"
+    class="btn btn-lg btn-outline-nav w-100 {% if block('active_url') == 'true' %}active{% endif %}"
+  >{{ ('e30v.nav.' ~ name)|trans }}</a>
+  {% endif %}
+  {% endfor %}
+</nav>
+{% endapply %}
+{% endblock %}
+
+{% block active_url %}
+{% if current_url == path %}true{% else %}false{% endif %}
 {% endblock %}
 
 {% block content %}

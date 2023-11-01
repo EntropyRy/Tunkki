@@ -1,6 +1,6 @@
 {% extends 'fullcolumn.html.twig' %}
 {% block title %}
-{{member.name}} | Entropy ry
+{{ member.name }} | Entropy ry
 {% endblock %}
 
 {% block content %}
@@ -9,12 +9,13 @@
 {% endif %}
 <div class="row">
 <div class="col-sm-4">
-    {{ sonata_block_render({'type':'entropy.block.member.info'}) }}
-    {{ sonata_block_render({'type':'entropy.block.compensations'}) }}
+    {{ sonata_block_render({'type': 'entropy.block.member.info'}) }}
+    {{ sonata_block_render({'type': 'entropy.block.compensations'}) }}
 </div>
 <div class="col-sm-8">
-    {{ sonata_block_render({'type':'entropy.block.member.situation'}) }}
-    {{ sonata_block_render({'type':'entropy.block.email_lists'}) }}
+    {{ sonata_block_render({'type': 'entropy.block.member.situation'}) }}
+    {{ sonata_block_render({'type': 'entropy.block.email_lists'}) }}
+    {{ sonata_block_render({'type': 'entropy.block.tickets'}) }}
 </div>
 </div>
 {% endblock %}

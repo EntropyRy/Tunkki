@@ -1,4 +1,4 @@
-{% extends 'event.html.twig' %}
+{% extends event.template %}
 {% block title %}
 {% set title = event.NameByLang(app.request.locale) ~ ' - ' ~ event.EventDate|date('d.m.Y, H:i') %}
 {{ title }} - {{ 'Artists'|trans }} | Entropy ry
@@ -6,7 +6,7 @@
 
 {% block meta %}
 {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
-{% if (event.published and event.publishDate < date('now')) %}
+{% if event.isPublished %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="index, follow">
     <meta charset="UTF-8">
@@ -42,7 +42,9 @@
     {% if event is not null and visible %}
     <div class="row">
         <div class="col">
+            {% if event.template == 'event.html.twig' %}
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
+            {% endif %}
             {{ block('bios') }}
             {% if block('vj_bios')|length > 0 %}
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - VJ {{ 'Artists'|trans }}</h1>
@@ -52,7 +54,9 @@
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
             {{ block('art_bios') }}
             {% endif %}
-            <h1>Back to <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
+            {% if event.template == 'event.html.twig' %}
+            <h1>{{ 'Back to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
+            {% endif %}
         </div>
     </div>
     {% else %}

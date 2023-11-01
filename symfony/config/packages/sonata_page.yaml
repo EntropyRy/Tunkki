@@ -66,12 +66,16 @@ sonata_page:
     - entropy_event_ticket_check
     - entropy_event_responsible
     - entropy_event_artists
+    - entropy_event_shop
     - entropy_event_happening_create
     - entropy_event_happening_edit
     - entropy_event_happening_show
+    - event_stripe_checkouts
+    - stripe_complete
   ignore_uri_patterns:
     - ^/admin\/
     - ^/api\/
+    - ^/stripe\/
 
   default_template: default
   templates:

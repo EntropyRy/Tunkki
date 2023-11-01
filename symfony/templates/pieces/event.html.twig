@@ -74,6 +74,22 @@
 {% endapply %}
 {% endblock %}
 
+{% block event_path_shop %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_shop', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
+{% block event_path_artists %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
 {% block published_and_updated %}
 {% apply spaceless %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}

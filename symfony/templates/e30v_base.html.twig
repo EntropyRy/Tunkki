@@ -22,8 +22,10 @@
                 {{ encore_entry_link_tags('e30v', null, 'e30v') }}
             {% endblock %}
             {% block sonata_page_javascripts %}
+                <script src="https://js.stripe.com/v3/" data-turbo-track="reload" crossorigin="anonymous"></script>
                 {{ encore_entry_script_tags('e30v', null, 'e30v') }}
             {% endblock %}
+
         </head>
     {% endblock %}
 
@@ -51,56 +53,7 @@
                             {{ 'Dashboard'|trans }}
                         </a>
                     </li>
-                    {% set sites = sonata_page.siteavailables %}
-                    {% if sites|length > 1 and site is defined %}
-                        <li class="dropdown nav-item">
-                            <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                {% for site in sites %}
-                                    <li class="dropdown-item"><a href="{{ site.url ? site.url : '/' }}">{{ site.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                    <li class="dropdown nav-item">
-                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            {% if page is defined %}
-                                <li class="dropdown-item">
-<a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a>
-                                </li>
-                                <li class="dropdown-item">
-<a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a>
-                                </li>
-                                <div class="dropdown-divider"></div>
-                            {% endif %}
-
-                            <li class="dropdown-item"><a href="{{ sonata_page_admin.generateUrl('list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
-                        </ul>
-                    </li>
-                    {% if page is defined and event is not defined %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
-                                <i class="fa fa-magic"></i>
-                                {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if page is defined and page.edited %}
-                        <li class="nav-item">
-                            <span class="nav-link" style="color:red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span>
-                        </li>
-                    {% endif %}
-                    {% if page is defined and not page.enabled %}
-                        <li class="nav-item">
-                            <span class="nav-link" style="background: red;">
-                                <strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em>
-                                </strong>
-                            </span>
-                        </li>
-                    {% endif %}
                 {% endif %}
-
                 {% if app.user and is_granted('IS_IMPERSONATOR') %}
                     <li class="nav-item"><a  class="nav-link" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle') }}</a></li>
                 {% endif %}

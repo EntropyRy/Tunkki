@@ -247,6 +247,9 @@ body {
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $abstractEn = null;
 
+    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'event')]
+    private Collection $products;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -375,6 +378,15 @@ body {
 
         return $this;
     }
+
+    public function isPublished(): bool
+    {
+        $now = new \DateTime();
+        if ($this->published == true && $this->publishDate < $now) {
+            return true;
+        }
+        return false;
+    }
     public function __construct()
     {
         $this->publishDate = new \DateTime();
@@ -387,6 +399,7 @@ body {
         $this->notifications = new ArrayCollection();
         $this->happenings = new ArrayCollection();
         $this->nakkiResponsibleAdmin = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1398,9 +1411,9 @@ body {
         return $this;
     }
 
-    public function getTemplate(): ?string
+    public function getTemplate(): string
     {
-        return $this->template;
+        return $this->template ? $this->template : 'event.html.twig';
     }
 
     public function setTemplate(?string $template): static
@@ -1438,5 +1451,32 @@ body {
     {
         $func = 'abstract' . ucfirst((string) $lang);
         return $this->{$func};
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->addEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            $product->removeEvent($this);
+        }
+
+        return $this;
     }
 }

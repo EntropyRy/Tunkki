@@ -136,6 +136,30 @@ class EventController extends Controller
     }
     #[Route(
         path: [
+            'fi' => '/{year}/{slug}/kauppa',
+            'en' => '/{year}/{slug}/shop',
+        ],
+        name: 'entropy_event_shop',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventShop(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        $products = $event->getProducts();
+        return $this->render('event/shop.html.twig', [
+            'products' => $products,
+            'event' => $event,
+        ]);
+    }
+    #[Route(
+        path: [
             'fi' => '/{year}/{slug}/artistit',
             'en' => '/{year}/{slug}/artists',
         ],
@@ -149,18 +173,17 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->getPublished() && is_null($user)) {
+        if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        return $this->render('artists.html.twig', [
+        return $this->render('event/artists.html.twig', [
             'event' => $event,
         ]);
     }
     private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void
     {
-        $now = new \DateTime();
         // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
-        if ($event->getPublished() && $event->getPublishDate() < $now) {
+        if ($event->isPublished()) {
             $title = $event->getNameByLang($lang) . ' - ' . $event->getEventDate()->format('d.m.Y, H:i');
             if ($page) {
                 $page->setTitle($title);

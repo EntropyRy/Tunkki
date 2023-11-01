@@ -1,0 +1,7 @@
+{% extends event.template %}
+
+{% block title %}{{ 'page.title.checkout'|trans }} | Entropy ry{% endblock %}
+
+{% block content %}
+<div {{ stimulus_controller('stripe', {'publicKey': publicKey, 'clientSecret': stripeSession.client_secret}) }}></div>
+{% endblock %}

@@ -70,6 +70,12 @@ sonata_admin:
           - entropy.admin.menu
           - sonata.media.admin.media
           - sonata.media.admin.gallery
+      sonata.admin.group.shop:
+        label: Shop
+        icon: '<i class="fa fa-archive"></i>'
+        items:
+          - admin.product
+        roles: [SONATA_SUPER_ADMIN, MEMBERS]
       sonata.admin.group.members:
         label: Members
         icon: '<i class="fa fa-users"></i>'
