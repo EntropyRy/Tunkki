@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Form\CartType;
+use App\Form\e30vCartType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -153,9 +155,11 @@ class EventController extends Controller
             throw $this->createAccessDeniedException('');
         }
         $products = $event->getProducts();
+        $form = $this->createForm(e30vCartType::class);
         return $this->render('event/shop.html.twig', [
             'products' => $products,
             'event' => $event,
+            'form' => $form
         ]);
     }
     #[Route(

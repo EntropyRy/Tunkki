@@ -1,5 +1,7 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-{{ products|join(',') }}
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
 {% endblock %}

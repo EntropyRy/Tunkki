@@ -461,5 +461,5 @@ services:
           controller: App\Controller\ProductAdminController,
           manager_type: orm,
           group: admin,
-          label: Product,
+          label: Products,
         }
