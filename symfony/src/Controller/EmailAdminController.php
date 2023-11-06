@@ -22,7 +22,7 @@ final class EmailAdminController extends CRUDController
             $img = $event->getPicture();
         }
         $admin = $this->admin;
-        return $this->renderWithExtraParams('emails/email.html.twig', [
+        return $this->render('emails/admin_preview.html.twig', [
             'body' => $email->getBody(),
             'email' => $email,
             'admin' => $admin,

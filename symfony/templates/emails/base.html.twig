@@ -68,22 +68,7 @@
 </td>
 </tr>
 </table>
-{% if admin is defined and admin.isChild %}
-<style>
-.button {
-  background-color: #4CAF50; /* Green */
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: block;
-  font-size: 16px;
-  width: 80%;
-  margin: 40px auto;
-}
-</style>
-    <a class="button" href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a></p>
-{% endif %}
+{% block admin_send %}
+{% endblock %}
 </body></html>
 

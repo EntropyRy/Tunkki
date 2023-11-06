@@ -1,0 +1,26 @@
+{% extends 'emails/base.html.twig' %}
+{% block content %}
+    <div>
+        {{ body|raw }}
+    </div>
+{% endblock %}
+
+{% block admin_send %}
+{% if admin is defined and admin.isChild %}
+<style>
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  width: 80%;
+  margin: 40px auto;
+}
+</style>
+    <a class="button" href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a></p>
+{% endif %}
+{% endblock %}
