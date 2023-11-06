@@ -57,9 +57,9 @@ class Product
     /**
      * @return array<string,?string>
      */
-    public function getLineItems(): array
+    public function getLineItems(?int $quantity): array
     {
-        if (count($this->customAmount) > 0) {
+        if (is_countable($this->customAmount) && count($this->customAmount) > 0) {
             return [
                 'price' => $this->stripePriceId,
                 'quantity' => 1
@@ -67,7 +67,7 @@ class Product
         }
         return [
             'price' => $this->stripePriceId,
-            'quantity' => 1,
+            'quantity' => $quantity,
         ];
     }
 

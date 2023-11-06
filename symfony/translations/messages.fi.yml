@@ -499,4 +499,8 @@ e30v:
     timetable: Aikataulu
   buy_tickets: Osta liput tästä
   years: vuotta
-
+  buy: Osta
+  gdpr: Käytämme vain välttämättömiä keksejä jotta kirjautuminen sekä Stripe integrattio toimii.
+  cart:
+    email:
+      help: Kannattaa kirjautua <a href="/login">sisään</a> niin liitämme lipun tiliisi

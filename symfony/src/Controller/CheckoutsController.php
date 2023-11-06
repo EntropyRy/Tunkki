@@ -31,14 +31,16 @@ class CheckoutsController extends AbstractController
         $client = $stripe->getClient();
         $returnUrl = $stripe->getReturnUrl();
         $products = $event->getProducts();
+        $session = $request->getSession();
+        $quantity = $session->get('quantity');
+        $email = $session->get('email');
         $expires = new \DateTime('+30min');
         $lineItems = [];
-        $session = null;
         foreach ($products as $product) {
-            $lineItems[] = $product->getLineItems();
+            $lineItems[] = $product->getLineItems($quantity);
         }
         if (count($lineItems) > 0) {
-            $session = $client->checkout->sessions->create([
+            $stripeSession = $client->checkout->sessions->create([
                 'ui_mode' => 'embedded',
                 'line_items' => [$lineItems],
                 'mode' => 'payment',
@@ -46,13 +48,15 @@ class CheckoutsController extends AbstractController
                 'automatic_tax' => [
                     'enabled' => true,
                 ],
-                'expires_at' => $expires->format('u'),
+                'customer_email' => $email,
+                'expires_at' => $expires->format('U'),
                 'locale' => $request->getLocale()
             ]);
             $checkout = new Checkout();
-            $checkout->setStripeSessionId($session['id']);
+            $checkout->setStripeSessionId($stripeSession['id']);
+            $checkout->setEmail($email);
             $cRepo->add($checkout, true);
-            $request->getSession()->set('StripeSessionId', $session('id'));
+            $session->set('StripeSessionId', $session['id']);
         }
         return $this->render('event/checkouts.html.twig', [
             'stripeSession' => $session,

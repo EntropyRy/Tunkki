@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-use App\Form\CartType;
 use App\Form\e30vCartType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -147,15 +146,32 @@ class EventController extends Controller
         ]
     )]
     public function eventShop(
+        Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
     ): Response {
         $user = $this->getUser();
+        $email = null;
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+        if ($user != null) {
+            assert($user instanceof User);
+            $email = $user->getEmail();
+        }
         $products = $event->getProducts();
-        $form = $this->createForm(e30vCartType::class);
+        $form = $this->createForm(e30vCartType::class, ['email' => $email], []);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+            $session = $request->getSession();
+            $session->set('email', $data['email']);
+            $session->set('quantity', $data['quantity']);
+            return $this->redirectToRoute('event_stripe_checkouts', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
+        }
         return $this->render('event/shop.html.twig', [
             'products' => $products,
             'event' => $event,

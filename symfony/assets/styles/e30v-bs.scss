@@ -3,6 +3,7 @@
 $blue: #8ba0ff;
 $dark-blue: #3f3c8a;
 $pink: #ff61d5;
+$green: #00ff80;
 
 $primary: $pink;
 $secondary: #b3b3b3;
@@ -18,7 +19,7 @@ $btn-whitespace: "nowrap";
 $body-bg: $blue;
 $body-color: #fff;
 $border-radius: 4em;
-
+$link-color: $green;
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/variables-dark";
@@ -116,6 +117,8 @@ body {
     max-width: 100%;
     overflow: hidden;
     margin-top: 10%;
+    font-weight: 800;
+    font-style: italic;
     border-bottom: 2px solid #fff;
     .marquee {
       white-space: nowrap;
@@ -144,7 +147,22 @@ body {
   border-radius: 2em;
   text-transform: uppercase;
   backdrop-filter: blur(10px);
+  font-weight: bolder;
   @include button-outline-variant($white, $pink, $white, $white);
+  border-style: solid;
+  border-color: $white;
+  border-top-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  &:first-of-type {
+    border-top-width: 2px;
+    border-bottom-width: 1px;
+  }
+  &:last-of-type {
+    border-top-width: 1px;
+    border-bottom-width: 2px;
+  }
   &.active {
     color: $white;
     background: transparent;

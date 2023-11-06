@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -14,26 +13,22 @@ class e30vCartType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $disabled = false;
+        if ($options['data']['email']) {
+            $disabled = true;
+        }
         $builder
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'disabled' => $disabled,
+                'data' => $options['data']['email'],
+                'help' => 'e30v.cart.email.help',
+                'help_html' => true
+            ])
             ->add('quantity', IntegerType::class, [
                 'constraints' => [new Positive()],
                 'attr' => [
                     'min' => 1
                 ]
-            ])
-            ->add('donationAmount', ChoiceType::class, [
-                'choices' => [
-                    '0€' => 0,
-                    '5€' => 500,
-                    '10€' => 1000,
-                    '15€' => 1500,
-                    '20€' => 2000,
-                    '30€' => 3000
-                ],
-                'label_attr' => ['class' => 'radio-inline'],
-                'expanded' => true,
-                'multiple' => false
             ]);
     }
 

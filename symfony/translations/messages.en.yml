@@ -389,6 +389,7 @@ calendar:
   url_generated: Link generated
 
 e30v:
+  gdpr: We only use nessessary cookis so that login and Stripe integarion works.
   nav:
     home: entropy 30 years
     info: info
@@ -397,3 +398,4 @@ e30v:
     timetable: Timetable
   years: years
   buy_tickets: Buy tickets here
+  buy: Buy

@@ -42,7 +42,6 @@
           </div>
           <div class="mt-4 mt-xl-0">
           {{ block('content') }}
-          {{ block('buy_button') }}
           </div>
           <div class="row">
             <div class="col-6">
@@ -58,6 +57,7 @@
   </div>
   <footer>
     {{ block('links') }}
+    <small>{{ 'e30v.gdpr'|trans }}</small>
   </footer>
 </div>
 {% endblock %}
@@ -117,6 +117,7 @@
 <div class="tab-content" id="nav-tabContent">
   <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
     {{ block('content_home', input) ?? '' }}
+    {{ block('buy_button') }}
   </div>
   <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
     {{ block('content_info', input) ?? '' }}
@@ -176,4 +177,16 @@
     style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}
 "></canvas>
 {% endif %}
+{% endblock %}
+
+{% block e30vInfos %}
+{% set bio_attribute = 'bio_attribute'|trans %}
+{% set content_attr = 'content_attribute'|trans %}
+    {% for info in infos %}
+        {% if info.StartTime is not empty %}
+            {% set artist = info.artistClone %}
+            {% set name = (artist.name|split(' for')).0 %}
+            {{ block('cycle') }}
+        {% endif %}
+    {% endfor %}
 {% endblock %}
