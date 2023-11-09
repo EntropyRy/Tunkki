@@ -4,40 +4,12 @@
 {{ title }} - {{ 'Artists'|trans }} | Entropy ry
 {% endblock %}
 
-{% block meta %}
-{# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
-{% if event.isPublished %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="robots" content="index, follow">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-Ua-Compatible" content="IE=EDGE">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    {% if event.Picture is not empty %}
-        {% set img = app.request.getSchemeAndHttpHost() ~ sonata_path(event.Picture, 'normal') %}
-        <meta property="og:image" content="{{ img }}">
-        <meta property="twitter:image" content="{{ img }}">
-        <meta property="og:image:height" content="">
-        <meta property="og:image:widht" content="">
-    {% endif %}
-    <meta property="og:site_name" content="entropy.fi">
-    <meta property="og:title" content="{{ block('title') }}">
-    <meta property="og:description" content="{{ event.getAbstract(app.request.locale) }}">
-    <meta property="twitter:title" content="{{ block('title') }}">
-    <meta property="twitter:desctiption" content="{{ event.getAbstract(app.request.locale) }}">
-    <meta property="twitter:card" content="summary_large_image">
-    {% if event.type != 'announcement' %}
-        <meta property="og:type" content="event">
-        <meta property="event:start_time" content="{{ event.EventDate|date('Y-m-d H:i') }}">
-    {% endif %}
-{% endif %}
-{% endblock %}
-
 {% use 'pieces/event.html.twig' %}
 {% block content %}
     {% if app.user %}
         {% set visible = true %}
     {% else %}
-        {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+        {% set visible = app.user is null and event.isPublished %}
     {% endif %}
     {% if event is not null and visible %}
     <div class="row">
@@ -45,6 +17,8 @@
             {% if event.template == 'event.html.twig' %}
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
             {% endif %}
+            {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+            {{ block('content_artists', input) ?? '' }}
             {{ block('bios') }}
             {% if block('vj_bios')|length > 0 %}
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - VJ {{ 'Artists'|trans }}</h1>
@@ -59,14 +33,5 @@
             {% endif %}
         </div>
     </div>
-    {% else %}
-        <div clas="col-12">
-            <br>
-            <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
-            <div class="col-6 mx-auto">
-               <a class="btn btn-primary w-100" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
-            </div>
-            <br>
-        </div>
     {% endif %}
 {% endblock %}

@@ -2,49 +2,39 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\Event;
-use App\Form\e30vCartType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sonata\PageBundle\CmsManager\CmsManagerSelector;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sonata\SeoBundle\Seo\SeoPageInterface;
-use App\Repository\TicketRepository;
-use App\Repository\EventRepository;
-use Sonata\MediaBundle\Provider\ImageProvider;
+use App\Entity\Product;
+use App\Entity\Ticket;
 use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\RSVPType;
+use App\Form\CartType;
+use App\Helper\AppStripeClient;
+use App\Helper\ReferenceNumber;
+use App\Repository\CartRepository;
+use App\Repository\TicketRepository;
+use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
     public function oneId(
-        Request $request,
-        CmsManagerSelector $cms,
-        TranslatorInterface $trans,
-        SeoPageInterface $seo,
-        EventRepository $eRepo
+        Event $event,
     ): Response {
-        $eventid = $request->get('id');
-        $lang = $request->getLocale();
-        if (empty($eventid)) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $event = $eRepo->findOneBy(['id' => $eventid]);
-        if (!$event) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        if (empty($event->getUrl()) && $event->getExternalUrl()) {
-            return new RedirectResponse("/");
-        }
         if ($event->getUrl()) {
             if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
@@ -54,46 +44,23 @@ class EventController extends Controller
                 'slug' => $event->getUrl()
             ]);
         }
-        $page = $cms->retrieve()->getCurrentPage();
-        $this->setMetaData($lang, $event, $page, $seo, null);
         $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
         return $this->render($template, [
             'event' => $event,
-            'page' => $page
         ]);
     }
     public function oneSlug(
         Request $request,
-        CmsManagerSelector $cms,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
         TranslatorInterface $trans,
-        SeoPageInterface $seo,
-        EventRepository $eRepo,
         TicketRepository $ticketRepo,
-        ImageProvider $mediaPro,
         EntityManagerInterface $em
     ): Response {
-        $mediaUrl = null;
-        $slug = $request->get('slug');
-        $year = $request->get('year');
-        if (empty($slug)) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $event = $eRepo->findEventBySlugAndYear($slug, $year);
-        if (!$event) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $lang = $request->getLocale();
         $ticket = null;
         $form = null;
         $ticketCount = null;
         $user = $this->getUser();
-        $page = $cms->retrieve()->getCurrentPage();
-        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
-            $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
-            $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
-        }
-        $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
-
         if ($event->getTicketsEnabled() && $user) {
             assert($user instanceof User);
             $member = $user->getMember();
@@ -123,13 +90,12 @@ class EventController extends Controller
                 }
             }
         }
-        if (!$event->getPublished() && is_null($user)) {
+        if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
         $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
         return $this->render($template, [
             'event' => $event,
-            'page' => $page,
             'rsvpForm' => $form,
             'ticket' => $ticket,
             'ticketsAvailable' => $ticketCount,
@@ -149,24 +115,39 @@ class EventController extends Controller
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
+        CartRepository $cartR
     ): Response {
         $user = $this->getUser();
-        $email = null;
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+        $email = null;
         if ($user != null) {
             assert($user instanceof User);
             $email = $user->getEmail();
         }
         $products = $event->getProducts();
-        $form = $this->createForm(e30vCartType::class, ['email' => $email], []);
+        $session = $request->getSession();
+        $cartId = $session->get('cart');
+        if (!is_null($cartId)) {
+            $cart = $cartR->findOneBy(['id' => $cartId]);
+            if (is_null($cart)) {
+                $cart = new Cart();
+            }
+        } else {
+            $cart = new Cart();
+        }
+        $cart->setProducts($products);
+        if ($cart->getEmail() == null) {
+            $cart->setEmail($email);
+        }
+        $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $data = $form->getData();
-            $session = $request->getSession();
-            $session->set('email', $data['email']);
-            $session->set('quantity', $data['quantity']);
+            $cart = $form->getData();
+            $cartR->save($cart, true);
+
+            $session->set('cart', $cart->getId());
             return $this->redirectToRoute('event_stripe_checkouts', [
                 'year' => $event->getEventDate()->format('Y'),
                 'slug' => $event->getUrl()
@@ -177,6 +158,120 @@ class EventController extends Controller
             'event' => $event,
             'form' => $form
         ]);
+    }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/valmis',
+            'en' => '/{year}/{slug}/complete',
+        ],
+        name: 'entropy_event_shop_complete',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function complete(
+        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+        AppStripeClient $stripe,
+        CheckoutRepository $cRepo,
+    ): Response {
+        $sessionId = $request->get('session_id');
+        $stripeSession = $stripe->getCheckoutSession($sessionId);
+        if ($stripeSession->status == 'open') {
+            $this->addFlash('warning', 'e30v.checkout.open');
+            return $this->redirectToRoute('event_stripe_checkouts', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
+        }
+        $qrs = [];
+        if ($stripeSession->status == 'complete') {
+            $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
+            $cart = $checkout->getCart();
+            $email = $cart->getEmail();
+            $products = $cart->getProducts();
+            $tickets = [];
+            if ($checkout->getStatus() == 1) {
+                foreach ($products as $cartItem) {
+                    $product = $cartItem->getProduct();
+                    $quantity = $cartItem->getQuantity();
+                    if ($product->isTicket()) {
+                        $tickets = $this->giveEventTicketToEmail($event, $product, $quantity, $email);
+                    }
+                }
+                $qrGenerator = new Generator();
+                foreach ($tickets as $ticket) {
+                    $qrs[] = base64_encode($qrGenerator
+                        ->format('png')
+                        ->eye('circle')
+                        ->style('round')
+                        ->size(600)
+                        ->gradient(0, 40, 40, 40, 40, 0, 'radial')
+                        ->errorCorrection('H')
+                        ->merge('images/golden-logo.png', .2)
+                        ->generate((string)$ticket->getReferenceNumber()));
+                }
+                try {
+                    $this->sendTicketQrEmail($event->getNameByLang($request->getLocale()), $email, $qrs, $event->getPicture());
+                } catch (\Exception $e) {
+                    $this->addFlash('error', $e->getMessage());
+                }
+            }
+            $checkout->setStatus(2);
+            $cRepo->save($checkout, true);
+        }
+        return $this->render('event/shop_complete.html.twig', [
+            'event' => $event,
+            'qrs' => $qrs
+        ]);
+    }
+    public function __construct(
+        private readonly MemberRepository $memberRepo,
+        private readonly TicketRepository $ticketRepo,
+        private readonly ReferenceNumber $rn,
+        private readonly MailerInterface $mailer
+    ) {
+    }
+    private function sendTicketQrEmail($eventName, $to, $qrs, $img)
+    {
+        foreach ($qrs as $x => $qr) {
+            $mail =  (new TemplatedEmail())
+                ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
+                ->to($to)
+                ->replyTo('info@entropy.fi')
+                ->subject('[' . $eventName . '] Your ticket #' . ($x + 1) . ' / Lippusi #' . ($x + 1))
+                ->htmlTemplate('emails/email.html.twig')
+                ->context(['body' => $qr, 'links' => true, 'img' => $img]);
+            $this->mailer->send($mail);
+        }
+    }
+    private function giveEventTicketToEmail(
+        Event $event,
+        Product $product,
+        int $quantity,
+        $email
+    ): array {
+        $tickets = [];
+        // check if is members email
+        $member = $this->memberRepo->getByEmail($email);
+        for ($i = 1; $i <= $quantity; $i++) {
+            $ticket = new Ticket();
+            $ticket->setEvent($event);
+            $ticket->setStripeProductId($product->getStripeId());
+            $ticket->setPrice($product->getAmount());
+            $ticket->setStatus('paid');
+            if (is_null($member)) {
+                $ticket->setEmail($email);
+            } else {
+                $ticket->setOwner($member);
+            }
+            $this->ticketRepo->save($ticket, true);
+            $ticket->setReferenceNumber($this->rn->calculateReferenceNumber($ticket, 9000, 909));
+            $this->ticketRepo->save($ticket, true);
+            $tickets[] = $ticket;
+        }
+        return $tickets;
     }
     #[Route(
         path: [

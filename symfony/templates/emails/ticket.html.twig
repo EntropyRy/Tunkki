@@ -1,6 +1,7 @@
 {% extends 'emails/base.html.twig' %}
 {% block content %}
     <div>
+        <img class="w-100" src="data:image/png;base64, {{ qr }}">
         {{ body|raw }}
     </div>
 {% endblock %}

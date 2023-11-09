@@ -139,6 +139,8 @@ block:
 menu:
   logon_to: Log on to
 event:
+  meta:
+    keywords: Entropy, music, association, culture, nonprofit, event
   edit: Edit
   not_public: not public
   only_for_members: Event only shown to members
@@ -294,6 +296,7 @@ rsvp:
     <a href="/rsvp-rekisteriseloste">here</a>.
   closed: Sign Up Closed
 ticket:
+  ticket: Ticket
   check: Ticket Check
   form:
     reserve: Reserve
@@ -399,3 +402,7 @@ e30v:
   years: years
   buy_tickets: Buy tickets here
   buy: Buy
+  cart:
+    email:
+      help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
+    empty: Your cart is empty

@@ -209,6 +209,8 @@ page:
   title:
     checkout: Kassa
 event:
+  meta:
+    keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
   edit: Muokkaa
   only_for_members: tapahtuma näkyy vain jäsenille
   not_public: ei julkinen
@@ -371,6 +373,7 @@ rsvp:
     alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
   closed: Ilmoittautuminen suljettu
 ticket:
+  ticket: Lippu
   form:
     reserve: Varaa
     reserve_and_recommend: Varaa ja suosittele
@@ -502,5 +505,6 @@ e30v:
   buy: Osta
   gdpr: Käytämme vain välttämättömiä keksejä jotta kirjautuminen sekä Stripe integrattio toimii.
   cart:
+    empty: Ostoskorisi on tyhjä
     email:
       help: Kannattaa kirjautua <a href="/login">sisään</a> niin liitämme lipun tiliisi

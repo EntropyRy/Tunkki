@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Event;
 
 /**
  * @extends ServiceEntityRepository<Product>
@@ -27,6 +28,16 @@ class ProductRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    public function findEventServiceFee(Event $event): ?Product
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.event = :event')
+            ->andWhere('p.serviceFee = true')
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
     //    /**
     //     * @return Product[] Returns an array of Product objects

@@ -247,7 +247,7 @@ body {
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $abstractEn = null;
 
-    #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'event')]
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
     private Collection $products;
 
     public function getId(): ?int
@@ -1465,7 +1465,7 @@ body {
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->addEvent($this);
+            $product->setEvent($this);
         }
 
         return $this;
@@ -1474,9 +1474,23 @@ body {
     public function removeProduct(Product $product): static
     {
         if ($this->products->removeElement($product)) {
-            $product->removeEvent($this);
+            // set the owning side to null (unless already changed)
+            if ($product->getEvent() === $this) {
+                $product->setEvent(null);
+            }
         }
 
         return $this;
+    }
+
+    public function getTicketTypeCount($id)
+    {
+        $return = 0;
+        foreach ($this->getTickets() as $ticket) {
+            if ($ticket->getStripeProductId() == $id) {
+                $return += 1;
+            }
+        }
+        return $return;
     }
 }

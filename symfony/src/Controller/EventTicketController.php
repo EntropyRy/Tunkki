@@ -136,12 +136,15 @@ class EventTicketController extends Controller
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'ticket' => $ticket,
             'form' => $form,
-            'qr' => $qr
+            'qr' => base64_encode($qr
+                ->format('png')
+                ->style('round')
                 ->eye('circle')
                 ->size(600)
                 ->gradient(0, 40, 40, 40, 40, 0, 'radial')
                 ->errorCorrection('H')
-                ->generate((string)$ticket->getReferenceNumber())
+                ->merge('images/golden-logo.png', .2)
+                ->generate((string)$ticket->getReferenceNumber()))
         ]);
     }
 

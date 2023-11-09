@@ -2,6 +2,7 @@
 
 namespace App\Helper;
 
+use App\Entity\Event;
 use App\Entity\Product;
 use Stripe\StripeClient;
 use Stripe\Product as StripeProduct;
@@ -22,9 +23,17 @@ class AppStripeClient
         return new StripeClient($this->bag->get('stripe_secret_key'));
     }
 
-    public function getReturnUrl(): string
+    public function getReturnUrl(Event $event): string
     {
-        return $this->urlG->generate('stripe_complete', [], $this->urlG::ABSOLUTE_URL);
+        return $this->urlG->generate(
+            'entropy_event_shop_complete',
+            [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+
+            ],
+            $this->urlG::ABSOLUTE_URL
+        ) . '?session_id={CHECKOUT_SESSION_ID}';
     }
 
     public function updateOurProduct(
@@ -45,19 +54,18 @@ class AppStripeClient
         if ($stripeProduct['active'] == 0 || $stripePrice['active'] == 0) {
             $active = false;
         }
-        if (($stripePrice['custom_unit_amount'] != null)) {
-            $product->setCustomAmount($stripePrice['custom_unit_amount']->toArray());
-        } else {
-            $product->setAmount($stripePrice['unit_amount']);
-        }
+        $product->setAmount($stripePrice['unit_amount']);
         $product->setActive($active);
         $product->setName($stripeProduct['name']);
         $product->setStripeId($stripeProduct['id']);
         $product->setStripePriceId($stripePrice['id']);
-        $product->setStripeData([
-            'product' => $stripeProduct->toArray(),
-            'price' => $stripePrice->toArray()
-        ]);
         return $product;
+    }
+
+    public function getCheckoutSession($sessionId)
+    {
+        $stripe = $this->getClient();
+        $session = $stripe->checkout->sessions->retrieve($sessionId);
+        return $session;
     }
 }

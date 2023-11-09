@@ -2,7 +2,19 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
 {{ form_start(form) }}
-{{ form_widget(form) }}
+{% for product in form.products %}
+<div class="card" {{ stimulus_controller('quantity', {'max': product.vars.value.product.max }) }}>
+  <div style="height: 0px;overflow: hidden">{{ form_row(product) }}</div>
+  <div class="row">
+    <div class="col-12">
+      <h1>{{ product.vars.value.product.name }}</h1>
+      <button {{ stimulus_action('quantity', 'minus') }} class="btn btn-primary">-</button>
+      <span {{ stimulus_target('quantity', 'quantity') }}></span>
+      <button {{ stimulus_action('quantity', 'plus') }} class="btn btn-primary">+</button>
+    </div>
+  </div>
+</div>
+{% endfor %}
 <input type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
 {{ form_end(form) }}
 {% endblock %}

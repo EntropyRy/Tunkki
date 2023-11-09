@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CheckoutRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Checkout
 {
     #[ORM\Id]
@@ -20,8 +21,27 @@ class Checkout
     #[ORM\Column]
     private ?int $status = 0;
 
-    #[ORM\Column(length: 255)]
-    private ?string $email = null;
+    #[ORM\Column]
+    private ?\DateTimeImmutable $createdAt = null;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\ManyToOne(inversedBy: 'checkouts')]
+    private ?Cart $cart = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
 
     public function __construct()
     {
@@ -56,14 +76,38 @@ class Checkout
         return $this;
     }
 
-    public function getEmail(): ?string
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->email;
+        return $this->createdAt;
     }
 
-    public function setEmail(string $email): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->email = $email;
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): static
+    {
+        $this->cart = $cart;
 
         return $this;
     }

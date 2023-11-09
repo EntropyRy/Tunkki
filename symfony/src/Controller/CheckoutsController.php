@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\CartItem;
 use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Helper\AppStripeClient;
+use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
+use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -27,19 +30,30 @@ class CheckoutsController extends AbstractController
         Event $event,
         AppStripeClient $stripe,
         CheckoutRepository $cRepo,
+        CartRepository $cartR,
+        ProductRepository $pRepo
     ): Response {
         $client = $stripe->getClient();
-        $returnUrl = $stripe->getReturnUrl();
-        $products = $event->getProducts();
+        $returnUrl = $stripe->getReturnUrl($event);
         $session = $request->getSession();
-        $quantity = $session->get('quantity');
-        $email = $session->get('email');
+        $cartId = $session->get('cart');
+        $cart = $cartR->findOneBy(['id' => $cartId]);
+        $products = $cart->getProducts();
+        $email = $cart->getEmail();
         $expires = new \DateTime('+30min');
         $lineItems = [];
-        foreach ($products as $product) {
-            $lineItems[] = $product->getLineItems($quantity);
+        foreach ($products as $cartItem) {
+            $lineItems[] = $cartItem->getLineItem(null);
         }
         if (count($lineItems) > 0) {
+            $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
+            if ($eventServiceFeeProduct != null) {
+                $cartItem = new CartItem();
+                $cartItem->setProduct($eventServiceFeeProduct);
+                $cartItem->setQuantity(1);
+                $cart->addProduct($cartItem);
+                $lineItems[] = $cartItem->getLineItem(1);
+            }
             $stripeSession = $client->checkout->sessions->create([
                 'ui_mode' => 'embedded',
                 'line_items' => [$lineItems],
@@ -54,12 +68,18 @@ class CheckoutsController extends AbstractController
             ]);
             $checkout = new Checkout();
             $checkout->setStripeSessionId($stripeSession['id']);
-            $checkout->setEmail($email);
+            $checkout->setCart($cart);
             $cRepo->add($checkout, true);
-            $session->set('StripeSessionId', $session['id']);
+            $session->set('StripeSessionId', $stripeSession['id']);
+        } else {
+            $this->addFlash('warning', 'e30v.cart.empty');
+            return $this->redirectToRoute('entropy_event_shop', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
         }
         return $this->render('event/checkouts.html.twig', [
-            'stripeSession' => $session,
+            'stripeSession' => $stripeSession,
             'event' => $event,
             'publicKey' => $this->getParameter('stripe_public_key')
         ]);

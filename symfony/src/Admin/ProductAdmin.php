@@ -24,7 +24,6 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('stripeData')
             ->add('event');
     }
 
@@ -38,8 +37,9 @@ final class ProductAdmin extends AbstractAdmin
                 'currency' => 'EUR',
                 'divisor' => 100
             ])
-            ->add('customAmount')
+            ->add('ticket')
             ->add('quantity')
+            ->add('sold')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -52,6 +52,8 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
+            ->add('serviceFee')
+            ->add('ticket')
             ->add('quantity')
             ->add('event');
     }
@@ -60,8 +62,7 @@ final class ProductAdmin extends AbstractAdmin
     {
         $show
             ->add('stripeId')
-            ->add('stripePriceId')
-            ->add('stripeData');
+            ->add('stripePriceId');
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {

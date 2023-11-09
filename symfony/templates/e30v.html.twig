@@ -1,5 +1,8 @@
 {% extends 'e30v_base.html.twig' %}
 {% use 'pieces/event.html.twig' %}
+{% use 'event/meta.html.twig' %}
+
+{% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block sonata_page_stylesheets %}
     {{ parent() }}
     <style data-turbo-track="reload">
@@ -19,7 +22,7 @@
       <div class="marquee">
         {% for i in 0..5 %}
         <p>
-            ENTROPY 30 {{ 'e30v.years'|trans }} / 3.2.2024 /
+            ENTROPY 30 {{ 'e30v.years'|trans }} / 3.2.2024 / UG /
         </p>
         {% endfor %}
       </div>
@@ -37,6 +40,7 @@
           <img width="100%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
         </div>
         <div class="col-12 col-md-7 col-xl-6 order-2 order-xl-1">
+          {% include 'flashmessages.html.twig' %}
           <div class="text-center d-none d-md-block d-xl-none">
           <img width="50%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
           </div>
@@ -53,35 +57,13 @@
           </div>
         <div>
       </div>
+      <footer>
+        {{ block('links') }}
+        <small>{{ 'e30v.gdpr'|trans }}</small>
+      </footer>
     </div>
   </div>
-  <footer>
-    {{ block('links') }}
-    <small>{{ 'e30v.gdpr'|trans }}</small>
-  </footer>
 </div>
-{% endblock %}
-
-{% block test_nav %}
-{% apply spaceless %}
-{% set el = ['home', 'info', 'tickets', 'artists', 'timetable'] %}
-<nav>
-  <div class="nav" id="nav-tab" role="tablist">
-  {% for nav in el %}
-  <button
-    id="{{ nav }}-tab"
-    data-bs-toggle="tab"
-    data-bs-target="#nav-{{ nav }}"
-    type="button"
-    role="tab"
-    aria-controls="nav-{{ nav }}"
-    aria-selected="{% if loop.first %}true{% else %}false{% endif %}"
-    class="btn btn-lg btn-outline-nav w-100 {% if loop.first %}active{% endif %}"
-  >{{ ('e30v.nav.' ~ nav)|trans }}</button>
-  {% endfor %}
-  </div>
-</nav>
-{% endapply %}
 {% endblock %}
 
 {% block nav %}
@@ -114,26 +96,8 @@
 
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-<div class="tab-content" id="nav-tabContent">
-  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-    {{ block('content_home', input) ?? '' }}
-    {{ block('buy_button') }}
-  </div>
-  <div class="tab-pane fade" id="nav-info" role="tabpanel" aria-labelledby="nav-info-tab">
-    {{ block('content_info', input) ?? '' }}
-  </div>
-  <div class="tab-pane fade" id="nav-tickets" role="tabpanel" aria-labelledby="nav-tickets-tab">
-
-    {{ block('content_tickets', input) ?? '' }}
-  </div>
-  <div class="tab-pane fade" id="nav-artists" role="tabpanel" aria-labelledby="nav-artists-tab">
-    {{ block('content_artists', input) ?? '' }}
-    {{ block('bios') }}
-  </div>
-  <div class="tab-pane fade" id="nav-timetable" role="tabpanel" aria-labelledby="nav-timetable-tab">
-    {{ block('content_timetable', input) ?? '' }}
-  </div>
-</div>
+{{ block('content_home', input) ?? '' }}
+{{ block('buy_button') }}
 {% endblock %}
 
 {% block buy_button %}
@@ -147,7 +111,7 @@
   </span>
   <span class="flex-column align-self-center">
     <div><strong>{{ 'location'|trans|upper }}</strong></div>
-    <div>TBA</div>
+    <div>UG</div>
   </span>
 </div>
 {% endblock %}

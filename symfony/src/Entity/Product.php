@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,9 +14,6 @@ class Product
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
-
-    #[ORM\Column]
-    private array $stripeData = [];
 
     #[ORM\Column(length: 255)]
     private ?string $stripeId = null;
@@ -35,42 +30,43 @@ class Product
     #[ORM\Column]
     private ?\DateTimeImmutable $updatedAt = null;
 
-    #[ORM\ManyToMany(targetEntity: Event::class, inversedBy: 'products')]
-    private Collection $event;
-
     #[ORM\Column]
-    private ?int $quantity = 50;
+    private ?int $quantity = 0;
 
     #[ORM\Column]
     private ?bool $active = true;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $customAmount = null;
-
     #[ORM\Column]
     private ?int $amount = 0;
 
-    public function __construct()
-    {
-        $this->event = new ArrayCollection();
-    }
-    /**
-     * @return array<string,?string>
-     */
-    public function getLineItems(?int $quantity): array
-    {
-        if (is_countable($this->customAmount) && count($this->customAmount) > 0) {
-            return [
-                'price' => $this->stripePriceId,
-                'quantity' => 1
-            ];
-        }
-        return [
-            'price' => $this->stripePriceId,
-            'quantity' => $quantity,
-        ];
-    }
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    private ?Event $event = null;
 
+    #[ORM\Column]
+    private ?bool $ticket = false;
+
+    #[ORM\Column]
+    private ?bool $serviceFee = false;
+
+    public function getSold(): int
+    {
+        if ($this->event) {
+            return $this->event->getTicketTypeCount($this->getStripeId());
+        }
+        return 0;
+    }
+    public function getMax(): int
+    {
+        if ($this->event && $this->ticket) {
+            $sold = $this->getSold();
+            $left = $this->quantity - $sold;
+            if ($left <= 10) {
+                return $left;
+            }
+            return 10;
+        }
+        return 0;
+    }
     public function __toString(): string
     {
         return $this->name;
@@ -92,18 +88,6 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getStripeData(): array
-    {
-        return $this->stripeData;
-    }
-
-    public function setStripeData(array $stripeData): static
-    {
-        $this->stripeData = $stripeData;
-
-        return $this;
     }
 
     public function getStripeId(): ?string
@@ -166,30 +150,6 @@ class Product
         return $this;
     }
 
-    /**
-     * @return Collection<int, Event>
-     */
-    public function getEvent(): Collection
-    {
-        return $this->event;
-    }
-
-    public function addEvent(Event $event): static
-    {
-        if (!$this->event->contains($event)) {
-            $this->event->add($event);
-        }
-
-        return $this;
-    }
-
-    public function removeEvent(Event $event): static
-    {
-        $this->event->removeElement($event);
-
-        return $this;
-    }
-
     public function getQuantity(): ?int
     {
         return $this->quantity;
@@ -214,18 +174,6 @@ class Product
         return $this;
     }
 
-    public function getCustomAmount(): ?array
-    {
-        return $this->customAmount;
-    }
-
-    public function setCustomAmount(?array $customAmount): static
-    {
-        $this->customAmount = $customAmount;
-
-        return $this;
-    }
-
     public function getAmount(): ?int
     {
         return $this->amount;
@@ -234,6 +182,42 @@ class Product
     public function setAmount(int $amount): static
     {
         $this->amount = $amount;
+
+        return $this;
+    }
+
+    public function getEvent(): ?Event
+    {
+        return $this->event;
+    }
+
+    public function setEvent(?Event $event): static
+    {
+        $this->event = $event;
+
+        return $this;
+    }
+
+    public function isTicket(): ?bool
+    {
+        return $this->ticket;
+    }
+
+    public function setTicket(bool $ticket): static
+    {
+        $this->ticket = $ticket;
+
+        return $this;
+    }
+
+    public function isServiceFee(): ?bool
+    {
+        return $this->serviceFee;
+    }
+
+    public function setServiceFee(bool $serviceFee): static
+    {
+        $this->serviceFee = $serviceFee;
 
         return $this;
     }

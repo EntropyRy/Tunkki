@@ -28,14 +28,13 @@ class StripeEventSubscriber implements EventSubscriberInterface
             StripeEvents::PRICE_DELETED => 'onPriceDeleted',
             StripeEvents::PRODUCT_UPDATED => 'onProductUpdated',
             StripeEvents::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
+            StripeEvents::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
         ];
     }
 
     public function onProductUpdated(StripeWebhook $webhook): void
     {
-        /** @var \Stripe\Event $stripeEvent */
         $stripeEvent = $webhook->getStripeObject();
-        /** @var \Stripe\Price $stripePrice */
         $stripeProduct = $stripeEvent->data->object;
         try {
             $products = $this->pRepo->findBy(['stripeId' => $stripeProduct['id']]);
@@ -49,9 +48,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
     public function onPriceCreated(StripeWebhook $webhook): void
     {
-        /** @var \Stripe\Event $stripeEvent */
         $stripeEvent = $webhook->getStripeObject();
-        /** @var \Stripe\Price $stripePrice */
         $stripePrice = $stripeEvent->data->object;
 
         try {
@@ -64,9 +61,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
     public function onPriceUpdated(StripeWebhook $webhook): void
     {
-        /** @var \Stripe\Event $stripeEvent */
         $stripeEvent = $webhook->getStripeObject();
-        /** @var \Stripe\Price $stripePrice */
         $stripePrice = $stripeEvent->data->object;
         try {
             $product = $this->pRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
@@ -78,9 +73,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
     public function onPriceDeleted(StripeWebhook $webhook): void
     {
-        /** @var \Stripe\Event $stripeEvent */
         $stripeEvent = $webhook->getStripeObject();
-        /** @var \Stripe\Price $stripePrice */
         $stripePrice = $stripeEvent->data->object;
 
         try {
@@ -93,15 +86,27 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
     public function onCheckoutExpired(StripeWebhook $webhook): void
     {
-        /** @var \Stripe\Event $stripeEvent */
         $stripeEvent = $webhook->getStripeObject();
-        /** @var \Stripe\Subscription $subscriptionStripe */
         $session = $stripeEvent->data->object;
         $this->logger->notice('Session: ' . $session['id']);
         try {
             $checkout = $this->cRepo->findOneBy(['stripeSessionId' => $session['id']]);
-            $this->logger->notice('Checkout: ' . $checkout->getStripeSessionId());
+            $this->logger->notice('Checkout expired: ' . $checkout->getStripeSessionId());
             $checkout->setStatus(-1);
+            $this->cRepo->save($checkout, true);
+        } catch (\Exception $e) {
+            $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
+        }
+    }
+    public function onCheckoutCompleted(StripeWebhook $webhook): void
+    {
+        $stripeEvent = $webhook->getStripeObject();
+        $session = $stripeEvent->data->object;
+        $this->logger->notice('Session: ' . $session['id']);
+        try {
+            $checkout = $this->cRepo->findOneBy(['stripeSessionId' => $session['id']]);
+            $this->logger->notice('Checkout done: ' . $checkout->getStripeSessionId());
+            $checkout->setStatus(1);
             $this->cRepo->save($checkout, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());

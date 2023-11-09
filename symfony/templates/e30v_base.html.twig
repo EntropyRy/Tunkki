@@ -13,19 +13,15 @@
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}
-            {% if block('meta') is defined %}
-                {{ block('meta') }}
-            {% else %}
-            {{ sonata_seo_metadatas() }}
-            {% endif %}
+            {% block meta %}
+                {{ sonata_seo_metadatas() }}
+            {% endblock %}
             {% block sonata_page_stylesheets %}
                 {{ encore_entry_link_tags('e30v', null, 'e30v') }}
             {% endblock %}
             {% block sonata_page_javascripts %}
-                <script src="https://js.stripe.com/v3/" data-turbo-track="reload" crossorigin="anonymous"></script>
                 {{ encore_entry_script_tags('e30v', null, 'e30v') }}
             {% endblock %}
-
         </head>
     {% endblock %}
 
