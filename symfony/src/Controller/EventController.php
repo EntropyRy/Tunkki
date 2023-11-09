@@ -25,6 +25,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use SimpleSoftwareIO\QrCode\Generator;
@@ -128,14 +129,10 @@ class EventController extends Controller
         }
         $products = $event->getProducts();
         $session = $request->getSession();
+        $cart = new Cart();
         $cartId = $session->get('cart');
         if (!is_null($cartId)) {
             $cart = $cartR->findOneBy(['id' => $cartId]);
-            if (is_null($cart)) {
-                $cart = new Cart();
-            }
-        } else {
-            $cart = new Cart();
         }
         $cart->setProducts($products);
         if ($cart->getEmail() == null) {
@@ -154,7 +151,6 @@ class EventController extends Controller
             ]);
         }
         return $this->render('event/shop.html.twig', [
-            'products' => $products,
             'event' => $event,
             'form' => $form
         ]);
@@ -192,7 +188,7 @@ class EventController extends Controller
             $email = $cart->getEmail();
             $products = $cart->getProducts();
             $tickets = [];
-            if ($checkout->getStatus() == 1) {
+            if ($checkout->getStatus() == 2) {
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     $quantity = $cartItem->getQuantity();
@@ -213,7 +209,12 @@ class EventController extends Controller
                         ->generate((string)$ticket->getReferenceNumber()));
                 }
                 try {
-                    $this->sendTicketQrEmail($event->getNameByLang($request->getLocale()), $email, $qrs, $event->getPicture());
+                    $this->sendTicketQrEmail(
+                        $event->getNameByLang($request->getLocale()),
+                        $email,
+                        $qrs,
+                        $event->getPicture()
+                    );
                 } catch (\Exception $e) {
                     $this->addFlash('error', $e->getMessage());
                 }
@@ -241,7 +242,8 @@ class EventController extends Controller
                 ->to($to)
                 ->replyTo('info@entropy.fi')
                 ->subject('[' . $eventName . '] Your ticket #' . ($x + 1) . ' / Lippusi #' . ($x + 1))
-                ->htmlTemplate('emails/email.html.twig')
+                ->addPart((new DataPart(base64_decode($qr), 'ticket', 'image/png', 'base64'))->asInline())
+                ->htmlTemplate('emails/ticket.html.twig')
                 ->context(['body' => $qr, 'links' => true, 'img' => $img]);
             $this->mailer->send($mail);
         }
@@ -294,46 +296,5 @@ class EventController extends Controller
         return $this->render('event/artists.html.twig', [
             'event' => $event,
         ]);
-    }
-    private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void
-    {
-        // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
-        if ($event->isPublished()) {
-            $title = $event->getNameByLang($lang) . ' - ' . $event->getEventDate()->format('d.m.Y, H:i');
-            if ($page) {
-                $page->setTitle($title);
-            }
-            if (!is_null($mediaUrl)) {
-                $seo->addMeta('property', 'twitter:image', 'https://entropy.fi' . $mediaUrl);
-                $seo->addMeta('property', 'og:image', 'https://entropy.fi' . $mediaUrl);
-                $seo->addMeta('property', 'og:image:height', '');
-                $seo->addMeta('property', 'og:image:widht', '');
-            } else {
-                $online = '';
-                if ($event->getType() == 'meeting' && is_null($event->getLocation()) && !is_null($event->getWebMeetingUrl())) {
-                    $online = '-online';
-                }
-                $url = 'https://entropy.fi/images/placeholders/' . $event->getType() . $online . '.webp';
-                $seo->addMeta('property', 'twitter:image', $url);
-                $seo->addMeta('property', 'og:image', $url);
-                $seo->addMeta('property', 'og:image:height', '1920');
-                $seo->addMeta('property', 'og:image:widht', '1080');
-            }
-            $abstract = $event->getAbstract($lang);
-            if (empty($abstract)) {
-                $abstract = $event->getAbstractFromContent($lang);
-            }
-            $seo->addMeta('property', 'twitter:card', "summary_large_image");
-            //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
-            $seo->addMeta('property', 'twitter:title', $title);
-            $seo->addMeta('property', 'twitter:desctiption', $abstract);
-            $seo->addMeta('property', 'og:title', $title)
-                ->addMeta('property', 'og:description', $abstract)
-                ->addMeta('name', 'description', $abstract);
-            if ($event->getType() != 'announcement') {
-                $seo->addMeta('property', 'og:type', 'event')
-                    ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));
-            }
-        }
     }
 }
