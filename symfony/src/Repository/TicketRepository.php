@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Event;
 use App\Entity\Member;
-use App\Entity\Product;
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -168,6 +167,18 @@ class TicketRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('t')
             ->andWhere('t.owner = :member')
             ->setParameter('member', $member)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findTicketsByEmailAndEvent(string $email, Event $event): mixed
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.owner', 'm')
+            ->andWhere('m.email = :email')
+            ->orWhere('t.email = :email')
+            ->andWhere('t.event = :event')
+            ->setParameter('email', $email)
+            ->setParameter('event', $event)
             ->getQuery()
             ->getResult();
     }

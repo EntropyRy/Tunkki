@@ -14,16 +14,13 @@ class CartType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $disabled = false;
         $help = 'e30v.cart.email.help';
 
         if ($options['data']->getEmail()) {
-            $disabled = true;
             $help = '';
         }
         $builder
             ->add('email', EmailType::class, [
-                'disabled' => $disabled,
                 'help' => $help,
                 'help_html' => true,
             ])

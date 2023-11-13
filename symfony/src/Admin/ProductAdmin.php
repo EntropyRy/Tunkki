@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
@@ -31,6 +32,7 @@ final class ProductAdmin extends AbstractAdmin
     {
         $list
             ->add('name')
+            ->add('descriptionFi')
             ->add('active')
             ->add('event')
             ->add('amount', MoneyType::class, [
@@ -52,6 +54,20 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
+            ->add(
+                'picture',
+                ModelListType::class,
+                [
+                    'required' => false
+                ],
+                [
+                    'link_parameters' => [
+                        'context' => 'product'
+                    ]
+                ]
+            )
+            ->add('descriptionFi')
+            ->add('descriptionEn')
             ->add('serviceFee')
             ->add('ticket')
             ->add('quantity')

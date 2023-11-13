@@ -1,124 +1,138 @@
 sonata_media:
-    db_driver: doctrine_orm
-    class:
-        media: App\Entity\Sonata\SonataMediaMedia
-        gallery: App\Entity\Sonata\SonataMediaGallery
-        gallery_item: App\Entity\Sonata\SonataMediaGalleryItem
-    default_context: item
-    force_disable_category: true
-    contexts:
-        default:
-            providers:
-                - sonata.media.provider.dailymotion
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-                - sonata.media.provider.vimeo
+  db_driver: doctrine_orm
+  class:
+    media: App\Entity\Sonata\SonataMediaMedia
+    gallery: App\Entity\Sonata\SonataMediaGallery
+    gallery_item: App\Entity\Sonata\SonataMediaGalleryItem
+  default_context: item
+  force_disable_category: true
+  contexts:
+    default:
+      providers:
+        - sonata.media.provider.dailymotion
+        - sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+        - sonata.media.provider.vimeo
 
-            formats:
-                small: { width: 100 , quality: 70}
-                big:   { width: 500 , quality: 70}
-        item: 
-            download:
-                strategy: sonata.media.security.public_strategy
-            providers:
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-            formats:
-                small: { width: 500 , quality: 70}
-                big:   { width: 1200 , quality: 80}
-        event: 
-            download:
-                strategy: sonata.media.security.public_strategy
-            providers:
-                - sonata.media.provider.youtube
-                - sonata.media.provider.image
-                - sonata.media.provider.file
-            formats:
-                small: { width: 500 , quality: 70}
-                normal: { width: 800 , quality: 80}
-                banner:   { width: 1200 , quality: 80}
-        artist: 
-            download:
-                strategy: sonata.media.security.public_strategy
-            providers:
-                - sonata.media.provider.image
-            formats:
-                small: { width: 400 , quality: 70}
-                big:   { width: 800 , quality: 80}
-                square:   { width: 800 , height: 800, quality: 75, resizer: sonata.media.resizer.square}
+      formats:
+        small: { width: 100, quality: 70 }
+        big: { width: 500, quality: 70 }
+    product:
+      download:
+        strategy: sonata.media.security.public_strategy
+      providers:
+        - sonata.media.provider.image
+      formats:
+        small: { width: 300, quality: 70 }
+        big: { width: 600, quality: 80 }
+    item:
+      download:
+        strategy: sonata.media.security.public_strategy
+      providers:
+        - sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+      formats:
+        small: { width: 500, quality: 70 }
+        big: { width: 1200, quality: 80 }
+    event:
+      download:
+        strategy: sonata.media.security.public_strategy
+      providers:
+        - sonata.media.provider.youtube
+        - sonata.media.provider.image
+        - sonata.media.provider.file
+      formats:
+        small: { width: 500, quality: 70 }
+        normal: { width: 800, quality: 80 }
+        banner: { width: 1200, quality: 80 }
+    artist:
+      download:
+        strategy: sonata.media.security.public_strategy
+      providers:
+        - sonata.media.provider.image
+      formats:
+        small: { width: 400, quality: 70 }
+        big: { width: 800, quality: 80 }
+        square:
+          {
+            width: 800,
+            height: 800,
+            quality: 75,
+            resizer: sonata.media.resizer.square,
+          }
 
-    cdn:
-        server:
-            path: /upload/media
+  cdn:
+    server:
+      path: /upload/media
 
-    filesystem:
-        local:
-            directory: "%kernel.project_dir%/public/upload/media"
-            create: true
-    providers:
-        youtube:
-            html5: false
-        image:
-            allowed_extensions:
-                - jpg
-                - png
-                - jpeg
-                - svg
-                - gif
-            allowed_mime_types:
-                - image/pjpeg
-                - image/jpeg
-                - image/png
-                - image/x-png
-                - image/svg+xml
-                - image/gif
-        file:
-            allowed_extensions:
-                - pdf
-                - txt
-                - rtf
-                - doc
-                - docx
-                - xls
-                - xlsx
-                - ppt
-                - pptx
-                - odt
-                - odg
-                - odp
-                - ods
-                - odc
-                - odf
-                - odb
-                - csv
-                - xml
-                - mp4
-            allowed_mime_types:
-                - application/pdf
-                - application/x-pdf
-                - application/rtf
-                - text/html
-                - text/rtf
-                - text/plain
-                - application/excel
-                - application/msword
-                - application/vnd.ms-excel
-                - application/vnd.ms-powerpoint
-                - application/vnd.ms-powerpoint
-                - application/vnd.openxmlformats-officedocument.wordprocessingml.document
-                - application/vnd.openxmlformats-officedocument.wordprocessingml.template
-                - application/vnd.oasis.opendocument.text
-                - application/vnd.oasis.opendocument.graphics
-                - application/vnd.oasis.opendocument.presentation
-                - application/vnd.oasis.opendocument.spreadsheet
-                - application/vnd.oasis.opendocument.chart
-                - application/vnd.oasis.opendocument.formula
-                - application/vnd.oasis.opendocument.database
-                - application/vnd.oasis.opendocument.image
-                - text/comma-separated-values
-                - text/xml
-                - application/xml
-                - application/zip
-                - video/mp4
+  filesystem:
+    local:
+      directory: "%kernel.project_dir%/public/upload/media"
+      create: true
+  providers:
+    youtube:
+      html5: false
+    image:
+      allowed_extensions:
+        - jpg
+        - png
+        - jpeg
+        - svg
+        - gif
+      allowed_mime_types:
+        - image/pjpeg
+        - image/jpeg
+        - image/png
+        - image/x-png
+        - image/svg+xml
+        - image/gif
+    file:
+      allowed_extensions:
+        - pdf
+        - txt
+        - rtf
+        - doc
+        - docx
+        - xls
+        - xlsx
+        - ppt
+        - pptx
+        - odt
+        - odg
+        - odp
+        - ods
+        - odc
+        - odf
+        - odb
+        - csv
+        - xml
+        - mp4
+      allowed_mime_types:
+        - application/pdf
+        - application/x-pdf
+        - application/rtf
+        - text/html
+        - text/rtf
+        - text/plain
+        - application/excel
+        - application/msword
+        - application/vnd.ms-excel
+        - application/vnd.ms-powerpoint
+        - application/vnd.ms-powerpoint
+        - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+        - application/vnd.openxmlformats-officedocument.wordprocessingml.template
+        - application/vnd.oasis.opendocument.text
+        - application/vnd.oasis.opendocument.graphics
+        - application/vnd.oasis.opendocument.presentation
+        - application/vnd.oasis.opendocument.spreadsheet
+        - application/vnd.oasis.opendocument.chart
+        - application/vnd.oasis.opendocument.formula
+        - application/vnd.oasis.opendocument.database
+        - application/vnd.oasis.opendocument.image
+        - text/comma-separated-values
+        - text/xml
+        - application/xml
+        - application/zip
+        - video/mp4

@@ -2,7 +2,9 @@
 
 namespace App\Entity;
 
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ProductRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -47,6 +49,18 @@ class Product
     #[ORM\Column]
     private ?bool $serviceFee = false;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeImageUrl = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionFi = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $descriptionEn = null;
+
+    #[ORM\ManyToOne]
+    private ?SonataMediaMedia $picture = null;
+
     public function getSold(): int
     {
         if ($this->event) {
@@ -54,11 +68,16 @@ class Product
         }
         return 0;
     }
-    public function getMax(): int
+    public function getDescription($lang): ?string
+    {
+        $func = 'description' . ucfirst((string) $lang);
+        return $this->{$func};
+    }
+    public function getMax(?int $inCheckouts): int
     {
         if ($this->event && $this->ticket) {
             $sold = $this->getSold();
-            $left = $this->quantity - $sold;
+            $left = $this->quantity - $sold - $inCheckouts;
             if ($left <= 10) {
                 return $left;
             }
@@ -217,6 +236,54 @@ class Product
     public function setServiceFee(bool $serviceFee): static
     {
         $this->serviceFee = $serviceFee;
+
+        return $this;
+    }
+
+    public function getStripeImageUrl(): ?string
+    {
+        return $this->stripeImageUrl;
+    }
+
+    public function setStripeImageUrl(?string $stripeImageUrl): static
+    {
+        $this->stripeImageUrl = $stripeImageUrl;
+
+        return $this;
+    }
+
+    public function getDescriptionFi(): ?string
+    {
+        return $this->descriptionFi;
+    }
+
+    public function setDescriptionFi(?string $descriptionFi): static
+    {
+        $this->descriptionFi = $descriptionFi;
+
+        return $this;
+    }
+
+    public function getDescriptionEn(): ?string
+    {
+        return $this->descriptionEn;
+    }
+
+    public function setDescriptionEn(?string $descriptionEn): static
+    {
+        $this->descriptionEn = $descriptionEn;
+
+        return $this;
+    }
+
+    public function getPicture(): ?SonataMediaMedia
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?SonataMediaMedia $picture): static
+    {
+        $this->picture = $picture;
 
         return $this;
     }

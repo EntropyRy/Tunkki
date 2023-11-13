@@ -4,9 +4,10 @@ $blue: #8ba0ff;
 $dark-blue: #3f3c8a;
 $pink: #ff61d5;
 $green: #00ff80;
+$gray: #b3b3b3;
 
 $primary: $pink;
-$secondary: #b3b3b3;
+$secondary: $gray;
 $success: #28a745;
 $danger: #ff4136;
 $warning: #ffc107;
@@ -56,11 +57,11 @@ $theme-colors: (
 @import "~bootstrap/scss/buttons";
 //@import "~bootstrap/scss/button-group";
 @import "~bootstrap/scss/transitions";
-//@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/card";
 @import "~bootstrap/scss/close";
 @import "~bootstrap/scss/forms";
 //@import "~bootstrap/scss/dropdown";
-//@import "~bootstrap/scss/accordion";
+// @import "~bootstrap/scss/accordion";
 //@import "~bootstrap/scss/badge";
 //@import "~bootstrap/scss/list-group";
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
@@ -116,7 +117,7 @@ body {
   .marquee-wrapper {
     max-width: 100%;
     overflow: hidden;
-    margin-top: 10%;
+    margin-top: 6%;
     font-weight: 800;
     font-style: italic;
     border-bottom: 2px solid #fff;
@@ -169,6 +170,7 @@ body {
   }
   &.active:before {
     content: "";
+    outline: 2px solid $white;
     display: block;
     width: 30px;
     height: 30px;
@@ -189,4 +191,46 @@ body {
 
 .btn-outline-info {
   backdrop-filter: blur(10px);
+}
+
+.text-darkblue {
+  color: $dark-blue;
+}
+
+.product {
+  padding: 0 0;
+  border-left: 2px $white solid;
+  border-right: 2px $white solid;
+  border-radius: 2em;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  .pic {
+    overflow: hidden;
+    border-radius: 0 0 2em 2em;
+  }
+  .price {
+    button {
+      border: none;
+      width: 100%;
+    }
+    h3 {
+      line-height: 2em;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+  }
+  .info {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+    &.callopsed {
+      max-height: 1200px;
+      transition: max-height 0.25s ease-in;
+    }
+  }
+  .quantity {
+    .number {
+      line-height: 2em;
+    }
+  }
 }

@@ -492,7 +492,10 @@ calendar:
   add_meetings: Lisää kokoukset
   add_notifications_for_meetings: Lisää muistutukset kokouksille
   generate: Generoi kalenteri linkki
-  url_generated: Linkki generoitu
+  url_generated: Linkki generoitu 
+product:
+  quantity: määrä
+  sold_out: Loppuunmyyty
 e30v:
   nav:
     home: entropy 30 vuotta
@@ -502,8 +505,8 @@ e30v:
     timetable: Aikataulu
   buy_tickets: Osta liput tästä
   years: vuotta
-  buy: Osta
-  gdpr: Käytämme vain välttämättömiä keksejä jotta kirjautuminen sekä Stripe integrattio toimii.
+  buy: Kassalle
+  gdpr: Käytämme vain välttämättömiä keksejä, jotta kirjautuminen sekä Stripe-integraatio toimii.
   cart:
     empty: Ostoskorisi on tyhjä
     email:

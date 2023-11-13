@@ -65,11 +65,14 @@ class CartItem
     /**
      * @return array<string,?string>
      */
-    public function getLineItem(?int $quantity): array
+    public function getLineItem(?int $quantity): ?array
     {
-        return [
-            'price' => $this->product->getStripePriceId(),
-            'quantity' => $quantity ? $quantity : $this->quantity,
-        ];
+        if ($this->product->getMax(0) > 0) {
+            return [
+                'price' => $this->product->getStripePriceId(),
+                'quantity' => $quantity ? $quantity : $this->quantity,
+            ];
+        }
+        return null;
     }
 }

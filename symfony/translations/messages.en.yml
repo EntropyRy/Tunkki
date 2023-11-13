@@ -390,7 +390,9 @@ calendar:
   add_notifications_for_meetings: Add reminders for meetings
   generate: Generate the calendar link
   url_generated: Link generated
-
+product:
+  quantity: quantity
+  sold_out: Sold Out
 e30v:
   gdpr: We only use nessessary cookis so that login and Stripe integarion works.
   nav:
@@ -401,7 +403,7 @@ e30v:
     timetable: Timetable
   years: years
   buy_tickets: Buy tickets here
-  buy: Buy
+  buy: Checkout
   cart:
     email:
       help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.

@@ -18,7 +18,7 @@ class Cart
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ["persist", "remove"])]
     private Collection $products;
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Checkout::class)]
@@ -81,7 +81,7 @@ class Cart
     {
         $this->clearProducts();
         foreach ($products as $product) {
-            if ($product->isTicket()) {
+            if ($product->isTicket() && $product->isActive()) {
                 $item = new CartItem();
                 $item->setProduct($product);
                 $item->setQuantity(0);
@@ -92,6 +92,10 @@ class Cart
 
     public function clearProducts(): void
     {
+        foreach ($this->getProducts() as $product) {
+            $this->removeProduct($product);
+        }
+
         $this->products = new ArrayCollection();
     }
 

@@ -38,12 +38,15 @@ class CheckoutsController extends AbstractController
         $session = $request->getSession();
         $cartId = $session->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
-        $products = $cart->getProducts();
         $email = $cart->getEmail();
         $expires = new \DateTime('+30min');
+        $products = $cart->getProducts();
         $lineItems = [];
         foreach ($products as $cartItem) {
-            $lineItems[] = $cartItem->getLineItem(null);
+            $item = $cartItem->getLineItem(null);
+            if (is_array($item)) {
+                $lineItems[] = $item;
+            }
         }
         if (count($lineItems) > 0) {
             $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);

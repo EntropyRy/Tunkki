@@ -117,7 +117,6 @@ final class TicketAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->remove('delete');
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('give', $this->getRouterIdParameter() . '/give');

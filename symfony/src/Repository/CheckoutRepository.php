@@ -45,20 +45,18 @@ class CheckoutRepository extends ServiceEntityRepository
         }
     }
 
-    //    /**
-    //     * @return Checkout[] Returns an array of Checkout objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('c')
-    //            ->andWhere('c.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('c.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Checkout[] Returns an array of Checkout objects
+     */
+    public function findOngoingCheckouts(): ?array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->andWhere('c.status = 0')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?Checkout
     //    {

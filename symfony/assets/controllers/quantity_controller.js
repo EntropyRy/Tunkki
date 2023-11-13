@@ -2,21 +2,24 @@ import { Controller } from "@hotwired/stimulus";
 
 stimulusFetch: "lazy";
 export default class extends Controller {
-  static targets = ["product", "quantity", "formquantity"];
+  static targets = ["plus", "minus", "quantity", "formquantity", "callopse"];
   static values = {
     quantity: Number,
     max: Number,
   };
   connect() {
-    this.quantityTarget.innerText = 0;
-    // console.log(this.formquantityTarget);
     this.formquantityTarget.value = 0;
+    this.minusTarget.classList.add("disabled");
   }
   plus(event) {
     event.preventDefault();
     if (this.quantityTarget.innerText < this.maxValue) {
       this.quantityTarget.innerText++;
       this.formquantityTarget.value++;
+      this.minusTarget.classList.remove("disabled");
+      if (this.quantityTarget.innerText == this.maxValue) {
+        this.plusTarget.classList.add("disabled");
+      }
     }
   }
   minus(event) {
@@ -24,6 +27,14 @@ export default class extends Controller {
     if (this.quantityTarget.innerText > 0) {
       this.quantityTarget.innerText--;
       this.formquantityTarget.value--;
+      this.plusTarget.classList.remove("disabled");
+      if (this.quantityTarget.innerText == "0") {
+        this.minusTarget.classList.add("disabled");
+      }
     }
+  }
+  callopse(event) {
+    event.preventDefault();
+    this.callopseTarget.classList.toggle("callopsed");
   }
 }

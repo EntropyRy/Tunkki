@@ -223,6 +223,7 @@ final class EventAdmin extends AbstractAdmin
         $event = $this->getSubject();
         $format = 'richhtml';
         $help = '';
+        $forceAbstarct = false;
         if ($event->getTemplate() == 'e30v.html.twig') {
             $format = 'raw';
             $help = 'Help: <a href="https://twig.symfony.com/">Twig template language</a>';
@@ -288,7 +289,8 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add('abstractEn', null, [
-                        'help' => 'Defines small text in some link previews. 150 chars.'
+                        'help' => 'Defines small text in some link previews. 150 chars.',
+                        'required' => $forceAbstarct
                     ]);
             }
             $formMapper
@@ -309,7 +311,8 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add('abstractFi', null, [
-                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.'
+                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.',
+                        'required' => $forceAbstarct
                     ]);
             }
             $formMapper

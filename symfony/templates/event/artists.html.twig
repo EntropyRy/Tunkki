@@ -35,3 +35,36 @@
     </div>
     {% endif %}
 {% endblock %}
+
+{% block artist_pic %}
+{% if 'e30v' in event.template %}
+    {% if name is not defined %}
+        {% set name = artist.name %}
+    {% endif %}
+    <h3 class="mb-0 bg-primary text-center text-uppercase fw-bolder">{{ name }}</h3>
+    <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
+    <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
+    </span>
+{% endif %}
+{% endblock %}
+{% block cycle %}
+<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+    <div class="row gx-2">
+        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
+            {{ block('artist_pic') }}
+        </div>
+        <div class="col-6 col-sm-6 col-md-7 col-xl-7">
+            {{ block('artist_event_info') }}
+        </div>
+        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+    </div>
+</div>
+{% if not loop.last %}
+<hr class="d-md-none">
+{% endif %}
+{% endblock %}
+{% block artist_event_info %}
+    <small class="fw-light">{{ artist.genre }}</small>
+    <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+    {{ block('artist_links') }}
+{% endblock %}
