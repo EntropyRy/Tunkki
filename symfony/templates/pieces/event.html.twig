@@ -316,9 +316,9 @@
                 {% set aspect = event.picture.width / event.picture.height %}
                 {% if aspect >= 1.42 %}
                 rect-img-container i16by9
-                {% elseif aspect > 0.8 and aspect < 1.42 %}
+                {% elseif aspect > 0.85 and aspect < 1.42 %}
                 rect-img-container
-                {% elseif aspect <= 0.8 %}
+                {% elseif aspect <= 0.85 %}
                 img-container
                 {% endif %}
             {% elseif frontpage|default(false) and not event.picture %}
