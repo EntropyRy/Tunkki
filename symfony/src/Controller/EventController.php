@@ -257,4 +257,26 @@ class EventController extends Controller
             'event' => $event,
         ]);
     }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/turvallisempi-tila',
+            'en' => '/{year}/{slug}/safer-space',
+        ],
+        name: 'entropy_event_safer_space',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventSaferSpace(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        return $this->render('event/safer_space.html.twig', [
+            'event' => $event,
+        ]);
+    }
 }

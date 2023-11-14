@@ -503,6 +503,7 @@ e30v:
     tickets: Liput
     artists: Artistit
     timetable: Aikataulu
+    safer_space: Turvallisempi tila
   buy_tickets: Osta liput tästä
   years: vuotta
   buy: Kassalle

@@ -82,6 +82,21 @@
 {% endapply %}
 {% endblock %}
 
+{% block event_path_info %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_info', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
+{% block event_path_safer_space %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_safer_space', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
 {% block event_path_artists %}
 {% apply spaceless %}
     {% if event.url and not event.externalUrl %}

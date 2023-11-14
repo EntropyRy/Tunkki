@@ -401,6 +401,7 @@ e30v:
     tickets: Tickets
     artists: Artists
     timetable: Timetable
+    safer_space: Safer Space 
   years: years
   buy_tickets: Buy tickets here
   buy: Checkout

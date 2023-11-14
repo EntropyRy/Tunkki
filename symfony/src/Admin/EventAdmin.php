@@ -527,6 +527,24 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false
                     ]
                 )
+                ->add(
+                    'artistSignUpInfoEn',
+                    SimpleFormatterType::class,
+                    [
+                        'format' => 'richhtml',
+                        'required' => false,
+                        'ckeditor_context' => 'default',
+                    ]
+                )
+                ->add(
+                    'artistSignUpInfoFi',
+                    SimpleFormatterType::class,
+                    [
+                        'format' => 'richhtml',
+                        'required' => false,
+                        'ckeditor_context' => 'default',
+                    ]
+                )
                 ->end()
                 ->end()
                 ->tab('Nakkikone config')

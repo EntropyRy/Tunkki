@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -249,6 +250,12 @@ body {
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
     private Collection $products;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $artistSignUpInfoFi = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $artistSignUpInfoEn = null;
 
     public function getId(): ?int
     {
@@ -1492,5 +1499,34 @@ body {
             }
         }
         return $return;
+    }
+
+    public function getArtistSignUpInfoFi(): ?string
+    {
+        return $this->artistSignUpInfoFi;
+    }
+
+    public function setArtistSignUpInfoFi(?string $artistSignUpInfoFi): static
+    {
+        $this->artistSignUpInfoFi = $artistSignUpInfoFi;
+
+        return $this;
+    }
+
+    public function getArtistSignUpInfoEn(): ?string
+    {
+        return $this->artistSignUpInfoEn;
+    }
+
+    public function setArtistSignUpInfoEn(?string $artistSignUpInfoEn): static
+    {
+        $this->artistSignUpInfoEn = $artistSignUpInfoEn;
+
+        return $this;
+    }
+    public function getArtistSignUpInfo($lang): ?string
+    {
+        $func = 'artistSignUpInfo' . ucfirst((string) $lang);
+        return $this->{$func};
     }
 }
