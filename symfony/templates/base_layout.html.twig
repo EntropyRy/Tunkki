@@ -13,11 +13,9 @@
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}
-            {% if block('meta') is defined %}
-                {{ block('meta') }}
-            {% else %}
-            {{ sonata_seo_metadatas() }}
-            {% endif %}
+            {% block meta %}
+                {{ sonata_seo_metadatas() }}
+            {% endblock %}
             {% block sonata_page_stylesheets %}
                 {{ encore_entry_link_tags('app', null, 'default') }}
             {% endblock %}

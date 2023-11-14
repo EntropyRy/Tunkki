@@ -74,6 +74,37 @@
 {% endapply %}
 {% endblock %}
 
+{% block event_path_shop %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_shop', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
+{% block event_path_info %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_info', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
+{% block event_path_safer_space %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_safer_space', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+{% block event_path_artists %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
+
 {% block published_and_updated %}
 {% apply spaceless %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
@@ -84,8 +115,7 @@
     {% endif %}
     {% if event.published == false %}
         -- <span class="only_for_members">
-            <i class="fa fa-eye-slash"></i>
-            {{ 'event.only_for_members'|trans }}
+            <i class="fa fa-eye-slash mr-1"></i>{{ 'event.only_for_members'|trans }}
         </span>
     {% endif %}
 {% endapply %}
@@ -338,11 +368,11 @@
 {% endblock %}
 
 {% block links %}
+{% apply spaceless %}
 {% if event.attachment %}
 <div class="mb-2">
 <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">
-    <i class="fas fa-link"></i>
-    {{ event.attachment.name }}
+    <i class="fas fa-link me-1"></i>{{ event.attachment.name }}
 </a>
 </div>
 <hr>
@@ -431,6 +461,7 @@
     </span>
     {% endif %}
 </div>
+{% endapply %}
 {% endblock %}
 
 {% block timetable_to_page %}
@@ -597,7 +628,6 @@
 
 {% block infos %}
 {% set bio_attribute = 'bio_attribute'|trans %}
-{% set content_attr = 'content_attribute'|trans %}
     {% for info in infos %}
         {% if info.StartTime is not empty %}
             {% set artist = info.artistClone %}
@@ -652,7 +682,7 @@
         <hr>
         {% for link in artist.links %}
         <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
-         href="{{ link.url }}"><i class="{{ link.icon }}"></i> {{ link.title }}</a>
+         href="{{ link.url }}"><i class="{{ link.icon }} me-1"></i>{{ link.title }}</a>
         </span>{% if not loop.last %} |{% endif %}
         {% endfor %}
     {% endif %}

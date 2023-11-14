@@ -82,7 +82,9 @@
     {{ form_rest(form) }}
     {{ form_end(form) }}
 {% elseif ticket.status == 'paid' %}
-<h4>{{ 'ticket.code'|trans }}: {{ ticket.referenceNumber }}</h4>
-<div class="qr-code text-center">{{ qr|raw }}</div>
+<h4 class="d-none">{{ 'ticket.code'|trans }}: {{ ticket.referenceNumber }}</h4>
+<div class="qr-code text-center">
+<img style="max-width: 100%" src="data:image/png;base64, {{ qr }}">
+</div>
 {% endif %}
 {% endblock %}

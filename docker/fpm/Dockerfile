@@ -9,7 +9,7 @@ RUN apk upgrade --update \
         gnupg curl \
         libzmq zeromq \ 
         git icu icu-data-full libssh2 \
-        libev \
+        libev imagemagick \
     && apk add --virtual build-deps \
         bash grep build-base tar re2c make file \ 
         zeromq-dev libpng-dev libwebp-dev \ 
@@ -18,12 +18,14 @@ RUN apk upgrade --update \
         libmcrypt-dev \
         autoconf libzip-dev \
         linux-headers \
+        $PHPIZE_DEPS imagemagick-dev \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
     && pecl channel-update pecl.php.net \
     && pecl install apcu \
     && pecl install ssh2-1.3.1 \
+    && pecl install imagick \
     && git clone https://github.com/mkoppanen/php-zmq.git \
     && cd php-zmq \
     && phpize && ./configure \
@@ -31,7 +33,7 @@ RUN apk upgrade --update \
     && make install \
     && cd .. \
     && rm -fr php-zmq \
-    && docker-php-ext-enable apcu zmq ssh2 \
+    && docker-php-ext-enable apcu zmq ssh2 imagick \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/*
 # install composer

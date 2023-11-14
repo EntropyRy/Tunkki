@@ -65,7 +65,7 @@ final class TicketAdminController extends CRUDController
                 return $this->redirect($this->admin->generateUrl('list'));
             }
         }
-        return $this->renderWithExtraParams('admin/ticket/change_owner.html.twig', [
+        return $this->render('admin/ticket/change_owner.html.twig', [
             'ticket' => $ticket,
             'form' => $form
         ]);

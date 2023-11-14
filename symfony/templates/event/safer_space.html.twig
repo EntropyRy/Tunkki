@@ -1,0 +1,5 @@
+{% extends event.template %}
+{% block content %}
+{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+{{ block('content_safer_space', input) ?? '' }}
+{% endblock %}

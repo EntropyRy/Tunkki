@@ -2,48 +2,40 @@
 
 namespace App\Controller;
 
+use App\Entity\Cart;
 use App\Entity\Event;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sonata\PageBundle\CmsManager\CmsManagerSelector;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sonata\SeoBundle\Seo\SeoPageInterface;
-use App\Repository\TicketRepository;
-use App\Repository\EventRepository;
-use Sonata\MediaBundle\Provider\ImageProvider;
+use App\Entity\Product;
+use App\Entity\Ticket;
 use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\RSVPType;
+use App\Form\CartType;
+use App\Helper\AppStripeClient;
+use App\Helper\ReferenceNumber;
+use App\Repository\CartRepository;
+use App\Repository\TicketRepository;
+use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
     public function oneId(
-        Request $request,
-        CmsManagerSelector $cms,
-        TranslatorInterface $trans,
-        SeoPageInterface $seo,
-        EventRepository $eRepo
+        Event $event,
     ): Response {
-        $eventid = $request->get('id');
-        $lang = $request->getLocale();
-        if (empty($eventid)) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $event = $eRepo->findOneBy(['id' => $eventid]);
-        if (!$event) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        if (empty($event->getUrl()) && $event->getExternalUrl()) {
-            return new RedirectResponse("/");
-        }
         if ($event->getUrl()) {
             if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
@@ -53,46 +45,23 @@ class EventController extends Controller
                 'slug' => $event->getUrl()
             ]);
         }
-        $page = $cms->retrieve()->getCurrentPage();
-        $this->setMetaData($lang, $event, $page, $seo, null);
         $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
         return $this->render($template, [
             'event' => $event,
-            'page' => $page
         ]);
     }
     public function oneSlug(
         Request $request,
-        CmsManagerSelector $cms,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
         TranslatorInterface $trans,
-        SeoPageInterface $seo,
-        EventRepository $eRepo,
         TicketRepository $ticketRepo,
-        ImageProvider $mediaPro,
         EntityManagerInterface $em
     ): Response {
-        $mediaUrl = null;
-        $slug = $request->get('slug');
-        $year = $request->get('year');
-        if (empty($slug)) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $event = $eRepo->findEventBySlugAndYear($slug, $year);
-        if (!$event) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
-        }
-        $lang = $request->getLocale();
         $ticket = null;
         $form = null;
         $ticketCount = null;
         $user = $this->getUser();
-        $page = $cms->retrieve()->getCurrentPage();
-        if ($event->getPicture() && $event->getPicture()->getProviderName() == $mediaPro->getName()) {
-            $format = $mediaPro->getFormatName($event->getPicture(), 'normal');
-            $mediaUrl = $mediaPro->generatePublicUrl($event->getPicture(), $format);
-        }
-        $this->setMetaData($lang, $event, $page, $seo, $mediaUrl);
-
         if ($event->getTicketsEnabled() && $user) {
             assert($user instanceof User);
             $member = $user->getMember();
@@ -122,17 +91,127 @@ class EventController extends Controller
                 }
             }
         }
-        if (!$event->getPublished() && is_null($user)) {
+        if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
         $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
         return $this->render($template, [
             'event' => $event,
-            'page' => $page,
             'rsvpForm' => $form,
             'ticket' => $ticket,
             'ticketsAvailable' => $ticketCount,
         ]);
+    }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/kauppa',
+            'en' => '/{year}/{slug}/shop',
+        ],
+        name: 'entropy_event_shop',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventShop(
+        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+        CartRepository $cartR,
+        CheckoutRepository $checkoutR
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        $email = null;
+        if ($user != null) {
+            assert($user instanceof User);
+            $email = $user->getEmail();
+        }
+        $products = $event->getProducts();
+        $session = $request->getSession();
+        $cart = new Cart();
+        $cartId = $session->get('cart');
+        if ($cartId != null) {
+            $cart = $cartR->findOneBy(['id' => $cartId]);
+            if ($cart == null) {
+                $cart = new Cart();
+            }
+        }
+        $max = [];
+        $ongoingCheckouts = $checkoutR->findOngoingCheckouts();
+        foreach ($ongoingCheckouts as $checkout) {
+            $otherCart = $checkout->getCart();
+            foreach ($otherCart->getProducts() as $item) {
+                if (!array_key_exists($item->getProduct()->getId(), $max)) {
+                    $max[$item->getProduct()->getId()] = 0;
+                }
+                $max[$item->getProduct()->getId()] += $item->getQuantity();
+            }
+        }
+        $cart->setProducts($products);
+        if ($cart->getEmail() == null) {
+            $cart->setEmail($email);
+        }
+        $form = $this->createForm(CartType::class, $cart);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $cart = $form->getData();
+            $cartR->save($cart, true);
+            $session->set('cart', $cart->getId());
+            return $this->redirectToRoute('event_stripe_checkouts', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
+        }
+        return $this->render('event/shop.html.twig', [
+            'event' => $event,
+            'form' => $form,
+            'inCheckouts' => $max
+        ]);
+    }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/valmis',
+            'en' => '/{year}/{slug}/complete',
+        ],
+        name: 'entropy_event_shop_complete',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function complete(
+        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+        AppStripeClient $stripe,
+        CheckoutRepository $cRepo,
+    ): Response {
+        $sessionId = $request->get('session_id');
+        $stripeSession = $stripe->getCheckoutSession($sessionId);
+        if ($stripeSession->status == 'open') {
+            $this->addFlash('warning', 'e30v.checkout.open');
+            return $this->redirectToRoute('event_stripe_checkouts', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
+        }
+        if ($stripeSession->status == 'complete') {
+            $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
+            $cart = $checkout->getCart();
+            $email = $cart->getEmail();
+            $request->getSession()->remove('cart');
+        }
+        return $this->render('event/shop_complete.html.twig', [
+            'event' => $event,
+            'email' => $email
+        ]);
+    }
+    public function __construct(
+        private readonly TicketRepository $ticketRepo,
+        private readonly ReferenceNumber $rn,
+        private readonly MailerInterface $mailer
+    ) {
     }
     #[Route(
         path: [
@@ -149,53 +228,55 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->getPublished() && is_null($user)) {
+        if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        return $this->render('artists.html.twig', [
+        return $this->render('event/artists.html.twig', [
             'event' => $event,
         ]);
     }
-    private function setMetaData($lang, $event, $page, $seo, $mediaUrl): void
-    {
-        $now = new \DateTime();
-        // ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu
-        if ($event->getPublished() && $event->getPublishDate() < $now) {
-            $title = $event->getNameByLang($lang) . ' - ' . $event->getEventDate()->format('d.m.Y, H:i');
-            if ($page) {
-                $page->setTitle($title);
-            }
-            if (!is_null($mediaUrl)) {
-                $seo->addMeta('property', 'twitter:image', 'https://entropy.fi' . $mediaUrl);
-                $seo->addMeta('property', 'og:image', 'https://entropy.fi' . $mediaUrl);
-                $seo->addMeta('property', 'og:image:height', '');
-                $seo->addMeta('property', 'og:image:widht', '');
-            } else {
-                $online = '';
-                if ($event->getType() == 'meeting' && is_null($event->getLocation()) && !is_null($event->getWebMeetingUrl())) {
-                    $online = '-online';
-                }
-                $url = 'https://entropy.fi/images/placeholders/' . $event->getType() . $online . '.webp';
-                $seo->addMeta('property', 'twitter:image', $url);
-                $seo->addMeta('property', 'og:image', $url);
-                $seo->addMeta('property', 'og:image:height', '1920');
-                $seo->addMeta('property', 'og:image:widht', '1080');
-            }
-            $abstract = $event->getAbstract($lang);
-            if (empty($abstract)) {
-                $abstract = $event->getAbstractFromContent($lang);
-            }
-            $seo->addMeta('property', 'twitter:card', "summary_large_image");
-            //$seo->addMeta('property', 'twitter:site', "@entropy.fi");
-            $seo->addMeta('property', 'twitter:title', $title);
-            $seo->addMeta('property', 'twitter:desctiption', $abstract);
-            $seo->addMeta('property', 'og:title', $title)
-                ->addMeta('property', 'og:description', $abstract)
-                ->addMeta('name', 'description', $abstract);
-            if ($event->getType() != 'announcement') {
-                $seo->addMeta('property', 'og:type', 'event')
-                    ->addMeta('property', 'event:start_time', $event->getEventDate()->format('Y-m-d H:i'));
-            }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/info',
+            'en' => '/{year}/{slug}/about',
+        ],
+        name: 'entropy_event_info',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventInfo(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
         }
+        return $this->render('event/about.html.twig', [
+            'event' => $event,
+        ]);
+    }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/turvallisempi-tila',
+            'en' => '/{year}/{slug}/safer-space',
+        ],
+        name: 'entropy_event_safer_space',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventSaferSpace(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        return $this->render('event/safer_space.html.twig', [
+            'event' => $event,
+        ]);
     }
 }

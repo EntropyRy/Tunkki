@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -247,6 +248,15 @@ body {
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $abstractEn = null;
 
+    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
+    private Collection $products;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $artistSignUpInfoFi = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $artistSignUpInfoEn = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -375,6 +385,15 @@ body {
 
         return $this;
     }
+
+    public function isPublished(): bool
+    {
+        $now = new \DateTime();
+        if ($this->published == true && $this->publishDate < $now) {
+            return true;
+        }
+        return false;
+    }
     public function __construct()
     {
         $this->publishDate = new \DateTime();
@@ -387,6 +406,7 @@ body {
         $this->notifications = new ArrayCollection();
         $this->happenings = new ArrayCollection();
         $this->nakkiResponsibleAdmin = new ArrayCollection();
+        $this->products = new ArrayCollection();
     }
     public function getNowTest(): ?string
     {
@@ -1398,9 +1418,9 @@ body {
         return $this;
     }
 
-    public function getTemplate(): ?string
+    public function getTemplate(): string
     {
-        return $this->template;
+        return $this->template ? $this->template : 'event.html.twig';
     }
 
     public function setTemplate(?string $template): static
@@ -1437,6 +1457,76 @@ body {
     public function getAbstract($lang): ?string
     {
         $func = 'abstract' . ucfirst((string) $lang);
+        return $this->{$func};
+    }
+
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getProducts(): Collection
+    {
+        return $this->products;
+    }
+
+    public function addProduct(Product $product): static
+    {
+        if (!$this->products->contains($product)) {
+            $this->products->add($product);
+            $product->setEvent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProduct(Product $product): static
+    {
+        if ($this->products->removeElement($product)) {
+            // set the owning side to null (unless already changed)
+            if ($product->getEvent() === $this) {
+                $product->setEvent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getTicketTypeCount($id)
+    {
+        $return = 0;
+        foreach ($this->getTickets() as $ticket) {
+            if ($ticket->getStripeProductId() == $id) {
+                $return += 1;
+            }
+        }
+        return $return;
+    }
+
+    public function getArtistSignUpInfoFi(): ?string
+    {
+        return $this->artistSignUpInfoFi;
+    }
+
+    public function setArtistSignUpInfoFi(?string $artistSignUpInfoFi): static
+    {
+        $this->artistSignUpInfoFi = $artistSignUpInfoFi;
+
+        return $this;
+    }
+
+    public function getArtistSignUpInfoEn(): ?string
+    {
+        return $this->artistSignUpInfoEn;
+    }
+
+    public function setArtistSignUpInfoEn(?string $artistSignUpInfoEn): static
+    {
+        $this->artistSignUpInfoEn = $artistSignUpInfoEn;
+
+        return $this;
+    }
+    public function getArtistSignUpInfo($lang): ?string
+    {
+        $func = 'artistSignUpInfo' . ucfirst((string) $lang);
         return $this->{$func};
     }
 }

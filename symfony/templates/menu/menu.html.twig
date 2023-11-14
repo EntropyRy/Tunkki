@@ -1,3 +1,4 @@
+{% use 'pieces/event.html.twig' %}
 {% block menu %}
 {% apply spaceless %}
 {% set loc = app.request.locale %}
@@ -9,7 +10,7 @@
         {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     {% endif %}
     {% if event.url is not empty and not event.externalUrl %}
-        {% set event_url = event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
+        {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
     {% endif %}
 {% else %}
     {% if app.user %}
@@ -57,14 +58,14 @@
             <span class="nav-link">FI</span>
         </li>
         <li class="nav-item">
-           <a class="nav-link" data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
+           <a class="nav-link" data-turbo="false" href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
         </li>
     {% else %}
         <li class="nav-item">
-            <a class="nav-link" data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
+            <a class="nav-link" data-turbo="false" href="{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a>
         </li>
         <li class="nav-item current">
-           <span class="nav-link">ENG</span>
+           <span class="nav-link">EN</span>
         </li>
     {% endif %}
 {% endblock %}
@@ -72,10 +73,10 @@
 {% apply spaceless %}
     {% if app.request.locale == 'fi' %}
         <span>FI</span> |
-        <a data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">ENG</a>
+        <a data-turbo="false" href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
     {% else %}
-        <a data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a> |
-        <span>ENG</span>
+        <a data-turbo="false" href="{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a> |
+        <span>EN</span>
     {% endif %}
 {% endapply %}
 {% endblock %}

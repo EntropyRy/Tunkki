@@ -91,14 +91,14 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 );
             }
-            if ($event->getTicketsEnabled()) {
+            if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
                 $menu->addChild(
                     'Tickets',
                     [
                         'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                     ]
                 );
-                if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
+                if ($event->getTicketsEnabled()) {
                     $menu->addChild(
                         'Update Ticket Count',
                         [
@@ -223,6 +223,7 @@ final class EventAdmin extends AbstractAdmin
         $event = $this->getSubject();
         $format = 'richhtml';
         $help = '';
+        $forceAbstarct = false;
         if ($event->getTemplate() == 'e30v.html.twig') {
             $format = 'raw';
             $help = 'Help: <a href="https://twig.symfony.com/">Twig template language</a>';
@@ -288,7 +289,8 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add('abstractEn', null, [
-                        'help' => 'Defines small text in some link previews. 150 chars.'
+                        'help' => 'Defines small text in some link previews. 150 chars.',
+                        'required' => $forceAbstarct
                     ]);
             }
             $formMapper
@@ -309,7 +311,8 @@ final class EventAdmin extends AbstractAdmin
                         ]
                     )
                     ->add('abstractFi', null, [
-                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.'
+                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.',
+                        'required' => $forceAbstarct
                     ]);
             }
             $formMapper
@@ -522,6 +525,24 @@ final class EventAdmin extends AbstractAdmin
                         'help' => 'when the artist signup ends',
                         'input' => 'datetime_immutable',
                         'required' => false
+                    ]
+                )
+                ->add(
+                    'artistSignUpInfoEn',
+                    SimpleFormatterType::class,
+                    [
+                        'format' => 'richhtml',
+                        'required' => false,
+                        'ckeditor_context' => 'default',
+                    ]
+                )
+                ->add(
+                    'artistSignUpInfoFi',
+                    SimpleFormatterType::class,
+                    [
+                        'format' => 'richhtml',
+                        'required' => false,
+                        'ckeditor_context' => 'default',
                     ]
                 )
                 ->end()

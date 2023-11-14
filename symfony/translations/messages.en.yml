@@ -103,7 +103,12 @@ logged_in_as: You are logged in as
 stream:
   command:
     successful: Stream command OK
+page:
+  title:
+    checkout: Checkout
 block:
+  tickets:
+    name: Your tickets
   stats:
     name: Statistics
     members: Members
@@ -134,6 +139,8 @@ block:
 menu:
   logon_to: Log on to
 event:
+  meta:
+    keywords: Entropy, music, association, culture, nonprofit, event
   edit: Edit
   not_public: not public
   only_for_members: Event only shown to members
@@ -149,7 +156,7 @@ event:
       request_edited: Signup request edited
       artist: Artist
       why_should_we_choose_you: Why should we choose you?
-      wish_for_playtime: At what time do you wish to play?
+      wish_for_playtime: At what time would you like to perform?
       set_length: Preferred length of the set
       free_word: Free word
       save: Save
@@ -289,6 +296,7 @@ rsvp:
     <a href="/rsvp-rekisteriseloste">here</a>.
   closed: Sign Up Closed
 ticket:
+  ticket: Ticket
   check: Ticket Check
   form:
     reserve: Reserve
@@ -382,13 +390,23 @@ calendar:
   add_notifications_for_meetings: Add reminders for meetings
   generate: Generate the calendar link
   url_generated: Link generated
-
+product:
+  quantity: quantity
+  sold_out: Sold Out
 e30v:
+  gdpr: We only use nessessary cookis so that login and Stripe integarion works.
   nav:
     home: entropy 30 years
     info: info
     tickets: Tickets
     artists: Artists
     timetable: Timetable
+    safer_space: Safer Space 
   years: years
   buy_tickets: Buy tickets here
+  buy: Checkout
+  cart:
+    email:
+      label: Email in which we will send your purchases
+      help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
+    empty: Your cart is empty

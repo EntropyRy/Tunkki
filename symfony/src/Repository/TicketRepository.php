@@ -161,4 +161,25 @@ class TicketRepository extends ServiceEntityRepository
         }
         return null;
     }
+
+    public function findMemberTickets(Member $member): mixed
+    {
+        return $this->createQueryBuilder('t')
+            ->andWhere('t.owner = :member')
+            ->setParameter('member', $member)
+            ->getQuery()
+            ->getResult();
+    }
+    public function findTicketsByEmailAndEvent(string $email, Event $event): mixed
+    {
+        return $this->createQueryBuilder('t')
+            ->join('t.owner', 'm')
+            ->andWhere('m.email = :email')
+            ->orWhere('t.email = :email')
+            ->andWhere('t.event = :event')
+            ->setParameter('email', $email)
+            ->setParameter('event', $event)
+            ->getQuery()
+            ->getResult();
+    }
 }

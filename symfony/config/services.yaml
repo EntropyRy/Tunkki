@@ -17,6 +17,8 @@ parameters:
   mailer_sender_address: "webmaster@entropy.fi"
   door_socket: "%env(DOOR_SOCKET)%"
   router.request_context.scheme: "%env(SCHEME)%"
+  stripe_public_key: "%env(STRIPE_PUBLISHABLE_KEY)%"
+  stripe_secret_key: "%env(STRIPE_SECRET_KEY)%"
 services:
   _defaults:
     autowire: true
@@ -191,6 +193,10 @@ services:
     class: App\Block\ArtistListBlock
     tags:
       - { name: sonata.block, alias: artistlistblock }
+  entropy.block.tickets:
+    class: App\Block\TicketsBlock
+    tags:
+      - { name: sonata.block, alias: ticketsblock }
   entropy.block.compensations:
     class: App\Block\Compensations
     tags:
@@ -444,4 +450,16 @@ services:
           manager_type: orm,
           group: admin,
           label: Location,
+        }
+
+  admin.product:
+    class: App\Admin\ProductAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Product,
+          controller: App\Controller\ProductAdminController,
+          manager_type: orm,
+          group: admin,
+          label: Products,
         }

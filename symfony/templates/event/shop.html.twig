@@ -1,0 +1,83 @@
+{% extends event.template %}
+{% use 'pieces/event.html.twig' %}
+{% block content %}
+{{ form_start(form) }}
+{% for product_form in form.products %}
+{% set product = product_form.vars.value.product %}
+{% if inCheckouts[product.id] is defined %}
+{% set minus = inCheckouts[product.id] %}
+{% endif %}
+  <div
+      class="col product mb-2 {% if product.picture %}border-top{% endif %}"
+      {{ stimulus_controller('quantity', {'max': product.max((minus|default(0)))}) }}
+      >
+    <div class="row">
+      <div class="col-12 pic">
+        {% if product.picture %}
+         {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'style': 'border-radius: 0 0 1.5em 1.5em', 'title': product.name}) }}
+        {% endif %}
+      </div>
+      <div class="col-12 price">
+        <button
+            {{ stimulus_action('quantity', 'callopse') }}
+            class="bg-white text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
+            >
+          <span class="ps-4 mr-auto"><h3>{{ product.name }}</h3></span>
+          <span class="pe-4"><h3>{{ product.amount / 100 }}€ <i class="fa fa-circle-question"></i></h3></span>
+        </button>
+      </div>
+      <div class="col-12 info" {{ stimulus_target('quantity', 'callopse') }}>
+        <div class="px-4">
+          <p>
+            {{ product.description(app.request.locale) }}
+          </p>
+        </div>
+        <div class="text-uppercase text-center fw-bold">{{ 'product.quantity'|trans }}</div>
+      </div>
+      <div class="col-12 quantity">
+        {{ block('quantity') }}
+      </div>
+      <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
+    </div>
+  </div>
+{% endfor %}
+<div class="col-12">
+  {{ form_row(form.email) }}
+  <input data-turbo="false" type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
+  {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block quantity %}
+<div class="d-flex justify-content-center border rounded">
+{% if product.max(minus|default(0)) <= 0 %}
+{% set button = 'btn-secondary disabled' %}
+{% else %}
+{% set button = 'btn-primary' %}
+{% endif %}
+  <button
+    {{ stimulus_target('quantity', 'minus') }}
+    {{ stimulus_action('quantity', 'minus') }}
+    class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
+    style="outline: 2px white solid"
+    >
+    <i class="fa fa-minus"></i>
+  </button>
+  <span class="number text-center w-100 fs-2 bolder"
+    {{ stimulus_target('quantity', 'quantity') }}>
+    {% if product.max(minus|default(0)) <= 0 %}
+      {{ 'product.sold_out'|trans }}
+    {% else %}
+      0
+    {% endif %}
+  </span>
+  <button
+    {{ stimulus_target('quantity', 'plus') }}
+    {{ stimulus_action('quantity', 'plus') }}
+    class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
+    style="outline: 2px white solid"
+    >
+    <i class="fa fa-plus"></i>
+  </button>
+</div>
+{% endblock %}

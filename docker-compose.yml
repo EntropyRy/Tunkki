@@ -44,7 +44,7 @@ services:
     volumes:
       - ./symfony/public:/var/www/symfony/public
   node:
-    image: node:18-alpine
+    image: node:20-alpine
     volumes:
       - ./symfony:/app
     ports:

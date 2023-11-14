@@ -6,10 +6,12 @@
         <h3>{{ event.nameAndDateByLang(app.request.locale) }}{% if event.until %} - {{ event.until|date }}{% endif %}</h3>
         <h5>{{ 'event.form.sign_up.ends'|trans }}: {{ event.artistSignUpEnd|date }}</h5>
         <p>{{ 'event.form.sign_up.description'|trans }}.</p>
-{{ form_start(form) }}
-{{ form_widget(form) }}
-<input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'event.form.sign_up.save'|trans }}">
-{{ form_end(form) }}
+        {{ event.artistSignUpInfo(app.request.locale)|raw }}
+        <hr>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'event.form.sign_up.save'|trans }}">
+        {{ form_end(form) }}
     </div>
 </div>
 {% endblock %}

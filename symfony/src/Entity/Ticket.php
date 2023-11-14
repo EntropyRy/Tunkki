@@ -44,6 +44,12 @@ class Ticket implements \Stringable
     #[ORM\Column(nullable: true)]
     private ?bool $given = false;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $email = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $stripeProductId = null;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
@@ -152,6 +158,30 @@ class Ticket implements \Stringable
     public function setGiven(?bool $given): static
     {
         $this->given = $given;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function getStripeProductId(): ?string
+    {
+        return $this->stripeProductId;
+    }
+
+    public function setStripeProductId(?string $stripeProductId): static
+    {
+        $this->stripeProductId = $stripeProductId;
 
         return $this;
     }

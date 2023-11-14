@@ -102,6 +102,9 @@ class BookingAdminListener implements EventSubscriberInterface
      */
     public static function getSubscribedEvents(): array
     {
-        return ['sonata.admin.event.persistence.post_persist' => 'sendEmailNotification', 'sonata.admin.event.persistence.pre_persist' => 'updateRewards'];
+        return [
+            'sonata.admin.event.persistence.post_persist' => 'sendEmailNotification',
+            'sonata.admin.event.persistence.pre_persist' => 'updateRewards'
+        ];
     }
 }

@@ -55,10 +55,12 @@ final class TicketAdmin extends AbstractAdmin
         }
         $list
             ->add('ticketHolderHasNakki')
+            ->add('stripeProductId')
             ->add('price')
             ->add('given', null, ['editable' => true])
             ->add('owner.firstname')
             ->add('owner.lastname')
+            ->add('email')
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt')
@@ -90,6 +92,7 @@ final class TicketAdmin extends AbstractAdmin
         $form
             ->add('price')
             ->add('given')
+            ->add('email')
             ->add('owner')
             ->add('referenceNumber', null, ['disabled' => true])
             ->add('status', ChoiceType::class, [
@@ -114,7 +117,6 @@ final class TicketAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->remove('delete');
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('give', $this->getRouterIdParameter() . '/give');

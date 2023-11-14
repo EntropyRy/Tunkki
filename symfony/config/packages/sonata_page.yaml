@@ -57,6 +57,13 @@ sonata_page:
     - entropy_artist_edit
     - entropy_artist_delete
     - entropy_public_artist
+    - entropy_event
+    - entropy_event_en
+    - entropy_event_slug
+    - entropy_event_info
+    - entropy_event_safer_space
+    - entropy_event_artists
+    - entropy_event_shop
     - entropy_event_slug_artist_signup
     - entropy_event_slug_artist_signup_edit
     - entropy_event_calendar
@@ -65,13 +72,15 @@ sonata_page:
     - entropy_event_ticket
     - entropy_event_ticket_check
     - entropy_event_responsible
-    - entropy_event_artists
     - entropy_event_happening_create
     - entropy_event_happening_edit
     - entropy_event_happening_show
+    - event_stripe_checkouts
+    - entropy_event_shop_complete
   ignore_uri_patterns:
     - ^/admin\/
     - ^/api\/
+    - ^/stripe\/
 
   default_template: default
   templates:
