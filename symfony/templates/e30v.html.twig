@@ -84,10 +84,10 @@
 {% set current_url = prefix ~ app.request.pathinfo %}
 {% set el = {
   'home': block('event_path'),
-  'info': block('event_path_info') ?? '',
+  'info': block('event_path_info'),
   'tickets': block('event_path_shop'),
   'artists': block('event_path_artists'),
-  'safer_space': block('event_path_safer_space') ?? ''
+  'safer_space': block('event_path_safer_space')
   } %}
 {% apply spaceless %}
 <nav>
