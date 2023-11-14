@@ -253,7 +253,7 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        return $this->render('event/about.html.twig', [
+        return $this->render('event/info.html.twig', [
             'event' => $event,
         ]);
     }
