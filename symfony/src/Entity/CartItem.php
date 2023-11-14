@@ -65,12 +65,12 @@ class CartItem
     /**
      * @return array<string,?string>
      */
-    public function getLineItem(?int $quantity): ?array
+    public function getLineItem(?int $forcedQuantity, ?int $minus): ?array
     {
-        if ($this->product->getMax(0) > 0) {
+        if ($this->product->getMax($minus) > 0) {
             return [
                 'price' => $this->product->getStripePriceId(),
-                'quantity' => $quantity ? $quantity : $this->quantity,
+                'quantity' => $forcedQuantity ? $forcedQuantity : $this->quantity,
             ];
         }
         return null;

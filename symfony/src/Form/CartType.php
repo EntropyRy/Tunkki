@@ -23,15 +23,15 @@ class CartType extends AbstractType
             ->add('email', EmailType::class, [
                 'help' => $help,
                 'help_html' => true,
+                'label' => 'e30v.cart.email.label'
             ])
             ->add('products', CollectionType::class, [
                 'entry_type' => CartItemType::class,
                 'delete_empty' => function (CartItem $item = null): bool {
                     return null === $item || $item->getQuantity() == 0;
                 },
-                'allow_delete' => true
-            ]);
-        ;
+                'allow_delete' => true,
+            ]);;
     }
 
     public function configureOptions(OptionsResolver $resolver): void

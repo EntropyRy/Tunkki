@@ -196,33 +196,15 @@ class EventController extends Controller
                 'slug' => $event->getUrl()
             ]);
         }
-        $qrs = [];
         if ($stripeSession->status == 'complete') {
             $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
-            if ($checkout->getStatus() == 2) {
-                $cart = $checkout->getCart();
-                $email = $cart->getEmail();
-                $tickets = $this->ticketRepo->findTicketsByEmailAndEvent($email, $event);
-                $qrGenerator = new Generator();
-                foreach ($tickets as $ticket) {
-                    if ($ticket->getReferenceNumber()) {
-                        $qrs[] = base64_encode($qrGenerator
-                            ->format('png')
-                            ->eye('circle')
-                            ->style('round')
-                            ->size(600)
-                            ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                            ->errorCorrection('H')
-                            ->merge('images/golden-logo.png', .2)
-                            ->generate((string)$ticket->getReferenceNumber()));
-                    }
-                }
-                $request->getSession()->remove('cart');
-            }
+            $cart = $checkout->getCart();
+            $email = $cart->getEmail();
+            $request->getSession()->remove('cart');
         }
         return $this->render('event/shop_complete.html.twig', [
             'event' => $event,
-            'qrs' => $qrs
+            'email' => $email
         ]);
     }
     public function __construct(

@@ -156,7 +156,7 @@ event:
       request_edited: Signup request edited
       artist: Artist
       why_should_we_choose_you: Why should we choose you?
-      wish_for_playtime: At what time do you wish to play?
+      wish_for_playtime: At what time would you like to perform?
       set_length: Preferred length of the set
       free_word: Free word
       save: Save
@@ -406,5 +406,6 @@ e30v:
   buy: Checkout
   cart:
     email:
+      label: Email in which we will send your purchases
       help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
     empty: Your cart is empty

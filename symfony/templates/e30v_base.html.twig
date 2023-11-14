@@ -39,7 +39,7 @@
 
     {% block sonata_page_top_bar %}
         {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
-        <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="banner">
+        <nav class="d-print-none navbar navbar-dark bg-dark navbar-expand-md" role="banner">
             <span class="navbar-text" style="color: white;">ADMIN MENU:</span>
             <ul class="navbar-nav justify-content-left">
                 {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}

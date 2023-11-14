@@ -2,6 +2,9 @@
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
 {{ block('content_shop_complete', input) ?? '' }}
+{% endblock %}
+
+{% block qr_codes %}
 {% for qr in qrs %}
 <h1>{{ 'ticket.ticket'|trans }} #{{ loop.index }}</h1>
 <div class="qr-code text-center">

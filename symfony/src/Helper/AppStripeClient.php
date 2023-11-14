@@ -4,6 +4,7 @@ namespace App\Helper;
 
 use App\Entity\Event;
 use App\Entity\Product;
+use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\Product as StripeProduct;
 use Stripe\Price as StripePrice;
@@ -65,7 +66,7 @@ class AppStripeClient
         return $product;
     }
 
-    public function getCheckoutSession($sessionId)
+    public function getCheckoutSession($sessionId): Session
     {
         $stripe = $this->getClient();
         $session = $stripe->checkout->sessions->retrieve($sessionId);

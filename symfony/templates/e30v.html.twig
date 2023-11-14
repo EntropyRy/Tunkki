@@ -17,15 +17,15 @@
     {% endif %}
 {% endblock %}
 {% block page_container %}
-<div class="container-fluid" data-turbo-permanent>
+<div class="container-fluid">
   <div class="row">
     <div class="col-12">
-      {% set event_url = block('event_path') %}
+      {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
       <div class="float-end">
       {{ block('mobile_locale') }}
       </div>
     </div>
-    <div class="marquee-wrapper fs-1 col-12">
+    <div class="marquee-wrapper fs-1 col-12" data-turbo-permanent>
       <div class="marquee">
         {% for i in 0..5 %}
         <p>
@@ -115,7 +115,7 @@
 {% endblock %}
 
 {% block buy_button %}
-<a href="{{ block('event_path_shop') }}" class="btn btn-lg btn-buy w-100">{{ 'e30v.buy_tickets'|trans }}</a>
+<a href="{{ block('event_path_shop') }}" class="btn mt-4 btn-lg btn-buy w-100">{{ 'e30v.buy_tickets'|trans }}</a>
 {% endblock %}
 
 {% block location %}

@@ -91,14 +91,14 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 );
             }
-            if ($event->getTicketsEnabled()) {
+            if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
                 $menu->addChild(
                     'Tickets',
                     [
                         'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                     ]
                 );
-                if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
+                if ($event->getTicketsEnabled()) {
                     $menu->addChild(
                         'Update Ticket Count',
                         [

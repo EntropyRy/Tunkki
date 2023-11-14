@@ -10,7 +10,7 @@
         {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     {% endif %}
     {% if event.url is not empty and not event.externalUrl %}
-        {% set event_url = block('event_path') %}
+        {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
     {% endif %}
 {% else %}
     {% if app.user %}
@@ -73,9 +73,9 @@
 {% apply spaceless %}
     {% if app.request.locale == 'fi' %}
         <span>FI</span> |
-        <a data-turbo="false" href="/en/{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
+        <a data-turbo="false" href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
     {% else %}
-        <a data-turbo="false" href="/{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a> |
+        <a data-turbo="false" href="{% if event_url is defined %}{{ event_url }}{% endif %}">FI</a> |
         <span>EN</span>
     {% endif %}
 {% endapply %}

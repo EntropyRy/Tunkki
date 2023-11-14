@@ -42,10 +42,24 @@ class CheckoutsController extends AbstractController
         $expires = new \DateTime('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
+        $max = [];
+        $ongoingCheckouts = $cRepo->findOngoingCheckouts();
+        foreach ($ongoingCheckouts as $checkout) {
+            $otherCart = $checkout->getCart();
+            foreach ($otherCart->getProducts() as $item) {
+                if (!array_key_exists($item->getProduct()->getId(), $max)) {
+                    $max[$item->getProduct()->getId()] = 0;
+                }
+                $max[$item->getProduct()->getId()] += $item->getQuantity();
+            }
+        }
         foreach ($products as $cartItem) {
-            $item = $cartItem->getLineItem(null);
+            $minus = array_key_exists($cartItem->getProduct()->getId(), $max) ? $max[$cartItem->getProduct()->getId()] : null;
+            $item = $cartItem->getLineItem(null, $minus);
             if (is_array($item)) {
                 $lineItems[] = $item;
+            } else {
+                $this->addFlash('warning', 'product.sold_out');
             }
         }
         if (count($lineItems) > 0) {
@@ -55,7 +69,7 @@ class CheckoutsController extends AbstractController
                 $cartItem->setProduct($eventServiceFeeProduct);
                 $cartItem->setQuantity(1);
                 $cart->addProduct($cartItem);
-                $lineItems[] = $cartItem->getLineItem(1);
+                $lineItems[] = $cartItem->getLineItem(1, null);
             }
             $stripeSession = $client->checkout->sessions->create([
                 'ui_mode' => 'embedded',
