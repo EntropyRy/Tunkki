@@ -68,7 +68,7 @@ final class ProductAdmin extends AbstractAdmin
             )
             ->add('descriptionFi')
             ->add('descriptionEn')
-            ->add('serviceFee')
+            //->add('serviceFee')
             ->add('ticket')
             ->add('quantity')
             ->add('event');
