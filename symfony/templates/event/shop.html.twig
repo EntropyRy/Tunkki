@@ -12,7 +12,7 @@
 {% endif %}
   <div
       class="col product mb-2 {% if product.picture %}border-top{% endif %}"
-      {{ stimulus_controller('quantity', {'max': product.max((minus|default(0)))}) }}
+      {{ stimulus_controller('product', {'max': product.max((minus|default(0)))}) }}
       >
     <div class="row">
       <div class="col-12 pic">
@@ -22,14 +22,14 @@
       </div>
       <div class="col-12 price">
         <button
-            {{ stimulus_action('quantity', 'callopse') }}
+            {{ stimulus_action('product', 'callopse') }}
             class="bg-white text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
             >
           <span class="ps-4 mr-auto"><h3>{{ product.name }}</h3></span>
           <span class="pe-4"><h3>{{ product.amount / 100 }}€ <i class="fa fa-circle-question"></i></h3></span>
         </button>
       </div>
-      <div class="col-12 info" {{ stimulus_target('quantity', 'callopse') }}>
+      <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
         <div class="px-4">
           <p>
             {{ product.description(app.request.locale) }}
@@ -60,15 +60,15 @@
 {% set button = 'btn-primary' %}
 {% endif %}
   <button
-    {{ stimulus_target('quantity', 'minus') }}
-    {{ stimulus_action('quantity', 'minus') }}
+    {{ stimulus_target('product', 'minus') }}
+    {{ stimulus_action('product', 'minus') }}
     class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
     style="outline: 2px white solid"
     >
     <i class="fa fa-minus"></i>
   </button>
   <span class="number text-center w-100 fs-2 bolder"
-    {{ stimulus_target('quantity', 'quantity') }}>
+    {{ stimulus_target('product', 'quantity') }}>
     {% if product.max(minus|default(0)) <= 0 %}
       {{ 'product.sold_out'|trans }}
     {% else %}
@@ -76,8 +76,8 @@
     {% endif %}
   </span>
   <button
-    {{ stimulus_target('quantity', 'plus') }}
-    {{ stimulus_action('quantity', 'plus') }}
+    {{ stimulus_target('product', 'plus') }}
+    {{ stimulus_action('product', 'plus') }}
     class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
     style="outline: 2px white solid"
     >
