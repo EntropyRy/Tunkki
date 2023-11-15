@@ -19,6 +19,7 @@
     "file-loader": "^6.0.0",
     "glob-all": "^3.3.1",
     "html5-qrcode": "^2.3.8",
+    "idiomorph": "^0.0.9",
     "intl-messageformat": "^10.2.5",
     "jquery": "^3.7.1",
     "masonry-layout": "^4.2.2",
@@ -30,6 +31,7 @@
     "sass-loader": "^13.0.2",
     "signature_pad": "^4.1.6",
     "sortablejs": "^1.14.0",
+    "turbo-view-transitions": "^0.3.0",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.0.1",
     "webpack-notifier": "^1.15.0"
