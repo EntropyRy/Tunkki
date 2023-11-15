@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
-  static values = { publicKey: String, clientSecret: String };
+  static values = { publicKey: String, clientSecret: String, time: Number };
   static stripe;
 
   async connect() {
@@ -10,6 +10,9 @@ export default class extends Controller {
       clientSecret: this.clientSecretValue,
     });
     this.checkout.mount(this.element);
+    setTimeout(function () {
+      window.history.back();
+    }, 1800000);
   }
 
   disconnect() {

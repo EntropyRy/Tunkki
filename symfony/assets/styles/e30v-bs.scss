@@ -75,6 +75,16 @@ $fa-font-display: swap;
 html {
   height: 100%;
 }
+h1,
+h2,
+h3,
+h4,
+h5 {
+  background: $primary;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  border-radius: 2em;
+}
 
 body {
   font-family: "Hanken Grotesk Variable", sans-serif;
@@ -214,6 +224,9 @@ body {
       width: 100%;
     }
     h3 {
+      padding-left: 0;
+      padding-right: 0;
+      background: $white;
       line-height: 2em;
       margin-bottom: 0;
       white-space: nowrap;

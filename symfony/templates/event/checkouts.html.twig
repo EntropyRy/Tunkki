@@ -8,5 +8,5 @@
 {% endblock %}
 
 {% block content %}
-<div {{ stimulus_controller('stripe', {'publicKey': publicKey, 'clientSecret': stripeSession.client_secret}) }}></div>
+<div {{ stimulus_controller('stripe', {'publicKey': publicKey, 'clientSecret': stripeSession.client_secret, 'time': time}) }}></div>
 {% endblock %}

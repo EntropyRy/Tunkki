@@ -87,7 +87,8 @@ class CheckoutsController extends AbstractController
         return $this->render('event/checkouts.html.twig', [
             'stripeSession' => $stripeSession,
             'event' => $event,
-            'publicKey' => $this->getParameter('stripe_public_key')
+            'publicKey' => $this->getParameter('stripe_public_key'),
+            'time' => $checkout->getUpdatedAt()->format('U')
         ]);
     }
 }
