@@ -139,7 +139,7 @@ body {
       white-space: nowrap;
       overflow: hidden;
       display: inline-block;
-      animation: marquee 20s linear infinite;
+      animation: marquee 40s linear infinite;
       p {
         display: inline-block;
         margin-bottom: 0;
@@ -230,7 +230,7 @@ body {
     h3 {
       padding-left: 0;
       padding-right: 0;
-      background: $white;
+      background: transparent;
       line-height: 2em;
       margin-bottom: 0;
       white-space: nowrap;
