@@ -111,4 +111,16 @@ class Checkout
 
         return $this;
     }
+
+    public function getItemQuantitiesInOngoing(): array
+    {
+        $max = [];
+        foreach ($this->cart->getProducts() as $item) {
+            if (!array_key_exists($item->getProduct()->getId(), $max)) {
+                $max[$item->getProduct()->getId()] = 0;
+            }
+            $max[$item->getProduct()->getId()] += $item->getQuantity();
+        }
+        return $max;
+    }
 }

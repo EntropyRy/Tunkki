@@ -42,19 +42,9 @@ class CheckoutsController extends AbstractController
         $expires = new \DateTime('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
-        $max = [];
-        $ongoingCheckouts = $cRepo->findOngoingCheckouts();
-        foreach ($ongoingCheckouts as $checkout) {
-            $otherCart = $checkout->getCart();
-            foreach ($otherCart->getProducts() as $item) {
-                if (!array_key_exists($item->getProduct()->getId(), $max)) {
-                    $max[$item->getProduct()->getId()] = 0;
-                }
-                $max[$item->getProduct()->getId()] += $item->getQuantity();
-            }
-        }
+        $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
         foreach ($products as $cartItem) {
-            $minus = array_key_exists($cartItem->getProduct()->getId(), $max) ? $max[$cartItem->getProduct()->getId()] : null;
+            $minus = array_key_exists($cartItem->getProduct()->getId(), $itemsInCheckout) ? $itemsInCheckout[$cartItem->getProduct()->getId()] : null;
             $item = $cartItem->getLineItem(null, $minus);
             if (is_array($item)) {
                 $lineItems[] = $item;

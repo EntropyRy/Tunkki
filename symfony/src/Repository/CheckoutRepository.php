@@ -57,7 +57,21 @@ class CheckoutRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
+    public function findProductQuantitiesInOngoingCheckouts(): ?array
+    {
+        $itemsInCheckouts = [];
+        $ongoingCheckouts = $this->findOngoingCheckouts();
+        foreach ($ongoingCheckouts as $checkout) {
+            $cart = $checkout->getCart();
+            foreach ($cart->getProducts() as $item) {
+                if (!array_key_exists($item->getProduct()->getId(), $itemsInCheckouts)) {
+                    $itemsInCheckouts[$item->getProduct()->getId()] = 0;
+                }
+                $itemsInCheckouts[$item->getProduct()->getId()] += $item->getQuantity();
+            }
+        }
+        return $itemsInCheckouts;
+    }
     //    public function findOneBySomeField($value): ?Checkout
     //    {
     //        return $this->createQueryBuilder('c')

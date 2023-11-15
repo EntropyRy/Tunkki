@@ -138,17 +138,7 @@ class EventController extends Controller
                 $cart = new Cart();
             }
         }
-        $max = [];
-        $ongoingCheckouts = $checkoutR->findOngoingCheckouts();
-        foreach ($ongoingCheckouts as $checkout) {
-            $otherCart = $checkout->getCart();
-            foreach ($otherCart->getProducts() as $item) {
-                if (!array_key_exists($item->getProduct()->getId(), $max)) {
-                    $max[$item->getProduct()->getId()] = 0;
-                }
-                $max[$item->getProduct()->getId()] += $item->getQuantity();
-            }
-        }
+        $max = $checkoutR->findProductQuantitiesInOngoingCheckouts();
         $cart->setProducts($products);
         if ($cart->getEmail() == null) {
             $cart->setEmail($email);
