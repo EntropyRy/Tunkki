@@ -1,5 +1,5 @@
 {% use 'menu/menu.html.twig' %}
-<header class="row" id="header" data-turbo-permanent>
+<header class="row" id="header" data-turbo-frame="nav">
 <div class="g-0 mb-4">
     {% if event is defined %}
         {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
@@ -8,7 +8,7 @@
     {% endif %}
     <div class="header-img text-center d-none d-lg-block">
         <a href="/{% if app.request.locale == 'en' %}en{% endif %}">
-            <img src="/images/header-logo-text.svg" {% if theme == 'dark' %}class="invert"{% endif %} width="50%" height="auto" z-index="0" alt="ENTROPY">
+            <img src="{{ asset('/images/header-logo-text.svg') }}" {% if theme == 'dark' %}class="invert"{% endif %} width="50%" height="auto" z-index="0" alt="ENTROPY">
         </a>
     </div>
     {{ block('menu') }}
