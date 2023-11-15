@@ -511,5 +511,5 @@ e30v:
   cart:
     empty: Ostoskorisi on tyhjä
     email:
-      label: Sähköposti johon liput lähetetään
+      label: Sähköposti johon ostoksesi lähetetään
       help: Kannattaa kirjautua <a href="/login">sisään</a> niin liitämme lipun tiliisi
