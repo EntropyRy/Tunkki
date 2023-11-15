@@ -404,7 +404,7 @@ ticket:
     off: Ennakkomyynti ei ole käytössä
 join_us:
   title: Liity jäseneksi!
-  button: Liity
+  button: Liity jäseneksi
   mattermost: Liity Mattermostiin
   1:
     Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme
