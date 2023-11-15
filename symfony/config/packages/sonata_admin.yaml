@@ -75,6 +75,7 @@ sonata_admin:
         icon: '<i class="fa fa-archive"></i>'
         items:
           - admin.product
+          - admin.checkout
         roles: [SONATA_SUPER_ADMIN, MEMBERS]
       sonata.admin.group.members:
         label: Members

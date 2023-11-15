@@ -87,8 +87,8 @@ final class ProductAdmin extends AbstractAdmin
     }
     public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
-        $menu->addChild('fetchFromStripe', [
+        $menu->addChild('Fetch from Stripe', [
             'route' => 'admin_app_product_fetch_from_stripe',
-        ])->setAttribute('icon', 'fa fa-balance-scale');
+        ])->setAttribute('icon', 'fa fa-download');
     }
 }

@@ -463,3 +463,15 @@ services:
           group: admin,
           label: Products,
         }
+
+  admin.checkout:
+    class: App\Admin\CheckoutAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\Checkout,
+          controller: App\Controller\CheckoutAdminController,
+          manager_type: orm,
+          group: admin,
+          label: Checkouts,
+        }

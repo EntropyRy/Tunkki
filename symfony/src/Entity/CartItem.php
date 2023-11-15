@@ -75,4 +75,9 @@ class CartItem
         }
         return null;
     }
+
+    public function __toString(): string
+    {
+        return $this->product ? $this->product->getName() . ' X ' . $this->quantity : 'N/A';
+    }
 }

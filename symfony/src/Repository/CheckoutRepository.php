@@ -72,6 +72,16 @@ class CheckoutRepository extends ServiceEntityRepository
         }
         return $itemsInCheckouts;
     }
+
+    public function findUnneededCheckouts(): ?array
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c')
+            ->andWhere('c.status = -1')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     //    public function findOneBySomeField($value): ?Checkout
     //    {
     //        return $this->createQueryBuilder('c')

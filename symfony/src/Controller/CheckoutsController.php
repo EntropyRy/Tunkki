@@ -38,7 +38,6 @@ class CheckoutsController extends AbstractController
         $session = $request->getSession();
         $cartId = $session->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
-        $email = $cart->getEmail();
         $expires = new \DateTime('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
@@ -69,7 +68,7 @@ class CheckoutsController extends AbstractController
                 'automatic_tax' => [
                     'enabled' => true,
                 ],
-                'customer_email' => $email,
+                'customer_email' => $cart->getEmail(),
                 'expires_at' => $expires->format('U'),
                 'locale' => $request->getLocale()
             ]);
