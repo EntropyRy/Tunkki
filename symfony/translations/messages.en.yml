@@ -163,7 +163,7 @@ event:
       new_artist_help_html:
         If you want to create a new artist you can do it from
         <a href="/en/profile/artist">your artist profile page</a>
-      ends: Sing up ends at
+      ends: Sign up ends at
       description:
         Please make modifications to your artist profile before the signup
         as the profiles are event specific

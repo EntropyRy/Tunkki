@@ -101,8 +101,11 @@ body {
   }
   .bg-img-container {
     background: linear-gradient(125deg, $blue 0%, $dark-blue 100%);
-    background-position: left top;
-    background-size: auto;
+    background-position: 0 0;
+    -webkit-animation: bg-animate 30s ease infinite;
+    -moz-animation: bg-animate 30s ease infinite;
+    animation: bg-animate 30s ease infinite;
+    background-size: 400% 400%;
     background-attachment: fixed;
     width: 100%;
     height: 100%;
@@ -246,5 +249,39 @@ body {
     .number {
       line-height: 2em;
     }
+  }
+}
+
+@-webkit-keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
