@@ -42,7 +42,7 @@
         {% set name = artist.name %}
     {% endif %}
     <h3 class="mb-0 bg-primary text-center text-uppercase fw-bolder">{{ name }}</h3>
-    <div class="">
+    <div class="border overflow-hidden" style="border-radius: 1em">
     <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
     </div>
 {% endif %}
@@ -50,7 +50,7 @@
 {% block cycle %}
 <div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
     <div class="row gx-2">
-        <div class="col-6 col-sm-6 col-md-5 col-xl-5 rounded overflow-hidden">
+        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
             {{ block('artist_pic') }}
         </div>
         <div class="col-6 col-sm-6 col-md-7 col-xl-7">
