@@ -55,9 +55,6 @@ class AppStripeClient
         if ($stripeProduct['active'] == 0 || $stripePrice['active'] == 0) {
             $active = false;
         }
-        if (!empty($stripeProduct['images'])) {
-            $product->setStripeImageUrl($stripeProduct['images'][0]);
-        }
         $product->setAmount($stripePrice['unit_amount']);
         $product->setActive($active);
         $product->setName($stripeProduct['name']);

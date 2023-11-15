@@ -49,9 +49,6 @@ class Product
     #[ORM\Column]
     private ?bool $serviceFee = false;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $stripeImageUrl = null;
-
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionFi = null;
 
@@ -236,18 +233,6 @@ class Product
     public function setServiceFee(bool $serviceFee): static
     {
         $this->serviceFee = $serviceFee;
-
-        return $this;
-    }
-
-    public function getStripeImageUrl(): ?string
-    {
-        return $this->stripeImageUrl;
-    }
-
-    public function setStripeImageUrl(?string $stripeImageUrl): static
-    {
-        $this->stripeImageUrl = $stripeImageUrl;
 
         return $this;
     }
