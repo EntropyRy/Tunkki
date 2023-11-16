@@ -80,11 +80,11 @@ h2,
 h3,
 h4,
 h5 {
-  background: $primary;
+  background: $white;
   padding-left: 0.5em;
   padding-right: 0.5em;
   border-radius: 2em;
-  outline: 2px solid $white;
+  color: $dark-blue;
 }
 
 body {
@@ -215,16 +215,16 @@ body {
   padding: 0 0;
   border-left: 2px $white solid;
   border-right: 2px $white solid;
+  border-top: 2px $white solid;
   border-radius: 2em;
   backdrop-filter: blur(10px);
-  overflow: hidden;
   .pic {
     overflow: hidden;
     border-radius: 0 0 2em 2em;
   }
   .price {
     button {
-      border: none;
+      border-bottom: 2px $white solid;
       width: 100%;
     }
     h3 {

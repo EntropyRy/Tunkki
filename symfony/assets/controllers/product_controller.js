@@ -2,7 +2,14 @@ import { Controller } from "@hotwired/stimulus";
 
 stimulusFetch: "lazy";
 export default class extends Controller {
-  static targets = ["plus", "minus", "quantity", "formquantity", "callopse"];
+  static targets = [
+    "plus",
+    "minus",
+    "quantity",
+    "formquantity",
+    "callopse",
+    "chevron",
+  ];
   static values = {
     quantity: Number,
     max: Number,
@@ -36,5 +43,7 @@ export default class extends Controller {
   callopse(event) {
     event.preventDefault();
     this.callopseTarget.classList.toggle("callopsed");
+    this.chevronTarget.classList.toggle("fa-chevron-up");
+    this.chevronTarget.classList.toggle("fa-chevron-down");
   }
 }

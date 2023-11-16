@@ -23,10 +23,17 @@
       <div class="col-12 price">
         <button
             {{ stimulus_action('product', 'callopse') }}
-            class="bg-white text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
+            class="bg-white p-0 text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
             >
-          <span class="ps-4 mr-auto"><h3>{{ product.name }}</h3></span>
-          <span class="pe-4"><h3>{{ product.amount / 100 }}€ <i class="fa fa-circle-question"></i></h3></span>
+            <h3 class="ps-4 pe-2 d-flex w-100 justify-content-between">
+              <span>{{ product.name }}</span>
+              <span>{{ product.amount / 100 }}€</span>
+            </h3>
+          <span class="btn btn-lg rounded-circle btn-primary text-darkblue fs-4"
+              style="outline: 2px white solid"
+          >
+            <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
+          </span>
         </button>
       </div>
       <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
