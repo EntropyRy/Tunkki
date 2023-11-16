@@ -41,7 +41,7 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <h3 class="mb-0 bg-primary text-center text-uppercase fw-bolder">{{ name }}</h3>
+    <h3 class="mb-0 text-uppercase fw-bolder">{{ name }}</h3>
     <div class="border overflow-hidden" style="border-radius: 1em">
     <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
     </div>
