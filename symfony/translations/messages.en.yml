@@ -394,7 +394,7 @@ product:
   quantity: quantity
   sold_out: Sold Out
 e30v:
-  gdpr: We only use nessessary cookis so that login and Stripe integarion works.
+  gdpr: We only use nessessary cookies so that login and Stripe integarion works.
   nav:
     home: entropy 30 years
     info: info
