@@ -11,7 +11,7 @@ $secondary: $gray;
 $success: #28a745;
 $danger: #ff4136;
 $warning: #ffc107;
-$dark: #343a40;
+$dark: $dark-blue;
 $info: #17a2b8;
 $enable-responsive-font-sizes: true;
 $border-width: 2px;
@@ -19,7 +19,7 @@ $grid-gutter-width: 48px;
 $btn-whitespace: "nowrap";
 $body-bg: $blue;
 $body-color: #fff;
-$border-radius: 4em;
+$border-radius: 34px;
 $link-color: $green;
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/variables";
@@ -74,17 +74,6 @@ $fa-font-display: swap;
 
 html {
   height: 100%;
-}
-h1,
-h2,
-h3,
-h4,
-h5 {
-  background: $white;
-  padding-left: 0.5em;
-  padding-right: 0.5em;
-  border-radius: 2em;
-  color: $dark-blue;
 }
 
 body {
@@ -145,6 +134,25 @@ body {
         margin-bottom: 0;
         text-transform: uppercase;
       }
+    }
+  }
+  .content {
+    background: $dark-blue;
+    background: rgba(63, 60, 138, 0.8);
+    border: 2px solid $white;
+    border-radius: 34px;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      background: $white;
+      padding: 0.4em 0.6em;
+      border-radius: 34px;
+      color: $dark-blue;
+    }
+    p {
+      padding: 0 1em;
     }
   }
 }
@@ -216,15 +224,18 @@ body {
   border-left: 2px $white solid;
   border-right: 2px $white solid;
   border-top: 2px $white solid;
-  border-radius: 2em;
+  border-radius: 34px;
   backdrop-filter: blur(10px);
   .pic {
     overflow: hidden;
-    border-radius: 0 0 2em 2em;
+    border-radius: 0 0 34px 34px;
   }
   .price {
     button {
       border-bottom: 2px $white solid;
+      border-left: 0px $white solid;
+      border-right: 0px $white solid;
+      border-top: 2px $white solid;
       width: 100%;
     }
     h3 {
@@ -247,7 +258,9 @@ body {
   }
   .quantity {
     .number {
-      line-height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   }
 }

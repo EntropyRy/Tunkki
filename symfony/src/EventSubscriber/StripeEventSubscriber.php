@@ -175,7 +175,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 ->subject('[' . $eventName . '] Your ticket #' . ($x + 1) . ' / Lippusi #' . ($x + 1))
                 ->addPart((new DataPart($qr, 'ticket', 'image/png', 'base64'))->asInline())
                 ->htmlTemplate('emails/ticket.html.twig')
-                ->context(['body' => $qr, 'links' => true, 'img' => $img]);
+                ->context(['body' => $qr, 'links' => false, 'img' => $img]);
             $this->mailer->send($mail);
         }
     }

@@ -18,7 +18,9 @@
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}</h1>
             {% endif %}
             {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-            {{ block('content_artists', input) ?? '' }}
+            <div class="content">
+                {{ block('content_artists', input) ?? '' }}
+            </div>
             {{ block('bios') }}
             {% if block('vj_bios')|length > 0 %}
             <h1><a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - VJ {{ 'Artists'|trans }}</h1>
@@ -41,23 +43,25 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <h3 class="mb-0 text-uppercase fw-bolder">{{ name }}</h3>
-    <div class="border overflow-hidden" style="border-radius: 1em">
+    <div class="rounded-circle overflow-hidden mb-4 me-4" style="outline: 2px solid white;">
     <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
     </div>
 {% endif %}
 {% endblock %}
 {% block cycle %}
-<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
-    <div class="row gx-2">
-        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
-            {{ block('artist_pic') }}
-        </div>
-        <div class="col-6 col-sm-6 col-md-7 col-xl-7">
-            {{ block('artist_event_info') }}
-        </div>
-        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-12 mt-3 mb-3 content">
+<div class="row">
+    <div class="col-12">
+        <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder">{{ name }}</h3>
     </div>
+    <div class="col-6 col-sm-6 col-md-5 col-xl-5 pe-2" style="margin-top: 2px">
+        {{ block('artist_pic') }}
+    </div>
+    <div class="col-6 col-sm-6 col-md-7 col-xl-7 pe-4">
+        {{ block('artist_event_info') }}
+    </div>
+    <div class="col mt-2 mx-4 mb-4 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+</div>
 </div>
 {% if not loop.last %}
 <hr class="d-md-none">

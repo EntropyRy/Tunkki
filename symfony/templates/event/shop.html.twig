@@ -2,8 +2,11 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+<div class="content">
 {{ block('content_shop', input) ?? '' }}
+</div>
 {% if form.products|length > 0 %}
+<hr>
 {{ form_start(form) }}
 {% for product_form in form.products %}
 {% set product = product_form.vars.value.product %}
