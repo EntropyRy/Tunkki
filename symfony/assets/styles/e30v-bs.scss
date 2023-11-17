@@ -15,11 +15,12 @@ $dark: $dark-blue;
 $info: #17a2b8;
 $enable-responsive-font-sizes: true;
 $border-width: 2px;
+$outline: 2px;
 $grid-gutter-width: 48px;
 $btn-whitespace: "nowrap";
 $body-bg: $blue;
 $body-color: #fff;
-$border-radius: 34px;
+$border-radius: 2rem;
 $link-color: $green;
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/variables";
@@ -139,8 +140,10 @@ body {
   .content {
     background: $dark-blue;
     background: rgba(63, 60, 138, 0.8);
-    border: 2px solid $white;
-    border-radius: 34px;
+    outline: $outline solid $white;
+    outline-offset: calc($outline / 2 - $outline);
+    padding-bottom: 1rem;
+    border-radius: 2rem;
     h1,
     h2,
     h3,
@@ -148,11 +151,11 @@ body {
     h5 {
       background: $white;
       padding: 0.4em 0.6em;
-      border-radius: 34px;
+      border-radius: 2rem;
       color: $dark-blue;
     }
     p {
-      padding: 0 1em;
+      padding: 0 1rem;
     }
   }
 }
@@ -172,27 +175,16 @@ body {
   backdrop-filter: blur(10px);
   font-weight: bolder;
   @include button-outline-variant($white, $pink, $white, $white);
-  border-style: solid;
-  border-color: $white;
-  border-top-width: 1px;
-  border-bottom-width: 1px;
-  border-left-width: 2px;
-  border-right-width: 2px;
-  &:first-of-type {
-    border-top-width: 2px;
-    border-bottom-width: 1px;
-  }
-  &:last-of-type {
-    border-top-width: 1px;
-    border-bottom-width: 2px;
-  }
+  outline: $outline solid $white;
+  outline-offset: calc($outline / 2 - $outline);
+  border: 0;
   &.active {
     color: $white;
     background: transparent;
   }
   &.active:before {
-    content: "";
-    outline: 2px solid $white;
+    content: " ";
+    outline: $outline solid $white;
     display: block;
     width: 30px;
     height: 30px;
@@ -221,28 +213,25 @@ body {
 
 .product {
   padding: 0 0;
-  border-left: 2px $white solid;
-  border-right: 2px $white solid;
-  border-top: 2px $white solid;
-  border-radius: 34px;
+  outline: $outline solid $white;
+  outline-offset: calc($outline / 2 - $outline);
+  border-radius: 2rem;
   backdrop-filter: blur(10px);
   .pic {
     overflow: hidden;
-    border-radius: 0 0 34px 34px;
+    border-radius: 0 0 2rem 2rem;
   }
   .price {
     button {
-      border-bottom: 2px $white solid;
-      border-left: 0px $white solid;
-      border-right: 0px $white solid;
-      border-top: 2px $white solid;
+      border: $outline solid $white;
       width: 100%;
+      align-items: center;
     }
     h3 {
       padding-left: 0;
       padding-right: 0;
       background: transparent;
-      line-height: 2em;
+      line-height: 2rem;
       margin-bottom: 0;
       white-space: nowrap;
     }
