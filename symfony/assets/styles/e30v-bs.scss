@@ -218,20 +218,31 @@ body {
   border-radius: 2rem;
   backdrop-filter: blur(10px);
   .pic {
-    overflow: hidden;
-    border-radius: 0 0 2rem 2rem;
+    img {
+      border-radius: 2rem;
+    }
   }
   .price {
+    min-height: calc($border-radius * 2);
     button {
-      border: $outline solid $white;
+      background: $white;
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
       width: 100%;
+      border: 0;
       align-items: center;
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc($border-radius * 2);
+        min-width: calc($border-radius * 2);
+      }
     }
     h3 {
       padding-left: 0;
       padding-right: 0;
       background: transparent;
-      line-height: 2rem;
       margin-bottom: 0;
       white-space: nowrap;
     }
@@ -246,10 +257,22 @@ body {
     }
   }
   .quantity {
-    .number {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .quantity-holder {
+      min-height: calc($border-radius * 2);
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
+      .number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button {
+        min-height: calc($border-radius * 2);
+        min-width: calc($border-radius * 2);
+        border: 0;
+        outline: $outline solid $white;
+        outline-offset: calc($outline / 2 - $outline);
+      }
     }
   }
 }

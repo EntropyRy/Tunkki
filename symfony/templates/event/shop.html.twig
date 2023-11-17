@@ -20,19 +20,19 @@
     <div class="row">
       <div class="col-12 pic">
         {% if product.picture %}
-         {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'style': 'border-radius: 0 0 1.5em 1.5em', 'title': product.name}) }}
+         {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'title': product.name}) }}
         {% endif %}
       </div>
       <div class="col-12 price">
         <button
           {{ stimulus_action('product', 'callopse') }}
-          class="bg-white p-0 text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
+          class="p-0 text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
           >
           <h3 class="ps-4 pe-2 d-flex w-100 justify-content-between">
             <span>{{ product.name }}</span>
             <span>{{ product.amount / 100 }}€</span>
           </h3>
-          <span class="btn btn-lg rounded-circle btn-primary text-darkblue fs-4"
+          <span class="btn rounded-circle btn-primary text-darkblue fs-4"
           >
             <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
           </span>
@@ -62,7 +62,7 @@
 {% endblock %}
 
 {% block quantity %}
-<div class="d-flex justify-content-center border rounded">
+<div class="quantity-holder d-flex justify-content-center rounded">
 {% if product.max(minus|default(0)) <= 0 %}
 {% set button = 'btn-secondary disabled' %}
 {% else %}
@@ -71,8 +71,7 @@
   <button
     {{ stimulus_target('product', 'minus') }}
     {{ stimulus_action('product', 'minus') }}
-    class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
-    style="outline: 2px white solid"
+    class="btn rounded-circle {{ button }} text-darkblue fs-4"
     >
     <i class="fa fa-minus"></i>
   </button>
@@ -87,8 +86,7 @@
   <button
     {{ stimulus_target('product', 'plus') }}
     {{ stimulus_action('product', 'plus') }}
-    class="btn btn-lg rounded-circle {{ button }} text-darkblue fs-4"
-    style="outline: 2px white solid"
+    class="btn rounded-circle {{ button }} text-darkblue fs-4"
     >
     <i class="fa fa-plus"></i>
   </button>
