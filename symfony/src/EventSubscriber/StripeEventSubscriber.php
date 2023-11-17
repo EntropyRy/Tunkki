@@ -8,6 +8,7 @@ use App\Entity\Ticket;
 use App\Helper\AppStripeClient;
 use App\Helper\ReferenceNumber;
 use App\Repository\CheckoutRepository;
+use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
@@ -24,12 +25,13 @@ use Symfony\Component\Mime\Part\DataPart;
 class StripeEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly CheckoutRepository $cRepo,
-        private readonly ProductRepository $pRepo,
+        private readonly CheckoutRepository $checkhoutRepo,
+        private readonly ProductRepository $productRepo,
         private readonly LoggerInterface $logger,
         private readonly AppStripeClient $stripe,
         private readonly MemberRepository $memberRepo,
         private readonly TicketRepository $ticketRepo,
+        private readonly EmailRepository $emailRepo,
         private readonly ReferenceNumber $rn,
         private readonly MailerInterface $mailer
     ) {
@@ -51,10 +53,10 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripeEvent = $webhook->getStripeObject();
         $stripeProduct = $stripeEvent->data->object;
         try {
-            $products = $this->pRepo->findBy(['stripeId' => $stripeProduct['id']]);
+            $products = $this->productRepo->findBy(['stripeId' => $stripeProduct['id']]);
             foreach ($products as $product) {
                 $product = $this->stripe->updateOurProduct($product, null, $stripeProduct);
-                $this->pRepo->save($product, true);
+                $this->productRepo->save($product, true);
             }
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
@@ -68,7 +70,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         try {
             $product = new Product();
             $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
-            $this->pRepo->save($product, true);
+            $this->productRepo->save($product, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
         }
@@ -78,9 +80,9 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripeEvent = $webhook->getStripeObject();
         $stripePrice = $stripeEvent->data->object;
         try {
-            $product = $this->pRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
+            $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
             $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
-            $this->pRepo->save($product, true);
+            $this->productRepo->save($product, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
         }
@@ -91,9 +93,9 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripePrice = $stripeEvent->data->object;
 
         try {
-            $product = $this->pRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
+            $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
             $product->setActive(false);
-            $this->pRepo->save($product, true);
+            $this->productRepo->save($product, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
         }
@@ -104,10 +106,10 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $session = $stripeEvent->data->object;
         $this->logger->notice('Session: ' . $session['id']);
         try {
-            $checkout = $this->cRepo->findOneBy(['stripeSessionId' => $session['id']]);
+            $checkout = $this->checkhoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
             $this->logger->notice('Checkout expired: ' . $checkout->getStripeSessionId());
             $checkout->setStatus(-1);
-            $this->cRepo->save($checkout, true);
+            $this->checkhoutRepo->save($checkout, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
         }
@@ -118,16 +120,18 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $session = $stripeEvent->data->object;
         $this->logger->notice('Session: ' . $session['id']);
         try {
-            $checkout = $this->cRepo->findOneBy(['stripeSessionId' => $session['id']]);
+            $checkout = $this->checkhoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
             $this->logger->notice('Checkout done: ' . $checkout->getStripeSessionId());
             $checkout->setStatus(1);
-            $this->cRepo->save($checkout, true);
+            $this->checkhoutRepo->save($checkout, true);
             if ($checkout->getStatus() == 1) {
                 $cart = $checkout->getCart();
                 $email = $cart->getEmail();
                 $locale = $session['locale'];
                 $products = $cart->getProducts();
                 $tickets = [];
+                $qrs = [];
+                $event = null;
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     $event = $product->getEvent();
@@ -159,7 +163,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
                 }
                 $checkout->setStatus(2);
-                $this->cRepo->save($checkout, true);
+                $this->checkhoutRepo->save($checkout, true);
             }
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
@@ -167,15 +171,27 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
     private function sendTicketQrEmail($eventName, $to, $qrs, $img)
     {
+        $email = $this->emailRepo->findOneBy(['purpose' => 'ticket_qr']);
+        $replyTo = 'hallitus@entropy.fi';
+        $body = '';
+        if ($email != null) {
+            $replyTo = $email->getReplyTo();
+            $body = $email->getBody();
+        }
         foreach ($qrs as $x => $qr) {
             $mail =  (new TemplatedEmail())
                 ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
                 ->to($to)
-                ->replyTo('info@entropy.fi')
+                ->replyTo($replyTo)
                 ->subject('[' . $eventName . '] Your ticket #' . ($x + 1) . ' / Lippusi #' . ($x + 1))
                 ->addPart((new DataPart($qr, 'ticket', 'image/png', 'base64'))->asInline())
                 ->htmlTemplate('emails/ticket.html.twig')
-                ->context(['body' => $qr, 'links' => false, 'img' => $img]);
+                ->context([
+                    'body' => $body,
+                    'qr' => $qr,
+                    'links' => $email->getAddLoginLinksToFooter() ? $email->getAddLoginLinksToFooter() : false,
+                    'img' => $img
+                ]);
             $this->mailer->send($mail);
         }
     }

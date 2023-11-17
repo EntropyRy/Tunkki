@@ -4,8 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Cart;
 use App\Entity\Event;
-use App\Entity\Product;
-use App\Entity\Ticket;
 use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
@@ -19,16 +17,12 @@ use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
@@ -186,6 +180,7 @@ class EventController extends Controller
                 'slug' => $event->getUrl()
             ]);
         }
+        $email = '';
         if ($stripeSession->status == 'complete') {
             $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
             $cart = $checkout->getCart();
@@ -196,12 +191,6 @@ class EventController extends Controller
             'event' => $event,
             'email' => $email
         ]);
-    }
-    public function __construct(
-        private readonly TicketRepository $ticketRepo,
-        private readonly ReferenceNumber $rn,
-        private readonly MailerInterface $mailer
-    ) {
     }
     #[Route(
         path: [

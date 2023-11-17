@@ -43,8 +43,8 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <div class="rounded-circle overflow-hidden mb-4 me-4" style="outline: 2px solid white;">
-    <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
+    <div class="rounded-circle float-start w-50 overflow-hidden mb-4 me-4" style="outline: 2px solid white;margin-top:2px;">
+        <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
     </div>
 {% endif %}
 {% endblock %}
@@ -54,13 +54,10 @@
     <div class="col-12">
         <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder">{{ name }}</h3>
     </div>
-    <div class="col-6 col-sm-6 col-md-5 col-xl-5 pe-2" style="margin-top: 2px">
+    <div class="col-12">
         {{ block('artist_pic') }}
-    </div>
-    <div class="col-6 col-sm-6 col-md-7 col-xl-7 pe-4">
         {{ block('artist_event_info') }}
     </div>
-    <div class="col mt-2 mx-4 mb-4 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
 </div>
 </div>
 {% if not loop.last %}
@@ -68,7 +65,9 @@
 {% endif %}
 {% endblock %}
 {% block artist_event_info %}
+<div class="float-none mx-4 mb-4">
     <small class="fw-light">{{ artist.genre }}</small>
-    <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+    <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
     {{ block('artist_links') }}
+</div>
 {% endblock %}

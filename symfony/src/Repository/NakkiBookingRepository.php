@@ -14,6 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method NakkiBooking|null findOneBy(array $criteria, array $orderBy = null)
  * @method NakkiBooking[]    findAll()
  * @method NakkiBooking[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<object>
  */
 class NakkiBookingRepository extends ServiceEntityRepository
 {
@@ -56,6 +57,9 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    /**
+     * @return NakkiBooking[] Returns an array of NakkiBooking objects
+     */
     public function findMemberEventBookingsAtSameTime(Member $member, Event $event, DateTimeImmutable $start, DateTimeImmutable $end): ?array
     {
         return $this->createQueryBuilder('n')

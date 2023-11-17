@@ -1,7 +1,9 @@
 {% extends event.template %}
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+<div class="content">
 {{ block('content_shop_complete', input) ?? '' }}
+</div>
 {% endblock %}
 
 {% block qr_codes %}

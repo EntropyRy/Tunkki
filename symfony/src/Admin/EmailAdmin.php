@@ -13,6 +13,9 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
+/**
+ * @extends AbstractAdmin<object>
+ */
 final class EmailAdmin extends AbstractAdmin
 {
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
@@ -73,23 +76,44 @@ final class EmailAdmin extends AbstractAdmin
             $formMapper
                 ->add('purpose', ChoiceType::class, [
                     'choices' => [
-                        'To RSVP' => 'rsvp',
-                        'To reserved and paid tickets holders' => 'ticket',
-                        'To people who have reserved Nakki' => 'nakkikone',
-                        'To all artists' => 'artist',
-                        'To tiedotus-list' => 'tiedotus',
-                        'To aktiivit-list' => 'aktiivit'
+                        'Can be sent now' => [
+                            'To RSVP' => 'rsvp',
+                            'To reserved and paid tickets holders' => 'ticket',
+                            'To people who have reserved Nakki' => 'nakkikone',
+                            'To all artists' => 'artist',
+                            'To tiedotus-list' => 'tiedotus',
+                            'To aktiivit-list' => 'aktiivit'
+                        ],
+                        'Sent as part of User action' => [
+                            'To tickets holders with QR code' => 'ticket_qr',
+
+                        ]
                     ],
                     'required' => false,
-                    'expanded' => true,
+                    'expanded' => false,
                     'multiple' => false,
                 ])
                 ->add('replyTo', null, [
                     'help' => 'Empty defaults to hallitus@entropy.fi. For aktiivit list change aktiivit@entropy.fi here.'
                 ]);
         }
+        $subjectHelp = 'start by "[Entropy]"? but not when sending to the lists. Include finnish and english version to same message!';
+        $email = $this->getSubject();
+        $disabled = false;
+        $placeholder = null;
+        if ($email != null) {
+            if ($email->getPurpose() == 'ticket_qr') {
+                $subjectHelp = 'Generated automatically';
+                $disabled = true;
+                $placeholder = '[event name] Ticket #1 / Lippusi #1';
+            }
+        }
         $formMapper
-            ->add('subject', null, ['help' => 'start by "[Entropy]"? but not when sending to the lists. Include finnish and english version to same message!'])
+            ->add('subject', null, [
+                'help' => $subjectHelp,
+                'disabled' => $disabled,
+                'data' => $placeholder
+            ])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }

@@ -39,6 +39,9 @@ class HappeningRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @return Happening[] Returns an array of Happening objects
+     */
     public function findPreviousAndNext(Happening $happening): ?array
     {
         $array = $this->createQueryBuilder('h')

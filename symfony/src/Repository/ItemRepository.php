@@ -4,8 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,7 +21,7 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    public function getAllItemChoices()
+    public function getAllItemChoices(): mixed
     {
         $queryBuilder = $this->createQueryBuilder('i')
             ->leftJoin('i.packages', 'p')
@@ -31,10 +29,13 @@ class ItemRepository extends ServiceEntityRepository
             ->orderBy('i.name', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }
-    public function getItemChoicesWithPrivileges($privileges)
+    /**
+     * @param mixed $privileges
+     */
+    public function getItemChoicesWithPrivileges($privileges): mixed
     {
         $queryBuilder = $this->createQueryBuilder('i')
-                       //->Where('i.cannotBeRented = false')
+            //->Where('i.cannotBeRented = false')
             ->andWhere('i.rent IS NOT NULL')
             ->andWhere('i.toSpareParts = false')
             ->andWhere('i.forSale = false')

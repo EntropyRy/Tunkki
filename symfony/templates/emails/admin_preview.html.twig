@@ -3,10 +3,14 @@
     <div>
         {{ body|raw }}
     </div>
+    {% if qr is defined %}
+    <hr>
+    <img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
+    {% endif %}
 {% endblock %}
 
 {% block admin_send %}
-{% if admin is defined and admin.isChild %}
+{% if admin is defined and admin.isChild and qr is not defined %}
 <style>
 .button {
   background-color: #4CAF50; /* Green */
