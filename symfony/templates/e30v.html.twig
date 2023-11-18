@@ -54,18 +54,24 @@
           <div class="mt-4 mt-xl-0" data-turbo-frame="page">
           {{ block('content') }}
           </div>
-          <div class="row" data-turbo-permanent>
-            <div class="col-6">
-              {{ block('location') }}
-            </div>
-            <div class="col-6">
-              {{ block('time') }}
-            </div>
-          </div>
         <div>
       </div>
       <footer class="mb-4" data-turbo-frame="footer">
-        {{ block('links') }}
+        <div class="row mt-2 mb-2 location-and-time" data-turbo-permanent>
+          <div class="col-12 d-flex justify-content-between">
+            <span>
+              {{ block('location') }}
+            </span>
+            <span>
+              {{ block('time') }}
+            </span>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            {{ block('links') }}
+          </div>
+        </div>
         <div class="mt-4">
         <small>{{ 'e30v.gdpr'|trans }}</small>
         </div>
@@ -122,23 +128,25 @@
 
 {% block location %}
 <div class="flex-row d-flex">
-  <span class="mx-2" style="font-size:4em;">
+  <span class="mx-2 fs-1">
     <i class="lh-base fa fa-location-dot"></i>
   </span>
   <span class="flex-column align-self-center">
-    <div><strong>{{ 'location'|trans|upper }}</strong></div>
-    <div>UG</div>
+    <div>
+      <strong>
+        UG ({{ 'location.former_industrial_complex'|trans }})
+      </strong>
+    </div>
   </span>
 </div>
 {% endblock %}
 {% block time %}
-<div class="flex-row d-flex">
-  <span class="mx-2" style="font-size:4em;">
-    <i class="lh-base fa-regular fa-clock"></i>
+<div class="flex-row d-flex justify-content-end">
+  <span class="mx-2 fs-1" style="font-size:3em;">
+    <i class="lh-base fa-regular fa-calendar"></i>
   </span>
   <span class="flex-column align-self-center">
     <div><strong>3.2.2024</strong></div>
-    <div>TBA</div>
   </span>
 </div>
 {% endblock %}

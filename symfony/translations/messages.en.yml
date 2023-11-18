@@ -358,7 +358,9 @@ happening:
   edited: Changes saved succesfully!
   ticket_missing: You need a ticket first.
 edited: Changes saved succesfully!
-location: location
+location: 
+  location: location
+  former_industrial_complex: former industrial complex
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish
@@ -403,7 +405,7 @@ e30v:
     timetable: Timetable
     safer_space: Safer Space 
   years: years
-  buy_tickets: Buy tickets here
+  buy_tickets: Buy tickets
   buy: Checkout
   cart:
     email:
