@@ -190,7 +190,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     'body' => $body,
                     'qr' => $qr,
                     'links' => $email->getAddLoginLinksToFooter() ? $email->getAddLoginLinksToFooter() : false,
-                    'img' => $img
+                    'img' => $img,
+                    'user_email' => $to
                 ]);
             $this->mailer->send($mail);
         }

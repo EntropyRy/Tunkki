@@ -85,8 +85,7 @@ final class EmailAdmin extends AbstractAdmin
                             'To aktiivit-list' => 'aktiivit'
                         ],
                         'Sent as part of User action' => [
-                            'To tickets holders with QR code' => 'ticket_qr',
-
+                            'To Stiripe tickets buyers. QR code email' => 'ticket_qr',
                         ]
                     ],
                     'required' => false,
