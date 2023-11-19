@@ -377,7 +377,7 @@
 </div>
 <hr>
 {% endif %}
-<div class="d-flex flex-wrap justify-content-between event-link-list">
+<div class="d-flex flex-wrap justify-content-between event-link-list" style="gap: 0.5rem 0">
     {% if event.location %}
     <span>
         {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
