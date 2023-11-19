@@ -2,7 +2,6 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
 {% if form.products|length > 0 %}
-<hr>
 {{ form_start(form) }}
 {% for product_form in form.products %}
 {% set product = product_form.vars.value.product %}
@@ -54,6 +53,7 @@
   <input data-turbo="false" type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
   {{ form_end(form) }}
 </div>
+<hr>
 {% endif %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
 <div class="content">
