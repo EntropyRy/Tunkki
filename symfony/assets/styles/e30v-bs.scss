@@ -118,14 +118,22 @@ body {
       z-index: -1;
     }
   }
+  .locale-selector {
+    background: $dark-blue;
+    background: rgba(63, 60, 138, 0.8);
+    position: absolute;
+    right: 0;
+    z-index: 4;
+    padding: 0.6em;
+  }
   .marquee-wrapper {
     max-width: 100%;
     overflow: hidden;
-    margin-top: 6%;
     font-weight: 800;
-    font-style: italic;
+    margin-top: 5px;
     border-bottom: 2px solid #fff;
     .marquee {
+      font-style: italic;
       white-space: nowrap;
       overflow: hidden;
       display: inline-block;

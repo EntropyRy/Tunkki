@@ -29,7 +29,7 @@
     <meta property="twitter:title" content="{{ block('title') }}">
     <meta property="twitter:desctiption" content="{{ abstract }}">
     <meta property="twitter:card" content="summary_large_image">
-    <meta name="keywords" content="{{ 'event.meta.keywords'|trans }}">
+    <meta name="keywords" content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}">
     <meta name="description" content="{{ abstract }}">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
