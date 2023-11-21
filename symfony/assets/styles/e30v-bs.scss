@@ -182,7 +182,6 @@ body {
   text-transform: uppercase;
   backdrop-filter: blur(10px);
   font-weight: bolder;
-  line-height: 1.25rem;
   @include button-outline-variant($white, $pink, $white, $white);
   outline: $outline solid $white;
   outline-offset: calc($outline / 2 - $outline);
@@ -208,7 +207,8 @@ body {
   // border-radius: 2em;
   font-weight: bolder;
   text-transform: uppercase;
-  @include button-variant($pink, $white, $white);
+  background: $pink;
+  @include button-outline-variant($white, $pink, $white, $white);
   @include button-size(0.8em, 1em, 1em, 3em);
 }
 
