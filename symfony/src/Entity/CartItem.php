@@ -67,7 +67,7 @@ class CartItem
      */
     public function getLineItem(?int $forcedQuantity, ?int $minus): ?array
     {
-        if ($this->product->getMax($minus) > 0) {
+        if ($this->product->getMax($minus) > 0 || $forcedQuantity > 0) {
             return [
                 'price' => $this->product->getStripePriceId(),
                 'quantity' => $forcedQuantity ? $forcedQuantity : $this->quantity,
