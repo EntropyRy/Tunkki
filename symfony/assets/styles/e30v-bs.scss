@@ -182,6 +182,7 @@ body {
   text-transform: uppercase;
   backdrop-filter: blur(10px);
   font-weight: bolder;
+  line-height: 1.25rem;
   @include button-outline-variant($white, $pink, $white, $white);
   outline: $outline solid $white;
   outline-offset: calc($outline / 2 - $outline);
