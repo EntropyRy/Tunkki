@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Ticket;
 use App\Helper\AppStripeClient;
+use App\Helper\Mattermost;
 use App\Helper\ReferenceNumber;
 use App\Repository\CheckoutRepository;
 use App\Repository\EmailRepository;
@@ -33,7 +34,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly TicketRepository $ticketRepo,
         private readonly EmailRepository $emailRepo,
         private readonly ReferenceNumber $rn,
-        private readonly MailerInterface $mailer
+        private readonly MailerInterface $mailer,
+        private readonly Mattermost $mm
     ) {
     }
     public static function getSubscribedEvents(): array
@@ -152,16 +154,13 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         ->merge('images/golden-logo.png', .2)
                         ->generate((string)$ticket->getReferenceNumber());
                 }
-                try {
-                    $this->sendTicketQrEmail(
-                        $event->getNameByLang($locale),
-                        $email,
-                        $qrs,
-                        $event->getPicture()
-                    );
-                } catch (\Exception $e) {
-                    $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
-                }
+                $this->sendTicketQrEmail(
+                    $event->getNameByLang($locale),
+                    $email,
+                    $qrs,
+                    $event->getPicture()
+                );
+                $this->mm->SendToMattermost('[' . $event->getName() . '] ' . count($tickets) . ' ticket(s) sold', 'yhdistys');
                 $checkout->setStatus(2);
                 $this->checkhoutRepo->save($checkout, true);
             }
@@ -200,7 +199,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         Event $event,
         Product $product,
         int $quantity,
-        $email
+        string $email
     ): array {
         $tickets = [];
         // check if is members email

@@ -26,7 +26,9 @@ class BookingAdminListener implements EventSubscriberInterface
         $this->email = $email;
         $this->fromEmail = $fromEmail;
     }
-
+    /**
+     * @param PersistenceEvent<object> $event
+     */
     public function sendEmailNotification(PersistenceEvent $event): void
     {
         if ($this->email) {
@@ -46,6 +48,9 @@ class BookingAdminListener implements EventSubscriberInterface
             }
         }
     }
+    /**
+     * @param PersistenceEvent<object> $args
+     */
     public function updateRewards(PersistenceEvent $args): void
     {
         $event = $args->getObject();
@@ -77,6 +82,11 @@ class BookingAdminListener implements EventSubscriberInterface
             }
         }
     }
+    /**
+     * @param mixed $amount
+     * @param mixed $booking
+     * @param mixed $user
+     */
     private function giveRewardToUser($amount, $booking, $user): Reward
     {
         $all = $user->getRewards();
