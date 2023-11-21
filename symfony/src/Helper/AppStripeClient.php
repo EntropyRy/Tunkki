@@ -57,7 +57,7 @@ class AppStripeClient
         }
         $product->setAmount($stripePrice['unit_amount']);
         $product->setActive($active);
-        $product->setName($stripeProduct['name']);
+        $product->setNameEn($stripeProduct['name']);
         $product->setStripeId($stripeProduct['id']);
         $product->setStripePriceId($stripePrice['id']);
         return $product;
