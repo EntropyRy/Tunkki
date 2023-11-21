@@ -5885,16 +5885,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.10.4",
+            "version": "4.10.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "bc844058947e62c10f20edb3d94620e292582231"
+                "reference": "36d53407f311c98cea17401ff752e5d6ee1a7de5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/bc844058947e62c10f20edb3d94620e292582231",
-                "reference": "bc844058947e62c10f20edb3d94620e292582231",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/36d53407f311c98cea17401ff752e5d6ee1a7de5",
+                "reference": "36d53407f311c98cea17401ff752e5d6ee1a7de5",
                 "shasum": ""
             },
             "require": {
@@ -5968,8 +5968,8 @@
                 "phpunit/phpunit": "^9.5",
                 "psalm/plugin-phpunit": "^0.18",
                 "psalm/plugin-symfony": "^5.0",
-                "rector/rector": "^0.17",
-                "sonata-project/admin-bundle": "^4.9",
+                "rector/rector": "^0.18",
+                "sonata-project/admin-bundle": "^4.28",
                 "sonata-project/block-bundle": "^4.11 || ^5.0",
                 "sonata-project/classification-bundle": "^4.0",
                 "sonata-project/doctrine-orm-admin-bundle": "^4.0",
@@ -6023,7 +6023,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.10.4"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.10.5"
             },
             "funding": [
                 {
@@ -6043,7 +6043,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-11T15:10:17+00:00"
+            "time": "2023-11-21T13:39:58+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
