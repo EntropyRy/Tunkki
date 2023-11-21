@@ -27,7 +27,7 @@
             <span>
               {{ product.name(app.request.locale) }}
               {% if app.request.locale == 'fi' %}
-              <br><span class="fs-6">({{ product.nameEn }})</span>
+              <br><span class="fs-6 float-start">({{ product.nameEn }})</span>
               {% endif %}
             </span>
             <span>{{ product.amount / 100 }}€</span>
