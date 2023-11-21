@@ -249,6 +249,7 @@ body {
     private ?string $abstractEn = null;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
+    #[OrderBy(['amount' => 'ASC'])]
     private Collection $products;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
