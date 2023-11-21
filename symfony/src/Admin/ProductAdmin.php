@@ -87,6 +87,7 @@ final class ProductAdmin extends AbstractAdmin
     }
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
+        $collection->remove('create');
         $collection->remove('show');
         $collection->add('fetch_from_stripe', 'fetch-from-stripe');
     }
