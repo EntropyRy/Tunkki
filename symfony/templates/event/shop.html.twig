@@ -32,8 +32,12 @@
           <h3 class="ps-4 pe-2 d-flex w-100 justify-content-between align-items-center">
             <span>
               {% if app.request.locale == 'fi' %}
-                {{ product.name(app.request.locale) }}<br>
-                <span class="fs-6 float-start">({{ product.nameEn }})</span>
+                {% if product.name(app.request.locale) is not null %}
+                  {{ product.name(app.request.locale) }}<br>
+                  <span class="fs-6 float-start">({{ product.nameEn }})</span>
+                {% else %}
+                  {{ product.nameEn }}
+                {% endif %}
               {% else %}
                 {{ product.name(app.request.locale) }}
               {% endif %}
