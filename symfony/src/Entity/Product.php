@@ -20,9 +20,6 @@ class Product
     private ?string $stripeId = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $name = null;
-
-    #[ORM\Column(length: 255)]
     private ?string $stripePriceId = null;
 
     #[ORM\Column]
@@ -58,12 +55,23 @@ class Product
     #[ORM\ManyToOne]
     private ?SonataMediaMedia $picture = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $nameEn = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nameFi = null;
+
     public function getSold(): int
     {
         if ($this->event) {
             return $this->event->getTicketTypeCount($this->getStripeId());
         }
         return 0;
+    }
+    public function getName($lang): ?string
+    {
+        $func = 'name' . ucfirst((string) $lang);
+        return $this->{$func};
     }
     public function getDescription($lang): ?string
     {
@@ -84,7 +92,7 @@ class Product
     }
     public function __toString(): string
     {
-        return $this->name;
+        return $this->nameEn;
     }
 
     #[ORM\PrePersist]
@@ -113,18 +121,6 @@ class Product
     public function setStripeId(string $stripeId): static
     {
         $this->stripeId = $stripeId;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): static
-    {
-        $this->name = $name;
 
         return $this;
     }
@@ -269,6 +265,30 @@ class Product
     public function setPicture(?SonataMediaMedia $picture): static
     {
         $this->picture = $picture;
+
+        return $this;
+    }
+
+    public function getNameEn(): ?string
+    {
+        return $this->nameEn;
+    }
+
+    public function setNameEn(string $nameEn): static
+    {
+        $this->nameEn = $nameEn;
+
+        return $this;
+    }
+
+    public function getNameFi(): ?string
+    {
+        return $this->nameFi;
+    }
+
+    public function setNameFi(?string $nameFi): static
+    {
+        $this->nameFi = $nameFi;
 
         return $this;
     }

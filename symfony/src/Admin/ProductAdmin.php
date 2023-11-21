@@ -31,8 +31,8 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('name')
-            ->add('descriptionFi')
+            ->add('nameEn')
+            ->add('descriptionEn')
             ->add('active')
             ->add('event')
             ->add('amount', MoneyType::class, [
@@ -54,6 +54,11 @@ final class ProductAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
+            ->add('nameEn', null, [
+                'help' => 'Defined in Stripe',
+                'disabled' => true
+            ])
+            ->add('nameFi')
             ->add(
                 'picture',
                 ModelListType::class,

@@ -44,7 +44,7 @@ class AppStripeClient
     ): Product {
         if ($stripeProduct != null && $stripePrice == null) {
             $product->setActive($stripeProduct['active'] == 1 ? true : false);
-            $product->setName($stripeProduct['name']);
+            $product->setNameEn($stripeProduct['name']);
             $product->setStripeId($stripeProduct['id']);
             return $product;
         }

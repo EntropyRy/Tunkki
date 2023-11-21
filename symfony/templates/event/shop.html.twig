@@ -9,13 +9,13 @@
 {% set minus = inCheckouts[product.id] %}
 {% endif %}
   <div
-      class="col product mb-2"
+      class="col product mb-4"
       {{ stimulus_controller('product', {'max': product.max((minus|default(0)))}) }}
       >
     <div class="row">
       <div class="col-12 pic">
         {% if product.picture %}
-         {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'title': product.name}) }}
+         {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'title': product.name(app.request.locale)}) }}
         {% endif %}
       </div>
       <div class="col-12 price">
@@ -23,8 +23,13 @@
           {{ stimulus_action('product', 'callopse') }}
           class="p-0 text-darkblue text-uppercase fw-bold d-flex justify-content-between rounded"
           >
-          <h3 class="ps-4 pe-2 d-flex w-100 justify-content-between">
-            <span>{{ product.name }}</span>
+          <h3 class="ps-4 pe-2 d-flex w-100 justify-content-between align-items-center">
+            <span>
+              {{ product.name(app.request.locale) }}
+              {% if app.request.locale == 'fi' %}
+              <br><span class="fs-6">({{ product.nameEn }})</span>
+              {% endif %}
+            </span>
             <span>{{ product.amount / 100 }}€</span>
           </h3>
           <span class="btn rounded-circle btn-primary text-darkblue fs-4"
