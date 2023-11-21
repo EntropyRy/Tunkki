@@ -78,6 +78,6 @@ class CartItem
 
     public function __toString(): string
     {
-        return $this->product ? $this->product->getName() . ' X ' . $this->quantity : 'N/A';
+        return $this->product ? $this->product->getNameEn() . ' X ' . $this->quantity : 'N/A';
     }
 }
