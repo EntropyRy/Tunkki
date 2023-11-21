@@ -2,9 +2,11 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+{% if block('content_shop_before', input) is defined %}
 <div class="content mb-4">
 {{ block('content_shop_before', input) ?? '' }}
 </div>
+{% endif %}
 {% if form.products|length > 0 %}
 {{ form_start(form) }}
 {% for product_form in form.products %}
