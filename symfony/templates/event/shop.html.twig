@@ -1,6 +1,10 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
+{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+<div class="content mb-4">
+{{ block('content_shop_before', input) ?? '' }}
+</div>
 {% if form.products|length > 0 %}
 {{ form_start(form) }}
 {% for product_form in form.products %}
@@ -60,9 +64,8 @@
 </div>
 <hr>
 {% endif %}
-{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
 <div class="content">
-{{ block('content_shop', input) ?? '' }}
+{{ block('content_shop_after', input) ?? '' }}
 </div>
 {% endblock %}
 
