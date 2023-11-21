@@ -508,6 +508,7 @@ e30v:
     safer_space: Turvallisempi tila
   buy_tickets: Osta liput
   years: vuotta
+  fee: Kattamaan maksunvälittäjän maksut, jokaiseen ostokseen lisätään 0,75 € maksu.
   buy: Kassalle
   gdpr: Käytämme vain välttämättömiä keksejä, jotta kirjautuminen sekä Stripe-integraatio toimii.
   cart:

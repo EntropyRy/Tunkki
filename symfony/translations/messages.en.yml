@@ -397,6 +397,7 @@ product:
   sold_out: Sold Out
 e30v:
   gdpr: We only use nessessary cookies so that login and Stripe integration works.
+  fee: To cover payment provider fees, a fee of 0.75€ will be added to each payment.
   nav:
     home: entropy 30 years
     info: info

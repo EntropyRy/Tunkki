@@ -61,6 +61,7 @@
 {% endfor %}
 <div class="col-12">
   {{ form_row(form.email) }}
+  <label>{{ 'e30v.fee'|trans }}</label>
   <input data-turbo="false" type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
   {{ form_end(form) }}
 </div>
