@@ -10,8 +10,8 @@
     {% set width = 1080 %}
     {% if event.Picture is not empty %}
         {% set img = app.request.getSchemeAndHttpHost() ~ sonata_path(event.Picture, 'normal') %}
-        {% set height = '' %}
-        {% set width = '' %}
+        {% set height = event.Picture.height %}
+        {% set width = event.Picture.width %}
     {% else %}
         {% set online = '' %}
         {% if event.type == 'meeting' and event.location is empty and event.webMeetingUrl is not empty %}
@@ -29,7 +29,7 @@
     <meta property="twitter:title" content="{{ block('title') }}">
     <meta property="twitter:desctiption" content="{{ abstract }}">
     <meta property="twitter:card" content="summary_large_image">
-    <meta name="keywords" content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}">
+    <meta name="keywords" content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}{% if event.url %},{{ event.url }}{% endif %}">
     <meta name="description" content="{{ abstract }}">
     <meta name="robots" content="index, follow">
     <meta name="viewport" content="width=device-width, initial-scale=1">
