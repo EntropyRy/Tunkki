@@ -5663,16 +5663,16 @@
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "2.1.0",
+            "version": "2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "b3402afd7ccf38dcd7f23817e7a5f06e7224f7d4"
+                "reference": "be7a195bff1fc76d27954105be3ee4ac26ec142c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/b3402afd7ccf38dcd7f23817e7a5f06e7224f7d4",
-                "reference": "b3402afd7ccf38dcd7f23817e7a5f06e7224f7d4",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/be7a195bff1fc76d27954105be3ee4ac26ec142c",
+                "reference": "be7a195bff1fc76d27954105be3ee4ac26ec142c",
                 "shasum": ""
             },
             "require": {
@@ -5739,7 +5739,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/form-extensions/issues",
-                "source": "https://github.com/sonata-project/form-extensions/tree/2.1.0"
+                "source": "https://github.com/sonata-project/form-extensions/tree/2.2.0"
             },
             "funding": [
                 {
@@ -5759,7 +5759,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-29T15:24:32+00:00"
+            "time": "2023-11-22T19:57:17+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
