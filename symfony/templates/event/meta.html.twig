@@ -8,7 +8,7 @@
     {#{ parent() }#}
     {% set height = 1920 %}
     {% set width = 1080 %}
-    {% if event.Picture is not empty %}
+    {% if event.Picture is not empty and event.picture.providername != 'sonata.media.provider.file' %}
         {% set img = app.request.getSchemeAndHttpHost() ~ sonata_path(event.Picture, 'normal') %}
         {% set height = event.Picture.height %}
         {% set width = event.Picture.width %}
