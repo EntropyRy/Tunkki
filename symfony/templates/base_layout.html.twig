@@ -61,22 +61,21 @@
                             </ul>
                         </li>
                     {% endif %}
+                    {% if page is defined %}
                     <li class="dropdown nav-item">
                         <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            {% if page is defined %}
-                                <li class="dropdown-item">
+                            <li class="dropdown-item">
 <a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a>
-                                </li>
-                                <li class="dropdown-item">
+                            </li>
+                            <li class="dropdown-item">
 <a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a>
-                                </li>
-                                <div class="dropdown-divider"></div>
-                            {% endif %}
-
+                            </li>
+                            <div class="dropdown-divider"></div>
                             <li class="dropdown-item"><a href="{{ sonata_page_admin.generateUrl('list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
                         </ul>
                     </li>
+                    {% endif %}
                     {% if page is defined and event is not defined %}
                         <li class="nav-item">
                             <a class="nav-link" href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
