@@ -132,6 +132,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 $locale = $session['locale'];
                 $products = $cart->getProducts();
                 $tickets = [];
+                $sold = [];
                 $qrs = [];
                 $event = null;
                 foreach ($products as $cartItem) {
@@ -140,6 +141,9 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $quantity = $cartItem->getQuantity();
                     if ($product->isTicket()) {
                         $tickets = $this->giveEventTicketToEmail($event, $product, $quantity, $email);
+                        $sold[$product->getNameEn()] =
+                            $product->getMax($quantity) . '/' .
+                            $product->getQuantity();
                     }
                 }
                 $qrGenerator = new Generator();
@@ -160,9 +164,11 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $qrs,
                     $event->getPicture()
                 );
-                $this->mm->SendToMattermost('[' . $event->getName() . '] ' . count($tickets) . ' ticket(s) sold', 'yhdistys');
                 $checkout->setStatus(2);
                 $this->checkhoutRepo->save($checkout, true);
+                foreach ($sold as $name => $info) {
+                    $this->mm->SendToMattermost('[' . $event->getName() . '] ' . $name . ' ticket(s) sold. Total:' . $info, 'yhdistys');
+                }
             }
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
