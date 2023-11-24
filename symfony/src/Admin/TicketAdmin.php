@@ -29,6 +29,7 @@ final class TicketAdmin extends AbstractAdmin
         $filter
             ->add('price')
             ->add('owner')
+            ->add('email')
             ->add('given')
             ->add('referenceNumber')
             ->add('status', ChoiceFilter::class, [
@@ -78,6 +79,9 @@ final class TicketAdmin extends AbstractAdmin
                     'give' => [
                         'template' => 'admin/ticket/button_give.html.twig'
                     ],
+                    'sendQrCodeEmail' => [
+                        'template' => 'admin/ticket/button_send_qr_code_email.html.twig'
+                    ],
                     'edit' => [],
                 ],
             ]);
@@ -111,6 +115,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('price')
             ->add('event')
             ->add('owner')
+            ->add('email')
             ->add('referenceNumber')
             ->add('status')
             ->add('updatedAt');
@@ -123,5 +128,6 @@ final class TicketAdmin extends AbstractAdmin
         $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
         $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
         $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');
+        $collection->add('sendQrCodeEmail', $this->getRouterIdParameter() . '/send-qr-code-email');
     }
 }
