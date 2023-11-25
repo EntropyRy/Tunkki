@@ -1,4 +1,5 @@
 {% extends 'onecolumn.html.twig' %}
+{% use 'pieces/event.html.twig' %}
 {% use 'event/meta.html.twig' %}
 
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
@@ -14,7 +15,6 @@
     {{ encore_entry_script_tags(event.backgroundEffect) }}
     {% endif %}
 {% endblock %}
-{% use 'pieces/event.html.twig' %}
 {% block content %}
     {% if app.user %}
         {% set visible = true %}

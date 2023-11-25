@@ -31,11 +31,11 @@
     <meta property="twitter:card" content="summary_large_image">
     <meta name="keywords" content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}{% if event.url %},{{ event.url }}{% endif %}">
     <meta name="description" content="{{ abstract }}">
-    <meta name="robots" content="index, follow">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if event.type != 'announcement' %}
         <meta property="og:type" content="event">
         <meta property="event:start_time" content="{{ event.EventDate|date('Y-m-d H:i') }}">
     {% endif %}
 {% endif %}
+<meta name="robots" content="index, follow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 {% endblock %}

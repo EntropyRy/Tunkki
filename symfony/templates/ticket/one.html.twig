@@ -1,4 +1,4 @@
-{% extends 'event.html.twig' %}
+{% extends event.template %}
 {% block title %}{{ event.nameByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
