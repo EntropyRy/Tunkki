@@ -99,7 +99,7 @@ final class EmailAdmin extends AbstractAdmin
         $subjectHelp = 'start by "[Entropy]"? but not when sending to the lists. Include finnish and english version to same message!';
         $email = $this->getSubject();
         $disabled = false;
-        $placeholder = null;
+        $placeholder = $this->getSubject()->getSubject();
         if ($email != null) {
             if ($email->getPurpose() == 'ticket_qr') {
                 $subjectHelp = 'Generated automatically';
