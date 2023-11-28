@@ -19,12 +19,12 @@
 {% block page_container %}
 <div class="container-fluid">
   <div class="row">
-    <div id="marquee" class="marquee-wrapper col-12" data-morph-permanent>
+    <div id="marquee" class="marquee-wrapper col-12">
       <div class="float-end locale-selector">
         {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
         {{ block('mobile_locale') }}
       </div>
-      <div class="marquee fs-1">
+      <div class="marquee fs-1" data-morph-permanent>
         {% for i in 0..8 %}
         <p>
             ENTROPY 30 {{ 'e30v.years'|trans }} / 3.2.2024 / UG /
