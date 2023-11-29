@@ -2,6 +2,9 @@ framework:
   secret: "%env(APP_SECRET)%"
   csrf_protection: true
   http_method_override: false
+  handle_all_throwables: true
+  annotations:
+    enabled: false
   session:
     name: tunkki
     save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"

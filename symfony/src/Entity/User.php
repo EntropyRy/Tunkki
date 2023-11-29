@@ -8,11 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+#[ORM\HasLifecycleCallbacks]
 class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -36,15 +36,9 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
     private ?\App\Entity\Member $member = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $CreatedAt = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $UpdatedAt = null;
 
@@ -64,6 +58,19 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     {
         $this->rewards = new ArrayCollection();
         $this->accessGroups = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

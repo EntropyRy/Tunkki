@@ -10,16 +10,22 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractAdmin<object>
+ */
 final class ContractAdmin extends AbstractAdmin
 {
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
             ->add('purpose')
-            ->add('validFrom')
+            ->add('validFrom', DateTimeFilter::class, [
+                'widget' => 'single_text',
+            ])
             ->add('updatedAt')
             ->add('createdAt');
     }
@@ -49,6 +55,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('validFrom', DateTimePickerType::class, [
                 'required' => false,
                 'format' => 'd.M.y H:mm',
+                'widget' => 'single_text',
                 'datepicker_options' => [
                     'display' => [
                         'sideBySide' => true,
@@ -76,6 +83,9 @@ final class ContractAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt');
     }
+    /**
+     * @return array<string,string>
+     */
     private function getPurposeChoices(): array
     {
         return ['Rent Contract' => 'rent'];

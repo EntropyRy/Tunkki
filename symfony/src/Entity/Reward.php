@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
+#[ORM\HasLifecycleCallbacks]
 class Reward implements \Stringable
 {
     #[ORM\Id]
@@ -34,9 +34,6 @@ class Reward implements \Stringable
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $PaymentHandledBy = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
@@ -49,6 +46,18 @@ class Reward implements \Stringable
     public function __construct()
     {
         $this->bookings = new ArrayCollection();
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getId(): ?int

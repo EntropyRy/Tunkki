@@ -345,19 +345,6 @@ services:
         manager_type: orm
         group: admin
         label: Menu
-  gedmo.listener.tree:
-    class: Gedmo\Tree\TreeListener
-    tags:
-      - { name: doctrine.event_listener, event: "prePersist" }
-      - { name: doctrine.event_listener, event: "preUpdate" }
-      - { name: doctrine.event_listener, event: "preRemove" }
-      - { name: doctrine.event_listener, event: "onFlush" }
-      - { name: doctrine.event_listener, event: "loadClassMetadata" }
-      - { name: doctrine.event_listener, event: "postPersist" }
-      - { name: doctrine.event_listener, event: "postUpdate" }
-      - { name: doctrine.event_listener, event: "postRemove" }
-    calls:
-      - [setAnnotationReader, ["@annotation_reader"]]
   entropy.admin.access_groups:
     class: App\Admin\AccessGroupsAdmin
     tags:

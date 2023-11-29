@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: \App\Repository\EmailRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Email implements \Stringable
 {
     #[ORM\Id]
@@ -22,17 +22,11 @@ class Email implements \Stringable
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $purpose = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTime $createdAt = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTime $updatedAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $addLoginLinksToFooter = null;
@@ -49,6 +43,19 @@ class Email implements \Stringable
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
     }
 
     public function getSubject(): ?string
@@ -80,7 +87,7 @@ class Email implements \Stringable
         return $this->purpose;
     }
 
-    public function setPurpose(string $purpose): self
+    public function setPurpose(?string $purpose): self
     {
         $this->purpose = $purpose;
 

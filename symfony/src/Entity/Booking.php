@@ -7,7 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -15,6 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 #[ORM\Table('Booking')]
 #[ORM\Entity(repositoryClass: \App\Repository\BookingRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Booking implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -94,18 +94,12 @@ class Booking implements \Stringable
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $creator = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(name: 'created_at', type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?\App\Entity\User $modifier = null;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(name: 'modified_at', type: 'datetime')]
     private ?\DateTimeInterface $modifiedAt = null;
 
@@ -124,6 +118,19 @@ class Booking implements \Stringable
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $accessoryPrice = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->modifiedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->modifiedAt = new \DateTime();
+    }
 
     public function addPackage(\App\Entity\Package $package): Booking
     {

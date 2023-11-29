@@ -4,9 +4,9 @@ namespace App\Entity;
 
 use App\Repository\RSVPRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: RSVPRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class RSVP implements \Stringable
 {
     #[ORM\Id]
@@ -22,9 +22,6 @@ class RSVP implements \Stringable
     #[ORM\JoinColumn(nullable: true)]
     private ?\App\Entity\Member $member = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -36,6 +33,12 @@ class RSVP implements \Stringable
 
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $lastName = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {

@@ -8,11 +8,11 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\OrderBy;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: \App\Repository\EventRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
 {
@@ -98,9 +98,6 @@ body {
     #[ORM\OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
     private $eventArtistInfos;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
@@ -257,6 +254,18 @@ body {
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $artistSignUpInfoEn = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {

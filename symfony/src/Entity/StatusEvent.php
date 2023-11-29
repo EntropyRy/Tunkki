@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use App\Entity\User;
 use DateTime;
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * Events
@@ -29,43 +29,38 @@ class StatusEvent implements \Stringable
     #[ORM\Column(name: 'Description', type: 'string', length: 5000, nullable: true)]
     private string $description;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(name: 'CreatedAt', type: 'datetime')]
-    private \DateTime $createdAt;
+    private \DateTimeInterface $createdAt;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(name: 'UpdatedAt', type: 'datetime')]
-    private \DateTime $updatedAt;
+    private \DateTimeInterface $updatedAt;
 
-    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?\App\Entity\User $creator = null;
 
-    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\User::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?\App\Entity\User $modifier = null;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return StatusEvent
-     */
     public function setDescription($description): StatusEvent
     {
         $this->description = $description;
@@ -73,23 +68,11 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get description
-     *
-     * @return string
-     */
     public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * Set createdAt
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return StatusEvent
-     */
     public function setCreatedAt($createdAt): StatusEvent
     {
         $this->createdAt = $createdAt;
@@ -97,23 +80,11 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    /**
-     * Set updatedAt
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return StatusEvent
-     */
     public function setUpdatedAt($updatedAt): StatusEvent
     {
         $this->updatedAt = $updatedAt;
@@ -121,21 +92,11 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get updatedAt
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->updatedAt;
     }
 
-    /**
-     * Set item
-     *
-     * @return StatusEvent
-     */
     public function setItem(\App\Entity\Item $item = null): StatusEvent
     {
         $this->item = $item;
@@ -143,11 +104,6 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get item
-     *
-     * @return \App\Entity\Item
-     */
     public function getItem(): ?Item
     {
         return $this->item;
@@ -164,11 +120,6 @@ class StatusEvent implements \Stringable
         }
     }
 
-    /**
-     * Set creator
-     *
-     * @return StatusEvent
-     */
     public function setCreator(\App\Entity\User $creator = null): StatusEvent
     {
         $this->creator = $creator;
@@ -176,21 +127,11 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get creator
-     *
-     * @return \App\Entity\User
-     */
     public function getCreator(): ?User
     {
         return $this->creator;
     }
 
-    /**
-     * Set modifier
-     *
-     * @return StatusEvent
-     */
     public function setModifier(\App\Entity\User $modifier = null): StatusEvent
     {
         $this->modifier = $modifier;
@@ -198,23 +139,11 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get modifier
-     *
-     * @return \App\Entity\User
-     */
     public function getModifier(): ?User
     {
         return $this->modifier;
     }
 
-    /**
-     * Set booking.
-     *
-     * @param \App\Entity\Booking|null $booking
-     *
-     * @return StatusEvent
-     */
     public function setBooking(\App\Entity\Booking $booking = null): StatusEvent
     {
         $this->booking = $booking;
@@ -222,11 +151,6 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    /**
-     * Get booking.
-     *
-     * @return \App\Entity\Booking|null
-     */
     public function getBooking(): ?Booking
     {
         return $this->booking;

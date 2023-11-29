@@ -6,7 +6,6 @@ use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
 use App\Entity\Ticket;
 
 /**
@@ -15,6 +14,7 @@ use App\Entity\Ticket;
 #[ORM\Table(name: 'member')]
 #[ORM\Entity(repositoryClass: \App\Repository\MemberRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+#[ORM\HasLifecycleCallbacks]
 class Member implements \Stringable
 {
     #[ORM\Column(name: 'id', type: 'integer')]
@@ -40,15 +40,9 @@ class Member implements \Stringable
     #[ORM\Column(name: 'CityOfResidence', type: 'string', length: 190, nullable: true)]
     private ?string $CityOfResidence = null;
 
-    /**
-     * @Gedmo\Timestampable(on="create")
-     */
     #[ORM\Column(name: 'createdAt', type: 'datetime')]
     private \DateTime $createdAt;
 
-    /**
-     * @Gedmo\Timestampable(on="update")
-     */
     #[ORM\Column(name: 'updatedAt', type: 'datetime')]
     private \DateTime $updatedAt;
 
@@ -129,213 +123,133 @@ class Member implements \Stringable
         $this->happeningBooking = new ArrayCollection();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updatedAt = new \DateTime();
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->firstname . ' ' . $this->lastname;
     }
 
-    /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return Member
-     */
-    public function setEmail($email)
+    public function setEmail(?string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * Get email.
-     *
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
 
-    /**
-     * Set phone.
-     *
-     * @param string|null $phone
-     *
-     * @return Member
-     */
-    public function setPhone($phone = null)
+    public function setPhone(?string $phone = null): self
     {
         $this->phone = $phone;
 
         return $this;
     }
 
-    /**
-     * Get phone.
-     *
-     * @return string|null
-     */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
-
     /**
-     * Set createdAt.
-     *
-     * @param \DateTime $createdAt
-     *
-     * @return Member
+     * @param mixed $createdAt
      */
-    public function setCreatedAt($createdAt)
+    public function setCreatedAt($createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    /**
-     * Get createdAt.
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
-
     /**
-     * Set updatedAt.
-     *
-     * @param \DateTime $updatedAt
-     *
-     * @return Member
+     * @param mixed $updatedAt
      */
-    public function setUpdatedAt($updatedAt)
+    public function setUpdatedAt($updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    /**
-     * Get updatedAt.
-     *
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
     /**
-     * Set studentUnionMember.
-     *
-     * @param bool|null $studentUnionMember
-     *
-     * @return Member
+     * @param mixed $studentUnionMember
      */
-    public function setStudentUnionMember($studentUnionMember = null)
+    public function setStudentUnionMember($studentUnionMember = null): self
     {
         $this->StudentUnionMember = $studentUnionMember;
 
         return $this;
     }
 
-    /**
-     * Get studentUnionMember.
-     *
-     * @return bool|null
-     */
-    public function getStudentUnionMember()
+    public function getStudentUnionMember(): ?bool
     {
         return $this->StudentUnionMember;
     }
-
     /**
-     * Set application.
-     *
-     * @param string|null $application
-     *
-     * @return Member
+     * @param mixed $application
      */
-    public function setApplication($application = null)
+    public function setApplication($application = null): self
     {
         $this->Application = $application;
 
         return $this;
     }
 
-    /**
-     * Get application.
-     *
-     * @return string|null
-     */
-    public function getApplication()
+    public function getApplication(): ?string
     {
         return $this->Application;
     }
-
     /**
-     * Set applicationDate.
-     *
-     * @param \DateTime|null $applicationDate
-     *
-     * @return Member
+     * @param mixed $applicationDate
      */
-    public function setApplicationDate($applicationDate = null)
+    public function setApplicationDate($applicationDate = null): self
     {
         $this->ApplicationDate = $applicationDate;
 
         return $this;
     }
 
-    /**
-     * Get applicationDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getApplicationDate()
+    public function getApplicationDate(): ?\DateTime
     {
         return $this->ApplicationDate;
     }
-
     /**
-     * Set cityOfResidence.
-     *
-     * @param string|null $cityOfResidence
-     *
-     * @return Member
+     * @param mixed $cityOfResidence
      */
-    public function setCityOfResidence($cityOfResidence = null)
+    public function setCityOfResidence($cityOfResidence = null): self
     {
         $this->CityOfResidence = $cityOfResidence;
 
         return $this;
     }
 
-    /**
-     * Get cityOfResidence.
-     *
-     * @return string|null
-     */
-    public function getCityOfResidence()
+    public function getCityOfResidence(): ?string
     {
         return $this->CityOfResidence;
     }
@@ -344,172 +258,101 @@ class Member implements \Stringable
     {
         return $this->getName();
     }
-
     /**
-     * Set firstname.
-     *
-     * @param string $firstname
-     *
-     * @return Member
+     * @param mixed $firstname
      */
-    public function setFirstname($firstname)
+    public function setFirstname($firstname): self
     {
         $this->firstname = $firstname;
 
         return $this;
     }
 
-    /**
-     * Get firstname.
-     *
-     * @return string
-     */
-    public function getFirstname()
+    public function getFirstname(): ?string
     {
         return $this->firstname;
     }
-
     /**
-     * Set lastname.
-     *
-     * @param string $lastname
-     *
-     * @return Member
+     * @param mixed $lastname
      */
-    public function setLastname($lastname)
+    public function setLastname($lastname): self
     {
         $this->lastname = $lastname;
 
         return $this;
     }
 
-    /**
-     * Get lastname.
-     *
-     * @return string
-     */
-    public function getLastname()
+    public function getLastname(): ?string
     {
         return $this->lastname;
     }
-
     /**
-     * Set isActiveMember.
-     *
-     * @param bool $isActiveMember
-     *
-     * @return Member
+     * @param mixed $isActiveMember
      */
-    public function setIsActiveMember($isActiveMember)
+    public function setIsActiveMember($isActiveMember): self
     {
         $this->isActiveMember = $isActiveMember;
 
         return $this;
     }
 
-    /**
-     * Get isActiveMember.
-     *
-     * @return bool
-     */
-    public function getIsActiveMember()
+    public function getIsActiveMember(): bool
     {
         return $this->isActiveMember;
     }
-
     /**
-     * Set rejectReason.
-     *
-     * @param string|null $rejectReason
-     *
-     * @return Member
+     * @param mixed $rejectReason
      */
-    public function setRejectReason($rejectReason = null)
+    public function setRejectReason($rejectReason = null): self
     {
         $this->rejectReason = $rejectReason;
 
         return $this;
     }
 
-    /**
-     * Get rejectReason.
-     *
-     * @return string|null
-     */
-    public function getRejectReason()
+    public function getRejectReason(): ?string
     {
         return $this->rejectReason;
     }
-
     /**
-     * Set rejectReasonSent.
-     *
-     * @param bool $rejectReasonSent
-     *
-     * @return Member
+     * @param mixed $rejectReasonSent
      */
-    public function setRejectReasonSent($rejectReasonSent)
+    public function setRejectReasonSent($rejectReasonSent): self
     {
         $this->rejectReasonSent = $rejectReasonSent;
 
         return $this;
     }
 
-    /**
-     * Get rejectReasonSent.
-     *
-     * @return bool
-     */
-    public function getRejectReasonSent()
+    public function getRejectReasonSent(): ?bool
     {
         return $this->rejectReasonSent;
     }
-
-
     /**
-     * Set applicationHandledDate.
-     *
-     * @param \DateTime|null $applicationHandledDate
-     *
-     * @return Member
+     * @param mixed $applicationHandledDate
      */
-    public function setApplicationHandledDate($applicationHandledDate = null)
+    public function setApplicationHandledDate($applicationHandledDate = null): self
     {
         $this->ApplicationHandledDate = $applicationHandledDate;
 
         return $this;
     }
 
-    /**
-     * Get applicationHandledDate.
-     *
-     * @return \DateTime|null
-     */
-    public function getApplicationHandledDate()
+    public function getApplicationHandledDate(): ?\DateTime
     {
         return $this->ApplicationHandledDate;
     }
-
     /**
-     * Set username.
-     *
-     * @param string|null $username
-     *
-     * @return Member
+     * @param mixed $username
      */
-    public function setUsername($username = null)
+    public function setUsername($username = null): self
     {
         $this->username = $username;
 
         return $this;
     }
 
-    /**
-     * Get username.
-     *
-     * @return string|null
-     */
-    public function getUsername()
+    public function getUsername(): ?string
     {
         return $this->username;
     }
@@ -597,6 +440,9 @@ class Member implements \Stringable
     {
         return $this->artist;
     }
+    /**
+     * @param int $id
+     */
     public function getArtistWithId($id): ?Artist
     {
         foreach ($this->getArtist() as $artist) {
@@ -760,7 +606,9 @@ class Member implements \Stringable
 
         return $this;
     }
-
+    /**
+     * @param Event $event
+     */
     public function getTicketForEvent($event): ?Ticket
     {
         foreach ($this->tickets as $ticket) {
@@ -800,8 +648,11 @@ class Member implements \Stringable
 
         return $this;
     }
-
-    public function getEventNakkiBooking($event)
+    /**
+     * @param Event $event
+     * @return NakkiBooking|null
+     */
+    public function getEventNakkiBooking($event): ?NakkiBooking
     {
         $bookings = $this->getNakkiBookings();
         foreach ($bookings as $b) {
