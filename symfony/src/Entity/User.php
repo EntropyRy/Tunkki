@@ -63,14 +63,14 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->CreatedAt = new \DateTime();
+        $this->UpdatedAt = new \DateTime();
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->UpdatedAt = new \DateTime();
     }
 
     public function getId(): ?int
