@@ -24,7 +24,7 @@
                 <ul class="fa-ul">
                 {% endif %}
                 <li><span class="fa-li"><i class="fas fa-key"></i></span>
-                    {{ log.createdAt|date }} {{ log.member }}: {{ log.message|default('profile.door.no_message')|trans }}
+                    {{ log.createdAt|date }} {{ log.member }}{% if log.meassage is not empty %}: {{ log.message|default('profile.door.no_message')|trans }}{% endif %}
                 </li>
                 {% endfor %}
                 </ul>
