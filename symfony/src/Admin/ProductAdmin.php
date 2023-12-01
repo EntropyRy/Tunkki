@@ -7,6 +7,7 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
@@ -35,9 +36,10 @@ final class ProductAdmin extends AbstractAdmin
             ->add('descriptionEn')
             ->add('active')
             ->add('event')
-            ->add('amount', MoneyType::class, [
-                'currency' => 'EUR',
-                'divisor' => 100
+            ->add('amount', null, [
+                'accessor' => function ($subject) {
+                    return $subject->getAmount() / 100 . '€';
+                }
             ])
             ->add('ticket')
             ->add('quantity')
