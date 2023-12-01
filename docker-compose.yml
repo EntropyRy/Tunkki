@@ -43,6 +43,7 @@ services:
       - fpm
     volumes:
       - ./symfony/public:/var/www/symfony/public
+      - /etc/localtime:/etc/localtime:ro
   node:
     image: node:20-alpine
     volumes:
