@@ -96,6 +96,9 @@
   "prefer-stable": true,
   "extra": {
     "symfony-assets-install": "copy",
+    "runtime": {
+      "class": "Sonata\\PageBundle\\Runtime\\SonataPagePathRuntime"
+    },
     "symfony": {
       "allow-contrib": true
     }

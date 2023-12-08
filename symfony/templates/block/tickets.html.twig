@@ -8,11 +8,13 @@
         <div class="box-body">
             <div class="row">
             {% for ticket in tickets %}
-            <a href="{{ path('entropy_event_ticket', {
-            'year': ticket.event.eventDate|date('Y'),
-            'slug': ticket.event.url,
-            'reference': ticket
-            }) }}" class="col-10 mx-auto mb-2 btn btn-primary">{{ ticket.event.name(app.request.locale) }}</a>
+                {% if ticket.referenceNumber %}
+                    <a href="{{ path('entropy_event_ticket', {
+                    'year': ticket.event.eventDate|date('Y'),
+                    'slug': ticket.event.url,
+                    'reference': ticket.referenceNumber
+                    }) }}" class="col-10 mx-auto mb-2 btn btn-primary">{{ ticket.event.name(app.request.locale) }}</a>
+                {% endif %}
             {% endfor %}
             </div>
         </div>

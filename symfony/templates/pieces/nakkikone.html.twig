@@ -24,7 +24,7 @@
 {% endblock %}
 {% block card %}
 {#{ dump(show|default(false)) }#}
-<div class="col mb-3{% if not show|default(false) %} card-hide d-none{%endif%}" {% if not show|default(false) %}id="card-{{ i }}"{%endif%}>
+<div class="col mb-3{% if not show|default(false) %} card-hide d-none{% endif %}" {% if not show|default(false) %}id="card-{{ i }}"{% endif %}>
 <div class="card
     {% if event.headerTheme == 'dark' %}
         bg-black text-white
@@ -64,5 +64,7 @@
 {% if event.multiday %}
 {{ b.startAt|date('j.m.') }}<br>
 {% endif %}
+{% if b is defined %}
 {{ b.startAt|date('H:i') }} - {{ b.endAt|date('H:i') }}
+{% endif %}
 {% endblock %}
