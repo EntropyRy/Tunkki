@@ -13,8 +13,8 @@ class PublicArtistController extends AbstractController
 {
   #[Route(
     [
-      'fi' =>   '/artisti/{name}',
-      'en' =>   '/artist/{name}',
+      'fi' =>   '/artisti/{id}/{name}',
+      'en' =>   '/artist/{id}/{name}',
     ],
     name: 'entropy_public_artist',
   )]

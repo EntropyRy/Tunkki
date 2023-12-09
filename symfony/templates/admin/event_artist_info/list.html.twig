@@ -6,8 +6,8 @@
             <span style="font-size: 1.2em;">
             {% set artist = object.artist %}
             {{ artist.type }}: {{ artist.name }}, Previews:
-                  <a href="{{ path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
-                  <a href="{{ path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
+                  <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
+                  <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
             </span>
             <span style="font-weight: 800">
             Member: {{ object|render_list_element(admin.list['Artist.member']) }}

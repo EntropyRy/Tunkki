@@ -57,8 +57,8 @@
         <div class="box-header">
             <h5 class="box-title">{{ 'Quick preview'|trans }}
                 <span class="float-right">{{ 'Full'|trans }}:
-                    <a href="{{ path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
-                    <a href="{{ path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
+                    <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
+                    <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
                 </span>
             </h5>
         </div>

@@ -2,15 +2,15 @@
 {% block block %}
     <div class="box">
         <div class="box-header" data-bs-toggle="collapse" data-bs-target="#artistList">
-            <h5 class="box-title btn-link">{{'artist.list'|trans}} ({{ artists|length }})</h5>
+            <h5 class="box-title btn-link">{{ 'artist.list'|trans }} ({{ artists|length }})</h5>
         </div>
         <div class="box-body">
         <div id="artistList" class="box-body row collapse">
             <ul>
-                {% for artist in artists|sort((a,b) => (a.name|lower <=> b.name|lower)) %}
+                {% for artist in artists|sort((a, b) => (a.name|lower <=> b.name|lower)) %}
             <li>{{ artist.type }}: {{ artist.name }}
-                  <a href="{{path('entropy_public_artist.fi', {'name': artist.name}) }}">FI</a> |
-                  <a href="{{path('entropy_public_artist.en', {'name': artist.name}) }}">EN</a>
+                  <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
+                  <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
             </li>
             {% endfor %}
             </ul>
