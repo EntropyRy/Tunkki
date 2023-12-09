@@ -31,7 +31,8 @@ class KerdeController extends AbstractController
         ZMQHelper $zmq,
         Barcode $barcode,
         EntityManagerInterface $em,
-        DoorLogRepository $doorlogrepo
+        DoorLogRepository $doorlogrepo,
+        SSH $ssh
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -78,6 +79,10 @@ class KerdeController extends AbstractController
             return $this->redirectToRoute('kerde_door');
         }
         $Mbarcode = $barcode->getBarcode($member);
+        // $status = $ssh->checkStatus();
+        // if ($status == 1) {
+        //     $this->addFlash('success', 'Stream is on!');
+        // }
         return $this->render('kerde/door.html.twig', [
             'form' => $form,
             'logs' => $logs,

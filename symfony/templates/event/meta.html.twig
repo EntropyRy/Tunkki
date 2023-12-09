@@ -24,9 +24,9 @@
     <meta property="og:image:height" content="{{ height }}">
     <meta property="og:image:widht" content="{{ width }}">
     <meta property="og:site_name" content="Entropy ry">
-    <meta property="og:title" content="{{ block('title') }}">
+    <meta property="og:title" content="{{ event.nameAndDateByLang(app.request.locale) }}">
     <meta property="og:description" content="{{ abstract }}">
-    <meta property="twitter:title" content="{{ block('title') }}">
+    <meta property="twitter:title" content="{{ event.nameAndDateByLang(app.request.locale) }}">
     <meta property="twitter:desctiption" content="{{ abstract }}">
     <meta property="twitter:card" content="summary_large_image">
     <meta name="keywords" content="{{ 'event.meta.keywords'|trans }},{{ event.name(app.request.locale) }}{% if event.url %},{{ event.url }}{% endif %}">

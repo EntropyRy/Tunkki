@@ -21,6 +21,21 @@ class SSH
         unset($connection);
         return $ret;
     }
+    public function checkStatus(): bool
+    {
+        try {
+            $stream = null;
+            $connection = $this->getConnection();
+            $cmd = $this->bag->get('recording.script.check');
+            $stream = ssh2_exec($connection, $cmd);
+            sleep(1);
+            $ret = fgets($stream);
+            fclose($stream);
+            unset($connection);
+            return $ret;
+        } catch (\Exception $e) {
+        }
+    }
     protected function getConnection(): mixed
     {
         $connection = ssh2_connect($this->bag->get('recording.host'), $this->bag->get('recording.port'));
