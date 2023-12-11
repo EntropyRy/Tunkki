@@ -27,7 +27,7 @@
     {% endblock %}
 
     {% block sonata_page_body_tag %}
-    <body class="entropy {% if app.user and event is not defined %}{{ app.user.member.theme }}" data-bs-theme="{{ app.user.member.theme }}"{% endif %}>
+    <body class="entropy {% if app.user and event is not defined %}{{ app.user.member.theme }}" data-bs-theme="{{ app.user.member.theme }}{% endif %}">
     {% if event is defined and event.backgroundEffect is not empty %}
     <canvas
         class="effect_canvas"
