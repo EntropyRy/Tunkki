@@ -102,6 +102,8 @@ body {
     overflow: hidden;
     position: fixed;
     z-index: -1;
+    top: 0;
+    left: 0;
     .left-bg-img {
       position: absolute;
       transform-origin: center top;

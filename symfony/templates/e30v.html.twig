@@ -33,48 +33,52 @@
       </div>
     </div>
   </div>
-</div>
-<div class="container-xxl">
-  <div class="row">
-    <div class="col-12 mt-4">
-      <div class="row">
-        <div class="col-6 col-sm-7 col-md-5 col-xl-4 order-0 pe-0 pe-md-3" data-turbo-frame="nav">
-          {{ block('nav') }}
-        </div>
-        <div class="col-6 col-sm-5 d-md-none d-xl-block order-1 order-xl-2 col-xl-2">
-          <img width="100%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
-        </div>
-        <div class="col-12 col-md-7 col-xl-6 order-2 order-xl-1">
-          {% include 'flashmessages.html.twig' %}
-          <div class="text-center d-none d-md-block d-xl-none">
-            <img width="50%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
-          </div>
-          <div class="mt-4 mt-xl-0" data-turbo-frame="page">
-          {{ block('content') }}
-          </div>
-        <div>
-      </div>
-      <footer class="mb-4" data-turbo-frame="footer">
-        <div class="row mt-2 mb-2 location-and-time" data-turbo-permanent>
-          <div class="col-12 d-flex justify-content-between">
-            <span>
-              {{ block('location') }}
-            </span>
-            <span>
-              {{ block('time') }}
-            </span>
-          </div>
-        </div>
+  <div class="container-xxl">
+    <div class="row">
+      <div class="col-12 mt-4">
         <div class="row">
-          <div class="col-12">
-            {{ block('links') }}
+          <div class="col-6 col-sm-7 col-md-5 col-xl-4 order-0 pe-0 pe-md-3" data-turbo-frame="nav">
+            {{ block('nav') }}
           </div>
+          <div class="col-6 col-sm-5 d-md-none d-xl-block order-1 order-xl-2 col-xl-2">
+            <img width="100%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
+          </div>
+          <div class="col-12 col-md-7 col-xl-6 order-2 order-xl-1">
+            {% include 'flashmessages.html.twig' %}
+            <div class="text-center d-none d-md-block d-xl-none">
+              <img width="50%" src="{{ asset('images/e30v/logo-round-text-white.svg') }}">
+            </div>
+            <div class="mt-4 mt-xl-0" data-turbo-frame="page">
+            {{ block('content') }}
+            </div>
+          <div>
         </div>
-        <div class="mt-4">
-        <small>{{ 'e30v.gdpr'|trans }}</small>
-        </div>
-      </footer>
+        <footer class="mb-4" data-turbo-frame="footer">
+          <div class="row mt-2 mb-2 location-and-time" data-turbo-permanent>
+            <div class="col-12 d-flex justify-content-between">
+              <span>
+                {{ block('location') }}
+              </span>
+              <span>
+                {{ block('time') }}
+              </span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              {{ block('links') }}
+            </div>
+          </div>
+          <div class="mt-4">
+          <small>{{ 'e30v.gdpr'|trans }}</small>
+          </div>
+        </footer>
+      </div>
     </div>
+  </div>
+  <div class="bg-img-container" data-turbo-permanent>
+    <img class="left-bg-img" src="{{ asset('images/e30v/chrome-pattern-left.webp') }}">
+    <img class="right-bg-img" src="{{ asset('images/e30v/chrome-pattern.webp') }}">
   </div>
 </div>
 {% endblock %}
@@ -147,20 +151,4 @@
     <div><strong>3.2.2024</strong></div>
   </span>
 </div>
-{% endblock %}
-
-{% block sonata_page_body_tag %}
-<body class="entropy">
-<div class="bg-img-container" data-turbo-permanent>
-<img class="left-bg-img" src="{{ asset('images/e30v/chrome-pattern-left.webp') }}">
-<img class="right-bg-img" src="{{ asset('images/e30v/chrome-pattern.webp') }}">
-</div>
-{% if event is defined and event.backgroundEffect is not empty %}
-<canvas
-    class="effect_canvas"
-    data-turbo-permanent
-    id="{{ event.backgroundEffect }}"
-    style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}
-"></canvas>
-{% endif %}
 {% endblock %}
