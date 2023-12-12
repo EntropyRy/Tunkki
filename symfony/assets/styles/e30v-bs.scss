@@ -22,6 +22,8 @@ $body-bg: $blue;
 $body-color: #fff;
 $border-radius: 2rem;
 $link-color: $green;
+$body-font-family: "Hanken Grotesk Variable", sans-serif;
+$body-font-weight: 400;
 // 3. Include remainder of required Bootstrap stylesheets
 @import "~bootstrap/scss/variables";
 @import "~bootstrap/scss/variables-dark";
@@ -78,8 +80,6 @@ html {
 }
 
 body {
-  font-family: "Hanken Grotesk Variable", sans-serif;
-  font-weight: 400;
   height: 100%;
   .effect_canvas {
     width: 100%;
@@ -129,7 +129,7 @@ body {
   .marquee-wrapper {
     max-width: 100%;
     overflow: hidden;
-    font-weight: 800;
+    font-weight: 600;
     margin-top: 5px;
     border-bottom: 2px solid #fff;
     .marquee {
