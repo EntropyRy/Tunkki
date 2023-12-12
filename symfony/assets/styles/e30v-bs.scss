@@ -117,7 +117,12 @@ body {
       transform-origin: center bottom;
       left: 32%;
       scale: 0.6;
+      float: right;
       z-index: -1;
+    }
+    @include media-breakpoint-up(xl) {
+      .right-bg-img {
+      }
     }
   }
   .locale-selector {
