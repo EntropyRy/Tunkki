@@ -23,19 +23,20 @@
             </div>
             {{ block('bios') }}
             {% if block('vj_bios')|length > 0 %}
+                {% if event.template == 'event.html.twig' %}
                 <h1>
-                {% if event.template != 'event.html.twig' %}
                     <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
+                    VJ {{ 'Artists'|trans }}
+                </h1>
                 {% endif %}
-                VJ {{ 'Artists'|trans }}</h1>
             {{ block('vj_bios') }}
             {% endif %}
             {% if block('art_bios')|length > 0 %}
+                {% if event.template == 'event.html.twig' %}
                 <h1>
-                {% if event.template != 'event.html.twig' %}
                     <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
+                    {{ 'Artists'|trans }}</h1>
                 {% endif %}
-                {{ 'Artists'|trans }}</h1>
             {{ block('art_bios') }}
             {% endif %}
             {% if event.template == 'event.html.twig' %}
