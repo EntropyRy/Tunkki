@@ -74,6 +74,7 @@ Encore
       safelist: [/^fa/, /^alert/, /^form/, /^bg-primary/, /^pt/],
       paths: glob.sync([
         path.join(__dirname, "./templates/pieces/*.html.twig"), // Adjust the paths to match your project structure
+        path.join(__dirname, "./templates/nakkikone.html.twig"), // Adjust the paths to match your project structure
         path.join(__dirname, "./templates/event/*.html.twig"), // Adjust the paths to match your project structure
         path.join(__dirname, "./templates/e30v*.html.twig"), // Adjust the paths to match your project structure
         path.join(__dirname, "./templates/flashmessages.html.twig"), // Adjust the paths to match your project structure
