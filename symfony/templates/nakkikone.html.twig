@@ -8,7 +8,7 @@
 {% block content %}
 {% set l = app.request.locale %}
     <div class="col-12">
-        <h2>Nakkikone: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h2>
+        <h2>Nakkikone{% if event.template == "event.html.twig"%}: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>{% endif %}</h2>
         {{ block('your_nakkis') }}
         {{ attribute(event, 'nakkiInfo' ~ l|capitalize)|raw }}
     <hr>
@@ -26,20 +26,20 @@
                   aria-controls="{{ name }}"
               >
               {{ name }} ({{ nakki.durations|join('h, ') }}h)
-              <span class="badge bg-info rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
+              <span class="badge rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
               </a>
               {% endfor %}
             </div>
           </div>
           <div class="col-sm-6 col-md-8">
-            <div class="tab-content" id="nav-tabContent">
-              <div class="tab-pane fade active show" id="list-none" role="tabpanel" aria-labelledby="list-none">
+            <div class="tab-content {% if "e30v" in event.template %}content{% endif %}" id="nav-tabContent">
+              <div class="tab-pane fade active show " id="list-none" role="tabpanel" aria-labelledby="list-none">
                   <h3>{#{ 'Nakki descriptions'|trans }#}
                   <small>{{ 'Choose a shift ("Nakki") to see the description'|trans }}.</small>
                   </h3>
               </div>
               {% for name, nakki in nakkis %}
-              <div class="tab-pane fade" id="nakki{{ loop.index }}" role="tabpanel" aria-labelledby="list-{{ name }}-list">{{ nakki['description']|raw }}</div>
+              <div class="tab-pane fade" id="nakki{{ loop.index }}" role="tabpanel" aria-labelledby="list-{{ name }}-list"><p>{{ nakki['description']|raw }}</p></div>
               {% endfor %}
             </div>
           </div>
