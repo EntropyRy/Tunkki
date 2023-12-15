@@ -66,7 +66,7 @@ $theme-colors: (
 //@import "~bootstrap/scss/dropdown";
 // @import "~bootstrap/scss/accordion";
 //@import "~bootstrap/scss/badge";
-//@import "~bootstrap/scss/list-group";
+@import "~bootstrap/scss/list-group";
 // 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
 @import "~bootstrap/scss/utilities/api";
 // 8. fontawesome fonts
