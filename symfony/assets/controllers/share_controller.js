@@ -5,11 +5,17 @@ export default class extends Controller {
   static values = {
     url: String,
     title: String,
+    anchor: String,
   };
   connect() {
-    if (!this.urlValue && !this.titleValue) {
+    if (!this.urlValue) {
       this.urlValue = document.location.href;
+    }
+    if (!this.titleValue) {
       this.titleValue = document.title;
+    }
+    if (this.anchorValue) {
+      this.urlValue = this.urlValue + "#" + this.anchorValue;
     }
   }
   shareUrl(event) {
