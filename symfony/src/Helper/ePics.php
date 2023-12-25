@@ -47,7 +47,7 @@ class ePics
                 if ($response->getStatusCode() == 200) {
                     $array = json_decode($response->getContent(), true, 512, JSON_THROW_ON_ERROR);
                     if (!is_null($array['size_variants']['thumb2x'])) {
-                        $pic['url'] = 'https://epics.entropy.fi/' . $array['size_variants']['thumb2x']['url'];
+                        $pic['url'] = $array['size_variants']['thumb2x']['url'];
                         $pic['taken'] = $array['taken_at'] ? $array['taken_at'] : $array['created_at'];
                         return $pic;
                     } else {
