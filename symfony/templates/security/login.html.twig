@@ -21,7 +21,7 @@
     <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" required autofocus>
     <label for="inputPassword">{{ 'password'|trans }}</label>
     <input type="password" name="_password" id="inputPassword" class="form-control" required>
-
+    {# <input type="hidden" name="_target_path" value="{{ path('dashboard') }}"> #}
     <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
 
     {#

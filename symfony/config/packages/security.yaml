@@ -98,6 +98,8 @@ security:
       form_login:
         login_path: app_login
         check_path: app_login
+        use_referer: true
+        enable_csrf: true
       logout:
         path: app_logout
       entry_point: form_login
