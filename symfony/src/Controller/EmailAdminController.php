@@ -66,6 +66,7 @@ final class EmailAdminController extends CRUDController
                     }
                 }
             } elseif ($purpose == 'ticket') {
+                $emails = [];
                 $tickets = $event->getTickets();
                 foreach ($tickets as $ticket) {
                     if (str_starts_with($ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
@@ -73,11 +74,16 @@ final class EmailAdminController extends CRUDController
                         if ($to == null) {
                             $to = $ticket->getEmail();
                         }
-                        if ($to) {
-                            $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
-                            $mailer->send($message);
-                            $count += 1;
+                        if (!in_array($to, $emails)) {
+                            $emails[] = $to;
                         }
+                    }
+                }
+                foreach ($emails as $to) {
+                    if ($to) {
+                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                        $mailer->send($message);
+                        $count += 1;
                     }
                 }
             } elseif ($purpose == 'nakkikone') {
