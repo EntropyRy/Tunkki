@@ -70,6 +70,9 @@ final class EmailAdminController extends CRUDController
                 foreach ($tickets as $ticket) {
                     if (str_starts_with($ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
                         $to = $ticket->getOwnerEmail();
+                        if ($to == null) {
+                            $to = $ticket->getEmail();
+                        }
                         if ($to) {
                             $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
                             $mailer->send($message);
