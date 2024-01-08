@@ -48,8 +48,8 @@ class ArtistController extends AbstractController
             if (!is_null($artist->getPicture())) {
                 $em->persist($artist);
                 $em->flush();
-                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
-                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+                $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
                 $text = 'New artist! type: ' . $artist->getType() . ', name: ' . $artist->getName() . '; **LINKS**: [FI](' . $url_fi . '), [EN](' . $url_en . ')';
                 $mm->SendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');

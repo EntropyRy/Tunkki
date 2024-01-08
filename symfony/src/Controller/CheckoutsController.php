@@ -38,6 +38,13 @@ class CheckoutsController extends AbstractController
         $session = $request->getSession();
         $cartId = $session->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
+        if ($cart == null) {
+            $this->addFlash('warning', 'e30v.cart.empty');
+            return $this->redirectToRoute('entropy_event_shop', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl()
+            ]);
+        }
         $expires = new \DateTime('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
