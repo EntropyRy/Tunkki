@@ -119,7 +119,7 @@
     type="button"
     aria-selected="{{ block('active_url') }}"
     class="btn btn-lg btn-outline-nav w-100 {% if block('active_url') == 'true' %}active{% endif %}"
-  >{{ ('e30v.nav.' ~ name)|trans }}</a>
+  >{{ ('e30v.nav.' ~ name)|trans|raw }}</a>
   {% endif %}
   {% endfor %}
 </nav>
