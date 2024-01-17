@@ -72,6 +72,7 @@ sonata_page:
     - entropy_event_ticket
     - entropy_event_ticket_check
     - entropy_event_responsible
+    - entropy_event_timetable
     - entropy_event_happening_create
     - entropy_event_happening_edit
     - entropy_event_happening_show

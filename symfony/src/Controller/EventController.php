@@ -216,6 +216,28 @@ class EventController extends Controller
     }
     #[Route(
         path: [
+            'fi' => '/{year}/{slug}/aikataulu',
+            'en' => '/{year}/{slug}/timetable',
+        ],
+        name: 'entropy_event_timetable',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventTimetable(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user)) {
+            throw $this->createAccessDeniedException('');
+        }
+        return $this->render('event/timetable.html.twig', [
+            'event' => $event,
+        ]);
+    }
+    #[Route(
+        path: [
             'fi' => '/{year}/{slug}/info',
             'en' => '/{year}/{slug}/about',
         ],
