@@ -1,4 +1,8 @@
 {% extends event.template %}
+{% block title %}
+{% set title = event.NameByLang(app.request.locale) ~ ' - ' ~ event.EventDate|date('d.m.Y, H:i') %}
+{{ title }} - {{ 'Timetable'|trans }} | Entropy ry
+{% endblock %}
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
 <div class="content">
