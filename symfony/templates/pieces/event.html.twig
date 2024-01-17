@@ -571,34 +571,59 @@
 {% endblock %}
 
 {% block cycle %}
-{% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
-{% if thecycle == 'even' %}
-<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+{% if 'e30v' in event.template %}
+    {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
+    <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
     <div class="row">
-        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
+        <div class="col-12">
+            <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder"
+                {{ stimulus_controller('share', {'title': name, 'anchor': anchor}) }}
+                >
+                {{ name }}
+                <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }} >
+                    <i class="fa fa-share"></i>
+                </button>
+                </h3>
+        </div>
+        <div class="col-12">
+            {{ block('artist_pic') }}
             {{ block('artist_event_info') }}
         </div>
-        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
-            {{ block('artist_pic') }}
-        </div>
-        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
     </div>
-</div>
+    </div>
+    {% if not loop.last %}
+    <hr class="d-md-none">
+    {% endif %}
 {% else %}
-<div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
-    <div class="row">
-        <div class="col-6 col-sm-6 col-md-5 col-xl-5">
-            {{ block('artist_pic') }}
+    {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
+    {% if thecycle == 'even' %}
+    <div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
+                {{ block('artist_event_info') }}
+            </div>
+            <div class="col-6 col-sm-6 col-md-5 col-xl-5">
+                {{ block('artist_pic') }}
+            </div>
+            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
         </div>
-        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
-            {{ block('artist_event_info') }}
-        </div>
-        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
     </div>
-</div>
-{% endif %}
-{% if not loop.last %}
-<hr class="d-md-none">
+    {% else %}
+    <div id="{{ artist.type|lower }}-{{ name|slug }}" class="col-md-12 pt-3 pb-3">
+        <div class="row">
+            <div class="col-6 col-sm-6 col-md-5 col-xl-5">
+                {{ block('artist_pic') }}
+            </div>
+            <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">
+                {{ block('artist_event_info') }}
+            </div>
+            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+        </div>
+    </div>
+    {% endif %}
+    {% if not loop.last %}
+    <hr class="d-md-none">
+    {% endif %}
 {% endif %}
 {% endblock %}
 
@@ -653,35 +678,49 @@
 {% endblock %}
 
 {% block artist_event_info %}
-{% if event is defined and event.multiday == true %}
-    {% set datestring = 'E, HH:mm' %}
+{% if 'e30v' in event.template %}
+    <div class="float-none mx-4 mb-4">
+        <small class="fw-light">{{ artist.genre }}</small>
+        <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
+        {{ block('artist_links') }}
+    </div>
 {% else %}
-    {% set datestring = 'HH:mm' %}
-{% endif %}
-<h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
-    {% if artist.type == 'Live' or artist.type == 'DJ' %}
-        {% if info is defined and frontpage|default(false) == false %}
-            @ {{ info.StartTime|format_datetime(pattern=datestring) }}
-        {% endif %}
+    {% if event is defined and event.multiday == true %}
+        {% set datestring = 'E, HH:mm' %}
+    {% else %}
+        {% set datestring = 'HH:mm' %}
     {% endif %}
-</h3>
-    <small>{{ artist.genre }}</small>
-    <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
-    {{ block('artist_links') }}
+    <h3>{{ name }} {% if artist.type == 'Live' %}(Live) {% endif %}
+        {% if artist.type == 'Live' or artist.type == 'DJ' %}
+            {% if info is defined and frontpage|default(false) == false %}
+                @ {{ info.StartTime|format_datetime(pattern=datestring) }}
+            {% endif %}
+        {% endif %}
+    </h3>
+        <small>{{ artist.genre }}</small>
+        <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+        {{ block('artist_links') }}
+{% endif %}
 {% endblock %}
 
 {% block artist_pic %}
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
-    {% if artist.Picture %}
-    <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
+    {% if 'e30v' in event.template %}
+        <div class="rounded-circle float-start w-50 overflow-hidden mb-4 me-4 border" style="shape-outside: margin-box;">
+            <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
+        </div>
     {% else %}
-    <img width="100%" loading="lazy" title="{{ name }}" src="{{ asset('images/thumb_artist_square.jpg') }}">
+        <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
+        {% if artist.Picture %}
+        <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
+        {% else %}
+        <img width="100%" loading="lazy" title="{{ name }}" src="{{ asset('images/thumb_artist_square.jpg') }}">
+        {% endif %}
+        <div class="caption d-none d-sm-block">{{ name }}</div>
+        </span>
     {% endif %}
-    <div class="caption d-none d-sm-block">{{ name }}</div>
-    </span>
 {% endblock %}
 
 {% block artist_preview_info %}
