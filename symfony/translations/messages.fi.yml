@@ -500,6 +500,7 @@ product:
   sold_out: Loppuunmyyty
 e30v:
   sponsors: Sponsorit
+  merch_shop: Oheistuotekauppa
   nav:
     home: entropy 30 vuotta
     info: info
