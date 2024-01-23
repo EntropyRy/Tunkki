@@ -571,7 +571,7 @@
 {% endblock %}
 
 {% block cycle %}
-{% if 'e30v' in event.template %}
+{% if 'e30v' in event.template|default(null) %}
     {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
     <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
     <div class="row">
@@ -678,7 +678,7 @@
 {% endblock %}
 
 {% block artist_event_info %}
-{% if 'e30v' in event.template %}
+{% if 'e30v' in event.template|default(null) %}
     <div class="float-none mx-4 mb-4">
         <small class="fw-light">{{ artist.genre }}</small>
         <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
@@ -707,7 +707,7 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    {% if 'e30v' in event.template %}
+    {% if 'e30v' in event.template|default(null) %}
         <div class="rounded-circle float-start w-50 overflow-hidden mb-4 me-4 border" style="shape-outside: margin-box;">
             <img width="100%" loading="lazy" title="{{ name }}" src="{{ sonata_path(artist.Picture, 'square') }}">
         </div>
