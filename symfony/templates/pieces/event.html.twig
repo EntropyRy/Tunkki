@@ -500,11 +500,11 @@
 {% else %}
     {% set datestring = 'HH:mm' %}
 {% endif %}
-<div class="row">
+<div class="row g-0">
 {% for stage, infos in music_bios %}
     <div class="col-12
     {% if music_bios|length > 1 %} {# is more than one stage #}
-    col-md-6 g-0
+    col-md-6
     {% endif %}">
 
     <h4 class="artists-heading">
@@ -557,11 +557,11 @@
 {% else %}
     {% set datestring = 'HH:mm' %}
 {% endif %}
-<div class="row">
+<div class="row g-0">
 {% for stage, infos in bios %}
     <div class="col-12
     {% if bios|length > 1 %} {# is more than one stage #}
-    col-md-6 g-0
+    col-md-6
     {% endif %}">
 
     <h4 class="artists-heading">
