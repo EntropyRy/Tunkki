@@ -104,6 +104,13 @@
     {% endif %}
 {% endapply %}
 {% endblock %}
+{% block event_path_timetable %}
+{% apply spaceless %}
+    {% if event.url and not event.externalUrl %}
+        {{ path('entropy_event_timetable', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+    {% endif %}
+{% endapply %}
+{% endblock %}
 
 {% block published_and_updated %}
 {% apply spaceless %}
