@@ -529,7 +529,64 @@
                 {% endif %}
             {% endif %}
             <a href="
-                {% if frontpage %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+                {% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+                {% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}
+                ">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
+        {% endif %}
+        {% set last = info.StartTime %}
+        {% if last is defined %}
+            {% if last != info.StartTime %}
+                </li>
+            {% endif %}
+        {% endif %}
+    {% endfor %}
+    </ul>
+    </div>
+{% endfor %}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block vj_timetable_to_page %}
+{% set last = null %}
+{% set page_links = true %}
+{% set bios = event.ArtistInfosByType('VJ') %}
+{% if bios|length > 0 %}
+{% if event.multiday == true %}
+    {% set datestring = 'E, HH:mm' %}
+{% else %}
+    {% set datestring = 'HH:mm' %}
+{% endif %}
+<div class="row">
+{% for stage, infos in bios %}
+    <div class="col-12
+    {% if bios|length > 1 %} {# is more than one stage #}
+    col-md-6
+    {% endif %}">
+
+    <h4 class="artists-heading">
+        {{ 'Timetable'|trans }} {% if stage %}@ {{ stage }}{% endif %}
+    </h4>
+    <ul>
+    {% for info in infos %}
+        {% set artist = info.artistClone %}
+        {% set name = (artist.name|split(' for')).0 %}
+        {% if last is defined %}
+            {% if info.timediff(last) > 4 and event.multiday %}
+                <hr>
+            {% endif %}
+            {% if last != info.StartTime %}
+                <li>{{ info.StartTime|format_datetime(pattern=datestring) }}:
+            {% endif %}
+        {% endif %}
+        {% if info.StartTime is not empty %}
+            {% if last is defined %}
+                {% if last == info.StartTime %}
+                B2B
+                {% endif %}
+            {% endif %}
+            <a href="
+                {% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
                 {% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}
                 ">{{ name }}</a> {% if artist.type == 'Live' %}(Live){% endif %}
         {% endif %}
