@@ -159,7 +159,7 @@ class EventArtistInfo implements \Stringable
     public function getArtistDataHasUpdate(): bool
     {
         if ($this->getArtist()) {
-            return ($this->getArtistClone()->getUpdatedAt() >= $this->getArtist()->getUpdatedAt()) ? false : true;
+            return ($this->getArtistClone()->getUpdatedAt()->format('U') >= $this->getArtist()->getUpdatedAt()->format('U')) ? false : true;
         }
         return false;
     }
