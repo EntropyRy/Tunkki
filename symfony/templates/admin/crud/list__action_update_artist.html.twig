@@ -1,5 +1,3 @@
-{{ object.event.EventDate.diff(date('now+3days')).days }}
-{% if object.artistDataHasUpdate %}1{%endif %}
-{% if object.event.EventDate.diff(date('now+3days')).days > 3 and object.artistDataHasUpdate %}
+{% if object.event.EventDate.diff(date('now-3days')).days > 3 and object.artistDataHasUpdate %}
 <a class="btn btn-sm btn-default edit_link" href="{{ admin.generateObjectUrl('update', object) }}"><i class="fa fa-magic" aria-hidden="true"></i> Update artist info</a>
 {% endif %}
