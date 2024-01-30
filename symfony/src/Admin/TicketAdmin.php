@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Ticket;
+use App\Helper\ReferenceNumber;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -129,5 +131,16 @@ final class TicketAdmin extends AbstractAdmin
         $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
         $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');
         $collection->add('sendQrCodeEmail', $this->getRouterIdParameter() . '/send-qr-code-email');
+    }
+    public function postPersist($object): void
+    {
+        if ($object->getReferenceNumber() == null) {
+            $object->setReferenceNumber($this->rn->calculateReferenceNumber($object, 9000, 909));
+            $this->update($object);
+        }
+    }
+    public function __construct(
+        protected ReferenceNumber $rn,
+    ) {
     }
 }
