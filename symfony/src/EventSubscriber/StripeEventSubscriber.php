@@ -140,7 +140,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $event = $product->getEvent();
                     $quantity = $cartItem->getQuantity();
                     if ($product->isTicket()) {
-                        $tickets = $this->giveEventTicketToEmail($event, $product, $quantity, $email);
+                        $given = $this->giveEventTicketToEmail($event, $product, $quantity, $email);
+                        $tickets = [...$tickets, ...$given];
                         $sold[$product->getNameEn()] =
                             $product->getSold() . '/' .
                             $product->getQuantity();
