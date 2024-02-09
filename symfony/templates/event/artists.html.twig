@@ -12,6 +12,7 @@
         {% set visible = app.user is null and event.isPublished %}
     {% endif %}
     {% if event is not null and visible %}
+    {% set frontpage = false %}
     <div class="row">
         <div class="col">
             {% if event.template == 'event.html.twig' %}
