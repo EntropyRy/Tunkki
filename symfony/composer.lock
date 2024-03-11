@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ee0f11438fa200d62dd6714714a668e9",
+    "content-hash": "6821d755e6fca05a03b7f2865abf4139",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -5815,16 +5815,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.11.1",
+            "version": "4.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "95eb2294d69e25fbd4d8a5b8082cef170812cabd"
+                "reference": "e0436ccf5153e260a70d224930dd18da42682478"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/95eb2294d69e25fbd4d8a5b8082cef170812cabd",
-                "reference": "95eb2294d69e25fbd4d8a5b8082cef170812cabd",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/e0436ccf5153e260a70d224930dd18da42682478",
+                "reference": "e0436ccf5153e260a70d224930dd18da42682478",
                 "shasum": ""
             },
             "require": {
@@ -5953,7 +5953,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.11.1"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.12.0"
             },
             "funding": [
                 {
@@ -5973,7 +5973,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-02-18T15:38:16+00:00"
+            "time": "2024-03-08T02:10:48+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
@@ -13284,8 +13284,8 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": "^8.1"
+        "php": "^8.2"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.6.0"
+    "plugin-api-version": "2.3.0"
 }
