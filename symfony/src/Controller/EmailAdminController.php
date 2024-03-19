@@ -28,6 +28,7 @@ final class EmailAdminController extends CRUDController
                     ->format('png')
                     ->eye('circle')
                     ->style('round')
+                    ->margin(2)
                     ->size(600)
                     ->gradient(0, 40, 40, 40, 40, 0, 'radial')
                     ->errorCorrection('H')

@@ -140,6 +140,7 @@ class EventTicketController extends Controller
                 ->format('png')
                 ->style('round')
                 ->eye('circle')
+                ->margin(2)
                 ->size(600)
                 ->gradient(0, 40, 40, 40, 40, 0, 'radial')
                 ->errorCorrection('H')
