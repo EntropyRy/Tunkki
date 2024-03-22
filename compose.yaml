@@ -1,4 +1,3 @@
-version: "3.2"
 services:
   db:
     image: mariadb:${DB_IMAGE_VERSION}
