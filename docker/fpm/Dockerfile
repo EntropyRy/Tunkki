@@ -1,6 +1,9 @@
-FROM php:8.2-fpm-alpine as dev
+FROM php:8.3-fpm-alpine as dev
 ARG UID
 ARG GID
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions
+
 RUN apk upgrade --update \
     && apk add --no-cache \
         libwebp freetype libltdl \ 
@@ -22,10 +25,10 @@ RUN apk upgrade --update \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
+    && install-php-extensions https://api.github.com/repos/Imagick/imagick/tarball/28f27044e435a2b203e32675e942eb8de620ee58 \
     && pecl channel-update pecl.php.net \
     && pecl install apcu \
     && pecl install ssh2-1.3.1 \
-    && pecl install imagick \
     && git clone https://github.com/mkoppanen/php-zmq.git \
     && cd php-zmq \
     && phpize && ./configure \
@@ -35,7 +38,7 @@ RUN apk upgrade --update \
     && rm -fr php-zmq \
     && docker-php-ext-enable apcu zmq ssh2 imagick \
     && apk del build-deps \
-    && rm -rf /var/cache/apk/* && rm -rf /tmp/*
+    && rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /usr/local/bin/install-php-extensions
 # install composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
