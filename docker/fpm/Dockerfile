@@ -25,17 +25,7 @@ RUN apk upgrade --update \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
-    && install-php-extensions https://api.github.com/repos/Imagick/imagick/tarball/28f27044e435a2b203e32675e942eb8de620ee58 \
-    && pecl channel-update pecl.php.net \
-    && pecl install apcu \
-    && pecl install ssh2-1.3.1 \
-    && git clone https://github.com/mkoppanen/php-zmq.git \
-    && cd php-zmq \
-    && phpize && ./configure \
-    && make \
-    && make install \
-    && cd .. \
-    && rm -fr php-zmq \
+    && install-php-extensions https://api.github.com/repos/Imagick/imagick/tarball/28f27044e435a2b203e32675e942eb8de620ee58 apcu ssh2 zmq \
     && docker-php-ext-enable apcu zmq ssh2 imagick \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /usr/local/bin/install-php-extensions
