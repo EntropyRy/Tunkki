@@ -16,6 +16,10 @@
         <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked data-bs-toggle="collapse" data-bs-target=".clubroom">
         <label class="form-check-label" for="clubroomSwitch"> {{ 'include_clubroom_events'|trans }}</label>
     </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="meetingSwitch" data-bs-toggle="collapse" data-bs-target=".meeting">
+        <label class="form-check-label" for="meetingSwitch"> {{ 'include_meeting_events'|trans }}</label>
+    </div>
     <div id="events">
         {% for event in events %}
             {% if app.user %}
@@ -28,7 +32,7 @@
                 <div class="linetext"><span>{{ year }}</span></div>
             {% endif %}
             {% if event is not null and visible %}
-                <div class="post {{ event.type }} collapse show" data-name="{{ attribute(event, name_attr) }}">
+                <div class="post {{ event.type }} collapse {% if event.type!='meeting' %}show{% endif %}" data-name="{{ attribute(event, name_attr) }}">
                     {{ block('events') }}
                 </div>
             {% endif %}

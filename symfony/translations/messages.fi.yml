@@ -82,6 +82,7 @@ register_as_member: Rekisteröidy jäseneksi
 close: Sulje
 clubroom_events: Kerhohuone tapahtumat (Keke)
 include_clubroom_events: Sisällytä kerhohuonetapahtumat (Keke)
+include_meeting_events: Sisällytä kokoukset
 privacy_policy: Rekisteriseloste
 submit_and_agree:
   Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
