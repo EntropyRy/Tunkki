@@ -40,7 +40,7 @@ search:
   include: Include
 include_clubroom_events: Clubroom Events (Keke)
 include_meeting_events: Meetings
-include_streams_events: Streams
+include_stream_events: Streams
 privacy_policy: Privacy Policy
 submit_and_agree:
   By submitting this form you agree on our privacy policy. We reserve
