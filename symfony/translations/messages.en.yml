@@ -36,8 +36,11 @@ released: Released
 older_from_archive: Older events you can find in the archive
 register_as_member: Register as a new member
 clubroom_events: Clubroom Events (Keke)
-include_clubroom_events: Include Clubroom Events (Keke)
-include_meeting_events: Include Meetings
+search:
+  include: Include
+include_clubroom_events: Clubroom Events (Keke)
+include_meeting_events: Meetings
+include_streams_events: Streams
 privacy_policy: Privacy Policy
 submit_and_agree:
   By submitting this form you agree on our privacy policy. We reserve

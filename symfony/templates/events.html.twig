@@ -11,12 +11,16 @@
         <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}"/>
         <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
     </div>
-
-    <div class="form-check">
+    <h4>{{ 'search.include'|trans }}</h4>
+    <div class="form-check form-check-inline">
         <input type="checkbox" class="form-check-input" id="clubroomSwitch" checked data-bs-toggle="collapse" data-bs-target=".clubroom">
         <label class="form-check-label" for="clubroomSwitch"> {{ 'include_clubroom_events'|trans }}</label>
     </div>
-    <div class="form-check">
+    <div class="form-check form-check-inline">
+        <input type="checkbox" class="form-check-input" id="streamSwitch" checked data-bs-toggle="collapse" data-bs-target=".stream">
+        <label class="form-check-label" for="streamSwitch"> {{ 'include_stream_events'|trans }}</label>
+    </div>
+    <div class="form-check form-check-inline">
         <input type="checkbox" class="form-check-input" id="meetingSwitch" data-bs-toggle="collapse" data-bs-target=".meeting">
         <label class="form-check-label" for="meetingSwitch"> {{ 'include_meeting_events'|trans }}</label>
     </div>

@@ -960,14 +960,14 @@
   integrity sha512-dBVuXR082gk3jsFp7Rd/JI4kytwGHecnCoTtXFb7DB6CNHp4rg5k1bhg0nWdLGLnOV71lmDzGQaLMy8iPLY0pw==
 
 "@fontsource-variable/hanken-grotesk@^5.0.18":
-  version "5.0.20"
-  resolved "https://registry.yarnpkg.com/@fontsource-variable/hanken-grotesk/-/hanken-grotesk-5.0.20.tgz#66e72f6ec4b3e3b3cc76d092393aa695d3a984ad"
-  integrity sha512-9AxVSey57hlNebafJ7Fw0OHuQPQxaw7O32Pmhe5VtGwLAT3hqrHcFj7nTgbEnF+uxMcP+son+wNAeC9ydomSzA==
+  version "5.0.21"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/hanken-grotesk/-/hanken-grotesk-5.0.21.tgz#818696f148a6f08a0f1150284aa0b853f96c1f66"
+  integrity sha512-dTzqzsvTmpag66Nx5TRpbZIevmj7dXYNHAYNSie67Mbb5+VF1V/ccgXTqrk/Lm04+eUimjJkf/5ZHDMl/349Lw==
 
 "@fontsource-variable/space-grotesk@^5.0.13":
-  version "5.0.17"
-  resolved "https://registry.yarnpkg.com/@fontsource-variable/space-grotesk/-/space-grotesk-5.0.17.tgz#659466211ff622cd88536e04a149864d02fe1095"
-  integrity sha512-CnVJT5H7I4pDy7zSxOWuKwrjkeMK7y8vI6T3VUSRNgAi7ZyGjJp54F7qI4RjhTzdVhvtI4JJUsm9K+TTvL+oMw==
+  version "5.0.18"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/space-grotesk/-/space-grotesk-5.0.18.tgz#e4b6d115b548177895684ec95839c069bdc15496"
+  integrity sha512-Z5uQmCjPdNobaFCtdA7aguerAQi4uvMRcUXhD+74N6Nq2Shxr0skvNzxB9mQVtkddGpB996RXipCDq9qzb525g==
 
 "@formatjs/ecma402-abstract@1.18.2":
   version "1.18.2"
@@ -1202,9 +1202,9 @@
     "@types/estree" "*"
 
 "@types/eslint@*":
-  version "8.56.9"
-  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.56.9.tgz#403e9ced04a34e63f1c383c5b8ee1a94442c8cc4"
-  integrity sha512-W4W3KcqzjJ0sHg2vAq9vfml6OhsJ53TcUjUqfzzZf/EChUtwspszj/S0pzMxnfRcO55/iGq47dscXw71Fxc4Zg==
+  version "8.56.10"
+  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.56.10.tgz#eb2370a73bf04a901eeba8f22595c7ee0f7eb58d"
+  integrity sha512-Shavhk87gCtY2fhXDctcfS3e6FdxWkCx1iUZ9eEUbh7rTqlZT0/IzOkCOVt0fCjcFuZ9FPYfuezTBImfHCDBGQ==
   dependencies:
     "@types/estree" "*"
     "@types/json-schema" "*"
@@ -1808,9 +1808,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001587:
-  version "1.0.30001611"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001611.tgz#4dbe78935b65851c2d2df1868af39f709a93a96e"
-  integrity sha512-19NuN1/3PjA3QI8Eki55N8my4LzfkMCRLgCVfrl/slbSAchQfV0+GwjPrK3rq37As4UCLlM/DHajbKkAqbv92Q==
+  version "1.0.30001612"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001612.tgz#d34248b4ec1f117b70b24ad9ee04c90e0b8a14ae"
+  integrity sha512-lFgnZ07UhaCcsSZgWW0K5j4e69dK1u/ltrL9lTUiFOwNHs12S3UMIEYgBV0Z6C6hRDev7iRnMzzYmKabYdXF9g==
 
 chalk@^2.4.2:
   version "2.4.2"
@@ -2319,9 +2319,9 @@ ee-first@1.1.1:
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
 electron-to-chromium@^1.4.668:
-  version "1.4.741"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.741.tgz#0ca6502689294beeef260889f35331e2c857451d"
-  integrity sha512-AyTBZqDoS7/mvQK22gOQpjxbeV8iPeUBTvYlEh/1S9dKAHgQdxuF49g9rLbj0cRKtqH8PzLJzqT3nAdl+qoZTA==
+  version "1.4.745"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.745.tgz#9c202ce9cbf18a5b5e0ca47145fd127cc4dd2290"
+  integrity sha512-tRbzkaRI5gbUn5DEvF0dV4TQbMZ5CLkWeTAXmpC9IrYT+GE+x76i9p+o3RJ5l9XmdQlI1pPhVtE9uNcJJ0G0EA==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -2948,9 +2948,9 @@ ipaddr.js@1.9.1:
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
 
 ipaddr.js@^2.0.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-2.1.0.tgz#2119bc447ff8c257753b196fc5f1ce08a4cdf39f"
-  integrity sha512-LlbxQ7xKzfBusov6UMi4MFpEg0m+mAm9xyNGEduwXMEDuf4WfzB/RZwMVYEd7IKGvh4IUkEXYxtAVu9T3OelJQ==
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-2.2.0.tgz#d33fa7bac284f4de7af949638c9d68157c6b92e8"
+  integrity sha512-Ag3wB2o37wslZS19hZqorUnrnzSkpOVy+IiiDEiTqNubEYpYuHWIf6K4psgN2ZWKExS4xhVCrRVfb/wfW8fWJA==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
