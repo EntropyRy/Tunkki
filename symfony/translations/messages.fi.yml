@@ -228,6 +228,7 @@ event:
   form:
     sign_up:
       request_edited: Ilmottautumista muokattu
+      request_deleted: Ilmottautuminen poistettu
       artist: Artisti
       description:
         Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
@@ -237,6 +238,7 @@ event:
       set_length: Toive setin pituudesta
       free_word: Vapaa sana
       save: Tallenna
+      delete: Poista
       new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen <a href="/profiili/artisti/">profiilisivultasi</a>
       ends: Ilmoittautuminen suljetaan
 url:

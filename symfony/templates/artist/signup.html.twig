@@ -11,6 +11,9 @@
         {{ form_start(form) }}
         {{ form_widget(form) }}
         <input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'event.form.sign_up.save'|trans }}">
+        {% if form.vars.value.id is not null %}
+        <a href="{{ path('entropy_event_slug_artist_signup_delete', {'id': form.vars.value.id })}}" class="btn btn-warning float-end" data-turbo="false">{{ 'event.form.sign_up.delete'|trans }}<a/>
+        {% endif %}
         {{ form_end(form) }}
     </div>
 </div>

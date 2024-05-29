@@ -20,7 +20,6 @@ use App\Entity\RSVP;
 use App\Entity\EventArtistInfo;
 use App\Entity\NakkiBooking;
 use App\Form\EventArtistInfoType;
-use App\Form\EventArtistInfoEditType;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -303,5 +302,37 @@ class EventSignUpController extends Controller
             'event' => $event,
             'form' => $form,
         ]);
+    }
+    #[Route(
+        '/signup/{id}/delete',
+        name: 'entropy_event_slug_artist_signup_delete',
+        requirements: [
+            'year' => '\d+',
+            'id' => '\d+',
+        ]
+    )]
+    public function artistSignUpDelete(
+        EventArtistInfo $artisteventinfo,
+        TranslatorInterface $trans,
+        EntityManagerInterface $em
+    ): Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        $event = $artisteventinfo->getEvent();
+        if (($artisteventinfo->getArtist()->getMember() != $member) || $event->isInPast()) {
+            $this->addFlash('warning', $trans->trans('Not allowed!'));
+            return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
+        }
+        $artistClone = $artisteventinfo->getArtistClone();
+        $em->remove($artistClone);
+        $em->remove($artisteventinfo);
+        try {
+            $em->flush();
+            $this->addFlash('success', $trans->trans('event.form.sign_up.request_deleted'));
+        } catch (\Exception) {
+            $this->addFlash('warning', $trans->trans('Something went wrong!'));
+        }
+        return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
     }
 }

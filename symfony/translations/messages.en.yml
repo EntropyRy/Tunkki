@@ -158,12 +158,14 @@ event:
   form:
     sign_up:
       request_edited: Signup request edited
+      request_deleted: Signup request deleted
       artist: Artist
       why_should_we_choose_you: Why should we choose you?
       wish_for_playtime: At what time would you like to perform?
       set_length: Preferred length of the set
       free_word: Free word
       save: Save
+      delete: Delete
       new_artist_help_html:
         If you want to create a new artist you can do it from
         <a href="/en/profile/artist">your artist profile page</a>
