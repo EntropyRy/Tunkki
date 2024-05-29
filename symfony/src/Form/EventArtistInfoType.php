@@ -20,20 +20,22 @@ class EventArtistInfoType extends AbstractType
                 'label' => 'event.form.sign_up.artist',
                 'help' => 'event.form.sign_up.new_artist_help_html',
                 'help_html' => true,
+                'disabled' => $options['disable_artist'] ?? false,
             ])
             ->add('WishForPlayTime', null, [
                 'label' => 'event.form.sign_up.wish_for_playtime'
             ]);
-        if($options['ask_time']){
-        $builder
-            ->add('SetLength', null, [
-                'label' => 'event.form.sign_up.set_length'
-            ]);
+        if ($options['ask_time']) {
+            $builder
+                ->add('SetLength', null, [
+                    'label' => 'event.form.sign_up.set_length'
+                ]);
         }
         $builder
             ->add('freeWord', null, [
                 'label' => 'event.form.sign_up.free_word',
-                'help' => 'event.form.sign_up.why_should_we_choose_you'
+                'help' => 'event.form.sign_up.why_should_we_choose_you',
+                'required' => true
             ]);
     }
 
@@ -42,7 +44,8 @@ class EventArtistInfoType extends AbstractType
         $resolver->setDefaults([
             'data_class' => EventArtistInfo::class,
             'artists' => null,
-            'ask_time' => true
+            'ask_time' => true,
+            'disable_artist' => false
         ]);
     }
 }

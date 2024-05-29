@@ -282,7 +282,10 @@ class EventSignUpController extends Controller
             $this->addFlash('warning', $trans->trans('Not allowed!'));
             return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
         }
-        $form = $this->createForm(EventArtistInfoEditType::class, $artisteventinfo);
+        $form = $this->createForm(EventArtistInfoType::class, $artisteventinfo, [
+            'ask_time' => $event->isArtistSignUpAskSetLength(),
+            'disable_artist' => true
+        ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();
