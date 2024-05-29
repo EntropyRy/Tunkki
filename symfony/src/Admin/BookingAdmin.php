@@ -167,7 +167,7 @@ class BookingAdmin extends AbstractAdmin
         $formMapper
             ->tab('General')
             ->with('Booking', ['class' => 'col-md-6'])
-            ->add('name', null, ['help' => "Event name or name we use to talk about this case."])
+            ->add('name', null, ['help' => "Event name or name we use to talk about this case. Not the renters name!"])
             ->add('bookingDate', DatePickerType::class, [
                 'format' => 'd.M.y',
             ])
