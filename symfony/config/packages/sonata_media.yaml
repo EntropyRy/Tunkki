@@ -81,6 +81,7 @@ sonata_media:
         - jpeg
         - svg
         - gif
+        - webp
       allowed_mime_types:
         - image/pjpeg
         - image/jpeg
@@ -88,6 +89,7 @@ sonata_media:
         - image/x-png
         - image/svg+xml
         - image/gif
+        - image/webp
     file:
       allowed_extensions:
         - pdf
