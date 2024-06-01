@@ -282,7 +282,7 @@ final class EventAdmin extends AbstractAdmin
                         SimpleFormatterType::class,
                         [
                             'format' => $format,
-                            'required' => false,
+                            'required' => true,
                             'help' => $help ? $help : 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
@@ -304,7 +304,7 @@ final class EventAdmin extends AbstractAdmin
                         SimpleFormatterType::class,
                         [
                             'format' => $format,
-                            'required' => false,
+                            'required' => true,
                             'help' => $help ? $help : 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
