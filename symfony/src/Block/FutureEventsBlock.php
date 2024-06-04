@@ -22,10 +22,11 @@ class FutureEventsBlock extends BaseBlockService
         $repo = $this->em->getRepository(Event::class);
         assert($repo instanceof EventRepository);
         $events = $repo->getFutureEvents();
-
+        $unreleased = $repo->getUnpublishedFutureEvents();
         return $this->renderResponse($blockContext->getTemplate(), [
             'block' => $blockContext->getBlock(),
             'events' => $events,
+            'unreleased' => $unreleased,
             'settings' => $blockContext->getSettings()
         ], $response);
     }

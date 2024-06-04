@@ -13,14 +13,7 @@
         <ul class="fa-ul">
         {% set name = 'name_attribute'|trans %}
         {% for event in events %}
-        <li><span class="fa-li"><i class="fas fa-link"></i></span>
-            <a href="
-            {% if event.url %}
-            {{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
-            {% else %}
-            {{ path('entropy_event', {'id': event.id}) }}
-            {% endif %}">{{ attribute(event, name) }} - {{ event.eventDate|date() }}</a>
-            </li>
+            {{ block('event_link') }}
         {% else %}
         <li>
             <span class="fa-li">
@@ -33,6 +26,12 @@
             </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'block.future_events.events'|trans }}</a>
         </li>
         {% endfor %}
+        {% if app.user %}
+            <li>{{ 'event.only_for_members'|trans }}</<li>
+            {% for event in unreleased %}
+                {{ block('event_link') }}
+            {% endfor %}
+        {% endif %}
         </ul>
         {% if settings.box|default(false) %}
         {% if is_granted('ROLE_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN')%}
@@ -44,4 +43,15 @@
     {% else %}
     </div>
     {% endif %}
+{% endblock %}
+
+{% block event_link %}
+    <li><span class="fa-li"><i class="fas fa-link"></i></span>
+        <a href="
+        {% if event.url %}
+        {{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}
+        {% else %}
+        {{ path('entropy_event', {'id': event.id}) }}
+        {% endif %}">{{ attribute(event, name) }} - {{ event.eventDate|date() }}</a>
+        </li>
 {% endblock %}
