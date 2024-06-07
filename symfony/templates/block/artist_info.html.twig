@@ -42,8 +42,12 @@
                     {% if info.StartTime %}
                     @ {{ info.StartTime|date('H:i') }}
                     {% else %}
-                    : {{ 'artist.not_confirmed_yet'|trans }},
-                    <a href="{{ path('entropy_event_slug_artist_signup_edit', {'year': info.event.eventDate|date('Y'), 'slug': info.event.url, 'id': info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                        {% if info.event.artistSignUpEnd|date >= 'now'|date %}
+                            : {{ 'artist.not_selected'|trans }}
+                        {% else %}
+                            : {{ 'artist.not_confirmed_yet'|trans }},
+                            <a href="{{ path('entropy_event_slug_artist_signup_edit', {'year': info.event.eventDate|date('Y'), 'slug': info.event.url, 'id': info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                        {% endif %} 
                     {% endif %}
                 </li>
                 {% endif %}
