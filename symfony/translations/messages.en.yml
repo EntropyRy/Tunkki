@@ -220,6 +220,7 @@ epics:
     title: Random photos from our events
 artist:
   not_confirmed_yet: Not confirmed (yet)
+  not_selected: Artist not selected
   explanation:
     In principle, the artist profile is event-specific. This means that
     your profile below will appear in the next event you are an artist. If you edit
