@@ -61,6 +61,9 @@ class Product
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nameFi = null;
 
+    #[ORM\Column]
+    private ?int $howManyOneCanBuyAtOneTime = 10;
+
     public function getSold(): int
     {
         if ($this->event) {
@@ -83,10 +86,10 @@ class Product
         if ($this->event && $this->ticket) {
             $sold = $this->getSold();
             $left = $this->quantity - $sold - $inCheckouts;
-            if ($left <= 10) {
+            if ($left <= $this->howManyOneCanBuyAtOneTime) {
                 return $left;
             }
-            return 10;
+            return $this->howManyOneCanBuyAtOneTime;
         }
         return 0;
     }
@@ -289,6 +292,18 @@ class Product
     public function setNameFi(?string $nameFi): static
     {
         $this->nameFi = $nameFi;
+
+        return $this;
+    }
+
+    public function getHowManyOneCanBuyAtOneTime(): ?int
+    {
+        return $this->howManyOneCanBuyAtOneTime;
+    }
+
+    public function setHowManyOneCanBuyAtOneTime(int $howManyOneCanBuyAtOneTime): static
+    {
+        $this->howManyOneCanBuyAtOneTime = $howManyOneCanBuyAtOneTime;
 
         return $this;
     }

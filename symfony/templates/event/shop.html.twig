@@ -1,13 +1,20 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
+{% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
-{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-{% if block('content_shop_before', input) is defined %}
-<div class="content mb-4">
-{{ block('content_shop_before', input) ?? '' }}
-</div>
+{% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
+    {% set show = true %}
+    {% set hide_time = true %}
+    {% set show_definition = true %}
+    {% set allow_nakki_cancel = true %}
+    {{ event.nakkiInfo(app.request.locale)|raw }}
+    {% if hasNakki %}
+    {{ block('your_nakkis') }}
+    {% else %}
+    {{ block('reserve_nakkis') }}
+    {% endif %}
 {% endif %}
-{% if form.products|length > 0 %}
+{% if form.products|length > 0 and hasNakki %}
 {{ form_start(form) }}
 {% for product_form in form.products %}
 {% set product = product_form.vars.value.product %}
@@ -44,7 +51,7 @@
             </span>
             <span>{{ product.amount / 100 }}€</span>
           </h3>
-          <span class="btn rounded-circle btn-primary text-darkblue fs-4"
+          <span class="btn rounded-circle text-darkblue fs-4"
           >
             <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
           </span>
@@ -66,20 +73,16 @@
   </div>
 {% endfor %}
 <div class="col-12">
-  {{ form_row(form.email) }}
-  <label>{{ 'e30v.fee'|trans }}</label>
+  <div class="d-none">{{ form_row(form.email) }}</div>
+  <label>{{ 'event.stripe.fee'|trans }}</label>
   <input data-turbo="false" type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
   {{ form_end(form) }}
 </div>
-<hr>
 {% endif %}
-<div class="content">
-{{ block('content_shop_after', input) ?? '' }}
-</div>
 {% endblock %}
 
 {% block quantity %}
-<div class="quantity-holder d-flex justify-content-center rounded">
+<div class="quantity-holder d-flex justify-content-center">
 {% if product.max(minus|default(0)) <= 0 %}
 {% set button = 'btn-secondary disabled' %}
 {% else %}
@@ -88,7 +91,7 @@
   <button
     {{ stimulus_target('product', 'minus') }}
     {{ stimulus_action('product', 'minus') }}
-    class="btn rounded-circle {{ button }} text-darkblue fs-4"
+    class="btn {{ button }} text-darkblue fs-4"
     >
     <i class="fa fa-minus"></i>
   </button>
@@ -103,7 +106,7 @@
   <button
     {{ stimulus_target('product', 'plus') }}
     {{ stimulus_action('product', 'plus') }}
-    class="btn rounded-circle {{ button }} text-darkblue fs-4"
+    class="btn {{ button }} text-darkblue fs-4"
     >
     <i class="fa fa-plus"></i>
   </button>

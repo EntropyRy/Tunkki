@@ -71,6 +71,8 @@ $fa-font-display: swap;
 @import "~@fortawesome/fontawesome-free/scss/solid";
 @import "~@fortawesome/fontawesome-free/scss/brands";
 
+@import "product.scss";
+
 .navbar-nav .current,
 .navbar-nav .current_ancestor.dropdown .nav-link {
   text-decoration: underline;

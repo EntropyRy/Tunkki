@@ -213,6 +213,8 @@ page:
   title:
     checkout: Kassa
 event:
+  stripe:
+    fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
   meta:
     keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
   edit: Muokkaa

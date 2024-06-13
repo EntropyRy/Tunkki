@@ -1539,4 +1539,5 @@ body {
         $func = 'artistSignUpInfo' . ucfirst((string) $lang);
         return $this->{$func};
     }
+
 }

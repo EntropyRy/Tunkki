@@ -129,8 +129,8 @@ class EventTicketController extends Controller
         $qr = new Generator();
 
         return $this->render('ticket/one.html.twig', [
-            'selected' => $selected,
             'event' => $event,
+            'selected' => $selected,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
             'hasNakki' => count((array) $selected) > 0 ? true : false,
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),

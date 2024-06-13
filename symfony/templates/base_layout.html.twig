@@ -17,10 +17,10 @@
                 {{ sonata_seo_metadatas() }}
             {% endblock %}
             {% block sonata_page_stylesheets %}
-                {{ encore_entry_link_tags('app', null, 'default') }}
+                {{ encore_entry_link_tags('app') }}
             {% endblock %}
             {% block sonata_page_javascripts %}
-                {{ encore_entry_script_tags('app', null, 'default') }}
+                {{ encore_entry_script_tags('app') }}
             {% endblock %}
             <link rel="manifest" href="/manifest.json">
         </head>

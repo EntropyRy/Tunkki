@@ -91,36 +91,36 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 );
             }
-            if ($event->getTicketCount() != (is_countable($event->getTickets()) ? count($event->getTickets()) : 0)) {
+            if (count($event->getTickets()) > 0) {
                 $menu->addChild(
                     'Tickets',
                     [
                         'uri' => $admin->generateUrl('admin.ticket.list', ['id' => $id])
                     ]
                 );
-                if ($event->getTicketsEnabled()) {
-                    $menu->addChild(
-                        'Update Ticket Count',
-                        [
-                            'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
-                            'attributes' => ['class' => 'btn-warning']
-                        ]
-                    );
-                }
-                if ($event->ticketPresaleEnabled()) {
-                    $event = $this->getSubject();
-                    $menu->addChild(
-                        'Ticket Presale Preview',
-                        [
-                            'route' => 'entropy_event_ticket_presale',
-                            'routeParameters' => [
-                                'slug' => $event->getUrl(),
-                                'year' => $event->getEventDate()->format('Y'),
-                            ],
-                            'linkAttributes' => ['target' => '_blank']
-                        ]
-                    );
-                }
+                /*                if ($event->getTicketsEnabled()) {
+                                    $menu->addChild(
+                                        'Update Ticket Count',
+                                        [
+                                            'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
+                                            'attributes' => ['class' => 'btn-warning']
+                                        ]
+                                    );
+                                }
+                                if ($event->ticketPresaleEnabled()) {
+                                    $event = $this->getSubject();
+                                    $menu->addChild(
+                                        'Ticket Presale Preview',
+                                        [
+                                            'route' => 'entropy_event_ticket_presale',
+                                            'routeParameters' => [
+                                                'slug' => $event->getUrl(),
+                                                'year' => $event->getEventDate()->format('Y'),
+                                            ],
+                                            'linkAttributes' => ['target' => '_blank']
+                                        ]
+                                    );
+                                }*/
             }
             $menu->addChild(
                 'Happenings',
@@ -605,8 +605,8 @@ final class EventAdmin extends AbstractAdmin
                 ->with('Config', ['class' => 'col-md-6'])
                 ->add('ticketsEnabled', null, ['help' => 'allow tikets to the event'])
                 ->add('nakkiRequiredForTicketReservation', null, ['help' => 'allow tikets to be reserved only after nakki reservation'])
-                ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated and ticket update button is pushed this amount will be created with the price below. 2 prices for tickets? first create low price tickets that are in presales and then the amount of full price tickets'])
-                ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
+                //->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated and ticket update button is pushed this amount will be created with the price below. 2 prices for tickets? first create low price tickets that are in presales and then the amount of full price tickets'])
+                //->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
                 ->end()
                 ->with('Presales', ['class' => 'col-md-6'])
                 ->add(
@@ -627,13 +627,13 @@ final class EventAdmin extends AbstractAdmin
                         'required' => false
                     ]
                 )
-                ->add(
-                    'ticketPresaleCount',
-                    null,
-                    [
-                        'help' => 'How many tickets can be sold in presale?'
-                    ]
-                )
+                // ->add(
+                //     'ticketPresaleCount',
+                //     null,
+                //     [
+                //         'help' => 'How many tickets can be sold in presale?'
+                //     ]
+                // )
                 ->end()
                 ->with('Info', ['class' => 'col-md-12'])
                 ->add(

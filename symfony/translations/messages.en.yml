@@ -143,6 +143,8 @@ block:
 menu:
   logon_to: Log on to
 event:
+  stripe:
+    fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
   meta:
     keywords: Entropy, music, association, culture, nonprofit, event
   edit: Edit

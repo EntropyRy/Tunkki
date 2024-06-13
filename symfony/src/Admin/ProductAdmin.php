@@ -78,6 +78,7 @@ final class ProductAdmin extends AbstractAdmin
             ->add('serviceFee', null, ['help' => 'One product will be forced to all transactions'])
             ->add('ticket')
             ->add('quantity')
+            ->add('howManyOneCanBuyAtOneTime')
             ->add('event');
     }
 
