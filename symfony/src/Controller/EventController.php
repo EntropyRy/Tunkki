@@ -115,17 +115,22 @@ class EventController extends Controller
         CheckoutRepository $checkoutR,
         NakkiBookingRepository $nakkirepo,
     ): Response {
+        $selected = [];
+        $nakkis = [];
+        $hasNakki = false;
+        $email = null;
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user)) {
+        if ((!$event->isPublished() && is_null($user)) || (is_null($user) && $event->isNakkiRequiredForTicketReservation())) {
             throw $this->createAccessDeniedException('');
         }
-        $email = null;
         if ($user != null) {
             assert($user instanceof User);
             $email = $user->getEmail();
             $member = $user->getMember();
+            $selected = $nakkirepo->findMemberEventBookings($member, $event);
+            $nakkis = $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale());
+            $hasNakki = count((array) $selected) > 0 ? true : false;
         }
-        $selected = $nakkirepo->findMemberEventBookings($member, $event);
         $products = $event->getProducts();
         $session = $request->getSession();
         $cart = new Cart();
@@ -154,8 +159,8 @@ class EventController extends Controller
         }
         return $this->render('event/shop.html.twig', [
             'selected' => $selected,
-            'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count((array) $selected) > 0 ? true : false,
+            'nakkis' => $nakkis,
+            'hasNakki' => $hasNakki,
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'event' => $event,
             'form' => $form,

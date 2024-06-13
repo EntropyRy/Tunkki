@@ -149,7 +149,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 }
                 $qrGenerator = new Generator();
                 foreach ($tickets as $ticket) {
-                    $qrs[] = $qrGenerator
+                    $qrs[] = ['qr' => $qrGenerator
                         ->format('png')
                         ->eye('circle')
                         ->style('round')
@@ -157,7 +157,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         ->gradient(0, 40, 40, 40, 40, 0, 'radial')
                         ->errorCorrection('H')
                         ->merge('images/golden-logo.png', .2)
-                        ->generate((string)$ticket->getReferenceNumber());
+                        ->generate((string)$ticket->getReferenceNumber()),
+                        'name' => $ticker->getNameByLang($locale)];
                 }
                 $this->sendTicketQrEmail(
                     $event->getNameByLang($locale),
@@ -190,7 +191,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 ->to($to)
                 ->replyTo($replyTo)
                 ->subject('[' . $eventName . '] Your ticket #' . ($x + 1) . ' / Lippusi #' . ($x + 1))
-                ->addPart((new DataPart($qr, 'ticket', 'image/png', 'base64'))->asInline())
+                ->addPart((new DataPart($qr['qr'], 'ticket', 'image/png', 'base64'))->asInline())
                 ->htmlTemplate('emails/ticket.html.twig')
                 ->context([
                     'body' => $body,

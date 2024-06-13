@@ -14,7 +14,8 @@
     {{ block('reserve_nakkis') }}
     {% endif %}
 {% endif %}
-{% if form.products|length > 0 and hasNakki %}
+
+{% if form.products|length > 0 %}
 {{ form_start(form) }}
 {% for product_form in form.products %}
 {% set product = product_form.vars.value.product %}
@@ -26,7 +27,7 @@
       {{ stimulus_controller('product', {'max': product.max((minus|default(0)))}) }}
       >
     <div class="row">
-      <div class="col-12 pic">
+      <div class="col-12 pic text-center">
         {% if product.picture %}
          {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'title': product.name(app.request.locale)}) }}
         {% endif %}
@@ -66,7 +67,13 @@
         <div class="text-uppercase text-center fw-bold">{{ 'product.quantity'|trans }}</div>
       </div>
       <div class="col-12 quantity">
-        {{ block('quantity') }}
+        {% if not nakkiRequired %}
+          {{ block('quantity') }}
+        {% else %}
+          {% if hasNakki %}
+            {{ block('quantity') }}
+          {% endif %}
+        {% endif %}
       </div>
       <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
     </div>
@@ -75,7 +82,7 @@
 <div class="col-12">
   <div class="d-none">{{ form_row(form.email) }}</div>
   <label>{{ 'event.stripe.fee'|trans }}</label>
-  <input data-turbo="false" type="submit" class="btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
+  <input data-turbo="false" type="submit" class="{% if not hasNakki %}disabled{% endif %} btn btn-lg btn-buy w-100" value="{{ 'e30v.buy'|trans }}" />
   {{ form_end(form) }}
 </div>
 {% endif %}
