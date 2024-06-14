@@ -394,7 +394,8 @@ ticket:
   reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
   not_available: Lippuja ei ole saatavilla
   reserve_yours: Varaa lippusi tästä!
-  details: Katso lippusi tiedot
+  buy_yours: Osta lippusi tästä!
+  details: Katso nakkisi/lippusi tiedot
   payment_info: Maksutiedot
   reference_number: Viite (pitää käyttää)
   code: Lippukoodi

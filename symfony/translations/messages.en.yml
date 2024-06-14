@@ -320,8 +320,9 @@ ticket:
   not_available: There is no ticket available
   reserved: The ticket has been reserved for you! Payment details below.
   reserve_yours: Reserve your ticket here!
+  buy_yours: Buy your ticket here!
   available: Available
-  details: See ticket details
+  details: See your ticket/nakki details
   go_to_event_page: Ticket in Event Page
   paid_with_bus: Ticket and Bus paid
   presale:
