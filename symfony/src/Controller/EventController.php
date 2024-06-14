@@ -93,7 +93,7 @@ class EventController extends Controller
         return $this->render($template, [
             'event' => $event,
             'rsvpForm' => $form,
-            'tickets' => $tickets,
+            'tickets' => $tickets ?? null,
             'ticketsAvailable' => $ticketCount,
         ]);
     }
