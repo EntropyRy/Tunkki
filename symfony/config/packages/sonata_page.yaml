@@ -70,6 +70,7 @@ sonata_page:
     - entropy_event_calendar_config
     - entropy_event_slug_nakkikone
     - entropy_event_ticket
+    - entropy_event_tickets
     - entropy_event_ticket_check
     - entropy_event_responsible
     - entropy_event_timetable

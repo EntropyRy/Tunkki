@@ -148,6 +148,56 @@ class EventTicketController extends Controller
                 ->generate((string)$ticket->getReferenceNumber()))
         ]);
     }
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/tickets',
+            'fi' => '/{year}/{slug}/liput'
+        ],
+        name: 'entropy_event_tickets',
+        requirements: [
+            'year' => '\d+',
+            'reference' => '\d+',
+        ]
+    )]
+    public function tickets(
+        Request $request,
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+        TranslatorInterface $trans,
+        NakkiBookingRepository $nakkirepo,
+        EntityManagerInterface $em,
+        TicketRepository $ticketRepo
+    ): Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        $selected = $nakkirepo->findMemberEventBookings($member, $event);
+        $qr = new Generator();
+        $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]);
+
+        foreach ($tickets as $ticket) {
+            $qrs[] = ['qr' => base64_encode($qr
+                ->format('png')
+                ->eye('circle')
+                ->style('round')
+                ->size(600)
+                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
+                ->errorCorrection('H')
+                ->merge('images/golden-logo.png', .2)
+                ->generate((string)$ticket->getReferenceNumber())),
+                'name' => $ticket->getName() ?? 'Ticket'
+            ];
+        }
+        return $this->render('ticket/multiple.html.twig', [
+            'event' => $event,
+            'selected' => $selected,
+            'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
+            'hasNakki' => count((array) $selected) > 0 ? true : false,
+            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
+            'tickets' => $tickets,
+            'qrs' => $qrs
+        ]);
+    }
 
     #[Route(
         path: [

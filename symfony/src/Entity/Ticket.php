@@ -46,6 +46,9 @@ class Ticket implements \Stringable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $stripeProductId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $name = null;
+
     public function __construct()
     {
         $this->updatedAt = new \DateTimeImmutable();
@@ -178,6 +181,18 @@ class Ticket implements \Stringable
     public function setStripeProductId(?string $stripeProductId): static
     {
         $this->stripeProductId = $stripeProductId;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): static
+    {
+        $this->name = $name;
 
         return $this;
     }

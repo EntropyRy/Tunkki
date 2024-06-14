@@ -80,30 +80,32 @@ final class TicketAdminController extends CRUDController
     {
         $ticket = $this->admin->getSubject();
         $to = $ticket->getEmail();
-        $email = $emailRepo->findOneBy(['purpose' => 'ticket_qr']);
+        $email = $emailRepo->findOneBy(['purpose' => 'ticket_qr', 'event' => $ticket->getEvent()]);
         $replyTo = 'hallitus@entropy.fi';
         $body = '';
         if ($email != null) {
-            $replyTo = $email->getReplyTo();
+            $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
             $body = $email->getBody();
         }
         $qrGenerator = new Generator();
-        $qr = $qrGenerator
-            ->format('png')
-            ->eye('circle')
-            ->style('round')
-            ->margin(2)
-            ->size(600)
-            ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-            ->errorCorrection('H')
-            ->merge('images/golden-logo.png', .2)
-            ->generate((string)$ticket->getReferenceNumber());
+        $qr = [
+            'qr' => $qrGenerator
+                ->format('png')
+                ->eye('circle')
+                ->style('round')
+                ->size(600)
+                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
+                ->errorCorrection('H')
+                ->merge('images/golden-logo.png', .2)
+                ->generate((string)$ticket->getReferenceNumber()),
+            'name' => $ticket->getName()
+        ];
         $mail =  (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyTo)
             ->subject('[' . $ticket->getEvent()->getName() . '] Your ticket / Lippusi')
-            ->addPart((new DataPart($qr, 'ticket', 'image/png', 'base64'))->asInline())
+            ->addPart((new DataPart($qr['qr'], 'ticket', 'image/png', 'base64'))->asInline())
             ->htmlTemplate('emails/ticket.html.twig')
             ->context([
                 'body' => $body,

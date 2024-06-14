@@ -18,7 +18,7 @@
 <div class="pt-2 pb-2" id="ticket">
     {# <p>{{'ticket.info'|trans|raw}}</p> #}
     <div class="col-md-6 mx-auto clearfix">
-    {% if ticket is not null %}
+    {% for ticket in tickets %}
         <a class="btn btn-primary w-100"
             href="{{ path('entropy_event_ticket', {
                    'slug': event.url,
@@ -27,7 +27,7 @@
             }) }}"
             >
             {% if ticket.owner == app.user.member %}
-            {{ 'ticket.details'|trans }}
+            {{ 'ticket.details'|trans }}: {{ ticket.name }}
             {% else %}
             {{ 'ticket.reserve_yours'|trans }}
             {% endif %}
@@ -46,16 +46,24 @@
                 {{ 'ticket.reserve_yours'|trans }}
             </a>
         {% endif %}
-    {% endif %}
+    {% endfor %}
     </div>
 </div>
 {% endif %}
 {% endapply %}
 {% endblock %}
 
+{% block multi_ticket %}
+<h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ qr.name }}</h1>
+<div class="qr-code text-center">
+<img style="max-width: 100%" src="data:image/png;base64,{{ qr.qr }}">
+</div>
+{% endblock %}
+
 {% block ticket %}
-<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
-{{ event.ticketInfo(app.request.locale)|raw }}
+{#<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
+{{ event.ticketInfo(app.request.locale)|raw }} #}
+<h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ ticket.name(app.request.locale) }}</h1>
 {% if ticket.status == 'reserved' %}
 <h4>{{ 'ticket.payment_info'|trans }}</h4>
 <dt>
@@ -76,9 +84,8 @@
     {{ form_rest(form) }}
     {{ form_end(form) }}
 {% elseif ticket.status == 'paid' %}
-<h4 class="d-none">{{ 'ticket.code'|trans }}: {{ ticket.referenceNumber }}</h4>
 <div class="qr-code text-center">
-<img style="max-width: 100%" src="data:image/png;base64, {{ qr }}">
+<img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
 </div>
 {% endif %}
 {% endblock %}
@@ -89,15 +96,14 @@
 <div class="pt-2 pb-2" id="ticket">
     {# <p>{{'ticket.info'|trans|raw}}</p> #}
     <div class="col-md-6 mx-auto clearfix">
-    {% if ticket is not null %}
+    {% if tickets is not null %}
         <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_ticket', {
+            href="{{ path('entropy_event_tickets', {
                    'slug': event.url,
                    'year': event.eventdate|date('Y'),
-                   'reference': ticket.referenceNumber
             }) }}"
             >
-            {% if ticket.owner == app.user.member %}
+            {% if tickets.0.owner == app.user.member %}
             {{ 'ticket.details'|trans }}
             {% else %}
             {{ 'ticket.reserve_yours'|trans }}

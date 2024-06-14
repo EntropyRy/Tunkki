@@ -215,6 +215,8 @@ page:
 event:
   stripe:
     fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
+    complete: Kiitos ostoksestasi!
+    mail_sent: Ostoksesi saapuivat juuri sähköpostilaatikkoosi. Ongelma tilanteissa ota yhteyttä!
   meta:
     keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
   edit: Muokkaa

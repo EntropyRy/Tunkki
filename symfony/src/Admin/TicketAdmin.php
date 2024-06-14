@@ -58,6 +58,7 @@ final class TicketAdmin extends AbstractAdmin
         }
         $list
             ->add('ticketHolderHasNakki')
+            ->add('name')
             ->add('stripeProductId')
             ->add('price')
             ->add('given', null, ['editable' => true])
@@ -96,6 +97,7 @@ final class TicketAdmin extends AbstractAdmin
                 ->add('event');
         }
         $form
+            ->add('name')
             ->add('price')
             ->add('given')
             ->add('email')

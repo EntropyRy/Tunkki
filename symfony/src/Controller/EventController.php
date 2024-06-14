@@ -60,7 +60,7 @@ class EventController extends Controller
         if ($event->getTicketsEnabled() && $user) {
             assert($user instanceof User);
             $member = $user->getMember();
-            $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]); //own ticket
+            $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]); //own ticket
             $ticketCount = $ticketRepo->findAvailableTicketsCount($event);
         }
         if ($event->getRsvpSystemEnabled() && is_null($user)) {
@@ -93,7 +93,7 @@ class EventController extends Controller
         return $this->render($template, [
             'event' => $event,
             'rsvpForm' => $form,
-            'ticket' => $ticket,
+            'tickets' => $tickets,
             'ticketsAvailable' => $ticketCount,
         ]);
     }

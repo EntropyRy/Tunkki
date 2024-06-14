@@ -1,9 +1,21 @@
 {% extends event.template %}
+{% use 'pieces/event.html.twig' %}
 {% block content %}
 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-<div class="content">
-{{ block('content_shop_complete', input) ?? '' }}
-</div>
+
+{% if block('content_shop_complete', input) is defined %}
+{{ block('content_shop_complete', input) }}
+{% else %}
+{{ block('complete') }}
+{% endif %}
+{% endblock %}
+
+{% block complete %}
+<h1>{{ 'event.stripe.complete'|trans }}</h1>
+<p>{{ 'event.stripe.mail_sent'|trans }}</p>
+<a class="btn btn-primary btn-lg w-100" {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
+{{ block('event_name') }}
+</a>
 {% endblock %}
 
 {% block qr_codes %}
