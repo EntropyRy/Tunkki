@@ -2,37 +2,37 @@
 {% if event.url %}
 <div class="pt-2 pb-2 col-12 d-grid" id="happening_list">
     {% for happening in event.happenings %}
-    {% if happening.releaseThisHappeningInEvent %}
-    <a class="btn text-white {% if loop.index is odd %}btn-primary{% else %}btn-info{% endif %} btn-lg btn-block mt-2"
-        href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
-        >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
-        {% if happening.needsPreliminarySignUp %}
-            ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
-        {% endif %}
-    </a>
-    {% else %}
-        {% if app.user and app.user.member in happening.owners %}
-        <a class="btn btn-danger w-100 mt-2"
+        {% if happening.releaseThisHappeningInEvent %}
+        <a class="btn text-white {% if loop.index is odd %}btn-primary{% else %}btn-info{% endif %} btn-lg btn-block mt-2"
             href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
             >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
             {% if happening.needsPreliminarySignUp %}
                 ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
             {% endif %}
-            {{ block('shown_only_to') }}
         </a>
+        {% else %}
+            {% if app.user and app.user.member in happening.owners %}
+            <a class="btn btn-danger w-100 mt-2"
+                href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
+                >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
+                {% if happening.needsPreliminarySignUp %}
+                    ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
+                {% endif %}
+                {{ block('shown_only_to') }}
+            </a>
+            {% endif %}
         {% endif %}
-    {% endif %}
     {% endfor %}
     {% if event.allowMembersToCreateHappenings and app.user %}
-    {% if event.happenings|length > 0 %}
-    <hr>
-    {% endif %}
-    <a class="btn btn-success text-white w-50 mx-auto mt-2"
-        href="{{ path('entropy_event_happening_create', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}"
-        >{{ 'happening.create'|trans }}</a>
+        {% if event.happenings|length > 0 %}
+        <hr>
+        {% endif %}
+        <a class="btn btn-success text-white w-50 mx-auto mt-2"
+            href="{{ path('entropy_event_happening_create', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}"
+            >{{ 'happening.create'|trans }}</a>
+        {% endif %}
     {% endif %}
 </div>
-{% endif %}
 {% endblock %}
 
 {% block shown_only_to %}
@@ -62,7 +62,7 @@
         <h1>
             <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
             {{ happening.type|capitalize|trans }}
-            {% if admin and event.isInPast %}
+            {% if admin and not event.isInPast %}
             ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
             {% endif %}
             {% if happening.releaseThisHappeningInEvent == false %}

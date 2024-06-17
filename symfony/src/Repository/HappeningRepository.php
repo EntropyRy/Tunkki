@@ -59,6 +59,9 @@ class HappeningRepository extends ServiceEntityRepository
         if ($key == 0 && $lenght >= 2) {
             return [null, $array[$key + 1]];
         }
+        if ($key == 0 && $lenght == 1) {
+            return [null, null];
+        }
         if ($key + 1 >= $lenght) {
             return [$array[$key - 1], null];
         }
