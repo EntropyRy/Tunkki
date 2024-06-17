@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
 
 final class HappeningAdmin extends AbstractAdmin
 {
@@ -57,6 +58,18 @@ final class HappeningAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         $form
+            ->add(
+                'picture',
+                ModelListType::class,
+                [
+                    'required' => false
+                ],
+                [
+                    'link_parameters' => [
+                        'context' => 'artist'
+                    ]
+                ]
+            )
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Restaurant' => 'restaurant',
