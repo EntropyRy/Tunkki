@@ -71,10 +71,10 @@ class HappeningRepository extends ServiceEntityRepository
     public function findHappeningByEventSlugAndSlug(string $eventSlug, string $slug): ?Happening
     {
         return $this->createQueryBuilder('h')
+            ->Where('h.slugFi LIKE :slug')
+            ->orWhere('h.slugEn LIKE :slug')
             ->leftJoin('h.event', 'e')
             ->andWhere('e.url = :eventSlug')
-            ->orWhere('h.slugFi LIKE :slug')
-            ->orWhere('h.slugEn LIKE :slug')
             ->setParameter('eventSlug', $eventSlug)
             ->setParameter('slug', $slug)
             ->getQuery()
