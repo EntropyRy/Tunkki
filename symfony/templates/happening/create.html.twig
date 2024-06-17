@@ -22,7 +22,7 @@
         </div>
     </div>
     {{ form_widget(form) }}
-    <input class="btn btn-primary" type="submit" value="{{ 'create'|trans|capitalize }}">
+    <input class="btn btn-primary" type="submit" data-turbo="false" value="{{ 'create'|trans|capitalize }}">
     {{ form_end(form) }}
 </div>
 {% endblock %}
