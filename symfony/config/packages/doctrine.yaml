@@ -16,7 +16,8 @@ doctrine:
       region_cache_driver:
         type: pool
         pool: doctrine.acpu_cache_pool
-
+    controller_resolver:
+      auto_mapping: true
     mappings:
       App:
         is_bundle: false
