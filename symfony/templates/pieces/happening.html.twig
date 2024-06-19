@@ -41,15 +41,15 @@
 {% block prev_next_navigation %}
     {% if prev %}
         <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
-        class="btn btn-secondary">{{ 'Previous'|trans }}: {{ prev.name(app.request.locale) }}</a>
+        class="btn btn-secondary"><i class="fa fa-arrow-left"></i> {{ prev.name(app.request.locale) }}</a>
     {% else %}
-        <button class="btn btn-secondary btn-disabled">{{ 'Previous'|trans }}</button>
+        <button class="btn btn-secondary disabled"><i class="fa fa-ban"></i></button>
     {% endif %}
     {% if next %}
         <a href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: next.slug(app.request.locale)}) }}"
-        class="btn btn-secondary float-end">{{ 'Next'|trans }}: {{ next.name(app.request.locale) }}</a>
+        class="btn btn-secondary float-end">{{ next.name(app.request.locale) }} <i class="fa fa-arrow-right"></i></a>
     {% else %}
-        <button class="btn btn-secondary btn-disabled float-end">{{ 'Next'|trans }}</button>
+        <button class="btn btn-secondary disabled float-end"><i class="fa fa-ban"></i></button>
     {% endif %}
 {% endblock %}
 
@@ -62,7 +62,7 @@
             <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
             {{ happening.type|capitalize|trans }}
             {% if admin and not event.isInPast %}
-            ~ <a class="btn btn-lg btn-secondary" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
+            ~ <a class="btn btn-lg btn-success" href="{{ path('entropy_event_happening_edit', {'slug': event.url, 'year': event.eventdate|date('Y'), 'happeningSlug': happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
             {% endif %}
             {% if happening.releaseThisHappeningInEvent == false %}
                ~ <span class="text-danger">
