@@ -88,7 +88,7 @@
 {% endif %}
 <h3>{{ name }} <small>{{ happening.time|format_datetime(pattern='E, HH:mm') }}</small></h3>
 <p>{{ description|raw }}</p>
-{% if happening.needsPreliminaryPayment %}
+{% if happening.needsPreliminaryPayment and not event.isInPast %}
     <hr>
     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
     <p>{{ payment_info|replace({
