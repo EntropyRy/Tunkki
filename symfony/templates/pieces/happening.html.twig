@@ -1,26 +1,25 @@
 {% block happening_list %}
 {% if event.url %}
 <div class="pt-2 pb-2 col-12 d-grid" id="happening_list">
-    {% for happening in event.happenings %}
-        {% if happening.releaseThisHappeningInEvent %}
-        <a class="btn text-white {% if loop.index is odd %}btn-primary{% else %}btn-info{% endif %} btn-lg btn-block mt-2"
+    {% for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == true) -%}
+        <a class="btn text-white btn-info btn-lg btn-block mb-2"
             href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
             >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
             {% if happening.needsPreliminarySignUp %}
                 ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
             {% endif %}
         </a>
-        {% else %}
-            {% if app.user and app.user.member in happening.owners %}
-            <a class="btn btn-danger w-100 mt-2"
-                href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
-                >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
-                {% if happening.needsPreliminarySignUp %}
-                    ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
-                {% endif %}
-                {{ block('shown_only_to') }}
-            </a>
+    {% endfor %}
+    {% for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == false) -%}
+        {% if app.user and app.user.member in happening.owners %}
+        <a class="btn btn-danger w-100 mt-2 mb-2"
+            href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}"
+            >{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
+            {% if happening.needsPreliminarySignUp %}
+                ( {{ happening.bookings|length }}/{{ happening.maxSignUps }} )
             {% endif %}
+            {{ block('shown_only_to') }}
+        </a>
         {% endif %}
     {% endfor %}
     {% if event.allowMembersToCreateHappenings and app.user %}

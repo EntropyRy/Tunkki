@@ -35,15 +35,21 @@ class EventController extends Controller
             if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
             }
-            return $this->redirectToRoute('entropy_event_slug', [
+            return $this->redirectToRoute(
+                'entropy_event_slug',
+                [
                 'year' => $event->getEventDate()->format('Y'),
                 'slug' => $event->getUrl()
-            ]);
+                ]
+            );
         }
-        $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
-        return $this->render($template, [
+        $template = $event->getTemplate() ?? 'event.html.twig';
+        return $this->render(
+            $template,
+            [
             'event' => $event,
-        ]);
+            ]
+        );
     }
     public function oneSlug(
         Request $request,
@@ -60,8 +66,9 @@ class EventController extends Controller
         if ($event->getTicketsEnabled() && $user) {
             assert($user instanceof User);
             $member = $user->getMember();
-            $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]); //own ticket
-            $ticketCount = $ticketRepo->findAvailableTicketsCount($event);
+            $tickets = $ticketRepo->findBy(
+                ['event' => $event, 'owner' => $member]
+            ); //own ticket
         }
         if ($event->getRsvpSystemEnabled() && is_null($user)) {
             $rsvp = new RSVP();
@@ -71,7 +78,11 @@ class EventController extends Controller
                 $rsvp = $form->getData();
                 $repo = $em->getRepository(Member::class);
                 assert($repo instanceof MemberRepository);
-                $exists = $repo->findByEmailOrName($rsvp->getEmail(), $rsvp->getFirstName(), $rsvp->getLastName());
+                $exists = $repo->findByEmailOrName(
+                    $rsvp->getEmail(),
+                    $rsvp->getFirstName(),
+                    $rsvp->getLastName()
+                );
                 if ($exists) {
                     $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
                 } else {
@@ -89,13 +100,15 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        $template = $event->getTemplate() ? $event->getTemplate() : 'event.html.twig';
-        return $this->render($template, [
+        $template = $event->getTemplate() ?? 'event.html.twig';
+        return $this->render(
+            $template,
+            [
             'event' => $event,
             'rsvpForm' => $form,
-            'tickets' => $tickets ?? null,
-            'ticketsAvailable' => $ticketCount,
-        ]);
+            'tickets' => $tickets ?? null
+            ]
+        );
     }
     #[Route(
         path: [
