@@ -17,7 +17,7 @@
     "doctrine/migrations": "^3.5.2",
     "doctrine/orm": "^2.14",
     "eluceo/ical": "^2.12",
-    "fpt/stripe-bundle": "^0.11.0",
+    "fpt/stripe-bundle": "^0.12",
     "gedmo/doctrine-extensions": "^3.9",
     "hashids/hashids": "^4.0",
     "knpuniversity/oauth2-client-bundle": "^2",
