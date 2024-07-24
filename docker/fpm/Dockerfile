@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine as dev
+FROM php:8.3-fpm-alpine AS dev
 ARG UID
 ARG GID
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -41,7 +41,7 @@ WORKDIR /var/www/symfony
 CMD ["php-fpm", "-F"]
 EXPOSE 9000
 
-FROM dev as prod
+FROM dev AS prod
 USER root
 RUN apk del --no-cache git \
     && rm /usr/local/bin/composer
