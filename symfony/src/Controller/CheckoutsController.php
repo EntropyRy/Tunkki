@@ -61,11 +61,22 @@ class CheckoutsController extends AbstractController
         if (count($lineItems) > 0) {
             $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
             if ($eventServiceFeeProduct != null) {
-                $cartItem = new CartItem();
-                $cartItem->setProduct($eventServiceFeeProduct);
-                $cartItem->setQuantity(1);
-                $cart->addProduct($cartItem);
-                $lineItems[] = $cartItem->getLineItem(1, null);
+                // Do not add it again if it is already in the cart
+                // This is to prevent multiple service fees being added to the cart
+                $found = false;
+                foreach ($products as $cartItem) {
+                    if ($cartItem->getProduct()->getId() == $eventServiceFeeProduct->getId()) {
+                        $found = true;
+                        break;
+                    }
+                }
+                if (!$found) {
+                    $cartItem = new CartItem();
+                    $cartItem->setProduct($eventServiceFeeProduct);
+                    $cartItem->setQuantity(1);
+                    $cart->addProduct($cartItem);
+                    $lineItems[] = $cartItem->getLineItem(1, null);
+                }
             }
             $stripeSession = $client->checkout->sessions->create([
                 'ui_mode' => 'embedded',
