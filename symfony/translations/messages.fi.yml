@@ -84,7 +84,7 @@ clubroom_events: Kerhohuone tapahtumat (Keke)
 search:
   include: Sisällytä
 include_clubroom_events: kerhohuonetapahtumat (Keke)
-include_stream_events: streamit 
+include_stream_events: streamit
 include_meeting_events: kokoukset
 privacy_policy: Rekisteriseloste
 submit_and_agree:
@@ -225,6 +225,8 @@ event:
   in_future: Tuleva tapahtuma
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
+  ticket:
+    shop: Lippukauppaan
   player:
     will_appear_here_when_the_stream_is_on:
       Voit kuunnella streamausta suoraan tältä
@@ -475,7 +477,7 @@ Price en: Hinta englanniksi
 Release this happening in event: Julkaise tapahtuma sivulle
 SHOWN ONLY TO: NÄYTETÄÄN VAIN
 missing: puuttuu
-location: 
+location:
   location: sijainti
   former_industrial_complex: entinen teollisuuskompleksi
 Your username was updated to your Mattermost username: Käyttäjänimesi vaihdettiin Mattermost käyttäjänimeksi.
@@ -498,7 +500,7 @@ share:
 calendar:
   heading: Kalenterin konfigurointi
   help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
-  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla:
+  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla
   add_events: Lisää tapahtumat
   add_notifications_for_events: Lisää muistutukset tapahtumille
   add_clubroom_events: Lisää kerhohuone tapahtumat
@@ -506,7 +508,7 @@ calendar:
   add_meetings: Lisää kokoukset
   add_notifications_for_meetings: Lisää muistutukset kokouksille
   generate: Generoi kalenteri linkki
-  url_generated: Linkki generoitu 
+  url_generated: Linkki generoitu
 product:
   quantity: määrä
   sold_out: Loppuunmyyty

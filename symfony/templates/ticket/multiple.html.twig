@@ -10,35 +10,43 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-    <div class="row">
-        <div class="col">
-            <a href="{{ block('event_path') }}">
-                <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
-            </a>
-            {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
-                {% set show = true %}
-                {% set hide_time = true %}
-                {% set show_definition = true %}
-                {% set allow_nakki_cancel = true %}
-                {{ event.nakkiInfo(app.request.locale)|raw }}
-                {% if hasNakki %}
-                {{ block('your_nakkis') }}
-                {% else %}
-                {{ block('reserve_nakkis') }}
+        <div class="row">
+            <div class="col">
+                <a href="{{ block("event_path") }}">
+                    <h3 class="mt-2">{{ block("event_name") }} ~ {{ block("event_time") }}</h3>
+                </a>
+                {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
+                    {% set show = true %}
+                    {% set hide_time = true %}
+                    {% set show_definition = true %}
+                    {% set allow_nakki_cancel = true %}
+                    {{ event.nakkiInfo(app.request.locale) |raw }}
+                    {% if hasNakki %}
+                        {{ block("your_nakkis") }}
+                    {% else %}
+                        {{ block("reserve_nakkis") }}
+                    {% endif %}
+                    <hr>
                 {% endif %}
-                <hr>
-            {% endif %}
-            {% for qr in qrs %}
-                {{ block('multi_ticket') }}
-                <hr>
-            {% endfor %}
+                {% for qr in qrs %}
+                    {{ block("multi_ticket") }}
+                    <hr>
+                {% endfor %}
+                {{ block("shop_link") }}
+            </div>
         </div>
-    </div>
     {% else %}
         <div clas="col-12">
             <br>
             <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
             <br>
         </div>
+    {% endif %}
+{% endblock %}
+{% block shop_link %}
+    {% if showShop %}
+        <a href="{{ path("entropy_event_shop", {'slug': event.url, 'year': event.eventDate|date('Y') }) }}"
+           class="btn btn-primary btn-lg text-center w-100">{{ 'event.ticket.shop'|trans }}</a>
+        <hr>
     {% endif %}
 {% endblock %}

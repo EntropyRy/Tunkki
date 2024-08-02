@@ -7,7 +7,7 @@ use App\Entity\Member;
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\ORMException;
+use Doctrine\ORM\Exeption\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**

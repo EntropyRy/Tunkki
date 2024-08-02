@@ -155,6 +155,8 @@ event:
   in_future: Upcoming event
   after: Past event
   now: Event is now
+  ticket:
+    shop: Ticket Shop
   player:
     will_appear_here_when_the_stream_is_on:
       Player will appear here on page load when

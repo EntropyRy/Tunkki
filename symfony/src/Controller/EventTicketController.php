@@ -154,6 +154,15 @@ class EventTicketController extends Controller
                 'name' => $ticket->getName() ?? 'Ticket'
             ];
         }
+        // check that event does not have other type of tickets available
+        // if so, provide link to the shop page
+        $showShop = false;
+        $userTickets = $ticketRepo->findTicketsByEmailAndEvent($member->getEmail(), $event);
+        $products = $event->getTicketProducts();
+        if(count($userTickets) < count($products)) {
+            $showShop = true;
+        }
+
         return $this->render('ticket/multiple.html.twig', [
             'event' => $event,
             'selected' => $selected,
@@ -161,6 +170,7 @@ class EventTicketController extends Controller
             'hasNakki' => count((array) $selected) > 0 ? true : false,
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'tickets' => $tickets,
+            'showShop' => $showShop,
             'qrs' => $qrs
         ]);
     }

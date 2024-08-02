@@ -123,14 +123,14 @@ body {
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoFi =
-    '
+        '
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
         <h6>Saat ilmaisen sisäänpääsyn</h6>
         ';
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $nakkiInfoEn =
-    '
+        '
         <p>Choose at least two (2) Nakkis that are 1 hour length and build up or take down</p>
         <h6>You\'ll get free entry to the party</h6>
         ';
@@ -1478,6 +1478,16 @@ body {
         return $this->products;
     }
 
+    /**
+     * @return Collection<int, Product>
+     */
+    public function getTicketProducts(): Collection
+    {
+        $tickets = new ArrayCollection();
+        return $this->products->filter(function (Product $product) {
+            return $product->isTicket();
+        });
+    }
     public function addProduct(Product $product): static
     {
         if (!$this->products->contains($product)) {

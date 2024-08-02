@@ -127,6 +127,7 @@ class EventController extends Controller
         CartRepository $cartR,
         CheckoutRepository $checkoutR,
         NakkiBookingRepository $nakkirepo,
+        TicketRepository $ticketRepo
     ): Response {
         $selected = [];
         $nakkis = [];
@@ -144,7 +145,6 @@ class EventController extends Controller
             $nakkis = $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale());
             $hasNakki = count((array) $selected) > 0 ? true : false;
         }
-        $products = $event->getProducts();
         $session = $request->getSession();
         $cart = new Cart();
         $cartId = $session->get('cart');
@@ -154,11 +154,29 @@ class EventController extends Controller
                 $cart = new Cart();
             }
         }
-        $max = $checkoutR->findProductQuantitiesInOngoingCheckouts();
-        $cart->setProducts($products);
         if ($cart->getEmail() == null) {
             $cart->setEmail($email);
         }
+        $products = $event->getProducts();
+        $max = $checkoutR->findProductQuantitiesInOngoingCheckouts();
+        // check that user does not have the product already
+        // if user has the product, remove it from the list
+        foreach ($products as $key => $product) {
+            // if there can be only one ticket per user, check that user does not have the ticket already
+            if (array_key_exists($product->getId(), $max)) {
+                $minus = $max[$product->getId()];
+            } else {
+                $minus = 0;
+            }
+            if ($product->getHowManyOneCanBuyAtOneTime() == 1 && $product->getMax($minus) >= 1 && $product->isTicket()) {
+                foreach ($ticketRepo->findTicketsByEmailAndEvent($email, $event) as $ticket) {
+                    if ($ticket->getStripeProductId() == $product->getStripeId()) {
+                        unset($products[$key]);
+                    }
+                }
+            }
+        }
+        $cart->setProducts($products);
         $form = $this->createForm(CartType::class, $cart);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
