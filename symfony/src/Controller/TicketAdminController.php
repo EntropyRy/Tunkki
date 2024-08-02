@@ -8,8 +8,8 @@ use App\Form\ChengeTicketOwnerType;
 use App\Repository\EmailRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Helper\Qr;
 use Sonata\AdminBundle\Controller\CRUDController;
-use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -72,17 +72,9 @@ final class TicketAdminController extends CRUDController
             $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
             $body = $email->getBody();
         }
-        $qrGenerator = new Generator();
+        $qrGenerator = new Qr();
         $qr = [
-            'qr' => $qrGenerator
-                ->format('png')
-                ->eye('circle')
-                ->style('round')
-                ->size(600)
-                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                ->errorCorrection('H')
-                ->merge('images/golden-logo.png', .2)
-                ->generate((string)$ticket->getReferenceNumber()),
+            'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
             'name' => $ticket->getName()
         ];
         $mail =  (new TemplatedEmail())

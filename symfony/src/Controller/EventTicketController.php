@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use SimpleSoftwareIO\QrCode\Generator;
+use App\Helper\Qr;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -113,39 +113,12 @@ class EventTicketController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
-        $form = $this->createForm(TicketType::class, $ticket);
-        $form->handleRequest($request);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $ticket->setStatus('reserved');
-            $this->addFlash('success', 'ticket.reserved');
-            $em->persist($ticket);
-            $em->flush();
-            return $this->redirectToRoute('entropy_event_ticket', [
-                'slug' => $event->getUrl(),
-                'year' => $event->getEventDate()->format('Y'),
-                'reference' => $ticket->getReferenceNumber()
-            ]);
-        };
-        $qr = new Generator();
+        $qr = new Qr();
 
         return $this->render('ticket/one.html.twig', [
             'event' => $event,
-            'selected' => $selected,
-            'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count((array) $selected) > 0 ? true : false,
-            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'ticket' => $ticket,
-            'form' => $form,
-            'qr' => base64_encode($qr
-                ->format('png')
-                ->style('round')
-                ->eye('circle')
-                ->margin(2)
-                ->size(600)
-                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                ->errorCorrection('H')
-                ->merge('images/golden-logo.png', .2)
-                ->generate((string)$ticket->getReferenceNumber()))
+            'qr' => $qr->getQrBase64((string)$ticket->getReferenceNumber())
         ]);
     }
     #[Route(
@@ -172,19 +145,12 @@ class EventTicketController extends Controller
         assert($user instanceof User);
         $member = $user->getMember();
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
-        $qr = new Generator();
+        $qr = new Qr();
         $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]);
 
         foreach ($tickets as $ticket) {
-            $qrs[] = ['qr' => base64_encode($qr
-                ->format('png')
-                ->eye('circle')
-                ->style('round')
-                ->size(600)
-                ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                ->errorCorrection('H')
-                ->merge('images/golden-logo.png', .2)
-                ->generate((string)$ticket->getReferenceNumber())),
+            $qrs[] = [
+                'qr' => $qr->getQrBase64((string)$ticket->getReferenceNumber()),
                 'name' => $ticket->getName() ?? 'Ticket'
             ];
         }

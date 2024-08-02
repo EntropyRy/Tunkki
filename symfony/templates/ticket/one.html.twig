@@ -10,27 +10,14 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-    <div class="row">
-        <div class="col">
-            <a href="{{ block('event_path') }}">
-                <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
-            </a>
-            {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
-                {% set show = true %}
-                {% set hide_time = true %}
-                {% set show_definition = true %}
-                {% set allow_nakki_cancel = (ticket.status == 'available') %}
-                {{ event.nakkiInfo(app.request.locale)|raw }}
-                {% if hasNakki and ticket.status != 'available' %}
-                {{ block('your_nakkis') }}
-                {% else %}
-                {{ block('reserve_nakkis') }}
-                {% endif %}
-                <hr>
-            {% endif %}
-            {{ block('ticket') }}
+        <div class="row">
+            <div class="col">
+                <a href="{{ block("event_path") }}">
+                    <h3 class="mt-2">{{ block("event_name") }} ~ {{ block("event_time") }}</h3>
+                </a>
+                {{ block("ticket") }}
+            </div>
         </div>
-    </div>
     {% else %}
         <div clas="col-12">
             <br>

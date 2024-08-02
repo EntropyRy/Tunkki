@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use SimpleSoftwareIO\QrCode\Generator;
+use App\Helper\Qr;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -23,17 +23,8 @@ final class EmailAdminController extends CRUDController
         if (!is_null($event)) {
             $img = $event->getPicture();
             if ($email->getPurpose() == 'ticket_qr') {
-                $qrGenerator = new Generator();
-                $qr = base64_encode($qrGenerator
-                    ->format('png')
-                    ->eye('circle')
-                    ->style('round')
-                    ->margin(2)
-                    ->size(600)
-                    ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                    ->errorCorrection('H')
-                    ->merge('images/golden-logo.png', .2)
-                    ->generate('test'));
+                $qrGenerator = new Qr();
+                $qr = $qrGenerator->getQrBase64("test");
             }
         }
         $admin = $this->admin;
