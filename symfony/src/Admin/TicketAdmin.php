@@ -70,12 +70,6 @@ final class TicketAdmin extends AbstractAdmin
             ->add('updatedAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'makePaid' => [
-                        'template' => 'admin/crud/list__action_make_ticket_paid.html.twig'
-                    ],
-                    'addBus' => [
-                        'template' => 'admin/crud/list__action_add_bus.html.twig'
-                    ],
                     'changeOwner' => [
                         'template' => 'admin/ticket/button_change_owner.html.twig'
                     ],
