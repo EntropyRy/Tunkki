@@ -9,6 +9,7 @@ use App\Entity\Ticket;
 use App\Helper\AppStripeClient;
 use App\Helper\Mattermost;
 use App\Helper\ReferenceNumber;
+use App\Helper\Qr;
 use App\Repository\CheckoutRepository;
 use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
@@ -17,7 +18,6 @@ use App\Repository\TicketRepository;
 use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
 use Psr\Log\LoggerInterface;
-use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -144,17 +144,10 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         $tickets = [...$tickets, ...$given];
                     }
                 }
-                $qrGenerator = new Generator();
+                $qrGenerator = new Qr();
                 foreach ($tickets as $ticket) {
-                    $qrs[] = ['qr' => $qrGenerator
-                        ->format('png')
-                        ->eye('circle')
-                        ->style('round')
-                        ->size(600)
-                        ->gradient(0, 40, 40, 40, 40, 0, 'radial')
-                        ->errorCorrection('H')
-                        ->merge('images/golden-logo.png', .2)
-                        ->generate((string)$ticket->getReferenceNumber()),
+                    $qrs[] = [
+                        'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
                         'name' => $ticket->getName() ?? 'Ticket'
                     ];
                 }
