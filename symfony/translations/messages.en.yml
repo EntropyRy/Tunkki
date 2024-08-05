@@ -146,7 +146,7 @@ event:
   stripe:
     fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
     complete: Thank you for your purchase!
-    mail_sent: Your purchase(s) has been sent to your email. If there is problems let us know!
+    mail_sent: Your purchase(s) has been sent to your email. If there is problems let us know, hallitus@entropy.fi
   meta:
     keywords: Entropy, music, association, culture, nonprofit, event
   edit: Edit
