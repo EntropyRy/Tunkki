@@ -15,6 +15,7 @@ sonata_formatter:
 fos_ck_editor:
   configs:
     default:
+      versionCheck: false
       toolbar:
         "standard"
         #extraPlugins: "html5audio"
