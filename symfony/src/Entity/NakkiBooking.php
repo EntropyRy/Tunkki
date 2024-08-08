@@ -107,4 +107,9 @@ class NakkiBooking implements \Stringable
     {
         return $this->member ? $this->member->getEmail() : null;
     }
+
+    public function memberHasEventTicket(): bool
+    {
+        return $this->member && $this->event->memberHasTicket($this->member);
+    }
 }

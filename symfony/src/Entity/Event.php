@@ -972,6 +972,16 @@ body {
         return $this;
     }
 
+    public function memberHasTicket(Member $member): bool
+    {
+        foreach ($this->getTickets() as $ticket) {
+            if ($ticket->getOwner() == $member) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public function getTicketCount(): ?int
     {
         return $this->ticketCount;

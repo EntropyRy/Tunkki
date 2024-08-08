@@ -37,6 +37,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
         }
         $list
             ->add('member')
+            ->add('memberHasEventTicket')
             ->add('startAt')
             ->add('endAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
