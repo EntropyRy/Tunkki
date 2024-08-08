@@ -1,112 +1,131 @@
 {% extends 'onecolumn.html.twig' %}
-{% block title %}
-{{ bookingdata.name }} - {{ bookingdata.date }}
-{% endblock %}
+{% block title %}{{ bookingdata.name }} - {{ bookingdata.date }}{% endblock %}
 {% block content %}
-<div class="col-md-12">
-    <input type="button" value="Print" class="no-print btn btn-primary float-end" onClick="window.print()">
-    {% set loc = 'content' ~ ((app.request.locale)|capitalize) %}
-{{ attribute(contract, loc)|raw }}
-<h1>{{ bookingdata.name }} - {{ bookingdata.date }}
-</h1>
-{% if bookingdata.packages %}
-<h3 style="text-transform: capitalize;">{{ 'packages'|trans }}</h3>
-    {% for package in bookingdata.packages %}
-    <div>
-    <input type="checkbox">
-    <label>{{ package }}:</label>
-        {% if package.rent %}
-            <span class="float-end">{{ package.rent }} €</span>
+    <div class="col-md-12">
+        <input type="button"
+               value="Print"
+               class="no-print btn btn-primary float-end"
+               onClick="window.print()">
+        {% if renter %}
+            {% set loc = 'content' ~ ((app.request.locale)|capitalize) %}
+            {{ attribute(contract, loc) |raw }}
         {% endif %}
-    </div>
-    <ul class="list-unstyled">
-        {% set show_price = false %}
-        {% for item in package.items %}
-        <li>
-            {{ block('item') }}
-        </li>
-        {% endfor %}
-    </ul>
-    {% endfor %}
-{% endif %}
-{% if bookingdata.items %}
-<h3 style="text-transform: capitalize;">{{ 'items'|trans }}</h3>
-    {% set show_price = true %}
-    {% for item in bookingdata.items %}
-        {{ block('item') }}
-    {% endfor %}
-{% endif %}
-{% if bookingdata.accessories %}
-    <h3 style="text-transform: capitalize;" class="mt-3">{{ 'accessories'|trans }}
-        {% if bookingdata.rent.accessories %}
-        <span class="float-end fs-6 fw-normal">{{ bookingdata.rent.accessories }}€</span>
+        <h1>{{ bookingdata.name }} - {{ bookingdata.date }}</h1>
+        {% if bookingdata.packages %}
+            <h3 style="text-transform: capitalize;">{{ 'packages'|trans }}</h3>
+            {% for package in bookingdata.packages %}
+                <div>
+                    <input type="checkbox">
+                    <label>{{ package }}:</label>
+                    {% if package.rent %}<span class="float-end">{{ package.rent }} €</span>{% endif %}
+                </div>
+                <ul class="list-unstyled">
+                    {% set show_price = false %}
+                    {% for item in package.items %}<li>{{ block("item") }}</li>{% endfor %}
+                </ul>
+            {% endfor %}
         {% endif %}
-    </h3>
-
-    <p>({{ 'contract.accessories.prices'|trans }})</p>
-    <ul class="list-unstyled">
-    {% for item in bookingdata.accessories %}
-    <li>
-        <input type="checkbox">
-            <label><span class="lead">{{ item.count }}</span> X {{ item.name }}</label>
-            {% if item.name.compensationPrice %}
-                <span class="float-end">{{ item.name.compensationPrice }} €/{{ 'pcs'|trans }}</span>
+        {% if bookingdata.items %}
+            <h3 style="text-transform: capitalize;">{{ 'items'|trans }}</h3>
+            {% set show_price = true %}
+            {% for item in bookingdata.items %}{{ block("item") }}{% endfor %}
+        {% endif %}
+        {% if bookingdata.accessories %}
+            <h3 style="text-transform: capitalize;" class="mt-3">
+                {{ 'accessories'|trans }}
+                {% if bookingdata.rent.accessories %}
+                    <span class="float-end fs-6 fw-normal">{{ bookingdata.rent.accessories }}€</span>
+                {% endif %}
+            </h3>
+            <p>({{ 'contract.accessories.prices'|trans }})</p>
+            <ul class="list-unstyled">
+                {% for item in bookingdata.accessories %}
+                    <li>
+                        <input type="checkbox">
+                        <label>
+                            <span class="lead">{{ item.count }}</span> X {{ item.name }}
+                        </label>
+                        {% if item.name.compensationPrice %}
+                            <span class="float-end">{{ item.name.compensationPrice }} €/{{ 'pcs'|trans }}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        {% if renter %}
+            <hr>
+            <h3 style="text-transform: capitalize;">{{ 'renter'|trans }}</h3>
+            {{ renter.name }}
+            <br>
+            {% if renter.organization %}
+                {{ renter.organization }}
+                <br>
             {% endif %}
-    </li>
-    {% endfor %}
-    </ul>
-{% endif %}
-{% if renter %}
-<hr>
-<h3 style="text-transform: capitalize;">{{ 'renter'|trans }}</h3>
-{{ renter.name }}<br>
-{% if renter.organization %}{{ renter.organization }}<br>{% endif %}
-{% if renter.phone %}{{ renter.phone }}<br>{% endif %}
-{{ renter.email }}
-<hr>
-<div class="text-center">{{ 'Total rent price'|trans }}: <span>{{ bookingdata.actualTotal }}€</span></div>
-<hr>
-<h3>Allekirjoitus</h3>
-<div {{ stimulus_controller('signature') }}>
-<div style="height: 260px">
-    {% if bookingdata.renterSignature is empty %}
-        <canvas data-signature-target="canvas" {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %} style="touch-action: none; user-select: none;" width="800" height="260"></canvas>
+            {% if renter.phone %}
+                {{ renter.phone }}
+                <br>
+            {% endif %}
+            {{ renter.email }}
+            <hr>
+            <div class="text-center">
+                {{ 'Total rent price'|trans }}: <span>{{ bookingdata.actualTotal }}€</span>
+            </div>
+            <hr>
+            <h3>Allekirjoitus</h3>
+            <div {{ stimulus_controller("signature") }}>
+                <div style="height: 260px">
+                    {% if bookingdata.renterSignature is empty %}
+                        <canvas data-signature-target="canvas"
+                                {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %}
+                                style="touch-action: none;
+                                       user-select: none"
+                                width="800"
+                                height="260"></canvas>
+                    {% endif %}
+                    <div id="signature"
+                         data-signature-target="signature"
+                         {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %}>
+                        {% if bookingdata.renterSignature is not empty %}
+                            <img class="img-fluid" src="{{ bookingdata.renterSignature }}">
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="consent_form">
+                    {% if bookingdata.renterSignature is empty %}
+                        <button style="display: none"
+                                data-signature-target="clearBtn"
+                                data-action="signature#clearCanvas"
+                                class="btn btn-secondary">Poista ja tee uusi allekirjoitus</button>
+                        <button data-action="signature#saveCanvas"
+                                data-signature-target="saveBtn"
+                                class="btn btn-primary">Tallenna allekirjoitus</button>
+                    {% endif %}
+                </div>
+                <hr>
+                {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <input type="button"
+                   value="Print"
+                   class="no-print btn btn-primary float-end"
+                   onClick="window.print()">
+        </div>
     {% endif %}
-    <div id="signature" data-signature-target="signature" {% if app.user.member.theme|default('light') == 'dark' %}class="invert"{% endif %}>
-        {% if bookingdata.renterSignature is not empty %}
-        <img class="img-fluid" src="{{ bookingdata.renterSignature }}">
-        {% endif %}
-    </div>
 </div>
-<div class="consent_form">
-{% if bookingdata.renterSignature is empty %}
-    <button style="display: none;" data-signature-target="clearBtn" data-action="signature#clearCanvas" class="btn btn-secondary">Poista ja tee uusi allekirjoitus</button>
-    <button data-action="signature#saveCanvas" data-signature-target="saveBtn" class="btn btn-primary">Tallenna allekirjoitus</button>
-{% endif %}
-</div>
-<hr>
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
-</div>
-    <input type="button" value="Print" class="no-print btn btn-primary float-end" onClick="window.print()">
-</div>
-{% endif %}
 {% endblock %}
-
 {% block item %}
-{% apply spaceless %}
+    {% apply spaceless %}
     <div class="form-check">
         <input type="checkbox" class="me-2">
         <label>{{ item }}</label>
-        <small>{% if item.Manufacturer %}, Manufacturer: {{ item.Manufacturer }}{% endif %}{% if item.model %}, Model: {{ item.model }}{% endif %}{% if item.serialNumber %}, S/N: {{ item.serialNumber }}{% endif %}</small>
-        {% for file in item.files %}
-        <span class="no-print">- {{ file.downloadLink|raw }}</span>
-        {% endfor %}
-        {% if show_price %}
-            <span class="float-end">{{ item.rent }} €</span>
-        {% endif %}
+        <small>
+            {% if item.Manufacturer %}, Manufacturer: {{ item.Manufacturer }}{% endif %}
+            {% if item.model %}, Model: {{ item.model }}{% endif %}
+            {% if item.serialNumber %}, S/N: {{ item.serialNumber }}{% endif %}
+        </small>
+        {% for file in item.files %}<span class="no-print">- {{ file.downloadLink|raw }}</span>{% endfor %}
+        {% if show_price %}<span class="float-end">{{ item.rent }} €</span>{% endif %}
     </div>
 {% endapply %}
 {% endblock %}
-

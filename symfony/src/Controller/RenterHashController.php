@@ -38,8 +38,8 @@ class RenterHashController extends Controller
             throw new NotFoundHttpException();
         }
         $renter = $em->getRepository(Renter::class)->findOneBy(['id' => $renterid]);
-        if (is_null($renter)) { // means that it is For Entropy
-            $renter = 0;
+        if ($renter->getId() == 1) { // means that it is For Entropy
+            $renter = null;
         }
         $contract = $em->getRepository(Contract::class)->findOneBy(['purpose' => 'rent']);
         $booking = $bRepo->findOneBy(['id' => $bookingid, 'renterHash' => $hash]);
