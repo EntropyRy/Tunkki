@@ -1,74 +1,110 @@
 <html>
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8"></head>
-<style type="text/css">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    </head>
+    <style type="text/css">
 @media screen and (max-width: 480px){
     a[class="post_btn"] {
         float: none !important;
     }
 }
-</style>
-<body>
-<table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="line-height: 1.7; color: #555;">
-<tr>
-<td>
-    <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width: 660px; font-family: Helvetica, Arial, sans-serif; font-size: 14px; background: #FFF;">
-        <tr>
-            <td style="border: 1px solid #ddd;">
-                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
-                    <tr>
-                        <td style="padding: 20px 20px 0px 20px; text-align:center;">
-                            {% if img is defined and img is not null %}
-                            <img src="{{app.request.getSchemeAndHttpHost()}}{{ sonata_path(img, 'banner') }}" width="100%" alt="Entropy ry">
-                            {% else %}
-                            <img src="{{ email_img }}" width="80%" alt="Entropy ry">
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table border="0" cellpadding="0" cellspacing="0" style="padding: 10px 30px 0; text-align: center; width: 100%;">
-                                <tr>
-                                    <td style="border-bottom: 1px solid #ddd; margin: 10px 0 20px;">
-                                        <table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
-                                        <tr>
-                                        <td style="text-align: left">
-                                            {% set content = block('content') is defined ? block('content') : body|raw %}
-                                            {% if content|length > 0 %}
-                                                {{ content|raw }}
+    </style>
+    <body>
+        <table align="center"
+               border="0"
+               cellpadding="0"
+               cellspacing="0"
+               width="100%"
+               style="line-height: 1.7;
+                      color: #555">
+            <tr>
+                <td>
+                    <table align="center"
+                           border="0"
+                           cellpadding="0"
+                           cellspacing="0"
+                           width="100%"
+                           style="max-width: 660px;
+                                  font-family: Helvetica, Arial, sans-serif;
+                                  font-size: 14px;
+                                  background: #FFF">
+                        <tr>
+                            <td style="border: 1px solid #ddd;">
+                                <table align="center"
+                                       border="0"
+                                       cellpadding="0"
+                                       cellspacing="0"
+                                       width="100%"
+                                       style="border-collapse: collapse">
+                                    <tr>
+                                        <td style="padding: 20px 20px 0px 20px; text-align:center;">
+                                            {% if img is defined and img is not null %}
+                                                <img src="{{ app.request.getSchemeAndHttpHost() }}{{ sonata_path(img, 'banner') }}"
+                                                     width="100%"
+                                                     alt="Entropy ry">
+                                            {% else %}
+                                                <img src="{{ email_img }}" width="80%" alt="Entropy ry">
                                             {% endif %}
                                         </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <table border="0"
+                                                   cellpadding="0"
+                                                   cellspacing="0"
+                                                   style="padding: 10px 30px 0;
+                                                          text-align: center;
+                                                          width: 100%">
+                                                <tr>
+                                                    <td style="border-bottom: 1px solid #ddd; margin: 10px 0 20px;">
+                                                        <table style="border-top: 1px solid #ddd; padding: 20px 0; width: 100%">
+                                                            <tr>
+                                                                <td style="text-align: left">
+                                                                    {% set content = block('content') is defined ? block('content') : body|raw %}
+                                                                    {% if content|length > 0 %}{{ content|raw }}{% endif %}
+                                                                </td>
+                                                            </tr>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
                                         </tr>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="color: #999; padding: 20px 0px; text-align: center; line-height: 25px; font-size: 13px;">
-                            Entropy ry, Jämeräntaival 3 A 1, 02150 Espoo<br>
-                            <a href="https://entropy.fi">entropy.fi</a>
-                        </td>
-                    </tr>
-                    {% if email.addLoginLinksToFooter|default(false) or links|default(false) %}
-                    <tr>
-                        <td style="text-align: center;color: #AAA; font-size: 11px; padding-bottom: 10px;">
-                            <p style="padding: 0 50px;">
-								<p>If you have forgotten your password you can order new one from <a href="{{ path('app_forgot_password_request') }}">here</a></p>
-                                <br>
-								<p><a href="{{ path('_entropy_mattermost_auth') }}">Mattermost Login</a></p>
-                            </p>
-                        </td>
-                    </tr>
-                    {% endif %}
-                </table>
-            </td>
-        </tr>
-    </table>
-</td>
-</tr>
-</table>
-{% block admin_send %}
-{% endblock %}
-</body></html>
-
+                                        <tr>
+                                            <td style="color: #999;
+                                                       padding: 20px 0px;
+                                                       text-align: center;
+                                                       line-height: 25px;
+                                                       font-size: 13px">
+                                                Entropy ry, Jämeräntaival 3 A 1, 02150 Espoo
+                                                <br>
+                                                <a href="https://entropy.fi">entropy.fi</a>
+                                            </td>
+                                        </tr>
+                                        {% if email.addLoginLinksToFooter|default(false) or links|default(false) %}
+                                            <tr>
+                                                <td style="text-align: center;
+                                                           color: #AAA;
+                                                           font-size: 11px;
+                                                           padding-bottom: 10px">
+                                                    <p style="padding: 0 50px;">
+                                                        <p>
+                                                            If you have forgotten your password you can order new one from <a href="{{ url("app_forgot_password_request") }}">here</a>
+                                                        </p>
+                                                        <br>
+                                                        <p>
+                                                            <a href="{{ url("_entropy_mattermost_auth") }}">Mattermost Login</a>
+                                                        </p>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        {% endif %}
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            {% block admin_send %}{% endblock %}
+        </body>
+    </html>
