@@ -1,49 +1,63 @@
 {% extends 'admin/crud/base_list_flat_inner_row.html.twig' %}
-
 {% block row %}
     {% set artist = object.artist %}
     {% if artist is not null %}
-    <div class="col-xs-12" style="border-bottom: 1px solid #a2a2a2">
-        <span style="display: flex; justify-content: space-between;">
-            <span style="font-size: 1.2em;">
-            {{ artist.type }}: {{ artist.name }}, Previews:
-                  <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
-                  <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
-            </span>
-            <span style="font-weight: 800">
-            Member: {{ object|render_list_element(admin.list['Artist.member']) }}
-            </span>
-        </span>
-    </div>
-    <div class="col-xs-2">
-        {% if artist.Picture is not empty %}
-            {{ sonata_media(object.artist.Picture, 'square') }}
-        {% else %}
-            <div style="width: 100%; padding-bottom: 100%; position: relative; text-align: center;">
-                <div style="position: absolute; top: 50%; color: red;">NO PICTURE</div>
+        <div class="row">
+            <div class="col-12" style="border-bottom: 1px solid #a2a2a2">
+                <span style="display: flex; justify-content: space-between;">
+                    <span style="font-size: 1.2em;">
+                        {{ artist.type }}: {{ artist.name }}, Previews:
+                        <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
+                        <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
+                    </span>
+                    <span style="font-weight: 800">Member: {{ object|render_list_element(admin.list['Artist.member']) }}</span>
+                </span>
             </div>
-        {% endif %}
-    </div>
-    <div class="col-xs-10">
-    {% if object.StartTime %}
-        <div style="border-bottom: 1px solid black">
-            <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
-            Stage: {{ object.stage|default('No stage') }}<br>
         </div>
-    {% endif %}
-        <span style="float: right; margin-left: 2em; padding: 5px; border-left: 1px solid #a2a2a2; border-bottom: 1px solid #a2a2a2;  ">
-            <small>
-                Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}<br>
-                Genre: {{ artist.genre }}<br>
-                Hardware: {{ artist.hardware }}<br>
-                Wish for Play Time: {{ object.WishForPlayTime }}<br>
-                Wish for Set Length: {{ object.SetLength }}<br>
-            </small>
-        </span>
-        <span>
-            <p>{{ object.freeWord|raw }}</p>
-        </span>
-    </div>
+        <div class="row">
+            <div class="col-2 col-xs-2">
+                {% if artist.Picture is not empty %}
+                    {{ sonata_media(object.artist.Picture, 'square') }}
+                {% else %}
+                    <div style="width: 100%;
+                                padding-bottom: 100%;
+                                position: relative;
+                                text-align: center">
+                        <div style="position: absolute; top: 50%; color: red;">NO PICTURE</div>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col-10">
+                {% if object.StartTime %}
+                    <div style="border-bottom: 1px solid black">
+                        <div style="font-weight: 800">Time: {{ object.StartTime|date }}</div>
+                        Stage: {{ object.stage|default("No stage") }}
+                        <br>
+                    </div>
+                {% endif %}
+                <span style="float: right;
+                             margin-left: 2em;
+                             padding: 5px;
+                             border-left: 1px solid #a2a2a2;
+                             border-bottom: 1px solid #a2a2a2">
+                    <small>
+                        Links: {{ object|render_list_element(admin.list['ArtistClone.linkUrls']) }}
+                        <br>
+                        Genre: {{ artist.genre }}
+                        <br>
+                        Hardware: {{ artist.hardware }}
+                        <br>
+                        Wish for Play Time: {{ object.WishForPlayTime }}
+                        <br>
+                        Wish for Set Length: {{ object.SetLength }}
+                        <br>
+                    </small>
+                </span>
+                <span>
+                    <p>{{ object.freeWord|raw }}</p>
+                </span>
+            </div>
+        </div>
     {% else %}
         <h4>artist deleted by user</h4>
     {% endif %}
