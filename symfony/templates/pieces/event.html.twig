@@ -51,9 +51,14 @@
                         </li>
                         {% endif %}
                         {% if event.includeSaferSpaceGuidelines %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ block('event_path_safer_space')}}">{{ 'event.safer_space'|trans|capitalize }}</a>
-                        </li>
+                            {% if app.request.locale == 'fi' %}
+                                {% set url = '/turvallisemman-tilan-periaatteet' %}
+                            {% else %}
+                                {% set url = '/en/safer-space-guidelines' %}
+                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
+                            </li>
                         {% endif %}
                     </ul>
                 </div>
