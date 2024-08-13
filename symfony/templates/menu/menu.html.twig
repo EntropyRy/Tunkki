@@ -1,55 +1,58 @@
 {% use 'pieces/event.html.twig' %}
 {% block menu %}
-{% apply spaceless %}
-{% set loc = app.request.locale %}
-{% set theme = 'light' %}
-{% if event is defined %}
-    {% if app.user %}
-        {% set theme = event.headerTheme ? event.headerTheme : (app.user.member.theme ? app.user.member.theme : 'light') %}
-    {% else %}
-        {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-    {% endif %}
-    {% if event.url is not empty and not event.externalUrl %}
-        {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
-    {% endif %}
-{% else %}
-    {% if app.user %}
-    {% set theme = app.user.member.theme ? app.user.member.theme : 'light' %}
-    {% endif %}
-{% endif %}
-<nav class="navbar navbar-expand-lg navbar-{{ theme }} g-4">
-    <div class="container-fluid">
-    <a class="navbar-brand d-lg-none d-inline-block" href="/{%if loc == 'en'%}en{% endif %}">
-        <img src="{{ asset('/images/header-logo-text.svg') }}"
-            width="auto" height="45" alt="Entropy"
-            {% if theme == 'dark' %}
-                class="invert"
-            {% endif %}
-        >
-    </a>
-    <span class="d-lg-none">
-       {{ block('mobile_locale') }}
-       {% if not app.user %}
-       | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
-       {% endif %}
-    </span>
-  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
-    {{ knp_menu_render(loc) }}
-    <ul class="navbar-nav d-none d-lg-flex">
-        {% if not app.user %}
-            <li class="nav-item">
-               <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
-            </li>
+    {% apply spaceless %}
+    {% set loc = app.request.locale %}
+    {% set theme = "light" %}
+    {% if event is defined %}
+        {% if app.user %}
+            {% set theme = event.headerTheme ? event.headerTheme : (app.user.member.theme ? app.user.member.theme : 'light') %}
+        {% else %}
+            {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
         {% endif %}
-        {{ block('locale') }}
-    </ul>
-  </div>
-</div>
-</nav>
-{% include 'menu/user_menu.html.twig' %}
+        {% if event.url is not empty and not event.externalUrl %}
+            {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
+        {% endif %}
+    {% else %}
+        {% if app.user %}
+            {% set theme = app.user.member.theme ? app.user.member.theme : 'light' %}
+        {% endif %}
+    {% endif %}
+    <nav class="navbar navbar-expand-lg navbar-{{ theme }} g-4">
+        <div class="container-fluid">
+            <a class="navbar-brand d-lg-none d-inline-block"
+               href="/{% if loc == 'en' %}en{% endif %}">
+                <img src="{{ asset("/images/header-logo-text.svg") }}" width="auto" height="45" alt="Entropy" {% if theme == 'dark' %}class="invert"{% endif %}>
+            </a>
+            <span class="d-lg-none">
+                {{ block("mobile_locale") }}
+                {% if not app.user %}
+                    | <a href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                {% endif %}
+            </span>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-between"
+                 id="navbarSupportedContent">
+                {{ knp_menu_render(loc) }}
+                <ul class="navbar-nav d-none d-lg-flex">
+                    {% if not app.user %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                        </li>
+                    {% endif %}
+                    {{ block("locale") }}
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% include 'menu/user_menu.html.twig' %}
 {% endapply %}
 {% endblock %}
 {% block locale %}
@@ -58,19 +61,21 @@
             <span class="nav-link">FI</span>
         </li>
         <li class="nav-item">
-           <a class="nav-link" href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
+            <a class="nav-link"
+               href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
         </li>
     {% else %}
         <li class="nav-item">
-            <a class="nav-link" href="{% if event_url is defined %}{{ event_url }}{% else %}/{% endif %}">FI</a>
+            <a class="nav-link"
+               href="{% if event_url is defined %}{{ event_url }}{% else %}/{% endif %}">FI</a>
         </li>
         <li class="nav-item current">
-           <span class="nav-link">EN</span>
+            <span class="nav-link">EN</span>
         </li>
     {% endif %}
 {% endblock %}
 {% block mobile_locale %}
-{% apply spaceless %}
+    {% apply spaceless %}
     {% if app.request.locale == 'fi' %}
         <span>FI</span> |
         <a href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>

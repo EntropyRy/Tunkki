@@ -1,6 +1,67 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/happening.html.twig' %}
+
+{% block menu %}
+    {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
+    {% apply spaceless %}
+    {% if app.user %}
+        <nav
+             class="navbar navbar-expand-lg navbar-{{ theme }}">
+            <div class="container">
+                <a class="navbar-brand d-lg-none" href="{{ block("event_path") }}">{{ 'Menu'|trans }} </a>
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#eventContent"
+                        aria-controls="eventContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="eventContent">
+                    <ul class="navbar-nav w-100 d-flex justify-content-between">
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ block("event_path") }}">{{ 'Home'|trans }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ block('event_path_artists')}}">{{ 'Artists'|trans|capitalize }}</a>
+                        </li>
+                        {% if event.allowMembersToCreateHappenings %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
+                        </li>
+                        {% endif %}
+                        {% if tickets|length > 0 %}
+                        <li class="nav-item">
+                            <a class="nav-link" 
+                                href="{{ path('entropy_event_tickets', {
+                                       'slug': event.url,
+                                       'year': event.eventdate|date('Y'),
+                                }) }}"
+                                >
+                                {{ 'ticket.and_nakki'|trans }}
+                                </a>
+                        </li>
+                        {% endif %}
+                        {% if event.includeSaferSpaceGuidelines %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ block('event_path_safer_space')}}">{{ 'event.safer_space'|trans|capitalize }}</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    {% endif %}
+{% endapply %}
+{% endblock %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
         <a {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
@@ -53,6 +114,10 @@
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
     <small>{{ block('published_and_updated') }}</small>
+    {% set content_attr = 'content_attribute'|trans %}
+    {% if '{{ menu }}' in attribute(event, content_attr) %}
+        {{ block('menu') }}
+    {% endif %}
     <h2 class="mt-2 event-name">{{ block('event_name') }}
       {% if event.type != 'announcement' %}
         ~ <span class="event_time">{{ block('event_time') }}</span>
@@ -203,7 +268,8 @@
     '{{ stripe_ticket }}': block('stripe_ticket'),
     '{{ ticket }}': block('ticket_for_event_page'),
     '{{ art_artist_list }}': block('art_artist_list'),
-    '{{ happening_list }}': block('happening_list')
+    '{{ happening_list }}': block('happening_list'),
+    '{{ menu }}': ''
 })|raw }}
 {% if '{{ links }}' not in attribute(event, content_attr) %}
     {{ block('links') }}

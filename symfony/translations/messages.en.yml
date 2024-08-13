@@ -155,6 +155,7 @@ event:
   in_future: Upcoming event
   after: Past event
   now: Event is now
+  safer_space: Safer Space
   ticket:
     shop: Ticket Shop
   player:
@@ -311,6 +312,7 @@ rsvp:
 ticket:
   ticket: Ticket
   check: Ticket Check
+  and_nakki: Nakki/Ticket
   form:
     reserve: Reserve
     reserve_and_recommend: Reserve and recommend
@@ -371,6 +373,7 @@ happening:
   same_name_exists: Happening with the same name already exists. Please change the name.
   edited: Changes saved succesfully!
   ticket_missing: You need a ticket first.
+  happenings: Happenings
 edited: Changes saved succesfully!
 location: 
   location: location

@@ -29,6 +29,8 @@ Timetable: Aikataulu
 fi: Suomi
 en: Englanti
 OR: TAI
+Home: Koti
+Venue: Paikka
 Choose login method: Valitse kirjautumistapa
 # Entropy.fi
 cookie_policy: Käytämme vain välttämättömiä keksejä jotta kirjautuminen toimii.
@@ -226,6 +228,7 @@ event:
   in_future: Tuleva tapahtuma
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
+  safer_space: Turvallinen Tila
   ticket:
     shop: Lippukauppaan
   player:
@@ -391,6 +394,7 @@ ticket:
   form:
     reserve: Varaa
     reserve_and_recommend: Varaa ja suosittele
+  and_nakki: Nakki/Lippu
   situation: Lippusi tila
   available: Saatavilla
   recipient: Vastaanottajan nimi
@@ -449,6 +453,7 @@ happening:
   same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
   edited: Muokkaukset tallennettu onnistuneesti.
   ticket_missing: Tarvitset lipun ensin.
+  happenings: Tapahtumat
 Name fi: Nimi suomeksi
 Name en: Nimi englanniksi
 Description fi: Kuvaus suomeksi
