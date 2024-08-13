@@ -228,7 +228,7 @@ event:
   in_future: Tuleva tapahtuma
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
-  safer_space: Turvallinen Tila
+  safer_space: Turvallisempi tila
   ticket:
     shop: Lippukauppaan
   player:
