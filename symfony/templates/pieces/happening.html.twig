@@ -66,93 +66,93 @@
                 {% endif %}
                 {% if happening.releaseThisHappeningInEvent == false %}
                     ~ <span class="text-danger">{{ block("shown_only_to") }}</span>
-            {% endif %}
-        </h1>
-    </div>
-</div>
-<div class="row">
-    {% if happening.picture %}
-        <div class="col-sm-6 col-md-4">{{ block("happening_pic") }}</div>
-        <div class="col-sm-6 col-md-8 mt-4 mt-sm-0">
-        {% else %}
-            <div class="col-12 mt-4 mt-sm-0">
-            {% endif %}
-            <h3>
-                {{ name }} <small>{{ happening.time|format_datetime(pattern='E, HH:mm') }}</small>
-            </h3>
-            <p>{{ description|raw }}</p>
-            {% if happening.needsPreliminaryPayment and not event.isInPast %}
-                <hr>
-                <h4>{{ 'happening.paymentInfo'|trans }}</h4>
-                <p>
-                    {{ payment_info|replace({
-                                        '{{ ticket_ref }}': ticket_ref
-                                        }) |raw }}
-                </p>
-                <h5>{{ 'Price'|trans }}</h5>
-                <p>{{ happening.price(app.request.locale) }}</p>
-            {% endif %}
-        </div>
-        {% if not event.isInPast %}
-            <div class="col-12 mt-4">
-                {% if happening.needsPreliminarySignUp %}
-                    {% if happening.signUpsAreOpen %}
-                        <h4>{{ space_left }} {{ 'seats available'|trans }}</h4>
-                        {% if happeningB.member == app.user.member %}
-                            {% if happeningB.comment %}
-                                <p>{{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}</p>
-                            {% endif %}
-                            <div>
-                                <a href="{{ path('entropy_event_happening_remove', {'id': happeningB.id}) }}"
-                                   class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
-                            </div>
-                        {% else %}
-                            {{ form_start(form) }}
-                                {{ form_widget(form) }}
-                                <input class="btn btn-primary w-100"
-                                       type="submit"
-                                       value="{{ 'sign up'|trans|capitalize }}">
-                            {{ form_end(form) }}
-                        {% endif %}
-                    {% else %}
-                        <h4>
-                            {{ space_left }} {{ 'seats available'|trans }},
-                            {{ 'happening.sign_ups_have_ended'|trans }}
-                        </h4>
-                    {% endif %}
                 {% endif %}
-                {% if happening.needsPreliminarySignUp and admin %}
-                    <div class="row mt-4">
-                        <div class="col-12">
-                            <h4>{{ 'Bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
-                            <ol>
-                                {% for booking in happening.bookings %}
-                                    <li>
-                                        {{ booking.member.username }}, {{ booking.member }}
-                                        {% if booking.comment %}: {{ booking.comment }}{% endif %}
-                                    </li>
-                                {% else %}
-                                    <span>{{ 'happening.no_reservations'|trans }}</span>
-                                {% endfor %}
-                            </ol>
-                        </div>
-                    </div>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+        {% if happening.picture %}
+            <div class="col-sm-6 col-md-4">{{ block("happening_pic") }}</div>
+            <div class="col-sm-6 col-md-8 mt-4 mt-sm-0">
+            {% else %}
+                <div class="col-12 mt-4 mt-sm-0">
+                {% endif %}
+                <h3>
+                    {{ name }} <small>{{ happening.time|format_datetime(pattern='E, HH:mm') }}</small>
+                </h3>
+                <p>{{ description|raw }}</p>
+                {% if happening.needsPreliminaryPayment and not event.isInPast %}
+                    <hr>
+                    <h4>{{ 'happening.paymentInfo'|trans }}</h4>
+                    <p>
+                        {{ payment_info|replace({
+                                                '{{ ticket_ref }}': ticket_ref
+                                                }) |raw }}
+                    </p>
+                    <h5>{{ 'Price'|trans }}</h5>
+                    <p>{{ happening.price(app.request.locale) }}</p>
                 {% endif %}
             </div>
-        {% endif %}
-    </div>
-    <div class="row mt-3">
-        <div class="col-12">{{ block("prev_next_navigation") }}</div>
-    </div>
-{% endblock %}
-{% block happening_pic %}
-    <span class="polaroid">
-        {% if happening.picture %}
-            <img width="100%"
-                 loading="lazy"
-                 title="{{ name }}"
-                 src="{{ sonata_path(happening.picture, 'square') }}">
-        {% endif %}
-        <div class="caption d-none d-sm-block">{{ name }}</div>
-    </span>
-{% endblock %}
+            {% if not event.isInPast %}
+                <div class="col-12 mt-4">
+                    {% if happening.needsPreliminarySignUp %}
+                        {% if happening.signUpsAreOpen %}
+                            <h4>{{ space_left }} {{ 'seats available'|trans }}</h4>
+                            {% if happeningB.member == app.user.member %}
+                                {% if happeningB.comment %}
+                                    <p>{{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}</p>
+                                {% endif %}
+                                <div>
+                                    <a href="{{ path('entropy_event_happening_remove', {'id': happeningB.id}) }}"
+                                       class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
+                                </div>
+                            {% else %}
+                                {{ form_start(form) }}
+                                    {{ form_widget(form) }}
+                                    <input class="btn btn-primary w-100"
+                                           type="submit"
+                                           value="{{ 'sign up'|trans|capitalize }}">
+                                {{ form_end(form) }}
+                            {% endif %}
+                        {% else %}
+                            <h4>
+                                {{ space_left }} {{ 'seats available'|trans }},
+                                {{ 'happening.sign_ups_have_ended'|trans }}
+                            </h4>
+                        {% endif %}
+                    {% endif %}
+                    {% if happening.needsPreliminarySignUp and admin %}
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4>{{ 'Bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
+                                <ol>
+                                    {% for booking in happening.bookings %}
+                                        <li>
+                                            {{ booking.member.username }}, {{ booking.member }}
+                                            {% if booking.comment %}: {{ booking.comment }}{% endif %}
+                                        </li>
+                                    {% else %}
+                                        <span>{{ 'happening.no_reservations'|trans }}</span>
+                                    {% endfor %}
+                                </ol>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        <div class="row mt-3">
+            <div class="col-12">{{ block("prev_next_navigation") }}</div>
+        </div>
+    {% endblock %}
+    {% block happening_pic %}
+        <span class="polaroid">
+            {% if happening.picture %}
+                <img width="100%"
+                     loading="lazy"
+                     title="{{ name }}"
+                     src="{{ sonata_path(happening.picture, 'square') }}">
+            {% endif %}
+            <div class="caption d-none d-sm-block">{{ name }}</div>
+        </span>
+    {% endblock %}

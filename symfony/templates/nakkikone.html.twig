@@ -3,52 +3,64 @@
 {% use 'pieces/nakkikone.html.twig' %}
 {% block sonata_page_javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('nakkikone') }}
+    {{ encore_entry_script_tags("nakkikone") }}
 {% endblock %}
 {% block content %}
-{% set l = app.request.locale %}
+    {% set l = app.request.locale %}
     <div class="col-12">
-        <h2>Nakkikone{% if event.template == "event.html.twig"%}: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>{% endif %}</h2>
-        {{ block('your_nakkis') }}
-        {{ attribute(event, 'nakkiInfo' ~ l|capitalize)|raw }}
-    <hr>
-    <h3>{{ 'Select Nakki'|trans }}</h3>
+        <h2>
+            Nakkikone
+            {% if event.template == "event.html.twig" %}
+                : <a href="{{ block("event_path") }}">{{ block("event_name") }}</a>
+            {% endif %}
+        </h2>
+        {{ block("your_nakkis") }}
+        {{ attribute(event, 'nakkiInfo' ~ l|capitalize) |raw }}
+        <hr>
+        <h3>{{ 'Select Nakki'|trans }}</h3>
         <div class="row">
-          <div class="col-sm-6 col-md-4">
-            <div class="list-group" id="list-tab" role="tablist">
-              {% for name, nakki in nakkis %}
-              <a class="list-group-item list-group-item-action"
-                  id="list-{{ name }}-list"
-                  data-bs-toggle="list"
-                  data-index="{{ loop.index }}"
-                  href="#nakki{{ loop.index }}"
-                  role="tab"
-                  aria-controls="{{ name }}"
-              >
-              {{ name }} ({{ nakki.durations|join('h, ') }}h)
-              <span class="badge rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
-              </a>
-              {% endfor %}
+            <div class="col-sm-6 col-md-4">
+                <div class="list-group" id="list-tab" role="tablist">
+                    {% for name, nakki in nakkis %}
+                        <a class="list-group-item list-group-item-action"
+                           id="list-{{ name }}-list"
+                           data-bs-toggle="list"
+                           data-index="{{ loop.index }}"
+                           href="#nakki{{ loop.index }}"
+                           role="tab"
+                           aria-controls="{{ name }}">
+                            {{ name }} ({{ nakki.durations|join("h, ") }}h)
+                            <span class="badge rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
+                        </a>
+                    {% endfor %}
+                </div>
             </div>
-          </div>
-          <div class="col-sm-6 col-md-8">
-            <div class="tab-content {% if "e30v" in event.template %}content{% endif %}" id="nav-tabContent">
-              <div class="tab-pane fade active show " id="list-none" role="tabpanel" aria-labelledby="list-none">
-                  <h3>{#{ 'Nakki descriptions'|trans }#}
-                  <small>{{ 'Choose a shift ("Nakki") to see the description'|trans }}.</small>
-                  </h3>
-              </div>
-              {% for name, nakki in nakkis %}
-              <div class="tab-pane fade" id="nakki{{ loop.index }}" role="tabpanel" aria-labelledby="list-{{ name }}-list"><p>{{ nakki['description']|raw }}</p></div>
-              {% endfor %}
+            <div class="col-sm-6 col-md-8">
+                <div class="tab-content {% if "e30v" in event.template %}content{% endif %}"
+                     id="nav-tabContent">
+                    <div class="tab-pane fade active show "
+                         id="list-none"
+                         role="tabpanel"
+                         aria-labelledby="list-none">
+                        <h3>
+                            {#{ 'Nakki descriptions'|trans }#}
+                            <small>{{ 'Choose a shift ("Nakki") to see the description'|trans }}.</small>
+                        </h3>
+                    </div>
+                    {% for name, nakki in nakkis %}
+                        <div class="tab-pane fade"
+                             id="nakki{{ loop.index }}"
+                             role="tabpanel"
+                             aria-labelledby="list-{{ name }}-list">
+                            <p>{{ nakki['description']|raw }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-          </div>
         </div>
     </div>
     <div class="col-12 mt-3 d-none show-on-click">
         <h3>{{ 'Reserve your Nakki'|trans }}</h3>
-        {{ block('reserve_nakkis') }}
+        {{ block("reserve_nakkis") }}
     </div>
 {% endblock %}
-
-

@@ -1,136 +1,132 @@
 {%- block sonata_page_html_tag -%}
-<!DOCTYPE html>
-<html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ app.request.locale }}">
-{% endblock %}
+    <!DOCTYPE html>
+    <html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ app.request.locale }}">
+    {% endblock %}
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>
             <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
             <link rel="preload" as="image" href="{{ asset("/images/header-logo-text.svg") }}">
             {% if block('title') is defined %}
-                <title>{{ block('title') }}</title>
+                <title>{{ block("title") }}</title>
             {% elseif page.title is defined %}
                 <title>{{ page.title }} | Entropy ry</title>
             {% else %}
                 {{ sonata_seo_title() }}
             {% endif %}
-            {% block meta %}
-                {{ sonata_seo_metadatas() }}
-            {% endblock %}
-            {% block sonata_page_stylesheets %}
-                {{ encore_entry_link_tags('app') }}
-            {% endblock %}
-            {% block sonata_page_javascripts %}
-                {{ encore_entry_script_tags('app') }}
-            {% endblock %}
+            {% block meta %}{{ sonata_seo_metadatas() }}{% endblock %}
+            {% block sonata_page_stylesheets %}{{ encore_entry_link_tags("app") }}{% endblock %}
+            {% block sonata_page_javascripts %}{{ encore_entry_script_tags("app") }}{% endblock %}
             <link rel="manifest" href="/manifest.json">
         </head>
     {% endblock %}
-
     {% block sonata_page_body_tag %}
-    <body class="entropy{% if app.user and event is not defined %} {{ app.user.member.theme }}" data-bs-theme="{{ app.user.member.theme }}{% endif %}">
-    {% if event is defined and event.backgroundEffect is not empty %}
-    <canvas
-        class="effect_canvas"
-        data-turbo-permanent
-        id="{{ event.backgroundEffect }}"
-        style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};{{ event.backgroundEffectPosition }}
-    "></canvas>
-    {% endif %}
-    {% endblock %}
-
-    {% block sonata_page_top_bar %}
-        {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
-        <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="banner">
-            <span class="navbar-text" style="color: white;">ADMIN MENU:</span>
-            <ul class="navbar-nav justify-content-left">
-                {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('sonata_admin_dashboard') }}">
-                            <i class="fa fa-magic"></i>
-                            {{ 'Dashboard'|trans }}
-                        </a>
-                    </li>
-                    {% set sites = sonata_page.siteavailables %}
-                    {% if sites|length > 1 and site is defined %}
-                        <li class="dropdown nav-item">
-                            <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                {% for site in sites %}
-                                    <li class="dropdown-item"><a href="{{ site.url ? site.url : '/' }}">{{ site.name }}</a></li>
-                                {% endfor %}
-                            </ul>
-                        </li>
-                    {% endif %}
-                    {% if page is defined %}
-                    <li class="dropdown nav-item">
-                        <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li class="dropdown-item">
-<a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a>
-                            </li>
-                            <li class="dropdown-item">
-<a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter): page.id}) }}" target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a>
-                            </li>
-                            <div class="dropdown-divider"></div>
-                            <li class="dropdown-item"><a href="{{ sonata_page_admin.generateUrl('list') }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a></li>
-                        </ul>
-                    </li>
-                    {% endif %}
-                    {% if page is defined and event is not defined %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
-                                <i class="fa fa-magic"></i>
-                                {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if page is defined and page.edited %}
-                        <li class="nav-item">
-                            <span class="nav-link" style="color:red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span>
-                        </li>
-                    {% endif %}
-                    {% if page is defined and not page.enabled %}
-                        <li class="nav-item">
-                            <span class="nav-link" style="background: red;">
-                                <strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em>
-                                </strong>
-                            </span>
-                        </li>
-                    {% endif %}
-                {% endif %}
-
-                {% if app.user and is_granted('IS_IMPERSONATOR') %}
-                    <li class="nav-item"><a  class="nav-link" href="{{ path('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle') }}</a></li>
-                {% endif %}
-            </ul>
-            {% if event is defined %}
-            <span class="navbar-text" style="color: white;">{{ 'Event'|trans }}:</span>
-            <ul class="navbar-nav justify-content-left">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ path('admin_app_event_edit', {'id': event.id}) }}">
-                            <i class="fa fa-magic"></i>
-                            {{ 'event.edit'|trans }}
-                        </a>
-                    </li>
-                    {% if event.published == false %}
-                    <li class="nav-item float-end">
-                        <span class="nav-link text-warning">
-                            <i class="fa fa-lock"></i>
-                            {{ 'event.not_public'|trans }}
-                        </span>
-                    </li>
-                    {% endif %}
-            </ul>
+        <body class="entropy{% if app.user and event is not defined %} {{ app.user.member.theme }}" data-bs-theme="{{ app.user.member.theme }}{% endif %}">
+            {% if event is defined and event.backgroundEffect is not empty %}
+                <canvas class="effect_canvas"
+                        data-turbo-permanent
+                        id="{{ event.backgroundEffect }}"
+                        style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }};
+                               {{ event.backgroundEffectPosition }}"></canvas>
             {% endif %}
-        </nav>
-    {% endif %}
-    {% endblock %}
-
-        {% block sonata_page_container %}
         {% endblock %}
-
-        {% block sonata_page_asset_footer %}
+        {% block sonata_page_top_bar %}
+            {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
+                <nav class="navbar navbar-dark bg-dark navbar-expand-md" role="banner">
+                    <span class="navbar-text" style="color: white;">ADMIN MENU:</span>
+                    <ul class="navbar-nav justify-content-left">
+                        {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path("sonata_admin_dashboard") }}">
+                                    <i class="fa fa-magic"></i>
+                                    {{ 'Dashboard'|trans }}
+                                </a>
+                            </li>
+                            {% set sites = sonata_page.siteavailables %}
+                            {% if sites|length > 1 and site is defined %}
+                                <li class="dropdown nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">{{ site.name }} <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        {% for site in sites %}
+                                            <li class="dropdown-item">
+                                                <a href="{{ site.url ? site.url : '/' }}">{{ site.name }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if page is defined %}
+                                <li class="dropdown nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li class="dropdown-item">
+                                            <a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter) : page.id}) }}"
+                                               target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a>
+                                        </li>
+                                        <li class="dropdown-item">
+                                            <a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter) : page.id}) }}"
+                                               target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a>
+                                        </li>
+                                        <div class="dropdown-divider"></div>
+                                        <li class="dropdown-item">
+                                            <a href="{{ sonata_page_admin.generateUrl("list") }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                            {% if page is defined and event is not defined %}
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter) : page.id}) }}">
+                                        <i class="fa fa-magic"></i>
+                                        {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if page is defined and page.edited %}
+                                <li class="nav-item">
+                                    <span class="nav-link" style="color:red;"><strong><em>{{ 'page_edited'|trans([], 'SonataPageBundle') }}</em></strong></span>
+                                </li>
+                            {% endif %}
+                            {% if page is defined and not page.enabled %}
+                                <li class="nav-item">
+                                    <span class="nav-link" style="background: red;">
+                                        <strong><em>{{ 'header.page_is_disabled'|trans([], 'SonataPageBundle') }}</em>
+                                        </strong>
+                                    </span>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                        {% if app.user and is_granted('IS_IMPERSONATOR') %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ path('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle') }}</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                    {% if event is defined %}
+                        <span class="navbar-text" style="color: white;">{{ 'Event'|trans }}:</span>
+                        <ul class="navbar-nav justify-content-left">
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                   href="{{ path('admin_app_event_edit', {'id': event.id}) }}">
+                                    <i class="fa fa-magic"></i>
+                                    {{ 'event.edit'|trans }}
+                                </a>
+                            </li>
+                            {% if event.published == false %}
+                                <li class="nav-item float-end">
+                                    <span class="nav-link text-warning">
+                                        <i class="fa fa-lock"></i>
+                                        {{ 'event.not_public'|trans }}
+                                    </span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    {% endif %}
+                </nav>
+            {% endif %}
         {% endblock %}
-
+        {% block sonata_page_container %}{% endblock %}
+        {% block sonata_page_asset_footer %}{% endblock %}
     </body>
 </html>

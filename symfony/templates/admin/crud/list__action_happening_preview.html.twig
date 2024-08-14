@@ -1,1 +1,2 @@
-<a class="btn btn-sm btn-default edit_link" href="{{ path('entropy_event_happening_show', {'year': object.event.eventDate|date('Y'), 'slug': object.event.url, 'happeningSlug': object.slug(app.request.locale)}) }}"><i class="fa fa-preview" aria-hidden="true"></i> Preview</a>
+<a class="btn btn-sm btn-default edit_link"
+   href="{{ path('entropy_event_happening_show', {'year': object.event.eventDate|date('Y') , 'slug': object.event.url, 'happeningSlug': object.slug(app.request.locale)}) }}"><i class="fa fa-preview" aria-hidden="true"></i> Preview</a>

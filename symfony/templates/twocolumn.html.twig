@@ -5,28 +5,22 @@
         <div class="row mx-md-1">
             {% include 'flashmessages.html.twig' %}
             <div class="col-12 col-md-8" data-turbo-frame="page">
-            {% block page_content %}
-                {% if content is defined %}
-                    {{ content|raw }}
-                {% else %}
-                    {% if page is defined %}
-                        {{ sonata_page_render_container('content', page) }}
-                    {% endif %}
-                    {% set content = block('content') is defined ? block('content') : '' %}
-                    {% if content|length > 0 %}
+                {% block page_content %}
+                    {% if content is defined %}
                         {{ content|raw }}
+                    {% else %}
+                        {% if page is defined %}{{ sonata_page_render_container('content', page) }}{% endif %}
+                        {% set content = block('content') is defined ? block('content') : '' %}
+                        {% if content|length > 0 %}{{ content|raw }}{% endif %}
+                        {% if page is defined %}{{ sonata_page_render_container('acontent', page) }}{% endif %}
                     {% endif %}
-                    {% if page is defined %}
-                        {{ sonata_page_render_container('acontent', page) }}
-                    {% endif %}
-                {% endif %}
-            {% endblock %}
-            <hr class="d-md-none d-lg-none">
+                {% endblock %}
+                <hr class="d-md-none d-lg-none">
             </div>
             <div class="col-12 col-md-4 right-content">
                 {% if page is defined %}
-                {{ sonata_page_render_container('rcontent', 'global') }}
-                {{ sonata_page_render_container('rcontent', page) }}
+                    {{ sonata_page_render_container('rcontent', 'global') }}
+                    {{ sonata_page_render_container('rcontent', page) }}
                 {% endif %}
             </div>
         </div>

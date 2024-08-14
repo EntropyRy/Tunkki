@@ -1,19 +1,14 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'event/meta.html.twig' %}
-
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block sonata_page_stylesheets %}
     {{ parent() }}
-    <style data-turbo-track="reload">
-    {{ event.css|raw }}
-    </style>
+    <style data-turbo-track="reload">{{ event.css|raw }}</style>
 {% endblock %}
 {% block sonata_page_javascripts %}
     {{ parent() }}
-    {% if event.backgroundEffect is not empty %}
-    {{ encore_entry_script_tags(event.backgroundEffect) }}
-    {% endif %}
+    {% if event.backgroundEffect is not empty %}{{ encore_entry_script_tags(event.backgroundEffect) }}{% endif %}
 {% endblock %}
 {% block content %}
     {% if app.user %}
@@ -22,26 +17,23 @@
         {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
     {% endif %}
     {% if event is not null and visible %}
-    <div class="row">
-        <div class="col overflow-auto">
-            {{ block('event_head_reverse') }}
-            {{ block('event_content') }}
-        </div>
-        {% if event.picture is not null and event.picturePosition == 'after' %}
-            <div class="img-after mb-2 mt-3">
-                {{ block('event_media') }}
+        <div class="row">
+            <div class="col overflow-auto">
+                {{ block("event_head_reverse") }}
+                {{ block("event_content") }}
             </div>
-        {% endif %}
-    </div>
+            {% if event.picture is not null and event.picturePosition == 'after' %}
+                <div class="img-after mb-2 mt-3">{{ block("event_media") }}</div>
+            {% endif %}
+        </div>
     {% else %}
         <div clas="col-12">
             <br>
             <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
             <div class="col-6 mx-auto">
-               <a class="btn btn-primary w-100" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                <a class="btn btn-primary w-100" href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </div>
             <br>
         </div>
     {% endif %}
 {% endblock %}
-

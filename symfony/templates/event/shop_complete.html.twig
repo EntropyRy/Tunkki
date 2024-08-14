@@ -1,30 +1,27 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-
-{% if block('content_shop_complete', input) is defined %}
-{{ block('content_shop_complete', input) }}
-{% else %}
-{{ block('complete') }}
-{% endif %}
+    {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+    {% if block('content_shop_complete', input) is defined %}
+        {{ block('content_shop_complete', <built-in function input>) }}
+    {% else %}
+        {{ block("complete") }}
+    {% endif %}
 {% endblock %}
-
 {% block complete %}
-<h1>{{ 'event.stripe.complete'|trans }}</h1>
-<p>{{ 'event.stripe.mail_sent'|trans }}</p>
-<a class="btn btn-primary btn-lg w-100" {% if event.externalUrl %}data-turbo="false"{% endif %} href="{{ block('event_path') }}">
-{{ block('event_name') }}
-</a>
+    <h1>{{ 'event.stripe.complete'|trans }}</h1>
+    <p>{{ 'event.stripe.mail_sent'|trans }}</p>
+    <a class="btn btn-primary btn-lg w-100"
+       {% if event.externalUrl %}data-turbo="false"{% endif %}
+       href="{{ block("event_path") }}">{{ block("event_name") }}</a>
 {% endblock %}
-
 {% block qr_codes %}
-{% for qr in qrs %}
-<h1>{{ 'ticket.ticket'|trans }} #{{ loop.index }}</h1>
-<div class="qr-code text-center">
-<img style="max-width:100%" src="data:image/png;base64, {{ qr }}">
-</div>
-{% else %}
-no codes
-{% endfor %}
+    {% for qr in qrs %}
+        <h1>{{ 'ticket.ticket'|trans }} #{{ loop.index }}</h1>
+        <div class="qr-code text-center">
+            <img style="max-width:100%" src="data:image/png;base64, {{ qr }}">
+        </div>
+    {% else %}
+        no codes
+    {% endfor %}
 {% endblock %}

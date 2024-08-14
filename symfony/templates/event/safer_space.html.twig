@@ -1,7 +1,7 @@
 {% extends event.template %}
 {% block content %}
-{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-<div class="content">
-{{ block('content_safer_space', input) ?? '' }}
-</div>
+    {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+    <div class="content">
+        {{ block('content_safer_space', <built-in function input>) ?? '' }}
+    </div>
 {% endblock %}

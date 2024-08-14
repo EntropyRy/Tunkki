@@ -1,12 +1,12 @@
 {% block entropy_type_packages_widget %}
-{% apply spaceless %}
+    {% apply spaceless %}
     {%- for child in form %}
         {% set reserved,fix = false,false %}
         {% set package = form.vars.choices[child.vars.value].data %}
         {% if package.items is defined %}
             {% for item in package.items %}
                 {% for itemBooking in item.rentHistory.toArray %}
-                    {% if itemBooking in bookings  %}
+                    {% if itemBooking in bookings %}
                         {% set reserved = true %}
                     {% endif %}
                 {% endfor %}
@@ -15,40 +15,40 @@
                 {% endif %}
             {% endfor %}
             <div class="box box-solid collapsed-box">
-                <div class="box-header {% if fix %}bg-warning{% endif %}" style="padding: 2px;{% if reserved %}opacity:0.5;{% endif %}"
-                    {% if package.Notes %}
-                        title="{{ package.Notes }}"
-                    {% endif %}
-                    >
+                <div class="box-header {% if fix %}bg-warning{% endif %}"
+                     style="padding: 2px;
+                            {% if reserved %}opacity:0.5;{% endif %}"
+                     {% if package.Notes %}title="{{ package.Notes }}"{% endif %}>
                     <span>
-                        {{ block('item') }}
-                    <div class="box-tools pull-right">
-                        <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
-                    </div>
+                        {{ block("item") }}
+                        <div class="box-tools pull-right">
+                            <button class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-plus"></i> Show Contents
+                            </button>
+                        </div>
                     </span>
                 </div>
                 <div style="display: none;" class="box-body">
-                <ul>
-                    {% for item in package.items %}
-                    <li>
-                        {% if item.needsFixing %}
-                            <i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>
-                        {% endif %}
-                        {{ item }}
-                    </li>
-                    {% endfor %} 
-                </ul>
-                Note: {{ package.notes }}
-                </div><!-- /.box-body -->
-            </div><!-- /.box -->
+                    <ul>
+                        {% for item in package.items %}
+                            <li>
+                                {% if item.needsFixing %}<i class="fa fa-medkit" title="{{ item.getFixingHistoryMessages(5) }}"></i>{% endif %}
+                                {{ item }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    Note: {{ package.notes }}
+                </div>
+                <!-- /.box-body -->
+            </div>
+            <!-- /.box -->
         {% endif %}
     {% endfor -%}
 {% endapply %}
 {% endblock %}
-
 {% block item %}
-<div {{ block('widget_container_attributes') }}>
-    {{- form_widget(child) -}}
-    {{- form_label(child) -}}
-</div> 
+    <div {{ block("widget_container_attributes") }}>
+        {{- form_widget(child) -}}
+        {{- form_label(child) -}}
+    </div>
 {% endblock %}

@@ -1,32 +1,27 @@
 {% extends 'fullcolumn.html.twig' %}
-{% block title %}
-{{ 'entropy_user_dashboard'|trans }} | Entropy ry
-{% endblock %}
-
+{% block title %}{{ 'entropy_user_dashboard'|trans }} | Entropy ry{% endblock %}
 {% block content %}
-<div class="row">
-<div class="col-md-6">
-    {% if member.isActiveMember %}
-        {% if barcode is defined %}
-            <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
-            <div class="mx-auto barcode" style="width:246px;">
-                {{ barcode.1|raw }}
-                <p class="text-center">Code: {{ barcode.0 }}</p>
-            </div>
-            </div>
-        {% endif %}
-        {{ sonata_block_render({'type': 'entropy.block.door_info'}) }}
-    {% endif %}
-    {{ sonata_block_render({'type': 'entropy.block.future_events'}, {'box': true}) }}
-    {{ sonata_block_render({'type': 'entropy.block.random_artist'}, {'box': true}) }}
-    {{ sonata_block_render({'type': 'entropy.block.artist_list'}, {'box': true}) }}
-</div>
-<div class="col-md-6">
-    {{ sonata_block_render({'type': 'entropy.block.statistics'}) }}
-    {{ sonata_block_render({'type': 'entropy.block.bookings_in_progress'}, {'box': true}) }}
-    {{ sonata_block_render({'type': 'entropy.block.brokenitems'}, {'bs3': false, 'random': true}) }}
-</div>
-</div>
+    <div class="row">
+        <div class="col-md-6">
+            {% if member.isActiveMember %}
+                {% if barcode is defined %}
+                    <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
+                        <div class="mx-auto barcode" style="width:246px;">
+                            {{ barcode.1|raw }}
+                            <p class="text-center">Code: {{ barcode.0 }}</p>
+                        </div>
+                    </div>
+                {% endif %}
+                {{ sonata_block_render({"type": "entropy.block.door_info"}) }}
+            {% endif %}
+            {{ sonata_block_render({'type': 'entropy.block.future_events'}, {'box': true}) }}
+            {{ sonata_block_render({'type': 'entropy.block.random_artist'}, {'box': true}) }}
+            {{ sonata_block_render({'type': 'entropy.block.artist_list'}, {'box': true}) }}
+        </div>
+        <div class="col-md-6">
+            {{ sonata_block_render({"type": "entropy.block.statistics"}) }}
+            {{ sonata_block_render({'type': 'entropy.block.bookings_in_progress'}, {'box': true}) }}
+            {{ sonata_block_render({'type': 'entropy.block.brokenitems'}, {'bs3': false, 'random': true}) }}
+        </div>
+    </div>
 {% endblock %}
-
-

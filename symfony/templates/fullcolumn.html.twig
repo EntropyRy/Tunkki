@@ -5,22 +5,16 @@
         <div class="row mx-1">
             {% include 'flashmessages.html.twig' %}
             <div class="col-12 mx-auto">
-            {% block page_content %}
-                {% if content is defined %}
-                    {{ content|raw }}
-                {% else %}
-                    {% if page is defined %}
-                        {{ sonata_page_render_container('content', page) }}
-                    {% endif %}
-                    {% set content = block('content') is defined ? block('content') : '' %}
-                    {% if content|length > 0 %}
+                {% block page_content %}
+                    {% if content is defined %}
                         {{ content|raw }}
+                    {% else %}
+                        {% if page is defined %}{{ sonata_page_render_container('content', page) }}{% endif %}
+                        {% set content = block('content') is defined ? block('content') : '' %}
+                        {% if content|length > 0 %}{{ content|raw }}{% endif %}
+                        {% if page is defined %}{{ sonata_page_render_container('acontent', page) }}{% endif %}
                     {% endif %}
-                    {% if page is defined %}
-                        {{ sonata_page_render_container('acontent', page) }}
-                    {% endif %}
-                {% endif %}
-            {% endblock %}
+                {% endblock %}
             </div>
         </div>
         {% include 'footer.html.twig' %}

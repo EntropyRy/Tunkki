@@ -1,63 +1,74 @@
 {% extends 'admin/crud/base_list_flat_inner_row.html.twig' %}
-
 {% block row %}
     <div class="col-xs-12" style="border-bottom: 1px solid #a2a2a2">
         <span style="display: flex; justify-content: space-between;">
-            <span style="font-size: 1.2em;">
-            {{ object.bookingDate|date('d.m.Y') }}
-            </span>
-            <span style="font-weight: 800">
-            {{ object|render_list_element(admin.list['name']) }}
-            </span>
+            <span style="font-size: 1.2em;">{{ object.bookingDate|date("d.m.Y") }}</span>
+            <span style="font-weight: 800">{{ object|render_list_element(admin.list['name']) }}</span>
             <span>
-                {% if object.actualPrice and not object.cancelled %}
-                    {{ block('contract') }}
-                {% endif %}
+                {% if object.actualPrice and not object.cancelled %}{{ block("contract") }}{% endif %}
             </span>
         </span>
     </div>
     <div class="col-xs-2">
         {% if not object.renterConsent and object.actualPrice and not object.cancelled %}
-            <span class="label label-danger">Contract not signed</span><br>
+            <span class="label label-danger">Contract not signed</span>
+            <br>
         {% elseif object.renterConsent and object.actualPrice %}
-            <span class="label label-success">Contract signed</span><br>
+            <span class="label label-success">Contract signed</span>
+            <br>
         {% endif %}
         {% if object.cancelled %}
             <span class="label label-info">Cancelled</span>
         {% else %}
             {% if object.itemsReturned %}
-                <span class="label label-success">Items Returned</span><br>
+                <span class="label label-success">Items Returned</span>
+                <br>
                 {% if object.actualPrice %}
-                    <span class="label label-{% if object.invoiceSent %}success">Invoice{% else %}danger">Invoice not{% endif %} sent</span><br>
-                    <span class="label label-{% if object.paid %}success">Paid{% else %}danger">Not paid{% endif %}</span>
+                    <span class="label label-{% if object.invoiceSent %}success">Invoice
+                    {% else %}
+                        danger">Invoice not
+                    {% endif %}
+                sent</span>
+                <br>
+                <span class="label label-{% if object.paid %}success">Paid
+                {% else %}
+                    danger">Not paid
                 {% endif %}
-            {% endif %}
+            </span>
         {% endif %}
-    </div>
-    <div class="col-xs-{% if object.actualPrice %}8{% else %}10{%endif%}" style="border-left: 1px solid #a2a2a2;">
-        <small>
-            Renter: {{ object|render_list_element(admin.list['renter']) }} {% if object.actualPrice and not object.cancelled %}- {{ block('contract') }}{% endif %}<br>
-            {% if object.retrieval and object.returning %}
-                From - To: {{ object.retrieval|date }} - {{ object.returning|date }}<br>
-            {% endif %}
-            {% if object.givenAwayBy %}
-                Given Away by: {{ object.givenAwayBy }}</br>
-            {% endif %}
-            {% if object.ReceivedBy %}
-                Received by: {{ object.ReceivedBy }}</br>
-            {% endif %}
-        </small>
-        {% if not object.itemsReturned %}
-            {{ block('brokenitems') }}
-        {% endif %}
-    </div>
-    {% if object.actualPrice and not object.cancelled %}
-        <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
-            Ref. {{ object.referenceNumber }}<br>
-            Price: {{ object.actualPrice }}€<br>
-        </div>
     {% endif %}
-    <style>
+{% endif %}
+</div>
+<div class="col-xs-{% if object.actualPrice %}8{% else %}10{% endif %}"
+     style="border-left: 1px solid #a2a2a2">
+    <small>
+        Renter: {{ object|render_list_element(admin.list['renter']) }}
+        {% if object.actualPrice and not object.cancelled %}- {{ block("contract") }}{% endif %}
+        <br>
+        {% if object.retrieval and object.returning %}
+            From - To: {{ object.retrieval|date }} - {{ object.returning|date }}
+            <br>
+        {% endif %}
+        {% if object.givenAwayBy %}
+            Given Away by: {{ object.givenAwayBy }}
+        </br>
+    {% endif %}
+    {% if object.ReceivedBy %}
+        Received by: {{ object.ReceivedBy }}
+    </br>
+{% endif %}
+</small>
+{% if not object.itemsReturned %}{{ block("brokenitems") }}{% endif %}
+</div>
+{% if object.actualPrice and not object.cancelled %}
+    <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
+        Ref. {{ object.referenceNumber }}
+        <br>
+        Price: {{ object.actualPrice }}€
+        <br>
+    </div>
+{% endif %}
+<style>
 .label-group>.label:first-child {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -72,37 +83,32 @@
     border-bottom-left-radius: 0;
     margin-left: 0;
 }
-    </style>
+</style>
 {% endblock %}
-
 {% block contract %}
     {% if object.renterHash %}
-        <a href="{{ path('entropy_tunkki_booking_hash', {
-                 'bookingid':object.id,
-                 'renterid':object.renter.id,
-                 'hash': object.renterHash}) }}">
+        <a href="{{ path('entropy_tunkki_booking_hash', { 'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
             Contract FI</a> |
-        <a href="/en{{ path('entropy_tunkki_booking_hash', {
-                 'bookingid':object.id,
-                 'renterid':object.renter.id,
-                 'hash': object.renterHash}) }}">
+            <a href="/en{{ path('entropy_tunkki_booking_hash', { 'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
             Contract ENG</a>
-    {% endif %}
-{% endblock %}
-
-{% block brokenitems %}
-    {% for item in object.items|filter(item=>item.needsFixing=='true') %}
-        <a class="btn btn-sm" style="display: inline-block;" href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
-            <i class="fa fa-medkit"></i>
-            {{ item.name }}
-        </a>
-    {% endfor %}
-    {% for package in object.packages %}
-        {% for item in package.itemsNeedingFixing %}
-            <a class="btn btn-sm" href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
+        {% endif %}
+    {% endblock %}
+    {% block brokenitems %}
+        {% for item in object.items|filter(item=>item.needsFixing=='true') %}
+            <a class="btn btn-sm"
+               style="display: inline-block"
+               href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
                 <i class="fa fa-medkit"></i>
                 {{ item.name }}
             </a>
         {% endfor %}
-    {% endfor %}
-{% endblock %}
+        {% for package in object.packages %}
+            {% for item in package.itemsNeedingFixing %}
+                <a class="btn btn-sm"
+                   href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
+                    <i class="fa fa-medkit"></i>
+                    {{ item.name }}
+                </a>
+            {% endfor %}
+        {% endfor %}
+    {% endblock %}

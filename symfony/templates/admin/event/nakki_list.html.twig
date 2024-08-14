@@ -6,7 +6,10 @@
                 <h1>{{ event }}</h1>
             </div>
             <div class="col-md-12">
-                <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+                <input type="button"
+                       value="Print"
+                       class="no-print btn btn-primary pull-right"
+                       onClick="window.print()">
                 {# <button class="no-print btn btn-secondary pull-right">
                     <a href="mailto:{{emails}}">Send mail to everyone</a>
                 </button> #}
@@ -14,47 +17,40 @@
             {% if nakkiBookings %}
                 <h3>Contacts</h3>
                 <table class="table table-sm table-striped">
-                    {{ block('tablehead') }}
+                    {{ block("tablehead") }}
                     <tbody>
-                    {% for nakki in nakkiBookings %}
-                        {% if nakki.member %}
-                        <tr>
-                            <td>
-                                <span class="">
-                                    {{ nakki.member.username }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="">
-                                    {{ nakki.member }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="">{{ nakki.member.email }}</span>
-                            </td>
-                            <td>
-                                <span class="">
-                                    {{ nakki.member.phone }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="">
-                                    {{ nakki.nakki.definition.name('fi') }}
-                                </span>
-                            </td>
-                            <td>
-                                <span class="">
-                                    {{ nakki.startAt|date('H:i') }}
-                                </span>
-                            </td>
-                        </tr>
-                        {% endif %}
-                    {% endfor %}
+                        {% for nakki in nakkiBookings %}
+                            {% if nakki.member %}
+                                <tr>
+                                    <td>
+                                        <span class="">{{ nakki.member.username }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="">{{ nakki.member }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="">{{ nakki.member.email }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="">{{ nakki.member.phone }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="">{{ nakki.nakki.definition.name("fi") }}</span>
+                                    </td>
+                                    <td>
+                                        <span class="">{{ nakki.startAt|date("H:i") }}</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
             {% endif %}
             <div class="col-md-12" style="page-break-after: always;">
-                <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()">
+                <input type="button"
+                       value="Print"
+                       class="no-print btn btn-primary pull-right"
+                       onClick="window.print()">
                 {# <button class="no-print btn btn-secondary pull-right">
                     <a href="mailto:{{emails}}">Send mail to everyone</a>
                 </button> #}
@@ -62,40 +58,38 @@
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-xs-12">
-                        <h3>Timetable
+                        <h3>
+                            Timetable
                             <small class="no-print">Click to hide table and reload the page to get it back</small>
                         </h3>
                     </div>
                     {% for nakki in event.nakkis %}
-                    <div class="col-xs-4" onClick="$(this).hide()">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>{{ nakki.definition.name(app.request.locale)}}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for hour in nakki.times %} 
-                                <tr>
-                                    <td>{{ hour|date('H:i')}}</td>
-                                    <td>
-                                        {% if nakki.memberByTime(hour) %}
-                                        {{ nakki.memberByTime(hour).username }}
-                                        {% endif %}
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                        <div class="col-xs-4" onClick="$(this).hide()">
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>{{ nakki.definition.name(app.request.locale) }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for hour in nakki.times %}
+                                        <tr>
+                                            <td>{{ hour|date("H:i") }}</td>
+                                            <td>
+                                                {% if nakki.memberByTime(hour) %}{{ nakki.memberByTime(hour).username }}{% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     {% endfor %}
-                </div>  
-            </div>  
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
-
 {% block tablehead %}
     <thead>
         <tr>

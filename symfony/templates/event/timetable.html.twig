@@ -1,14 +1,14 @@
 {% extends event.template %}
 {% block title %}
-{% set title = event.NameByLang(app.request.locale) ~ ' - ' ~ event.EventDate|date('d.m.Y, H:i') %}
-{{ title }} - {{ 'Timetable'|trans }} | Entropy ry
+    {% set title = event.NameByLang(app.request.locale) ~ ' - ' ~ event.EventDate|date('d.m.Y, H:i') %}
+    {{ title }} - {{ 'Timetable'|trans }} | Entropy ry
 {% endblock %}
 {% block content %}
-{% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-<div class="content">
-{{ block('content_timetable', input) ?? '' }}
-{{ block('timetable_to_page') }}
-<h2>VJ</h2>
-{{ block('vj_timetable_to_page') }}
-</div>
+    {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+    <div class="content">
+        {{ block('content_timetable', <built-in function input>) ?? '' }}
+        {{ block("timetable_to_page") }}
+        <h2>VJ</h2>
+        {{ block("vj_timetable_to_page") }}
+    </div>
 {% endblock %}

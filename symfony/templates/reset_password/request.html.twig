@@ -1,21 +1,19 @@
 {% extends 'twocolumn.html.twig' %}
-
 {% block content %}
-<div class="col-12">
-    {% for flashError in app.flashes('reset_password_error') %}
-        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
-    {% endfor %}
-    <h1>{{ 'reset_your_password'|trans }}</h1>
-
-    {{ form_start(requestForm) }}
-        {{ form_row(requestForm.email) }}
-        <div>
-            <small>
-                {{ 'reset_password_form_help'|trans }}
-            </small>
-        </div>
-
-        <input type="submit" class="btn btn-primary" data-turbo="false" value="{{ 'send_password_reset_email'|trans }}">
-    {{ form_end(requestForm) }}
-</div>
+    <div class="col-12">
+        {% for flashError in app.flashes('reset_password_error') %}
+            <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+        {% endfor %}
+        <h1>{{ 'reset_your_password'|trans }}</h1>
+        {{ form_start(requestForm) }}
+            {{ form_row(requestForm.email) }}
+            <div>
+                <small>{{ 'reset_password_form_help'|trans }}</small>
+            </div>
+            <input type="submit"
+                   class="btn btn-primary"
+                   data-turbo="false"
+                   value="{{ 'send_password_reset_email'|trans }}">
+        {{ form_end(requestForm) }}
+    </div>
 {% endblock %}

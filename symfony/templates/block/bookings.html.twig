@@ -1,95 +1,109 @@
 {% extends sonata_block.templates.block_base %}
 {% block block %}
-{% set shown = false %}
-<div class="box">
-    <div class="box-header">
-        <h3 class="box-title">Future Bookings</h3>
-    </div>
-    <div class="box-body">
-        {% for booking in bookings %}
-        {% if booking.bookingdate < date('now-1days') and shown == false %}
-        <h3 style="text-align: center;">Should be returned</h3>
-        {% set shown = true %}
-        {% endif %}
-        <div class="box box-solid collapsed-box">
-            <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
-                <div class="pull-left">
-                    {{ booking.bookingdate|date('d.m.Y') }}
-                    {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
-                    <br>
-                    <a href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">{{ booking.name }}</a>
-                </div>
-                <div class="box-tools pull-right" style="position:relative">
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">
-                        <i class="fa fa-pencil-square-o"></i> edit
-                    </a>
-                    <a class="btn btn-default btn-sm" href="{{ path('admin_app_booking_statusevent_create', {'id': booking.id}) }}">
-                        <i class="fa fa-pencil-square-o"></i>
-                        Change Status
-                    </a>
-                    <button class="btn btn-default btn-sm" data-widget="collapse"><i class="fa fa-plus"></i> Show Contents</button>
-                </div>
-            </div>
-            <div style="display: none;" class="box-body">
-                <div class="row">
-                    <div class="col-md-3">
-                        <div>Given away <br>{%if booking.retrieval %} {{ booking.retrieval|date('d.m.Y H:i') }}<br>{% endif %} 
-                            {% if booking.givenAwayBy %}
-                                {{ booking.givenAwayBy.username }}
-                            {% else %}
-                                nobody?
-                            {% endif %}
-                        </div>
-                        <hr>
-                        <div>Returning <br> {%if booking.returning %}{{ booking.returning|date('d.m.Y H:i') }} <br>{% endif %}
-                            {% if booking.receivedBy %}
-                                {{ booking.receivedBy.username }}
-                            {% else %}
-                                nobody?
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="col-md-5">
-                    {% for package in booking.packages %}
-                        {%if package is not empty %}
-                            Package: {{ package }}
-                            <ul>
-                            {% for item in package.items %}
-                            <li>
-                                {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-                                {{ item }}
-                            </li>
-                            {% endfor %}
-                            </ul>
-                        {% endif %}
-                    {% endfor %}
-                    {% if booking.accessories is not empty %}
-                        Accessories:
-                        <ul>
-                        {% for item in booking.accessories %}
-                        <li>{{ item }}</li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                    </div>
-                    <div class="col-md-4">
-                    {% if booking.items is not empty %}
-                        Items:
-                        <ul>
-                        {% for item in booking.items %}
-                        <li>
-                            {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}   
-                            {{ item }}
-                        </li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                    </div>
-                </div>
-            </div>
+    {% set shown = false %}
+    <div class="box">
+        <div class="box-header">
+            <h3 class="box-title">Future Bookings</h3>
         </div>
-    {% endfor %}
-    {# dump(bookings) #}
+        <div class="box-body">
+            {% for booking in bookings %}
+                {% if booking.bookingdate < date('now-1days') and shown == false %}
+                    <h3 style="text-align: center;">Should be returned</h3>
+                    {% set shown = true %}
+                {% endif %}
+                <div class="box box-solid collapsed-box">
+                    <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
+                        <div class="pull-left">
+                            {{ booking.bookingdate|date("d.m.Y") }}
+                            {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
+                            <br>
+                            <a href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">{{ booking.name }}</a>
+                        </div>
+                        <div class="box-tools pull-right" style="position:relative">
+                            <a class="btn btn-default btn-sm"
+                               href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">
+                                <i class="fa fa-pencil-square-o"></i> edit
+                            </a>
+                            <a class="btn btn-default btn-sm"
+                               href="{{ path('admin_app_booking_statusevent_create', {'id': booking.id}) }}">
+                                <i class="fa fa-pencil-square-o"></i>
+                                Change Status
+                            </a>
+                            <button class="btn btn-default btn-sm" data-widget="collapse">
+                                <i class="fa fa-plus"></i> Show Contents
+                            </button>
+                        </div>
+                    </div>
+                    <div style="display: none;" class="box-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div>
+                                    Given away
+                                    <br>
+                                    {% if booking.retrieval %}
+                                        {{ booking.retrieval|date("d.m.Y H:i") }}
+                                        <br>
+                                    {% endif %}
+                                    {% if booking.givenAwayBy %}
+                                        {{ booking.givenAwayBy.username }}
+                                    {% else %}
+                                        nobody?
+                                    {% endif %}
+                                </div>
+                                <hr>
+                                <div>
+                                    Returning
+                                    <br>
+                                    {% if booking.returning %}
+                                        {{ booking.returning|date("d.m.Y H:i") }}
+                                        <br>
+                                    {% endif %}
+                                    {% if booking.receivedBy %}
+                                        {{ booking.receivedBy.username }}
+                                    {% else %}
+                                        nobody?
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                {% for package in booking.packages %}
+                                    {% if package is not empty %}
+                                        Package: {{ package }}
+                                        <ul>
+                                            {% for item in package.items %}
+                                                <li>
+                                                    {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}
+                                                    {{ item }}
+                                                </li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if booking.accessories is not empty %}
+                                    Accessories:
+                                    <ul>
+                                        {% for item in booking.accessories %}<li>{{ item }}</li>{% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-4">
+                                {% if booking.items is not empty %}
+                                    Items:
+                                    <ul>
+                                        {% for item in booking.items %}
+                                            <li>
+                                                {% if item.needsFixing %}<i class="fa fa-medkit"></i>{% endif %}
+                                                {{ item }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            {# dump(bookings) #}
+        </div>
     </div>
-</div>
 {% endblock %}

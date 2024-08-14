@@ -1,9 +1,9 @@
 {% extends 'emails/base.html.twig' %}
 {% block content %}
-<div>
-    {{ body|replace({'{{ email }}': user_email})|raw }}
-    <hr>
-    <h1 style="text-align: center;">{{ qr.name }}</h1>
-    <img style="max-width: 100%" src="cid:ticket">
-</div>
+    <div>
+        {{ body|replace({'{{ email }}': user_email}) |raw }}
+        <hr>
+        <h1 style="text-align: center;">{{ qr.name }}</h1>
+        <img style="max-width: 100%" src="cid:ticket">
+    </div>
 {% endblock %}

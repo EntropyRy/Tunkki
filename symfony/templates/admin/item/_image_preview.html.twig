@@ -1,11 +1,10 @@
 {% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
 {% block field %}
-<div>
-    {% if object != null and object.file.providerName == 'sonata.media.provider.image' %}
-    <img src="{{ sonata_path( object.file, 'small') }}">
-    {% else %}
-    <span>No picture</span>
-    {% endif %}
-</div>
+    <div>
+        {% if object != null and object.file.providerName == 'sonata.media.provider.image' %}
+            <img src="{{ sonata_path(object.file, 'small') }}">
+        {% else %}
+            <span>No picture</span>
+        {% endif %}
+    </div>
 {% endblock %}
-

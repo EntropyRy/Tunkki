@@ -1,14 +1,11 @@
 {% extends 'onecolumn.html.twig' %}
-
 {% block title %}{{'reset_your_password'|trans}}{% endblock %}
-
 {% block content %}
-<div class="col-12">
-    <h1>{{'reset_your_password'|trans}}</h1>
-
-    {{ form_start(resetForm) }}
-        {{ form_row(resetForm.plainPassword) }}
-        <button class="btn btn-primary">{{'Reset password'|trans}}</button>
-    {{ form_end(resetForm) }}
-</div>
+    <div class="col-12">
+        <h1>{{'reset_your_password'|trans}}</h1>
+        {{ form_start(resetForm) }}
+            {{ form_row(resetForm.plainPassword) }}
+            <button class="btn btn-primary">{{'Reset password'|trans}}</button>
+        {{ form_end(resetForm) }}
+    </div>
 {% endblock %}

@@ -1,33 +1,41 @@
 {% extends 'onecolumn.html.twig' %}
 {% block content %}
-<div class="col-md-8 col-xl-6 mx-auto mb-3">
-    {% if email %}
-        <p>{{ 'member.join.info'|trans }}</p>
-        <code class="bg-gray">
-        {{ email.body|raw }}
-        </code>
-        <a href="{{ path('app_login') }}" type="button" class="btn btn-primary">{{ 'sign_in'|trans }}</a>
-    {% else %}
-        <h1>{{ 'register_as_member'|trans }}</h1>
-        {{ form_start(form) }}
-          {{ form_row(form.username) }}
-		  <div class="row">
-          {{ form_row(form.firstname, {'row_attr': {'class': 'col-6'}}) }}
-          {{ form_row(form.lastname, {'row_attr': {'class': 'col-6'}}) }}
-		  </div>
-		  <div class="row">
-          {{ form_row(form.email, {'row_attr': {'class': 'col-6'}}) }}
-          {{ form_row(form.phone, {'row_attr': {'class': 'col-6'}}) }}
-		  </div>
-          {{ form_row(form.CityOfResidence) }}
-          {{ form_row(form.StudentUnionMember) }}
-          {{ form_row(form.user.plainPassword) }}
-          {{ form_row(form.locale, {'row_attr': {'class': 'd-none'}}) }}
-          {{ form_row(form.theme, {'row_attr': {'class': 'd-none'}}) }}
-          <div class="mb-3"><small>{{ 'submit_and_agree'|trans }}</small></div>
-          <a target="privacypolicy" href="/rekisteriseloste" type="button" class="btn btn-secondary">{{ 'privacy_policy'|trans }}</a>
-          <input data-turbo="false" class="btn btn-primary float-end" type="submit" value="{{ 'Submit'|trans }}" />
-        {{ form_end(form) }}
-    {% endif %}
-</div>
+    <div class="col-md-8 col-xl-6 mx-auto mb-3">
+        {% if email %}
+            <p>{{ 'member.join.info'|trans }}</p>
+            <code class="bg-gray">
+                {{ email.body|raw }}
+            </code>
+            <a href="{{ path("app_login") }}" type="button" class="btn btn-primary">{{ 'sign_in'|trans }}</a>
+        {% else %}
+            <h1>{{ 'register_as_member'|trans }}</h1>
+            {{ form_start(form) }}
+                {{ form_row(form.username) }}
+                <div class="row">
+                    {{ form_row(form.firstname, {'row_attr': {'class': 'col-6' }}) }}
+                    {{ form_row(form.lastname, {'row_attr': {'class': 'col-6' }}) }}
+                </div>
+                <div class="row">
+                    {{ form_row(form.email, {'row_attr': {'class': 'col-6' }}) }}
+                    {{ form_row(form.phone, {'row_attr': {'class': 'col-6' }}) }}
+                </div>
+                {{ form_row(form.CityOfResidence) }}
+                {{ form_row(form.StudentUnionMember) }}
+                {{ form_row(form.user.plainPassword) }}
+                {{ form_row(form.locale, {'row_attr': {'class': 'd-none' }}) }}
+                {{ form_row(form.theme, {'row_attr': {'class': 'd-none' }}) }}
+                <div class="mb-3">
+                    <small>{{ 'submit_and_agree'|trans }}</small>
+                </div>
+                <a target="privacypolicy"
+                   href="/rekisteriseloste"
+                   type="button"
+                   class="btn btn-secondary">{{ 'privacy_policy'|trans }}</a>
+                <input data-turbo="false"
+                       class="btn btn-primary float-end"
+                       type="submit"
+                       value="{{ 'Submit'|trans }}" />
+            {{ form_end(form) }}
+        {% endif %}
+    </div>
 {% endblock %}

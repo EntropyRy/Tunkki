@@ -1,33 +1,36 @@
 {% extends '@SonataAdmin/CRUD/base_list.html.twig' %}
-
 {% import _self as tree %}
 {% macro navigate_child(collection, admin, root, depth) %}
     {% import _self as tree %}
-    <ul{% if root %} class="sonata-tree sonata-tree--toggleable js-treeview"{% endif %}>
+    <ul {% if root %}class="sonata-tree sonata-tree--toggleable js-treeview"{% endif %}>
         {% for element in collection|sort((a, b) => a.position <=> b.position) %}
-            <li class="sonata-ba-list-field" objectId="{{ element.id }}" >
-                <div class="sonata-tree__item"{% if depth < 2 %} data-treeview-toggled{% endif %}>
+            <li class="sonata-ba-list-field" objectId="{{ element.id }}">
+                <div class="sonata-tree__item"
+                     {% if depth < 2 %}data-treeview-toggled{% endif %}>
                     {% if element.parent or root %}<i class="fa fa-caret-right" data-treeview-toggler></i>{% endif %}
                     {% if admin.hasRoute('edit') and admin.hasAccess('edit') %}
-                        <a class="sonata-tree__item__edit" href="{{ admin.generateObjectUrl('edit', element) }}">{{ element.label }}</a>
+                        <a class="sonata-tree__item__edit"
+                           href="{{ admin.generateObjectUrl('edit', element) }}">{{ element.label }}</a>
                     {% elseif admin.hasRoute('show') and admin.hasAccess('show') %}
-                        <a class="sonata-tree__item__edit" href="{{ admin.generateObjectUrl('show', element) }}">{{ element.label }}</a>
+                        <a class="sonata-tree__item__edit"
+                           href="{{ admin.generateObjectUrl('show', element) }}">{{ element.label }}</a>
                     {% else %}
                         {{ element.label }}
                     {% endif %}
-                    <a class="label label-default pull-right" href="{{ admin.generateObjectUrl('edit', element) }}">edit <i class="fa fa-magic"></i></a>
-                    {% if element.enabled %}<span class="label label-success pull-right"><i class="fa fa-check"></i> {{ 'active'|trans }}</span>{% endif %}
-                    {% if not element.enabled %}<span class="label label-danger pull-right"><i class="fa fa-times"></i> {{ 'disabled'|trans }}</span>{% endif %}
+                    <a class="label label-default pull-right"
+                       href="{{ admin.generateObjectUrl('edit', element) }}">edit <i class="fa fa-magic"></i></a>
+                    {% if element.enabled %}
+                        <span class="label label-success pull-right"><i class="fa fa-check"></i> {{ 'active'|trans }}</span>
+                    {% endif %}
+                    {% if not element.enabled %}
+                        <span class="label label-danger pull-right"><i class="fa fa-times"></i> {{ 'disabled'|trans }}</span>
+                    {% endif %}
                 </div>
-
-                {% if element.children|length %}
-                    {{ tree.navigate_child(element.children, admin, false, depth + 1) }}
-                {% endif %}
+                {% if element.children|length %}{{ tree.navigate_child(element.children, admin, false, depth + 1) }}{% endif %}
             </li>
         {% endfor %}
     </ul>
 {% endmacro %}
-
 {# block tab_menu %}
     {% include '@SonataClassification/CategoryAdmin/list_tab_menu.html.twig' with {
         'mode':   'tree',
@@ -35,14 +38,11 @@
         'admin':  admin,
     } only %}
 {% endblock %#}
-
 {% block list_table %}
     <div class="col-xs-12 col-md-12">
         <div class="box box-primary">
             <div class="box-header">
-                <h1 class="box-title">
-                    {{ 'tree_catalog_title'|trans }}
-                </h1>
+                <h1 class="box-title">{{ 'tree_catalog_title'|trans }}</h1>
             </div>
             <div class="box-content">
                 {% if menu is empty %}

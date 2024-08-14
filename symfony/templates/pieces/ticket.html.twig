@@ -1,127 +1,117 @@
 {% block ticket_for_frontpage %}
-{% apply spaceless %}
-{% if event.ticketsEnabled and app.user %}
-<div class="pt-2 pb-2" id="ticket">
-    <div class="col-md-6 mx-auto clearfix">
-        <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y')}) }}">
-            {{ 'ticket.go_to_event_page'|trans }}
-            </a>
-    </div>
-</div>
-{% endif %}
+    {% apply spaceless %}
+    {% if event.ticketsEnabled and app.user %}
+        <div class="pt-2 pb-2" id="ticket">
+            <div class="col-md-6 mx-auto clearfix">
+                <a class="btn btn-primary w-100"
+                   href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                    {{ 'ticket.go_to_event_page'|trans }}
+                </a>
+            </div>
+        </div>
+    {% endif %}
 {% endapply %}
 {% endblock %}
 {% block ticket_for_event_page %}
-{% apply spaceless %}
-{% if event.ticketsEnabled and app.user %}
-<div class="pt-2 pb-2" id="ticket">
-    {# <p>{{'ticket.info'|trans|raw}}</p> #}
-    <div class="col-md-6 mx-auto clearfix">
-    {% for ticket in tickets %}
-        <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_ticket', {
-                   'slug': event.url,
-                   'year': event.eventdate|date('Y'),
-                   'reference': ticket.referenceNumber
-            }) }}"
-            >
-            {% if ticket.owner == app.user.member %}
-            {{ 'ticket.details'|trans }}: {{ ticket.name }}
-            {% else %}
-            {{ 'ticket.reserve_yours'|trans }}
-            {% endif %}
-            </a>
-    {% else %}
-        {% if event.ticketPresaleEnabled %}
-            <a class="btn btn-primary w-100"
-               >{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
-        {% else %}
-            <a class="btn btn-primary w-100"
-                href="{{ path('entropy_event_ticket_sale', {
-                       'slug': event.url,
-                       'year': event.eventdate|date('Y'),
-                }) }}"
-                >
-                {{ 'ticket.reserve_yours'|trans }}
-            </a>
-        {% endif %}
-    {% endfor %}
-    </div>
-</div>
-{% endif %}
-{% endapply %}
-{% endblock %}
-
-{% block multi_ticket %}
-<h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ qr.name }}</h1>
-<div class="qr-code text-center">
-<img style="max-width: 100%" src="data:image/png;base64,{{ qr.qr }}">
-</div>
-{% endblock %}
-
-{% block ticket %}
-{#<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
-{{ event.ticketInfo(app.request.locale)|raw }} #}
-<h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ ticket.name(app.request.locale) }}</h1>
-{% if ticket.status == 'reserved' %}
-<h4>{{ 'ticket.payment_info'|trans }}</h4>
-<dt>
-    <dt>{{ 'ticket.recipient'|trans }}</dt>
-    <dd>Entropy Ry</dd>
-    <dt>{{ 'Bank Account'|trans }}</dt>
-    <dd>FI42 7997 7997 0149 02</dd>
-    <dt>{{ 'ticket.reference_number'|trans }}<dt>
-    <dd>{{ ticket.referenceNumber }}</dd>
-    <dt>{{ 'ticket.sum'|trans }}<dt>
-    <dd>{{ ticket.price }}€</dd>
-</dt>
-{% elseif ticket.status == 'available' %}
-    {{ form_start(form) }}
-    <input class="btn w-100
-       {% if not hasNakki and nakkiRequired %}btn-danger disabled" disabled{% else %}btn-success"{% endif %}
-       type="submit" value="{{ 'ticket.form.reserve'|trans }}">
-    {{ form_rest(form) }}
-    {{ form_end(form) }}
-{% elseif ticket.status == 'paid' %}
-<div class="qr-code text-center">
-<img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
-</div>
-{% endif %}
-{% endblock %}
-
-{% block stripe_ticket %}
-{% apply spaceless %}
-{% if event.ticketsEnabled %}
-<div class="pt-2 pb-2" id="ticket">
-    {# <p>{{'ticket.info'|trans|raw}}</p> #}
-    <div class="col-md-6 mx-auto clearfix">
-    {% if tickets|length > 0 %}
-        <a class="btn btn-primary w-100"
-            href="{{ path('entropy_event_tickets', {
-                   'slug': event.url,
-                   'year': event.eventdate|date('Y'),
-            }) }}"
-            >
-            {{ 'ticket.details'|trans }}
-            </a>
-    {% else %}
-        {% if event.ticketPresaleEnabled %}
-            <a class="btn btn-primary w-100"
-               >{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
-        {% else %}
-            <a class="btn btn-primary w-100"
-                href="{{ path('entropy_event_shop', {
-                       'slug': event.url,
-                       'year': event.eventdate|date('Y'),
-                }) }}"
-                >
-                {{ 'ticket.buy_yours'|trans }}
-            </a>
-        {% endif %}
+    {% apply spaceless %}
+    {% if event.ticketsEnabled and app.user %}
+        <div class="pt-2 pb-2" id="ticket">
+            {# <p>{{'ticket.info'|trans|raw}}</p> #}
+            <div class="col-md-6 mx-auto clearfix">
+                {% for ticket in tickets %}
+                    <a class="btn btn-primary w-100"
+                       href="{{ path('entropy_event_ticket', { 'slug': event.url, 'year': event.eventdate|date('Y') , 'reference': ticket.referenceNumber }) }}">
+                        {% if ticket.owner == app.user.member %}
+                            {{ 'ticket.details'|trans }}: {{ ticket.name }}
+                        {% else %}
+                            {{ 'ticket.reserve_yours'|trans }}
+                        {% endif %}
+                    </a>
+                {% else %}
+                    {% if event.ticketPresaleEnabled %}
+                        <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
+                    {% else %}
+                        <a class="btn btn-primary w-100"
+                           href="{{ path('entropy_event_ticket_sale', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                            {{ 'ticket.reserve_yours'|trans }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     {% endif %}
-    </div>
-</div>
-{% endif %}
 {% endapply %}
 {% endblock %}
+{% block multi_ticket %}
+    <h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ qr.name }}</h1>
+    <div class="qr-code text-center">
+        <img style="max-width: 100%" src="data:image/png;base64,{{ qr.qr }}">
+    </div>
+{% endblock %}
+{% block ticket %}
+    {#<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
+{{ event.ticketInfo(app.request.locale)|raw }} #}
+    <h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ ticket.name(app.request.locale) }}</h1>
+    {% if ticket.status == 'reserved' %}
+        <h4>{{ 'ticket.payment_info'|trans }}</h4>
+        <dt>
+            <dt>{{ 'ticket.recipient'|trans }}</dt>
+            <dd>
+                Entropy Ry
+            </dd>
+            <dt>{{ 'Bank Account'|trans }}</dt>
+            <dd>
+                FI42 7997 7997 0149 02
+            </dd>
+            <dt>
+                {{ 'ticket.reference_number'|trans }}
+                <dt>
+                    <dd>
+                        {{ ticket.referenceNumber }}
+                    </dd>
+                    <dt>
+                        {{ 'ticket.sum'|trans }}
+                        <dt>
+                            <dd>
+                                {{ ticket.price }}€
+                            </dd>
+                        </dt>
+                    {% elseif ticket.status == 'available' %}
+                        {{ form_start(form) }}
+                            <input class="btn w-100
+                                {% if not hasNakki and nakkiRequired %}btn-danger disabled" disabled{% else %}btn-success"{% endif %}
+                                type="submit" value="{{ 'ticket.form.reserve'|trans }}">
+                                {{ form_rest(form) }}
+                            {{ form_end(form) }}
+                        {% elseif ticket.status == 'paid' %}
+                            <div class="qr-code text-center">
+                                <img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+                    {% block stripe_ticket %}
+                        {% apply spaceless %}
+                        {% if event.ticketsEnabled %}
+                            <div class="pt-2 pb-2" id="ticket">
+                                {# <p>{{'ticket.info'|trans|raw}}</p> #}
+                                <div class="col-md-6 mx-auto clearfix">
+                                    {% if tickets|length > 0 %}
+                                        <a class="btn btn-primary w-100"
+                                           href="{{ path('entropy_event_tickets', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                                            {{ 'ticket.details'|trans }}
+                                        </a>
+                                    {% else %}
+                                        {% if event.ticketPresaleEnabled %}
+                                            <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
+                                        {% else %}
+                                            <a class="btn btn-primary w-100"
+                                               href="{{ path('entropy_event_shop', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                                                {{ 'ticket.buy_yours'|trans }}
+                                            </a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endapply %}
+                {% endblock %}

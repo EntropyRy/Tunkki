@@ -1,10 +1,14 @@
 {% for label, messages in app.flashes %}
     <div class="col-md-8 mx-auto">
-    {% for message in messages %}
-        <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-             <i class="fas fa-arrow-right"></i>  {{ message|trans }}
-             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-    {% endfor %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show"
+                 role="alert">
+                <i class="fas fa-arrow-right"></i>  {{ message|trans }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Close"></button>
+            </div>
+        {% endfor %}
     </div>
 {% endfor %}

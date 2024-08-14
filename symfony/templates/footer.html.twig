@@ -1,7 +1,7 @@
 <footer class="row mt-4" data-turbo-frame="footer">
     <div class="col-12 p-4">
         <div class="fs-5 mb-2">
-            <span class="float-end" {{ stimulus_controller('share') }}>
+            <span class="float-end" {{ stimulus_controller("share") }}>
                 <button data-action="share#shareUrl" class="btn btn-sm btn-secondary">
                     {{ 'share.share'|trans }}
                     <i class="fa fa-share"></i>
@@ -13,17 +13,19 @@
             <div class="col">
                 <h5 class="text-center text-sm-start">{{ 'Address'|trans }}</h5>
                 <p class="ms-4">
-                    Jämeräntaival 3 A 1<br>
-                    02150 Espoo<br>
+                    Jämeräntaival 3 A 1
+                    <br>
+                    02150 Espoo
+                    <br>
                     {{ 'Finland'|trans }}
                 </p>
             </div>
-        {{ sonata_page_render_container('footer', 'global') }}
-    </div>
-    <div class="col-12 mt-2">
-        <div class="d-block d-sm-flex justify-content-between">
-        {{ sonata_page_render_container('footer2', 'global') }}
+            {{ sonata_page_render_container('footer', 'global') }}
         </div>
-    <small>{{ 'cookie_policy'|trans }}{% if not app.user %} <small>{{ 'whisper'|trans|raw }}</small>{% endif %}</small>
-    </div>
-</footer>
+        <div class="col-12 mt-2">
+            <div class="d-block d-sm-flex justify-content-between">{{ sonata_page_render_container('footer2', 'global') }}</div>
+            <small>{{ 'cookie_policy'|trans }}
+                {% if not app.user %}<small>{{ 'whisper'|trans|raw }}</small>{% endif %}
+            </small>
+        </div>
+    </footer>

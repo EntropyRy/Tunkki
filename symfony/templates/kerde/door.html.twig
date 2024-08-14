@@ -1,40 +1,40 @@
 {% extends 'onecolumn.html.twig' %}
-{% block title %}
-{{ 'profile.door.opener'|trans|capitalize }} | Entropy ry
-{% endblock %}
-
+{% block title %}{{ 'profile.door.opener'|trans|capitalize }} | Entropy ry{% endblock %}
 {% block content %}
-<div class="col-md-12">
-    <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
-    <div class="mx-auto barcode" style="width:246px;">
-        {{ barcode.1|raw }}
-        <p class="text-center">Code: {{ barcode.0 }}</p>
+    <div class="col-md-12">
+        <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
+            <div class="mx-auto barcode" style="width:246px;">
+                {{ barcode.1|raw }}
+                <p class="text-center">Code: {{ barcode.0 }}</p>
+            </div>
+        </div>
+        <a class="btn w-100 btn-primary" href="{{ path("kerde_barcodes") }}">{{ 'Control barcodes'|trans }}</a>
+        <hr>
+        <h1>{{ 'profile.door.opener'|trans|capitalize }}</h1>
+        <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
+        {% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
+            {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input class="btn btn-primary w-100"
+                       type="submit"
+                       value="{{ 'profile.door.open_the_door'|trans|capitalize }}" />
+            {{ form_end(form) }}
+            <ul class="fa-ul mt-3">
+                {% for log in logs %}
+                    <li>
+                        <span class="fa-li"><i class="fas fa-key"></i></span>
+                        {{ log.createdAt|date }} {{ log.member }}: {{ log.message|default("profile.door.no_message") |trans }}
+                    </li>
+                {% endfor %}
+            </ul>
+            <hr>
+            <h1>Stream</h1>
+            <div class="d-flex justify-content-between">
+                <a class="btn btn-danger" href="{{ path("recording_start") }}"><i class="fas fa-play"></i> Start Stream</a>
+                <a class="btn btn-danger" href="{{ path("recording_stop") }}"><i class="fas fa-stop"></i> Stop Stream</a>
+            </div>
+        {% else %}
+            <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
+        {% endif %}
     </div>
-    </div>
-    <a class="btn w-100 btn-primary" href="{{ path('kerde_barcodes') }}">{{ 'Control barcodes'|trans }}</a>
-    <hr>
-    <h1>{{ 'profile.door.opener'|trans|capitalize }}</h1>
-    <p>{{ 'profile.door.last'|trans|capitalize }}: {{ status }}</p>
-{% if member.isActiveMember and not member.denyKerdeAccess|default(false) %}
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <input class="btn btn-primary w-100" type="submit" value="{{ 'profile.door.open_the_door'|trans|capitalize }}" />
-    {{ form_end(form) }}
-    <ul class="fa-ul mt-3">
-    {% for log in logs %}
-    <li><span class="fa-li"><i class="fas fa-key"></i></span>
-        {{ log.createdAt|date }} {{ log.member }}: {{ log.message|default('profile.door.no_message')|trans }}
-    </li>
-    {% endfor %}
-    </ul>
-    <hr>
-    <h1>Stream</h1>
-    <div class="d-flex justify-content-between">
-    <a class="btn btn-danger" href="{{ path('recording_start') }}"><i class="fas fa-play"></i> Start Stream</a>
-    <a class="btn btn-danger" href="{{ path('recording_stop') }}"><i class="fas fa-stop"></i> Stop Stream</a>
-    </div>
-{% else %}
-<h4>{{ 'profile.door.not_active_member'|trans }}</h4>
-{% endif %}
-</div>
 {% endblock %}

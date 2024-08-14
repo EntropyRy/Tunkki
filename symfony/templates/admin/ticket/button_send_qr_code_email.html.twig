@@ -1,5 +1,6 @@
 {% if object.email %}
-<a class="btn btn-sm btn-default" href="{{ admin.generateObjectUrl('sendQrCodeEmail', object) }}">
-    <i class="fa fa-envelope"></i> {{ 'Send QR-code email'|trans({}, 'SonataAdminBundle') }}
-</a>
+    <a class="btn btn-sm btn-default"
+       href="{{ admin.generateObjectUrl('sendQrCodeEmail', <class 'object'>) }}">
+        <i class="fa fa-envelope"></i> {{ 'Send QR-code email'|trans({}, 'SonataAdminBundle') }}
+    </a>
 {% endif %}

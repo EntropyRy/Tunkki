@@ -1,31 +1,41 @@
 {% extends 'onecolumn.html.twig' %}
-
 {% block content %}
-<div class="col-md-12">
-<h1>{{ 'calendar.heading'|trans }}</h1>
-<p>{{ 'calendar.help'|trans }}</p>
-      {{ form_start(form) }}
-      {{ form_widget(form) }}
-      <input class="btn btn-primary" data-turbo="false" type="submit" value="{{ 'calendar.generate'|trans|capitalize }}" />
-      {{ form_end(form) }}
-{% if url %}
-<p class="mt-3">{{ 'calendar.help2'|trans }}</p>
-<p>
-<ul>
-<li><a href="https://support.google.com/calendar/answer/37100?hl=en&co=GENIE.Platform=Desktop">Google</a></li>
-<li><a href="https://support.microsoft.com/en-us/office/import-or-subscribe-to-a-calendar-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c">Outlook</a></li>
-<li><a href="https://proton.me/support/subscribe-to-external-calendar">Proton</a></li>
-<li><a href="https://support.apple.com/en-gb/guide/iphone/iph3d1110d4/ios">Apple</a></li>
-</ul>
-</p>
-<div class="input-group">
-<input type="text" class="form-control" aria-label="{{ url }}" value="{{ url }}" />
-<button class="btn btn-primary btn-lg"
-      {{ stimulus_controller('share', {'url': url, 'title': 'calendar.url'|trans}) }}
-      {{ stimulus_action('share', 'copyToClipboard') }}
-      >{{ 'share.copy'|trans }}
-</button>
-</div>
-{% endif %}
-</div>
+    <div class="col-md-12">
+        <h1>{{ 'calendar.heading'|trans }}</h1>
+        <p>{{ 'calendar.help'|trans }}</p>
+        {{ form_start(form) }}
+            {{ form_widget(form) }}
+            <input class="btn btn-primary"
+                   data-turbo="false"
+                   type="submit"
+                   value="{{ 'calendar.generate'|trans|capitalize }}" />
+        {{ form_end(form) }}
+        {% if url %}
+            <p class="mt-3">{{ 'calendar.help2'|trans }}</p>
+            <p>
+                <ul>
+                    <li>
+                        <a href="https://support.google.com/calendar/answer/37100?hl=en&co=GENIE.Platform=Desktop">Google</a>
+                    </li>
+                    <li>
+                        <a href="https://support.microsoft.com/en-us/office/import-or-subscribe-to-a-calendar-in-outlook-com-cff1429c-5af6-41ec-a5b4-74f2c278e98c">Outlook</a>
+                    </li>
+                    <li>
+                        <a href="https://proton.me/support/subscribe-to-external-calendar">Proton</a>
+                    </li>
+                    <li>
+                        <a href="https://support.apple.com/en-gb/guide/iphone/iph3d1110d4/ios">Apple</a>
+                    </li>
+                </ul>
+            </p>
+            <div class="input-group">
+                <input type="text"
+                       class="form-control"
+                       aria-label="{{ url }}"
+                       value="{{ url }}" />
+                <button class="btn btn-primary btn-lg" {{ stimulus_controller('share', {'url': url, 'title': 'calendar.url'|trans}) }} {{ stimulus_action('share', 'copyToClipboard') }}>{{ 'share.copy'|trans }}
+                </button>
+            </div>
+        {% endif %}
+    </div>
 {% endblock %}

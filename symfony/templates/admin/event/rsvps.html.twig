@@ -8,8 +8,13 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <h3>Door list
-                <input type="button" value="Print" class="no-print btn btn-primary pull-right" onClick="window.print()"></h3>
+                <h3>
+                    Door list
+                    <input type="button"
+                           value="Print"
+                           class="no-print btn btn-primary pull-right"
+                           onClick="window.print()">
+                </h3>
                 {% if rsvps %}
                     <table class="table table-condensed table-striped">
                         <thead>
@@ -22,26 +27,28 @@
                         </thead>
                         <tbody>
                             {% for rsvp in rsvps|sort((a, b) => a.availableLastName <=> b.availableLastName) %}
-                            <tr>
-                                <td><input type="checkbox"></td>
-                                {% if rsvp.member %}
-                                    <td>{{ rsvp.member.lastName }}</td>
-                                    <td>{{ rsvp.member.firstName }}</td>
+                                <tr>
                                     <td>
-                                        {% if rsvp.member.acceptedAsHonoraryMember %}
-                                            HC Member
-                                        {% elseif rsvp.member.isActiveMember %}
-                                            Active Member
-                                        {% else %}
-                                            Member
-                                        {% endif %}
+                                        <input type="checkbox">
                                     </td>
-                                {% else %}
-                                    <td>{{ rsvp.lastName }}</td>
-                                    <td>{{ rsvp.firstName }}</td>
-                                    <td></td>
-                                {% endif %}
-                            </tr>
+                                    {% if rsvp.member %}
+                                        <td>{{ rsvp.member.lastName }}</td>
+                                        <td>{{ rsvp.member.firstName }}</td>
+                                        <td>
+                                            {% if rsvp.member.acceptedAsHonoraryMember %}
+                                                HC Member
+                                            {% elseif rsvp.member.isActiveMember %}
+                                                Active Member
+                                            {% else %}
+                                                Member
+                                            {% endif %}
+                                        </td>
+                                    {% else %}
+                                        <td>{{ rsvp.lastName }}</td>
+                                        <td>{{ rsvp.firstName }}</td>
+                                        <td></td>
+                                    {% endif %}
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -49,7 +56,6 @@
             </div>
         </div>
     </div>
-
     <script>
     function copyToClipBoard(){
         navigator.clipboard.writeText($('.mails').text());

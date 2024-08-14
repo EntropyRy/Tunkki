@@ -1,30 +1,41 @@
 {% extends 'fullcolumn.html.twig' %}
-
 {% block content %}
-<div class="col-xl-6 col-md-10 mx-auto">
-<p>{{ 'login.join_us'|trans|raw }}</p>
-<h1 class="h3 mb-3 font-weight-normal">{{ 'Choose login method'|trans }}</h1>
-<div class="col-12">
-    <a class="btn btn-lg btn-primary w-100" href="{{ path('_entropy_mattermost_auth') }}">
-        <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}"> {{ 'Mattermost login'|trans }}
-    </a>
-</div>
-    <div class="linetext">
-        <span>{{ 'OR'|trans }}</span>
-    </div>
-<form action="{{ path('app_login') }}" method="post">
-    {% if error %}
-        <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
-
-    <label for="inputEmail">{{ 'email'|trans }}</label>
-    <input type="email" value="{{ last_username }}" name="_username" id="inputEmail" class="form-control" required autofocus>
-    <label for="inputPassword">{{ 'password'|trans }}</label>
-    <input type="password" name="_password" id="inputPassword" class="form-control" required>
-    {# <input type="hidden" name="_target_path" value="{{ path('dashboard') }}"> #}
-    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
-
-    {#
+    <div class="col-xl-6 col-md-10 mx-auto">
+        <p>{{ 'login.join_us'|trans|raw }}</p>
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'Choose login method'|trans }}</h1>
+        <div class="col-12">
+            <a class="btn btn-lg btn-primary w-100"
+               href="{{ path("_entropy_mattermost_auth") }}">
+                <img height="23" src="{{ asset("/images/mattermost-logo.svg") }}">
+                {{ 'Mattermost login'|trans }}
+            </a>
+        </div>
+        <div class="linetext">
+            <span>{{ 'OR'|trans }}</span>
+        </div>
+        <form action="{{ path("app_login") }}" method="post">
+            {% if error %}
+                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+            <label for="inputEmail">{{ 'email'|trans }}</label>
+            <input type="email"
+                   value="{{ last_username }}"
+                   name="_username"
+                   id="inputEmail"
+                   class="form-control"
+                   required
+                   autofocus>
+            <label for="inputPassword">{{ 'password'|trans }}</label>
+            <input type="password"
+                   name="_password"
+                   id="inputPassword"
+                   class="form-control"
+                   required>
+            {# <input type="hidden" name="_target_path" value="{{ path('dashboard') }}"> #}
+            <input type="hidden"
+                   name="_csrf_token"
+                   value="{{ csrf_token("authenticate") }}">
+            {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
         See https://symfony.com/doc/current/security/remember_me.html
 
@@ -34,17 +45,18 @@
             </label>
         </div>
     #}
-    <br>
-    <div class="d-flex flex-row justify-content-around">
-        <div class="flex-fill">
-            <a class="btn btn-secondary" href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
-        </div>
-        <div>
-            <button class="btn btn-primary" type="submit" data-turbo="false">
-                <i class="fas fa-sign-in-alt"></i> {{ 'sign_in'|trans }}
-            </button>
-        </div>
+            <br>
+            <div class="d-flex flex-row justify-content-around">
+                <div class="flex-fill">
+                    <a class="btn btn-secondary"
+                       href="{{ path("app_forgot_password_request") }}">{{ 'forgot_password'|trans }}</a>
+                </div>
+                <div>
+                    <button class="btn btn-primary" type="submit" data-turbo="false">
+                        <i class="fas fa-sign-in-alt"></i> {{ 'sign_in'|trans }}
+                    </button>
+                </div>
+            </div>
+        </form>
     </div>
-</form>
-</div>
 {% endblock %}

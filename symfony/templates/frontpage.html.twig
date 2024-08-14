@@ -1,69 +1,50 @@
 {% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-{% set name_attr = 'name_attribute'|trans %}
-{% set content_attr = 'content_attribute'|trans %}
-<div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" {{ stimulus_controller('masonry') }} data-masonry-target="masonry">
-{#    <turbo-frame id="stream">
+    {% set name_attr = 'name_attribute'|trans %}
+    {% set content_attr = 'content_attribute'|trans %}
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" {{ stimulus_controller("masonry") }} data-masonry-target="masonry">
+        {#    <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
         </div>
     </turbo-frame> #}
-    {% for event in events %}
-        {% if app.user %}
-            {% set visible = true %}
-        {% else %}
-            {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
-        {% endif %}
-        {% if event is not null and visible %}
-        <div class="col p-2">
-        {{ block('event_tile') }}
-        </div>
-        {% endif %}
-    {% endfor %}
-    <div class="col p-2">
-    {{ block('epic_tile') }}
+        {% for event in events %}
+            {% if app.user %}
+                {% set visible = true %}
+            {% else %}
+                {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
+            {% endif %}
+            {% if event is not null and visible %}<div class="col p-2">{{ block("event_tile") }}</div>{% endif %}
+        {% endfor %}
+        <div class="col p-2">{{ block("epic_tile") }}</div>
+        {% if info is not null %}<div class="col p-2">{{ block("artist_tile") }}</div>{% endif %}
+        {% if not app.user %}<div class="col p-2">{{ block("join_us_tile") }}</div>{% endif %}
+        <div class="col p-2">{{ block("stream_tile") }}</div>
     </div>
-    {% if info is not null %}
-        <div class="col p-2">
-        {{ block('artist_tile') }}
-        </div>
-    {% endif %}
-    {% if not app.user %}
-        <div class="col p-2">
-        {{ block('join_us_tile') }}
-        </div>
-    {% endif %}
-    <div class="col p-2">
-    {{ block('stream_tile') }}
-    </div>
-</div>
 {% endblock %}
-
 {% block epic_tile %}
-<div class="tile col-12 p-2">
-    <turbo-frame
-        {{ stimulus_controller('epics') }}
-         data-epics-url-value="/api/epics/random"
-         data-epics-refresh-interval-value="8000">
+    <div class="tile col-12 p-2">
+        <turbo-frame {{ stimulus_controller("epics") }} data-epics-url-value="/api/epics/random" data-epics-refresh-interval-value="8000">
         <div class="rect-img-container">
-            <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
+            <img data-epics-target="pic" src="{{ asset("/images/header-logo.svg") }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
             <div class="badge-container">
                 <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
             </div>
         </div>
-    </turbo-frame>
-    <h4>{{ 'epics.tile.heading'|trans }} {{ 'epics.tile.heading_events'|trans }}.</h4>
-    <div class="justify-content-between d-flex">
-        <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
-        <a class="btn btn-outline-primary" href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.events_button'|trans }}</a>
+        </turbo-frame>
+        <h4>{{ 'epics.tile.heading'|trans }} {{ 'epics.tile.heading_events'|trans }}.</h4>
+        <div class="justify-content-between d-flex">
+            <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
+            <a class="btn btn-outline-primary"
+               href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.events_button'|trans }}</a>
+        </div>
     </div>
-</div>
 {% endblock %}
 {% block join_us_tile %}
     <div class="tile col-12 p-2">
         <div class="rect-img-container">
-            <img src="{{ asset('/images/golden-logo.svg') }}" loading="lazy" class="rect-img fill" title="{{ 'Join us'|trans }}">
+            <img src="{{ asset("/images/golden-logo.svg") }}" loading="lazy" class="rect-img fill" title="{{ 'Join us'|trans }}">
         </div>
         <h4>{{ 'join_us.title'|trans }}</h4>
         <p>{{ 'join_us.1'|trans }}</p>
@@ -73,8 +54,11 @@
             <li>{{ 'join_us.4'|trans }}</li>
         </ul>
         <div class="justify-content-between d-flex">
-            <a class="btn btn-primary" href="{{ path('_page_alias_join_us_' ~ app.request.locale) }}">{{ 'join_us.button'|trans }}</a>
-            <a data-turbo="false" class="btn btn-primary" href="https://entropy.fi/mm">{{ 'join_us.mattermost'|trans }}</a>
+            <a class="btn btn-primary"
+               href="{{ path('_page_alias_join_us_' ~ app.request.locale) }}">{{ 'join_us.button'|trans }}</a>
+            <a data-turbo="false"
+               class="btn btn-primary"
+               href="https://entropy.fi/mm">{{ 'join_us.mattermost'|trans }}</a>
         </div>
     </div>
 {% endblock %}
@@ -86,54 +70,47 @@
     {% set bio_attribute = 'bio_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
     <div class="tile col-12 p-2">
-    <a href="{{ block('event_path') }}">
-    <div class="rect-img-container">
-        {{ block('artist_pic') }}
-        <div class="badge-container">
-            <span class="badge bg-secondary">{{ 'artist.tile.heading'|trans }}</span>
-        </div>
-    </div>
-    </a>
-    {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
-    <div class="mb-2 justify-content-between d-flex">
-        {% if app.request.locale == 'fi' %}
-            {% set artist_url = '/artistit' %}
-        {% else %}
-            {% set artist_url = '/en/artists' %}
-        {% endif %}
-        <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{ 'artist.tile.button_event'|trans }}</a>
-        <a class="btn btn-outline-primary" href="{{ artist_url }}">{{ 'artist.tile.button_artists'|trans }}</a>
-    </div>
-    {{ block('artist_event_info') }}
-    </div>
-{% endblock %}
-{% block stream_tile %}
-<div
-    {{ stimulus_controller('stream') }}
-     data-stream-url-value="https://stream.entropy.fi"
-     data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}"
-     data-stream-offline-img-value="{{ asset('/images/entropy-stream-offline.svg') }}"
-     data-stream-refresh-interval-value="20000">
-    <div class="tile col-12 p-2">
-        <a href="https://stream.entropy.fi">
+        <a href="{{ block("event_path") }}">
             <div class="rect-img-container">
-                <img data-stream-target="pic"
-                    src="{{ asset('/images/entropy-stream-offline.svg') }}"
-                    loading="lazy"
-                    class="rect-img fill {% if app.user is not null and app.user.member.theme == 'dark' %} invert{% endif %}"
-                    title="{{ 'Stream'|trans }}">
+                {{ block("artist_pic") }}
                 <div class="badge-container">
-                    <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
+                    <span class="badge bg-secondary">{{ 'artist.tile.heading'|trans }}</span>
                 </div>
             </div>
         </a>
+        {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
         <div class="mb-2 justify-content-between d-flex">
-            <div data-stream-target="player" class="audioplayer d-none mt-4">
-                <audio controls="controls" preload="none">
-                    <source data-stream-target="source" src="https://stream.entropy.fi/kerde.mp3" type="audio/mpeg" />
-                </audio>
+            {% if app.request.locale == 'fi' %}
+                {% set artist_url = "/artistit" %}
+            {% else %}
+                {% set artist_url = "/en/artists" %}
+            {% endif %}
+            <a class="btn btn-outline-primary" href="{{ block("event_path") }}">{{ 'artist.tile.button_event'|trans }}</a>
+            <a class="btn btn-outline-primary" href="{{ artist_url }}">{{ 'artist.tile.button_artists'|trans }}</a>
+        </div>
+        {{ block("artist_event_info") }}
+    </div>
+{% endblock %}
+{% block stream_tile %}
+    <div {{ stimulus_controller("stream") }} data-stream-url-value="https://stream.entropy.fi" data-stream-online-img-value="{{ asset("/images/entropy-stream-online.svg") }}" data-stream-offline-img-value="{{ asset("/images/entropy-stream-offline.svg") }}" data-stream-refresh-interval-value="20000">
+        <div class="tile col-12 p-2">
+            <a href="https://stream.entropy.fi">
+                <div class="rect-img-container">
+                    <img data-stream-target="pic" src="{{ asset("/images/entropy-stream-offline.svg") }}" loading="lazy" class="rect-img fill {% if app.user is not null and app.user.member.theme == 'dark' %}invert{% endif %}" title="{{ 'Stream'|trans }}">
+                    <div class="badge-container">
+                        <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
+                    </div>
+                </div>
+            </a>
+            <div class="mb-2 justify-content-between d-flex">
+                <div data-stream-target="player" class="audioplayer d-none mt-4">
+                    <audio controls="controls" preload="none">
+                        <source data-stream-target="source"
+                                src="https://stream.entropy.fi/kerde.mp3"
+                                type="audio/mpeg" />
+                    </audio>
+                </div>
             </div>
         </div>
     </div>
-</div>
 {% endblock %}

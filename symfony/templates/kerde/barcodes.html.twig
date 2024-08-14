@@ -1,20 +1,18 @@
 {% extends 'onecolumn.html.twig' %}
-{% block title %}
-{{ 'kerde.barcodes'|trans|capitalize }} | Entropy ry
-{% endblock %}
-
+{% block title %}{{ 'kerde.barcodes'|trans|capitalize }} | Entropy ry{% endblock %}
 {% block content %}
-<div class="col-md-12">
-    <h1>ZOOM</h1>
-    <p>{{ 'barcode.expl'|trans }}</p>
-    {% for name, code in barcodes %}
-    <hr class="py-5">
-    <div class="py-5 m-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}" style="width:400px;">
-        <div class="mx-auto barcode" style="width:246px;">
-            {{ code|raw }}
-            <p class="text-center {% if app.user.member.theme == 'dark' %}text-black{% endif %}">{{ name }}</p>
-        </div>
+    <div class="col-md-12">
+        <h1>ZOOM</h1>
+        <p>{{ 'barcode.expl'|trans }}</p>
+        {% for name, code in barcodes %}
+            <hr class="py-5">
+            <div class="py-5 m-auto{% if app.user.member.theme == 'dark' %} bg-white{% endif %}"
+                 style="width:400px">
+                <div class="mx-auto barcode" style="width:246px;">
+                    {{ code|raw }}
+                    <p class="text-center {% if app.user.member.theme == 'dark' %}text-black{% endif %}">{{ name }}</p>
+                </div>
+            </div>
+        {% endfor %}
     </div>
-    {% endfor %}
-</div>
 {% endblock %}

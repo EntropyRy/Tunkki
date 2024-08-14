@@ -10,16 +10,11 @@
                     {{ content|raw }}
                 {% else %}
                     {% set content = block('content') is defined ? block('content') : '' %}
-                    {% if content|length > 0 %}
-                        {{ content|raw }}
-                    {% endif %}
-                    {% if page is defined %}
-                        {{ sonata_page_render_container('content', page) }}
-                    {% endif %}
+                    {% if content|length > 0 %}{{ content|raw }}{% endif %}
+                    {% if page is defined %}{{ sonata_page_render_container('content', page) }}{% endif %}
                 {% endif %}
             {% endblock %}
         </div>
-
         <footer class="row mt-3">
             {{ sonata_page_render_container('footer', 'global') }}
         </footer>
