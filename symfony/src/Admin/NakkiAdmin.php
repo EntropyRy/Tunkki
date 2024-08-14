@@ -38,7 +38,9 @@ final class NakkiAdmin extends AbstractAdmin
         $filter
             ->add('responsible')
             ->add('startAt')
-            ->add('endAt');
+            ->add('endAt')
+            ->add('disableBookings')
+        ;
     }
 
     protected function configureListFields(ListMapper $list): void
@@ -53,6 +55,7 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('responsible')
             ->add('startAt')
             ->add('endAt')
+            ->add('disableBookings')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'show' => [],
@@ -110,7 +113,9 @@ final class NakkiAdmin extends AbstractAdmin
                     ]
                 ],
                 'minutes' => 00,
-            ]);
+            ])
+            ->add('disableBookings')
+        ;
     }
 
     protected function configureShowFields(ShowMapper $show): void
@@ -120,7 +125,8 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('event')
             ->add('responsible')
             ->add('startAt')
-            ->add('endAt');
+            ->add('endAt')
+        ;
     }
     public function postPersist($nakki): void
     {

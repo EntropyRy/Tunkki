@@ -45,6 +45,9 @@ class Nakki implements \Stringable
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $mattermostChannel = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $disableBookings = null;
+
     public function __construct()
     {
         $this->nakkiBookings = new ArrayCollection();
@@ -195,6 +198,18 @@ class Nakki implements \Stringable
     public function setMattermostChannel(?string $mattermostChannel): self
     {
         $this->mattermostChannel = $mattermostChannel;
+
+        return $this;
+    }
+
+    public function isDisableBookings(): ?bool
+    {
+        return $this->disableBookings;
+    }
+
+    public function setDisableBookings(?bool $disableBookings): static
+    {
+        $this->disableBookings = $disableBookings;
 
         return $this;
     }

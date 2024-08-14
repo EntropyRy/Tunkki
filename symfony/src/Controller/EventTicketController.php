@@ -296,6 +296,9 @@ class EventTicketController extends Controller
     {
         $nakkis = [];
         foreach ($event->getNakkis() as $nakki) {
+            if ($nakki->isDisableBookings() == true) {
+                continue;
+            }
             foreach ($selected as $booking) {
                 if ($booking->getNakki() == $nakki) {
                     $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
