@@ -119,6 +119,10 @@ class Booking implements \Stringable
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $accessoryPrice = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Version]
+    private ?int $version = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {

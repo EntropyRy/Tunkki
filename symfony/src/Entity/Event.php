@@ -255,6 +255,10 @@ body {
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $artistSignUpInfoEn = null;
 
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\Version]
+    private ?int $version = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
