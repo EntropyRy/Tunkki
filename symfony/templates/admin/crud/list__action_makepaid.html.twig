@@ -1,4 +1,4 @@
 {% if not object.paid %}
     <a class="btn btn-sm btn-default edit_link"
-       href="{{ admin.generateObjectUrl('makepaid', <class 'object'>) }}"><i class="fa fa-money" aria-hidden="true"></i> Make Paid</a>
+       href="{{ admin.generateObjectUrl('makepaid', object) }}"><i class="fa fa-money" aria-hidden="true"></i> Make Paid</a>
 {% endif %}

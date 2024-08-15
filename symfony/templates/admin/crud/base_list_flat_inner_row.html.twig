@@ -15,12 +15,12 @@ file that was distributed with this source code.
 {% endif %}
 <td class="sonata-ba-list-field sonata-ba-list-field-inline-fields"
     colspan="{{ admin.list.getElements() |length - (admin.list.has(constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_ACTIONS')) + admin.list.has(constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_BATCH'))) }}"
-    objectId="{{ admin.id(<class 'object'>) }}">
+    objectId="{{ admin.id(object) }}">
     {% block row %}{% endblock %}
 </td>
 {% if admin.list.has(constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_ACTIONS')) and not app.request.isXmlHttpRequest %}
     <td class="sonata-ba-list-field sonata-ba-list-field-_action"
-        objectId="{{ admin.id(<class 'object'>) }}">
+        objectId="{{ admin.id(object) }}">
         {{ object|render_list_element(admin.list[constant('Sonata\\AdminBundle\\Datagrid\\ListMapper::NAME_ACTIONS') ]) }}
     </td>
 {% endif %}
