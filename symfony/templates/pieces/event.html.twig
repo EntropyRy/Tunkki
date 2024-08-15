@@ -574,11 +574,7 @@
                                     {% if last is defined %}
                                         {% if last == info.StartTime %}B2B{% endif %}
                                     {% endif %}
-                                    <a href=" {% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
-                                    {% elseif page_links|default(false) %}
-                                        {{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
-                                    {% endif %}
-                                #{{ artist.type|lower }}-{{ name|slug }} ">{{ name }}</a>
+                                    <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }} ">{{ name }}</a>
                                 {% if artist.type == 'Live' %}(Live){% endif %}
                             {% endif %}
                             {% set last = info.StartTime %}
