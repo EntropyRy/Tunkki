@@ -110,8 +110,7 @@
     {{ block("event_banner_media") }}
     <small>{{ block("published_and_updated") }}</small>
     {% set content_attr = 'content_attribute'|trans %}
-    {% if '{{ menu }}
-        ' in attribute(event, content_attr) %}
+    {% if '{{ menu }}' in attribute(event, content_attr) %}
         {{ block("menu") }}
     {% endif %}
     <h2 class="mt-2 event-name">
