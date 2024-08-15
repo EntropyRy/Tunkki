@@ -21,7 +21,7 @@
                 {% endif %}
                 {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
                 <div class="content">
-                    {{ block('content_artists', <built-in function input>) ?? '' }}
+                    {{ block('content_artists', input) ?? '' }}
                 </div>
                 {{ block("bios") }}
                 {% if block('vj_bios')|length > 0 %}
