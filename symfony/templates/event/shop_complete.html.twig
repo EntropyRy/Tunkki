@@ -3,7 +3,7 @@
 {% block content %}
     {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
     {% if block('content_shop_complete', input) is defined %}
-        {{ block('content_shop_complete', <built-in function input>) }}
+        {{ block('content_shop_complete', input) }}
     {% else %}
         {{ block("complete") }}
     {% endif %}

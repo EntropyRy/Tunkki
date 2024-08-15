@@ -6,7 +6,7 @@
 {% block content %}
     {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
     <div class="content">
-        {{ block('content_timetable', <built-in function input>) ?? '' }}
+        {{ block('content_timetable', input) ?? '' }}
         {{ block("timetable_to_page") }}
         <h2>VJ</h2>
         {{ block("vj_timetable_to_page") }}

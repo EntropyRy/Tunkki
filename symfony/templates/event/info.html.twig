@@ -2,6 +2,6 @@
 {% block content %}
     {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
     <div class="content">
-        {{ block('content_info', <built-in function input>) ?? '' }}
+        {{ block('content_info', input) ?? '' }}
     </div>
 {% endblock %}
