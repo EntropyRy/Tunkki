@@ -3,6 +3,7 @@
         <div class="pt-2 pb-2 col-12 d-grid" id="happening_list">
             {% for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == true) -%}
                 <a class="btn text-white btn-info btn-lg btn-block mb-2"
+                   data-turbo-frame="nav"
                    href="{{ path('entropy_event_happening_show', {'slug': event.url, 'year': event.eventdate|date('Y') , happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
                     {% if happening.needsPreliminarySignUp %}( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif %}
                 </a>
@@ -19,6 +20,7 @@
             {% if event.allowMembersToCreateHappenings and app.user %}
                 {% if event.happenings|length > 0 %}<hr>{% endif %}
                 <a class="btn btn-success text-white w-50 mx-auto mt-2"
+                   data-turbo-frame="nav"
                    href="{{ path('entropy_event_happening_create', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">{{ 'happening.create'|trans }}</a>
             {% endif %}
         {% endif %}
