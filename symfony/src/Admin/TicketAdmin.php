@@ -29,6 +29,7 @@ final class TicketAdmin extends AbstractAdmin
                 ->add('event');
         }
         $filter
+            ->add('name')
             ->add('price')
             ->add('owner')
             ->add('email')
