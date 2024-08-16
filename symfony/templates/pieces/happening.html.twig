@@ -119,12 +119,12 @@
                             <h4>
                                 {{ space_left }} {{ 'seats available'|trans }},
                                 {{ 'happening.sign_ups_have_ended'|trans }}
-                                {% for booking in happening.bookings %}
-                                    {% if booking.member == app.user.member %}
-                                        <p>{{ 'You have an reservation with a comment'|trans }}: {{ booking.comment }}</p>
-                                    {% endif %}
-                                {% endfor %}
                             </h4>
+                            {% for booking in happening.bookings %}
+                                {% if booking.member == app.user.member %}
+                                    <p class="text-success">{{ 'You have an reservation with a comment'|trans }}: {{ booking.comment }}</p>
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
                     {% endif %}
                     {% if happening.needsPreliminarySignUp and admin %}
