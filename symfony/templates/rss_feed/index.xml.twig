@@ -15,10 +15,7 @@ https://entropy.fi
 <image>
 <url>https://entropy.fi/images/header-logo.svg</url>
 <title>Entropy ry</title>
-<link>
-https://entropy.fi
-{% if locale == 'en' %}/en{% endif %}
-</link>
+<link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
 </image>
 {% for event in events %}
     {% if locale == 'fi' %}
@@ -34,9 +31,9 @@ https://entropy.fi
     {% set guid = 'https://entropy.fi' ~ path(eventpath, {'id': event.id, 'updated': event.updatedAt|date('dmY')}) %}
     <item>
     {% if event.type != 'announcement' %}
-        <title>{{ event.nameAndDateByLang(locale) |escape }}</title>
+        <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
     {% else %}
-        <title>{{ event.nameByLang(locale) |escape }}</title>
+        <title>{{ event.nameByLang(locale)|escape }}</title>
     {% endif %}
     <link>{{ link }}</link>
 <guid>{{ guid }}</guid>
