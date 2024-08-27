@@ -1,0 +1,331 @@
+@import "~bootstrap/scss/functions";
+
+$blue: #8ba0ff;
+$dark-blue: #3f3c8a;
+$pink: #ff61d5;
+$green: #00ff80;
+$gray: #b3b3b3;
+
+$primary: $pink;
+$secondary: $gray;
+$success: #28a745;
+$danger: #ff4136;
+$warning: #ffc107;
+$dark: $dark-blue;
+$info: #17a2b8;
+$enable-responsive-font-sizes: true;
+$border-width: 2px;
+$outline: 2px;
+$grid-gutter-width: 48px;
+$btn-whitespace: "nowrap";
+$body-bg: $blue;
+$body-color: #fff;
+$border-radius: 2rem;
+$link-color: $green;
+$body-font-family: "Hanken Grotesk Variable", sans-serif;
+$body-font-weight: 400;
+// 3. Include remainder of required Bootstrap stylesheets
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/variables-dark";
+
+// 4. Include any default map overrides here
+$theme-colors: (
+  "primary": $primary,
+  "secondary": $secondary,
+  "success": $success,
+  "danger": $danger,
+  "warning": $warning,
+  "dark": $dark,
+  "info": $white,
+);
+
+// 5. Include remainder of required parts
+@import "~bootstrap/scss/maps";
+@import "~bootstrap/scss/mixins";
+@import "~bootstrap/scss/root";
+
+// 6. Optionally include any other parts as needed
+@import "~bootstrap/scss/utilities";
+@import "~bootstrap/scss/reboot";
+@import "~bootstrap/scss/type";
+@import "~bootstrap/scss/images";
+@import "~bootstrap/scss/containers";
+@import "~bootstrap/scss/grid";
+@import "~bootstrap/scss/helpers";
+@import "~bootstrap/scss/nav";
+@import "~bootstrap/scss/navbar";
+//@import "~bootstrap/scss/progress";
+//@import "~bootstrap/scss/tables";
+@import "~bootstrap/scss/alert";
+@import "~bootstrap/scss/buttons";
+//@import "~bootstrap/scss/button-group";
+@import "~bootstrap/scss/transitions";
+@import "~bootstrap/scss/card";
+@import "~bootstrap/scss/close";
+@import "~bootstrap/scss/forms";
+//@import "~bootstrap/scss/dropdown";
+// @import "~bootstrap/scss/accordion";
+//@import "~bootstrap/scss/badge";
+@import "~bootstrap/scss/list-group";
+// 7. Optionally include utilities API last to generate classes based on the Sass map in `_utilities.scss`
+@import "~bootstrap/scss/utilities/api";
+// 8. fontawesome fonts
+$fa-font-display: swap;
+@import "~@fortawesome/fontawesome-free/scss/fontawesome";
+@import "~@fortawesome/fontawesome-free/scss/solid";
+@import "~@fortawesome/fontawesome-free/scss/brands";
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  .effect_canvas {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+  }
+  .bg-img-container {
+    background: linear-gradient(125deg, $blue 0%, $dark-blue 100%);
+    background-position: 0 0;
+    -webkit-animation: bg-animate 30s ease infinite;
+    -moz-animation: bg-animate 30s ease infinite;
+    animation: bg-animate 30s ease infinite;
+    background-size: 400% 400%;
+    background-attachment: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    .left-bg-img {
+      position: absolute;
+      transform-origin: center top;
+      left: -900px;
+      top: 26%;
+      scale: 0.6;
+      z-index: -1;
+    }
+    .right-bg-img {
+      position: absolute;
+      transform-origin: center bottom;
+      left: 32%;
+      scale: 0.6;
+      float: right;
+      z-index: -1;
+    }
+    @include media-breakpoint-up(xl) {
+      .right-bg-img {
+      }
+    }
+  }
+  .locale-selector {
+    background: $dark-blue;
+    background: rgba(63, 60, 138, 0.8);
+    position: absolute;
+    right: 0;
+    z-index: 4;
+    padding: 0.6em;
+  }
+  .marquee-wrapper {
+    max-width: 100%;
+    overflow: hidden;
+    font-weight: 600;
+    margin-top: 5px;
+    border-bottom: 2px solid #fff;
+    .marquee {
+      font-style: italic;
+      white-space: nowrap;
+      overflow: hidden;
+      display: inline-block;
+      animation: marquee 40s linear infinite;
+      p {
+        display: inline-block;
+        margin-bottom: 0;
+        text-transform: uppercase;
+      }
+    }
+  }
+  .content {
+    background: $dark-blue;
+    background: rgba(63, 60, 138, 0.8);
+    outline: $outline solid $white;
+    outline-offset: calc($outline / 2 - $outline);
+    padding-bottom: 1rem;
+    border-radius: 2rem;
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+      background: $white;
+      padding: 0.4em 0.6em;
+      border-radius: 2rem;
+      color: $dark-blue;
+    }
+    p {
+      padding: 0 1rem;
+    }
+  }
+}
+
+@keyframes marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.btn-outline-nav {
+  border-radius: 2em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+  font-weight: bolder;
+  @include button-outline-variant($white, $pink, $white, $white);
+  outline: $outline solid $white;
+  outline-offset: calc($outline / 2 - $outline);
+  border: 0;
+  &.active {
+    color: $white;
+    background: transparent;
+  }
+  &.active:before {
+    content: " ";
+    outline: $outline solid $white;
+    display: block;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    background-color: $pink;
+    position: absolute;
+    left: -15px;
+    top: 7px;
+  }
+}
+.btn-buy {
+  // border-radius: 2em;
+  font-weight: bolder;
+  text-transform: uppercase;
+  background: $pink;
+  @include button-outline-variant($white, $pink, $white, $white);
+  @include button-size(0.8em, 1em, 1em, 3em);
+}
+
+.btn-outline-info {
+  backdrop-filter: blur(10px);
+}
+
+.text-darkblue {
+  color: $dark-blue;
+}
+
+.product {
+  padding: 0 0;
+  outline: $outline solid $white;
+  outline-offset: calc($outline / 2 - $outline);
+  border-radius: 2rem;
+  backdrop-filter: blur(10px);
+  .pic {
+    img {
+      border-radius: 2rem;
+    }
+  }
+  .price {
+    min-height: calc($border-radius * 2);
+    button {
+      background: $white;
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
+      width: 100%;
+      border: 0;
+      align-items: center;
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc($border-radius * 2);
+        min-width: calc($border-radius * 2);
+      }
+    }
+    h3 {
+      padding-left: 0;
+      padding-right: 0;
+      background: transparent;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+  }
+  .info {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+    &.callopsed {
+      max-height: 1200px;
+      transition: max-height 0.25s ease-in;
+    }
+    p {
+      padding-top: 1rem;
+    }
+  }
+  .quantity {
+    .quantity-holder {
+      min-height: calc($border-radius * 2);
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
+      .number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button {
+        min-height: calc($border-radius * 2);
+        min-width: calc($border-radius * 2);
+        border: 0;
+        outline: $outline solid $white;
+        outline-offset: calc($outline / 2 - $outline);
+      }
+    }
+  }
+}
+
+@-webkit-keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@-moz-keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+@keyframes bg-animate {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

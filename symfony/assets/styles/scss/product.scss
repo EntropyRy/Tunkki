@@ -1,0 +1,83 @@
+$pink: #ee81ee;
+$outline: 2px;
+.btn-buy {
+  // border-radius: 2em;
+  font-weight: bolder;
+  text-transform: uppercase;
+  background: $pink;
+  @include button-outline-variant($white, $pink, $white, $white);
+  @include button-size(0.8em, 1em, 1em, 3em);
+}
+
+.btn-outline-info {
+  backdrop-filter: blur(10px);
+}
+
+.product {
+  padding: 0 0;
+  outline: $outline solid $white;
+  outline-offset: calc($outline / 2 - $outline);
+  /* border-radius: 2rem;*/
+  backdrop-filter: blur(10px);
+  .pic {
+    img {
+      border-radius: 2rem;
+    }
+  }
+  .price {
+    min-height: calc($border-radius * 2);
+    button {
+      background: $white;
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
+      width: 100%;
+      border: 0;
+      align-items: center;
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: calc($border-radius * 2);
+        min-width: calc($border-radius * 2);
+      }
+    }
+    h3 {
+      padding-left: 0;
+      padding-right: 0;
+      background: transparent;
+      margin-bottom: 0;
+      white-space: nowrap;
+    }
+  }
+  .info {
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.25s ease-out;
+    &.callopsed {
+      max-height: 1200px;
+      transition: max-height 0.25s ease-in;
+    }
+    p {
+      padding-top: 1rem;
+    }
+  }
+  .quantity {
+    .quantity-holder {
+      min-height: calc($border-radius * 2);
+      outline: $outline solid $white;
+      outline-offset: calc($outline / 2 - $outline);
+      .number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      button {
+        min-height: calc($border-radius * 2);
+        min-width: 3rem; /* calc($border-radius * 2); */
+        border: 0;
+        outline: $outline solid $white;
+        outline-offset: calc($outline / 2 - $outline);
+      }
+    }
+  }
+}

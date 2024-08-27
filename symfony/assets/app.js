@@ -9,5 +9,5 @@
 import "./styles/app.css";
 import "@fontsource-variable/space-grotesk/index.css";
 // start the Stimulus application
-import "./bootstrap";
+import "./bootstrap.js";
 import "./js/app.js";
