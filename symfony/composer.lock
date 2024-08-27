@@ -5021,16 +5021,16 @@
         },
         {
             "name": "sonata-project/classification-bundle",
-            "version": "4.8.0",
+            "version": "4.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataClassificationBundle.git",
-                "reference": "d18b2d9365f169a8c00a1361de769ad3db5279bc"
+                "reference": "45aa1d967a746490b44c802d982717bdbdf2b6ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/d18b2d9365f169a8c00a1361de769ad3db5279bc",
-                "reference": "d18b2d9365f169a8c00a1361de769ad3db5279bc",
+                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/45aa1d967a746490b44c802d982717bdbdf2b6ea",
+                "reference": "45aa1d967a746490b44c802d982717bdbdf2b6ea",
                 "shasum": ""
             },
             "require": {
@@ -5079,7 +5079,7 @@
                 "phpunit/phpunit": "^9.5",
                 "psalm/plugin-phpunit": "^0.18",
                 "psalm/plugin-symfony": "^5.0",
-                "rector/rector": "^0.18",
+                "rector/rector": "^1.1",
                 "sonata-project/admin-bundle": "^4.28",
                 "sonata-project/block-bundle": "^4.11 || ^5.0",
                 "sonata-project/doctrine-orm-admin-bundle": "^4.0",
@@ -5127,7 +5127,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataClassificationBundle/issues",
-                "source": "https://github.com/sonata-project/SonataClassificationBundle/tree/4.8.0"
+                "source": "https://github.com/sonata-project/SonataClassificationBundle/tree/4.8.1"
             },
             "funding": [
                 {
@@ -5147,7 +5147,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-14T14:32:54+00:00"
+            "time": "2024-08-26T14:48:16+00:00"
         },
         {
             "name": "sonata-project/doctrine-extensions",
