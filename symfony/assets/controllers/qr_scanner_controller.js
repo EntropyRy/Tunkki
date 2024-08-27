@@ -1,10 +1,3 @@
-import {
-  trans,
-  TICKET_ALREADY_GIVEN,
-  TICKET_GIVEN_OUT,
-  TICKET_PAID,
-  TICKET_NOT_PAID,
-} from "../translator";
 import { Controller } from "@hotwired/stimulus";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
@@ -64,9 +57,9 @@ export default class extends Controller {
     this.referenceNumberTarget.innerText = data["referenceNumber"];
     this.emailTarget.innerText = data["email"];
     if (data["status"] == "paid") {
-      this.statusTarget.innerText = trans(TICKET_PAID);
+      this.statusTarget.innerText = "Paid";
     } else {
-      this.statusTarget.innerText = trans(TICKET_NOT_PAID);
+      this.statusTarget.innerText = "Not Paid";
       this.statusTarget.classList.add("text-danger");
     }
     // this.givenTarget.innerText = data["given"];
@@ -75,7 +68,7 @@ export default class extends Controller {
       this.buttonTarget.classList.remove("d-none");
     } else {
       let result = [];
-      result["ok"] = TICKET_ALREADY_GIVEN;
+      result["ok"] = "Ticket Already Given Out";
       this.hideTicketStatus(result);
     }
   }
@@ -89,13 +82,10 @@ export default class extends Controller {
 
   hideTicketStatus(data) {
     if ("error" in data) {
-      this.givenTarget.innerText = trans(TICKET_ERROR);
+      this.givenTarget.innerText = "Check error";
       this.statusTarget.innerText = data["error"];
     } else {
-      if (data["ok"] == "TICKET_GIVEN_OUT") {
-        data["ok"] = TICKET_GIVEN_OUT;
-      }
-      this.givenTarget.innerText = trans(data["ok"]);
+      this.givenTarget.innerText = "Ticket Given Out";
     }
     setTimeout(() => {
       this.resultTarget.style.top = "0px";

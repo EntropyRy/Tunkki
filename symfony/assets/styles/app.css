@@ -41,12 +41,12 @@ nav.navbar-light .nav-item a.nav-link {
 footer {
   background: #191919;
   color: #a6a6a6;
-  .e-text {
-    color: #fff;
-  }
-  a {
-    color: #65aed2;
-  }
+}
+footer .e-text {
+  color: #fff;
+}
+footer a {
+  color: #65aed2;
 }
 .checkbox div[class^="icheckbox"],
 .checkbox-inline div[class^="icheckbox"],
@@ -97,8 +97,8 @@ footer {
   position: relative;
   margin-bottom: 0.5rem;
 }
-.rect-img-container.badge-container,
-.img-container.badge-container {
+.rect-img-container .badge-container,
+.img-container .badge-container {
   z-index: 100;
   position: absolute;
   right: 2%;

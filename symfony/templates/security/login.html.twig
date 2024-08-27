@@ -4,7 +4,7 @@
         <p>{{ 'login.join_us'|trans|raw }}</p>
         <h1 class="h3 mb-3 font-weight-normal">{{ 'Choose login method'|trans }}</h1>
         <div class="col-12">
-            <a class="btn btn-lg btn-primary w-100"
+            <a class="btn btn-lg btn-primary w-100" data-turbo="false"
                href="{{ path("_entropy_mattermost_auth") }}">
                 <img height="23" src="{{ asset("/images/mattermost-logo.svg") }}">
                 {{ 'Mattermost login'|trans }}

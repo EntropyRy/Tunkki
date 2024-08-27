@@ -1,4 +1,4 @@
-import { trans, SHARE_COPIED } from "../translator";
+// import { trans, SHARE_COPIED } from "../translator";
 import { Controller } from "@hotwired/stimulus";
 
 export default class extends Controller {
@@ -46,7 +46,9 @@ export default class extends Controller {
     if (clip) {
       try {
         let successful = clip.writeText(text);
-        var msg = successful ? trans(SHARE_COPIED) : "Whoops, not copied!";
+        var msg = successful
+          ? "URL copied to Clipboard!"
+          : "Whoops, not copied!";
         event.currentTarget.innerText = msg;
         //console.log("Page URL copied to clipboard with Cliboard API");
       } catch (err) {
@@ -59,7 +61,9 @@ export default class extends Controller {
       copyTextArea.select();
       try {
         var successful = document.execCommand("copy");
-        var msg = successful ? trans(SHARE_COPIED) : "Whoops, not copied!";
+        var msg = successful
+          ? "URL copied to Clipboard!"
+          : "Whoops, not copied!";
         event.currentTarget.innerText = msg;
       } catch (err) {
         console.log("Oops, unable to copy");

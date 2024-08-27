@@ -75,20 +75,17 @@ return [
     '@formatjs/icu-skeleton-parser' => [
         'version' => '1.8.2',
     ],
-    '@symfony/ux-translator' => [
-        'path' => './vendor/symfony/ux-translator/assets/dist/translator_controller.js',
-    ],
-    '@app/translations' => [
-        'path' => './var/translations/index.js',
-    ],
-    '@app/translations/configuration' => [
-        'path' => './var/translations/configuration.js',
-    ],
     '@hotwired/turbo' => [
         'version' => '7.3.0',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
         'version' => '5.0.19',
         'type' => 'css',
+    ],
+    'moment' => [
+        'version' => '2.30.1',
+    ],
+    'signature_pad' => [
+        'version' => '5.0.3',
     ],
 ];

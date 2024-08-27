@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "472065583530ed1826cea5c1b23279fb",
+    "content-hash": "af220da70326bc2b6addd004bb4e9707",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -11856,82 +11856,6 @@
                 }
             ],
             "time": "2024-05-31T14:49:08+00:00"
-        },
-        {
-            "name": "symfony/ux-translator",
-            "version": "v2.19.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/ux-translator.git",
-                "reference": "2c0027a4aeda6a9c58db7428862c778e106c12a1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-translator/zipball/2c0027a4aeda6a9c58db7428862c778e106c12a1",
-                "reference": "2c0027a4aeda6a9c58db7428862c778e106c12a1",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=8.1",
-                "symfony/console": "^5.4|^6.0|^7.0",
-                "symfony/filesystem": "^5.4|^6.0|^7.0",
-                "symfony/string": "^5.4|^6.0|^7.0",
-                "symfony/translation": "^5.4|^6.0|^7.0"
-            },
-            "require-dev": {
-                "symfony/framework-bundle": "^5.4|^6.0|^7.0",
-                "symfony/phpunit-bridge": "^5.2|^6.0|^7.0",
-                "symfony/var-dumper": "^5.4|^6.0|^7.0"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "thanks": {
-                    "name": "symfony/ux",
-                    "url": "https://github.com/symfony/ux"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\UX\\Translator\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Hugo Alliaume",
-                    "email": "hugo@alliau.me"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Exposes Symfony Translations directly to JavaScript.",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "symfony-ux"
-            ],
-            "support": {
-                "source": "https://github.com/symfony/ux-translator/tree/v2.19.3"
-            },
-            "funding": [
-                {
-                    "url": "https://symfony.com/sponsor",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://github.com/fabpot",
-                    "type": "github"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
-                    "type": "tidelift"
-                }
-            ],
-            "time": "2024-08-14T14:09:20+00:00"
         },
         {
             "name": "symfony/ux-turbo",
