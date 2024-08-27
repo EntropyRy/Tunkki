@@ -14,8 +14,14 @@
                 {{ sonata_seo_title() }}
             {% endif %}
             {% block meta %}{{ sonata_seo_metadatas() }}{% endblock %}
-            {% block sonata_page_stylesheets %}{{ encore_entry_link_tags("app") }}{% endblock %}
-            {% block sonata_page_javascripts %}{{ encore_entry_script_tags("app") }}{% endblock %}
+            {% block stylesheets %}
+                <link rel="stylesheet" href="{{ asset("styles/app.scss") }}">
+            {% endblock %}
+            {% block importmap %}
+                {{ importmap('app') }}
+            {% endblock %}
+            {% block sonata_page_stylesheets %}{% endblock %}
+            {% block sonata_page_javascripts %}{% endblock %}
             <link rel="manifest" href="/manifest.json">
         </head>
     {% endblock %}
