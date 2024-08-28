@@ -36,6 +36,9 @@ return [
         'path' => './assets/js/vhs.js',
         'entrypoint' => true,
     ],
+    '@symfony/stimulus-bundle' => [
+        'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
@@ -59,13 +62,13 @@ return [
         'version' => '2.1.1',
     ],
     'get-size' => [
-        'version' => '2.0.3',
+        'version' => '3.0.0',
     ],
     'ev-emitter' => [
-        'version' => '1.1.1',
+        'version' => '2.1.2',
     ],
     'fizzy-ui-utils' => [
-        'version' => '2.0.7',
+        'version' => '3.0.0',
     ],
     'desandro-matches-selector' => [
         'version' => '2.0.2',
@@ -73,14 +76,11 @@ return [
     'sortablejs' => [
         'version' => '1.15.2',
     ],
-    '@symfony/stimulus-bundle' => [
-        'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
-    ],
     'intl-messageformat' => [
         'version' => '10.5.14',
     ],
     'tslib' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
     ],
     '@formatjs/icu-messageformat-parser' => [
         'version' => '2.7.8',
@@ -92,7 +92,7 @@ return [
         'version' => '1.8.2',
     ],
     '@hotwired/turbo' => [
-        'version' => '7.3.0',
+        'version' => '8.0.5',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
         'version' => '5.0.19',
