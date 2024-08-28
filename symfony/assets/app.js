@@ -13,3 +13,4 @@ import "@fontsource-variable/space-grotesk/index.css";
 // start the Stimulus application
 import "./bootstrap.js";
 import "./js/bs.js";
+import "./js/nakkikone.js";

@@ -1,10 +1,6 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
-{% block sonata_page_javascripts %}
-    {{ parent() }}
-    {{ encore_entry_script_tags("nakkikone") }}
-{% endblock %}
 {% block content %}
     {% set l = app.request.locale %}
     <div class="col-12">
