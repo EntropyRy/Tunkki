@@ -7,10 +7,11 @@
     <style data-turbo-track="reload">{{ event.css|raw }}</style>
 {% endblock %}
 {% block importmap %}
-    {{ parent() }}
+    {% set import = ['app']%}
     {% if event.backgroundEffect is not empty %}
-        {{ importmap(event.backgroundEffect) }}
+        {% set import = import|merge([event.backgroundEffect]) %}
     {% endif %}
+    {{ importmap(import) }}
 {% endblock %}
 {% block content %}
     {% if app.user %}
