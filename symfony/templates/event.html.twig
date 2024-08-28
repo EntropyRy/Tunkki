@@ -2,13 +2,15 @@
 {% use 'pieces/event.html.twig' %}
 {% use 'event/meta.html.twig' %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
-{% block sonata_page_stylesheets %}
+{% block stylesheets %}
     {{ parent() }}
     <style data-turbo-track="reload">{{ event.css|raw }}</style>
 {% endblock %}
-{% block sonata_page_javascripts %}
+{% block importmap %}
     {{ parent() }}
-    {% if event.backgroundEffect is not empty %}{{ encore_entry_script_tags(event.backgroundEffect) }}{% endif %}
+    {% if event.backgroundEffect is not empty %}
+        {{ importmap(event.backgroundEffect) }}
+    {% endif %}
 {% endblock %}
 {% block content %}
     {% if app.user %}

@@ -16,6 +16,26 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'snow' => [
+        'path' => './assets/js/snow.js',
+        'entrypoint' => true,
+    ],
+    'grid' => [
+        'path' => './assets/js/grid.js',
+        'entrypoint' => true,
+    ],
+    'stars' => [
+        'path' => './assets/js/stars.js',
+        'entrypoint' => true,
+    ],
+    'tv' => [
+        'path' => './assets/js/tv.js',
+        'entrypoint' => true,
+    ],
+    'vhs' => [
+        'path' => './assets/js/vhs.js',
+        'entrypoint' => true,
+    ],
     '@hotwired/stimulus' => [
         'version' => '3.2.2',
     ],
