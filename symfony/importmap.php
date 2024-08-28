@@ -98,14 +98,14 @@ return [
         'version' => '5.0.19',
         'type' => 'css',
     ],
-    'moment' => [
-        'version' => '2.30.1',
-    ],
     'signature_pad' => [
         'version' => '5.0.3',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
         'version' => '6.6.0',
         'type' => 'css',
+    ],
+    'moment/min/moment-with-locales.min.js' => [
+        'version' => '2.30.1',
     ],
 ];

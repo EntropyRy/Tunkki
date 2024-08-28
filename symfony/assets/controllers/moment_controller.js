@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import moment from "moment";
+import moment from "moment/min/moment-with-locales.min.js";
 
 export default class extends Controller {
   static targets = ["badge"];
@@ -16,6 +16,7 @@ export default class extends Controller {
   changeTime() {
     moment.locale(this.localeValue);
     let date = moment(this.dateValue);
+    console.log(date.fromNow());
     this.badgeTarget.innerText = date.fromNow();
   }
   startRefreshing() {
