@@ -104,4 +104,8 @@ return [
     'signature_pad' => [
         'version' => '5.0.3',
     ],
+    '@fortawesome/fontawesome-free/css/all.css' => [
+        'version' => '6.6.0',
+        'type' => 'css',
+    ],
 ];

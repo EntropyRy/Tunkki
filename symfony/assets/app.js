@@ -10,6 +10,7 @@ import "./styles/app.css";
 import "./styles/animations.css";
 import "./styles/polaroid.css";
 import "@fontsource-variable/space-grotesk/index.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 // start the Stimulus application
 import "./bootstrap.js";
 import "./js/bs.js";
