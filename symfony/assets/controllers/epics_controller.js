@@ -1,5 +1,5 @@
 import { Controller } from "@hotwired/stimulus";
-import moment from "moment";
+import moment from "moment/min/moment-with-locales.min.js";
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
