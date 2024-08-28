@@ -12,7 +12,7 @@ body {
   color: #102c3a;
   letter-spacing: -0.1px;
 }
-body.effect_canvas {
+body .effect_canvas {
   width: 100%;
   height: 100%;
   position: fixed;

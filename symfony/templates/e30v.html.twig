@@ -1,15 +1,31 @@
-{% extends 'e30v_base.html.twig' %}
+{% extends 'base_layout.html.twig' %}
 {% use 'menu/menu.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'event/meta.html.twig' %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
+{% block preload_icons %}
+    <link rel="icon" href="{{ asset("/images/e30v/logo-only.svg") }}" sizes="any" type="image/svg+xml">
+    <link rel="preload" as="image" href="{{ asset("/images/e30v/logo-round-text-white.svg") }}">
+{% endblock %}
+{% block importmap %}
+    <link rel="stylesheet" href="/static/e30v/e30v.1d9878c9.css" data-turbo-track="reload" integrity="sha384-6W/1iC9RIFv9IFFDeDYhEHxa+sId0UIqtYck3xlgq3o7V0YhqBZHz35XwW9wWB7U">
+{% endblock %}
 {% block sonata_page_stylesheets %}
-    {{ parent() }}
-    <style data-turbo-track="reload">{{ event.css|raw }}</style>
+<style>
+.btn-buy {
+  font-size: 1.5em;
+  padding: 0.4em;
+  font-style: italic;
+}
+.artists-heading {
+	margin-top: 1rem;
+}
+</style>
 {% endblock %}
 {% block sonata_page_javascripts %}
-    {{ parent() }}
-    {% if event.backgroundEffect is not empty %}{{ encore_entry_script_tags(event.backgroundEffect) }}{% endif %}
+<script src="/static/e30v/runtime.06e07be3.js" defer="" data-turbo-track="reload" integrity="sha384-B4Fz1PmGNP7TOZnfenJjcu7tXgONEp0pzYcVOxeezm/cKP+85TUbf57ZLnmQfsEs"></script>
+<script src="/static/e30v/588.d662159d.js" defer="" data-turbo-track="reload" integrity="sha384-TBOYh5ssSqv7y90PU7q3jA23q5thVVXe0vRdeH86w8yrD4mVLB752w1RDMWA3bun"></script>
+<script src="/static/e30v/e30v.f7489262.js" defer="" data-turbo-track="reload" integrity="sha384-DR9PNTtb/UHXsGMP1wyP3c//036jj3BAPRtlqEi6y2dKSJN8PdJ6x6GiLBo+TRLG"></script>
 {% endblock %}
 {% block page_container %}
     <div class="container-fluid">

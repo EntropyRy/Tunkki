@@ -4,8 +4,10 @@
     {% endblock %}
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>
-            <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
-            <link rel="preload" as="image" href="{{ asset("/images/header-logo-text.svg") }}">
+            {% block preload_icons %}
+                <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
+                <link rel="preload" as="image" href="{{ asset("/images/header-logo-text.svg") }}">
+            {% endblock %}
             {% if block('title') is defined %}
                 <title>{{ block("title") }}</title>
             {% elseif page.title is defined %}
@@ -133,6 +135,7 @@
             {% endif %}
         {% endblock %}
         {% block sonata_page_container %}{% endblock %}
+        {% block page_container %}{% endblock %}
         {% block sonata_page_asset_footer %}{% endblock %}
     </body>
 </html>
