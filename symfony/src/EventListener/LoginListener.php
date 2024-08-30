@@ -5,14 +5,12 @@ namespace App\EventListener;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Translation\LocaleSwitcher;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 class LoginListener implements EventSubscriberInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
         private LocaleSwitcher $localeSwitcher,
         private readonly EntityManagerInterface $em
     ) {

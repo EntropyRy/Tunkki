@@ -23,10 +23,10 @@ class Email implements \Stringable
     private ?string $purpose = null;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $createdAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTime $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $addLoginLinksToFooter = null;

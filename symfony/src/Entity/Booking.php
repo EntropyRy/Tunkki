@@ -9,9 +9,6 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * Booking
- */
 #[ORM\Table('Booking')]
 #[ORM\Entity(repositoryClass: \App\Repository\BookingRepository::class)]
 #[ORM\HasLifecycleCallbacks]

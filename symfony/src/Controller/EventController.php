@@ -43,7 +43,7 @@ class EventController extends Controller
                 ]
             );
         }
-        $template = $event->getTemplate() ?? 'event.html.twig';
+        $template = $event->getTemplate();
         return $this->render(
             $template,
             [
@@ -100,7 +100,7 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
-        $template = $event->getTemplate() ?? 'event.html.twig';
+        $template = $event->getTemplate();
         return $this->render(
             $template,
             [

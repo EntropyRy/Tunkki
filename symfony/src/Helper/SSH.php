@@ -34,6 +34,7 @@ class SSH
             unset($connection);
             return $ret;
         } catch (\Exception $e) {
+            return false;
         }
     }
     protected function getConnection(): mixed

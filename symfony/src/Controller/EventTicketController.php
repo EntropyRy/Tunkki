@@ -144,6 +144,7 @@ class EventTicketController extends Controller
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
+        $qrs = [];
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
         $qr = new Qr();
         $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]);

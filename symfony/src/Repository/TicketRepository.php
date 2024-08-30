@@ -25,10 +25,6 @@ class TicketRepository extends ServiceEntityRepository
         parent::__construct($registry, Ticket::class);
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function add(Ticket $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -37,10 +33,6 @@ class TicketRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function save(Ticket $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
@@ -49,10 +41,6 @@ class TicketRepository extends ServiceEntityRepository
         }
     }
 
-    /**
-     * @throws ORMException
-     * @throws OptimisticLockException
-     */
     public function remove(Ticket $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
@@ -61,34 +49,6 @@ class TicketRepository extends ServiceEntityRepository
         }
     }
 
-    // /**
-    //  * @return Ticket[] Returns an array of Ticket objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('t.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Ticket
-    {
-        return $this->createQueryBuilder('t')
-            ->andWhere('t.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
     public function findAvailableTicketsCount(Event $event): mixed
     {
         $qb = $this->createQueryBuilder('t');
