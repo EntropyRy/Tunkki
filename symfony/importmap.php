@@ -74,7 +74,7 @@ return [
         'version' => '2.0.2',
     ],
     'sortablejs' => [
-        'version' => '1.15.2',
+        'version' => '1.15.3',
     ],
     'intl-messageformat' => [
         'version' => '10.5.14',
