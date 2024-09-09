@@ -95,7 +95,7 @@ return [
         'version' => '8.0.5',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.0.19',
+        'version' => '5.0.20',
         'type' => 'css',
     ],
     'signature_pad' => [

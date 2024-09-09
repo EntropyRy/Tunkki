@@ -324,6 +324,22 @@
 {% endapply %}
 {% endblock %}
 {% block event_frontpage_media %}
+    {% if event.picture is not null %}
+        {% set aspect = event.picture.width / event.picture.height %}
+        {% if aspect >= 1.20 %}
+            {% set containerClass = "rect-img-container i16by9" %}
+            {% set class = "rect-img" %}
+        {% elseif aspect > 0.85 and aspect < 1.20 %} 
+            {% set containerClass = "rect-img-container" %}
+            {% set class = "rect-img" %}
+        {% elseif aspect <= 1.20 %} 
+            {% set containerClass = "img-container" %}
+            {% set class = "img-fluid" %}
+        {% endif %} 
+    {% else %}
+        {% set containerClass = "rect-img-container i16by9" %}
+        {% set class = "rect-img" %}
+    {% endif %}
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
         <div class="rect-img-container i16by9">
             <div class="rect-img">
@@ -332,28 +348,12 @@
             </div>
         </div>
     {% else %}
-    {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}
-        {% set containerClass = "video-fluid" %}
-    {% else %} 
-        {% set containerClass = "img-filter" %}
-        {% if event.picture %} 
-            {% set aspect = event.picture.width / event.picture.height %} 
-            {% if aspect >= 1.20 %}
-                {% set containerClass = "rect-img-container i16by9" %}
-            {% elseif aspect > 0.85 and aspect < 1.20 %} 
-                {% set containerClass = "rect-img-container" %}
-            {% elseif aspect <= 1.20 %} 
-                {% set containerClass = "img-container" %}
-            {% endif %} 
-        {% elseif not event.picture %}
-            {% set containerClass = "rect-img-container i16by9" %}
+        {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}
+            {% set containerClass = "video-fluid" %}
+        {% else %} 
+            {% set containerClass = containerClass ~ " img-filter" %}
         {% endif %}
-    {% endif %}
-        <div class="{{ containerClass }}" {{ block("imgfilter")}}>
-            {% set class = "rect-img" %}
-            {% if event.picture and aspect < 1.10 %}
-                {% set class = "img-fluid" %}
-            {% endif %}
+        <div class="{{ containerClass }}" {{ block("imgfilter") }}>
             {{ block("img") }}
             {{ block("event_badge") }}
         </div>
