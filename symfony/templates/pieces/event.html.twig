@@ -332,7 +332,24 @@
             </div>
         </div>
     {% else %}
-        <div class=" {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %} video-fluid {% else %} {% apply spaceless %} img-filter {% if event.picture %} {% set aspect = event.picture.width / event.picture.height %} {% if aspect >= 1.42 %} rect-img-container i16by9 {% elseif aspect > 0.85 and aspect < 1.42 %} rect-img-container {% elseif aspect <= 0.85 %} img-container {% endif %} {% elseif not event.picture %} rect-img-container i16by9 {% endif %} {% endapply %} {% endif %}" {{ block("imgfilter") }}>
+    {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}
+        {% set containerClass = "video-fluid" %}
+    {% else %} 
+        {% set containerClass = "img-filter" %}
+        {% if event.picture %} 
+            {% set aspect = event.picture.width / event.picture.height %} 
+            {% if aspect >= 1.20 %}
+                {% set containerClass = "rect-img-container i16by9" %}
+            {% elseif aspect > 0.85 and aspect < 1.20 %} 
+                {% set containerClass = "rect-img-container" %}
+            {% elseif aspect <= 1.20 %} 
+                {% set containerClass = "img-container" %}
+            {% endif %} 
+        {% elseif not event.picture %}
+            {% set containerClass = "rect-img-container i16by9" %}
+        {% endif %}
+    {% endif %}
+        <div class="{{ containerClass }}" {{ block("imgfilter")}}>
             {% set class = "rect-img" %}
             {% if event.picture and event.picture.width < event.picture.height %}
                 {% set class = "img-fluid" %}
