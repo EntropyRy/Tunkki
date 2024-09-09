@@ -684,6 +684,9 @@ final class EventAdmin extends AbstractAdmin
             $kerde = $this->lr->findOneBy(['id' => 1]);
             $event->setLocation($kerde);
         }
+        if ($event->getType() != 'announcement') {
+            $event->setIncludeSaferSpaceGuidelines(true);
+        }
         if (is_null($event->getUrl())) {
             $event->setUrl($this->slug->slug($event->getNimi())->lower()->toString());
         }
