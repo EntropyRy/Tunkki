@@ -16,7 +16,6 @@ export default class extends Controller {
   changeTime() {
     moment.locale(this.localeValue);
     let date = moment(this.dateValue);
-    console.log(date.fromNow());
     this.badgeTarget.innerText = date.fromNow();
   }
   startRefreshing() {
