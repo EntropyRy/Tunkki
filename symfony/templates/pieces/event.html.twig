@@ -351,7 +351,7 @@
     {% endif %}
         <div class="{{ containerClass }}" {{ block("imgfilter")}}>
             {% set class = "rect-img" %}
-            {% if event.picture and event.picture.width < event.picture.height %}
+            {% if event.picture and aspect < 1.10 %}
                 {% set class = "img-fluid" %}
             {% endif %}
             {{ block("img") }}
