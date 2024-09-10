@@ -108,4 +108,7 @@ return [
     'moment/min/moment-with-locales.min.js' => [
         'version' => '2.30.1',
     ],
+    'es-module-shims' => [
+        'version' => '1.10.0',
+    ],
 ];
