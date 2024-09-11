@@ -98,7 +98,12 @@ final class EmailAdminController extends CRUDController
                 $signups = $event->getEventArtistInfos();
                 $emails = [];
                 foreach ($signups as $signup) {
-                    $member = $signup->getArtist()->getMember();
+                    $artist = $signup->getArtist();
+                    if ($artist) {
+                        $member = $signup->getArtist()->getMember();
+                    } else {
+                        $this->addFlash('sonata_flash_warning', sprintf('Artist %s member not found.', $artist->getName()));
+                    }
                     if ($member) {
                         $emails[$member->getId()] = $member->getEmail();
                     }
