@@ -102,7 +102,7 @@ final class EmailAdminController extends CRUDController
                     if ($artist) {
                         $member = $signup->getArtist()->getMember();
                     } else {
-                        $this->addFlash('sonata_flash_warning', sprintf('Artist %s member not found.', $artist->getName()));
+                        $this->addFlash('sonata_flash_warning', sprintf('%s member not found.', $signup->getArtistClone()->getName()));
                     }
                     if ($member) {
                         $emails[$member->getId()] = $member->getEmail();
