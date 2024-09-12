@@ -6,7 +6,7 @@
     scaleFactor = 2.5, // Noise size
     samples = [],
     sampleIndex = 0,
-    FPS = 50,
+    FPS = 60,
     SAMPLE_COUNT = 10;
 
   window.onresize = function () {
@@ -29,7 +29,15 @@
       var k = i * 4;
       var color = Math.floor(36 * Math.random());
       imageData.data[k] = imageData.data[k + 1] = imageData.data[k + 2] = color;
-      imageData.data[k + 3] = Math.round(255 * trans);
+      // Bell curve for alpha calculation
+      // Using a Gaussian function to determine alpha
+      var mean = 20; // Center of the bell curve (around gray)
+      var stdDev = 8; // Standard deviation (controls the width of the curve)
+      var alpha = Math.round(
+        255 * Math.exp(-0.5 * Math.pow((color - mean) / stdDev, 2)),
+      );
+
+      imageData.data[k + 3] = alpha; // Set alpha based on the bell curve
     }
     return imageData;
   }

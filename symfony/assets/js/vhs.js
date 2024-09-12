@@ -42,7 +42,7 @@
         Math.floor(i / factor),
         intensityCurve[Math.floor(i / factor)],
         Math.floor(i / factor) + 1,
-        intensityCurve[Math.floor(i / factor) + 1]
+        intensityCurve[Math.floor(i / factor) + 1],
       );
       intensity.push(value);
     }
@@ -54,7 +54,14 @@
       // Optional: add an intensity curve to try to simulate scan lines
       color += intensity[Math.floor(i / w)];
       imageData.data[k] = imageData.data[k + 1] = imageData.data[k + 2] = color;
-      imageData.data[k + 3] = Math.round(255 * trans);
+      // Bell curve for alpha calculation
+      // Using a Gaussian function to determine alpha
+      var mean = 20; // Center of the bell curve (around gray)
+      var stdDev = 8; // Standard deviation (controls the width of the curve)
+      var alpha = Math.round(
+        255 * Math.exp(-0.5 * Math.pow((color - mean) / stdDev, 2)),
+      );
+      imageData.data[k + 3] = alpha; // Set alpha based on the bell curve
     }
     return imageData;
   }
@@ -69,7 +76,7 @@
       0,
       scanOffsetY,
       0,
-      scanSize + scanOffsetY
+      scanSize + scanOffsetY,
     );
 
     grd.addColorStop(0, "rgba(255,255,255,0)");
