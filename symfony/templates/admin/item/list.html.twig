@@ -21,6 +21,9 @@
             {{ object.category }}
             <br>
         {% endif %}
+        {% if object.placeInStorage %}
+            <span class="label label-default">{{ object.placeInStorage }}</span><br>
+        {% endif %}
         <small>{{ object.description|u.truncate(150) }}</small>
     </div>
     {% if object.rent %}
