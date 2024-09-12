@@ -16,18 +16,6 @@ $theme-colors: (
   "info": $info,
 );
 @import "../../../vendor/twbs/bootstrap/scss/bootstrap";
-$utilities: map-merge(
-  $utilities,
-  (
-    "width":
-      map-merge(
-        map-get($utilities, "width"),
-        (
-          responsive: true,
-        )
-      ),
-  )
-);
 @import "product.scss";
 @import "dark.scss";
 /* $fa-font-display: swap; */

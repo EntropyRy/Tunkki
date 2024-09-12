@@ -224,7 +224,7 @@
 {% block event_content %}
     {% set frontpage = false %}
     {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="ms-md-4 mb-md-4 float-end w-md-50">{{ block("event_media") }}</div>
+        <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block("event_media") }}</div>
     {% endif %}
     {% apply spaceless %}
     {% set content_attr = 'content_attribute'|trans %}
@@ -318,11 +318,9 @@
         {% endif %}
     </div>
 {% endblock %}
-{% block event_img_title %}
-    {% apply spaceless %}
+{%- block event_img_title -%}
     {{ event.badgeText|trans ~ ': ' ~ block("event_name") ~ ' ' ~ block('event_time') }}
-{% endapply %}
-{% endblock %}
+{%- endblock -%}
 {% block event_frontpage_media %}
     {% if event.picture is not null %}
         {% set aspect = event.picture.width / event.picture.height %}
