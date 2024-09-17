@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "arkounay/ux-collection",
-            "version": "4.0.1",
+            "version": "4.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Arkounay/ux-collection.git",
-                "reference": "5f12c8c6f6d1cadcde5ff74caf1250eb08a8a1e2"
+                "reference": "f066105ffcc8aed3c3c859f7ba7483ee32d20a2f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/5f12c8c6f6d1cadcde5ff74caf1250eb08a8a1e2",
-                "reference": "5f12c8c6f6d1cadcde5ff74caf1250eb08a8a1e2",
+                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/f066105ffcc8aed3c3c859f7ba7483ee32d20a2f",
+                "reference": "f066105ffcc8aed3c3c859f7ba7483ee32d20a2f",
                 "shasum": ""
             },
             "require": {
@@ -51,9 +51,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Arkounay/ux-collection/issues",
-                "source": "https://github.com/Arkounay/ux-collection/tree/4.0.1"
+                "source": "https://github.com/Arkounay/ux-collection/tree/4.0.2"
             },
-            "time": "2024-08-19T10:01:11+00:00"
+            "time": "2024-09-13T06:46:47+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -6029,16 +6029,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.14.0",
+            "version": "4.14.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "28eb711f4e28bb950e41fe562b140c1823ed4f5b"
+                "reference": "a76aec83fb1a305eadddd7a033af8c24b55c6c0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/28eb711f4e28bb950e41fe562b140c1823ed4f5b",
-                "reference": "28eb711f4e28bb950e41fe562b140c1823ed4f5b",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/a76aec83fb1a305eadddd7a033af8c24b55c6c0c",
+                "reference": "a76aec83fb1a305eadddd7a033af8c24b55c6c0c",
                 "shasum": ""
             },
             "require": {
@@ -6167,7 +6167,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.14.0"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.14.1"
             },
             "funding": [
                 {
@@ -6187,7 +6187,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-27T09:30:32+00:00"
+            "time": "2024-09-12T15:01:35+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
@@ -6649,16 +6649,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v15.8.0",
+            "version": "v15.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "5ed133fa45987771f80ad300be2316c05832f6a7"
+                "reference": "dc9726ac0cfbba7b3c97e2cf6042f2c090551cdb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/5ed133fa45987771f80ad300be2316c05832f6a7",
-                "reference": "5ed133fa45987771f80ad300be2316c05832f6a7",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/dc9726ac0cfbba7b3c97e2cf6042f2c090551cdb",
+                "reference": "dc9726ac0cfbba7b3c97e2cf6042f2c090551cdb",
                 "shasum": ""
             },
             "require": {
@@ -6702,9 +6702,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v15.8.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v15.9.0"
             },
-            "time": "2024-08-29T21:58:14+00:00"
+            "time": "2024-09-12T22:05:50+00:00"
         },
         {
             "name": "symfony-cmf/routing",
@@ -12997,16 +12997,16 @@
     "packages-dev": [
         {
             "name": "nikic/php-parser",
-            "version": "v5.1.0",
+            "version": "v5.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1"
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/683130c2ff8c2739f4822ff7ac5c873ec529abd1",
-                "reference": "683130c2ff8c2739f4822ff7ac5c873ec529abd1",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
+                "reference": "23c79fbbfb725fb92af9bcf41065c8e9a0d49ddb",
                 "shasum": ""
             },
             "require": {
@@ -13049,9 +13049,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nikic/PHP-Parser/issues",
-                "source": "https://github.com/nikic/PHP-Parser/tree/v5.1.0"
+                "source": "https://github.com/nikic/PHP-Parser/tree/v5.2.0"
             },
-            "time": "2024-07-01T20:03:41+00:00"
+            "time": "2024-09-15T16:40:33+00:00"
         },
         {
             "name": "phpstan/extension-installer",
