@@ -34,7 +34,7 @@ class Event implements \Stringable
     private \DateTimeInterface|\DateTime $publishDate;
 
     #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
-    private ?\App\Entity\Sonata\SonataMediaMedia $picture = null;
+    private ?Media $picture = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
@@ -89,7 +89,7 @@ body {
     private bool $cancelled = false;
 
     #[ORM\ManyToOne(targetEntity: Media::class)]
-    private ?\App\Entity\Sonata\SonataMediaMedia $attachment = null;
+    private ?Media $attachment = null;
 
     #[ORM\Column(type: 'array', nullable: true)]
     private ?array $links = [];
