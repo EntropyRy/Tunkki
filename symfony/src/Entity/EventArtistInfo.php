@@ -156,8 +156,11 @@ class EventArtistInfo implements \Stringable
         }
         return null;
     }
-    public function getArtistDataHasUpdate(): bool
+    public function getArtistDataHasUpdate(\DateTimeInterface $eventDate): bool
     {
+        if ($eventDate < (new \DateTime('now'))->modify('-1 day')) {
+            return false;
+        }
         if ($this->getArtist()) {
             return ($this->getArtistClone()->getUpdatedAt()->format('U') >= $this->getArtist()->getUpdatedAt()->format('U')) ? false : true;
         }
