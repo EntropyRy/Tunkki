@@ -231,16 +231,19 @@ class EventSignUpController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();
             $artist = $info->getArtist();
-            $artistClone = new Artist();
+            $i = 1;
+            foreach ($event->getEventArtistInfos() as $eventinfo) {
+                if ($info->getArtist() == $eventinfo->getArtist()) {
+                    if ($i == 1) {
+                        $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
+                    }
+                    $i += 1;
+                }
+            }
+            $artistClone = clone $info->getArtist();
+            $artistClone->setMember(null);
             $artistClone->setCopyForArchive(true);
-            $artistClone->setName($artist->getName() . ' for ' . $event->getName());
-            $artistClone->setPicture($artist->getPicture());
-            $artistClone->setHardware($artist->getHardware());
-            $artistClone->setBio($artist->getBio());
-            $artistClone->setBioEn($artist->getBioEn());
-            $artistClone->setLinks($artist->getLinks());
-            $artistClone->setGenre($artist->getGenre());
-            $artistClone->setType($artist->getType());
+            $artistClone->setName($artistClone->getName() . ' for ' . $eventinfo->getEvent()->getName() . ' #' . $i);
             $info->setArtistClone($artistClone);
             $em->persist($artistClone);
             $em->persist($info);
@@ -252,7 +255,6 @@ class EventSignUpController extends Controller
                 $this->addFlash('warning', $trans->trans('this_artist_signed_up_already'));
             }
         }
-        //$page = $cms->retrieve()->getCurrentPage();
         return $this->render('artist/signup.html.twig', [
             'event' => $event,
             'form' => $form,

@@ -33,7 +33,7 @@
                             <div class="d-flex justify-content-between">
                                 <a class="btn btn-primary btn-large"
                                    href="{{ path('entropy_artist_edit', {'id': artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
-                                <a class="btn btn-warning btn-large"
+                                <a class="btn btn-warning btn-large" data-turbo="false"
                                    onclick="return ConfirmDelete();"
                                    href="{{ path('entropy_artist_delete', {'id': artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
                             </div>
