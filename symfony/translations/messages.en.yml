@@ -296,7 +296,7 @@ member:
 dark: Dark
 bright: Bright
 rsvp:
-  email_in_use: Are you an Member? Sing in first.
+  email_in_use: You are a member. Please, sign in first.
   receive_info: To be able to receive the location RSVP here
   no_user: To be able to RSVP you need to be a member of Entropy and logged in.
   already_rsvpd:
