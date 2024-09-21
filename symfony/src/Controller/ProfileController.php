@@ -58,6 +58,7 @@ class ProfileController extends AbstractController
                     $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getLocale());
                     $member->setCode($bc->getCode());
+                    $user->setAuthId(bin2hex(openssl_random_pseudo_bytes(10)));
                     $em->persist($user);
                     $em->persist($member);
                     $em->flush();
