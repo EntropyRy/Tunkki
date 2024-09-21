@@ -54,6 +54,9 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]
     private $accessGroups;
 
+    #[ORM\Column(length: 255)]
+    private ?string $authId = null;
+
     public function __construct()
     {
         $this->rewards = new ArrayCollection();
@@ -305,5 +308,17 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     public function getLocale(): string
     {
         return $this->member->getLocale();
+    }
+
+    public function getAuthId(): ?string
+    {
+        return $this->authId;
+    }
+
+    public function setAuthId(string $authId): static
+    {
+        $this->authId = $authId;
+
+        return $this;
     }
 }

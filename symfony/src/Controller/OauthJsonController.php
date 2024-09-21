@@ -5,7 +5,6 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\ExpressionLanguage\Expression;
-use Hashids\Hashids;
 use App\Entity\User;
 
 class OauthJsonController extends AbstractController
@@ -19,8 +18,7 @@ class OauthJsonController extends AbstractController
         );
         $user = $security->getUser();
         assert($user instanceof User);
-        $hash = new Hashids('dalt', 6);
-        $id = $hash->encode($user->getId());
+        $id = $user->getAuthId();
         return new JsonResponse(
             [
                 'id' => $id,

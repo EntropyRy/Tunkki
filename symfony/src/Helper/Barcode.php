@@ -2,17 +2,16 @@
 
 namespace App\Helper;
 
-use Hashids\Hashids;
 use Picqer\Barcode\BarcodeGeneratorHTML;
+use Sqids\Sqids;
 
 class Barcode
 {
-    public function getBarcode($member): array
+    public function getCode(): string
     {
-        $code = $member->getId() . '' . $member->getId() . '' . $member->getUser()->getId();
-        $hashids = new Hashids($code, 8);
-        $code = $hashids->encode($code);
-        return $this->getBarcodeForCode($code);
+        $uniquecode = date('ismnydhis');
+        $sqid = new Sqids('', 9);
+        return $sqid->encode([$uniquecode]);
     }
     public function getBarcodeForCode(string $code): array
     {

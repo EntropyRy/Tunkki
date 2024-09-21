@@ -37,8 +37,6 @@ use App\Entity\Booking;
 use App\Entity\Package;
 use App\Repository\BookingRepository;
 use App\Repository\PackagesRepository;
-// Hash
-use Hashids\Hashids;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -340,8 +338,8 @@ class BookingAdmin extends AbstractAdmin
 
     protected function calculateOwnerHash($booking): string
     {
-        $hashids = new Hashids($booking->getName() . $booking->getRenter(), 10);
-        return strtolower($hashids->encode($booking->getReferenceNumber()));
+        $string = str_shuffle($booking->getReferenceNumber()).''.$booking->getName();
+        return strtolower(md5($string));
     }
     public function prePersist($booking): void
     {
@@ -361,6 +359,7 @@ class BookingAdmin extends AbstractAdmin
         ) . '|' . $booking->getName() . '> on ' .
             $booking->getBookingDate()->format('d.m.Y') . ' created by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->update($booking);
         //$this->sendNotificationMail($booking);
     }
     public function preUpdate($booking): void

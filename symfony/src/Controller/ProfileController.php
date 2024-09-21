@@ -41,6 +41,7 @@ class ProfileController extends AbstractController
         UserPasswordHasherInterface $hasher,
         Mattermost $mm,
         MailerInterface $mailer,
+        Barcode $bc,
         EntityManagerInterface $em
     ): Response {
         $member = new Member();
@@ -56,6 +57,7 @@ class ProfileController extends AbstractController
                     $user = $member->getUser();
                     $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getLocale());
+                    $member->setCode($bc->getCode());
                     $em->persist($user);
                     $em->persist($member);
                     $em->flush();

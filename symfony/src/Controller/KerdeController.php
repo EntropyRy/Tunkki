@@ -65,7 +65,7 @@ class KerdeController extends AbstractController
                 $text .= ' - ' . $doorlog->getMessage();
             } else {
                 foreach ($logs as $log) {
-                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimeStamp() < 60 * 60 * 4)) {
+                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimestamp() < 60 * 60 * 4)) {
                         $send = false;
                         break;
                     }
@@ -78,7 +78,7 @@ class KerdeController extends AbstractController
 
             return $this->redirectToRoute('kerde_door');
         }
-        $barcode = $barcodeGenerator->getBarcode($member);
+        $barcode = $barcodeGenerator->getBarcodeForCode($member->getCode());
         // $status = $ssh->checkStatus();
         // if ($status == 1) {
         //     $this->addFlash('success', 'Stream is on!');
@@ -130,13 +130,12 @@ class KerdeController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $generator = new BarcodeGeneratorHTML();
-        $code = $gen->getBarcode($member);
+        $code = $gen->getBarcodeForCode($member->getCode());
         $barcodes['Your Code'] = $code[1];
-        $barcodes['10€'] = $generator->getBarcode('_10e_', $generator::TYPE_CODE_128, 2, 90);
-        $barcodes['20€'] = $generator->getBarcode('_20e_', $generator::TYPE_CODE_128, 2, 90);
-        $barcodes['Cancel'] = $generator->getBarcode('_CANCEL_', $generator::TYPE_CODE_128, 2, 90);
-        $barcodes['Manual'] = $generator->getBarcode('1812271001', $generator::TYPE_CODE_128, 2, 90);
+        $barcodes['10€'] = $gen->getBarcodeForCode('_10e_')[1];
+        $barcodes['20€'] = $gen->getBarcodeForCode('_20e_')[1];
+        $barcodes['Cancel'] = $gen->getBarcodeForCode('_CANCEL_')[1];
+        $barcodes['Manual'] = $gen->getBarcodeForCode('1812271001')[1];
         // $barcodes['Statistics'] = $generator->getBarcode('0348030005', $generator::TYPE_CODE_128, 2, 90);
         return $this->render('kerde/barcodes.html.twig', [
             'barcodes' => $barcodes
