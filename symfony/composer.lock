@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "61b29d493ee006263b3a4e794e307a74",
+    "content-hash": "4931d0327d0a487bd18846e4146c4026",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -4202,21 +4202,21 @@
         },
         {
             "name": "picqer/php-barcode-generator",
-            "version": "v2.4.2",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/picqer/php-barcode-generator.git",
-                "reference": "e9d39681f617705492b609fc3fc58465ef88e8fd"
+                "reference": "9599fe8a6b194f855ed006620688c5f23318c7e1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/picqer/php-barcode-generator/zipball/e9d39681f617705492b609fc3fc58465ef88e8fd",
-                "reference": "e9d39681f617705492b609fc3fc58465ef88e8fd",
+                "url": "https://api.github.com/repos/picqer/php-barcode-generator/zipball/9599fe8a6b194f855ed006620688c5f23318c7e1",
+                "reference": "9599fe8a6b194f855ed006620688c5f23318c7e1",
                 "shasum": ""
             },
             "require": {
                 "ext-mbstring": "*",
-                "php": "^8.1"
+                "php": "^8.2"
             },
             "require-dev": {
                 "phpstan/phpstan": "^1.10",
@@ -4277,15 +4277,9 @@
             ],
             "support": {
                 "issues": "https://github.com/picqer/php-barcode-generator/issues",
-                "source": "https://github.com/picqer/php-barcode-generator/tree/v2.4.2"
+                "source": "https://github.com/picqer/php-barcode-generator/tree/v3.0.0"
             },
-            "funding": [
-                {
-                    "url": "https://github.com/casperbakker",
-                    "type": "github"
-                }
-            ],
-            "time": "2024-09-18T08:09:33+00:00"
+            "time": "2024-09-21T08:26:14+00:00"
         },
         {
             "name": "psr/cache",
