@@ -111,6 +111,9 @@ class Member implements \Stringable
     #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
     private Collection $happenings;
 
+    #[ORM\Column(length: 255)]
+    private ?string $code = null;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -721,6 +724,18 @@ class Member implements \Stringable
         if ($this->happenings->removeElement($happening)) {
             $happening->removeOwner($this);
         }
+
+        return $this;
+    }
+
+    public function getCode(): ?string
+    {
+        return $this->code;
+    }
+
+    public function setCode(string $code): static
+    {
+        $this->code = $code;
 
         return $this;
     }

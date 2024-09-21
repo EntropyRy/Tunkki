@@ -29,7 +29,7 @@ class KerdeController extends AbstractController
         FormFactoryInterface $formF,
         Mattermost $mm,
         ZMQHelper $zmq,
-        Barcode $barcode,
+        Barcode $barcodeGenerator,
         EntityManagerInterface $em,
         DoorLogRepository $doorlogrepo,
         SSH $ssh
@@ -78,7 +78,7 @@ class KerdeController extends AbstractController
 
             return $this->redirectToRoute('kerde_door');
         }
-        $Mbarcode = $barcode->getBarcode($member);
+        $barcode = $barcodeGenerator->getBarcode($member);
         // $status = $ssh->checkStatus();
         // if ($status == 1) {
         //     $this->addFlash('success', 'Stream is on!');
@@ -88,7 +88,7 @@ class KerdeController extends AbstractController
             'logs' => $logs,
             'member' => $member,
             'status' => $status,
-            'barcode' => $Mbarcode
+            'barcode' => $barcode
         ]);
     }
     #[Route('/kerde/recording/start', name: 'recording_start')]

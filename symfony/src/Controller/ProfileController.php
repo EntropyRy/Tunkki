@@ -55,7 +55,7 @@ class ProfileController extends AbstractController
                 if (!$name && !$email) {
                     $user = $member->getUser();
                     $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
-                    $member->setLocale($request->getlocale());
+                    $member->setLocale($request->getLocale());
                     $em->persist($user);
                     $em->persist($member);
                     $em->flush();
@@ -174,7 +174,7 @@ class ProfileController extends AbstractController
             $this->addFlash('success', 'profile.member_data_changed');
             return $this->redirectToRoute('profile');
         }
-        return $this->renderForm('profile/password.html.twig', [
+        return $this->render('profile/password.html.twig', [
             'form' => $form
         ]);
     }
