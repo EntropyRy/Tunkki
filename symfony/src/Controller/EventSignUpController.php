@@ -243,7 +243,7 @@ class EventSignUpController extends Controller
             $artistClone = clone $info->getArtist();
             $artistClone->setMember(null);
             $artistClone->setCopyForArchive(true);
-            $artistClone->setName($artistClone->getName() . ' for ' . $eventinfo->getEvent()->getName() . ' #' . $i);
+            $artistClone->setName($artistClone->getName() . ' for ' . $event->getName() . ' #' . $i);
             $info->setArtistClone($artistClone);
             $em->persist($artistClone);
             $em->persist($info);

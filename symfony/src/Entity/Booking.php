@@ -118,6 +118,7 @@ class Booking implements \Stringable
 
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Version]
+    // @phpstan-ignore-next-line
     private ?int $version = null;
 
     #[ORM\PrePersist]

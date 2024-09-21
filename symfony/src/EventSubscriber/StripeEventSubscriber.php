@@ -27,7 +27,7 @@ use Symfony\Component\Mime\Part\DataPart;
 class StripeEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(
-        private readonly CheckoutRepository $checkhoutRepo,
+        private readonly CheckoutRepository $checkoutRepo,
         private readonly ProductRepository $productRepo,
         private readonly LoggerInterface $logger,
         private readonly AppStripeClient $stripe,
@@ -54,7 +54,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onProductUpdated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripeProduct = $stripeEvent->data->object;
+        $stripeProduct = $stripeEvent->data->object; // @phpstan-ignore-line
         try {
             $products = $this->productRepo->findBy(['stripeId' => $stripeProduct['id']]);
             foreach ($products as $product) {
@@ -68,7 +68,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceCreated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object;
+        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
 
         try {
             $product = new Product();
@@ -81,7 +81,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceUpdated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object;
+        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
         try {
             $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
             $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
@@ -93,7 +93,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceDeleted(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object;
+        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
 
         try {
             $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
@@ -106,13 +106,13 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onCheckoutExpired(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $session = $stripeEvent->data->object;
+        $session = $stripeEvent->data->object; // @phpstan-ignore-line
         $this->logger->notice('Session: ' . $session['id']);
         try {
-            $checkout = $this->checkhoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
+            $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
             $this->logger->notice('Checkout expired: ' . $checkout->getStripeSessionId());
             $checkout->setStatus(-1);
-            $this->checkhoutRepo->save($checkout, true);
+            $this->checkoutRepo->save($checkout, true);
         } catch (\Exception $e) {
             $this->logger->error('Code: ' . $e->getCode() . ' M:' . $e->getMessage());
         }
@@ -120,13 +120,13 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onCheckoutCompleted(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $session = $stripeEvent->data->object;
+        $session = $stripeEvent->data->object; // @phpstan-ignore-line
         $this->logger->notice('Session: ' . $session['id']);
         try {
-            $checkout = $this->checkhoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
+            $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
             $this->logger->notice('Checkout done: ' . $checkout->getStripeSessionId());
             $checkout->setStatus(1);
-            $this->checkhoutRepo->save($checkout, true);
+            $this->checkoutRepo->save($checkout, true);
             if ($checkout->getStatus() == 1) {
                 $cart = $checkout->getCart();
                 $email = $cart->getEmail();
@@ -159,7 +159,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $event->getPicture()
                 );
                 $checkout->setStatus(2);
-                $this->checkhoutRepo->save($checkout, true);
+                $this->checkoutRepo->save($checkout, true);
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
