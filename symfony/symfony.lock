@@ -111,9 +111,6 @@
     "guzzlehttp/psr7": {
         "version": "1.6.1"
     },
-    "hashids/hashids": {
-        "version": "3.0.0"
-    },
     "imagine/imagine": {
         "version": "v0.7.1"
     },
