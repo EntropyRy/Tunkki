@@ -64,7 +64,7 @@
                             {% if not nakkiRequired %}
                                 {{ block("quantity") }}
                             {% else %}
-                                {% if hasNakki %}{{ block("quantity") }}{% endif %}
+                                {% if event.nakkiRequiredforTicketReservation and hasNakki %}{{ block("quantity") }}{% endif %}
                             {% endif %}
                         </div>
                         <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
@@ -72,14 +72,14 @@
                 </div>
             {% endfor %}
             <div class="col-12">
-                <div class="d-none">{{ form_row(form.email) }}</div>
+                <div class="{% if app.user %}d-none{% endif %}">{{ form_row(form.email) }}</div>
                 {# <label>{{ 'event.stripe.fee'|trans }}</label> #}
                 <input data-turbo="false"
                        type="submit"
                        class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-buy w-100"
                        value="{{ 'e30v.buy'|trans }}" />
-            {{ form_end(form) }}
-        </div>
+                {{ form_end(form) }}
+            </div>
     {% endif %}
 {% endblock %}
 {% block quantity %}
