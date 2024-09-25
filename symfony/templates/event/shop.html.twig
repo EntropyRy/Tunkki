@@ -5,7 +5,7 @@
     <a href="{{ block("event_path") }}">
         <h3>{{ 'Back to'|trans }}: {{ block("event_name") }} ~ {{ block("event_time") }}</h3>
     </a>
-    {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
+    {% if event.nakkiRequiredforTicketReservation and event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
         {{ event.nakkiInfo(app.request.locale) |raw }}
         {% set show = true %}
         {% set hide_time = true %}
@@ -24,7 +24,7 @@
                 {% if inCheckouts[product.id] is defined %}
                     {% set minus = inCheckouts[product.id] %}
                 {% endif %}
-                <div class="col product mb-4" {{ stimulus_controller('product', {'max': product.max((minus|default(0) ))}) }}>
+                <div class="col product mb-4 rounded" {{ stimulus_controller('product', {'max': product.max((minus|default(0) ))}) }}>
                     <div class="row">
                         <div class="col-12 pic text-center">
                             {% if product.picture %}
@@ -32,7 +32,7 @@
                             {% endif %}
                         </div>
                         <div class="col-12 price">
-                            <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-darkblue text-uppercase d-flex justify-content-between rounded">
+                            <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-uppercase d-flex justify-content-between rounded">
                                 <h3 class="ps-4 pe-2 d-flex w-100 fw-bold justify-content-between align-items-center">
                                     <span>
                                         {% if app.request.locale == 'fi' %}
@@ -49,7 +49,7 @@
                                     </span>
                                     <span>{{ product.amount / 100 }}€</span>
                                 </h3>
-                                <span class="btn rounded-circle text-darkblue fs-4">
+                                <span class="btn rounded-circle fs-4">
                                     <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
                                 </span>
                             </button>
@@ -73,23 +73,23 @@
             {% endfor %}
             <div class="col-12">
                 <div class="d-none">{{ form_row(form.email) }}</div>
-                <label>{{ 'event.stripe.fee'|trans }}</label>
+                {# <label>{{ 'event.stripe.fee'|trans }}</label> #}
                 <input data-turbo="false"
                        type="submit"
-                       class="{% if not hasNakki %}disabled{% endif %} btn btn-lg btn-buy w-100"
+                       class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-buy w-100"
                        value="{{ 'e30v.buy'|trans }}" />
             {{ form_end(form) }}
         </div>
     {% endif %}
 {% endblock %}
 {% block quantity %}
-    <div class="quantity-holder d-flex justify-content-center">
+    <div class="quantity-holder d-flex justify-content-center rounded">
         {% if product.max(minus|default(0)) <= 0 %}
             {% set button = "btn-secondary disabled" %}
         {% else %}
             {% set button = "btn-primary" %}
         {% endif %}
-        <button {{ stimulus_target('product', 'minus') }} {{ stimulus_action('product', 'minus') }} class="btn {{ button }} text-darkblue fs-4">
+        <button {{ stimulus_target('product', 'minus') }} {{ stimulus_action('product', 'minus') }} class="btn {{ button }} fs-4">
             <i class="fa fa-minus"></i>
         </button>
         <span class="number text-center w-100 fs-2 fw-bolder" {{ stimulus_target('product', 'quantity') }}>
@@ -99,7 +99,7 @@
                 0
             {% endif %}
         </span>
-        <button {{ stimulus_target('product', 'plus') }} {{ stimulus_action('product', 'plus') }} class="btn {{ button }} text-darkblue fs-4">
+        <button {{ stimulus_target('product', 'plus') }} {{ stimulus_action('product', 'plus') }} class="btn {{ button }} fs-4">
             <i class="fa fa-plus"></i>
         </button>
     </div>

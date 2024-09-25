@@ -1,4 +1,5 @@
 $pink: #ee81ee;
+$outline-color: $secondary;
 $outline: 2px;
 .btn-buy {
   // border-radius: 2em;
@@ -15,7 +16,7 @@ $outline: 2px;
 
 .product {
   padding: 0 0;
-  outline: $outline solid $white;
+  outline: $outline solid $outline-color;
   outline-offset: calc($outline / 2 - $outline);
   /* border-radius: 2rem;*/
   backdrop-filter: blur(10px);
@@ -28,7 +29,7 @@ $outline: 2px;
     min-height: calc($border-radius * 2);
     button {
       background: $white;
-      outline: $outline solid $white;
+      outline: $outline solid $outline-color;
       outline-offset: calc($outline / 2 - $outline);
       width: 100%;
       border: 0;
@@ -64,7 +65,7 @@ $outline: 2px;
   .quantity {
     .quantity-holder {
       min-height: calc($border-radius * 2);
-      outline: $outline solid $white;
+      outline: $outline solid $outline-color;
       outline-offset: calc($outline / 2 - $outline);
       .number {
         display: flex;
@@ -75,7 +76,7 @@ $outline: 2px;
         min-height: calc($border-radius * 2);
         min-width: 3rem; /* calc($border-radius * 2); */
         border: 0;
-        outline: $outline solid $white;
+        outline: $outline solid $outline-color;
         outline-offset: calc($outline / 2 - $outline);
       }
     }
