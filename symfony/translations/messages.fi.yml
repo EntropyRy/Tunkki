@@ -230,7 +230,8 @@ event:
   now: Tapahtuma meneillään
   safer_space: Turvallisempi tila
   ticket:
-    shop: Lippukauppaan
+    shop: Lippukauppa
+    to_shop: Lippukauppaan
   player:
     will_appear_here_when_the_stream_is_on:
       Voit kuunnella streamausta suoraan tältä

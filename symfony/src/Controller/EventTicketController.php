@@ -158,9 +158,13 @@ class EventTicketController extends Controller
         // check that event does not have other type of tickets available
         // if so, provide link to the shop page
         $showShop = false;
-        $userTickets = $ticketRepo->findTicketsByEmailAndEvent($member->getEmail(), $event);
         $products = $event->getTicketProducts();
-        if(count($userTickets) < count($products)) {
+        if (count($products) > 1) {
+            $userTickets = $ticketRepo->findTicketsByEmailAndEvent($member->getEmail(), $event);
+            if (count($userTickets) < count($products)) {
+                $showShop = true;
+            }
+        } else {
             $showShop = true;
         }
 
