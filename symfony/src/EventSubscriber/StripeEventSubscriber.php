@@ -163,12 +163,12 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
-                        if ($product->getQuantity() > 1) {
-                            $sold = 'tickets sold.';
+                        if ($cartItem->getQuantity() > 1) {
+                            $sold = 'Sold ' . $cartItem->getQuantity() . ' tickets.';
                         } else {
-                            $sold = 'ticket sold.';
+                            $sold = 'Sold 1 ticket.';
                         }
-                        $this->mm->SendToMattermost('[' . $product->getNameEn() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
+                        $this->mm->SendToMattermost('[' . $event->getName() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
                     }
                 }
             }
