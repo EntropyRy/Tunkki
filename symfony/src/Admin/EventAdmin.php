@@ -25,7 +25,9 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use App\Form\UrlsType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\Session\Session;
 
 final class EventAdmin extends AbstractAdmin
 {
@@ -700,6 +702,19 @@ final class EventAdmin extends AbstractAdmin
     public function __construct(
         protected SluggerInterface $slug,
         protected LocationRepository $lr,
+        protected RequestStack $rs,
     ) {
+    }
+    public function preValidate(object $object): void
+    {
+        if ($object->getTicketsEnabled() == true) {
+            if (is_object($object->getTicketPresaleStart()) && is_object($object->getTicketPresaleEnd())) {
+                if ($object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()) {
+                    $session = $this->rs->getSession();
+                    assert($session instanceof Session);
+                    $session->getFlashBag()->add('warning', 'Presale end date must be after start date');
+                }
+            }
+        }
     }
 }
