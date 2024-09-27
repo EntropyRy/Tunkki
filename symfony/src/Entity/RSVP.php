@@ -122,14 +122,14 @@ class RSVP implements \Stringable
         return $this;
     }
 
-    public function getAvailableLastName()
+    public function getAvailableLastName(): string
     {
         if ($this->getMember()) {
             return ucfirst($this->getMember()->getLastname());
         }
         return ucfirst((string) $this->lastName);
     }
-    public function getAvailableEmail()
+    public function getAvailableEmail(): string
     {
         if ($this->getMember()) {
             return $this->getMember()->getEmail();

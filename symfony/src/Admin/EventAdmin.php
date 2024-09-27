@@ -601,6 +601,7 @@ final class EventAdmin extends AbstractAdmin
                 ->tab('RSVP')
                 ->with('Config')
                 ->add('rsvpSystemEnabled', null, ['help' => 'allow RSVP to the event'])
+                ->add('sendRsvpEmail', null, ['help' => 'Send the RSVP email when someone does the RSVP but only IF it is defined for this event'])
                 ->end()
                 ->end()
                 ->tab('Tickets')

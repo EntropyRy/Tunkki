@@ -259,6 +259,9 @@ body {
     #[ORM\Version]
     private ?int $version = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $sendRsvpEmail = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
@@ -1562,6 +1565,18 @@ body {
     {
         $func = 'artistSignUpInfo' . ucfirst((string) $lang);
         return $this->{$func};
+    }
+
+    public function isSendRsvpEmail(): ?bool
+    {
+        return $this->sendRsvpEmail;
+    }
+
+    public function setSendRsvpEmail(?bool $sendRsvpEmail): static
+    {
+        $this->sendRsvpEmail = $sendRsvpEmail;
+
+        return $this;
     }
 
 }
