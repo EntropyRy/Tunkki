@@ -24,9 +24,12 @@ final class RSVPListener
         // Send an email to the user who RSVP'd
         $event = $rsvp->getEvent();
         $userMail = $rsvp->getAvailableEmail();
-        if ($event->getRsvpSystemEnabled()) {
-            $emailTemplate = $this->emailRepository->findOneBy(['event' => $event, 'purpose' => 'rsvp']);
-            if ($userMail && $emailTemplate) {
+        if ($event->getRsvpSystemEnabled() && $event->isSendRsvpEmail() && $userMail) {
+            $emailTemplate = $this->emailRepository->findOneBy([
+                'event' => $event,
+                'purpose' => 'rsvp'
+            ]);
+            if ($emailTemplate) {
                 $email = $this->generateMail(
                     $userMail,
                     $emailTemplate->getReplyTo() ?: 'hallitus@entropy.fi',

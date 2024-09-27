@@ -176,7 +176,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         string $eventName,
         string $to,
         $qrs,
-        SonataMediaMedia $img
+        ?SonataMediaMedia $img
     ): void {
         $email = $this->emailRepo->findOneBy(['purpose' => 'ticket_qr', 'event' => $event]);
         $replyTo = 'hallitus@entropy.fi';
@@ -186,17 +186,22 @@ class StripeEventSubscriber implements EventSubscriberInterface
             $body = $email->getBody();
         }
         foreach ($qrs as $x => $qr) {
+            if ($x > 0) {
+                $subject = '[ENTROPY] ' . $qr['name'] . ' (' . ($x + 1) . ')';
+            } else {
+                $subject = '[ENTROPY] ' . $qr['name'];
+            }
             $mail =  (new TemplatedEmail())
                 ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
                 ->to($to)
                 ->replyTo($replyTo)
-                ->subject('[' . $eventName . '] ' . $qr['name'])
+                ->subject($subject)
                 ->addPart((new DataPart($qr['qr'], 'ticket', 'image/png', 'base64'))->asInline())
                 ->htmlTemplate('emails/ticket.html.twig')
                 ->context([
                     'body' => $body,
                     'qr' => $qr,
-                    'links' => $email->getAddLoginLinksToFooter() ?? false,
+                    'links' => $email ? $email->getAddLoginLinksToFooter() : true,
                     'img' => $img,
                     'user_email' => $to
                 ]);
