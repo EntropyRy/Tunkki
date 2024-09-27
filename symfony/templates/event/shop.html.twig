@@ -6,7 +6,7 @@
     <a href="{{ block("event_path") }}">
         <h3><i class="fa fa-arrow-left"></i> {{ block("event_name") }} ~ {{ block("event_time") }}</h3>
     </a>
-    {{ event.ticketInfo(app.request.locale)|default('<p>nbsp;</p>')|raw }}
+    {{ event.ticketInfo(app.request.locale)|default('<p>&nbsp;</p>')|raw }}
     {% if event.nakkiRequiredforTicketReservation and event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
         {{ event.nakkiInfo(app.request.locale) |raw }}
         {% set show = true %}
