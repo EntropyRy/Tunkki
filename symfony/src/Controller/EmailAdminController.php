@@ -125,10 +125,14 @@ final class EmailAdminController extends CRUDController
                 $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
                 $mailer->send($message);
                 $count += 1;
+            } else {
+                $this->addFlash('sonata_flash_error', sprintf('Purpose %s not supported.', $purpose));
             }
-            $email->setSentAt(new \DateTimeImmutable('now'));
-            $this->admin->update($email);
-            $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
+            if ($count > 0) {
+                $email->setSentAt(new \DateTimeImmutable('now'));
+                $this->admin->update($email);
+                $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
+            }
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
