@@ -15,6 +15,7 @@ $outline: 2px;
 }
 
 .product {
+  margin: 1.5rem auto;
   padding: 0 0;
   outline: $outline solid $outline-color;
   outline-offset: calc($outline / 2 - $outline);
