@@ -1578,5 +1578,4 @@ body {
 
         return $this;
     }
-
 }

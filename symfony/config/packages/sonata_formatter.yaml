@@ -13,15 +13,16 @@ sonata_formatter:
         - sonata.formatter.twig.gist
         - sonata.formatter.twig.media
 fos_ck_editor:
+  default_config: default
   configs:
     default:
       versionCheck: false
       toolbar:
         "standard"
         #extraPlugins: "html5audio"
-  toolbars:
-    items:
-      standard.links: ["Link", "Unlink", "Anchor", "-", "Html5audio"]
+    simple:
+      versionCheck: false
+      toolbar: "basic"
 sonata_admin:
   assets:
     extra_javascripts:

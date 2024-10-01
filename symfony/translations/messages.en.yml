@@ -57,6 +57,7 @@ fb.event: FB Event
 tg:
   event: The Event
   info: Telegram info channel
+  ticket_shop: Ticket Shop 
 entropy.seo.description: Electronic music and culture association
 rss_desc: Upcoming and past events and announcements of Entropy ry
 map: Map

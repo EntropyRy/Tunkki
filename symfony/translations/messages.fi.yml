@@ -20,6 +20,7 @@ Chat: Keskustelu
 tg:
   event: Tapahtuma
   info: Telegram-infokanava
+  ticket_shop: Lippukauppa
 footer:
   side_title: Elektronisen musiikin kulttuuriyhdistys
 Signed: Allekirjoitettu
