@@ -38,25 +38,25 @@ final class NotificationAdminController extends CRUDController
             'year' => $event->getEventDate()->format('Y'),
             'slug' => $event->getUrl(),
         ]);
+        $host = $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
-            $url = $request->headers->get('host') . $path;
-            $nakkikone = $request->headers->get('host') . $path . 'nakkikone';
-            $shop = $request->headers->get('host') . $path . 'kauppa';
+            $url = $host . $path;
+            $nakkikone = $host . $path . 'nakkikone';
+            $shop = $host . $path . 'kauppa';
         } else {
-            $url = $request->headers->get('host') . '/en' . $path;
-            $nakkikone = $request->headers->get('host') . '/en' . $path . 'nakkikone';
-            $shop = $request->headers->get('host') . $path . 'shop';
+            $url = $host . '/en' . $path;
+            $nakkikone = $host . '/en' . $path . 'nakkikone';
+            $shop = $host . '/en'. $path . 'shop';
         }
         $msg = html_entity_decode(strip_tags($notification->getMessage(), '<a><b><strong><u><code><em><a>'));
         $message = new ChatMessage($msg);
-        $telegramOptions = (new TelegramOptions());
-        if ($notification->getMessageId()) {
-            $telegramOptions->edit($notification->getMessageId());
-        }
-        $telegramOptions
+        $telegramOptions = (new TelegramOptions())
             ->parseMode('HTML')
             ->disableWebPagePreview(true)
             ->disableNotification(true);
+        if ($notification->getMessageId()) {
+            $telegramOptions->edit($notification->getMessageId());
+        }
         $options = $notification->getOptions();
         $buttons = [];
         foreach ($options as $option) {
@@ -104,6 +104,7 @@ final class NotificationAdminController extends CRUDController
                         ->inlineKeyboard($buttons)
                 );
         }
+        //dd($telegramOptions);
         $message->options($telegramOptions);
         try {
             $return = $chatter->send($message);
