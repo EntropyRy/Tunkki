@@ -3,7 +3,7 @@
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
     {% set l = app.request.locale %}
-    <div class="col-12">
+    <div class="col-12" {{ stimulus_controller("nakkikone") }}>
         <h2>
             Nakkikone
             {% if event.template == "event.html.twig" %}
