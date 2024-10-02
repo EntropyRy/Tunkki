@@ -26,7 +26,8 @@ final class NotificationAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('message', null, [
+            ->add('message', 'html', [
+                'safe' => true
             ])
             ->add('updatedAt')
             ->add('sentAt')
