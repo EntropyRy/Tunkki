@@ -26,7 +26,7 @@
                            role="tab"
                            aria-controls="{{ name }}">
                             {{ name }} ({{ nakki.durations|join("h, ") }}h)
-                            <span class="badge rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
+                            <span class="badge bg-secondary rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
                         </a>
                     {% endfor %}
                 </div>
