@@ -69,10 +69,11 @@ final class NotificationAdmin extends AbstractAdmin
                 'choices' => [
                     'Add event picture to the message header (can be added only on first send)' => 'add_event_picture',
                     'Preview link That is in the content (only if there is no header picture)' => 'add_preview_link',
-                    'Send Notification to everybody in the info channel (only works on first send)' => 'send_notification',
+                    'Send Notification Sound to everybody in the info channel (only works on first send)' => 'send_notification',
                     'Add Event Button' => 'add_event_button',
                     'Add Nakkikone Button' => 'add_nakkikone_button',
-                    'Add Buy Ticket Button' => 'add_shop_button'
+                    'Add Buy Ticket Button' => 'add_shop_button',
+                    'Add Venue: Inserts map to the event venue defined in Event Location in Event-tab. If used it is the only info to send. Sent message cannot be edited. New message has to be sent' => 'add_venue',
                 ]
             ]);
     }

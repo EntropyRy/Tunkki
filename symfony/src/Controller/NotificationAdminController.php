@@ -72,6 +72,10 @@ final class NotificationAdminController extends CRUDController
                 case 'send_notification':
                     $telegramOptions->disableNotification(false);
                     break;
+                case 'add_venue':
+                    $venue = $event->getLocation();
+                    $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $venue->getName(), $venue->getStreetAddress());
+                    break;
                 case 'add_event_button':
                     array_push(
                         $buttons,
