@@ -29,20 +29,25 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
     {% endif %}
     {% set guid = 'https://entropy.fi' ~ path(eventpath, {'id': event.id, 'updated': event.updatedAt|date('dmY')}) %}
     <item>
-    {% if event.type != 'announcement' %}
-        <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
-    {% else %}
-        <title>{{ event.nameByLang(locale)|escape }}</title>
-    {% endif %}
-    <link>{{ link }}</link>
-<guid>{{ guid }}</guid>
-<pubDate>{{ event.publishDate|date("r") }}</pubDate>
-<updated>{{ event.updatedAt|date("r") }}</updated>
-<description>{{ event.abstract(locale) }}
-{% if event.updatedAt|date('Y') != '-0001' %}{{ 'updated'|trans }}: {{ event.updatedAt|date() }}{% endif %}
-</description>
-<category>{{ event.type|trans }}</category>
-</item>
+        {% if event.type != 'announcement' %}
+            <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
+        {% else %}
+            <title>{{ event.nameByLang(locale)|escape }}</title>
+        {% endif %}
+        <link>{{ link }}</link>
+        {% if event.Picture %}
+        <enclosure url="https://entropy.fi{{ sonata_path(event.picture, 'banner') }}" type="{{ event.picture.contentType }}" length="0" />
+        {% else %}
+        <enclosure url="https://entropy.fi{{ asset('images/placeholders/' ~ event.type ~ '.webp') }}" type="image/webp" length="0" />
+        {% endif %}
+        <guid>{{ guid }}</guid>
+        <pubDate>{{ event.publishDate|date("r") }}</pubDate>
+        <updated>{{ event.updatedAt|date("r") }}</updated>
+        <description>{{ event.abstract(locale) }}
+        {% if event.updatedAt|date('Y') != '-0001' %}{{ 'updated'|trans }}: {{ event.updatedAt|date() }}{% endif %}
+        </description>
+        <category>{{ event.type|trans }}</category>
+    </item>
 {% endfor %}
 </channel>
 </rss>
