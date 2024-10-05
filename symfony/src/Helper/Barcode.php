@@ -9,7 +9,7 @@ class Barcode
 {
     public function getCode(): string
     {
-        $uniquecode = date('ismnydhis');
+        $uniquecode = (int)date('ismnydhis');
         $sqid = new Sqids('', 9);
         return $sqid->encode([$uniquecode]);
     }
