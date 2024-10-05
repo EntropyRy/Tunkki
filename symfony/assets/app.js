@@ -14,4 +14,3 @@ import "@fortawesome/fontawesome-free/css/all.css";
 // start the Stimulus application
 import "./bootstrap.js";
 import "./js/bs.js";
-//import "./js/nakkikone.js";

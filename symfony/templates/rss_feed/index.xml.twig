@@ -5,8 +5,7 @@
 <channel>
 <title>Entropy ry</title>
 <link>
-https://entropy.fi
-{% if locale == 'en' %}/en{% endif %}
+https://entropy.fi{% if locale == 'en' %}/en{% endif %}
 </link>
 <atom:link href="https://entropy.fi{{ path('rss_feed.' ~ locale) }}" rel="self" type="application/rss+xml" />
 <description>{{ 'rss_desc'|trans }}</description>
