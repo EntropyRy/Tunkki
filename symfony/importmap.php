@@ -73,19 +73,19 @@ return [
         'version' => '1.15.3',
     ],
     'intl-messageformat' => [
-        'version' => '10.5.14',
+        'version' => '10.6.0',
     ],
     'tslib' => [
         'version' => '2.7.0',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.7.8',
+        'version' => '2.7.9',
     ],
     '@formatjs/fast-memoize' => [
         'version' => '2.2.0',
     ],
     '@formatjs/icu-skeleton-parser' => [
-        'version' => '1.8.2',
+        'version' => '1.8.3',
     ],
     '@hotwired/turbo' => [
         'version' => '8.0.10',
@@ -106,5 +106,9 @@ return [
     ],
     'es-module-shims' => [
         'version' => '1.10.0',
+    ],
+    'bootstrap/dist/css/bootstrap.min.css' => [
+        'version' => '5.3.3',
+        'type' => 'css',
     ],
 ];
