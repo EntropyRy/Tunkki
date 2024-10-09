@@ -231,6 +231,7 @@
     {{ attribute(event, content_attr) |replace({
     '{{ timetable }}': block('timetable'),
     '{{ timetable_to_page }}': block('timetable_to_page'),
+    '{{ timetable_with_genre }}': block('timetable_with_genre'),
     '{{ bios }}': block('bios'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ vj_bios }}': block('vj_bios'),
@@ -514,6 +515,11 @@
     {% set page_links = true %}
     {{ block("timetable") }}
 {% endblock %}
+{% block timetable_with_genre %}
+    {% set page_links = true %}
+    {% set genre = true %}
+    {{ block("timetable") }}
+{% endblock %}
 {% block timetable %}
     {% set last = null %}
     {% set music_bios = event.MusicArtistInfos %}
@@ -547,6 +553,9 @@
                                     {% endif %}
                                     <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
                                 {% if artist.type == 'Live' %}(Live){% endif %}
+                                {% if genre|default(null) %}
+                                    <i class="fw-lighter"> ({{ artist.genre }})</i>
+                                {% endif %}
                             {% endif %}
                             {% set last = info.StartTime %}
                             {% if last is defined %}
