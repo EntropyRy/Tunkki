@@ -67,36 +67,34 @@
             {% else %}
                 {% if event.url and not event.externalUrl %}
                     <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {% else %}
-                        <a href="{{ path(route, {id: event.id}) }}">
-                        {% endif %}
+                {% else %}
+                    <a href="{{ path(route, {id: event.id}) }}">
+                {% endif %}
                         {{ attribute(event, name_attr) }}
                     </a>
-                {% endif %}
-                {% if not event.published %}- {{ 'event.not_public'|trans }}{% endif %}
-            </span>
-            <span class="border-bottom flex-fill">
-                {% if event.epics %}
-                    <a style="position: relative;
-                              float: right;
-                              right: 30%"
-                       href="{{ event.epics }}"><i class="fas fa-image"></i></a>
-                {% endif %}
-            </span>
-            <span>
-                {% apply spaceless %}
-                {% if event.until %}
-                    {% if event.until|date('n') != event.eventdate|date('n') %}
-                        {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-                    {% elseif (event.until|date('j') - event.eventdate|date('j')) > 1 %}
-                        {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
-                    {% else %}
-                        {{ event.eventdate|date('j.n.') }}
-                    {% endif %}
-                {% else %}
-                    {{ event.eventdate|date('j.n.') }}
-                {% endif %}
-            {% endapply %}
+            {% endif %}
+            {% if not event.published %}- {{ 'event.not_public'|trans }}{% endif %}
+        </span>
+        <span class="border-bottom flex-fill">
+            {% if event.epics %}
+                <a style="position: relative;
+                        float: right;
+                        right: 30%"
+                href="{{ event.epics }}"><i class="fas fa-image"></i></a>
+            {% endif %}
+        </span>
+        <span>
+        {%- if event.until %}
+            {% if event.until|date('n') != event.eventdate|date('n') %}
+                {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
+            {% elseif (event.until|date('j') - event.eventdate|date('j')) > 1 %}
+                {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
+            {% else %}
+                {{ event.eventdate|date('j.n.') }}
+            {% endif %}
+        {% else %}
+            {{ event.eventdate|date('j.n.') }}
+        {% endif -%}
         </span>
     </h5>
 {% endblock %}

@@ -1,6 +1,5 @@
 {% use 'pieces/event.html.twig' %}
-{% block menu %}
-    {% apply spaceless %}
+{%- block menu %}
     {% set loc = app.request.locale %}
     {% set theme = 'light' %}
     {% if event is defined %}
@@ -53,8 +52,7 @@
         </div>
     </nav>
     {{ include('menu/user_menu.html.twig') }}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block locale %}
     {% if app.request.locale == 'fi' %}
         <li class="nav-item current">
@@ -74,8 +72,7 @@
         </li>
     {% endif %}
 {% endblock %}
-{% block mobile_locale %}
-    {% apply spaceless %}
+{%- block mobile_locale %}
     {% if app.request.locale == 'fi' %}
         <span>FI</span> |
         <a href="/en{% if event_url is defined %}{{ event_url }}{% endif %}">EN</a>
@@ -83,5 +80,4 @@
         <a href="{% if event_url is defined %}{{ event_url }}{% else %}/{% endif %}">FI</a> |
         <span>EN</span>
     {% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}

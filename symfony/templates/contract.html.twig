@@ -114,8 +114,7 @@
     {% endif %}
 </div>
 {% endblock %}
-{% block item %}
-    {% apply spaceless %}
+{%- block item %}
     <div class="form-check">
         <input type="checkbox" class="me-2">
         <label>{{ item }}</label>
@@ -127,5 +126,4 @@
         {% for file in item.files %}<span class="no-print">- {{ file.downloadLink|raw }}</span>{% endfor %}
         {% if show_price %}<span class="float-end">{{ item.rent }} €</span>{% endif %}
     </div>
-{% endapply %}
-{% endblock %}
+{% endblock -%}

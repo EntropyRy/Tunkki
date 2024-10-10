@@ -114,15 +114,13 @@
                             timetable: block('event_path_timetable')
                         } %}
             {# 'tickets': block('event_path_shop'), #}
-            {% apply spaceless %}
             <nav>
-                {% for name, path in el %}
+                {%- for name, path in el %}
                     {% if path is not null %}
                         <a href={{ path }} type="button" aria-selected="{{ block('active_url') }}" class="btn btn-lg btn-outline-nav w-100 {% if block('active_url') == 'true' %}active{% endif %}">{{ ('e30v.nav.' ~ name)|trans|raw }}</a>
                     {% endif %}
-                {% endfor %}
+                {% endfor -%}
             </nav>
-        {% endapply %}
     {% endblock %}
     {% block active_url %}
         {% if current_url == path %}

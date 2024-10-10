@@ -1,5 +1,4 @@
-{% apply spaceless %}
-{% if app.user %}
+{%- if app.user %}
     <nav style="border-top: 0px"
          class="navbar navbar-expand-lg navbar-{{ theme }} g-4">
         <div class="container-fluid">
@@ -72,5 +71,4 @@
             </div>
         </div>
     </nav>
-{% endif %}
-{% endapply %}
+{% endif -%}

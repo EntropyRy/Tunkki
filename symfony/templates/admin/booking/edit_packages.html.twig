@@ -1,5 +1,4 @@
 {% block entropy_type_packages_widget %}
-    {% apply spaceless %}
     {%- for child in form %}
         {% set reserved, fix = false, false %}
         {% set package = form.vars.choices[child.vars.value].data %}
@@ -44,7 +43,6 @@
             <!-- /.box -->
         {% endif %}
     {% endfor -%}
-{% endapply %}
 {% endblock %}
 {% block item %}
     <div {{ block('widget_container_attributes') }}>

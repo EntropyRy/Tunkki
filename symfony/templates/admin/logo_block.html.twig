@@ -1,6 +1,5 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
-{% block logo %}
-    {% apply spaceless %}
+{%- block logo %}
     <a class="logo w-100"
        href="{{ path('dashboard.' ~ app.request.locale|default('fi')) }}">
         <img src="{{ asset(sonata_config.logo) }}"
@@ -8,5 +7,4 @@
              width="100%"
              style="max-width:100%">
     </a>
-{% endapply %}
-{% endblock %}
+{% endblock -%}

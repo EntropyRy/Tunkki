@@ -1,5 +1,4 @@
-{% block ticket_for_frontpage %}
-    {% apply spaceless %}
+{%- block ticket_for_frontpage %}
     {% if event.ticketsEnabled and app.user %}
         <div class="pt-2 pb-2" id="ticket">
             <div class="col-md-6 mx-auto clearfix">
@@ -10,10 +9,8 @@
             </div>
         </div>
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block ticket_for_event_page %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block ticket_for_event_page %}
     {% if event.ticketsEnabled and app.user %}
         <div class="pt-2 pb-2" id="ticket">
             {# <p>{{'ticket.info'|trans|raw}}</p> #}
@@ -40,8 +37,7 @@
             </div>
         </div>
     {% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block multi_ticket %}
     <h1 class="text-center">{{ qr.name }}</h1>
     <div class="qr-code text-center">
@@ -90,8 +86,7 @@
     {% endif %}
 {% endblock %}
 
-{% block stripe_ticket %}
-{% apply spaceless %}
+{%- block stripe_ticket %}
     {% if event.ticketsEnabled %}
         <div class="pt-2 pb-2" id="ticket">
             <div class="col-md-6 mx-auto clearfix">
@@ -113,5 +108,4 @@
             </div>
         </div>
     {% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}

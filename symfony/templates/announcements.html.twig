@@ -43,25 +43,23 @@
             {% else %}
                 {% if event.url and not event.externalUrl %}
                     <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {% else %}
-                        <a href="{{ path(route, {id: event.id}) }}">
-                        {% endif %}
-                        {{ attribute(event, name_attr) }}
+                {% else %}
+                    <a href="{{ path(route, {id: event.id}) }}">
+                {% endif %}
+                    {{ attribute(event, name_attr) }}
                     </a>
-                {% endif %}
-            </span>
-            <span class="border-bottom flex-fill">
-                {% if event.epics %}
-                    <a style="position: relative;
-                              float: right;
-                              right: 30%"
-                       href="{{ event.epics }}"><i class="fas fa-image"></i></a>
-                {% endif %}
-            </span>
-            <span>
-                {% apply spaceless %}
-                {{ event.publishdate|date('j.n.') }}
-            {% endapply %}
+            {% endif %}
+        </span>
+        <span class="border-bottom flex-fill">
+            {% if event.epics %}
+                <a style="position: relative;
+                            float: right;
+                            right: 30%"
+                    href="{{ event.epics }}"><i class="fas fa-image"></i></a>
+            {% endif %}
+        </span>
+        <span>
+            {{ event.publishdate|date('j.n.') }}
         </span>
     </h5>
 {% endblock %}

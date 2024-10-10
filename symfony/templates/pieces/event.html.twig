@@ -3,8 +3,7 @@
 {% use 'pieces/happening.html.twig' %}
 {% block menu %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-    {% apply spaceless %}
-    {% if app.user %}
+    {%- if app.user %}
         <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
             <div class="container">
                 <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
@@ -58,8 +57,7 @@
                 </div>
             </div>
         </nav>
-    {% endif %}
-{% endapply %}
+    {% endif -%}
 {% endblock %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
@@ -118,8 +116,7 @@
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h2>
 {% endblock %}
-{% block event_path %}
-{% apply spaceless %}
+{%- block event_path %}
 {% if event.url and not event.externalUrl %}
     {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
 {% else %}
@@ -129,45 +126,33 @@
         {{ path('entropy_event_en', {id: event.id}) }}
     {% endif %}
 {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_path_shop %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block event_path_shop %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_path_info %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block event_path_info %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_info', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_path_safer_space %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block event_path_safer_space %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_safer_space', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_path_artists %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block event_path_artists %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_path_timetable %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block event_path_timetable %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_timetable', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block published_and_updated %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block published_and_updated %}
     {{ 'released'|trans }}: {{ event.publishDate|date() }}
     {% if event.updatedAt %}
         {% if event.publishDate < event.updatedAt %}-- {{ 'updated'|trans }}: {{ event.updatedAt|date }}{% endif %}
@@ -177,8 +162,7 @@
         <i class="fa fa-eye-slash mr-1"></i>{{ 'event.only_for_members'|trans }}
     </span>
 {% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block event_head_frontpage %}
     <h3 class="mt-2 event-name">
         {{ block('event_name') }}
@@ -186,19 +170,16 @@
     </h3>
     {{ block('event_banner_media') }}
 {% endblock %}
-{% block event_name %}
-    {% apply spaceless %}
+{%- block event_name %}
     {% set name_attr = 'name_attribute'|trans %}
     {{ attribute(event, name_attr) }}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
     {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block event_time_badge %}
     <span class="badge text-black bg-info text-wrap float-end" style="font-size:0.8rem" {{ stimulus_controller('moment') }} data-moment-date-value="{{ event.eventDate|date('c') }}" data-moment-target="badge" data-moment-refresh-interval-value="1000" data-moment-locale-value="{{ app.request.locale }}"></span>
 {% endblock %}
-{% block event_time %}
-    {% apply spaceless %}
+{%- block event_time %}
     {% if event.type != 'announcement' %}
         {% if event.multiday %}
             {{ event.eventdate|date('j') }}. - {{ event.until|date('j.n.Y') }}
@@ -206,8 +187,7 @@
             {{ event.eventdate|date() }}
         {% endif %}
     {% endif %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block event_time_small %}
     {% if event.type != 'announcement' %}
         {% if event.multiday %}
@@ -221,12 +201,11 @@
 {% block event_banner_media %}
     {% if event.picturePosition == 'banner' %}{{ block('event_media') }}{% endif %}
 {% endblock %}
-{% block event_content %}
+{%- block event_content %}
     {% set frontpage = false %}
     {% if event.picture is not null and event.picturePosition == 'right' %}
         <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
-    {% apply spaceless %}
     {% set content_attr = 'content_attribute'|trans %}
     {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
@@ -246,11 +225,9 @@
     {% if '{{ links }}' not in attribute(event, content_attr) %}
         {{ block('links') }}
     {% endif %}
-{% endapply %}
-{% endblock %}
-{% block event_frontpage_content %}
+{% endblock -%}
+{%- block event_frontpage_content %}
     {% set frontpage = true %}
-    {% apply spaceless %}
     {% set content_attr = 'content_attribute'|trans %}
     {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
@@ -262,8 +239,7 @@
     '{{ rsvp }}': block('RSVP')
     })|raw }}
     {{ block('links') }}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block event_badge %}
     <div class="badge-container text-end">
         {{ block('event_icons') }}
@@ -409,8 +385,7 @@
 {% block imgfilter %}
     {% if event.imgFilterColor and event.imgFilterBlendMode %}style="background: {{ event.imgFilterColor }};"{% endif %}
 {% endblock %}
-{% block links %}
-    {% apply spaceless %}
+{%- block links %}
     {% if event.attachment %}
         <div class="mb-2">
             <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
@@ -509,8 +484,7 @@
             </span>
         {% endif %}
     </div>
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block timetable_to_page %}
     {% set page_links = true %}
     {{ block('timetable') }}
@@ -689,21 +663,18 @@
             {% if not loop.last %}<hr class="d-md-none">{% endif %}
         {% endif %}
     {% endblock %}
-    {% block vj_bios %}
-        {% apply spaceless %}
-        {% for stage, infos in event.ArtistInfosByType('VJ') %}
-            {% if stage %}
-                <h3 class="artists-heading text-center">
-                    VJ {{ 'Artists'|trans }}
-                    {% if stage %}@ {{ stage }}{% endif %}
-                </h3>
-            {% endif %}
-            {{ block('infos') }}
-        {% endfor %}
-    {% endapply %}
-{% endblock %}
-{% block art_bios %}
-    {% apply spaceless %}
+{%- block vj_bios %}
+    {% for stage, infos in event.ArtistInfosByType('VJ') %}
+        {% if stage %}
+            <h3 class="artists-heading text-center">
+                VJ {{ 'Artists'|trans }}
+                {% if stage %}@ {{ stage }}{% endif %}
+            </h3>
+        {% endif %}
+        {{ block('infos') }}
+    {% endfor %}
+{% endblock -%}
+{%- block art_bios %}
     {% for stage, infos in event.ArtistInfosByType('ART') %}
         {% if stage %}
             <h3 class="artists-heading text-center">
@@ -713,10 +684,8 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
-{% endapply %}
-{% endblock %}
-{% block bios %}
-    {% apply spaceless %}
+{% endblock -%}
+{%- block bios %}
     {% for stage, infos in event.MusicArtistInfos %}
         {% if stage %}
             <h3 class="artists-heading text-center">
@@ -726,8 +695,7 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
-{% endapply %}
-{% endblock %}
+{% endblock -%}
 {% block infos %}
     {% set bio_attribute = 'bio_attribute'|trans %}
     {% for info in infos %}

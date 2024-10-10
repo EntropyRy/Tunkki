@@ -1,6 +1,5 @@
 {% block entropy_type_items_widget %}
-    {% apply spaceless %}
-    {% for key, category in categories %}
+    {%- for key, category in categories %}
         <div class="col-md-12">
             <h3>
                 {{ key }}
@@ -42,8 +41,7 @@
                 {% endfor -%}
             </div>
         </div>
-    {% endfor %}
-{% endapply %}
+    {% endfor -%}
 {% endblock %}
 {% block helpbutton %}
     <button id="pop" type="button" class="btn pull-right" data-toggle="popover" title="Coding for the items" data-content=' <span style="opacity:0.3;">Greyed out</span> selections are in another booking.

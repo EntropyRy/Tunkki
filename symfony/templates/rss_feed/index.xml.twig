@@ -1,5 +1,4 @@
 {% use 'pieces/event.html.twig' %}
-{% apply spaceless %}
 <?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 <channel>
@@ -16,7 +15,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
 <title>Entropy ry</title>
 <link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
 </image>
-{% for event in events %}
+{%- for event in events %}
     {% if locale == 'fi' %}
         {% set eventpath = 'entropy_event' %}
     {% else %}
@@ -48,7 +47,6 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         </description>
         <category>{{ event.type|trans }}</category>
     </item>
-{% endfor %}
+{% endfor -%}
 </channel>
 </rss>
-{% endapply %}
