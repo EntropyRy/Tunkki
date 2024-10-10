@@ -5,15 +5,15 @@
         <h1 class="h3 mb-3 font-weight-normal">{{ 'Choose login method'|trans }}</h1>
         <div class="col-12">
             <a class="btn btn-lg btn-primary w-100" data-turbo="false"
-               href="{{ path("_entropy_mattermost_auth") }}">
-                <img height="23" src="{{ asset("/images/mattermost-logo.svg") }}">
+               href="{{ path('_entropy_mattermost_auth') }}">
+                <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}">
                 {{ 'Mattermost login'|trans }}
             </a>
         </div>
         <div class="linetext">
             <span>{{ 'OR'|trans }}</span>
         </div>
-        <form action="{{ path("app_login") }}" method="post">
+        <form action="{{ path('app_login') }}" method="post">
             {% if error %}
                 <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}
@@ -34,7 +34,7 @@
             {# <input type="hidden" name="_target_path" value="{{ path('dashboard') }}"> #}
             <input type="hidden"
                    name="_csrf_token"
-                   value="{{ csrf_token("authenticate") }}">
+                   value="{{ csrf_token('authenticate') }}">
             {#
         Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
         See https://symfony.com/doc/current/security/remember_me.html
@@ -49,7 +49,7 @@
             <div class="d-flex flex-row justify-content-around">
                 <div class="flex-fill">
                     <a class="btn btn-secondary"
-                       href="{{ path("app_forgot_password_request") }}">{{ 'forgot_password'|trans }}</a>
+                       href="{{ path('app_forgot_password_request') }}">{{ 'forgot_password'|trans }}</a>
                 </div>
                 <div>
                     <button class="btn btn-primary" type="submit" data-turbo="false">

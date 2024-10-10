@@ -12,10 +12,10 @@
     {% if event is not null and visible %}
         <div class="row">
             <div class="col">
-                <a href="{{ block("event_path") }}">
-                    <h3 class="mt-2">{{ block("event_name") }} ~ {{ block("event_time") }}</h3>
+                <a href="{{ block('event_path') }}">
+                    <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
                 </a>
-                {{ block("ticket") }}
+                {{ block('ticket') }}
             </div>
         </div>
     {% else %}

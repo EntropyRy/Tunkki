@@ -14,18 +14,18 @@
                 <div class="box box-solid collapsed-box">
                     <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
                         <div class="pull-left">
-                            {{ booking.bookingdate|date("d.m.Y") }}
+                            {{ booking.bookingdate|date('d.m.Y') }}
                             {% if booking.IsSomethingBroken %}- <i class="fa fa-medkit"></i>{% endif %}
                             <br>
-                            <a href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">{{ booking.name }}</a>
+                            <a href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">{{ booking.name }}</a>
                         </div>
                         <div class="box-tools pull-right" style="position:relative">
                             <a class="btn btn-default btn-sm"
-                               href="{{ path('admin_app_booking_edit', {'id': booking.id}) }}">
+                               href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
                                 <i class="fa fa-pencil-square-o"></i> edit
                             </a>
                             <a class="btn btn-default btn-sm"
-                               href="{{ path('admin_app_booking_statusevent_create', {'id': booking.id}) }}">
+                               href="{{ path('admin_app_booking_statusevent_create', {id: booking.id}) }}">
                                 <i class="fa fa-pencil-square-o"></i>
                                 Change Status
                             </a>
@@ -41,7 +41,7 @@
                                     Given away
                                     <br>
                                     {% if booking.retrieval %}
-                                        {{ booking.retrieval|date("d.m.Y H:i") }}
+                                        {{ booking.retrieval|date('d.m.Y H:i') }}
                                         <br>
                                     {% endif %}
                                     {% if booking.givenAwayBy %}
@@ -55,7 +55,7 @@
                                     Returning
                                     <br>
                                     {% if booking.returning %}
-                                        {{ booking.returning|date("d.m.Y H:i") }}
+                                        {{ booking.returning|date('d.m.Y H:i') }}
                                         <br>
                                     {% endif %}
                                     {% if booking.receivedBy %}

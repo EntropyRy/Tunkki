@@ -1,4 +1,4 @@
-{% if object.rejectReason|length>0 and not object.rejectReasonSent %}
+{% if object.rejectReason|length > 0 and not object.rejectReasonSent %}
     <a class="btn btn-sm btn-default edit_link"
        href="{{ admin.generateObjectUrl('sendrejectreason', object) }}"><i class="fa fa-paper-plane" aria-hidden="true"></i> Send Reject Reason</a>
 {% endif %}

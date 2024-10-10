@@ -3,7 +3,7 @@
     {% set loaded = 1 %}
     {% for file in object.files %}
         {% if file is defined and loaded %}
-            {% if file.file.providerName == "sonata.media.provider.image" %}
+            {% if file.file.providerName == 'sonata.media.provider.image' %}
                 {{ sonata_media(file.file, 'small') }}
                 {% set loaded = 0 %}
             {% endif %}
@@ -22,10 +22,10 @@
 {% block sonata_mosaic_description %}
     {% if admin.isGranted('EDIT', object) and admin.hasRoute('edit') %}
         <a class="mosaic-inner-link"
-           href="{{ admin.generateUrl('edit', {'id' : object|sonata_urlsafeid }) }}">{{ meta.title|u.truncate(40) }}</a>
+           href="{{ admin.generateUrl('edit', {id: object|sonata_urlsafeid}) }}">{{ meta.title|u.truncate(40) }}</a>
     {% elseif admin.isGranted('SHOW', object) and admin.hasRoute('show') %}
         <a class="mosaic-inner-link"
-           href="{{ admin.generateUrl('show', {'id' : object|sonata_urlsafeid }) }}">{{ meta.title|u.truncate(40) }}</a>
+           href="{{ admin.generateUrl('show', {id: object|sonata_urlsafeid}) }}">{{ meta.title|u.truncate(40) }}</a>
     {% else %}
         {{ meta.title|u.truncate(40) }}
     {% endif %}

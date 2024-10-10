@@ -4,24 +4,24 @@
         {{ form_start(form) }}
             {{ form_errors(form) }}
             <div class="row">
-                {{ form_row(form.firstname, {'row_attr': {'class': 'col-md-6' }}) }}
-                {{ form_row(form.lastname, {'row_attr': {'class': 'col-md-6' }}) }}
+                {{ form_row(form.firstname, {row_attr: {class: 'col-md-6'}}) }}
+                {{ form_row(form.lastname, {row_attr: {class: 'col-md-6'}}) }}
             </div>
             <div class="row">
-                {{ form_row(form.email, {'row_attr': {'class': 'col-md-6' }}) }}
-                {{ form_row(form.phone, {'row_attr': {'class': 'col-md-6' }}) }}
+                {{ form_row(form.email, {row_attr: {class: 'col-md-6'}}) }}
+                {{ form_row(form.phone, {row_attr: {class: 'col-md-6'}}) }}
             </div>
             <div class="row">
-                {{ form_row(form.username, {'row_attr': {'class': 'col-md-6' }}) }}
-                {{ form_row(form.CityOfResidence, {'row_attr': {'class': 'col-md-6' }}) }}
+                {{ form_row(form.username, {row_attr: {class: 'col-md-6'}}) }}
+                {{ form_row(form.CityOfResidence, {row_attr: {class: 'col-md-6'}}) }}
             </div>
             <div class="row">
-                {{ form_row(form.locale, {'row_attr': {'class': 'col-md-6' }}) }}
-                {{ form_row(form.theme, {'row_attr': {'class': 'col-md-6' }}) }}
+                {{ form_row(form.locale, {row_attr: {class: 'col-md-6'}}) }}
+                {{ form_row(form.theme, {row_attr: {class: 'col-md-6'}}) }}
             </div>
-            <div class="row">{{ form_row(form.StudentUnionMember, {'row_attr': {'class': 'col-md-6 pt-4' }}) }}</div>
+            <div class="row">{{ form_row(form.StudentUnionMember, {row_attr: {class: 'col-md-6 pt-4'}}) }}</div>
             <div class="d-flex justify-content-between mt-4">
-                <a class="btn btn-secondary" href="{{ path("profile_password_edit") }}">{{ 'profile.change_password'|trans }}</a>
+                <a class="btn btn-secondary" href="{{ path('profile_password_edit') }}">{{ 'profile.change_password'|trans }}</a>
                 <input class="btn btn-primary"
                        type="submit"
                        value="{{ 'profile.save'|trans|capitalize }}" />

@@ -9,7 +9,7 @@
                 <div class="row">
                     {% for ticket in tickets %}
                         {% if ticket.referenceNumber %}
-                            <a href="{{ path('entropy_event_ticket', { 'year': ticket.event.eventDate|date('Y') , 'slug': ticket.event.url, 'reference': ticket.referenceNumber }) }}"
+                            <a href="{{ path('entropy_event_ticket', {year: ticket.event.eventDate|date('Y'), slug: ticket.event.url, reference: ticket.referenceNumber}) }}"
                                class="col-10 mx-auto mb-2 btn btn-primary">{{ ticket.event.name(app.request.locale) }}</a>
                         {% endif %}
                     {% endfor %}

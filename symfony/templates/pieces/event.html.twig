@@ -7,7 +7,7 @@
     {% if app.user %}
         <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
             <div class="container">
-                <a class="navbar-brand d-lg-none" href="{{ block("event_path") }}">{{ 'Menu'|trans }}</a>
+                <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
                 <button class="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
@@ -20,7 +20,7 @@
                 <div class="collapse navbar-collapse" id="eventContent">
                     <ul class="navbar-nav w-100 d-flex justify-content-between">
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ block("event_path") }}">{{ 'Home'|trans }}</a>
+                            <a class="nav-link" href="{{ block('event_path') }}">{{ 'Home'|trans }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
@@ -29,7 +29,7 @@
                             <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ block("event_path_artists") }}">{{ 'Artists'|trans|capitalize }}</a>
+                            <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
                         </li>
                         {% if event.allowMembersToCreateHappenings %}
                             <li class="nav-item">
@@ -39,16 +39,16 @@
                         {% if tickets|length > 0 %}
                             <li class="nav-item">
                                 <a class="nav-link"
-                                   href="{{ path('entropy_event_tickets', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                                   href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                                     {{ 'ticket.and_nakki'|trans }}
                                 </a>
                             </li>
                         {% endif %}
                         {% if event.includeSaferSpaceGuidelines %}
                             {% if app.request.locale == 'fi' %}
-                                {% set url = "/turvallisemman-tilan-periaatteet" %}
+                                {% set url = '/turvallisemman-tilan-periaatteet' %}
                             {% else %}
-                                {% set url = "/en/safer-space-guidelines" %}
+                                {% set url = '/en/safer-space-guidelines' %}
                             {% endif %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
@@ -64,26 +64,26 @@
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
         <a {% if event.externalUrl %}data-turbo="false"{% endif %}
-           href="{{ block("event_path") }}">
-            {{ block("event_frontpage_media") }}
+           href="{{ block('event_path') }}">
+            {{ block('event_frontpage_media') }}
             {% set badge = true %}
-            <h5 class="my-2">{{ block("event_time_small") }}</h5>
-            <h4>{{ block("event_name") }}</h4>
+            <h5 class="my-2">{{ block('event_time_small') }}</h5>
+            <h4>{{ block('event_name') }}</h4>
         </a>
         <div class="d-flex justify-content-between">
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user and not event.isInPast %}
                 <span class="pe-2">
                     <a class="btn btn-primary"
-                       href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                        {{ "fas fa-tasks"|parse_icon }}
+                       href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                        {{ 'fas fa-tasks'|parse_icon }}
                         Nakkikone
                     </a>
                 </span>
             {% endif %}
             {% if not event.isInPast and event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
                 <a class="btn btn-primary"
-                   href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                    {{ "fas fa-tasks"|parse_icon }}
+                   href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    {{ 'fas fa-tasks'|parse_icon }}
                     {{ 'Artist signup'|trans }}
                 </a>
             {% endif %}
@@ -92,41 +92,41 @@
 {% endblock %}
 {% block event %}
     {% if event.url is null and event.externalUrl %}
-        {{ block("event_head_frontpage") }}
+        {{ block('event_head_frontpage') }}
     {% else %}
-        <a href="{{ block("event_path") }}">{{ block("event_head_frontpage") }}</a>
+        <a href="{{ block('event_path') }}">{{ block('event_head_frontpage') }}</a>
     {% endif %}
-    <small>{{ block("published_and_updated") }}</small>
+    <small>{{ block('published_and_updated') }}</small>
     {% if event.picture is not null and event.picturePosition == 'right' %}
         <div class="row">
-            <div class="col-md-8 order-1 order-md-0">{{ block("event_frontpage_content") }}</div>
-            <div class="col-md-4 order-0 order-md-1">{{ block("event_media") }}</div>
+            <div class="col-md-8 order-1 order-md-0">{{ block('event_frontpage_content') }}</div>
+            <div class="col-md-4 order-0 order-md-1">{{ block('event_media') }}</div>
         </div>
     {% else %}
-        {{ block("event_frontpage_content") }}
+        {{ block('event_frontpage_content') }}
     {% endif %}
 {% endblock %}
 {% block event_head_reverse %}
-    {{ block("event_banner_media") }}
-    <small>{{ block("published_and_updated") }}</small>
+    {{ block('event_banner_media') }}
+    <small>{{ block('published_and_updated') }}</small>
     {% set content_attr = 'content_attribute'|trans %}
     {% if '{{ menu }}' in attribute(event, content_attr) %}
-        {{ block("menu") }}
+        {{ block('menu') }}
     {% endif %}
     <h2 class="mt-2 event-name">
-        {{ block("event_name") }}
-        {% if event.type != 'announcement' %}~ <span class="event_time">{{ block("event_time") }}</span>{% endif %}
+        {{ block('event_name') }}
+        {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h2>
 {% endblock %}
 {% block event_path %}
 {% apply spaceless %}
 {% if event.url and not event.externalUrl %}
-    {{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+    {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
 {% else %}
     {% if app.request.locale == 'fi' %}
-        {{ path('entropy_event', {'id': event.id}) }}
+        {{ path('entropy_event', {id: event.id}) }}
     {% else %}
-        {{ path('entropy_event_en', {'id': event.id}) }}
+        {{ path('entropy_event_en', {id: event.id}) }}
     {% endif %}
 {% endif %}
 {% endapply %}
@@ -134,35 +134,35 @@
 {% block event_path_shop %}
     {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_shop', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+        {{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {% endapply %}
 {% endblock %}
 {% block event_path_info %}
     {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_info', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+        {{ path('entropy_event_info', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {% endapply %}
 {% endblock %}
 {% block event_path_safer_space %}
     {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_safer_space', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+        {{ path('entropy_event_safer_space', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {% endapply %}
 {% endblock %}
 {% block event_path_artists %}
     {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+        {{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {% endapply %}
 {% endblock %}
 {% block event_path_timetable %}
     {% apply spaceless %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_timetable', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+        {{ path('entropy_event_timetable', {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {% endapply %}
 {% endblock %}
@@ -181,10 +181,10 @@
 {% endblock %}
 {% block event_head_frontpage %}
     <h3 class="mt-2 event-name">
-        {{ block("event_name") }}
-        {% if event.type != 'announcement' %}~ <span class="event_time">{{ block("event_time") }}</span>{% endif %}
+        {{ block('event_name') }}
+        {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h3>
-    {{ block("event_banner_media") }}
+    {{ block('event_banner_media') }}
 {% endblock %}
 {% block event_name %}
     {% apply spaceless %}
@@ -195,13 +195,13 @@
 {% endapply %}
 {% endblock %}
 {% block event_time_badge %}
-    <span class="badge text-black bg-info text-wrap float-end" style="font-size:0.8rem" {{ stimulus_controller("moment") }} data-moment-date-value="{{ event.eventDate|date("c") }}" data-moment-target="badge" data-moment-refresh-interval-value="1000" data-moment-locale-value="{{ app.request.locale }}"></span>
+    <span class="badge text-black bg-info text-wrap float-end" style="font-size:0.8rem" {{ stimulus_controller('moment') }} data-moment-date-value="{{ event.eventDate|date('c') }}" data-moment-target="badge" data-moment-refresh-interval-value="1000" data-moment-locale-value="{{ app.request.locale }}"></span>
 {% endblock %}
 {% block event_time %}
     {% apply spaceless %}
     {% if event.type != 'announcement' %}
         {% if event.multiday %}
-            {{ event.eventdate|date("j") }}. - {{ event.until|date("j.n.Y") }}
+            {{ event.eventdate|date('j') }}. - {{ event.until|date('j.n.Y') }}
         {% else %}
             {{ event.eventdate|date() }}
         {% endif %}
@@ -211,24 +211,24 @@
 {% block event_time_small %}
     {% if event.type != 'announcement' %}
         {% if event.multiday %}
-            {{ event.eventdate|date("j") }} - {{ event.until|date("j.n.Y") }}
+            {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
         {% else %}
             {{ event.eventdate|format_datetime(pattern='E, d.M. @ HH:mm') }}
         {% endif %}
-        {% if badge|default(false) %}{{ block("event_time_badge") }}{% endif %}
+        {% if badge|default(false) %}{{ block('event_time_badge') }}{% endif %}
     {% endif %}
 {% endblock %}
 {% block event_banner_media %}
-    {% if event.picturePosition == 'banner' %}{{ block("event_media") }}{% endif %}
+    {% if event.picturePosition == 'banner' %}{{ block('event_media') }}{% endif %}
 {% endblock %}
 {% block event_content %}
     {% set frontpage = false %}
     {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block("event_media") }}</div>
+        <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
     {% apply spaceless %}
     {% set content_attr = 'content_attribute'|trans %}
-    {{ attribute(event, content_attr) |replace({
+    {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
     '{{ timetable_to_page }}': block('timetable_to_page'),
     '{{ timetable_with_genre }}': block('timetable_with_genre'),
@@ -244,7 +244,7 @@
     '{{ menu }}': ''
     })|raw }}
     {% if '{{ links }}' not in attribute(event, content_attr) %}
-        {{ block("links") }}
+        {{ block('links') }}
     {% endif %}
 {% endapply %}
 {% endblock %}
@@ -252,7 +252,7 @@
     {% set frontpage = true %}
     {% apply spaceless %}
     {% set content_attr = 'content_attribute'|trans %}
-    {{ attribute(event, content_attr) |replace({
+    {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ bios }}': '',
@@ -261,12 +261,12 @@
     '{{ ticket }}': block('ticket_for_frontpage'),
     '{{ rsvp }}': block('RSVP')
     })|raw }}
-    {{ block("links") }}
+    {{ block('links') }}
 {% endapply %}
 {% endblock %}
 {% block event_badge %}
     <div class="badge-container text-end">
-        {{ block("event_icons") }}
+        {{ block('event_icons') }}
         {% if event.badgeText == 'event.now' %}
             <span class="shadow badge bg-success">{{ event.badgeText|trans }}</span>
         {% elseif event.badgeText == 'event.after' %}
@@ -320,41 +320,41 @@
     </div>
 {% endblock %}
 {%- block event_img_title -%}
-    {{ event.badgeText|trans ~ ': ' ~ block("event_name") ~ ' ' ~ block('event_time') }}
+    {{ event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') }}
 {%- endblock -%}
 {% block event_frontpage_media %}
     {% if event.picture is not null %}
         {% set aspect = event.picture.width / event.picture.height %}
         {% if aspect >= 1.20 %}
-            {% set containerClass = "rect-img-container i16by9" %}
-            {% set class = "rect-img" %}
-        {% elseif aspect > 0.85 and aspect < 1.20 %} 
-            {% set containerClass = "rect-img-container" %}
-            {% set class = "rect-img" %}
-        {% elseif aspect <= 1.20 %} 
-            {% set containerClass = "img-container" %}
-            {% set class = "img-fluid" %}
-        {% endif %} 
+            {% set containerClass = 'rect-img-container i16by9' %}
+            {% set class = 'rect-img' %}
+        {% elseif aspect > 0.85 and aspect < 1.20 %}
+            {% set containerClass = 'rect-img-container' %}
+            {% set class = 'rect-img' %}
+        {% elseif aspect <= 1.20 %}
+            {% set containerClass = 'img-container' %}
+            {% set class = 'img-fluid' %}
+        {% endif %}
     {% else %}
-        {% set containerClass = "rect-img-container i16by9" %}
-        {% set class = "rect-img" %}
+        {% set containerClass = 'rect-img-container i16by9' %}
+        {% set class = 'rect-img' %}
     {% endif %}
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
         <div class="rect-img-container i16by9">
             <div class="rect-img">
-                <div class="img-fluid">{{ block("video_media") }}</div>
-                {{ block("event_badge") }}
+                <div class="img-fluid">{{ block('video_media') }}</div>
+                {{ block('event_badge') }}
             </div>
         </div>
     {% else %}
         {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}
-            {% set containerClass = "video-fluid" %}
-        {% else %} 
-            {% set containerClass = containerClass ~ " img-filter" %}
+            {% set containerClass = 'video-fluid' %}
+        {% else %}
+            {% set containerClass = containerClass ~ ' img-filter' %}
         {% endif %}
-        <div class="{{ containerClass }}" {{ block("imgfilter") }}>
-            {{ block("img") }}
-            {{ block("event_badge") }}
+        <div class="{{ containerClass }}" {{ block('imgfilter') }}>
+            {{ block('img') }}
+            {{ block('event_badge') }}
         </div>
     {% endif %}
 {% endblock %}
@@ -365,35 +365,35 @@
 {% endblock %}
 {% block event_media %}
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
-        <div class="img-fluid">{{ block("video_media") }}</div>
+        <div class="img-fluid">{{ block('video_media') }}</div>
     {% else %}
-        <div class=" {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %} video-fluid {% else %} img-filter {% endif %}" {{ block("imgfilter") }}>
+        <div class=" {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %} video-fluid {% else %} img-filter {% endif %}" {{ block('imgfilter') }}>
             {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
-            {{ block("img") }}
+            {{ block('img') }}
         </div>
     {% endif %}
 {% endblock %}
 {% block img %}
     {% if loop is defined and loop.first %}
-        {% set loading = "eager" %}
+        {% set loading = 'eager' %}
     {% else %}
-        {% set loading = "lazy" %}
+        {% set loading = 'lazy' %}
     {% endif %}
     {% if event.picture is not null %}
-        {{ sonata_media(event.picture, 'banner', {'srcset': ['small', 'normal', 'banner'],
-                'loading': loading,
-                'style': event.imgFilterBlendMode,
-                'class': class,
-                'title': block('event_img_title') 
+        {{ sonata_media(event.picture, 'banner', {srcset: ['small', 'normal', 'banner'],
+                loading: loading,
+                style: event.imgFilterBlendMode,
+                class: class,
+                title: block('event_img_title')
         }) }}
     {% else %}
-        {{ block("placeholder_img") }}
+        {{ block('placeholder_img') }}
     {% endif %}
 {% endblock %}
 {% block placeholder_img %}
-    {% set online = "" %}
+    {% set online = '' %}
     {% if event.type == 'meeting' and not event.location and event.webMeetingUrl %}
-        {% set online = "-online" %}
+        {% set online = '-online' %}
     {% endif %}
     <picture {% if event.imgFilterBlendMode %}style="{{ event.imgFilterBlendMode }}"{% endif %}>
         <source type="image/webp"
@@ -403,7 +403,7 @@
         <img loading="{{ loading }}"
              class="{{ class }}"
              src="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}"
-             title="{{ block("event_img_title") }}">
+             title="{{ block('event_img_title') }}">
     </picture>
 {% endblock %}
 {% block imgfilter %}
@@ -413,7 +413,7 @@
     {% apply spaceless %}
     {% if event.attachment %}
         <div class="mb-2">
-            <a href="{{ path('sonata_media_download', {'id': event.attachment.id}) }}">
+            <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
                 <i class="fas fa-link me-1"></i>{{ event.attachment.name }}
             </a>
         </div>
@@ -484,8 +484,8 @@
         {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_artist_signup', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                    {{ "fas fa-tasks"|parse_icon }}
+                   href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    {{ 'fas fa-tasks'|parse_icon }}
                     {{ 'Artist signup'|trans }}
                 </a>
             </span>
@@ -493,8 +493,8 @@
         {% if not event.isInPast and event.showNakkikoneLinkInEvent|default(false) and event.url and app.user %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_nakkikone', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
-                    {{ "fas fa-tasks"|parse_icon }}
+                   href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    {{ 'fas fa-tasks'|parse_icon }}
                     Nakkikone
                 </a>
             </span>
@@ -503,7 +503,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ path('_page_alias_announcements_' ~ app.request.locale) }}">
-                    {{ "fas fa-list"|parse_icon }}
+                    {{ 'fas fa-list'|parse_icon }}
                     {{ 'button.old_announcements'|trans }}
                 </a>
             </span>
@@ -513,21 +513,21 @@
 {% endblock %}
 {% block timetable_to_page %}
     {% set page_links = true %}
-    {{ block("timetable") }}
+    {{ block('timetable') }}
 {% endblock %}
 {% block timetable_with_genre %}
     {% set page_links = true %}
     {% set genre = true %}
-    {{ block("timetable") }}
+    {{ block('timetable') }}
 {% endblock %}
 {% block timetable %}
     {% set last = null %}
     {% set music_bios = event.MusicArtistInfos %}
     {% if music_bios|length > 0 %}
         {% if event.multiday == true %}
-            {% set datestring = "E, HH:mm" %}
+            {% set datestring = 'E, HH:mm' %}
         {% else %}
-            {% set datestring = "HH:mm" %}
+            {% set datestring = 'HH:mm' %}
         {% endif %}
         <div class="row g-0">
             {% for stage, infos in music_bios %}
@@ -551,7 +551,7 @@
                                     {% if last is defined %}
                                         {% if last == info.StartTime %}B2B{% endif %}
                                     {% endif %}
-                                    <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+                                    <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
                                 {% if artist.type == 'Live' %}(Live){% endif %}
                                 {% if genre|default(null) %}
                                     <i class="fw-lighter"> ({{ artist.genre }})</i>
@@ -574,9 +574,9 @@
     {% set bios = event.ArtistInfosByType('VJ') %}
     {% if bios|length > 0 %}
         {% if event.multiday == true %}
-            {% set datestring = "E, HH:mm" %}
+            {% set datestring = 'E, HH:mm' %}
         {% else %}
-            {% set datestring = "HH:mm" %}
+            {% set datestring = 'HH:mm' %}
         {% endif %}
         <div class="row g-0">
             {% for stage, infos in bios %}
@@ -600,7 +600,7 @@
                                     {% if last is defined %}
                                         {% if last == info.StartTime %}B2B{% endif %}
                                     {% endif %}
-                                    <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }} ">{{ name }}</a>
+                                    <a href="{% if frontpage|default(false) %}{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}{% elseif page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }} ">{{ name }}</a>
                                 {% if artist.type == 'Live' %}(Live){% endif %}
                             {% endif %}
                             {% set last = info.StartTime %}
@@ -635,7 +635,7 @@
                                 {% set name = (artist.name|split(' for')).0 %}
                                 <li>
                                     {% if info.StartTime is not empty %}
-                                        <a href="{{ path('entropy_event_artists', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+                                        <a href="{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
                                     {% endif %}
                                 </li>
                             {% endfor %}
@@ -651,7 +651,7 @@
             <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
                 <div class="row">
                     <div class="col-12">
-                        <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {'title': name, 'anchor': anchor}) }}>
+                        <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {title: name, anchor: anchor}) }}>
                             {{ name }}
                             <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }}>
                                 <i class="fa fa-share"></i>
@@ -659,8 +659,8 @@
                         </h3>
                     </div>
                     <div class="col-12">
-                        {{ block("artist_pic") }}
-                        {{ block("artist_event_info") }}
+                        {{ block('artist_pic') }}
+                        {{ block('artist_event_info') }}
                     </div>
                 </div>
             </div>
@@ -671,18 +671,18 @@
                 <div id="{{ artist.type|lower }}-{{ name|slug }}"
                      class="col-md-12 pt-3 pb-3">
                     <div class="row">
-                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block("artist_event_info") }}</div>
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block("artist_pic") }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute) |nl2br }}</div>
+                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
+                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
+                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
                     </div>
                 </div>
             {% else %}
                 <div id="{{ artist.type|lower }}-{{ name|slug }}"
                      class="col-md-12 pt-3 pb-3">
                     <div class="row">
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block("artist_pic") }}</div>
-                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block("artist_event_info") }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute) |nl2br }}</div>
+                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
+                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
+                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
                     </div>
                 </div>
             {% endif %}
@@ -698,7 +698,7 @@
                     {% if stage %}@ {{ stage }}{% endif %}
                 </h3>
             {% endif %}
-            {{ block("infos") }}
+            {{ block('infos') }}
         {% endfor %}
     {% endapply %}
 {% endblock %}
@@ -711,7 +711,7 @@
                 {% if stage %}@ {{ stage }}{% endif %}
             </h3>
         {% endif %}
-        {{ block("infos") }}
+        {{ block('infos') }}
     {% endfor %}
 {% endapply %}
 {% endblock %}
@@ -724,7 +724,7 @@
                 {% if stage %}@ {{ stage }}{% endif %}
             </h3>
         {% endif %}
-        {{ block("infos") }}
+        {{ block('infos') }}
     {% endfor %}
 {% endapply %}
 {% endblock %}
@@ -734,7 +734,7 @@
         {% if info.StartTime is not empty %}
             {% set artist = info.artistClone %}
             {% set name = (artist.name|split(' for')).0 %}
-            {{ block("cycle") }}
+            {{ block('cycle') }}
         {% endif %}
     {% endfor %}
 {% endblock %}
@@ -742,14 +742,14 @@
     {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
         <div class="float-none mx-4 mb-4">
             <small class="fw-light">{{ artist.genre }}</small>
-            <div>{{ attribute(artist, bio_attribute) |nl2br }}</div>
-            {{ block("artist_links") }}
+            <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
+            {{ block('artist_links') }}
         </div>
     {% else %}
         {% if event is defined and event.multiday == true %}
-            {% set datestring = "E, HH:mm" %}
+            {% set datestring = 'E, HH:mm' %}
         {% else %}
-            {% set datestring = "HH:mm" %}
+            {% set datestring = 'HH:mm' %}
         {% endif %}
         <h3>
             {{ name }}
@@ -761,8 +761,8 @@
             {% endif %}
         </h3>
         <small>{{ artist.genre }}</small>
-        <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute) |nl2br }}</div>
-        {{ block("artist_links") }}
+        <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+        {{ block('artist_links') }}
     {% endif %}
 {% endblock %}
 {% block artist_pic %}
@@ -788,7 +788,7 @@
                 <img width="100%"
                      loading="lazy"
                      title="{{ name }}"
-                     src="{{ asset("images/thumb_artist_square.jpg") }}">
+                     src="{{ asset('images/thumb_artist_square.jpg') }}">
             {% endif %}
             <div class="caption d-none d-sm-block">{{ name }}</div>
         </span>
@@ -799,7 +799,7 @@
     <h3>{{ artist.name }}</h3>
     <small>{{ artist.genre }}</small>
     <div>{{ attribute(artist, bio_attribute) }}</div>
-    {{ block("artist_links") }}
+    {{ block('artist_links') }}
 {% endblock %}
 {% block artist_links %}
     {% if artist.links is not empty %}
@@ -817,9 +817,9 @@
     {% set bio_attribute = 'bio_attribute'|trans %}
     <div id="{{ name|slug }}" class="col-md-12 pt-3">
         <div class="row">
-            <div class="col-6">{{ block("artist_event_info") }}</div>
-            <div class="col-6">{{ block("artist_pic") }}</div>
-            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute) |nl2br }}</div>
+            <div class="col-6">{{ block('artist_event_info') }}</div>
+            <div class="col-6">{{ block('artist_pic') }}</div>
+            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
         </div>
     </div>
 {% endblock %}

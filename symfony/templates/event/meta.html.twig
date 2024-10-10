@@ -5,7 +5,7 @@
         {% if abstract is empty %}
             {% set abstract = event.abstractFromContent(app.request.locale) %}
         {% endif %}
-        {#{ parent() }#}
+        {# { parent() } #}
         {% set height = 1920 %}
         {% set width = 1080 %}
         {% if event.Picture is not empty and event.picture.providername != 'sonata.media.provider.file' %}
@@ -13,9 +13,9 @@
             {% set height = event.Picture.height %}
             {% set width = event.Picture.width %}
         {% else %}
-            {% set online = "" %}
+            {% set online = '' %}
             {% if event.type == 'meeting' and event.location is empty and event.webMeetingUrl is not empty %}
-                {% set online = "-online" %}
+                {% set online = '-online' %}
             {% endif %}
             {% set img = 'https://entropy.fi/images/placeholders/' ~ event.type ~ online ~ '.webp' %}
         {% endif %}
@@ -37,7 +37,7 @@
         {% if event.type != 'announcement' %}
             <meta property="og:type" content="event">
             <meta property="event:start_time"
-                  content="{{ event.EventDate|date("Y-m-d H:i") }}">
+                  content="{{ event.EventDate|date('Y-m-d H:i') }}">
         {% endif %}
     {% endif %}
     <meta name="robots" content="index, follow">

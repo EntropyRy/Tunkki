@@ -27,7 +27,7 @@
                             <li>
                                 <span class="fa-li"><i class="fas fa-key"></i></span>
                                 {{ log.createdAt|date }} {{ log.member }}
-                                {% if log.message is not empty %}: {{ log.message|default("profile.door.no_message") |trans }}{% endif %}
+                                {% if log.message is not empty %}: {{ log.message|default('profile.door.no_message')|trans }}{% endif %}
                             </li>
                         {% endfor %}
                     </ul>

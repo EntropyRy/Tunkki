@@ -13,7 +13,7 @@
                 <ul class="fa-ul">
                     {% set name = 'name_attribute'|trans %}
                     {% for event in events %}
-                        {{ block("event_link") }}
+                        {{ block('event_link') }}
                     {% else %}
                         <li>
                             <span class="fa-li">
@@ -30,15 +30,15 @@
                         <li>
                             {{ 'event.only_for_members'|trans }}</
                             <li>
-                                {% for event in unreleased %}{{ block("event_link") }}{% endfor %}
+                                {% for event in unreleased %}{{ block('event_link') }}{% endfor %}
                             {% endif %}
                         </ul>
                         {% if settings.box|default(false) %}
                             {% if is_granted('ROLE_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}
-                                <a class="btn btn-primary" href="{{ path("admin_app_event_list") }}">{{ 'block.events.manage'|trans }}</a>
+                                <a class="btn btn-primary" href="{{ path('admin_app_event_list') }}">{{ 'block.events.manage'|trans }}</a>
                             {% endif %}
                             <a class="btn btn-primary"
-                               href="{{ path("entropy_event_calendar_config") }}">{{ 'calendar.heading'|trans }}</a>
+                               href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
                         </div>
                     </div>
                 {% else %}
@@ -48,9 +48,9 @@
         {% block event_link %}
             <li>
                 <span class="fa-li"><i class="fas fa-link"></i></span>
-                <a href=" {% if event.url %} {{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}
+                <a href=" {% if event.url %} {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
                 {% else %}
-                    {{ path('entropy_event', {'id': event.id}) }}
+                    {{ path('entropy_event', {id: event.id}) }}
                 {% endif %}
             ">{{ attribute(event, name) }} - {{ event.eventDate|date() }}</a>
         </li>

@@ -2,7 +2,7 @@
 {% block menu %}
     {% apply spaceless %}
     {% set loc = app.request.locale %}
-    {% set theme = "light" %}
+    {% set theme = 'light' %}
     {% if event is defined %}
         {% if app.user %}
             {% set theme = event.headerTheme ? event.headerTheme : (app.user.member.theme ? app.user.member.theme : 'light') %}
@@ -10,7 +10,7 @@
             {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
         {% endif %}
         {% if event.url is not empty and not event.externalUrl %}
-            {% set event_url = "/" ~ event.eventDate|date('Y') ~ "/" ~ event.url ~ "/" %}
+            {% set event_url = '/' ~ event.eventDate|date('Y') ~ '/' ~ event.url ~ '/' %}
         {% endif %}
     {% else %}
         {% if app.user %}
@@ -21,12 +21,12 @@
         <div class="container-fluid">
             <a class="navbar-brand d-lg-none d-inline-block"
                href="/{% if loc == 'en' %}en{% endif %}">
-                <img src="{{ asset("/images/header-logo-text.svg") }}" width="auto" height="45" alt="Entropy" {% if theme == 'dark' %}class="invert"{% endif %}>
+                <img src="{{ asset('/images/header-logo-text.svg') }}" width="auto" height="45" alt="Entropy" {% if theme == 'dark' %}class="invert"{% endif %}>
             </a>
             <span class="d-lg-none">
-                {{ block("mobile_locale") }}
+                {{ block('mobile_locale') }}
                 {% if not app.user %}
-                    | <a href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                    | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
                 {% endif %}
             </span>
             <button class="navbar-toggler"
@@ -44,15 +44,15 @@
                 <ul class="navbar-nav d-none d-lg-flex">
                     {% if not app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                            <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
                         </li>
                     {% endif %}
-                    {{ block("locale") }}
+                    {{ block('locale') }}
                 </ul>
             </div>
         </div>
     </nav>
-    {% include 'menu/user_menu.html.twig' %}
+    {{ include('menu/user_menu.html.twig') }}
 {% endapply %}
 {% endblock %}
 {% block locale %}

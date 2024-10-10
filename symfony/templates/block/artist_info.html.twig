@@ -3,7 +3,7 @@
 {% block block %}
     <h2 class="col-md-12 pb-2 pt-2">
         {{ 'artist.profiles'|trans }}
-        <a class="btn btn-primary" href="{{ path("entropy_artist_create") }}">{{ 'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+        <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
     </h2>
     {% for artist in member.artist %}
         <div class="col-12">
@@ -25,17 +25,17 @@
                                     <br>
                                     {{ 'artist.form.hardware'|trans }}: {{ artist.hardware }}
                                     <br>
-                                    {{ 'created_at'|trans }}: {{ artist.createdAt|date("d.m.Y") }}
+                                    {{ 'created_at'|trans }}: {{ artist.createdAt|date('d.m.Y') }}
                                     <br>
-                                    {{ 'updated_at'|trans }}: {{ artist.updatedAt|date("d.m.Y") }}
+                                    {{ 'updated_at'|trans }}: {{ artist.updatedAt|date('d.m.Y') }}
                                 </li>
                             </ul>
                             <div class="d-flex justify-content-between">
                                 <a class="btn btn-primary btn-large"
-                                   href="{{ path('entropy_artist_edit', {'id': artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                                   href="{{ path('entropy_artist_edit', {id: artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
                                 <a class="btn btn-warning btn-large" data-turbo="false"
                                    onclick="return ConfirmDelete();"
-                                   href="{{ path('entropy_artist_delete', {'id': artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
+                                   href="{{ path('entropy_artist_delete', {id: artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
                             </div>
                             <script>
             function ConfirmDelete()
@@ -48,15 +48,15 @@
                                 {% for info in artist.eventArtistInfos %}
                                     {% if info.event.nowTest != 'after' or info.StartTime %}
                                         <li>
-                                            <a href="{{ path('entropy_event_slug', {'year': info.event.eventDate|date('Y') , 'slug': info.event.url}) }}">{{ info.event }}</a>
+                                            <a href="{{ path('entropy_event_slug', {year: info.event.eventDate|date('Y'), slug: info.event.url}) }}">{{ info.event }}</a>
                                             {% if info.StartTime %}
-                                                @ {{ info.StartTime|date("H:i") }}
+                                                @ {{ info.StartTime|date('H:i') }}
                                             {% else %}
                                                 {% if info.event.artistSignUpEnd|date('U') <= 'now'|date('U') %}
                                                     : {{ 'artist.not_selected'|trans }}
                                                 {% else %}
                                                     : {{ 'artist.not_confirmed_yet'|trans }},
-                                                    <a href="{{ path('entropy_event_slug_artist_signup_edit', {'year': info.event.eventDate|date('Y') , 'slug': info.event.url, 'id': info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                                                    <a href="{{ path('entropy_event_slug_artist_signup_edit', {year: info.event.eventDate|date('Y'), slug: info.event.url, id: info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
                                                 {% endif %}
                                             {% endif %}
                                         </li>
@@ -72,14 +72,14 @@
                             <h5 class="box-title">
                                 {{ 'Quick preview'|trans }}
                                 <span class="float-end">{{ 'Full'|trans }}:
-                                    <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
-                                    <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
+                                    <a href="{{ path('entropy_public_artist.fi', {name: artist.name, id: artist.id}) }}">FI</a> |
+                                    <a href="{{ path('entropy_public_artist.en', {name: artist.name, id: artist.id}) }}">EN</a>
                                 </span>
                             </h5>
                         </div>
                         <div class="box-body row">
-                            <div class="col-sm-6">{{ block("artist_preview_info") }}</div>
-                            <div class="col-sm-6">{{ block("artist_pic") }}</div>
+                            <div class="col-sm-6">{{ block('artist_preview_info') }}</div>
+                            <div class="col-sm-6">{{ block('artist_pic') }}</div>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 {% block entropy_type_packages_widget %}
     {% apply spaceless %}
     {%- for child in form %}
-        {% set reserved,fix = false,false %}
+        {% set reserved, fix = false, false %}
         {% set package = form.vars.choices[child.vars.value].data %}
         {% if package.items is defined %}
             {% for item in package.items %}
@@ -20,7 +20,7 @@
                             {% if reserved %}opacity:0.5;{% endif %}"
                      {% if package.Notes %}title="{{ package.Notes }}"{% endif %}>
                     <span>
-                        {{ block("item") }}
+                        {{ block('item') }}
                         <div class="box-tools pull-right">
                             <button class="btn btn-default btn-sm" data-widget="collapse">
                                 <i class="fa fa-plus"></i> Show Contents
@@ -47,7 +47,7 @@
 {% endapply %}
 {% endblock %}
 {% block item %}
-    <div {{ block("widget_container_attributes") }}>
+    <div {{ block('widget_container_attributes') }}>
         {{- form_widget(child) -}}
         {{- form_label(child) -}}
     </div>

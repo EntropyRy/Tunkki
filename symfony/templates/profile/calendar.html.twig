@@ -33,7 +33,7 @@
                        class="form-control"
                        aria-label="{{ url }}"
                        value="{{ url }}" />
-                <button class="btn btn-primary btn-lg" {{ stimulus_controller('share', {'url': url, 'title': 'calendar.url'|trans}) }} {{ stimulus_action('share', 'copyToClipboard') }}>{{ 'share.copy'|trans }}
+                <button class="btn btn-primary btn-lg" {{ stimulus_controller('share', {url: url, title: 'calendar.url'|trans}) }} {{ stimulus_action('share', 'copyToClipboard') }}>{{ 'share.copy'|trans }}
                 </button>
             </div>
         {% endif %}

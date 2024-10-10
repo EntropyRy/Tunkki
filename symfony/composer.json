@@ -67,7 +67,8 @@
     "symfony/debug-bundle": "^6.2",
     "symfony/maker-bundle": "^1",
     "symfony/stopwatch": "^6.2",
-    "symfony/web-profiler-bundle": "^6.2"
+    "symfony/web-profiler-bundle": "^6.2",
+    "vincentlanglet/twig-cs-fixer": "^3.1"
   },
   "scripts": {
     "post-root-package-install": [

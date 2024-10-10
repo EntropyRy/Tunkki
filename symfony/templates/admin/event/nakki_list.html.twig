@@ -17,7 +17,7 @@
             {% if nakkiBookings %}
                 <h3>Contacts</h3>
                 <table class="table table-sm table-striped">
-                    {{ block("tablehead") }}
+                    {{ block('tablehead') }}
                     <tbody>
                         {% for nakki in nakkiBookings %}
                             {% if nakki.member %}
@@ -35,10 +35,10 @@
                                         <span class="">{{ nakki.member.phone }}</span>
                                     </td>
                                     <td>
-                                        <span class="">{{ nakki.nakki.definition.name("fi") }}</span>
+                                        <span class="">{{ nakki.nakki.definition.name('fi') }}</span>
                                     </td>
                                     <td>
-                                        <span class="">{{ nakki.startAt|date("H:i") }}</span>
+                                        <span class="">{{ nakki.startAt|date('H:i') }}</span>
                                     </td>
                                 </tr>
                             {% endif %}
@@ -75,7 +75,7 @@
                                 <tbody>
                                     {% for hour in nakki.times %}
                                         <tr>
-                                            <td>{{ hour|date("H:i") }}</td>
+                                            <td>{{ hour|date('H:i') }}</td>
                                             <td>
                                                 {% if nakki.memberByTime(hour) %}{{ nakki.memberByTime(hour).username }}{% endif %}
                                             </td>

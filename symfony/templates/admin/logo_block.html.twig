@@ -2,7 +2,7 @@
 {% block logo %}
     {% apply spaceless %}
     <a class="logo w-100"
-       href="{{ path('dashboard.' ~ app.request.locale|default('fi') ) }}">
+       href="{{ path('dashboard.' ~ app.request.locale|default('fi')) }}">
         <img src="{{ asset(sonata_config.logo) }}"
              alt="{{ sonata_config.title }}"
              width="100%"

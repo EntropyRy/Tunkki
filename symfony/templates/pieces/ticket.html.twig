@@ -4,7 +4,7 @@
         <div class="pt-2 pb-2" id="ticket">
             <div class="col-md-6 mx-auto clearfix">
                 <a class="btn btn-primary w-100"
-                   href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                   href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     {{ 'ticket.go_to_event_page'|trans }}
                 </a>
             </div>
@@ -20,7 +20,7 @@
             <div class="col-md-6 mx-auto clearfix">
                 {% for ticket in tickets %}
                     <a class="btn btn-primary w-100"
-                       href="{{ path('entropy_event_ticket', { 'slug': event.url, 'year': event.eventdate|date('Y') , 'reference': ticket.referenceNumber }) }}">
+                       href="{{ path('entropy_event_ticket', {slug: event.url, year: event.eventdate|date('Y'), reference: ticket.referenceNumber}) }}">
                         {% if ticket.owner == app.user.member %}
                             {{ 'ticket.details'|trans }}: {{ ticket.name }}
                         {% else %}
@@ -32,7 +32,7 @@
                         <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
                     {% else %}
                         <a class="btn btn-primary w-100"
-                           href="{{ path('entropy_event_ticket_sale', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                           href="{{ path('entropy_event_ticket_sale', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                             {{ 'ticket.reserve_yours'|trans }}
                         </a>
                     {% endif %}
@@ -49,7 +49,7 @@
     </div>
 {% endblock %}
 {% block ticket %}
-{#<h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
+{# <h3>{{ 'ticket.situation'|trans }}: {{ ('ticket.' ~ ticket.status)|trans }} {% if ticket.given %}, OK{% endif %}</h3>
 {{ event.ticketInfo(app.request.locale)|raw }} #}
 <h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ ticket.name(app.request.locale) }}</h1>
 {% if ticket.status == 'reserved' %}
@@ -97,7 +97,7 @@
             <div class="col-md-6 mx-auto clearfix">
                 {% if tickets|length > 0 %}
                     <a class="btn btn-primary w-100"
-                        href="{{ path('entropy_event_tickets', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                        href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                         {{ 'ticket.details'|trans }}
                     </a>
                 {% else %}
@@ -105,7 +105,7 @@
                         <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
                     {% else %}
                         <a class="btn btn-primary w-100"
-                            href="{{ path('entropy_event_shop', { 'slug': event.url, 'year': event.eventdate|date('Y') , }) }}">
+                            href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                             {{ 'ticket.buy_yours'|trans }}
                         </a>
                     {% endif %}

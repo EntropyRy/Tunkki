@@ -30,16 +30,16 @@
                 <div class="col-md-4">
                     <i class="{% if member %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
                     {{ 'Member account created'|trans }}:
-                    {{ member.createdAt|date("d.m.Y") }}
+                    {{ member.createdAt|date('d.m.Y') }}
                 </div>
                 <div class="col-md-4">
                     <span>
                         <i class="{% if member.isActiveMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
                         {{ 'Active member'|trans }}
-                        {% if member.ApplicationHandledDate %}{{ 'since'|trans }} {{ member.ApplicationHandledDate|date("d.m.Y") }}{% endif %}
+                        {% if member.ApplicationHandledDate %}{{ 'since'|trans }} {{ member.ApplicationHandledDate|date('d.m.Y') }}{% endif %}
                         {% if not member.isActiveMember %}
                             <a class="btn btn-primary btn-sm"
-                               href="{{ path("apply_for_active_member") }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
+                               href="{{ path('apply_for_active_member') }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
                         {% endif %}
                     </span>
                 </div>
@@ -48,7 +48,7 @@
                         <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
                         {{ 'HC member'|trans }}
                         {% if member.AcceptedAsHonoraryMember %}
-                            {{ 'since'|trans }} {{ member.AcceptedAsHonoraryMember|date("d.m.Y") }}
+                            {{ 'since'|trans }} {{ member.AcceptedAsHonoraryMember|date('d.m.Y') }}
                         {% endif %}
                     </span>
                 </div>

@@ -2,10 +2,10 @@
 {% block row %}
     <div class="col-xs-12" style="border-bottom: 1px solid #a2a2a2">
         <span style="display: flex; justify-content: space-between;">
-            <span style="font-size: 1.2em;">{{ object.bookingDate|date("d.m.Y") }}</span>
+            <span style="font-size: 1.2em;">{{ object.bookingDate|date('d.m.Y') }}</span>
             <span style="font-weight: 800">{{ object|render_list_element(admin.list['name']) }}</span>
             <span>
-                {% if object.actualPrice and not object.cancelled %}{{ block("contract") }}{% endif %}
+                {% if object.actualPrice and not object.cancelled %}{{ block('contract') }}{% endif %}
             </span>
         </span>
     </div>
@@ -43,7 +43,7 @@
      style="border-left: 1px solid #a2a2a2">
     <small>
         Renter: {{ object|render_list_element(admin.list['renter']) }}
-        {% if object.actualPrice and not object.cancelled %}- {{ block("contract") }}{% endif %}
+        {% if object.actualPrice and not object.cancelled %}- {{ block('contract') }}{% endif %}
         <br>
         {% if object.retrieval and object.returning %}
             From - To: {{ object.retrieval|date }} - {{ object.returning|date }}
@@ -58,7 +58,7 @@
     </br>
 {% endif %}
 </small>
-{% if not object.itemsReturned %}{{ block("brokenitems") }}{% endif %}
+{% if not object.itemsReturned %}{{ block('brokenitems') }}{% endif %}
 </div>
 {% if object.actualPrice and not object.cancelled %}
     <div class="col-xs-2" style="border-left: 1px solid #a2a2a2;">
@@ -87,17 +87,17 @@
 {% endblock %}
 {% block contract %}
     {% if object.renterHash %}
-        <a href="{{ path('entropy_tunkki_booking_hash', { 'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
+        <a href="{{ path('entropy_tunkki_booking_hash', {bookingid: object.id, renterid: object.renter.id, hash: object.renterHash}) }}">
             Contract FI</a> |
-            <a href="/en{{ path('entropy_tunkki_booking_hash', { 'bookingid':object.id, 'renterid':object.renter.id, 'hash': object.renterHash}) }}">
+            <a href="/en{{ path('entropy_tunkki_booking_hash', {bookingid: object.id, renterid: object.renter.id, hash: object.renterHash}) }}">
             Contract ENG</a>
         {% endif %}
     {% endblock %}
     {% block brokenitems %}
-        {% for item in object.items|filter(item=>item.needsFixing=='true') %}
+        {% for item in object.items|filter(item=>item.needsFixing == 'true') %}
             <a class="btn btn-sm"
                style="display: inline-block"
-               href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
+               href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
                 <i class="fa fa-medkit"></i>
                 {{ item.name }}
             </a>
@@ -105,7 +105,7 @@
         {% for package in object.packages %}
             {% for item in package.itemsNeedingFixing %}
                 <a class="btn btn-sm"
-                   href="{{ path('admin_app_item_statusevent_list', {'id':item.id}) }}">
+                   href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
                     <i class="fa fa-medkit"></i>
                     {{ item.name }}
                 </a>

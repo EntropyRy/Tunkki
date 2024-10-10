@@ -12,8 +12,8 @@
                     {% for artist in artists|sort((a, b) => (a.name|lower <=> b.name|lower)) %}
                         <li>
                             {{ artist.type }}: {{ artist.name }}
-                            <a href="{{ path('entropy_public_artist.fi', {'name': artist.name, 'id': artist.id}) }}">FI</a> |
-                            <a href="{{ path('entropy_public_artist.en', {'name': artist.name, 'id': artist.id}) }}">EN</a>
+                            <a href="{{ path('entropy_public_artist.fi', {name: artist.name, id: artist.id}) }}">FI</a> |
+                            <a href="{{ path('entropy_public_artist.en', {name: artist.name, id: artist.id}) }}">EN</a>
                         </li>
                     {% endfor %}
                 </ul>

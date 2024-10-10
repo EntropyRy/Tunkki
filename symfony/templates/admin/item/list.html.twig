@@ -4,7 +4,7 @@
         {% set loaded = 1 %}
         {% for file in object.files %}
             {% if file is defined and loaded %}
-                {% if file.file.providerName == "sonata.media.provider.image" %}
+                {% if file.file.providerName == 'sonata.media.provider.image' %}
                     {{ sonata_media(file.file, 'small') }}
                     {% set loaded = 0 %}
                 {% endif %}
@@ -42,7 +42,7 @@
                 <hr style="margin: 2px">
                 {% set fixh = object.fixinghistory|last %}
                 {% if fixh %}
-                    <span>{{ fixh.createdAt|date("d.m.Y") }}, {{ fixh.creator }}: {{ fixh.description }}</span>
+                    <span>{{ fixh.createdAt|date('d.m.Y') }}, {{ fixh.creator }}: {{ fixh.description }}</span>
                     <br>
                 {% endif %}
             {% endif %}

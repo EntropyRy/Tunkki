@@ -12,27 +12,27 @@
     {% if event is not null and visible %}
         <div class="row">
             <div class="col">
-                <a href="{{ block("event_path") }}">
-                    <h3 class="mt-2">{{ block("event_name") }} ~ {{ block("event_time") }}</h3>
+                <a href="{{ block('event_path') }}">
+                    <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
                 </a>
                 {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
                     {% set show = true %}
                     {% set hide_time = true %}
                     {% set show_definition = true %}
                     {% set allow_nakki_cancel = true %}
-                    {{ event.nakkiInfo(app.request.locale) |raw }}
+                    {{ event.nakkiInfo(app.request.locale)|raw }}
                     {% if hasNakki %}
-                        {{ block("your_nakkis") }}
+                        {{ block('your_nakkis') }}
                     {% else %}
-                        {{ block("reserve_nakkis") }}
+                        {{ block('reserve_nakkis') }}
                     {% endif %}
                     <hr>
                 {% endif %}
                 {% for qr in qrs %}
-                    {{ block("multi_ticket") }}
+                    {{ block('multi_ticket') }}
                     <hr>
                 {% endfor %}
-                {{ block("shop_link") }}
+                {{ block('shop_link') }}
             </div>
         </div>
     {% else %}
@@ -45,7 +45,7 @@
 {% endblock %}
 {% block shop_link %}
     {% if showShop %}
-        <a href="{{ path("entropy_event_shop", {'slug': event.url, 'year': event.eventDate|date('Y') }) }}"
+        <a href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventDate|date('Y')}) }}"
            class="btn btn-primary btn-lg text-center w-100">{{ 'event.ticket.to_shop'|trans }}</a>
         <hr>
     {% endif %}

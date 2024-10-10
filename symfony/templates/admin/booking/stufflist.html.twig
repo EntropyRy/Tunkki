@@ -13,7 +13,7 @@
             </div>
             <div class="col-md-12">
                 <h3>Items</h3>
-                {{ block("tablehead") }}
+                {{ block('tablehead') }}
                 {% if packages %}
                     {% for package in packages %}
                         <tr>
@@ -63,7 +63,7 @@
         </table>
         {% if accessories %}
             <h3>Accessories</h3>
-            {{ block("acces_tablehead") }}
+            {{ block('acces_tablehead') }}
             {% for item in accessories %}
                 <tr>
                     <td>

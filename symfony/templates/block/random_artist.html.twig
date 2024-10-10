@@ -3,11 +3,11 @@
 {% block block %}
     <div class="box">
         <div class="box-header">
-            <h5 class="box-title">{{'artist.random.preview'|trans}}</h5>
+            <h5 class="box-title">{{ 'artist.random.preview'|trans }}</h5>
         </div>
         <div class="box-body row">
-            <div class="col-sm-6">{{ block("artist_preview_info") }}</div>
-            <div class="col-sm-6">{{ block("artist_pic") }}</div>
+            <div class="col-sm-6">{{ block('artist_preview_info') }}</div>
+            <div class="col-sm-6">{{ block('artist_pic') }}</div>
         </div>
     </div>
 {% endblock %}

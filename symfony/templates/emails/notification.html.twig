@@ -5,10 +5,10 @@
                  color: #555;
                  margin: 0 0 5px;
                  display: inline-block">
-        New Booking! - {{ booking.name }} on {{ booking.bookingDate|date("d.m.Y") }}
+        New Booking! - {{ booking.name }} on {{ booking.bookingDate|date('d.m.Y') }}
     </span>
     <div style="margin: 5px 0 0;">
-        {% if booking.retrieval %}Pickup Time: {{ booking.retrieval|date("d.m.Y H:m") }}{% endif %}
+        {% if booking.retrieval %}Pickup Time: {{ booking.retrieval|date('d.m.Y H:m') }}{% endif %}
     </div>
     <div>Renter: {{ booking.renter }}</div>
     <div>Creator: {{ booking.creator }}</div>
@@ -26,7 +26,7 @@
                   width: 100%;
                   height: 100%;
                   display: block"
-           href=" {{ path('admin_app_booking_stuffList', {'id': booking.id}) }} ">Booking stufflist >></a>
+           href=" {{ path('admin_app_booking_stuffList', {id: booking.id}) }} ">Booking stufflist >></a>
     </td>
 </tr>
 <tr>
@@ -40,5 +40,5 @@
                   width: 100%;
                   height: 100%;
                   display: block"
-           href=" {{ path('admin_app_booking_edit', {'id': booking.id}) }} ">Booking edit >></a>
+           href=" {{ path('admin_app_booking_edit', {id: booking.id}) }} ">Booking edit >></a>
     {% endblock %}

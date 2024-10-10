@@ -3,20 +3,20 @@
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
     <h1>{{ 'event.ticket.shop'|trans }}</h1>
-    <a href="{{ block("event_path") }}">
-        <h3><i class="fa fa-arrow-left"></i> {{ block("event_name") }} ~ {{ block("event_time") }}</h3>
+    <a href="{{ block('event_path') }}">
+        <h3><i class="fa fa-arrow-left"></i> {{ block('event_name') }} ~ {{ block('event_time') }}</h3>
     </a>
     {{ event.ticketInfo(app.request.locale)|default('<p>&nbsp;</p>')|raw }}
     {% if event.nakkiRequiredforTicketReservation and event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
-        {{ event.nakkiInfo(app.request.locale) |raw }}
+        {{ event.nakkiInfo(app.request.locale)|raw }}
         {% set show = true %}
         {% set hide_time = true %}
         {% set show_definition = true %}
         {% set allow_nakki_cancel = true %}
         {% if hasNakki %}
-            {{ block("your_nakkis") }}
+            {{ block('your_nakkis') }}
         {% else %}
-            {{ block("reserve_nakkis") }}
+            {{ block('reserve_nakkis') }}
         {% endif %}
     {% endif %}
     {% if form.products|length > 0 %}
@@ -26,11 +26,11 @@
                 {% if inCheckouts[product.id] is defined %}
                     {% set minus = inCheckouts[product.id] %}
                 {% endif %}
-                <div class="col-12 col-sm-9 col-md-7 col-xl-6 product rounded" {{ stimulus_controller('product', {'max': product.max((minus|default(0) ))}) }}>
+                <div class="col-12 col-sm-9 col-md-7 col-xl-6 product rounded" {{ stimulus_controller('product', {max: product.max((minus|default(0)))}) }}>
                     <div class="row">
                         <div class="col-12 pic text-center">
                             {% if product.picture %}
-                                {{ sonata_media(product.picture, 'big', {'class': 'img-fluid w-100', 'title': product.name(app.request.locale) }) }}
+                                {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(app.request.locale)}) }}
                             {% endif %}
                         </div>
                         <div class="col-12 price">
@@ -64,9 +64,9 @@
                         </div>
                         <div class="col-12 quantity">
                             {% if not nakkiRequired %}
-                                {{ block("quantity") }}
+                                {{ block('quantity') }}
                             {% else %}
-                                {% if event.nakkiRequiredforTicketReservation and hasNakki %}{{ block("quantity") }}{% endif %}
+                                {% if event.nakkiRequiredforTicketReservation and hasNakki %}{{ block('quantity') }}{% endif %}
                             {% endif %}
                         </div>
                         <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
@@ -87,9 +87,9 @@
 {% block quantity %}
     <div class="quantity-holder d-flex justify-content-center rounded">
         {% if product.max(minus|default(0)) <= 0 %}
-            {% set button = "btn-secondary disabled" %}
+            {% set button = 'btn-secondary disabled' %}
         {% else %}
-            {% set button = "btn-primary" %}
+            {% set button = 'btn-primary' %}
         {% endif %}
         <button {{ stimulus_target('product', 'minus') }} {{ stimulus_action('product', 'minus') }} class="btn {{ button }} fs-4">
             <i class="fa fa-minus"></i>

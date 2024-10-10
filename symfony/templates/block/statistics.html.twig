@@ -2,7 +2,7 @@
 {% block block %}
     <div class="box">
         <div class="box-header">
-            <h5>{{'block.stats.name'|trans}}</h5>
+            <h5>{{ 'block.stats.name'|trans }}</h5>
         </div>
         <div class="box-body">
             <dl class="row">
@@ -13,7 +13,7 @@
                     </dd>
                 {% endfor %}
                 {% if member.isActiveMember %}
-                    <dt class="col-10">{{'Kerde door opened by you'|trans }} ({{'times'|trans}})</dt>
+                    <dt class="col-10">{{ 'Kerde door opened by you'|trans }} ({{ 'times'|trans }})</dt>
                     <dd class="col-2 text-right">
                         {{ member.doorLogs|length }}
                     </dd>

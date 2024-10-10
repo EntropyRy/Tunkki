@@ -9,7 +9,7 @@
     {% do attribute(item, setter, ['class', value ~ ' ' ~ add]) %}
 {% endmacro %}
 {% block item %}
-    {% import "knp_menu.html.twig" as macros %}
+    {% import 'knp_menu.html.twig' as macros %}
     {#
     As multiple level is not currently supported by bootstrap 4
     This requires you to install
@@ -23,8 +23,8 @@
         {%- set divider_prepend = attributes.divider_prepend|default(false) %}
         {%- set divider_append = attributes.divider_append|default(false) %}
         {# unset bootstrap specific attributes #}
-        {%- set attributes = attributes|merge({'dropdown': null, 'divider_prepend': null, 'divider_append': null }) %}
-        {%- if divider_prepend %}{{ block("dividerElement") }}{%- endif %}
+        {%- set attributes = attributes|merge({dropdown: null, divider_prepend: null, divider_append: null}) %}
+        {%- if divider_prepend %}{{ block('dividerElement') }}{%- endif %}
         {# building the class of the item #}
         {%- set classes = item.attribute('class') is not empty ? [item.attribute('class'), 'nav-item'] : ['nav-item'] %}
         {%- if matcher.isCurrent(item) %}
@@ -48,21 +48,21 @@
         {%- endif %}
         {# putting classes together #}
         {%- if classes is not empty %}
-            {%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
+            {%- set attributes = attributes|merge({class: classes|join(' ')}) %}
         {%- endif %}
-        {%- set listAttributes = item.childrenAttributes|merge({'class': childrenClasses|join(' ') }) %}
+        {%- set listAttributes = item.childrenAttributes|merge({class: childrenClasses|join(' ')}) %}
         <li {{ macros.attributes(attributes) }}>
             {# displaying the item #}
             {%- if is_dropdown %}
-                {{ block("dropdownElement") }}
+                {{ block('dropdownElement') }}
             {%- elseif item.uri is not empty and (not item.current or options.currentAsLink) %}
-                {{ block("linkElement") }}
+                {{ block('linkElement') }}
             {%- else %}
-                {{ block("spanElement") }}
+                {{ block('spanElement') }}
             {%- endif %}
-            {%- if divider_append %}{{ block("dividerElement") }}{%- endif %}
+            {%- if divider_append %}{{ block('dividerElement') }}{%- endif %}
             {% if item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
-                {{ block("dropdownlinks") }}
+                {{ block('dropdownlinks') }}
             {% endif %}
         </li>
     {% endif %}
@@ -74,9 +74,9 @@
             <div class="dropdown-menu">
             {% endif %}
             {% for item in item.children %}
-                {{ block("renderDropdownlink") }}
+                {{ block('renderDropdownlink') }}
                 {% if use_multilevel and item.hasChildren and options.depth is not same as(0) and item.displayChildren %}
-                    {{ block("dropdownlinks") }}
+                    {{ block('dropdownlinks') }}
                 {% endif %}
             {% endfor %}
             {% if not use_multilevel %}
@@ -89,25 +89,25 @@
     {% import _self as ownmacro %}
     {%- set divider_prepend = item.attributes.divider_prepend|default(false) %}
     {%- set divider_append = item.attributes.divider_append|default(false) %}
-    {%- set attributes = item.attributes|merge({'dropdown': null, 'divider_prepend': null, 'divider_append': null }) %}
+    {%- set attributes = item.attributes|merge({dropdown: null, divider_prepend: null, divider_append: null}) %}
     {% if use_multilevel %}<li>{% endif %}
-        {%- if divider_prepend %}{{ block("dividerElementDropdown") }}{%- endif %}
+        {%- if divider_prepend %}{{ block('dividerElementDropdown') }}{%- endif %}
         {%- if item.uri is not empty and (not item.current or options.currentAsLink) %}
             {{ ownmacro.setCssClassAttribute(item, 'LinkAttribute', 'dropdown-item') }}
-            {{ block("linkElement") }}
+            {{ block('linkElement') }}
         {%- else %}
-            {{ block("spanElementDropdown") }}
+            {{ block('spanElementDropdown') }}
         {%- endif %}
-        {%- if divider_append %}{{ block("dividerElementDropdown") }}{%- endif %}
+        {%- if divider_append %}{{ block('dividerElementDropdown') }}{%- endif %}
         {% if use_multilevel %}</li>{% endif %}
 {% endblock %}
 {% block spanElementDropdown %}
-    {% import "knp_menu.html.twig" as macros %}
+    {% import 'knp_menu.html.twig' as macros %}
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LabelAttribute', 'dropdown-header') }}
     <div {{ macros.attributes(item.labelAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute("icon") }}"></i>{% endif %}
-        {{ block("label") }}
+        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {{ block('label') }}
     </div>
 {% endblock %}
 {% block dividerElementDropdown %}<div class="dropdown-divider"></div>{% endblock %}
@@ -119,33 +119,33 @@
     {% endif %}
 {% endblock %}
 {% block linkElement %}
-    {% import "knp_menu.html.twig" as macros %}
+    {% import 'knp_menu.html.twig' as macros %}
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LinkAttribute', 'nav-link') }}
     <a href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute("icon") }}"></i>{% endif %}
-        {{ block("label") }}
+        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {{ block('label') }}
     </a>
 {% endblock %}
 {% block spanElement %}
-    {% import "knp_menu.html.twig" as macros %}
+    {% import 'knp_menu.html.twig' as macros %}
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LabelAttribute', 'navbar-text') }}
     <span {{ macros.attributes(item.labelAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute("icon") }}"></i>{% endif %}
-        {{ block("label") }}
+        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {{ block('label') }}
     </span>
 {% endblock %}
 {% block dropdownElement %}
-    {% import "knp_menu.html.twig" as macros %}
+    {% import 'knp_menu.html.twig' as macros %}
     {%- set classes = item.linkAttribute('class') is not empty ? [item.linkAttribute('class')] : [] %}
     {%- set classes = classes|merge(['dropdown-toggle', 'nav-link']) %}
     {%- set attributes = item.linkAttributes %}
-    {%- set attributes = attributes|merge({'class': classes|join(' ')}) %}
+    {%- set attributes = attributes|merge({class: classes|join(' ')}) %}
     {%- set attributes = attributes|merge({'data-bs-toggle': 'dropdown'}) %}
     <a href="#"{{ macros.attributes(attributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute("icon") }}"></i>{% endif %}
-        {{ block("label") }}
+        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {{ block('label') }}
         <b class="caret"></b>
     </a>
 {% endblock %}
