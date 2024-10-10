@@ -1,8 +1,8 @@
 {% extends 'event.html.twig' %}
 {% block content %}
     {% if is_granted('ROLE_SUPER_ADMIN') %}<h1 class="text-success">You are ADMIN</h1>{% endif %}
-    {{ block("responsibles") }}
-    {{ block("infos") }}
+    {{ block('responsibles') }}
+    {{ block('infos') }}
 {% endblock %}
 {% block responsibles %}
     {% if responsibles|length > 0 and infos|length > 0 %}
@@ -20,7 +20,7 @@
                     {% if nakki.responsible %}
                         {% set r = nakki.responsible %}
                     {% else %}
-                        {% set r = "missing" %}
+                        {% set r = 'missing' %}
                     {% endif %}
                     <tr>
                         <th scope="col">{{ name }}</th>
@@ -56,28 +56,28 @@
         </h3>
         {% if nakki.responsible is not null %}
             {# {% set r = nakki.responsible %} #}
-            {# <table class="table table-striped #} {#     {% if event.headerTheme == 'dark' %}#} {#         table-dark #} {#{% endif %} #} {#     "> #}
-            {#   <thead> #}
-            {#     <tr> #}
-            {#       <th scope="col">{{ 'Username'|trans }}</th> #}
-            {#       <th scope="col">{{ 'Name'|trans }}</th> #}
-            {#       <th scope="col">{{ 'Phone'|trans }}</th> #}
-            {#       <th scope="col">Email</th> #}
-            {#     </tr> #}
-            {#   </thead> #}
-            {#   <tbody> #}
-            {#     <tr> #}
-            {#       <th scope="col">{{ r.username }}</th> #}
-            {#       <th scope="col">{{ r.name }}</th> #}
-            {#       <th scope="col">{{ r.phone }}</th> #}
-            {#       <th scope="col">{{ r.email }}</th> #}
-            {#     </tr> #}
-            {#   </tbody> #}
+            {# <table class="table table-striped #} {# {% if event.headerTheme == 'dark' %} #} {# table-dark #} {# {% endif %} #} {# "> #}
+            {# <thead> #}
+            {# <tr> #}
+            {# <th scope="col">{{ 'Username'|trans }}</th> #}
+            {# <th scope="col">{{ 'Name'|trans }}</th> #}
+            {# <th scope="col">{{ 'Phone'|trans }}</th> #}
+            {# <th scope="col">Email</th> #}
+            {# </tr> #}
+            {# </thead> #}
+            {# <tbody> #}
+            {# <tr> #}
+            {# <th scope="col">{{ r.username }}</th> #}
+            {# <th scope="col">{{ r.name }}</th> #}
+            {# <th scope="col">{{ r.phone }}</th> #}
+            {# <th scope="col">{{ r.email }}</th> #}
+            {# </tr> #}
+            {# </tbody> #}
             {# </table> #}
         {% else %}
             <h5 class="text-warning">{{ 'Responsible'|trans }}: {{ 'missing'|trans }}</h5>
         {% endif %}
-        {{ block("thead") }}
+        {{ block('thead') }}
         {% for bookings in nakki.b %}
             {% for b in bookings %}
                 {% if b.member is not null %}
@@ -100,7 +100,7 @@
     </tbody>
 </table>
 {% else %}
-<h1>{{ "No permissions"|trans }}</h1>
+<h1>{{ 'No permissions'|trans }}</h1>
 {% endfor %}
 {% endblock %}
 {% block thead %}

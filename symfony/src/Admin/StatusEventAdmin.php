@@ -145,7 +145,7 @@ class StatusEventAdmin extends AbstractAdmin
         $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
-    private function getMMtext($Event, $user)
+    private function getMMtext($Event, $user): string
     {
         $text = 'EVENT: <' . $this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|';
         $fix = null;

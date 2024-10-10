@@ -4,13 +4,13 @@
         {% if event is defined %}
             {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
         {% else %}
-            {% set theme = "light" %}
+            {% set theme = 'light' %}
         {% endif %}
         <div class="header-img text-center d-none d-lg-block">
             <a href="/{% if app.request.locale == 'en' %}en{% endif %}">
-                <img src="{{ asset("/images/header-logo-text.svg") }}" {% if theme == 'dark' %}class="invert"{% endif %} width="50%" height="auto" z-index="0" alt="ENTROPY">
+                <img src="{{ asset('/images/header-logo-text.svg') }}" {% if theme == 'dark' %}class="invert"{% endif %} width="50%" height="auto" z-index="0" alt="ENTROPY">
             </a>
         </div>
-        {{ block("menu") }}
+        {{ block('menu') }}
     </div>
 </header>

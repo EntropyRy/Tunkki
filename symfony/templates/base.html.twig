@@ -3,7 +3,7 @@
         <div class="content row">
             <header class="header">
                 {{ sonata_page_render_container('header', 'global') }}
-                {% include 'menu/menu.html.twig' %}
+                {{ include('menu/menu.html.twig') }}
             </header>
             {% block page_content %}
                 {% if content is defined %}

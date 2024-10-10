@@ -3,15 +3,15 @@
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
     {% set l = app.request.locale %}
-    <div class="col-12" {{ stimulus_controller("nakkikone") }}>
+    <div class="col-12" {{ stimulus_controller('nakkikone') }}>
         <h2>
             Nakkikone
-            {% if event.template == "event.html.twig" %}
-                : <a href="{{ block("event_path") }}">{{ block("event_name") }}</a>
+            {% if event.template == 'event.html.twig' %}
+                : <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
             {% endif %}
         </h2>
-        {{ block("your_nakkis") }}
-        {{ attribute(event, 'nakkiInfo' ~ l|capitalize) |raw }}
+        {{ block('your_nakkis') }}
+        {{ attribute(event, 'nakkiInfo' ~ l|capitalize)|raw }}
         <hr>
         <h3>{{ 'Select Nakki'|trans }}</h3>
         <div class="row">
@@ -25,21 +25,21 @@
                            href="#nakki{{ loop.index }}"
                            role="tab"
                            aria-controls="{{ name }}">
-                            {{ name }} ({{ nakki.durations|join("h, ") }}h)
+                            {{ name }} ({{ nakki.durations|join('h, ') }}h)
                             <span class="badge bg-secondary rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
                         </a>
                     {% endfor %}
                 </div>
             </div>
             <div class="col-sm-6 col-md-8">
-                <div class="tab-content {% if "e30v" in event.template %}content{% endif %}"
+                <div class="tab-content {% if 'e30v' in event.template %}content{% endif %}"
                      id="nav-tabContent">
                     <div class="tab-pane fade active show "
                          id="list-none"
                          role="tabpanel"
                          aria-labelledby="list-none">
                         <h3>
-                            {#{ 'Nakki descriptions'|trans }#}
+                            {# { 'Nakki descriptions'|trans } #}
                             <small>{{ 'Choose a shift ("Nakki") to see the description'|trans }}.</small>
                         </h3>
                     </div>
@@ -57,6 +57,6 @@
     </div>
     <div class="col-12 mt-3 d-none show-on-click">
         <h3>{{ 'Reserve your Nakki'|trans }}</h3>
-        {{ block("reserve_nakkis") }}
+        {{ block('reserve_nakkis') }}
     </div>
 {% endblock %}

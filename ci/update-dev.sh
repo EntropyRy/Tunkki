@@ -6,3 +6,7 @@ $dc build --pull;
 $dc up -d; 
 $dc exec fpm composer update; 
 $dc exec fpm ./bin/console importmap:update; 
+if [ -f ~/.local/share/nvim/mason/bin/twig-cs-fixer ]; then
+    ~/.local/share/nvim/mason/bin/twig-cs-fixer fix --fix symfony/templates/*.html.twig;
+fi
+$dc exec fpm ./vendor/bin/phpstan analyse src --level=5

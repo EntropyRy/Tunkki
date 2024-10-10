@@ -3,11 +3,11 @@
     {% if fix is defined %}
         {% for item in fix %}
             <div>
-                <a href="{{ path('admin_app_item_edit', {'id':item.id}) }}">
+                <a href="{{ path('admin_app_item_edit', {id: item.id}) }}">
                     <h3>{{ item.name }}</h3>
                 </a>
                 {% for fixh in item.fixinghistory|reverse %}
-                    <span>{{ fixh.createdAt|date("d.m.Y") }}, {{ fixh.creator }}: {{ fixh.description }}</span>
+                    <span>{{ fixh.createdAt|date('d.m.Y') }}, {{ fixh.creator }}: {{ fixh.description }}</span>
                     <br>
                 {% endfor %}
                 {# dump(item) #}

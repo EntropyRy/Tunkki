@@ -3,9 +3,9 @@
 {% block content %}
     {% set newyear = date('Y') %}
     {% if app.request.locale == 'en' %}
-        {% set route = "entropy_event_en" %}
+        {% set route = 'entropy_event_en' %}
     {% else %}
-        {% set route = "entropy_event" %}
+        {% set route = 'entropy_event' %}
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
@@ -19,7 +19,7 @@
             {% set year = event.eventdate|date('Y') %}
             {% if event is not null and visible %}
                 {% if loop.first %}
-                    {{ block("event") }}
+                    {{ block('event') }}
                 {% else %}
                     {% if year != newyear %}
                         <div class="linetext">
@@ -28,7 +28,7 @@
                     {% endif %}
                     <div class="post"
                          data-type="{{ event.type }}"
-                         data-cancelled="{{ event.cancelled }}">{{ block("events") }}</div>
+                         data-cancelled="{{ event.cancelled }}">{{ block('events') }}</div>
                 {% endif %}
             {% endif %}
             {% set newyear = event.eventdate|date('Y') %}
@@ -42,9 +42,9 @@
                 {{ attribute(event, name_attr) }}
             {% else %}
                 {% if event.url and not event.externalUrl %}
-                    <a href="{{ path('entropy_event_slug',{'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                    <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     {% else %}
-                        <a href="{{ path(route,{'id': event.id}) }}">
+                        <a href="{{ path(route, {id: event.id}) }}">
                         {% endif %}
                         {{ attribute(event, name_attr) }}
                     </a>
@@ -60,7 +60,7 @@
             </span>
             <span>
                 {% apply spaceless %}
-                {{ event.publishdate|date("j.n.") }}
+                {{ event.publishdate|date('j.n.') }}
             {% endapply %}
         </span>
     </h5>

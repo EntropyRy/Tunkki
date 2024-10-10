@@ -2,13 +2,13 @@
 {% block content %}
     {% set newyear = date('Y') %}
     {% if app.request.locale == 'en' %}
-        {% set route = "entropy_event_en" %}
+        {% set route = 'entropy_event_en' %}
     {% else %}
-        {% set route = "entropy_event" %}
+        {% set route = 'entropy_event' %}
     {% endif %}
     {% set name_attr = 'name_attribute'|trans %}
     <div class="input-group mb-3">
-        <input type="text" {{ stimulus_controller("search") }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}" />
+        <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}" />
         <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
     </div>
     <h4>{{ 'search.include'|trans }}</h4>
@@ -52,8 +52,8 @@
                 </div>
             {% endif %}
             {% if event is not null and visible %}
-                <div class="post {{ event.type }} collapse {% if event.type!='meeting' %}show{% endif %}"
-                     data-name="{{ attribute(event, name_attr) }}">{{ block("events") }}</div>
+                <div class="post {{ event.type }} collapse {% if event.type != 'meeting' %}show{% endif %}"
+                     data-name="{{ attribute(event, name_attr) }}">{{ block('events') }}</div>
             {% endif %}
             {% set newyear = event.eventdate|date('Y') %}
         {% endfor %}
@@ -66,9 +66,9 @@
                 {{ attribute(event, name_attr) }}
             {% else %}
                 {% if event.url and not event.externalUrl %}
-                    <a href="{{ path('entropy_event_slug', {'slug': event.url, 'year': event.eventdate|date('Y') }) }}">
+                    <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     {% else %}
-                        <a href="{{ path(route, {'id': event.id}) }}">
+                        <a href="{{ path(route, {id: event.id}) }}">
                         {% endif %}
                         {{ attribute(event, name_attr) }}
                     </a>
@@ -87,14 +87,14 @@
                 {% apply spaceless %}
                 {% if event.until %}
                     {% if event.until|date('n') != event.eventdate|date('n') %}
-                        {{ event.eventdate|date("j.n.") }}-{{ event.until|date("j.n.") }}
+                        {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
                     {% elseif (event.until|date('j') - event.eventdate|date('j')) > 1 %}
-                        {{ event.eventdate|date("j") }}-{{ event.until|date("j.n.") }}
+                        {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
                     {% else %}
-                        {{ event.eventdate|date("j.n.") }}
+                        {{ event.eventdate|date('j.n.') }}
                     {% endif %}
                 {% else %}
-                    {{ event.eventdate|date("j.n.") }}
+                    {{ event.eventdate|date('j.n.') }}
                 {% endif %}
             {% endapply %}
         </span>

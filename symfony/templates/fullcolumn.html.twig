@@ -1,9 +1,9 @@
 {% extends 'base_layout.html.twig' %}
 {% block sonata_page_container %}
     <div class="container e-container">
-        {% include 'header.html.twig' %}
+        {{ include('header.html.twig') }}
         <div class="row mx-1">
-            {% include 'flashmessages.html.twig' %}
+            {{ include('flashmessages.html.twig') }}
             <div class="col-12 mx-auto">
                 {% block page_content %}
                     {% if content is defined %}
@@ -17,6 +17,6 @@
                 {% endblock %}
             </div>
         </div>
-        {% include 'footer.html.twig' %}
+        {{ include('footer.html.twig') }}
     </div>
 {% endblock %}

@@ -15,7 +15,7 @@
             {% else %}
                 <div style="margin-right: 5px">
                     <div class="polaroid">
-                        <img src="{{ asset("images/thumb_artist_square.jpg") }}" style="width: 100%" title="Placeholder Image" />
+                        <img src="{{ asset('images/thumb_artist_square.jpg') }}" style="width: 100%" title="Placeholder Image" />
                         <div class="caption">
                             <strong>{{ 'no_linked_media'|trans }}</strong>
                         </div>
@@ -25,7 +25,7 @@
         </div>
         <div class="col-12 col-md-8">
             <strong>{{ 'link_media'|trans }}</strong>
-            {{ block("form_widget") }}
+            {{ block('form_widget') }}
         </div>
     </div>
 {% endblock sonata_media_type_widget %}

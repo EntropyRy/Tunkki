@@ -6,10 +6,10 @@
         <head {{ sonata_seo_head_attributes() }}>
             {% block preload_icons %}
                 <link rel="icon" href="/favicon.svg" sizes="any" type="image/svg+xml">
-                <link rel="preload" as="image" href="{{ asset("/images/header-logo-text.svg") }}">
+                <link rel="preload" as="image" href="{{ asset('/images/header-logo-text.svg') }}">
             {% endblock %}
             {% if block('title') is defined %}
-                <title>{{ block("title") }}</title>
+                <title>{{ block('title') }}</title>
             {% elseif page.title is defined %}
                 <title>{{ page.title }} | Entropy ry</title>
             {% else %}
@@ -17,7 +17,7 @@
             {% endif %}
             {% block meta %}{{ sonata_seo_metadatas() }}{% endblock %}
             {% block stylesheets %}
-                <link rel="stylesheet" href="{{ asset("styles/app.scss") }}">
+                <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
             {% endblock %}
             {% block importmap %}
                 {{ importmap('app') }}
@@ -43,7 +43,7 @@
                     <ul class="navbar-nav justify-content-left">
                         {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ path("sonata_admin_dashboard") }}">
+                                <a class="nav-link" href="{{ path('sonata_admin_dashboard') }}">
                                     <i class="fa fa-magic"></i>
                                     {{ 'Dashboard'|trans }}
                                 </a>
@@ -66,16 +66,16 @@
                                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
                                         <li class="dropdown-item">
-                                            <a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter) : page.id}) }}"
-                                               target="_new">{{ "header.edit_page"|trans({}, 'SonataPageBundle') }}</a>
+                                            <a href="{{ sonata_page_admin.generateUrl('edit', {(sonata_page_admin.idParameter): page.id}) }}"
+                                               target="_new">{{ 'header.edit_page'|trans({}, 'SonataPageBundle') }}</a>
                                         </li>
                                         <li class="dropdown-item">
-                                            <a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter) : page.id}) }}"
-                                               target="_new">{{ "header.create_snapshot"|trans({}, 'SonataPageBundle') }}</a>
+                                            <a href="{{ sonata_page_admin.generateUrl('sonata.page.admin.page|sonata.page.admin.snapshot.list', {(sonata_page_admin.idParameter): page.id}) }}"
+                                               target="_new">{{ 'header.create_snapshot'|trans({}, 'SonataPageBundle') }}</a>
                                         </li>
                                         <div class="dropdown-divider"></div>
                                         <li class="dropdown-item">
-                                            <a href="{{ sonata_page_admin.generateUrl("list") }}" target="_new">{{ "header.view_all_pages"|trans({}, 'SonataPageBundle') }}</a>
+                                            <a href="{{ sonata_page_admin.generateUrl('list') }}" target="_new">{{ 'header.view_all_pages'|trans({}, 'SonataPageBundle') }}</a>
                                         </li>
                                     </ul>
                                 </li>
@@ -83,7 +83,7 @@
                             {% if page is defined and event is not defined %}
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                       href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter) : page.id}) }}">
+                                       href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
                                         <i class="fa fa-magic"></i>
                                         {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
                                     </a>
@@ -106,7 +106,7 @@
                         {% if app.user and is_granted('IS_IMPERSONATOR') %}
                             <li class="nav-item">
                                 <a class="nav-link"
-                                   href="{{ path('homepage', {'_switch_user': '_exit'}) }}">{{ "header.switch_user_exit"|trans({}, 'SonataPageBundle') }}</a>
+                                   href="{{ path('homepage', {_switch_user: '_exit'}) }}">{{ 'header.switch_user_exit'|trans({}, 'SonataPageBundle') }}</a>
                             </li>
                         {% endif %}
                     </ul>
@@ -115,7 +115,7 @@
                         <ul class="navbar-nav justify-content-left">
                             <li class="nav-item">
                                 <a class="nav-link"
-                                   href="{{ path('admin_app_event_edit', {'id': event.id}) }}">
+                                   href="{{ path('admin_app_event_edit', {id: event.id}) }}">
                                     <i class="fa fa-magic"></i>
                                     {{ 'event.edit'|trans }}
                                 </a>

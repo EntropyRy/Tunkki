@@ -3,7 +3,7 @@
 {% use 'event/meta.html.twig' %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block importmap %}
-    {% set import = ['app']%}
+    {% set import = ['app'] %}
     {% if event.backgroundEffect is not empty %}
         {% set import = import|merge([event.backgroundEffect]) %}
     {% endif %}
@@ -19,11 +19,11 @@
     {% if event is not null and visible %}
         <div class="row">
             <div class="col overflow-auto">
-                {{ block("event_head_reverse") }}
-                {{ block("event_content") }}
+                {{ block('event_head_reverse') }}
+                {{ block('event_content') }}
             </div>
             {% if event.picture is not null and event.picturePosition == 'after' %}
-                <div class="img-after mb-2 mt-3">{{ block("event_media") }}</div>
+                <div class="img-after mb-2 mt-3">{{ block('event_media') }}</div>
             {% endif %}
         </div>
     {% else %}
@@ -31,7 +31,7 @@
             <br>
             <h1 class="text-center">{{ 'event_not_found'|trans }}</h1>
             <div class="col-6 mx-auto">
-                <a class="btn btn-primary w-100" href="{{ path("app_login") }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                <a class="btn btn-primary w-100" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
             </div>
             <br>
         </div>

@@ -3,8 +3,8 @@
 {% block content %}
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" {{ stimulus_controller("masonry") }} data-masonry-target="masonry">
-        {#    <turbo-frame id="stream">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3" {{ stimulus_controller('masonry') }} data-masonry-target="masonry">
+        {# <turbo-frame id="stream">
         <div class="col p-2">
             {{ block('stream_tile') }}
         </div>
@@ -15,19 +15,19 @@
             {% else %}
                 {% set visible = app.user is null and event.published and (event.publishDate < date()) %}
             {% endif %}
-            {% if event is not null and visible %}<div class="col p-2">{{ block("event_tile") }}</div>{% endif %}
+            {% if event is not null and visible %}<div class="col p-2">{{ block('event_tile') }}</div>{% endif %}
         {% endfor %}
-        <div class="col p-2">{{ block("epic_tile") }}</div>
-        {% if info is not null %}<div class="col p-2">{{ block("artist_tile") }}</div>{% endif %}
-        {% if not app.user %}<div class="col p-2">{{ block("join_us_tile") }}</div>{% endif %}
-        <div class="col p-2">{{ block("stream_tile") }}</div>
+        <div class="col p-2">{{ block('epic_tile') }}</div>
+        {% if info is not null %}<div class="col p-2">{{ block('artist_tile') }}</div>{% endif %}
+        {% if not app.user %}<div class="col p-2">{{ block('join_us_tile') }}</div>{% endif %}
+        <div class="col p-2">{{ block('stream_tile') }}</div>
     </div>
 {% endblock %}
 {% block epic_tile %}
     <div class="tile col-12 p-2">
-        <turbo-frame {{ stimulus_controller("epics") }} data-epics-url-value="/api/epics/random" data-epics-refresh-interval-value="8000">
+        <turbo-frame {{ stimulus_controller('epics') }} data-epics-url-value="/api/epics/random" data-epics-refresh-interval-value="8000">
         <div class="rect-img-container">
-            <img data-epics-target="pic" src="{{ asset("/images/header-logo.svg") }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
+            <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
             <div class="badge-container">
                 <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
             </div>
@@ -44,7 +44,7 @@
 {% block join_us_tile %}
     <div class="tile col-12 p-2">
         <div class="rect-img-container">
-            <img src="{{ asset("/images/golden-logo.svg") }}" loading="lazy" class="rect-img fill" title="{{ 'Join us'|trans }}">
+            <img src="{{ asset('/images/golden-logo.svg') }}" loading="lazy" class="rect-img fill" title="{{ 'Join us'|trans }}">
         </div>
         <h4>{{ 'join_us.title'|trans }}</h4>
         <p>{{ 'join_us.1'|trans }}</p>
@@ -70,33 +70,33 @@
     {% set bio_attribute = 'bio_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
     <div class="tile col-12 p-2">
-        <a href="{{ block("event_path") }}">
+        <a href="{{ block('event_path') }}">
             <div class="rect-img-container">
-                {{ block("artist_pic") }}
+                {{ block('artist_pic') }}
                 <div class="badge-container">
                     <span class="badge bg-secondary">{{ 'artist.tile.heading'|trans }}</span>
                 </div>
             </div>
         </a>
-        {#    <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
+        {# <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
         <div class="mb-2 justify-content-between d-flex">
             {% if app.request.locale == 'fi' %}
-                {% set artist_url = "/artistit" %}
+                {% set artist_url = '/artistit' %}
             {% else %}
-                {% set artist_url = "/en/artists" %}
+                {% set artist_url = '/en/artists' %}
             {% endif %}
-            <a class="btn btn-outline-primary" href="{{ block("event_path") }}">{{ 'artist.tile.button_event'|trans }}</a>
+            <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{ 'artist.tile.button_event'|trans }}</a>
             <a class="btn btn-outline-primary" href="{{ artist_url }}">{{ 'artist.tile.button_artists'|trans }}</a>
         </div>
-        {{ block("artist_event_info") }}
+        {{ block('artist_event_info') }}
     </div>
 {% endblock %}
 {% block stream_tile %}
-    <div {{ stimulus_controller("stream") }} data-stream-url-value="https://stream.entropy.fi" data-stream-online-img-value="{{ asset("/images/entropy-stream-online.svg") }}" data-stream-offline-img-value="{{ asset("/images/entropy-stream-offline.svg") }}" data-stream-refresh-interval-value="20000">
+    <div {{ stimulus_controller('stream') }} data-stream-url-value="https://stream.entropy.fi" data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}" data-stream-offline-img-value="{{ asset('/images/entropy-stream-offline.svg') }}" data-stream-refresh-interval-value="20000">
         <div class="tile col-12 p-2">
             <a href="https://stream.entropy.fi">
                 <div class="rect-img-container">
-                    <img data-stream-target="pic" src="{{ asset("/images/entropy-stream-offline.svg") }}" loading="lazy" class="rect-img fill {% if app.user is not null and app.user.member.theme == 'dark' %}invert{% endif %}" title="{{ 'Stream'|trans }}">
+                    <img data-stream-target="pic" src="{{ asset('/images/entropy-stream-offline.svg') }}" loading="lazy" class="rect-img fill {% if app.user is not null and app.user.member.theme == 'dark' %}invert{% endif %}" title="{{ 'Stream'|trans }}">
                     <div class="badge-container">
                         <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
                     </div>
