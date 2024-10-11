@@ -9,7 +9,7 @@
   const lineSpacing = (canvas.height * 9) / numLines; // spacing between lines
   const lineWidth = 1; // width of lines
   const color = "black"; // color of lines
-  const speed = 0.01; // speed of animation
+  const speed = 0.1; // speed of animation
 
   let time = 0; // time variable for animation
   function drawLines() {
