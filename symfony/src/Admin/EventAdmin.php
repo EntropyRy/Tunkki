@@ -429,6 +429,7 @@ final class EventAdmin extends AbstractAdmin
                                 'Snowfall' => 'snow',
                                 'Starfield' => 'stars',
                                 'Color Grid' => 'grid',
+                                'Wavy Lines' => 'lines',
                             ]
                         ]
                     )

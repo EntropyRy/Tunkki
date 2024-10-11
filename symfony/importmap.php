@@ -32,6 +32,10 @@ return [
         'path' => './assets/js/tv.js',
         'entrypoint' => true,
     ],
+    'lines' => [
+        'path' => './assets/js/lines.js',
+        'entrypoint' => true,
+    ],
     'vhs' => [
         'path' => './assets/js/vhs.js',
         'entrypoint' => true,
