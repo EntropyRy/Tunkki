@@ -24,14 +24,20 @@ class AppStripeClient
         return new StripeClient($this->bag->get('stripe_secret_key'));
     }
 
-    public function getReturnUrl(Event $event): string
+    public function getReturnUrl(?Event $event): string
     {
+        if ($event == null) {
+            return $this->urlG->generate(
+                'entropy_shop_complete',
+                [],
+                $this->urlG::ABSOLUTE_URL
+            ) . '?session_id={CHECKOUT_SESSION_ID}';
+        }
         return $this->urlG->generate(
             'entropy_event_shop_complete',
             [
                 'year' => $event->getEventDate()->format('Y'),
                 'slug' => $event->getUrl()
-
             ],
             $this->urlG::ABSOLUTE_URL
         ) . '?session_id={CHECKOUT_SESSION_ID}';

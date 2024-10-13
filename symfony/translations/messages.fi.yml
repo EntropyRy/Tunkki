@@ -520,6 +520,13 @@ calendar:
 product:
   quantity: määrä
   sold_out: Loppuunmyyty
+shop:
+  cart:
+    empty: Ostoskorisi on tyhjä
+    email:
+      label: Sähköposti, johon kuittisi lähetetään
+      help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme ostoksesi tiliisi.
+
 e30v:
   sponsors: Sponsorit
   merch_shop: Oheistuotekauppa

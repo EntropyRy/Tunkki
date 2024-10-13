@@ -414,6 +414,12 @@ calendar:
 product:
   quantity: quantity
   sold_out: Sold Out
+shop:
+  cart:
+    email:
+      label: Email in which we will send your receipt
+      help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
+    empty: Your cart is empty
 e30v:
   sponsors: Sponsors
   merch_shop: Merchandise Shop

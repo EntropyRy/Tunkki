@@ -1,0 +1,12 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}{{ 'page.title.checkout'|trans }} | Entropy ry{% endblock %}
+{% block javascripts %}
+    <script src="https://js.stripe.com/v3/"
+            data-turbo-track="reload"
+            crossorigin="anonymous"></script>
+    {{ parent() }}
+{% endblock %}
+{% block content %}
+    <div {{ stimulus_controller('stripe', {publicKey: publicKey, clientSecret: stripeSession.client_secret, time: time}) }}>
+    </div>
+{% endblock %}
