@@ -77,19 +77,19 @@ return [
         'version' => '1.15.3',
     ],
     'intl-messageformat' => [
-        'version' => '10.6.0',
+        'version' => '10.7.0',
     ],
     'tslib' => [
         'version' => '2.7.0',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.7.9',
+        'version' => '2.7.10',
     ],
     '@formatjs/fast-memoize' => [
-        'version' => '2.2.0',
+        'version' => '2.2.1',
     ],
     '@formatjs/icu-skeleton-parser' => [
-        'version' => '1.8.3',
+        'version' => '1.8.4',
     ],
     '@hotwired/turbo' => [
         'version' => '8.0.10',
