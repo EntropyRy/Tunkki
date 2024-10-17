@@ -104,7 +104,7 @@
                         <a class="btn btn-primary w-100"
                             href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                             <div class="fs-4 fw-bold text-uppercase">{{ 'ticket.to_ticket_shop'|trans }}</div>
-                            {{ 'ticket.sale_ends'|trans }}: {{ event.ticketPresaleEnd|format_datetime('short','short', locale=app.request.locale) }}
+                            {{ 'ticket.sale_ends'|trans }}: {{ event.ticketPresaleEnd|format_datetime('short', 'short', locale=app.request.locale) }}
                         </a>
                     {% else %}
                         {% if event.ticketPresaleStart > date('now') %}
