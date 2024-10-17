@@ -615,7 +615,7 @@ final class EventAdmin extends AbstractAdmin
                 ->with('Presales', ['class' => 'col-md-6'])
                 ->add(
                     'ticketPresaleStart',
-                    DatePickerType::class,
+                    DateTimePickerType::class,
                     [
                         'help' => 'When presale starts',
                         'input' => 'datetime_immutable',
@@ -626,7 +626,7 @@ final class EventAdmin extends AbstractAdmin
                     'ticketPresaleEnd',
                     DateTimePickerType::class,
                     [
-                        'help' => 'when presale ends. If start of the ticket sale needs to be timed: define start and end seconds apart',
+                        'help' => 'when presale ',
                         'input' => 'datetime_immutable',
                         'required' => false
                     ]

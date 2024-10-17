@@ -184,7 +184,7 @@ body {
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $ticketInfoEn = null;
 
-    #[ORM\Column(type: 'date_immutable', nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $ticketPresaleStart = null;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
