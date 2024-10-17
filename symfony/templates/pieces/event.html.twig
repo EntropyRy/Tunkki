@@ -69,6 +69,15 @@
             <h4>{{ block('event_name') }}</h4>
         </a>
         <div class="d-flex justify-content-between">
+            {% if event.ticketPresaleEnabled and event.url and not event.isInPast %}
+                <span class="pe-2">
+                    <a class="btn btn-primary"
+                       href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                        {{ 'fas fa-ticket'|parse_icon }}
+                        {{ 'ticket.to_ticket_shop'|trans }}
+                    </a>
+                </span>
+            {% endif %}
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user and not event.isInPast %}
                 <span class="pe-2">
                     <a class="btn btn-primary"

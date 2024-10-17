@@ -1127,6 +1127,7 @@ body {
     {
         $now = new \DateTime('now');
         if (
+            $this->ticketsEnabled &&
             is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
             is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now
         ) {
