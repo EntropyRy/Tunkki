@@ -80,7 +80,7 @@ return [
         'version' => '10.7.0',
     ],
     'tslib' => [
-        'version' => '2.7.0',
+        'version' => '2.8.0',
     ],
     '@formatjs/icu-messageformat-parser' => [
         'version' => '2.7.10',
@@ -92,14 +92,14 @@ return [
         'version' => '1.8.4',
     ],
     '@hotwired/turbo' => [
-        'version' => '8.0.10',
+        'version' => '8.0.12',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
         'version' => '5.1.0',
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.0.3',
+        'version' => '5.0.4',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
         'version' => '6.6.0',

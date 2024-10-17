@@ -124,14 +124,13 @@ class CheckoutsController extends AbstractController
         ProductRepository $pRepo
     ): Response {
         $client = $stripe->getClient();
-        $returnUrl = $stripe->getReturnUrl();
+        $returnUrl = $stripe->getReturnUrl(null);
         $session = $request->getSession();
         $cartId = $session->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
         if ($cart == null) {
             $this->addFlash('warning', 'shop.cart.empty');
-            return $this->redirectToRoute('entropy_shop', [
-            ]);
+            return $this->redirectToRoute('entropy_shop', []);
         }
         $expires = new \DateTime('+30min');
         $products = $cart->getProducts();
@@ -166,10 +165,7 @@ class CheckoutsController extends AbstractController
             $session->set('StripeSessionId', $stripeSession['id']);
         } else {
             $this->addFlash('warning', 'shop.cart.empty');
-            return $this->redirectToRoute('entropy_shop', [
-                'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl()
-            ]);
+            return $this->redirectToRoute('entropy_shop', []);
         }
         return $this->render('shop/checkout.html.twig', [
             'stripeSession' => $stripeSession,

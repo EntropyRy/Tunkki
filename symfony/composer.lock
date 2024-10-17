@@ -2431,16 +2431,16 @@
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.0.3",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8"
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
-                "reference": "6ea8dd08867a2a42619d65c3deb2c0fcbf81c8f8",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
+                "reference": "f9c436286ab2892c7db7be8c8da4ef61ccf7b455",
                 "shasum": ""
             },
             "require": {
@@ -2494,7 +2494,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.0.3"
+                "source": "https://github.com/guzzle/promises/tree/2.0.4"
             },
             "funding": [
                 {
@@ -2510,7 +2510,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-07-18T10:29:17+00:00"
+            "time": "2024-10-17T10:06:22+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -3413,16 +3413,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "9.0.0",
+            "version": "9.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "2ed9e5f65045bebf9e99c33ef1558dcd6d0206b7"
+                "reference": "1dc1ee861e8490a9e73d668b1ceccfa27436d861"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/2ed9e5f65045bebf9e99c33ef1558dcd6d0206b7",
-                "reference": "2ed9e5f65045bebf9e99c33ef1558dcd6d0206b7",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/1dc1ee861e8490a9e73d668b1ceccfa27436d861",
+                "reference": "1dc1ee861e8490a9e73d668b1ceccfa27436d861",
                 "shasum": ""
             },
             "require": {
@@ -3497,7 +3497,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/oauth2-server/issues",
-                "source": "https://github.com/thephpleague/oauth2-server/tree/9.0.0"
+                "source": "https://github.com/thephpleague/oauth2-server/tree/9.0.1"
             },
             "funding": [
                 {
@@ -3505,7 +3505,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-05-13T21:35:12+00:00"
+            "time": "2024-10-14T22:17:04+00:00"
         },
         {
             "name": "league/oauth2-server-bundle",
