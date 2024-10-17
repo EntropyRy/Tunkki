@@ -170,24 +170,23 @@
     </h3>
     {{ block('event_banner_media') }}
 {% endblock %}
-{%- block event_name %}
+{%- block event_name -%}
     {% set name_attr = 'name_attribute'|trans %}
-    {{ attribute(event, name_attr) }}
+    {{- attribute(event, name_attr) -}}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
-    {% if event.sticky and app.user %}<i style="font-size: 1rem;" class="fas fa-thumbtack float-end"></i>{% endif %}
-{% endblock -%}
+{%- endblock -%}
 {% block event_time_badge %}
     <span class="badge text-black bg-info text-wrap float-end" style="font-size:0.8rem" {{ stimulus_controller('moment') }} data-moment-date-value="{{ event.eventDate|date('c') }}" data-moment-target="badge" data-moment-refresh-interval-value="1000" data-moment-locale-value="{{ app.request.locale }}"></span>
 {% endblock %}
-{%- block event_time %}
-    {% if event.type != 'announcement' %}
-        {% if event.multiday %}
-            {{ event.eventdate|date('j') }}. - {{ event.until|date('j.n.Y') }}
-        {% else %}
-            {{ event.eventdate|date() }}
-        {% endif %}
-    {% endif %}
-{% endblock -%}
+{%- block event_time -%}
+    {%- if event.type != 'announcement' -%}
+        {%- if event.multiday -%}
+            {{- event.eventdate|date('j') -}}. - {{- event.until|date('j.n.Y') -}}
+        {%- else -%}
+            {{- event.eventdate|date() -}}
+        {%- endif -%}
+    {%- endif -%}
+{%- endblock -%}
 {% block event_time_small %}
     {% if event.type != 'announcement' %}
         {% if event.multiday %}
@@ -296,7 +295,7 @@
     </div>
 {% endblock %}
 {%- block event_img_title -%}
-    {{ event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') }}
+    {{- event.badgeText|trans ~ ': ' ~ block('event_name') ~ ' ' ~ block('event_time') -}}
 {%- endblock -%}
 {% block event_frontpage_media %}
     {% if event.picture is not null %}
