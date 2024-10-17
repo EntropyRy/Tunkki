@@ -10,7 +10,7 @@
         </div>
     {% endif %}
 {% endblock -%}
-{%- block ticket_for_event_page %}
+{% block ticket_for_event_page -%}
     {% if event.ticketsEnabled and app.user %}
         <div class="pt-2 pb-2" id="ticket">
             {# <p>{{'ticket.info'|trans|raw}}</p> #}
@@ -37,7 +37,7 @@
             </div>
         </div>
     {% endif %}
-{% endblock -%}
+{%- endblock %}
 {% block multi_ticket %}
     <h1 class="text-center">{{ qr.name }}</h1>
     <div class="qr-code text-center">
@@ -93,16 +93,25 @@
                 {% if tickets|length > 0 %}
                     <a class="btn btn-primary w-100"
                         href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                        {{ 'ticket.details'|trans }}
+                        {% if event.nakkiRequiredForTicketReservation %}
+                            {{ 'ticket.details_with_nakki'|trans }}
+                        {% else %}
+                            {{ 'ticket.details'|trans }}
+                        {% endif %}
                     </a>
                 {% else %}
                     {% if event.ticketPresaleEnabled %}
-                        <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
-                    {% else %}
                         <a class="btn btn-primary w-100"
                             href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                            {{ 'ticket.buy_yours'|trans }}
+                            <div class="fs-4 fw-bold text-uppercase">{{ 'ticket.to_ticket_shop'|trans }}</div>
+                            {{ 'ticket.sale_ends'|trans }}: {{ event.ticketPresaleEnd|format_datetime('short','short', locale=app.request.locale) }}
                         </a>
+                    {% else %}
+                        {% if event.ticketPresaleStart > date('now') %}
+                            <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleStart|date }}</a>
+                        {% elseif event.ticketPresaleEnd < date('now') %}
+                            <a class="btn btn-primary w-100">{{ 'ticket.sale_ended'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
+                        {% endif %}
                     {% endif %}
                 {% endif %}
             </div>

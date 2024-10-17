@@ -167,7 +167,6 @@ class EventTicketController extends Controller
         } else {
             $showShop = true;
         }
-
         return $this->render('ticket/multiple.html.twig', [
             'event' => $event,
             'selected' => $selected,

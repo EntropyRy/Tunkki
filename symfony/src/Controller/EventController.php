@@ -129,6 +129,9 @@ class EventController extends Controller
         NakkiBookingRepository $nakkirepo,
         TicketRepository $ticketRepo
     ): Response {
+        if ($event->ticketPresaleEnabled() == false) {
+            throw $this->createAccessDeniedException('');
+        }
         $selected = [];
         $nakkis = [];
         $hasNakki = false;

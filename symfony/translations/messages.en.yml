@@ -328,17 +328,21 @@ ticket:
   reserve_yours: Reserve your ticket here!
   buy_yours: Buy your ticket here!
   available: Available
-  details: See your ticket/nakki details
+  details_with_nakki: See your Nakki/Ticket details
+  details: See your ticket details
   go_to_event_page: Ticket in Event Page
   paid_with_bus: Ticket and Bus paid
   presale:
     off: Presales is not in use
+  sale_ended: Ticket presales ended
+  sale_ends: Ticket presales ends
   situation: Your tickets situation
   code: Ticket code
   paid: paid
   not_paid: Not paid
   all_sold: Tickets sold out.
-  sale_starts: Ticketsale starts
+  to_ticket_shop: Ticket shop
+  sale_starts: Ticket presale starts
   recipient: Recipient
   sum: Price
   reference_number: Reference Number (must be used)

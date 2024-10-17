@@ -404,7 +404,8 @@ ticket:
   not_available: Lippuja ei ole saatavilla
   reserve_yours: Varaa lippusi tästä!
   buy_yours: Osta lippusi tästä!
-  details: Katso nakkisi/lippusi tiedot
+  details: Katso lippusi tiedot
+  details_with_nakki: Katso nakkisi/lippusi tiedot
   payment_info: Maksutiedot
   reference_number: Viite (pitää käyttää)
   code: Lippukoodi
@@ -412,7 +413,10 @@ ticket:
   not_paid: Ei maksettu
   paid_with_bus: Lippu ja bussi maksettu
   all_sold: Kaikki liput on myyty.
-  sale_starts: Lipunmyynti alkaa
+  to_ticket_shop: Lippukauppaan
+  sale_starts: Ennakkolipunmyynti alkaa
+  sale_ends: Ennakkolipunmyynti loppuu
+  sale_ended: Ennakkolipunmyynti loppui
   sum: Hinta
   check: Lipputarkistus
   error: Katso oheinen virhe
