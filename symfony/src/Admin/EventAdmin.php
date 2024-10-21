@@ -718,5 +718,12 @@ final class EventAdmin extends AbstractAdmin
                 }
             }
         }
+        if (is_object($object->getEventDate()) && is_object($object->getUntil())) {
+            if ($object->getEventDate() >= $object->getUntil()) {
+                $session = $this->rs->getSession();
+                assert($session instanceof Session);
+                $session->getFlashBag()->add('warning', 'Event stop time must be after start time');
+            }
+        }
     }
 }
