@@ -92,6 +92,7 @@ export default class extends Controller {
       this.referenceNumberTarget.innerText = "";
       this.emailTarget.innerText = "";
       this.statusTarget.innerText = "";
+      this.givenTarget.innerText = "";
     }, 3000);
     this.buttonTarget.classList.add("d-none");
     this.buttonTarget.classList.add("disabled");
