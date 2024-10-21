@@ -108,9 +108,9 @@
                         </a>
                     {% else %}
                         {% if event.ticketPresaleStart > date('now') %}
-                            <a class="btn btn-primary w-100">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleStart|date }}</a>
+                            <a class="btn btn-primary w-100 disabled">{{ 'ticket.sale_starts'|trans }}: {{ event.ticketPresaleStart|date }}</a>
                         {% elseif event.ticketPresaleEnd < date('now') %}
-                            <a class="btn btn-primary w-100">{{ 'ticket.sale_ended'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
+                            <a class="btn btn-primary w-100 disabled">{{ 'ticket.sale_ended'|trans }}: {{ event.ticketPresaleEnd|date }}</a>
                         {% endif %}
                     {% endif %}
                 {% endif %}
