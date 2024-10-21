@@ -285,7 +285,7 @@ final class EventAdmin extends AbstractAdmin
                         [
                             'format' => $format,
                             'required' => true,
-                            'help' => $help ? $help : 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} as needed.',
+                            'help' => $help ? $help : 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
                         ]
@@ -307,7 +307,7 @@ final class EventAdmin extends AbstractAdmin
                         [
                             'format' => $format,
                             'required' => true,
-                            'help' => $help ? $help : 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ ticket }} niinkun on tarve.',
+                            'help' => $help ? $help : 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
                         ]
