@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Member;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -49,7 +50,7 @@ class Artist implements \Stringable
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
-    private ?\App\Entity\Member $member = null;
+    private ?Member $member = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bioEn = null;
@@ -58,7 +59,7 @@ class Artist implements \Stringable
     private ?array $links = [];
 
     #[ORM\ManyToOne(targetEntity: SonataMediaMedia::class, cascade: ['persist', 'detach'])]
-    private ?\App\Entity\Sonata\SonataMediaMedia $Picture = null;
+    private ?SonataMediaMedia $Picture = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $copyForArchive = false;

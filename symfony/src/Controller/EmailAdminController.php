@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Helper\Qr;
+use App\Repository\ArtistRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -36,29 +37,30 @@ final class EmailAdminController extends CRUDController
             'img' => $img
         ]);
     }
-    public function sendAction(MailerInterface $mailer): RedirectResponse
+    public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo): RedirectResponse
     {
         $email = $this->admin->getSubject();
         $links = $email->getAddLoginLinksToFooter();
         $purpose = $email->getPurpose();
         $subject = $email->getSubject();
         $event = $email->getEvent();
+        $emails = [];
+        $img = null;
+        if ($event) {
+            $img = $event->getPicture();
+        }
         $body = $email->getBody();
         $count = 0;
         $replyto = $email->getReplyTo() ?: 'hallitus@entropy.fi';
-        if ($subject && $body && $event) {
-            if ($purpose == 'rsvp') {
+        if ($subject && $body) {
+            if ($purpose == 'rsvp' && $event) {
                 $rsvps = $event->getRSVPs();
                 if (count($rsvps) > 0) {
                     foreach ($rsvps as $rsvp) {
-                        $to = $rsvp->getAvailableEmail();
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
-                        $mailer->send($message);
-                        $count += 1;
+                        $emails[] = $rsvp->getAvailableEmail();
                     }
                 }
-            } elseif ($purpose == 'ticket') {
-                $emails = [];
+            } elseif ($purpose == 'ticket' && $event) {
                 $tickets = $event->getTickets();
                 foreach ($tickets as $ticket) {
                     if (str_starts_with($ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
@@ -71,32 +73,16 @@ final class EmailAdminController extends CRUDController
                         }
                     }
                 }
-                foreach ($emails as $to) {
-                    if ($to) {
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
-                        $mailer->send($message);
-                        $count += 1;
-                    }
-                }
-            } elseif ($purpose == 'nakkikone') {
+            } elseif ($purpose == 'nakkikone' && $event) {
                 $nakkis = $event->getNakkiBookings();
-                $emails = [];
                 foreach ($nakkis as $nakki) {
                     $member = $nakki->getMember();
                     if ($member) {
                         $emails[$member->getId()] = $member->getEmail();
                     }
                 }
-                foreach ($emails as $to) {
-                    if ($to) {
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
-                        $mailer->send($message);
-                        $count += 1;
-                    }
-                }
-            } elseif ($purpose == 'artist') {
+            } elseif ($purpose == 'artist' && $event) {
                 $signups = $event->getEventArtistInfos();
-                $emails = [];
                 foreach ($signups as $signup) {
                     $artist = $signup->getArtist();
                     if ($artist) {
@@ -108,31 +94,37 @@ final class EmailAdminController extends CRUDController
                         $this->addFlash('sonata_flash_error', sprintf('Artist %s member not found.', $signup->getArtistClone()->getName()));
                     }
                 }
-                foreach ($emails as $to) {
-                    if ($to) {
-                        $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
-                        $mailer->send($message);
-                        $count += 1;
-                    }
-                }
-            } elseif ($purpose == 'aktiivit') {
+            } elseif ($purpose == 'aktiivit' && $event) {
                 $to = 'aktiivit@entropy.fi';
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
                 $mailer->send($message);
                 $count += 1;
-            } elseif ($purpose == 'tiedotus') {
+            } elseif ($purpose == 'tiedotus' && $event) {
                 $to = 'tiedotus@entropy.fi';
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $event->getPicture());
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
                 $mailer->send($message);
                 $count += 1;
+            } elseif ($purpose == 'vj_roster') {
+                $emails = $this->getRoster('VJ', $aRepo);
+            } elseif ($purpose == 'dj_roster') {
+                $emails = $this->getRoster('DJ', $aRepo);
             } else {
                 $this->addFlash('sonata_flash_error', sprintf('Purpose %s not supported.', $purpose));
             }
-            if ($count > 0) {
-                $email->setSentAt(new \DateTimeImmutable('now'));
-                $this->admin->update($email);
-                $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
+        }
+        if (count($emails) > 0) {
+            foreach ($emails as $to) {
+                if ($to) {
+                    $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
+                    $mailer->send($message);
+                    $count += 1;
+                }
             }
+        }
+        if ($count > 0) {
+            $email->setSentAt(new \DateTimeImmutable('now'));
+            $this->admin->update($email);
+            $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
@@ -145,5 +137,16 @@ final class EmailAdminController extends CRUDController
             ->subject($subject)
             ->htmlTemplate('emails/email.html.twig')
             ->context(['body' => $body, 'links' => $links, 'img' => $img]);
+    }
+    private function getRoster(string $type, ArtistRepository $artistRepository): array
+    {
+        $emails = [];
+        $artists = $artistRepository->findBy(['type' => $type, 'copyForArchive' => false]);
+        foreach ($artists as $artist) {
+            if ($artist->getMember()) {
+                $emails[$artist->getMember()->getId()] = $artist->getMember()->getEmail();
+            }
+        }
+        return $emails;
     }
 }
