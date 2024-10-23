@@ -77,13 +77,13 @@ return [
         'version' => '1.15.3',
     ],
     'intl-messageformat' => [
-        'version' => '10.7.0',
+        'version' => '10.7.1',
     ],
     'tslib' => [
         'version' => '2.8.0',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.7.10',
+        'version' => '2.8.0',
     ],
     '@formatjs/fast-memoize' => [
         'version' => '2.2.1',
