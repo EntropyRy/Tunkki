@@ -427,6 +427,7 @@ final class EventAdmin extends AbstractAdmin
                                 'TV white noise' => 'tv',
                                 'VHS static' => 'vhs',
                                 'Snowfall' => 'snow',
+                                'Snowfall with mouse collector (not used, can be changed)' => 'snow_mouse_dodge',
                                 'Starfield' => 'stars',
                                 'Color Grid' => 'grid',
                                 'Wavy Lines' => 'lines',

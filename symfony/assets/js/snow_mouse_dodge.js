@@ -1,6 +1,6 @@
 var w = window.innerWidth,
   h = window.innerHeight,
-  canvas = document.getElementById("snow"),
+  canvas = document.getElementById("snow_mouse_dodge"),
   ctx = canvas.getContext("2d"),
   rate = 50,
   amountOfSnow = 500,
@@ -12,7 +12,9 @@ var w = window.innerWidth,
   count,
   mouseX = w / 2,
   mouseY = h / 2,
-  dodgeDistance = 50; // Distance at which snowflakes start dodging the cursor
+  dodgeDistance = 50,
+  lensDistance = 100,
+  lensStrength = 0.05;
 
 canvas.setAttribute("width", w);
 canvas.setAttribute("height", h);
@@ -30,6 +32,14 @@ function init() {
       size: Math.random() * size,
     };
   }
+  window.addEventListener("resize", onWindowResize);
+}
+
+function onWindowResize() {
+  w = window.innerWidth;
+  h = window.innerHeight;
+  canvas.setAttribute("width", w);
+  canvas.setAttribute("height", h);
 }
 
 function snow() {
@@ -42,16 +52,16 @@ function snow() {
     var dy = li.y - mouseY;
     var distance = Math.sqrt(dx * dx + dy * dy);
 
-    // If the snowflake is within the dodge distance, move it away from the cursor
-    if (distance < dodgeDistance) {
-      var angle = Math.atan2(dy, dx);
-      li.x += Math.cos(angle) * dodgeDistance;
-      li.y += Math.sin(angle) * dodgeDistance;
+    // Apply lens-like bending effect
+    if (distance < lensDistance) {
+      var distortionFactor = 1 - (distance / lensDistance) * lensStrength;
+      li.x = mouseX + dx * distortionFactor;
+      li.y = mouseY + dy * distortionFactor;
     }
 
     ctx.beginPath();
     ctx.arc(li.x, li.y, li.size, 0, Math.PI * 2, false);
-    ctx.fillStyle = snowColor;
+    ctx.fillStyle = li.c;
     ctx.fill();
     li.x = li.x + li.toX * (time * 0.05);
     li.y = li.y + li.toY * (time * 0.05);
@@ -82,3 +92,4 @@ function updateMousePosition(event) {
 init();
 window.requestAnimationFrame(snow);
 window.addEventListener("mousemove", updateMousePosition);
+window.addEventListener("touchmove", updateMousePosition);

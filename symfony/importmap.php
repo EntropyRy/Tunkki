@@ -20,6 +20,10 @@ return [
         'path' => './assets/js/snow.js',
         'entrypoint' => true,
     ],
+    'snow_mouse_dodge' => [
+        'path' => './assets/js/snow_mouse_dodge.js',
+        'entrypoint' => true,
+    ],
     'grid' => [
         'path' => './assets/js/grid.js',
         'entrypoint' => true,
