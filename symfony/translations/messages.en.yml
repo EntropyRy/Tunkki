@@ -126,8 +126,8 @@ block:
     future_events: Upcoming Events
   bookings:
     manage: Manage
-    no_bookings: Bookings in progress
-    bookings: No bookings in progress
+    no_bookings: No bookings in progress
+    bookings: Bookings in progress
     help: Come and help us with the bookings?
   items:
     title: Broken items
