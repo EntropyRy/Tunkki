@@ -4,7 +4,6 @@ namespace App\Block;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
 use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
@@ -19,8 +18,17 @@ class ArtistListBlock extends BaseBlockService
 {
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
-        $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
-        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'artists'  => $artists, 'settings' => $blockContext->getSettings()], $response);
+        $artists = [];
+        $artists['DJ'] = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false, 'type' => 'DJ'], ['name' => 'ASC']);
+        $artists['LIVE'] = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false, 'type' => 'LIVE'], ['name' => 'ASC']);
+        $artists['VJ'] = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false, 'type' => 'VJ'], ['name' => 'ASC']);
+        $artists['ART'] = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false, 'type' => 'ART'], ['name' => 'ASC']);
+        return $this->renderResponse($blockContext->getTemplate(), [
+            'block'     => $blockContext->getBlock(),
+            'artists'  => $artists,
+            'count' => array_sum(array_map("count", $artists)),
+            'settings' => $blockContext->getSettings()
+        ], $response);
     }
 
     public function __construct(Environment $twig, protected EntityManagerInterface $em)
