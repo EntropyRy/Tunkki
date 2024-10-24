@@ -61,9 +61,9 @@ final class EmailAdmin extends AbstractAdmin
             $formMapper
                 ->add('purpose', ChoiceType::class, [
                     'choices' => [
-                        'Automatic email to new Member on registration' => 'member',
-                        'Automatic thank you email to member who requests Active Member status' => 'active_member',
-                        'New Active Member info package (can be sent from the member list)' => 'active_member_info_package',
+                        'Automatic email to new Member on registration (There should only be one)' => 'member',
+                        'Automatic thank you email to member who requests Active Member status (There should only be one)' => 'active_member',
+                        'New Active Member info package (can be sent from the member list) (There should only be one)' => 'active_member_info_package',
                         'Email to All VJs in our roster, meaming the VJs who have artist profile in our site' => 'vj_roster',
                         'Email to All DJs in our roster, meaming the DJs who have artist profile in our site' => 'dj_roster',
                         //'Other' => 'other'
