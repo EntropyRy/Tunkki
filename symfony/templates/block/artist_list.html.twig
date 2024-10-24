@@ -9,7 +9,7 @@
         <div class="box-body">
             <div id="artistList" class="box-body row collapse">
                 {% for type,list in artists %}
-                    <h4>{{ type }}</h4>
+                    <h4>{{ type }} ({{ list|length }})</h4>
                     <ul class="ms-4">
                         {% for artist in list %}
                             <li>
