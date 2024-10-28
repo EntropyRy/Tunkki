@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\TicketRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -30,7 +31,7 @@ class Ticket implements \Stringable
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $referenceNumber = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Choice(choices: Ticket::STATUSES)]
     private string $status = 'available';
 

@@ -2,6 +2,7 @@
 
 namespace App\Block;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use App\Repository\DoorLogRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -46,7 +47,7 @@ class DoorInfoBlock extends BaseBlockService
 
     public function __construct(
         Environment $twig,
-        protected \Symfony\Bundle\SecurityBundle\Security $security,
+        protected Security $security,
         protected DoorLogRepository $doorLogR,
         protected ZMQHelper $zmq
     ) {

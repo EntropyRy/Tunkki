@@ -2,12 +2,14 @@
 
 namespace App\Entity;
 
+use App\Repository\PackagesRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'Package')]
-#[ORM\Entity(repositoryClass: \App\Repository\PackagesRepository::class)]
+#[ORM\Entity(repositoryClass: PackagesRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Package implements \Stringable
 {
@@ -19,10 +21,10 @@ class Package implements \Stringable
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
     private ?Collection $items;
 
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private string $name;
 
-    #[ORM\Column(name: 'rent', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'rent', type: Types::STRING, length: 190)]
     private string $rent;
 
     #[ORM\Column(name: 'needs_fixing', type: 'boolean')]
@@ -93,7 +95,7 @@ class Package implements \Stringable
         return $this;
     }
 
-    public function removeItem(\App\Entity\Item $item): void
+    public function removeItem(Item $item): void
     {
         $item->getPackages()->removeElement($this);
         $this->items->removeElement($item);
@@ -138,7 +140,7 @@ class Package implements \Stringable
     }
     public function getItemsNeedingFixing(): ArrayCollection
     {
-        $needsfix = new \Doctrine\Common\Collections\ArrayCollection();
+        $needsfix = new ArrayCollection();
         foreach ($this->getItems() as $item) {
             if ($item->getneedsFixing()) {
                 $needsfix[] = $item;

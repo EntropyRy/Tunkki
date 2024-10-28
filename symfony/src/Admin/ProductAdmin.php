@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -99,7 +101,7 @@ final class ProductAdmin extends AbstractAdmin
         $collection->add('fetch_from_stripe', 'fetch-from-stripe');
     }
     #[\Override]
-    public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
+    public function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Fetch from Stripe', [
             'route' => 'admin_app_product_fetch_from_stripe',

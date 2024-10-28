@@ -15,11 +15,11 @@ class NakkiBooking implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Nakki::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\Nakki $nakki = null;
+    private ?Nakki $nakki = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
-    private ?\App\Entity\Member $member = null;
+    private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $startAt = null;
@@ -29,7 +29,7 @@ class NakkiBooking implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\Event $event = null;
+    private ?Event $event = null;
 
     #[\Override]
     public function __toString(): string

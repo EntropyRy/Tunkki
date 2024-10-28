@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -17,10 +18,10 @@ class Accessory implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \App\Entity\AccessoryChoice::class, cascade: ['persist'])]
-    private ?\App\Entity\AccessoryChoice $name = null;
+    #[ORM\ManyToOne(targetEntity: AccessoryChoice::class, cascade: ['persist'])]
+    private ?AccessoryChoice $name = null;
 
-    #[ORM\Column(name: 'count', type: \Doctrine\DBAL\Types\Types::STRING, length: 50)]
+    #[ORM\Column(name: 'count', type: Types::STRING, length: 50)]
     #[Assert\NotBlank]
     private ?string $count = null;
 
@@ -64,7 +65,7 @@ class Accessory implements \Stringable
      *
      * @return Accessory
      */
-    public function setName(\App\Entity\AccessoryChoice $name = null)
+    public function setName(AccessoryChoice $name = null)
     {
         $this->name = $name;
 
@@ -74,7 +75,7 @@ class Accessory implements \Stringable
     /**
      * Get name
      *
-     * @return \App\Entity\AccessoryChoice
+     * @return AccessoryChoice
      */
     public function getName()
     {

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Eluceo\iCal\Domain\ValueObject\Alarm\DisplayAction;
+use Eluceo\iCal\Domain\ValueObject\Alarm\RelativeTrigger;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Form\CalendarConfigType;
@@ -127,8 +129,8 @@ class CalendarController extends AbstractController
             }
             $e->addAlarm(
                 new Alarm(
-                    new Alarm\DisplayAction($text),
-                    (new Alarm\RelativeTrigger(\DateInterval::createFromDateString('-1 day')))->withRelationToStart()
+                    new DisplayAction($text),
+                    (new RelativeTrigger(\DateInterval::createFromDateString('-1 day')))->withRelationToStart()
                 )
             );
         }

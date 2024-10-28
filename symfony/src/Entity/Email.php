@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
+use App\Repository\EmailRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: \App\Repository\EmailRepository::class)]
+#[ORM\Entity(repositoryClass: EmailRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Email implements \Stringable
 {
@@ -13,13 +15,13 @@ class Email implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $subject = null;
 
     #[ORM\Column(type: 'text')]
     private ?string $body = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $purpose = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -32,9 +34,9 @@ class Email implements \Stringable
     private ?bool $addLoginLinksToFooter = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]
-    private ?\App\Entity\Event $event = null;
+    private ?Event $event = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $replyTo = null;
 
     #[ORM\Column(nullable: true)]

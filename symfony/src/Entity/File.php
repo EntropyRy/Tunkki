@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -14,11 +15,11 @@ class File implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'tiedostoinfo', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'tiedostoinfo', type: Types::STRING, length: 190, nullable: true)]
     private ?string $fileinfo = null;
 
-    #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'files')]
-    private ?\App\Entity\Item $product = null;
+    #[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'files')]
+    private ?Item $product = null;
 
     #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
     private ?Media $file = null;
@@ -40,7 +41,7 @@ class File implements \Stringable
         return $this->fileinfo;
     }
 
-    public function setProduct(\App\Entity\Item $product = null): self
+    public function setProduct(Item $product = null): self
     {
         $this->product = $product;
 

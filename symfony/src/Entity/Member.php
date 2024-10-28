@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\MemberRepository;
+use Doctrine\DBAL\Types\Types;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -12,7 +14,7 @@ use App\Entity\Ticket;
  * Member
  */
 #[ORM\Table(name: 'member')]
-#[ORM\Entity(repositoryClass: \App\Repository\MemberRepository::class)]
+#[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
 #[ORM\HasLifecycleCallbacks]
 class Member implements \Stringable
@@ -22,22 +24,22 @@ class Member implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'firstname', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'firstname', type: Types::STRING, length: 190)]
     private string $firstname;
 
-    #[ORM\Column(name: 'lastname', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'lastname', type: Types::STRING, length: 190)]
     private string $lastname;
 
-    #[ORM\Column(name: 'email', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, unique: true)]
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
     private $email;
 
-    #[ORM\Column(name: 'username', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'username', type: Types::STRING, length: 190, nullable: true)]
     private ?string $username = null;
 
-    #[ORM\Column(name: 'phone', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'phone', type: Types::STRING, length: 190, nullable: true)]
     private ?string $phone = null;
 
-    #[ORM\Column(name: 'CityOfResidence', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'CityOfResidence', type: Types::STRING, length: 190, nullable: true)]
     private ?string $CityOfResidence = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime')]
@@ -75,9 +77,9 @@ class Member implements \Stringable
 
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
-    private ?\App\Entity\User $user = null;
+    private ?User $user = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 8)]
+    #[ORM\Column(type: Types::STRING, length: 8)]
     private ?string $locale = 'fi';
 
     #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
@@ -87,7 +89,7 @@ class Member implements \Stringable
     #[ORM\OneToMany(targetEntity: DoorLog::class, mappedBy: 'member', orphanRemoval: true)]
     private $doorLogs;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $theme = null;
 
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]

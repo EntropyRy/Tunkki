@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\DoorLogRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,12 +17,12 @@ class DoorLog
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'doorLogs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\Member $member = null;
+    private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface|\DateTime|null $createdAt = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $message = null;
 
     public function getId(): ?int

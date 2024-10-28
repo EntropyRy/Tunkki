@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Entity\User;
 use DateTime;
 use DateTimeInterface;
@@ -20,13 +21,13 @@ class StatusEvent implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'fixingHistory')]
-    private ?\App\Entity\Item $item = null;
+    #[ORM\ManyToOne(targetEntity: Item::class, inversedBy: 'fixingHistory')]
+    private ?Item $item = null;
 
-    #[ORM\ManyToOne(targetEntity: \App\Entity\Booking::class, inversedBy: 'statusEvents')]
-    private ?\App\Entity\Booking $booking = null;
+    #[ORM\ManyToOne(targetEntity: Booking::class, inversedBy: 'statusEvents')]
+    private ?Booking $booking = null;
 
-    #[ORM\Column(name: 'Description', type: \Doctrine\DBAL\Types\Types::STRING, length: 5000, nullable: true)]
+    #[ORM\Column(name: 'Description', type: Types::STRING, length: 5000, nullable: true)]
     private string $description;
 
     #[ORM\Column(name: 'CreatedAt', type: 'datetime')]
@@ -37,11 +38,11 @@ class StatusEvent implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?\App\Entity\User $creator = null;
+    private ?User $creator = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?\App\Entity\User $modifier = null;
+    private ?User $modifier = null;
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -97,7 +98,7 @@ class StatusEvent implements \Stringable
         return $this->updatedAt;
     }
 
-    public function setItem(\App\Entity\Item $item = null): StatusEvent
+    public function setItem(Item $item = null): StatusEvent
     {
         $this->item = $item;
 
@@ -121,7 +122,7 @@ class StatusEvent implements \Stringable
         }
     }
 
-    public function setCreator(\App\Entity\User $creator = null): StatusEvent
+    public function setCreator(User $creator = null): StatusEvent
     {
         $this->creator = $creator;
 
@@ -133,7 +134,7 @@ class StatusEvent implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(\App\Entity\User $modifier = null): StatusEvent
+    public function setModifier(User $modifier = null): StatusEvent
     {
         $this->modifier = $modifier;
 
@@ -145,7 +146,7 @@ class StatusEvent implements \Stringable
         return $this->modifier;
     }
 
-    public function setBooking(\App\Entity\Booking $booking = null): StatusEvent
+    public function setBooking(Booking $booking = null): StatusEvent
     {
         $this->booking = $booking;
 

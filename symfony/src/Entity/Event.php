@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\EventRepository;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping\OrderBy;
 
 use function Symfony\Component\String\u;
 
-#[ORM\Entity(repositoryClass: \App\Repository\EventRepository::class)]
+#[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
@@ -21,10 +22,10 @@ class Event implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $Name = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $Nimi = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -64,16 +65,16 @@ body {
     private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
             {{ timetable }} <br> {{ timetable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $url = null;
 
     #[ORM\Column(type: 'boolean')]
     private bool $published = false;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $type = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $epics = null;
 
     #[ORM\Column(type: 'boolean')]
@@ -82,7 +83,7 @@ body {
     #[ORM\Column(type: 'boolean')]
     private bool $sticky = false;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private string $picturePosition = 'banner';
 
     #[ORM\Column(type: 'boolean')]
@@ -138,16 +139,16 @@ body {
     #[ORM\Column(type: 'boolean', nullable: true)]
     private ?bool $includeSaferSpaceGuidelines = false;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $headerTheme = 'light';
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $streamPlayerUrl = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $imgFilterColor = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $imgFilterBlendMode = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
@@ -159,7 +160,7 @@ body {
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $artistSignUpStart = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $webMeetingUrl = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]

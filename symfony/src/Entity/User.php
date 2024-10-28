@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -26,7 +27,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING)]
+    #[ORM\Column(type: Types::STRING)]
     #[Assert\Length(min: 8)]
     private ?string $password = null;
 
@@ -34,7 +35,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     private $plainPassword;
 
     #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
-    private ?\App\Entity\Member $member = null;
+    private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $CreatedAt = null;
@@ -42,13 +43,13 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $UpdatedAt = null;
 
-    #[ORM\OneToMany(targetEntity: \App\Entity\Reward::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Reward::class, mappedBy: 'user', orphanRemoval: true)]
     private $rewards;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $LastLogin = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $MattermostId = null;
 
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]

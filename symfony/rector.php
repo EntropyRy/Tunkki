@@ -23,4 +23,5 @@ return RectorConfig::configure()
         'string' => 'STRING',
     ]),
     ])
+    ->withImportNames(importShortClasses: false)
     ->withPreparedSets(deadCode: true);

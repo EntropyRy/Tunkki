@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,25 +23,25 @@ class Renter implements \Stringable
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'renter')]
     private $bookings;
 
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private string $name;
 
-    #[ORM\Column(name: 'streetadress', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'streetadress', type: Types::STRING, length: 190, nullable: true)]
     private ?string $streetadress = null;
 
-    #[ORM\Column(name: 'organization', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'organization', type: Types::STRING, length: 190, nullable: true)]
     private ?string $organization = null;
 
-    #[ORM\Column(name: 'zipcode', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'zipcode', type: Types::STRING, length: 190, nullable: true)]
     private ?string $zipcode = null;
 
-    #[ORM\Column(name: 'city', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'city', type: Types::STRING, length: 190, nullable: true)]
     private ?string $city = null;
 
-    #[ORM\Column(name: 'phone', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'phone', type: Types::STRING, length: 190, nullable: true)]
     private ?string $phone = null;
 
-    #[ORM\Column(name: 'email', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 190, nullable: true)]
     private ?string $email = null;
 
     /**
@@ -203,7 +204,7 @@ class Renter implements \Stringable
      *
      * @return Renter
      */
-    public function setBookings(\App\Entity\Booking $bookings = null)
+    public function setBookings(Booking $bookings = null)
     {
         $this->bookings = $bookings;
 
@@ -213,7 +214,7 @@ class Renter implements \Stringable
     /**
      * Get bookings
      *
-     * @return \App\Entity\Booking
+     * @return Booking
      */
     public function getBookings()
     {
@@ -229,7 +230,7 @@ class Renter implements \Stringable
      */
     public function __construct()
     {
-        $this->bookings = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->bookings = new ArrayCollection();
     }
 
     /**
@@ -262,7 +263,7 @@ class Renter implements \Stringable
      *
      * @return Renter
      */
-    public function addBooking(\App\Entity\Booking $booking)
+    public function addBooking(Booking $booking)
     {
         $this->bookings[] = $booking;
 
@@ -272,7 +273,7 @@ class Renter implements \Stringable
     /**
      * Remove booking
      */
-    public function removeBooking(\App\Entity\Booking $booking)
+    public function removeBooking(Booking $booking)
     {
         $this->bookings->removeElement($booking);
     }

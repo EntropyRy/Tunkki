@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use App\Repository\ItemRepository;
+use Doctrine\DBAL\Types\Types;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
 use DateTime;
@@ -15,7 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
  * item
  */
 #[ORM\Table(name: 'Item')]
-#[ORM\Entity(repositoryClass: \App\Repository\ItemRepository::class)]
+#[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Item implements \Stringable
@@ -25,25 +27,25 @@ class Item implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'Name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'Name', type: Types::STRING, length: 190)]
     private string $name;
 
-    #[ORM\Column(name: 'Manufacturer', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'Manufacturer', type: Types::STRING, length: 190, nullable: true)]
     private ?string $manufacturer = null;
 
-    #[ORM\Column(name: 'Model', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'Model', type: Types::STRING, length: 190, nullable: true)]
     private ?string $model = null;
 
-    #[ORM\Column(name: 'Url', type: \Doctrine\DBAL\Types\Types::STRING, length: 500, nullable: true)]
+    #[ORM\Column(name: 'Url', type: Types::STRING, length: 500, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(name: 'SerialNumber', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'SerialNumber', type: Types::STRING, length: 190, nullable: true)]
     private ?string $serialnumber = null;
 
-    #[ORM\Column(name: 'PlaceInStorage', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
+    #[ORM\Column(name: 'PlaceInStorage', type: Types::STRING, length: 190, nullable: true)]
     private ?string $placeinstorage = null;
 
-    #[ORM\Column(name: 'Description', type: \Doctrine\DBAL\Types\Types::STRING, length: 4000, nullable: true)]
+    #[ORM\Column(name: 'Description', type: Types::STRING, length: 4000, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
@@ -65,7 +67,7 @@ class Item implements \Stringable
     #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $compensationPrice;
 
-    #[ORM\Column(name: 'RentNotice', type: \Doctrine\DBAL\Types\Types::STRING, length: 5000, nullable: true)]
+    #[ORM\Column(name: 'RentNotice', type: Types::STRING, length: 5000, nullable: true)]
     private ?string $rentNotice = null;
 
     #[ORM\Column(name: 'NeedsFixing', type: 'boolean')]
@@ -100,11 +102,11 @@ class Item implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?\App\Entity\User $creator = null;
+    private ?User $creator = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?\App\Entity\User $modifier = null;
+    private ?User $modifier = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime')]
     private \DateTimeInterface|\DateTimeImmutable|null $createdAt = null;
@@ -254,7 +256,7 @@ class Item implements \Stringable
         $this->packages = new ArrayCollection();
     }
 
-    public function addFixingHistory(\App\Entity\StatusEvent $fixingHistory): Item
+    public function addFixingHistory(StatusEvent $fixingHistory): Item
     {
         $fixingHistory->setItem($this);
         $this->fixingHistory[] = $fixingHistory;
@@ -262,7 +264,7 @@ class Item implements \Stringable
         return $this;
     }
 
-    public function removeFixingHistory(\App\Entity\StatusEvent $fixingHistory): void
+    public function removeFixingHistory(StatusEvent $fixingHistory): void
     {
         $fixingHistory->setItem(null);
         $this->fixingHistory->removeElement($fixingHistory);
@@ -327,7 +329,7 @@ class Item implements \Stringable
         return $this->serialnumber;
     }
 
-    public function addFile(\App\Entity\File $file): Item
+    public function addFile(File $file): Item
     {
         $file->setProduct($this);
         $this->files[] = $file;
@@ -335,7 +337,7 @@ class Item implements \Stringable
         return $this;
     }
 
-    public function removeFile(\App\Entity\File $file): void
+    public function removeFile(File $file): void
     {
         $file->setProduct(null);
         $this->files->removeElement($file);
@@ -374,7 +376,7 @@ class Item implements \Stringable
         return $this->tags;
     }
 
-    public function setCreator(\App\Entity\User $creator = null): Item
+    public function setCreator(User $creator = null): Item
     {
         $this->creator = $creator;
 
@@ -386,7 +388,7 @@ class Item implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(\App\Entity\User $modifier = null): Item
+    public function setModifier(User $modifier = null): Item
     {
         $this->modifier = $modifier;
 
@@ -398,14 +400,14 @@ class Item implements \Stringable
         return $this->modifier;
     }
 
-    public function addPackage(\App\Entity\Package $package): Item
+    public function addPackage(Package $package): Item
     {
         $this->packages[] = $package;
 
         return $this;
     }
 
-    public function removePackage(\App\Entity\Package $package): void
+    public function removePackage(Package $package): void
     {
         $this->packages->removeElement($package);
     }
@@ -426,21 +428,21 @@ class Item implements \Stringable
         return $this->toSpareParts;
     }
 
-    public function setPackages(\App\Entity\Package $packages = null): Item
+    public function setPackages(Package $packages = null): Item
     {
         $this->packages = $packages;
 
         return $this;
     }
 
-    public function addRentHistory(\App\Entity\Booking $rentHistory): Item
+    public function addRentHistory(Booking $rentHistory): Item
     {
         $this->rentHistory[] = $rentHistory;
 
         return $this;
     }
 
-    public function removeRentHistory(\App\Entity\Booking $rentHistory): void
+    public function removeRentHistory(Booking $rentHistory): void
     {
         $this->rentHistory->removeElement($rentHistory);
     }
@@ -469,14 +471,14 @@ class Item implements \Stringable
         return $this->category;
     }
 
-    public function addWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): Item
+    public function addWhoCanRent(WhoCanRentChoice $whoCanRent): Item
     {
         $this->whoCanRent[] = $whoCanRent;
 
         return $this;
     }
 
-    public function removeWhoCanRent(\App\Entity\WhoCanRentChoice $whoCanRent): void
+    public function removeWhoCanRent(WhoCanRentChoice $whoCanRent): void
     {
         $this->whoCanRent->removeElement($whoCanRent);
     }

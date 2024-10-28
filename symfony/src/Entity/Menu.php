@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Entity\Sonata\SonataPagePage as Page;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,20 +19,20 @@ class Menu implements \Stringable
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $label = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180)]
+    #[ORM\Column(type: Types::STRING, length: 180)]
     private ?string $nimi = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Page::class)]
-    private ?\App\Entity\Sonata\SonataPagePage $pageFi = null;
+    private ?Page $pageFi = null;
 
     #[ORM\ManyToOne(targetEntity: Page::class)]
-    private ?\App\Entity\Sonata\SonataPagePage $pageEn = null;
+    private ?Page $pageEn = null;
 
     #[ORM\Column(type: 'boolean')]
     private ?bool $enabled = null;

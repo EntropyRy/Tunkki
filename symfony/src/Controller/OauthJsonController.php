@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\ExpressionLanguage\Expression;
@@ -9,7 +10,7 @@ use App\Entity\User;
 
 class OauthJsonController extends AbstractController
 {
-    public function me(\Symfony\Bundle\SecurityBundle\Security $security): JsonResponse
+    public function me(Security $security): JsonResponse
     {
         $this->denyAccessUnlessGranted(
             new Expression(

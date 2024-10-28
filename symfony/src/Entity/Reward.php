@@ -17,7 +17,7 @@ class Reward implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rewards')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\User $user = null;
+    private ?User $user = null;
 
     #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'rewards')]
     private $bookings;
@@ -32,7 +32,7 @@ class Reward implements \Stringable
     private ?\DateTimeInterface $paidDate = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?\App\Entity\User $PaymentHandledBy = null;
+    private ?User $PaymentHandledBy = null;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;

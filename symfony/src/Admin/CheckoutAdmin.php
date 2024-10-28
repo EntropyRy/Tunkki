@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Knp\Menu\ItemInterface;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -69,7 +71,7 @@ final class CheckoutAdmin extends AbstractAdmin
         $collection->add('remove_unneeded', 'remove-unneeded');
     }
     #[\Override]
-    public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
+    public function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Remove Unneeded', [
             'route' => 'admin_app_checkout_remove_unneeded',

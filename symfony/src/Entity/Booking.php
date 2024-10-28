@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Repository\BookingRepository;
 use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,7 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Table('Booking')]
-#[ORM\Entity(repositoryClass: \App\Repository\BookingRepository::class)]
+#[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Booking implements \Stringable
 {
@@ -19,13 +20,13 @@ class Booking implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private ?string $name = null;
 
-    #[ORM\Column(name: 'referenceNumber', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
+    #[ORM\Column(name: 'referenceNumber', type: Types::STRING, length: 190)]
     private int|string $referenceNumber = 0;
 
-    #[ORM\Column(name: 'renterHash', type: \Doctrine\DBAL\Types\Types::STRING, length: 199)]
+    #[ORM\Column(name: 'renterHash', type: Types::STRING, length: 199)]
     private int|string $renterHash = 0;
 
     #[ORM\Column(name: 'renterConsent', type: 'boolean')]
@@ -64,20 +65,20 @@ class Booking implements \Stringable
     private $accessories;
 
     #[ORM\ManyToOne(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
-    private ?\App\Entity\WhoCanRentChoice $rentingPrivileges = null;
+    private ?WhoCanRentChoice $rentingPrivileges = null;
 
     #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
     #[Assert\NotBlank]
-    private ?\App\Entity\Renter $renter = null;
+    private ?Renter $renter = null;
 
     #[ORM\OneToMany(targetEntity: BillableEvent::class, mappedBy: 'booking', cascade: ['persist'], orphanRemoval: true)]
     private $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?\App\Entity\User $givenAwayBy = null;
+    private ?User $givenAwayBy = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?\App\Entity\User $receivedBy = null;
+    private ?User $receivedBy = null;
 
     #[ORM\Column(name: 'actualPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $actualPrice;
@@ -89,13 +90,13 @@ class Booking implements \Stringable
     private $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?\App\Entity\User $creator = null;
+    private ?User $creator = null;
 
     #[ORM\Column(name: 'created_at', type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
-    private ?\App\Entity\User $modifier = null;
+    private ?User $modifier = null;
 
     #[ORM\Column(name: 'modified_at', type: 'datetime')]
     private ?\DateTimeInterface $modifiedAt = null;
@@ -107,7 +108,7 @@ class Booking implements \Stringable
     #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
     private $rewards;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $reasonForDiscount = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -134,7 +135,7 @@ class Booking implements \Stringable
         $this->modifiedAt = new \DateTime();
     }
 
-    public function addPackage(\App\Entity\Package $package): Booking
+    public function addPackage(Package $package): Booking
     {
         foreach ($package->getItems() as $item) {
             $item->addRentHistory($this);
@@ -144,7 +145,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function removePackage(\App\Entity\Package $package): void
+    public function removePackage(Package $package): void
     {
         foreach ($package->getItems() as $item) {
             $item->removeRentHistory($this);
@@ -260,7 +261,7 @@ class Booking implements \Stringable
         $this->rewards = new ArrayCollection();
     }
 
-    public function addItem(\App\Entity\Item $item): Booking
+    public function addItem(Item $item): Booking
     {
         $item->addRentHistory($this);
         $this->items[] = $item;
@@ -268,7 +269,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function removeItem(\App\Entity\Item $item): void
+    public function removeItem(Item $item): void
     {
         $item->removeRentHistory($this);
         $this->items->removeElement($item);
@@ -291,7 +292,7 @@ class Booking implements \Stringable
         return $this->numberOfRentDays;
     }
 
-    public function addBillableEvent(\App\Entity\BillableEvent $billableEvent): Booking
+    public function addBillableEvent(BillableEvent $billableEvent): Booking
     {
         $billableEvent->setBooking($this);
         $this->billableEvents[] = $billableEvent;
@@ -299,7 +300,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function removeBillableEvent(\App\Entity\BillableEvent $billableEvent): void
+    public function removeBillableEvent(BillableEvent $billableEvent): void
     {
         $this->billableEvents->removeElement($billableEvent);
     }
@@ -309,14 +310,14 @@ class Booking implements \Stringable
         return $this->billableEvents;
     }
 
-    public function setRentingPrivileges(\App\Entity\WhoCanRentChoice $rentingPrivileges = null): Booking
+    public function setRentingPrivileges(WhoCanRentChoice $rentingPrivileges = null): Booking
     {
         $this->rentingPrivileges = $rentingPrivileges;
 
         return $this;
     }
 
-    public function setRenter(\App\Entity\Renter $renter = null): Booking
+    public function setRenter(Renter $renter = null): Booking
     {
         $this->renter = $renter;
 
@@ -388,14 +389,14 @@ class Booking implements \Stringable
         return $this->cancelled;
     }
 
-    public function addStatusEvent(\App\Entity\StatusEvent $statusEvent): Booking
+    public function addStatusEvent(StatusEvent $statusEvent): Booking
     {
         $this->statusEvents[] = $statusEvent;
 
         return $this;
     }
 
-    public function removeStatusEvent(\App\Entity\StatusEvent $statusEvent): bool
+    public function removeStatusEvent(StatusEvent $statusEvent): bool
     {
         return $this->statusEvents->removeElement($statusEvent);
     }

@@ -16,8 +16,8 @@ class BillableEvent implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: '\\' . \App\Entity\Booking::class, inversedBy: 'billableEvents')]
-    private ?\App\Entity\Booking $booking = null;
+    #[ORM\ManyToOne(targetEntity: '\\' . Booking::class, inversedBy: 'billableEvents')]
+    private ?Booking $booking = null;
 
     #[ORM\Column(name: 'description', type: 'text')]
     private string $description;
@@ -90,7 +90,7 @@ class BillableEvent implements \Stringable
      *
      * @return BillableEvent
      */
-    public function setBooking(\App\Entity\Booking $booking = null)
+    public function setBooking(Booking $booking = null)
     {
         $this->booking = $booking;
 
@@ -100,7 +100,7 @@ class BillableEvent implements \Stringable
     /**
      * Get booking
      *
-     * @return \App\Entity\Booking
+     * @return Booking
      */
     public function getBooking()
     {

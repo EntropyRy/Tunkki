@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\NakkiRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -19,7 +20,7 @@ class Nakki implements \Stringable
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private ?\App\Entity\NakkiDefinition $definition = null;
+    private ?NakkiDefinition $definition = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $startAt = null;
@@ -33,16 +34,16 @@ class Nakki implements \Stringable
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private ?\App\Entity\Event $event = null;
+    private ?Event $event = null;
 
     #[ORM\Column(type: 'dateinterval')]
     private \DateInterval $nakkiInterval;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
     #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
-    private ?\App\Entity\Member $responsible = null;
+    private ?Member $responsible = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $mattermostChannel = null;
 
     #[ORM\Column(nullable: true)]

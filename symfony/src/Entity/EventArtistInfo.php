@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\EventArtistInfoRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -13,28 +14,28 @@ class EventArtistInfo implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $SetLength = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $StartTime = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
-    private ?\App\Entity\Event $Event = null;
+    private ?Event $Event = null;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'eventArtistInfos', cascade: ['persist'])]
-    private ?\App\Entity\Artist $Artist = null;
+    private ?Artist $Artist = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $WishForPlayTime = null;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'])]
-    private ?\App\Entity\Artist $artistClone = null;
+    private ?Artist $artistClone = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $freeWord = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $stage = null;
 
     public function getId(): ?int

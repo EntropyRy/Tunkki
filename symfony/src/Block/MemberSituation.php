@@ -2,6 +2,7 @@
 
 namespace App\Block;
 
+use Symfony\Bundle\SecurityBundle\Security;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -35,7 +36,7 @@ class MemberSituation extends BaseBlockService
     {
     }
 
-    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security)
+    public function __construct(Environment $twig, protected Security $security)
     {
         parent::__construct($twig);
     }

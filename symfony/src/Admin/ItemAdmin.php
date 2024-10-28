@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Helper\Mattermost;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -245,7 +246,7 @@ class ItemAdmin extends AbstractAdmin
         return $actions;
     }
     public function __construct(
-        protected \App\Helper\Mattermost $mm,
+        protected Mattermost $mm,
         protected TokenStorageInterface $ts,
         protected CategoryManagerInterface $cm,
         protected EntityManagerInterface $em

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\RSVPRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -16,22 +17,22 @@ class RSVP implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?\App\Entity\Event $event = null;
+    private ?Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: true)]
-    private ?\App\Entity\Member $member = null;
+    private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $firstName = null;
 
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $lastName = null;
 
     #[ORM\PrePersist]

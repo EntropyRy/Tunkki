@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Helper\Mattermost;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -180,7 +181,7 @@ class StatusEventAdmin extends AbstractAdmin
         }
         return $text . (' by ' . $user);
     }
-    public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts)
+    public function __construct(protected Mattermost $mm, protected TokenStorageInterface $ts)
     {
     }
 }
