@@ -33,12 +33,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
 
         $user->setPassword($newEncodedPassword);
-        $this->_em->persist($user);
-        $this->_em->flush();
+        $this->getEntityManager()->persist($user);
+        $this->getEntityManager()->flush();
     }
     public function loadUserByUsername(string $usernameOrEmail): ?User
     {
-        return $this->_em->createQuery(
+        return $this->getEntityManager()->createQuery(
             'SELECT u
                 FROM App\Entity\User u
 				INNER JOIN u.member m
@@ -50,7 +50,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
     public function loadUserByIdentifier(string $usernameOrEmail): ?User
     {
-        return $this->_em->createQuery(
+        return $this->getEntityManager()->createQuery(
             'SELECT u
                 FROM App\Entity\User u
 				INNER JOIN u.member m

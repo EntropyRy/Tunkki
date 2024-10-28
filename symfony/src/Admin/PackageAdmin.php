@@ -8,9 +8,9 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
@@ -44,12 +44,12 @@ class PackageAdmin extends AbstractAdmin
         $p = $this->getSubject();
         if (is_null($p->getId())) {
             $query = $this->em->createQueryBuilder()->select('i')
-                ->from('App:Item', 'i')
+                ->from(Item::class, 'i')
                 ->andWhere('i.packages is empty')
                 ->orderBy('i.name', 'ASC');
         } else {
             $query = $this->em->createQueryBuilder()->select('i')
-                ->from('App:Item', 'i')
+                ->from(Item::class, 'i')
                 ->andWhere('i.packages is empty')
                 ->leftJoin('i.packages', 'pack')
                 ->orWhere('pack = :p')
