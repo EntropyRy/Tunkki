@@ -26,7 +26,7 @@ class StatusEvent implements \Stringable
     #[ORM\ManyToOne(targetEntity: \App\Entity\Booking::class, inversedBy: 'statusEvents')]
     private ?\App\Entity\Booking $booking = null;
 
-    #[ORM\Column(name: 'Description', type: 'string', length: 5000, nullable: true)]
+    #[ORM\Column(name: 'Description', type: \Doctrine\DBAL\Types\Types::STRING, length: 5000, nullable: true)]
     private string $description;
 
     #[ORM\Column(name: 'CreatedAt', type: 'datetime')]

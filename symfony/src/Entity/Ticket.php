@@ -30,7 +30,7 @@ class Ticket implements \Stringable
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $referenceNumber = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     #[Assert\Choice(choices: Ticket::STATUSES)]
     private string $status = 'available';
 

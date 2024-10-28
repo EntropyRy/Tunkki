@@ -21,7 +21,7 @@ class DoorLog
     #[ORM\Column(type: 'datetime')]
     private \DateTimeInterface|\DateTime|null $createdAt = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $message = null;
 
     public function getId(): ?int

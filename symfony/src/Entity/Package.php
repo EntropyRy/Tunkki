@@ -19,10 +19,10 @@ class Package implements \Stringable
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
     private ?Collection $items;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private string $name;
 
-    #[ORM\Column(name: 'rent', type: 'string', length: 190)]
+    #[ORM\Column(name: 'rent', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private string $rent;
 
     #[ORM\Column(name: 'needs_fixing', type: 'boolean')]

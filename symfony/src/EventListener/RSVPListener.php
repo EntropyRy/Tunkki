@@ -19,7 +19,7 @@ final readonly class RSVPListener
         private EmailRepository $emailRepository
     ) {
     }
-    public function sendRSVPMailListener(RSVP $rsvp, PostPersistEventArgs $eventArgs): void
+    public function sendRSVPMailListener(RSVP $rsvp): void
     {
         // Send an email to the user who RSVP'd
         $event = $rsvp->getEvent();

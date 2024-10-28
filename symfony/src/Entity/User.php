@@ -26,7 +26,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: 'string')]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING)]
     #[Assert\Length(min: 8)]
     private ?string $password = null;
 
@@ -48,7 +48,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $LastLogin = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $MattermostId = null;
 
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]

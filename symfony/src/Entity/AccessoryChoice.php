@@ -13,7 +13,7 @@ class AccessoryChoice implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private string $name;
 
     #[ORM\Column(name: 'compensationPrice', type: 'integer')]

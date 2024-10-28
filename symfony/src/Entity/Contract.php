@@ -20,7 +20,7 @@ class Contract implements \Stringable
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: 'string', length: 255, unique: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, unique: true)]
     private ?string $purpose = null;
 
     #[ORM\Column(type: 'datetime')]

@@ -19,13 +19,13 @@ class Booking implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'name', type: 'string', length: 190)]
+    #[ORM\Column(name: 'name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private ?string $name = null;
 
-    #[ORM\Column(name: 'referenceNumber', type: 'string', length: 190)]
+    #[ORM\Column(name: 'referenceNumber', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private int|string $referenceNumber = 0;
 
-    #[ORM\Column(name: 'renterHash', type: 'string', length: 199)]
+    #[ORM\Column(name: 'renterHash', type: \Doctrine\DBAL\Types\Types::STRING, length: 199)]
     private int|string $renterHash = 0;
 
     #[ORM\Column(name: 'renterConsent', type: 'boolean')]
@@ -107,7 +107,7 @@ class Booking implements \Stringable
     #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
     private $rewards;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $reasonForDiscount = null;
 
     #[ORM\Column(type: 'text', nullable: true)]

@@ -13,7 +13,7 @@ class EventArtistInfo implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $SetLength = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
@@ -25,7 +25,7 @@ class EventArtistInfo implements \Stringable
     #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'eventArtistInfos', cascade: ['persist'])]
     private ?\App\Entity\Artist $Artist = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $WishForPlayTime = null;
 
     #[ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'])]
@@ -34,7 +34,7 @@ class EventArtistInfo implements \Stringable
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $freeWord = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $stage = null;
 
     public function getId(): ?int

@@ -14,7 +14,7 @@ class File implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'tiedostoinfo', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'tiedostoinfo', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
     private ?string $fileinfo = null;
 
     #[ORM\ManyToOne(targetEntity: \App\Entity\Item::class, inversedBy: 'files')]

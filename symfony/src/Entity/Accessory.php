@@ -20,7 +20,7 @@ class Accessory implements \Stringable
     #[ORM\ManyToOne(targetEntity: \App\Entity\AccessoryChoice::class, cascade: ['persist'])]
     private ?\App\Entity\AccessoryChoice $name = null;
 
-    #[ORM\Column(name: 'count', type: 'string', length: 50)]
+    #[ORM\Column(name: 'count', type: \Doctrine\DBAL\Types\Types::STRING, length: 50)]
     #[Assert\NotBlank]
     private ?string $count = null;
 

@@ -25,25 +25,25 @@ class Item implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'Name', type: 'string', length: 190)]
+    #[ORM\Column(name: 'Name', type: \Doctrine\DBAL\Types\Types::STRING, length: 190)]
     private string $name;
 
-    #[ORM\Column(name: 'Manufacturer', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'Manufacturer', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
     private ?string $manufacturer = null;
 
-    #[ORM\Column(name: 'Model', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'Model', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
     private ?string $model = null;
 
-    #[ORM\Column(name: 'Url', type: 'string', length: 500, nullable: true)]
+    #[ORM\Column(name: 'Url', type: \Doctrine\DBAL\Types\Types::STRING, length: 500, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(name: 'SerialNumber', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'SerialNumber', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
     private ?string $serialnumber = null;
 
-    #[ORM\Column(name: 'PlaceInStorage', type: 'string', length: 190, nullable: true)]
+    #[ORM\Column(name: 'PlaceInStorage', type: \Doctrine\DBAL\Types\Types::STRING, length: 190, nullable: true)]
     private ?string $placeinstorage = null;
 
-    #[ORM\Column(name: 'Description', type: 'string', length: 4000, nullable: true)]
+    #[ORM\Column(name: 'Description', type: \Doctrine\DBAL\Types\Types::STRING, length: 4000, nullable: true)]
     private ?string $description = null;
 
     #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
@@ -65,7 +65,7 @@ class Item implements \Stringable
     #[ORM\Column(name: 'compensationPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $compensationPrice;
 
-    #[ORM\Column(name: 'RentNotice', type: 'string', length: 5000, nullable: true)]
+    #[ORM\Column(name: 'RentNotice', type: \Doctrine\DBAL\Types\Types::STRING, length: 5000, nullable: true)]
     private ?string $rentNotice = null;
 
     #[ORM\Column(name: 'NeedsFixing', type: 'boolean')]

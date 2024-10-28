@@ -18,13 +18,13 @@ class Menu implements \Stringable
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\Column(type: 'string', length: 180)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180)]
     private ?string $label = null;
 
-    #[ORM\Column(type: 'string', length: 180)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180)]
     private ?string $nimi = null;
 
-    #[ORM\Column(type: 'string', length: 180, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 180, nullable: true)]
     private ?string $url = null;
 
     #[ORM\ManyToOne(targetEntity: Page::class)]

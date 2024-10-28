@@ -13,13 +13,13 @@ class Email implements \Stringable
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255)]
     private ?string $subject = null;
 
     #[ORM\Column(type: 'text')]
     private ?string $body = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $purpose = null;
 
     #[ORM\Column(type: 'datetime')]
@@ -34,7 +34,7 @@ class Email implements \Stringable
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]
     private ?\App\Entity\Event $event = null;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::STRING, length: 255, nullable: true)]
     private ?string $replyTo = null;
 
     #[ORM\Column(nullable: true)]
