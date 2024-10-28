@@ -9,12 +9,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ChengeTicketOwnerType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('owner', null, ['label' => 'Change owner to:']);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

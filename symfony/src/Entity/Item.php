@@ -90,7 +90,7 @@ class Item implements \Stringable
     private ?bool $forSale = false;
 
     #[ORM\ManyToMany(targetEntity: Package::class, inversedBy: 'items')]
-    private $packages = null;
+    private $packages;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
     private ?\DateTime $commission = null;
@@ -176,10 +176,7 @@ class Item implements \Stringable
     {
         return $this->rent;
     }
-    /**
-     * @param mixed $rentNotice
-     */
-    public function setRentNotice($rentNotice): Item
+    public function setRentNotice(mixed $rentNotice): Item
     {
         $this->rentNotice = $rentNotice;
 
@@ -190,10 +187,7 @@ class Item implements \Stringable
     {
         return $this->rentNotice;
     }
-    /**
-     * @param mixed $needsFixing
-     */
-    public function setNeedsFixing($needsFixing): Item
+    public function setNeedsFixing(mixed $needsFixing): Item
     {
         $this->needsFixing = $needsFixing;
 
@@ -204,10 +198,7 @@ class Item implements \Stringable
     {
         return $this->needsFixing;
     }
-    /**
-     * @param mixed $forSale
-     */
-    public function setForSale($forSale): Item
+    public function setForSale(mixed $forSale): Item
     {
         $this->forSale = $forSale;
 
@@ -243,6 +234,7 @@ class Item implements \Stringable
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         if ($this->name) {
@@ -312,10 +304,7 @@ class Item implements \Stringable
             $this->removeWhoCanRent($who);
         }
     }
-    /**
-     * @param mixed $commission
-     */
-    public function setCommission($commission): Item
+    public function setCommission(mixed $commission): Item
     {
         $this->commission = $commission;
 
@@ -326,10 +315,7 @@ class Item implements \Stringable
     {
         return $this->commission;
     }
-    /**
-     * @param mixed $serialnumber
-     */
-    public function setSerialnumber($serialnumber): Item
+    public function setSerialnumber(mixed $serialnumber): Item
     {
         $this->serialnumber = $serialnumber;
 
@@ -359,10 +345,7 @@ class Item implements \Stringable
     {
         return $this->files;
     }
-    /**
-     * @param mixed $placeinstorage
-     */
-    public function setPlaceinstorage($placeinstorage): Item
+    public function setPlaceinstorage(mixed $placeinstorage): Item
     {
         $this->placeinstorage = $placeinstorage;
 
@@ -431,10 +414,7 @@ class Item implements \Stringable
     {
         return $this->packages;
     }
-    /**
-     * @param mixed $toSpareParts
-     */
-    public function setToSpareParts($toSpareParts): Item
+    public function setToSpareParts(mixed $toSpareParts): Item
     {
         $this->toSpareParts = $toSpareParts;
 
@@ -505,10 +485,7 @@ class Item implements \Stringable
     {
         return $this->whoCanRent;
     }
-    /**
-     * @param mixed $url
-     */
-    public function setUrl($url = null): Item
+    public function setUrl(mixed $url = null): Item
     {
         $this->url = $url;
 
@@ -519,10 +496,7 @@ class Item implements \Stringable
     {
         return $this->url;
     }
-    /**
-     * @param mixed $cannotBeRented
-     */
-    public function setCannotBeRented($cannotBeRented): Item
+    public function setCannotBeRented(mixed $cannotBeRented): Item
     {
         $this->cannotBeRented = $cannotBeRented;
 
@@ -533,10 +507,7 @@ class Item implements \Stringable
     {
         return $this->cannotBeRented;
     }
-    /**
-     * @param mixed $compensationPrice
-     */
-    public function setCompensationPrice($compensationPrice = null): Item
+    public function setCompensationPrice(mixed $compensationPrice = null): Item
     {
         $this->compensationPrice = $compensationPrice;
 
@@ -547,10 +518,7 @@ class Item implements \Stringable
     {
         return $this->compensationPrice;
     }
-    /**
-     * @param mixed $purchasePrice
-     */
-    public function setPurchasePrice($purchasePrice = null): Item
+    public function setPurchasePrice(mixed $purchasePrice = null): Item
     {
         $this->purchasePrice = $purchasePrice;
 

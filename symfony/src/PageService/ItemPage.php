@@ -15,11 +15,13 @@ class ItemPage implements PageServiceInterface
     public function __construct(private $name, private readonly TemplateManager $templateManager, private readonly EntityManagerInterface $em)
     {
     }
+    #[\Override]
     public function getName(): string
     {
         return $this->name;
     }
 
+    #[\Override]
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
         $needsfix = $this->em->getRepository(Item::class)->findBy(['needsFixing' => true, 'toSpareParts' => false]);

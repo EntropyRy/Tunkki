@@ -49,7 +49,7 @@ class EventRepository extends ServiceEntityRepository
     {
         $now = new \DateTime();
         $end = new \DateTime();
-        $future =  $this->createQueryBuilder('e')
+        return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')
@@ -62,13 +62,12 @@ class EventRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        return $future;
     }
     public function getUnpublishedFutureEvents(): mixed
     {
         $now = new \DateTime();
         $end = new \DateTime();
-        $future =  $this->createQueryBuilder('e')
+        return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
             ->andWhere('e.type != :type')
@@ -81,7 +80,6 @@ class EventRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();
-        return $future;
     }
     public function findOneEventByType(string $type): ?Event
     {

@@ -17,11 +17,13 @@ class AllEventsPage implements PageServiceInterface
         private readonly EventRepository $eventR
     ) {
     }
+    #[\Override]
     public function getName(): string
     {
         return $this->name;
     }
 
+    #[\Override]
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
         $events = $this->eventR->findBy(['published' => true, 'sticky' => false]);

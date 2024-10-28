@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class AccessGroupsAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -23,6 +24,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -39,6 +41,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $roles = $this->bag->get('security.role_hierarchy.roles');
@@ -56,6 +59,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

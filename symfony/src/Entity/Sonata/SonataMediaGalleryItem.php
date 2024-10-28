@@ -16,6 +16,7 @@ class SonataMediaGalleryItem extends BaseGalleryItem
     #[ORM\Column(type: 'integer')]
     protected $id;
 
+    #[\Override]
     public function getId(): int|string|null
     {
         return $this->id;

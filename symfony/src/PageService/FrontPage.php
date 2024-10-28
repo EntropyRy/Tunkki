@@ -20,14 +20,16 @@ class FrontPage implements PageServiceInterface
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
         // private readonly ePics $ePics,
-        private ?SeoPageInterface $seoPage = null
+        private readonly ?SeoPageInterface $seoPage = null
     ) {
     }
+    #[\Override]
     public function getName(): string
     {
         return $this->name;
     }
 
+    #[\Override]
     public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
     {
         $events = [];

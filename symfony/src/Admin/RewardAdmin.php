@@ -14,10 +14,12 @@ use Sonata\Form\Type\DateTimePickerType;
 
 final class RewardAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'reward';
     }
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -28,6 +30,7 @@ final class RewardAdmin extends AbstractAdmin
             ->add('updatedAt');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -49,6 +52,7 @@ final class RewardAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -61,6 +65,7 @@ final class RewardAdmin extends AbstractAdmin
             ->add('updatedAt', DateTimePickerType::class, ['disabled' => true]);
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -74,15 +79,18 @@ final class RewardAdmin extends AbstractAdmin
             ->add('paymentHandledBy')
             ->add('updatedAt');
     }
+    #[\Override]
     public function preUpdate($reward): void
     {
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('makepaid', $this->getRouterIdParameter() . '/makepaid');
         $collection->add('PrepareEvenout', 'evenout/prepare');
         $collection->add('Evenout', 'evenout/make');
     }
+    #[\Override]
     public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Evenout', [

@@ -12,6 +12,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CartType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $help = 'e30v.cart.email.help';
@@ -27,13 +28,12 @@ class CartType extends AbstractType
             ])
             ->add('products', CollectionType::class, [
                 'entry_type' => CartItemType::class,
-                'delete_empty' => function (CartItem $item = null): bool {
-                    return null === $item || $item->getQuantity() == 0;
-                },
+                'delete_empty' => fn(CartItem $item = null): bool => null === $item || $item->getQuantity() == 0,
                 'allow_delete' => true,
             ]);;
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

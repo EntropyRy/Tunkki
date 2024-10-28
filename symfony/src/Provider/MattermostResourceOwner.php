@@ -21,6 +21,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      *
      * @return array
      */
+    #[\Override]
     public function toArray()
     {
         return $this->response;
@@ -30,6 +31,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
      *
      * @return string|null
      */
+    #[\Override]
     public function getId()
     {
         return $this->response['id'] ?: null;

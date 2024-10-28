@@ -14,6 +14,7 @@ use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -23,6 +24,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('notes');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -39,6 +41,7 @@ class PackageAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $p = $this->getSubject();
@@ -75,6 +78,7 @@ class PackageAdmin extends AbstractAdmin
             ->end();
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

@@ -17,6 +17,7 @@ use Twig\Environment;
 
 class BookingsInProgressBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
@@ -33,6 +34,7 @@ class BookingsInProgressBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

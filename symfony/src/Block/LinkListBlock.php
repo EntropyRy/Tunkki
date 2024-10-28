@@ -20,6 +20,7 @@ use App\Form\UrlsType;
 
 class LinkListBlock extends BaseBlockService implements EditableBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         return $this->renderResponse($blockContext->getTemplate(), [
@@ -27,10 +28,12 @@ class LinkListBlock extends BaseBlockService implements EditableBlockService
             'settings'  => $blockContext->getSettings()
         ], $response);
     }
+    #[\Override]
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->configureCreateForm($formMapper, $block);
     }
+    #[\Override]
     public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $formMapper
@@ -59,6 +62,7 @@ class LinkListBlock extends BaseBlockService implements EditableBlockService
             ]);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -68,12 +72,14 @@ class LinkListBlock extends BaseBlockService implements EditableBlockService
             'template' => 'block/links.html.twig',
         ]);
     }
+    #[\Override]
     public function getMetadata(): Metadata
     {
         return new Metadata($this->getName(), null, null, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
+    #[\Override]
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }

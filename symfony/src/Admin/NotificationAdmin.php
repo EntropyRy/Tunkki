@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class NotificationAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -23,6 +24,7 @@ final class NotificationAdmin extends AbstractAdmin
             ->add('sentAt');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -42,6 +44,7 @@ final class NotificationAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -78,6 +81,7 @@ final class NotificationAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -87,6 +91,7 @@ final class NotificationAdmin extends AbstractAdmin
             ->add('sentAt')
             ->add('messageId');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');

@@ -17,11 +17,13 @@ use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 
 final class TicketAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'ticket';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         if (!$this->isChild()) {
@@ -51,6 +53,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('updatedAt');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         if (!$this->isChild()) {
@@ -85,6 +88,7 @@ final class TicketAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isChild()) {
@@ -108,6 +112,7 @@ final class TicketAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -119,6 +124,7 @@ final class TicketAdmin extends AbstractAdmin
             ->add('status')
             ->add('updatedAt');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');
@@ -129,6 +135,7 @@ final class TicketAdmin extends AbstractAdmin
         $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');
         $collection->add('sendQrCodeEmail', $this->getRouterIdParameter() . '/send-qr-code-email');
     }
+    #[\Override]
     public function postPersist($object): void
     {
         if ($object->getReferenceNumber() == null) {

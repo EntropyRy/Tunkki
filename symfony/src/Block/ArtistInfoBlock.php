@@ -17,6 +17,7 @@ use Twig\Environment;
 
 class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
@@ -28,10 +29,12 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
             'member'    => $member
         ], $response);
     }
+    #[\Override]
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->configureCreateForm($formMapper, $block);
     }
+    #[\Override]
     public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
@@ -41,18 +44,21 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'template' => 'block/artist_info.html.twig',
         ]);
     }
+    #[\Override]
     public function getMetadata(): Metadata
     {
         return new Metadata($this->getName(), null, null, 'messages', [
             'class' => 'fa fa-link',
         ]);
     }
+    #[\Override]
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }

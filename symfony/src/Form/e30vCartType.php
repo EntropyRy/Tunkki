@@ -11,6 +11,7 @@ use Symfony\Component\Validator\Constraints\Positive;
 
 class e30vCartType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $disabled = false;
@@ -32,6 +33,7 @@ class e30vCartType extends AbstractType
             ]);
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -2,18 +2,21 @@
 
 namespace App\Entity\Sonata;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\ClassificationBundle\Entity\BaseCollection;
 
-#[ORM\Table(name: 'classification__collection')]
 #[ORM\Entity]
+#[ORM\Table(name: 'classification__collection')]
 class SonataClassificationCollection extends BaseCollection
 {
     #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
-    protected $id;
-    public function getId(): int|string|null
+    protected ?int $id = null;
+
+    #[\Override]
+    public function getId(): ?int
     {
         return $this->id;
     }

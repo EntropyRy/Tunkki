@@ -63,7 +63,7 @@ final class EmailAdminController extends CRUDController
             } elseif ($purpose == 'ticket' && $event) {
                 $tickets = $event->getTickets();
                 foreach ($tickets as $ticket) {
-                    if (str_starts_with($ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
+                    if (str_starts_with((string) $ticket->getStatus(), 'paid') || $ticket->getStatus() == 'reserved') {
                         $to = $ticket->getOwnerEmail();
                         if ($to == null) {
                             $to = $ticket->getEmail();
@@ -112,13 +112,11 @@ final class EmailAdminController extends CRUDController
                 $this->addFlash('sonata_flash_error', sprintf('Purpose %s not supported.', $purpose));
             }
         }
-        if (count($emails) > 0) {
-            foreach ($emails as $to) {
-                if ($to) {
-                    $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
-                    $mailer->send($message);
-                    $count += 1;
-                }
+        foreach ($emails as $to) {
+            if ($to) {
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
+                $mailer->send($message);
+                $count += 1;
             }
         }
         if ($count > 0) {

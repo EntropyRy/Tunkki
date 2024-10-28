@@ -21,18 +21,21 @@ class SonataMediaMedia extends BaseMedia
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
+    #[\Override]
     public function getId(): int|string|null
     {
         return $this->id;
     }
 
     #[ORM\PrePersist]
+    #[\Override]
     public function prePersist(): void
     {
         parent::prePersist();
     }
 
     #[ORM\PreUpdate]
+    #[\Override]
     public function preUpdate(): void
     {
         parent::preUpdate();

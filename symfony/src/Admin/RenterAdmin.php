@@ -11,6 +11,7 @@ use Sonata\Form\Validator\ErrorElement;
 
 class RenterAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -24,6 +25,7 @@ class RenterAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -39,6 +41,7 @@ class RenterAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -52,6 +55,7 @@ class RenterAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

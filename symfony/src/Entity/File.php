@@ -77,6 +77,7 @@ class File implements \Stringable
         }
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->fileinfo ?: '';

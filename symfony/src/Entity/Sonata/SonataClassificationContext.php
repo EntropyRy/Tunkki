@@ -2,12 +2,12 @@
 
 namespace App\Entity\Sonata;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\ClassificationBundle\Entity\BaseContext;
-use Doctrine\DBAL\Types\Types;
 
-#[ORM\Table(name: 'classification__context')]
 #[ORM\Entity]
+#[ORM\Table(name: 'classification__context')]
 class SonataClassificationContext extends BaseContext
 {
     #[ORM\Id]

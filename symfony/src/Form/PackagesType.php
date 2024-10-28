@@ -18,6 +18,7 @@ class PackagesType extends AbstractType
     {
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
@@ -27,6 +28,7 @@ class PackagesType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
     }
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
@@ -44,11 +46,13 @@ class PackagesType extends AbstractType
             'btn_catalogue' => 'SonataAdminBundle',
         ]);
     }
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'entropy_type_packages';

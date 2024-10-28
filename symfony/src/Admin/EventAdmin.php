@@ -31,11 +31,13 @@ use Symfony\Component\HttpFoundation\Session\Session;
 
 final class EventAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'event';
     }
 
+    #[\Override]
     protected function configureDefaultSortValues(array &$sortValues): void
     {
         // display the first page (default = 1)
@@ -48,6 +50,7 @@ final class EventAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::SORT_BY] = 'EventDate';
     }
 
+    #[\Override]
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -154,6 +157,7 @@ final class EventAdmin extends AbstractAdmin
             );
         }
     }
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $TypeChoices = [
@@ -183,6 +187,7 @@ final class EventAdmin extends AbstractAdmin
             ->add('sticky');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -204,6 +209,7 @@ final class EventAdmin extends AbstractAdmin
             );
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $TypeChoices = [
@@ -285,7 +291,7 @@ final class EventAdmin extends AbstractAdmin
                         [
                             'format' => $format,
                             'required' => true,
-                            'help' => $help ? $help : 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
+                            'help' => $help ?: 'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
                         ]
@@ -307,7 +313,7 @@ final class EventAdmin extends AbstractAdmin
                         [
                             'format' => $format,
                             'required' => true,
-                            'help' => $help ? $help : 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.',
+                            'help' => $help ?: 'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.',
                             'help_html' => true,
                             'attr' => ['rows' => 20]
                         ]
@@ -664,6 +670,7 @@ final class EventAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -676,6 +683,7 @@ final class EventAdmin extends AbstractAdmin
             ->add('Sisallys')
             ->add('updatedAt');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');
@@ -683,6 +691,7 @@ final class EventAdmin extends AbstractAdmin
         $collection->add('rsvp', $this->getRouterIdParameter() . '/rsvp');
         $collection->add('nakkiList', $this->getRouterIdParameter() . '/nakkilist');
     }
+    #[\Override]
     public function prePersist($event): void
     {
         if ($event->getType() == 'clubroom') {
@@ -696,6 +705,7 @@ final class EventAdmin extends AbstractAdmin
             $event->setUrl($this->slug->slug($event->getNimi())->lower()->toString());
         }
     }
+    #[\Override]
     public function preUpdate($event): void
     {
         if (is_null($event->getUrl())) {
@@ -708,6 +718,7 @@ final class EventAdmin extends AbstractAdmin
         protected RequestStack $rs,
     ) {
     }
+    #[\Override]
     public function preValidate(object $object): void
     {
         if ($object->getTicketsEnabled() == true) {

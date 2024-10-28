@@ -6,7 +6,7 @@ use App\Repository\HappeningBookingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HappeningBookingRepository::class)]
-class HappeningBooking
+class HappeningBooking implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -72,7 +72,8 @@ class HappeningBooking
         return $this;
     }
 
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
         return $this->createdAt->format('d.m. H:i') . ' ' . $this->member;
     }

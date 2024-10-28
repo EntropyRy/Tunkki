@@ -15,7 +15,7 @@ class ReferenceNumber
         $summa = 0;
         $kertoimet = [7, 3, 1];
         $id = (int)$object->getId() + $add;
-        $viite = (int)$start . $id;
+        $viite = $start . $id;
 
         for ($i = strlen($viite); $i > 0; $i--) {
             $summa += (int) substr($viite, $i - 1, 1) * $kertoimet[$ki++ % 3];

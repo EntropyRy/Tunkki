@@ -17,6 +17,7 @@ use Twig\Environment;
 
 class RandomArtistBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
@@ -30,6 +31,7 @@ class RandomArtistBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

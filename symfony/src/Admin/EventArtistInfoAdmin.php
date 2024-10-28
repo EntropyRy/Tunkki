@@ -17,11 +17,13 @@ use App\Entity\Artist;
 
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'artists';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -31,6 +33,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('StartTime');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -52,6 +55,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
@@ -86,12 +90,14 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
             ->add('SetLength')
             ->add('StartTime');
     }
+    #[\Override]
     public function prePersist($eventinfo): void
     {
         $event = $eventinfo->getEvent();
@@ -107,6 +113,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $artistClone->setName($artistClone->getName() . ' for ' . $eventinfo->getEvent()->getName() . ' #' . $i);
         $eventinfo->setArtistClone($artistClone);
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('delete');

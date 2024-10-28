@@ -112,7 +112,7 @@ class EventTicketController extends Controller
         if ($ticket->getOwner() != $member) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
-        $selected = $nakkirepo->findMemberEventBookings($member, $event);
+        $nakkirepo->findMemberEventBookings($member, $event);
         $qr = new Qr();
 
         return $this->render('ticket/one.html.twig', [

@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class MenuAdminController extends CRUDController
 {
+    #[\Override]
     public function listAction(Request $request = null): RedirectResponse
     {
         return new RedirectResponse($this->admin->generateUrl('tree', $request->query->all()));

@@ -10,6 +10,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 class WhoCanRentChoiceAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -17,6 +18,7 @@ class WhoCanRentChoiceAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -26,6 +28,7 @@ class WhoCanRentChoiceAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -33,6 +36,7 @@ class WhoCanRentChoiceAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

@@ -22,6 +22,7 @@ class Mattermost extends AbstractProvider
      *
      * @return string
      */
+    #[\Override]
     public function getBaseAuthorizationUrl()
     {
         return 'https://chat.entropy.fi/oauth/authorize';
@@ -32,6 +33,7 @@ class Mattermost extends AbstractProvider
      *
      * @return string
      */
+    #[\Override]
     public function getBaseAccessTokenUrl(array $params)
     {
         return 'https://chat.entropy.fi/oauth/access_token';
@@ -42,6 +44,7 @@ class Mattermost extends AbstractProvider
      *
      * @return string
      */
+    #[\Override]
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
         /*   $params = [
@@ -59,6 +62,7 @@ class Mattermost extends AbstractProvider
      * @param array|string      $data     Parsed response data
      * @return void
      */
+    #[\Override]
     protected function checkResponse(ResponseInterface $response, $data)
     {
         if (!empty($data['error'])) {
@@ -73,6 +77,7 @@ class Mattermost extends AbstractProvider
      *
      * @return MattermostResourceOwner
      */
+    #[\Override]
     protected function createResourceOwner(array $response, AccessToken $token)
     {
         return new MattermostResourceOwner($response);
@@ -80,6 +85,7 @@ class Mattermost extends AbstractProvider
     /**
      * @return array
      */
+    #[\Override]
     protected function getDefaultScopes()
     {
         return [];

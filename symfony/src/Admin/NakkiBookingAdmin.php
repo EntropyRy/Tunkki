@@ -13,6 +13,7 @@ use Sonata\Form\Type\DateTimePickerType;
 
 final class NakkiBookingAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -27,6 +28,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('endAt');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -49,6 +51,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -67,6 +70,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

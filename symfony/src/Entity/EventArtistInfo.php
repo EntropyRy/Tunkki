@@ -96,6 +96,7 @@ class EventArtistInfo implements \Stringable
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
         return (string) ($this->Artist ?: 'n/a');

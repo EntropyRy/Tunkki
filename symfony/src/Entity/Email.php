@@ -129,9 +129,10 @@ class Email implements \Stringable
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
-        return (string) ($this->purpose ?: 'Email for ' . $this->event);
+        return $this->purpose ?: 'Email for ' . $this->event;
     }
 
     public function getEvent(): ?Event

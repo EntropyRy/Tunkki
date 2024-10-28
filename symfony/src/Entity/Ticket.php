@@ -53,6 +53,7 @@ class Ticket implements \Stringable
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->referenceNumber;

@@ -16,15 +16,18 @@ final class MenuAdmin extends AbstractAdmin
     protected array $accessMapping = [
         'tree' => 'LIST',
     ];
+    #[\Override]
     public function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('tree', 'tree');
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -41,6 +44,7 @@ final class MenuAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -55,6 +59,7 @@ final class MenuAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper

@@ -13,6 +13,7 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
 final class NakkiDefinitionAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -24,6 +25,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -41,6 +43,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -56,6 +59,7 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

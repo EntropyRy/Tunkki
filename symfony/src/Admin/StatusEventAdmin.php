@@ -15,6 +15,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class StatusEventAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -26,6 +27,7 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('creator');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         if (!$this->isChild()) {
@@ -44,6 +46,7 @@ class StatusEventAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if (!$this->isChild()) {
@@ -59,10 +62,8 @@ class StatusEventAdmin extends AbstractAdmin
         if ($this->getSubject()->getItem() != null) {
             $events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0, 5));
             $help = '';
-            if ($events) {
-                foreach ($events as $event) {
-                    $help .= "[" . $event->getCreatedAt()->format('d.m.y H:i') . '] ' . $event->getCreator() . ': ' . $event->getDescription() . '<br>';
-                }
+            foreach ($events as $event) {
+                $help .= "[" . $event->getCreatedAt()->format('d.m.y H:i') . '] ' . $event->getCreator() . ': ' . $event->getDescription() . '<br>';
             }
             $formMapper
                 ->with('Status', ['class' => 'col-md-4'])
@@ -111,6 +112,7 @@ class StatusEventAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -122,23 +124,27 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('modifier')
             ->add('updatedAt');
     }
+    #[\Override]
     public function prePersist($Event): void
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setCreator($user);
         $Event->setModifier($user);
     }
+    #[\Override]
     public function postPersist($Event): void
     {
         $user = $Event->getCreator();
         $text = $this->getMMtext($Event, $user);
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
+    #[\Override]
     public function preUpdate($Event): void
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
     }
+    #[\Override]
     public function postUpdate($Event): void
     {
         $user = $Event->getModifier();
@@ -172,8 +178,7 @@ class StatusEventAdmin extends AbstractAdmin
         if ($Event->getDescription()) {
             $text .= 'with comment: ' . $Event->getDescription();
         }
-        $text .= ' by ' . $user;
-        return $text;
+        return $text . (' by ' . $user);
     }
     public function __construct(protected \App\Helper\Mattermost $mm, protected TokenStorageInterface $ts)
     {

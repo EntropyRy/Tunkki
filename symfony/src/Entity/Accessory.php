@@ -81,6 +81,7 @@ class Accessory implements \Stringable
         return $this->name;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         $name = $this->name ?: 'n/a';

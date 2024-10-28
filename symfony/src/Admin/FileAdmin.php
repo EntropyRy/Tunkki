@@ -11,6 +11,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 class FileAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -22,6 +23,7 @@ class FileAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -37,6 +39,7 @@ class FileAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
@@ -55,6 +58,7 @@ class FileAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
     }

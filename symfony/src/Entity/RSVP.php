@@ -125,7 +125,7 @@ class RSVP implements \Stringable
     public function getAvailableLastName(): string
     {
         if ($this->getMember()) {
-            return ucfirst($this->getMember()->getLastname());
+            return ucfirst((string) $this->getMember()->getLastname());
         }
         return ucfirst((string) $this->lastName);
     }
@@ -136,6 +136,7 @@ class RSVP implements \Stringable
         }
         return $this->email;
     }
+    #[\Override]
     public function __toString(): string
     {
         return 'ID: ' . $this->id;

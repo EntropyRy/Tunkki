@@ -156,6 +156,7 @@ class Booking implements \Stringable
     {
         return $this->packages;
     }
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ? $this->name . ' - ' . date_format($this->bookingDate, 'd.m.Y') : 'n/a';

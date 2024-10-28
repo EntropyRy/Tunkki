@@ -172,10 +172,7 @@ class Member implements \Stringable
     {
         return $this->phone;
     }
-    /**
-     * @param mixed $createdAt
-     */
-    public function setCreatedAt($createdAt): self
+    public function setCreatedAt(mixed $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -186,10 +183,7 @@ class Member implements \Stringable
     {
         return $this->createdAt;
     }
-    /**
-     * @param mixed $updatedAt
-     */
-    public function setUpdatedAt($updatedAt): self
+    public function setUpdatedAt(mixed $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -200,10 +194,7 @@ class Member implements \Stringable
     {
         return $this->updatedAt;
     }
-    /**
-     * @param mixed $studentUnionMember
-     */
-    public function setStudentUnionMember($studentUnionMember = null): self
+    public function setStudentUnionMember(mixed $studentUnionMember = null): self
     {
         $this->StudentUnionMember = $studentUnionMember;
 
@@ -214,10 +205,7 @@ class Member implements \Stringable
     {
         return $this->StudentUnionMember;
     }
-    /**
-     * @param mixed $application
-     */
-    public function setApplication($application = null): self
+    public function setApplication(mixed $application = null): self
     {
         $this->Application = $application;
 
@@ -228,10 +216,7 @@ class Member implements \Stringable
     {
         return $this->Application;
     }
-    /**
-     * @param mixed $applicationDate
-     */
-    public function setApplicationDate($applicationDate = null): self
+    public function setApplicationDate(mixed $applicationDate = null): self
     {
         $this->ApplicationDate = $applicationDate;
 
@@ -242,10 +227,7 @@ class Member implements \Stringable
     {
         return $this->ApplicationDate;
     }
-    /**
-     * @param mixed $cityOfResidence
-     */
-    public function setCityOfResidence($cityOfResidence = null): self
+    public function setCityOfResidence(mixed $cityOfResidence = null): self
     {
         $this->CityOfResidence = $cityOfResidence;
 
@@ -257,14 +239,12 @@ class Member implements \Stringable
         return $this->CityOfResidence;
     }
 
+    #[\Override]
     public function __toString(): string
     {
-        return $this->getName();
+        return (string) $this->getName();
     }
-    /**
-     * @param mixed $firstname
-     */
-    public function setFirstname($firstname): self
+    public function setFirstname(mixed $firstname): self
     {
         $this->firstname = $firstname;
 
@@ -275,10 +255,7 @@ class Member implements \Stringable
     {
         return $this->firstname;
     }
-    /**
-     * @param mixed $lastname
-     */
-    public function setLastname($lastname): self
+    public function setLastname(mixed $lastname): self
     {
         $this->lastname = $lastname;
 
@@ -289,10 +266,7 @@ class Member implements \Stringable
     {
         return $this->lastname;
     }
-    /**
-     * @param mixed $isActiveMember
-     */
-    public function setIsActiveMember($isActiveMember): self
+    public function setIsActiveMember(mixed $isActiveMember): self
     {
         $this->isActiveMember = $isActiveMember;
 
@@ -303,10 +277,7 @@ class Member implements \Stringable
     {
         return $this->isActiveMember;
     }
-    /**
-     * @param mixed $rejectReason
-     */
-    public function setRejectReason($rejectReason = null): self
+    public function setRejectReason(mixed $rejectReason = null): self
     {
         $this->rejectReason = $rejectReason;
 
@@ -317,10 +288,7 @@ class Member implements \Stringable
     {
         return $this->rejectReason;
     }
-    /**
-     * @param mixed $rejectReasonSent
-     */
-    public function setRejectReasonSent($rejectReasonSent): self
+    public function setRejectReasonSent(mixed $rejectReasonSent): self
     {
         $this->rejectReasonSent = $rejectReasonSent;
 
@@ -331,10 +299,7 @@ class Member implements \Stringable
     {
         return $this->rejectReasonSent;
     }
-    /**
-     * @param mixed $applicationHandledDate
-     */
-    public function setApplicationHandledDate($applicationHandledDate = null): self
+    public function setApplicationHandledDate(mixed $applicationHandledDate = null): self
     {
         $this->ApplicationHandledDate = $applicationHandledDate;
 
@@ -345,10 +310,7 @@ class Member implements \Stringable
     {
         return $this->ApplicationHandledDate;
     }
-    /**
-     * @param mixed $username
-     */
-    public function setUsername($username = null): self
+    public function setUsername(mixed $username = null): self
     {
         $this->username = $username;
 
@@ -653,7 +615,6 @@ class Member implements \Stringable
     }
     /**
      * @param Event $event
-     * @return NakkiBooking|null
      */
     public function getEventNakkiBooking($event): ?NakkiBooking
     {

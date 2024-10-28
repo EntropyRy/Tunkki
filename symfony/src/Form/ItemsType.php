@@ -22,6 +22,7 @@ class ItemsType extends AbstractType
     ) {
     }
 
+    #[\Override]
     public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
@@ -49,6 +50,7 @@ class ItemsType extends AbstractType
         }
         return $cats;
     }
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $choices = $this->itemR->getAllItemChoices();
@@ -72,11 +74,13 @@ class ItemsType extends AbstractType
             ]
         );
     }
+    #[\Override]
     public function getParent(): string
     {
         return EntityType::class;
     }
 
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'entropy_type_items';

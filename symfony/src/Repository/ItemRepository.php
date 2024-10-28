@@ -29,10 +29,7 @@ class ItemRepository extends ServiceEntityRepository
             ->orderBy('i.name', 'ASC');
         return $queryBuilder->getQuery()->getResult();
     }
-    /**
-     * @param mixed $privileges
-     */
-    public function getItemChoicesWithPrivileges($privileges): mixed
+    public function getItemChoicesWithPrivileges(mixed $privileges): mixed
     {
         $queryBuilder = $this->createQueryBuilder('i')
             //->Where('i.cannotBeRented = false')

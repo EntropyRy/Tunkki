@@ -59,9 +59,7 @@ class EventController extends Controller
         TicketRepository $ticketRepo,
         EntityManagerInterface $em
     ): Response {
-        $ticket = null;
         $form = null;
-        $ticketCount = null;
         $user = $this->getUser();
         if ($event->getTicketsEnabled() && $user) {
             assert($user instanceof User);

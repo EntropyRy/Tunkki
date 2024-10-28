@@ -20,7 +20,7 @@ class Renter implements \Stringable
     private ?int $id = null;
 
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'renter')]
-    private $bookings = null;
+    private $bookings;
 
     #[ORM\Column(name: 'name', type: 'string', length: 190)]
     private string $name;
@@ -219,6 +219,7 @@ class Renter implements \Stringable
     {
         return $this->bookings;
     }
+    #[\Override]
     public function __toString(): string
     {
         return ($this->organization ? $this->name . ' / ' . $this->organization : $this->name);

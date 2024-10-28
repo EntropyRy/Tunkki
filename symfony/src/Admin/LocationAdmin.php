@@ -15,6 +15,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 final class LocationAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -24,6 +25,7 @@ final class LocationAdmin extends AbstractAdmin
             ->add('streetAddress');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -40,6 +42,7 @@ final class LocationAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -51,6 +54,7 @@ final class LocationAdmin extends AbstractAdmin
             ->add('streetAddress');
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SitemapController extends AbstractController
 {
-    public function __construct(private EventRepository $eventRepo, private MenuRepository $menuRepo)
+    public function __construct(private readonly EventRepository $eventRepo, private readonly MenuRepository $menuRepo)
     {
     }
 

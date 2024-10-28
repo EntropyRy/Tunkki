@@ -19,6 +19,7 @@ use Twig\Environment;
 
 class StatisticsBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $stats = [];
@@ -58,6 +59,7 @@ class StatisticsBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(

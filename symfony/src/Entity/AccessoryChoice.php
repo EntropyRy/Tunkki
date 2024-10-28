@@ -36,6 +36,7 @@ class AccessoryChoice implements \Stringable
         return $this->name;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ?: '';

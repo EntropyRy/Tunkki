@@ -13,11 +13,13 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 final class DoorLogAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'doorlog';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -27,6 +29,7 @@ final class DoorLogAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -40,6 +43,7 @@ final class DoorLogAdmin extends AbstractAdmin
 ])*/;
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -48,6 +52,7 @@ final class DoorLogAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -56,6 +61,7 @@ final class DoorLogAdmin extends AbstractAdmin
             ->add('message')
         ;
     }
+    #[\Override]
     public function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('edit');

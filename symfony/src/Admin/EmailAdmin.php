@@ -18,10 +18,12 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
  */
 final class EmailAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'email';
     }
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -31,6 +33,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('body');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         if (!$this->isChild()) {
@@ -55,6 +58,7 @@ final class EmailAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         if (!$this->isChild()) {
@@ -118,6 +122,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -129,6 +134,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('updatedAt');
     }
 
+    #[\Override]
     protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->remove('show');

@@ -39,6 +39,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly Mattermost $mm
     ) {
     }
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

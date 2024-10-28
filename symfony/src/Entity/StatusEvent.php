@@ -109,6 +109,7 @@ class StatusEvent implements \Stringable
         return $this->item;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         if (is_object($this->getItem())) {

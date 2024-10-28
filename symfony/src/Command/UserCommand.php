@@ -24,6 +24,7 @@ class UserCommand extends Command
     ) {
         parent::__construct();
     }
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -35,6 +36,7 @@ class UserCommand extends Command
             ->addOption('create-user', null, InputOption::VALUE_NONE, 'create user too');
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

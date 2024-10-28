@@ -386,6 +386,7 @@ body {
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
         return $this->getName() ?: 'Happening';
@@ -599,8 +600,7 @@ body {
         $abstract = str_replace("{{ streamplayer }}", "", $abstract);
         $abstract = str_replace("{{ ticket }}", "", $abstract);
         $abstract = str_replace("{{ art_artist_list }}", "", $abstract);
-        $abstract = str_replace("{{ happening_list }}", "", $abstract);
-        return $abstract;
+        return str_replace("{{ happening_list }}", "", $abstract);
     }
     public function getNameByLang($lang)
     {
@@ -1448,7 +1448,7 @@ body {
 
     public function getTemplate(): string
     {
-        return $this->template ? $this->template : 'event.html.twig';
+        return $this->template ?: 'event.html.twig';
     }
 
     public function setTemplate(?string $template): static
@@ -1501,10 +1501,8 @@ body {
      */
     public function getTicketProducts(): Collection
     {
-        $tickets = new ArrayCollection();
-        return $this->products->filter(function (Product $product) {
-            return $product->isTicket();
-        });
+        new ArrayCollection();
+        return $this->products->filter(fn(Product $product) => $product->isTicket());
     }
     public function addProduct(Product $product): static
     {

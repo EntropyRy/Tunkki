@@ -95,7 +95,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     {
         if ($this->member) {
             if ($this->member->getUsername()) {
-                return (string) $this->member->getUsername();
+                return $this->member->getUsername();
             }
         }
         return 'N/A';
@@ -105,11 +105,12 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
      *
      * @see UserInterface
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         if ($this->member) {
             if ($this->member->getEmail()) {
-                return (string) $this->member->getEmail();
+                return $this->member->getEmail();
             }
         }
         return 'N/A';
@@ -117,6 +118,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function getRoles(): array
     {
         $roles = $this->roles;
@@ -143,6 +145,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function getPassword(): string
     {
         return (string) $this->password;
@@ -166,6 +169,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here
@@ -297,10 +301,11 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
 
         return $this;
     }
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
         if ($this->member) {
-            return $this->member->getName();
+            return (string) $this->member->getName();
         } else {
             return 'user: ' . $this->id;
         }

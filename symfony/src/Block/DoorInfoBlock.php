@@ -16,6 +16,7 @@ use Twig\Environment;
 
 class DoorInfoBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
@@ -52,6 +53,7 @@ class DoorInfoBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

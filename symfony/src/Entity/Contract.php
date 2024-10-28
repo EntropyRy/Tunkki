@@ -97,9 +97,10 @@ class Contract implements \Stringable
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
-        return (string) ($this->purpose ?: 'purpose');
+        return $this->purpose ?: 'purpose';
     }
 
     public function getContentEn(): ?string

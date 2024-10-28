@@ -12,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 final class NakkiAdminController extends CRUDController
 {
+    #[\Override]
     protected function preCreate(Request $request, $object): ?Response
     {
         if ($object->getEvent()) {

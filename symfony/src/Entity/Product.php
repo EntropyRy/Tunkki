@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Product
+class Product implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -93,9 +93,10 @@ class Product
         }
         return 0;
     }
+    #[\Override]
     public function __toString(): string
     {
-        return $this->nameEn;
+        return (string) $this->nameEn;
     }
 
     #[ORM\PrePersist]

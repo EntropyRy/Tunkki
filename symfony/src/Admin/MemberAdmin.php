@@ -19,11 +19,13 @@ use App\Helper\Mattermost;
 
 final class MemberAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'member';
     }
 
+    #[\Override]
     protected function configureDefaultSortValues(array &$sortValues): void
     {
         // display the first page (default = 1)
@@ -36,6 +38,7 @@ final class MemberAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::SORT_BY] = 'createdAt';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $now = new \DateTime();
@@ -85,6 +88,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('createdAt', DateRangeFilter::class, ['field_type' => DateRangeType::class]);
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -117,6 +121,7 @@ final class MemberAdmin extends AbstractAdmin
             );
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $editable = false;
@@ -173,6 +178,7 @@ final class MemberAdmin extends AbstractAdmin
         //}
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -200,14 +206,17 @@ final class MemberAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('activememberinfo', $this->getRouterIdParameter() . '/activememberinfo');
     }
+    #[\Override]
     public function configureExportFields(): array
     {
         return ['name', 'email', 'StudentUnionMember', 'isActiveMember', 'isFullMember', 'AcceptedAsHonoraryMember'];
     }
+    #[\Override]
     public function preRemove($member): void
     {
         foreach ($member->getArtist() as $artist) {
@@ -219,6 +228,7 @@ final class MemberAdmin extends AbstractAdmin
         }
         $this->em->flush();
     }
+    #[\Override]
     public function postRemove($member): void
     {
         $text = '**Member deleted: ' . $member . '**';

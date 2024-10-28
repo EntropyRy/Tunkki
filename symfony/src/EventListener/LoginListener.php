@@ -11,7 +11,7 @@ use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 class LoginListener implements EventSubscriberInterface
 {
     public function __construct(
-        private LocaleSwitcher $localeSwitcher,
+        private readonly LocaleSwitcher $localeSwitcher,
         private readonly EntityManagerInterface $em
     ) {
     }
@@ -27,6 +27,7 @@ class LoginListener implements EventSubscriberInterface
         $userLocale = $user->getMember()->getLocale() ?? 'fi';
         $this->localeSwitcher->setLocale($userLocale);
     }
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

@@ -14,6 +14,7 @@ use Twig\Environment;
 
 class MemberInfoBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
@@ -38,6 +39,7 @@ class MemberInfoBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

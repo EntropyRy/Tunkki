@@ -107,10 +107,11 @@ class BillableEvent implements \Stringable
         return $this->booking;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         if (!empty($this->getUnitPrice())) {
-            return (string) ($this->description ? $this->description.': '.$this->getUnitPrice() : '');
+            return $this->description ? $this->description.': '.$this->getUnitPrice() : '';
         } else {
             return '';
         }

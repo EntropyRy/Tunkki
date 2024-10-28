@@ -52,6 +52,7 @@ class WhoCanRentChoice implements \Stringable
     {
         return $this->name;
     }
+    #[\Override]
     public function __toString(): string
     {
         return $this->name ?: '';

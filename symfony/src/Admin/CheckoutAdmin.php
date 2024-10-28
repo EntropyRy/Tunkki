@@ -16,6 +16,7 @@ use Sonata\AdminBundle\Show\ShowMapper;
  */
 final class CheckoutAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -26,6 +27,7 @@ final class CheckoutAdmin extends AbstractAdmin
             ->add('updatedAt');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -43,12 +45,14 @@ final class CheckoutAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
             ->add('status');
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -57,12 +61,14 @@ final class CheckoutAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('delete');
         $collection->remove('create');
         $collection->add('remove_unneeded', 'remove-unneeded');
     }
+    #[\Override]
     public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Remove Unneeded', [

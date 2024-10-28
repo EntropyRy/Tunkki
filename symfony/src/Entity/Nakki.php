@@ -54,9 +54,10 @@ class Nakki implements \Stringable
         $this->nakkiInterval = new \DateInterval('PT1H');
     }
 
+    #[\Override]
     public function __toString(): string
     {
-        return (string) $this->definition ? $this->definition->getNameEn() : 'N/A';
+        return (string) ((string) $this->definition ? $this->definition->getNameEn() : 'N/A');
     }
     public function getId(): ?int
     {
@@ -160,7 +161,7 @@ class Nakki implements \Stringable
         $hours = $diff->h;
         $hours = ($hours + ($diff->days * 24)) / ((int) $this->getNakkiInterval()->format('%h'));
         for ($i = 0; $i < $hours; $i++) {
-            $start = (int) $i * (int) $this->getNakkiInterval()->format('%h');
+            $start = $i * (int) $this->getNakkiInterval()->format('%h');
             $times[] = $this->getStartAt()->modify($start . ' hour');
         }
         return $times;

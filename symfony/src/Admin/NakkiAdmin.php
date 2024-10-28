@@ -22,11 +22,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 final class NakkiAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'nakki';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -43,6 +45,7 @@ final class NakkiAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -68,6 +71,7 @@ final class NakkiAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -118,6 +122,7 @@ final class NakkiAdmin extends AbstractAdmin
         ;
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
@@ -128,6 +133,7 @@ final class NakkiAdmin extends AbstractAdmin
             ->add('endAt')
         ;
     }
+    #[\Override]
     public function postPersist($nakki): void
     {
         // create booking nakkis
@@ -139,6 +145,7 @@ final class NakkiAdmin extends AbstractAdmin
         }
         $this->em->flush();
     }
+    #[\Override]
     public function postUpdate($nakki): void
     {
         $bookings = $nakki->getNakkiBookings();
@@ -182,6 +189,7 @@ final class NakkiAdmin extends AbstractAdmin
         $b->setEvent($nakki->getEvent());
         $this->em->persist($b);
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter() . '/clone');

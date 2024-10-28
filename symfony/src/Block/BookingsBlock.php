@@ -17,6 +17,7 @@ use Twig\Environment;
 
 class BookingsBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
@@ -34,6 +35,7 @@ class BookingsBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['position' => '1', 'template' => 'block/bookings.html.twig']);

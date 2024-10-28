@@ -14,6 +14,7 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 
 final class HappeningAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -36,6 +37,7 @@ final class HappeningAdmin extends AbstractAdmin
             ->add('releaseThisHappeningInEvent');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -55,6 +57,7 @@ final class HappeningAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -95,6 +98,7 @@ final class HappeningAdmin extends AbstractAdmin
             ->add('bookings');
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show

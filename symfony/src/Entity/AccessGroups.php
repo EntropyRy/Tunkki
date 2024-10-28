@@ -33,6 +33,7 @@ class AccessGroups implements \Stringable
         $this->users = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->name;

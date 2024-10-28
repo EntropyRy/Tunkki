@@ -111,16 +111,16 @@ class Package implements \Stringable
         return $this->name;
     }
 
+    #[\Override]
     public function __toString(): string
     {
-        $return = $this->name ?: 'n/a';
         /*    if ($return != 'n/a'){
                 $return .= ' = ';
                 foreach ($this->getItems() as $item){
                     $return .= $item->getName().', ';
                 }
             }*/
-        return $return;
+        return $this->name ?: 'n/a';
     }
 
     public function getItems()

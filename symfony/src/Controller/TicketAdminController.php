@@ -91,7 +91,7 @@ final class TicketAdminController extends CRUDController
             ->context([
                 'body' => $body,
                 'qr' => $qr,
-                'links' => $email->getAddLoginLinksToFooter() ? $email->getAddLoginLinksToFooter() : false,
+                'links' => $email->getAddLoginLinksToFooter() ?: false,
                 'img' => $ticket->getEvent()->getPicture(),
                 'user_email' => $to
             ]);

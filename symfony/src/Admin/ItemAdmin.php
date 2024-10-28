@@ -27,14 +27,15 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class ItemAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'item';
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
-        $context = 'item';
         //$currentContext = $this->cm->getRootCategoriesForContext($context);
         $datagridMapper
             ->add('name')
@@ -56,6 +57,7 @@ class ItemAdmin extends AbstractAdmin
 	    ]);
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -78,6 +80,7 @@ class ItemAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $context = 'item';
@@ -149,6 +152,7 @@ class ItemAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -172,6 +176,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('creator')
             ->add('modifier');
     }
+    #[\Override]
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -189,12 +194,14 @@ class ItemAdmin extends AbstractAdmin
             $menu->addChild('Files', ['uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', ['id' => $id])]);
         }
     }
+    #[\Override]
     public function prePersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         $Item->setModifier($user);
         $Item->setCreator($user);
     }
+    #[\Override]
     public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
@@ -202,6 +209,7 @@ class ItemAdmin extends AbstractAdmin
         $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '> created by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
+    #[\Override]
     public function preUpdate($Item): void
     {
         $user = $this->ts->getToken()->getUser();
@@ -215,6 +223,7 @@ class ItemAdmin extends AbstractAdmin
             $this->mm->SendToMattermost($text, 'vuokraus');
         }
     }
+    #[\Override]
     public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
@@ -222,10 +231,12 @@ class ItemAdmin extends AbstractAdmin
         $text = '#### ITEM: ' . $Item->getName() . ' deleted by ' . $user;
         $this->mm->SendToMattermost($text, 'vuokraus');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->add('clone', $this->getRouterIdParameter() . '/clone');
     }
+    #[\Override]
     public function configureBatchActions(array $actions): array
     {
         if ($this->hasRoute('edit') && $this->hasAccess('edit')) {

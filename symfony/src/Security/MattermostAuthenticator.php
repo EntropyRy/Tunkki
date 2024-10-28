@@ -30,11 +30,13 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         private readonly UrlGeneratorInterface $urlG,
     ) {
     }
+    #[\Override]
     public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
         return $request->attributes->get('_route') === '_entropy_mattermost_check';
     }
+    #[\Override]
     public function authenticate(Request $request): Passport
     {
         $client = $this->clientRegistry->getClient('mattermost');
@@ -55,7 +57,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $id]);
 
                 if ($existingUser) {
-                    if (strtolower($existingUser->getMember()->getUsername()) != $username) {
+                    if (strtolower((string) $existingUser->getMember()->getUsername()) != $username) {
                         $existingUser->getMember()->setUsername($username);
                         $this->em->persist($existingUser);
                         $this->em->flush();
@@ -67,7 +69,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 // 2) do we have a matching user by email?
                 $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
                 if ($member) {
-                    if (strtolower($member->getUsername()) != $username) {
+                    if (strtolower((string) $member->getUsername()) != $username) {
                         $member->setUsername($username);
                         $this->em->persist($member);
                         $this->em->flush();
@@ -83,12 +85,14 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
             })
         );
     }
+    #[\Override]
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
         $message = strtr($exception->getMessageKey(), $exception->getMessageData());
 
         return new Response($message, Response::HTTP_FORBIDDEN);
     }
+    #[\Override]
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
@@ -97,6 +101,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         return new RedirectResponse($this->urlG->generate('dashboard.' . $request->getLocale()));
     }
 
+    #[\Override]
     public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
     {
         return new RedirectResponse(

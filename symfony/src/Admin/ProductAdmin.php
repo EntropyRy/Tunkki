@@ -19,16 +19,19 @@ use Symfony\Component\Form\Extension\Core\Type\MoneyType;
  */
 final class ProductAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'product';
     }
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
             ->add('event');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
@@ -37,9 +40,7 @@ final class ProductAdmin extends AbstractAdmin
             ->add('active')
             ->add('event')
             ->add('amount', null, [
-                'accessor' => function ($subject) {
-                    return $subject->getAmount() / 100 . '€';
-                }
+                'accessor' => fn($subject) => $subject->getAmount() / 100 . '€'
             ])
             ->add('ticket')
             ->add('quantity')
@@ -53,6 +54,7 @@ final class ProductAdmin extends AbstractAdmin
             ]);
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
         $form
@@ -82,18 +84,21 @@ final class ProductAdmin extends AbstractAdmin
             ->add('event');
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
             ->add('stripeId')
             ->add('stripePriceId');
     }
+    #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('create');
         $collection->remove('show');
         $collection->add('fetch_from_stripe', 'fetch-from-stripe');
     }
+    #[\Override]
     public function configureTabMenu(\Knp\Menu\ItemInterface $menu, $action, \Sonata\AdminBundle\Admin\AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Fetch from Stripe', [

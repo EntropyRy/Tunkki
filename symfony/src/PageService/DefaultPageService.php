@@ -15,12 +15,13 @@ final class DefaultPageService extends BasePageService
 {
     public function __construct(
         string $name,
-        private TemplateManagerInterface $templateManager,
-        private ?SeoPageInterface $seoPage = null
+        private readonly TemplateManagerInterface $templateManager,
+        private readonly ?SeoPageInterface $seoPage = null
     ) {
         parent::__construct($name);
     }
 
+    #[\Override]
     public function execute(
         PageInterface $page,
         Request $request,

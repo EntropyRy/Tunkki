@@ -6,7 +6,7 @@ use App\Repository\CartItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CartItemRepository::class)]
-class CartItem
+class CartItem implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -70,12 +70,13 @@ class CartItem
         if ($this->product->getMax($minus) > 0 || $forcedQuantity > 0) {
             return [
                 'price' => $this->product->getStripePriceId(),
-                'quantity' => $forcedQuantity ? $forcedQuantity : $this->quantity,
+                'quantity' => $forcedQuantity ?: $this->quantity,
             ];
         }
         return null;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->product ? $this->product->getNameEn() . ' X ' . $this->quantity : 'N/A';

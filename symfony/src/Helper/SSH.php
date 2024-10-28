@@ -33,7 +33,7 @@ class SSH
             fclose($stream);
             unset($connection);
             return $ret;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             return false;
         }
     }

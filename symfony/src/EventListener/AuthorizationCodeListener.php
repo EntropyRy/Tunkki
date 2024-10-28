@@ -12,7 +12,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-final class AuthorizationCodeListener implements EventSubscriberInterface
+final readonly class AuthorizationCodeListener implements EventSubscriberInterface
 {
     public function __construct(
         private UrlGeneratorInterface $urlGenerator,
@@ -42,6 +42,7 @@ final class AuthorizationCodeListener implements EventSubscriberInterface
             $event->setResponse($response);
         }
     }
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return ['league.oauth2_server.event.authorization_request_resolve' => 'onAuthorizationRequestResolve'];

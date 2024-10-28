@@ -10,7 +10,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: HappeningRepository::class)]
-class Happening
+class Happening implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -393,9 +393,10 @@ class Happening
         return $this;
     }
 
-    public function __toString()
+    #[\Override]
+    public function __toString(): string
     {
-        return $this->nameEn;
+        return (string) $this->nameEn;
     }
 
     public function getSignUpsOpenUntil(): ?\DateTimeInterface

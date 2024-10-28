@@ -43,11 +43,13 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 
 class BookingAdmin extends AbstractAdmin
 {
+    #[\Override]
     protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
     {
         return 'booking';
     }
 
+    #[\Override]
     protected function configureDefaultSortValues(array &$sortValues): void
     {
         // display the first page (default = 1)
@@ -60,6 +62,7 @@ class BookingAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::SORT_BY] = 'bookingDate';
     }
 
+    #[\Override]
     protected function configureTabMenu(MenuItemInterface $menu, $action, AdminInterface $childAdmin = null): void
     {
         if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
@@ -88,6 +91,7 @@ class BookingAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
@@ -106,6 +110,7 @@ class BookingAdmin extends AbstractAdmin
             ->add('paid');
     }
 
+    #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
@@ -142,6 +147,7 @@ class BookingAdmin extends AbstractAdmin
         return $cats;
     }
 
+    #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $subject = $this->getSubject();
@@ -313,6 +319,7 @@ class BookingAdmin extends AbstractAdmin
         }
     }
 
+    #[\Override]
     protected function configureShowFields(ShowMapper $showMapper): void
     {
         $showMapper
@@ -338,14 +345,16 @@ class BookingAdmin extends AbstractAdmin
 
     protected function calculateOwnerHash($booking): string
     {
-        $string = str_shuffle($booking->getReferenceNumber()).''.$booking->getName();
+        $string = str_shuffle((string) $booking->getReferenceNumber()).''.$booking->getName();
         return strtolower(md5($string));
     }
+    #[\Override]
     public function prePersist($booking): void
     {
         $user = $this->ts->getToken()->getUser();
         $booking->setCreator($user);
     }
+    #[\Override]
     public function postPersist($booking): void
     {
         $booking->setReferenceNumber($this->rn->calculateReferenceNumber($booking, 1220, 303));
@@ -362,6 +371,7 @@ class BookingAdmin extends AbstractAdmin
         $this->update($booking);
         //$this->sendNotificationMail($booking);
     }
+    #[\Override]
     public function preUpdate($booking): void
     {
         if ($booking->getReferenceNumber() == null || $booking->getReferenceNumber() == 0) {
@@ -374,6 +384,7 @@ class BookingAdmin extends AbstractAdmin
         $booking->setModifier($user);
     }
 
+    #[\Override]
     public function preValidate(object $object): void
     {
         if ($object->getAccessories() != null) {
@@ -403,6 +414,7 @@ class BookingAdmin extends AbstractAdmin
         }
          */
     }
+    #[\Override]
     protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->add('removeSignature', $this->getRouterIdParameter() . '/remove-signature');

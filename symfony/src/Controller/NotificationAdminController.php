@@ -48,7 +48,7 @@ final class NotificationAdminController extends CRUDController
             $nakkikone = $host . '/en' . $path . 'nakkikone';
             $shop = $host . '/en'. $path . 'shop';
         }
-        $msg = html_entity_decode(strip_tags($notification->getMessage(), '<a><b><strong><u><code><em><a>'));
+        $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
         $message = new ChatMessage($msg);
         $telegramOptions = (new TelegramOptions())
             ->parseMode('HTML')

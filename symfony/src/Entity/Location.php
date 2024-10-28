@@ -42,9 +42,10 @@ class Location implements \Stringable
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
-        return $this->name ? $this->name : 'N/A';
+        return $this->name ?: 'N/A';
     }
 
     public function getLongitude(): ?string

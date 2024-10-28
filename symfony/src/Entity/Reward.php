@@ -166,6 +166,7 @@ class Reward implements \Stringable
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
         return '#' . $this->id . ' for ' . $this->user;

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Notification
+class Notification implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -36,6 +36,7 @@ class Notification
     #[ORM\Column]
     private array $options = [];
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->locale . ' tgID: ' . $this->messageId;

@@ -72,7 +72,6 @@ class AppStripeClient
     public function getCheckoutSession($sessionId): Session
     {
         $stripe = $this->getClient();
-        $session = $stripe->checkout->sessions->retrieve($sessionId);
-        return $session;
+        return $stripe->checkout->sessions->retrieve($sessionId);
     }
 }

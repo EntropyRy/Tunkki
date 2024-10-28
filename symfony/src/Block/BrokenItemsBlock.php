@@ -26,6 +26,7 @@ class BrokenItemsBlock extends BaseBlockService
         return 'Broken Items Block';
     }
 
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $broken = $this->em->getRepository(Item::class)->findBy(['needsFixing' => true, 'toSpareParts' => false]);
@@ -35,7 +36,7 @@ class BrokenItemsBlock extends BaseBlockService
             if (count($broken) > 5) {
                 $l = 3;
             } else {
-                $l = count($broken) ? count($broken) : 0;
+                $l = count($broken) ?: 0;
             }
             $broken = array_splice($broken, 0, $l);
         }
@@ -47,6 +48,7 @@ class BrokenItemsBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults(['position' => '1', 'random' => false, 'bs3' => true, 'template' => 'block/brokenitems.html.twig']);

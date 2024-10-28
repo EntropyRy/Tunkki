@@ -62,7 +62,7 @@ class Menu implements \Stringable
     private ?\App\Entity\Menu $parent = null;
 
     #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: 'parent')]
-    private $children = null;
+    private $children;
 
     public function __construct()
     {
@@ -233,9 +233,10 @@ class Menu implements \Stringable
 
         return $this;
     }
+    #[\Override]
     public function __toString(): string
     {
-        return (string) ($this->label ?: 'n/a');
+        return $this->label ?: 'n/a';
     }
 
     public function getPageFi(): ?Page
@@ -263,7 +264,7 @@ class Menu implements \Stringable
     }
     public function getPageByLang(string $lang)
     {
-        $func = 'page' . ucfirst((string) $lang);
+        $func = 'page' . ucfirst($lang);
         return $this->{$func};
     }
 }

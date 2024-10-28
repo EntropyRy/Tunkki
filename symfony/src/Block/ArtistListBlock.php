@@ -16,6 +16,7 @@ use Twig\Environment;
 
 class ArtistListBlock extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $artists = [];
@@ -36,6 +37,7 @@ class ArtistListBlock extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

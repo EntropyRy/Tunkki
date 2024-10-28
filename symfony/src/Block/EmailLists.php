@@ -17,6 +17,7 @@ use App\Entity\User;
 
 class EmailLists extends BaseBlockService
 {
+    #[\Override]
     public function execute(BlockContextInterface $blockContext, Response $response = null): Response
     {
         $user = $this->security->getUser();
@@ -46,6 +47,7 @@ class EmailLists extends BaseBlockService
         parent::__construct($twig);
     }
 
+    #[\Override]
     public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

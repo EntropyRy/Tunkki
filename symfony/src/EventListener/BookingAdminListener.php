@@ -14,17 +14,8 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 class BookingAdminListener implements EventSubscriberInterface
 {
-    private $email;
-    private $fromEmail;
-
-    public function __construct(
-        string $email,
-        string $fromEmail,
-        private readonly MailerInterface $mailer,
-        private readonly EntityManagerInterface $em
-    ) {
-        $this->email = $email;
-        $this->fromEmail = $fromEmail;
+    public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $em)
+    {
     }
     /**
      * @param PersistenceEvent<object> $event
@@ -82,12 +73,7 @@ class BookingAdminListener implements EventSubscriberInterface
             }
         }
     }
-    /**
-     * @param mixed $amount
-     * @param mixed $booking
-     * @param mixed $user
-     */
-    private function giveRewardToUser($amount, $booking, $user): Reward
+    private function giveRewardToUser(mixed $amount, mixed $booking, mixed $user): Reward
     {
         $all = $user->getRewards();
         foreach ($all as $reward) {
@@ -110,6 +96,7 @@ class BookingAdminListener implements EventSubscriberInterface
     /**
      * @return array<string, mixed>
      */
+    #[\Override]
     public static function getSubscribedEvents(): array
     {
         return [

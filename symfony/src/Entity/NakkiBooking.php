@@ -31,6 +31,7 @@ class NakkiBooking implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?\App\Entity\Event $event = null;
 
+    #[\Override]
     public function __toString(): string
     {
         if ($this->event->isNakkiRequiredForTicketReservation()) {

@@ -12,11 +12,11 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
 #[AsEntityListener(event: Events::postPersist, method: 'sendRSVPMailListener', entity: RSVP::class)]
-final class RSVPListener
+final readonly class RSVPListener
 {
     public function __construct(
-        private readonly MailerInterface $mailer,
-        private readonly EmailRepository $emailRepository
+        private MailerInterface $mailer,
+        private EmailRepository $emailRepository
     ) {
     }
     public function sendRSVPMailListener(RSVP $rsvp, PostPersistEventArgs $eventArgs): void

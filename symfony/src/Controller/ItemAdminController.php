@@ -50,7 +50,6 @@ class ItemAdminController extends Controller
 
     public function batchActionBatchEditIsRelevant(array $selectedIds, $allEntitiesSelected, Request $request = null)
     {
-        $parameterBag = $request->request;
         if ($allEntitiesSelected) {
             return true;
         }

@@ -32,6 +32,7 @@ class NakkiDefinition implements \Stringable
     {
         return $this->id;
     }
+    #[\Override]
     public function __toString(): string
     {
         return (string) $this->nameEn;
