@@ -24,7 +24,7 @@ class Renter implements \Stringable
     private $bookings;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
-    private string $name;
+    private string $name = '';
 
     #[ORM\Column(name: 'streetadress', type: Types::STRING, length: 190, nullable: true)]
     private ?string $streetadress = null;

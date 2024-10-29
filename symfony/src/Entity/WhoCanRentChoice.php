@@ -18,38 +18,21 @@ class WhoCanRentChoice implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
-    private string $name;
+    private string $name = '';
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set name
-     *
-     * @param string $name
-     *
-     * @return WhoCanRentChoice
-     */
-    public function setName($name)
+    public function setName($name): self
     {
         $this->name = $name;
 
         return $this;
     }
 
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

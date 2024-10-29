@@ -25,10 +25,10 @@ class Member implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(name: 'firstname', type: Types::STRING, length: 190)]
-    private string $firstname;
+    private string $firstname = '';
 
     #[ORM\Column(name: 'lastname', type: Types::STRING, length: 190)]
-    private string $lastname;
+    private string $lastname = '';
 
     #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
     private $email;

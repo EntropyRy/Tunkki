@@ -22,10 +22,10 @@ class Package implements \Stringable
     private ?Collection $items;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
-    private string $name;
+    private string $name = '';
 
     #[ORM\Column(name: 'rent', type: Types::STRING, length: 190)]
-    private string $rent;
+    private string $rent = '';
 
     #[ORM\Column(name: 'needs_fixing', type: 'boolean')]
     private bool $needsFixing = false;

@@ -20,89 +20,48 @@ class BillableEvent implements \Stringable
     private ?Booking $booking = null;
 
     #[ORM\Column(name: 'description', type: 'text')]
-    private string $description;
+    private string $description = '';
 
     #[ORM\Column(name: 'unitPrice', type: 'decimal', precision: 7, scale: 2)]
-    private string $unitPrice;
+    private string $unitPrice = '';
 
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * Set description
-     *
-     * @param string $description
-     *
-     * @return BillableEvent
-     */
-    public function setDescription($description)
+    public function setDescription($description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * Get description
-     *
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
 
-    /**
-     * Set unitPrice
-     *
-     * @param string $unitPrice
-     *
-     * @return BillableEvent
-     */
-    public function setUnitPrice($unitPrice)
+    public function setUnitPrice($unitPrice): self
     {
         $this->unitPrice = $unitPrice;
 
         return $this;
     }
 
-    /**
-     * Get unitPrice
-     *
-     * @return string
-     */
-    public function getUnitPrice()
+    public function getUnitPrice(): string
     {
         return $this->unitPrice;
     }
 
-    /**
-     * Set booking
-     *
-     *
-     * @return BillableEvent
-     */
-    public function setBooking(Booking $booking = null)
+    public function setBooking(Booking $booking = null): self
     {
         $this->booking = $booking;
 
         return $this;
     }
 
-    /**
-     * Get booking
-     *
-     * @return Booking
-     */
-    public function getBooking()
+    public function getBooking(): ?Booking
     {
         return $this->booking;
     }

@@ -15,7 +15,7 @@ class AccessoryChoice implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
-    private string $name;
+    private string $name = '';
 
     #[ORM\Column(name: 'compensationPrice', type: 'integer')]
     private int $compensationPrice;
@@ -25,7 +25,7 @@ class AccessoryChoice implements \Stringable
         return $this->id;
     }
 
-    public function setName($name): AccessoryChoice
+    public function setName(string $name): AccessoryChoice
     {
         $this->name = $name;
 

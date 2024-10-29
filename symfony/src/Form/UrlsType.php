@@ -7,8 +7,6 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Sonata\AdminBundle\Form\Type\CollectionType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 final class UrlsType extends AbstractType
 {
@@ -18,7 +16,8 @@ final class UrlsType extends AbstractType
         $builder
             ->add('url', UrlType::class, [
                 'label' => 'url.form.url',
-                'attr' => ['placeholder' => 'https://soundcloud.com/entropy-fi']
+                'attr' => ['placeholder' => 'https://soundcloud.com/entropy-fi'],
+                'default_protocol' => 'https',
             ])
             ->add('icon', TextType::class, [
                 'label' => 'url.form.icon',

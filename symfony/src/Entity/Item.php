@@ -28,7 +28,7 @@ class Item implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(name: 'Name', type: Types::STRING, length: 190)]
-    private string $name;
+    private string $name = '';
 
     #[ORM\Column(name: 'Manufacturer', type: Types::STRING, length: 190, nullable: true)]
     private ?string $manufacturer = null;
