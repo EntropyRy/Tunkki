@@ -40,13 +40,13 @@ final class NotificationAdminController extends CRUDController
         ]);
         $host = $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
-            $url = $host . $path;
-            $nakkikone = $host . $path . 'nakkikone';
-            $shop = $host . $path . 'kauppa';
+            $url = $host . $path.'?source=tg';
+            $nakkikone = $host . $path . 'nakkikone?source=tg';
+            $shop = $host . $path . 'kauppa?source=tg';
         } else {
-            $url = $host . '/en' . $path;
-            $nakkikone = $host . '/en' . $path . 'nakkikone';
-            $shop = $host . '/en'. $path . 'shop';
+            $url = $host . '/en' . $path.'?source=tg';
+            $nakkikone = $host . '/en' . $path . 'nakkikone?source=tg';
+            $shop = $host . '/en'. $path . 'shop?source=tg';
         }
         $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
         $message = new ChatMessage($msg);

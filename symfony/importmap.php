@@ -84,7 +84,7 @@ return [
         'version' => '10.7.3',
     ],
     'tslib' => [
-        'version' => '2.8.0',
+        'version' => '2.8.1',
     ],
     '@formatjs/icu-messageformat-parser' => [
         'version' => '2.9.1',
@@ -113,7 +113,7 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '1.10.0',
+        'version' => '1.10.1',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.3',
