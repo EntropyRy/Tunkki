@@ -228,7 +228,7 @@
     '{{ ticket }}': block('ticket_for_event_page'),
     '{{ art_artist_list }}': block('art_artist_list'),
     '{{ happening_list }}': block('happening_list'),
-    '{{ menu }}': ''
+    '{{ menu }}': '',
     })|raw }}
     {% if '{{ links }}' not in attribute(event, content_attr) %}
         {{ block('links') }}
@@ -244,7 +244,7 @@
     '{{ vj_bios }}': '',
     '{{ links }}': '',
     '{{ ticket }}': block('ticket_for_frontpage'),
-    '{{ rsvp }}': block('RSVP')
+    '{{ rsvp }}': block('RSVP'),
     })|raw }}
     {{ block('links') }}
 {% endblock -%}
@@ -368,7 +368,7 @@
                 loading: loading,
                 style: event.imgFilterBlendMode,
                 class: class,
-                title: block('event_img_title')
+                title: block('event_img_title'),
         }) }}
     {% else %}
         {{ block('placeholder_img') }}

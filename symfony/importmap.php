@@ -81,7 +81,7 @@ return [
         'version' => '1.15.3',
     ],
     'intl-messageformat' => [
-        'version' => '10.7.5',
+        'version' => '10.7.6',
     ],
     'tslib' => [
         'version' => '2.8.1',

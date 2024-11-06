@@ -87,7 +87,7 @@
                     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
                     <p>
                         {{ payment_info|replace({
-                                                '{{ ticket_ref }}': ticket_ref
+                                                '{{ ticket_ref }}': ticket_ref,
                                                 })|raw }}
                     </p>
                     <h5>{{ 'Price'|trans }}</h5>
