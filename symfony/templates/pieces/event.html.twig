@@ -125,37 +125,37 @@
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h2>
 {% endblock %}
-{% block event_path -%}
+{% block event_path %}
 {% if event.url and not event.externalUrl -%}
     {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
-{% else %}
+{%- else -%}
     {% if app.request.locale == 'fi' -%}
         {{ path('entropy_event', {id: event.id}) }}
-    {% else %}
+    {%- else -%}
         {{ path('entropy_event_en', {id: event.id}) }}
     {%- endif %}
 {%- endif %}
-{%- endblock %}
-{% block event_path_shop -%}
+{% endblock %}
+{% block event_path_shop %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}
+        {{- path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
-{%- endblock %}
-{% block event_path_info -%}
+{% endblock %}
+{% block event_path_info %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_info', {slug: event.url, year: event.eventdate|date('Y')}) }}
+        {{- path('entropy_event_info', {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
-{%- endblock %}
-{% block event_path_safer_space -%}
+{% endblock %}
+{% block event_path_safer_space %}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_safer_space', {slug: event.url, year: event.eventdate|date('Y')}) }}
+        {{- path('entropy_event_safer_space', {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
-{%- endblock %}
-{%- block event_path_artists -%}
+{% endblock %}
+{% block event_path_artists -%}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}
+        {{- path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
-{%- endblock -%}
+{% endblock %}
 {%- block event_path_timetable -%}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_timetable', {slug: event.url, year: event.eventdate|date('Y')}) }}
