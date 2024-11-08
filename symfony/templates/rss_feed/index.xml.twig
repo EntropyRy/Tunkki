@@ -41,7 +41,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         {% endif %}
         <guid>{{ guid }}</guid>
         <pubDate>{{ event.updatedAt|date('r') }}</pubDate>
-        <description>{{ event.abstract(locale) }}
+        <description>{{ event.abstract(locale) ?? event.abstractFromContent(locale) }}
         {% if event.updatedAt|date('Y') != '-0001' %}{{ 'updated'|trans }}: {{ event.updatedAt|date() }}{% endif %}
         </description>
         <category>{{ event.type|trans }}</category>

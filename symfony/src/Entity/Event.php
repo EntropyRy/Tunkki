@@ -593,6 +593,9 @@ body {
     protected function removeTwigTags($message)
     {
         $abstract = str_replace("{{ bios }}", "", (string) $message);
+        $abstract = str_replace("{{ menu }}", "", (string) $abstract);
+        $abstract = str_replace("{{ timetable_with_genre }}", "", $abstract);
+        $abstract = str_replace("{{ stripe_ticket }}", "", $abstract);
         $abstract = str_replace("{{ timetable }}", "", $abstract);
         $abstract = str_replace("{{ timetable_to_page }}", "", $abstract);
         $abstract = str_replace("{{ vj_bios }}", "", $abstract);
@@ -1503,7 +1506,7 @@ body {
     public function getTicketProducts(): Collection
     {
         new ArrayCollection();
-        return $this->products->filter(fn(Product $product) => $product->isTicket());
+        return $this->products->filter(fn (Product $product) => $product->isTicket());
     }
     public function addProduct(Product $product): static
     {
