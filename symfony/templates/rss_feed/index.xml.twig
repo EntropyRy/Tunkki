@@ -26,7 +26,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
     {% else %}
         {% set link = 'https://entropy.fi' ~ block('event_path') %}
     {% endif %}
-    {% set guid = 'https://entropy.fi' ~ path(eventpath, {id: event.id, updated: event.updatedAt|date('dmY')}) %}
+    {% set guid = 'https://entropy.fi' ~ path(eventpath, {id: event.id}) %}
     <item>
         {% if event.type != 'announcement' %}
             <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
@@ -40,8 +40,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         <enclosure url="https://entropy.fi{{ asset('images/placeholders/' ~ event.type ~ '.webp') }}" type="image/webp" length="0" />
         {% endif %}
         <guid>{{ guid }}</guid>
-        <pubDate>{{ event.publishDate|date('r') }}</pubDate>
-        <updated>{{ event.updatedAt|date('r') }}</updated>
+        <pubDate>{{ event.updatedAt|date('r') }}</pubDate>
         <description>{{ event.abstract(locale) }}
         {% if event.updatedAt|date('Y') != '-0001' %}{{ 'updated'|trans }}: {{ event.updatedAt|date() }}{% endif %}
         </description>

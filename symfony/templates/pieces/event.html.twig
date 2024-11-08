@@ -125,7 +125,7 @@
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h2>
 {% endblock %}
-{%- block event_path %}
+{%- block event_path -%}
 {% if event.url and not event.externalUrl %}
     {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
 {% else %}
@@ -135,7 +135,7 @@
         {{ path('entropy_event_en', {id: event.id}) }}
     {% endif %}
 {% endif %}
-{% endblock -%}
+{%- endblock -%}
 {%- block event_path_shop %}
     {% if event.url and not event.externalUrl %}
         {{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}
