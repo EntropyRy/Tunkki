@@ -167,7 +167,7 @@
         {%- if event.publishDate < event.updatedAt %}-- {{ 'updated'|trans }}: {{ event.updatedAt|date }}{% endif -%}
     {%- endif %}
     {%- if event.published == false -%}
-        -- 
+        --
         <span class="only_for_members">
             <i class="fa fa-eye-slash mr-1"></i>{{ 'event.only_for_members'|trans }}
         </span>
