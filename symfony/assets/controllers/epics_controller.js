@@ -3,7 +3,7 @@ import moment from "moment/min/moment-with-locales.min.js";
 
 /* stimulusFetch: 'lazy' */
 export default class extends Controller {
-  static targets = ["pic", "badge"];
+  static targets = ["pic", "badge", "progress"];
   static values = { url: String, refreshInterval: Number };
   connect() {
     this.changePic();
@@ -45,6 +45,9 @@ export default class extends Controller {
     if (data["url"]) {
       this.picTarget.classList.remove("shimmer");
       this.picTarget.setAttribute("src", data["url"]);
+      this.progressTarget.animate([{ width: "100%" }, { width: "0%" }], {
+        duration: this.refreshIntervalValue,
+      });
     } else {
       this.picTarget.classList.add("shimmer");
       this.picTarget.setAttribute("src", "/images/header-logo.svg");
