@@ -15,7 +15,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
 <title>Entropy ry</title>
 <link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
 </image>
-{%- for event in events %}
+{%- for event in events -%}
     {% if locale == 'fi' %}
         {% set eventpath = 'entropy_event' %}
     {% else %}
@@ -35,9 +35,9 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         {% endif %}
         <link>{{ link }}</link>
         {% if event.Picture %}
-        <enclosure url="https://entropy.fi{{ sonata_path(event.picture, 'banner') }}" type="{{ event.picture.contentType }}" length="0" />
+            <enclosure url="https://entropy.fi{{ sonata_path(event.picture, 'banner') }}" type="{{ event.picture.contentType }}" length="0" />
         {% else %}
-        <enclosure url="https://entropy.fi{{ asset('images/placeholders/' ~ event.type ~ '.webp') }}" type="image/webp" length="0" />
+            <enclosure url="https://entropy.fi{{ asset('images/placeholders/' ~ event.type ~ '.webp') }}" type="image/webp" length="0" />
         {% endif %}
         <guid>{{ guid }}</guid>
         <pubDate>{{ event.updatedAt|date('r') }}</pubDate>
@@ -46,6 +46,6 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         </description>
         <category>{{ event.type|trans }}</category>
     </item>
-{% endfor -%}
+{%- endfor -%}
 </channel>
 </rss>

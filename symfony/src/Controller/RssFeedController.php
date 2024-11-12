@@ -6,6 +6,7 @@ use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Attribute\Cache;
 use Symfony\Component\Routing\Annotation\Route;
 
 class RssFeedController extends AbstractController
@@ -17,6 +18,7 @@ class RssFeedController extends AbstractController
         ],
         name: 'rss_feed',
     )]
+    #[Cache(expires: '+2 hour')]
     public function index(Request $request, EventRepository $eRepo): Response
     {
         $events = $eRepo->getRSSEvents();
