@@ -19,6 +19,9 @@ $theme-colors: (
 @import "product.scss";
 @import "tile.scss";
 @import "dark.scss";
+@import "qr.scss";
+@import "footer.scss";
+@import "polaroid.scss";
 /* $fa-font-display: swap; */
 /* @import "~@fortawesome/fontawesome-free/scss/fontawesome"; */
 /* @import "~@fortawesome/fontawesome-free/scss/solid"; */
@@ -143,4 +146,64 @@ nav a.hilight {
 nav a.hilight:after {
   content: "Live";
   font-variant: super;
+}
+html {
+  height: 100%;
+}
+body {
+  background-image: url(../images/bg_stripe_transparent.png);
+  background-color: white;
+  background-position: left top;
+  background-size: auto;
+  background-repeat: repeat;
+  background-attachment: scroll;
+  font-family: "Space Grotesk Variable";
+  color: #102c3a;
+  letter-spacing: -0.1px;
+}
+body .effect_canvas {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+h1 {
+  text-transform: uppercase;
+}
+.e-container {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  background: white;
+  box-shadow: 0 0 20px 0px;
+  position: relative;
+}
+nav {
+  border-top: 1px solid #afafaf;
+  border-bottom: 1px solid #afafaf;
+  font-weight: 800;
+}
+nav.navbar-light .nav-item a.nav-link {
+  color: #102c3a;
+}
+.checkbox div[class^="icheckbox"],
+.checkbox-inline div[class^="icheckbox"],
+.radio div[class^="iradio"],
+.radio-inline div[class^="iradio"] {
+  position: relative;
+  margin-top: 4px \9;
+  margin-right: 5px;
+  margin-top: -3px;
+}
+@media print {
+  .icheckbox_square-blue,
+  .iradio_square-blue {
+    background: #fff !important;
+    border: 1px solid #000 !important;
+  }
+  .no-print,
+  .no-print * {
+    display: none;
+  }
 }

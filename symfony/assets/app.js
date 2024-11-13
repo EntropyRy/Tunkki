@@ -6,9 +6,6 @@
  */
 
 // any CSS you import will output into a single css file (app.css in this case)
-import "./styles/app.css";
-import "./styles/animations.css";
-import "./styles/polaroid.css";
 import "@fontsource-variable/space-grotesk/index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 // start the Stimulus application
