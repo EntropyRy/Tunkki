@@ -17,6 +17,7 @@ $theme-colors: (
 );
 @import "../../../vendor/twbs/bootstrap/scss/bootstrap";
 @import "product.scss";
+@import "tile.scss";
 @import "dark.scss";
 /* $fa-font-display: swap; */
 /* @import "~@fortawesome/fontawesome-free/scss/fontawesome"; */
