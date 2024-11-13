@@ -126,6 +126,7 @@ footer a {
   height: 100%;
   object-fit: cover;
   overflow: hidden;
+  border-radius: var(--bs-border-radius);
 }
 .shimmer {
   -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/450%
