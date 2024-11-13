@@ -8,8 +8,10 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
 </link>
 <atom:link href="https://entropy.fi{{ path('rss_feed.' ~ locale) }}" rel="self" type="application/rss+xml" />
 <description>{{ 'rss_desc'|trans }}</description>
-<lastBuildDate>{{ 'now'|date('r') }}</lastBuildDate>
+<pubDate>{{ events.0.updatedAt|date('r') }}</pubDate>
+<lastBuildDate>{{ events.0.updatedAt|date('r') }}</lastBuildDate>
 <language>{{ locale }}</language>
+<ttl>1</ttl>
 <image>
 <url>https://entropy.fi/images/header-logo.svg</url>
 <title>Entropy ry</title>
@@ -26,7 +28,6 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
     {% else %}
         {% set link = 'https://entropy.fi' ~ block('event_path') %}
     {% endif %}
-    {% set guid = 'https://entropy.fi' ~ path(eventpath, {id: event.id}) %}
     <item>
         {% if event.type != 'announcement' %}
             <title>{{ event.nameAndDateByLang(locale)|escape }}</title>
@@ -39,7 +40,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
         {% else %}
             <enclosure url="https://entropy.fi{{ asset('images/placeholders/' ~ event.type ~ '.webp') }}" type="image/webp" length="0" />
         {% endif %}
-        <guid>{{ guid }}</guid>
+        <guid isPermaLink="false">{{ event.name(locale) }} ~ {{ event.EventDate|date('d.m.Y') }}</guid>
         <pubDate>{{ event.updatedAt|date('r') }}</pubDate>
         <description>{{ event.abstract(locale) ?? event.abstractFromContent(locale) }}
         {% if event.updatedAt|date('Y') != '-0001' %}{{ 'updated'|trans }}: {{ event.updatedAt|date() }}{% endif %}
