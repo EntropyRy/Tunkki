@@ -4908,16 +4908,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.31.0",
+            "version": "4.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "73492afdcdf6cb5314685b2661f87dc906b1f2b6"
+                "reference": "9579fc27a761b727b1b40097ddd2a8e63f58dc22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/73492afdcdf6cb5314685b2661f87dc906b1f2b6",
-                "reference": "73492afdcdf6cb5314685b2661f87dc906b1f2b6",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/9579fc27a761b727b1b40097ddd2a8e63f58dc22",
+                "reference": "9579fc27a761b727b1b40097ddd2a8e63f58dc22",
                 "shasum": ""
             },
             "require": {
@@ -4968,6 +4968,7 @@
                 "matthiasnoback/symfony-config-test": "^4.2 || ^5.0",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.2 || ^5.0",
                 "phpstan/extension-installer": "^1.0",
+                "phpstan/phpdoc-parser": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
@@ -5021,7 +5022,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.31.0"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.32.0"
             },
             "funding": [
                 {
@@ -5041,7 +5042,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-07-15T18:56:45+00:00"
+            "time": "2024-11-14T19:17:10+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -5159,16 +5160,16 @@
         },
         {
             "name": "sonata-project/classification-bundle",
-            "version": "4.8.1",
+            "version": "4.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataClassificationBundle.git",
-                "reference": "45aa1d967a746490b44c802d982717bdbdf2b6ea"
+                "reference": "11d064d4c8e5621cb4921164fe3d29118314d6fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/45aa1d967a746490b44c802d982717bdbdf2b6ea",
-                "reference": "45aa1d967a746490b44c802d982717bdbdf2b6ea",
+                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/11d064d4c8e5621cb4921164fe3d29118314d6fa",
+                "reference": "11d064d4c8e5621cb4921164fe3d29118314d6fa",
                 "shasum": ""
             },
             "require": {
@@ -5210,6 +5211,7 @@
                 "matthiasnoback/symfony-config-test": "^4.2 || ^5.1",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0 || ^5.0",
                 "phpstan/extension-installer": "^1.0",
+                "phpstan/phpdoc-parser": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
@@ -5265,7 +5267,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataClassificationBundle/issues",
-                "source": "https://github.com/sonata-project/SonataClassificationBundle/tree/4.8.1"
+                "source": "https://github.com/sonata-project/SonataClassificationBundle/tree/4.9.0"
             },
             "funding": [
                 {
@@ -5285,7 +5287,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-08-26T14:48:16+00:00"
+            "time": "2024-11-14T20:03:40+00:00"
         },
         {
             "name": "sonata-project/doctrine-extensions",
@@ -5957,16 +5959,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.14.1",
+            "version": "4.15.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "a76aec83fb1a305eadddd7a033af8c24b55c6c0c"
+                "reference": "42e55795d05620bda9265a09f3d152a5800b33ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/a76aec83fb1a305eadddd7a033af8c24b55c6c0c",
-                "reference": "a76aec83fb1a305eadddd7a033af8c24b55c6c0c",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/42e55795d05620bda9265a09f3d152a5800b33ef",
+                "reference": "42e55795d05620bda9265a09f3d152a5800b33ef",
                 "shasum": ""
             },
             "require": {
@@ -6033,6 +6035,7 @@
                 "matthiasnoback/symfony-config-test": "^4.2 || ^5.1",
                 "matthiasnoback/symfony-dependency-injection-test": "^4.0 || ^5.0",
                 "phpstan/extension-installer": "^1.0",
+                "phpstan/phpdoc-parser": "^1.0",
                 "phpstan/phpstan": "^1.0",
                 "phpstan/phpstan-phpunit": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
@@ -6095,7 +6098,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.14.1"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.15.0"
             },
             "funding": [
                 {
@@ -6115,7 +6118,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-09-12T15:01:35+00:00"
+            "time": "2024-11-14T20:04:19+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
