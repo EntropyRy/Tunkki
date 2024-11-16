@@ -19,7 +19,7 @@ class ePics
                 'POST',
                 'https://epics.entropy.fi/api/Session::init',
                 [
-                    'max_duration' => 4,
+                    'max_duration' => 10,
                     'headers' => [
                         'Content-Type' => 'application/json',
                         'Accept' => 'application/json'
