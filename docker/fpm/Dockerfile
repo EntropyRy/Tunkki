@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine AS dev
+FROM php:8.4-fpm-alpine AS dev
 ARG UID
 ARG GID
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
