@@ -81,19 +81,19 @@ return [
         'version' => '1.15.3',
     ],
     'intl-messageformat' => [
-        'version' => '10.7.6',
+        'version' => '10.7.7',
     ],
     'tslib' => [
         'version' => '2.8.1',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.9.3',
+        'version' => '2.9.4',
     ],
     '@formatjs/fast-memoize' => [
         'version' => '2.2.3',
     ],
     '@formatjs/icu-skeleton-parser' => [
-        'version' => '1.8.7',
+        'version' => '1.8.8',
     ],
     '@hotwired/turbo' => [
         'version' => '8.0.12',
@@ -106,7 +106,7 @@ return [
         'version' => '5.0.4',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
-        'version' => '6.6.0',
+        'version' => '6.7.1',
         'type' => 'css',
     ],
     'moment/min/moment-with-locales.min.js' => [
