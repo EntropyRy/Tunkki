@@ -1,6 +1,6 @@
 services:
   db:
-    image: mariadb:${DB_IMAGE_VERSION}
+    image: mariadb:11.4
     restart: unless-stopped
     user: ${USERID}:${GROUPID}
     environment:
