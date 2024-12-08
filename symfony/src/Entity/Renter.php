@@ -204,7 +204,7 @@ class Renter implements \Stringable
      *
      * @return Renter
      */
-    public function setBookings(Booking $bookings = null)
+    public function setBookings(?Booking $bookings = null)
     {
         $this->bookings = $bookings;
 

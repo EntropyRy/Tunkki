@@ -16,7 +16,7 @@ return RectorConfig::configure()
     ])
     ->withPhpSets()
     ->withTypeCoverageLevel(0)
-    ->withSets([SetList::PHP_83])
+    ->withSets([SetList::PHP_84])
     ->withAttributesSets(symfony: true, doctrine: true)
     ->withConfiguredRule(AttributeKeyToClassConstFetchRector::class, [
         new AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', [

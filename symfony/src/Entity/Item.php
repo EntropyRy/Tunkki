@@ -376,7 +376,7 @@ class Item implements \Stringable
         return $this->tags;
     }
 
-    public function setCreator(User $creator = null): Item
+    public function setCreator(?User $creator = null): Item
     {
         $this->creator = $creator;
 
@@ -388,7 +388,7 @@ class Item implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(User $modifier = null): Item
+    public function setModifier(?User $modifier = null): Item
     {
         $this->modifier = $modifier;
 
@@ -428,7 +428,7 @@ class Item implements \Stringable
         return $this->toSpareParts;
     }
 
-    public function setPackages(Package $packages = null): Item
+    public function setPackages(?Package $packages = null): Item
     {
         $this->packages = $packages;
 
@@ -459,7 +459,7 @@ class Item implements \Stringable
         }
     }
 
-    public function setCategory(Category $category = null): Item
+    public function setCategory(?Category $category = null): Item
     {
         $this->category = $category;
 

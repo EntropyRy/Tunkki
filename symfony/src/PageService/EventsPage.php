@@ -21,7 +21,7 @@ class EventsPage implements PageServiceInterface
     }
 
     #[\Override]
-    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $events = $this->em->getRepository(Event::class)->findPublicEventsByNotType('announcement');
         //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');

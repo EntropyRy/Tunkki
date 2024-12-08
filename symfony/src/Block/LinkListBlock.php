@@ -21,7 +21,7 @@ use App\Form\UrlsType;
 class LinkListBlock extends BaseBlockService implements EditableBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),

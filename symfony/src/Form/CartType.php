@@ -28,7 +28,7 @@ class CartType extends AbstractType
             ])
             ->add('products', CollectionType::class, [
                 'entry_type' => CartItemType::class,
-                'delete_empty' => fn(CartItem $item = null): bool => null === $item || $item->getQuantity() == 0,
+                'delete_empty' => fn(?CartItem $item = null): bool => null === $item || $item->getQuantity() == 0,
                 'allow_delete' => true,
             ]);;
     }

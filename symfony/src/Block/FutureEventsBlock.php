@@ -18,7 +18,7 @@ use Twig\Environment;
 class FutureEventsBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $repo = $this->em->getRepository(Event::class);
         assert($repo instanceof EventRepository);

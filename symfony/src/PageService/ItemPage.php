@@ -22,7 +22,7 @@ class ItemPage implements PageServiceInterface
     }
 
     #[\Override]
-    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $needsfix = $this->em->getRepository(Item::class)->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         return $this->templateManager->renderResponse($page->getTemplateCode(), [...$parameters, ...['fix'=>$needsfix]], $response);

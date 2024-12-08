@@ -93,7 +93,7 @@ final class RewardAdmin extends AbstractAdmin
         $collection->add('Evenout', 'evenout/make');
     }
     #[\Override]
-    public function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null): void
+    public function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Evenout', [
             'route' => 'admin_app_reward_PrepareEvenout',

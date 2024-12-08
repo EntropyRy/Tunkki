@@ -20,7 +20,7 @@ use Twig\Environment;
 class StatisticsBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $stats = [];
         $stats['block.stats.members'] = $this->memberR->countByMember();

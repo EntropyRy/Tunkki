@@ -24,7 +24,7 @@ class AllEventsPage implements PageServiceInterface
     }
 
     #[\Override]
-    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $events = $this->eventR->findBy(['published' => true, 'sticky' => false]);
         $sticky = $this->eventR->findOneBy(['published' => true, 'sticky' => true]);

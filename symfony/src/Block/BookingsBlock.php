@@ -18,7 +18,7 @@ use Twig\Environment;
 class BookingsBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
             'itemsReturned' => false,

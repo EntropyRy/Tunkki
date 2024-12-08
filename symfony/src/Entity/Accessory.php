@@ -65,7 +65,7 @@ class Accessory implements \Stringable
      *
      * @return Accessory
      */
-    public function setName(AccessoryChoice $name = null)
+    public function setName(?AccessoryChoice $name = null)
     {
         $this->name = $name;
 

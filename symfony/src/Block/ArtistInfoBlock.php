@@ -18,7 +18,7 @@ use Twig\Environment;
 class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $user = $this->security->getUser();
         assert($user instanceof User);

@@ -102,7 +102,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
     }
 
     #[\Override]
-    public function start(Request $request, AuthenticationException $authException = null): RedirectResponse
+    public function start(Request $request, ?AuthenticationException $authException = null): RedirectResponse
     {
         return new RedirectResponse(
             '/login/', // might be the site, where users choose their oauth provider

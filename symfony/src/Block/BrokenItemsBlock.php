@@ -27,7 +27,7 @@ class BrokenItemsBlock extends BaseBlockService
     }
 
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $broken = $this->em->getRepository(Item::class)->findBy(['needsFixing' => true, 'toSpareParts' => false]);
         $settings = $blockContext->getSettings();

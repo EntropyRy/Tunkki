@@ -30,7 +30,7 @@ class FrontPage implements PageServiceInterface
     }
 
     #[\Override]
-    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $events = [];
         $future = $this->eventR->getFutureEvents();

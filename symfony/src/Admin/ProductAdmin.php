@@ -101,7 +101,7 @@ final class ProductAdmin extends AbstractAdmin
         $collection->add('fetch_from_stripe', 'fetch-from-stripe');
     }
     #[\Override]
-    public function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null): void
+    public function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Fetch from Stripe', [
             'route' => 'admin_app_product_fetch_from_stripe',

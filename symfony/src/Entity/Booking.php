@@ -310,14 +310,14 @@ class Booking implements \Stringable
         return $this->billableEvents;
     }
 
-    public function setRentingPrivileges(WhoCanRentChoice $rentingPrivileges = null): Booking
+    public function setRentingPrivileges(?WhoCanRentChoice $rentingPrivileges = null): Booking
     {
         $this->rentingPrivileges = $rentingPrivileges;
 
         return $this;
     }
 
-    public function setRenter(Renter $renter = null): Booking
+    public function setRenter(?Renter $renter = null): Booking
     {
         $this->renter = $renter;
 

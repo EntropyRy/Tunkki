@@ -202,7 +202,7 @@
         {% if event.multiday %}
             {{ event.eventdate|date('j') }} - {{ event.until|date('j.n.Y') }}
         {% else %}
-            {{ event.eventdate|format_datetime(pattern='E, d.M. @ HH:mm') }}
+            {{ event.eventdate|format_datetime(pattern: 'E, d.M. @ HH:mm') }}
         {% endif %}
         {% if badge|default(false) %}{{ block('event_time_badge') }}{% endif %}
     {% endif %}
@@ -527,7 +527,7 @@
                                 {% if info.timediff(last) > 4 and event.multiday %}<hr>{% endif %}
                                 {% if last != info.StartTime %}
                                     <li>
-                                        {{ info.StartTime|format_datetime(pattern=datestring) }}:
+                                        {{ info.StartTime|format_datetime(pattern: datestring) }}:
                                     {% endif %}
                                 {% endif %}
                                 {% if info.StartTime is not empty %}
@@ -576,7 +576,7 @@
                                 {% if info.timediff(last) > 4 and event.multiday %}<hr>{% endif %}
                                 {% if last != info.StartTime %}
                                     <li>
-                                        {{ info.StartTime|format_datetime(pattern=datestring) }}:
+                                        {{ info.StartTime|format_datetime(pattern: datestring) }}:
                                     {% endif %}
                                 {% endif %}
                                 {% if info.StartTime is not empty %}
@@ -733,7 +733,7 @@
             {% if artist.type == 'Live' %}(Live){% endif %}
             {% if artist.type == 'Live' or artist.type == 'DJ' %}
                 {% if info is defined and frontpage|default(false) == false %}
-                    @ {{ info.StartTime|format_datetime(pattern=datestring) }}
+                    @ {{ info.StartTime|format_datetime(pattern: datestring) }}
                 {% endif %}
             {% endif %}
         </h3>

@@ -4,14 +4,14 @@
             {% for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == true) -%}
                 <a class="btn text-white btn-info btn-lg btn-block mb-2"
                    target="_top"
-                   href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
+                   href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern: 'E, HH:mm') }}
                     {% if happening.needsPreliminarySignUp %}( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif %}
                 </a>
             {% endfor %}
             {% for happening in event.happenings|filter(happening => happening.releaseThisHappeningInEvent == false) -%}
                 {% if app.user and app.user.member in happening.owners %}
                     <a class="btn btn-danger w-100 mt-2 mb-2"
-                       href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern='E, HH:mm') }}
+                       href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ happening.name(app.request.locale) }} ~ {{ happening.time|format_datetime(pattern: 'E, HH:mm') }}
                         {% if happening.needsPreliminarySignUp %}( {{ happening.bookings|length }}/{{ happening.maxSignUps }} ){% endif %}
                         {{ block('shown_only_to') }}
                     </a>
@@ -79,7 +79,7 @@
                 <div class="col-12 mt-4 mt-sm-0">
                 {% endif %}
                 <h3>
-                    {{ name }} <small>{{ happening.time|format_datetime(pattern='E, HH:mm') }}</small>
+                    {{ name }} <small>{{ happening.time|format_datetime(pattern: 'E, HH:mm') }}</small>
                 </h3>
                 <p>{{ description|raw }}</p>
                 {% if happening.needsPreliminaryPayment and not event.isInPast %}

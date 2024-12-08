@@ -41,7 +41,7 @@ class File implements \Stringable
         return $this->fileinfo;
     }
 
-    public function setProduct(Item $product = null): self
+    public function setProduct(?Item $product = null): self
     {
         $this->product = $product;
 
@@ -53,7 +53,7 @@ class File implements \Stringable
         return $this->product;
     }
 
-    public function setFile(Media $file = null): self
+    public function setFile(?Media $file = null): self
     {
         $this->file = $file;
 

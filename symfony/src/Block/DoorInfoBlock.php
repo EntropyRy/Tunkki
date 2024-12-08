@@ -18,7 +18,7 @@ use Twig\Environment;
 class DoorInfoBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $user = $this->security->getUser();
         if (is_null($user)) {

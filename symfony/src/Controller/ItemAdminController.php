@@ -48,7 +48,7 @@ class ItemAdminController extends Controller
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 
-    public function batchActionBatchEditIsRelevant(array $selectedIds, $allEntitiesSelected, Request $request = null)
+    public function batchActionBatchEditIsRelevant(array $selectedIds, $allEntitiesSelected, ?Request $request = null)
     {
         if ($allEntitiesSelected) {
             return true;

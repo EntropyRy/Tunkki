@@ -71,7 +71,7 @@ final class CheckoutAdmin extends AbstractAdmin
         $collection->add('remove_unneeded', 'remove-unneeded');
     }
     #[\Override]
-    public function configureTabMenu(ItemInterface $menu, $action, AdminInterface $childAdmin = null): void
+    public function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {
         $menu->addChild('Remove Unneeded', [
             'route' => 'admin_app_checkout_remove_unneeded',

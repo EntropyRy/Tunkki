@@ -81,19 +81,19 @@ return [
         'version' => '1.15.6',
     ],
     'intl-messageformat' => [
-        'version' => '10.7.7',
+        'version' => '10.7.8',
     ],
     'tslib' => [
         'version' => '2.8.1',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.9.4',
+        'version' => '2.9.5',
     ],
     '@formatjs/fast-memoize' => [
-        'version' => '2.2.3',
+        'version' => '2.2.4',
     ],
     '@formatjs/icu-skeleton-parser' => [
-        'version' => '1.8.8',
+        'version' => '1.8.9',
     ],
     '@hotwired/turbo' => [
         'version' => '8.0.12',

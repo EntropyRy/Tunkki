@@ -21,12 +21,12 @@ class AnnouncementsPage implements PageServiceInterface
     }
 
     #[\Override]
-    public function execute(PageInterface $page, Request $request, array $parameters = [], Response $response = null): Response
+    public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $events = $this->em->getRepository(Event::class)->findEventsByType('announcement');
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...['events'=>$events]], //'clubroom'=>$clubroom)),
+            [...$parameters, ...['events' => $events]], //'clubroom'=>$clubroom)),
             $response
         );
     }

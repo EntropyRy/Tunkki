@@ -98,7 +98,7 @@ class StatusEvent implements \Stringable
         return $this->updatedAt;
     }
 
-    public function setItem(Item $item = null): StatusEvent
+    public function setItem(?Item $item = null): StatusEvent
     {
         $this->item = $item;
 
@@ -122,7 +122,7 @@ class StatusEvent implements \Stringable
         }
     }
 
-    public function setCreator(User $creator = null): StatusEvent
+    public function setCreator(?User $creator = null): StatusEvent
     {
         $this->creator = $creator;
 
@@ -134,7 +134,7 @@ class StatusEvent implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(User $modifier = null): StatusEvent
+    public function setModifier(?User $modifier = null): StatusEvent
     {
         $this->modifier = $modifier;
 
@@ -146,7 +146,7 @@ class StatusEvent implements \Stringable
         return $this->modifier;
     }
 
-    public function setBooking(Booking $booking = null): StatusEvent
+    public function setBooking(?Booking $booking = null): StatusEvent
     {
         $this->booking = $booking;
 

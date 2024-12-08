@@ -54,7 +54,7 @@ class BillableEvent implements \Stringable
         return $this->unitPrice;
     }
 
-    public function setBooking(Booking $booking = null): self
+    public function setBooking(?Booking $booking = null): self
     {
         $this->booking = $booking;
 

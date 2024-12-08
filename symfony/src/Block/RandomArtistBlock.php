@@ -18,7 +18,7 @@ use Twig\Environment;
 class RandomArtistBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
         shuffle($artists);

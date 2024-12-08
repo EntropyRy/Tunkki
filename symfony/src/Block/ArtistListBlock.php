@@ -17,7 +17,7 @@ use Twig\Environment;
 class ArtistListBlock extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $artists = [];
         $artists['DJ'] = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false, 'type' => 'DJ'], ['name' => 'ASC']);

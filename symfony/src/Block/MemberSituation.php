@@ -17,7 +17,7 @@ use Twig\Environment;
 class MemberSituation extends BaseBlockService
 {
     #[\Override]
-    public function execute(BlockContextInterface $blockContext, Response $response = null): Response
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $user = $this->security->getUser();
         assert($user instanceof User);
