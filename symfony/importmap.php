@@ -106,7 +106,7 @@ return [
         'version' => '5.0.4',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
-        'version' => '6.7.1',
+        'version' => '6.7.2',
         'type' => 'css',
     ],
     'moment/min/moment-with-locales.min.js' => [
