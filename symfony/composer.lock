@@ -2819,20 +2819,20 @@
         },
         {
             "name": "knplabs/knp-menu-bundle",
-            "version": "v3.4.2",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "6a1e3e1f4131f9a5a967e36717a1fe680c183637"
+                "reference": "5f85a4908343c3d6a6009c2f8a74c2d102c0aa80"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/6a1e3e1f4131f9a5a967e36717a1fe680c183637",
-                "reference": "6a1e3e1f4131f9a5a967e36717a1fe680c183637",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/5f85a4908343c3d6a6009c2f8a74c2d102c0aa80",
+                "reference": "5f85a4908343c3d6a6009c2f8a74c2d102c0aa80",
                 "shasum": ""
             },
             "require": {
-                "knplabs/knp-menu": "^3.3",
+                "knplabs/knp-menu": "^3.6",
                 "php": "^8.1",
                 "symfony/deprecation-contracts": "^2.5 | ^3.3",
                 "symfony/framework-bundle": "^5.4 | ^6.0 | ^7.0"
@@ -2878,9 +2878,9 @@
             ],
             "support": {
                 "issues": "https://github.com/KnpLabs/KnpMenuBundle/issues",
-                "source": "https://github.com/KnpLabs/KnpMenuBundle/tree/v3.4.2"
+                "source": "https://github.com/KnpLabs/KnpMenuBundle/tree/v3.5.0"
             },
-            "time": "2024-06-03T08:48:36+00:00"
+            "time": "2024-12-25T16:34:19+00:00"
         },
         {
             "name": "knpuniversity/oauth2-client-bundle",
@@ -12570,7 +12570,7 @@
         },
         {
             "name": "twig/extra-bundle",
-            "version": "v3.17.0",
+            "version": "v3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/twig-extra-bundle.git",
@@ -12628,7 +12628,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.17.0"
+                "source": "https://github.com/twigphp/twig-extra-bundle/tree/v3.18.0"
             },
             "funding": [
                 {
@@ -12644,7 +12644,7 @@
         },
         {
             "name": "twig/intl-extra",
-            "version": "v3.17.0",
+            "version": "v3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/intl-extra.git",
@@ -12692,7 +12692,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/intl-extra/tree/v3.17.0"
+                "source": "https://github.com/twigphp/intl-extra/tree/v3.18.0"
             },
             "funding": [
                 {
@@ -12708,7 +12708,7 @@
         },
         {
             "name": "twig/markdown-extra",
-            "version": "v3.17.0",
+            "version": "v3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/markdown-extra.git",
@@ -12764,7 +12764,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/twigphp/markdown-extra/tree/v3.17.0"
+                "source": "https://github.com/twigphp/markdown-extra/tree/v3.18.0"
             },
             "funding": [
                 {
@@ -12780,7 +12780,7 @@
         },
         {
             "name": "twig/string-extra",
-            "version": "v3.17.0",
+            "version": "v3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/string-extra.git",
@@ -12831,7 +12831,7 @@
                 "unicode"
             ],
             "support": {
-                "source": "https://github.com/twigphp/string-extra/tree/v3.17.0"
+                "source": "https://github.com/twigphp/string-extra/tree/v3.18.0"
             },
             "funding": [
                 {
@@ -12847,16 +12847,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.17.1",
+            "version": "v3.18.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "677ef8da6497a03048192aeeb5aa3018e379ac71"
+                "reference": "acffa88cc2b40dbe42eaf3a5025d6c0d4600cc50"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/677ef8da6497a03048192aeeb5aa3018e379ac71",
-                "reference": "677ef8da6497a03048192aeeb5aa3018e379ac71",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/acffa88cc2b40dbe42eaf3a5025d6c0d4600cc50",
+                "reference": "acffa88cc2b40dbe42eaf3a5025d6c0d4600cc50",
                 "shasum": ""
             },
             "require": {
@@ -12911,7 +12911,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.17.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.18.0"
             },
             "funding": [
                 {
@@ -12923,7 +12923,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-12T09:58:10+00:00"
+            "time": "2024-12-29T10:51:50+00:00"
         }
     ],
     "packages-dev": [
