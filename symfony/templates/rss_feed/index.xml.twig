@@ -18,11 +18,7 @@ https://entropy.fi{% if locale == 'en' %}/en{% endif %}
 <link>https://entropy.fi{% if locale == 'en' %}/en{% endif %}</link>
 </image>
 {%- for event in events -%}
-    {% if locale == 'fi' %}
-        {% set eventpath = 'entropy_event' %}
-    {% else %}
-        {% set eventpath = 'entropy_event_en' %}
-    {% endif %}
+    {% set eventpath = 'entropy_event' %}
     {% if event.externalUrl and event.url %}
         {% set link = event.url %}
     {% else %}

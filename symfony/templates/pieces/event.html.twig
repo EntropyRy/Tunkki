@@ -129,11 +129,7 @@
 {% if event.url and not event.externalUrl -%}
     {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
 {%- else -%}
-    {% if app.request.locale == 'fi' -%}
-        {{ path('entropy_event', {id: event.id}) }}
-    {%- else -%}
-        {{ path('entropy_event_en', {id: event.id}) }}
-    {%- endif %}
+    {{ path('entropy_event', {id: event.id}) }}
 {%- endif %}
 {% endblock %}
 {% block event_path_shop %}

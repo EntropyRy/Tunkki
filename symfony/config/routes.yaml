@@ -3,21 +3,6 @@ controllers:
     path: ../src/Controller/
     namespace: App\Controller
   type: attribute
-entropy_event:
-  path: /tapahtuma/{id}/
-  controller: App\Controller\EventController::oneId
-  requirements:
-    id: '\d+'
-entropy_event_en:
-  path: /event/{id}/
-  controller: App\Controller\EventController::oneId
-  requirements:
-    id: '\d+'
-entropy_event_slug:
-  path: /{year}/{slug}/
-  controller: App\Controller\EventController::oneSlug
-  requirements:
-    year: '\d+'
 entropy_event_responsible:
   path:
     en: /{year}/{slug}/nakkikone/responsible

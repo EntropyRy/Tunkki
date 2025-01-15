@@ -2,11 +2,7 @@
 {% use 'pieces/event.html.twig' %}
 {% block content %}
     {% set newyear = date('Y') %}
-    {% if app.request.locale == 'en' %}
-        {% set route = 'entropy_event_en' %}
-    {% else %}
-        {% set route = 'entropy_event' %}
-    {% endif %}
+    {% set route = 'entropy_event' %}
     {% set name_attr = 'name_attribute'|trans %}
     {% set content_attr = 'content_attribute'|trans %}
     <div id="events">

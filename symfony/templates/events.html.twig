@@ -1,11 +1,7 @@
 {% extends 'twocolumn.html.twig' %}
 {% block content %}
     {% set newyear = date('Y') %}
-    {% if app.request.locale == 'en' %}
-        {% set route = 'entropy_event_en' %}
-    {% else %}
-        {% set route = 'entropy_event' %}
-    {% endif %}
+    {% set route = 'entropy_event' %}
     {% set name_attr = 'name_attribute'|trans %}
     <div class="input-group mb-3">
         <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}" />

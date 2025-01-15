@@ -22,25 +22,41 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
+    #[Route(
+        path: [
+            'fi' => '/tapahtuma/{id}',
+            'en' => '/event/{id}',
+        ],
+        name: 'entropy_event',
+        requirements: [
+            'id' => '\d+',
+        ]
+    )]
     public function oneId(
+        Request $request,
         Event $event,
     ): Response {
         if ($event->getUrl()) {
             if ($event->getExternalUrl()) {
                 return new RedirectResponse($event->getUrl());
             }
+            $acceptLang = $request->getPreferredLanguage();
+            $locale = $acceptLang == 'fi' ? 'fi' : 'en';
+            $request->setLocale($locale);
+            // Create the redirect URL with the proper locale
             return $this->redirectToRoute(
                 'entropy_event_slug',
                 [
-                'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl()
-                ]
+                    'year' => $event->getEventDate()->format('Y'),
+                    'slug' => $event->getUrl()
+                ],
             );
         }
         $template = $event->getTemplate();
@@ -51,6 +67,16 @@ class EventController extends Controller
             ]
         );
     }
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}',
+            'en' => '/{year}/{slug}',
+        ],
+        name: 'entropy_event_slug',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
     public function oneSlug(
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
