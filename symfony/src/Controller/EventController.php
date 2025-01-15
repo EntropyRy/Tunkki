@@ -68,10 +68,7 @@ class EventController extends Controller
         );
     }
     #[Route(
-        path: [
-            'fi' => '/{year}/{slug}',
-            'en' => '/{year}/{slug}',
-        ],
+        path: '/{year}/{slug}',
         name: 'entropy_event_slug',
         requirements: [
             'year' => '\d+',
