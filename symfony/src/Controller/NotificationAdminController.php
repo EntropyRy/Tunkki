@@ -37,14 +37,13 @@ final class NotificationAdminController extends CRUDController
         $path = '/'. $event->getEventDate()->format('Y') . '/' . $event->getUrl();
         $host = $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
-            $url = $host . $path.'?source=tg';
             $nakkikone = $host . $path . '/nakkikone?source=tg';
             $shop = $host . $path . '/kauppa?source=tg';
         } else {
-            $url = $host . '/en' . $path.'?source=tg';
             $nakkikone = $host . '/en' . $path . '/nakkikone?source=tg';
             $shop = $host . '/en'. $path . '/shop?source=tg';
         }
+        $url = $host . '/tapahtuma/'.$event->getId().'?source=tg';
         $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
         $message = new ChatMessage($msg);
         $telegramOptions = (new TelegramOptions())
@@ -76,7 +75,7 @@ final class NotificationAdminController extends CRUDController
                 case 'add_event_button':
                     array_push(
                         $buttons,
-                        (new InlineKeyboardButton($ts->trans('tg.event', locale: $locale)))
+                        (new InlineKeyboardButton('Tapahtuma / The Event'))
                             ->url($url)
                     );
                     break;
