@@ -17,14 +17,20 @@ use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\NakkiBookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Sonata\PageBundle\Model\SiteManagerInterface;
+use Sonata\PageBundle\Route\CmsPageRouter;
+use Sonata\PageBundle\Site\SiteSelectorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
@@ -42,6 +48,10 @@ class EventController extends Controller
     public function oneId(
         Request $request,
         Event $event,
+        SiteSelectorInterface $siteSelector,
+        SiteManagerInterface $siteManager,
+        RequestStack $requestStack,
+        #[Autowire(service: 'sonata.page.router')] ChainedRouterInterface $cmsRouter
     ): Response {
         if ($event->getUrl()) {
             if ($event->getExternalUrl()) {
@@ -49,14 +59,45 @@ class EventController extends Controller
             }
             $acceptLang = $request->getPreferredLanguage();
             $locale = $acceptLang == 'fi' ? 'fi' : 'en';
-            $request->setLocale($locale);
-            // Create the redirect URL with the proper locale
+
+            //$request->getSession()->set('_desired_locale', $locale);
+            // If we're switching languages, we need to find the correct site first
+            $currentSite = $siteSelector->retrieve();
+            if ($currentSite->getLocale() !== $locale) {
+                // Find the site for the target locale
+                $targetSite = $siteManager->findOneBy([
+                    'locale' => $locale,
+                    'enabled' => true
+                ]);
+
+                if ($targetSite) {
+                    // Get the relative path from the target site
+                    $relativePath = $targetSite->getRelativePath();
+
+                    // Generate the base URL without locale prefix
+                    $baseUrl = $this->generateUrl(
+                        'entropy_event_slug',
+                        [
+                            'year' => $event->getEventDate()->format('Y'),
+                            'slug' => $event->getUrl()
+                        ],
+                        UrlGeneratorInterface::ABSOLUTE_PATH
+                    );
+
+                    // Combine the site's relative path with the generated URL
+                    $url = rtrim($relativePath ?? '', '/') . '/' . ltrim($baseUrl, '/');
+
+                    return new RedirectResponse($url);
+                }
+            }
+
+            // For same locale, generate URL normally
             return $this->redirectToRoute(
                 'entropy_event_slug',
                 [
                     'year' => $event->getEventDate()->format('Y'),
                     'slug' => $event->getUrl()
-                ],
+                ]
             );
         }
         $template = $event->getTemplate();
