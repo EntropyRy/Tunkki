@@ -34,12 +34,6 @@ services:
   Twig\Extension\StringLoaderExtension:
   Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
-  # App\EventSubscriber\LocaleSiteSelectorSubscriber:
-  #   arguments:
-  #     $siteManager: "@sonata.page.manager.site"
-  #     $requestStack: "@request_stack"
-  #   tags:
-  #     - { name: kernel.event_subscriber }
   symfony.mailer:
     alias: Symfony\Component\Mailer\MailerInterface
   entropy.menu_builder.fi:
