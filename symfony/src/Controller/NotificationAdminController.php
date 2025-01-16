@@ -34,19 +34,16 @@ final class NotificationAdminController extends CRUDController
             $pictureUrl = 'https://entropy.fi'.$provider->generatePublicUrl($picture, $format);
         }
         //dd($pictureUrl);
-        $path =  $this->generateUrl('entropy_event_slug', [
-            'year' => $event->getEventDate()->format('Y'),
-            'slug' => $event->getUrl(),
-        ]);
+        $path = '/'. $event->getEventDate()->format('Y') . '/' . $event->getUrl();
         $host = $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
             $url = $host . $path.'?source=tg';
-            $nakkikone = $host . $path . 'nakkikone?source=tg';
-            $shop = $host . $path . 'kauppa?source=tg';
+            $nakkikone = $host . $path . '/nakkikone?source=tg';
+            $shop = $host . $path . '/kauppa?source=tg';
         } else {
             $url = $host . '/en' . $path.'?source=tg';
-            $nakkikone = $host . '/en' . $path . 'nakkikone?source=tg';
-            $shop = $host . '/en'. $path . 'shop?source=tg';
+            $nakkikone = $host . '/en' . $path . '/nakkikone?source=tg';
+            $shop = $host . '/en'. $path . '/shop?source=tg';
         }
         $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
         $message = new ChatMessage($msg);
