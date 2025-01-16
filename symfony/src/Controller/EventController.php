@@ -29,8 +29,6 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Cmf\Component\Routing\ChainedRouterInterface;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
@@ -50,8 +48,6 @@ class EventController extends Controller
         Event $event,
         SiteSelectorInterface $siteSelector,
         SiteManagerInterface $siteManager,
-        RequestStack $requestStack,
-        #[Autowire(service: 'sonata.page.router')] ChainedRouterInterface $cmsRouter
     ): Response {
         if ($event->getUrl()) {
             if ($event->getExternalUrl()) {
@@ -60,7 +56,6 @@ class EventController extends Controller
             $acceptLang = $request->getPreferredLanguage();
             $locale = $acceptLang == 'fi' ? 'fi' : 'en';
 
-            //$request->getSession()->set('_desired_locale', $locale);
             // If we're switching languages, we need to find the correct site first
             $currentSite = $siteSelector->retrieve();
             if ($currentSite->getLocale() !== $locale) {
