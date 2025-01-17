@@ -86,8 +86,8 @@ final class EmailAdmin extends AbstractAdmin
                             'To reserved and paid tickets holders' => 'ticket',
                             'To people who have reserved Nakki' => 'nakkikone',
                             'To all artists' => 'artist',
-                            'To tiedotus-list' => 'tiedotus',
-                            'To aktiivit-list' => 'aktiivit'
+                            'Tiedotus (all members on the site, including active members)' => 'tiedotus',
+                            'Aktiivit (all active members)' => 'aktiivit'
                         ],
                         'Sent as part of User action' => [
                             'To Stiripe tickets buyers. QR code email' => 'ticket_qr',
@@ -98,10 +98,10 @@ final class EmailAdmin extends AbstractAdmin
                     'multiple' => false,
                 ])
                 ->add('replyTo', null, [
-                    'help' => 'Empty defaults to hallitus@entropy.fi. For aktiivit list change aktiivit@entropy.fi here.'
+                    'help' => 'Empty defaults to hallitus@entropy.fi.'
                 ]);
         }
-        $subjectHelp = 'start by "[Entropy]"? but not when sending to the lists. Include finnish and english version to same message!';
+        $subjectHelp = 'start by "[Entropy]" so there is distiction? Include finnish and english version to same message!';
         $email = $this->getSubject();
         $disabled = false;
         $placeholder = $this->getSubject()->getSubject();

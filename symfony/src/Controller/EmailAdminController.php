@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Helper\Qr;
 use App\Repository\ArtistRepository;
+use App\Repository\MemberRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -37,7 +38,7 @@ final class EmailAdminController extends CRUDController
             'img' => $img
         ]);
     }
-    public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo): RedirectResponse
+    public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo, MemberRepository $memberRepository): RedirectResponse
     {
         $email = $this->admin->getSubject();
         $links = $email->getAddLoginLinksToFooter();
@@ -95,15 +96,13 @@ final class EmailAdminController extends CRUDController
                     }
                 }
             } elseif ($purpose == 'aktiivit' && $event) {
-                $to = 'aktiivit@entropy.fi';
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
-                $mailer->send($message);
-                $count += 1;
+                foreach ($memberRepository->findBy(['isActiveMember' => true]) as $member) {
+                    $emails[$member->getId()] = $member->getEmail();
+                }
             } elseif ($purpose == 'tiedotus' && $event) {
-                $to = 'tiedotus@entropy.fi';
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
-                $mailer->send($message);
-                $count += 1;
+                foreach ($memberRepository->findAll() as $member) {
+                    $emails[$member->getId()] = $member->getEmail();
+                }
             } elseif ($purpose == 'vj_roster') {
                 $emails = $this->getRoster('VJ', $aRepo);
             } elseif ($purpose == 'dj_roster') {
