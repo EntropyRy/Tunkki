@@ -6,7 +6,6 @@ framework:
   annotations:
     enabled: false
   session:
-    name: tunkki
     save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
     cookie_lifetime: 1209600
     cookie_secure: auto

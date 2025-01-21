@@ -81,13 +81,13 @@ return [
         'version' => '1.15.6',
     ],
     'intl-messageformat' => [
-        'version' => '10.7.12',
+        'version' => '10.7.14',
     ],
     'tslib' => [
         'version' => '2.8.1',
     ],
     '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.10.0',
+        'version' => '2.11.0',
     ],
     '@formatjs/fast-memoize' => [
         'version' => '2.2.6',
@@ -113,7 +113,7 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.0.3',
+        'version' => '2.0.5',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.3',
