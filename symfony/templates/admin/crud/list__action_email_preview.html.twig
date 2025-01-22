@@ -2,6 +2,11 @@
     <a class="btn btn-sm btn-default edit_link"
        href="{{ admin.generateObjectUrl('preview', object) }}"><i class="fa fa-envelope" aria-hidden="true"></i> Email Preview and send</a>
 {% else %}
+   {% if object.purpose == 'aktiivit' or object.purpose == 'tiedotus' %}
+    <a class="btn btn-sm btn-default edit_link"
+       href="{{ admin.generateObjectUrl('preview', object) }}"><i class="fa fa-envelope" aria-hidden="true"></i> Email Preview and send</a>
+   {% else %}
     <a class="btn btn-sm btn-default edit_link"
        href="{{ admin.generateObjectUrl('preview', object) }}"><i class="fa fa-envelope" aria-hidden="true"></i> Email Preview</a>
+   {% endif %}
 {% endif %}

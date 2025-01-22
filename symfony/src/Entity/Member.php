@@ -119,6 +119,12 @@ class Member implements \Stringable
     #[ORM\Column]
     private ?bool $emailVerified = null;
 
+    #[ORM\Column]
+    private ?bool $allowInfoMails = null;
+
+    #[ORM\Column]
+    private ?bool $allowActiveMemberMails = null;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -714,6 +720,30 @@ class Member implements \Stringable
     public function setEmailVerified(bool $emailVerified): static
     {
         $this->emailVerified = $emailVerified;
+
+        return $this;
+    }
+
+    public function isAllowInfoMails(): ?bool
+    {
+        return $this->allowInfoMails;
+    }
+
+    public function setAllowInfoMails(bool $allowInfoMails): static
+    {
+        $this->allowInfoMails = $allowInfoMails;
+
+        return $this;
+    }
+
+    public function isAllowActiveMemberMails(): ?bool
+    {
+        return $this->allowActiveMemberMails;
+    }
+
+    public function setAllowActiveMemberMails(bool $allowActiveMemberMails): static
+    {
+        $this->allowActiveMemberMails = $allowActiveMemberMails;
 
         return $this;
     }

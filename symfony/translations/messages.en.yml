@@ -21,6 +21,7 @@ entropy_user_dashboard: Dashboard
 Firstname: First name
 Lastname: Last name
 Email: Email
+email.settings: Email Settings
 updated: Updated
 Phone: Phone number
 City of residence: City of residence
@@ -189,6 +190,8 @@ url:
     url: Url
     icon: Icon class
 profile:
+  edit: Edit Profile
+  email_notifications: Email settings
   change_password: Change Password
   member_data_changed: Password or member data changed
   add_new_artist: Add new artist profile
@@ -271,6 +274,8 @@ artist:
     information: Basic info
     hardware: Hardware
 member:
+  allow_info_mails: Info Emails
+  allow_active_member_mails: Emails for active members
   can_vote: Can vote (Student union member or board has accepted as full member)
   active:
     application_title: Apply for active membership

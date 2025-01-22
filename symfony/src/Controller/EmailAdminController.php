@@ -46,6 +46,7 @@ final class EmailAdminController extends CRUDController
         $subject = $email->getSubject();
         $event = $email->getEvent();
         $emails = [];
+        $locales = [];
         $img = null;
         if ($event) {
             $img = $event->getPicture();
@@ -80,6 +81,7 @@ final class EmailAdminController extends CRUDController
                     $member = $nakki->getMember();
                     if ($member) {
                         $emails[$member->getId()] = $member->getEmail();
+                        $locales[$member->getId()] = $member->getLocale() ?? 'fi';
                     }
                 }
             } elseif ($purpose == 'artist' && $event) {
@@ -90,18 +92,21 @@ final class EmailAdminController extends CRUDController
                         $member = $signup->getArtist()->getMember();
                         if ($member) {
                             $emails[$member->getId()] = $member->getEmail();
+                            $locales[$member->getId()] = $member->getLocale() ?? 'fi';
                         }
                     } else {
                         $this->addFlash('sonata_flash_error', sprintf('Artist %s member not found.', $signup->getArtistClone()->getName()));
                     }
                 }
-            } elseif ($purpose == 'aktiivit' && $event) {
-                foreach ($memberRepository->findBy(['isActiveMember' => true, 'emailVerified' => true]) as $member) {
+            } elseif ($purpose == 'aktiivit') {
+                foreach ($memberRepository->findBy(['isActiveMember' => true, 'emailVerified' => true, 'allowActiveMemberMails' => true]) as $member) {
                     $emails[$member->getId()] = $member->getEmail();
+                    $locales[$member->getId()] = $member->getLocale() ?? 'fi';
                 }
-            } elseif ($purpose == 'tiedotus' && $event) {
-                foreach ($memberRepository->findBy(['emailVerified' => true]) as $member) {
+            } elseif ($purpose == 'tiedotus') {
+                foreach ($memberRepository->findBy(['emailVerified' => true, 'allowInfoMails' => true]) as $member) {
                     $emails[$member->getId()] = $member->getEmail();
+                    $locales[$member->getId()] = $member->getLocale() ?? 'fi';
                 }
             } elseif ($purpose == 'vj_roster') {
                 $emails = $this->getRoster('VJ', $aRepo);
@@ -111,9 +116,10 @@ final class EmailAdminController extends CRUDController
                 $this->addFlash('sonata_flash_error', sprintf('Purpose %s not supported.', $purpose));
             }
         }
-        foreach ($emails as $to) {
+        foreach ($emails as $id => $to) {
             if ($to) {
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img);
+                $locale = $locales[$id] ?? 'fi';
+                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img, $locale);
                 $mailer->send($message);
                 $count += 1;
             }
@@ -125,7 +131,7 @@ final class EmailAdminController extends CRUDController
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
-    private function generateMail($to, $replyto, $subject, $body, $links, $img): TemplatedEmail
+    private function generateMail($to, $replyto, $subject, $body, $links, $img, $locale = 'fi'): TemplatedEmail
     {
         return (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
@@ -133,7 +139,7 @@ final class EmailAdminController extends CRUDController
             ->replyTo($replyto)
             ->subject($subject)
             ->htmlTemplate('emails/email.html.twig')
-            ->context(['body' => $body, 'links' => $links, 'img' => $img]);
+            ->context(['body' => $body, 'links' => $links, 'img' => $img, 'locale' => $locale]);
     }
     private function getRoster(string $type, ArtistRepository $artistRepository): array
     {

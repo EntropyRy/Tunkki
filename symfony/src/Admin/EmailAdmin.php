@@ -70,6 +70,8 @@ final class EmailAdmin extends AbstractAdmin
                         'New Active Member info package (can be sent from the member list) (There should only be one)' => 'active_member_info_package',
                         'Email to All VJs in our roster, meaming the VJs who have artist profile in our site' => 'vj_roster',
                         'Email to All DJs in our roster, meaming the DJs who have artist profile in our site' => 'dj_roster',
+                        'Tiedotus (all members on the site, including active members)' => 'tiedotus',
+                        'Aktiivit (all active members)' => 'aktiivit'
                         //'Other' => 'other'
                     ],
                     'required' => false,

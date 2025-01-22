@@ -31,7 +31,7 @@ class Email implements \Stringable
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'boolean', nullable: true)]
-    private ?bool $addLoginLinksToFooter = null;
+    private ?bool $addLoginLinksToFooter = true;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]
     private ?Event $event = null;

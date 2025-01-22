@@ -1,6 +1,7 @@
 {% extends 'onecolumn.html.twig' %}
 {% block content %}
     <div class="col-md-12">
+        <h1>{{ 'profile.edit'|trans }}</h1>
         {{ form_start(form) }}
             {{ form_errors(form) }}
             <div class="row">
@@ -20,6 +21,11 @@
                 {{ form_row(form.theme, {row_attr: {class: 'col-md-6'}}) }}
             </div>
             <div class="row">{{ form_row(form.StudentUnionMember, {row_attr: {class: 'col-md-6 pt-4'}}) }}</div>
+            <div class="row mt-3">
+                <h3>{{ 'profile.email_notifications'|trans }}</h3>
+                {{ form_row(form.allowInfoMails, {row_attr: {class: 'col-md-6 pt-4'}}) }}
+                {{ form_row(form.allowActiveMemberMails, {row_attr: {class: 'col-md-6 pt-4'}}) }}
+            </div>
             <div class="d-flex justify-content-between mt-4">
                 <a class="btn btn-secondary" href="{{ path('profile_password_edit') }}">{{ 'profile.change_password'|trans }}</a>
                 <input class="btn btn-primary"
