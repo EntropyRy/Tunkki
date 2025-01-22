@@ -116,6 +116,9 @@ class Member implements \Stringable
     #[ORM\Column(length: 255)]
     private ?string $code = null;
 
+    #[ORM\Column]
+    private ?bool $emailVerified = null;
+
     public function __construct()
     {
         $this->artist = new ArrayCollection();
@@ -699,6 +702,18 @@ class Member implements \Stringable
     public function setCode(string $code): static
     {
         $this->code = $code;
+
+        return $this;
+    }
+
+    public function isEmailVerified(): ?bool
+    {
+        return $this->emailVerified;
+    }
+
+    public function setEmailVerified(bool $emailVerified): static
+    {
+        $this->emailVerified = $emailVerified;
 
         return $this;
     }

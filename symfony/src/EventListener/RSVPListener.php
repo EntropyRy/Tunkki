@@ -5,7 +5,6 @@ namespace App\EventListener;
 use App\Entity\RSVP;
 use App\Repository\EmailRepository;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
-use Doctrine\ORM\Event\PostPersistEventArgs;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Doctrine\ORM\Events;
 use Symfony\Component\Mailer\MailerInterface;

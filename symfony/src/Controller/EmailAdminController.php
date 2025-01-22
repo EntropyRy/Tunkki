@@ -96,11 +96,11 @@ final class EmailAdminController extends CRUDController
                     }
                 }
             } elseif ($purpose == 'aktiivit' && $event) {
-                foreach ($memberRepository->findBy(['isActiveMember' => true]) as $member) {
+                foreach ($memberRepository->findBy(['isActiveMember' => true, 'emailVerified' => true]) as $member) {
                     $emails[$member->getId()] = $member->getEmail();
                 }
             } elseif ($purpose == 'tiedotus' && $event) {
-                foreach ($memberRepository->findAll() as $member) {
+                foreach ($memberRepository->findBy(['emailVerified' => true]) as $member) {
                     $emails[$member->getId()] = $member->getEmail();
                 }
             } elseif ($purpose == 'vj_roster') {
