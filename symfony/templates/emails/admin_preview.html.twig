@@ -7,7 +7,7 @@
     {% endif %}
 {% endblock %}
 {% block admin_send %}
-    {% if (admin is defined and admin.isChild and qr is null) or (email.purpose == 'aktiivit' or email.purpose == 'info') %}
+    {% if (admin is defined and admin.isChild and qr is null) or (email.purpose == 'aktiivit' or email.purpose == 'tiedotus') %}
         <style>
           .button {
             background-color: #4CAF50; /* Green */

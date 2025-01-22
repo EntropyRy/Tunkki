@@ -126,6 +126,7 @@ final class EmailAdminController extends CRUDController
         }
         if ($count > 0) {
             $email->setSentAt(new \DateTimeImmutable('now'));
+            $email->setSentBy($this->getUser()->getMember());
             $this->admin->update($email);
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
         }

@@ -42,6 +42,9 @@ class Email implements \Stringable
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $SentAt = null;
 
+    #[ORM\ManyToOne]
+    private ?Member $sentBy = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -169,6 +172,18 @@ class Email implements \Stringable
     public function setSentAt(?\DateTimeImmutable $SentAt): self
     {
         $this->SentAt = $SentAt;
+
+        return $this;
+    }
+
+    public function getSentBy(): ?Member
+    {
+        return $this->sentBy;
+    }
+
+    public function setSentBy(?Member $sentBy): static
+    {
+        $this->sentBy = $sentBy;
 
         return $this;
     }
