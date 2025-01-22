@@ -65,6 +65,10 @@ class EventSignUpController extends Controller
             $this->addFlash('danger', 'Nakki is not reserved! Please define username in you profile');
             return $this->redirect($request->headers->get('referer'));
         }
+        if ($member->isEmailVerified() == false) {
+            $this->addFlash('danger', 'Nakki is not reserved! Please verify your email address and send mail to webmaster@entropy.fi');
+            return $this->redirect($request->headers->get('referer'));
+        }
         if ($event->getNakkikoneEnabled()) {
             if (is_null($booking->getMember())) {
                 if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
