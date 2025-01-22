@@ -48,6 +48,7 @@ final class MemberAdmin extends AbstractAdmin
             ->add('firstname')
             ->add('lastname')
             ->add('email')
+            ->add('emailVerified')
             ->add('phone')
             ->add('CityOfResidence')
             ->add('ApplicationDate', DateRangeFilter::class, ['field_type' => DateRangeType::class])
