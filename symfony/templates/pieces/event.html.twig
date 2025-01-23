@@ -516,7 +516,7 @@
         {% else %}
             {% set datestring = 'HH:mm' %}
         {% endif %}
-        <div class="row g-0">
+        <div id="timetable" class="row g-0">
             {% for stage, infos in music_bios %}
                 <div class="col-12 {% if music_bios|length > 1 %}{# is more than one stage #} col-md-6{% endif %}">
                     <h4 class="artists-heading">
@@ -565,7 +565,7 @@
         {% else %}
             {% set datestring = 'HH:mm' %}
         {% endif %}
-        <div class="row g-0">
+        <div id="timetable" class="row g-0">
             {% for stage, infos in bios %}
                 <div class="col-12 {% if bios|length > 1 %}{# is more than one stage #} col-md-6{% endif %}">
                     <h4 class="artists-heading">
@@ -677,6 +677,7 @@
         {% endif %}
     {% endblock %}
 {%- block vj_bios %}
+    <div id="vj-bios">
     {% for stage, infos in event.ArtistInfosByType('VJ') %}
         {% if stage %}
             <h3 class="artists-heading text-center">
@@ -686,8 +687,10 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
+    </div>
 {% endblock -%}
 {%- block art_bios %}
+    <div id="art-bios">
     {% for stage, infos in event.ArtistInfosByType('ART') %}
         {% if stage %}
             <h3 class="artists-heading text-center">
@@ -697,8 +700,10 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
+    </div>
 {% endblock -%}
 {%- block bios %}
+    <div id="bios">
     {% for stage, infos in event.MusicArtistInfos %}
         {% if stage %}
             <h3 class="artists-heading text-center">
@@ -708,6 +713,7 @@
         {% endif %}
         {{ block('infos') }}
     {% endfor %}
+    </div>
 {% endblock -%}
 {% block infos %}
     {% set bio_attribute = 'bio_attribute'|trans %}
