@@ -2,7 +2,7 @@
     {% if event.rsvpSystemEnabled and event.nowTest != 'after' %}
         <div class="pt-2 pb-2" id="RSVP">
             {% if not app.user %}<p>{{ 'rsvp.info'|trans|raw }}</p>{% endif %}
-            <div class="col-md-6 mx-auto clearfix">
+            <div class="clearfix">
                 {% if app.user %}
                     <a class="btn btn-primary w-100" data-turbo="false"
                        href="{{ path('entropy_event_rsvp', {slug: event.url, year: event.eventdate|date('Y')}) }}">RSVP

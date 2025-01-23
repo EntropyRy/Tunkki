@@ -89,7 +89,7 @@
 {%- block stripe_ticket %}
     {% if event.ticketsEnabled %}
         <div class="pt-2 pb-2" id="ticket">
-            <div class="col-md-6 mx-auto clearfix">
+            <div class="clearfix">
                 {% if tickets|length > 0 %}
                     <a class="btn btn-primary w-100"
                         href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
