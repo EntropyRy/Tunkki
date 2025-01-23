@@ -18,7 +18,7 @@
     {% endif %}
     {% if event is not null and visible %}
         <div class="row">
-            <div class="col overflow-auto">
+            <div id="event-content" class="col overflow-auto">
                 {{ block('event_head_reverse') }}
                 {{ block('event_content') }}
             </div>
