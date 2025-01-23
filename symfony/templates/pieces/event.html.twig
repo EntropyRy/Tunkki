@@ -425,7 +425,7 @@
         {% endfor %}
         {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
             <span>
-                <a class="btn btn-outline-info" href="{{ event.epics }}">
+                <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
                     <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
                     Forums
                 </a>
