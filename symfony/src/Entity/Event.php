@@ -263,6 +263,9 @@ body {
     #[ORM\Column(nullable: true)]
     private ?bool $sendRsvpEmail = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $linkToForums = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
@@ -1578,6 +1581,18 @@ body {
     public function setSendRsvpEmail(?bool $sendRsvpEmail): static
     {
         $this->sendRsvpEmail = $sendRsvpEmail;
+
+        return $this;
+    }
+
+    public function getLinkToForums(): ?string
+    {
+        return $this->linkToForums;
+    }
+
+    public function setLinkToForums(?string $linkToForums): static
+    {
+        $this->linkToForums = $linkToForums;
 
         return $this;
     }

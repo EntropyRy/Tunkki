@@ -468,21 +468,7 @@ final class EventAdmin extends AbstractAdmin
             $formMapper
                 ->end()
                 ->with('Links', ['class' => 'col-md-4'])
-                ->add(
-                    'attachment',
-                    ModelListType::class,
-                    [
-                        'required' => false,
-                        'help' => 'added as downloadable link'
-                    ],
-                    [
-                        'link_parameters' => [
-                            'context' => 'event',
-                            'provider' => 'sonata.media.provider.file'
-                        ]
-                    ]
-                )
-                ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->add('linkToForums', null, ['help' => 'link to Forums that is shown only to active members'])
                 ->add('includeSaferSpaceGuidelines', null, ['help' => 'add it to the link list'])
                 ->add('webMeetingUrl', null, ['help' => 'Will be shown as a link 8 hours before and 2 hours after event start time. Added as an location in Calendar'])
                 ->add(
@@ -509,6 +495,21 @@ final class EventAdmin extends AbstractAdmin
                                 'allow_extra_fields' => true,
                                 'entry_type' => UrlsType::class,
                             ]],
+                        ]
+                    ]
+                )
+                ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->add(
+                    'attachment',
+                    ModelListType::class,
+                    [
+                        'required' => false,
+                        'help' => 'added as downloadable link'
+                    ],
+                    [
+                        'link_parameters' => [
+                            'context' => 'event',
+                            'provider' => 'sonata.media.provider.file'
                         ]
                     ]
                 )
@@ -670,19 +671,6 @@ final class EventAdmin extends AbstractAdmin
         }
     }
 
-    #[\Override]
-    protected function configureShowFields(ShowMapper $showMapper): void
-    {
-        $showMapper
-            ->add('Name')
-            ->add('Nimi')
-            ->add('EventDate')
-            ->add('publishDate')
-            ->add('css')
-            ->add('Content')
-            ->add('Sisallys')
-            ->add('updatedAt');
-    }
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
