@@ -28,8 +28,8 @@ class HappeningController extends AbstractController
 {
     #[Route(
         path: [
+            'fi' => '/{year}/{slug}/tapahtuma/luo',
             'en' => '/{year}/{slug}/happening/create',
-            'fi' => '/{year}/{slug}/tapahtuma/luo'
         ],
         name: 'entropy_event_happening_create',
         requirements: [

@@ -1,7 +1,7 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 {%- block logo %}
     <a class="logo w-100"
-       href="{{ path('dashboard.' ~ app.request.locale|default('fi')) }}">
+       href="{{ path('dashboard', {_locale: app.request.locale}) }}">
         <img src="{{ asset(sonata_config.logo) }}"
              alt="{{ sonata_config.title }}"
              width="100%"

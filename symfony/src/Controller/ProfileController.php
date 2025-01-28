@@ -157,8 +157,7 @@ class ProfileController extends AbstractController
     }
     #[Route(path: [
         'en' => '/profile/password',
-        'fi' => '/profiili/salasana
-    '
+        'fi' => '/profiili/salasana'
     ], name: 'profile_password_edit')]
     public function password(
         Request $request,
@@ -183,8 +182,7 @@ class ProfileController extends AbstractController
     }
     #[Route(path: [
         'en' => '/profile/apply',
-        'fi' => '/profiili/aktiiviksi
-    '
+        'fi' => '/profiili/aktiiviksi'
     ], name: 'apply_for_active_member')]
     public function apply(
         Request $request,
