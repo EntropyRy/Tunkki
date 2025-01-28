@@ -8,9 +8,6 @@
         {% else %}
             {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
         {% endif %}
-        {% if event.url is not empty and not event.externalUrl %}
-            {% set event_url = '/' ~ event.eventDate|date('Y') ~ '/' ~ event.url ~ '/' %}
-        {% endif %}
     {% else %}
         {% if app.user %}
             {% set theme = app.user.member.theme ? app.user.member.theme : 'light' %}
