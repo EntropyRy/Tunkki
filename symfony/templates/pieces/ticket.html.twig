@@ -15,7 +15,7 @@
         <div class="pt-2 pb-2" id="ticket">
             {# <p>{{'ticket.info'|trans|raw}}</p> #}
             <div class="col-md-6 mx-auto clearfix">
-                {% for ticket in tickets|default([]) %}
+                {% for ticket in tickets %}
                     <a class="btn btn-primary w-100"
                        href="{{ path('entropy_event_ticket', {slug: event.url, year: event.eventdate|date('Y'), reference: ticket.referenceNumber}) }}">
                         {% if ticket.owner == app.user.member %}
@@ -90,7 +90,7 @@
     {% if event.ticketsEnabled %}
         <div class="pt-2 pb-2" id="ticket">
             <div class="clearfix">
-                {% if tickets|default(0)|length > 0 %}
+                {% if tickets|length > 0 %}
                     <a class="btn btn-primary w-100"
                         href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                         {% if event.nakkiRequiredForTicketReservation %}
