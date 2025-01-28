@@ -14,7 +14,7 @@ class RssFeedController extends AbstractController
     #[Route(
         path: [
             'fi' => '/feed.rss',
-            'en' => '/feed.rss',
+            'en' => '/en-feed.rss',
         ],
         name: 'rss_feed',
     )]
