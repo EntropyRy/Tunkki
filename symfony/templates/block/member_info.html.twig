@@ -54,7 +54,10 @@
                 </li>
                 {% endif %}
             </ul>
-            <a class="btn btn-primary btn-large" href="{{ path('profile_edit') }}">{{ 'edit'|trans|capitalize }}</a>
+            <div class="d-grid gap-2">
+                <a class="btn btn-primary btn-large" href="{{ path('profile_edit') }}">{{ 'edit'|trans|capitalize }}</a>
+                <a class="btn btn-primary" href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
+            </div>
         </div>
     </div>
 {% endblock %}
