@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\User;
 use App\Helper\Qr;
 use App\Repository\ArtistRepository;
 use App\Repository\MemberRepository;
@@ -126,7 +127,9 @@ final class EmailAdminController extends CRUDController
         }
         if ($count > 0) {
             $email->setSentAt(new \DateTimeImmutable('now'));
-            $email->setSentBy($this->getUser()->getMember());
+            $user = $this->getUser();
+            assert($user instanceof User);
+            $email->setSentBy($user->getMember());
             $this->admin->update($email);
             $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
         }
