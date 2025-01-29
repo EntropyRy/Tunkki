@@ -59,42 +59,6 @@ return [
     'html5-qrcode' => [
         'version' => '2.3.8',
     ],
-    'masonry-layout' => [
-        'version' => '4.2.2',
-    ],
-    'outlayer' => [
-        'version' => '2.1.1',
-    ],
-    'get-size' => [
-        'version' => '3.0.0',
-    ],
-    'ev-emitter' => [
-        'version' => '2.1.2',
-    ],
-    'fizzy-ui-utils' => [
-        'version' => '3.0.0',
-    ],
-    'desandro-matches-selector' => [
-        'version' => '2.0.2',
-    ],
-    'sortablejs' => [
-        'version' => '1.15.6',
-    ],
-    'intl-messageformat' => [
-        'version' => '10.7.14',
-    ],
-    'tslib' => [
-        'version' => '2.8.1',
-    ],
-    '@formatjs/icu-messageformat-parser' => [
-        'version' => '2.11.0',
-    ],
-    '@formatjs/fast-memoize' => [
-        'version' => '2.2.6',
-    ],
-    '@formatjs/icu-skeleton-parser' => [
-        'version' => '1.8.12',
-    ],
     '@hotwired/turbo' => [
         'version' => '8.0.12',
     ],
@@ -118,5 +82,8 @@ return [
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.3',
         'type' => 'css',
+    ],
+    'sortablejs' => [
+        'version' => '1.15.6',
     ],
 ];
