@@ -58,7 +58,7 @@ final class EmailAdminController extends CRUDController
             'img' => $img
         ]);
     }
-    public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo, MemberRepository $memberRepository): RedirectResponse
+    public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo, MemberRepository $memberRepository): RedirectResponse|JsonResponse
     {
         $session = $this->requestStack->getSession();
         $email = $this->admin->getSubject();

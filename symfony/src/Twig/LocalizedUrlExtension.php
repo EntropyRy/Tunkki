@@ -6,9 +6,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
-use Symfony\Component\DependencyInjection\Attribute\AsTwigExtension;
 
-#[AsTwigExtension]
 class LocalizedUrlExtension extends AbstractExtension
 {
     public function __construct(
@@ -17,6 +15,7 @@ class LocalizedUrlExtension extends AbstractExtension
     ) {
     }
 
+    #[\Override]
     public function getFunctions(): array
     {
         return [
@@ -40,14 +39,14 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         // Check if current route is a Sonata Page route (they start with 'page_')
-        if ($currentRoute && str_starts_with($currentRoute, 'page_')) {
+        if ($currentRoute && str_starts_with((string) $currentRoute, 'page_')) {
             return $targetLocale === 'en' ? '/en' : '/';
         }
 
         // If we have a route, try to get its localized version
         if ($currentRoute) {
             // Strip locale suffix if present
-            $baseRoute = preg_replace('/\.(en|fi)$/', '', $currentRoute);
+            $baseRoute = preg_replace('/\.(en|fi)$/', '', (string) $currentRoute);
             $targetRoute = $baseRoute . '.' . $targetLocale;
 
             // Get route parameters from the current request
@@ -68,7 +67,7 @@ class LocalizedUrlExtension extends AbstractExtension
                 }
 
                 return $url;
-            } catch (\Throwable $e) {
+            } catch (\Throwable) {
                 // Fallback if route generation fails
                 $pathWithoutPrefix = str_starts_with($currentPath, '/en') ? substr($currentPath, 3) : $currentPath;
                 return $targetLocale === 'en' ? '/en' . $pathWithoutPrefix : $pathWithoutPrefix;
