@@ -14,9 +14,28 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 final class EmailAdminController extends CRUDController
 {
+    public function __construct(private readonly RequestStack $requestStack)
+    {
+    }
+
+    public function sendProgressAction(): JsonResponse
+    {
+        $session = $this->requestStack->getSession();
+        $progress = $session->get('email_send_progress', [
+            'current' => 0,
+            'total' => 0,
+            'completed' => false
+        ]);
+
+        return new JsonResponse($progress);
+    }
+
     public function previewAction(): Response
     {
         $email = $this->admin->getSubject();
@@ -41,6 +60,7 @@ final class EmailAdminController extends CRUDController
     }
     public function sendAction(MailerInterface $mailer, ArtistRepository $aRepo, MemberRepository $memberRepository): RedirectResponse
     {
+        $session = $this->requestStack->getSession();
         $email = $this->admin->getSubject();
         $links = $email->getAddLoginLinksToFooter();
         $purpose = $email->getPurpose();
@@ -117,21 +137,44 @@ final class EmailAdminController extends CRUDController
                 $this->addFlash('sonata_flash_error', sprintf('Purpose %s not supported.', $purpose));
             }
         }
-        foreach ($emails as $id => $to) {
-            if ($to) {
-                $locale = $locales[$id] ?? 'fi';
-                $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img, $locale);
-                $mailer->send($message);
-                $count += 1;
+        // Initialize progress
+        $totalEmails = count($emails);
+        $session->set('email_send_progress', [
+            'current' => 0,
+            'total' => $totalEmails,
+            'completed' => false
+        ]);
+
+        if ($this->requestStack->getCurrentRequest()->isXmlHttpRequest()) {
+            $count = 0;
+            foreach ($emails as $id => $to) {
+                if ($to) {
+                    $locale = $locales[$id] ?? 'fi';
+                    $message = $this->generateMail($to, $replyto, $subject, $body, $links, $img, $locale);
+                    $mailer->send($message);
+                    $count++;
+
+                    // Update progress
+                    $session->set('email_send_progress', [
+                        'current' => $count,
+                        'total' => $totalEmails,
+                        'completed' => ($count >= $totalEmails),
+                        'redirectUrl' => $this->admin->generateUrl('list', $this->admin->getFilterParameters())
+                    ]);
+                }
             }
-        }
-        if ($count > 0) {
-            $email->setSentAt(new \DateTimeImmutable('now'));
-            $user = $this->getUser();
-            assert($user instanceof User);
-            $email->setSentBy($user->getMember());
-            $this->admin->update($email);
-            $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
+
+            // Update email entity
+            if ($count > 0) {
+                $email->setSentAt(new \DateTimeImmutable('now'));
+                $user = $this->getUser();
+                assert($user instanceof User);
+                $email->setSentBy($user->getMember());
+                $this->admin->update($email);
+                $this->addFlash('sonata_flash_success', sprintf('%s %s info packages sent.', $count, $purpose));
+            }
+
+            return new JsonResponse(['success' => true]);
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

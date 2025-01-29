@@ -146,5 +146,6 @@ final class EmailAdmin extends AbstractAdmin
         $collection->remove('show');
         $collection->add('preview', $this->getRouterIdParameter() . '/preview');
         $collection->add('send', $this->getRouterIdParameter() . '/send');
+        $collection->add('send_progress', $this->getRouterIdParameter() . '/send-progress');
     }
 }

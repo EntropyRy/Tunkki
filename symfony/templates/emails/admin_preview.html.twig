@@ -1,3 +1,4 @@
+{# admin_preview.html.twig #}
 {% extends 'emails/base.html.twig' %}
 {% block content %}
     <div>{{ body|raw }}</div>
@@ -10,7 +11,7 @@
     {% if (admin is defined and admin.isChild and qr is null) or (email.purpose == 'aktiivit' or email.purpose == 'tiedotus') %}
         <style>
           .button {
-            background-color: #4CAF50; /* Green */
+            background-color: #4CAF50;
             border: 2px solid #000;
             color: white;
             padding: 15px 32px;
@@ -21,12 +22,73 @@
             width: 80%;
             margin: 40px auto;
           }
+          .progress {
+            width: 80%;
+            margin: 20px auto;
+            display: none;
+          }
+          .progress-bar {
+            height: 20px;
+            background-color: #4CAF50;
+            width: 0%;
+            transition: width 0.5s;
+          }
           p.info {
             text-align: center;
             margin: 40px auto;
           }
         </style>
-        <p class="info">Every email costs us. Please do not send emails at nihgt time as people do not get notifications about them.</p>
-        <a class="button" href="{{ admin.generateObjectUrl('send', email) }}">Send mails</a>
-{% endif %}
+
+        <p class="info">Every email costs us. Please do not send emails at night time as people do not get notifications about them.</p>
+        <button class="button" id="sendEmails" 
+                data-url="{{ admin.generateObjectUrl('send', email) }}"
+                data-progress-url="{{ admin.generateObjectUrl('send_progress', email) }}">
+            Send mails
+        </button>
+
+        <div class="progress" id="emailProgress">
+            <div class="progress-bar" role="progressbar"></div>
+            <p class="text-center" id="progressText">0%</p>
+        </div>
+
+        <script>
+            document.getElementById('sendEmails').addEventListener('click', function(e) {
+                e.preventDefault();
+                const button = this;
+                const progressDiv = document.getElementById('emailProgress');
+                const progressBar = progressDiv.querySelector('.progress-bar');
+                const progressText = document.getElementById('progressText');
+                const sendUrl = button.dataset.url;
+                const progressUrl = button.dataset.progressUrl;
+
+                // Disable button and show progress
+                button.disabled = true;
+                progressDiv.style.display = 'block';
+
+                // Start the email sending process
+                fetch(sendUrl, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                });
+
+                // Start progress checking
+                const checkProgress = setInterval(function() {
+                    fetch(progressUrl)
+                        .then(response => response.json())
+                        .then(data => {
+                            const percent = Math.round((data.current / data.total) * 100);
+                            progressBar.style.width = percent + '%';
+                            progressText.textContent = `${data.current} / ${data.total} emails sent (${percent}%)`;
+
+                            if (data.completed) {
+                                clearInterval(checkProgress);
+                                window.location.href = data.redirectUrl;
+                            }
+                        });
+                }, 1000);
+            });
+        </script>
+    {% endif %}
 {% endblock %}
