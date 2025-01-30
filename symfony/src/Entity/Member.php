@@ -117,13 +117,13 @@ class Member implements \Stringable
     private ?string $code = null;
 
     #[ORM\Column]
-    private ?bool $emailVerified = null;
+    private ?bool $emailVerified = true;
 
     #[ORM\Column]
-    private ?bool $allowInfoMails = null;
+    private ?bool $allowInfoMails = true;
 
     #[ORM\Column]
-    private ?bool $allowActiveMemberMails = null;
+    private ?bool $allowActiveMemberMails = true;
 
     public function __construct()
     {

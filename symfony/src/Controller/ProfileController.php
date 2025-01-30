@@ -57,7 +57,6 @@ class ProfileController extends AbstractController
                     $user = $member->getUser();
                     $user->setPassword($hasher->hashPassword($user, $form->get('user')->get('plainPassword')->getData()));
                     $member->setLocale($request->getLocale());
-                    $member->setEmailVerified(true);
                     $member->setCode($bc->getCode());
                     $user->setAuthId(bin2hex(openssl_random_pseudo_bytes(10)));
                     $em->persist($user);
@@ -69,8 +68,6 @@ class ProfileController extends AbstractController
                     if ($email_content) {
                         $this->sendEmailToMember($email_content, $member, $mailer);
                     }
-                    // TODO:
-                    //$code = $this->addToInfoMailingList($member);
                     $this->addFlash('info', 'member.join.added');
                     $this->redirectToRoute('app_login');
                 } else {
