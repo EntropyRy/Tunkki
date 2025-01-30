@@ -92,7 +92,7 @@ body {
     #[ORM\ManyToOne(targetEntity: Media::class)]
     private ?Media $attachment = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
     #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: \Event::class)]

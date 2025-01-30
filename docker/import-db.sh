@@ -29,5 +29,5 @@ fi
 
 INPUT_SQL=${1}
 
-cat ${INPUT_SQL} | docker compose exec -T db mysql -u ${DB_USER} --password="${DB_PASSWORD}" ${DB_NAME}
+cat ${INPUT_SQL} | docker compose exec -iT db mariadb -u ${DB_USER} --password="${DB_PASSWORD}" ${DB_NAME}
 

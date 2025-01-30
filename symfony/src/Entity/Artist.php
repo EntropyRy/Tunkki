@@ -56,7 +56,7 @@ class Artist implements \Stringable
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bioEn = null;
 
-    #[ORM\Column(type: 'array', nullable: true)]
+    #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
     #[ORM\ManyToOne(targetEntity: SonataMediaMedia::class, cascade: ['persist', 'detach'])]
