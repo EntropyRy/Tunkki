@@ -2,6 +2,7 @@
 logs/
 .env
 docker/data
+docker/backup
 dev.sql
 .php-cs-fixer.cache
 .phpactor.yml
