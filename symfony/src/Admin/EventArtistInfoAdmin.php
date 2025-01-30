@@ -65,7 +65,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     'query_builder' => fn ($repo) => $repo->createQueryBuilder('a')
                         ->andWhere('a.copyForArchive = :copy')
                         ->setParameter('copy', false),
-                    'choice_label' => fn (Artist $artist) => $artist->getGenre() ? $artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName(),
+                    'choice_label' => fn (Artist $artist) => $artist->getGenre() ? $artist->getType().': ' .$artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName(),
                 ]);
         } else {
             $formMapper

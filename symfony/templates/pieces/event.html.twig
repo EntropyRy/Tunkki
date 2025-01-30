@@ -214,6 +214,7 @@
     {% set content_attr = 'content_attribute'|trans %}
     {{ attribute(event, content_attr)|replace({
     '{{ timetable }}': block('timetable'),
+    '{{ vj_timetable }}': block('vj_timetable'),
     '{{ timetable_to_page }}': block('timetable_to_page'),
     '{{ timetable_with_genre }}': block('timetable_with_genre'),
     '{{ bios }}': block('bios'),
@@ -506,24 +507,28 @@
 {% block timetable_to_page %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
+    {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 {% block timetable_with_genre %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = true %}
+    {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 {% block timetable %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = false %}
+    {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 {% block vj_timetable %}
     {% set last = null %}
     {% set page_links = false %}
     {% set genre = false %}
+    {% set type = 'VJ' %}
     {% set bios = event.ArtistInfosByType('VJ') %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -539,7 +544,7 @@
             {% for stage, infos in bios %}
                 <div class="col-12 {% if bios|length > 1 %}{# is more than one stage #} col-md-6{% endif %}">
                     <h4 class="artists-heading">
-                        {{ 'Timetable'|trans }}
+                        {{ type }} {{ 'Timetable'|trans }}
                         {% if stage %}@ {{ stage }}{% endif %}
                     </h4>
                     <ul>
