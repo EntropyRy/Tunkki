@@ -120,10 +120,10 @@
     {% if '{{ menu }}' in attribute(event, content_attr) %}
         {{ block('menu') }}
     {% endif %}
-    <h2 class="mt-2 event-name">
+    <h1 class="event-name">
         {{ block('event_name') }}
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
-    </h2>
+    </h1>
 {% endblock %}
 {% block event_path %}
 {% if event.url and not event.externalUrl -%}
