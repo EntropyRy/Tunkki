@@ -441,19 +441,21 @@
             </span>
         {% endif %}
         {% if event.webMeetingUrl %}
-            <span>
-                {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
+            {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
+                <span>
                     <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
                         <i class="fas fa-laptop"></i>
                         {{ 'Join remotely'|trans }}
                     </a>
-                {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
+                </span>
+            {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
+                <span>
                     <a class="btn btn-outline-info">
                         <i class="fas fa-laptop"></i>
                         {{ 'Join remotely'|trans }}
                     </a>
-                {% endif %}
-            </span>
+                </span>
+            {% endif %}
         {% endif %}
         {% if event.includeSaferSpaceGuidelines %}
             <span>
