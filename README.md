@@ -17,12 +17,6 @@
 
 - docker compose exec fpm ./bin/console doctrine:schema:update --force
 
-#### install assets
-
-- docker compose run --rm node yarn install
-- docker compose run --rm node yarn build
-- docker compose run --rm node yarn e30v-build
-
 ### Access tunkki
 
 - open http://localhost:9090/ in your browser

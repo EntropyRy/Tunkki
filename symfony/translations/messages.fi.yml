@@ -529,6 +529,10 @@ calendar:
 product:
   quantity: määrä
   sold_out: Loppuunmyyty
+nakkikone:
+  build_up: Rakennus
+  during: Tapahtuman aikana
+  tear_down: Purku
 shop:
   cart:
     empty: Ostoskorisi on tyhjä

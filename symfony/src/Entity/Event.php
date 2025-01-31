@@ -668,9 +668,13 @@ body {
         return $this;
     }
 
-    public function getUntil(): ?\DateTimeInterface
+    public function getUntil(): \DateTimeInterface
     {
-        return $this->until;
+        if ($this->until) {
+            return $this->until;
+        } else {
+            return $this->EventDate->add(new \DateInterval('PT8H'));
+        }
     }
 
     public function setUntil(?\DateTimeInterface $until): self

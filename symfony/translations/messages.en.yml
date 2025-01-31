@@ -429,6 +429,10 @@ shop:
       label: Email in which we will send your receipt
       help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
     empty: Your cart is empty
+nakkikone:
+  build_up: Build up
+  during: During the event
+  tear_down: Tear down
 e30v:
   sponsors: Sponsors
   merch_shop: Merchandise Shop

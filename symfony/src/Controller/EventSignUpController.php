@@ -142,28 +142,35 @@ class EventSignUpController extends Controller
             $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');
             if ($booking->getNakki()->getDefinition()->getOnlyForActiveMembers()) {
                 if ($member->getIsActiveMember()) {
-                    $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
-                    $nakkis[$name]['bookings'][] = $booking;
-                    $nakkis[$name]['durations'][$duration] = $duration;
-                    if (is_null($booking->getMember())) {
-                        if (!array_key_exists('not_reserved', $nakkis[$name])) {
-                            $nakkis[$name]['not_reserved'] = 1;
-                        } else {
-                            $nakkis[$name]['not_reserved'] += 1;
-                        }
-                    }
+                    $nakkis = $this->buildNakkiArray($nakkis, $booking, $name, $duration, $locale);
                 }
             } else {
-                $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
-                $nakkis[$name]['bookings'][] = $booking;
-                $nakkis[$name]['durations'][$duration] = $duration;
-                if (is_null($booking->getMember())) {
-                    if (!array_key_exists('not_reserved', $nakkis[$name])) {
-                        $nakkis[$name]['not_reserved'] = 1;
-                    } else {
-                        $nakkis[$name]['not_reserved'] += 1;
-                    }
-                }
+                $nakkis = $this->buildNakkiArray($nakkis, $booking, $name, $duration, $locale);
+            }
+        }
+        return $nakkis;
+    }
+    private function buildNakkiArray($nakkis, $booking, $name, $duration, $locale): array
+    {
+        $event = $booking->getEvent();
+        // compare the event start date to the booking start date
+        if ($event->getEventDate() > $booking->getStartAt()) {
+            $nakkis[$name]['compared_to_event'] = 'nakkikone.build_up';
+        } elseif ($event->getEventDate() <= $booking->getStartAt() && $event->getUntil() >= $booking->getEndAt()) {
+            $nakkis[$name]['compared_to_event'] = 'nakkikone.during';
+        } else {
+            $nakkis[$name]['compared_to_event'] = 'nakkikone.tear_down';
+        }
+
+        $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
+        $nakkis[$name]['bookings'][] = $booking;
+        $nakkis[$name]['durations'][$duration] = $duration;
+
+        if (is_null($booking->getMember())) {
+            if (!array_key_exists('not_reserved', $nakkis[$name])) {
+                $nakkis[$name]['not_reserved'] = 1;
+            } else {
+                $nakkis[$name]['not_reserved'] += 1;
             }
         }
         return $nakkis;

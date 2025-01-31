@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "arkounay/ux-collection",
-            "version": "4.0.2",
+            "version": "4.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Arkounay/ux-collection.git",
-                "reference": "f066105ffcc8aed3c3c859f7ba7483ee32d20a2f"
+                "reference": "be574a17a64f2f76ff961d205dd7b5bfaf681a22"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/f066105ffcc8aed3c3c859f7ba7483ee32d20a2f",
-                "reference": "f066105ffcc8aed3c3c859f7ba7483ee32d20a2f",
+                "url": "https://api.github.com/repos/Arkounay/ux-collection/zipball/be574a17a64f2f76ff961d205dd7b5bfaf681a22",
+                "reference": "be574a17a64f2f76ff961d205dd7b5bfaf681a22",
                 "shasum": ""
             },
             "require": {
@@ -51,9 +51,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Arkounay/ux-collection/issues",
-                "source": "https://github.com/Arkounay/ux-collection/tree/4.0.2"
+                "source": "https://github.com/Arkounay/ux-collection/tree/4.0.3"
             },
-            "time": "2024-09-13T06:46:47+00:00"
+            "time": "2025-01-30T21:57:05+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
