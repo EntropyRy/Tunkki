@@ -15,7 +15,7 @@ class CartType extends AbstractType
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $help = 'e30v.cart.email.help';
+        $help = 'shop.cart.email.help';
 
         if ($options['data']->getEmail()) {
             $help = '';
@@ -24,13 +24,14 @@ class CartType extends AbstractType
             ->add('email', EmailType::class, [
                 'help' => $help,
                 'help_html' => true,
-                'label' => 'e30v.cart.email.label'
+                'label' => 'shop.cart.email.label'
             ])
             ->add('products', CollectionType::class, [
                 'entry_type' => CartItemType::class,
-                'delete_empty' => fn(?CartItem $item = null): bool => null === $item || $item->getQuantity() == 0,
+                'delete_empty' => fn (?CartItem $item = null): bool => null === $item || $item->getQuantity() == 0,
                 'allow_delete' => true,
-            ]);;
+            ]);
+        ;
     }
 
     #[\Override]

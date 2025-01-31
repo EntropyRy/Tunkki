@@ -534,10 +534,11 @@ nakkikone:
   during: Tapahtuman aikana
   tear_down: Purku
 shop:
+  buy: Kassalle
   cart:
     empty: Ostoskorisi on tyhjä
     email:
-      label: Sähköposti, johon kuittisi lähetetään
+      label: Sähköposti, johon ostoksesi lähetetään
       help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme ostoksesi tiliisi.
 e30v:
   sponsors: Sponsorit

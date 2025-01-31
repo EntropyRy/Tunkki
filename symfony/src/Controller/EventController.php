@@ -27,12 +27,15 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
+    use TargetPathTrait;
+
     #[Route(
         path: [
             'fi' => '/tapahtuma/{id}',
@@ -248,6 +251,8 @@ class EventController extends Controller
                 'slug' => $event->getUrl()
             ]);
         }
+        // if use clicks on the login button then redirect them back to this page
+        $this->saveTargetPath($session, 'main', $request->getUri());
         return $this->render('event/shop.html.twig', [
             'selected' => $selected,
             'nakkis' => $nakkis,

@@ -2,10 +2,11 @@
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
-    <h1>{{ 'event.ticket.shop'|trans }}</h1>
-    <a href="{{ block('event_path') }}">
-        <h3><i class="fa fa-arrow-left"></i> {{ block('event_name') }} ~ {{ block('event_time') }}</h3>
-    </a>
+    <h1>{{ 'event.ticket.shop'|trans }}: 
+        <a href="{{ block('event_path') }}">
+            {{ block('event_name') }} ~ {{ block('event_time') }}
+        </a>
+    </h1>
     {{ event.ticketInfo(app.request.locale)|default('<p>&nbsp;</p>')|raw }}
     {% if event.nakkiRequiredforTicketReservation and event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
         {{ event.nakkiInfo(app.request.locale)|raw }}
@@ -21,67 +22,69 @@
     {% endif %}
     {% if form.products|length > 0 %}
         {{ form_start(form) }}
-            {% for product_form in form.products %}
-                {% set product = product_form.vars.value.product %}
-                {% if inCheckouts[product.id] is defined %}
-                    {% set minus = inCheckouts[product.id] %}
-                {% endif %}
-                <div class="col-12 col-sm-9 col-md-7 col-xl-6 product rounded" {{ stimulus_controller('product', {max: product.max((minus|default(0)))}) }}>
-                    <div class="row">
-                        <div class="col-12 pic text-center">
-                            {% if product.picture %}
-                                {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(app.request.locale)}) }}
-                            {% endif %}
-                        </div>
-                        <div class="col-12 price">
-                            <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-uppercase d-flex justify-content-between rounded">
-                                <h3 class="ps-4 pe-2 py-2 d-flex w-100 fw-bold justify-content-between align-items-center">
-                                    <span>
-                                        {% if app.request.locale == 'fi' %}
-                                            {% if product.name(app.request.locale) is not null %}
-                                                {{ product.name(app.request.locale) }}
-                                                <br>
-                                                <span class="fs-6 float-start">({{ product.nameEn }})</span>
-                                            {% else %}
-                                                {{ product.nameEn }}
-                                            {% endif %}
-                                        {% else %}
-                                            {{ product.name(app.request.locale) }}
-                                        {% endif %}
-                                    </span>
-                                    <span>{{ product.amount / 100 }}€</span>
-                                </h3>
-                                <span class="btn rounded-circle fs-4">
-                                    <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
-                                </span>
-                            </button>
-                        </div>
-                        <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
-                            <div class="px-4">
-                                <p>{{ product.description(app.request.locale) }}</p>
-                            </div>
-                            <div class="text-uppercase text-center fw-bold">{{ 'product.quantity'|trans }}</div>
-                        </div>
-                        <div class="col-12 quantity">
-                            {% if not nakkiRequired %}
-                                {{ block('quantity') }}
-                            {% else %}
-                                {% if event.nakkiRequiredforTicketReservation and hasNakki %}{{ block('quantity') }}{% endif %}
-                            {% endif %}
-                        </div>
-                        <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
+        <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
+            <div class="{% if app.user %}d-none{% endif %}">{{ form_row(form.email) }}</div>
+            {# <label>{{ 'event.stripe.fee'|trans }}</label> #}
+        </div>
+        {% for product_form in form.products %}
+            {% set product = product_form.vars.value.product %}
+            {% if inCheckouts[product.id] is defined %}
+                {% set minus = inCheckouts[product.id] %}
+            {% endif %}
+            <div class="col-12 col-sm-9 col-md-7 col-xl-6 product rounded" {{ stimulus_controller('product', {max: product.max((minus|default(0)))}) }}>
+                <div class="row">
+                    <div class="col-12 pic text-center">
+                        {% if product.picture %}
+                            {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(app.request.locale)}) }}
+                        {% endif %}
                     </div>
+                    <div class="col-12 price">
+                        <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-uppercase d-flex justify-content-between rounded">
+                            <h3 class="ps-4 pe-2 py-2 d-flex w-100 fw-bold justify-content-between align-items-center">
+                                <span>
+                                    {% if app.request.locale == 'fi' %}
+                                        {% if product.name(app.request.locale) is not null %}
+                                            {{ product.name(app.request.locale) }}
+                                            <br>
+                                            <span class="fs-6 float-start">({{ product.nameEn }})</span>
+                                        {% else %}
+                                            {{ product.nameEn }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ product.name(app.request.locale) }}
+                                    {% endif %}
+                                </span>
+                                <span>{{ product.amount / 100 }}€</span>
+                            </h3>
+                            <span class="btn rounded-circle fs-4">
+                                <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
+                            </span>
+                        </button>
+                    </div>
+                    <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
+                        <div class="px-4">
+                            <p>{{ product.description(app.request.locale) }}</p>
+                        </div>
+                        <div class="text-uppercase text-center fw-bold">{{ 'product.quantity'|trans }}</div>
+                    </div>
+                    <div class="col-12 quantity">
+                        {% if not nakkiRequired %}
+                            {{ block('quantity') }}
+                        {% else %}
+                            {% if event.nakkiRequiredforTicketReservation and hasNakki %}{{ block('quantity') }}{% endif %}
+                        {% endif %}
+                    </div>
+                    <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
                 </div>
-            {% endfor %}
-            <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
-                <div class="{% if app.user %}d-none{% endif %}">{{ form_row(form.email) }}</div>
-                {# <label>{{ 'event.stripe.fee'|trans }}</label> #}
-                <input data-turbo="false"
-                       type="submit"
-                       class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-primary float-end"
-                       value="{{ 'e30v.buy'|trans }}" />
-                {{ form_end(form) }}
             </div>
+        {% endfor %}
+        <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
+            <input data-turbo="false"
+                    type="submit"
+                    class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-primary float-end"
+                    value="{{ 'shop.buy'|trans }}" />
+            {{ form_end(form) }}
+        </div>
     {% endif %}
 {% endblock %}
 {% block quantity %}

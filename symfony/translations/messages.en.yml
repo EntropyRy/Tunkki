@@ -424,6 +424,7 @@ product:
   quantity: quantity
   sold_out: Sold Out
 shop:
+  buy: Checkout
   cart:
     email:
       label: Email in which we will send your receipt
