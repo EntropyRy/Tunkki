@@ -26,8 +26,8 @@
             <div class="badge-container">
                 <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
             </div>
-            <div class="progress" role="progressbar" style="border-radius: 0; opacity: 0.7; height: 10px; background: transparent">
-                <div class="progress-bar bg-white" {{ stimulus_target('epics', 'progress') }} style="z-index:100;"></div>
+            <div class="progress rounded-top rounded-bottom-0" role="progressbar" style="opacity: 0.7; height: 10px; background: transparent">
+                <div class="progress-bar bg-white" {{ stimulus_target('epics', 'progress') }}></div>
             </div>
         </div>
         </turbo-frame>
