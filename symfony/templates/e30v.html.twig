@@ -134,11 +134,11 @@
         <div class="content">
             {{ block('content_home', input) ?? '' }}
         </div>
-        {{ block('buy_button') }}
+        {# { block('buy_button') } #}
     {% endblock %}
     {% block buy_button %}
         <a href="{{ block('event_path_shop') }}"
-           class="btn mt-4 btn-lg btn-buy w-100">{{ 'e30v.buy_tickets'|trans }}</a>
+           class="btn mt-4 disabled btn-lg btn-buy w-100">{{ 'e30v.buy_tickets'|trans }}</a>
     {% endblock %}
     {% block location %}
         <div class="flex-row d-flex">
