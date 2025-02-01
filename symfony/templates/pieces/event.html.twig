@@ -512,6 +512,12 @@
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
+{% block vj_timetable_to_page %}
+    {% set bios = event.ArtistInfosByType('VJ') %}
+    {% set page_links = true %}
+    {% set type = 'VJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
 {% block timetable_with_genre %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
