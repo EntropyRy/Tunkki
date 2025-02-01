@@ -6,7 +6,7 @@
         <div class="col-12">
             <a class="btn btn-lg btn-primary w-100" data-turbo="false"
                href="{{ path('_entropy_mattermost_auth') }}">
-                <img height="23" src="{{ asset('/images/mattermost-logo.svg') }}">
+                <twig:ux:icon name="cib:mattermost" height="1.2rem" />
                 {{ 'Mattermost login'|trans }}
             </a>
         </div>
@@ -53,7 +53,7 @@
                 </div>
                 <div>
                     <button class="btn btn-primary" type="submit" data-turbo="false">
-                        <i class="fas fa-sign-in-alt"></i> {{ 'sign_in'|trans }}
+                        {{ 'sign_in'|trans }}
                     </button>
                 </div>
             </div>
