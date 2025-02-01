@@ -110,10 +110,6 @@ class CalendarController extends AbstractController
         $url = new Uri($event->getUrlByLang($locale));
         $start = $event->getEventDate();
         $end = $event->getUntil();
-        if (is_null($end)) {
-            $end = (new \DateTimeImmutable())->createFromInterface($start);
-            $end = $end->modify('+2hours');
-        }
         $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, true));
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = (new CalendarEvent($uid))

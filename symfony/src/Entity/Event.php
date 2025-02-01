@@ -673,7 +673,12 @@ body {
         if ($this->until) {
             return $this->until;
         } else {
-            return $this->EventDate->add(new \DateInterval('PT8H'));
+            // add 8 hours to the event date
+            $newDateTime = \DateTime::createFromInterface($this->EventDate);
+            if ($this->type == 'meeting') {
+                return $newDateTime->add(new \DateInterval('PT2H'));
+            }
+            return $newDateTime->add(new \DateInterval('PT8H'));
         }
     }
 
