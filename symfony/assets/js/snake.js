@@ -13,6 +13,26 @@ let snakeWidth = gridSize - 2;
 let isBlueFood = false;
 let blueEatenCount = 0;
 
+function getSegmentWidth(index, totalLength) {
+  if (index === 0 || index === totalLength - 1) return gridSize - 2; // Head and tail always normal width
+
+  // Calculate relative position (0 to 1) from each end, use the smaller value
+  const fromStart = index / (totalLength - 1);
+  const fromEnd = 1 - fromStart;
+  const relativePos = Math.min(fromStart, fromEnd);
+
+  // Calculate the peak width based on blue foods eaten
+  const maxWidth = (blueEatenCount + 1) * (gridSize - 2);
+
+  // Use a sine wave to create smooth transition, peaking in the middle
+  const width =
+    gridSize -
+    2 +
+    (maxWidth - (gridSize - 2)) * Math.sin(relativePos * Math.PI);
+
+  return width;
+}
+
 function updateHighScore(newScore) {
   if (newScore > highScore) {
     highScore = newScore;
@@ -39,7 +59,7 @@ if (isMobile) {
         top: 10px;
         right: 10px;
         padding: 10px;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.6);
         border: 2px solid rgba(255, 255, 255, 0.5);
         color: white;
         border-radius: 8px;
@@ -56,8 +76,8 @@ if (isMobile) {
     canvas.style.display = gameRunning ? "block" : "none";
     toggleButton.innerText = gameRunning ? "🎮 Hide Game" : "🎮 Show Game";
     toggleButton.style.background = gameRunning
-      ? "rgba(255, 255, 255, 0.4)"
-      : "rgba(255, 255, 255, 0.2)";
+      ? "rgba(0, 0, 0, 0.8)"
+      : "rgba(0, 0, 0, 0.6)";
 
     if (gameRunning) {
       canvas.style.pointerEvents = "auto";
@@ -132,7 +152,7 @@ function drawControlButtons() {
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+    ctx.fillStyle = "rgba(255, 255, 255, 1)"; // Pure white arrows
     ctx.font = `${button.height * 0.5}px Arial`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -222,40 +242,35 @@ function checkCollision(head) {
 
   for (let i = 1; i < snake.length; i++) {
     const segment = snake[i];
+    const segmentWidth = getSegmentWidth(i, snake.length);
 
-    if (i <= blueEatenCount) {
-      if (head.x === segment.x && head.y === segment.y) {
+    if (segment.isHorizontal) {
+      const yOffset = (gridSize - segmentWidth) / 2;
+      const bodyTop = segment.y + yOffset;
+      const bodyBottom = segment.y + yOffset + segmentWidth;
+      const headTop = head.y;
+      const headBottom = head.y + (gridSize - 2);
+
+      if (
+        head.x === segment.x &&
+        ((headTop >= bodyTop && headTop <= bodyBottom) ||
+          (headBottom >= bodyTop && headBottom <= bodyBottom))
+      ) {
         return true;
       }
     } else {
-      if (segment.isHorizontal) {
-        const yOffset = (gridSize - snakeWidth) / 2;
-        const bodyTop = segment.y + yOffset;
-        const bodyBottom = segment.y + yOffset + snakeWidth;
-        const headTop = head.y;
-        const headBottom = head.y + (gridSize - 2);
+      const xOffset = (gridSize - segmentWidth) / 2;
+      const bodyLeft = segment.x + xOffset;
+      const bodyRight = segment.x + xOffset + segmentWidth;
+      const headLeft = head.x;
+      const headRight = head.x + (gridSize - 2);
 
-        if (
-          head.x === segment.x &&
-          ((headTop >= bodyTop && headTop <= bodyBottom) ||
-            (headBottom >= bodyTop && headBottom <= bodyBottom))
-        ) {
-          return true;
-        }
-      } else {
-        const xOffset = (gridSize - snakeWidth) / 2;
-        const bodyLeft = segment.x + xOffset;
-        const bodyRight = segment.x + xOffset + snakeWidth;
-        const headLeft = head.x;
-        const headRight = head.x + (gridSize - 2);
-
-        if (
-          head.y === segment.y &&
-          ((headLeft >= bodyLeft && headLeft <= bodyRight) ||
-            (headRight >= bodyLeft && headRight <= bodyRight))
-        ) {
-          return true;
-        }
+      if (
+        head.y === segment.y &&
+        ((headLeft >= bodyLeft && headLeft <= bodyRight) ||
+          (headRight >= bodyLeft && headRight <= bodyRight))
+      ) {
+        return true;
       }
     }
   }
@@ -264,11 +279,23 @@ function checkCollision(head) {
 }
 
 function generateFood() {
-  isBlueFood = score >= 100 && Math.random() < 0.2;
+  // Only spawn blue food if the snake is long enough
+  const minLengthNeeded = (blueEatenCount + 2) * 2; // Need enough length for smooth transition
+  isBlueFood =
+    score >= 100 && snake.length >= minLengthNeeded && Math.random() < 0.2;
 
-  food.x = Math.floor(Math.random() * (canvas.width / gridSize)) * gridSize;
+  // Calculate current maximum width for margin
+  const maxWidth = (blueEatenCount + 1) * (gridSize - 2);
+  const margin = Math.ceil(maxWidth / gridSize) + 1;
+
+  food.x =
+    Math.floor(
+      Math.random() * (canvas.width / gridSize - 2 * margin) + margin,
+    ) * gridSize;
   food.y =
-    Math.floor(Math.random() * ((canvas.height - 100) / gridSize)) * gridSize;
+    Math.floor(
+      Math.random() * ((canvas.height - 100) / gridSize - 2 * margin) + margin,
+    ) * gridSize;
 
   for (let segment of snake) {
     if (segment.x === food.x && segment.y === food.y) {
@@ -343,6 +370,13 @@ function gameLoop() {
   if (gameOver) {
     updateHighScore(score);
 
+    // Calculate final stats
+    const snakeLength = snake.length;
+    const maxWidth = Math.max(
+      ...snake.map((_, i) => getSegmentWidth(i, snake.length)),
+    );
+    const maxWidthBlocks = Math.round(maxWidth / (gridSize - 2));
+
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
@@ -356,20 +390,32 @@ function gameLoop() {
       canvas.width / 2,
       canvas.height / 2 + 40,
     );
+    ctx.fillText(
+      `Snake Length: ${snakeLength} blocks`,
+      canvas.width / 2,
+      canvas.height / 2 + 70,
+    );
+    ctx.fillText(
+      `Maximum Width: ${maxWidthBlocks} blocks`,
+      canvas.width / 2,
+      canvas.height / 2 + 100,
+    );
+
     if (score === highScore && score > 0) {
-      ctx.fillText("New High Score!", canvas.width / 2, canvas.height / 2 + 70);
       ctx.font = "16px Arial";
       ctx.fillText(
         `Achieved on: ${lastScoreDate}`,
         canvas.width / 2,
-        canvas.height / 2 + 95,
+        canvas.height / 2 + 130,
       );
     }
+
     ctx.fillText(
       isMobile ? "Tap to Restart" : "Press Space to Restart",
       canvas.width / 2,
-      canvas.height / 2 + 130,
+      canvas.height / 2 + 160,
     );
+
     animationFrame = requestAnimationFrame(gameLoop);
     return;
   }
@@ -404,7 +450,6 @@ function gameLoop() {
   if (head.x === food.x && head.y === food.y) {
     if (isBlueFood) {
       blueEatenCount++;
-      snakeWidth = Math.min(gridSize * 4, snakeWidth * 2);
       score += score;
     } else {
       score += 10;
@@ -421,16 +466,14 @@ function gameLoop() {
 
   ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
   snake.forEach((segment, index) => {
-    if (index <= blueEatenCount) {
-      ctx.fillRect(segment.x, segment.y, gridSize - 2, gridSize - 2);
+    const segmentWidth = getSegmentWidth(index, snake.length);
+
+    if (segment.isHorizontal) {
+      const yOffset = (gridSize - segmentWidth) / 2;
+      ctx.fillRect(segment.x, segment.y + yOffset, gridSize - 2, segmentWidth);
     } else {
-      if (segment.isHorizontal) {
-        const yOffset = (gridSize - snakeWidth) / 2;
-        ctx.fillRect(segment.x, segment.y + yOffset, gridSize - 2, snakeWidth);
-      } else {
-        const xOffset = (gridSize - snakeWidth) / 2;
-        ctx.fillRect(segment.x + xOffset, segment.y, snakeWidth, gridSize - 2);
-      }
+      const xOffset = (gridSize - segmentWidth) / 2;
+      ctx.fillRect(segment.x + xOffset, segment.y, segmentWidth, gridSize - 2);
     }
   });
 
