@@ -60,12 +60,25 @@ class HappeningType extends AbstractType
                 'help_html' => true,
             ])
             ->add('priceEn')
-            ->add('needsPreliminarySignUp')
+            ->add('needsPreliminarySignUp', null, [
+                'attr' => [
+                    'data-bs-toggle' => 'collapse',
+                    'data-bs-target' => '#signups',
+                    'aria-expanded' => 'false',
+                    'aria-controls' => 'signups'
+                ]
+            ])
             ->add('maxSignUps')
             ->add('signUpsOpenUntil')
             ->add('allowSignUpComments')
             ->add('needsPreliminaryPayment', null, [
-                'label' => 'happening.show_payment_info'
+                'label' => 'happening.show_payment_info',
+                'attr' => [
+                    'data-bs-toggle' => 'collapse',
+                    'data-bs-target' => '#payment',
+                    'aria-expanded' => 'false',
+                    'aria-controls' => 'payment'
+                ]
             ])
             ->add('releaseThisHappeningInEvent');
     }
