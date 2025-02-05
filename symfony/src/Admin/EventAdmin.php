@@ -437,6 +437,7 @@ final class EventAdmin extends AbstractAdmin
                                 'Starfield' => 'stars',
                                 'Color Grid' => 'grid',
                                 'Wavy Lines' => 'lines',
+                                'Snake Game' => 'snake',
                             ]
                         ]
                     )

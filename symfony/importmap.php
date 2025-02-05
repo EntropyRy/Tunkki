@@ -44,6 +44,10 @@ return [
         'path' => './assets/js/vhs.js',
         'entrypoint' => true,
     ],
+    'snake' => [
+        'path' => './assets/js/snake.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
