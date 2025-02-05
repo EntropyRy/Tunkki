@@ -447,8 +447,9 @@ Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
   old_announcements: Vanhat tiedotteet
 happening:
+  heading:
+    edit: Muokkaa tapahtumaa
   create: Luo tapahtuma/ravintola yms.
-  edit: Muokkaa tapahtumaa/ravintolaa yms.
   paymentInfo: Maksutiedot
   bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
   no_reservations: Ei varauksia

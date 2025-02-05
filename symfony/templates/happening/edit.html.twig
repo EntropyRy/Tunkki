@@ -2,7 +2,7 @@
 {% block title %}{{ 'happening.edit'|trans }} | Entropy ry{% endblock %}
 {% block content %}
     <div class="col-12">
-        <h1>{{ 'happening.edit'|trans }}</h1>
+        <h1>{{ 'happening.heading.edit'|trans }}: {{ happening.name(app.request.locale) }}</h1>
         {% if happening.releaseThisHappeningInEvent %}<h2 class="text-warning">{{ 'SHOWN ONLY TO YOU'|trans }}</h2>{% endif %}
         {{ form_start(form) }}
             <div class="row">

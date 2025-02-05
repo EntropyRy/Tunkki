@@ -367,6 +367,8 @@ barcode.expl: First your code then the others and confirmation with your code
 button:
   old_announcements: Old Announcements
 happening:
+  heading:
+    edit: Edit Happening
   create: Create happening/restaurant etc.
   edit: Edit happening/restaurant etc.
   paymentInfo: Payment Info
