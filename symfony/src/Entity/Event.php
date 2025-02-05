@@ -668,12 +668,15 @@ body {
         return $this;
     }
 
-    public function getUntil(): \DateTimeInterface
+    public function getUntil(): ?\DateTimeInterface
     {
         if ($this->until) {
             return $this->until;
         } else {
-            // add 8 hours to the event date
+            if ($this->EventDate == null) {
+                return null;
+            }
+            // add 8 hours to the event date for created event
             $newDateTime = \DateTime::createFromInterface($this->EventDate);
             if ($this->type == 'meeting') {
                 return $newDateTime->add(new \DateInterval('PT2H'));
