@@ -11,6 +11,7 @@ let lastScoreDate = localStorage.getItem("snakeLastScoreDate") || "";
 
 let snakeWidth = gridSize - 2;
 let isBlueFood = false;
+let blueEatenCount = 0;
 
 function updateHighScore(newScore) {
   if (newScore > highScore) {
@@ -222,33 +223,39 @@ function checkCollision(head) {
   for (let i = 1; i < snake.length; i++) {
     const segment = snake[i];
 
-    if (segment.isHorizontal) {
-      const yOffset = (gridSize - snakeWidth) / 2;
-      const bodyTop = segment.y + yOffset;
-      const bodyBottom = segment.y + yOffset + snakeWidth;
-      const headTop = head.y;
-      const headBottom = head.y + (gridSize - 2);
-
-      if (
-        head.x === segment.x &&
-        ((headTop >= bodyTop && headTop <= bodyBottom) ||
-          (headBottom >= bodyTop && headBottom <= bodyBottom))
-      ) {
+    if (i <= blueEatenCount) {
+      if (head.x === segment.x && head.y === segment.y) {
         return true;
       }
     } else {
-      const xOffset = (gridSize - snakeWidth) / 2;
-      const bodyLeft = segment.x + xOffset;
-      const bodyRight = segment.x + xOffset + snakeWidth;
-      const headLeft = head.x;
-      const headRight = head.x + (gridSize - 2);
+      if (segment.isHorizontal) {
+        const yOffset = (gridSize - snakeWidth) / 2;
+        const bodyTop = segment.y + yOffset;
+        const bodyBottom = segment.y + yOffset + snakeWidth;
+        const headTop = head.y;
+        const headBottom = head.y + (gridSize - 2);
 
-      if (
-        head.y === segment.y &&
-        ((headLeft >= bodyLeft && headLeft <= bodyRight) ||
-          (headRight >= bodyLeft && headRight <= bodyRight))
-      ) {
-        return true;
+        if (
+          head.x === segment.x &&
+          ((headTop >= bodyTop && headTop <= bodyBottom) ||
+            (headBottom >= bodyTop && headBottom <= bodyBottom))
+        ) {
+          return true;
+        }
+      } else {
+        const xOffset = (gridSize - snakeWidth) / 2;
+        const bodyLeft = segment.x + xOffset;
+        const bodyRight = segment.x + xOffset + snakeWidth;
+        const headLeft = head.x;
+        const headRight = head.x + (gridSize - 2);
+
+        if (
+          head.y === segment.y &&
+          ((headLeft >= bodyLeft && headLeft <= bodyRight) ||
+            (headRight >= bodyLeft && headRight <= bodyRight))
+        ) {
+          return true;
+        }
       }
     }
   }
@@ -324,6 +331,7 @@ function resetGame() {
   dy = 0;
   score = 0;
   snakeWidth = gridSize - 2;
+  blueEatenCount = 0;
   gameOver = false;
   isBlueFood = false;
   generateFood();
@@ -395,6 +403,7 @@ function gameLoop() {
 
   if (head.x === food.x && head.y === food.y) {
     if (isBlueFood) {
+      blueEatenCount++;
       snakeWidth = Math.min(gridSize * 4, snakeWidth * 2);
       score += score;
     } else {
@@ -412,7 +421,7 @@ function gameLoop() {
 
   ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
   snake.forEach((segment, index) => {
-    if (index === 0) {
+    if (index <= blueEatenCount) {
       ctx.fillRect(segment.x, segment.y, gridSize - 2, gridSize - 2);
     } else {
       if (segment.isHorizontal) {
