@@ -76,7 +76,7 @@ if (isMobile) {
     canvas.style.display = gameRunning ? "block" : "none";
     toggleButton.innerText = gameRunning ? "🎮 Hide Game" : "🎮 Show Game";
     toggleButton.style.background = gameRunning
-      ? "rgba(0, 0, 0, 0.8)"
+      ? "rgba(0, 0, 0, 0.6)"
       : "rgba(0, 0, 0, 0.6)";
 
     if (gameRunning) {
@@ -140,19 +140,22 @@ let gameOver = false;
 function drawControlButtons() {
   if (!isMobile) return;
 
-  ctx.save();
-
-  ctx.fillStyle = "rgba(255, 255, 255, 0.2)";
-  ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
-  ctx.lineWidth = 2;
-
+  // Draw each button separately with fresh context settings
   [controlButtons.left, controlButtons.right].forEach((button) => {
+    ctx.save();
+
+    // Background
+    ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+    ctx.strokeStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.lineWidth = 2;
+
     ctx.beginPath();
     ctx.roundRect(button.x, button.y, button.width, button.height, 10);
     ctx.fill();
     ctx.stroke();
 
-    ctx.fillStyle = "rgba(255, 255, 255, 1)"; // Pure white arrows
+    // Arrow
+    ctx.fillStyle = "rgba(255, 255, 255, 1)";
     ctx.font = `${button.height * 0.5}px Arial`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -161,9 +164,9 @@ function drawControlButtons() {
       button.x + button.width / 2,
       button.y + button.height / 2,
     );
-  });
 
-  ctx.restore();
+    ctx.restore();
+  });
 }
 
 function turnLeft() {
