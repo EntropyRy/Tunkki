@@ -417,10 +417,15 @@ function drawGameTitle(x, y, showVersion = true) {
     currentX += ctx.measureText(letter).width;
   });
 
+  // Add punch line between title and version
+  ctx.font = "bold 16px Arial";
+  ctx.fillStyle = "white";
+  ctx.fillText("Growth can be fatal", x, y + 25);
+
   if (showVersion) {
     ctx.font = "bold 16px Arial";
     ctx.fillStyle = "white";
-    ctx.fillText("v1.0", x, y + 30);
+    ctx.fillText("v1.0", x, y + 45); // Moved version down by 15px to make room for punch line
   }
 
   ctx.restore();
@@ -447,7 +452,7 @@ function gameLoop() {
     ctx.fillStyle = "white";
 
     // Title and version
-    drawGameTitle(canvas.width / 2, canvas.height / 2 - 80);
+    drawGameTitle(canvas.width / 2, canvas.height / 2 - 100);
 
     // Game over and stats
     ctx.fillStyle = "white";
