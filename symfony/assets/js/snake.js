@@ -13,6 +13,19 @@ let snakeWidth = gridSize - 2;
 let isBlueFood = false;
 let blueEatenCount = 0;
 
+let titleColorOffset = 0;
+let lastTitleColorUpdate = 0;
+const titleColorSpeed = 0.05; // Speed of color change
+const titleColors = [
+  "#FF0000", // Red
+  "#FF7F00", // Orange
+  "#FFFF00", // Yellow
+  "#00FF00", // Green
+  "#0000FF", // Blue
+  "#4B0082", // Indigo
+  "#9400D3", // Violet
+];
+
 function getSegmentWidth(index, totalLength) {
   if (index === 0 || index === totalLength - 1) return gridSize - 2; // Head and tail always normal width
 
@@ -367,6 +380,52 @@ function resetGame() {
   generateFood();
 }
 
+function drawGameTitle(x, y, showVersion = true) {
+  const title = "HYPERSAUSAGE";
+  const currentTime = Date.now();
+
+  // Update color offset
+  if (currentTime - lastTitleColorUpdate > 16) {
+    // ~60fps
+    titleColorOffset += titleColorSpeed;
+    if (titleColorOffset >= titleColors.length) {
+      titleColorOffset = 0;
+    }
+    lastTitleColorUpdate = currentTime;
+  }
+
+  ctx.save();
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = 'bold 48px Impact, "Arial Black", sans-serif';
+
+  // Draw each letter with its own color
+  let totalWidth = 0;
+  const letters = title.split("");
+
+  // First pass to measure total width
+  letters.forEach((letter) => {
+    totalWidth += ctx.measureText(letter).width;
+  });
+
+  // Draw letters centered
+  let currentX = x - totalWidth / 2;
+  letters.forEach((letter, i) => {
+    const colorIndex = Math.floor((i + titleColorOffset) % titleColors.length);
+    ctx.fillStyle = titleColors[colorIndex];
+    ctx.fillText(letter, currentX + ctx.measureText(letter).width / 2, y);
+    currentX += ctx.measureText(letter).width;
+  });
+
+  if (showVersion) {
+    ctx.font = "bold 16px Arial";
+    ctx.fillStyle = "white";
+    ctx.fillText("v1.0", x, y + 30);
+  }
+
+  ctx.restore();
+}
+
 function gameLoop() {
   if (!gameRunning) return;
 
@@ -379,29 +438,39 @@ function gameLoop() {
       ...snake.map((_, i) => getSegmentWidth(i, snake.length)),
     );
     const maxWidthBlocks = Math.round(maxWidth / (gridSize - 2));
+    const areaBlocks = Math.floor(
+      (canvas.width / gridSize) * (canvas.height / gridSize),
+    );
 
     ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     ctx.fillStyle = "white";
-    ctx.font = "48px Arial";
+
+    // Title and version
+    drawGameTitle(canvas.width / 2, canvas.height / 2 - 80);
+
+    // Game over and stats
+    ctx.fillStyle = "white";
+    ctx.font = "32px Arial";
     ctx.textAlign = "center";
-    ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 40);
+    ctx.fillText("Game Over!", canvas.width / 2, canvas.height / 2 - 20);
+
     ctx.font = "24px Arial";
-    ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 10);
+    ctx.fillText(`Score: ${score}`, canvas.width / 2, canvas.height / 2 + 20);
     ctx.fillText(
       `High Score: ${highScore}`,
       canvas.width / 2,
-      canvas.height / 2 + 40,
+      canvas.height / 2 + 50,
     );
     ctx.fillText(
-      `Snake Length: ${snakeLength} blocks`,
+      `Sausage: ${snakeLength} blocks long, ${maxWidthBlocks} blocks wide`,
       canvas.width / 2,
-      canvas.height / 2 + 70,
+      canvas.height / 2 + 80,
     );
     ctx.fillText(
-      `Maximum Width: ${maxWidthBlocks} blocks`,
+      `Play Area: ${areaBlocks} blocks${isMobile ? " (Mobile)" : ""}`,
       canvas.width / 2,
-      canvas.height / 2 + 100,
+      canvas.height / 2 + 110,
     );
 
     if (score === highScore && score > 0) {
@@ -409,14 +478,14 @@ function gameLoop() {
       ctx.fillText(
         `Achieved on: ${lastScoreDate}`,
         canvas.width / 2,
-        canvas.height / 2 + 130,
+        canvas.height / 2 + 140,
       );
     }
 
     ctx.fillText(
       isMobile ? "Tap to Restart" : "Press Space to Restart",
       canvas.width / 2,
-      canvas.height / 2 + 160,
+      canvas.height / 2 + 170,
     );
 
     animationFrame = requestAnimationFrame(gameLoop);
@@ -469,21 +538,87 @@ function gameLoop() {
 
   ctx.fillStyle = "rgba(0, 255, 0, 0.8)";
   snake.forEach((segment, index) => {
-    const segmentWidth = getSegmentWidth(index, snake.length);
-
-    if (segment.isHorizontal) {
-      const yOffset = (gridSize - segmentWidth) / 2;
-      ctx.fillRect(segment.x, segment.y + yOffset, gridSize - 2, segmentWidth);
-    } else {
-      const xOffset = (gridSize - segmentWidth) / 2;
-      ctx.fillRect(segment.x + xOffset, segment.y, segmentWidth, gridSize - 2);
-    }
+    drawSnakeSegment(segment, snake[index + 1], index, snake.length);
   });
 
   drawScores();
 
   if (isMobile) {
     drawControlButtons();
+  }
+}
+
+function drawSnakeSegment(segment, nextSegment, index, totalLength) {
+  const currentWidth = getSegmentWidth(index, snake.length);
+
+  // Check if this is a turning point AND at least one blue food has been eaten
+  if (
+    nextSegment &&
+    segment.isHorizontal !== nextSegment.isHorizontal &&
+    blueEatenCount > 0
+  ) {
+    const radius = currentWidth / 2;
+
+    // Draw three circles: before, at, and after the turn
+    if (segment.isHorizontal) {
+      // Before turn
+      ctx.beginPath();
+      const beforeX = segment.x;
+      const beforeY = segment.y + (gridSize - currentWidth) / 2 + radius;
+      ctx.arc(beforeX, beforeY, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // At turn
+      ctx.beginPath();
+      const atX = segment.x + (gridSize - 2);
+      const atY = segment.y + (gridSize - currentWidth) / 2 + radius;
+      ctx.arc(atX, atY, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // After turn (vertical)
+      ctx.beginPath();
+      const afterX =
+        segment.x + (gridSize - 2) + (gridSize - currentWidth) / 2 + radius;
+      const afterY = segment.y + (gridSize - 2);
+      ctx.arc(afterX, afterY, radius, 0, Math.PI * 2);
+      ctx.fill();
+    } else {
+      // Before turn
+      ctx.beginPath();
+      const beforeX = segment.x + (gridSize - currentWidth) / 2 + radius;
+      const beforeY = segment.y;
+      ctx.arc(beforeX, beforeY, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // At turn
+      ctx.beginPath();
+      const atX = segment.x + (gridSize - currentWidth) / 2 + radius;
+      const atY = segment.y + (gridSize - 2);
+      ctx.arc(atX, atY, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // After turn (horizontal)
+      ctx.beginPath();
+      const afterX = segment.x + (gridSize - 2);
+      const afterY =
+        segment.y + (gridSize - 2) + (gridSize - currentWidth) / 2 + radius;
+      ctx.arc(afterX, afterY, radius, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  // Draw regular blocks for straight segments or when no blue food eaten yet
+  else if (
+    !nextSegment ||
+    (nextSegment && segment.isHorizontal === nextSegment.isHorizontal) ||
+    blueEatenCount === 0
+  ) {
+    if (segment.isHorizontal) {
+      const yOffset = (gridSize - currentWidth) / 2;
+      ctx.fillRect(segment.x, segment.y + yOffset, gridSize - 2, currentWidth);
+    } else {
+      const xOffset = (gridSize - currentWidth) / 2;
+      ctx.fillRect(segment.x + xOffset, segment.y, currentWidth, gridSize - 2);
+    }
   }
 }
 
