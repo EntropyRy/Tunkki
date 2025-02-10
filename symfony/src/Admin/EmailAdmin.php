@@ -107,7 +107,7 @@ final class EmailAdmin extends AbstractAdmin
                     'help' => 'Empty defaults to hallitus@entropy.fi.'
                 ]);
         }
-        $subjectHelp = 'start by "[Entropy]" so there is distiction? Include finnish and english version to same message!';
+        $subjectHelp = 'All mails have forced prefix "[Entropy]" for consistency. Include Finnish and English version to same message!';
         $email = $this->getSubject();
         $disabled = false;
         $placeholder = $this->getSubject()->getSubject();

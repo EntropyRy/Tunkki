@@ -184,7 +184,7 @@ final class EmailAdminController extends CRUDController
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyto)
-            ->subject($subject)
+            ->subject('[Entropy] ' . $subject)
             ->htmlTemplate('emails/email.html.twig')
             ->context(['body' => $body, 'links' => $links, 'img' => $img, 'locale' => $locale]);
     }
