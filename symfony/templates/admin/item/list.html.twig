@@ -13,7 +13,7 @@
         {% if loaded %}<img class="hidden-xs hidden-sm" src="/images/logo.png" alt="noimg" />{% endif %}
     </div>
     <div class="col-md-4">
-        {{ object|render_list_element(admin.list['name']) }} {{ object.manufacturer }} {{ object.model }}
+        <b>{{ object|render_list_element(admin.list['name']) }}</b> {{ object.manufacturer }} {{ object.model }}
         {% if object.url is not empty %}<span class="pull-right"><a href="{{ object.url }}">URL</a></span>{% endif %}
         <br>
         {% if object.category is not empty %}
