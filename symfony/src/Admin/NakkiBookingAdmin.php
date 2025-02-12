@@ -9,6 +9,8 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NullFilter;
 use Sonata\Form\Type\DateTimePickerType;
 
 final class NakkiBookingAdmin extends AbstractAdmin
@@ -24,8 +26,15 @@ final class NakkiBookingAdmin extends AbstractAdmin
         }
         $filter
             ->add('member')
+            ->add('memberNotAssigned', NullFilter::class, [
+                'field_name' => 'member',
+            ])
             ->add('startAt')
-            ->add('endAt');
+            ->add('startAtRange', DateTimeRangeFilter::class, [
+                'field_name' => 'startAt',
+            ])
+            ->add('endAt')
+        ;
     }
 
     #[\Override]
