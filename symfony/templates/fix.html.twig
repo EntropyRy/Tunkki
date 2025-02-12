@@ -1,10 +1,16 @@
 {% extends 'twocolumn.html.twig' %}
 {% block content %}
+    <twig:ux:icon height="2rem" name="fluent:wrench-screwdriver-24-regular" /> {{ 'page.fixing.icon.wrench'|trans }}
+    <twig:ux:icon height="2rem" style="color: red" name="game-icons:puzzle" /> {{ 'page.fixing.icon.puzzle'|trans }}
     {% if fix is defined %}
         {% for item in fix %}
             <div>
                 <a href="{{ path('admin_app_item_edit', {id: item.id}) }}">
-                    <h3>{{ item.name }}</h3>
+                    <h3>
+                        {{ item.name }}
+                        {% if item.needsFixing %}<twig:ux:icon height="2rem" name="fluent:wrench-screwdriver-24-regular" />{% endif %}
+                        {% if item.toSpareParts %}<twig:ux:icon height="2rem" style="color: red" name="game-icons:puzzle" />{% endif %}
+                    </h3>
                 </a>
                 {% for fixh in item.fixinghistory|reverse %}
                     <span>{{ fixh.createdAt|date('d.m.Y') }}, {{ fixh.creator }}: {{ fixh.description }}</span>

@@ -217,6 +217,10 @@ menu:
 page:
   title:
     checkout: Kassa
+  fixing:
+    icon:
+      wrench: Tarkoittaa että tarvitsee korjausta
+      puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
 event:
   stripe:
     fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
