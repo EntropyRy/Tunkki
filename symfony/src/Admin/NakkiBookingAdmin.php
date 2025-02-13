@@ -39,7 +39,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
                 'field_name' => 'startAt',
             ])
             ->add('endAt')
-            ->add('display_only_unique', CallbackFilter::class, [
+            ->add('display_only_unique_members', CallbackFilter::class, [
                 // This option accepts any callable syntax.
                 // 'callback' => [$this, 'getWithOpenCommentFilter'],
                 'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
