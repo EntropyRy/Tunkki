@@ -4881,16 +4881,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.35.2",
+            "version": "4.35.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "e0daf0bfc7ca9dcbfc3b8c20a5963d1dd239837e"
+                "reference": "db0e49510a75faa4ad93189fc185cd389cccbf09"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/e0daf0bfc7ca9dcbfc3b8c20a5963d1dd239837e",
-                "reference": "e0daf0bfc7ca9dcbfc3b8c20a5963d1dd239837e",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/db0e49510a75faa4ad93189fc185cd389cccbf09",
+                "reference": "db0e49510a75faa4ad93189fc185cd389cccbf09",
                 "shasum": ""
             },
             "require": {
@@ -4997,7 +4997,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.35.2"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.35.3"
             },
             "funding": [
                 {
@@ -5017,7 +5017,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-05T19:10:40+00:00"
+            "time": "2025-02-13T11:12:17+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -13206,16 +13206,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.17",
+            "version": "1.12.18",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "7027b3b0270bf392de0cfba12825979768d728bf"
+                "reference": "fef9f07814a573399229304bb0046affdf558812"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/7027b3b0270bf392de0cfba12825979768d728bf",
-                "reference": "7027b3b0270bf392de0cfba12825979768d728bf",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/fef9f07814a573399229304bb0046affdf558812",
+                "reference": "fef9f07814a573399229304bb0046affdf558812",
                 "shasum": ""
             },
             "require": {
@@ -13260,7 +13260,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-07T15:01:57+00:00"
+            "time": "2025-02-13T12:44:44+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
