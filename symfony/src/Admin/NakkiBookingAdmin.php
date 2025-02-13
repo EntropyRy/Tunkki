@@ -7,11 +7,15 @@ namespace App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NullFilter;
 use Sonata\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 final class NakkiBookingAdmin extends AbstractAdmin
 {
@@ -35,6 +39,22 @@ final class NakkiBookingAdmin extends AbstractAdmin
                 'field_name' => 'startAt',
             ])
             ->add('endAt')
+            ->add('display_only_unique', CallbackFilter::class, [
+                // This option accepts any callable syntax.
+                // 'callback' => [$this, 'getWithOpenCommentFilter'],
+                'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
+                    if (!$data->hasValue()) {
+                        return false;
+                    }
+
+                    $query
+                        ->groupBy('o.member')
+                    ;
+
+                    return true;
+                },
+                'field_type' => CheckboxType::class,
+            ]);
         ;
     }
 
