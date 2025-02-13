@@ -198,7 +198,6 @@ final class MemberAdmin extends AbstractAdmin
             ->add('emailVerified')
             ->add('allowInfoMails')
             ->add('allowActiveMemberMails')
-            ->add('user.MattermostId')
             ->add('phone')
             ->add('CityOfResidence')
             ->add('StudentUnionMember')

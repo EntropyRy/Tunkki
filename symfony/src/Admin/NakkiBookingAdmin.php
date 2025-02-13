@@ -26,6 +26,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
         }
         $filter
             ->add('member')
+            ->add('member.isActiveMember')
             ->add('memberNotAssigned', NullFilter::class, [
                 'field_name' => 'member',
             ])
