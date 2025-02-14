@@ -495,7 +495,7 @@ function gameLoop() {
     );
 
     // Add the toggle instruction text
-    ctx.font = "8px Arial";
+    ctx.font = "10px Arial";
     ctx.fillText(
       "Press (t)oggle or ESC to hide/show the game",
       canvas.width / 2,
@@ -652,9 +652,9 @@ document.addEventListener("keydown", function (event) {
 function toggleGameVisibility() {
   isGameVisible = !isGameVisible;
   if (isGameVisible) {
-    canvas.style.opacity = "1";
+    canvas.style.display = "block";
   } else {
-    canvas.style.opacity = "0";
+    canvas.style.display = "none";
   }
 }
 document.addEventListener("keydown", (e) => {
