@@ -5,6 +5,7 @@ const gridSize = 20;
 const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 let gameRunning = false;
 let animationFrame = null;
+let isGameVisible = true;
 
 let highScore = parseInt(localStorage.getItem("snakeHighScore")) || 0;
 let lastScoreDate = localStorage.getItem("snakeLastScoreDate") || "";
@@ -493,6 +494,14 @@ function gameLoop() {
       canvas.height / 2 + 170,
     );
 
+    // Add the toggle instruction text
+    ctx.font = "8px Arial";
+    ctx.fillText(
+      "Press (t)oggle or ESC to hide/show the game",
+      canvas.width / 2,
+      canvas.height / 2 + 200,
+    );
+
     animationFrame = requestAnimationFrame(gameLoop);
     return;
   }
@@ -634,7 +643,20 @@ if (!isMobile) {
 } else {
   canvas.addEventListener("touchstart", restartGame);
 }
-
+// Add the toggle event listener
+document.addEventListener("keydown", function (event) {
+  if (event.key === "t" || event.key === "T" || event.key === "Escape") {
+    toggleGameVisibility();
+  }
+});
+function toggleGameVisibility() {
+  isGameVisible = !isGameVisible;
+  if (isGameVisible) {
+    canvas.style.opacity = "1";
+  } else {
+    canvas.style.opacity = "0";
+  }
+}
 document.addEventListener("keydown", (e) => {
   if (e.code === "Space" && !isMobile) {
     restartGame();
