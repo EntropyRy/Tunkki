@@ -47,6 +47,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
                         return false;
                     }
 
+                    assert($query instanceof \Doctrine\ORM\QueryBuilder);
                     $query
                         ->groupBy('o.member')
                     ;
