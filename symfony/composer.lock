@@ -3385,16 +3385,16 @@
         },
         {
             "name": "league/oauth2-server",
-            "version": "9.1.0",
+            "version": "9.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server.git",
-                "reference": "d511107cb018ead0bd84f86402b086306738c686"
+                "reference": "00323013403e1a1e0f424affafca56c28b60c22c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/d511107cb018ead0bd84f86402b086306738c686",
-                "reference": "d511107cb018ead0bd84f86402b086306738c686",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server/zipball/00323013403e1a1e0f424affafca56c28b60c22c",
+                "reference": "00323013403e1a1e0f424affafca56c28b60c22c",
                 "shasum": ""
             },
             "require": {
@@ -3469,7 +3469,7 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/oauth2-server/issues",
-                "source": "https://github.com/thephpleague/oauth2-server/tree/9.1.0"
+                "source": "https://github.com/thephpleague/oauth2-server/tree/9.2.0"
             },
             "funding": [
                 {
@@ -3477,7 +3477,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-21T22:47:09+00:00"
+            "time": "2025-02-15T00:49:10+00:00"
         },
         {
             "name": "league/oauth2-server-bundle",
