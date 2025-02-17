@@ -145,10 +145,20 @@ final class MemberAdmin extends AbstractAdmin
             ->add('locale')
             // ->add('user.MattermostId')
             ->end()
-            ->with('Email settings', ['class' => 'col-md-4'])
-            ->add('emailVerified', null, ['help' => 'Email verified'])
-            ->add('allowInfoMails')
-            ->add('allowActiveMemberMails')
+            ->with('Membership info', ['class' => 'col-md-4'])
+            ->add('Application', null, ['disabled' => $editable])
+            ->add('ApplicationDate', DatePickerType::class, ['required' => false])
+            ->add(
+                'ApplicationHandledDate',
+                DatePickerType::class,
+                [
+                    'required' => false,
+                    'help' => 'doubles as accepted as active member date'
+                ]
+            )
+            ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
+            ->add('rejectReasonSent')
+            ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, ['help' => 'Everyone who is this is actual member of entropy with voting rights'])
@@ -165,26 +175,11 @@ final class MemberAdmin extends AbstractAdmin
             )
             //->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
-            ->with('Membership info', ['class' => 'col-md-4'])
-            ->add('Application', null, ['disabled' => $editable])
-            ->add('ApplicationDate', DatePickerType::class, ['required' => false])
-            ->add(
-                'ApplicationHandledDate',
-                DatePickerType::class,
-                [
-                    'required' => false,
-                    'help' => 'doubles as accepted as active member date'
-                ]
-            )
-            ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
+            ->with('Email settings', ['class' => 'col-md-4'])
+            ->add('emailVerified', null, ['help' => 'Email verified'])
+            ->add('allowInfoMails')
+            ->add('allowActiveMemberMails')
             ->end();
-        //if (is_null($this->getSubject()->getApplicationHandledDate())){
-        $formMapper
-            ->with('Membership info')
-            ->add('rejectReason', null, ['help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list'])
-            ->add('rejectReasonSent')
-            ->end();
-        //}
     }
 
     #[\Override]
