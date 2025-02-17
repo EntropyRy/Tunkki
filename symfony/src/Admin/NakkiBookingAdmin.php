@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -47,7 +48,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
                         return false;
                     }
 
-                    assert($query instanceof \Doctrine\ORM\QueryBuilder);
+                    assert($query instanceof QueryBuilder);
                     $query
                         ->groupBy('o.member')
                     ;
