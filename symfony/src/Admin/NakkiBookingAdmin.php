@@ -30,16 +30,6 @@ final class NakkiBookingAdmin extends AbstractAdmin
                 ->add('event');
         }
         $filter
-            ->add('member')
-            ->add('member.isActiveMember')
-            ->add('memberNotAssigned', NullFilter::class, [
-                'field_name' => 'member',
-            ])
-            ->add('startAt')
-            ->add('startAtRange', DateTimeRangeFilter::class, [
-                'field_name' => 'startAt',
-            ])
-            ->add('endAt')
             ->add('display_only_unique_members', CallbackFilter::class, [
                 // This option accepts any callable syntax.
                 // 'callback' => [$this, 'getWithOpenCommentFilter'],
@@ -56,7 +46,17 @@ final class NakkiBookingAdmin extends AbstractAdmin
                     return true;
                 },
                 'field_type' => CheckboxType::class,
-            ]);
+            ])
+            ->add('member')
+            ->add('member.isActiveMember')
+            ->add('memberNotAssigned', NullFilter::class, [
+                'field_name' => 'member',
+            ])
+            ->add('startAt')
+            ->add('startAtRange', DateTimeRangeFilter::class, [
+                'field_name' => 'startAt',
+            ])
+            ->add('endAt')
         ;
     }
 
