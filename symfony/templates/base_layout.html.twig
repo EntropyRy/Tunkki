@@ -16,11 +16,11 @@
                 {{ sonata_seo_title() }}
             {% endif %}
             {% block meta %}{{ sonata_seo_metadatas() }}{% endblock %}
-            {% block stylesheets %}
-                <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
-            {% endblock %}
             {% block importmap %}
                 {{ importmap('app') }}
+            {% endblock %}
+            {% block stylesheets %}
+                <link rel="stylesheet" href="{{ asset('styles/app.scss') }}">
             {% endblock %}
             {% block javascripts %}{% endblock %}
             <link rel="manifest" href="/manifest.json">
