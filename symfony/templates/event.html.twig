@@ -3,13 +3,16 @@
 {% use 'event/meta.html.twig' %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block importmap %}
-    {% set import = ['app'] %}
+    {{ parent() }}
     {% if event.backgroundEffect is not empty %}
-        {% set import = import|merge([event.backgroundEffect]) %}
+        {{ importmap(event.backgroundEffect) }}
     {% endif %}
-    {{ importmap(import) }}
+{% endblock %}
+{% block stylesheets %}
+    {{ parent() }}
     <style data-turbo-track="reload">{{ event.css|raw }}</style>
 {% endblock %}
+
 {% block content %}
     {% if app.user %}
         {% set visible = true %}
