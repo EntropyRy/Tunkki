@@ -151,6 +151,7 @@ event:
     music: Music
     meeting: Discussion event
     announcement: Announcement
+    web: Happens online
   stripe:
     fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
     complete: Thank you for your purchase!

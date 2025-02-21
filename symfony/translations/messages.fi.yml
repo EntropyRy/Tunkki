@@ -228,6 +228,7 @@ event:
     music: Musiikkia
     meeting: Keskustelu tilaisuus
     announcement: Ilmoitus asia
+    web: online mahdollisuus
   stripe:
     fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
     complete: Kiitos ostoksestasi!
