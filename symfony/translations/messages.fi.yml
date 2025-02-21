@@ -222,6 +222,12 @@ page:
       wrench: Tarkoittaa että tarvitsee korjausta
       puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
 event:
+  badge:
+    stream: Internet lähetys
+    clubroom: Tapahtuu kerhohuoneella
+    music: Musiikkia
+    meeting: Keskustelu tilaisuus
+    announcement: Ilmoitus asia
   stripe:
     fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
     complete: Kiitos ostoksestasi!
