@@ -229,7 +229,7 @@ profile:
     last: latest change in the lock
     connection_problems: Connection problems
     connection_ok: Connection ok
-    wifi: Needs clubroom wifi connection to work. Safari <a href="https://support.apple.com/en-us/HT212614">problem</a>
+    wifi: Needs clubroom wifi connection to work. iPhone <a href="https://support.apple.com/en-us/HT212614">problem</a>
 epics:
   tile:
     heading: Random photos from
