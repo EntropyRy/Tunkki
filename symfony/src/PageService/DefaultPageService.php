@@ -39,7 +39,7 @@ final class DefaultPageService extends BasePageService
 
     private function updateSeoPage(PageInterface $page): void
     {
-        if (null === $this->seoPage) {
+        if (!$this->seoPage instanceof SeoPageInterface) {
             return;
         }
 

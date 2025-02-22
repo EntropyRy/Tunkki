@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class BillableEvent implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -30,7 +31,7 @@ class BillableEvent implements \Stringable
         return $this->id;
     }
 
-    public function setDescription($description): self
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -42,7 +43,7 @@ class BillableEvent implements \Stringable
         return $this->description;
     }
 
-    public function setUnitPrice($unitPrice): self
+    public function setUnitPrice(string $unitPrice): self
     {
         $this->unitPrice = $unitPrice;
 
@@ -69,8 +70,8 @@ class BillableEvent implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if (!empty($this->getUnitPrice())) {
-            return $this->description ? $this->description.': '.$this->getUnitPrice() : '';
+        if (!in_array($this->getUnitPrice(), ['', '0'], true)) {
+            return $this->description !== '' && $this->description !== '0' ? $this->description.': '.$this->getUnitPrice() : '';
         } else {
             return '';
         }

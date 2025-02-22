@@ -50,7 +50,7 @@ class CheckoutsController extends AbstractController
         $lineItems = [];
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
         foreach ($products as $cartItem) {
-            $minus = array_key_exists($cartItem->getProduct()->getId(), $itemsInCheckout) ? $itemsInCheckout[$cartItem->getProduct()->getId()] : null;
+            $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
             if (is_array($item)) {
                 $lineItems[] = $item;
@@ -58,7 +58,7 @@ class CheckoutsController extends AbstractController
                 $this->addFlash('warning', 'product.sold_out');
             }
         }
-        if (count($lineItems) > 0) {
+        if ($lineItems !== []) {
             $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
             if ($eventServiceFeeProduct != null) {
                 // Do not add it again if it is already in the cart
@@ -137,7 +137,7 @@ class CheckoutsController extends AbstractController
         $lineItems = [];
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
         foreach ($products as $cartItem) {
-            $minus = array_key_exists($cartItem->getProduct()->getId(), $itemsInCheckout) ? $itemsInCheckout[$cartItem->getProduct()->getId()] : null;
+            $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
             if (is_array($item)) {
                 $lineItems[] = $item;
@@ -145,7 +145,7 @@ class CheckoutsController extends AbstractController
                 $this->addFlash('warning', 'product.sold_out');
             }
         }
-        if (count($lineItems) > 0) {
+        if ($lineItems !== []) {
             $stripeSession = $client->checkout->sessions->create([
                 'ui_mode' => 'embedded',
                 'line_items' => [$lineItems],

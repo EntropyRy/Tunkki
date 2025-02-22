@@ -11,7 +11,7 @@ class NakkiDefinition implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -26,7 +26,7 @@ class NakkiDefinition implements \Stringable
     #[ORM\Column(type: 'text')]
     private ?string $DescriptionEn = null;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $onlyForActiveMembers = false;
 
     public function getId(): ?int

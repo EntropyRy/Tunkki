@@ -67,11 +67,9 @@ class Cart
 
     public function removeProduct(CartItem $product): static
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getCart() === $this) {
-                $product->setCart(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->products->removeElement($product) && $product->getCart() === $this) {
+            $product->setCart(null);
         }
 
         return $this;
@@ -119,11 +117,9 @@ class Cart
 
     public function removeCheckout(Checkout $checkout): static
     {
-        if ($this->checkouts->removeElement($checkout)) {
-            // set the owning side to null (unless already changed)
-            if ($checkout->getCart() === $this) {
-                $checkout->setCart(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->checkouts->removeElement($checkout) && $checkout->getCart() === $this) {
+            $checkout->setCart(null);
         }
 
         return $this;

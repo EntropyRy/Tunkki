@@ -710,21 +710,17 @@ final class EventAdmin extends AbstractAdmin
     #[\Override]
     public function preValidate(object $object): void
     {
-        if ($object->getTicketsEnabled() == true) {
-            if (is_object($object->getTicketPresaleStart()) && is_object($object->getTicketPresaleEnd())) {
-                if ($object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()) {
-                    $session = $this->rs->getSession();
-                    assert($session instanceof Session);
-                    $session->getFlashBag()->add('warning', 'Presale end date must be after start date');
-                }
-            }
-        }
-        if (is_object($object->getEventDate()) && is_object($object->getUntil())) {
-            if ($object->getEventDate() >= $object->getUntil()) {
+        if ($object->getTicketsEnabled() == true && (is_object($object->getTicketPresaleStart()) && is_object($object->getTicketPresaleEnd()))) {
+            if ($object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()) {
                 $session = $this->rs->getSession();
                 assert($session instanceof Session);
-                $session->getFlashBag()->add('warning', 'Event stop time must be after start time');
+                $session->getFlashBag()->add('warning', 'Presale end date must be after start date');
             }
+        }
+        if (is_object($object->getEventDate()) && is_object($object->getUntil()) && $object->getEventDate() >= $object->getUntil()) {
+            $session = $this->rs->getSession();
+            assert($session instanceof Session);
+            $session->getFlashBag()->add('warning', 'Event stop time must be after start time');
         }
     }
 }

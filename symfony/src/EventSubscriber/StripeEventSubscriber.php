@@ -164,11 +164,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
-                        if ($cartItem->getQuantity() > 1) {
-                            $sold = 'Sold ' . $cartItem->getQuantity() . ' tickets.';
-                        } else {
-                            $sold = 'Sold 1 ticket.';
-                        }
+                        $sold = $cartItem->getQuantity() > 1 ? 'Sold ' . $cartItem->getQuantity() . ' tickets.' : 'Sold 1 ticket.';
                         $this->mm->SendToMattermost('[' . $event->getName() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
                     }
                 }
@@ -192,11 +188,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
             $body = $email->getBody();
         }
         foreach ($qrs as $x => $qr) {
-            if ($x > 0) {
-                $subject = '[ENTROPY] ' . $qr['name'] . ' (' . ($x + 1) . ')';
-            } else {
-                $subject = '[ENTROPY] ' . $qr['name'];
-            }
+            $subject = $x > 0 ? '[ENTROPY] ' . $qr['name'] . ' (' . ($x + 1) . ')' : '[ENTROPY] ' . $qr['name'];
             $mail =  (new TemplatedEmail())
                 ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
                 ->to($to)

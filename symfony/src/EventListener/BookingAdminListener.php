@@ -22,7 +22,7 @@ class BookingAdminListener implements EventSubscriberInterface
      */
     public function sendEmailNotification(PersistenceEvent $event): void
     {
-        if ($this->email) {
+        if ($this->email !== '' && $this->email !== '0') {
             $booking = $event->getObject();
             if ($booking instanceof Booking) {
                 $mailer = $this->mailer;
@@ -45,30 +45,27 @@ class BookingAdminListener implements EventSubscriberInterface
     public function updateRewards(PersistenceEvent $args): void
     {
         $event = $args->getObject();
-        if ($event instanceof StatusEvent) {
-            if ($event->getBooking() instanceof Booking) {
-                $booking = $event->getBooking();
-                if ($booking->getPaid() && $booking->getActualPrice() > 0) { // now it is paid
-                    $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
-                    if (!$old['paid']) { // earlier it was not paid
-                        // give reward
-                        if (!empty($booking->getActualPrice())) {
-                            $amount = (float) $booking->getActualPrice() * 0.10;
-                            if ($booking->getGivenAwayBy() == $booking->getReceivedBy()) {
-                                $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
-                                $gr->addWeight(2);
-                                $this->em->persist($gr);
-                            } else {
-                                $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
-                                $gr->addWeight(1);
-                                $this->em->persist($gr);
-                                $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
-                                $rr->addWeight(1);
-                                $this->em->persist($rr);
-                            }
-                            $this->em->flush();
-                        }
+        if ($event instanceof StatusEvent && $event->getBooking() instanceof Booking) {
+            $booking = $event->getBooking();
+            if ($booking->getPaid() && $booking->getActualPrice() > 0) { // now it is paid
+                $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
+                // earlier it was not paid
+                // give reward
+                if (!$old['paid'] && !empty($booking->getActualPrice())) {
+                    $amount = (float) $booking->getActualPrice() * 0.10;
+                    if ($booking->getGivenAwayBy() === $booking->getReceivedBy()) {
+                        $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
+                        $gr->addWeight(2);
+                        $this->em->persist($gr);
+                    } else {
+                        $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
+                        $gr->addWeight(1);
+                        $this->em->persist($gr);
+                        $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
+                        $rr->addWeight(1);
+                        $this->em->persist($rr);
                     }
+                    $this->em->flush();
                 }
             }
         }

@@ -60,7 +60,7 @@ final class RewardAdminController extends CRUDController
             $reward->setEvenout(strval($total['pool'] * $reward->getWeight() / $total['sum']));
             $this->admin->update($reward);
         }
-        $this->addFlash('sonata_flash_success', sprintf('New distribution calculated!'));
+        $this->addFlash('sonata_flash_success', 'New distribution calculated!');
 
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }

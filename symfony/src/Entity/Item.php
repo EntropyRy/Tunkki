@@ -22,7 +22,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Item implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -70,13 +70,13 @@ class Item implements \Stringable
     #[ORM\Column(name: 'RentNotice', type: Types::STRING, length: 5000, nullable: true)]
     private ?string $rentNotice = null;
 
-    #[ORM\Column(name: 'NeedsFixing', type: 'boolean')]
+    #[ORM\Column(name: 'NeedsFixing', type: Types::BOOLEAN)]
     private bool $needsFixing = false;
 
-    #[ORM\Column(name: 'ToSpareParts', type: 'boolean')]
+    #[ORM\Column(name: 'ToSpareParts', type: Types::BOOLEAN)]
     private bool $toSpareParts = false;
 
-    #[ORM\Column(name: 'CannotBeRented', type: 'boolean')]
+    #[ORM\Column(name: 'CannotBeRented', type: Types::BOOLEAN)]
     private bool $cannotBeRented = false;
 
     #[ORM\OneToMany(targetEntity: StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
@@ -88,7 +88,7 @@ class Item implements \Stringable
     #[ORM\ManyToMany(targetEntity: Booking::class, cascade: ['all'])]
     private $rentHistory;
 
-    #[ORM\Column(name: 'ForSale', type: 'boolean', nullable: true)]
+    #[ORM\Column(name: 'ForSale', type: Types::BOOLEAN, nullable: true)]
     private ?bool $forSale = false;
 
     #[ORM\ManyToMany(targetEntity: Package::class, inversedBy: 'items')]
@@ -239,7 +239,7 @@ class Item implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if ($this->name) {
+        if ($this->name !== '' && $this->name !== '0') {
             return $this->name;
         } else {
             return 'N/A';
@@ -277,11 +277,7 @@ class Item implements \Stringable
 
     public function getFixingHistoryMessages(int $count, ?string $endofline = null): ?string
     {
-        if ($endofline == 'html') {
-            $eol = "<br>";
-        } else {
-            $eol = PHP_EOL;
-        }
+        $eol = $endofline == 'html' ? "<br>" : PHP_EOL;
         $messages = '';
         foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
             $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';

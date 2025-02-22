@@ -14,7 +14,7 @@ class AccessGroups implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -23,10 +23,10 @@ class AccessGroups implements \Stringable
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'accessGroups')]
     private $users;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $active = true;
 
     public function __construct()

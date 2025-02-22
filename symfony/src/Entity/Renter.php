@@ -15,7 +15,7 @@ use App\Entity\Booking;
 #[ORM\Entity]
 class Renter implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -49,7 +49,7 @@ class Renter implements \Stringable
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -57,11 +57,9 @@ class Renter implements \Stringable
     /**
      * Set name
      *
-     * @param string $name
      *
-     * @return Renter
      */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -70,10 +68,8 @@ class Renter implements \Stringable
 
     /**
      * Get name
-     *
-     * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -82,10 +78,8 @@ class Renter implements \Stringable
      * Set streetadress
      *
      * @param string $streetadress
-     *
-     * @return Renter
      */
-    public function setStreetadress($streetadress)
+    public function setStreetadress(?string $streetadress): static
     {
         $this->streetadress = $streetadress;
 
@@ -97,7 +91,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getStreetadress()
+    public function getStreetadress(): ?string
     {
         return $this->streetadress;
     }
@@ -106,10 +100,8 @@ class Renter implements \Stringable
      * Set zipcode
      *
      * @param string $zipcode
-     *
-     * @return Renter
      */
-    public function setZipcode($zipcode)
+    public function setZipcode(?string $zipcode): static
     {
         $this->zipcode = $zipcode;
 
@@ -121,7 +113,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getZipcode()
+    public function getZipcode(): ?string
     {
         return $this->zipcode;
     }
@@ -130,10 +122,8 @@ class Renter implements \Stringable
      * Set city
      *
      * @param string $city
-     *
-     * @return Renter
      */
-    public function setCity($city)
+    public function setCity(?string $city): static
     {
         $this->city = $city;
 
@@ -145,7 +135,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getCity()
+    public function getCity(): ?string
     {
         return $this->city;
     }
@@ -154,10 +144,8 @@ class Renter implements \Stringable
      * Set phone
      *
      * @param string $phone
-     *
-     * @return Renter
      */
-    public function setPhone($phone)
+    public function setPhone(?string $phone): static
     {
         $this->phone = $phone;
 
@@ -169,7 +157,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -178,10 +166,8 @@ class Renter implements \Stringable
      * Set email
      *
      * @param string $email
-     *
-     * @return Renter
      */
-    public function setEmail($email)
+    public function setEmail(?string $email): static
     {
         $this->email = $email;
 
@@ -193,7 +179,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -201,10 +187,8 @@ class Renter implements \Stringable
     /**
      * Set bookings
      *
-     *
-     * @return Renter
      */
-    public function setBookings(?Booking $bookings = null)
+    public function setBookings(?Booking $bookings = null): static
     {
         $this->bookings = $bookings;
 
@@ -237,10 +221,8 @@ class Renter implements \Stringable
      * Set organization
      *
      * @param string $organization
-     *
-     * @return Renter
      */
-    public function setOrganization($organization)
+    public function setOrganization(?string $organization): static
     {
         $this->organization = $organization;
 
@@ -252,7 +234,7 @@ class Renter implements \Stringable
      *
      * @return string
      */
-    public function getOrganization()
+    public function getOrganization(): ?string
     {
         return $this->organization;
     }
@@ -260,10 +242,8 @@ class Renter implements \Stringable
     /**
      * Add booking
      *
-     *
-     * @return Renter
      */
-    public function addBooking(Booking $booking)
+    public function addBooking(Booking $booking): static
     {
         $this->bookings[] = $booking;
 
@@ -273,7 +253,7 @@ class Renter implements \Stringable
     /**
      * Remove booking
      */
-    public function removeBooking(Booking $booking)
+    public function removeBooking(Booking $booking): void
     {
         $this->bookings->removeElement($booking);
     }

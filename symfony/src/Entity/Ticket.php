@@ -14,7 +14,7 @@ class Ticket implements \Stringable
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
@@ -25,10 +25,10 @@ class Ticket implements \Stringable
     #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
     private ?Member $owner = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $price = null;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $referenceNumber = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -119,7 +119,7 @@ class Ticket implements \Stringable
 
     public function getOwnerEmail(): ?string
     {
-        return $this->owner ? $this->owner->getEmail() : null;
+        return $this->owner instanceof Member ? $this->owner->getEmail() : null;
     }
 
     public function setStatus(string $status): self

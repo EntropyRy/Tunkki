@@ -47,7 +47,7 @@ class RenterHashController extends Controller
             throw new NotFoundHttpException();
         }
         $form = $this->createForm(BookingConsentType::class, $booking);
-        if ($request->getMethod() == 'POST') {
+        if ($request->getMethod() === 'POST') {
             $form->handleRequest($request);
             if ($form->isValid() && $form->isSubmitted()) {
                 $booking = $form->getData();

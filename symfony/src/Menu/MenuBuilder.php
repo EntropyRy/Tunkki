@@ -77,9 +77,9 @@ class MenuBuilder
         }
         return $menu;
     }
-    private function addItem($menu, $m, $l)
+    private function addItem($menu, $m, string $l)
     {
-        if ($l == 'fi') {
+        if ($l === 'fi') {
             if ($m->getPageFi()) {
                 $menu->addChild($m->getNimi(), [
                     'route' => 'page_slug',
@@ -88,25 +88,17 @@ class MenuBuilder
             } else {
                 $menu->addChild($m->getNimi(), ['uri' => $m->getUrl()]);
             }
+        } elseif ($m->getPageEn()) {
+            $prefix = str_contains((string) $m->getPageEn()->getSlug(), '/en') ? '/en' : '';
+            $url = $prefix . '/' . $m->getPageEn()->getSlug();
+            $menu->addChild($m->getLabel(), [
+                'route' => 'page_slug',
+                'routeParameters' => ['path' => $url]
+            ]);
+        } elseif (str_contains((string) $m->getUrl(), 'http')) {
+            $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
         } else {
-            if ($m->getPageEn()) {
-                if (str_contains((string) $m->getPageEn()->getSlug(), '/en')) {
-                    $prefix = '/en';
-                } else {
-                    $prefix = '';
-                }
-                $url = $prefix . '/' . $m->getPageEn()->getSlug();
-                $menu->addChild($m->getLabel(), [
-                    'route' => 'page_slug',
-                    'routeParameters' => ['path' => $url]
-                ]);
-            } else {
-                if (str_contains((string) $m->getUrl(), 'http')) {
-                    $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
-                } else {
-                    $menu->addChild($m->getLabel(), ['uri' => '/en' . $m->getUrl()]);
-                }
-            }
+            $menu->addChild($m->getLabel(), ['uri' => '/en' . $m->getUrl()]);
         }
         return $menu;
     }
@@ -115,7 +107,7 @@ class MenuBuilder
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            fn ($a, $b) => $a->getPosition() <=> $b->getPosition()
+            fn ($a, $b): int => $a->getPosition() <=> $b->getPosition()
         );
         return $array;
     }

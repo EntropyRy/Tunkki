@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Sonata;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\MediaBundle\Entity\BaseGalleryItem;
 
@@ -13,7 +14,7 @@ class SonataMediaGalleryItem extends BaseGalleryItem
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     protected $id;
 
     #[\Override]

@@ -79,6 +79,6 @@ class CartItem implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->product ? $this->product->getNameEn() . ' X ' . $this->quantity : 'N/A';
+        return $this->product instanceof Product ? $this->product->getNameEn() . ' X ' . $this->quantity : 'N/A';
     }
 }

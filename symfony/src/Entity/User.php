@@ -18,10 +18,10 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'json')]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
 
     /**
@@ -94,10 +94,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
      */
     public function getUsername(): string
     {
-        if ($this->member) {
-            if ($this->member->getUsername()) {
-                return $this->member->getUsername();
-            }
+        if ($this->member instanceof Member && $this->member->getUsername()) {
+            return $this->member->getUsername();
         }
         return 'N/A';
     }
@@ -109,10 +107,8 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[\Override]
     public function getUserIdentifier(): string
     {
-        if ($this->member) {
-            if ($this->member->getEmail()) {
-                return $this->member->getEmail();
-            }
+        if ($this->member instanceof Member && $this->member->getEmail()) {
+            return $this->member->getEmail();
         }
         return 'N/A';
     }
@@ -270,7 +266,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     {
         return $this->plainPassword;
     }
-    public function setPlainPassword($plainPassword)
+    public function setPlainPassword($plainPassword): void
     {
         $this->plainPassword = $plainPassword;
         $this->password = null;
@@ -305,7 +301,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[\Override]
     public function __toString(): string
     {
-        if ($this->member) {
+        if ($this->member instanceof Member) {
             return (string) $this->member->getName();
         } else {
             return 'user: ' . $this->id;

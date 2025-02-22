@@ -16,7 +16,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class StatusEvent implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -62,7 +62,7 @@ class StatusEvent implements \Stringable
         return $this->id;
     }
 
-    public function setDescription($description): StatusEvent
+    public function setDescription(string $description): StatusEvent
     {
         $this->description = $description;
 
@@ -74,7 +74,7 @@ class StatusEvent implements \Stringable
         return $this->description;
     }
 
-    public function setCreatedAt($createdAt): StatusEvent
+    public function setCreatedAt(\DateTimeInterface $createdAt): StatusEvent
     {
         $this->createdAt = $createdAt;
 
@@ -86,7 +86,7 @@ class StatusEvent implements \Stringable
         return $this->createdAt;
     }
 
-    public function setUpdatedAt($updatedAt): StatusEvent
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): StatusEvent
     {
         $this->updatedAt = $updatedAt;
 

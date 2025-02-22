@@ -4882,16 +4882,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.35.3",
+            "version": "4.35.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "db0e49510a75faa4ad93189fc185cd389cccbf09"
+                "reference": "418783e0d7889dd9ba3f3ba0e5178452dd472689"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/db0e49510a75faa4ad93189fc185cd389cccbf09",
-                "reference": "db0e49510a75faa4ad93189fc185cd389cccbf09",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/418783e0d7889dd9ba3f3ba0e5178452dd472689",
+                "reference": "418783e0d7889dd9ba3f3ba0e5178452dd472689",
                 "shasum": ""
             },
             "require": {
@@ -4998,7 +4998,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.35.3"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.35.4"
             },
             "funding": [
                 {
@@ -5018,7 +5018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-13T11:12:17+00:00"
+            "time": "2025-02-20T14:35:07+00:00"
         },
         {
             "name": "sonata-project/block-bundle",

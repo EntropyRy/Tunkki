@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class AccessoryChoice implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -17,7 +17,7 @@ class AccessoryChoice implements \Stringable
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private string $name = '';
 
-    #[ORM\Column(name: 'compensationPrice', type: 'integer')]
+    #[ORM\Column(name: 'compensationPrice', type: Types::INTEGER)]
     private int $compensationPrice;
 
     public function getId(): ?int

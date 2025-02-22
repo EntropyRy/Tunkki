@@ -73,31 +73,22 @@ final class NotificationAdminController extends CRUDController
                     $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $venue->getName(), $venue->getStreetAddress());
                     break;
                 case 'add_event_button':
-                    array_push(
-                        $buttons,
-                        (new InlineKeyboardButton('Tapahtuma / The Event'))
-                            ->url($url)
-                    );
+                    $buttons[] = (new InlineKeyboardButton('Tapahtuma / The Event'))
+                        ->url($url);
                     break;
                 case 'add_shop_button':
-                    array_push(
-                        $buttons,
-                        (new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale)))
-                            ->url($shop)
-                    );
+                    $buttons[] = (new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale)))
+                        ->url($shop);
                     break;
                 case 'add_nakkikone_button':
-                    array_push(
-                        $buttons,
-                        (new InlineKeyboardButton($ts->trans('Nakkikone')))
-                            ->url($nakkikone)
-                    );
+                    $buttons[] = (new InlineKeyboardButton($ts->trans('Nakkikone')))
+                        ->url($nakkikone);
                     break;
                 default:
                     break;
             }
         }
-        if (!empty($buttons)) {
+        if ($buttons !== []) {
             $telegramOptions
                 ->replyMarkup(
                     (new InlineKeyboardMarkup())

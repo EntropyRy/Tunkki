@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class File implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -29,7 +29,7 @@ class File implements \Stringable
         return $this->id;
     }
 
-    public function setFileinfo($fileinfo): self
+    public function setFileinfo(?string $fileinfo): self
     {
         $this->fileinfo = $fileinfo;
 

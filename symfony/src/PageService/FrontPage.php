@@ -67,7 +67,7 @@ class FrontPage implements PageServiceInterface
     }
     private function updateSeoPage(PageInterface $page): void
     {
-        if (null === $this->seoPage) {
+        if (!$this->seoPage instanceof SeoPageInterface) {
             return;
         }
 

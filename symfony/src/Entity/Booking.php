@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\HasLifecycleCallbacks]
 class Booking implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -29,19 +29,19 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'renterHash', type: Types::STRING, length: 199)]
     private int|string $renterHash = 0;
 
-    #[ORM\Column(name: 'renterConsent', type: 'boolean')]
+    #[ORM\Column(name: 'renterConsent', type: Types::BOOLEAN)]
     private bool $renterConsent = false;
 
-    #[ORM\Column(name: 'itemsReturned', type: 'boolean')]
+    #[ORM\Column(name: 'itemsReturned', type: Types::BOOLEAN)]
     private bool $itemsReturned = false;
 
-    #[ORM\Column(name: 'invoiceSent', type: 'boolean')]
+    #[ORM\Column(name: 'invoiceSent', type: Types::BOOLEAN)]
     private bool $invoiceSent = false;
 
-    #[ORM\Column(name: 'paid', type: 'boolean')]
+    #[ORM\Column(name: 'paid', type: Types::BOOLEAN)]
     private bool $paid = false;
 
-    #[ORM\Column(name: 'cancelled', type: 'boolean')]
+    #[ORM\Column(name: 'cancelled', type: Types::BOOLEAN)]
     private bool $cancelled = false;
 
     #[ORM\Column(name: 'retrieval', type: 'datetime', nullable: true)]
@@ -83,7 +83,7 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'actualPrice', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $actualPrice;
 
-    #[ORM\Column(name: 'numberOfRentDays', type: 'integer')]
+    #[ORM\Column(name: 'numberOfRentDays', type: Types::INTEGER)]
     private int $numberOfRentDays = 1;
 
     #[ORM\OneToMany(targetEntity: StatusEvent::class, mappedBy: 'booking', cascade: ['all'], fetch: 'LAZY')]
@@ -163,7 +163,7 @@ class Booking implements \Stringable
         return $this->name ? $this->name . ' - ' . date_format($this->bookingDate, 'd.m.Y') : 'n/a';
     }
 
-    public function setPaid($paid): Booking
+    public function setPaid(bool $paid): Booking
     {
         $this->setPaidDate(new \DateTime());
         $this->paid = $paid;
@@ -176,7 +176,7 @@ class Booking implements \Stringable
         return $this->paid;
     }
 
-    public function setPaidDate($paidDate): Booking
+    public function setPaidDate(?\DateTime $paidDate): Booking
     {
         $this->paid_date = $paidDate;
 
@@ -280,7 +280,7 @@ class Booking implements \Stringable
         return $this->items;
     }
 
-    public function setNumberOfRentDays($numberOfRentDays): Booking
+    public function setNumberOfRentDays(int $numberOfRentDays): Booking
     {
         $this->numberOfRentDays = $numberOfRentDays;
 
@@ -329,7 +329,7 @@ class Booking implements \Stringable
         return $this->renter;
     }
 
-    public function setInvoiceSent($invoiceSent): Booking
+    public function setInvoiceSent(bool $invoiceSent): Booking
     {
         $this->invoiceSent = $invoiceSent;
 
@@ -341,7 +341,7 @@ class Booking implements \Stringable
         return $this->invoiceSent;
     }
 
-    public function setItemsReturned($itemsReturned): Booking
+    public function setItemsReturned(bool $itemsReturned): Booking
     {
         $this->itemsReturned = $itemsReturned;
 
@@ -353,7 +353,7 @@ class Booking implements \Stringable
         return $this->itemsReturned;
     }
 
-    public function setRenterHash($renterHash): Booking
+    public function setRenterHash(int|string $renterHash): Booking
     {
         $this->renterHash = $renterHash;
 
@@ -365,7 +365,7 @@ class Booking implements \Stringable
         return $this->renterHash;
     }
 
-    public function setRenterConsent($renterConsent): Booking
+    public function setRenterConsent(bool $renterConsent): Booking
     {
         $this->renterConsent = $renterConsent;
 
@@ -377,7 +377,7 @@ class Booking implements \Stringable
         return $this->renterConsent;
     }
 
-    public function setCancelled($cancelled): Booking
+    public function setCancelled(bool $cancelled): Booking
     {
         $this->cancelled = $cancelled;
 

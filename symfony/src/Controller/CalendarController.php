@@ -118,11 +118,7 @@ class CalendarController extends AbstractController
             ->setOccurrence($occurance)
             ->setUrl($url);
         if ($notification == 1) {
-            if ($locale == 'fi') {
-                $text = 'Muistutus huomisesta Entropy tapahtumasta!';
-            } else {
-                $text = 'Reminder for Entropy event tommorrow!';
-            }
+            $text = $locale == 'fi' ? 'Muistutus huomisesta Entropy tapahtumasta!' : 'Reminder for Entropy event tommorrow!';
             $e->addAlarm(
                 new Alarm(
                     new DisplayAction($text),
@@ -134,7 +130,7 @@ class CalendarController extends AbstractController
             $location = new Location($event->getWebMeetingUrl());
             $e->setLocation($location);
         }
-        if ($event->getLocation()) {
+        if ($event->getLocation() instanceof \App\Entity\Location) {
             $location = new Location($event->getLocation()->getStreetAddress(), $event->getLocation()->getName());
             $e->setLocation($location);
         }

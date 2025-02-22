@@ -66,7 +66,7 @@ class Product implements \Stringable
 
     public function getSold(): int
     {
-        if ($this->event) {
+        if ($this->event instanceof Event) {
             return $this->event->getTicketTypeCount($this->getStripeId());
         }
         return 0;

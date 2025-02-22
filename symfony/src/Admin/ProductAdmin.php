@@ -42,7 +42,7 @@ final class ProductAdmin extends AbstractAdmin
             ->add('active')
             ->add('event')
             ->add('amount', null, [
-                'accessor' => fn($subject) => $subject->getAmount() / 100 . '€'
+                'accessor' => fn($subject): string => $subject->getAmount() / 100 . '€'
             ])
             ->add('ticket')
             ->add('quantity')

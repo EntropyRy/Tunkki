@@ -178,7 +178,7 @@ final class EmailAdminController extends CRUDController
         }
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
-    private function generateMail($to, $replyto, $subject, $body, $links, $img, $locale = 'fi'): TemplatedEmail
+    private function generateMail(Address|string $to, Address|string $replyto, string $subject, $body, $links, $img, $locale = 'fi'): TemplatedEmail
     {
         return (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))

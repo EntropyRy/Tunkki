@@ -19,7 +19,7 @@ use App\Entity\Ticket;
 #[ORM\HasLifecycleCallbacks]
 class Member implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -48,13 +48,13 @@ class Member implements \Stringable
     #[ORM\Column(name: 'updatedAt', type: 'datetime')]
     private \DateTime $updatedAt;
 
-    #[ORM\Column(name: 'isActiveMember', type: 'boolean')]
+    #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
 
-    #[ORM\Column(name: 'rejectReasonSent', type: 'boolean')]
+    #[ORM\Column(name: 'rejectReasonSent', type: Types::BOOLEAN)]
     private bool $rejectReasonSent = false;
 
-    #[ORM\Column(name: 'StudentUnionMember', type: 'boolean')]
+    #[ORM\Column(name: 'StudentUnionMember', type: Types::BOOLEAN)]
     private bool $StudentUnionMember = false;
 
     #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
@@ -72,7 +72,7 @@ class Member implements \Stringable
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $AcceptedAsHonoraryMember = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFullMember = false;
 
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
@@ -104,7 +104,7 @@ class Member implements \Stringable
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
     private $responsibleForNakkis;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $denyKerdeAccess = false;
 
     #[ORM\OneToMany(targetEntity: HappeningBooking::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
@@ -367,7 +367,7 @@ class Member implements \Stringable
         $this->user = $user;
 
         // set (or unset) the owning side of the relation if necessary
-        $newMember = null === $user ? null : $this;
+        $newMember = $user instanceof User ? $this : null;
         if ($user->getMember() !== $newMember) {
             $user->setMember($newMember);
         }
@@ -376,7 +376,7 @@ class Member implements \Stringable
     }
     public function getProgressP(): string
     {
-        if ($this->AcceptedAsHonoraryMember) {
+        if ($this->AcceptedAsHonoraryMember instanceof \DateTimeInterface) {
             return '100';
         }
         if ($this->isActiveMember) {
@@ -391,10 +391,7 @@ class Member implements \Stringable
         if ($this->StudentUnionMember) {
             return true;
         }
-        if ($this->isFullMember) {
-            return true;
-        }
-        return false;
+        return $this->isFullMember;
     }
 
     public function getLocale(): ?string
@@ -471,11 +468,9 @@ class Member implements \Stringable
 
     public function removeDoorLog(DoorLog $doorLog): self
     {
-        if ($this->doorLogs->removeElement($doorLog)) {
-            // set the owning side to null (unless already changed)
-            if ($doorLog->getMember() === $this) {
-                $doorLog->setMember(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->doorLogs->removeElement($doorLog) && $doorLog->getMember() === $this) {
+            $doorLog->setMember(null);
         }
 
         return $this;
@@ -513,11 +508,9 @@ class Member implements \Stringable
 
     public function removeRSVP(RSVP $rSVP): self
     {
-        if ($this->RSVPs->removeElement($rSVP)) {
-            // set the owning side to null (unless already changed)
-            if ($rSVP->getMember() === $this) {
-                $rSVP->setMember(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->RSVPs->removeElement($rSVP) && $rSVP->getMember() === $this) {
+            $rSVP->setMember(null);
         }
 
         return $this;
@@ -543,11 +536,9 @@ class Member implements \Stringable
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
-            // set the owning side to null (unless already changed)
-            if ($nakkiBooking->getMember() === $this) {
-                $nakkiBooking->setMember(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getMember() === $this) {
+            $nakkiBooking->setMember(null);
         }
 
         return $this;
@@ -573,11 +564,9 @@ class Member implements \Stringable
 
     public function removeTicket(Ticket $ticket): self
     {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getOwner() === $this) {
-                $ticket->setOwner(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->tickets->removeElement($ticket) && $ticket->getOwner() === $this) {
+            $ticket->setOwner(null);
         }
 
         return $this;
@@ -615,11 +604,9 @@ class Member implements \Stringable
 
     public function removeResponsibleForNakki(Nakki $responsibleForNakki): self
     {
-        if ($this->responsibleForNakkis->removeElement($responsibleForNakki)) {
-            // set the owning side to null (unless already changed)
-            if ($responsibleForNakki->getResponsible() === $this) {
-                $responsibleForNakki->setResponsible(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->responsibleForNakkis->removeElement($responsibleForNakki) && $responsibleForNakki->getResponsible() === $this) {
+            $responsibleForNakki->setResponsible(null);
         }
 
         return $this;

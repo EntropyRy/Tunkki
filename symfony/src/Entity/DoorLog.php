@@ -12,7 +12,7 @@ class DoorLog
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'doorLogs')]
@@ -66,7 +66,7 @@ class DoorLog
         return $this;
     }
     #[ORM\PrePersist]
-    public function prePersist()
+    public function prePersist(): void
     {
         $this->createdAt = new \DateTime();
     }

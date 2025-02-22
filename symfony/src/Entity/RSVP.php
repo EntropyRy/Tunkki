@@ -12,7 +12,7 @@ class RSVP implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
@@ -125,14 +125,14 @@ class RSVP implements \Stringable
 
     public function getAvailableLastName(): string
     {
-        if ($this->getMember()) {
+        if ($this->getMember() instanceof Member) {
             return ucfirst((string) $this->getMember()->getLastname());
         }
         return ucfirst((string) $this->lastName);
     }
     public function getAvailableEmail(): string
     {
-        if ($this->getMember()) {
+        if ($this->getMember() instanceof Member) {
             return $this->getMember()->getEmail();
         }
         return $this->email;

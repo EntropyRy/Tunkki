@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\RSVP;
 use App\Repository\EmailRepository;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
@@ -41,7 +42,7 @@ final readonly class RSVPListener
             }
         }
     }
-    private function generateMail($to, $replyto, $subject, $body, $links, $img): TemplatedEmail
+    private function generateMail(string $to, Address|string $replyto, string $subject, $body, $links, ?SonataMediaMedia $img): TemplatedEmail
     {
         return (new TemplatedEmail())
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))

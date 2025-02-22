@@ -56,7 +56,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 // 1) have they logged in with Mattermost before? Easy!
                 $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $id]);
 
-                if ($existingUser) {
+                if ($existingUser !== null) {
                     if (strtolower((string) $existingUser->getMember()->getUsername()) != $username) {
                         $existingUser->getMember()->setUsername($username);
                         $this->em->persist($existingUser);
@@ -68,7 +68,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
 
                 // 2) do we have a matching user by email?
                 $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
-                if ($member) {
+                if ($member !== null) {
                     if (strtolower((string) $member->getUsername()) != $username) {
                         $member->setUsername($username);
                         $this->em->persist($member);

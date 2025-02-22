@@ -136,20 +136,18 @@ class ItemAdmin extends AbstractAdmin
                 ->end() */
             ->end();
         $subject = $this->getSubject();
-        if ($subject->getId()) {
-            if ($subject->getCreatedAt()) {
-                $formMapper
-                    ->tab('Meta')
-                    ->with('history')
-                    ->add('rentHistory', null, ['disabled' => true])
-                    ->end()
-                    ->with('Meta')
-                    ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
-                    ->add('creator', null, ['disabled' => true])
-                    ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
-                    ->add('modifier', null, ['disabled' => true])
-                    ->end();
-            }
+        if ($subject->getId() && $subject->getCreatedAt()) {
+            $formMapper
+                ->tab('Meta')
+                ->with('history')
+                ->add('rentHistory', null, ['disabled' => true])
+                ->end()
+                ->with('Meta')
+                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('creator', null, ['disabled' => true])
+                ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('modifier', null, ['disabled' => true])
+                ->end();
         }
     }
 

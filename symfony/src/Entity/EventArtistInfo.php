@@ -11,7 +11,7 @@ class EventArtistInfo implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -153,7 +153,7 @@ class EventArtistInfo implements \Stringable
 
     public function timediff(?\DateTimeInterface $date): ?int
     {
-        if ($date) {
+        if ($date instanceof \DateTimeInterface) {
             return (int)$date->diff($this->StartTime)->format('%r%h');
         }
         return null;
@@ -163,13 +163,13 @@ class EventArtistInfo implements \Stringable
         if ($eventDate < (new \DateTime('now'))->modify('-1 day')) {
             return false;
         }
-        if ($this->getArtist()) {
-            return ($this->getArtistClone()->getUpdatedAt()->format('U') >= $this->getArtist()->getUpdatedAt()->format('U')) ? false : true;
+        if ($this->getArtist() instanceof Artist) {
+            return $this->getArtistClone()->getUpdatedAt()->format('U') < $this->getArtist()->getUpdatedAt()->format('U');
         }
         return false;
     }
     public function getArtistName(): string
     {
-        return $this->getArtist() ? $this->getArtist()->getName() : $this->getArtistClone()->getName();
+        return $this->getArtist() instanceof Artist ? $this->getArtist()->getName() : $this->getArtistClone()->getName();
     }
 }

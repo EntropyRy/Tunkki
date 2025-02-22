@@ -16,7 +16,7 @@ class ItemAdminController extends Controller
         $object = $this->admin->getSubject();
 
         if ($object == null) {
-            throw new NotFoundHttpException(sprintf('unable to find the object'));
+            throw new NotFoundHttpException('unable to find the object');
         }
         $clonedObject = new Item();
         //$clonedObject = clone $object;
@@ -48,7 +48,7 @@ class ItemAdminController extends Controller
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 
-    public function batchActionBatchEditIsRelevant(array $selectedIds, $allEntitiesSelected, ?Request $request = null)
+    public function batchActionBatchEditIsRelevant(array $selectedIds, $allEntitiesSelected, ?Request $request = null): true|string
     {
         if ($allEntitiesSelected) {
             return true;

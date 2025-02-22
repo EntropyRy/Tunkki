@@ -9,7 +9,7 @@ class SSH
     public function __construct(protected ParameterBagInterface $bag)
     {
     }
-    public function sendCommand($text): string|bool
+    public function sendCommand(string $text): string|bool
     {
         $stream = null;
         $connection = $this->getConnection();

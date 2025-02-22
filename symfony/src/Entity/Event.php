@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Symfony\Component\String\AbstractString;
 use App\Repository\EventRepository;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,7 +20,7 @@ class Event implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -68,7 +69,7 @@ body {
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $url = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $published = false;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
@@ -77,16 +78,16 @@ body {
     #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $epics = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $externalUrl = false;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $sticky = false;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     private string $picturePosition = 'banner';
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $cancelled = false;
 
     #[ORM\ManyToOne(targetEntity: Media::class)]
@@ -108,7 +109,7 @@ body {
     #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'event', orphanRemoval: true)]
     private $RSVPs;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
 
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
@@ -119,7 +120,7 @@ body {
     #[OrderBy(["startAt" => "ASC"])]
     private $nakkiBookings;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private bool $NakkikoneEnabled = false;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -136,7 +137,7 @@ body {
         <h6>You\'ll get free entry to the party</h6>
         ';
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $includeSaferSpaceGuidelines = false;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -151,7 +152,7 @@ body {
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $imgFilterBlendMode = null;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $artistSignUpEnabled = false;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
@@ -163,20 +164,20 @@ body {
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $webMeetingUrl = null;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
     #[ORM\OrderBy(['id' => 'DESC'])]
     private $tickets;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $ticketCount = 0;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $ticketsEnabled = false;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $ticketPrice = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -191,13 +192,13 @@ body {
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $ticketPresaleEnd = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $ticketPresaleCount = 0;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $showNakkikoneLinkInEvent = false;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
@@ -411,10 +412,7 @@ body {
     public function isPublished(): bool
     {
         $now = new \DateTime();
-        if ($this->published == true && $this->publishDate < $now) {
-            return true;
-        }
-        return false;
+        return $this->published == true && $this->publishDate < $now;
     }
     public function __construct()
     {
@@ -433,7 +431,7 @@ body {
     public function getNowTest(): ?string
     {
         $now = new \DateTime();
-        if ($this->until) {
+        if ($this->until instanceof \DateTimeInterface) {
             if ($now >= $this->EventDate && $now <= $this->until) {
                 return 'now';
             } elseif ($now > $this->until) {
@@ -441,12 +439,10 @@ body {
             } elseif ($now < $this->EventDate) {
                 return 'before';
             }
+        } elseif ($now < $this->EventDate) {
+            return 'before';
         } else {
-            if ($now < $this->EventDate) {
-                return 'before';
-            } else {
-                return 'after';
-            }
+            return 'after';
         }
         return 'undefined';
     }
@@ -466,10 +462,7 @@ body {
     }
     public function isInPast(): bool
     {
-        if ($this->getNowTest() == 'after') {
-            return true;
-        }
-        return false;
+        return $this->getNowTest() == 'after';
     }
     public function getType(): ?string
     {
@@ -566,34 +559,21 @@ body {
 
         return $this;
     }
-    public function getContentForTwig($lang)
+    public function getContentForTwig($lang): ?string
     {
-        if ($lang == 'fi') {
-            $content = $this->Sisallys;
-        } else {
-            $content = $this->Content;
-        }
-        return $content;
+        return $lang == 'fi' ? $this->Sisallys : $this->Content;
     }
-    public function getContentByLang($lang)
+    public function getContentByLang($lang): string
     {
-        if ($lang == 'fi') {
-            $abstract = $this->removeTwigTags($this->Sisallys);
-        } else {
-            $abstract = $this->removeTwigTags($this->Content);
-        }
+        $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
         return html_entity_decode(strip_tags((string) $abstract));
     }
-    public function getAbstractFromContent($lang)
+    public function getAbstractFromContent($lang): AbstractString
     {
-        if ($lang == 'fi') {
-            $abstract = $this->removeTwigTags($this->Sisallys);
-        } else {
-            $abstract = $this->removeTwigTags($this->Content);
-        }
+        $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
         return u(html_entity_decode(strip_tags((string) $abstract)))->truncate(200, '..');
     }
-    protected function removeTwigTags($message)
+    protected function removeTwigTags($message): string
     {
         $abstract = str_replace("{{ bios }}", "", (string) $message);
         $abstract = str_replace("{{ menu }}", "", (string) $abstract);
@@ -609,7 +589,7 @@ body {
         $abstract = str_replace("{{ art_artist_list }}", "", $abstract);
         return str_replace("{{ happening_list }}", "", $abstract);
     }
-    public function getNameByLang($lang)
+    public function getNameByLang($lang): ?string
     {
         if ($lang == 'fi') {
             return $this->Nimi;
@@ -617,7 +597,7 @@ body {
             return $this->Name;
         }
     }
-    public function getNameAndDateByLang($lang)
+    public function getNameAndDateByLang($lang): string
     {
         if ($lang == 'fi') {
             return $this->Nimi . ' - ' . $this->EventDate->format('j.n.Y, H:i');
@@ -670,7 +650,7 @@ body {
 
     public function getUntil(): ?\DateTimeInterface
     {
-        if ($this->until) {
+        if ($this->until instanceof \DateTimeInterface) {
             return $this->until;
         } else {
             if ($this->EventDate == null) {
@@ -712,11 +692,9 @@ body {
 
     public function removeRSVP(RSVP $rSVP): self
     {
-        if ($this->RSVPs->removeElement($rSVP)) {
-            // set the owning side to null (unless already changed)
-            if ($rSVP->getEvent() === $this) {
-                $rSVP->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->RSVPs->removeElement($rSVP) && $rSVP->getEvent() === $this) {
+            $rSVP->setEvent(null);
         }
 
         return $this;
@@ -759,11 +737,9 @@ body {
 
     public function removeNakki(Nakki $nakki): self
     {
-        if ($this->nakkis->removeElement($nakki)) {
-            // set the owning side to null (unless already changed)
-            if ($nakki->getEvent() === $this) {
-                $nakki->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->nakkis->removeElement($nakki) && $nakki->getEvent() === $this) {
+            $nakki->setEvent(null);
         }
 
         return $this;
@@ -789,11 +765,9 @@ body {
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
-            // set the owning side to null (unless already changed)
-            if ($nakkiBooking->getEvent() === $this) {
-                $nakkiBooking->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getEvent() === $this) {
+            $nakkiBooking->setEvent(null);
         }
 
         return $this;
@@ -933,15 +907,10 @@ body {
     public function getArtistSignUpNow(): bool
     {
         $now = new \DateTimeImmutable('now');
-        if (
-            $this->getArtistSignUpEnabled() &&
-            $this->getArtistSignUpStart() <= $now &&
-            $this->getArtistSignUpEnd() >= $now &&
-            !$this->isInPast()
-        ) {
-            return true;
-        }
-        return false;
+        return $this->getArtistSignUpEnabled() &&
+        $this->getArtistSignUpStart() <= $now &&
+        $this->getArtistSignUpEnd() >= $now &&
+        !$this->isInPast();
     }
 
     public function getWebMeetingUrl(): ?string
@@ -988,11 +957,9 @@ body {
 
     public function removeTicket(Ticket $ticket): self
     {
-        if ($this->tickets->removeElement($ticket)) {
-            // set the owning side to null (unless already changed)
-            if ($ticket->getEvent() === $this) {
-                $ticket->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->tickets->removeElement($ticket) && $ticket->getEvent() === $this) {
+            $ticket->setEvent(null);
         }
 
         return $this;
@@ -1058,7 +1025,7 @@ body {
     public function getMultiday(): bool
     {
         //dd( $this->EventDate->format('U') - $this->until->format('U'));
-        if ($this->until) {
+        if ($this->until instanceof \DateTimeInterface) {
             if (($this->until->format('U') - $this->EventDate->format('U')) > 86400) {
                 return true;
             } else {
@@ -1073,10 +1040,8 @@ body {
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
-            if (!is_null($info->getStartTime())) {
-                if ($info->getArtistClone()->getType() == 'DJ' || $info->getArtistClone()->getType() == 'Live') {
-                    $bystage[$info->getStage()][] = $info;
-                }
+            if (!is_null($info->getStartTime()) && ($info->getArtistClone()->getType() == 'DJ' || $info->getArtistClone()->getType() == 'Live')) {
+                $bystage[$info->getStage()][] = $info;
             }
         }
         return $bystage;
@@ -1085,10 +1050,8 @@ body {
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
-            if (!is_null($info->getStartTime())) {
-                if ($info->getArtistClone()->getType() == $type) {
-                    $bystage[$info->getStage()][] = $info;
-                }
+            if (!is_null($info->getStartTime()) && $info->getArtistClone()->getType() == $type) {
+                $bystage[$info->getStage()][] = $info;
             }
         }
         return $bystage;
@@ -1142,17 +1105,12 @@ body {
         return $this;
     }
 
-    public function ticketPresaleEnabled()
+    public function ticketPresaleEnabled(): bool
     {
         $now = new \DateTime('now');
-        if (
-            $this->ticketsEnabled &&
-            is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
-            is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now
-        ) {
-            return true;
-        }
-        return false;
+        return $this->ticketsEnabled &&
+        is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
+        is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now;
     }
 
     public function getTicketPresaleCount(): ?int
@@ -1206,7 +1164,7 @@ body {
     {
         $bookings = [];
         $booking = $member->getEventNakkiBooking($this);
-        if ($booking) {
+        if ($booking instanceof NakkiBooking) {
             $nakki = $booking->getNakki();
             $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'][] = $nakki->getNakkiBookings();
             $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
@@ -1244,11 +1202,9 @@ body {
 
     public function removeEmail(Email $email): self
     {
-        if ($this->emails->removeElement($email)) {
-            // set the owning side to null (unless already changed)
-            if ($email->getEvent() === $this) {
-                $email->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->emails->removeElement($email) && $email->getEvent() === $this) {
+            $email->setEvent(null);
         }
 
         return $this;
@@ -1346,11 +1302,9 @@ body {
 
     public function removeNotification(Notification $notification): self
     {
-        if ($this->notifications->removeElement($notification)) {
-            // set the owning side to null (unless already changed)
-            if ($notification->getEvent() === $this) {
-                $notification->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->notifications->removeElement($notification) && $notification->getEvent() === $this) {
+            $notification->setEvent(null);
         }
 
         return $this;
@@ -1369,7 +1323,7 @@ body {
             $lang = '';
         }
 
-        if (empty($this->url) && !$this->externalUrl) {
+        if (($this->url === null || $this->url === '' || $this->url === '0') && !$this->externalUrl) {
             return 'https://entropy.fi' . $event . $this->id;
         }
         return $lang ? 'https://entropy.fi/' . $lang . $year . $url : 'https://entropy.fi' . $year . $url;
@@ -1395,11 +1349,9 @@ body {
 
     public function removeHappening(Happening $happening): self
     {
-        if ($this->happenings->removeElement($happening)) {
-            // set the owning side to null (unless already changed)
-            if ($happening->getEvent() === $this) {
-                $happening->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->happenings->removeElement($happening) && $happening->getEvent() === $this) {
+            $happening->setEvent(null);
         }
 
         return $this;
@@ -1521,7 +1473,7 @@ body {
     public function getTicketProducts(): Collection
     {
         new ArrayCollection();
-        return $this->products->filter(fn (Product $product) => $product->isTicket());
+        return $this->products->filter(fn (Product $product): ?bool => $product->isTicket());
     }
     public function addProduct(Product $product): static
     {
@@ -1535,17 +1487,15 @@ body {
 
     public function removeProduct(Product $product): static
     {
-        if ($this->products->removeElement($product)) {
-            // set the owning side to null (unless already changed)
-            if ($product->getEvent() === $this) {
-                $product->setEvent(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->products->removeElement($product) && $product->getEvent() === $this) {
+            $product->setEvent(null);
         }
 
         return $this;
     }
 
-    public function getTicketTypeCount($id)
+    public function getTicketTypeCount($id): int
     {
         $return = 0;
         foreach ($this->getTickets() as $ticket) {

@@ -27,7 +27,7 @@ class DoorInfoBlock extends BaseBlockService
         assert($user instanceof User);
         $member = $user->getMember();
         $now = new \DateTime('now');
-        $status = $this->zmq->send('dev' . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
+        $status = $this->zmq->send('dev init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
         $logs = $this->doorLogR->getLatest(3);
         return $this->renderResponse($blockContext->getTemplate(), [
             'block'     => $blockContext->getBlock(),

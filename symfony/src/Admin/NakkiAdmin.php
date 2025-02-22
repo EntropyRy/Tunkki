@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Nakki;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -178,7 +179,7 @@ final class NakkiAdmin extends AbstractAdmin
     ) {
     }
 
-    protected function createBooking($nakki, $i): void
+    protected function createBooking(?Nakki $nakki, $i): void
     {
         $b = new NakkiBooking();
         $b->setNakki($nakki);

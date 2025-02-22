@@ -14,7 +14,7 @@ class Nakki implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
@@ -58,7 +58,7 @@ class Nakki implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) ((string) $this->definition ? $this->definition->getNameEn() : 'N/A');
+        return (string) ((string) $this->definition !== '' && (string) $this->definition !== '0' ? $this->definition->getNameEn() : 'N/A');
     }
     public function getId(): ?int
     {
@@ -121,11 +121,9 @@ class Nakki implements \Stringable
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        if ($this->nakkiBookings->removeElement($nakkiBooking)) {
-            // set the owning side to null (unless already changed)
-            if ($nakkiBooking->getNakki() === $this) {
-                $nakkiBooking->setNakki(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getNakki() === $this) {
+            $nakkiBooking->setNakki(null);
         }
 
         return $this;
@@ -171,10 +169,8 @@ class Nakki implements \Stringable
     public function getMemberByTime($date): ?Member
     {
         foreach ($this->getNakkiBookings() as $booking) {
-            if ($booking->getStartAt() == $date) {
-                if ($booking->getMember()) {
-                    return $booking->getMember();
-                }
+            if ($booking->getStartAt() == $date && $booking->getMember()) {
+                return $booking->getMember();
             }
         }
         return null;

@@ -94,7 +94,7 @@ class ProfileController extends AbstractController
             ]);
         $mailer->send($email);
     }
-    protected function announceToMattermost($mm, $member): void
+    protected function announceToMattermost($mm, string $member): void
     {
         $text = '**New Member: ' . $member . '**';
         $mm->SendToMattermost($text, 'yhdistys');

@@ -210,11 +210,9 @@ class Happening implements \Stringable
 
     public function removeBooking(HappeningBooking $booking): self
     {
-        if ($this->bookings->removeElement($booking)) {
-            // set the owning side to null (unless already changed)
-            if ($booking->getHappening() === $this) {
-                $booking->setHappening(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->bookings->removeElement($booking) && $booking->getHappening() === $this) {
+            $booking->setHappening(null);
         }
 
         return $this;
@@ -417,10 +415,7 @@ class Happening implements \Stringable
             return true;
         }
         $time = new \DateTime('now');
-        if ($this->signUpsOpenUntil > $time) {
-            return true;
-        }
-        return false;
+        return $this->signUpsOpenUntil > $time;
     }
 
     public function isAllowSignUpComments(): ?bool

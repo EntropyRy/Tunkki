@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ class EventSignUpController extends Controller
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        if ($booking->getMember() == $member) {
+        if ($booking->getMember() === $member) {
             $booking->setMember(null);
             $em->persist($booking);
             $em->flush();
@@ -150,7 +151,7 @@ class EventSignUpController extends Controller
         }
         return $nakkis;
     }
-    private function buildNakkiArray($nakkis, $booking, $name, $duration, $locale): array
+    private function buildNakkiArray(array $nakkis, $booking, $name, $duration, $locale): array
     {
         $event = $booking->getEvent();
         // compare the event start date to the booking start date
@@ -186,7 +187,7 @@ class EventSignUpController extends Controller
         assert($user instanceof User);
         $member = $user->getMember();
 
-        if (empty($member)) {
+        if (!$member instanceof Member) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
 
@@ -290,7 +291,7 @@ class EventSignUpController extends Controller
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        if ($artisteventinfo->getArtist()->getMember() != $member) {
+        if ($artisteventinfo->getArtist()->getMember() !== $member) {
             $this->addFlash('warning', $trans->trans('Not allowed!'));
             return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
         }
@@ -333,7 +334,7 @@ class EventSignUpController extends Controller
         assert($user instanceof User);
         $member = $user->getMember();
         $event = $artisteventinfo->getEvent();
-        if (($artisteventinfo->getArtist()->getMember() != $member) || $event->isInPast()) {
+        if (($artisteventinfo->getArtist()->getMember() !== $member) || $event->isInPast()) {
             $this->addFlash('warning', $trans->trans('Not allowed!'));
             return new RedirectResponse($this->generateUrl('entropy_artist_profile'));
         }

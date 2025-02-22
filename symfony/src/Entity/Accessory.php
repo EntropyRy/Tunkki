@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Entity]
 class Accessory implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -31,7 +31,7 @@ class Accessory implements \Stringable
      *
      * @return integer
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -40,10 +40,8 @@ class Accessory implements \Stringable
      * Set count
      *
      * @param string $count
-     *
-     * @return Accessory
      */
-    public function setCount($count)
+    public function setCount(?string $count): static
     {
         $this->count = $count;
 
@@ -55,17 +53,15 @@ class Accessory implements \Stringable
      *
      * @return string
      */
-    public function getCount()
+    public function getCount(): ?string
     {
         return $this->count;
     }
 
     /**
      * Set name
-     *
-     * @return Accessory
      */
-    public function setName(?AccessoryChoice $name = null)
+    public function setName(?AccessoryChoice $name = null): static
     {
         $this->name = $name;
 
@@ -77,7 +73,7 @@ class Accessory implements \Stringable
      *
      * @return AccessoryChoice
      */
-    public function getName()
+    public function getName(): ?AccessoryChoice
     {
         return $this->name;
     }

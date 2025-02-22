@@ -389,7 +389,7 @@ class BookingAdmin extends AbstractAdmin
     {
         if ($object->getAccessories() != null) {
             foreach ($object->getAccessories() as $line) {
-                if ($line->getCount() == null or $line->getName() == null) {
+                if ($line->getCount() == null || $line->getName() == null) {
                     $session = $this->rs->getSession();
                     assert($session instanceof Session);
                     $session->getFlashBag()->add('warning', 'Dont leave empty lines in accessories');

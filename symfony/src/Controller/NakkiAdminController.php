@@ -29,7 +29,7 @@ final class NakkiAdminController extends CRUDController
         $object = $this->admin->getSubject();
 
         if ($object == null) {
-            throw new NotFoundHttpException(sprintf('unable to find the object'));
+            throw new NotFoundHttpException('unable to find the object');
         }
         $clone = clone $object;
         $this->admin->create($clone);

@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use App\Repository\NakkiBookingRepository;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -10,7 +11,7 @@ class NakkiBooking implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Nakki::class, inversedBy: 'nakkiBookings')]
@@ -107,7 +108,7 @@ class NakkiBooking implements \Stringable
 
     public function getMemberEmail(): ?string
     {
-        return $this->member ? $this->member->getEmail() : null;
+        return $this->member instanceof Member ? $this->member->getEmail() : null;
     }
 
     public function memberHasEventTicket(): bool

@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
 class Package implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: 'integer')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
@@ -27,7 +27,7 @@ class Package implements \Stringable
     #[ORM\Column(name: 'rent', type: Types::STRING, length: 190)]
     private string $rent = '';
 
-    #[ORM\Column(name: 'needs_fixing', type: 'boolean')]
+    #[ORM\Column(name: 'needs_fixing', type: Types::BOOLEAN)]
     private bool $needsFixing = false;
 
     #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
@@ -45,7 +45,7 @@ class Package implements \Stringable
         return $this->id;
     }
 
-    public function setRent($rent): self
+    public function setRent(string $rent): self
     {
         $this->rent = $rent;
 
@@ -57,7 +57,7 @@ class Package implements \Stringable
         return $this->rent;
     }
 
-    public function setNeedsFixing($needsFixing): self
+    public function setNeedsFixing(bool $needsFixing): self
     {
         $this->needsFixing = $needsFixing;
 
@@ -69,7 +69,7 @@ class Package implements \Stringable
         return $this->needsFixing;
     }
 
-    public function setNotes($notes): self
+    public function setNotes(?string $notes): self
     {
         $this->notes = $notes;
 
@@ -101,7 +101,7 @@ class Package implements \Stringable
         $this->items->removeElement($item);
     }
 
-    public function setName($name): Package
+    public function setName(string $name): Package
     {
         $this->name = $name;
 
@@ -125,7 +125,7 @@ class Package implements \Stringable
         return $this->name ?: 'n/a';
     }
 
-    public function getItems()
+    public function getItems(): ?Collection
     {
         return $this->items;
     }
@@ -174,7 +174,7 @@ class Package implements \Stringable
         $this->whoCanRent->removeElement($whoCanRent);
     }
 
-    public function getWhoCanRent()
+    public function getWhoCanRent(): ?Collection
     {
         return $this->whoCanRent;
     }

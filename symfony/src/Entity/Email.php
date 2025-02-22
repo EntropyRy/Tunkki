@@ -12,7 +12,7 @@ class Email implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
@@ -30,7 +30,7 @@ class Email implements \Stringable
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: 'boolean', nullable: true)]
+    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $addLoginLinksToFooter = true;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'emails')]

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Member;
 use App\Helper\Qr;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -109,7 +110,7 @@ class EventTicketController extends Controller
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        if ($ticket->getOwner() != $member) {
+        if ($ticket->getOwner() !== $member) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $nakkirepo->findMemberEventBookings($member, $event);
@@ -171,7 +172,7 @@ class EventTicketController extends Controller
             'event' => $event,
             'selected' => $selected,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => count((array) $selected) > 0 ? true : false,
+            'hasNakki' => (array) $selected !== [],
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'tickets' => $tickets,
             'showShop' => $showShop,
@@ -214,7 +215,7 @@ class EventTicketController extends Controller
     ): JsonResponse {
         if ($ticket->getEvent() == $event) {
             $ticketA = [
-                'email' => $ticket->getOwner() ? $ticket->getOwnerEmail() : 'email',
+                'email' => $ticket->getOwner() instanceof Member ? $ticket->getOwnerEmail() : 'email',
                 'status' => $ticket->getStatus(),
                 'given' => $ticket->isGiven(),
                 'referenceNumber' => $ticket->getReferenceNumber()
@@ -249,18 +250,14 @@ class EventTicketController extends Controller
         }
     }
 
-    private function ticketChecks($for, $event, $ticketRepo): ?RedirectResponse
+    private function ticketChecks(string $for, Event $event, TicketRepository $ticketRepo): ?RedirectResponse
     {
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
         $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
         if (is_null($ticket)) {
-            if ($for == 'presale') {
-                $ticket = $ticketRepo->findAvailablePresaleTicket($event);
-            } else {
-                $ticket = $ticketRepo->findAvailableTicket($event);
-            }
+            $ticket = $for === 'presale' ? $ticketRepo->findAvailablePresaleTicket($event) : $ticketRepo->findAvailableTicket($event);
         }
         if (is_null($ticket)) {
             $this->addFlash('warning', 'ticket.not_available');
@@ -276,23 +273,21 @@ class EventTicketController extends Controller
         }
         return null;
     }
-    private function freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo): void
+    private function freeAvailableTickets(Event $event, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiBookingRepo): void
     {
         $now = new \DateTime('now');
         foreach ($event->getTickets() as $ticket) {
-            if ($ticket->getStatus() == 'available' && !is_null($ticket->getOwner())) {
-                if (($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
-                    if ($event->isNakkiRequiredForTicketReservation()) {
-                        foreach ($event->getNakkiBookings() as $nakkiB) {
-                            if ($nakkiB->getMember() == $ticket->getOwner()) {
-                                $nakkiB->setMember(null);
-                                $nakkiBookingRepo->save($nakkiB, true);
-                            }
+            if ($ticket->getStatus() == 'available' && !is_null($ticket->getOwner()) && ($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
+                if ($event->isNakkiRequiredForTicketReservation()) {
+                    foreach ($event->getNakkiBookings() as $nakkiB) {
+                        if ($nakkiB->getMember() == $ticket->getOwner()) {
+                            $nakkiB->setMember(null);
+                            $nakkiBookingRepo->save($nakkiB, true);
                         }
                     }
-                    $ticket->setOwner(null);
-                    $ticketRepo->add($ticket, true);
                 }
+                $ticket->setOwner(null);
+                $ticketRepo->add($ticket, true);
             }
         }
     }
@@ -323,7 +318,7 @@ class EventTicketController extends Controller
         }
         return $nakkis;
     }
-    protected function addNakkiToArray($nakkis, $booking, $locale): array
+    protected function addNakkiToArray(array $nakkis, $booking, $locale): array
     {
         $name = $booking->getNakki()->getDefinition()->getName($locale);
         $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');

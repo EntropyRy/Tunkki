@@ -2,6 +2,7 @@
 
 namespace App\Twig;
 
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Extension\AbstractExtension;
@@ -26,7 +27,7 @@ class LocalizedUrlExtension extends AbstractExtension
     public function getLocalizedUrl(string $targetLocale): string
     {
         $request = $this->requestStack->getCurrentRequest();
-        if (!$request) {
+        if (!$request instanceof Request) {
             return '/';
         }
 

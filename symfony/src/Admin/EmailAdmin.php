@@ -111,12 +111,10 @@ final class EmailAdmin extends AbstractAdmin
         $email = $this->getSubject();
         $disabled = false;
         $placeholder = $this->getSubject()->getSubject();
-        if ($email != null) {
-            if ($email->getPurpose() == 'ticket_qr') {
-                $subjectHelp = 'Generated automatically';
-                $disabled = true;
-                $placeholder = '[event name] Ticket #1 / Lippusi #1';
-            }
+        if ($email != null && $email->getPurpose() == 'ticket_qr') {
+            $subjectHelp = 'Generated automatically';
+            $disabled = true;
+            $placeholder = '[event name] Ticket #1 / Lippusi #1';
         }
         $formMapper
             ->add('subject', null, [

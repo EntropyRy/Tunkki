@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\MemberRepository;
@@ -61,7 +62,7 @@ class ResetPasswordController extends AbstractController
     public function checkEmail(): Response
     {
         // We prevent users from directly accessing this page
-        if (null === ($resetToken = $this->getTokenObjectFromSession())) {
+        if (!($resetToken = $this->getTokenObjectFromSession()) instanceof ResetPasswordToken) {
             $resetToken = $this->resetPasswordHelper->generateFakeResetToken();
         }
 
@@ -98,10 +99,7 @@ class ResetPasswordController extends AbstractController
             $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
         } catch (ResetPasswordExceptionInterface $e) {
             $reason = $trans->trans($e->getReason());
-            $this->addFlash('reset_password_error', sprintf(
-                '%s',
-                $reason
-            ));
+            $this->addFlash('reset_password_error', $reason);
 
             return $this->redirectToRoute('app_forgot_password_request');
         }

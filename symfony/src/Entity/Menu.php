@@ -16,7 +16,7 @@ class Menu implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
@@ -34,19 +34,19 @@ class Menu implements \Stringable
     #[ORM\ManyToOne(targetEntity: Page::class)]
     private ?Page $pageEn = null;
 
-    #[ORM\Column(type: 'boolean')]
+    #[ORM\Column(type: Types::BOOLEAN)]
     private ?bool $enabled = null;
 
     #[Gedmo\TreeLeft]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $lft = null;
 
     #[Gedmo\TreeLevel]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $lvl = null;
 
     #[Gedmo\TreeRight]
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $rgt = null;
 
     #[Gedmo\TreeRoot]
@@ -54,7 +54,7 @@ class Menu implements \Stringable
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?\App\Entity\Menu $root = null;
 
-    #[ORM\Column(type: 'integer')]
+    #[ORM\Column(type: Types::INTEGER)]
     private ?int $position = null;
 
     #[Gedmo\TreeParent]
@@ -215,11 +215,7 @@ class Menu implements \Stringable
 
     public function hasChildren(): bool
     {
-        if (count($this->children) > 0) {
-            return true;
-        }
-
-        return false;
+        return count($this->children) > 0;
     }
 
     public function removeChild(Menu $child): self

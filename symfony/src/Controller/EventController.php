@@ -68,7 +68,7 @@ class EventController extends Controller
                     'enabled' => true
                 ]);
 
-                if ($targetSite) {
+                if ($targetSite !== null) {
                     // Get the relative path from the target site
                     $relativePath = $targetSite->getRelativePath();
 
@@ -206,7 +206,7 @@ class EventController extends Controller
             $member = $user->getMember();
             $selected = $nakkirepo->findMemberEventBookings($member, $event);
             $nakkis = $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale());
-            $hasNakki = count((array) $selected) > 0 ? true : false;
+            $hasNakki = (array) $selected !== [];
         }
         $session = $request->getSession();
         $cart = new Cart();
@@ -226,11 +226,7 @@ class EventController extends Controller
         // if user has the product, remove it from the list
         foreach ($products as $key => $product) {
             // if there can be only one ticket per user, check that user does not have the ticket already
-            if (array_key_exists($product->getId(), $max)) {
-                $minus = $max[$product->getId()];
-            } else {
-                $minus = 0;
-            }
+            $minus = array_key_exists($product->getId(), $max) ? $max[$product->getId()] : 0;
             if ($product->getHowManyOneCanBuyAtOneTime() == 1 && $product->getMax($minus) >= 1 && $product->isTicket()) {
                 foreach ($ticketRepo->findTicketsByEmailAndEvent($email, $event) as $ticket) {
                     if ($ticket->getStripeProductId() == $product->getStripeId()) {
@@ -290,7 +286,7 @@ class EventController extends Controller
         }
         return $nakkis;
     }
-    protected function addNakkiToArray($nakkis, $booking, $locale): array
+    protected function addNakkiToArray(array $nakkis, $booking, $locale): array
     {
         $name = $booking->getNakki()->getDefinition()->getName($locale);
         $duration = $booking->getStartAt()->diff($booking->getEndAt())->format('%h');

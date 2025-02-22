@@ -187,7 +187,7 @@ class HappeningController extends AbstractController
         }
         return $this->render('happening/show.html.twig', [
             'prev' => $prevAndNext[0],
-            'next' => array_key_exists(1, $prevAndNext) ? $prevAndNext[1] : null,
+            'next' => $prevAndNext[1] ?? null,
             'event' => $event,
             'happening' => $happening,
             'description' => $converter->convert($happening->getDescription($request->getLocale())),
@@ -214,7 +214,7 @@ class HappeningController extends AbstractController
         assert($user instanceof User);
         $member = $user->getMember();
         $event = $happeningB->getHappening()->getEvent();
-        if ($happeningB->getMember() == $member) {
+        if ($happeningB->getMember() === $member) {
             $happeningB->setMember(null);
             $hbr->remove($happeningB, true);
             $this->addFlash('success', 'happening.reservation_cancelled');

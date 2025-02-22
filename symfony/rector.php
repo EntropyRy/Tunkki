@@ -15,12 +15,16 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withPhpSets()
-    ->withTypeCoverageLevel(0)
+    ->withTypeCoverageLevel(100)
+    ->withCodeQualityLevel(100)
     ->withSets([SetList::PHP_84])
     ->withAttributesSets(symfony: true, doctrine: true)
     ->withConfiguredRule(AttributeKeyToClassConstFetchRector::class, [
         new AttributeKeyToClassConstFetch('Doctrine\\ORM\\Mapping\\Column', 'type', 'Doctrine\\DBAL\\Types\\Types', [
-        'string' => 'STRING',
+            'string' => 'STRING',
+            'integer' => 'INTEGER',
+            'json' => 'JSON',
+            'boolean' => 'BOOLEAN',
     ]),
     ])
     ->withImportNames(importShortClasses: false)
