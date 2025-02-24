@@ -37,7 +37,13 @@ class EventArtistInfoType extends AbstractType
                 'label' => 'event.form.sign_up.free_word',
                 'help' => 'event.form.sign_up.why_should_we_choose_you',
                 'required' => true
-            ]);
+            ])
+            ->add('agreeOnRecording', null, [
+                'label' => 'event.form.sign_up.agree_on_recording',
+                'help' => 'event.form.sign_up.agree_on_recording_help',
+                'required' => true
+            ])
+        ;
     }
 
     #[\Override]

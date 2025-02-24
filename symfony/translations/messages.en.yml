@@ -190,6 +190,8 @@ event:
       description:
         Please make modifications to your artist profile before the signup
         as the profiles are event specific
+      agree_on_recording: Agree that the set is recorded
+      agree_on_recording_help: Performances of the event will be recorded for the archive purposes. Recording is deleted upon request.
 url:
   form:
     open_in_new_window: Open in a new window

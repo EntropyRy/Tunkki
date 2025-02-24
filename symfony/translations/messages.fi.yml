@@ -265,6 +265,8 @@ event:
       delete: Poista
       new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen <a href="/profiili/artisti/">profiilisivultasi</a>
       ends: Ilmoittautuminen suljetaan
+      agree_on_recording: Hyväksy tallennus
+      agree_on_recording_help: Tapahtuman esiintymiset taltioidaan arkistointia varten. Tallenne poistetaan pyydettäessä.
 url:
   form:
     open_in_new_window: Avaa uudessa ikkunassa

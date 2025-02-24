@@ -38,6 +38,9 @@ class EventArtistInfo implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $stage = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?bool $agreeOnRecording = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -171,5 +174,17 @@ class EventArtistInfo implements \Stringable
     public function getArtistName(): string
     {
         return $this->getArtist() instanceof Artist ? $this->getArtist()->getName() : $this->getArtistClone()->getName();
+    }
+
+    public function isAgreeOnRecording(): ?bool
+    {
+        return $this->agreeOnRecording;
+    }
+
+    public function setAgreeOnRecording(?bool $agreeOnRecording): static
+    {
+        $this->agreeOnRecording = $agreeOnRecording;
+
+        return $this;
     }
 }

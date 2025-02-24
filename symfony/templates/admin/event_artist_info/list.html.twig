@@ -9,6 +9,11 @@
                         {{ artist.type }}: {{ artist.name }}, Previews:
                         <a href="{{ path('entropy_public_artist.fi', {name: artist.name, id: artist.id}) }}">FI</a> |
                         <a href="{{ path('entropy_public_artist.en', {name: artist.name, id: artist.id}) }}">EN</a>
+                        {% if object.agreeOnRecording %}
+                            <span class="text-success text-bold" style="margin-left: 5em">Allows recording</span>
+                        {% else %}
+                            <span class="text-warning text-bold" style="margin-left: 5em">Recording not allowed</span>
+                        {% endif %}
                     </span>
                     <span style="font-weight: 800">Member: {{ object|render_list_element(admin.list['Artist.member']) }}</span>
                 </span>
