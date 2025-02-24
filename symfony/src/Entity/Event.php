@@ -566,12 +566,12 @@ body {
     public function getContentByLang($lang): string
     {
         $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
-        return html_entity_decode(strip_tags((string) $abstract));
+        return html_entity_decode(strip_tags($abstract));
     }
     public function getAbstractFromContent($lang): AbstractString
     {
         $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
-        return u(html_entity_decode(strip_tags((string) $abstract)))->truncate(200, '..');
+        return u(html_entity_decode(strip_tags($abstract)))->truncate(200, '..');
     }
     protected function removeTwigTags($message): string
     {

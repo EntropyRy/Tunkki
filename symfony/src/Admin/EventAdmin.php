@@ -710,12 +710,10 @@ final class EventAdmin extends AbstractAdmin
     #[\Override]
     public function preValidate(object $object): void
     {
-        if ($object->getTicketsEnabled() == true && (is_object($object->getTicketPresaleStart()) && is_object($object->getTicketPresaleEnd()))) {
-            if ($object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()) {
-                $session = $this->rs->getSession();
-                assert($session instanceof Session);
-                $session->getFlashBag()->add('warning', 'Presale end date must be after start date');
-            }
+        if ($object->getTicketsEnabled() == true && (is_object($object->getTicketPresaleStart()) && is_object($object->getTicketPresaleEnd())) && $object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()) {
+            $session = $this->rs->getSession();
+            assert($session instanceof Session);
+            $session->getFlashBag()->add('warning', 'Presale end date must be after start date');
         }
         if (is_object($object->getEventDate()) && is_object($object->getUntil()) && $object->getEventDate() >= $object->getUntil()) {
             $session = $this->rs->getSession();
