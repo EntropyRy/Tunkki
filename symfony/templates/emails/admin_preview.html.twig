@@ -50,7 +50,6 @@
             <div class="progress-bar" role="progressbar"></div>
             <p class="text-center" id="progressText">0%</p>
         </div>
-
         <script>
             document.getElementById('sendEmails').addEventListener('click', function(e) {
                 e.preventDefault();
@@ -63,31 +62,71 @@
 
                 // Disable button and show progress
                 button.disabled = true;
+                button.textContent = 'Sending...';
                 progressDiv.style.display = 'block';
 
                 // Start the email sending process
                 fetch(sendUrl, {
                     method: 'POST',
                     headers: {
-                        'X-Requested-With': 'XMLHttpRequest'
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Cache-Control': 'no-cache'
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
                     }
+                    return response.json();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    progressText.textContent = 'Error occurred: ' + error.message;
+                    button.disabled = false;
+                    button.textContent = 'Try Again';
                 });
 
                 // Start progress checking
-                const checkProgress = setInterval(function() {
-                    fetch(progressUrl)
-                        .then(response => response.json())
-                        .then(data => {
-                            const percent = Math.round((data.current / data.total) * 100);
-                            progressBar.style.width = percent + '%';
-                            progressText.textContent = `${data.current} / ${data.total} emails sent (${percent}%)`;
+                let checkProgress = function() {
+                    fetch(progressUrl, {
+                        headers: {
+                            'Cache-Control': 'no-cache',
+                            'Pragma': 'no-cache'
+                        },
+                        credentials: 'same-origin'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.total === 0) {
+                            progressText.textContent = 'Preparing to send emails...';
+                            return;
+                        }
 
-                            if (data.completed) {
-                                clearInterval(checkProgress);
+                        const percent = Math.round((data.current / data.total) * 100);
+                        progressBar.style.width = percent + '%';
+                        progressText.textContent = `${data.current} / ${data.total} emails sent (${percent}%)`;
+
+                        if (data.completed) {
+                            progressText.textContent += ' - Complete! Redirecting...';
+                            setTimeout(() => {
                                 window.location.href = data.redirectUrl;
-                            }
-                        });
-                }, 1000);
+                            }, 1500);
+                            return;
+                        }
+
+                        // Continue checking progress
+                        setTimeout(checkProgress, 1000);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching progress:', error);
+                        progressText.textContent = 'Error tracking progress: ' + error.message;
+                        setTimeout(checkProgress, 2000); // Try again after 2 seconds
+                    });
+                };
+
+                // Start the progress checking
+                setTimeout(checkProgress, 1000);
             });
         </script>
     {% endif %}
