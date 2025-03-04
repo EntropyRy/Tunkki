@@ -64,10 +64,10 @@ return [
         'version' => '2.3.8',
     ],
     '@hotwired/turbo' => [
-        'version' => '8.0.12',
+        'version' => '8.0.13',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.1.1',
+        'version' => '5.2.5',
         'type' => 'css',
     ],
     'signature_pad' => [
