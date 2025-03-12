@@ -4882,23 +4882,23 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.35.4",
+            "version": "4.36.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "418783e0d7889dd9ba3f3ba0e5178452dd472689"
+                "reference": "748306c95cc137ecca907af1bd30f886f576014c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/418783e0d7889dd9ba3f3ba0e5178452dd472689",
-                "reference": "418783e0d7889dd9ba3f3ba0e5178452dd472689",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/748306c95cc137ecca907af1bd30f886f576014c",
+                "reference": "748306c95cc137ecca907af1bd30f886f576014c",
                 "shasum": ""
             },
             "require": {
                 "doctrine/collections": "^1.6 || ^2.0",
                 "doctrine/common": "^3.0",
                 "ext-json": "*",
-                "knplabs/knp-menu": "^3.2",
+                "knplabs/knp-menu": "^3.6",
                 "knplabs/knp-menu-bundle": "^3.0",
                 "php": "^8.1",
                 "psr/container": "^1.0 || ^2.0",
@@ -4998,7 +4998,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.35.4"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.36.0"
             },
             "funding": [
                 {
@@ -5018,7 +5018,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-02-20T14:35:07+00:00"
+            "time": "2025-03-11T13:00:04+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -13207,16 +13207,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.20",
+            "version": "1.12.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "3240b1972042c7f73cf1045e879ea5bd5f761bb7"
+                "reference": "14276fdef70575106a3392a4ed553c06a984df28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/3240b1972042c7f73cf1045e879ea5bd5f761bb7",
-                "reference": "3240b1972042c7f73cf1045e879ea5bd5f761bb7",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/14276fdef70575106a3392a4ed553c06a984df28",
+                "reference": "14276fdef70575106a3392a4ed553c06a984df28",
                 "shasum": ""
             },
             "require": {
@@ -13261,7 +13261,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-05T13:37:43+00:00"
+            "time": "2025-03-09T09:24:50+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
