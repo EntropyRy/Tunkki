@@ -67,11 +67,11 @@ return [
         'version' => '8.0.13',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.2.5',
+        'version' => '5.2.6',
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.0.4',
+        'version' => '5.0.6',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
         'version' => '6.7.2',
