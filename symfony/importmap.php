@@ -48,6 +48,10 @@ return [
         'path' => './assets/js/snake.js',
         'entrypoint' => true,
     ],
+    'flowfields' => [
+        'path' => './assets/js/flowfields.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],

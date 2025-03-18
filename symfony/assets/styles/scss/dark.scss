@@ -1,10 +1,12 @@
-body.dark {
-  background-image: url("../../images/bg_stripe_black.png");
-  background-color: black;
-  color: #ddedf6;
-  .navbar-brand img,
-  .header-img img {
-    filter: invert(1);
+@include color-mode(dark) {
+  body {
+    background-image: url("../../images/bg_stripe_black.png");
+    background-color: black;
+    color: #ddedf6;
+    .navbar-brand img,
+    .header-img img {
+      filter: invert(1);
+    }
   }
   .e-container {
     background: #000;

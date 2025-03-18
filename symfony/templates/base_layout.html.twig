@@ -1,6 +1,13 @@
 {%- block sonata_page_html_tag -%}
+    {% if app.user and event is not defined %} 
+        {% set theme = app.user.member.theme %}
+    {% elseif event is defined %} 
+        {% set theme = event.headerTheme %}
+    {% else %}
+        {% set theme = 'light' %}
+    {% endif %}
     <!DOCTYPE html>
-    <html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ app.request.locale }}">
+    <html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ app.request.locale }}" data-bs-theme="{{ theme }}">
     {% endblock %}
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>
@@ -27,7 +34,7 @@
         </head>
     {% endblock %}
     {% block sonata_page_body_tag %}
-        <body class="entropy{% if app.user and event is not defined %} {{ app.user.member.theme }}" data-bs-theme="{{ app.user.member.theme }}{% endif %}">
+        <body class="entropy">
             {% if event is defined and event.backgroundEffect is not empty -%}
                 <canvas
                     class="effect_canvas"
