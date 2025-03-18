@@ -40,21 +40,13 @@ class Event implements \Stringable
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
-body {
+[data-bs-theme=dark] body, body {
     background-image: url(/images/bg_stripe_transparent.png);
     background-color: yellow;
 }
-.container {
+[data-bs-theme=dark].e-container, .e-container {
     background: #220101;
     color: red;
-}
-.img-filter {
-    /* possible animations: morph and transparent_morph, still color with background */
-    /* animation: morph 8s infinite; */
-    background: #00FFFF;
-}
-.img-filter img {
-    mix-blend-mode: difference;
 }
 */";
 
