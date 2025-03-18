@@ -439,6 +439,7 @@ final class EventAdmin extends AbstractAdmin
                                 'Wavy Lines' => 'lines',
                                 'Hypermakkara Game' => 'snake',
                                 'Flow Fields' => 'flowfields',
+                                'Flow Fields for Bunka' => 'bunka',
                             ]
                         ]
                     )

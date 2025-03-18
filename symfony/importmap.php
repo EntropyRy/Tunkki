@@ -52,6 +52,10 @@ return [
         'path' => './assets/js/flowfields.js',
         'entrypoint' => true,
     ],
+    'bunka' => [
+        'path' => './assets/js/bunka.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],
