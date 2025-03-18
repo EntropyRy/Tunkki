@@ -1,7 +1,7 @@
 {%- block sonata_page_html_tag -%}
-    {% if app.user and event is not defined %} 
+    {% if app.user and event is not defined %}
         {% set theme = app.user.member.theme %}
-    {% elseif event is defined %} 
+    {% elseif event is defined %}
         {% set theme = event.headerTheme %}
     {% else %}
         {% set theme = 'light' %}

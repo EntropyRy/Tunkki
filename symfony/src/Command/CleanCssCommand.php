@@ -17,15 +17,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class CleanCssCommand extends Command
 {
-    private EntityManagerInterface $entityManager;
     private array $selectors = ['.container', '.e-container', 'body', 'a', 'input', 'button'];
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(private readonly EntityManagerInterface $entityManager)
     {
         parent::__construct();
-        $this->entityManager = $entityManager;
     }
 
+    #[\Override]
     protected function configure(): void
     {
         $this
@@ -37,6 +36,7 @@ class CleanCssCommand extends Command
             );
     }
 
+    #[\Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
@@ -99,7 +99,7 @@ class CleanCssCommand extends Command
         $this->entityManager->flush();
 
         // Display processed events
-        if (!empty($processedEvents)) {
+        if ($processedEvents !== []) {
             $io->section('Processed Events:');
             $table = [];
             foreach ($processedEvents as $event) {
@@ -125,14 +125,9 @@ class CleanCssCommand extends Command
     private function isFullyCommentedOut(string $cssContent): bool
     {
         $trimmedContent = trim($cssContent);
-
         // Check if the content starts with /* and ends with */
         // No nested comment marker check as requested
-        if (str_starts_with($trimmedContent, '/*') && str_ends_with($trimmedContent, '*/')) {
-            return true;
-        }
-
-        return false;
+        return str_starts_with($trimmedContent, '/*') && str_ends_with($trimmedContent, '*/');
     }
 
     /**
@@ -156,7 +151,7 @@ class CleanCssCommand extends Command
         }
 
         // If we have any additions, append them to the CSS content
-        if (!empty($additions)) {
+        if ($additions !== []) {
             $cssContent .= "\n\n/* Dark theme variants added automatically */\n";
             $cssContent .= implode("\n", $additions);
         }
