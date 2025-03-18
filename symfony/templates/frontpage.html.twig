@@ -94,7 +94,7 @@
         <div class="tile col-12 p-2">
             <a href="https://stream.entropy.fi">
                 <div class="rect-img-container">
-                    <img data-stream-target="pic" src="{{ asset('/images/entropy-stream-offline.svg') }}" loading="lazy" class="rect-img fill {% if app.user is not null and app.user.member.theme == 'dark' %}invert{% endif %}" title="{{ 'Stream'|trans }}">
+                    <img data-stream-target="pic" src="{{ asset('/images/entropy-stream-offline.svg') }}" loading="lazy" class="rect-img fill stream-img" title="{{ 'Stream'|trans }}">
                     <div class="badge-container">
                         <span data-stream-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
                     </div>
