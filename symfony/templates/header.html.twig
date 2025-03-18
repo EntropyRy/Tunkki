@@ -1,18 +1,15 @@
 {% use 'menu/menu.html.twig' %}
 <header class="row" id="header" data-turbo-frame="nav">
     <div class="g-0 mb-4">
-        {% if event is defined %}
-            {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-        {% else %}
-            {% set theme = 'light' %}
-        {% endif %}
         <div class="header-img text-center d-none d-lg-block">
             <a href="/{% if app.request.locale == 'en' %}en{% endif %}">
-                <img src="{{ asset('/images/header-logo-text.svg') }}" {% if theme == 'dark' %}class="invert"{% endif %} width="50%" height="auto" z-index="0" alt="ENTROPY">
+                <img src="{{ asset('/images/header-logo-text.svg') }}" width="50%" height="auto" z-index="0" alt="ENTROPY">
             </a>
-            <button class="btn position-absolute top-0 end-0" {{ stimulus_controller('theme-switcher') }} {{ stimulus_action('theme-switcher', 'switch')}}>
-                 <twig:ux:icon name="proicons:dark-theme" height="2em"/>
-            </button>
+            {% if event is not defined %}
+                <button class="btn position-absolute top-0 end-0" {{ stimulus_controller('theme-switcher') }} {{ stimulus_action('theme-switcher', 'switch')}}>
+                    <twig:ux:icon name="proicons:dark-theme" height="2em"/>
+                </button>
+            {% endif %}
         </div>
         {{ block('menu') }}
     </div>
