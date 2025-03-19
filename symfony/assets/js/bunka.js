@@ -36,7 +36,7 @@ const config = {
   particleLifespan: 800, // Frames a particle lives for
   cursorInfluence: 250, // Radius of cursor influence
   cursorRepel: false, // Whether cursor repels particles
-  colorMode: "analogous", // 'fixed', 'age', 'position', 'flow', 'complement'
+  colorMode: "complement", // 'fixed', 'age', 'position', 'flow', 'complement'
   enableTrails: true, // Enable particle trails
   trailLength: 0.98, // Trail length (0-1, higher = longer trails)
   trailWidth: 3, // Width of trail lines
