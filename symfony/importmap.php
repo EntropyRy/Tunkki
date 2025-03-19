@@ -79,7 +79,7 @@ return [
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.0.6',
+        'version' => '5.0.7',
     ],
     '@fortawesome/fontawesome-free/css/all.css' => [
         'version' => '6.7.2',
