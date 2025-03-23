@@ -29,33 +29,4 @@ final class StreamControl
         return $this->streamStatus;
     }
 
-    public function getCurrentDateTime(): string
-    {
-        $dateTime = new \DateTime('now', new \DateTimeZone('UTC'));
-        return $dateTime->format('Y-m-d H:i:s');
-    }
-    public function getCurrentUser(): string
-    {
-        if (($token = $this->tokenStorage->getToken()) instanceof TokenInterface) {
-            $user = $token->getUser();
-            if (is_object($user)) {
-                return $user->getUserIdentifier();
-            }
-        }
-
-        return 'Guest';
-    }
-
-    public function isActiveMember(): bool
-    {
-        if (($token = $this->tokenStorage->getToken()) instanceof TokenInterface) {
-            $user = $token->getUser();
-            if (is_object($user) && method_exists($user, 'getMember')) {
-                $member = $user->getMember();
-                return $member && method_exists($member, 'getIsActiveMember') && $member->getIsActiveMember();
-            }
-        }
-
-        return false;
-    }
 }
