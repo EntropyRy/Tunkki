@@ -182,6 +182,11 @@ Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen 
 stream:
   command:
     successful: Stream käsky OK
+  control:
+    off: Automaattinen streamaus/tallennus pois päältä
+    on: Automaattinen streamaus/tallennus päällä
+    start: Aloita
+    end: Lopeta
 block:
   tickets:
     name: Omistamasi liput

@@ -1,0 +1,26 @@
+<div class="stream-control-component" {{ attributes }}>
+    <div class="stream-status">
+        {% if this.streamStatus %}
+            <div class="alert alert-success">
+                <twig:ux:icon name="quill:broadcast" height="1em" />
+                {{ 'stream.control.on'|trans }}
+            </div>
+        {% else %}
+            <div class="alert alert-secondary">
+                <twig:ux:icon name="fa:power-off" height="1em" />
+                {{ 'stream.control.off'|trans }}
+            </div>
+        {% endif %}
+        {% if this.streamStatus %}
+            <a href="{{ path('recording_stop') }}" class="btn btn-danger" data-turbo="false">
+                <twig:ux:icon name="material-symbols:stop-rounded" height="1em" />
+                {{ 'stream.control.stop'|trans }}
+            </a>
+        {% else %}
+            <a href="{{ path('recording_start') }}" class="btn btn-success" data-turbo="false">
+                <twig:ux:icon name="material-symbols:play-arrow-rounded" height="1em" />
+                {{ 'stream.control.start'|trans }}
+            </a>
+        {% endif %}
+    </div>
+</div>

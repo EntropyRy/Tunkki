@@ -29,10 +29,11 @@
             </ul>
             <hr>
             <h1>Stream</h1>
-            <div class="d-flex justify-content-between">
+            <twig:StreamControl />
+            {# <div class="d-flex justify-content-between">
                 <a class="btn btn-danger" href="{{ path('recording_start') }}"><i class="fas fa-play"></i> Start Stream</a>
                 <a class="btn btn-danger" href="{{ path('recording_stop') }}"><i class="fas fa-stop"></i> Stop Stream</a>
-            </div>
+            </div> #}
         {% else %}
             <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
         {% endif %}

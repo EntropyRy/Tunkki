@@ -109,6 +109,11 @@ logged_in_as: You are logged in as
 stream:
   command:
     successful: Stream command OK
+  control:
+    off: Automatic streaming/recording is OFF 
+    on: Automatic streaming/recording is ON
+    start: Start
+    stop: Stop
 page:
   title:
     checkout: Checkout
