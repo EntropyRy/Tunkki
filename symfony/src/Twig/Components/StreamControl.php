@@ -4,7 +4,6 @@ namespace App\Twig\Components;
 
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use App\Helper\SSH;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
@@ -14,7 +13,6 @@ final class StreamControl
 
     public function __construct(
         private readonly SSH $ssh,
-        private readonly TokenStorageInterface $tokenStorage
     ) {
     }
 
