@@ -212,25 +212,27 @@
         <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
     {% set content_attr = 'content_attribute'|trans %}
-    {{ attribute(event, content_attr)|replace({
-    '{{ timetable }}': block('timetable'),
-    '{{ vj_timetable }}': block('vj_timetable'),
-    '{{ timetable_to_page }}': block('timetable_to_page'),
-    '{{ timetable_with_genre }}': block('timetable_with_genre'),
-    '{{ bios }}': block('bios'),
-    '{{ streamplayer }}': block('streamplayer'),
-    '{{ vj_bios }}': block('vj_bios'),
-    '{{ links }}': block('links'),
-    '{{ rsvp }}': block('RSVP'),
-    '{{ stripe_ticket }}': block('stripe_ticket'),
-    '{{ ticket }}': block('ticket_for_event_page'),
-    '{{ art_artist_list }}': block('art_artist_list'),
-    '{{ happening_list }}': block('happening_list'),
-    '{{ menu }}': '',
-    })|raw }}
-    {% if '{{ links }}' not in attribute(event, content_attr) %}
-        {{ block('links') }}
-    {% endif %}
+    <div class="event-text-content">
+        {{ attribute(event, content_attr)|replace({
+        '{{ timetable }}': block('timetable'),
+        '{{ vj_timetable }}': block('vj_timetable'),
+        '{{ timetable_to_page }}': block('timetable_to_page'),
+        '{{ timetable_with_genre }}': block('timetable_with_genre'),
+        '{{ bios }}': block('bios'),
+        '{{ streamplayer }}': block('streamplayer'),
+        '{{ vj_bios }}': block('vj_bios'),
+        '{{ links }}': block('links'),
+        '{{ rsvp }}': block('RSVP'),
+        '{{ stripe_ticket }}': block('stripe_ticket'),
+        '{{ ticket }}': block('ticket_for_event_page'),
+        '{{ art_artist_list }}': block('art_artist_list'),
+        '{{ happening_list }}': block('happening_list'),
+        '{{ menu }}': '',
+        })|raw }}
+        {% if '{{ links }}' not in attribute(event, content_attr) %}
+            {{ block('links') }}
+        {% endif %}
+    </div>
 {% endblock -%}
 {%- block event_frontpage_content %}
     {% set frontpage = true %}
