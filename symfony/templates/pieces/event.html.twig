@@ -249,6 +249,7 @@
 {% block event_badge %}
     <div class="badge-container text-end">
         {{ block('event_icons') }}
+        {{ event.badgeText }}{{ event.NowTest }} {{ date('now')|date('Y-m-d H:i:s') }}
         {% if event.badgeText == 'event.now' %}
             <span class="shadow badge bg-success">{{ event.badgeText|trans }}</span>
         {% elseif event.badgeText == 'event.after' %}
