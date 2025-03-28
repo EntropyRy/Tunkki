@@ -3,10 +3,11 @@
 {% use 'event/meta.html.twig' %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block importmap %}
-    {{ parent() }}
+    {% set maps = ['app'] %}
     {% if event.backgroundEffect is not empty %}
-        {{ importmap(event.backgroundEffect) }}
+        {% set maps = maps|merge([event.backgroundEffect]) %}
     {% endif %}
+    {{ importmap(maps) }}
 {% endblock %}
 {% block stylesheets %}
     {{ parent() }}
