@@ -249,8 +249,7 @@
 {% block event_badge %}
     <div class="badge-container text-end">
         {{ block('event_icons') }}
-        {{  (date() >= event.EventDate and date() <= event.until) }}
-        {% if event.badgeText == 'event.now' %}
+        {% if date() >= event.EventDate and date() <= event.until %}
             <span class="shadow badge bg-success">{{ event.badgeText|trans }}</span>
         {% elseif event.badgeText == 'event.after' %}
             <span class="shadow badge bg-danger">{{ event.badgeText|trans }}</span>
