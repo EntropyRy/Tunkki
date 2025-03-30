@@ -29,7 +29,7 @@ $outline: 2px;
   .price {
     min-height: calc($border-radius * 2);
     button {
-      background: $white;
+      background: transparent;
       outline: $outline solid $outline-color;
       outline-offset: calc($outline / 2 - $outline);
       width: 100%;
