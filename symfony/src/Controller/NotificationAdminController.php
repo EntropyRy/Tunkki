@@ -30,10 +30,19 @@ final class NotificationAdminController extends CRUDController
         $picture = $event->getPicture();
         if ($picture !== null) {
             $provider = $pool->getProvider($picture->getProviderName());
-            $format = $provider->getFormatName($picture, 'banner');
-            $pictureUrl = 'https://entropy.fi'.$provider->generatePublicUrl($picture, $format);
+            $adapter = $provider->getFilesystem()->getAdapter();
+            $baseDirectory = $adapter->getDirectory();
+
+            // Construct the relative path
+            $relativePath = $provider->generatePrivateUrl($picture, 'reference');
+
+            // Construct the full filesystem path
+            $filePath = $baseDirectory . '/' . $relativePath;
+
+            // $filePath = $filesystem->getAdapter()->getPathPrefix() . $media->getProviderReference();
+            //$format = $provider->getFormatName($picture, 'normal');
+            //$pictureUrl = $provider->generatePath($picture, $format);
         }
-        //dd($pictureUrl);
         $path = '/'. $event->getEventDate()->format('Y') . '/' . $event->getUrl();
         $host = $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
@@ -59,7 +68,7 @@ final class NotificationAdminController extends CRUDController
             switch ($option) {
                 case 'add_event_picture':
                     if ($picture !== null && $notification->getMessageId() == null) {
-                        $telegramOptions->photo($pictureUrl);
+                        $telegramOptions->uploadPhoto($filePath);
                     }
                     break;
                 case 'add_preview_link':
