@@ -3898,16 +3898,16 @@
         },
         {
             "name": "nette/utils",
-            "version": "v4.0.5",
+            "version": "v4.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nette/utils.git",
-                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96"
+                "reference": "ce708655043c7050eb050df361c5e313cf708309"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nette/utils/zipball/736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
-                "reference": "736c567e257dbe0fcf6ce81b4d6dbe05c6899f96",
+                "url": "https://api.github.com/repos/nette/utils/zipball/ce708655043c7050eb050df361c5e313cf708309",
+                "reference": "ce708655043c7050eb050df361c5e313cf708309",
                 "shasum": ""
             },
             "require": {
@@ -3978,9 +3978,9 @@
             ],
             "support": {
                 "issues": "https://github.com/nette/utils/issues",
-                "source": "https://github.com/nette/utils/tree/v4.0.5"
+                "source": "https://github.com/nette/utils/tree/v4.0.6"
             },
-            "time": "2024-08-07T15:39:19+00:00"
+            "time": "2025-03-30T21:06:30+00:00"
         },
         {
             "name": "nyholm/psr7",
@@ -6678,16 +6678,16 @@
         },
         {
             "name": "symfony-cmf/routing-bundle",
-            "version": "3.1.0",
+            "version": "3.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony-cmf/routing-bundle.git",
-                "reference": "4a3d31d27050d5f4fd808dc68377050f72b99979"
+                "reference": "7aab681c812e93a41d70349f560976b93da049ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/4a3d31d27050d5f4fd808dc68377050f72b99979",
-                "reference": "4a3d31d27050d5f4fd808dc68377050f72b99979",
+                "url": "https://api.github.com/repos/symfony-cmf/routing-bundle/zipball/7aab681c812e93a41d70349f560976b93da049ca",
+                "reference": "7aab681c812e93a41d70349f560976b93da049ca",
                 "shasum": ""
             },
             "require": {
@@ -6705,7 +6705,7 @@
             "require-dev": {
                 "doctrine/data-fixtures": "^1.0.0",
                 "doctrine/doctrine-bundle": "^2.8",
-                "doctrine/orm": "^2.9 || ^3.0",
+                "doctrine/orm": "^2.9 || ^3.0.1",
                 "doctrine/phpcr-bundle": "^3.0",
                 "doctrine/phpcr-odm": "^2.0",
                 "jackalope/jackalope-doctrine-dbal": "^2.0",
@@ -6756,9 +6756,9 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony-cmf/routing-bundle/issues",
-                "source": "https://github.com/symfony-cmf/routing-bundle/tree/3.1.0"
+                "source": "https://github.com/symfony-cmf/routing-bundle/tree/3.1.1"
             },
-            "time": "2024-04-07T08:17:51+00:00"
+            "time": "2025-03-31T07:12:15+00:00"
         },
         {
             "name": "symfony/asset",
