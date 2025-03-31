@@ -26,25 +26,27 @@ final class NotificationAdminController extends CRUDController
         $notification = $this->admin->getSubject();
         $locale = $notification->getLocale();
         $event = $notification->getEvent();
-        //$name = $event->getName();
         $picture = $event->getPicture();
+
+        // Prepare picture URL
+        $publicUrl = null;
         if ($picture !== null) {
+            // Get base URL from request
+            $scheme = $request->isSecure() ? 'https' : 'http';
+            $host = $request->getHost();
+            $baseUrl = $scheme . '://' . $host;
+
             $provider = $pool->getProvider($picture->getProviderName());
-            $adapter = $provider->getFilesystem()->getAdapter();
-            $baseDirectory = $adapter->getDirectory();
-
-            // Construct the relative path
-            $relativePath = $provider->generatePrivateUrl($picture, 'reference');
-
-            // Construct the full filesystem path
-            $filePath = $baseDirectory . '/' . $relativePath;
-
-            // $filePath = $filesystem->getAdapter()->getPathPrefix() . $media->getProviderReference();
-            //$format = $provider->getFormatName($picture, 'normal');
-            //$pictureUrl = $provider->generatePath($picture, $format);
+            $format = $provider->getFormatName($picture, 'reference');
+            $publicUrl = 'https://entropy.fi'.$provider->generatePublicUrl($picture, $format);
         }
+
+        if ($_ENV["APP_ENV"] == 'dev') {
+            $publicUrl = 'https://entropy.fi/upload/media/event/0001/01/c9ae350d6d50efeadd95eab3270604a78719fb1b.jpg';
+        }
+        // Prepare event URLs
         $path = '/'. $event->getEventDate()->format('Y') . '/' . $event->getUrl();
-        $host = $request->headers->get('host');
+        $host = 'https://' . $request->headers->get('host');
         if ($notification->getLocale() == 'fi') {
             $nakkikone = $host . $path . '/nakkikone?source=tg';
             $shop = $host . $path . '/kauppa?source=tg';
@@ -52,25 +54,42 @@ final class NotificationAdminController extends CRUDController
             $nakkikone = $host . '/en' . $path . '/nakkikone?source=tg';
             $shop = $host . '/en'. $path . '/shop?source=tg';
         }
+
         $url = $host . '/tapahtuma/'.$event->getId().'?source=tg';
         $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
-        $message = new ChatMessage($msg);
+
+        // Prepare buttons with each button on its own row
+        $buttonRows = [];
+        $options = $notification->getOptions();
+
+        foreach ($options as $option) {
+            switch ($option) {
+                case 'add_event_button':
+                    $buttonRows[] = (new InlineKeyboardButton('Tapahtuma / The Event'))
+                        ->url($url);
+                    break;
+                case 'add_shop_button':
+                    $buttonRows[] = (new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale)))
+                        ->url($shop);
+                    break;
+                case 'add_nakkikone_button':
+                    $buttonRows[] = (new InlineKeyboardButton($ts->trans('Nakkikone')))
+                        ->url($nakkikone);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Create Telegram options
         $telegramOptions = (new TelegramOptions())
             ->parseMode('HTML')
             ->disableWebPagePreview(true)
             ->disableNotification(true);
-        if ($notification->getMessageId()) {
-            $telegramOptions->edit($notification->getMessageId());
-        }
-        $options = $notification->getOptions();
-        $buttons = [];
+
+        // Apply specific options
         foreach ($options as $option) {
             switch ($option) {
-                case 'add_event_picture':
-                    if ($picture !== null && $notification->getMessageId() == null) {
-                        $telegramOptions->uploadPhoto($filePath);
-                    }
-                    break;
                 case 'add_preview_link':
                     $telegramOptions->disableWebPagePreview(false);
                     break;
@@ -81,32 +100,42 @@ final class NotificationAdminController extends CRUDController
                     $venue = $event->getLocation();
                     $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $venue->getName(), $venue->getStreetAddress());
                     break;
-                case 'add_event_button':
-                    $buttons[] = (new InlineKeyboardButton('Tapahtuma / The Event'))
-                        ->url($url);
-                    break;
-                case 'add_shop_button':
-                    $buttons[] = (new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale)))
-                        ->url($shop);
-                    break;
-                case 'add_nakkikone_button':
-                    $buttons[] = (new InlineKeyboardButton($ts->trans('Nakkikone')))
-                        ->url($nakkikone);
-                    break;
                 default:
                     break;
             }
         }
-        if ($buttons !== []) {
+
+        // Handle editing existing messages
+        if ($notification->getMessageId()) {
+            $telegramOptions->edit($notification->getMessageId());
+        }
+
+        // Add the photo if available and requested
+        if ($publicUrl !== null && in_array('add_event_picture', $options) && $notification->getMessageId() === null) {
+            $telegramOptions->photo($publicUrl);
+        }
+
+        // Add reply markup with buttons if any exist
+        if ($buttonRows !== []) {
             $telegramOptions
                 ->replyMarkup(
                     (new InlineKeyboardMarkup())
-                        ->inlineKeyboard($buttons)
+                        ->inlineKeyboard($buttonRows)
                 );
+            // $markup = new InlineKeyboardMarkup();
+            // // Each button gets its own row in the keyboard
+            // $markup->inlineKeyboard($buttonRows);
+            // $telegramOptions->replyMarkup($markup);
         }
-        //dd($telegramOptions);
+
+        // Create message
+        $message = new ChatMessage($msg);
         $message->options($telegramOptions);
+
         try {
+            // Add debug log before sending
+            // error_log('Sending Telegram message with options: ' . json_encode($telegramOptions->toArray()));
+
             $return = $chatter->send($message);
             $notification->setMessageId((int) $return->getMessageId());
             $notification->setSentAt(new \DateTimeImmutable('now'));
@@ -114,7 +143,9 @@ final class NotificationAdminController extends CRUDController
             $this->addFlash('success', 'Message sent');
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Message NOT sent: ' . $e->getMessage());
+            // error_log('Telegram error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }
