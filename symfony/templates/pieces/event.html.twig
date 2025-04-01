@@ -73,7 +73,6 @@
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="fontisto:ticket-alt" />
-                    {{ 'fas fa-ticket'|parse_icon }}
                     {{ 'ticket.to_ticket_shop'|trans }}
                 </a>
             {% endif %}
