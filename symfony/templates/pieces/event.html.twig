@@ -72,6 +72,7 @@
             {% if event.ticketPresaleEnabled and event.url and not event.isInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    <twig:ux:icon name="fontisto:ticket-alt" />
                     {{ 'fas fa-ticket'|parse_icon }}
                     {{ 'ticket.to_ticket_shop'|trans }}
                 </a>
@@ -79,14 +80,14 @@
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user and not event.isInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {{ 'fas fa-tasks'|parse_icon }}
+                    <twig:ux:icon name="fa-solid:tasks" />
                     Nakkikone
                 </a>
             {% endif %}
             {% if not event.isInPast and event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
                 <a class="btn btn-primary"
                    href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {{ 'fas fa-tasks'|parse_icon }}
+                    <twig:ux:icon name="mdi:register" />
                     {{ 'Artist signup'|trans }}
                 </a>
             {% endif %}
