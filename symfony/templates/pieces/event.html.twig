@@ -68,7 +68,7 @@
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
             <h4>{{ block('event_name') }}</h4>
         </a>
-        <div class="d-inline-flex gap-2 ">
+        <div class="d-inline-flex gap-2 flex-wrap">
             {% if event.ticketPresaleEnabled and event.url and not event.isInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
