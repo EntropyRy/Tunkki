@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus";
 import moment from "moment/min/moment-with-locales.min.js";
 
-/* stimulusFetch: 'lazy' */
+stimulusFetch: "eager";
 export default class extends Controller {
   static targets = ["pic", "badge", "progress"];
   static values = { url: String, refreshInterval: Number };
