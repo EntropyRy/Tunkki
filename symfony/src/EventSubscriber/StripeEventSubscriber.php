@@ -55,7 +55,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onProductUpdated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripeProduct = $stripeEvent->data->object; // @phpstan-ignore-line
+        $stripeProduct = $stripeEvent->data->object;
         try {
             $products = $this->productRepo->findBy(['stripeId' => $stripeProduct['id']]);
             foreach ($products as $product) {
@@ -69,7 +69,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceCreated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
+        $stripePrice = $stripeEvent->data->object;
 
         try {
             $product = new Product();
@@ -82,7 +82,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceUpdated(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
+        $stripePrice = $stripeEvent->data->object;
         try {
             $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
             $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
@@ -94,7 +94,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onPriceDeleted(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $stripePrice = $stripeEvent->data->object; // @phpstan-ignore-line
+        $stripePrice = $stripeEvent->data->object;
 
         try {
             $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
@@ -107,7 +107,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onCheckoutExpired(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $session = $stripeEvent->data->object; // @phpstan-ignore-line
+        $session = $stripeEvent->data->object;
         $this->logger->notice('Session: ' . $session['id']);
         try {
             $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
@@ -121,7 +121,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     public function onCheckoutCompleted(StripeWebhook $webhook): void
     {
         $stripeEvent = $webhook->getStripeObject();
-        $session = $stripeEvent->data->object; // @phpstan-ignore-line
+        $session = $stripeEvent->data->object;
         $this->logger->notice('Session: ' . $session['id']);
         try {
             $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);

@@ -87,7 +87,7 @@ class CheckoutsController extends AbstractController
                     'enabled' => true,
                 ],
                 'customer_email' => $cart->getEmail(),
-                'expires_at' => $expires->format('U'),
+                'expires_at' => $expires->getTimestamp(),
                 'locale' => $request->getLocale()
             ]);
             $checkout = new Checkout();
@@ -155,7 +155,7 @@ class CheckoutsController extends AbstractController
                     'enabled' => true,
                 ],
                 'customer_email' => $cart->getEmail(),
-                'expires_at' => $expires->format('U'),
+                'expires_at' => $expires->getTimestamp(),
                 'locale' => $request->getLocale()
             ]);
             $checkout = new Checkout();

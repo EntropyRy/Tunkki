@@ -4884,16 +4884,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.36.0",
+            "version": "4.36.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "748306c95cc137ecca907af1bd30f886f576014c"
+                "reference": "7f94789311bc7931030fbf84cda6ca7a3b18ed03"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/748306c95cc137ecca907af1bd30f886f576014c",
-                "reference": "748306c95cc137ecca907af1bd30f886f576014c",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/7f94789311bc7931030fbf84cda6ca7a3b18ed03",
+                "reference": "7f94789311bc7931030fbf84cda6ca7a3b18ed03",
                 "shasum": ""
             },
             "require": {
@@ -5000,7 +5000,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.36.0"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.36.1"
             },
             "funding": [
                 {
@@ -5020,7 +5020,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-03-11T13:00:04+00:00"
+            "time": "2025-04-03T18:45:18+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -6562,16 +6562,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v16.6.0",
+            "version": "v17.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "d6de0a536f00b5c5c74f36b8f4d0d93b035499ff"
+                "reference": "b4ce1fdd4ec607e4e8906419c346846f19363f10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/d6de0a536f00b5c5c74f36b8f4d0d93b035499ff",
-                "reference": "d6de0a536f00b5c5c74f36b8f4d0d93b035499ff",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/b4ce1fdd4ec607e4e8906419c346846f19363f10",
+                "reference": "b4ce1fdd4ec607e4e8906419c346846f19363f10",
                 "shasum": ""
             },
             "require": {
@@ -6581,7 +6581,7 @@
                 "php": ">=5.6.0"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "3.5.0",
+                "friendsofphp/php-cs-fixer": "3.72.0",
                 "phpstan/phpstan": "^1.2",
                 "phpunit/phpunit": "^5.7 || ^9.0"
             },
@@ -6615,9 +6615,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v16.6.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v17.1.0"
             },
-            "time": "2025-02-24T22:35:29+00:00"
+            "time": "2025-04-02T16:32:19+00:00"
         },
         {
             "name": "symfony-cmf/routing",
@@ -12771,16 +12771,16 @@
         },
         {
             "name": "twbs/bootstrap",
-            "version": "v5.3.3",
+            "version": "v5.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twbs/bootstrap.git",
-                "reference": "6e1f75f420f68e1d52733b8e407fc7c3766c9dba"
+                "reference": "51581ed235f0c63e70cef43b49da1e47b0c5f308"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/6e1f75f420f68e1d52733b8e407fc7c3766c9dba",
-                "reference": "6e1f75f420f68e1d52733b8e407fc7c3766c9dba",
+                "url": "https://api.github.com/repos/twbs/bootstrap/zipball/51581ed235f0c63e70cef43b49da1e47b0c5f308",
+                "reference": "51581ed235f0c63e70cef43b49da1e47b0c5f308",
                 "shasum": ""
             },
             "replace": {
@@ -12815,9 +12815,9 @@
             ],
             "support": {
                 "issues": "https://github.com/twbs/bootstrap/issues",
-                "source": "https://github.com/twbs/bootstrap/tree/v5.3.3"
+                "source": "https://github.com/twbs/bootstrap/tree/v5.3.4"
             },
-            "time": "2024-02-20T15:14:29+00:00"
+            "time": "2025-04-03T15:58:10+00:00"
         },
         {
             "name": "twig/extra-bundle",
