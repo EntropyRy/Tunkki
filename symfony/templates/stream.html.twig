@@ -1,0 +1,8 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block content %}
+    {{ sonata_page_render_container('content', page) }}
+    {# <twig:StreamArtist /> #}
+    <twig:StreamPlayer />
+    {{ sonata_page_render_container('a_content', page) }}
+{% endblock %}
