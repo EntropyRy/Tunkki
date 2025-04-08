@@ -213,6 +213,7 @@
         '{{ timetable }}': block('timetable'),
         '{{ vj_timetable }}': block('vj_timetable'),
         '{{ timetable_to_page }}': block('timetable_to_page'),
+        '{{ timetable_to_page_with_genre }}': block('timetable_to_page_with_genre'),
         '{{ timetable_with_genre }}': block('timetable_with_genre'),
         '{{ bios }}': block('bios'),
         '{{ streamplayer }}': block('streamplayer'),
@@ -504,6 +505,13 @@
         {% endif %}
     </div>
 {% endblock -%}
+{% block timetable_to_page_with_genre %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = true %}
+    {% set genre = true %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
 {% block timetable_to_page %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
