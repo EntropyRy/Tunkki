@@ -8,6 +8,7 @@ use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\Product as StripeProduct;
 use Stripe\Price as StripePrice;
+use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
@@ -45,8 +46,8 @@ class AppStripeClient
 
     public function updateOurProduct(
         Product $product,
-        ?StripePrice $stripePrice,
-        ?StripeProduct $stripeProduct,
+        ?StripeObject $stripePrice,
+        ?StripeObject $stripeProduct,
     ): Product {
         if ($stripeProduct != null && $stripePrice == null) {
             $product->setActive($stripeProduct['active'] == 1);
