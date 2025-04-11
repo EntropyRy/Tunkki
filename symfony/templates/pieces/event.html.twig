@@ -561,15 +561,15 @@
                         {{ type }} {{ 'Timetable'|trans }}
                         {% if stage %}@ {{ stage }}{% endif %}
                     </h4>
-                    <ul>
-                        {% for info in infos %}
+                    <ul class="timetable">
+                        {% for info in infos -%}
                             {% set artist = info.artistClone %}
                             {% set name = (artist.name|split(' for')).0 %}
                             {% if last is defined %}
                                 {% if info.timediff(last) > 4 and event.multiday %}<hr>{% endif %}
                                 {% if last != info.StartTime %}
                                     <li>
-                                        {{ info.StartTime|format_datetime(pattern: datestring) }}:
+                                    <span clas="time">{{ info.StartTime|format_datetime(pattern: datestring) }}:</span>
                                     {% endif %}
                                 {% endif %}
                                 {% if info.StartTime is not empty %}
@@ -585,13 +585,13 @@
                             {% set last = info.StartTime %}
                             {% if last is defined %}
                                 {% if last != info.StartTime %}</li>{% endif %}
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
+                            {% endif %}
+                        {%- endfor %}
+                    </ul>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 {% endblock %}
 {% block art_artist_list %}
     {% set bios = event.ArtistInfosByType('ART') %}

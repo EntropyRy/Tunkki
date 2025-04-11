@@ -215,3 +215,19 @@ nav.navbar-light .nav-item a.nav-link {
   height: 1.2em;
   vertical-align: -0.2em;
 }
+
+.timetable {
+  list-style-type: none;
+  padding-left: 2em;
+  li {
+    display: flex;
+  }
+  .time {
+    min-width: 5em;
+    font-weight: bold;
+    margin-right: 0.5em;
+  }
+  a {
+    margin: 0 0.5em;
+  }
+}
