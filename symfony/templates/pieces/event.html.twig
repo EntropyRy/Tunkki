@@ -561,6 +561,77 @@
                         {{ type }} {{ 'Timetable'|trans }}
                         {% if stage %}@ {{ stage }}{% endif %}
                     </h4>
+                    <table class="timetable">
+                        <tbody>
+                            {% set current_time = null %}
+                            {% set row_open = false %}
+                            
+                            {% for info in infos %}
+                                {% set artist = info.artistClone %}
+                                {% set name = (artist.name|split(' for')).0 %}
+                                
+                                {% if info.StartTime is not empty %}
+                                    {% if current_time != info.StartTime %}
+                                        {# Close previous row if open #}
+                                        {% if row_open %}
+                                            </td></tr>
+                                            {% set row_open = false %}
+                                        {% endif %}
+                                        
+                                        {# Add separator for multiday events with big time gaps #}
+                                        {% if last is defined and info.timediff(last) > 4 and event.multiday %}
+                                            <tr class="time-separator"><td colspan="2"><hr></td></tr>
+                                        {% endif %}
+                                        
+                                        {# Start new row #}
+                                        <tr>
+                                            <td class="time">{{ info.StartTime|format_datetime(pattern: datestring) }}:</td>
+                                            <td class="artist-info">
+                                                {% set row_open = true %}
+                                                {% set current_time = info.StartTime %}
+                                    {% else %}
+                                        {# Same time slot, add B2B indicator #}
+                                        B2B
+                                    {% endif %}
+                                    
+                                    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+                                    
+                                    {% if artist.type == 'Live' %}(Live){% endif %}
+                                    
+                                    {% if genre|default(null) %}
+                                        <i class="fw-lighter"> ({{ artist.genre }})</i>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                {% set last = info.StartTime %}
+                            {% endfor %}
+                            
+                            {# Close the last row if still open #}
+                            {% if row_open %}
+                                </td></tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block timetable_list_li %}
+    {% if event.multiday == true %}
+        {% set datestring = 'E, HH:mm' %}
+    {% else %}
+        {% set datestring = 'HH:mm' %}
+    {% endif %}
+    {% set last = null %}
+    {% if bios|length > 0 %}
+        <div id="timetable" class="row g-0">
+            {% for stage, infos in bios %}
+                <div class="col-12 {% if bios|length > 1 %}{# is more than one stage #} col-md-6{% endif %}">
+                    <h4 class="artists-heading">
+                        {{ type }} {{ 'Timetable'|trans }}
+                        {% if stage %}@ {{ stage }}{% endif %}
+                    </h4>
                     <ul class="timetable">
                         {% for info in infos -%}
                             {% set artist = info.artistClone %}

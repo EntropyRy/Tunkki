@@ -215,3 +215,47 @@ nav.navbar-light .nav-item a.nav-link {
   height: 1.2em;
   vertical-align: -0.2em;
 }
+
+.timetable {
+  width: 90%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  margin-bottom: 1.5em;
+
+  tr {
+    vertical-align: top;
+  }
+
+  td {
+    padding: 0.5em 0;
+    line-height: 1.4;
+  }
+
+  .time {
+    font-weight: bold;
+    padding-right: 1em;
+    white-space: nowrap;
+    width: 4.5em;
+  }
+
+  .artist-info {
+    a {
+      display: inline;
+    }
+
+    i {
+      display: inline;
+    }
+  }
+
+  .time-separator {
+    td {
+      padding: 0;
+    }
+
+    hr {
+      margin: 0.5em 0;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+}
