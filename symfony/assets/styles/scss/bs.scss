@@ -217,8 +217,8 @@ nav.navbar-light .nav-item a.nav-link {
 }
 
 .timetable {
-  width: 90%;
-  margin: 0 auto;
+  // width: 90%;
+  // margin: 0 auto;
   border-collapse: collapse;
   margin-bottom: 1.5em;
 
@@ -237,7 +237,12 @@ nav.navbar-light .nav-item a.nav-link {
     white-space: nowrap;
     width: 4.5em;
   }
-
+  .indicator {
+    width: 4.5em;
+    text-align: right;
+    padding-right: 0.5em;
+    line-height: 1.2;
+  }
   .artist-info {
     a {
       display: inline;
