@@ -242,6 +242,7 @@ nav.navbar-light .nav-item a.nav-link {
     text-align: right;
     padding-right: 0.5em;
     line-height: 1.2;
+    transition: transform 0.3s ease;
   }
   .artist-info {
     a {
@@ -261,6 +262,22 @@ nav.navbar-light .nav-item a.nav-link {
     hr {
       margin: 0.5em 0;
       border-color: rgba(0, 0, 0, 0.1);
+    }
+  }
+  /* Animation for the SVG update */
+  .update-animation {
+    animation: flip-animation 0.5s ease-in-out;
+  }
+
+  @keyframes flip-animation {
+    0% {
+      transform: rotateX(0);
+    }
+    50% {
+      transform: rotateX(3.142rad);
+    }
+    100% {
+      transform: rotateX(0);
     }
   }
 }
