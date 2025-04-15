@@ -584,14 +584,13 @@
                                     {%- endif -%}
                                     {# Open a new row for the new time slot #}
                                     <tr>
-                                        <td class="indicator" {% if loop.first %}{{ stimulus_target('time-indicator', 'indicator') }}>
+                                        <td class="indicator" 
                                             {%- if is_current -%}
-                                            {%- endif -%}
+                                                {{ stimulus_target('time-indicator', 'indicator') }}>
                                                 {{- 'timetable.now'|trans }} <twig:ux:icon name="icomoon-free:arrow-right" height="1em" />
-                                            {% else %}
+                                            {%- else -%}
                                             >
                                             {%- endif -%}
-
                                         </td>
                                         <td class="time">{{- info.StartTime|format_datetime(pattern: datestring) -}}</td>
                                         <td>

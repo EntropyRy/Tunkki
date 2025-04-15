@@ -179,7 +179,11 @@ Message: Viesti
 Full list: Koko lista
 logged_in_as: Olet kirjautuneena käyttäjänä
 Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen kuvauksen
+timetable:
+  now: nyt
 stream:
+  recommended_quality: Paras laatu
+  better_compability: Parempi yhteensopivuus
   command:
     successful: Stream käsky OK
   control:

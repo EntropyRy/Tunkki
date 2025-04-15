@@ -106,7 +106,11 @@ widget_label_binary_content: Binary content
 widget_label_unlink: Unlink
 link_media: Add a photo from your files
 logged_in_as: You are logged in as
+timetable:
+  now: Now
 stream:
+  recommended_quality: Recommended Quality
+  better_compability: Better Compability
   command:
     successful: Stream command OK
   control:
