@@ -105,7 +105,7 @@ sonata_page:
       path: "stream.html.twig"
       name: Stream
       containers:
-        content:
+        s_content:
           name: Content
         a_content:
           name: After Content
@@ -117,7 +117,7 @@ sonata_page:
           AAAAAAAA
           AAAAAAAA
         mapping:
-          C: content
+          C: s_content
           A: a_content
     default:
       path: "twocolumn.html.twig"
