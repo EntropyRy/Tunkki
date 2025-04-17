@@ -70,7 +70,7 @@ class StreamNotificationController extends AbstractController
         return $this->json([
             'status' => 'success',
             'message' => 'Stream notification received',
-            'event_id' => ($stream ? $stream->getId() : null),
+            'event_id' => ($stream !== null ? $stream->getId() : null),
         ]);
     }
 }
