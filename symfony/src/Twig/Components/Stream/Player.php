@@ -146,7 +146,7 @@ final class Player
     private function updateStreamListeners(int $listeners): void
     {
         // $this->stream = $this->streamRepository->findOneBy([], ['id' => 'DESC']);
-        if ($this->stream === null) {
+        if (!$this->stream instanceof Stream) {
             return;
         }
         $old = $this->stream->getListeners();

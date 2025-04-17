@@ -150,7 +150,7 @@ class ArtistController extends AbstractController
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
-        $member = $user->getMember();
+        $user->getMember();
         return $this->render('artist/streams.html.twig', [
             'artist' => $artist,
         ]);

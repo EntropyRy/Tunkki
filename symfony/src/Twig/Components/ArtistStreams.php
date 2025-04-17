@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components;
 
+use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Artist;
 use App\Repository\StreamArtistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,16 +24,11 @@ final class ArtistStreams extends AbstractController
     public function mount(): void
     {
         $user = $this->getUser();
-        if ($user) {
+        if ($user instanceof UserInterface) {
             $this->domain = $_ENV['STREAM_DOMAIN'];
         }
     }
-    /**
-     * Get streams grouped by stream ID for a specific artist
-     *
-     * @param int|Artist $artist The artist entity or ID
-     * @return array Streams grouped by stream ID
-     */
+
     public function getArtistStreams(Artist $artist): array
     {
         // Fetch the streams for the given artist from the repository

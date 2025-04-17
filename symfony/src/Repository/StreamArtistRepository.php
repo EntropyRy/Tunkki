@@ -21,7 +21,7 @@ class StreamArtistRepository extends ServiceEntityRepository
     /**
      * Find active stream artists for a particular stream
      */
-    public function findActiveArtistsInStream(Stream $stream)
+    public function findActiveArtistsInStream(Stream $stream): mixed
     {
         return $this->createQueryBuilder('sa')
             ->andWhere('sa.stream = :stream')
@@ -43,7 +43,7 @@ class StreamArtistRepository extends ServiceEntityRepository
             $artistIds[] = $artist->getId();
         }
 
-        if (empty($artistIds)) {
+        if ($artistIds === []) {
             return null;
         }
 

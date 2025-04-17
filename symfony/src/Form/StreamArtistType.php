@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use Symfony\Component\Validator\Constraints\NotNull;
 use App\Entity\Artist;
 use App\Entity\StreamArtist;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -12,6 +13,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class StreamArtistType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $member = $options['member'];
@@ -19,7 +21,6 @@ class StreamArtistType extends AbstractType
             return;
         }
         $choices = $member->getStreamArtists();
-        $stream = $options['stream'];
         $isInStream = $options['is_in_stream'] ?? false;
 
         if ($isInStream) {
@@ -39,7 +40,7 @@ class StreamArtistType extends AbstractType
                     'label' => 'stream.artist.label',
                     'placeholder' => 'stream.artist.select',
                     'constraints' => [
-                        new \Symfony\Component\Validator\Constraints\NotNull([
+                        new NotNull([
                             'message' => 'stream.artist.notnull',
                         ]),
                     ],
@@ -47,6 +48,7 @@ class StreamArtistType extends AbstractType
         }
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

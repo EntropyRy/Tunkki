@@ -43,6 +43,8 @@ class StreamNotificationController extends AbstractController
             'recording_file' => $data['recording_file'] ?? 'unknown'
         ]);
 
+        $stream = null;
+
         if ($data['event'] === 'stream-start') {
             // Save to database
             $stream = new Stream();
@@ -52,7 +54,7 @@ class StreamNotificationController extends AbstractController
 
         } elseif ($data['event'] === 'stream-stop') {
             $stream = $streamRepository->findOneBy(['online' => true]);
-            if ($stream) {
+            if ($stream !== null) {
                 $stream->setOnline(false);
                 foreach ($stream->getArtists() as $artist) {
                     $artist->setStoppedAt(new \DateTimeImmutable());
@@ -68,7 +70,7 @@ class StreamNotificationController extends AbstractController
         return $this->json([
             'status' => 'success',
             'message' => 'Stream notification received',
-            'event_id' => $stream->getId()
+            'event_id' => ($stream ? $stream->getId() : null),
         ]);
     }
 }

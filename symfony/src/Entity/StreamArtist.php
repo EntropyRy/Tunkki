@@ -28,9 +28,10 @@ class StreamArtist implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?Stream $stream = null;
 
+    #[\Override]
     public function __toString(): string
     {
-        return $this->artist->getName();
+        return (string) $this->artist->getName();
     }
 
     public function getId(): ?int

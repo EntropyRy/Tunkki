@@ -42,6 +42,7 @@ class Stream implements \Stringable
         $this->artists = new ArrayCollection();
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return 'Stream: '.$this->getCreatedAt()->format('d.m.Y H:i:s');
@@ -124,11 +125,9 @@ class Stream implements \Stringable
 
     public function removeArtist(StreamArtist $artist): static
     {
-        if ($this->artists->removeElement($artist)) {
-            // set the owning side to null (unless already changed)
-            if ($artist->getStream() === $this) {
-                $artist->setStream(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->artists->removeElement($artist) && $artist->getStream() === $this) {
+            $artist->setStream(null);
         }
 
         return $this;
@@ -136,7 +135,7 @@ class Stream implements \Stringable
 
     public function getArtistsOnline(): Collection
     {
-        return $this->artists->filter(fn (StreamArtist $artist) => $artist->getStoppedAt() === null);
+        return $this->artists->filter(fn (StreamArtist $artist): bool => !$artist->getStoppedAt() instanceof \DateTimeImmutable);
     }
 
     public function getFilename(): ?string

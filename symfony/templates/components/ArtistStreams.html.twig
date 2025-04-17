@@ -4,7 +4,7 @@
             <div class="col-sm-5">
                 <h4>{{ 'stream.label'|trans }}: {{ group.stream.createdAt|date() }}</h4>
                 <p>{{ 'stream.listeners'|trans }}: {{ group.stream.listeners }}</p>
-                
+
                 {% for format in ['flac', 'mp3', 'opus'] %}
                     <a class="btn btn-primary btn-sm"
                        href="{{ domain }}{{ attribute(group.stream, format ~ 'Filename') }}"
@@ -13,7 +13,7 @@
                     </a>
                 {% endfor %}
             </div>
-            
+
             <div class="stream-item col-sm-7">
                 <p>{{ 'stream.artist.played_at'|trans }}</p>
                 {% for item in group.items %}

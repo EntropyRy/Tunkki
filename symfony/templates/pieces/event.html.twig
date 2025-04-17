@@ -562,13 +562,13 @@
                     </h4>
                     <table class="timetable" {{ stimulus_controller('time-indicator', {'server-time': 'now'|date('Y-m-d\\TH:i:sP')}) }}>
                         <tbody>
-                            {%- set now = "now"|date('U') -%}
+                            {%- set now = 'now'|date('U') -%}
                             {%- set event_until = event.until|date('U') -%}
                             {%- set last_start_time = null -%}
                             {%- for info in infos -%}
                                 {%- set artist = info.artistClone -%}
                                 {%- set name = (artist.name|split(' for')).0 -%}
-                                
+
                                 {# Determine if this is the current artist #}
                                 {%- set is_last_slot = loop.last and now <= event_until -%}
                                 {%- set next_start_time = infos[loop.index]|default(null) is not null and infos[loop.index].StartTime is not null
@@ -584,7 +584,7 @@
                                     {%- endif -%}
                                     {# Open a new row for the new time slot #}
                                     <tr>
-                                        <td class="indicator" 
+                                        <td class="indicator"
                                             {%- if is_current -%}
                                                 {{ stimulus_target('time-indicator', 'indicator') }}>
                                                 {{- 'timetable.now'|trans }} <twig:ux:icon name="icomoon-free:arrow-right" height="1em" />
