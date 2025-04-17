@@ -1,0 +1,48 @@
+<div {{ attributes }}
+     data-poll="delay({{ this.refreshInterval }})|checkStreamStatus">
+    <!-- Stream Player component html -->
+    <div class="tile col-12 p-2">
+        <a href="https://stream.entropy.fi">
+            <div class="rect-img-container">
+                <img src="{{ asset(this.currentImg) }}" loading="lazy"
+                     class="rect-img fill stream-img {{ this.isOnline ? 'shimmer' : '' }}"
+                     title="{{ 'Stream'|trans }}">
+                <div class="badge-container">
+                    <span class="badge {{ this.isOnline ? 'bg-success' : 'bg-secondary' }}">
+                        {{ this.badgeText|trans }}
+                    </span>
+                </div>
+            </div>
+        </a>
+        <div id="{{ streamFormat }}" class="mb-2 d-flex flex-column">
+            <div class="audioplayer {{ not this.showPlayer ? 'd-none' : '' }} mt-4">
+                <audio controls="controls" preload="none">
+                    <source src="{{ this.getStreamUrl() }}"
+                            type="{{ this.getStreamMimeType() }}" />
+                </audio>
+            </div>
+
+            <div class="mt-2 d-flex justify-content-start format-selector {{ not this.showPlayer ? 'd-none' : '' }}">
+                <div class="btn-group btn-group-sm">
+                    <button type="button"
+                            class="btn btn-sm {{ this.streamFormat == 'mp3' ? 'btn-primary' : 'btn-outline-primary' }}"
+                            {{ live_action('setStreamFormat', {format: 'mp3'}) }}>
+                        MP3
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm {{ this.streamFormat == 'opus' ? 'btn-primary' : 'btn-outline-primary' }}"
+                            {{ live_action('setStreamFormat', {format: 'opus'}) }}>
+                        OPUS
+                    </button>
+                </div>
+                <small class="text-muted ms-2 d-flex align-items-center">
+                    {% if this.streamFormat == 'opus' %}
+                        {{ 'stream.recommeded_quality'|trans }}
+                    {% else %}
+                        {{ 'stream.better_compability'|trans }}
+                    {% endif %}
+                </small>
+            </div>
+        </div>
+    </div>
+</div>

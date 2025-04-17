@@ -1,0 +1,54 @@
+<div{{ attributes }}>
+<h1>{{ 'Stream' }} {{ isOnline }}</h1>
+    {% if stream and app.user %}
+        <div class="stream-artist-control">
+            <h3>{{ 'stream.artist.management'|trans }}</h3>
+            
+            {{ form_start(form, {
+                attr: {
+                class: 'send-artist-form',
+                'data-action': 'live#action:prevent',
+                'data-live-action-param': 'save',
+                },
+            }) }}
+        
+            {% if isInStream %}
+                <div class="alert alert-info">
+                    <p>{{ 'stream.artist.your'|trans }} <strong>{{ existingStreamArtist.artist.name }}</strong> {{ 'stream.artist.currently_in_stream'|trans }}.</p>
+                    <button type="button" class="btn btn-danger" 
+                            data-action="live#action" 
+                            data-live-action-param="cancel">
+                        {{ 'stream.artist.remove'|trans }}
+                    </button>
+                </div>
+            {% else %}
+                {{ form_row(form.artist) }}
+                <button type="submit" class="btn btn-primary">
+                    {{ 'stream.artist.add'|trans }}
+                </button>
+                
+                <div class="form-help mt-2 mb-4">
+                    <small class="text-muted">
+                    {{ 'stream.artist.note'|trans }}: {{ 'stream.artist.note_text'|trans }}
+                    </small>
+                </div>
+            {% endif %}
+            
+            {{ form_end(form) }}
+        </div>
+    {% endif %}
+    <div class="row">
+        {% if stream %}
+            <div class="col-md-5">
+                <twig:Stream:Player />
+            </div>
+            <div class="col-md-7">
+                <twig:Stream:Artists />
+            </div>
+        {% else %}
+            <div class="col-md-6 col-xl-4 mx-auto">
+                <twig:Stream:Player />
+            </div>
+        {% endif %}
+    </div>
+</div>

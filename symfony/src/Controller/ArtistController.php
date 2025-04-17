@@ -10,6 +10,7 @@ use App\Form\ArtistType;
 use App\Helper\Mattermost;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,6 +21,13 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ArtistController extends AbstractController
 {
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti',
+            'en' => '/profile/artist',
+        ],
+        name: 'entropy_artist_profile',
+    )]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -30,6 +38,13 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti/uusi',
+            'en' => '/profile/artist/create',
+        ],
+        name: 'entropy_artist_create',
+    )]
     public function create(
         Request $request,
         FormFactoryInterface $formF,
@@ -68,6 +83,16 @@ class ArtistController extends AbstractController
             'form' => $form
         ]);
     }
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti/{id}/muokkaa',
+            'en' => '/profile/artist/{id}/edit',
+        ],
+        name: 'entropy_artist_edit',
+        requirements: [
+            'id' => '\d+',
+        ]
+    )]
     public function edit(
         Request $request,
         Artist $artist,
@@ -88,6 +113,16 @@ class ArtistController extends AbstractController
             'form' => $form
         ]);
     }
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti/{id}/poista',
+            'en' => '/profile/artist/{id}/delete',
+        ],
+        name: 'entropy_artist_delete',
+        requirements: [
+            'id' => '\d+',
+        ]
+    )]
     public function delete(EntityManagerInterface $em, Artist $artist): RedirectResponse
     {
         foreach ($artist->getEventArtistInfos() as $info) {
@@ -97,5 +132,27 @@ class ArtistController extends AbstractController
         $em->remove($artist);
         $em->flush();
         return $this->redirectToRoute('entropy_artist_profile');
+    }
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti/{id}/streamit',
+            'en' => '/profile/artist/{id}/streams',
+        ],
+        name: 'entropy_artist_streams',
+        requirements: [
+            'id' => '\d+',
+        ]
+    )]
+    public function streams(
+        Request $request,
+        EntityManagerInterface $em,
+        Artist $artist
+    ): RedirectResponse|Response {
+        $user = $this->getUser();
+        assert($user instanceof User);
+        $member = $user->getMember();
+        return $this->render('artist/streams.html.twig', [
+            'artist' => $artist,
+        ]);
     }
 }

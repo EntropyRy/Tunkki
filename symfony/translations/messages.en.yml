@@ -109,8 +109,29 @@ logged_in_as: You are logged in as
 timetable:
   now: Now
 stream:
+  label: Stream
+  labels: Streams
+  no_streams: Artist has not participated in streams
+  loading: loading..
+  artist:
+    played_at: Artist played at
+    notnull: You have to select artist
+    your: Your artist
+    remove: Remove from Stream
+    currently_in_stream: is currently in the stream
+    add: Add to Stream
+    note: Note
+    note_text: Only one of your artists can be active in the stream at a time. Adding a new artist will automatically remove any of your currently active artists.
+    management: Stream Artist Management
+    label: Artist
+    select: Please, select an artist
+  download:
+    mp3: Download Mp3
+    flac: Download Flac
+    opus: Download Opus
   recommended_quality: Recommended Quality
   better_compability: Better Compability
+  listeners: Listeners
   command:
     successful: Stream command OK
   control:
@@ -249,6 +270,8 @@ epics:
     events_button: Events
     title: Random photos from our events
 artist:
+  streams: Streams
+  streams_by: Streams by
   not_confirmed_yet: Not confirmed (yet)
   not_selected: Artist not selected
   explanation:

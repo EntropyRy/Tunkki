@@ -63,6 +63,8 @@
                                     {% endif %}
                                 {% endfor %}
                             </ul>
+                            <a class="btn btn-primary w-100"
+                               href="{{ path('entropy_artist_streams', {id: artist.id}) }}">{{ 'artist.streams'|trans|capitalize }}</a>
                         </div>
                     </div>
                 </div>

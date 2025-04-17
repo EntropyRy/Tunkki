@@ -2,13 +2,6 @@
 
 {% block content %}
     {{ sonata_page_render_container('content', page) }}
-    <div class="row">
-        <div class="col col-md-7">
-            <twig:StreamArtist />
-        </div>
-        <div class="col col-md-5">
-            <twig:StreamPlayer />
-        </div>
-    </div>
+    <twig:Stream:ArtistControl />
     {{ sonata_page_render_container('a_content', page) }}
 {% endblock %}

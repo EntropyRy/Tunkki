@@ -1,0 +1,29 @@
+<div{{ attributes }}>
+    {% for group in this.getArtistStreams(artist) %}
+        <div class="stream row">
+            <div class="col-sm-5">
+                <h4>{{ 'stream.label'|trans }}: {{ group.stream.createdAt|date() }}</h4>
+                <p>{{ 'stream.listeners'|trans }}: {{ group.stream.listeners }}</p>
+                
+                {% for format in ['flac', 'mp3', 'opus'] %}
+                    <a class="btn btn-primary btn-sm"
+                       href="{{ domain }}{{ attribute(group.stream, format ~ 'Filename') }}"
+                       target="_blank">
+                        {{ ('stream.download.' ~ format)|trans }}
+                    </a>
+                {% endfor %}
+            </div>
+            
+            <div class="stream-item col-sm-7">
+                <p>{{ 'stream.artist.played_at'|trans }}</p>
+                {% for item in group.items %}
+                    {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt|date('H:i') }}<br>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {{ 'stream.no_streams'|trans }}
+        </div>
+    {% endfor %}
+</div>

@@ -738,7 +738,14 @@
                     </div>
                 </div>
             {% endif %}
-            {% if not loop.last %}<hr class="d-md-none">{% endif %}
+            {% if not loop.last %}
+                {% if back_to_back|default(false) %}
+                    <div class="linetext">
+                        <span>B2B</span>
+                    </div>
+                {% endif %}
+                <hr class="d-md-none">
+            {% endif %}
         {% endif %}
     {% endblock %}
 {%- block vj_bios %}

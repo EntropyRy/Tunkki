@@ -2,12 +2,12 @@
     <div class="stream-status">
         {% if this.streamStatus %}
             <div class="alert alert-success">
-                <twig:ux:icon name="quill:broadcast" />
+                <twig:ux:icon name="quill:broadcast" height="2em"/>
                 {{ 'stream.control.on'|trans }}
             </div>
         {% else %}
             <div class="alert alert-secondary">
-                <twig:ux:icon name="fa:power-off" />
+                <twig:ux:icon name="fa:power-off" height="2em" />
                 {{ 'stream.control.off'|trans }}
             </div>
         {% endif %}

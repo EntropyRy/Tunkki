@@ -734,4 +734,16 @@ class Member implements \Stringable
 
         return $this;
     }
+
+    public function getStreamArtists(): array
+    {
+        $streamArtists = [];
+        foreach ($this->getArtist() as $artist) {
+            if ($artist->getType() == 'DJ' || $artist->getType() == 'LIVE') {
+                $streamArtists[] = $artist;
+            }
+        }
+
+        return $streamArtists;
+    }
 }

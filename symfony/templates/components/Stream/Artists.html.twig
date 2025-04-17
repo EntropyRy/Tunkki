@@ -1,0 +1,31 @@
+{% use 'pieces/event.html.twig' %}
+<div{{ attributes }} id="artists-{{ hash }}">
+    {% if isOnline %}
+        <div class="d-grid grid-cols-2 gap-2">
+        {% for streamArtist in stream.artistsOnline %}
+            {% set artist = streamArtist.artist %} 
+            {% set name = artist.name %} 
+            {% set bio_attribute = 'bio_attribute'|trans %}
+            {% set backToBack = true %}
+            {{ block('cycle') }}
+                {# <span class="polaroid">
+                    {% if streamArtist.artist.Picture %}
+                        <img width="100%"
+                            loading="lazy"
+                            title="{{ streamArtist.artist.name }}"
+                            src="{{ sonata_path(streamArtist.artist.Picture, 'square') }}">
+                    {% endif %}
+                    <div class="caption d-none d-sm-block">{{ streamArtist.artist.name }}</div>
+                </span> #}
+        {% else %}
+            <div class="polaroid">
+                <img width="100%"
+                    loading="lazy"
+                    title="{{ 'Unknown' }}"
+                    src="{{ asset('images/thumb_artist_square.jpg') }}">
+                <div class="caption d-none d-sm-block">{{ 'unknown' }}</div>
+            </div>
+        {% endfor %}
+        </div>
+    {% endif %}
+</div>

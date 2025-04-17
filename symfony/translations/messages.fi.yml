@@ -182,8 +182,29 @@ Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen 
 timetable:
   now: nyt
 stream:
+  label: Streami
+  labels: Streamit
+  no_streams: Artisti ei ole osallistunut yhtään streamiin
+  loading: ladataan..
+  artist:
+    played_at: Artisti soitti näinä ajankohtina
+    notnull: Sinun täytyy valita artisti
+    your: Artistisi
+    remove: Poista artistisi streamista
+    currently_in_stream: on tällä hetkellä streamissa
+    add: Lisää streamiin
+    note: Huomaa
+    note_text: Vain yksi sinun artisteista voi olla yhtäaikaa aktiivinen streamissa. Jos lisäät toisen artisteistasi niin edellinen otetaan pois streamista.
+    management: Stream artisti muokkaus
+    label: Artisti
+    select: Valitse artisti
+  download:
+    mp3: Lataa Mp3
+    flac: Lataa Flac
+    opus: Lataa Opus
   recommended_quality: Paras laatu
   better_compability: Parempi yhteensopivuus
+  listeners: kuuntelijoita
   command:
     successful: Stream käsky OK
   control:
@@ -317,6 +338,8 @@ profile:
     connection_ok: Yhteys ok
     wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. iPhone <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
 artist:
+  streams: Streamit
+  streams_by: Artistin streamit
   not_confirmed_yet: Ei vahvistettu (vielä)
   not_selected: Artistia ei valittu
   explanation:

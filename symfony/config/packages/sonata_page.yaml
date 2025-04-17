@@ -56,6 +56,7 @@ sonata_page:
     - entropy_artist_create
     - entropy_artist_edit
     - entropy_artist_delete
+    - entropy_artist_streams
     - entropy_public_artist
     - entropy_event
     - entropy_event_en
