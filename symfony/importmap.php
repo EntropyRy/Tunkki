@@ -101,4 +101,7 @@ return [
     'sortablejs' => [
         'version' => '1.15.6',
     ],
+    'howler' => [
+        'version' => '2.2.4',
+    ],
 ];

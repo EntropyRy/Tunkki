@@ -161,7 +161,14 @@ final class Player
     public function setStreamFormat(#[LiveArg] string $format): void
     {
         if (in_array($format, [self::FORMAT_MP3, self::FORMAT_OPUS])) {
+            $oldFormat = $this->streamFormat;
             $this->streamFormat = $format;
+            // Emit an event to notify the Howler.js controller that the format changed
+            if ($oldFormat !== $format) {
+                $this->dispatchBrowserEvent('stream:format-changed', [
+                    'format' => $format
+                ]);
+            }
         }
     }
 
