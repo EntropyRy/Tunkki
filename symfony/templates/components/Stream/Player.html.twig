@@ -14,29 +14,29 @@
                 </div>
             </div>
         </a>
-        
+
         <div id="{{ streamFormat }}" class="mb-2 d-flex flex-column">
             {# Howler.js Audio Player #}
             <div class="audioplayer {{ not this.showPlayer ? 'd-none' : '' }} mt-4"
                  {{ stimulus_controller('howler-player', {
-                     'mp3Url': this.getStreamUrl('mp3'),
-                     'opusUrl': this.getStreamUrl('opus'),
-                     'format': this.streamFormat
+                     mp3Url: this.getStreamUrl('mp3'),
+                     opusUrl: this.getStreamUrl('opus'),
+                     format: this.streamFormat,
                  }) }}>
-                
+
                 <div class="d-flex justify-content-center align-items-center">
-                    <button class="btn btn-primary rounded-circle mx-2" 
+                    <button class="btn btn-primary rounded-circle mx-2"
                             {{ stimulus_target('howler-player', 'playButton') }}
                             {{ stimulus_action('howler-player', 'play') }}>
                         <twig:ux:icon name="gravity-ui:play-fill" />
                     </button>
-                    
-                    <button class="btn btn-primary rounded-circle mx-2 d-none" 
+
+                    <button class="btn btn-primary rounded-circle mx-2 d-none"
                             {{ stimulus_target('howler-player', 'pauseButton') }}
                             {{ stimulus_action('howler-player', 'pause') }}>
                         <twig:ux:icon name="gravity-ui:pause-fill" />
                     </button>
-                    
+
                     <div class="volume-control mx-3">
                         <input type="range" class="form-range" min="0" max="1" step="0.1" value="1"
                                {{ stimulus_target('howler-player', 'volumeSlider') }}
@@ -60,7 +60,7 @@
                 </div>
                 <small class="text-muted ms-2 d-flex align-items-center">
                     {% if this.streamFormat == 'opus' %}
-                        {{ 'stream.recommeded_quality'|trans }}
+                        {{ 'stream.recommended_quality'|trans }}
                     {% else %}
                         {{ 'stream.better_compability'|trans }}
                     {% endif %}
