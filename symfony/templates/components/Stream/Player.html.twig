@@ -37,8 +37,9 @@
                         <twig:ux:icon name="gravity-ui:pause-fill" />
                     </button>
 
-                    <div class="volume-control mx-3">
-                        <input type="range" class="form-range" min="0" max="1" step="0.1" value="1"
+                    <div class="volume-control mx-3 d-flex align-items-center">
+                        <twig:ux:icon name="gravity-ui:volume" height="2em"/>
+                        <input type="range" class="form-range ms-2" min="0" max="1" step="0.1" value="1"
                                {{ stimulus_target('howler-player', 'volumeSlider') }}
                                {{ stimulus_action('howler-player', 'updateVolume', 'input') }}>
                     </div>
