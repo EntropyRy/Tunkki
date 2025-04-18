@@ -187,6 +187,7 @@ stream:
   no_streams: Artisti ei ole osallistunut yhtään streamiin
   loading: ladataan..
   artist:
+    not_yours: Ei sinun artistisi
     played_at: Artisti soitti näinä ajankohtina
     notnull: Sinun täytyy valita artisti
     your: Artistisi

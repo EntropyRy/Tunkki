@@ -150,7 +150,13 @@ class ArtistController extends AbstractController
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
-        $user->getMember();
+        $member = $user->getMember();
+        // Check that the member owns the artist
+        // If not, redirect to the artist profile
+        if ($member->getId() !== $artist->getMember()->getId()) {
+            $this->addFlash('warning', 'stream.artist.not_yours');
+            return $this->redirectToRoute('entropy_artist_profile');
+        }
         return $this->render('artist/streams.html.twig', [
             'artist' => $artist,
         ]);

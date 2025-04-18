@@ -114,6 +114,7 @@ stream:
   no_streams: Artist has not participated in streams
   loading: loading..
   artist:
+    not_yours: Not your artist
     played_at: Artist played at
     notnull: You have to select artist
     your: Your artist
