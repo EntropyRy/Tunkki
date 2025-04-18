@@ -739,7 +739,7 @@ class Member implements \Stringable
     {
         $streamArtists = [];
         foreach ($this->getArtist() as $artist) {
-            if ($artist->getType() == 'DJ' || $artist->getType() == 'LIVE') {
+            if ($artist->getType() != 'ART') {
                 $streamArtists[] = $artist;
             }
         }
