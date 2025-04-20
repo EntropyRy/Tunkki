@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus";
 import { Howl } from "howler";
 
 export default class extends Controller {
-  static targets = ["playButton", "pauseButton", "volumeSlider"];
+  static targets = ["playButton", "pauseButton", "loadingButton"];
   static values = {
     mp3Url: String,
     opusUrl: String,
@@ -11,9 +11,17 @@ export default class extends Controller {
 
   connect() {
     this.isPlaying = false;
+    this.isLoading = false;
+    this.wakeLock = null; // To store the wake lock instance
+
+    // Load format from localStorage if available
+    const savedFormat = localStorage.getItem("audioPlayerFormat");
+    if (savedFormat && (savedFormat === "mp3" || savedFormat === "opus")) {
+      this.formatValue = savedFormat; // Override initial format value
+    }
+
     this.setupPlayer();
 
-    // Listen for events from the Live Component
     this.element.addEventListener(
       "stream:format-changed",
       this.onFormatChanged.bind(this),
@@ -30,40 +38,51 @@ export default class extends Controller {
 
   disconnect() {
     this.stopPlayback();
+    this.releaseWakeLock(); // Release wake lock when the controller is disconnected
     if (this.sound) {
       this.sound.unload();
     }
   }
 
   setupPlayer() {
-    // Create the Howl instance
     this.sound = new Howl({
       src: [this.getCurrentStreamUrl()],
-      html5: true, // Force HTML5 Audio for streaming
-      format: [this.formatValue], // Use the format from the component
+      html5: true, // Use HTML5 audio for streaming
+      preload: "none", // Ensure the stream doesn't buffer until play is triggered
+      format: [this.formatValue],
       autoplay: false,
       volume: 0.7,
-      onplay: () => {
+      onload: () => {
+        this.isLoading = false;
+        this.updatePlaybackUI(false, false);
+      },
+      onplay: async () => {
         this.isPlaying = true;
-        this.updatePlaybackUI(true);
+        this.isLoading = false;
+        this.updatePlaybackUI(true, false);
+        await this.requestWakeLock(); // Request wake lock when the stream starts playing
       },
       onpause: () => {
         this.isPlaying = false;
-        this.updatePlaybackUI(false);
+        this.updatePlaybackUI(false, false);
+        this.releaseWakeLock(); // Release wake lock when the stream is paused
       },
       onstop: () => {
         this.isPlaying = false;
-        this.updatePlaybackUI(false);
+        this.updatePlaybackUI(false, false);
+        this.releaseWakeLock(); // Release wake lock when the stream is stopped
       },
       onloaderror: () => {
         console.error("Error loading stream");
-        this.updatePlaybackUI(false);
+        this.isLoading = false;
+        this.updatePlaybackUI(false, false);
       },
       onplayerror: () => {
         console.error("Error playing stream");
-        this.updatePlaybackUI(false);
+        this.isLoading = false;
+        this.updatePlaybackUI(false, false);
 
-        // Try to recover by recreating the player
+        // Attempt recovery
         this.sound.unload();
         this.setupPlayer();
       },
@@ -74,52 +93,89 @@ export default class extends Controller {
     return this.formatValue === "mp3" ? this.mp3UrlValue : this.opusUrlValue;
   }
 
-  // Actions
-  play() {
-    if (this.sound && !this.sound.playing()) {
+  async play() {
+    if (!this.sound.playing()) {
+      this.isLoading = true;
+      this.updatePlaybackUI(false, true);
       this.sound.play();
     }
   }
 
   pause() {
-    if (this.sound && this.sound.playing()) {
+    if (this.sound.playing()) {
       this.sound.pause();
     }
   }
 
-  updateVolume() {
-    if (this.hasVolumeSliderTarget && this.sound) {
-      const volume = parseFloat(this.volumeSliderTarget.value);
-      this.sound.volume(volume);
+  stopPlayback() {
+    if (this.sound && this.sound.playing()) {
+      this.sound.stop();
+    }
+    this.updatePlaybackUI(false, false);
+  }
+
+  updatePlaybackUI(isPlaying, isLoading) {
+    if (this.hasPlayButtonTarget) {
+      this.playButtonTarget.classList.toggle("d-none", isPlaying || isLoading);
+    }
+    if (this.hasPauseButtonTarget) {
+      this.pauseButtonTarget.classList.toggle(
+        "d-none",
+        !isPlaying || isLoading,
+      );
+    }
+    if (this.hasLoadingButtonTarget) {
+      this.loadingButtonTarget.classList.toggle("d-none", !isLoading);
     }
   }
 
-  // Event handlers
+  async requestWakeLock() {
+    if ("wakeLock" in navigator) {
+      try {
+        this.wakeLock = await navigator.wakeLock.request("screen");
+        console.log("Wake Lock is active");
+      } catch (err) {
+        console.error("Failed to acquire wake lock:", err);
+      }
+    } else {
+      console.warn("Wake Lock API is not supported in this browser.");
+    }
+  }
+
+  releaseWakeLock() {
+    if (this.wakeLock) {
+      this.wakeLock
+        .release()
+        .then(() => {
+          this.wakeLock = null;
+          console.log("Wake Lock released");
+        })
+        .catch((err) => {
+          console.error("Failed to release wake lock:", err);
+        });
+    }
+  }
+
   onFormatChanged(event) {
     const newFormat = event.detail.format;
 
-    // Only reload if format actually changed
     if (this.formatValue !== newFormat) {
-      const wasPlaying = this.sound && this.sound.playing();
+      const wasPlaying = this.sound.playing();
       this.formatValue = newFormat;
 
-      // Unload current stream
-      if (this.sound) {
-        this.sound.unload();
-      }
+      // Save the selected format to localStorage
+      localStorage.setItem("audioPlayerFormat", newFormat);
 
-      // Create new player with new format
+      this.sound.unload();
       this.setupPlayer();
 
-      // Resume playback if it was playing before
       if (wasPlaying) {
-        this.sound.play();
+        this.play();
       }
     }
   }
 
   onStreamStarted() {
-    // Stream became available
     if (this.sound) {
       this.sound.unload();
     }
@@ -127,21 +183,6 @@ export default class extends Controller {
   }
 
   onStreamStopped() {
-    // Stream went offline
     this.stopPlayback();
-  }
-
-  stopPlayback() {
-    if (this.sound && this.sound.playing()) {
-      this.sound.stop();
-    }
-    this.updatePlaybackUI(false);
-  }
-
-  updatePlaybackUI(isPlaying) {
-    if (this.hasPlayButtonTarget && this.hasPauseButtonTarget) {
-      this.playButtonTarget.classList.toggle("d-none", isPlaying);
-      this.pauseButtonTarget.classList.toggle("d-none", !isPlaying);
-    }
   }
 }
