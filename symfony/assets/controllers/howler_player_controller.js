@@ -47,7 +47,7 @@ export default class extends Controller {
   setupPlayer() {
     this.sound = new Howl({
       src: [this.getCurrentStreamUrl()],
-      html5: true, // Use HTML5 audio for streaming
+      //html5: true, // Use HTML5 audio for streaming
       preload: "none", // Ensure the stream doesn't buffer until play is triggered
       format: [this.formatValue],
       autoplay: false,
