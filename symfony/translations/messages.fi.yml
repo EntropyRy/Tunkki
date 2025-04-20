@@ -182,6 +182,10 @@ Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen 
 timetable:
   now: nyt
 stream:
+  page:
+    players: Streamissa tällä hetkellä
+  tile:
+    button: Streami sivu
   label: Streami
   labels: Streamit
   no_streams: Artisti ei ole osallistunut yhtään streamiin

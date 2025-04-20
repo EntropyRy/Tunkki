@@ -3,6 +3,7 @@
     {% if isOnline %}
         <div class="d-grid grid-cols-2 gap-2">
         {% for streamArtist in stream.artistsOnline %}
+            <h2>{{ 'stream.page.players'|trans }}</h2>
             {% set artist = streamArtist.artist %}
             {% set name = artist.name %}
             {% set bio_attribute = 'bio_attribute'|trans %}

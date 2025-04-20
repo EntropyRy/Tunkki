@@ -92,7 +92,7 @@
 {% block stream_tile %}
     <div {{ stimulus_controller('stream') }} data-stream-url-value="https://stream.entropy.fi" data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}" data-stream-offline-img-value="{{ asset('/images/entropy-stream-offline.svg') }}" data-stream-refresh-interval-value="20000">
         <div class="tile col-12 p-2">
-            <a href="https://stream.entropy.fi">
+            <a href="https://entropy.fi{{ app.request.locale == 'fi' ? '' : '/en' }}/stream">
                 <div class="rect-img-container">
                     <img data-stream-target="pic" src="{{ asset('/images/entropy-stream-offline.svg') }}" loading="lazy" class="rect-img fill stream-img" title="{{ 'Stream'|trans }}">
                     <div class="badge-container">
@@ -109,6 +109,9 @@
                     </audio>
                 </div>
             </div>
+            <a class="btn btn-primary w-100" href="https://entropy.fi{{ app.request.locale == 'fi' ? '' : '/en' }}/stream">
+                {{ 'stream.tile.button'|trans }}
+            </a>
         </div>
     </div>
 {% endblock %}

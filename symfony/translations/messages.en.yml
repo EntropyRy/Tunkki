@@ -109,6 +109,10 @@ logged_in_as: You are logged in as
 timetable:
   now: Now
 stream:
+  page:
+    players: Who is playing now
+  tile:
+    button: Stream Page
   label: Stream
   labels: Streams
   no_streams: Artist has not participated in streams
