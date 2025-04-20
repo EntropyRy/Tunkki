@@ -21,6 +21,9 @@ class StreamArtistType extends AbstractType
             return;
         }
         $choices = $member->getStreamArtists();
+        if (!$choices) {
+            return;
+        }
         $isInStream = $options['is_in_stream'] ?? false;
 
         if ($isInStream) {

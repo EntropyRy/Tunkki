@@ -1,5 +1,5 @@
 <div{{ attributes }}>
-    {% if stream and app.user %}
+    {% if stream and app.user and form.artist is defined %}
         <div class="stream-artist-control">
             <h3>{{ 'stream.artist.management'|trans }}</h3>
 
