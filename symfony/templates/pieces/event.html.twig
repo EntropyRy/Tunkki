@@ -739,12 +739,13 @@
                 </div>
             {% endif %}
             {% if not loop.last %}
-                {% if back_to_back|default(false) %}
+                {% if backToBack|default(false) %}
                     <div class="linetext">
                         <span>B2B</span>
                     </div>
+                {% else %}
+                    <hr class="d-md-none">
                 {% endif %}
-                <hr class="d-md-none">
             {% endif %}
         {% endif %}
     {% endblock %}
