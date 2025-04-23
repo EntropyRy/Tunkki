@@ -21,6 +21,9 @@
                 {% endfor %}
             </div>
         </div>
+        {% if not loop.last %}
+            <hr>
+        {% endif %}
     {% else %}
         <div class="alert alert-info">
             {{ 'stream.no_streams'|trans }}
