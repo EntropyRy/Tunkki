@@ -186,6 +186,8 @@ stream:
     players: Streamissa tällä hetkellä
   tile:
     button: Streami sivu
+  live:
+    now: Livenä tällä hetkellä
   label: Streami
   labels: Streamit
   no_streams: Artisti ei ole osallistunut yhtään streamiin

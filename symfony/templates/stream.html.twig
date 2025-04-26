@@ -1,5 +1,33 @@
 {% extends 'onecolumn.html.twig' %}
 
+{% block meta %}
+    {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
+    {% set img = asset('images/header-logo.svg') %}
+    {% set title = page.title %}
+    {% set keywords = page.metaKeyword %}
+    {% set description = page.metaDescription %}
+    {% if artists|length > 0 %}
+        {% set desctiption = description ~ ' ' ~ 'stream.live.now'|trans ~ ': ' ~ artists|join(' B2B ') %}
+    {% endif %}
+    {% set height = 400 %}
+    {% set width = 400 %}
+    <meta property="og:image" content="{{ img }}">
+    <meta property="twitter:image" content="{{ img }}">
+    <meta property="og:image:height" content="{{ height }}">
+    <meta property="og:image:width" content="{{ width }}">
+    <meta property="og:site_name" content="Entropy ry">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ description }}">
+    <meta property="twitter:title" content="{{ title }}">
+    <meta property="twitter:desctiption" content="{{ description }}">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta name="keywords" content="{{ keywords }}">
+    <meta name="description" content="{{ description }}">
+    <meta property="og:type" content="stream">
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+{% endblock %}
+
 {% block content %}
     {{ sonata_page_render_container('s_content', page) }}
     <twig:Stream:ArtistControl />

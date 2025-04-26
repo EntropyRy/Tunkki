@@ -113,6 +113,8 @@ stream:
     players: Who is playing now
   tile:
     button: Stream Page
+  live: 
+    now: Playing live NOW
   label: Stream
   labels: Streams
   no_streams: Artist has not participated in streams
