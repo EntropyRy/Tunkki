@@ -17,7 +17,7 @@
             {% if event.type == 'meeting' and event.location is empty and event.webMeetingUrl is not empty %}
                 {% set online = '-online' %}
             {% endif %}
-            {% set img = 'https://entropy.fi/images/placeholders/' ~ event.type ~ online ~ '.webp' %}
+            {% set img = asset('images/placeholders/' ~ event.type ~ online ~ '.webp') %}
         {% endif %}
         <meta property="og:image" content="{{ img }}">
         <meta property="twitter:image" content="{{ img }}">
