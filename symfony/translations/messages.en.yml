@@ -413,6 +413,7 @@ join_us:
   4: Renting sound and light equipment
 barcode.expl: First your code then the others and confirmation with your code
 button:
+  join_mattermost: Join Mattermost
   old_announcements: Old Announcements
 happening:
   heading:

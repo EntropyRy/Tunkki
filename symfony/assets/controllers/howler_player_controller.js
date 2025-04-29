@@ -12,10 +12,14 @@ export default class extends Controller {
     mp3Url: String, // Your Icecast stream URL(s)
     opusUrl: String,
     format: String,
+    title: { type: String, default: "Live Stream" },
+    artist: { type: String, default: "Entropy ry" },
+    album: { type: String, default: "" },
+    artwork: { type: Array, default: [] },
   };
 
   connect() {
-    console.log("Connecting Simplified Howler Player Controller...");
+    // console.log("Connecting Simplified Howler Player Controller...");
     this.isPlaying = false;
     this.isLoading = false;
     this.wakeLock = null;
@@ -37,6 +41,9 @@ export default class extends Controller {
       this.onStreamStopped.bind(this),
     );
 
+    // Setup MediaSession if supported
+    this.setupMediaSession();
+
     // console.log("Initial format:", this.formatValue);
   }
 
@@ -44,6 +51,72 @@ export default class extends Controller {
     // console.log("Disconnecting Simplified Howler Player Controller...");
     this.stopPlayback(); // Stop sound and unload
     this.releaseWakeLock();
+    this.clearMediaSession();
+  }
+
+  // --- MediaSession API Integration ---
+  setupMediaSession() {
+    if ("mediaSession" in navigator) {
+      // Set initial metadata (will be updated when playback starts)
+      this.updateMediaSessionMetadata();
+
+      // Set action handlers for media controls
+      navigator.mediaSession.setActionHandler("play", () => {
+        this.play();
+      });
+
+      navigator.mediaSession.setActionHandler("pause", () => {
+        this.pause();
+      });
+
+      navigator.mediaSession.setActionHandler("stop", () => {
+        this.stopPlayback();
+      });
+
+      // Optional: implement seeking handlers if needed for specific use cases
+      // Since this is a stream, seeking is typically not applicable
+    }
+  }
+
+  updateMediaSessionMetadata() {
+    if (!("mediaSession" in navigator)) return;
+
+    try {
+      const defaultArtwork = [
+        {
+          src: "https://entropy.fi/images/header-logo.svg",
+          sizes: "512x512",
+          type: "image/svg+xml",
+        },
+      ];
+
+      const artwork =
+        this.artworkValue.length > 0 ? this.artworkValue : defaultArtwork;
+
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: this.titleValue,
+        artist: this.artistValue,
+        album: this.albumValue,
+        artwork: artwork,
+      });
+
+      // Update playback state
+      navigator.mediaSession.playbackState = this.isPlaying
+        ? "playing"
+        : "paused";
+    } catch (error) {
+      // console.error("Error setting MediaSession metadata:", error);
+    }
+  }
+
+  clearMediaSession() {
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.playbackState = "none";
+      // Clear handlers
+      navigator.mediaSession.setActionHandler("play", null);
+      navigator.mediaSession.setActionHandler("pause", null);
+      navigator.mediaSession.setActionHandler("stop", null);
+    }
   }
 
   // --- Player Setup & Control (No Web Audio API) ---
@@ -59,7 +132,7 @@ export default class extends Controller {
           ? "opus"
           : "mp3";
     }
-    console.log("Format loaded/determined:", this.formatValue);
+    // console.log("Format loaded/determined:", this.formatValue);
   }
 
   getCurrentStreamUrl() {
@@ -110,6 +183,8 @@ export default class extends Controller {
         this.isPlaying = true;
         this.isLoading = false;
         this.updatePlaybackUI(true, false);
+        // Update MediaSession metadata and state
+        this.updateMediaSessionMetadata();
         // Request wake lock when playback starts
         await this.requestWakeLock();
       },
@@ -117,6 +192,10 @@ export default class extends Controller {
         // console.log("Howler onpause: Playback paused");
         this.isPlaying = false;
         this.updatePlaybackUI(false, false);
+        // Update MediaSession state
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.playbackState = "paused";
+        }
         // Release wake lock when playback pauses
         this.releaseWakeLock();
       },
@@ -125,6 +204,10 @@ export default class extends Controller {
         this.isPlaying = false;
         this.isLoading = false;
         this.updatePlaybackUI(false, false);
+        // Update MediaSession state
+        if ("mediaSession" in navigator) {
+          navigator.mediaSession.playbackState = "none";
+        }
         // Release wake lock when playback stops
         this.releaseWakeLock();
         this.sound = null;
@@ -168,7 +251,7 @@ export default class extends Controller {
 
   stopPlayback() {
     if (this.sound) {
-      console.log("Stop action triggered.");
+      // console.log("Stop action triggered.");
       this.sound.stop(); // Triggers onstop
     } else {
       this.isPlaying = false;

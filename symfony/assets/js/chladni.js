@@ -12,19 +12,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function initChladni() {
   // Create the Chladni canvas if it doesn't exist
   let canvas = document.getElementById("chladni");
-  if (!canvas) {
-    canvas = document.createElement("canvas");
-    canvas.id = "chladni";
-    canvas.style.position = "fixed";
-    canvas.style.top = "0";
-    canvas.style.left = "0";
-    canvas.style.width = "100%";
-    canvas.style.height = "100%";
-    canvas.style.pointerEvents = "none";
-    canvas.style.zIndex = "-1";
-    document.body.appendChild(canvas);
-  }
-
   // Initialize the Chladni pattern generator
   const chladniApp = new ChladniApp(canvas);
 }
@@ -254,7 +241,7 @@ class ChladniApp {
     }
 
     // Reset render flag
-    this.needsRender = false;
+    this.needsRender = true;
 
     // Extract time components
     const hours = now.getHours();

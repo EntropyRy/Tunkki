@@ -497,6 +497,7 @@ join_us:
 barcode.expl: Ensin oma koodi ja sitte voit käyttää muita koodeja ja hyväksyminen omalla koodilla
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
+  join_mattermost: Liity Mattermostiin
   old_announcements: Vanhat tiedotteet
 happening:
   heading:
