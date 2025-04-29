@@ -2,15 +2,15 @@
 
 {% block meta %}
     {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
-    {% set img = asset('images/header-logo.svg') %}
+    {% set img = asset('images/golden-logo.png') %}
     {% set title = page.title %}
     {% set keywords = page.metaKeyword %}
     {% set description = page.metaDescription %}
     {% if artists|length > 0 %}
         {% set desctiption = description ~ ' ' ~ 'stream.live.now'|trans ~ ': ' ~ artists|join(' B2B ') %}
     {% endif %}
-    {% set height = 400 %}
-    {% set width = 400 %}
+    {% set height = 385 %}
+    {% set width = 385 %}
     <meta property="og:image" content="{{ img }}">
     <meta property="twitter:image" content="{{ img }}">
     <meta property="og:image:height" content="{{ height }}">
