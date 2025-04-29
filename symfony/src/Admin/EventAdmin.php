@@ -438,6 +438,7 @@ final class EventAdmin extends AbstractAdmin
                                 'Color Grid' => 'grid',
                                 'Wavy Lines' => 'lines',
                                 'Hypermakkara Game' => 'snake',
+                                'Chladni Pattern Generator' => 'chladni',
                                 'Flow Fields' => 'flowfields',
                                 'Flow Fields for Bunka' => 'bunka',
                             ]
