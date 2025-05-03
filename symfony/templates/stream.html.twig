@@ -9,8 +9,8 @@
     {% if artists|length > 0 %}
         {% set desctiption = description ~ ' ' ~ 'stream.live.now'|trans ~ ': ' ~ artists|join(' B2B ') %}
     {% endif %}
-    {% set height = 385 %}
-    {% set width = 385 %}
+    {% set height = 512 %}
+    {% set width = 512 %}
     <meta property="og:image" content="{{ img }}">
     <meta property="twitter:image" content="{{ img }}">
     <meta property="og:image:height" content="{{ height }}">
