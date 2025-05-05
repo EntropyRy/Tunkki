@@ -7,7 +7,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ePics
 {
-    private const API_BASE = 'https://epics.entropy.fi';
+    private const string API_BASE = 'https://epics.entropy.fi';
 
     public function __construct(
         private readonly HttpClientInterface $client
@@ -37,14 +37,14 @@ class ePics
             if (isset($headers['set-cookie'])) {
                 foreach ($headers['set-cookie'] as $cookie) {
                     // Extract XSRF token
-                    if (strpos($cookie, 'XSRF-TOKEN=') === 0) {
+                    if (str_starts_with($cookie, 'XSRF-TOKEN=')) {
                         $parts = explode(';', $cookie);
                         $tokenValue = substr($parts[0], 11); // 11 is length of 'XSRF-TOKEN='
                         $xsrfToken = str_replace('%3D', '=', $tokenValue);
                     }
 
                     // Extract session token
-                    if (strpos($cookie, 'lychee_session=') === 0) {
+                    if (str_starts_with($cookie, 'lychee_session=')) {
                         $parts = explode(';', $cookie);
                         $sessionValue = substr($parts[0], 15); // 15 is length of 'lychee_session='
                         $sessionToken = str_replace('%3D', '=', $sessionValue);
@@ -89,7 +89,7 @@ class ePics
                     }
                 }
             }
-        } catch (TransportExceptionInterface $e) {
+        } catch (TransportExceptionInterface) {
             return null;
         }
         return null;

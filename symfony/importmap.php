@@ -82,7 +82,7 @@ return [
         'version' => '8.0.13',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.2.6',
+        'version' => '5.2.7',
         'type' => 'css',
     ],
     'signature_pad' => [
