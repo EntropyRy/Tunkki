@@ -4,9 +4,14 @@ import moment from "moment/min/moment-with-locales.min.js";
 stimulusFetch: "eager";
 export default class extends Controller {
   static targets = ["pic", "badge", "progress"];
-  static values = { url: String, refreshInterval: Number };
+  static values = {
+    url: String,
+    refreshInterval: Number,
+    defaultPic: String,
+  };
 
   connect() {
+    this.defaultPicValue = this.picTarget.getAttribute("src");
     this.changePic();
     if (this.hasRefreshIntervalValue) {
       this.startRefreshing();
@@ -98,7 +103,7 @@ export default class extends Controller {
       };
     } else {
       // Only add shimmer class when showing the header logo
-      this.picTarget.setAttribute("src", "/images/header-logo.svg");
+      this.picTarget.setAttribute("src", this.defaultPicValue);
       this.picTarget.classList.add("shimmer");
     }
   }
