@@ -34,7 +34,7 @@ Home: Koti
 Venue: Paikka
 Choose login method: Valitse kirjautumistapa
 # Entropy.fi
-cookie_policy: Käytämme vain välttämättömiä keksejä jotta kirjautuminen toimii.
+cookie_policy: Käytämme vain välttämättömiä evästeitä jotta kirjautuminen ja maksupalvelu toimii.
 whisper: psst. <a href="/liity">liity</a>
 Artists: Artistit
 Artist: Artisti
@@ -613,7 +613,7 @@ e30v:
   years: vuotta
   fee: Jokaiseen ostokseen lisätään 0,75 € kattamaan maksunvälittäjän ottamat kulut.
   buy: Kassalle
-  gdpr: Käytämme vain välttämättömiä keksejä, jotta kirjautuminen sekä Stripe-integraatio toimii.
+  gdpr: Käytämme vain välttämättömiä evästeitä, jotta kirjautuminen sekä Stripe-integraatio toimii.
   cart:
     empty: Ostoskorisi on tyhjä
     email:
