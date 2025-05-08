@@ -18,7 +18,7 @@ final class DefaultPageService extends BasePageService
         string $name,
         private readonly TemplateManagerInterface $templateManager,
         private readonly AssetMapperInterface $assetMapper,
-        private readonly ?SeoPageInterface $seoPage = null
+        private readonly SeoPageInterface $seoPage
     ) {
         parent::__construct($name);
     }
