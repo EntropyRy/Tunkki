@@ -252,6 +252,11 @@ block:
 menu:
   logon_to: Kirjaudu
 page:
+  email_unsubscribe:
+    removed: poistettu
+    title: Sähköposti poistettu tiedotuslistalta
+    message: Entropy tiedotus uutiskirjeen tilaus on nyt peruutettu. Jos haluat saada sähköposteja uudestaan kirjaudu tilillesi ja muuta sähköpostiasetuksia.
+    link: Kirjaudu muokkaamaan profiiliasi
   title:
     checkout: Kassa
   fixing:

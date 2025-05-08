@@ -147,6 +147,11 @@ stream:
     start: Start
     stop: Stop
 page:
+  email_unsubscribe:
+    removed: removed 
+    title: Email Unsubscribed
+    message: You've now been unsubscribed from Entropy tiedotus mailing list. In order to start receiving emails again, log in and change the email preferences.
+    link: Login to Your profile
   title:
     checkout: Checkout
 block:

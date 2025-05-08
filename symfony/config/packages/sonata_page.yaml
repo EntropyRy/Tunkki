@@ -41,6 +41,7 @@ sonata_page:
     - app_forgot_password_request
     - app_check_email
     - app_reset_password
+    - app_email_unsubscribe
     - app_login
     - app_logout
     - rss_feed

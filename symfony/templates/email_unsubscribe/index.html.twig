@@ -1,0 +1,11 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block title %}{{ 'page.email_unsubscribe.title'|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ email }} {{ 'page.email_unsubscribe.removed'|trans }}✅</h1>
+    <p>{{ 'page.email_unsubscribe.message'|trans }}</p>
+    <a class="btn btn-primary" href="{{ path('profile_edit') }}">
+        {{ 'page.email_unsubscribe.link'|trans }}
+        </a>
+{% endblock %}
