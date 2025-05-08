@@ -503,6 +503,7 @@ final class EventAdmin extends AbstractAdmin
                     ]
                 )
                 ->add('epics', null, ['help' => 'link to ePics pictures'])
+                ->add('wikiPage', null, ['help' => 'link to Wiki that is shown only to active members'])
                 ->add(
                     'attachment',
                     ModelListType::class,

@@ -82,6 +82,11 @@
                     <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
                 </a>
             {% endif %}
+            {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
+                <a class="icon-link" href="{{ event.wikiPage }}">
+                    <twig:ux:icon name="fa:wikipedia-w" height="1em" width="1em"/>
+                </a>
+            {% endif %}
         </span>
         <span>
         {%- if event.until %}

@@ -423,14 +423,6 @@
                 </span>
             {% endfor %}
         {% endfor %}
-        {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
-            <span>
-                <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
-                    <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
-                    Forums
-                </a>
-            </span>
-        {% endif %}
         {% if event.epics %}
             <span>
                 <a class="btn btn-outline-info" href="{{ event.epics }}">
@@ -486,6 +478,22 @@
                    href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     {{ 'fas fa-tasks'|parse_icon }}
                     Nakkikone
+                </a>
+            </span>
+        {% endif %}
+        {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
+            <span>
+                <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
+                    <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
+                    Forums
+                </a>
+            </span>
+        {% endif %}
+        {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
+            <span>
+                <a class="btn btn-outline-info" href="{{ event.wikiPage }}">
+                    <twig:ux:icon name="fa:wikipedia-w" height="1em" width="1em"/>
+                    Wiki
                 </a>
             </span>
         {% endif %}

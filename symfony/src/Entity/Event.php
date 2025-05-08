@@ -259,6 +259,9 @@ class Event implements \Stringable
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkToForums = null;
 
+    #[ORM\Column(length: 190, nullable: true)]
+    private ?string $wikiPage = null;
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
@@ -1547,6 +1550,18 @@ class Event implements \Stringable
     public function setLinkToForums(?string $linkToForums): static
     {
         $this->linkToForums = $linkToForums;
+
+        return $this;
+    }
+
+    public function getWikiPage(): ?string
+    {
+        return $this->wikiPage;
+    }
+
+    public function setWikiPage(?string $wikiPage): static
+    {
+        $this->wikiPage = $wikiPage;
 
         return $this;
     }
