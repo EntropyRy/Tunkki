@@ -121,19 +121,12 @@ services:
     class: App\PageService\EventsPage
     arguments:
       - "Events"
-      - "@sonata.page.template_manager"
-      - "@doctrine.orm.entity_manager"
     tags:
       - { name: sonata.page, alias: eventspage }
   sonata.page.service.default:
     class: App\PageService\DefaultPageService
     arguments:
       $name: Default
-  App\PageService\AllEventsPage:
-    arguments:
-      $name: "All Events"
-    tags:
-      - { name: sonata.page, alias: alleventspage }
   App\PageService\FrontPage:
     arguments:
       $name: "Front Page"

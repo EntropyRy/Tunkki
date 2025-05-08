@@ -8,6 +8,7 @@ use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\TemplateManagerInterface;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Sonata\PageBundle\Page\Service\BasePageService;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,6 +17,7 @@ final class DefaultPageService extends BasePageService
     public function __construct(
         string $name,
         private readonly TemplateManagerInterface $templateManager,
+        private readonly AssetMapperInterface $assetMapper,
         private readonly ?SeoPageInterface $seoPage = null
     ) {
         parent::__construct($name);
@@ -59,6 +61,8 @@ final class DefaultPageService extends BasePageService
             $this->seoPage->addMeta('name', 'keywords', $metaKeywords);
         }
 
+        $this->seoPage->addMeta('property', 'twitter:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'og:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
         $this->seoPage->addMeta('property', 'og:type', 'article');
         $this->seoPage->addHtmlAttributes('prefix', 'og: http://ogp.me/ns#');
     }

@@ -20,10 +20,8 @@ sonata_seo:
         # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
         "og:site_name": Entropy ry
         "og:description": Electronic music and culture association
-        "og:image": https://entropy.fi/images/header-logo.svg
-        "og:image:height": 400px
-        "og:image:widht": 400px
-        "twitter:image": https://entropy.fi/images/header-logo.svg
+        "og:image:height": 512px
+        "og:image:widht": 512px
         "twitter:card": summary_large_image
         #
       http-equiv:
