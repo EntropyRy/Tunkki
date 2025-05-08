@@ -695,7 +695,7 @@ final class EventAdmin extends AbstractAdmin
             $event->setIncludeSaferSpaceGuidelines(true);
         }
         if ($event->getType() == 'event') {
-            $event->setWikiPage('https://wiki.entropy.fi/index.php?title='.urlencode($event->getNimi()));
+            $event->setWikiPage('https://wiki.entropy.fi/index.php?title='.urlencode((string) $event->getNimi()));
         }
         if (is_null($event->getUrl())) {
             $event->setUrl($this->slug->slug($event->getNimi())->lower()->toString());
