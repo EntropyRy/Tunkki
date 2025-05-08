@@ -15,8 +15,8 @@ return RectorConfig::configure()
         __DIR__ . '/src',
     ])
     ->withPhpSets()
-    ->withTypeCoverageLevel(100)
-    ->withCodeQualityLevel(100)
+    ->withPreparedSets(typeDeclarations: true)
+    ->withPreparedSets(codeQuality: true)
     ->withSets([SetList::PHP_84])
     ->withAttributesSets(symfony: true, doctrine: true)
     ->withConfiguredRule(AttributeKeyToClassConstFetchRector::class, [

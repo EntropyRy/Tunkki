@@ -189,12 +189,12 @@ class StripeEventSubscriber implements EventSubscriberInterface
         }
         foreach ($qrs as $x => $qr) {
             $subject = $x > 0 ? '[ENTROPY] ' . $qr['name'] . ' (' . ($x + 1) . ')' : '[ENTROPY] ' . $qr['name'];
-            $mail =  (new TemplatedEmail())
+            $mail =  new TemplatedEmail()
                 ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
                 ->to($to)
                 ->replyTo($replyTo)
                 ->subject($subject)
-                ->addPart((new DataPart($qr['qr'], 'ticket', 'image/png', 'base64'))->asInline())
+                ->addPart(new DataPart($qr['qr'], 'ticket', 'image/png', 'base64')->asInline())
                 ->htmlTemplate('emails/ticket.html.twig')
                 ->context([
                     'body' => $body,

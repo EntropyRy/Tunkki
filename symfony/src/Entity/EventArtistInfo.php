@@ -163,7 +163,7 @@ class EventArtistInfo implements \Stringable
     }
     public function getArtistDataHasUpdate(\DateTimeInterface $eventDate): bool
     {
-        if ($eventDate < (new \DateTime('now'))->modify('-1 day')) {
+        if ($eventDate < new \DateTime('now')->modify('-1 day')) {
             return false;
         }
         if ($this->getArtist() instanceof Artist) {

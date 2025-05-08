@@ -65,15 +65,15 @@ final class NotificationAdminController extends CRUDController
         foreach ($options as $option) {
             switch ($option) {
                 case 'add_event_button':
-                    $buttonRows[] = (new InlineKeyboardButton('Tapahtuma / The Event'))
+                    $buttonRows[] = new InlineKeyboardButton('Tapahtuma / The Event')
                         ->url($url);
                     break;
                 case 'add_shop_button':
-                    $buttonRows[] = (new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale)))
+                    $buttonRows[] = new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale))
                         ->url($shop);
                     break;
                 case 'add_nakkikone_button':
-                    $buttonRows[] = (new InlineKeyboardButton($ts->trans('Nakkikone')))
+                    $buttonRows[] = new InlineKeyboardButton($ts->trans('Nakkikone'))
                         ->url($nakkikone);
                     break;
                 default:
@@ -82,7 +82,7 @@ final class NotificationAdminController extends CRUDController
         }
 
         // Create Telegram options
-        $telegramOptions = (new TelegramOptions())
+        $telegramOptions = new TelegramOptions()
             ->parseMode('HTML')
             ->disableWebPagePreview(true)
             ->disableNotification(true);
@@ -119,7 +119,7 @@ final class NotificationAdminController extends CRUDController
         if ($buttonRows !== []) {
             $telegramOptions
                 ->replyMarkup(
-                    (new InlineKeyboardMarkup())
+                    new InlineKeyboardMarkup()
                         ->inlineKeyboard($buttonRows)
                 );
             // $markup = new InlineKeyboardMarkup();

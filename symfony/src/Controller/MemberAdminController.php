@@ -18,7 +18,7 @@ final class MemberAdminController extends CRUDController
     {
         $object = $this->admin->getSubject();
         $email = $em->getRepository(Email::class)->findOneBy(['purpose' => 'active_member_info_package']);
-        $message = (new TemplatedEmail())
+        $message = new TemplatedEmail()
             ->from(new Address('hallitus@entropy.fi', 'Entropyn Hallitus'))
             ->to($object->getEmail())
             ->subject($email->getSubject())

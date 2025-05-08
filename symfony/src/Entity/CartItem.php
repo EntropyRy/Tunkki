@@ -62,9 +62,7 @@ class CartItem implements \Stringable
 
         return $this;
     }
-    /**
-     * @return array<string,?string>
-     */
+
     public function getLineItem(?int $forcedQuantity, ?int $minus): ?array
     {
         if ($this->product->getMax($minus) > 0 || $forcedQuantity > 0) {

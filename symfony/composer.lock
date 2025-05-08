@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4eb368cfab26c16649ac7e1f7830e9b8",
+    "content-hash": "6a8d0ba4763ddee43d2478597bc56863",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -13384,20 +13384,20 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.12.25",
+            "version": "2.1.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "e310849a19e02b8bfcbb63147f495d8f872dd96f"
+                "reference": "8f2e03099cac24ff3b379864d171c5acbfc6b9a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e310849a19e02b8bfcbb63147f495d8f872dd96f",
-                "reference": "e310849a19e02b8bfcbb63147f495d8f872dd96f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/8f2e03099cac24ff3b379864d171c5acbfc6b9a2",
+                "reference": "8f2e03099cac24ff3b379864d171c5acbfc6b9a2",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0"
+                "php": "^7.4|^8.0"
             },
             "conflict": {
                 "phpstan/phpstan-shim": "*"
@@ -13438,36 +13438,35 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-04-27T12:20:45+00:00"
+            "time": "2025-05-02T15:32:28+00:00"
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "1.4.15",
+            "version": "2.0.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "78b6b5a62f56731d938031c8f59817ed83b2328a"
+                "reference": "648087fb4dd865a09b1828a3b0396eb447665f2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/78b6b5a62f56731d938031c8f59817ed83b2328a",
-                "reference": "78b6b5a62f56731d938031c8f59817ed83b2328a",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/648087fb4dd865a09b1828a3b0396eb447665f2e",
+                "reference": "648087fb4dd865a09b1828a3b0396eb447665f2e",
                 "shasum": ""
             },
             "require": {
                 "ext-simplexml": "*",
-                "php": "^7.2 || ^8.0",
-                "phpstan/phpstan": "^1.12"
+                "php": "^7.4 || ^8.0",
+                "phpstan/phpstan": "^2.1.2"
             },
             "conflict": {
                 "symfony/framework-bundle": "<3.0"
             },
             "require-dev": {
-                "nikic/php-parser": "^4.13.0",
                 "php-parallel-lint/php-parallel-lint": "^1.2",
-                "phpstan/phpstan-phpunit": "^1.3.11",
-                "phpstan/phpstan-strict-rules": "^1.5.1",
-                "phpunit/phpunit": "^8.5.29 || ^9.5",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpstan/phpstan-strict-rules": "^2.0",
+                "phpunit/phpunit": "^9.6",
                 "psr/container": "1.0 || 1.1.1",
                 "symfony/config": "^5.4 || ^6.1",
                 "symfony/console": "^5.4 || ^6.1",
@@ -13508,27 +13507,27 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/1.4.15"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/2.0.4"
             },
-            "time": "2025-03-28T12:01:24+00:00"
+            "time": "2025-03-28T12:02:03+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "1.2.10",
+            "version": "2.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "40f9cf38c05296bd32f444121336a521a293fa61"
+                "reference": "abbbf32474a67e242d26bffc098a712a05b3d32a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/40f9cf38c05296bd32f444121336a521a293fa61",
-                "reference": "40f9cf38c05296bd32f444121336a521a293fa61",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/abbbf32474a67e242d26bffc098a712a05b3d32a",
+                "reference": "abbbf32474a67e242d26bffc098a712a05b3d32a",
                 "shasum": ""
             },
             "require": {
-                "php": "^7.2|^8.0",
-                "phpstan/phpstan": "^1.12.5"
+                "php": "^7.4|^8.0",
+                "phpstan/phpstan": "^2.1.14"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -13561,7 +13560,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/1.2.10"
+                "source": "https://github.com/rectorphp/rector/tree/2.0.15"
             },
             "funding": [
                 {
@@ -13569,7 +13568,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-11-08T13:59:10+00:00"
+            "time": "2025-05-05T10:00:41+00:00"
         },
         {
             "name": "symfony/debug-bundle",

@@ -262,7 +262,7 @@ final class EmailAdminController extends CRUDController
         $img,
         $locale = "fi"
     ): TemplatedEmail {
-        return (new TemplatedEmail())
+        return new TemplatedEmail()
             ->from(new Address("webmaster@entropy.fi", "Entropy ry"))
             ->to($to)
             ->replyTo($replyto)

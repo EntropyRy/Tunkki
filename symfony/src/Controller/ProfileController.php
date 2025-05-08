@@ -84,7 +84,7 @@ class ProfileController extends AbstractController
     }
     protected function sendEmailToMember($email_content, $member, $mailer): void
     {
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
             ->to($member->getEmail())
             ->subject($email_content->getSubject())

@@ -77,12 +77,12 @@ final class TicketAdminController extends CRUDController
             'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
             'name' => $ticket->getName()
         ];
-        $mail =  (new TemplatedEmail())
+        $mail =  new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyTo)
             ->subject('[' . $ticket->getEvent()->getName() . '] Your ticket / Lippusi')
-            ->addPart((new DataPart($qr['qr'], 'ticket', 'image/png', 'base64'))->asInline())
+            ->addPart(new DataPart($qr['qr'], 'ticket', 'image/png', 'base64')->asInline())
             ->htmlTemplate('emails/ticket.html.twig')
             ->context([
                 'body' => $body,

@@ -42,10 +42,6 @@ final class DefaultPageService extends BasePageService
 
     private function updateSeoPage(PageInterface $page, string $host): void
     {
-        if (!$this->seoPage instanceof SeoPageInterface) {
-            return;
-        }
-
         $title = $page->getTitle();
         if (null !== $title) {
             $this->seoPage->setTitle($title);

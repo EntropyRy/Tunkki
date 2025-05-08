@@ -26,7 +26,7 @@ class BookingAdminListener implements EventSubscriberInterface
             $booking = $event->getObject();
             if ($booking instanceof Booking) {
                 $mailer = $this->mailer;
-                $email = (new TemplatedEmail())
+                $email = new TemplatedEmail()
                     ->from(new Address($this->fromEmail, 'Tunkki'))
                     ->to($this->email)
                     ->subject("[Entropy Tunkki] New Booking on " . $booking->getBookingDate()->format('d.m.Y'))

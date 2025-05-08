@@ -14,7 +14,7 @@ use Sonata\PageBundle\Page\Service\PageServiceInterface;
 class EventsPage implements PageServiceInterface
 {
     public function __construct(
-        private string $name,
+        private readonly string $name,
         private readonly TemplateManagerInterface $templateManager,
         private readonly EventRepository $eventRepository,
         private readonly AssetMapperInterface $assetMapper,
@@ -42,10 +42,6 @@ class EventsPage implements PageServiceInterface
     }
     private function updateSeoPage(PageInterface $page, string $host): void
     {
-        if (!$this->seoPage instanceof SeoPageInterface) {
-            return;
-        }
-
         $title = $page->getTitle();
         if (null !== $title) {
             $this->seoPage->setTitle($title);

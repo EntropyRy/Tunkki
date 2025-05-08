@@ -44,7 +44,7 @@ final readonly class RSVPListener
     }
     private function generateMail(string $to, Address|string $replyto, string $subject, $body, $links, ?SonataMediaMedia $img): TemplatedEmail
     {
-        return (new TemplatedEmail())
+        return new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyto)

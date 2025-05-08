@@ -112,7 +112,7 @@ class CalendarController extends AbstractController
         $end = $event->getUntil();
         $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, true));
         $timestamp = new Timestamp($event->getUpdatedAt());
-        $e = (new CalendarEvent($uid))
+        $e = new CalendarEvent($uid)
             ->setSummary($event->getNameByLang($locale))
             ->setDescription($event->getContentByLang($locale))
             ->setOccurrence($occurance)
@@ -122,7 +122,7 @@ class CalendarController extends AbstractController
             $e->addAlarm(
                 new Alarm(
                     new DisplayAction($text),
-                    (new RelativeTrigger(\DateInterval::createFromDateString('-1 day')))->withRelationToStart()
+                    new RelativeTrigger(\DateInterval::createFromDateString('-1 day'))->withRelationToStart()
                 )
             );
         }

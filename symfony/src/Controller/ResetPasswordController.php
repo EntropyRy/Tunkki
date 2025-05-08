@@ -158,7 +158,7 @@ class ResetPasswordController extends AbstractController
             return $this->redirectToRoute('app_check_email');
         }
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
             ->to($member->getEmail())
             ->subject('Salasanan vaihtopyyntö / Your password reset request')
