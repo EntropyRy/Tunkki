@@ -32,14 +32,15 @@ class EventsPage implements PageServiceInterface
     {
         $events = $this->eventRepository->findPublicEventsByNotType('announcement');
         //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
-        $this->updateSeoPage($page);
+        $host = $request->getSchemeAndHttpHost();
+        $this->updateSeoPage($page, $host);
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
             [...$parameters, ...['events' => $events]], //'clubroom'=>$clubroom)),
             $response
         );
     }
-    private function updateSeoPage(PageInterface $page): void
+    private function updateSeoPage(PageInterface $page, string $host): void
     {
         if (!$this->seoPage instanceof SeoPageInterface) {
             return;
@@ -61,8 +62,9 @@ class EventsPage implements PageServiceInterface
             $this->seoPage->addMeta('name', 'keywords', $metaKeywords);
         }
 
-        $this->seoPage->addMeta('property', 'twitter:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
-        $this->seoPage->addMeta('property', 'og:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'twitter:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
+
+        $this->seoPage->addMeta('property', 'og:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
         $this->seoPage->addMeta('property', 'og:type', 'article');
         $this->seoPage->addHtmlAttributes('prefix', 'og: http://ogp.me/ns#');
     }

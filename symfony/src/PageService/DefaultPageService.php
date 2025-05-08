@@ -30,7 +30,8 @@ final class DefaultPageService extends BasePageService
         array $parameters = [],
         ?Response $response = null
     ): Response {
-        $this->updateSeoPage($page);
+        $host = $request->getSchemeAndHttpHost();
+        $this->updateSeoPage($page, $host);
         $templateCode = $page->getTemplateCode();
         if (null === $templateCode) {
             throw new \RuntimeException('The page template is not defined');
@@ -39,7 +40,7 @@ final class DefaultPageService extends BasePageService
         return $this->templateManager->renderResponse($templateCode, $parameters, $response);
     }
 
-    private function updateSeoPage(PageInterface $page): void
+    private function updateSeoPage(PageInterface $page, string $host): void
     {
         if (!$this->seoPage instanceof SeoPageInterface) {
             return;
@@ -61,8 +62,8 @@ final class DefaultPageService extends BasePageService
             $this->seoPage->addMeta('name', 'keywords', $metaKeywords);
         }
 
-        $this->seoPage->addMeta('property', 'twitter:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
-        $this->seoPage->addMeta('property', 'og:image', $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'twitter:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'og:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
         $this->seoPage->addMeta('property', 'og:type', 'article');
         $this->seoPage->addHtmlAttributes('prefix', 'og: http://ogp.me/ns#');
     }
