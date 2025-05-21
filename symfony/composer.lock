@@ -6575,16 +6575,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v17.2.0",
+            "version": "v17.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "ff2364c75533b71116ea11994d6bd08989b7f67b"
+                "reference": "a84ec46e82e2d1f1dbd04cf332317923ade82ba6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/ff2364c75533b71116ea11994d6bd08989b7f67b",
-                "reference": "ff2364c75533b71116ea11994d6bd08989b7f67b",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/a84ec46e82e2d1f1dbd04cf332317923ade82ba6",
+                "reference": "a84ec46e82e2d1f1dbd04cf332317923ade82ba6",
                 "shasum": ""
             },
             "require": {
@@ -6628,9 +6628,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v17.2.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v17.2.1"
             },
-            "time": "2025-04-30T19:20:34+00:00"
+            "time": "2025-05-19T19:03:41+00:00"
         },
         {
             "name": "symfony-cmf/routing",
@@ -8094,16 +8094,16 @@
         },
         {
             "name": "symfony/flex",
-            "version": "v2.5.1",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/flex.git",
-                "reference": "62d5c38c7af6280d8605b725364680838b475641"
+                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/flex/zipball/62d5c38c7af6280d8605b725364680838b475641",
-                "reference": "62d5c38c7af6280d8605b725364680838b475641",
+                "url": "https://api.github.com/repos/symfony/flex/zipball/ccc4d2dc15e90f0fed555d6078c3698396306cdd",
+                "reference": "ccc4d2dc15e90f0fed555d6078c3698396306cdd",
                 "shasum": ""
             },
             "require": {
@@ -8142,7 +8142,7 @@
             "description": "Composer plugin for Symfony",
             "support": {
                 "issues": "https://github.com/symfony/flex/issues",
-                "source": "https://github.com/symfony/flex/tree/v2.5.1"
+                "source": "https://github.com/symfony/flex/tree/v2.6.0"
             },
             "funding": [
                 {
@@ -8158,7 +8158,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-10T14:05:03+00:00"
+            "time": "2025-05-21T07:23:28+00:00"
         },
         {
             "name": "symfony/form",
@@ -11197,16 +11197,16 @@
         },
         {
             "name": "symfony/stimulus-bundle",
-            "version": "v2.25.0",
+            "version": "v2.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/stimulus-bundle.git",
-                "reference": "520ba148f3b87b137fc3763f81a2fc3c43badabc"
+                "reference": "5a6aef0646119530da862d5afa1386ade3b9ed43"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/520ba148f3b87b137fc3763f81a2fc3c43badabc",
-                "reference": "520ba148f3b87b137fc3763f81a2fc3c43badabc",
+                "url": "https://api.github.com/repos/symfony/stimulus-bundle/zipball/5a6aef0646119530da862d5afa1386ade3b9ed43",
+                "reference": "5a6aef0646119530da862d5afa1386ade3b9ed43",
                 "shasum": ""
             },
             "require": {
@@ -11246,7 +11246,7 @@
                 "symfony-ux"
             ],
             "support": {
-                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.25.0"
+                "source": "https://github.com/symfony/stimulus-bundle/tree/v2.25.2"
             },
             "funding": [
                 {
@@ -11262,7 +11262,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-06T04:28:20+00:00"
+            "time": "2025-05-19T11:54:27+00:00"
         },
         {
             "name": "symfony/stopwatch",
@@ -12014,16 +12014,16 @@
         },
         {
             "name": "symfony/ux-live-component",
-            "version": "v2.25.0",
+            "version": "v2.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-live-component.git",
-                "reference": "11f2c3a6f7db18845799095a500713c78f6acd79"
+                "reference": "79e8cc179eb21119547c492ae21e4bf529ac1a15"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/11f2c3a6f7db18845799095a500713c78f6acd79",
-                "reference": "11f2c3a6f7db18845799095a500713c78f6acd79",
+                "url": "https://api.github.com/repos/symfony/ux-live-component/zipball/79e8cc179eb21119547c492ae21e4bf529ac1a15",
+                "reference": "79e8cc179eb21119547c492ae21e4bf529ac1a15",
                 "shasum": ""
             },
             "require": {
@@ -12032,7 +12032,7 @@
                 "symfony/property-access": "^5.4.5|^6.0|^7.0",
                 "symfony/property-info": "^5.4|^6.0|^7.0",
                 "symfony/stimulus-bundle": "^2.9",
-                "symfony/ux-twig-component": "^2.25",
+                "symfony/ux-twig-component": "^2.25.1",
                 "twig/twig": "^3.10.3"
             },
             "conflict": {
@@ -12089,7 +12089,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-live-component/tree/v2.25.0"
+                "source": "https://github.com/symfony/ux-live-component/tree/v2.25.2"
             },
             "funding": [
                 {
@@ -12105,20 +12105,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-17T14:48:50+00:00"
+            "time": "2025-05-19T11:54:27+00:00"
         },
         {
             "name": "symfony/ux-turbo",
-            "version": "v2.25.0",
+            "version": "v2.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-turbo.git",
-                "reference": "78643989dc27a6716bb1a705260cb8d69fa92a67"
+                "reference": "11ebca138005c7e25678c3f98a07ddf718a0480c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/78643989dc27a6716bb1a705260cb8d69fa92a67",
-                "reference": "78643989dc27a6716bb1a705260cb8d69fa92a67",
+                "url": "https://api.github.com/repos/symfony/ux-turbo/zipball/11ebca138005c7e25678c3f98a07ddf718a0480c",
+                "reference": "11ebca138005c7e25678c3f98a07ddf718a0480c",
                 "shasum": ""
             },
             "require": {
@@ -12187,7 +12187,7 @@
                 "turbo-stream"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-turbo/tree/v2.25.0"
+                "source": "https://github.com/symfony/ux-turbo/tree/v2.25.2"
             },
             "funding": [
                 {
@@ -12203,20 +12203,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-04-26T09:38:11+00:00"
+            "time": "2025-05-19T11:54:27+00:00"
         },
         {
             "name": "symfony/ux-twig-component",
-            "version": "v2.25.0",
+            "version": "v2.25.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/ux-twig-component.git",
-                "reference": "442debb5d18c73cf4e2733b172f463a7738f8ff0"
+                "reference": "d20da25517fc09d147897d02819a046f0a0f6735"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/442debb5d18c73cf4e2733b172f463a7738f8ff0",
-                "reference": "442debb5d18c73cf4e2733b172f463a7738f8ff0",
+                "url": "https://api.github.com/repos/symfony/ux-twig-component/zipball/d20da25517fc09d147897d02819a046f0a0f6735",
+                "reference": "d20da25517fc09d147897d02819a046f0a0f6735",
                 "shasum": ""
             },
             "require": {
@@ -12270,7 +12270,7 @@
                 "twig"
             ],
             "support": {
-                "source": "https://github.com/symfony/ux-twig-component/tree/v2.25.0"
+                "source": "https://github.com/symfony/ux-twig-component/tree/v2.25.2"
             },
             "funding": [
                 {
@@ -12286,7 +12286,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-05-17T04:50:09+00:00"
+            "time": "2025-05-20T13:06:01+00:00"
         },
         {
             "name": "symfony/validator",
@@ -13754,16 +13754,16 @@
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
-            "version": "3.7.0",
+            "version": "3.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/VincentLanglet/Twig-CS-Fixer.git",
-                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a"
+                "reference": "d216db67b63d78cfdefca6a9a7acef4fd0d304bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/a71515e8d1b105e85602ecdafd550b0e17b2b48a",
-                "reference": "a71515e8d1b105e85602ecdafd550b0e17b2b48a",
+                "url": "https://api.github.com/repos/VincentLanglet/Twig-CS-Fixer/zipball/d216db67b63d78cfdefca6a9a7acef4fd0d304bb",
+                "reference": "d216db67b63d78cfdefca6a9a7acef4fd0d304bb",
                 "shasum": ""
             },
             "require": {
@@ -13819,7 +13819,7 @@
             "homepage": "https://github.com/VincentLanglet/Twig-CS-Fixer",
             "support": {
                 "issues": "https://github.com/VincentLanglet/Twig-CS-Fixer/issues",
-                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.7.0"
+                "source": "https://github.com/VincentLanglet/Twig-CS-Fixer/tree/3.7.1"
             },
             "funding": [
                 {
@@ -13827,7 +13827,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-05-15T17:19:20+00:00"
+            "time": "2025-05-19T12:24:50+00:00"
         },
         {
             "name": "webmozart/assert",
