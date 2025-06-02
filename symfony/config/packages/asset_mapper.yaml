@@ -5,3 +5,5 @@ framework:
       - assets/
     excluded_patterns:
       - "scss/*.scss"
+      - "assets/styles/scss/**"
+      - "assets/styles/app.scss"

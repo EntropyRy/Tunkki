@@ -1,0 +1,18 @@
+/* Footer styles */
+:root {
+  --border-radius: 0.375rem;
+}
+
+footer {
+  background: #191919;
+  color: #a6a6a6;
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
+}
+
+footer .e-text {
+  color: #fff;
+}
+
+footer a {
+  color: #65aed2;
+}

@@ -1,0 +1,27 @@
+/* Polaroid styles */
+.polaroid {
+  background: #ffffff;
+  display: inline-block;
+  padding: 15px 15px 30px;
+  text-align: center;
+  text-decoration: none;
+  -webkit-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  transition: all 0.2s linear;
+  position: relative;
+  width: 100%;
+}
+
+.polaroid .caption {
+  color: #333;
+  font-size: 25px;
+  position: relative;
+  top: 15px;
+}
+/*.polaroid img {
+  display: block;
+  width: 250px;
+}*/
