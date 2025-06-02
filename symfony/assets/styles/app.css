@@ -275,13 +275,3 @@ nav.navbar-light .nav-item a.nav-link {
     transform: rotateX(0);
   }
 }
-
-/* Import component styles */
-@import url("./components/product.css");
-@import url("./components/tile.css");
-@import url("./components/dark.css");
-@import url("./components/qr.css");
-@import url("./components/footer.css");
-@import url("./components/polaroid.css");
-
-/* Using FontAwesome via importmap */

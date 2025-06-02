@@ -12,3 +12,11 @@ import "bootstrap/dist/css/bootstrap.min.css";
 // start the Stimulus application
 import "./bootstrap.js";
 import "./js/bs.js";
+import "./styles/app.css";
+/* Import component styles */
+import "./styles/components/dark.css";
+import "./styles/components/product.css";
+import "./styles/components/tile.css";
+import "./styles/components/qr.css";
+import "./styles/components/footer.css";
+import "./styles/components/polaroid.css";

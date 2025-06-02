@@ -99,9 +99,9 @@
             {% else %}
                 {# For events crossing midnight but less than 24 hours, just show start date #}
                 {{ event.eventdate|date('j.n.') }}
-                {#% if event.until|date('Y-m-d') == event.eventdate|date('Y-m-d') %}
+                {# % if event.until|date('Y-m-d') == event.eventdate|date('Y-m-d') %}
                     {{ event.eventdate|date('H:i') }}-{{ event.until|date('H:i') }}
-                {% endif %#}
+                {% endif % #}
             {% endif %}
         {% else %}
             {{ event.eventdate|date('j.n.') }}

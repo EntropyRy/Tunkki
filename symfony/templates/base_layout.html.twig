@@ -27,8 +27,6 @@
                 {{ importmap('app') }}
             {% endblock %}
             {% block stylesheets %}
-                <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-                {{ importmap_tags(['bootstrap/dist/css/bootstrap.min.css', '@fortawesome/fontawesome-free/css/all.css']) }}
             {% endblock %}
             {% block javascripts %}{% endblock %}
             <link rel="manifest" href="/manifest.json">
