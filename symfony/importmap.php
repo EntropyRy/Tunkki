@@ -82,7 +82,7 @@ return [
         'version' => '8.0.13',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
-        'version' => '5.2.7',
+        'version' => '5.2.8',
         'type' => 'css',
     ],
     'signature_pad' => [
@@ -96,7 +96,7 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.5.1',
+        'version' => '2.6.0',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.6',
