@@ -573,6 +573,7 @@
                             {%- set now = 'now'|date('U') -%}
                             {%- set event_until = event.until|date('U') -%}
                             {%- set last_start_time = null -%}
+                            {%- set prev_info = null -%}
                             {%- for info in infos -%}
                                 {%- set artist = info.artistClone -%}
                                 {%- set name = (artist.name|split(' for')).0 -%}
@@ -589,6 +590,10 @@
                                     {# Close the previous row for B2B artists #}
                                     {%- if last_start_time is not null -%}
                                         </td></tr>
+                                        {# Add space for large time gaps in multiday events #}
+                                        {%- if event.multiday == true and prev_info is not null and info.timediff(prev_info.StartTime) > 4 -%}
+                                            <tr class="time-gap"><td colspan="3"></td></tr>
+                                        {%- endif -%}
                                     {%- endif -%}
                                     {# Open a new row for the new time slot #}
                                     <tr>
@@ -615,6 +620,7 @@
                                 {%- endif -%}
 
                                 {%- set last_start_time = info.StartTime -%}
+                                {%- set prev_info = info -%}
                             {%- endfor -%}
                             {# Close the final row if still open #}
                             {%- if last_start_time is not null -%}
