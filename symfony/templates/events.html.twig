@@ -90,12 +90,18 @@
         </span>
         <span>
         {%- if event.until %}
-            {% if event.until|date('n') != event.eventdate|date('n') %}
-                {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
-            {% elseif (event.until|date('j') - event.eventdate|date('j')) > 1 %}
-                {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
+            {% if event.multiday %}
+                {% if event.until|date('n') != event.eventdate|date('n') %}
+                    {{ event.eventdate|date('j.n.') }}-{{ event.until|date('j.n.') }}
+                {% else %}
+                    {{ event.eventdate|date('j') }}-{{ event.until|date('j.n.') }}
+                {% endif %}
             {% else %}
+                {# For events crossing midnight but less than 24 hours, just show start date #}
                 {{ event.eventdate|date('j.n.') }}
+                {#% if event.until|date('Y-m-d') == event.eventdate|date('Y-m-d') %}
+                    {{ event.eventdate|date('H:i') }}-{{ event.until|date('H:i') }}
+                {% endif %#}
             {% endif %}
         {% else %}
             {{ event.eventdate|date('j.n.') }}
