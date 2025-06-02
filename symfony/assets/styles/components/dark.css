@@ -1,5 +1,5 @@
 /* Dark mode styles */
-@media (prefers-color-scheme: dark) {
+[data-bs-theme="dark"] {
   body {
     background-image: url("../../images/bg_stripe_black.png");
     background-color: black;

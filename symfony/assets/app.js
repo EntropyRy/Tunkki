@@ -8,6 +8,7 @@
 // any CSS you import will output into a single css file (app.css in this case)
 import "@fontsource-variable/space-grotesk/index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
+import "./styles/components/bootstrap-override.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 // start the Stimulus application
 import "./bootstrap.js";

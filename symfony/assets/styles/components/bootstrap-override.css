@@ -1,0 +1,133 @@
+:root,
+[data-bs-theme=light] {
+  --bs-primary: #2b7093;
+  --bs-primary-rgb: 43, 112, 147;
+  --bs-primary-text-emphasis: #112c3a;
+  --bs-primary-bg-subtle: #d8e3ea;
+  --bs-primary-border-subtle: #b1c6d5;
+
+  --bs-secondary: #6c757d;
+  --bs-secondary-rgb: 108, 117, 125;
+  --bs-secondary-text-emphasis: #2b2f32;
+  --bs-secondary-bg-subtle: #e2e3e5;
+  --bs-secondary-border-subtle: #c4c8cb;
+
+  --bs-success: #28a745;
+  --bs-success-rgb: 40, 167, 69;
+  --bs-success-text-emphasis: #10431c;
+  --bs-success-bg-subtle: #d9efe0;
+  --bs-success-border-subtle: #b3dec0;
+
+  --bs-danger: #ff4136;
+  --bs-danger-rgb: 255, 65, 54;
+  --bs-danger-text-emphasis: #661a15;
+  --bs-danger-bg-subtle: #ffdddb;
+  --bs-danger-border-subtle: #ffbbb7;
+
+  --bs-warning: #ffc107;
+  --bs-warning-rgb: 255, 193, 7;
+  --bs-warning-text-emphasis: #664d03;
+  --bs-warning-bg-subtle: #fff3cd;
+  --bs-warning-border-subtle: #ffe69c;
+
+  --bs-info: #17a2b8;
+  --bs-info-rgb: 23, 162, 184;
+  --bs-info-text-emphasis: #0a414a;
+  --bs-info-bg-subtle: #d1ecf1;
+  --bs-info-border-subtle: #a3dae3;
+
+  --bs-dark: #343a40;
+  --bs-dark-rgb: 52, 58, 64;
+  --bs-dark-text-emphasis: #14171a;
+  --bs-dark-bg-subtle: #d8d9da;
+  --bs-dark-border-subtle: #b1b3b6;
+}
+
+[data-bs-theme=dark] {
+  --bs-primary: #3b8caf;
+  --bs-primary-rgb: 59, 140, 175;
+  --bs-primary-text-emphasis: #8ebbce;
+  --bs-primary-bg-subtle: #081c25;
+  --bs-primary-border-subtle: #193849;
+
+  --bs-secondary: #868e96;
+  --bs-secondary-rgb: 134, 142, 150;
+  --bs-secondary-text-emphasis: #ced3d8;
+  --bs-secondary-bg-subtle: #212529;
+  --bs-secondary-border-subtle: #343a40;
+
+  --bs-success: #2fb74d;
+  --bs-success-rgb: 47, 183, 77;
+  --bs-success-text-emphasis: #88d197;
+  --bs-success-bg-subtle: #092210;
+  --bs-success-border-subtle: #174420;
+
+  --bs-danger: #ff544a;
+  --bs-danger-rgb: 255, 84, 74;
+  --bs-danger-text-emphasis: #ffa7a1;
+  --bs-danger-bg-subtle: #33100d;
+  --bs-danger-border-subtle: #661f19;
+
+  --bs-warning: #ffca2c;
+  --bs-warning-rgb: 255, 202, 44;
+  --bs-warning-text-emphasis: #ffe68a;
+  --bs-warning-bg-subtle: #332701;
+  --bs-warning-border-subtle: #664d03;
+
+  --bs-info: #1cb3ca;
+  --bs-info-rgb: 28, 179, 202;
+  --bs-info-text-emphasis: #7ed7e4;
+  --bs-info-bg-subtle: #072428;
+  --bs-info-border-subtle: #0e4950;
+
+  --bs-dark: #42484e;
+  --bs-dark-rgb: 66, 72, 78;
+  --bs-dark-text-emphasis: #9fa2a6;
+  --bs-dark-bg-subtle: #0e0f10;
+  --bs-dark-border-subtle: #1a1d20;
+}
+
+/* Override button colors */
+.btn-primary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: #226786;
+  --bs-btn-hover-border-color: #1f5d7a;
+  --bs-btn-focus-shadow-rgb: 49, 132, 163;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #1f5d7a;
+  --bs-btn-active-border-color: #1c576f;
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: var(--bs-primary);
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+/* Apply the colors to other Bootstrap components */
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--bs-primary);
+  --bs-btn-hover-border-color: var(--bs-primary);
+  --bs-btn-focus-shadow-rgb: 43, 112, 147;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--bs-primary);
+  --bs-btn-active-border-color: var(--bs-primary);
+  --bs-btn-disabled-color: var(--bs-primary);
+  --bs-btn-disabled-bg: transparent;
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+.bg-primary {
+  background-color: var(--bs-primary) !important;
+}
+
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.border-primary {
+  border-color: var(--bs-primary) !important;
+}
