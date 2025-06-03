@@ -82,7 +82,13 @@ class ePics
                     // Try different size variants in order of preference
                     foreach (['medium2x', 'medium', 'thumb2x', 'thumb'] as $size) {
                         if (isset($photoData['size_variants'][$size])) {
-                            $pic['url'] = $photoData['size_variants'][$size]['url'];
+                            // Ensure the URL is complete
+                            $url = $photoData['size_variants'][$size]['url'];
+                            // Add base URL if the URL is relative
+                            if (!str_starts_with($url, 'http')) {
+                                $url = self::API_BASE . '/' . ltrim($url, '/');
+                            }
+                            $pic['url'] = $url;
                             $pic['taken'] = $photoData['taken_at'] ?? $photoData['created_at'] ?? null;
                             return $pic;
                         }

@@ -25,7 +25,10 @@ export default class extends Controller {
   changePic() {
     fetch(this.urlValue)
       .then((response) => response.json())
-      .then((data) => this.setPic(data));
+      .then((data) => this.setPic(data))
+      .catch((error) => {
+        // Silent error handling
+      });
   }
 
   startRefreshing() {
@@ -59,9 +62,27 @@ export default class extends Controller {
       // Create a new image element to preload
       const newImage = new Image();
       // Use the nginx proxy cache for the image
-      const cachedUrl = data["url"].replace("https://epics.entropy.fi/", "/epics-proxy/");
+      let cachedUrl;
+      
+      if (data["url"].includes("https://epics.entropy.fi/")) {
+        cachedUrl = data["url"].replace("https://epics.entropy.fi/", "/epics-proxy/");
+      } else if (data["url"].startsWith("http")) {
+        // For other absolute URLs, use as is
+        cachedUrl = data["url"];
+      } else {
+        // For relative URLs
+        cachedUrl = "/epics-proxy/" + data["url"].replace(/^\/+/, "");
+      }
+      
       newImage.src = cachedUrl;
 
+      newImage.onerror = (error) => {
+        // Fallback to direct URL if proxy fails
+        if (cachedUrl.startsWith("/epics-proxy/")) {
+          newImage.src = data["url"];
+        }
+      };
+      
       newImage.onload = () => {
         // Start fade out of current image
         const fadeOutAnimation = this.picTarget.animate(

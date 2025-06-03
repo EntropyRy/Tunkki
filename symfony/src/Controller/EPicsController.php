@@ -15,6 +15,7 @@ class EPicsController extends AbstractController
         $response = new JsonResponse($epics->getRandomPic());
         $response->setPublic();
         $response->setMaxAge(300); // 5 minutes cache
+        $response->setSharedMaxAge(3600); // 1 hour for shared caches
         $response->headers->addCacheControlDirective('must-revalidate', true);
         
         return $response;
