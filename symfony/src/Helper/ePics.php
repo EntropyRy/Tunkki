@@ -85,8 +85,8 @@ class ePics
                             // Ensure the URL is complete
                             $url = $photoData['size_variants'][$size]['url'];
                             // Add base URL if the URL is relative
-                            if (!str_starts_with($url, 'http')) {
-                                $url = self::API_BASE . '/' . ltrim($url, '/');
+                            if (!str_starts_with((string) $url, 'http')) {
+                                $url = self::API_BASE . '/' . ltrim((string) $url, '/');
                             }
                             $pic['url'] = $url;
                             $pic['taken'] = $photoData['taken_at'] ?? $photoData['created_at'] ?? null;
