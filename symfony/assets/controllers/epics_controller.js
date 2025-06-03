@@ -61,25 +61,30 @@ export default class extends Controller {
 
       // Create a new image element to preload
       const newImage = new Image();
-      // Use the nginx proxy cache for the image
+      
+      // Process the URL to create a cacheable URL
+      // First check if it's from epics.entropy.fi
+      const originalUrl = data["url"];
       let cachedUrl;
       
-      if (data["url"].includes("https://epics.entropy.fi/")) {
-        cachedUrl = data["url"].replace("https://epics.entropy.fi/", "/epics-proxy/");
-      } else if (data["url"].startsWith("http")) {
-        // For other absolute URLs, use as is
-        cachedUrl = data["url"];
+      // Only apply the proxy to epics.entropy.fi URLs
+      if (originalUrl.includes("epics.entropy.fi")) {
+        // Extract the path part after the domain
+        const urlObj = new URL(originalUrl);
+        const pathPart = urlObj.pathname.replace(/^\/+/, ""); // Remove leading slashes
+        cachedUrl = "/epics-proxy/" + pathPart;
       } else {
-        // For relative URLs
-        cachedUrl = "/epics-proxy/" + data["url"].replace(/^\/+/, "");
+        // For other URLs, use as is
+        cachedUrl = originalUrl;
       }
       
+      // Set the image source to the cachedUrl
       newImage.src = cachedUrl;
 
       newImage.onerror = (error) => {
         // Fallback to direct URL if proxy fails
-        if (cachedUrl.startsWith("/epics-proxy/")) {
-          newImage.src = data["url"];
+        if (cachedUrl !== originalUrl) {
+          newImage.src = originalUrl;
         }
       };
       
