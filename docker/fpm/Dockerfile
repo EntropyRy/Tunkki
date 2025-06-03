@@ -12,6 +12,7 @@ RUN apk upgrade --update \
         libzmq zeromq \ 
         git icu icu-data-full libssh2 \
         libev imagemagick \
+        brotli \
     && apk add --virtual build-deps \
         bash grep build-base tar re2c make file \ 
         zeromq-dev libpng-dev libwebp-dev \ 
@@ -24,8 +25,8 @@ RUN apk upgrade --update \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
-    && install-php-extensions imagick apcu ssh2 zmq \
-    && docker-php-ext-enable apcu zmq ssh2 imagick \
+    && install-php-extensions imagick apcu ssh2 zmq brotli \
+    && docker-php-ext-enable imagick apcu ssh2 zmq brotli \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /usr/local/bin/install-php-extensions
 # install composer
