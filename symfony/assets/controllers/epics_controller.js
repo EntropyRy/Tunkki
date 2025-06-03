@@ -58,7 +58,9 @@ export default class extends Controller {
 
       // Create a new image element to preload
       const newImage = new Image();
-      newImage.src = data["url"];
+      // Use the nginx proxy cache for the image
+      const cachedUrl = data["url"].replace("https://epics.entropy.fi/", "/epics-proxy/");
+      newImage.src = cachedUrl;
 
       newImage.onload = () => {
         // Start fade out of current image
@@ -72,7 +74,7 @@ export default class extends Controller {
         );
 
         fadeOutAnimation.onfinish = () => {
-          this.picTarget.setAttribute("src", data["url"]);
+          this.picTarget.setAttribute("src", cachedUrl);
 
           // Fade in new image
           this.picTarget.animate([{ opacity: 0 }, { opacity: 1 }], {

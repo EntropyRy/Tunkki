@@ -12,6 +12,11 @@ class EPicsController extends AbstractController
     #[Route('/api/epics/random', name: 'epics_random_pic')]
     public function getRandomPic(ePics $epics): JsonResponse
     {
-        return new JsonResponse($epics->getRandomPic());
+        $response = new JsonResponse($epics->getRandomPic());
+        $response->setPublic();
+        $response->setMaxAge(300); // 5 minutes cache
+        $response->headers->addCacheControlDirective('must-revalidate', true);
+        
+        return $response;
     }
 }
