@@ -103,6 +103,7 @@ class EventTicketController extends Controller
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
         EntityManagerInterface $em,
+        Qr $qr,
     ): Response {
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans("event_not_found"));
@@ -114,7 +115,6 @@ class EventTicketController extends Controller
             throw new NotFoundHttpException($trans->trans("event_not_found"));
         }
         $nakkirepo->findMemberEventBookings($member, $event);
-        $qr = new Qr();
 
         return $this->render('ticket/one.html.twig', [
             'event' => $event,
@@ -140,14 +140,14 @@ class EventTicketController extends Controller
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
         EntityManagerInterface $em,
-        TicketRepository $ticketRepo
+        TicketRepository $ticketRepo,
+        Qr $qr
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
         $qrs = [];
         $selected = $nakkirepo->findMemberEventBookings($member, $event);
-        $qr = new Qr();
         $tickets = $ticketRepo->findBy(['event' => $event, 'owner' => $member]);
 
         foreach ($tickets as $ticket) {

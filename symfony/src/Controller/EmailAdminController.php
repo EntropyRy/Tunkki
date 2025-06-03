@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class EmailAdminController extends CRUDController
 {
-    public function __construct(private readonly RequestStack $requestStack) {}
+    public function __construct(private readonly RequestStack $requestStack, Qr $qr) {}
 
     public function sendProgressAction(): JsonResponse
     {
@@ -48,7 +48,7 @@ final class EmailAdminController extends CRUDController
         if (!is_null($event)) {
             $img = $event->getPicture();
             if ($email->getPurpose() == "ticket_qr") {
-                $qrGenerator = new Qr();
+                $qrGenerator = $this->qr;
                 $qr = $qrGenerator->getQrBase64("test");
             }
         }

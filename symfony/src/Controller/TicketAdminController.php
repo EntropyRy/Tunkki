@@ -61,7 +61,7 @@ final class TicketAdminController extends CRUDController
             'form' => $form
         ]);
     }
-    public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer): RedirectResponse
+    public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, Qr $qrGenerator): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
         $to = $ticket->getOwner() == null ? $ticket->getEmail() : $ticket->getOwner()->getEmail();
@@ -72,7 +72,6 @@ final class TicketAdminController extends CRUDController
             $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
             $body = $email->getBody();
         }
-        $qrGenerator = new Qr();
         $qr = [
             'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
             'name' => $ticket->getName()
