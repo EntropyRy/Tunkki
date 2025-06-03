@@ -20,11 +20,28 @@ export default class extends Controller {
 
   disconnect() {
     this.stopRefreshing();
+    document.removeEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
+  }
+  
+  handleVisibilityChange() {
+    if (document.hidden) {
+      this.stopRefreshing();
+    } else if (this.hasRefreshIntervalValue) {
+      this.startRefreshing();
+    }
   }
 
   changePic() {
-    fetch(this.urlValue)
-      .then((response) => response.json())
+    // Add cache-busting for API responses
+    const cacheBuster = `?_=${Date.now()}`;
+    
+    fetch(`${this.urlValue}${cacheBuster}`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
       .then((data) => this.setPic(data))
       .catch((error) => {
         // Silent error handling
@@ -33,11 +50,15 @@ export default class extends Controller {
 
   startRefreshing() {
     if (!document.hidden) {
+      // Clear any existing timer first
+      this.stopRefreshing();
+      
       this.refreshTimer = setInterval(() => {
         this.changePic();
       }, this.refreshIntervalValue);
-    } else {
-      this.stopRefreshing();
+      
+      // Add event listener for visibility changes
+      document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
     }
   }
 
@@ -62,28 +83,32 @@ export default class extends Controller {
       // Create a new image element to preload
       const newImage = new Image();
       
-      // Process the URL to create a cacheable URL
-      // First check if it's from epics.entropy.fi
+      // Get the original URL from the data
       const originalUrl = data["url"];
-      let cachedUrl;
+      let cachedUrl = originalUrl;
       
-      // Only apply the proxy to epics.entropy.fi URLs
+      // Use the proxy for epics.entropy.fi URLs
       if (originalUrl.includes("epics.entropy.fi")) {
-        // Extract the path part after the domain
-        const urlObj = new URL(originalUrl);
-        const pathPart = urlObj.pathname.replace(/^\/+/, ""); // Remove leading slashes
-        cachedUrl = "/epics-proxy/" + pathPart;
-      } else {
-        // For other URLs, use as is
-        cachedUrl = originalUrl;
+        try {
+          // For full URLs from epics.entropy.fi, extract everything after the domain
+          const parts = originalUrl.split("epics.entropy.fi/");
+          if (parts.length > 1) {
+            cachedUrl = "/epics-proxy/" + parts[1];
+          }
+        } catch (e) {
+          // If any error in URL processing, use the original
+          cachedUrl = originalUrl;
+        }
       }
       
-      // Set the image source to the cachedUrl
+      // Set the image source
       newImage.src = cachedUrl;
 
-      newImage.onerror = (error) => {
-        // Fallback to direct URL if proxy fails
+      // Handle loading errors
+      newImage.onerror = () => {
+        // If the proxy URL fails and we're not already using the direct URL
         if (cachedUrl !== originalUrl) {
+          // Try the direct URL
           newImage.src = originalUrl;
         }
       };
@@ -100,6 +125,7 @@ export default class extends Controller {
         );
 
         fadeOutAnimation.onfinish = () => {
+          // Set the image source to cached URL
           this.picTarget.setAttribute("src", cachedUrl);
 
           // Fade in new image
