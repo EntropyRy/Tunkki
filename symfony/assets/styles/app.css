@@ -275,3 +275,11 @@ nav.navbar-light .nav-item a.nav-link {
     transform: rotateX(0);
   }
 }
+
+.fa-li {
+  svg {
+    width: 1.2em;
+    height: 1.2em;
+    vertical-align: -0.2em;
+  }
+}

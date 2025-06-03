@@ -29,9 +29,9 @@
             <div class="row offset-1 pb-2">
                 <div class="col-md-4">
                     {% if member %}
-                        <twig:ux:icon name="fa6-regular:check-square" />
+                        <twig:ux:icon name="fa6-regular:square-check" height="1.2em" />
                     {% else %}
-                        <twig:ux:icon name="fa6-regular:square" />
+                        <twig:ux:icon name="fa6-regular:square" height="1.2em"/>
                     {% endif %}
                     {{ 'Member account created'|trans }}:
                     {{ member.createdAt|date('d.m.Y') }}
@@ -39,9 +39,9 @@
                 <div class="col-md-4">
                     <span>
                         {% if member.isActiveMember %}
-                            <twig:ux:icon name="fa6-regular:check-square" />
+                            <twig:ux:icon name="fa6-regular:square-check" height="1.2em"/>
                         {% else %}
-                            <twig:ux:icon name="fa6-regular:square" />
+                            <twig:ux:icon name="fa6-regular:square" height="1.2em"/>
                         {% endif %}
                         {{ 'Active member'|trans }}
                         {% if member.ApplicationHandledDate %}{{ 'since'|trans }} {{ member.ApplicationHandledDate|date('d.m.Y') }}{% endif %}
@@ -54,9 +54,9 @@
                 <div class="col-md-4">
                     <span>
                         {% if member.AcceptedAsHonoraryMember %}
-                            <twig:ux:icon name="fa6-regular:check-square" />
+                            <twig:ux:icon name="fa6-regular:square-check" height="1.2em"/>
                         {% else %}
-                            <twig:ux:icon name="fa6-regular:square" />
+                            <twig:ux:icon name="fa6-regular:square" height="1.2em"/>
                         {% endif %}
                         {{ 'HC member'|trans }}
                         {% if member.AcceptedAsHonoraryMember %}
@@ -66,9 +66,9 @@
                 </div>
                 <div class="col-md-11 justify-content-end">
                     {% if member.canVote %}
-                        <twig:ux:icon name="fa6-regular:check-square" />
+                        <twig:ux:icon name="fa6-regular:square-check" height="1.2em"/>
                     {% else %}
-                        <twig:ux:icon name="fa6-regular:square" />
+                        <twig:ux:icon name="fa6-regular:square" height="1.2em"/>
                     {% endif %}
                     {{ 'member.can_vote'|trans }}
                 </div>
@@ -76,7 +76,7 @@
             <hr>
             <ul class="fa-ul">
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:users-cog" /></span>
+                    <span class="fa-li"><twig:ux:icon name="fa6-solid:users-gear" /></span>
                     {{ 'profile.access_groups'|trans }}:
                     {% for group in member.user.AccessGroups %}
                         {% if group.active %}
