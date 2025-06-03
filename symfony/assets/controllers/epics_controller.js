@@ -62,34 +62,16 @@ export default class extends Controller {
       // Create a new image element to preload
       const newImage = new Image();
       
-      // Get the original URL from the data
-      const originalUrl = data["url"];
-      let cachedUrl = originalUrl;
-      
-      // Use the proxy for epics.entropy.fi URLs
-      if (originalUrl.includes("epics.entropy.fi")) {
-        try {
-          // For full URLs from epics.entropy.fi, extract everything after the domain
-          const parts = originalUrl.split("epics.entropy.fi/");
-          if (parts.length > 1) {
-            cachedUrl = "/epics-proxy/" + parts[1];
-          }
-        } catch (e) {
-          // If any error in URL processing, use the original
-          cachedUrl = originalUrl;
-        }
-      }
+      // Get the original URL from the data and use it directly
+      // Cloudflare will handle the caching
+      const imageUrl = data["url"];
       
       // Set the image source
-      newImage.src = cachedUrl;
+      newImage.src = imageUrl;
 
-      // Handle loading errors
+      // Simple error handling
       newImage.onerror = () => {
-        // If the proxy URL fails and we're not already using the direct URL
-        if (cachedUrl !== originalUrl) {
-          // Try the direct URL
-          newImage.src = originalUrl;
-        }
+        console.error('Failed to load image');
       };
       
       newImage.onload = () => {
@@ -104,8 +86,8 @@ export default class extends Controller {
         );
 
         fadeOutAnimation.onfinish = () => {
-          // Set the image source to cached URL
-          this.picTarget.setAttribute("src", cachedUrl);
+          // Set the image source directly
+          this.picTarget.setAttribute("src", imageUrl);
 
           // Fade in new image
           this.picTarget.animate([{ opacity: 0 }, { opacity: 1 }], {

@@ -6,7 +6,6 @@ ARG GID
 RUN addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony
 
 RUN rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /etc/nginx/conf.d/default.conf
-RUN mkdir -p /data/nginx/cache && chown -R symfony:symfony /data/nginx/cache
 
 ADD nginx.conf /etc/nginx/
 ADD dev.conf /etc/nginx/conf.d/symfony.conf
