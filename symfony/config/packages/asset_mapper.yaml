@@ -9,4 +9,3 @@ framework:
       - "assets/styles/app.scss"
     precompress:
       format: "brotli"
-      extensions: ["css", "js", "json", "svg", "xml"]
