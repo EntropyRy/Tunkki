@@ -20,28 +20,11 @@ export default class extends Controller {
 
   disconnect() {
     this.stopRefreshing();
-    document.removeEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
-  }
-  
-  handleVisibilityChange() {
-    if (document.hidden) {
-      this.stopRefreshing();
-    } else if (this.hasRefreshIntervalValue) {
-      this.startRefreshing();
-    }
   }
 
   changePic() {
-    // Add cache-busting for API responses
-    const cacheBuster = `?_=${Date.now()}`;
-    
-    fetch(`${this.urlValue}${cacheBuster}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
+    fetch(this.urlValue)
+      .then((response) => response.json())
       .then((data) => this.setPic(data))
       .catch((error) => {
         // Silent error handling
@@ -50,15 +33,11 @@ export default class extends Controller {
 
   startRefreshing() {
     if (!document.hidden) {
-      // Clear any existing timer first
-      this.stopRefreshing();
-      
       this.refreshTimer = setInterval(() => {
         this.changePic();
       }, this.refreshIntervalValue);
-      
-      // Add event listener for visibility changes
-      document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
+    } else {
+      this.stopRefreshing();
     }
   }
 
