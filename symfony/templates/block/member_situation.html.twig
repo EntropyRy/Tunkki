@@ -7,7 +7,7 @@
         <div class="box-body">
             <ul class="fa-ul">
                 <li>
-                    <span class="fa-li"><i class="fas fa-trophy"></i></span>
+                    <span class="fa-li"><twig:ux:icon name="fa6-solid:trophy" /></span>
                     <div class="progress" style="height: 25px;">
                         <div class="progress-bar progress-bar-striped progress-bar-animated"
                              role="progressbar"
@@ -28,13 +28,21 @@
             </ul>
             <div class="row offset-1 pb-2">
                 <div class="col-md-4">
-                    <i class="{% if member %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {% if member %}
+                        <twig:ux:icon name="fa6-regular:check-square" />
+                    {% else %}
+                        <twig:ux:icon name="fa6-regular:square" />
+                    {% endif %}
                     {{ 'Member account created'|trans }}:
                     {{ member.createdAt|date('d.m.Y') }}
                 </div>
                 <div class="col-md-4">
                     <span>
-                        <i class="{% if member.isActiveMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                        {% if member.isActiveMember %}
+                            <twig:ux:icon name="fa6-regular:check-square" />
+                        {% else %}
+                            <twig:ux:icon name="fa6-regular:square" />
+                        {% endif %}
                         {{ 'Active member'|trans }}
                         {% if member.ApplicationHandledDate %}{{ 'since'|trans }} {{ member.ApplicationHandledDate|date('d.m.Y') }}{% endif %}
                         {% if not member.isActiveMember %}
@@ -45,7 +53,11 @@
                 </div>
                 <div class="col-md-4">
                     <span>
-                        <i class="{% if member.AcceptedAsHonoraryMember %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                        {% if member.AcceptedAsHonoraryMember %}
+                            <twig:ux:icon name="fa6-regular:check-square" />
+                        {% else %}
+                            <twig:ux:icon name="fa6-regular:square" />
+                        {% endif %}
                         {{ 'HC member'|trans }}
                         {% if member.AcceptedAsHonoraryMember %}
                             {{ 'since'|trans }} {{ member.AcceptedAsHonoraryMember|date('d.m.Y') }}
@@ -53,14 +65,18 @@
                     </span>
                 </div>
                 <div class="col-md-11 justify-content-end">
-                    <i class="{% if member.canVote %}far fa-check-square{% else %}far fa-square{% endif %}"></i>
+                    {% if member.canVote %}
+                        <twig:ux:icon name="fa6-regular:check-square" />
+                    {% else %}
+                        <twig:ux:icon name="fa6-regular:square" />
+                    {% endif %}
                     {{ 'member.can_vote'|trans }}
                 </div>
             </div>
             <hr>
             <ul class="fa-ul">
                 <li>
-                    <span class="fa-li"><i class="fas fa-users-cog"></i></span>
+                    <span class="fa-li"><twig:ux:icon name="fa6-solid:users-cog" /></span>
                     {{ 'profile.access_groups'|trans }}:
                     {% for group in member.user.AccessGroups %}
                         {% if group.active %}
