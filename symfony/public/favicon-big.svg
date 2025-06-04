@@ -1,14 +1,38 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
    width="512"
    height="512"
    version="1.1"
-   id="svg254">
+   id="svg254"
+   sodipodi:docname="favicon-big.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="1.8066406"
+     inkscape:cx="255.72324"
+     inkscape:cy="256"
+     inkscape:window-width="5108"
+     inkscape:window-height="1398"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg254" />
   <metadata
      id="metadata258">
     <rdf:RDF>
@@ -21,7 +45,8 @@
       </cc:Work>
     </rdf:RDF>
   </metadata>
-    <style id="style161">
+  <style
+     id="style161">
        .cls-1{
             fill:none;
             stroke: #1d1d1b;
@@ -40,7 +65,7 @@
   <g
      id="Layer_1"
      data-name="Layer 1"
-     transform="matrix(1.3052285,0,0,1.3052285,-83.650635,-43.775624)">
+     transform="matrix(1.8343846,0,0,1.8343846,-109.98329,-54.18393)">
     <path
        class="cls-1"
        d="m 314.12,147.8 a 114.33,114.33 0 0 0 -4.2,-15.59 L 325.46,119.64 306.73,87.16 288,94.32 A 116.18,116.18 0 0 0 276.36,82.69 L 283.53,64 251,45.25 238.49,60.79 a 114.38,114.38 0 0 0 -15.67,-4.2 L 219.69,36.87 H 182.2 l -3.13,19.72 a 113.4,113.4 0 0 0 -15.7,4.21 L 150.81,45.27 118.33,64 125.49,82.72 A 116.27,116.27 0 0 0 113.85,94.36 L 95.14,87.19 76.42,119.68 92,132.23 A 114.38,114.38 0 0 0 87.82,147.8 L 68,151 v 37.5 l 19.74,3.23 A 114.33,114.33 0 0 0 92,207.35 l -15.56,12.56 18.72,32.49 18.71,-7.17 a 117.54,117.54 0 0 0 11.65,11.65 l -7.16,18.71 32.48,18.71 12.56,-15.53 a 114.38,114.38 0 0 0 15.67,4.2 l 3.13,19.72 h 37.49 L 222.82,283 a 115.21,115.21 0 0 0 15.71,-4.22 l 12.56,15.53 33.56,-20.94 -29.2,-57.88 a 177.54,177.54 0 0 1 -21,13.37 c -11.76,6.31 -21.76,8.84 -33.55,8.84 a 68,68 0 0 1 -63.62,-44.2 h 167.48 l 29.1,-4.95 V 151 Z"
@@ -75,39 +100,39 @@
        id="path181" />
     <polygon
        class="cls-1"
-       points="304.81,193.48 292.59,169.78 109,169.78 137.37,193.48 "
+       points="137.37,193.48 304.81,193.48 292.59,169.78 109,169.78 "
        id="polygon183" />
     <polygon
        class="cls-1"
-       points="200.99,78.18 179.12,56.59 182.25,36.86 200.99,48.43 "
+       points="200.99,48.43 200.99,78.18 179.12,56.59 182.25,36.86 "
        id="polygon185" />
     <polygon
        class="cls-1"
-       points="238.53,60.79 246.72,90.4 261.56,64.63 251.09,45.25 "
+       points="251.09,45.25 238.53,60.79 246.72,90.4 261.56,64.63 "
        id="polygon187" />
     <polygon
        class="cls-1"
-       points="92,132.23 121.62,124.06 95.84,109.21 76.47,119.68 "
+       points="76.47,119.68 92,132.23 121.62,124.06 95.84,109.21 "
        id="polygon189" />
     <polygon
        class="cls-1"
-       points="288.06,94.32 280.36,124.02 306.12,109.18 306.78,87.16 "
+       points="306.78,87.16 288.06,94.32 280.36,124.02 306.12,109.18 "
        id="polygon191" />
     <polygon
        class="cls-1"
-       points="113.92,245.23 121.65,215.52 95.86,230.38 95.21,252.4 "
+       points="95.21,252.4 113.92,245.23 121.65,215.52 95.86,230.38 "
        id="polygon193" />
     <polygon
        class="cls-1"
-       points="238.58,278.76 246.45,248.63 261.6,274.91 251.14,294.29 "
+       points="251.14,294.29 238.58,278.76 246.45,248.63 261.6,274.91 "
        id="polygon195" />
     <polygon
        class="cls-1"
-       points="155.25,90.42 140.39,64.65 118.37,63.99 125.54,82.71 "
+       points="125.54,82.71 155.25,90.42 140.39,64.65 118.37,63.99 "
        id="polygon197" />
     <polygon
        class="cls-1"
-       points="68.08,188.53 79.64,169.78 109,169.78 87.82,191.76 "
+       points="87.82,191.76 68.08,188.53 79.64,169.78 109,169.78 "
        id="polygon199" />
     <polygon
        class="cls-1"
@@ -115,7 +140,7 @@
        id="polygon201" />
     <polygon
        class="cls-1"
-       points="118.4,275.59 125.56,256.88 154.8,248.85 140.42,274.93 "
+       points="140.42,274.93 118.4,275.59 125.56,256.88 154.8,248.85 "
        id="polygon203" />
     <polygon
        class="cls-1"
@@ -123,11 +148,11 @@
        id="polygon205" />
     <polygon
        class="cls-1"
-       points="182.25,302.69 179.12,282.97 200.99,260.79 200.99,291.13 "
+       points="200.99,291.13 182.25,302.69 179.12,282.97 200.99,260.79 "
        id="polygon207" />
     <polygon
        class="cls-1"
-       points="292.59,169.78 304.81,193.48 333.91,188.53 322.34,169.78 "
+       points="322.34,169.78 292.59,169.78 304.81,193.48 333.91,188.53 "
        id="polygon209" />
     <path
        class="cls-1"
@@ -147,31 +172,31 @@
        id="polygon217" />
     <polygon
        class="cls-1"
-       points="264.62,146.08 137.37,146.08 109,169.78 292.59,169.78 "
+       points="292.59,169.78 264.62,146.08 137.37,146.08 109,169.78 "
        id="polygon219" />
     <polygon
        class="cls-1"
-       points="280.36,124.02 306.12,109.18 325.5,119.64 309.97,132.2 "
+       points="309.97,132.2 280.36,124.02 306.12,109.18 325.5,119.64 "
        id="polygon221" />
     <polygon
        class="cls-1"
-       points="283.58,63.97 276.42,82.68 246.72,90.4 261.56,64.63 "
+       points="261.56,64.63 283.58,63.97 276.42,82.68 246.72,90.4 "
        id="polygon223" />
     <polygon
        class="cls-1"
-       points="200.99,48.43 219.74,36.86 222.86,56.59 200.99,78.18 "
+       points="200.99,78.18 200.99,48.43 219.74,36.86 222.86,56.59 "
        id="polygon225" />
     <polygon
        class="cls-1"
-       points="255.5,215.46 284.42,272.85 261.6,274.91 246.75,249.15 "
+       points="246.75,249.15 255.5,215.46 284.42,272.85 261.6,274.91 "
        id="polygon227" />
     <polygon
        class="cls-1"
-       points="200.99,291.13 200.99,260.79 222.86,282.98 219.74,302.69 "
+       points="219.74,302.69 200.99,291.13 200.99,260.79 222.86,282.98 "
        id="polygon229" />
     <polygon
        class="cls-1"
-       points="150.89,294.31 163.45,278.77 154.8,248.85 140.42,274.93 "
+       points="140.42,274.93 150.89,294.31 163.45,278.77 154.8,248.85 "
        id="polygon231" />
     <path
        class="cls-1"
@@ -203,15 +228,15 @@
        id="path245" />
     <polygon
        class="cls-1"
-       points="163.7,60.72 150.85,45.27 140.39,64.65 155.25,90.42 "
+       points="155.25,90.42 163.7,60.72 150.85,45.27 140.39,64.65 "
        id="polygon247" />
     <polygon
        class="cls-1"
-       points="95.84,109.21 121.62,124.06 113.89,94.35 95.18,87.19 "
+       points="95.18,87.19 95.84,109.21 121.62,124.06 113.89,94.35 "
        id="polygon249" />
     <polygon
        class="cls-1"
-       points="322.34,169.78 292.59,169.78 314.12,147.8 333.91,151.03 "
+       points="333.91,151.03 322.34,169.78 292.59,169.78 314.12,147.8 "
        id="polygon251" />
   </g>
 </svg>
