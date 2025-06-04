@@ -50,7 +50,7 @@ class MemberEditType extends AbstractType
             $form = $event->getForm();
 
             // checks if the member is active member
-            if ($member->getIsActiveMember()) {
+            if ($member && $member->getIsActiveMember()) {
                 $form->add('allowActiveMemberMails', CheckboxType::class, [
                     'label_attr' => ['class' => 'switch-custom'],
                     'label' => 'member.allow_active_member_mails',
