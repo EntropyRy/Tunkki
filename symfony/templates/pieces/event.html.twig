@@ -467,7 +467,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {{ 'fas fa-tasks'|parse_icon }}
+                    <twig:ux:icon name="fs6-solid:tasks" height="1em" width="1em"/>
                     {{ 'Artist signup'|trans }}
                 </a>
             </span>
@@ -476,7 +476,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    {{ 'fas fa-tasks'|parse_icon }}
+                    <twig:ux:icon name="fs6-solid:tasks" height="1em" width="1em"/>
                     Nakkikone
                 </a>
             </span>
@@ -506,7 +506,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ url }}">
-                    {{ 'fas fa-list'|parse_icon }}
+                    <twig:ux:icon name="fs6-solid:list" height="1em" width="1em"/>
                     {{ 'button.old_announcements'|trans }}
                 </a>
             </span>
