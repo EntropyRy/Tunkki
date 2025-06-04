@@ -35,7 +35,6 @@ class ProfileController extends AbstractController
     ], name: 'profile_new')]
     public function newMember(
         Request $request,
-        FormFactoryInterface $formF,
         MemberRepository $memberRepo,
         EmailRepository $emailRepo,
         UserPasswordHasherInterface $hasher,
@@ -46,7 +45,7 @@ class ProfileController extends AbstractController
     ): Response {
         $member = new Member();
         $email_content = null;
-        $form = $formF->create(MemberType::class, $member);
+        $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -132,13 +131,12 @@ class ProfileController extends AbstractController
     #[Route(path: ['en' => '/profile/edit', 'fi' => '/profiili/muokkaa'], name: 'profile_edit')]
     public function edit(
         Request $request,
-        FormFactoryInterface $formF,
         EntityManagerInterface $em
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $form = $formF->create(MemberEditType::class, $member);
+        $form = $this->createForm(MemberEditType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
@@ -159,12 +157,11 @@ class ProfileController extends AbstractController
     ], name: 'profile_password_edit')]
     public function password(
         Request $request,
-        FormFactoryInterface $formF,
         UserPasswordHasherInterface $hasher,
         EntityManagerInterface $em
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        $form = $formF->create(UserPasswordType::class, $user);
+        $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
@@ -184,7 +181,6 @@ class ProfileController extends AbstractController
     ], name: 'apply_for_active_member')]
     public function apply(
         Request $request,
-        FormFactoryInterface $formF,
         Mattermost $mm,
         EntityManagerInterface $em
     ): RedirectResponse|Response {
@@ -195,7 +191,7 @@ class ProfileController extends AbstractController
             $this->addFlash('success', 'profile.you_are_active_member_already');
             return $this->redirectToRoute('profile.' . $member->getLocale());
         }
-        $form = $formF->create(ActiveMemberType::class, $member);
+        $form = $this->createForm(ActiveMemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
