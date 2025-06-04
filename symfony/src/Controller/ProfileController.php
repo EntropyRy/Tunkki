@@ -21,7 +21,6 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -128,7 +127,10 @@ class ProfileController extends AbstractController
             'member' => $member,
         ]);
     }
-    #[Route(path: ['en' => '/profile/edit', 'fi' => '/profiili/muokkaa'], name: 'profile_edit')]
+    #[Route(path: [
+        'en' => '/profile/edit', 
+        'fi' => '/profiili/muokkaa'
+    ], name: 'profile_edit')]
     public function edit(
         Request $request,
         EntityManagerInterface $em

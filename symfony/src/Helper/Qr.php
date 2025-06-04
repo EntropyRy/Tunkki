@@ -11,7 +11,7 @@ class Qr
     public function __construct(
         private readonly AssetMapperInterface $assetMapper,
         #[Autowire('%kernel.project_dir%')]
-        private string $projectDir
+        private readonly string $projectDir
     ) {
     }
 

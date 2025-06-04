@@ -20,7 +20,10 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 final class EmailAdminController extends CRUDController
 {
-    public function __construct(private readonly RequestStack $requestStack, Qr $qr) {}
+    public function __construct(
+        private readonly RequestStack $requestStack, 
+        private readonly Qr $qr
+    ) {}
 
     public function sendProgressAction(): JsonResponse
     {
