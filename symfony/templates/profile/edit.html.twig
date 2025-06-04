@@ -24,7 +24,10 @@
             <div class="row mt-3">
                 <h3>{{ 'profile.email_notifications'|trans }}</h3>
                 {{ form_row(form.allowInfoMails, {row_attr: {class: 'col-md-6 pt-4'}}) }}
-                {{ form_row(form.allowActiveMemberMails, {row_attr: {class: 'col-md-6 pt-4'}}) }}
+                {# render this form field if it exists #}
+                {% if form.allowActiveMemberMails is defined %}
+                    {{ form_row(form.allowActiveMemberMails, {row_attr: {class: 'col-md-6 pt-4'}}) }}
+                {% endif %}
             </div>
             <div class="d-flex justify-content-between mt-4">
                 <a class="btn btn-secondary" href="{{ path('profile_password_edit') }}">{{ 'profile.change_password'|trans }}</a>
