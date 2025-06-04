@@ -36,7 +36,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly EmailRepository $emailRepo,
         private readonly ReferenceNumber $rn,
         private readonly MailerInterface $mailer,
-        private readonly Mattermost $mm
+        private readonly Mattermost $mm,
+        private readonly Qr $qrGenerator
     ) {
     }
     #[\Override]
@@ -145,7 +146,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         $tickets = [...$tickets, ...$given];
                     }
                 }
-                $qrGenerator = new Qr();
+                $qrGenerator = $this->qrGenerator;
                 foreach ($tickets as $ticket) {
                     $qrs[] = [
                         'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
