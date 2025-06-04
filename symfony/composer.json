@@ -53,7 +53,6 @@
     "symfony/web-link": "^7.1",
     "symfony/yaml": "^7.1",
     "symfonycasts/reset-password-bundle": "^1.16",
-    "symfonycasts/sass-bundle": "^0.7.0",
     "twbs/bootstrap": "^5.3",
     "twig/extra-bundle": "^3.4",
     "twig/intl-extra": "^3.4",
