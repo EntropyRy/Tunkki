@@ -3,7 +3,7 @@
 {% block block %}
     <h2 class="col-md-12 pb-2 pt-2">
         {{ 'artist.profiles'|trans }}
-        <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <i class="fas fa-plus"></i></a>
+        <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <twig:ux:icon name="fa6-solid:plus" /></a>
     </h2>
     {% for artist in member.artist %}
         <div class="col-12">
@@ -16,11 +16,11 @@
                         <div class="box-body">
                             <ul class="fa-ul">
                                 <li>
-                                    <span class="fa-li"><i class="fas fa-user"></i></span>
+                                    <span class="fa-li"><twig:ux:icon name="fa6-solid:user" /></span>
                                     {{ artist.type }}: {{ artist.name }}
                                 </li>
                                 <li>
-                                    <span class="fa-li"><i class="fas fa-question"></i></span>
+                                    <span class="fa-li"><twig:ux:icon name="fa6-solid:question" /></span>
                                     {{ 'artist.form.genre'|trans }}: {{ artist.genre }}
                                     <br>
                                     {{ 'artist.form.hardware'|trans }}: {{ artist.hardware }}

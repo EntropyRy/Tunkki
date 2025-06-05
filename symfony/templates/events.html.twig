@@ -5,7 +5,7 @@
     {% set name_attr = 'name_attribute'|trans %}
     <div class="input-group mb-3">
         <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}" />
-        <span id="nameSearch" class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+        <span id="nameSearch" class="input-group-text"><twig:ux:icon name="fa6-solid:magnifying-glass" /></span>
     </div>
     <h4>{{ 'search.include'|trans }}</h4>
     <div class="form-check form-check-inline">

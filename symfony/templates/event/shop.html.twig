@@ -57,7 +57,7 @@
                                 <span>{{ product.amount / 100 }}€</span>
                             </h3>
                             <span class="btn fs-4">
-                                <i class="fa fa-chevron-down" {{ stimulus_target('product', 'chevron') }}></i>
+                                <twig:ux:icon name="fa6-solid:chevron-down" {{ stimulus_target('product', 'chevron') }} />
                             </span>
                         </button>
                     </div>
@@ -95,7 +95,7 @@
             {% set button = 'btn-primary' %}
         {% endif %}
         <button {{ stimulus_target('product', 'minus') }} {{ stimulus_action('product', 'minus') }} class="btn {{ button }} fs-4">
-            <i class="fa fa-minus"></i>
+            <twig:ux:icon name="fa6-solid:minus" />
         </button>
         <span class="number text-center w-100 fs-2 fw-bolder" {{ stimulus_target('product', 'quantity') }}>
             {% if product.max(minus|default(0)) <= 0 %}
@@ -105,7 +105,7 @@
             {% endif %}
         </span>
         <button {{ stimulus_target('product', 'plus') }} {{ stimulus_action('product', 'plus') }} class="btn {{ button }} fs-4">
-            <i class="fa fa-plus"></i>
+            <twig:ux:icon name="fa6-solid:plus" />
         </button>
     </div>
 {% endblock %}

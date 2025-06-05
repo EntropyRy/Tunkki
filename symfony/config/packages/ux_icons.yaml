@@ -1,0 +1,19 @@
+ux_icons:
+  default_icon_attributes:
+    height: 1.2em
+    width: auto
+    aria-hidden: true
+    
+  # Define icon sets (already registered by the package)
+  icon_sets:
+    # These are pre-configured when you install the package
+    # fa6-solid: ~
+    # fa6-regular: ~
+    
+  # Define icon aliases if needed
+  # aliases:
+  #   user: fa6-solid:user
+  #   email: fa6-solid:envelope
+    
+  # Other configuration options
+  ignore_not_found: false

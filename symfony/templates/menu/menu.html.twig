@@ -22,7 +22,7 @@
             <span class="d-lg-none">
                 {{ block('mobile_locale') }}
                 {% if not app.user %}
-                    | <a href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                    | <a href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" /> {{ 'login'|trans|capitalize }}</a>
                 {% endif %}
             </span>
             <button class="navbar-toggler"
@@ -40,7 +40,7 @@
                 <ul class="navbar-nav d-none d-lg-flex">
                     {% if not app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}"><i class="fas fa-sign-in-alt"></i> {{ 'login'|trans|capitalize }}</a>
+                            <a class="nav-link" href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" /> {{ 'login'|trans|capitalize }}</a>
                         </li>
                     {% endif %}
                     {{ block('locale') }}

@@ -20,9 +20,9 @@
                             <span class="fa-li"><i class="{{ link.icon }}"></i></span>
                         {% else %}
                             {% if app.request.attributes.get('path') in link.url %}
-                                <span class="fa-li"><i class="fas fa-arrow-right"></i></span>
+                                <span class="fa-li"><twig:ux:icon name="fa6-solid:arrow-right" /></span>
                             {% else %}
-                                <span class="fa-li"><i class="fas fa-link"></i></span>
+                                <span class="fa-li"><twig:ux:icon name="fa6-solid:link" /></span>
                             {% endif %}
                         {% endif %}
                         <a {% if link.openInNewWindow|default(false) %}target="_blank"{% endif %}

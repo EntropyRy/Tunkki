@@ -46,7 +46,7 @@
                             <a class="nav-link"
                                target="_blank"
                                href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">
-                                <i class="fa-solid fa-up-right-from-square"></i>
+                                <twig:ux:icon name="fa6-solid:up-right-from-square" />
                                 Forum
                             </a>
                         </li>
@@ -55,7 +55,7 @@
                             <a class="nav-link"
                                target="_blank"
                                href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">
-                                <i class="fa-solid fa-up-right-from-square"></i>
+                                <twig:ux:icon name="fa6-solid:up-right-from-square" />
                                 Wiki
                             </a>
                         </li>
@@ -64,7 +64,7 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" data-turbo="false" href="{{ path('app_logout') }}">
-                            <i class="fas fa-sign-out-alt"></i> {{ 'profile.logout'|trans|capitalize }}
+                            <twig:ux:icon name="fa6-solid:right-from-bracket" /> {{ 'profile.logout'|trans|capitalize }}
                         </a>
                     </li>
                 </ul>

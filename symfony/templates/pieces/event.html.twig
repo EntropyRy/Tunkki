@@ -161,7 +161,7 @@
     {%- if event.published == false -%}
         --
         <span class="only_for_members">
-            <i class="fa fa-eye-slash mr-1"></i>{{ 'event.only_for_members'|trans }}
+            <twig:ux:icon name="fa6-solid:eye-slash" />{{ 'event.only_for_members'|trans }}
         </span>
     {%- endif %}
 {%- endblock %}
@@ -269,33 +269,33 @@
         {% endif %}
         {% if event.webMeetingUrl %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.web'|trans }}">
-                <i class="fa fa-globe"></i>
+                <twig:ux:icon name="fa6-solid:globe" />
             </span>
         {% endif %}
         {% if event.location %}
             {% if event.type == 'clubroom' or event.location.id == 1 %}
                 <span class="shadow badge bg-secondary" title="{{ 'event.badge.clubroom'|trans }}">
-                    <i class="fa fa-home"></i>
+                    <twig:ux:icon name="fa6-solid:house" />
                 </span>
             {% else %}
                 <span class="shadow badge bg-secondary" title="{{ event.location.name }}" >
-                    <i class="fa fa-location-dot"></i>
+                    <twig:ux:icon name="fa6-solid:location-dot" />
                 </span>
             {% endif %}
         {% endif %}
         {% if event.type == 'meeting' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.meeting'|trans }}">
-                <i class="fa fa-comments"></i>
+                <twig:ux:icon name="fa6-solid:comments" />
             </span>
         {% endif %}
         {% if event.type == 'clubroom' or event.type == 'event' or event.type == 'stream' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.music'|trans }}">
-                <i class="fa fa-music"></i>
+                <twig:ux:icon name="fa6-solid:music" />
             </span>
         {% endif %}
         {% if event.type == 'announcement' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.announcement'|trans }}">
-                <i class="fa fa-bullhorn"></i>
+                <twig:ux:icon name="fa6-solid:bullhorn" />
             </span>
         {% endif %}
     </div>
@@ -394,7 +394,7 @@
     {% if event.attachment %}
         <div class="mb-2">
             <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
-                <i class="fas fa-link me-1"></i>{{ event.attachment.name }}
+                <twig:ux:icon name="fa6-solid:link" />{{ event.attachment.name }}
             </a>
         </div>
         <hr>
@@ -406,7 +406,7 @@
                 {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
                 <a class="btn btn-outline-info"
                    href="https://reittiopas.hsl.fi/etusivu/-/{{ event.location.streetAddress|url_encode }}{{ gps|url_encode }}">
-                    <i class="fas fa-location-dot"></i>
+                    <twig:ux:icon name="fa6-solid:location-dot" />
                     {{ 'map'|trans }}
                 </a>
             </span>
@@ -435,14 +435,14 @@
             {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
                 <span>
                     <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
-                        <i class="fas fa-laptop"></i>
+                        <twig:ux:icon name="fa6-solid:laptop" />
                         {{ 'Join remotely'|trans }}
                     </a>
                 </span>
             {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
                 <span>
                     <a class="btn btn-outline-info">
-                        <i class="fas fa-laptop"></i>
+                        <twig:ux:icon name="fa6-solid:laptop" />
                         {{ 'Join remotely'|trans }}
                     </a>
                 </span>
@@ -452,12 +452,12 @@
             <span>
                 {% if app.request.locale == 'fi' %}
                     <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
-                        <i class="fas fa-hand-holding-heart"></i>
+                        <twig:ux:icon name="fa6-solid:hand-holding-heart" />
                         Turvallisemman tilan periaatteet
                     </a>
                 {% else %}
                     <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
-                        <i class="fas fa-hand-holding-heart"></i>
+                        <twig:ux:icon name="fa6-solid:hand-holding-heart" />
                         Safer space guidelines
                     </a>
                 {% endif %}
@@ -720,7 +720,7 @@
                         <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {title: name, anchor: anchor}) }}>
                             {{ name }}
                             <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }}>
-                                <i class="fa fa-share"></i>
+                                <twig:ux:icon name="fa6-solid:share" />
                             </button>
                         </h3>
                     </div>
