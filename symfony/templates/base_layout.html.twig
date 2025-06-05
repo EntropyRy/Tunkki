@@ -51,7 +51,7 @@
                         {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('sonata_admin_dashboard') }}">
-                                    <twig:ux:icon name="fa6-solid:magic" />
+                                    <twig:ux:icon name="fa-solid:magic" />
                                     {{ 'Dashboard'|trans }}
                                 </a>
                             </li>
@@ -91,7 +91,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link"
                                        href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
-                                        <twig:ux:icon name="fa6-solid:magic" />
+                                        <twig:ux:icon name="fa-solid:magic" />
                                         {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
                                     </a>
                                 </li>
@@ -123,7 +123,7 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ path('admin_app_event_edit', {id: event.id}) }}">
-                                    <twig:ux:icon name="fa6-solid:magic" />
+                                    <twig:ux:icon name="fa-solid:magic" />
                                     {{ 'event.edit'|trans }}
                                 </a>
                             </li>

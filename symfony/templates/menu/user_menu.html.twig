@@ -1,8 +1,8 @@
-{%- if app.user %}
+{%- if app.user -%}
     <nav style="border-top: 0px"
          class="navbar navbar-expand-lg g-4">
         <div class="container-fluid">
-            <a class="navbar-brand d-lg-none" href="{{ path('profile.' ~ loc) }}">{{ app.user.member.username }}</a>
+            <a class="navbar-brand d-lg-none" href="{{- path('profile.' ~ loc) }}">{{ app.user.member.username -}}</a>
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -16,7 +16,7 @@
                  id="userContent">
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('dashboard') }}">{{ 'entropy_user_dashboard'|trans }}</a>
+                        <a class="nav-link" href="{{- path('dashboard') }}">{{ 'entropy_user_dashboard'|trans -}}</a>
                     </li>
                     {# {% if app.request.server.get("HTTP_X_REAL_IP") == door_ip %} #}
                     {# <li class="nav-item"> #}
@@ -26,10 +26,10 @@
                     {# </li> #}
                     {# {% endif %} #}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('profile.' ~ loc) }}">{{ 'profile.name'|trans|capitalize }}</a>
+                        <a class="nav-link" href="{{- path('profile.' ~ loc) }}">{{ 'profile.name'|trans|capitalize -}}</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ path('entropy_artist_profile') }}">{{ 'artist.profiles'|trans|capitalize }}</a>
+                        <a class="nav-link" href="{{- path('entropy_artist_profile') }}">{{ 'artist.profiles'|trans|capitalize -}}</a>
                     </li>
                     {# <li class="nav-item dropdown">
                      <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false"> {{ 'menu.logon_to'|trans }}</a>
@@ -46,29 +46,30 @@
                             <a class="nav-link"
                                target="_blank"
                                href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">
-                                <twig:ux:icon name="fa6-solid:up-right-from-square" />
+                                <twig:ux:icon name="fa6-solid:up-right-from-square" height="1em" />
                                 Forum
                             </a>
                         </li>
-                    {% if app.user.member.isActiveMember %}
+                    {%- if app.user.member.isActiveMember -%}
                         <li class="nav-item">
                             <a class="nav-link"
                                target="_blank"
                                href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">
-                                <twig:ux:icon name="fa6-solid:up-right-from-square" />
+                                <twig:ux:icon name="fa6-solid:up-right-from-square" height="1em" />
                                 Wiki
                             </a>
                         </li>
-                    {% endif %}
+                    {%- endif -%}
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-turbo="false" href="{{ path('app_logout') }}">
-                            <twig:ux:icon name="fa6-solid:right-from-bracket" /> {{ 'profile.logout'|trans|capitalize }}
+                        <a class="nav-link" data-turbo="false" href="{{- path('app_logout') -}}">
+                            <twig:ux:icon name="fa6-solid:right-from-bracket" height="1em" />
+                            {{ 'profile.logout'|trans|capitalize -}}
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
-{% endif -%}
+{%- endif -%}
