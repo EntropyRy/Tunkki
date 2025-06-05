@@ -1,28 +1,15 @@
 {% use 'pieces/event.html.twig' %}
 {%- block menu %}
-    {% set loc = app.request.locale %}
-    {% set theme = 'light' %}
-    {% if event is defined %}
-        {% if app.user %}
-            {% set theme = event.headerTheme ? event.headerTheme : (app.user.member.theme ? app.user.member.theme : 'light') %}
-        {% else %}
-            {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-        {% endif %}
-    {% else %}
-        {% if app.user %}
-            {% set theme = app.user.member.theme ? app.user.member.theme : 'light' %}
-        {% endif %}
-    {% endif %}
     <nav class="navbar navbar-expand-lg g-4">
         <div class="container-fluid">
             <a class="navbar-brand d-lg-none d-inline-block"
-               href="/{% if loc == 'en' %}en{% endif %}">
-                <img src="{{ asset('/images/header-logo-text.svg') }}" width="auto" height="45" alt="Entropy" {% if theme == 'dark' %}class="invert"{% endif %}>
+               href="/{% if app.request.locale == 'en' %}en{% endif %}">
+                <img src="{{ asset('/images/header-logo-text.svg') }}" width="auto" height="45" alt="Entropy">
             </a>
             <span class="d-lg-none">
                 {{ block('mobile_locale') }}
                 {% if not app.user %}
-                    | <a href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" /> {{ 'login'|trans|capitalize }}</a>
+                    | <a href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" height="1em" width="1em" /> {{ 'login'|trans|capitalize }}</a>
                 {% endif %}
             </span>
             <button class="navbar-toggler"
@@ -36,11 +23,13 @@
             </button>
             <div class="collapse navbar-collapse justify-content-between"
                  id="navbarSupportedContent">
-                {{ knp_menu_render(loc) }}
+                {{ knp_menu_render(app.request.locale) }}
                 <ul class="navbar-nav d-none d-lg-flex">
                     {% if not app.user %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" /> {{ 'login'|trans|capitalize }}</a>
+                            <a class="nav-link" href="{{ path('app_login') }}">
+                                <twig:ux:icon name="fa6-solid:right-to-bracket" height="1em" width="1em" /> 
+                                {{ 'login'|trans|capitalize }}</a>
                         </li>
                     {% endif %}
                     {{ block('locale') }}

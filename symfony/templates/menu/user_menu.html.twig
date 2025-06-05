@@ -2,7 +2,7 @@
     <nav style="border-top: 0px"
          class="navbar navbar-expand-lg g-4">
         <div class="container-fluid">
-            <a class="navbar-brand d-lg-none" href="{{- path('profile.' ~ loc) }}">{{ app.user.member.username -}}</a>
+            <a class="navbar-brand d-lg-none" href="{{- path('profile.' ~ app.request.locale) }}">{{ app.user.member.username -}}</a>
             <button class="navbar-toggler"
                     type="button"
                     data-bs-toggle="collapse"
@@ -26,7 +26,7 @@
                     {# </li> #}
                     {# {% endif %} #}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{- path('profile.' ~ loc) }}">{{ 'profile.name'|trans|capitalize -}}</a>
+                        <a class="nav-link" href="{{- path('profile.' ~ app.request.locale) }}">{{ 'profile.name'|trans|capitalize -}}</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{- path('entropy_artist_profile') }}">{{ 'artist.profiles'|trans|capitalize -}}</a>
