@@ -119,6 +119,7 @@ ux_icons:
     bullhorn: fa6-solid:bullhorn
     broadcast: fa6-solid:tower-broadcast
     login: fa6-solid:right-to-bracket
+    sign-in: fa6-solid:right-to-bracket
     logout: fa6-solid:right-from-bracket
 
     # Actions and states
@@ -166,7 +167,7 @@ ux_icons:
     broadcast-tower: fa6-solid:tower-broadcast
     globe: fa6-solid:globe
 
-  ignore_not_found: true
+  ignore_not_found: false
 
 when@prod:
   ux_icons:
