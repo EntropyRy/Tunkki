@@ -98,7 +98,6 @@ ux_icons:
     coffee: fa6-solid:coffee
     ticket: fa6-solid:ticket-alt
     link-out: fa6-solid:up-right-from-square
-    sign-in: fa6-solid:right-to-bracket
     rss: fa6-solid:square-rss
     map-pin: fa6-solid:map-marker-alt
     comments: fa6-solid:comments
@@ -119,6 +118,8 @@ ux_icons:
     table: fa6-solid:table
     bullhorn: fa6-solid:bullhorn
     broadcast: fa6-solid:tower-broadcast
+    login: fa6-solid:right-to-bracket
+    logout: fa6-solid:right-from-bracket
 
     # Actions and states
     play: fa6-solid:play
@@ -165,16 +166,6 @@ ux_icons:
     broadcast-tower: fa6-solid:tower-broadcast
     globe: fa6-solid:globe
 
-    # Legacy FontAwesome mappings
-    pencil-square-o: fa6-solid:pen-to-square
-    arrow-circle-right: fa6-solid:circle-arrow-right
-    sign-in-alt: fa6-solid:right-to-bracket
-    sign-out-alt: fa6-solid:right-from-bracket
-    check-square: fa6-solid:square-check
-    users-cog: fa6-solid:users-gear
-    users-gear: fa6-solid:users-gear
-    list-alt: fa6-solid:rectangle-list
-    trash-o: fa6-solid:trash
   ignore_not_found: true
 
 when@prod:
