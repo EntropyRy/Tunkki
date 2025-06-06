@@ -58,7 +58,7 @@ fb.event: FB Event
 tg:
   event: The Event
   info: Telegram info channel
-  ticket_shop: Ticket Shop 
+  ticket_shop: Ticket Shop
 entropy.seo.description: Electronic music and culture association
 rss_desc: Upcoming and past events and announcements of Entropy ry
 map: Map
@@ -113,7 +113,7 @@ stream:
     players: Who is playing now
   tile:
     button: Stream Page
-  live: 
+  live:
     now: Playing live NOW
   label: Stream
   labels: Streams
@@ -142,13 +142,13 @@ stream:
   command:
     successful: Stream command OK
   control:
-    off: Automatic streaming/recording is OFF 
+    off: Automatic streaming/recording is OFF
     on: Automatic streaming/recording is ON
     start: Start
     stop: Stop
 page:
   email_unsubscribe:
-    removed: removed 
+    removed: removed
     title: Email Unsubscribed
     message: You've now been unsubscribed from Entropy tiedotus mailing list. In order to start receiving emails again, log in and change the email preferences.
     link: Login to Your profile
@@ -239,7 +239,8 @@ url:
     open_in_new_window: Open in a new window
     title: Title
     url: Url
-    icon: Icon class
+    icon: Icon
+    icon_placeholder: Select an icon..
 profile:
   edit: Edit Profile
   email_notifications: Email settings
@@ -442,7 +443,7 @@ happening:
   ticket_missing: You need a ticket first.
   happenings: Happenings
 edited: Changes saved succesfully!
-location: 
+location:
   location: location
   former_industrial_complex: former industrial complex
 Name fi: Name in Finnish
@@ -486,6 +487,56 @@ shop:
       label: Email in which we will send your receipt
       help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
     empty: Your cart is empty
+icons:
+  brand_icons_label: Brand Icons
+  common_icons_label: Common Icons
+  brand_icons:
+    bandcamp: Bandcamp
+    behance: Behance
+    discord: Discord
+    facebook: Facebook
+    github: GitHub
+    instagram: Instagram
+    linkedin: LinkedIn
+    linktree: Linktree
+    mastodon: Mastodon
+    mixcloud: Mixcloud
+    pinterest: Pinterest
+    reddit: Reddit
+    ra: Resident Advisor
+    soundcloud: SoundCloud
+    spotify: Spotify
+    telegram: Telegram
+    tiktok: TikTok
+    twitch: Twitch
+    twitter: Twitter
+    whatsapp: WhatsApp
+    youtube: YouTube
+  common_icons:
+    bus: Bus
+    calendar: Calendar
+    coffee: Coffee
+    comments: Comments
+    cubes: Cubes
+    download: Download
+    email: Email
+    heart: Heart
+    home: Home
+    image: Image
+    link: Link
+    location-dot: Location
+    map-pin: Map Pin
+    music: Music
+    pause: Pause
+    phone: Phone
+    play: Play
+    rss: RSS
+    smiley: Smiley
+    star: Star
+    ticket: Ticket
+    upload: Upload
+    user: User
+    video: Video
 nakkikone:
   build_up: Build up
   during: During the event
@@ -501,7 +552,7 @@ e30v:
     tickets: Tickets
     artists: Artists
     timetable: Timetable
-    safer_space: Safer Space 
+    safer_space: Safer Space
   years: years
   buy_tickets: Buy tickets
   buy: Checkout

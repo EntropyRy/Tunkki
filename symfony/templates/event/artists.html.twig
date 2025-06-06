@@ -3,7 +3,6 @@
     {% set title = event.NameByLang(app.request.locale) ~ ' - ' ~ event.EventDate|date('d.m.Y, H:i') %}
     {{ title }} - {{ 'Artists'|trans }} | Entropy ry
 {% endblock %}
-{% use 'pieces/event.html.twig' %}
 {% block content %}
     {% if app.user %}
         {% set visible = true %}

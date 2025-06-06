@@ -17,12 +17,12 @@
                 {% for link in settings.urls %}
                     <li>
                         {% if link.icon %}
-                            <span class="fa-li"><i class="{{ link.icon }}"></i></span>
+                            <span class="fa-li"><twig:ux:icon name="{{ link.icon }}" /></span>
                         {% else %}
-                            {% if app.request.attributes.get('path') in link.url %}
-                                <span class="fa-li"><twig:ux:icon name="fa6-solid:arrow-right" /></span>
+                            {% if 'http' not in link.url and app.request.attributes.get('path') in link.url %}
+                                <span class="fa-li"><twig:ux:icon name="arrow-right" /></span>
                             {% else %}
-                                <span class="fa-li"><twig:ux:icon name="fa6-solid:link" /></span>
+                                <span class="fa-li"><twig:ux:icon name="link" /></span>
                             {% endif %}
                         {% endif %}
                         <a {% if link.openInNewWindow|default(false) %}target="_blank"{% endif %}

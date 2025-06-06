@@ -314,7 +314,8 @@ url:
     open_in_new_window: Avaa uudessa ikkunassa
     title: Linkin teksti
     url: Url-osoite
-    icon: Iconin luokka (class)
+    icon: ikoni
+    icon_placeholder: Valitse ikoni
 profile:
   edit: Profiilin muokkaus
   email_notifications: Sähköposti asetukset
@@ -619,3 +620,53 @@ e30v:
     email:
       label: Sähköposti, johon ostoksesi lähetetään
       help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme lipun tiliisi.
+icons:
+  brand_icons_label: Brändi-ikonit
+  common_icons_label: Yleiset ikonit
+  brand_icons:
+    bandcamp: Bandcamp
+    behance: Behance
+    discord: Discord
+    facebook: Facebook
+    github: GitHub
+    instagram: Instagram
+    linkedin: LinkedIn
+    linktree: Linktree
+    mastodon: Mastodon
+    mixcloud: Mixcloud
+    pinterest: Pinterest
+    reddit: Reddit
+    ra: Resident Advisor
+    soundcloud: SoundCloud
+    spotify: Spotify
+    telegram: Telegram
+    tiktok: TikTok
+    twitch: Twitch
+    twitter: Twitter
+    whatsapp: WhatsApp
+    youtube: YouTube
+  common_icons:
+    bus: Bussi
+    calendar: Kalenteri
+    coffee: Kahvi
+    comments: Kommentit
+    cubes: Kuutiot
+    download: Lataa
+    email: Sähköposti
+    heart: Sydän
+    home: Koti
+    image: Kuva
+    link: Linkki
+    location-dot: Sijainti
+    map-pin: Karttapiste
+    music: Musiikki
+    pause: Tauko
+    phone: Puhelin
+    play: Toisto
+    rss: RSS
+    smiley: Hymiö
+    star: Tähti
+    ticket: Lippu
+    upload: Lataa ylös
+    user: Käyttäjä
+    video: Video

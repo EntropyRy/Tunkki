@@ -24,7 +24,7 @@ file that was distributed with this source code.
             </p>
         </div>
         <div class="icon">
-            <i class="fa {{ settings.icon }}"></i>
+            <twig:ux:icon name="{{ settings.icon }}" />
         </div>
         {% if admin.hasAccess('list') %}
             <a href="{{ admin.generateUrl('list', {filter: settings.filters}) }}"

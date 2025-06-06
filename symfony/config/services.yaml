@@ -34,6 +34,13 @@ services:
   Twig\Extension\StringLoaderExtension:
   Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
+  Symfony\UX\Icons\Registry\LocalSvgIconRegistry:
+    arguments:
+      - "%kernel.project_dir%/assets/icons"
+  Symfony\UX\Icons\Twig\IconFinder:
+    arguments:
+      - "@twig"
+      - "%kernel.project_dir%/assets/icons"
   entropy.menu_builder.fi:
     class: App\Menu\MenuBuilder
     tags:

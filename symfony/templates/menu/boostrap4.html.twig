@@ -106,7 +106,7 @@
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LabelAttribute', 'dropdown-header') }}
     <div {{ macros.attributes(item.labelAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {% if item.attribute('icon') is not empty %}<twig:ux:icon name="{{ item.attribute('icon') }}" />{% endif %}
         {{ block('label') }}
     </div>
 {% endblock %}
@@ -123,7 +123,7 @@
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LinkAttribute', 'nav-link') }}
     <a href="{{ item.uri }}"{{ macros.attributes(item.linkAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {% if item.attribute('icon') is not empty %}<twig:ux:icon name="{{ item.attribute('icon') }}" />{% endif %}
         {{ block('label') }}
     </a>
 {% endblock %}
@@ -132,7 +132,7 @@
     {% import _self as ownmacro %}
     {{ ownmacro.setCssClassAttribute(item, 'LabelAttribute', 'navbar-text') }}
     <span {{ macros.attributes(item.labelAttributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {% if item.attribute('icon') is not empty %}<twig:ux:icon name="{{ item.attribute('icon') }}" />{% endif %}
         {{ block('label') }}
     </span>
 {% endblock %}
@@ -144,7 +144,7 @@
     {%- set attributes = attributes|merge({class: classes|join(' ')}) %}
     {%- set attributes = attributes|merge({'data-bs-toggle': 'dropdown'}) %}
     <a href="#"{{ macros.attributes(attributes) }}>
-        {% if item.attribute('icon') is not empty %}<i class="{{ item.attribute('icon') }}"></i>{% endif %}
+        {% if item.attribute('icon') is not empty %}<twig:ux:icon name="{{ item.attribute('icon') }}" />{% endif %}
         {{ block('label') }}
         <b class="caret"></b>
     </a>

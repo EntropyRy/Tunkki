@@ -3,17 +3,177 @@ ux_icons:
     height: 1.2em
     width: auto
     aria-hidden: true
-    
+
   # Define icon sets (already registered by the package)
   icon_sets:
     # These are pre-configured when you install the package
     # fa6-solid: ~
     # fa6-regular: ~
-    
-  # Define icon aliases if needed
-  # aliases:
-  #   user: fa6-solid:user
-  #   email: fa6-solid:envelope
-    
-  # Other configuration options
-  ignore_not_found: false
+
+  # Define icon aliases for simplified database storage
+  aliases:
+    # Brand icons (social media, platforms, etc.)
+    facebook: simple-icons:facebook
+    x: simple-icons:x
+    twitter: simple-icons:x
+    youtube: simple-icons:youtube
+    instagram: simple-icons:instagram
+    spotify: simple-icons:spotify
+    soundcloud: simple-icons:soundcloud
+    bandcamp: simple-icons:bandcamp
+    apple: simple-icons:apple
+    linkedin: simple-icons:linkedin
+    github: simple-icons:github
+    discord: simple-icons:discord
+    tiktok: simple-icons:tiktok
+    twitch: simple-icons:twitch
+    telegram: simple-icons:telegram
+    whatsapp: simple-icons:whatsapp
+    mastodon: simple-icons:mastodon
+    pinterest: simple-icons:pinterest
+    reddit: simple-icons:reddit
+    behance: simple-icons:behance
+    angellist: logos:angellist
+    mixcloud: simple-icons:mixcloud
+    linktree: simple-icons:linktree
+    ra: brands:ra
+
+    # Common UI icons (FontAwesome solid)
+    user: fa6-solid:user
+    users: fa6-solid:users
+    home: fa6-solid:house
+    house: fa6-solid:house
+    music: fa6-solid:music
+    link: fa6-solid:link
+    email: fa6-solid:envelope
+    envelope: fa6-solid:envelope
+    hand-holding-heart: fa6-solid:hand-holding-heart
+    wiki: fa:wikipedia-w
+    t-shirt: fa6-solid:shirt
+    phone: fa6-solid:phone
+    calendar: fa6-solid:calendar
+    clock: fa6-solid:clock
+    download: fa6-solid:download
+    upload: fa6-solid:upload
+    search: fa6-solid:magnifying-glass
+    edit: fa6-solid:pen
+    pen: fa6-solid:pen
+    pencil: fa6-solid:pen
+    trash: fa6-solid:trash
+    delete: fa6-solid:trash
+    remove: fa6-solid:xmark
+    close: fa6-solid:xmark
+    check: fa6-solid:check
+    plus: fa6-solid:plus
+    minus: fa6-solid:minus
+    arrow-right: fa6-solid:arrow-right
+    arrow-left: fa6-solid:arrow-left
+    arrow-up: fa6-solid:arrow-up
+    arrow-down: fa6-solid:arrow-down
+    settings: fa6-solid:gear
+    gear: fa6-solid:gear
+    cog: fa6-solid:gear
+    info: fa6-solid:info
+    warning: fa6-solid:triangle-exclamation
+    error: fa6-solid:circle-exclamation
+    success: fa6-solid:circle-check
+    star: fa6-solid:star
+    heart: fa6-regular:heart
+    bookmark: fa6-solid:bookmark
+    share: fa6-solid:share
+    print: fa6-solid:print
+    save: fa6-solid:floppy-disk
+    copy: fa6-solid:copy
+    cut: fa6-solid:scissors
+    paste: fa6-solid:paste
+    folder: fa6-solid:folder
+    file: fa6-solid:file
+    image: fa6-solid:image
+    video: fa6-solid:video
+    audio: fa6-solid:music
+    document: fa6-solid:file-text
+    pdf: fa6-solid:file-pdf
+    cube: fa6-solid:cube
+    smoking: fa6-solid:smoking
+    cd: fa6-solid:compact-disc
+    location-dot: fa6-solid:location-dot
+    coffee: fa6-solid:coffee
+    ticket: fa6-solid:ticket-alt
+    link-out: fa6-solid:up-right-from-square
+    sign-in: fa6-solid:right-to-bracket
+    rss: fa6-solid:square-rss
+    map-pin: fa6-solid:map-marker-alt
+    comments: fa6-solid:comments
+    bus: fa6-solid:bus
+    smiley: fa6-regular:face-smile
+    cubes: fa6-solid:cubes
+
+    # Navigation and layout
+    menu: fa6-solid:bars
+    bars: fa6-solid:bars
+    grid: fa6-solid:table-cells
+    list: fa6-solid:list
+    address-card: fa6-solid:address-card
+    table: fa6-solid:table
+    bullhorn: fa6-solid:bullhorn
+    broadcast: fa6-solid:tower-broadcast
+
+    # Actions and states
+    play: fa6-solid:play
+    pause: fa6-solid:pause
+    stop: fa6-solid:stop
+    record: fa6-solid:record-vinyl
+    volume: fa6-solid:volume-high
+    mute: fa6-solid:volume-xmark
+    lock: fa6-solid:lock
+    unlock: fa6-solid:unlock
+    visible: fa6-solid:eye
+    hidden: fa6-solid:eye-slash
+    eye: fa6-solid:eye
+    eye-slash: fa6-solid:eye-slash
+
+    # Business and e-commerce
+    cart: fa6-solid:cart-shopping
+    shopping: fa6-solid:cart-shopping
+    money: fa6-solid:dollar-sign
+    payment: fa6-solid:credit-card
+    card: fa6-solid:credit-card
+    bank: fa6-solid:building-columns
+    chart: fa6-solid:chart-line
+    analytics: fa6-solid:chart-bar
+    report: fa6-solid:file-chart-line
+
+    # Communication
+    message: fa6-solid:message
+    chat: fa6-solid:comment
+    comment: fa6-solid:comment
+    notification: fa6-solid:bell
+    bell: fa6-solid:bell
+    mail: fa6-solid:envelope
+
+    # Special mappings from the command
+    medkit: fa6-solid:kit-medical
+    kit-medical: fa6-solid:kit-medical
+    history: fa6-solid:clock-rotate-left
+    tasks: fa6-solid:list-check
+    balance-scale: fa6-solid:scale-balanced
+    book: fa6-solid:book
+    fish: fa6-solid:fish
+    browser: fa6-solid:link
+    broadcast-tower: fa6-solid:tower-broadcast
+
+    # Legacy FontAwesome mappings
+    pencil-square-o: fa6-solid:pen-to-square
+    arrow-circle-right: fa6-solid:circle-arrow-right
+    sign-in-alt: fa6-solid:right-to-bracket
+    sign-out-alt: fa6-solid:right-from-bracket
+    check-square: fa6-solid:square-check
+    users-cog: fa6-solid:users-gear
+    users-gear: fa6-solid:users-gear
+    list-alt: fa6-solid:rectangle-list
+    trash-o: fa6-solid:trash
+  ignore_not_found: true
+
+when@prod:
+  ux_icons:
+    ignore_not_found: true

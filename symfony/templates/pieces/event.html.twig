@@ -417,7 +417,7 @@
                     <a class="btn btn-outline-info"
                        {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %}
                        href="{{ url.url }}">
-                        <i class="{{ url.icon }}"></i>
+                        <twig:ux:icon name="{{ url.icon }}" />
                         {{ url.title|trans }}
                     </a>
                 </span>
@@ -633,53 +633,6 @@
         </div>
     {% endif %}
 {% endblock %}
-{% block timetable_list_li %}
-    {% if event.multiday == true %}
-        {% set datestring = 'E, HH:mm' %}
-    {% else %}
-        {% set datestring = 'HH:mm' %}
-    {% endif %}
-    {% set last = null %}
-    {% if bios|length > 0 %}
-        <div id="timetable" class="row g-0">
-            {% for stage, infos in bios %}
-                <div class="col-12 {% if bios|length > 1 %}{# is more than one stage #} col-md-6{% endif %}">
-                    <h4 class="artists-heading">
-                        {{ type }} {{ 'Timetable'|trans }}
-                        {% if stage %}@ {{ stage }}{% endif %}
-                    </h4>
-                    <ul class="timetable">
-                        {% for info in infos -%}
-                            {% set artist = info.artistClone %}
-                            {% set name = (artist.name|split(' for')).0 %}
-                            {% if last is defined %}
-                                {% if info.timediff(last) > 4 and event.multiday %}<hr>{% endif %}
-                                {% if last != info.StartTime %}
-                                    <li>
-                                    <span clas="time">{{ info.StartTime|format_datetime(pattern: datestring) }}:</span>
-                                    {% endif %}
-                                {% endif %}
-                                {% if info.StartTime is not empty %}
-                                    {% if last is defined %}
-                                        {% if last == info.StartTime %}B2B{% endif %}
-                                    {% endif %}
-                                    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
-                                {% if artist.type == 'Live' %}(Live){% endif %}
-                                {% if genre|default(null) %}
-                                    <i class="fw-lighter"> ({{ artist.genre }})</i>
-                                {% endif %}
-                            {% endif %}
-                            {% set last = info.StartTime %}
-                            {% if last is defined %}
-                                {% if last != info.StartTime %}</li>{% endif %}
-                            {% endif %}
-                        {%- endfor %}
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock %}
 {% block art_artist_list %}
     {% set bios = event.ArtistInfosByType('ART') %}
     {% if bios|length > 0 %}
@@ -875,17 +828,23 @@
     <div>{{ attribute(artist, bio_attribute) }}</div>
     {{ block('artist_links') }}
 {% endblock %}
-{% block artist_links %}
-    {% if artist.links is not empty %}
+{% block artist_links -%}
+    {%- if artist.links is not empty -%}
         <hr>
-        {% for link in artist.links %}
-        <span><a {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
-   href="{{ link.url }}"><i class="{{ link.icon }} me-1"></i>{{ link.title }}</a>
-    </span>
-    {% if not loop.last %}|{% endif %}
-{% endfor %}
-{% endif %}
-{% endblock %}
+        {%- for link in artist.links -%}
+            <span>
+                <a 
+                    {%- if link.open_in_new_window|default(false) %}target="_blank"{% endif -%}
+                    href="{{- link.url -}}"
+                    >
+                    <twig:ux:icon name="{{ link.icon }}" class="me-1" />
+                    {{- link.title -}}
+                </a>
+            </span>
+            {%- if not loop.last %}|{% endif -%}
+        {%- endfor -%}
+{%- endif -%}
+{%- endblock %}
 {% block public_artist_info %}
     {% set name = artist.name %}
     {% set bio_attribute = 'bio_attribute'|trans %}
