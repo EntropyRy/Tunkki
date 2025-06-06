@@ -41,7 +41,6 @@ class ReplaceTemplateIconsCommand extends Command
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
         private readonly string $projectDir,
-        private readonly ?Command $iconSearchCommand = null
     ) {
         parent::__construct();
     }
@@ -220,7 +219,7 @@ class ReplaceTemplateIconsCommand extends Command
                 $quote = $match[1][0];
                 $iconClass = $match[2][0];
                 $iconName = $match[3][0];
-                $extraAttrs = isset($match[5]) ? $match[5][0] : '';
+                //$extraAttrs = isset($match[5]) ? $match[5][0] : '';
                 
                 // Determine the proper icon set (solid vs regular)
                 $iconSet = 'fa6-solid';
@@ -257,7 +256,7 @@ class ReplaceTemplateIconsCommand extends Command
                     }
                 }
                 
-                $replacement = '<twig:ux:icon name="' . $uxIconName . '"' . $extraAttrs . ' />';
+                $replacement = '<twig:ux:icon name="' . $uxIconName . '" />';
                 
                 $io->text(sprintf(' - Replace: <comment>%s</comment>', $fullMatch));
                 $io->text(sprintf('   with: <info>%s</info>', $replacement));

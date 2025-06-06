@@ -75,7 +75,7 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * Special mappings for icons that need to be redirected to a different icon set
      */
-    private const SPECIAL_ICON_MAPPINGS = [
+    private const array SPECIAL_ICON_MAPPINGS = [
         'angellist' => 'logos:angellist',
         'fish' => 'fa6-solid:fish',
         'browser' => 'fa6-solid:link',
@@ -122,7 +122,6 @@ class ConvertDatabaseIconsCommand extends Command
         'simple-icons:behance' => 'behance',
         'logos:angellist' => 'angellist',
         'simple-icons:mixcloud' => 'mixcloud',
-        'simple-icons:linktree' => 'linktree',
         'simple-icons:gitlab' => 'gitlab',
         'simple-icons:vimeo' => 'vimeo',
         
@@ -207,7 +206,6 @@ class ConvertDatabaseIconsCommand extends Command
         'fa6-solid:square-check' => 'check-square',
         'fa6-solid:users-gear' => 'users-cog',
         'fa6-solid:rectangle-list' => 'list-alt',
-        'fa6-solid:cube' => 'cube',
         'fa6-solid:smoking' => 'smoking',
         'fa6-solid:compact-disc' => 'cd',
         'fa6-solid:location-dot' => 'location-dot',
