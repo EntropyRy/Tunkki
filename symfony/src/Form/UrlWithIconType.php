@@ -38,6 +38,7 @@ final class UrlWithIconType extends AbstractType
                 'icons.brand_icons.tiktok' => 'tiktok',
                 'icons.brand_icons.twitch' => 'twitch',
                 'icons.brand_icons.twitter' => 'twitter',
+                'Vimeo' => 'vimeo',
                 'icons.brand_icons.whatsapp' => 'whatsapp',
                 'icons.brand_icons.youtube' => 'youtube',
             ],
@@ -81,7 +82,7 @@ final class UrlWithIconType extends AbstractType
                 "attr" => [
                     "class" => "icon-select form-select"
                 ],
-                "choice_attr" => fn($choice, $key, $value): array => ["data-icon" => $choice],
+                "choice_attr" => fn ($choice, $key, $value): array => ["data-icon" => $choice],
             ])
             ->add("title", TextType::class, [
                 "label" => "url.form.title",
