@@ -106,6 +106,9 @@ ux_icons:
     smiley: fa6-regular:face-smile
     cubes: fa6-solid:cubes
     ban: fa6-solid:ban
+    wave-square: fa6-solid:wave-square
+    paintbrush: fa6-solid:paintbrush
+    kiwi-bird: fa6-solid:kiwi-bird
 
     # Navigation and layout
     menu: fa6-solid:bars
@@ -121,7 +124,7 @@ ux_icons:
     play: fa6-solid:play
     pause: fa6-solid:pause
     stop: fa6-solid:stop
-    record: fa6-solid:record-vinyl
+    vinyl: fa6-solid:record-vinyl
     volume: fa6-solid:volume-high
     mute: fa6-solid:volume-xmark
     lock: fa6-solid:lock
