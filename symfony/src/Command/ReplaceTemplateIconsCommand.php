@@ -2,6 +2,8 @@
 
 namespace App\Command;
 
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -19,7 +21,7 @@ use Symfony\Component\Finder\Finder;
 class ReplaceTemplateIconsCommand extends Command
 {
     // Maps FA icons to their Symfony UX equivalent
-    private const FA_TO_UX_MAPPINGS = [
+    private const array FA_TO_UX_MAPPINGS = [
         // Regular icons that need special mapping
         'fa-check-square' => 'square-check',
         'fa-users-cog' => 'users-gear',
@@ -37,9 +39,9 @@ class ReplaceTemplateIconsCommand extends Command
     ];
     
     public function __construct(
-        #[\Symfony\Component\DependencyInjection\Attribute\Autowire('%kernel.project_dir%')]
-        private string $projectDir,
-        private ?Command $iconSearchCommand = null
+        #[Autowire('%kernel.project_dir%')]
+        private readonly string $projectDir,
+        private readonly ?Command $iconSearchCommand = null
     ) {
         parent::__construct();
     }
@@ -104,7 +106,7 @@ class ReplaceTemplateIconsCommand extends Command
             $fileModified = false;
             
             // Process standard icon tags
-            list($newContent, $fileNameDisplayed, $fileModified) = $this->processStandardIcons(
+            [$newContent, $fileNameDisplayed, $fileModified] = $this->processStandardIcons(
                 $content, 
                 $io, 
                 $writeMode, 
@@ -151,7 +153,7 @@ class ReplaceTemplateIconsCommand extends Command
         
         // Get application from the current command
         $application = $this->getApplication();
-        if (!$application) {
+        if (!$application instanceof Application) {
             $io->warning('Could not access application to verify icons');
             return false;
         }
@@ -172,8 +174,8 @@ class ReplaceTemplateIconsCommand extends Command
             $result = $output->fetch();
             
             // Parse the output to check if the icon exists
-            $exists = strpos($result, 'Found 0 icons') === false && 
-                     strpos($result, $iconName) !== false;
+            $exists = !str_contains($result, 'Found 0 icons') && 
+                     str_contains($result, $iconName);
             
             if ($exists) {
                 $io->text(sprintf(' - <info>Verified</info>: %s ✅', $fullName));
@@ -222,9 +224,9 @@ class ReplaceTemplateIconsCommand extends Command
                 
                 // Determine the proper icon set (solid vs regular)
                 $iconSet = 'fa6-solid';
-                if (strpos($iconClass, 'far ') !== false || 
-                    strpos($iconClass, 'fa-regular') !== false ||
-                    strpos($iconClass, 'fa-regular:') !== false) {
+                if (str_contains($iconClass, 'far ') || 
+                    str_contains($iconClass, 'fa-regular') ||
+                    str_contains($iconClass, 'fa-regular:')) {
                     $iconSet = 'fa6-regular';
                 }
                 

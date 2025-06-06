@@ -72,21 +72,21 @@
             {% if event.ticketPresaleEnabled and event.url and not event.isInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="fontisto:ticket-alt" />
+                    <twig:ux:icon name="ticket" />
                     {{ 'ticket.to_ticket_shop'|trans }}
                 </a>
             {% endif %}
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user and not event.isInPast %}
                 <a class="btn btn-primary"
                     href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="fa-solid:tasks" />
+                    <twig:ux:icon name="tasks" />
                     Nakkikone
                 </a>
             {% endif %}
             {% if not event.isInPast and event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
                 <a class="btn btn-primary"
                    href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="mdi:register" />
+                    <twig:ux:icon name="register" />
                     {{ 'Artist signup'|trans }}
                 </a>
             {% endif %}
@@ -161,7 +161,7 @@
     {%- if event.published == false -%}
         --
         <span class="only_for_members">
-            <twig:ux:icon name="fa6-solid:eye-slash" />{{ 'event.only_for_members'|trans }}
+            <twig:ux:icon name="hidden" />{{ 'event.only_for_members'|trans }}
         </span>
     {%- endif %}
 {%- endblock %}
@@ -269,33 +269,33 @@
         {% endif %}
         {% if event.webMeetingUrl %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.web'|trans }}">
-                <twig:ux:icon name="fa6-solid:globe" />
+                <twig:ux:icon name="globe" />
             </span>
         {% endif %}
         {% if event.location %}
             {% if event.type == 'clubroom' or event.location.id == 1 %}
                 <span class="shadow badge bg-secondary" title="{{ 'event.badge.clubroom'|trans }}">
-                    <twig:ux:icon name="fa6-solid:house" />
+                    <twig:ux:icon name="house" />
                 </span>
             {% else %}
                 <span class="shadow badge bg-secondary" title="{{ event.location.name }}" >
-                    <twig:ux:icon name="fa6-solid:location-dot" />
+                    <twig:ux:icon name="location-dot" />
                 </span>
             {% endif %}
         {% endif %}
         {% if event.type == 'meeting' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.meeting'|trans }}">
-                <twig:ux:icon name="fa6-solid:comments" />
+                <twig:ux:icon name="comments" />
             </span>
         {% endif %}
         {% if event.type == 'clubroom' or event.type == 'event' or event.type == 'stream' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.music'|trans }}">
-                <twig:ux:icon name="fa6-solid:music" />
+                <twig:ux:icon name="music" />
             </span>
         {% endif %}
         {% if event.type == 'announcement' %}
             <span class="shadow badge bg-secondary" title="{{ 'event.badge.announcement'|trans }}">
-                <twig:ux:icon name="fa6-solid:bullhorn" />
+                <twig:ux:icon name="bullhorn" />
             </span>
         {% endif %}
     </div>
@@ -394,7 +394,7 @@
     {% if event.attachment %}
         <div class="mb-2">
             <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
-                <twig:ux:icon name="fa6-solid:link" />{{ event.attachment.name }}
+                <twig:ux:icon name="link" />{{ event.attachment.name }}
             </a>
         </div>
         <hr>
@@ -406,7 +406,7 @@
                 {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
                 <a class="btn btn-outline-info"
                    href="https://reittiopas.hsl.fi/etusivu/-/{{ event.location.streetAddress|url_encode }}{{ gps|url_encode }}">
-                    <twig:ux:icon name="fa6-solid:location-dot" />
+                    <twig:ux:icon name="location-dot" />
                     {{ 'map'|trans }}
                 </a>
             </span>
@@ -426,7 +426,7 @@
         {% if event.epics %}
             <span>
                 <a class="btn btn-outline-info" href="{{ event.epics }}">
-                    <twig:ux:icon name="entypo:images" height="1em" width="1em" />
+                    <twig:ux:icon name="images" height="1em" width="1em" />
                     Epics
                 </a>
             </span>
@@ -435,14 +435,14 @@
             {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
                 <span>
                     <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
-                        <twig:ux:icon name="fa6-solid:laptop" />
+                        <twig:ux:icon name="laptop" />
                         {{ 'Join remotely'|trans }}
                     </a>
                 </span>
             {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
                 <span>
                     <a class="btn btn-outline-info">
-                        <twig:ux:icon name="fa6-solid:laptop" />
+                        <twig:ux:icon name="laptop" />
                         {{ 'Join remotely'|trans }}
                     </a>
                 </span>
@@ -452,12 +452,12 @@
             <span>
                 {% if app.request.locale == 'fi' %}
                     <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
-                        <twig:ux:icon name="fa6-solid:hand-holding-heart" />
+                        <twig:ux:icon name="hand-holding-heart" />
                         Turvallisemman tilan periaatteet
                     </a>
                 {% else %}
                     <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
-                        <twig:ux:icon name="fa6-solid:hand-holding-heart" />
+                        <twig:ux:icon name="hand-holding-heart" />
                         Safer space guidelines
                     </a>
                 {% endif %}
@@ -467,7 +467,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="fa-solid:tasks" height="1em" width="1em"/>
+                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
                     {{ 'Artist signup'|trans }}
                 </a>
             </span>
@@ -476,7 +476,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="fa-solid:tasks" height="1em" width="1em"/>
+                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
                     Nakkikone
                 </a>
             </span>
@@ -484,7 +484,7 @@
         {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
             <span>
                 <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
-                    <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
+                    <twig:ux:icon name="forum" height="1em" width="1em"/>
                     Forums
                 </a>
             </span>
@@ -492,7 +492,7 @@
         {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
             <span>
                 <a class="btn btn-outline-info" href="{{ event.wikiPage }}">
-                    <twig:ux:icon name="fa:wikipedia-w" height="1em" width="1em"/>
+                    <twig:ux:icon name="wiki" height="1em" width="1em"/>
                     Wiki
                 </a>
             </span>
@@ -506,7 +506,7 @@
             <span>
                 <a class="btn btn-outline-info"
                    href="{{ url }}">
-                    <twig:ux:icon name="fa-solid:tasks" height="1em" width="1em"/>
+                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
                     {{ 'button.old_announcements'|trans }}
                 </a>
             </span>
@@ -600,7 +600,7 @@
                                         <td class="indicator"
                                             {%- if is_current -%}
                                                 {{ stimulus_target('time-indicator', 'indicator') }}>
-                                                {{- 'timetable.now'|trans }} <twig:ux:icon name="icomoon-free:arrow-right" height="1em" />
+                                                {{- 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
                                             {%- else -%}
                                             >
                                             {%- endif -%}
@@ -673,7 +673,7 @@
                         <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {title: name, anchor: anchor}) }}>
                             {{ name }}
                             <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }}>
-                                <twig:ux:icon name="fa6-solid:share" />
+                                <twig:ux:icon name="share" />
                             </button>
                         </h3>
                     </div>
@@ -833,8 +833,8 @@
         <hr>
         {%- for link in artist.links -%}
             <span>
-                <a 
-                    {%- if link.open_in_new_window|default(false) %}target="_blank"{% endif -%}
+                <a
+                    {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
                     href="{{- link.url -}}"
                     >
                     <twig:ux:icon name="{{ link.icon }}" class="me-1" />

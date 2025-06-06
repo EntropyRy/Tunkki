@@ -86,11 +86,7 @@ return [
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.0.7',
-    ],
-    '@fortawesome/fontawesome-free/css/all.css' => [
-        'version' => '6.7.2',
-        'type' => 'css',
+        'version' => '5.0.9',
     ],
     'moment/min/moment-with-locales.min.js' => [
         'version' => '2.30.1',

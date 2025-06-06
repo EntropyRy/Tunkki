@@ -35,18 +35,18 @@
 {% block prev_next_navigation %}
     {% if prev %}
         <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
-           class="btn btn-secondary"><twig:ux:icon name="fa6-solid:arrow-left" /> {{ prev.name(app.request.locale) }}</a>
+           class="btn btn-secondary"><twig:ux:icon name="arrow-left" /> {{ prev.name(app.request.locale) }}</a>
     {% else %}
         <button class="btn btn-secondary disabled">
-            <twig:ux:icon name="fa6-solid:ban" />
+            <twig:ux:icon name="ban" />
         </button>
     {% endif %}
     {% if next %}
         <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: next.slug(app.request.locale)}) }}"
-           class="btn btn-secondary float-end">{{ next.name(app.request.locale) }} <twig:ux:icon name="fa6-solid:arrow-right" /></a>
+           class="btn btn-secondary float-end">{{ next.name(app.request.locale) }} <twig:ux:icon name="arrow-right" /></a>
     {% else %}
         <button class="btn btn-secondary disabled float-end">
-            <twig:ux:icon name="fa6-solid:ban" />
+            <twig:ux:icon name="ban" />
         </button>
     {% endif %}
 {% endblock %}

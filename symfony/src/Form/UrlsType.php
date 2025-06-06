@@ -21,10 +21,11 @@ final class UrlsType extends AbstractType
             ])
             ->add('icon', TextType::class, [
                 'label' => 'url.form.icon',
-                'attr' => ['placeholder' => 'fab fa-soundcloud', 'data-icopy-target' => 'input'],
-                'row_attr' => ['data-controller' => 'icopy'],
                 'help_html' => true,
-                'help' => 'Click: <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fab fa-soundcloud" href="#"><i class="fab fa-soundcloud"></i></a> | <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fab fa-facebook" href="#"><i class="fab fa-facebook"></i></a> | <a data-action="icopy#copyClass:prevent" data-icopy-iclass-param="fas fa-music" href="#"><i class="fas fa-music"></i></a> | Check the <a target=_blank href="https://fontawesome.com/icons">icon list</a>',
+                'help' => 'Most brands have icons corresponding their name. ex. Soundcloud -> soundcloud.<br>
+                    Check: <a target=_blank href="https://github.com/EntropyRy/Tunkki/blob/main/symfony/config/packages/ux_icons.yaml#L14">preconfigured icon list</a><br>
+                    And: <a target=_blank href="https://ux.symfony.com/icons">All icons</a>
+                ',
             ])
             ->add('title', TextType::class, [
                 'label' => 'url.form.title',

@@ -1,6 +1,6 @@
 ux_icons:
   default_icon_attributes:
-    height: 1.2em
+    height: 1em
     width: auto
     aria-hidden: true
 
@@ -37,6 +37,7 @@ ux_icons:
     mixcloud: simple-icons:mixcloud
     linktree: simple-icons:linktree
     ra: brands:ra
+    mattermost: cib:mattermost
 
     # Common UI icons (FontAwesome solid)
     user: fa6-solid:user
@@ -47,6 +48,7 @@ ux_icons:
     link: fa6-solid:link
     email: fa6-solid:envelope
     envelope: fa6-solid:envelope
+    register: mdi:register
     hand-holding-heart: fa6-solid:hand-holding-heart
     wiki: fa:wikipedia-w
     t-shirt: fa6-solid:shirt
@@ -89,6 +91,7 @@ ux_icons:
     folder: fa6-solid:folder
     file: fa6-solid:file
     image: fa6-solid:image
+    images: entypo:images
     video: fa6-solid:video
     audio: fa6-solid:music
     document: fa6-solid:file-text
@@ -107,6 +110,7 @@ ux_icons:
     bus: fa6-solid:bus
     smiley: fa6-regular:face-smile
     cubes: fa6-solid:cubes
+    ban: fa6-solid:ban
 
     # Navigation and layout
     menu: fa6-solid:bars
@@ -150,8 +154,10 @@ ux_icons:
     notification: fa6-solid:bell
     bell: fa6-solid:bell
     mail: fa6-solid:envelope
+    laptop: fa6-solid:laptop
+    forum: fluent-mdl2:forum
 
-    # Special mappings from the command
+    # Special mappings
     medkit: fa6-solid:kit-medical
     kit-medical: fa6-solid:kit-medical
     history: fa6-solid:clock-rotate-left
@@ -161,6 +167,7 @@ ux_icons:
     fish: fa6-solid:fish
     browser: fa6-solid:link
     broadcast-tower: fa6-solid:tower-broadcast
+    globe: fa6-solid:globe
 
     # Legacy FontAwesome mappings
     pencil-square-o: fa6-solid:pen-to-square

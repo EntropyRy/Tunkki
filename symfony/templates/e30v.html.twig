@@ -170,7 +170,7 @@
                         <a class="btn btn-outline-info"
                            {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %}
                            href="{{ url.url }}">
-                            {% set icon_class = 'fas fa-external-link-alt' %}
+                            {% set icon_class = 'fas fa-link' %}
                             {% if url.icon == 'link' %}
                                 {% set icon_class = 'fas fa-link' %}
                             {% elseif url.icon == 'instagram' %}

@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use Symfony\Component\Console\Application;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +22,7 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * FontAwesome icon name mappings to FA6 and simple-icons equivalents
      */
-    private const ICON_MAPPINGS = [
+    private const array ICON_MAPPINGS = [
         // FontAwesome 4/5 to FA6 name changes
         'medkit' => 'kit-medical',
         'pencil-square-o' => 'pen-to-square',
@@ -42,7 +43,7 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * FontAwesome brand icons to simple-icons mappings
      */
-    private const BRAND_ICON_MAPPINGS = [
+    private const array BRAND_ICON_MAPPINGS = [
         'facebook' => 'facebook',
         'facebook-f' => 'facebook',
         'twitter' => 'twitter',
@@ -71,7 +72,7 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * Special mappings for icons that need to be redirected to a different icon set
      */
-    private const SPECIAL_ICON_MAPPINGS = [
+    private const array SPECIAL_ICON_MAPPINGS = [
         'angellist' => 'logos:angellist',
         'fish' => 'fa6-solid:fish',
         'browser' => 'fa6-solid:link',
@@ -81,12 +82,9 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * Mapping from full icon paths to simple aliases (reverse of ux_icons.yaml aliases)
      */
-    private const ICON_TO_ALIAS_MAPPINGS = [
-        // Brand icons
-        'simple-icons:facebook' => 'facebook',
+    private const array ICON_TO_ALIAS_MAPPINGS = [
         'simple-icons:twitter' => 'twitter',
         'simple-icons:youtube' => 'youtube',
-        'simple-icons:instagram' => 'instagram',
         'simple-icons:spotify' => 'spotify',
         'simple-icons:soundcloud' => 'soundcloud',
         'simple-icons:bandcamp' => 'bandcamp',
@@ -96,7 +94,6 @@ class ConvertDatabaseIconsCommand extends Command
         'simple-icons:discord' => 'discord',
         'simple-icons:tiktok' => 'tiktok',
         'simple-icons:twitch' => 'twitch',
-        'simple-icons:telegram' => 'telegram',
         'simple-icons:whatsapp' => 'whatsapp',
         'simple-icons:mastodon' => 'mastodon',
         'simple-icons:pinterest' => 'pinterest',
@@ -110,7 +107,6 @@ class ConvertDatabaseIconsCommand extends Command
         'fa6-solid:users' => 'users',
         'fa6-solid:house' => 'home',
         'fa6-solid:music' => 'music',
-        'fa6-solid:link' => 'link',
         'fa6-solid:envelope' => 'email',
         'fa6-solid:phone' => 'phone',
         'fa6-solid:calendar' => 'calendar',
@@ -183,7 +179,6 @@ class ConvertDatabaseIconsCommand extends Command
         'fa6-solid:fish' => 'fish',
         'fa6-solid:pen-to-square' => 'pencil-square-o',
         'fa6-solid:circle-arrow-right' => 'arrow-circle-right',
-        'fa6-solid:right-to-bracket' => 'sign-in-alt',
         'fa6-solid:right-from-bracket' => 'sign-out-alt',
         'fa6-solid:square-check' => 'check-square',
         'fa6-solid:users-gear' => 'users-cog',
@@ -222,7 +217,7 @@ class ConvertDatabaseIconsCommand extends Command
     // Cache for verified icons
     private array $verifiedIcons = [];
 
-    public function __construct(private Connection $connection)
+    public function __construct(private readonly Connection $connection)
     {
         parent::__construct();
     }
@@ -279,7 +274,7 @@ class ConvertDatabaseIconsCommand extends Command
         
         $blocks = $blockQueryResult->fetchAllAssociative();
         
-        if (empty($blocks)) {
+        if ($blocks === []) {
             $io->info('No blocks found with icon data.');
             return;
         }
@@ -293,7 +288,7 @@ class ConvertDatabaseIconsCommand extends Command
             $blockType = $block['type'] ?? 'Unknown';
             $io->text(sprintf('Processing block #%d (Type: %s)', $block['id'], $blockType));
             
-            $settings = json_decode($block['settings'], true);
+            $settings = json_decode((string) $block['settings'], true);
             $updated = false;
             
             if (isset($settings['urls']) && is_array($settings['urls'])) {
@@ -380,7 +375,7 @@ class ConvertDatabaseIconsCommand extends Command
             
             $artists = $artistQuery->fetchAllAssociative();
             
-            if (empty($artists)) {
+            if ($artists === []) {
                 $io->info('No artists found with icon data.');
                 return;
             }
@@ -391,7 +386,7 @@ class ConvertDatabaseIconsCommand extends Command
             $artistsUpdated = 0;
             
             foreach ($artists as $artist) {
-                $links = json_decode($artist['links'], true);
+                $links = json_decode((string) $artist['links'], true);
                 $updated = false;
                 
                 if (is_array($links)) {
@@ -481,7 +476,7 @@ class ConvertDatabaseIconsCommand extends Command
             
             $events = $eventQuery->fetchAllAssociative();
             
-            if (empty($events)) {
+            if ($events === []) {
                 $io->info('No events found with icon data.');
                 return;
             }
@@ -492,7 +487,7 @@ class ConvertDatabaseIconsCommand extends Command
             $eventsUpdated = 0;
             
             foreach ($events as $event) {
-                $links = json_decode($event['links'], true);
+                $links = json_decode((string) $event['links'], true);
                 $updated = false;
                 
                 if (is_array($links)) {
@@ -648,11 +643,11 @@ class ConvertDatabaseIconsCommand extends Command
             return false;
         }
         
-        list($iconSet, $iconName) = explode(':', $iconToCheck);
+        [$iconSet, $iconName] = explode(':', $iconToCheck);
         
         // Get application from the current command
         $application = $this->getApplication();
-        if (!$application) {
+        if (!$application instanceof Application) {
             return true; // Default to true if we can't check
         }
         
@@ -675,8 +670,8 @@ class ConvertDatabaseIconsCommand extends Command
             $result = $output->fetch();
             
             // Parse output to check if icon exists
-            $exists = strpos($result, 'Found 0 icons') === false && 
-                    strpos($result, $iconName) !== false;
+            $exists = !str_contains($result, 'Found 0 icons') && 
+                    str_contains($result, $iconName);
             
             // Cache the result for both the original icon and the checked icon
             $this->verifiedIcons[$iconToCheck] = $exists;
@@ -687,7 +682,7 @@ class ConvertDatabaseIconsCommand extends Command
             }
             
             return $exists;
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // If there's an error, assume the icon exists (failsafe)
             return true;
         }
@@ -702,13 +697,8 @@ class ConvertDatabaseIconsCommand extends Command
     {
         $fullIconPath = $this->convertToFullIconPath($fontAwesomeClass);
         
-        // Check if we have an alias for this full icon path
-        if (isset(self::ICON_TO_ALIAS_MAPPINGS[$fullIconPath])) {
-            return self::ICON_TO_ALIAS_MAPPINGS[$fullIconPath];
-        }
-        
         // If no alias found, return the full path
-        return $fullIconPath;
+        return self::ICON_TO_ALIAS_MAPPINGS[$fullIconPath] ?? $fullIconPath;
     }
     
     /**
@@ -731,16 +721,11 @@ class ConvertDatabaseIconsCommand extends Command
     private function isIconAlreadyConverted(string $icon): bool
     {
         // If it contains a colon, it's a full icon path (already converted)
-        if (strpos($icon, ':') !== false) {
+        if (str_contains($icon, ':')) {
             return true;
         }
-        
         // If it's one of our known aliases, it's already converted
-        if (in_array($icon, self::ICON_TO_ALIAS_MAPPINGS)) {
-            return true;
-        }
-        
-        return false;
+        return in_array($icon, self::ICON_TO_ALIAS_MAPPINGS);
     }
     
     /**
@@ -772,12 +757,8 @@ class ConvertDatabaseIconsCommand extends Command
                 }
                 return 'simple-icons:' . $iconName;
             } else {
-                // Check for special non-brand mappings
-                if (isset(self::SPECIAL_ICON_MAPPINGS[$iconName])) {
-                    return self::SPECIAL_ICON_MAPPINGS[$iconName];
-                }
                 // Default to solid for all other prefixes (fa, fas, etc)
-                return 'fa6-solid:' . $iconName;
+                return self::SPECIAL_ICON_MAPPINGS[$iconName] ?? 'fa6-solid:' . $iconName;
             }
         }
         
@@ -803,11 +784,7 @@ class ConvertDatabaseIconsCommand extends Command
                 }
                 return 'simple-icons:' . $iconName;
             }
-            // Check for special non-brand mappings
-            if (isset(self::SPECIAL_ICON_MAPPINGS[$iconName])) {
-                return self::SPECIAL_ICON_MAPPINGS[$iconName];
-            }
-            return 'fa6-' . $type . ':' . $iconName;
+            return self::SPECIAL_ICON_MAPPINGS[$iconName] ?? 'fa6-' . $type . ':' . $iconName;
         }
         
         // Handle just the icon name without prefix (fa-xxx)
