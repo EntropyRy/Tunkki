@@ -1,7 +1,7 @@
 ux_icons:
   default_icon_attributes:
     height: 1em
-    width: auto
+    width: 1em
     aria-hidden: true
 
   # Define icon aliases for simplified database storage

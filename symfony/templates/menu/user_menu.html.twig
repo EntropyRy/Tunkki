@@ -46,21 +46,21 @@
                             <a class="nav-link"
                                target="_blank"
                                href="https://keskustelu.entropy.fi/ucp.php?mode=login&login=external&oauth_service=entropy">
-                                <twig:ux:icon name="link-out" height="1em" width="1em" /> Forum</a>
+                                <twig:ux:icon name="link-out" /> Forum</a>
                         </li>
                     {%- if app.user.member.isActiveMember -%}
                         <li class="nav-item">
                             <a class="nav-link"
                                target="_blank"
                                href="https://wiki.entropy.fi/index.php?title=Special:OAuth2Client/redirect">
-                                <twig:ux:icon name="link-out" height="1em" width="1em" /> Wiki</a>
+                                <twig:ux:icon name="link-out" /> Wiki</a>
                         </li>
                     {%- endif -%}
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" data-turbo="false" href="{{- path('app_logout') -}}">
-                            <twig:ux:icon name="login" height="1em" width="1em" /> {{ 'profile.logout'|trans|capitalize -}}</a>
+                            <twig:ux:icon name="login" /> {{ 'profile.logout'|trans|capitalize -}}</a>
                     </li>
                 </ul>
             </div>
