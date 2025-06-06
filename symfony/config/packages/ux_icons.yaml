@@ -4,12 +4,6 @@ ux_icons:
     width: auto
     aria-hidden: true
 
-  # Define icon sets (already registered by the package)
-  icon_sets:
-    # These are pre-configured when you install the package
-    # fa6-solid: ~
-    # fa6-regular: ~
-
   # Define icon aliases for simplified database storage
   aliases:
     # Brand icons (social media, platforms, etc.)
@@ -148,7 +142,6 @@ ux_icons:
     analytics: fa6-solid:chart-bar
     report: fa6-solid:file-chart-line
 
-    # Communication
     message: fa6-solid:message
     chat: fa6-solid:comment
     comment: fa6-solid:comment
@@ -156,9 +149,8 @@ ux_icons:
     bell: fa6-solid:bell
     mail: fa6-solid:envelope
     laptop: fa6-solid:laptop
+    laptop-code: fa6-solid:laptop-code
     forum: fluent-mdl2:forum
-
-    # Special mappings
     medkit: fa6-solid:kit-medical
     kit-medical: fa6-solid:kit-medical
     history: fa6-solid:clock-rotate-left
