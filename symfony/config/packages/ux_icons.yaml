@@ -39,7 +39,7 @@ ux_icons:
     ra: brands:ra
     mattermost: cib:mattermost
 
-    # Common UI icons (FontAwesome solid)
+    # Common UI icons
     user: fa6-solid:user
     users: fa6-solid:users
     home: fa6-solid:house

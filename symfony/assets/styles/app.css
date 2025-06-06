@@ -276,14 +276,6 @@ nav.navbar-light .nav-item a.nav-link {
   }
 }
 
-.fa-li {
-  svg {
-    width: 1.2em;
-    height: 1.2em;
-    vertical-align: -0.2em;
-  }
-}
-
 a {
   svg {
     height: auto;

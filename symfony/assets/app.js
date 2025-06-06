@@ -19,5 +19,6 @@ import "./styles/components/dark.css";
 import "./styles/components/product.css";
 import "./styles/components/tile.css";
 import "./styles/components/qr.css";
-import "./styles/components/footer.css";
 import "./styles/components/polaroid.css";
+import "./styles/components/icon-list.css";
+import "./styles/components/footer.css";
