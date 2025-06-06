@@ -75,13 +75,13 @@ class ConvertDatabaseIconsCommand extends Command
     /**
      * Special mappings for icons that need to be redirected to a different icon set
      */
-    private const array SPECIAL_ICON_MAPPINGS = [
+    private const SPECIAL_ICON_MAPPINGS = [
         'angellist' => 'logos:angellist',
         'fish' => 'fa6-solid:fish',
         'browser' => 'fa6-solid:link',
         'broadcast-tower' => 'fa6-solid:tower-broadcast',
         'wave-square' => 'fa6-solid:wave-square',
-        'wand-magic-sparkles' => 'fa6-solid:wand-magic-sparkles',
+        'wand-magic-sparkles' => 'fa6-solid:magic',
         'poo' => 'fa6-solid:poo',
         'laptop' => 'fa6-solid:laptop',
         'laptop-code' => 'fa6-solid:laptop-code',
@@ -97,6 +97,7 @@ class ConvertDatabaseIconsCommand extends Command
         'cube' => 'fa6-solid:cube',
         'web' => 'fa6-solid:globe',
         'house' => 'fa6-solid:house',
+        'square-instagram' => 'simple-icons:instagram',
     ];
     
     /**
@@ -177,7 +178,7 @@ class ConvertDatabaseIconsCommand extends Command
         'fa6-solid:play' => 'play',
         'fa6-solid:pause' => 'pause',
         'fa6-solid:stop' => 'stop',
-        'fa6-solid:record-vinyl' => 'record',
+        'fa6-solid:record-vinyl' => 'vinyl',
         'fa6-solid:volume-high' => 'volume',
         'fa6-solid:volume-xmark' => 'mute',
         'fa6-solid:lock' => 'lock',
@@ -236,7 +237,7 @@ class ConvertDatabaseIconsCommand extends Command
         'fa6-solid:shirt' => 't-shirt',
         'simple-icons:linktree' => 'linktree',
         'fa6-solid:wave-square' => 'wave-square',
-        'fa6-solid:wand-magic-sparkles' => 'wand-magic-sparkles',
+        'fa6-solid:wand-magic-sparkles' => 'magic',
         'fa6-solid:poo' => 'poo',
         'fa6-solid:laptop' => 'laptop',
         'fa6-solid:laptop-code' => 'laptop-code',
@@ -255,6 +256,7 @@ class ConvertDatabaseIconsCommand extends Command
         'simple-icons:cube' => 'cube',
         'simple-icons:web' => 'web',
         'simple-icons:house' => 'house',
+        'fa6-solid:square-instagram' => 'instagram',
     ];
     
     // Cache for verified icons
