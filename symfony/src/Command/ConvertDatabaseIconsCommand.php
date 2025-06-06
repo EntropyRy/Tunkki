@@ -67,6 +67,9 @@ class ConvertDatabaseIconsCommand extends Command
         'behance' => 'behance',
         'angellist' => 'angellist',
         'mixcloud' => 'mixcloud',
+        'tree' => 'linktree',
+        'gitlab' => 'gitlab',
+        'vimeo' => 'vimeo',
     ];
     
     /**
@@ -77,6 +80,23 @@ class ConvertDatabaseIconsCommand extends Command
         'fish' => 'fa6-solid:fish',
         'browser' => 'fa6-solid:link',
         'broadcast-tower' => 'fa6-solid:tower-broadcast',
+        'wave-square' => 'fa6-solid:wave-square',
+        'wand-magic-sparkles' => 'fa6-solid:wand-magic-sparkles',
+        'poo' => 'fa6-solid:poo',
+        'laptop' => 'fa6-solid:laptop',
+        'laptop-code' => 'fa6-solid:laptop-code',
+        'camera' => 'fa6-solid:camera',
+        'film' => 'fa6-solid:film',
+        'camera-retro' => 'fa6-solid:camera-retro',
+        'radio' => 'fa6-solid:radio',
+        'paintbrush' => 'fa6-solid:paintbrush',
+        'globe' => 'fa6-solid:globe',
+        'kiwi-bird' => 'fa6-solid:kiwi-bird',
+        'duotone' => 'fa6-solid:duotone',
+        'turntable' => 'fa6-solid:duotone',
+        'cube' => 'fa6-solid:cube',
+        'web' => 'fa6-solid:globe',
+        'house' => 'fa6-solid:house',
     ];
     
     /**
@@ -101,6 +121,9 @@ class ConvertDatabaseIconsCommand extends Command
         'simple-icons:behance' => 'behance',
         'logos:angellist' => 'angellist',
         'simple-icons:mixcloud' => 'mixcloud',
+        'simple-icons:linktree' => 'linktree',
+        'simple-icons:gitlab' => 'gitlab',
+        'simple-icons:vimeo' => 'vimeo',
         
         // Common UI icons
         'fa6-solid:user' => 'user',
@@ -212,6 +235,26 @@ class ConvertDatabaseIconsCommand extends Command
         'fa:wikipedia-w' => 'wiki',
         'fa6-solid:shirt' => 't-shirt',
         'simple-icons:linktree' => 'linktree',
+        'fa6-solid:wave-square' => 'wave-square',
+        'fa6-solid:wand-magic-sparkles' => 'wand-magic-sparkles',
+        'fa6-solid:poo' => 'poo',
+        'fa6-solid:laptop' => 'laptop',
+        'fa6-solid:laptop-code' => 'laptop-code',
+        'fa6-solid:camera' => 'camera',
+        'fa6-solid:film' => 'film',
+        'fa6-solid:camera-retro' => 'camera-retro',
+        'fa6-regular:location-dot' => 'location-dot',
+        'fa6-regular:message' => 'message',
+        'fa6-solid:radio' => 'radio',
+        'fa6-solid:paintbrush' => 'paintbrush',
+        'fa6-solid:globe' => 'globe',
+        'fa6-solid:kiwi-bird' => 'kiwi-bird',
+        'fa6-solid:duotone' => 'duotone',
+        'fa6-solid:login' => 'login',
+        'fa6-solid:cube' => 'cube',
+        'simple-icons:cube' => 'cube',
+        'simple-icons:web' => 'web',
+        'simple-icons:house' => 'house',
     ];
     
     // Cache for verified icons
@@ -695,10 +738,27 @@ class ConvertDatabaseIconsCommand extends Command
      */
     private function convertFontAwesomeToSymfonyUx(string $fontAwesomeClass): string
     {
-        $fullIconPath = $this->convertToFullIconPath($fontAwesomeClass);
+        // First, strip any HTML tags and extract just the class names
+        $cleanedClass = $this->stripHtmlAndExtractClasses($fontAwesomeClass);
+        
+        $fullIconPath = $this->convertToFullIconPath($cleanedClass);
         
         // If no alias found, return the full path
         return self::ICON_TO_ALIAS_MAPPINGS[$fullIconPath] ?? $fullIconPath;
+    }
+    
+    /**
+     * Strip HTML tags and extract FontAwesome class names
+     */
+    private function stripHtmlAndExtractClasses(string $input): string
+    {
+        // If input contains HTML tags, extract the class attribute
+        if (preg_match('/<i[^>]*class=["\']([^"\']*)["\'][^>]*>/i', $input, $matches)) {
+            return $matches[1];
+        }
+        
+        // If no HTML tags, return as is
+        return $input;
     }
     
     /**
@@ -755,7 +815,9 @@ class ConvertDatabaseIconsCommand extends Command
                 if (isset(self::BRAND_ICON_MAPPINGS[$iconName])) {
                     return 'simple-icons:' . self::BRAND_ICON_MAPPINGS[$iconName];
                 }
-                return 'simple-icons:' . $iconName;
+                // Fallback: if it's not a known brand icon, treat as solid icon
+                // This handles incorrectly prefixed icons like "fab fa-tree"
+                return 'fa6-solid:' . $iconName;
             } else {
                 // Default to solid for all other prefixes (fa, fas, etc)
                 return self::SPECIAL_ICON_MAPPINGS[$iconName] ?? 'fa6-solid:' . $iconName;
@@ -782,7 +844,8 @@ class ConvertDatabaseIconsCommand extends Command
                 if (isset(self::BRAND_ICON_MAPPINGS[$iconName])) {
                     return 'simple-icons:' . self::BRAND_ICON_MAPPINGS[$iconName];
                 }
-                return 'simple-icons:' . $iconName;
+                // Fallback: if it's not a known brand icon, treat as solid icon
+                return 'fa6-solid:' . $iconName;
             }
             return self::SPECIAL_ICON_MAPPINGS[$iconName] ?? 'fa6-' . $type . ':' . $iconName;
         }
@@ -801,7 +864,7 @@ class ConvertDatabaseIconsCommand extends Command
                 return self::SPECIAL_ICON_MAPPINGS[$iconName];
             }
             
-            // Check for brand names in bare icons
+            // Check for brand names in bare icons only if it's a known brand
             if (isset(self::BRAND_ICON_MAPPINGS[$iconName])) {
                 return 'simple-icons:' . self::BRAND_ICON_MAPPINGS[$iconName];
             }
