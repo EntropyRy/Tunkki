@@ -23,7 +23,7 @@
                     {{ block('content_artists', input) ?? '' }}
                 </div>
                 {{ block('bios') }}
-                {% if block('vj_bios')|length > 0 %}
+                {% if event.ArtistInfosByType('VJ')|length > 0 %}
                     {% if event.template == 'event.html.twig' %}
                         <h1>
                             <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
@@ -32,7 +32,7 @@
                     {% endif %}
                     {{ block('vj_bios') }}
                 {% endif %}
-                {% if block('art_bios')|length > 0 %}
+                {% if event.ArtistInfosByType('ART')|length > 0 %}
                     {% if event.template == 'event.html.twig' %}
                         <h1>
                             <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
