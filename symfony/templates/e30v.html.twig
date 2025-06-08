@@ -484,26 +484,26 @@
             {%- for link in artist.links -%}
                 <span>
                     <a
-                        {%- if link.open_in_new_window|default(false) %}target="_blank"{% endif -%}
-                        href="{{- link.url -}}"
+                        {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
+                        href="{{ link.url -}}"
                         >
-                        {% set icon_class = 'fas fa-external-link-alt' %}
+                        {% set icon_class = 'fas fa-link' %}
                         {% if link.icon == 'link' %}
                             {% set icon_class = 'fas fa-link' %}
                         {% elseif link.icon == 'instagram' %}
                             {% set icon_class = 'fab fa-instagram' %}
+                        {% elseif link.icon == 'soundcloud' %}
+                            {% set icon_class = 'fab fa-soundcloud' %}
+                        {% elseif link.icon == 'bandcamp' %}
+                            {% set icon_class = 'fab fa-bandcamp' %}
+                        {% elseif link.icon == 'youtube' %}
+                            {% set icon_class = 'fab fa-youtube' %}
                         {% elseif link.icon == 'telegram' %}
                             {% set icon_class = 'fab fa-telegram' %}
                         {% elseif link.icon == 'ra' or link.title == 'Resident Advisor' %}
                             {% set icon_class = 'custom-ra' %}
                         {% elseif link.icon == 'facebook' %}
                             {% set icon_class = 'fab fa-facebook' %}
-                        {% elseif link.icon == 'hand-holding-heart' %}
-                            {% set icon_class = 'fas fa-hand-holding-heart' %}
-                        {% elseif link.icon == 'wiki' %}
-                            {% set icon_class = 'fab fa-wikipedia-w' %}
-                        {% elseif link.icon == 't-shirt' %}
-                            {% set icon_class = 'fas fa-shirt' %}
                         {% endif %}
                         {% if icon_class == 'custom-ra' %}
                             <svg class="me-1" width="1em" height="1em" viewBox="0 0 83 40" aria-label="RA logo" style="vertical-align: -0.125em;">
@@ -512,7 +512,7 @@
                         {% else %}
                             <i class="{{ icon_class }} me-1"></i>
                         {% endif %}
-                        {{- link.title -}}
+                        {{ link.title -}}
                     </a>
                 </span>
                 {%- if not loop.last %}|{% endif -%}
