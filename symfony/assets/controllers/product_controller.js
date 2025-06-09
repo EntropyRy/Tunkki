@@ -43,7 +43,11 @@ export default class extends Controller {
   callopse(event) {
     event.preventDefault();
     this.callopseTarget.classList.toggle("callopsed");
-    this.chevronTarget.classList.toggle("fa-chevron-up");
-    this.chevronTarget.classList.toggle("fa-chevron-down");
+    // Toggle the chevron icon
+    // go through children of the chevronTarget and toggle d-none class
+    const icons = this.chevronTarget.children;
+    Array.from(icons).forEach((child) => {
+      child.classList.toggle("d-none");
+    });
   }
 }
