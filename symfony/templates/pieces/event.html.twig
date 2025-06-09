@@ -837,7 +837,7 @@
                     {% if link.open_in_new_window|default(false) %}target="_blank"{% endif %}
                     href="{{- link.url -}}"
                     >
-                    <twig:ux:icon name="{{ link.icon }}" class="me-1" />
+                    <twig:ux:icon name="{{ link.icon|lower }}" class="me-1" />
                     {{- link.title -}}
                 </a>
             </span>
