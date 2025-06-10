@@ -9,7 +9,7 @@
             <span class="d-lg-none">
                 {{ block('mobile_locale') }}
                 {% if not app.user %}
-                    | <a href="{{ path('app_login') }}"><twig:ux:icon name="fa6-solid:right-to-bracket" height="1em" width="1em" /> {{ 'login'|trans|capitalize }}</a>
+                    | <a href="{{ path('app_login') }}"><twig:ux:icon name="login" height="1em" width="1em" /> {{ 'login'|trans|capitalize }}</a>
                 {% endif %}
             </span>
             <button class="navbar-toggler"
