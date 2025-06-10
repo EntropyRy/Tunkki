@@ -29,7 +29,7 @@ file that was distributed with this source code.
         {% if admin.hasAccess('list') %}
             <a href="{{ admin.generateUrl('list', {filter: settings.filters}) }}"
                class="small-box-footer">
-                {{ 'stats_view_more'|trans({}, 'SonataAdminBundle') }} <twig:ux:icon name="fa6-solid:circle-arrow-right" aria-hidden="true" />
+                {{ 'stats_view_more'|trans({}, 'SonataAdminBundle') }} <twig:ux:icon name="arrow-right" aria-hidden="true" />
             </a>
         {% else %}
             <div class="small-box-footer">&nbsp;</div>

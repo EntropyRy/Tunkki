@@ -3,7 +3,7 @@
 {% block block %}
     <h2 class="col-md-12 pb-2 pt-2">
         {{ 'artist.profiles'|trans }}
-        <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <twig:ux:icon name="fa6-solid:plus" /></a>
+        <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <twig:ux:icon name="plus" /></a>
     </h2>
     {% for artist in member.artist %}
         <div class="col-12">

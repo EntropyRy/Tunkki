@@ -7,11 +7,11 @@
         <div class="box-body">
             <ul class="fa-ul">
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:user" /></span>
+                    <span class="fa-li"><twig:ux:icon name="user" /></span>
                     {{ member.name }}, {{ member.username }}
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:envelope" /></span>
+                    <span class="fa-li"><twig:ux:icon name="envelope" /></span>
                     {% if not member.emailVerified %}
                         <p>Your email is not verified, Please send email to hallitus@entropy.fi to clear this up</p>
                         {# <a href="{{ path('profile_resend_verification') }}" class="btn btn-primary btn-sm">{{ 'resend_verification'|trans }}</a> #}
@@ -20,41 +20,41 @@
                     {% endif %}
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:lock" /></span>
+                    <span class="fa-li"><twig:ux:icon name="lock" /></span>
                     ********
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:phone" /></span>
+                    <span class="fa-li"><twig:ux:icon name="phone" /></span>
                     {{ member.phone }}
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:city" /></span>
+                    <span class="fa-li"><twig:ux:icon name="city" /></span>
                     {{ member.CityOfResidence }}
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:language" /></span>
+                    <span class="fa-li"><twig:ux:icon name="language" /></span>
                     {{ member.locale|trans }}&nbsp;
                 </li>
                 <li>
                     <span class="fa-li">
                         {% if member.StudentUnionMember %}
-                            <twig:ux:icon name="fa6-regular:square-check" />
+                            <twig:ux:icon name="check-square" />
                         {% else %}
-                            <twig:ux:icon name="fa6-regular:square" />
+                            <twig:ux:icon name="square" />
                         {% endif %}
                     </span>
                     {{ 'Student union member'|trans }}
                 </li>
                 <li>
-                    <span class="fa-li"><twig:ux:icon name="fa6-solid:palette" /></span>
+                    <span class="fa-li"><twig:ux:icon name="palette" /></span>
                     {{ member.theme|default('bright')|trans }}&nbsp;
                 </li>
                 <li>
                     <span class="fa-li">
                         {% if member.allowInfoMails %}
-                            <twig:ux:icon name="fa6-regular:square-check" />
+                            <twig:ux:icon name="check-square" />
                         {% else %}
-                            <twig:ux:icon name="fa6-regular:square" />
+                            <twig:ux:icon name="square" />
                         {% endif %}
                     </span>
                     {{ 'member.allow_info_mails'|trans }}
@@ -63,9 +63,9 @@
                 <li>
                     <span class="fa-li">
                         {% if member.allowActiveMemberMails %}
-                            <twig:ux:icon name="fa6-regular:square-check" />
+                            <twig:ux:icon name="check-square" />
                         {% else %}
-                            <twig:ux:icon name="fa6-regular:square" />
+                            <twig:ux:icon name="square" />
                         {% endif %}
                     </span>
                     {{ 'member.allow_active_member_mails'|trans }}

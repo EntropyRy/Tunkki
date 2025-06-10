@@ -7,7 +7,7 @@
             </a>
             {% if event is not defined %}
                 <button class="btn position-absolute top-0 end-0" {{ stimulus_controller('theme-switcher') }} {{ stimulus_action('theme-switcher', 'switch') }}>
-                    <twig:ux:icon name="proicons:dark-theme" height="2em"/>
+                    <twig:ux:icon name="dark-theme" height="2em"/>
                 </button>
             {% endif %}
         </div>

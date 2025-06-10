@@ -51,7 +51,7 @@
                         {% if app.user and is_granted('ROLE_SONATA_ADMIN') %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ path('sonata_admin_dashboard') }}">
-                                    <twig:ux:icon name="fa-solid:magic" />
+                                    <twig:ux:icon name="settings" />
                                     {{ 'Dashboard'|trans }}
                                 </a>
                             </li>
@@ -91,7 +91,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link"
                                        href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
-                                        <twig:ux:icon name="fa-solid:magic" />
+                                        <twig:ux:icon name="settings" />
                                         {{ 'header.compose_page'|trans({}, 'SonataPageBundle') }}
                                     </a>
                                 </li>
@@ -123,14 +123,14 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ path('admin_app_event_edit', {id: event.id}) }}">
-                                    <twig:ux:icon name="fa-solid:magic" />
+                                    <twig:ux:icon name="settings" />
                                     {{ 'event.edit'|trans }}
                                 </a>
                             </li>
                             {% if event.published == false %}
                                 <li class="nav-item float-end">
                                     <span class="nav-link text-warning">
-                                        <twig:ux:icon name="fa6-solid:lock" />
+                                        <twig:ux:icon name="lock" />
                                         {{ 'event.not_public'|trans }}
                                     </span>
                                 </li>

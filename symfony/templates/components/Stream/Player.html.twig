@@ -28,23 +28,23 @@
                     <button class="btn btn-primary rounded-circle mx-2"
                             {{ stimulus_target('howler-player', 'playButton') }}
                             {{ stimulus_action('howler-player', 'play') }}>
-                        <twig:ux:icon name="gravity-ui:play-fill" />
+                        <twig:ux:icon name="play" />
                     </button>
 
                     <button class="btn btn-primary rounded-circle mx-2 d-none"
                             {{ stimulus_target('howler-player', 'pauseButton') }}
                             {{ stimulus_action('howler-player', 'pause') }}>
-                        <twig:ux:icon name="gravity-ui:pause-fill" />
+                        <twig:ux:icon name="pause" />
                     </button>
 
                     <button class="btn btn-primary rounded-circle mx-2 d-none"
                             {{ stimulus_target('howler-player', 'loadingButton') }}
                             disabled>
-                        <twig:ux:icon name="line-md:loading-loop" />
+                        <twig:ux:icon name="loading" />
                     </button>
 
                     <div class="volume-control mx-3 d-flex align-items-center">
-                        <twig:ux:icon name="gravity-ui:volume" height="2em"/>
+                        <twig:ux:icon name="volume" height="2em"/>
                         <input type="range" class="form-range ms-2" min="0" max="1" step="0.1" value="1"
                                {{ stimulus_target('howler-player', 'volumeSlider') }}
                                {{ stimulus_action('howler-player', 'updateVolume', 'input') }}>

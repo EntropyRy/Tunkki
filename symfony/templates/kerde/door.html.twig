@@ -22,7 +22,7 @@
             <ul class="fa-ul mt-3">
                 {% for log in logs %}
                     <li>
-                        <span class="fa-li"><twig:ux:icon name="fa6-solid:key" /></span>
+                        <span class="fa-li"><twig:ux:icon name="key" /></span>
                         {{ log.createdAt|date }} {{ log.member }}: {{ log.message|default('profile.door.no_message')|trans }}
                     </li>
                 {% endfor %}
@@ -31,8 +31,8 @@
             <h1>Stream</h1>
             <twig:Stream:Control />
             {# <div class="d-flex justify-content-between">
-                <a class="btn btn-danger" href="{{ path('recording_start') }}"><twig:ux:icon name="fa6-solid:play" /> Start Stream</a>
-                <a class="btn btn-danger" href="{{ path('recording_stop') }}"><twig:ux:icon name="fa6-solid:stop" /> Stop Stream</a>
+                <a class="btn btn-danger" href="{{ path('recording_start') }}"><twig:ux:icon name="play" /> Start Stream</a>
+                <a class="btn btn-danger" href="{{ path('recording_stop') }}"><twig:ux:icon name="stop" /> Stop Stream</a>
             </div> #}
         {% else %}
             <h4>{{ 'profile.door.not_active_member'|trans }}</h4>

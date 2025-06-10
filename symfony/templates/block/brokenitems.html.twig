@@ -15,11 +15,11 @@
                             <div class="box-tools pull-right">
                                 <a class="btn btn-default btn-sm"
                                    href="{{ path('admin_app_item_edit', {id: item.id}) }}">
-                                    <twig:ux:icon name="fa6-solid:pen-to-square" /> edit
+                                    <twig:ux:icon name="edit" /> edit
                                 </a>
                                 {% if item.fixingHistory is not empty %}
                                     <button class="btn btn-default btn-sm" data-widget="collapse">
-                                        <twig:ux:icon name="fa6-solid:plus" /> Show Comments
+                                        <twig:ux:icon name="plus" /> Show Comments
                                     </button>
                                 {% endif %}
                             </div>

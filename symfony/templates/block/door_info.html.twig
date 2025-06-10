@@ -25,7 +25,7 @@
                             <ul class="fa-ul">
                             {% endif %}
                             <li>
-                                <span class="fa-li"><twig:ux:icon name="fa6-solid:key" /></span>
+                                <span class="fa-li"><twig:ux:icon name="key" /></span>
                                 {{ log.createdAt|date }} {{ log.member }}
                                 {% if log.message is not empty %}: {{ log.message|default('profile.door.no_message')|trans }}{% endif %}
                             </li>

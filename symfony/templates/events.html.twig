@@ -5,7 +5,7 @@
     {% set name_attr = 'name_attribute'|trans %}
     <div class="input-group mb-3">
         <input type="text" {{ stimulus_controller('search') }} id="nameSearchInput" class="form-control" placeholder="{{ 'Search by name'|trans }}" />
-        <span id="nameSearch" class="input-group-text"><twig:ux:icon name="fa6-solid:magnifying-glass" /></span>
+        <span id="nameSearch" class="input-group-text"><twig:ux:icon name="search" /></span>
     </div>
     <h4>{{ 'search.include'|trans }}</h4>
     <div class="form-check form-check-inline">
@@ -74,17 +74,17 @@
         <span class="border-bottom d-flex gap-3">
             {% if event.epics %}
                 <a class="icon-link" href="{{ event.epics }}">
-                    <twig:ux:icon name="entypo:images" height="1em" width="1em" />
+                    <twig:ux:icon name="images" height="1em" width="1em" />
                 </a>
             {% endif %}
             {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
                 <a class="icon-link" href="{{ event.linkToForums }}">
-                    <twig:ux:icon name="fluent-mdl2:forum" height="1em" width="1em"/>
+                    <twig:ux:icon name="forum" height="1em" width="1em"/>
                 </a>
             {% endif %}
             {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
                 <a class="icon-link" href="{{ event.wikiPage }}">
-                    <twig:ux:icon name="fa:wikipedia-w" height="1em" width="1em"/>
+                    <twig:ux:icon name="wiki" height="1em" width="1em"/>
                 </a>
             {% endif %}
         </span>

@@ -15,9 +15,9 @@
                 <li>
                     <span class="fa-li">
                         {% if booking.BookingDate|date('U') > 'now-1day'|date('U') %}
-                            <twig:ux:icon name="fa6-solid:link" />
+                            <twig:ux:icon name="link" />
                         {% else %}
-                            <twig:ux:icon name="fa6-solid:clock-rotate-left" style="color:red" />
+                            <twig:ux:icon name="history" style="color:red" />
                         {% endif %}
                     </span>
                     {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}

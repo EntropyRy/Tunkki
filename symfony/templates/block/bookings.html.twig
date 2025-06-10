@@ -15,22 +15,22 @@
                     <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
                         <div class="pull-left">
                             {{ booking.bookingdate|date('d.m.Y') }}
-                            {% if booking.IsSomethingBroken %}- <twig:ux:icon name="fa6-solid:kit-medical" />{% endif %}
+                            {% if booking.IsSomethingBroken %}- <twig:ux:icon name="kit-medical" />{% endif %}
                             <br>
                             <a href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">{{ booking.name }}</a>
                         </div>
                         <div class="box-tools pull-right" style="position:relative">
                             <a class="btn btn-default btn-sm"
                                href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
-                                <twig:ux:icon name="fa6-solid:pen-to-square" /> edit
+                                <twig:ux:icon name="edit" /> edit
                             </a>
                             <a class="btn btn-default btn-sm"
                                href="{{ path('admin_app_booking_statusevent_create', {id: booking.id}) }}">
-                                <twig:ux:icon name="fa6-solid:pen-to-square" />
+                                <twig:ux:icon name="edit" />
                                 Change Status
                             </a>
                             <button class="btn btn-default btn-sm" data-widget="collapse">
-                                <twig:ux:icon name="fa6-solid:plus" /> Show Contents
+                                <twig:ux:icon name="plus" /> Show Contents
                             </button>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                                         <ul>
                                             {% for item in package.items %}
                                                 <li>
-                                                    {% if item.needsFixing %}<twig:ux:icon name="fa6-solid:kit-medical" />{% endif %}
+                                                    {% if item.needsFixing %}<twig:ux:icon name="kit-medical" />{% endif %}
                                                     {{ item }}
                                                 </li>
                                             {% endfor %}
@@ -92,7 +92,7 @@
                                     <ul>
                                         {% for item in booking.items %}
                                             <li>
-                                                {% if item.needsFixing %}<twig:ux:icon name="fa6-solid:kit-medical" />{% endif %}
+                                                {% if item.needsFixing %}<twig:ux:icon name="kit-medical" />{% endif %}
                                                 {{ item }}
                                             </li>
                                         {% endfor %}

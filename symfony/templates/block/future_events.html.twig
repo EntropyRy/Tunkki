@@ -17,12 +17,12 @@
                     {% else %}
                         <li>
                             <span class="fa-li">
-                                <twig:ux:icon name="fa6-solid:exclamation" />
+                                <twig:ux:icon name="exclamation" />
                             </span> {{ 'stay_tuned'|trans }}
                         </li>
                         <li>
                             <span class="fa-li">
-                                <twig:ux:icon name="fa6-solid:arrow-right" />
+                                <twig:ux:icon name="arrow-right" />
                             </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'block.future_events.events'|trans }}</a>
                         </li>
                     {% endfor %}
@@ -50,7 +50,7 @@
                 {% set url = path('entropy_event', {id: event.id}) %}
             {% endif %}
             <li>
-                <span class="fa-li"><twig:ux:icon name="fa6-solid:link" /></span>
+                <span class="fa-li"><twig:ux:icon name="link" /></span>
                 <a href="{{ url }}">{{ attribute(event, name) }} - {{ event.eventDate|date() }}</a>
             </li>
     {% endblock %}

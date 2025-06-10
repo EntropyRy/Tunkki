@@ -109,6 +109,21 @@ ux_icons:
     paintbrush: fa6-solid:paintbrush
     kiwi-bird: fa6-solid:kiwi-bird
     question: fa6-solid:circle-question
+    key: fa6-solid:key
+    city: fa6-solid:city
+    language: fa6-solid:language
+    check-square: fa6-regular:square-check
+    square: fa6-regular:square
+    palette: fa6-solid:palette
+    users-gear: fa6-solid:users-gear
+    power-off: fa:power-off
+    loading: line-md:loading-loop
+    wrench: fluent:wrench-screwdriver-24-regular
+    puzzle: game-icons:puzzle
+    dark-theme: proicons:dark-theme
+    chevron-up: fa6-solid:chevron-up
+    chevron-down: fa6-solid:chevron-down
+    exclamation: fa-solid:exclamation-circle
 
     # Navigation and layout
     menu: fa6-solid:bars
