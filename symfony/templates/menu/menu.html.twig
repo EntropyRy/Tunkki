@@ -46,12 +46,12 @@
         </li>
         <li class="nav-item">
             <a class="nav-link"
-               href="{{ localized_url('en') }}">EN</a>
+               href="{{ localized_url('en', page is defined ? page : null) }}">EN</a>
         </li>
     {% else %}
         <li class="nav-item">
             <a class="nav-link"
-               href="{{ localized_url('fi') }}">FI</a>
+               href="{{ localized_url('fi', page is defined ? page : null) }}">FI</a>
         </li>
         <li class="nav-item current">
             <span class="nav-link">EN</span>

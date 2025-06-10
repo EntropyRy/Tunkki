@@ -3,7 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Menu;
-use App\Entity\SonataPagePage;
+use App\Entity\Sonata\SonataPagePage;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sonata\PageBundle\Model\PageInterface;
@@ -15,13 +15,13 @@ use Twig\TwigFunction;
 
 /**
  * Twig extension that provides localized URL generation for both regular routes and Sonata Page Bundle pages.
- * 
+ *
  * This extension handles the complexities of URL generation in a multilingual setup where:
  * - Finnish (fi) is the default locale with no URL prefix
  * - English (en) has a /en URL prefix
  * - Sonata Page Bundle pages use technical aliases with locale suffixes (e.g., _page_alias_services_fi, _page_alias_services_en)
  * - Menu entities can link pages in different locales together
- * 
+ *
  * The extension uses multiple strategies to find localized pages (in priority order):
  * 1. Menu-based lookup (primary method) - Uses Menu entity relationships
  * 2. Technical alias transformation (fallback method) - Pattern-based alias matching
@@ -48,13 +48,13 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Generates a localized URL for the current page or a specific page.
-     * 
+     *
      * This method uses multiple strategies to find the localized version:
      * 1. If a page object is provided, uses Menu-based lookup first
      * 2. Falls back to technical alias transformation if Menu method fails
      * 3. For regular routes, uses route name transformation
      * 4. Final fallback uses URL path manipulation
-     * 
+     *
      * @param string $targetLocale The target locale ('fi' or 'en')
      * @param PageInterface|null $page Optional page object. If provided, will find the localized version of this page.
      * @return string The localized URL
@@ -83,7 +83,7 @@ class LocalizedUrlExtension extends AbstractExtension
         if ($currentRoute && str_starts_with((string) $currentRoute, 'page_')) {
             // Try to find the current page by route name and get its localized version
             $currentPage = $this->findPageByRouteName($currentRoute);
-            if ($currentPage) {
+            if ($currentPage instanceof PageInterface) {
                 return $this->getLocalizedUrlFromPage($currentPage, $targetLocale);
             }
             // Fallback for Sonata pages
@@ -128,14 +128,14 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Generates a localized URL from a specific Sonata Page object.
-     * 
+     *
      * This method uses a two-step approach:
      * 1. First searches through Menu entities to find linked pages in different locales
      * 2. If that fails, tries technical alias transformation (e.g., _page_alias_services_fi -> _page_alias_services_en)
-     * 
+     *
      * The Menu-based lookup is the primary method as it's more reliable and leverages
      * the existing Menu structure that properly links pages across locales.
-     * 
+     *
      * @param PageInterface $page The source page object
      * @param string $targetLocale The target locale ('fi' or 'en')
      * @return string The localized URL
@@ -153,7 +153,7 @@ class LocalizedUrlExtension extends AbstractExtension
                     'target_page_id' => $this->getPageIdSafely($targetPage),
                     'strategy' => 'menu_lookup'
                 ]);
-                
+
                 // Handle the URL based on locale and prefix requirements
                 if ($targetLocale === 'en' && !str_starts_with($url, '/en')) {
                     return '/en' . $url;
@@ -167,34 +167,31 @@ class LocalizedUrlExtension extends AbstractExtension
 
         // If Menu approach fails, try the technical alias approach as fallback
         $pageAlias = $page->getPageAlias();
-        if ($pageAlias) {
-            // Extract the base alias and current locale from technical alias
-            // Expected format: _page_alias_services_fi or _page_alias_services_en
-            if (preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)) {
-                $baseAlias = $matches[1];
-                $targetAlias = $baseAlias . '_' . $targetLocale;
-                
-                // Find the page with the target alias
-                $targetPage = $this->findPageByAlias($targetAlias);
-                if ($targetPage && $targetPage->getEnabled()) {
-                    $url = $targetPage->getUrl();
-                    if ($url) {
-                        $this->logger?->debug('LocalizedUrlExtension: Found page via technical alias', [
-                            'source_alias' => $pageAlias,
-                            'target_alias' => $targetAlias,
-                            'target_locale' => $targetLocale,
-                            'strategy' => 'technical_alias'
-                        ]);
-                        
-                        // Handle the URL based on locale and prefix requirements
-                        if ($targetLocale === 'en' && !str_starts_with($url, '/en')) {
-                            return '/en' . $url;
-                        }
-                        if ($targetLocale === 'fi' && str_starts_with($url, '/en')) {
-                            return substr($url, 3) ?: '/';
-                        }
-                        return $url;
+        // Extract the base alias and current locale from technical alias
+        // Expected format: _page_alias_services_fi or _page_alias_services_en
+        if ($pageAlias && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)) {
+            $baseAlias = $matches[1];
+            $targetAlias = $baseAlias . '_' . $targetLocale;
+            // Find the page with the target alias
+            $targetPage = $this->findPageByAlias($targetAlias);
+            if ($targetPage && $targetPage->getEnabled()) {
+                $url = $targetPage->getUrl();
+                if ($url) {
+                    $this->logger?->debug('LocalizedUrlExtension: Found page via technical alias', [
+                        'source_alias' => $pageAlias,
+                        'target_alias' => $targetAlias,
+                        'target_locale' => $targetLocale,
+                        'strategy' => 'technical_alias'
+                    ]);
+
+                    // Handle the URL based on locale and prefix requirements
+                    if ($targetLocale === 'en' && !str_starts_with($url, '/en')) {
+                        return '/en' . $url;
                     }
+                    if ($targetLocale === 'fi' && str_starts_with($url, '/en')) {
+                        return substr($url, 3) ?: '/';
+                    }
+                    return $url;
                 }
             }
         }
@@ -205,13 +202,13 @@ class LocalizedUrlExtension extends AbstractExtension
             'target_locale' => $targetLocale,
             'strategy' => 'fallback'
         ]);
-        
+
         return $targetLocale === 'en' ? '/en' : '/';
     }
 
     /**
      * Finds a Sonata Page by its route name.
-     * 
+     *
      * @param string $routeName The route name to search for
      * @return PageInterface|null The found page or null if not found
      */
@@ -226,7 +223,7 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Finds a Sonata Page by its technical alias.
-     * 
+     *
      * @param string $alias The technical alias to search for (e.g., '_page_alias_services_fi')
      * @return PageInterface|null The found page or null if not found
      */
@@ -241,19 +238,19 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Finds the corresponding page in the target locale through the Menu system.
-     * 
+     *
      * This is the primary method for finding localized pages because:
      * 1. Menu entities explicitly link pages across locales via pageFi and pageEn properties
      * 2. It's more reliable than technical alias patterns which may not be consistent
      * 3. It leverages the existing content management structure
      * 4. It works even when pages don't follow naming conventions
-     * 
+     *
      * This method searches for a menu item that references the given page (in either locale)
      * and then returns the page for the target locale from the same menu item.
-     * 
+     *
      * Note: Uses try-catch to handle SnapshotPageProxy objects which may cause comparison issues
      * during Doctrine's findOneBy operations.
-     * 
+     *
      * @param PageInterface $page The source page object
      * @param string $targetLocale The target locale ('fi' or 'en')
      * @return PageInterface|null The found page or null if not found
@@ -261,16 +258,16 @@ class LocalizedUrlExtension extends AbstractExtension
     private function findPageThroughMenu(PageInterface $page, string $targetLocale): ?PageInterface
     {
         $menuRepository = $this->entityManager->getRepository(Menu::class);
-        
+
         try {
             // Try to find by the actual page object first
             // Note: This may fail with SnapshotPageProxy objects, hence the try-catch
             $menuItem = $menuRepository->findOneBy(['pageFi' => $page]);
-            if (!$menuItem) {
+            if ($menuItem === null) {
                 $menuItem = $menuRepository->findOneBy(['pageEn' => $page]);
             }
-            
-            if ($menuItem) {
+
+            if ($menuItem !== null) {
                 // Found a menu item, now get the page for the target locale
                 return $menuItem->getPageByLang($targetLocale);
             }
@@ -279,14 +276,14 @@ class LocalizedUrlExtension extends AbstractExtension
             // Return null to let fallback methods handle the URL generation
             return null;
         }
-        
+
         return null;
     }
 
     /**
      * Debug version of getLocalizedUrl that returns both URL and strategy information.
      * Useful for debugging which strategy was used to generate the URL.
-     * 
+     *
      * @param string $targetLocale The target locale ('fi' or 'en')
      * @param PageInterface|null $page Optional page object
      * @return array{url: string, strategy: string, debug_info: array} URL and debug information
@@ -295,14 +292,14 @@ class LocalizedUrlExtension extends AbstractExtension
     {
         $debugInfo = [
             'target_locale' => $targetLocale,
-            'has_page_object' => $page !== null,
+            'has_page_object' => $page instanceof PageInterface,
             'strategies_tried' => []
         ];
 
         if ($page instanceof PageInterface) {
             $pageAlias = $page->getPageAlias();
             $debugInfo['page_alias'] = $pageAlias;
-            
+
             // Try menu lookup first (primary method)
             $debugInfo['strategies_tried'][] = 'menu_lookup';
             $targetPage = $this->findPageThroughMenu($page, $targetLocale);
@@ -316,14 +313,14 @@ class LocalizedUrlExtension extends AbstractExtension
                     ])
                 ];
             }
-            
+
             // Try technical alias as fallback
             if ($pageAlias && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)) {
                 $debugInfo['strategies_tried'][] = 'technical_alias';
                 $baseAlias = $matches[1];
                 $targetAlias = $baseAlias . '_' . $targetLocale;
                 $targetPage = $this->findPageByAlias($targetAlias);
-                
+
                 if ($targetPage && $targetPage->getEnabled() && $targetPage->getUrl()) {
                     $url = $this->formatUrlForLocale($targetPage->getUrl(), $targetLocale);
                     return [
@@ -341,7 +338,7 @@ class LocalizedUrlExtension extends AbstractExtension
         // Fallback to regular URL generation
         $debugInfo['strategies_tried'][] = 'fallback';
         $url = $this->getLocalizedUrl($targetLocale, $page);
-        
+
         return [
             'url' => $url,
             'strategy' => 'fallback',
@@ -351,7 +348,7 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Formats a URL according to locale prefix requirements.
-     * 
+     *
      * @param string $url The base URL
      * @param string $targetLocale The target locale
      * @return string The formatted URL
@@ -369,7 +366,7 @@ class LocalizedUrlExtension extends AbstractExtension
 
     /**
      * Safely gets the page ID as a string, handling proxy objects that may not have getId().
-     * 
+     *
      * @param PageInterface $page The page object
      * @return string The page ID as string or 'unknown' if not available
      */
