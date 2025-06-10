@@ -108,6 +108,7 @@ ux_icons:
     wave-square: fa6-solid:wave-square
     paintbrush: fa6-solid:paintbrush
     kiwi-bird: fa6-solid:kiwi-bird
+    question: fa6-solid:circle-question
 
     # Navigation and layout
     menu: fa6-solid:bars

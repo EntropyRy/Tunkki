@@ -43,6 +43,7 @@ class LocalizedUrlExtension extends AbstractExtension
         return [
             new TwigFunction('localized_url', $this->getLocalizedUrl(...)),
             new TwigFunction('localized_url_debug', $this->getLocalizedUrlWithDebug(...)),
+            new TwigFunction('localized_route', $this->getLocalizedRoute(...)),
         ];
     }
 
@@ -380,5 +381,39 @@ class LocalizedUrlExtension extends AbstractExtension
         }
     }
 
+    /**
+     * Generate a localized URL based on a specified route and parameters.
+     *
+     * @param string $route The route name without locale suffix
+     * @param string $targetLocale The target locale (e.g., 'en', 'fi')
+     * @param array $parameters The route parameters
+     * @return string The generated URL
+     */
+    public function getLocalizedRoute(string $route, string $targetLocale, array $parameters = []): string
+    {
+        // Strip any existing locale suffix if present
+        $baseRoute = preg_replace('/\.(en|fi)$/', '', $route);
+        $targetRoute = $baseRoute . '.' . $targetLocale;
+
+        try {
+            // Generate URL with the provided parameters
+            $url = $this->router->generate($targetRoute, $parameters);
+
+            // For English locale, ensure /en prefix
+            if ($targetLocale === 'en' && !str_starts_with($url, '/en')) {
+                return '/en' . $url;
+            }
+
+            // For Finnish locale, remove /en prefix if present
+            if ($targetLocale === 'fi' && str_starts_with($url, '/en')) {
+                return substr($url, 3);
+            }
+
+            return $url;
+        } catch (\Throwable) {
+            // Fallback to root URL if route generation fails
+            return $targetLocale === 'en' ? '/en' : '/';
+        }
+    }
 
 }
