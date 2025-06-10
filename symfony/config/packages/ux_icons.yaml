@@ -96,7 +96,7 @@ ux_icons:
     cd: fa6-solid:compact-disc
     location-dot: fa6-solid:location-dot
     coffee: fa6-solid:coffee
-    ticket: fa6-solid:ticket-alt
+    ticket: fa-solid:ticket-alt
     link-out: fa6-solid:up-right-from-square
     rss: fa6-solid:square-rss
     map-pin: fa6-solid:map-marker-alt
