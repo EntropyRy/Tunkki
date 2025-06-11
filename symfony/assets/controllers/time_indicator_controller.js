@@ -10,13 +10,30 @@ export default class extends Controller {
   connect() {
     if (!this.hasIndicatorTarget) return;
 
-    // Initialize position
-    this.updateIndicatorPosition();
+    // Calculate the time difference between server and client
+    this.calculateTimeOffset();
+
+    // Wait for fonts and layout to be ready, then initialize
+    this.initializeWhenReady();
 
     // Set up periodic updates
     this.intervalId = setInterval(() => {
       this.updateIndicatorPosition();
     }, this.updateIntervalValue);
+  }
+
+  initializeWhenReady() {
+    // Use requestAnimationFrame to ensure DOM is fully rendered
+    requestAnimationFrame(() => {
+      // Double-check fonts are loaded if possible
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => {
+          this.updateIndicatorPosition();
+        });
+      } else {
+        this.updateIndicatorPosition();
+      }
+    });
   }
 
   disconnect() {
@@ -35,40 +52,16 @@ export default class extends Controller {
     }
   }
 
-  animateArrow() {
-    // Find the SVG element inside the indicator
-    const svg = this.indicatorTarget.querySelector("svg");
-    if (!svg) return;
-
-    // Add CSS classes to trigger the animation
-    svg.classList.add("update-animation");
-
-    // Remove the class after animation completes to reset for next time
-    setTimeout(() => {
-      svg.classList.remove("update-animation");
-    }, 500); // 1 second matches our animation duration
-  }
-
-  getCurrentTime() {
-    // Parse the ISO format with timezone (2025-04-15T20:35:34+03:00)
-    try {
-      return new Date(this.serverTimeValue);
-    } catch (e) {
-      console.error("Error parsing time:", e);
-      return new Date(); // Fallback to browser time
-    }
-  }
-
-  calculatePosition(currentTime) {
-    // Get all rows with time cells
+  recalculateRowPositions() {
+    // Force a reflow to get accurate measurements
+    this.element.offsetHeight;
+    
+    // Get fresh row positions
     const rows = Array.from(this.element.querySelectorAll("tr")).filter(
       (row) => row.querySelector(".time") !== null,
     );
 
-    if (rows.length === 0) return null;
-
-    // Extract time information from each row
-    const timeSlots = rows.map((row) => {
+    return rows.map((row) => {
       const timeCell = row.querySelector(".time");
       const timeText = timeCell.textContent.trim();
       const timeMatch = timeText.match(/(\d{1,2}):(\d{2})/);
@@ -84,6 +77,45 @@ export default class extends Controller {
         timeText: timeText,
       };
     });
+  }
+
+  animateArrow() {
+    // Find the SVG element inside the indicator
+    const svg = this.indicatorTarget.querySelector("svg");
+    if (!svg) return;
+
+    // Add CSS classes to trigger the animation
+    svg.classList.add("update-animation");
+
+    // Remove the class after animation completes to reset for next time
+    setTimeout(() => {
+      svg.classList.remove("update-animation");
+    }, 500); // 1 second matches our animation duration
+  }
+
+  calculateTimeOffset() {
+    // Calculate the time difference between server and client
+    try {
+      const serverTime = new Date(this.serverTimeValue);
+      const clientTime = new Date();
+      this.timeOffset = serverTime.getTime() - clientTime.getTime();
+    } catch (e) {
+      console.error("Error parsing server time:", e);
+      this.timeOffset = 0; // Fallback to no offset
+    }
+  }
+
+  getCurrentTime() {
+    // Return current client time adjusted by server offset
+    const now = new Date();
+    return new Date(now.getTime() + (this.timeOffset || 0));
+  }
+
+  calculatePosition(currentTime) {
+    // Get fresh row positions to account for dynamic heights
+    const timeSlots = this.recalculateRowPositions();
+
+    if (timeSlots.length === 0) return null;
 
     // Handle times after midnight (e.g., 00:30, 01:00)
     // If we find a time that's earlier than the previous, assume it's the next day
