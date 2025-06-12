@@ -267,7 +267,7 @@ class Menu implements \Stringable
     }
     public function getPageByLang(string $lang): ?Page
     {
-        $func = "getPage" . ucfirst($lang);
-        return $this->{$func}();
+        $func = "page" . ucfirst($lang);
+        return $this->{$func};
     }
 }

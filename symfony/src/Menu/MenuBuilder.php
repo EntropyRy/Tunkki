@@ -15,9 +15,6 @@ class MenuBuilder
         private readonly MenuRepository $mRepo
     ) {}
 
-    /**
-     * @param array $options
-     */
     public function createMainMenu(array $options): ItemInterface
     {
         $locale = $options["locale"];

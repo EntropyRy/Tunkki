@@ -21,9 +21,9 @@
                     aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse justify-content-between"
-                 id="navbarSupportedContent">
-                {{ knp_menu_render(app.request.locale) }}
+            <div class="collapse navbar-collapse justify-content-between" id="navbarSupportedContent">
+                {% set menu = knp_menu_get('mainMenu', [], {locale: app.request.locale}) %}
+                {{ knp_menu_render(menu) }}
                 <ul class="navbar-nav d-none d-lg-flex">
                     {% if not app.user %}
                         <li class="nav-item">
