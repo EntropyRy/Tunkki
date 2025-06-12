@@ -44,11 +44,21 @@ services:
   entropy.menu_builder.fi:
     class: App\Menu\MenuBuilder
     tags:
-      - { name: knp_menu.menu_builder, method: createMainMenuFi, alias: fi }
+      - {
+          name: knp_menu.menu_builder,
+          method: createMainMenu,
+          alias: fi,
+          options: { locale: "fi" },
+        }
   entropy.menu_builder.en:
     class: App\Menu\MenuBuilder
     tags:
-      - { name: knp_menu.menu_builder, method: createMainMenuEn, alias: en }
+      - {
+          name: knp_menu.menu_builder,
+          method: createMainMenu,
+          alias: en,
+          options: { locale: "en" },
+        }
   admin.door_log:
     class: App\Admin\DoorLogAdmin
     tags:

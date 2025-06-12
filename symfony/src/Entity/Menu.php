@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
-#[Gedmo\Tree(type: 'nested')]
+#[Gedmo\Tree(type: "nested")]
 #[ORM\Entity(repositoryClass: NestedTreeRepository::class)]
 class Menu implements \Stringable
 {
@@ -51,18 +51,24 @@ class Menu implements \Stringable
 
     #[Gedmo\TreeRoot]
     #[ORM\ManyToOne(targetEntity: Menu::class)]
-    #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(referencedColumnName: "id", onDelete: "CASCADE")]
     private ?\App\Entity\Menu $root = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $position = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'children')]
-    #[ORM\JoinColumn(name: 'parent_id', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: "children")]
+    #[
+        ORM\JoinColumn(
+            name: "parent_id",
+            referencedColumnName: "id",
+            onDelete: "CASCADE"
+        )
+    ]
     private ?\App\Entity\Menu $parent = null;
 
-    #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: "parent")]
     private $children;
 
     public function __construct()
@@ -233,7 +239,7 @@ class Menu implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->label ?: 'n/a';
+        return $this->label ?: "n/a";
     }
 
     public function getPageFi(): ?Page
@@ -259,9 +265,9 @@ class Menu implements \Stringable
 
         return $this;
     }
-    public function getPageByLang(string $lang)
+    public function getPageByLang(string $lang): ?Page
     {
-        $func = 'page' . ucfirst($lang);
-        return $this->{$func};
+        $func = "getPage" . ucfirst($lang);
+        return $this->{$func}();
     }
 }

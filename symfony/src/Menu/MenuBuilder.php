@@ -2,72 +2,61 @@
 
 namespace App\Menu;
 
+use App\Entity\Sonata\SonataPagePage;
+use App\Entity\Menu;
 use App\Repository\MenuRepository;
 use Knp\Menu\FactoryInterface;
+use Knp\Menu\ItemInterface;
 
 class MenuBuilder
 {
     public function __construct(
         private readonly FactoryInterface $factory,
         private readonly MenuRepository $mRepo
-    ) {
-    }
+    ) {}
 
-    public function createMainMenuFi(array $options)
+    /**
+     * @param array $options
+     */
+    public function createMainMenu(array $options): ItemInterface
     {
-        $locale = 'fi';
+        $locale = $options["locale"];
+        $nameFunc = $locale == "fi" ? "getNimi" : "getLabel";
         $roots = $this->mRepo->getRootNodes();
-        $menu = $this->factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'navbar-nav');
+        $menu = $this->factory->createItem("root");
+        $menu->setChildrenAttribute("class", "navbar-nav navbar-nav-scroll");
         foreach ($roots as $m) {
-            $menu = $this->addItem($menu, $m, $locale);
+            $menu = $this->addItem($menu, $m, $locale, 1);
             $m = $this->sortByPosition($m);
             foreach ($m as $item) {
                 if ($item->getEnabled()) {
-                    if ($item->getUrl() == '#') {
-                        $dropdown = $menu->addChild(
-                            $item->getNimi(),
-                            [
-                                'attributes' => [
-                                    'dropdown' => true,
-                                ],
-                            ]
-                        );
-                        foreach ($item->getChildren() as $subitem) {
-                            $dropdown = $this->addItem($dropdown, $subitem, $locale);
-                        }
-                    } else {
-                        $menu = $this->addItem($menu, $item, $locale);
-                    }
-                }
-            }
-        }
-        // dynamically add stream
-        //$this->addStream($menu);
-        return $menu;
-    }
-    public function createMainMenuEn(array $options)
-    {
-        $locale = 'en';
-        $roots = $this->mRepo->getRootNodes();
-        $menu = $this->factory->createItem('root');
-        $menu->setChildrenAttribute('class', 'navbar-nav mr-auto');
-        foreach ($roots as $m) {
-            $menu = $this->addItem($menu, $m, $locale);
-            $m = $this->sortByPosition($m);
-            foreach ($m as $item) {
-                if ($item->getEnabled()) {
-                    if ($item->getUrl() == '#') {
-                        $dropdown = $menu->addChild(
-                            $item->getLabel(),
-                            [
-                                'attributes' => [
-                                    'dropdown' => true,
-                                ],
-                            ]
-                        );
-                        foreach ($item->getChildren() as $subitem) {
-                            $dropdown = $this->addItem($dropdown, $subitem, $locale);
+                    if ($item->getUrl() == "#") {
+                        $dropdown = $menu->addChild($item->{$nameFunc}(), [
+                            "attributes" => [
+                                "dropdown" => true,
+                            ],
+                        ]);
+                        $items = $this->sortByPosition($item);
+                        foreach ($items as $subitem) {
+                            if ($subitem->getEnabled()) {
+                                $dropdown = $this->addItem(
+                                    $dropdown,
+                                    $subitem,
+                                    $locale,
+                                    2
+                                );
+                            }
+                            $subsubitems = $this->sortByPosition($subitem);
+                            foreach ($subsubitems as $subsubitem) {
+                                if ($subsubitem->getEnabled()) {
+                                    $subdropdown = $this->addItem(
+                                        $dropdown,
+                                        $subsubitem,
+                                        $locale,
+                                        3
+                                    );
+                                }
+                            }
                         }
                     } else {
                         $menu = $this->addItem($menu, $item, $locale);
@@ -77,37 +66,39 @@ class MenuBuilder
         }
         return $menu;
     }
-    private function addItem($menu, $m, string $l)
-    {
-        if ($l === 'fi') {
-            if ($m->getPageFi()) {
-                $menu->addChild($m->getNimi(), [
-                    'route' => 'page_slug',
-                    'routeParameters' => ['path' => '/' . $m->getPageFi()->getSlug()]
-                ]);
-            } else {
-                $menu->addChild($m->getNimi(), ['uri' => $m->getUrl()]);
-            }
-        } elseif ($m->getPageEn()) {
-            $prefix = str_contains((string) $m->getPageEn()->getSlug(), '/en') ? '/en' : '';
-            $url = $prefix . '/' . $m->getPageEn()->getSlug();
-            $menu->addChild($m->getLabel(), [
-                'route' => 'page_slug',
-                'routeParameters' => ['path' => $url]
-            ]);
-        } elseif (str_contains((string) $m->getUrl(), 'http')) {
-            $menu->addChild($m->getLabel(), ['uri' => $m->getUrl()]);
+    private function addItem(
+        ItemInterface $menu,
+        Menu $item,
+        string $locale,
+        ?int $lvl = null
+    ): ItemInterface {
+        $level = "level-" . $lvl;
+        $nameFunc = $locale === "fi" ? "getNimi" : "getLabel";
+        $page = $item->getPageByLang($locale);
+        if ($page instanceof SonataPagePage) {
+            // if page is set
+            $url = $page->getUrl();
         } else {
-            $menu->addChild($m->getLabel(), ['uri' => '/en' . $m->getUrl()]);
+            $url = $item->getUrl();
         }
+        $menu->addChild($item->{$nameFunc}(), [
+            "route" => "page_slug",
+            "routeParameters" => ["path" => "" . $url],
+            "linkAttributes" => [
+                "class" => $level,
+            ],
+        ]);
         return $menu;
     }
+    /**
+     * @param mixed $m
+     */
     private function sortByPosition($m): array
     {
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            fn ($a, $b): int => $a->getPosition() <=> $b->getPosition()
+            fn($a, $b): int => $a->getPosition() <=> $b->getPosition()
         );
         return $array;
     }
