@@ -43,20 +43,21 @@ final class ArtistStreams extends AbstractController
                 $groupedStreams[$streamId] = [
                     "stream" => $stream->getStream(),
                     "items" => [],
-                    "overlapping_artists" => [],
                 ];
             }
 
             $groupedStreams[$streamId]["items"][] = $stream;
         }
 
-        // For each grouped stream, find overlapping artists
+        // For each grouped stream, add overlapping artists to each item
         foreach ($groupedStreams as $streamId => &$group) {
-            $group["overlapping_artists"] = $this->getOverlappingArtists(
-                $group["stream"],
-                $artist,
-                $group["items"]
-            );
+            foreach ($group["items"] as &$item) {
+                $item->overlappingArtists = $this->getOverlappingArtistsForTimeSlot(
+                    $group["stream"],
+                    $artist,
+                    $item
+                );
+            }
         }
 
         return array_values($groupedStreams); // Convert to indexed array
@@ -65,12 +66,13 @@ final class ArtistStreams extends AbstractController
     /**
      * @param mixed $stream
      * @param Artist $currentArtist
-     * @param array $currentArtistItems
+     * @param mixed $currentItem
+     * @return string[]
      */
-    private function getOverlappingArtists(
+    private function getOverlappingArtistsForTimeSlot(
         $stream,
         Artist $currentArtist,
-        array $currentArtistItems
+        $currentItem
     ): array {
         // Get all stream artists for this stream except the current artist
         $allStreamArtists = $this->streamArtistRepository->findBy([
@@ -87,24 +89,13 @@ final class ArtistStreams extends AbstractController
                 continue;
             }
 
-            // Check if this artist overlaps with any of the current artist's time slots
-            foreach ($currentArtistItems as $currentItem) {
-                if ($this->hasTimeOverlap($currentItem, $streamArtist)) {
-                    // Avoid duplicates
-                    $artistId = $streamArtist->getArtist()->getId();
-                    if (!isset($overlappingArtists[$artistId])) {
-                        $overlappingArtists[$artistId] = [
-                            "artist" => $streamArtist->getArtist(),
-                            "items" => [],
-                        ];
-                    }
-                    $overlappingArtists[$artistId]["items"][] = $streamArtist;
-                    break; // Found overlap, no need to check other time slots for this artist
-                }
+            // Check if this artist overlaps with the current time slot
+            if ($this->hasTimeOverlap($currentItem, $streamArtist)) {
+                $overlappingArtists[] = $streamArtist->getArtist()->getName();
             }
         }
 
-        return array_values($overlappingArtists);
+        return $overlappingArtists;
     }
 
     /**

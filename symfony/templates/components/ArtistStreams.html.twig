@@ -17,25 +17,12 @@
             <div class="stream-item col-sm-7">
                 <p>{{ 'stream.artist.played_at'|trans }}</p>
                 {% for item in group.items %}
-                    {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt|date('H:i') }}<br>
+                    {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt ? item.stoppedAt|date('H:i') : 'ongoing' }}
+                    {% if item.overlappingArtists is defined and item.overlappingArtists is not empty %}
+                        , {{ 'stream.artist.other_artists'|trans }}: {{ item.overlappingArtists|join(', ') }}
+                    {% endif %}
+                    <br>
                 {% endfor %}
-
-                {% if group.overlapping_artists is not empty %}
-                    <div class="overlapping-artists mt-3 p-2 bg-light rounded">
-                        <p class="mb-2"><strong>{{ 'stream.artist.other_artists'|trans }}:</strong></p>
-                        {% for overlappingArtist in group.overlapping_artists %}
-                            <div class="artist-overlap mb-2 p-1 border-left border-primary">
-                                <span class="artist-name fw-bold">{{ overlappingArtist.artist.name }}</span>
-                                <div class="overlap-times text-muted small">
-                                    {% for item in overlappingArtist.items %}
-                                        {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt|date('H:i') }}
-                                        {% if not loop.last %}, {% endif %}
-                                    {% endfor %}
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
             </div>
         </div>
         {% if not loop.last %}
