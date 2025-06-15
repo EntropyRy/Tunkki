@@ -2,6 +2,7 @@
 
 namespace App\Twig\Components;
 
+use App\Entity\Stream;
 use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Artist;
 use App\Repository\StreamArtistRepository;
@@ -50,7 +51,7 @@ final class ArtistStreams extends AbstractController
         }
 
         // For each grouped stream, add overlapping artists to each item
-        foreach ($groupedStreams as $streamId => &$group) {
+        foreach ($groupedStreams as &$group) {
             foreach ($group["items"] as &$item) {
                 $item->overlappingArtists = $this->getOverlappingArtistsForTimeSlot(
                     $group["stream"],
@@ -65,12 +66,11 @@ final class ArtistStreams extends AbstractController
 
     /**
      * @param mixed $stream
-     * @param Artist $currentArtist
      * @param mixed $currentItem
      * @return string[]
      */
     private function getOverlappingArtistsForTimeSlot(
-        $stream,
+        ?Stream $stream,
         Artist $currentArtist,
         $currentItem
     ): array {

@@ -203,7 +203,7 @@ final class ArtistControl extends AbstractController
     public function onStreamStopped(): void
     {
         // If there's an existing stream artist, mark it as stopped
-        if ($this->existingStreamArtist) {
+        if ($this->existingStreamArtist instanceof StreamArtist) {
             $this->existingStreamArtist->setStoppedAt(new \DateTimeImmutable());
             $this->entityManager->flush();
         }
