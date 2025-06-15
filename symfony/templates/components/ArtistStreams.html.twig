@@ -17,7 +17,7 @@
             <div class="stream-item col-sm-7">
                 <p>{{ 'stream.artist.played_at'|trans }}</p>
                 {% for item in group.items %}
-                    {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt ? item.stoppedAt|date('H:i') : 'ongoing' }}
+                    {{ item.startedAt|date('H:i') }} - {{ item.stoppedAt ? item.stoppedAt|date('H:i') : group.stream.updatedAt|date('H:i') }}
                     {% if item.overlappingArtists is defined and item.overlappingArtists is not empty %}
                         , {{ 'stream.artist.other_artists'|trans }}: {{ item.overlappingArtists|join(', ') }}
                     {% endif %}
