@@ -195,6 +195,7 @@ stream:
   artist:
     not_yours: Ei sinun artistisi
     played_at: Artisti soitti näinä ajankohtina
+    other_artists: Muut artistit samaan aikaan
     notnull: Sinun täytyy valita artisti
     your: Artistisi
     remove: Poista artistisi streamista

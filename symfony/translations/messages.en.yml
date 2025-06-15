@@ -122,6 +122,7 @@ stream:
   artist:
     not_yours: Not your artist
     played_at: Artist played at
+    other_artists: Other artists at the same time
     notnull: You have to select artist
     your: Your artist
     remove: Remove from Stream
