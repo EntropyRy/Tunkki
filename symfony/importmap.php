@@ -70,7 +70,7 @@ return [
         'version' => '3.2.2',
     ],
     'bootstrap' => [
-        'version' => '5.3.6',
+        'version' => '5.3.7',
     ],
     '@popperjs/core' => [
         'version' => '2.11.8',
@@ -95,7 +95,7 @@ return [
         'version' => '2.6.0',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
-        'version' => '5.3.6',
+        'version' => '5.3.7',
         'type' => 'css',
     ],
     'sortablejs' => [
