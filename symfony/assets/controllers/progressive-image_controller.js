@@ -45,35 +45,20 @@ export default class extends Controller {
 
     // Create a test image to check if it's cached
     const testImg = new Image();
-
-    // Set up a timeout to prevent hanging
-    const timeout = setTimeout(() => {
-      // Image not cached, proceed with normal loading logic
-      if (this.lazyValue === false) {
-        this.loadProgressiveImage();
-      } else {
-        this.setupIntersectionObserver();
-      }
-    }, 10);
-
-    testImg.onload = () => {
-      clearTimeout(timeout);
-      // Image is cached, load it immediately
-      this.loadProgressiveImage();
-    };
-
-    testImg.onerror = () => {
-      clearTimeout(timeout);
-      // Error loading, proceed with normal logic
-      if (this.lazyValue === false) {
-        this.loadProgressiveImage();
-      } else {
-        this.setupIntersectionObserver();
-      }
-    };
-
-    // Start the test - if cached, onload fires immediately
     testImg.src = dataSrc;
+
+    // Check if image loaded synchronously (cached)
+    if (testImg.complete && testImg.naturalWidth > 0) {
+      // Image is cached, load immediately
+      this.loadProgressiveImage();
+    } else {
+      // Not cached, proceed with normal logic
+      if (this.lazyValue === false) {
+        this.loadProgressiveImage();
+      } else {
+        this.setupIntersectionObserver();
+      }
+    }
   }
 
   setupIntersectionObserver() {
