@@ -20,8 +20,7 @@ final class ArtistStreams extends AbstractController
 
     public function __construct(
         private readonly StreamArtistRepository $streamArtistRepository
-    ) {
-    }
+    ) {}
 
     public function mount(): void
     {
@@ -53,12 +52,18 @@ final class ArtistStreams extends AbstractController
 
         // For each grouped stream, add overlapping artists to each item
         foreach ($groupedStreams as &$group) {
-            foreach ($group["items"] as &$item) {
-                $item['overlappingArtists'] = $this->getOverlappingArtistsForTimeSlot(
+            foreach ($group["items"] as $index => &$item) {
+                $overlappingArtists = $this->getOverlappingArtistsForTimeSlot(
                     $group["stream"],
                     $artist,
                     $item
                 );
+
+                // Store overlapping artists data alongside the item
+                $group["items"][$index] = [
+                    "streamArtist" => $item,
+                    "overlappingArtists" => $overlappingArtists,
+                ];
             }
         }
 
