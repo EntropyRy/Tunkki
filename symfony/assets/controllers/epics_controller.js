@@ -12,14 +12,15 @@ export default class extends Controller {
 
   connect() {
     this.defaultPicValue = this.picTarget.getAttribute("src");
-    this.changePic();
-    if (this.hasRefreshIntervalValue) {
-      this.startRefreshing();
-    }
+    this.isVisible = false;
+    this.setupIntersectionObserver();
   }
 
   disconnect() {
     this.stopRefreshing();
+    if (this.observer) {
+      this.observer.disconnect();
+    }
   }
 
   changePic() {
@@ -32,7 +33,7 @@ export default class extends Controller {
   }
 
   startRefreshing() {
-    if (!document.hidden) {
+    if (this.isVisible && !document.hidden && this.hasRefreshIntervalValue) {
       this.refreshTimer = setInterval(() => {
         this.changePic();
       }, this.refreshIntervalValue);
@@ -44,7 +45,34 @@ export default class extends Controller {
   stopRefreshing() {
     if (this.refreshTimer) {
       clearInterval(this.refreshTimer);
+      this.refreshTimer = null;
     }
+    if (this.fadeOutTimer) {
+      clearTimeout(this.fadeOutTimer);
+      this.fadeOutTimer = null;
+    }
+  }
+
+  setupIntersectionObserver() {
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            this.isVisible = true;
+            this.changePic();
+            this.startRefreshing();
+          } else {
+            this.isVisible = false;
+            this.stopRefreshing();
+          }
+        });
+      },
+      {
+        threshold: 0.1, // Trigger when 10% of the element is visible
+      },
+    );
+
+    this.observer.observe(this.element);
   }
 
   setPic(data) {
@@ -61,19 +89,19 @@ export default class extends Controller {
 
       // Create a new image element to preload
       const newImage = new Image();
-      
+
       // Get the original URL from the data and use it directly
       // Cloudflare will handle the caching
       const imageUrl = data["url"];
-      
+
       // Set the image source
       newImage.src = imageUrl;
 
       // Simple error handling
       newImage.onerror = () => {
-        console.error('Failed to load image');
+        console.error("Failed to load image");
       };
-      
+
       newImage.onload = () => {
         // Start fade out of current image
         const fadeOutAnimation = this.picTarget.animate(
