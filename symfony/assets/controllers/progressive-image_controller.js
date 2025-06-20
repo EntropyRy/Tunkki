@@ -105,7 +105,7 @@ export default class extends Controller {
     }
 
     // Hide placeholder immediately and show image without animation
-    this.placeholder.style.display = "none";
+    this.placeholder.style.opacity = "0";
     this.picture.style.opacity = "1";
     this.picture.classList.add("loaded");
 
