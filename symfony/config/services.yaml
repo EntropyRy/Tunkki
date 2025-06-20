@@ -505,14 +505,14 @@ services:
   #     - twig.extension
 
   # Custom CmsPageRouter to handle _locale parameters correctly
-  App\Route\LocalizedCmsPageRouter:
-    arguments:
-      - "@sonata.page.router"
-      - "@router.default"
-      - "@sonata.page.manager.site"
-    tags:
-      - { name: router, priority: 200 }
-
+  #  App\Route\LocalizedCmsPageRouter:
+  #    arguments:
+  #      - "@sonata.page.router"
+  #      - "@router.default"
+  #      - "@sonata.page.manager.site"
+  #    tags:
+  #      - { name: router, priority: 200 }
+  #
   # Override the default site selector
   sonata.page.site.selector.host_with_path_by_locale:
     alias: App\Site\CustomHostPathByLocaleSiteSelector
