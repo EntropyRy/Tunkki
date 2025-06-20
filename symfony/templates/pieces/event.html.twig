@@ -361,12 +361,22 @@
         {% set loading = 'lazy' %}
     {% endif %}
     {% if event.picture is not null %}
-        {{ sonata_media(event.picture, 'banner', {srcset: ['small', 'normal', 'banner'],
-                loading: loading,
-                style: event.imgFilterBlendMode,
-                class: class,
-                title: block('event_img_title'),
-        }) }}
+        <twig:ProgressiveImage
+            :media="event.picture"
+            :sizes="{
+                'small': '(max-width: 480px)',
+                'normal': '(max-width: 768px)',
+                'banner': '(min-width: 769px)'
+            }"
+            :placeholder="sonata_path(event.picture, 'placeholder')"
+            :class="class"
+            :alt="block('event_img_title')"
+            :title="block('event_img_title')"
+            :lazy="loading == 'lazy'"
+            :imgAttributes="{
+                'style': event.imgFilterBlendMode
+            }"
+        />
     {% else %}
         {{ block('placeholder_img') }}
     {% endif %}
@@ -796,30 +806,28 @@
     {% if name is not defined %}
         {% set name = artist.name %}
     {% endif %}
-    {% if event is defined and 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
-        <div class="rounded-circle float-start w-50 overflow-hidden mb-4 me-4 border"
-             style="shape-outside: margin-box">
+    <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
+        {% if artist.Picture %}
+            <twig:ProgressiveImage
+                :media="artist.Picture"
+                :sizes="{
+                    'square': '(max-width: 768px)',
+                    'large': '(min-width: 769px)'
+                }"
+                :placeholder="sonata_path(artist.Picture, 'placeholder')"
+                class="w-100"
+                :alt="name"
+                :title="name"
+                :lazy="true"
+            />
+        {% else %}
             <img width="100%"
-                 loading="lazy"
-                 title="{{ name }}"
-                 src="{{ sonata_path(artist.Picture, 'square') }}">
-        </div>
-    {% else %}
-        <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
-            {% if artist.Picture %}
-                <img width="100%"
-                     loading="lazy"
-                     title="{{ name }}"
-                     src="{{ sonata_path(artist.Picture, 'square') }}">
-            {% else %}
-                <img width="100%"
-                     loading="lazy"
-                     title="{{ name }}"
-                     src="{{ asset('images/thumb_artist_square.jpg') }}">
-            {% endif %}
-            <div class="caption d-none d-sm-block">{{ name }}</div>
-        </span>
-    {% endif %}
+                    loading="lazy"
+                    title="{{ name }}"
+                    src="{{ asset('images/thumb_artist_square.jpg') }}">
+        {% endif %}
+        <div class="caption d-none d-sm-block">{{ name }}</div>
+    </span>
 {% endblock %}
 {% block artist_preview_info %}
     {% set bio_attribute = 'bio_attribute'|trans %}

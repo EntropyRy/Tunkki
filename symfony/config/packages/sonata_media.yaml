@@ -44,6 +44,7 @@ sonata_media:
         - sonata.media.provider.image
         - sonata.media.provider.file
       formats:
+        placeholder: { width: 64, quality: 30 }
         small: { width: 500, quality: 70 }
         normal: { width: 800, quality: 80 }
         banner: { width: 1200, quality: 80 }
@@ -53,6 +54,7 @@ sonata_media:
       providers:
         - sonata.media.provider.image
       formats:
+        placeholder: { width: 64, quality: 30 }
         small: { width: 400, quality: 70 }
         big: { width: 800, quality: 80 }
         square:
