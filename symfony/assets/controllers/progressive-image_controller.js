@@ -24,12 +24,8 @@ export default class extends Controller {
     this.mainImage = this.imageTarget;
     this.observer = null;
 
-    // If lazy is false, load immediately, otherwise use intersection observer
-    if (this.lazyValue === false) {
-      this.loadProgressiveImage();
-    } else {
-      this.setupIntersectionObserver();
-    }
+    // Check if image is already cached first
+    this.checkCacheAndLoad();
   }
 
   disconnect() {
@@ -37,6 +33,47 @@ export default class extends Controller {
       this.observer.disconnect();
       this.observer = null;
     }
+  }
+
+  checkCacheAndLoad() {
+    const dataSrc = this.mainImage.getAttribute("data-src");
+
+    if (!dataSrc) {
+      // No data-src, nothing to check
+      return;
+    }
+
+    // Create a test image to check if it's cached
+    const testImg = new Image();
+
+    // Set up a timeout to prevent hanging
+    const timeout = setTimeout(() => {
+      // Image not cached, proceed with normal loading logic
+      if (this.lazyValue === false) {
+        this.loadProgressiveImage();
+      } else {
+        this.setupIntersectionObserver();
+      }
+    }, 10);
+
+    testImg.onload = () => {
+      clearTimeout(timeout);
+      // Image is cached, load it immediately
+      this.loadProgressiveImage();
+    };
+
+    testImg.onerror = () => {
+      clearTimeout(timeout);
+      // Error loading, proceed with normal logic
+      if (this.lazyValue === false) {
+        this.loadProgressiveImage();
+      } else {
+        this.setupIntersectionObserver();
+      }
+    };
+
+    // Start the test - if cached, onload fires immediately
+    testImg.src = dataSrc;
   }
 
   setupIntersectionObserver() {
