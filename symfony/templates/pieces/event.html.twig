@@ -356,9 +356,9 @@
 {% endblock %}
 {% block img %}
     {% if loop is defined and loop.first %}
-        {% set loading = 'eager' %}
+        {% set lazy = false %}
     {% else %}
-        {% set loading = 'lazy' %}
+        {% set lazy = true %}
     {% endif %}
     {% if event.picture is not null %}
         <twig:ProgressiveImage
@@ -372,7 +372,7 @@
             :class="class"
             :alt="block('event_img_title')"
             :title="block('event_img_title')"
-            :lazy="loading == 'lazy'"
+            :lazy="lazy"
             :imgAttributes="{
                 'style': event.imgFilterBlendMode
             }"
