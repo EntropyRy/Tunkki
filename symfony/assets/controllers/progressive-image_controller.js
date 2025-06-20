@@ -49,8 +49,8 @@ export default class extends Controller {
 
     // Check if image loaded synchronously (cached)
     if (testImg.complete && testImg.naturalWidth > 0) {
-      // Image is cached, load immediately
-      this.loadProgressiveImage();
+      // Image is cached, show immediately without animation
+      this.loadCachedImage();
     } else {
       // Not cached, proceed with normal logic
       if (this.lazyValue === false) {
@@ -85,6 +85,39 @@ export default class extends Controller {
     this.observer.observe(this.element);
   }
 
+  loadCachedImage() {
+    const sources = this.picture.querySelectorAll("source[data-srcset]");
+    const img = this.mainImage;
+
+    // Load sources immediately for cached image
+    sources.forEach((source) => {
+      const dataSrcset = source.getAttribute("data-srcset");
+      if (dataSrcset) {
+        source.setAttribute("srcset", dataSrcset);
+        source.removeAttribute("data-srcset");
+      }
+    });
+
+    const dataSrc = img.getAttribute("data-src");
+    if (dataSrc) {
+      img.src = dataSrc;
+      img.removeAttribute("data-src");
+    }
+
+    // Hide placeholder immediately and show image without animation
+    this.placeholder.style.display = "none";
+    this.picture.style.opacity = "1";
+    this.picture.classList.add("loaded");
+
+    this.dispatch("loaded", {
+      detail: {
+        mediaId: this.mediaIdValue,
+        element: this.element,
+        cached: true,
+      },
+    });
+  }
+
   loadProgressiveImage() {
     const sources = this.picture.querySelectorAll("source[data-srcset]");
     const img = this.mainImage;
@@ -117,6 +150,7 @@ export default class extends Controller {
           detail: {
             mediaId: this.mediaIdValue,
             element: this.element,
+            cached: false,
           },
         });
       };
