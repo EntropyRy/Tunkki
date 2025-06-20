@@ -6,6 +6,7 @@ export default class extends Controller {
   static values = {
     mediaId: String,
     sizes: Object,
+    lazy: Boolean,
   };
 
   static targets = ["placeholder", "picture", "image"];
@@ -23,7 +24,12 @@ export default class extends Controller {
     this.mainImage = this.imageTarget;
     this.observer = null;
 
-    this.setupIntersectionObserver();
+    // If lazy is false, load immediately, otherwise use intersection observer
+    if (this.lazyValue === false) {
+      this.loadProgressiveImage();
+    } else {
+      this.setupIntersectionObserver();
+    }
   }
 
   disconnect() {
