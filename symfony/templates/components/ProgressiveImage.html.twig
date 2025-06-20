@@ -20,14 +20,14 @@
 
         {% for format, mediaQuery in sizes %}
             <source media="{{ mediaQuery }}"
-                    {% if lazy %}data-srcset{% else %}srcset{% endif %}="{{ sonata_path(media, format) }}"
+                    data-srcset="{{ sonata_path(media, format) }}"
                     type="{{ media.contentType }}">
             <source media="{{ mediaQuery }}"
-                    {% if lazy %}data-srcset{% else %}srcset{% endif %}="{{ sonata_path(media, format) }}">
+                    data-srcset="{{ sonata_path(media, format) }}">
         {% endfor %}
 
         {# Fallback image #}
-        <img {% if lazy %}data-src{% else %}src{% endif %}="{{ sonata_path(media, sizes|keys|last) }}"
+        <img data-src="{{ sonata_path(media, sizes|keys|last) }}"
              alt="{{ alt }}"
              {% if title %}title="{{ title }}"{% endif %}
              class="{{ this.imageClasses }}"

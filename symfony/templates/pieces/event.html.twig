@@ -391,7 +391,7 @@
                 srcset="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.webp') }}">
         <source type="image/png"
                 srcset="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}">
-        <img loading="{{ loading }}"
+        <img loading="{% if loop is defined and loop.first %}eager{% else %}lazy{% endif %}"
              class="{{ class }}"
              src="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}"
              title="{{ block('event_img_title') }}">
