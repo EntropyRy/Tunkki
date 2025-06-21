@@ -89,6 +89,14 @@ export default class extends Controller {
     const sources = this.picture.querySelectorAll("source[data-srcset]");
     const img = this.mainImage;
 
+    // Force disable transitions immediately for Firefox compatibility
+    this.placeholder.style.transition = "none";
+    this.picture.style.transition = "none";
+
+    // Force a reflow to ensure transition changes take effect
+    this.placeholder.offsetHeight;
+    this.picture.offsetHeight;
+
     // Load sources immediately for cached image
     sources.forEach((source) => {
       const dataSrcset = source.getAttribute("data-srcset");
@@ -104,19 +112,19 @@ export default class extends Controller {
       img.removeAttribute("data-src");
     }
 
-    // Hide placeholder immediately and show image without animation
-    this.placeholder.style.transition = "none";
-    this.picture.style.transition = "none";
-    this.placeholder.style.opacity = "0";
-    this.picture.style.opacity = "1";
-    this.picture.classList.add("loaded");
+    // Use requestAnimationFrame to ensure changes happen after transition is disabled
+    requestAnimationFrame(() => {
+      this.placeholder.style.opacity = "0";
+      this.picture.style.opacity = "1";
+      this.picture.classList.add("loaded");
 
-    this.dispatch("loaded", {
-      detail: {
-        mediaId: this.mediaIdValue,
-        element: this.element,
-        cached: true,
-      },
+      this.dispatch("loaded", {
+        detail: {
+          mediaId: this.mediaIdValue,
+          element: this.element,
+          cached: true,
+        },
+      });
     });
   }
 
