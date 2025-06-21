@@ -52,8 +52,8 @@ class ProgressiveImage
         $this->imageClass = $imageClass ?: $class;
         
         // Handle alt and title with fallbacks
-        $this->alt = $alt ?: $media->getName() ?: 'Image';
-        $this->title = $title ?: $media->getDescription() ?: $media->getName() ?: '';
+        $this->alt = ($alt ?: $media->getName()) ?: 'Image';
+        $this->title = ($title ?: $media->getDescription() ?: $media->getName()) ?: '';
         
         $this->lazy = $lazy;
         $this->pictureAttributes = $pictureAttributes;
@@ -88,7 +88,7 @@ class ProgressiveImage
     {
         $classes = ['progressive-media-container'];
         
-        if ($this->containerClass) {
+        if ($this->containerClass !== '' && $this->containerClass !== '0') {
             $classes[] = $this->containerClass;
         }
         
@@ -99,7 +99,7 @@ class ProgressiveImage
     {
         $classes = ['progressive-placeholder'];
         
-        if ($this->placeholderClass) {
+        if ($this->placeholderClass !== '' && $this->placeholderClass !== '0') {
             $classes[] = $this->placeholderClass;
         }
         
@@ -110,7 +110,7 @@ class ProgressiveImage
     {
         $classes = ['progressive-picture'];
         
-        if ($this->pictureClass) {
+        if ($this->pictureClass !== '' && $this->pictureClass !== '0') {
             $classes[] = $this->pictureClass;
         }
         
@@ -121,7 +121,7 @@ class ProgressiveImage
     {
         $classes = ['progressive-image'];
         
-        if ($this->imageClass) {
+        if ($this->imageClass !== '' && $this->imageClass !== '0') {
             $classes[] = $this->imageClass;
         }
         
