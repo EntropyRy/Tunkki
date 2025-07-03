@@ -61,15 +61,7 @@ class CheckoutsController extends AbstractController
         if ($lineItems !== []) {
             $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
             if ($eventServiceFeeProduct != null) {
-                // Do not add it again if it is already in the cart
-                // This is to prevent multiple service fees being added to the cart
-                $found = false;
-                foreach ($products as $cartItem) {
-                    if ($cartItem->getProduct()->getId() == $eventServiceFeeProduct->getId()) {
-                        $found = true;
-                        break;
-                    }
-                }
+                $found = array_any($products, fn($cartItem): bool => $cartItem->getProduct()->getId() == $eventServiceFeeProduct->getId());
                 if (!$found) {
                     $cartItem = new CartItem();
                     $cartItem->setProduct($eventServiceFeeProduct);
