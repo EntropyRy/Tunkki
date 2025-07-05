@@ -117,7 +117,7 @@
   .e-container {
     border: 0px solid #fff;
   }
-  nav {
+  .e-container nav {
     border-top: 0px solid #afafaf;
   }
 }
