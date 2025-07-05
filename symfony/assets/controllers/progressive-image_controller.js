@@ -12,53 +12,37 @@ export default class extends Controller {
   static targets = ["placeholder", "picture", "image"];
 
   connect() {
-    // console.log("Progressive image controller connected");
-    // console.log("Targets found:", {
-    //   placeholder: this.hasPlaceholderTarget,
-    //   picture: this.hasPictureTarget,
-    //   image: this.hasImageTarget,
-    // });
-    //
-    this.placeholder = this.placeholderTarget;
-    this.picture = this.pictureTarget;
-    this.mainImage = this.imageTarget;
     this.observer = null;
-
-    // Check if image is already cached first
-    this.checkCacheAndLoad();
+    this.loadingPromise = null;
+    this.isLoaded = false;
+    this.setupLoadingStrategy();
   }
 
   disconnect() {
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = null;
-    }
+    this.cleanup();
   }
 
-  checkCacheAndLoad() {
-    const dataSrc = this.mainImage.getAttribute("data-src");
+  setupLoadingStrategy() {
+    const dataSrc = this.imageTarget.getAttribute("data-src");
 
     if (!dataSrc) {
-      // No data-src, nothing to check
       return;
     }
 
-    // Create a test image to check if it's cached
-    const testImg = new Image();
-    testImg.src = dataSrc;
-
-    // Check if image loaded synchronously (cached)
-    if (testImg.complete && testImg.naturalWidth > 0) {
-      // Image is cached, show immediately without animation
-      this.loadCachedImage();
+    // Check cache first, then determine loading strategy
+    if (this.isImageCached(dataSrc)) {
+      this.loadImageImmediately();
+    } else if (this.lazyValue === false) {
+      this.loadProgressiveImage();
     } else {
-      // Not cached, proceed with normal logic
-      if (this.lazyValue === false) {
-        this.loadProgressiveImage();
-      } else {
-        this.setupIntersectionObserver();
-      }
+      this.setupIntersectionObserver();
     }
+  }
+
+  isImageCached(src) {
+    const testImg = new Image();
+    testImg.src = src;
+    return testImg.complete && testImg.naturalWidth > 0;
   }
 
   setupIntersectionObserver() {
@@ -68,14 +52,7 @@ export default class extends Controller {
     }
 
     this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            this.loadProgressiveImage();
-            this.observer.unobserve(entry.target);
-          }
-        });
-      },
+      this.handleIntersection.bind(this),
       {
         threshold: 0.1,
         rootMargin: "50px",
@@ -85,99 +62,145 @@ export default class extends Controller {
     this.observer.observe(this.element);
   }
 
-  loadCachedImage() {
-    const sources = this.picture.querySelectorAll("source[data-srcset]");
-    const img = this.mainImage;
-
-    // Force disable transitions immediately for Firefox compatibility
-    this.placeholder.style.transition = "none";
-    this.picture.style.transition = "none";
-
-    // Force a reflow to ensure transition changes take effect
-    this.placeholder.offsetHeight;
-    this.picture.offsetHeight;
-
-    // Load sources immediately for cached image
-    sources.forEach((source) => {
-      const dataSrcset = source.getAttribute("data-srcset");
-      if (dataSrcset) {
-        source.setAttribute("srcset", dataSrcset);
-        source.removeAttribute("data-srcset");
-      }
-    });
-
-    const dataSrc = img.getAttribute("data-src");
-    if (dataSrc) {
-      img.src = dataSrc;
-      img.removeAttribute("data-src");
+  handleIntersection(entries) {
+    const entry = entries[0];
+    if (entry.isIntersecting && !this.isLoaded) {
+      this.loadProgressiveImage();
+      this.observer.unobserve(entry.target);
     }
-
-    // Use requestAnimationFrame to ensure changes happen after transition is disabled
-    requestAnimationFrame(() => {
-      this.placeholder.style.opacity = "0";
-      this.picture.style.opacity = "1";
-      this.picture.classList.add("loaded");
-
-      this.dispatch("loaded", {
-        detail: {
-          mediaId: this.mediaIdValue,
-          element: this.element,
-          cached: true,
-        },
-      });
-    });
   }
 
-  loadProgressiveImage() {
-    const sources = this.picture.querySelectorAll("source[data-srcset]");
-    const img = this.mainImage;
+  loadImageImmediately() {
+    if (this.isLoaded) return;
 
-    sources.forEach((source) => {
-      const dataSrcset = source.getAttribute("data-srcset");
-      if (dataSrcset) {
-        source.setAttribute("srcset", dataSrcset);
-        source.removeAttribute("data-srcset");
-      }
+    // Batch DOM operations for better performance
+    this.batchStyleUpdates(() => {
+      this.disableTransitions();
+      this.updateImageSources();
+      this.applyLoadedStyles(true);
     });
 
-    const dataSrc = img.getAttribute("data-src");
-    if (dataSrc) {
+    this.markAsLoaded(true);
+  }
+
+  async loadProgressiveImage() {
+    if (this.isLoaded || this.loadingPromise) return;
+
+    try {
+      this.loadingPromise = this.preloadImage();
+      await this.loadingPromise;
+
+      this.updateImageSources();
+      this.animateImageReveal();
+      this.markAsLoaded(false);
+    } catch (error) {
+      console.error(`Failed to load progressive image:`, error);
+      this.handleLoadError();
+    } finally {
+      this.loadingPromise = null;
+    }
+  }
+
+  preloadImage() {
+    const dataSrc = this.imageTarget.getAttribute("data-src");
+
+    return new Promise((resolve, reject) => {
       const tempImg = new Image();
 
+      const cleanup = () => {
+        tempImg.onload = null;
+        tempImg.onerror = null;
+      };
+
       tempImg.onload = () => {
-        img.src = dataSrc;
-        img.removeAttribute("data-src");
-
-        this.picture.style.opacity = "1";
-        this.picture.classList.add("loaded");
-
-        setTimeout(() => {
-          this.placeholder.style.opacity = "0";
-          this.placeholder.classList.add("faded");
-        }, 50);
-
-        this.dispatch("loaded", {
-          detail: {
-            mediaId: this.mediaIdValue,
-            element: this.element,
-            cached: false,
-          },
-        });
+        cleanup();
+        resolve();
       };
 
       tempImg.onerror = () => {
-        console.error(`Failed to load progressive image: ${dataSrc}`);
-        this.handleLoadError();
+        cleanup();
+        reject(new Error(`Failed to load image: ${dataSrc}`));
       };
 
       tempImg.src = dataSrc;
+    });
+  }
+
+  updateImageSources() {
+    // Update all source elements
+    const sources = this.pictureTarget.querySelectorAll("source[data-srcset]");
+    sources.forEach((source) => {
+      const dataSrcset = source.getAttribute("data-srcset");
+      if (dataSrcset) {
+        source.setAttribute("srcset", dataSrcset);
+        source.removeAttribute("data-srcset");
+      }
+    });
+
+    // Update main image
+    const dataSrc = this.imageTarget.getAttribute("data-src");
+    if (dataSrc) {
+      this.imageTarget.src = dataSrc;
+      this.imageTarget.removeAttribute("data-src");
     }
   }
 
+  disableTransitions() {
+    const elements = [this.placeholderTarget, this.pictureTarget];
+    elements.forEach((el) => {
+      el.style.transition = "none";
+      // Force reflow
+      el.offsetHeight;
+    });
+  }
+
+  animateImageReveal() {
+    this.batchStyleUpdates(() => {
+      this.pictureTarget.style.opacity = "1";
+      this.pictureTarget.classList.add("loaded");
+    });
+
+    // Delay placeholder fade for smoother transition
+    setTimeout(() => {
+      this.batchStyleUpdates(() => {
+        this.placeholderTarget.style.opacity = "0";
+        this.placeholderTarget.classList.add("faded");
+      });
+    }, 50);
+  }
+
+  applyLoadedStyles(isInstant = false) {
+    if (isInstant) {
+      this.placeholderTarget.style.opacity = "0";
+      this.pictureTarget.style.opacity = "1";
+      this.pictureTarget.classList.add("loaded");
+    }
+  }
+
+  batchStyleUpdates(updateFunction) {
+    // Use requestAnimationFrame to batch DOM updates
+    requestAnimationFrame(() => {
+      updateFunction();
+    });
+  }
+
+  markAsLoaded(cached) {
+    this.isLoaded = true;
+    this.dispatch("loaded", {
+      detail: {
+        mediaId: this.mediaIdValue,
+        element: this.element,
+        cached,
+      },
+    });
+  }
+
   handleLoadError() {
-    this.placeholder.style.filter = "none";
-    this.placeholder.style.opacity = "1";
-    this.element.classList.add("load-error");
+    this.batchStyleUpdates(() => {
+      this.placeholderTarget.style.filter = "none";
+      this.placeholderTarget.style.opacity = "1";
+      this.element.classList.add("load-error");
+    });
 
     this.dispatch("error", {
       detail: {
@@ -185,5 +208,18 @@ export default class extends Controller {
         element: this.element,
       },
     });
+  }
+
+  cleanup() {
+    if (this.observer) {
+      this.observer.disconnect();
+      this.observer = null;
+    }
+
+    if (this.loadingPromise) {
+      this.loadingPromise = null;
+    }
+
+    this.isLoaded = false;
   }
 }
