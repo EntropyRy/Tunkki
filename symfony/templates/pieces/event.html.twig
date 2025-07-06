@@ -348,7 +348,7 @@
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
         <div class="img-fluid">{{ block('video_media') }}</div>
     {% else %}
-        <div class=" {% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %} video-fluid {% else %} img-filter {% endif %}" {{ block('imgfilter') }}>
+        <div class="{% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}" {{ block('imgfilter') }}>
             {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
             {{ block('img') }}
         </div>
@@ -427,7 +427,7 @@
                     <a class="btn btn-outline-info"
                        {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %}
                        href="{{ url.url }}">
-                        <twig:ux:icon name="{{ url.icon }}" />
+                        <twig:ux:icon name="{{ url.icon|default('link') }}" />
                         {{ url.title|trans }}
                     </a>
                 </span>
