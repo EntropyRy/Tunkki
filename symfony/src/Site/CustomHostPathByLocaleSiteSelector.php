@@ -90,7 +90,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             $url = $defaultSite->getUrl();
             \assert(null !== $url);
 
-            $event->setResponse(new RedirectResponse($url));
+            $event->setResponse(new RedirectResponse($url ? $url : "/"));
         } elseif (
             $this->site instanceof SiteInterface &&
             null !== $this->site->getLocale()
