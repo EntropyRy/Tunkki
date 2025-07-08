@@ -11,11 +11,12 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SitemapController extends AbstractController
 {
-    public function __construct(private readonly EventRepository $eventRepo, private readonly MenuRepository $menuRepo)
-    {
-    }
+    public function __construct(
+        private readonly EventRepository $eventRepo,
+        private readonly MenuRepository $menuRepo
+    ) {}
 
-    #[Route('/sitemap.xml', name: 'sitemap')]
+    #[Route("/sitemap.xml", name: "sitemap")]
     public function index(Request $request): Response
     {
         // find published events from db
@@ -24,60 +25,77 @@ class SitemapController extends AbstractController
         $domain = $request->getSchemeAndHttpHost();
         $urls = [];
         $alt = [];
-        $defaultLangs = ['fi', 'en'];
+        $defaultLangs = ["fi", "en"];
         foreach ($events as $event) {
             foreach ($defaultLangs as $lang) {
                 $alt[$lang] = $event->getUrlByLang($lang);
             }
             $urls[] = [
-                'loc' => $event->getUrlByLang('fi'),
-                'lastmod' => $event->getUpdatedAt()->format('Y-m-d'),
-                'changefreq' => 'weekly',
-                'priority' => '0.5',
-                'alts' => $alt
+                "loc" => $event->getUrlByLang("fi"),
+                "lastmod" => $event->getUpdatedAt()->format("Y-m-d"),
+                "changefreq" => "weekly",
+                "priority" => "0.5",
+                "alts" => $alt,
             ];
         }
         foreach ($roots as $root) {
             foreach ($defaultLangs as $lang) {
                 $page = $root->getPageByLang($lang);
-                $alt[$lang] = $domain . $page->getUrl();
+                $url = $page->getUrl();
+                if ($lang === "en") {
+                    $url = "/en" . $url;
+                }
+                $alt[$lang] = $domain . $url;
             }
-            $pageFi = $root->getPageByLang('fi');
+            $pageFi = $root->getPageByLang("fi");
             $urls[] = [
-                'loc' => $domain . $pageFi->getUrl(),
-                'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
-                'changefreq' => 'weekly',
-                'priority' => '0.5',
-                'alts' => $alt
+                "loc" => $domain . $pageFi->getUrl(),
+                "lastmod" => $pageFi->getUpdatedAt()->format("Y-m-d"),
+                "changefreq" => "weekly",
+                "priority" => "0.5",
+                "alts" => $alt,
             ];
             foreach ($root->getChildren() as $item) {
                 if ($item->getEnabled()) {
                     foreach ($defaultLangs as $lang) {
                         $page = $item->getPageByLang($lang);
-                        $alt[$lang] = $domain . $page->getUrl();
+                        $url = $page->getUrl();
+                        if ($lang === "en") {
+                            $url = "/en" . $url;
+                        }
+                        $alt[$lang] = $domain . $url;
                     }
-                    $pageFi = $item->getPageByLang('fi');
+                    $pageFi = $item->getPageByLang("fi");
                     $urls[] = [
-                        'loc' => $domain . $pageFi->getUrl(),
-                        'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
-                        'changefreq' => 'weekly',
-                        'priority' => '0.5',
-                        'alts' => $alt
+                        "loc" => $domain . $pageFi->getUrl(),
+                        "lastmod" => $pageFi->getUpdatedAt()->format("Y-m-d"),
+                        "changefreq" => "weekly",
+                        "priority" => "0.5",
+                        "alts" => $alt,
                     ];
                     if ($item->hasChildren()) {
                         foreach ($item->getChildren() as $itemLv2) {
-                            if ($itemLv2->getEnabled() && empty($itemLv2->getUrl())) {
+                            if (
+                                $itemLv2->getEnabled() &&
+                                empty($itemLv2->getUrl())
+                            ) {
                                 foreach ($defaultLangs as $lang) {
                                     $page = $itemLv2->getPageByLang($lang);
-                                    $alt[$lang] = $domain . $page->getUrl();
+                                    $url = $page->getUrl();
+                                    if ($lang === "en") {
+                                        $url = "/en" . $url;
+                                    }
+                                    $alt[$lang] = $domain . $url;
                                 }
-                                $pageFi = $itemLv2->getPageByLang('fi');
+                                $pageFi = $itemLv2->getPageByLang("fi");
                                 $urls[] = [
-                                    'loc' => $domain . $pageFi->getUrl(),
-                                    'lastmod' => $pageFi->getUpdatedAt()->format('Y-m-d'),
-                                    'changefreq' => 'weekly',
-                                    'priority' => '0.5',
-                                    'alts' => $alt
+                                    "loc" => $domain . $pageFi->getUrl(),
+                                    "lastmod" => $pageFi
+                                        ->getUpdatedAt()
+                                        ->format("Y-m-d"),
+                                    "changefreq" => "weekly",
+                                    "priority" => "0.5",
+                                    "alts" => $alt,
                                 ];
                             }
                         }
@@ -92,10 +110,10 @@ class SitemapController extends AbstractController
         // ),
 
         $response = new Response(
-            $this->renderView('sitemap.html.twig', ['urls' => $urls]),
+            $this->renderView("sitemap.html.twig", ["urls" => $urls]),
             200
         );
-        $response->headers->set('Content-Type', 'text/xml');
+        $response->headers->set("Content-Type", "text/xml");
 
         return $response;
     }
