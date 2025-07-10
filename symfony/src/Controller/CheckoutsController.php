@@ -61,7 +61,7 @@ class CheckoutsController extends AbstractController
         if ($lineItems !== []) {
             $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
             if ($eventServiceFeeProduct != null) {
-                $found = array_any($products, fn($cartItem): bool => $cartItem->getProduct()->getId() === $eventServiceFeeProduct->getId());
+                $found = array_any($products->toArray(), fn ($cartItem): bool => $cartItem->getProduct()->getId() === $eventServiceFeeProduct->getId());
                 if (!$found) {
                     $cartItem = new CartItem();
                     $cartItem->setProduct($eventServiceFeeProduct);
