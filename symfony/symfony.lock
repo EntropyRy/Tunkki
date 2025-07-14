@@ -14,9 +14,6 @@
     "defuse/php-encryption": {
         "version": "v2.2.1"
     },
-    "doctrine/cache": {
-        "version": "1.10.0"
-    },
     "doctrine/collections": {
         "version": "1.6.4"
     },
