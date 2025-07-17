@@ -3,9 +3,5 @@ framework:
     # The paths to make available to the asset mapper.
     paths:
       - assets/
-    excluded_patterns:
-      - "scss/*.scss"
-      - "assets/styles/scss/**"
-      - "assets/styles/app.scss"
     precompress:
-      format: "brotli"
+      format: [brotli, gzip]
