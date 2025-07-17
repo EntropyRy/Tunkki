@@ -506,6 +506,7 @@ Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
   join_mattermost: Liity Mattermostiin
   old_announcements: Vanhat tiedotteet
+  theme-swithcer: Teeman vaihtaja
 happening:
   heading:
     edit: Muokkaa tapahtumaa

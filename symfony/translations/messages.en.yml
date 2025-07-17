@@ -422,6 +422,7 @@ barcode.expl: First your code then the others and confirmation with your code
 button:
   join_mattermost: Join Mattermost
   old_announcements: Old Announcements
+  theme-switcher: Theme Switcher
 happening:
   heading:
     edit: Edit Happening
