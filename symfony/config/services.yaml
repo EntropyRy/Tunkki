@@ -491,28 +491,6 @@ services:
           priority: 44,
         }
 
-  # Custom router decorator to fix localized routing with Sonata Page Bundle
-  # DISABLED due to memory leak - using Twig extension approach instead
-  # App\Routing\LocalizedRouterDecorator:
-  #   decorates: router
-  #   arguments:
-  #     - '@App\Routing\LocalizedRouterDecorator.inner'
-
-  # Custom Twig extension to handle _locale parameter in path() function
-  # DISABLED - testing CmsPageRouter approach instead
-  # App\Twig\LocalizedPathExtension:
-  #   tags:
-  #     - twig.extension
-
-  # Custom CmsPageRouter to handle _locale parameters correctly
-  #  App\Route\LocalizedCmsPageRouter:
-  #    arguments:
-  #      - "@sonata.page.router"
-  #      - "@router.default"
-  #      - "@sonata.page.manager.site"
-  #    tags:
-  #      - { name: router, priority: 200 }
-  #
   # Override the default site selector
   sonata.page.site.selector.host_with_path_by_locale:
     alias: App\Site\CustomHostPathByLocaleSiteSelector

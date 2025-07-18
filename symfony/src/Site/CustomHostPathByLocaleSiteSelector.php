@@ -13,7 +13,6 @@ use Sonata\PageBundle\Request\SiteRequestInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Custom site selector that supports Symfony's localized routing.
@@ -29,75 +28,6 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
     ) {
         parent::__construct($siteManager, $decoratorStrategy, $seoPage);
     }
-    public function handleKernelRequesta(RequestEvent $event): void
-    {
-        $request = $event->getRequest();
-
-        if (!$request instanceof SiteRequestInterface) {
-            throw new \RuntimeException(
-                'You must configure runtime on your composer.json in order to use "Host path by locale" strategy, take a look on page bundle multiside doc.'
-            );
-        }
-
-        $currentPath = $request->getPathInfo();
-
-        // First, check if this is a raw localized route that should be blocked
-        if ($this->isRawLocalizedRoute($currentPath)) {
-            // Don't set any site - this will cause 404 for raw localized routes
-            return;
-        }
-
-        $enabledSites = [];
-        $pathInfo = null;
-
-        foreach ($this->getSites($request) as $site) {
-            if (!$site->isEnabled()) {
-                continue;
-            }
-
-            $enabledSites[] = $site;
-
-            $match = $this->matchRequest($site, $request);
-
-            if (false === $match) {
-                continue;
-            }
-
-            if (!$this->shouldSiteHandlePath($match, $site)) {
-                continue;
-            }
-
-            $this->site = $site;
-            $pathInfo = $match;
-
-            if (!$this->site->isLocalhost()) {
-                break;
-            }
-        }
-
-        if ($this->site instanceof SiteInterface) {
-            $request->setPathInfo($pathInfo ?? "/");
-        }
-
-        // no valid site, but try to find a default site for the current request
-        if (
-            !$this->site instanceof SiteInterface &&
-            \count($enabledSites) > 0
-        ) {
-            $defaultSite = $this->getPreferredSite($enabledSites, $request);
-            \assert($defaultSite instanceof SiteInterface);
-
-            $url = $defaultSite->getUrl();
-            \assert(null !== $url);
-
-            $event->setResponse(new RedirectResponse($url ?: "/"));
-        } elseif (
-            $this->site instanceof SiteInterface
-        ) {
-            $request->attributes->set("_locale", $this->site->getLocale());
-        }
-    }
-
     /**
      * Check if this is a raw localized route that should not be directly accessible.
      */
@@ -177,11 +107,11 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             if (false === $match) {
                 continue;
             }
-            /* if (!$this->shouldSiteHandlePath($match, $site)) { */
-            /*     $this->site = $site; */
-            /*     $pathInfo = $match; */
-            /*     continue; */
-            /* } */
+            if (!$this->shouldSiteHandlePath($match, $site)) {
+                $this->site = $site;
+                $pathInfo = $match;
+                continue;
+            }
             $this->site = $site;
             $pathInfo = $match;
 
@@ -205,6 +135,10 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             $event->setResponse(new RedirectResponse($url ?: '/'));
         } elseif ($this->site instanceof SiteInterface && null !== $this->site->getLocale()) {
             $request->attributes->set('_locale', $this->site->getLocale());
+
+            if ($this->site->getLocale() !== 'fi') {
+                $request->setPathInfo('/' . $this->site->getLocale() . $request->getPathInfo());
+            }
         }
     }
 }
