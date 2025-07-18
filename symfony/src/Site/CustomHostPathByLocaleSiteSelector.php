@@ -47,33 +47,6 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
 
         return false;
     }
-
-    /**
-     * Check if a site should handle a specific path.
-     */
-    private function shouldSiteHandlePath(
-        string $matchedPath,
-        SiteInterface $site
-    ): bool {
-        $siteLocale = $site->getLocale();
-
-        // Try to match the stripped path to see if it's a localized route
-        try {
-            $routeInfo = $this->router->match($matchedPath);
-            $routeName = $routeInfo["_route"] ?? "";
-            $routeLocale = $routeInfo["_locale"] ?? null;
-
-            // If this is a localized route, ensure the locale matches the site
-            if ($routeLocale && $routeLocale !== $siteLocale) {
-                return false;
-            }
-        } catch (\Throwable) {
-            // Not a recognized route - let Sonata handle it normally
-            /* return false; */
-        }
-
-        return true;
-    }
     #[\Override]
     public function handleKernelRequest(RequestEvent $event): void
     {
@@ -107,11 +80,11 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             if (false === $match) {
                 continue;
             }
-            if (!$this->shouldSiteHandlePath($match, $site)) {
-                $this->site = $site;
-                $pathInfo = $match;
-                continue;
-            }
+            /* if (!$this->shouldSiteHandlePath($match, $site)) { */
+            /*     $this->site = $site; */
+            /*     $pathInfo = $match; */
+            /*     continue; */
+            /* } */
             $this->site = $site;
             $pathInfo = $match;
 
@@ -135,10 +108,6 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             $event->setResponse(new RedirectResponse($url ?: '/'));
         } elseif ($this->site instanceof SiteInterface && null !== $this->site->getLocale()) {
             $request->attributes->set('_locale', $this->site->getLocale());
-
-            if ($this->site->getLocale() !== 'fi') {
-                $request->setPathInfo('/' . $this->site->getLocale() . $request->getPathInfo());
-            }
         }
     }
 }

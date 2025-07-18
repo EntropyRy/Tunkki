@@ -8,7 +8,7 @@
             {% if event is not defined %}
                 <button
                     aria-label="{{ 'button.theme-switcher'|trans }}"
-                    class="btn position-absolute top-0 end-0" 
+                    class="btn position-absolute top-0 end-0"
                     {{ stimulus_controller('theme-switcher') }}
                     {{ stimulus_action('theme-switcher', 'switch') }}
                 >
