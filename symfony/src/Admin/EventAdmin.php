@@ -430,6 +430,7 @@ final class EventAdmin extends AbstractAdmin
                         [
                             'required' => false,
                             'choices' => [
+                                'Rain' => 'rain',
                                 'TV white noise' => 'tv',
                                 'VHS static' => 'vhs',
                                 'Snowfall' => 'snow',

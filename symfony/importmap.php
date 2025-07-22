@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'rain' => [
+        'path' => './assets/js/rain.js',
+        'entrypoint' => true,
+    ],
     'snow' => [
         'path' => './assets/js/snow.js',
         'entrypoint' => true,
