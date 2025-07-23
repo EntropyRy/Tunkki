@@ -357,7 +357,8 @@ final class EventAdmin extends AbstractAdmin
                     ModelListType::class,
                     [
                         'required' => false,
-                        'help' => 'Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.'
+                        'help' => 'Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.',
+                        'btn_delete' => 'Unselect',
                     ],
                 )
                 ->add(
