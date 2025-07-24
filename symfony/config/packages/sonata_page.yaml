@@ -66,6 +66,7 @@ sonata_page:
     - entropy_event_safer_space
     - entropy_event_artists
     - entropy_event_shop
+    - entropy_event_location
     - entropy_event_slug_artist_signup
     - entropy_event_slug_artist_signup_edit
     - entropy_event_calendar

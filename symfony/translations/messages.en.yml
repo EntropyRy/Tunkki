@@ -195,6 +195,9 @@ event:
     meeting: Discussion event
     announcement: Announcement
     web: Happens online
+  location:
+    title: Location
+    description: The street address, map and links to map services can be found here
   stripe:
     fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
     complete: Thank you for your purchase!

@@ -379,6 +379,28 @@ class EventController extends Controller
     }
     #[Route(
         path: [
+            'fi' => '/{year}/{slug}/paikka',
+            'en' => '/{year}/{slug}/location',
+        ],
+        name: 'entropy_event_location',
+        requirements: [
+            'year' => '\d+',
+        ]
+    )]
+    public function eventLocation(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        $user = $this->getUser();
+        if (!$event->isPublished() && is_null($user) && !$event->isLocationPublic()) {
+            throw $this->createAccessDeniedException('');
+        }
+        return $this->render('event/location.html.twig', [
+            'event' => $event,
+        ]);
+    }
+    #[Route(
+        path: [
             'fi' => '/{year}/{slug}/info',
             'en' => '/{year}/{slug}/about',
         ],

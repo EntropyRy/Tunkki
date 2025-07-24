@@ -278,6 +278,9 @@ event:
     mail_sent: Ostoksesi saapuivat juuri sähköpostilaatikkoosi. Ongelmatilanteissa ota yhteyttä hallitus@entropy.fi
   meta:
     keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
+  location:
+    title: Paikka
+    description: Paikan osoite, kartta ja linkit karttapalveluihin löytyy alta
   edit: Muokkaa
   only_for_members: tapahtuma näkyy vain jäsenille
   not_public: ei julkinen

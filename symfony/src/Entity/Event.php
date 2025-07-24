@@ -1565,4 +1565,9 @@ class Event implements \Stringable
 
         return $this;
     }
+
+    public function isLocationPublic(): ?bool
+    {
+        return $this->location ? true : false;
+    }
 }
