@@ -17,8 +17,8 @@
                 position: [location.latitude, location.longitude],
                 title: title,
                 infoWindow: {
-                    content: '<h3>' ~ title ~ '</h3>' ~ '<br>' ~ location.streetAddress
-                }
+                    content: '<h3>' ~ title ~ '</h3>' ~ '<br>' ~ location.streetAddress,
+                },
             }] %}
                 <p>{{ 'event.location.description'|trans }}</p>
                 <twig:ux:map

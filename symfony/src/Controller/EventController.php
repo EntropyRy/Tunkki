@@ -392,7 +392,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user) && !$event->isLocationPublic()) {
+        if (!$event->isPublished() && is_null($user) || !$event->isLocationPublic()) {
             throw $this->createAccessDeniedException('');
         }
         return $this->render('event/location.html.twig', [
