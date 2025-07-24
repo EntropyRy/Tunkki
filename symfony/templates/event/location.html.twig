@@ -21,7 +21,6 @@
                 }
             }] %}
                 <p>{{ 'event.location.description'|trans }}</p>
-                <p>{{ location.streetAddress }}</p>
                 <twig:ux:map
                     center="{{ center }}"
                     zoom="15"
@@ -29,6 +28,7 @@
                     class="foo"
                     style="height: 800px; width: 100%;"
                 />
+                <p>{{ location.streetAddress }}</p>
             <div class="mt-3 d-flex justify-content-between">
                 {# reittiopas link #}
                 {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
