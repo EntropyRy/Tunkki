@@ -281,6 +281,7 @@ event:
   location:
     title: Paikka
     description: Paikan osoite, kartta ja linkit karttapalveluihin löytyy alta
+    not_found: Paikkaa ei ole julkaistu
   edit: Muokkaa
   only_for_members: tapahtuma näkyy vain jäsenille
   not_public: ei julkinen
