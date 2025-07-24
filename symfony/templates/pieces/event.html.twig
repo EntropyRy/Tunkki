@@ -413,9 +413,8 @@
          style="gap: 0.5rem 0">
         {% if event.location %}
             <span>
-                {% set gps = '::' ~ event.location.latitude ~ ',' ~ event.location.longitude %}
                 <a class="btn btn-outline-info"
-                   href="https://reittiopas.hsl.fi/etusivu/-/{{ event.location.streetAddress|url_encode }}{{ gps|url_encode }}">
+                   href="{{ path('entropy_event_location', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="location-dot" />
                     {{ 'map'|trans }}
                 </a>
