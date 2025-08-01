@@ -15,7 +15,7 @@
                 <a href="{{ block('event_path') }}">
                     <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
                 </a>
-                {% if event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
+                {% if event.nakkikoneEnabled == true and event.requireNakkiBookingsToBeDifferentTimes == false %}
                     {% set show = true %}
                     {% set hide_time = true %}
                     {% set show_definition = true %}
