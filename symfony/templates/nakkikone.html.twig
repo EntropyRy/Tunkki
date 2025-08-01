@@ -2,6 +2,9 @@
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
+    {% if event.requireNakkiBookingsToBeDifferentTimes == false %}
+        {% set hide_time = true %}
+    {% endif %}
     {% set l = app.request.locale %}
     <div class="col-12" {{ stimulus_controller('nakkikone') }}>
         <h1>Nakkikone: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
@@ -13,7 +16,7 @@
             <div class="col-sm-6 col-md-4">
                 <div class="list-group" id="list-tab" role="tablist">
                     {% for name, nakki in nakkis %}
-                        {% if compared is not defined or compared != nakki.compared_to_event %}
+                        {% if not event.multiday and (compared is not defined or compared != nakki.compared_to_event) %}
                             <h5 class="mt-2">{{ nakki.compared_to_event|trans }}</h5>
                         {% endif %}
                         <a class="list-group-item list-group-item-action"
@@ -23,7 +26,10 @@
                            href="#nakki{{ loop.index }}"
                            role="tab"
                            aria-controls="{{ name }}">
-                            {{ name }} ({{ nakki.durations|join('h, ') }}h)
+                            {{ name }} 
+                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and event.multiday %}
+                                ({{ nakki.durations|join('h, ') }}h)
+                            {% endif %}
                             <span class="badge bg-secondary rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
                         </a>
                         {% set compared = nakki.compared_to_event %}
@@ -48,6 +54,9 @@
                              role="tabpanel"
                              aria-labelledby="list-{{ name }}-list">
                             <p>{{ nakki['description']|raw }}</p>
+                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and event.multiday %}
+                                <p>{{ 'Responsible'|trans }}: {{ nakki.responsible|default('') }}</p>
+                            {% endif %}
                         </div>
                     {% endfor %}
                 </div>

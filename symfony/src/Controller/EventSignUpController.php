@@ -164,6 +164,7 @@ class EventSignUpController extends Controller
         }
 
         $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
+        $nakkis[$name]['responsible'] = $booking->getNakki()->getResponsible(). ' (' . $booking->getNakki()->getResponsible()?->getUser()->getUsername() . ')';
         $nakkis[$name]['bookings'][] = $booking;
         $nakkis[$name]['durations'][$duration] = $duration;
 
