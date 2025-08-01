@@ -27,7 +27,7 @@
                            role="tab"
                            aria-controls="{{ name }}">
                             {{ name }} 
-                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and event.multiday %}
+                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and not event.multiday %}
                                 ({{ nakki.durations|join('h, ') }}h)
                             {% endif %}
                             <span class="badge bg-secondary rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
