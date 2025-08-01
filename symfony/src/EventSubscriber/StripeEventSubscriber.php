@@ -166,7 +166,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
                         $sold = $cartItem->getQuantity() > 1 ? 'Sold ' . $cartItem->getQuantity() . ' tickets.' : 'Sold 1 ticket.';
-                        $this->mm->SendToMattermost('[' . $event->getName() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
+                        $this->mm->SendToMattermost('[' . $product->getNameEn() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
                     }
                 }
             }
