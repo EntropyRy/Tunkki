@@ -26,7 +26,7 @@
                            href="#nakki{{ loop.index }}"
                            role="tab"
                            aria-controls="{{ name }}">
-                            {{ name }} 
+                            {{ name }}
                             {% if event.requireNakkiBookingsToBeDifferentTimes == false and not event.multiday %}
                                 ({{ nakki.durations|join('h, ') }}h)
                             {% endif %}
