@@ -8,7 +8,7 @@
     </h1>
     <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
         {% set location = event.location %}
-        {% if location %}
+        {% if location and location.latitude is not empty %}
             {% set name = block('event_name') %}
             {% set time = block('event_time') %}
             {% set center = [location.latitude, location.longitude] %}
