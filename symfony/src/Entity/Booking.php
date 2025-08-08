@@ -150,9 +150,9 @@ class Booking implements \Stringable
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $accessoryPrice = null;
 
-    // @phpstan-ignore-next-line
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Version]
+    // @phpstan-ignore-next-line
     private ?int $version = null;
 
     #[ORM\PrePersist]
