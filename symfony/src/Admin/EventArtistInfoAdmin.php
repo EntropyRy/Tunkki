@@ -119,4 +119,9 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $collection->remove('delete');
         $collection->add('update', $this->getRouterIdParameter() . '/update');
     }
+
+    protected function configureExportFields(): array
+    {
+        return ['artistClone.name', 'artistClone.genre', 'WishForPlayTime', 'SetLength', 'artistClone.linkUrls', 'freeWord', 'stage', 'StartTime'];
+    }
 }
