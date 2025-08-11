@@ -3,42 +3,6 @@ controllers:
     path: ../src/Controller/
     namespace: App\Controller
   type: attribute
-entropy_event_responsible:
-  path:
-    en: /{year}/{slug}/nakkikone/responsible
-    fi: /{year}/{slug}/nakkikone/vastuuhenkilo
-  controller: App\Controller\EventSignUpController::responsible
-  requirements:
-    year: '\d+'
-entropy_event_nakki_sign_up:
-  path: /{year}/{slug}/nakkikone/{id}/signup
-  controller: App\Controller\EventSignUpController::nakkiSignUp
-  requirements:
-    year: '\d+'
-    id: '\d+'
-entropy_event_nakki_cancel:
-  path: /{year}/{slug}/nakkikone/{id}/cancel
-  controller: App\Controller\EventSignUpController::nakkiCancel
-  requirements:
-    year: '\d+'
-    id: '\d+'
-entropy_event_slug_nakkikone:
-  path: /{year}/{slug}/nakkikone
-  controller: App\Controller\EventSignUpController::nakkikone
-  requirements:
-    year: '\d+'
-entropy_event_slug_artist_signup:
-  path:
-    en: /{year}/{slug}/artist/signup
-    fi: /{year}/{slug}/artisti/ilmottautuminen
-  controller: App\Controller\EventSignUpController::artistSignUp
-  requirements:
-    year: '\d+'
-entropy_event_rsvp:
-  path: /{year}/{slug}/rsvp
-  controller: App\Controller\EventSignUpController::RSVP
-  requirements:
-    year: '\d+'
 _entropy_mattermost_auth:
   path: /oauth
   controller: App\Controller\MattermostAuthController::connectAction
@@ -49,11 +13,3 @@ _entropy_mattermost_check_ssl:
   path: /oauth/check
   controller: App\Controller\MattermostAuthController::connectCheckAction
   schemes: [https]
-  #_member_form:
-  #path:    /member/join
-  #controller: App\Controller\MemberFormController:newMember
-  #_active_member_form:
-  #path:    /member/active
-  #controller: App\Controller\MemberFormController:activeMember
-#sonata_translation:
-#resource: '@SonataTranslationBundle/Resources/config/routes.yaml'
