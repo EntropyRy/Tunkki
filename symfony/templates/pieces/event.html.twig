@@ -24,12 +24,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
                         </li>
+                        {% if event.ArtistInfosByType('DJ')|length > 0 %}
                         <li class="nav-item">
                             <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
                         </li>
+                        {% endif %}
                         {% if event.allowMembersToCreateHappenings %}
                             <li class="nav-item">
                                 <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
