@@ -111,15 +111,19 @@
 {% endblock %}
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
-    <small>{{ block('published_and_updated') }}</small>
     {% set content_attr = 'content_attribute'|trans %}
     {% if '{{ menu }}' in attribute(event, content_attr) %}
         {{ block('menu') }}
+    {% else %}
+        <small>{{ block('published_and_updated') }}</small>
     {% endif %}
     <h1 class="event-name">
         {{ block('event_name') }}
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h1>
+    {% if '{{ menu }}' in attribute(event, content_attr) %}
+    <small>{{ block('published_and_updated') }}</small>
+    {% endif %}
 {% endblock %}
 {% block event_path %}
 {% if event.url and not event.externalUrl -%}
