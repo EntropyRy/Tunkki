@@ -39,7 +39,11 @@
                             <li class="nav-item">
                                 <a class="nav-link"
                                    href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                                    {{ 'ticket.and_nakki'|trans }}
+                                   {% if event.nakkiRequiredForTicketReservation %}
+                                        {{ 'ticket.and_nakki'|trans }}
+                                    {% else %}
+                                        {{ 'ticket.tickets'|trans }}
+                                    {% endif %}
                                 </a>
                             </li>
                         {% endif %}

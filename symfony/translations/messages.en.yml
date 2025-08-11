@@ -379,6 +379,7 @@ ticket:
   ticket: Ticket
   check: Ticket Check
   and_nakki: Nakki/Ticket
+  your_tickets: Your ticket
   form:
     reserve: Reserve
     reserve_and_recommend: Reserve and recommend

@@ -461,6 +461,7 @@ rsvp:
   closed: Ilmoittautuminen suljettu
 ticket:
   ticket: Lippu
+  your_tickets: Lippusi
   form:
     reserve: Varaa
     reserve_and_recommend: Varaa ja suosittele
