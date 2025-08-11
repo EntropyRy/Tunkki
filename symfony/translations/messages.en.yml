@@ -188,6 +188,7 @@ block:
 menu:
   logon_to: Log on to
 event:
+  no_artist: Artists have not been selected yet.
   badge:
     stream: Internet Stream
     clubroom: Happens at our clubroom

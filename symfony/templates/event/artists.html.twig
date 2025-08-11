@@ -18,33 +18,37 @@
                         <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}
                     </h1>
                 {% endif %}
-                {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
-                <div class="content">
-                    {{ block('content_artists', input) ?? '' }}
-                </div>
-                {{ block('bios') }}
-                {% if event.ArtistInfosByType('VJ')|length > 0 %}
+                {% if event.ArtistInfosByType('DJ')|length > 0 %}
+                    {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
+                    <div class="content">
+                        {{ block('content_artists', input) ?? '' }}
+                    </div>
+                    {{ block('bios') }}
+                    {% if event.ArtistInfosByType('VJ')|length > 0 %}
+                        {% if event.template == 'event.html.twig' %}
+                            <h1>
+                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
+                                VJ {{ 'Artists'|trans }}
+                            </h1>
+                        {% endif %}
+                        {{ block('vj_bios') }}
+                    {% endif %}
+                    {% if event.ArtistInfosByType('ART')|length > 0 %}
+                        {% if event.template == 'event.html.twig' %}
+                            <h1>
+                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
+                                {{ 'Artists'|trans }}
+                            </h1>
+                        {% endif %}
+                        {{ block('art_bios') }}
+                    {% endif %}
                     {% if event.template == 'event.html.twig' %}
                         <h1>
-                            <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
-                            VJ {{ 'Artists'|trans }}
+                            {{ 'Back to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
                         </h1>
                     {% endif %}
-                    {{ block('vj_bios') }}
-                {% endif %}
-                {% if event.ArtistInfosByType('ART')|length > 0 %}
-                    {% if event.template == 'event.html.twig' %}
-                        <h1>
-                            <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
-                            {{ 'Artists'|trans }}
-                        </h1>
-                    {% endif %}
-                    {{ block('art_bios') }}
-                {% endif %}
-                {% if event.template == 'event.html.twig' %}
-                    <h1>
-                        {{ 'Back to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-                    </h1>
+                {% else %}
+                    <h1>{{ 'event.no_artists'|trans }}</h1>
                 {% endif %}
             </div>
         </div>
