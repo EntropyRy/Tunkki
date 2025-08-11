@@ -265,7 +265,7 @@ page:
       wrench: Tarkoittaa että tarvitsee korjausta
       puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
 event:
-  no_artist: Aristeja ei ole vielä valittu
+  no_artists: Aristeja ei ole vielä valittu
   badge:
     stream: Internet lähetys
     clubroom: Tapahtuu kerhohuoneella
