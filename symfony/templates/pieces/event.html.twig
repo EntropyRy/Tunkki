@@ -585,11 +585,24 @@
                         {{- type }} {{ 'Timetable'|trans -}}
                         {%- if stage %}@ {{ stage }}{% endif -%}
                     </h4>
-                    <table class="timetable" {{ stimulus_controller('time-indicator', {'server-time': 'now'|date('Y-m-d\\TH:i:sP')}) }}>
+                    {%- set now = 'now'|date('U') -%}
+                    {%- set event_until = event.until|date('U') -%}
+                    {% set unix_times = [] %}
+                    {% for i in infos %}
+                        {% set unix_times = unix_times|merge([i.StartTime|date('U')]) %}
+                    {% endfor %}
+                    {% set first_start_unix = (infos|first).StartTime|date('U') %}
+                    {% set show_indicator = now >= first_start_unix and now <= event_until %}
+                    <table class="timetable"{% if show_indicator %} {{ stimulus_controller('time-indicator', {
+                        'server-time': 'now'|date('c'),
+                        'event-start': (infos|first).StartTime|date('c'),
+                        'event-end': event.until|date('c'),
+                        'slot-times': unix_times|join(',')
+                    }) }}{% endif %}>
                         <tbody>
-                            {%- set now = 'now'|date('U') -%}
-                            {%- set event_until = event.until|date('U') -%}
                             {%- set last_start_time = null -%}
+                            {%- set prev_info = null -%}
+                            {%- set indicator_added = false -%}
                             {%- set prev_info = null -%}
                             {%- for info in infos -%}
                                 {%- set artist = info.artistClone -%}
@@ -614,12 +627,9 @@
                                     {%- endif -%}
                                     {# Open a new row for the new time slot #}
                                     <tr>
-                                        <td class="indicator"
-                                            {%- if is_current -%}
-                                                {{ stimulus_target('time-indicator', 'indicator') }}>
+                                        <td class="indicator"{% if show_indicator and not indicator_added %} {{ stimulus_target('time-indicator', 'indicator') }}{% set indicator_added = true %}{% endif %}>
+                                            {%- if is_current and show_indicator -%}
                                                 {{- 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
-                                            {%- else -%}
-                                            >
                                             {%- endif -%}
                                         </td>
                                         <td class="time">{{- info.StartTime|format_datetime(pattern: datestring) -}}</td>

@@ -4,19 +4,33 @@ export default class extends Controller {
   static targets = ["indicator"];
   static values = {
     serverTime: String,
+    eventStart: String,
+    eventEnd: String,
+    slotTimes: String,
+    // Position recalculation interval (less frequent to reduce layout work)
     updateInterval: { type: Number, default: 30000 }, // 30 seconds
   };
 
   connect() {
     if (!this.hasIndicatorTarget) return;
 
+    // Parse event bounds (optional)
+    this.eventStartDate = this.hasEventStartValue
+      ? new Date(this.eventStartValue)
+      : null;
+    this.eventEndDate = this.hasEventEndValue
+      ? new Date(this.eventEndValue)
+      : null;
+
+    // Parse slot times
+    this.parseSlotTimes();
     // Calculate the time difference between server and client
     this.calculateTimeOffset();
 
     // Wait for fonts and layout to be ready, then initialize
     this.initializeWhenReady();
 
-    // Set up periodic updates
+    // Set up periodic position updates (heavier work)
     this.intervalId = setInterval(() => {
       this.updateIndicatorPosition();
     }, this.updateIntervalValue);
@@ -42,157 +56,163 @@ export default class extends Controller {
     }
   }
 
+  hideIndicator() {
+    if (this.hasIndicatorTarget) {
+      // Keep layout space; just visually hide
+      this.indicatorTarget.style.visibility = "hidden";
+      this.indicatorTarget.style.opacity = "0";
+    }
+  }
+
+  showIndicator() {
+    if (this.hasIndicatorTarget) {
+      this.indicatorTarget.style.visibility = "visible";
+      this.indicatorTarget.style.opacity = "1";
+    }
+  }
+
   updateIndicatorPosition() {
     const currentTime = this.getCurrentTime();
-    const position = this.calculatePosition(currentTime);
 
+    // Need parsed slot timestamps to decide visibility/position
+    if (!this.slotTimestampsMs || this.slotTimestampsMs.length === 0) {
+      this.hideIndicator();
+      return;
+    }
+
+    const firstSlotMs = this.slotTimestampsMs[0];
+    const lastSlotMs = this.slotTimestampsMs[this.slotTimestampsMs.length - 1];
+    // Assume a slot lasts up to 60 minutes after its start for end boundary if no explicit eventEnd
+    const inferredEndMs = lastSlotMs + 60 * 60 * 1000;
+
+    const windowStart = this.eventStartDate
+      ? this.eventStartDate.getTime()
+      : firstSlotMs;
+    const windowEnd = this.eventEndDate
+      ? this.eventEndDate.getTime()
+      : inferredEndMs;
+
+    if (
+      currentTime.getTime() < windowStart ||
+      currentTime.getTime() > windowEnd
+    ) {
+      this.hideIndicator();
+      return;
+    }
+
+    this.showIndicator();
+
+    const position = this.calculatePosition(currentTime);
     if (position !== null) {
       this.indicatorTarget.style.transform = `translateY(${position}px)`;
-      this.animateArrow();
     }
   }
 
   recalculateRowPositions() {
     // Force a reflow to get accurate measurements
     this.element.offsetHeight;
-    
-    // Get fresh row positions
+
+    // Get fresh row positions mapped against provided slotTimes
     const rows = Array.from(this.element.querySelectorAll("tr")).filter(
       (row) => row.querySelector(".time") !== null,
     );
 
-    return rows.map((row) => {
-      const timeCell = row.querySelector(".time");
-      const timeText = timeCell.textContent.trim();
-      const timeMatch = timeText.match(/(\d{1,2}):(\d{2})/);
-      const hours = parseInt(timeMatch[1], 10);
-      const minutes = parseInt(timeMatch[2], 10);
-
-      return {
-        row: row,
-        hours: hours,
-        minutes: minutes,
-        totalMinutes: hours * 60 + minutes,
-        top: row.offsetTop,
-        timeText: timeText,
-      };
+    const slots = [];
+    rows.forEach((row, idx) => {
+      const tsMs = this.slotTimestampsMs && this.slotTimestampsMs[idx];
+      if (typeof tsMs === "number") {
+        slots.push({
+          row,
+          timestampMs: tsMs,
+          top: row.offsetTop,
+        });
+      }
     });
+
+    // If counts differ, we still sort by timestamp to be safe
+    slots.sort((a, b) => a.timestampMs - b.timestampMs);
+    return slots;
   }
 
-  animateArrow() {
-    // Find the SVG element inside the indicator
-    const svg = this.indicatorTarget.querySelector("svg");
-    if (!svg) return;
-
-    // Add CSS classes to trigger the animation
-    svg.classList.add("update-animation");
-
-    // Remove the class after animation completes to reset for next time
-    setTimeout(() => {
-      svg.classList.remove("update-animation");
-    }, 500); // 1 second matches our animation duration
+  parseSlotTimes() {
+    this.slotTimestampsMs = [];
+    if (!this.hasSlotTimesValue || !this.slotTimesValue) return;
+    this.slotTimestampsMs = this.slotTimesValue
+      .split(",")
+      .map((s) => parseInt(s.trim(), 10))
+      .filter((n) => !isNaN(n))
+      .map((sec) => sec * 1000)
+      .sort((a, b) => a - b);
   }
 
   calculateTimeOffset() {
-    // Calculate the time difference between server and client
     try {
       const serverTime = new Date(this.serverTimeValue);
       const clientTime = new Date();
       this.timeOffset = serverTime.getTime() - clientTime.getTime();
     } catch (e) {
       console.error("Error parsing server time:", e);
-      this.timeOffset = 0; // Fallback to no offset
+      this.timeOffset = 0;
     }
   }
 
   getCurrentTime() {
-    // Return current client time adjusted by server offset
     const now = new Date();
     return new Date(now.getTime() + (this.timeOffset || 0));
   }
 
   calculatePosition(currentTime) {
-    // Get fresh row positions to account for dynamic heights
     const timeSlots = this.recalculateRowPositions();
-
     if (timeSlots.length === 0) return null;
 
-    // Handle times after midnight (e.g., 00:30, 01:00)
-    // If we find a time that's earlier than the previous, assume it's the next day
-    for (let i = 1; i < timeSlots.length; i++) {
-      if (timeSlots[i].totalMinutes < timeSlots[i - 1].totalMinutes) {
-        timeSlots[i].totalMinutes += 24 * 60; // Add a day
-      }
-    }
-
-    // Get current time in minutes
-    const currentHour = currentTime.getHours();
-    const currentMinute = currentTime.getMinutes();
-    let currentTotalMinutes = currentHour * 60 + currentMinute;
-
-    // Adjust current time for midnight crossing if needed
-    // If the first slot is in the evening (e.g., 20:00) and current time is after midnight,
-    // we need to add 24 hours to current time for proper comparison
-    if (timeSlots[0].hours >= 12 && currentHour < 12) {
-      currentTotalMinutes += 24 * 60;
-    }
-
-    // Base offset is -10px
+    const currentMs = currentTime.getTime();
     const baseOffset = -10;
 
-    // Before first slot
-    if (currentTotalMinutes < timeSlots[0].totalMinutes) {
-      return baseOffset; // At the top with base offset
+    // Before first slot or after last slot is handled by event bounds; still position at extremes
+    if (currentMs <= timeSlots[0].timestampMs) {
+      return baseOffset;
     }
 
-    // Find which slot we're in
+    // Find current slot index
     let currentSlotIndex = -1;
     for (let i = 0; i < timeSlots.length; i++) {
       if (i === timeSlots.length - 1) {
-        // Last slot
-        if (currentTotalMinutes >= timeSlots[i].totalMinutes) {
+        if (currentMs >= timeSlots[i].timestampMs) {
           currentSlotIndex = i;
         }
       } else if (
-        currentTotalMinutes >= timeSlots[i].totalMinutes &&
-        currentTotalMinutes < timeSlots[i + 1].totalMinutes
+        currentMs >= timeSlots[i].timestampMs &&
+        currentMs < timeSlots[i + 1].timestampMs
       ) {
         currentSlotIndex = i;
         break;
       }
     }
 
-    // If no slot found (shouldn't happen if we're after the first slot)
     if (currentSlotIndex === -1) {
       return baseOffset;
     }
 
     const currentSlot = timeSlots[currentSlotIndex];
 
-    // If it's the last slot
+    // Last slot logic
     if (currentSlotIndex === timeSlots.length - 1) {
-      const minutesIntoSlot = currentTotalMinutes - currentSlot.totalMinutes;
-
-      // If more than 60 minutes after the last slot, stay at the end
+      const minutesIntoSlot =
+        (currentMs - currentSlot.timestampMs) / (60 * 1000);
       if (minutesIntoSlot > 60) {
-        return currentSlot.top + 30 + baseOffset; // 30px default height
+        return currentSlot.top + 30 + baseOffset;
       }
-
-      // Linear calculation for the last slot (assume 60 min duration)
       const percentage = minutesIntoSlot / 60;
-      return currentSlot.top + baseOffset + 30 * percentage; // 30px default height
+      return currentSlot.top + baseOffset + 30 * percentage;
     }
 
-    // Calculate position linearly between current slot and next slot
+    // Interpolate between current and next slot
     const nextSlot = timeSlots[currentSlotIndex + 1];
-    const slotDuration = nextSlot.totalMinutes - currentSlot.totalMinutes;
-    const minutesIntoSlot = currentTotalMinutes - currentSlot.totalMinutes;
-    const percentage = minutesIntoSlot / slotDuration;
-
-    // Calculate the row height
+    const slotDurationMs = nextSlot.timestampMs - currentSlot.timestampMs;
+    const elapsedMs = currentMs - currentSlot.timestampMs;
+    const percentage = slotDurationMs > 0 ? elapsedMs / slotDurationMs : 0;
     const rowHeight = nextSlot.top - currentSlot.top;
 
-    // Linear calculation: start at current row top + base offset, then add percentage through slot
     return currentSlot.top + baseOffset + rowHeight * percentage;
   }
 }
