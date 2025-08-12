@@ -98,7 +98,7 @@
                     'server-time': 'now'|date('c'),
                     'event-start': (infos|first).StartTime|date('c'),
                     'event-end': event.until|date('c'),
-                    'slot-times': unix_times|join(',')
+                    'slot-times': unix_times|join(','),
                 }) }}
             {% endif %}
         >
@@ -178,7 +178,7 @@
 {% endblock %}
 
 {% block timetable_artist_link %}
-    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', { slug: event.url, year: event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
+    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
         {{ name }}
     </a>
     {% if artist.type == 'Live' %}(Live){% endif %}
