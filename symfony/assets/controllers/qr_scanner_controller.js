@@ -1,7 +1,7 @@
+/* stimulusFetch: 'lazy' */
 import { Controller } from "@hotwired/stimulus";
 import { Html5QrcodeScanner } from "html5-qrcode";
 
-stimulusFetch: "lazy";
 export default class extends Controller {
   static qrCodeScanner;
   static targets = [

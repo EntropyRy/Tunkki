@@ -1,6 +1,6 @@
+/* stimulusFetch: 'lazy' */
 import { Controller } from "@hotwired/stimulus";
 
-stimulusFetch: "eager";
 export default class extends Controller {
   tabs = null;
 
