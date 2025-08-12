@@ -3,67 +3,65 @@
 {% use 'pieces/happening.html.twig' %}
 {% block menu %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-    {%- if app.user %}
-        <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
-            <div class="container">
-                <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#eventContent"
-                        aria-controls="eventContent"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="eventContent">
-                    <ul class="navbar-nav w-100 d-flex justify-content-between">
+    <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
+        <div class="container">
+            <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
+            <button class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#eventContent"
+                    aria-controls="eventContent"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="eventContent">
+                <ul class="navbar-nav w-100 d-flex justify-content-between">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ block('event_path') }}">{{ 'Home'|trans }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
+                    </li>
+                    {% if event.ArtistInfosByType('DJ')|length > 0 %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
+                    </li>
+                    {% endif %}
+                    {% if event.allowMembersToCreateHappenings %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ block('event_path') }}">{{ 'Home'|trans }}</a>
+                            <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
                         </li>
+                    {% endif %}
+                    {% if tickets|length > 0 %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
+                            <a class="nav-link"
+                                href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                                {% if event.nakkiRequiredForTicketReservation %}
+                                    {{ 'ticket.and_nakki'|trans }}
+                                {% else %}
+                                    {{ 'ticket.your_tickets'|trans }}
+                                {% endif %}
+                            </a>
                         </li>
-                        {% if event.ArtistInfosByType('DJ')|length > 0 %}
+                    {% endif %}
+                    {% if event.includeSaferSpaceGuidelines %}
+                        {% if app.request.locale == 'fi' %}
+                            {% set url = '/turvallisemman-tilan-periaatteet' %}
+                        {% else %}
+                            {% set url = '/en/safer-space-guidelines' %}
+                        {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
+                            <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
-                        </li>
-                        {% endif %}
-                        {% if event.allowMembersToCreateHappenings %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
-                            </li>
-                        {% endif %}
-                        {% if tickets|length > 0 %}
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                   href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                                   {% if event.nakkiRequiredForTicketReservation %}
-                                        {{ 'ticket.and_nakki'|trans }}
-                                    {% else %}
-                                        {{ 'ticket.your_tickets'|trans }}
-                                    {% endif %}
-                                </a>
-                            </li>
-                        {% endif %}
-                        {% if event.includeSaferSpaceGuidelines %}
-                            {% if app.request.locale == 'fi' %}
-                                {% set url = '/turvallisemman-tilan-periaatteet' %}
-                            {% else %}
-                                {% set url = '/en/safer-space-guidelines' %}
-                            {% endif %}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                    {% endif %}
+                </ul>
             </div>
-        </nav>
-    {% endif -%}
+        </div>
+    </nav>
 {% endblock %}
 {% block event_tile %}
     <div class="tile event_tile col-12 p-2">
