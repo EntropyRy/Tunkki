@@ -597,7 +597,7 @@
                         'server-time': 'now'|date('c'),
                         'event-start': (infos|first).StartTime|date('c'),
                         'event-end': event.until|date('c'),
-                        'slot-times': unix_times|join(',')
+                        'slot-times': unix_times|join(','),
                     }) }}{% endif %}>
                         <tbody>
                             {%- set last_start_time = null -%}
