@@ -7,14 +7,13 @@ export default class extends Controller {
     eventStart: String,
     eventEnd: String,
     slotTimes: String,
-    // Position recalculation interval (less frequent to reduce layout work)
+    // Position recalculation interval
     updateInterval: { type: Number, default: 30000 }, // 30 seconds
   };
 
   connect() {
     if (!this.hasIndicatorTarget) return;
 
-    // Parse event bounds (optional)
     this.eventStartDate = this.hasEventStartValue
       ? new Date(this.eventStartValue)
       : null;
@@ -22,28 +21,19 @@ export default class extends Controller {
       ? new Date(this.eventEndValue)
       : null;
 
-    // Parse slot times
     this.parseSlotTimes();
-    // Calculate the time difference between server and client
     this.calculateTimeOffset();
-
-    // Wait for fonts and layout to be ready, then initialize
     this.initializeWhenReady();
 
-    // Set up periodic position updates (heavier work)
     this.intervalId = setInterval(() => {
       this.updateIndicatorPosition();
     }, this.updateIntervalValue);
   }
 
   initializeWhenReady() {
-    // Use requestAnimationFrame to ensure DOM is fully rendered
     requestAnimationFrame(() => {
-      // Double-check fonts are loaded if possible
       if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(() => {
-          this.updateIndicatorPosition();
-        });
+        document.fonts.ready.then(() => this.updateIndicatorPosition());
       } else {
         this.updateIndicatorPosition();
       }
@@ -51,14 +41,11 @@ export default class extends Controller {
   }
 
   disconnect() {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    if (this.intervalId) clearInterval(this.intervalId);
   }
 
   hideIndicator() {
     if (this.hasIndicatorTarget) {
-      // Keep layout space; just visually hide
       this.indicatorTarget.style.visibility = "hidden";
       this.indicatorTarget.style.opacity = "0";
     }
@@ -72,9 +59,7 @@ export default class extends Controller {
   }
 
   updateIndicatorPosition() {
-    const currentTime = this.getCurrentTime();
-
-    // Need parsed slot timestamps to decide visibility/position
+    const now = this.getCurrentTime();
     if (!this.slotTimestampsMs || this.slotTimestampsMs.length === 0) {
       this.hideIndicator();
       return;
@@ -82,41 +67,87 @@ export default class extends Controller {
 
     const firstSlotMs = this.slotTimestampsMs[0];
     const lastSlotMs = this.slotTimestampsMs[this.slotTimestampsMs.length - 1];
-    // Assume a slot lasts up to 60 minutes after its start for end boundary if no explicit eventEnd
-    const inferredEndMs = lastSlotMs + 60 * 60 * 1000;
 
+    // Window start = event start (if provided) else first slot
     const windowStart = this.eventStartDate
       ? this.eventStartDate.getTime()
       : firstSlotMs;
-    const windowEnd = this.eventEndDate
-      ? this.eventEndDate.getTime()
-      : inferredEndMs;
 
-    if (
-      currentTime.getTime() < windowStart ||
-      currentTime.getTime() > windowEnd
-    ) {
+    // Vanish rule: half of the gap between the last two slots (fallback 60m if only one slot)
+    let vanishMs;
+    if (this.slotTimestampsMs.length >= 2) {
+      const prevSlotMs =
+        this.slotTimestampsMs[this.slotTimestampsMs.length - 2];
+      const gap = lastSlotMs - prevSlotMs;
+      vanishMs = lastSlotMs + gap * 0.5;
+    } else {
+      vanishMs = lastSlotMs + 60 * 60 * 1000;
+    }
+
+    // Hide outside window
+    if (now.getTime() < windowStart || now.getTime() > vanishMs) {
       this.hideIndicator();
       return;
     }
 
+    // Recompute slot layout
+    const timeSlots = this.recalculateRowPositions();
+    if (timeSlots.length === 0) {
+      this.hideIndicator();
+      return;
+    }
+
+    // Identify current slot index (standard linear interpolation across all gaps)
+    let idx = -1;
+    for (let i = 0; i < timeSlots.length; i++) {
+      if (i === timeSlots.length - 1) {
+        if (now.getTime() >= timeSlots[i].timestampMs) idx = i;
+      } else if (
+        now.getTime() >= timeSlots[i].timestampMs &&
+        now.getTime() < timeSlots[i + 1].timestampMs
+      ) {
+        idx = i;
+        break;
+      }
+    }
+    if (idx === -1) idx = 0;
+
     this.showIndicator();
 
-    const position = this.calculatePosition(currentTime);
+    // Position calculation
+    const position = this.calculatePositionWithSlots(now, timeSlots);
     if (position !== null) {
       this.indicatorTarget.style.transform = `translateY(${position}px)`;
+    }
+
+    // Dynamic label state
+    this.updateNowLabel(now, idx, timeSlots);
+  }
+
+  updateNowLabel(now, idx, timeSlots) {
+    if (!this.indicatorTarget) return;
+    // We only keep the original innerHTML (NOW label + icon) when "active"
+    // Determine active range: from slot start to either next slot start or slot start + 60m if last.
+    const slotStart = timeSlots[idx].timestampMs;
+    let slotEnd;
+    if (idx === timeSlots.length - 1) {
+      slotEnd = slotStart + 60 * 60 * 1000;
+    } else {
+      slotEnd = timeSlots[idx + 1].timestampMs;
+    }
+    const active = now.getTime() >= slotStart && now.getTime() < slotEnd;
+    if (active) {
+      this.indicatorTarget.classList.add("is-active");
+    } else {
+      this.indicatorTarget.classList.remove("is-active");
     }
   }
 
   recalculateRowPositions() {
-    // Force a reflow to get accurate measurements
-    this.element.offsetHeight;
-
-    // Get fresh row positions mapped against provided slotTimes
+    this.element.offsetHeight; // force reflow
     const rows = Array.from(this.element.querySelectorAll("tr")).filter(
       (row) => row.querySelector(".time") !== null,
     );
-
     const slots = [];
     rows.forEach((row, idx) => {
       const tsMs = this.slotTimestampsMs && this.slotTimestampsMs[idx];
@@ -128,10 +159,46 @@ export default class extends Controller {
         });
       }
     });
-
-    // If counts differ, we still sort by timestamp to be safe
     slots.sort((a, b) => a.timestampMs - b.timestampMs);
     return slots;
+  }
+
+  calculatePositionWithSlots(currentTime, timeSlots) {
+    if (!timeSlots.length) return null;
+    const currentMs = currentTime.getTime();
+    const baseOffset = -10;
+
+    if (currentMs <= timeSlots[0].timestampMs) return baseOffset;
+
+    let currentSlotIndex = -1;
+    for (let i = 0; i < timeSlots.length; i++) {
+      if (i === timeSlots.length - 1) {
+        if (currentMs >= timeSlots[i].timestampMs) currentSlotIndex = i;
+      } else if (
+        currentMs >= timeSlots[i].timestampMs &&
+        currentMs < timeSlots[i + 1].timestampMs
+      ) {
+        currentSlotIndex = i;
+        break;
+      }
+    }
+    if (currentSlotIndex === -1) return baseOffset;
+
+    const currentSlot = timeSlots[currentSlotIndex];
+
+    if (currentSlotIndex === timeSlots.length - 1) {
+      const minutesInto = (currentMs - currentSlot.timestampMs) / (60 * 1000);
+      if (minutesInto > 60) return currentSlot.top + 30 + baseOffset;
+      const pct = minutesInto / 60;
+      return currentSlot.top + baseOffset + 30 * pct;
+    }
+
+    const nextSlot = timeSlots[currentSlotIndex + 1];
+    const duration = nextSlot.timestampMs - currentSlot.timestampMs;
+    const elapsed = currentMs - currentSlot.timestampMs;
+    const pct = duration > 0 ? elapsed / duration : 0;
+    const rowHeight = nextSlot.top - currentSlot.top;
+    return currentSlot.top + baseOffset + rowHeight * pct;
   }
 
   parseSlotTimes() {
@@ -159,60 +226,5 @@ export default class extends Controller {
   getCurrentTime() {
     const now = new Date();
     return new Date(now.getTime() + (this.timeOffset || 0));
-  }
-
-  calculatePosition(currentTime) {
-    const timeSlots = this.recalculateRowPositions();
-    if (timeSlots.length === 0) return null;
-
-    const currentMs = currentTime.getTime();
-    const baseOffset = -10;
-
-    // Before first slot or after last slot is handled by event bounds; still position at extremes
-    if (currentMs <= timeSlots[0].timestampMs) {
-      return baseOffset;
-    }
-
-    // Find current slot index
-    let currentSlotIndex = -1;
-    for (let i = 0; i < timeSlots.length; i++) {
-      if (i === timeSlots.length - 1) {
-        if (currentMs >= timeSlots[i].timestampMs) {
-          currentSlotIndex = i;
-        }
-      } else if (
-        currentMs >= timeSlots[i].timestampMs &&
-        currentMs < timeSlots[i + 1].timestampMs
-      ) {
-        currentSlotIndex = i;
-        break;
-      }
-    }
-
-    if (currentSlotIndex === -1) {
-      return baseOffset;
-    }
-
-    const currentSlot = timeSlots[currentSlotIndex];
-
-    // Last slot logic
-    if (currentSlotIndex === timeSlots.length - 1) {
-      const minutesIntoSlot =
-        (currentMs - currentSlot.timestampMs) / (60 * 1000);
-      if (minutesIntoSlot > 60) {
-        return currentSlot.top + 30 + baseOffset;
-      }
-      const percentage = minutesIntoSlot / 60;
-      return currentSlot.top + baseOffset + 30 * percentage;
-    }
-
-    // Interpolate between current and next slot
-    const nextSlot = timeSlots[currentSlotIndex + 1];
-    const slotDurationMs = nextSlot.timestampMs - currentSlot.timestampMs;
-    const elapsedMs = currentMs - currentSlot.timestampMs;
-    const percentage = slotDurationMs > 0 ? elapsedMs / slotDurationMs : 0;
-    const rowHeight = nextSlot.top - currentSlot.top;
-
-    return currentSlot.top + baseOffset + rowHeight * percentage;
   }
 }
