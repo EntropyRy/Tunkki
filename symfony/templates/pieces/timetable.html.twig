@@ -150,7 +150,15 @@
     {% if last_start_time is not null %}
         </td></tr>
         {% if event.multiday == true and prev_info is not null and info.timediff(prev_info.StartTime) > 4 %}
-            <tr class="time-gap"><td colspan="3"></td></tr>
+            {# Long gap row with translated label and icon #}
+            <tr class="time-gap">
+                <td colspan="3">
+                    <span class="gap-chip">
+                        <twig:ux:icon name="clock" height="0.9em" />
+                        {{ 'timetable.gap'|trans({'%hours%': info.timediff(prev_info.StartTime)}) }}
+                    </span>
+                </td>
+            </tr>
         {% endif %}
     {% endif %}
 {% endblock %}

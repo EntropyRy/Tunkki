@@ -108,6 +108,7 @@ link_media: Add a photo from your files
 logged_in_as: You are logged in as
 timetable:
   now: Now
+  gap: "%hours%h gap"
 stream:
   page:
     players: Who is playing now

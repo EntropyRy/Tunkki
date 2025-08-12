@@ -232,7 +232,9 @@ nav.navbar-light .nav-item a.nav-link {
     vertical-align: top;
 }
 .timetable tr.time-gap {
-    height: 20px;
+    height: 40px;
+    position: relative;
+    border: 0;
 }
 .timetable td {
     padding: 0.2em 0;
@@ -250,6 +252,8 @@ nav.navbar-light .nav-item a.nav-link {
     padding-right: 0.5em;
     line-height: 1.2;
     transition: transform 0.3s ease;
+    position: relative;
+    z-index: 3; /* Keep indicator above gap line */
 }
 
 .timetable .indicator svg {
@@ -276,6 +280,55 @@ nav.navbar-light .nav-item a.nav-link {
 .timetable .update-animation {
     animation: flip-animation 0.5s ease-in-out;
 }
+
+/* Gap chip styling */
+.gap-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: #ffffff;
+    border: 1px solid #bbb;
+    border-radius: 14px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+    line-height: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.timetable tr.time-gap td {
+    padding: 0;
+    text-align: center;
+    position: relative;
+    vertical-align: middle;
+}
+
+.timetable tr.time-gap td:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0) 0%,
+        #bbb 15%,
+        #bbb 85%,
+        rgba(0, 0, 0, 0) 100%
+    );
+    transform: translateY(-50%);
+    z-index: 1;
+}
 @keyframes flip-animation {
     0% {
         transform: rotateX(0);
@@ -286,6 +339,24 @@ nav.navbar-light .nav-item a.nav-link {
     100% {
         transform: rotateX(0);
     }
+}
+
+/* Dark theme adjustments for gap chip */
+[data-bs-theme="dark"] .gap-chip {
+    background: #222;
+    border-color: #555;
+    color: #ddd;
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+[data-bs-theme="dark"] .timetable tr.time-gap td:before {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0) 0%,
+        #666 15%,
+        #666 85%,
+        rgba(255, 255, 255, 0) 100%
+    );
 }
 
 a {
