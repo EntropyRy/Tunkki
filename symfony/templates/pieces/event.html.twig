@@ -1,6 +1,7 @@
 {% use 'pieces/rsvp.html.twig' %}
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/happening.html.twig' %}
+{% use 'pieces/timetable.html.twig' %}
 {% block menu %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
@@ -530,136 +531,7 @@
         {% endif %}
     </div>
 {% endblock -%}
-{% block timetable_to_page_with_genre %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = true %}
-    {% set genre = true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block timetable_to_page %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block vj_timetable_to_page %}
-    {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set page_links = true %}
-    {% set type = 'VJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block timetable_with_genre %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = false %}
-    {% set genre = true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block timetable %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = false %}
-    {% set genre = false %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block vj_timetable %}
-    {% set last = null %}
-    {% set page_links = false %}
-    {% set genre = false %}
-    {% set type = 'VJ' %}
-    {% set bios = event.ArtistInfosByType('VJ') %}
-    {{ block('timetable_list') }}
-{% endblock %}
-{% block timetable_list %}
-    {%- if event.multiday == true -%}
-        {% set datestring = 'E, HH:mm' %}
-    {%- else -%}
-        {% set datestring = 'HH:mm' %}
-    {%- endif -%}
-    {%- if bios|length > 0 -%}
-        <div id="timetable" class="row g-0">
-            {%- for stage, infos in bios -%}
-                <div class="col-12{%- if bios|length > 1 %} col-md-6{% endif -%}">
-                    <h4 class="artists-heading">
-                        {{- type }} {{ 'Timetable'|trans -}}
-                        {%- if stage %}@ {{ stage }}{% endif -%}
-                    </h4>
-                    {%- set now = 'now'|date('U') -%}
-                    {%- set event_until = event.until|date('U') -%}
-                    {% set unix_times = [] %}
-                    {% for i in infos %}
-                        {% set unix_times = unix_times|merge([i.StartTime|date('U')]) %}
-                    {% endfor %}
-                    {% set first_start_unix = (infos|first).StartTime|date('U') %}
-                    {% set show_indicator = now >= first_start_unix and now <= event_until %}
-                    <table class="timetable"{% if show_indicator %} {{ stimulus_controller('time-indicator', {
-                        'server-time': 'now'|date('c'),
-                        'event-start': (infos|first).StartTime|date('c'),
-                        'event-end': event.until|date('c'),
-                        'slot-times': unix_times|join(',')
-                    }) }}{% endif %}>
-                        <tbody>
-                            {%- set last_start_time = null -%}
-                            {%- set prev_info = null -%}
-                            {%- set indicator_added = false -%}
-                            {%- set prev_info = null -%}
-                            {%- for info in infos -%}
-                                {%- set artist = info.artistClone -%}
-                                {%- set name = (artist.name|split(' for')).0 -%}
 
-                                {# Determine if this is the current artist #}
-                                {%- set is_last_slot = loop.last and now <= event_until -%}
-                                {%- set next_start_time = infos[loop.index]|default(null) is not null and infos[loop.index].StartTime is not null
-                                    ? infos[loop.index].StartTime|date('U')
-                                    : null -%}
-                                {%- set is_current = info.StartTime|date('U') <= now and (next_start_time > now or is_last_slot) -%}
-
-                                {# Check if this is a new time slot #}
-                                {%- if last_start_time != info.StartTime -%}
-                                    {# Close the previous row for B2B artists #}
-                                    {%- if last_start_time is not null -%}
-                                        </td></tr>
-                                        {# Add space for large time gaps in multiday events #}
-                                        {%- if event.multiday == true and prev_info is not null and info.timediff(prev_info.StartTime) > 4 -%}
-                                            <tr class="time-gap"><td colspan="3"></td></tr>
-                                        {%- endif -%}
-                                    {%- endif -%}
-                                    {# Open a new row for the new time slot #}
-                                    <tr>
-                                        <td class="indicator"{% if show_indicator and not indicator_added %} {{ stimulus_target('time-indicator', 'indicator') }}{% set indicator_added = true %}{% endif %}>
-                                            {%- if is_current and show_indicator -%}
-                                                {{- 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
-                                            {%- endif -%}
-                                        </td>
-                                        <td class="time">{{- info.StartTime|format_datetime(pattern: datestring) -}}</td>
-                                        <td>
-                                {%- else %}
-                                    {# Separate B2B artists with "B2B" text #}
-                                    B2B
-                                {% endif -%}
-
-                                {# Render artist details #}
-                                <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
-                                {%- if artist.type == 'Live' -%}(Live){%- endif -%}
-                                {%- if genre|default(null) -%}
-                                    <i class="fw-lighter"> ({{ artist.genre -}})</i>
-                                {%- endif -%}
-
-                                {%- set last_start_time = info.StartTime -%}
-                                {%- set prev_info = info -%}
-                            {%- endfor -%}
-                            {# Close the final row if still open #}
-                            {%- if last_start_time is not null -%}
-                                </td></tr>
-                            {%- endif -%}
-                        </tbody>
-                    </table>
-                </div>
-            {%- endfor -%}
-        </div>
-    {% endif %}
-{% endblock %}
 {% block art_artist_list %}
     {% set bios = event.ArtistInfosByType('ART') %}
     {% if bios|length > 0 %}

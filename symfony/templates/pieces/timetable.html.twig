@@ -1,0 +1,188 @@
+{#
+  Usage:
+    In your event template (event.html.twig), use this file:
+      {% use 'pieces/timetable.html.twig' %}
+    Then you can use the existing blocks as before:
+      {{ block('timetable') }}
+      {{ block('timetable_with_genre') }}
+      {{ block('timetable_to_page') }}
+      {{ block('timetable_to_page_with_genre') }}
+      {{ block('vj_timetable') }}
+      {{ block('vj_timetable_to_page') }}
+
+  Blocks provided:
+    - timetable_to_page_with_genre  (DJ, page links, with genre)
+    - timetable_to_page             (DJ, page links)
+    - vj_timetable_to_page          (VJ, page links)
+    - timetable_with_genre          (DJ, no page links, with genre)
+    - timetable                     (DJ, no page links)
+    - vj_timetable                  (VJ, no page links)
+    - timetable_list                (core rendering logic)
+#}
+
+{% block timetable_to_page_with_genre %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = true %}
+    {% set genre = true %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block timetable_to_page %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = true %}
+    {% set genre = false %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block vj_timetable_to_page %}
+    {% set bios = event.ArtistInfosByType('VJ') %}
+    {% set page_links = true %}
+    {% set genre = false %}
+    {% set type = 'VJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block timetable_with_genre %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = false %}
+    {% set genre = true %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block timetable %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = false %}
+    {% set genre = false %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block vj_timetable %}
+    {% set bios = event.ArtistInfosByType('VJ') %}
+    {% set page_links = false %}
+    {% set genre = false %}
+    {% set type = 'VJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
+{% block timetable_list %}
+    {# High-level orchestrator: computes date format & delegates stage rendering #}
+    {% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
+    {% if bios|length > 0 %}
+        <div id="timetable" class="row g-0">
+            {% for stage, infos in bios %}
+                {% set now = 'now'|date('U') %}
+                {% set event_until = event.until|date('U') %}
+                {% set unix_times = [] %}
+                {% for i in infos %}
+                    {% set unix_times = unix_times|merge([i.StartTime|date('U')]) %}
+                {% endfor %}
+                {% set first_start_unix = (infos|first).StartTime|date('U') %}
+                {% set show_indicator = now >= first_start_unix and now <= event_until %}
+                {# Render a single stage via its own block for clarity #}
+                {{ block('timetable_stage_table') }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block timetable_stage_table %}
+    <div class="col-12{% if bios|length > 1 %} col-md-6{% endif %}">
+        {{ block('timetable_stage_header') }}
+        <table class="timetable"
+            {% if show_indicator %}
+                {{ stimulus_controller('time-indicator', {
+                    'server-time': 'now'|date('c'),
+                    'event-start': (infos|first).StartTime|date('c'),
+                    'event-end': event.until|date('c'),
+                    'slot-times': unix_times|join(',')
+                }) }}
+            {% endif %}
+        >
+            <tbody>
+                {% set last_start_time = null %}
+                {% set prev_info = null %}
+                {% set indicator_added = false %}
+                {% for info in infos %}
+                    {% set artist = info.artistClone %}
+                    {% set name = (artist.name|split(' for')).0 %}
+                    {% set is_last_slot = loop.last and now <= event_until %}
+                    {% set next_start_time = infos[loop.index]|default(null) is not null and infos[loop.index].StartTime is not null
+                        ? infos[loop.index].StartTime|date('U')
+                        : null %}
+                    {% set is_current = info.StartTime|date('U') <= now and (next_start_time > now or is_last_slot) %}
+
+                    {% if last_start_time != info.StartTime %}
+                        {{ block('timetable_close_previous_slot') }}
+                        <tr>
+                            {% set will_add_indicator_target = show_indicator and (not indicator_added) %}
+                            {{ block('timetable_indicator_cell') }}{% if will_add_indicator_target %}{% set indicator_added = true %}{% endif %}
+                            {{ block('timetable_time_cell') }}
+                            <td class="artist-info">
+                    {% else %}
+                        {{ block('timetable_b2b_separator') }}
+                    {% endif %}
+
+                    {{ block('timetable_artist_link') }}
+
+                    {% set last_start_time = info.StartTime %}
+                    {% set prev_info = info %}
+                {% endfor %}
+                {% if last_start_time is not null %}
+                    </td></tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block timetable_stage_header %}
+    <h4 class="artists-heading">
+        {{ type }} {{ 'Timetable'|trans }}
+        {% if stage %}@ {{ stage }}{% endif %}
+    </h4>
+{% endblock %}
+
+{% block timetable_close_previous_slot %}
+    {% if last_start_time is not null %}
+        </td></tr>
+        {% if event.multiday == true and prev_info is not null and info.timediff(prev_info.StartTime) > 4 %}
+            <tr class="time-gap"><td colspan="3"></td></tr>
+        {% endif %}
+    {% endif %}
+{% endblock %}
+
+{% block timetable_indicator_cell %}
+    <td class="indicator"
+        {% if will_add_indicator_target %}
+            {{ stimulus_target('time-indicator', 'indicator') }}
+        {% endif %}
+    >
+        {% if will_add_indicator_target %}
+            {{ 'timetable.now'|trans }} <twig:ux:icon name="arrow-right" height="1em" />
+        {% endif %}
+    </td>
+{% endblock %}
+
+{% block timetable_time_cell %}
+    <td class="time">
+        {{ info.StartTime|format_datetime(pattern: datestring) }}
+    </td>
+{% endblock %}
+
+{% block timetable_b2b_separator %}
+    B2B
+{% endblock %}
+
+{% block timetable_artist_link %}
+    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', { slug: event.url, year: event.eventdate|date('Y') }) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
+        {{ name }}
+    </a>
+    {% if artist.type == 'Live' %}(Live){% endif %}
+    {% if genre|default(null) %}
+        <i class="fw-lighter"> ({{ artist.genre }})</i>
+    {% endif %}
+{% endblock %}
