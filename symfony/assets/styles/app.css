@@ -341,29 +341,9 @@ nav.navbar-light .nav-item a.nav-link {
     }
 }
 
-/* Dark theme adjustments for gap chip */
-[data-bs-theme="dark"] .gap-chip {
-    background: #222;
-    border-color: #555;
-    color: #ddd;
-    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.15);
-}
-
-[data-bs-theme="dark"] .timetable tr.time-gap td:before {
-    background: linear-gradient(
-        90deg,
-        rgba(255, 255, 255, 0) 0%,
-        #666 15%,
-        #666 85%,
-        rgba(255, 255, 255, 0) 100%
-    );
-}
-
-a {
-    svg {
-        height: auto;
-        vertical-align: -0.2em;
-    }
+a svg {
+    height: auto;
+    vertical-align: -0.2em;
 }
 
 /* Menu level styles */
@@ -383,13 +363,12 @@ a {
 .progressive-media-container {
     position: relative;
     overflow: hidden;
-    &.aspect-square {
-        aspect-ratio: 1 / 1;
-    }
-
-    &.aspect-video {
-        aspect-ratio: 16 / 9;
-    }
+}
+.progressive-media-container.aspect-square {
+    aspect-ratio: 1 / 1;
+}
+.progressive-media-container.aspect-video {
+    aspect-ratio: 16 / 9;
 }
 
 .progressive-placeholder {
@@ -400,18 +379,15 @@ a {
     transition: opacity 0.2s ease;
     filter: blur(5px);
     opacity: 1;
-
-    &.faded {
-        opacity: 0;
-    }
-
-    &.blur-sm {
-        filter: blur(4px);
-    }
-
-    &.bg-gray-200 {
-        background-color: #e5e7eb;
-    }
+}
+.progressive-placeholder.faded {
+    opacity: 0;
+}
+.progressive-placeholder.blur-sm {
+    filter: blur(4px);
+}
+.progressive-placeholder.bg-gray-200 {
+    background-color: #e5e7eb;
 }
 
 .progressive-picture {
@@ -422,22 +398,19 @@ a {
     left: 0;
     width: 100%;
     height: 100%;
-
-    &.loaded {
-        opacity: 1 !important;
-    }
+}
+.progressive-picture.loaded {
+    opacity: 1 !important;
 }
 
 .progressive-image {
     width: 100%;
     height: 100%;
     object-fit: cover;
-
-    &.rounded-lg {
-        border-radius: 0.5rem;
-    }
-
-    &.shadow-lg {
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-    }
+}
+.progressive-image.rounded-lg {
+    border-radius: 0.5rem;
+}
+.progressive-image.shadow-lg {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
