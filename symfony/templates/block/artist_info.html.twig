@@ -52,7 +52,7 @@
                                             {% if info.StartTime %}
                                                 @ {{ info.StartTime|date('H:i') }}
                                             {% else %}
-                                                {% if info.event.artistSignUpEnd|date('U') <= 'now'|date('U') %}
+                                                {% if info.event.eventDate|date('U') <= 'now'|date('U') %}
                                                     : {{ 'artist.not_selected'|trans }}
                                                 {% else %}
                                                     : {{ 'artist.not_confirmed_yet'|trans }},
