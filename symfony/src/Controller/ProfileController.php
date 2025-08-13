@@ -62,7 +62,7 @@ class ProfileController extends AbstractController
                     $em->flush();
 
                     $email_content = $emailRepo->findOneBy(['purpose' => 'member']);
-                    $this->announceToMattermost($mm, $member);
+                    $this->announceToMattermost($mm, $member->getName());
                     if ($email_content) {
                         $this->sendEmailToMember($email_content, $member, $mailer);
                     }
