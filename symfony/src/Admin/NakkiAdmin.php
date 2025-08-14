@@ -155,7 +155,7 @@ final class NakkiAdmin extends AbstractAdmin
             if ($booking->getMember()) {
                 $session = $this->rs->getSession();
                 assert($session instanceof Session);
-                $session->getFlashBag()->add('error', 'One or more Nakki has been reserved by member. Edit Nakki bookings manually. Nothing changed');
+                $session->getFlashBag()->add('warning', 'One or more Nakki has been reserved by a member. Edit Nakki bookings manually. Only details edited.');
                 return;
             }
         }
