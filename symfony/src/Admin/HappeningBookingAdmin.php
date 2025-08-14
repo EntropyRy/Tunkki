@@ -77,17 +77,7 @@ final class HappeningBookingAdmin extends AbstractAdmin
             ]);
         }
 
-        // Member selection
-        // Prefer ModelAutocomplete for large datasets; fallback ModelList if you want modal selection.
-        $form->add('member', ModelAutocompleteType::class, [
-            'property' => ['firstname', 'lastname', 'email', 'username'],
-            'required' => true,
-            'label' => 'Member',
-            'to_string_callback' => static function (Member $member, ?string $property = null): string {
-                return $member->getName() . ' <' . $member->getEmail() . '>';
-            },
-        ]);
-
+        $form->add('member');
         // Comment field (optional)
         $form->add('comment', TextType::class, [
             'required' => false,
