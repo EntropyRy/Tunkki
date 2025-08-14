@@ -430,6 +430,19 @@ services:
           group: admin,
           label: Happening,
         }
+    calls:
+      - [addChild, ["@admin.happening_booking", "happening"]]
+
+  admin.happening_booking:
+    class: App\Admin\HappeningBookingAdmin
+    tags:
+      - {
+          name: sonata.admin,
+          model_class: App\Entity\HappeningBooking,
+          manager_type: orm,
+          group: admin,
+          label: Happening Bookings,
+        }
 
   admin.location:
     class: App\Admin\LocationAdmin
