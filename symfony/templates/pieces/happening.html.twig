@@ -104,7 +104,7 @@
                                     <p>{{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}</p>
                                 {% endif %}
                                 <div>
-                                    <a href="{{ path('entropy_event_happening_remove', {id: happeningB.id}) }}"
+                                    <a data-turbo="false" href="{{ path('entropy_event_happening_remove', {id: happeningB.id}) }}"
                                        class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
                                 </div>
                             {% else %}
