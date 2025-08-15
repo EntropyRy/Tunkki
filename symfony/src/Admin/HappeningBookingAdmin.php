@@ -40,14 +40,10 @@ final class HappeningBookingAdmin extends AbstractAdmin
         $list
             ->add('id')
             ->add('happening', null, [
-                'associated_property' => static function (?Happening $h): ?string {
-                    return $h?->getNameEn() ?? $h?->getNameFi();
-                },
+                'associated_property' => static fn (?Happening $h): ?string => $h?->getNameEn() ?? $h?->getNameFi(),
             ])
             ->add('member', null, [
-                'associated_property' => static function (?Member $m): ?string {
-                    return $m?->getName();
-                },
+                'associated_property' => static fn (?Member $m): ?string => $m?->getName(),
             ])
             ->add('comment')
             ->add('createdAt')
@@ -63,8 +59,7 @@ final class HappeningBookingAdmin extends AbstractAdmin
     #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
-        /** @var HappeningBooking|null $subject */
-        $subject = $this->getSubject();
+        $this->getSubject();
         $isEmbeddedInHappening = $this->hasParentFieldDescription();
 
         // When used standalone (not embedded under Happening), allow selecting the Happening.
@@ -106,12 +101,10 @@ final class HappeningBookingAdmin extends AbstractAdmin
     public function prePersist(object $object): void
     {
         // When the admin is used inline under Happening, ensure the association is set.
-        if ($object instanceof HappeningBooking) {
-            if ($this->hasParentFieldDescription() && method_exists($this, 'getParent') && $this->getParent()) {
-                $parent = $this->getParent()->getSubject();
-                if ($parent instanceof Happening && $object->getHappening() === null) {
-                    $object->setHappening($parent);
-                }
+        if ($object instanceof HappeningBooking && $this->hasParentFieldDescription()) {
+            $parent = $this->getParent()->getSubject();
+            if ($parent instanceof Happening && !$object->getHappening() instanceof Happening) {
+                $object->setHappening($parent);
             }
         }
     }
@@ -120,12 +113,10 @@ final class HappeningBookingAdmin extends AbstractAdmin
     public function preUpdate(object $object): void
     {
         // Same safety as prePersist to keep association intact during inline edits.
-        if ($object instanceof HappeningBooking) {
-            if ($this->hasParentFieldDescription() && method_exists($this, 'getParent') && $this->getParent()) {
-                $parent = $this->getParent()->getSubject();
-                if ($parent instanceof Happening && $object->getHappening() === null) {
-                    $object->setHappening($parent);
-                }
+        if ($object instanceof HappeningBooking && $this->hasParentFieldDescription()) {
+            $parent = $this->getParent()->getSubject();
+            if ($parent instanceof Happening && !$object->getHappening() instanceof Happening) {
+                $object->setHappening($parent);
             }
         }
     }
