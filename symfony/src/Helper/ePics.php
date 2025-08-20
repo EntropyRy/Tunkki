@@ -196,7 +196,8 @@ class ePics
                         ],
                     ],
                 );
-                return $resp->getStatusCode() === 200;
+                return $resp->getStatusCode() >= 200 &&
+                    $resp->getStatusCode() < 300;
             }
 
             // Create user if not found
@@ -214,7 +215,8 @@ class ePics
                     ],
                 ],
             );
-            return $create->getStatusCode() === 200;
+            return $create->getStatusCode() >= 200 &&
+                $create->getStatusCode() < 300;
         } catch (TransportExceptionInterface) {
             return false;
         }
@@ -285,7 +287,8 @@ class ePics
             ],
         );
 
-        return $response->getStatusCode() === 200;
+        return $response->getStatusCode() >= 200 &&
+            $response->getStatusCode() < 300;
     }
 
     /**
