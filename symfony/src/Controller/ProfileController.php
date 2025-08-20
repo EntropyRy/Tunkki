@@ -219,9 +219,8 @@ class ProfileController extends AbstractController
             $this->addFlash("success", "profile.member_data_changed");
             return $this->redirectToRoute("profile");
         }
-        return $this->render("profile/epics_password.html.twig", [
+        return $this->render("profile/password.html.twig", [
             "form" => $form,
-            "epics_username" => $resolvedUsername,
         ]);
     }
     #[
@@ -304,8 +303,9 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute("profile." . $member->getLocale());
         }
 
-        return $this->render("profile/password.html.twig", [
+        return $this->render("profile/epics_password.html.twig", [
             "form" => $form,
+            "epics_username" => $resolvedUsername,
         ]);
     }
 }
