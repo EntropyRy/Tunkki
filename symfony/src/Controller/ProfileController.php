@@ -275,6 +275,7 @@ class ProfileController extends AbstractController
     public function epicsPassword(
         Request $request,
         ePics $epics,
+        EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -295,6 +296,11 @@ class ProfileController extends AbstractController
             );
 
             if ($success) {
+                if (!$member->getEpicsUsername()) {
+                    $member->setEpicsUsername($resolvedUsername);
+                    $em->persist($member);
+                    $em->flush();
+                }
                 $this->addFlash("success", "epics.password_set");
             } else {
                 $this->addFlash("danger", "epics.password_set_failed");
