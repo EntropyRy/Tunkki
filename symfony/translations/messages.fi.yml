@@ -343,6 +343,14 @@ profile:
   save: tallenna
   only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
   logout: Uloskirjautuminen
+  epics:
+    title: ePics
+    set_password: Aseta/vaihda ePics-salasana
+    open: Avaa ePics
+    password_title: ePics-salasana
+    password_page:
+      description: Tämä luo tilin epics.entropy.fi-palveluun tai päivittää salasanan, jos tili on jo olemassa.
+      username_hint: ePics-käyttäjänimesi on jäsentilisi käyttäjänimi.
   no_access_groups: Ei erityisoikeuksia
   door:
     log: Kertsin ovilogi
@@ -399,15 +407,22 @@ artist:
     hardware: Laitteisto
     links: Linkit medianäytteisiin ja muihin palveluihin
 epics:
+  password_set: ePics-salasana tallennettu.
+  password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
   tile:
     heading: Satunnaisia kuvia Entropyn
     heading_events: tapahtumista
     more_button: Kuvia
     events_button: Tapahtumia
     title: Satunnaisia kuvia Entropyn tapahtumista
+flash:
+  password_set: ePics-salasana tallennettu.
+  password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
 member:
   allow_info_mails: Info mailit
   allow_active_member_mails: Aktiivien mailit
+  epics_username: ePics-käyttäjänimi
+  epics_username.not_set: ei asetettu
   can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
   active:
     application_title: Hae aktiivijäseneksi

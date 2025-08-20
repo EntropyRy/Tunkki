@@ -22,40 +22,40 @@ final class HappeningBookingAdmin extends AbstractAdmin
      * Enable inline editing in Happening admin's OneToMany collection by telling
      * Sonata which association links this child to its parent.
      */
-    protected $parentAssociationMapping = 'happening';
+    protected $parentAssociationMapping = "happening";
 
     #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('happening')
-            ->add('member')
-            ->add('comment')
-            ->add('createdAt');
+            ->add("happening")
+            ->add("member")
+            ->add("comment")
+            ->add("createdAt");
     }
 
     #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('id')
-            ->add('happening', null, [
-                'associated_property' => static function (?Happening $h): ?string {
-                    return $h?->getNameEn() ?? $h?->getNameFi();
-                },
+            ->add("id")
+            ->add("happening", null, [
+                "associated_property" => static fn(
+                    ?Happening $h,
+                ): ?string => $h?->getNameEn() ?? $h?->getNameFi(),
             ])
-            ->add('member', null, [
-                'associated_property' => static function (?Member $m): ?string {
-                    return $m?->getName();
-                },
+            ->add("member", null, [
+                "associated_property" => static fn(
+                    ?Member $m,
+                ): ?string => $m?->getName(),
             ])
-            ->add('comment')
-            ->add('createdAt')
+            ->add("comment")
+            ->add("createdAt")
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => [
-                    'edit' => [],
-                    'delete' => [],
-                    'show' => [],
+                "actions" => [
+                    "edit" => [],
+                    "delete" => [],
+                    "show" => [],
                 ],
             ]);
     }
@@ -63,31 +63,30 @@ final class HappeningBookingAdmin extends AbstractAdmin
     #[\Override]
     protected function configureFormFields(FormMapper $form): void
     {
-        /** @var HappeningBooking|null $subject */
-        $subject = $this->getSubject();
+        $this->getSubject();
         $isEmbeddedInHappening = $this->hasParentFieldDescription();
 
         // When used standalone (not embedded under Happening), allow selecting the Happening.
         if (!$isEmbeddedInHappening) {
             // Either a compact autocomplete or a full ModelList chooser works; keep both patterns handy.
-            $form->add('happening', ModelListType::class, [
-                'btn_add' => false,
-                'required' => true,
-                'label' => 'Happening',
+            $form->add("happening", ModelListType::class, [
+                "btn_add" => false,
+                "required" => true,
+                "label" => "Happening",
             ]);
         }
 
-        $form->add('member');
+        $form->add("member");
         // Comment field (optional)
-        $form->add('comment', TextType::class, [
-            'required' => false,
-            'empty_data' => '',
+        $form->add("comment", TextType::class, [
+            "required" => false,
+            "empty_data" => "",
         ]);
 
         // Read-only createdAt for visibility
-        $form->add('createdAt', null, [
-            'disabled' => true,
-            'required' => false,
+        $form->add("createdAt", null, [
+            "disabled" => true,
+            "required" => false,
         ]);
     }
 
@@ -95,23 +94,27 @@ final class HappeningBookingAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add('id')
-            ->add('happening')
-            ->add('member')
-            ->add('comment')
-            ->add('createdAt');
+            ->add("id")
+            ->add("happening")
+            ->add("member")
+            ->add("comment")
+            ->add("createdAt");
     }
 
     #[\Override]
     public function prePersist(object $object): void
     {
         // When the admin is used inline under Happening, ensure the association is set.
-        if ($object instanceof HappeningBooking) {
-            if ($this->hasParentFieldDescription() && method_exists($this, 'getParent') && $this->getParent()) {
-                $parent = $this->getParent()->getSubject();
-                if ($parent instanceof Happening && $object->getHappening() === null) {
-                    $object->setHappening($parent);
-                }
+        if (
+            $object instanceof HappeningBooking &&
+            $this->hasParentFieldDescription()
+        ) {
+            $parent = $this->getParent()->getSubject();
+            if (
+                $parent instanceof Happening &&
+                !$object->getHappening() instanceof Happening
+            ) {
+                $object->setHappening($parent);
             }
         }
     }
@@ -120,12 +123,16 @@ final class HappeningBookingAdmin extends AbstractAdmin
     public function preUpdate(object $object): void
     {
         // Same safety as prePersist to keep association intact during inline edits.
-        if ($object instanceof HappeningBooking) {
-            if ($this->hasParentFieldDescription() && method_exists($this, 'getParent') && $this->getParent()) {
-                $parent = $this->getParent()->getSubject();
-                if ($parent instanceof Happening && $object->getHappening() === null) {
-                    $object->setHappening($parent);
-                }
+        if (
+            $object instanceof HappeningBooking &&
+            $this->hasParentFieldDescription()
+        ) {
+            $parent = $this->getParent()->getSubject();
+            if (
+                $parent instanceof Happening &&
+                !$object->getHappening() instanceof Happening
+            ) {
+                $object->setHappening($parent);
             }
         }
     }
