@@ -220,9 +220,8 @@ class ProfileController extends AbstractController
             $this->addFlash("success", "profile.member_data_changed");
             return $this->redirectToRoute("profile");
         }
-        return $this->render("profile/epics_password.html.twig", [
+        return $this->render("profile/password.html.twig", [
             "form" => $form,
-            "epics_username" => $resolvedUsername,
         ]);
     }
     #[
@@ -526,9 +525,7 @@ class ProfileController extends AbstractController
             if ($overallOk) {
                 $this->addFlash(
                     "success",
-                    'epics.password_set <a class="btn btn-sm btn-primary ms-2" href="' .
-                        $apiBase .
-                        '" target="_blank" rel="noopener">Login to ePics</a>',
+                    'epics.password_set'
                 );
             } else {
                 $this->addFlash("danger", "epics.password_set_failed");
@@ -537,8 +534,9 @@ class ProfileController extends AbstractController
             return $this->redirectToRoute("profile." . $member->getLocale());
         }
 
-        return $this->render("profile/password.html.twig", [
+        return $this->render("profile/epics_password.html.twig", [
             "form" => $form,
+            "epics_username" => $resolvedUsername,
         ]);
     }
 }

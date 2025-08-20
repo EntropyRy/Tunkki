@@ -11,6 +11,15 @@
                     <h5 class="box-title">{{ 'profile.epics.title'|trans }}</h5>
                 </div>
                 <div class="box-body d-grid gap-2">
+                    <span>
+                    <twig:ux:icon name="image" />
+                    {{ 'member.epics_username'|trans }}:
+                    {% if member.epicsusername %}
+                        {{ member.epicsusername }}
+                    {% else %}
+                        <em>{{ 'member.epics_username.not_set'|trans }}</em>
+                    {% endif %}
+                    </span>
                     <a class="btn btn-primary" href="{{ path('profile_epics_password') }}">{{ 'profile.epics.set_password'|trans }}</a>
                     <a class="btn btn-outline-primary" href="https://epics.entropy.fi" target="_blank" rel="noopener">{{ 'profile.epics.open'|trans }}</a>
                 </div>

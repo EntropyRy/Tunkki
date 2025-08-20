@@ -38,25 +38,16 @@ final class HappeningBookingAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-<<<<<<< HEAD
-            ->add('id')
-            ->add('happening', null, [
-                'associated_property' => static fn (?Happening $h): ?string => $h?->getNameEn() ?? $h?->getNameFi(),
-            ])
-            ->add('member', null, [
-                'associated_property' => static fn (?Member $m): ?string => $m?->getName(),
-=======
             ->add("id")
             ->add("happening", null, [
-                "associated_property" => static fn(
+                "associated_property" => static fn (
                     ?Happening $h,
                 ): ?string => $h?->getNameEn() ?? $h?->getNameFi(),
             ])
             ->add("member", null, [
-                "associated_property" => static fn(
+                "associated_property" => static fn (
                     ?Member $m,
                 ): ?string => $m?->getName(),
->>>>>>> 8e18c4a0a1c8d5756264f4aae8a4bb4383eabb2d
             ])
             ->add("comment")
             ->add("createdAt")
