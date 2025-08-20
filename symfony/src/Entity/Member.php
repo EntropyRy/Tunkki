@@ -13,104 +13,161 @@ use App\Entity\Ticket;
 /**
  * Member
  */
-#[ORM\Table(name: 'member')]
+#[ORM\Table(name: "member")]
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
-#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
 #[ORM\HasLifecycleCallbacks]
 class Member implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: Types::INTEGER)]
+    #[ORM\Column(name: "id", type: Types::INTEGER)]
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\GeneratedValue(strategy: "AUTO")]
     private ?int $id = null;
 
-    #[ORM\Column(name: 'firstname', type: Types::STRING, length: 190)]
-    private string $firstname = '';
+    #[ORM\Column(name: "firstname", type: Types::STRING, length: 190)]
+    private string $firstname = "";
 
-    #[ORM\Column(name: 'lastname', type: Types::STRING, length: 190)]
-    private string $lastname = '';
+    #[ORM\Column(name: "lastname", type: Types::STRING, length: 190)]
+    private string $lastname = "";
 
-    #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
+    #[ORM\Column(name: "email", type: Types::STRING, length: 190, unique: true)]
     private $email;
 
-    #[ORM\Column(name: 'username', type: Types::STRING, length: 190, nullable: true)]
+    #[
+        ORM\Column(
+            name: "username",
+            type: Types::STRING,
+            length: 190,
+            nullable: true,
+        ),
+    ]
     private ?string $username = null;
 
-    #[ORM\Column(name: 'phone', type: Types::STRING, length: 190, nullable: true)]
+    #[
+        ORM\Column(
+            name: "phone",
+            type: Types::STRING,
+            length: 190,
+            nullable: true,
+        ),
+    ]
     private ?string $phone = null;
 
-    #[ORM\Column(name: 'CityOfResidence', type: Types::STRING, length: 190, nullable: true)]
+    #[
+        ORM\Column(
+            name: "CityOfResidence",
+            type: Types::STRING,
+            length: 190,
+            nullable: true,
+        ),
+    ]
     private ?string $CityOfResidence = null;
 
-    #[ORM\Column(name: 'createdAt', type: 'datetime')]
+    #[ORM\Column(name: "createdAt", type: "datetime")]
     private \DateTime $createdAt;
 
-    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
+    #[ORM\Column(name: "updatedAt", type: "datetime")]
     private \DateTime $updatedAt;
 
-    #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
+    #[ORM\Column(name: "isActiveMember", type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
 
-    #[ORM\Column(name: 'rejectReasonSent', type: Types::BOOLEAN)]
+    #[ORM\Column(name: "rejectReasonSent", type: Types::BOOLEAN)]
     private bool $rejectReasonSent = false;
 
-    #[ORM\Column(name: 'StudentUnionMember', type: Types::BOOLEAN)]
+    #[ORM\Column(name: "StudentUnionMember", type: Types::BOOLEAN)]
     private bool $StudentUnionMember = false;
 
-    #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
+    #[ORM\Column(name: "Application", type: "text", nullable: true)]
     private ?string $Application = null;
 
-    #[ORM\Column(name: 'reject_reason', type: 'text', nullable: true)]
+    #[ORM\Column(name: "reject_reason", type: "text", nullable: true)]
     private ?string $rejectReason = null;
 
-    #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
+    #[ORM\Column(name: "ApplicationDate", type: "datetime", nullable: true)]
     private ?\DateTime $ApplicationDate = null;
 
-    #[ORM\Column(name: 'ApplicationHandledDate', type: 'datetime', nullable: true)]
+    #[
+        ORM\Column(
+            name: "ApplicationHandledDate",
+            type: "datetime",
+            nullable: true,
+        ),
+    ]
     private ?\DateTime $ApplicationHandledDate = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $AcceptedAsHonoraryMember = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFullMember = false;
 
-    #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+    #[
+        ORM\OneToOne(
+            targetEntity: User::class,
+            mappedBy: "member",
+            cascade: ["persist", "remove"],
+        ),
+    ]
+    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::STRING, length: 8)]
-    private ?string $locale = 'fi';
+    private ?string $locale = "fi";
 
-    #[ORM\OneToMany(targetEntity: Artist::class, mappedBy: 'member', orphanRemoval: true)]
-    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
+    #[
+        ORM\OneToMany(
+            targetEntity: Artist::class,
+            mappedBy: "member",
+            orphanRemoval: true,
+        ),
+    ]
+    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
     private $artist;
 
-    #[ORM\OneToMany(targetEntity: DoorLog::class, mappedBy: 'member', orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: DoorLog::class,
+            mappedBy: "member",
+            orphanRemoval: true,
+        ),
+    ]
     private $doorLogs;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $theme = null;
 
-    #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'member', orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: RSVP::class,
+            mappedBy: "member",
+            orphanRemoval: true,
+        ),
+    ]
     private $RSVPs;
 
-    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
+    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: "member")]
     private $nakkiBookings;
 
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: "owner")]
     private $tickets;
 
-    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
+    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: "responsible")]
     private $responsibleForNakkis;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $denyKerdeAccess = false;
 
-    #[ORM\OneToMany(targetEntity: HappeningBooking::class, mappedBy: 'member', cascade: ['persist', 'remove'])]
+    #[
+        ORM\OneToMany(
+            targetEntity: HappeningBooking::class,
+            mappedBy: "member",
+            cascade: ["persist", "remove"],
+        ),
+    ]
     private Collection $happeningBooking;
 
-    #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
+    #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: "owners")]
     private Collection $happenings;
 
     #[ORM\Column(length: 255)]
@@ -124,6 +181,9 @@ class Member implements \Stringable
 
     #[ORM\Column]
     private ?bool $allowActiveMemberMails = true;
+
+    #[ORM\Column(type: Types::STRING, length: 190, nullable: true)]
+    private ?string $epicsUsername = null;
 
     public function __construct()
     {
@@ -157,7 +217,7 @@ class Member implements \Stringable
 
     public function getName(): ?string
     {
-        return $this->firstname . ' ' . $this->lastname;
+        return $this->firstname . " " . $this->lastname;
     }
 
     public function setEmail(?string $email): self
@@ -205,8 +265,9 @@ class Member implements \Stringable
     {
         return $this->updatedAt;
     }
-    public function setStudentUnionMember(mixed $studentUnionMember = null): self
-    {
+    public function setStudentUnionMember(
+        mixed $studentUnionMember = null,
+    ): self {
         $this->StudentUnionMember = $studentUnionMember;
 
         return $this;
@@ -310,8 +371,9 @@ class Member implements \Stringable
     {
         return $this->rejectReasonSent;
     }
-    public function setApplicationHandledDate(mixed $applicationHandledDate = null): self
-    {
+    public function setApplicationHandledDate(
+        mixed $applicationHandledDate = null,
+    ): self {
         $this->ApplicationHandledDate = $applicationHandledDate;
 
         return $this;
@@ -338,8 +400,9 @@ class Member implements \Stringable
         return $this->AcceptedAsHonoraryMember;
     }
 
-    public function setAcceptedAsHonoraryMember(?\DateTimeInterface $AcceptedAsHonoraryMember): self
-    {
+    public function setAcceptedAsHonoraryMember(
+        ?\DateTimeInterface $AcceptedAsHonoraryMember,
+    ): self {
         $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember;
 
         return $this;
@@ -377,12 +440,12 @@ class Member implements \Stringable
     public function getProgressP(): string
     {
         if ($this->AcceptedAsHonoraryMember instanceof \DateTimeInterface) {
-            return '100';
+            return "100";
         }
         if ($this->isActiveMember) {
-            return '66';
+            return "66";
         } else {
-            return '33';
+            return "33";
         }
     }
 
@@ -469,7 +532,10 @@ class Member implements \Stringable
     public function removeDoorLog(DoorLog $doorLog): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->doorLogs->removeElement($doorLog) && $doorLog->getMember() === $this) {
+        if (
+            $this->doorLogs->removeElement($doorLog) &&
+            $doorLog->getMember() === $this
+        ) {
             $doorLog->setMember(null);
         }
 
@@ -509,7 +575,10 @@ class Member implements \Stringable
     public function removeRSVP(RSVP $rSVP): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->RSVPs->removeElement($rSVP) && $rSVP->getMember() === $this) {
+        if (
+            $this->RSVPs->removeElement($rSVP) &&
+            $rSVP->getMember() === $this
+        ) {
             $rSVP->setMember(null);
         }
 
@@ -537,7 +606,10 @@ class Member implements \Stringable
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getMember() === $this) {
+        if (
+            $this->nakkiBookings->removeElement($nakkiBooking) &&
+            $nakkiBooking->getMember() === $this
+        ) {
             $nakkiBooking->setMember(null);
         }
 
@@ -565,7 +637,10 @@ class Member implements \Stringable
     public function removeTicket(Ticket $ticket): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->tickets->removeElement($ticket) && $ticket->getOwner() === $this) {
+        if (
+            $this->tickets->removeElement($ticket) &&
+            $ticket->getOwner() === $this
+        ) {
             $ticket->setOwner(null);
         }
 
@@ -605,7 +680,10 @@ class Member implements \Stringable
     public function removeResponsibleForNakki(Nakki $responsibleForNakki): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->responsibleForNakkis->removeElement($responsibleForNakki) && $responsibleForNakki->getResponsible() === $this) {
+        if (
+            $this->responsibleForNakkis->removeElement($responsibleForNakki) &&
+            $responsibleForNakki->getResponsible() === $this
+        ) {
             $responsibleForNakki->setResponsible(null);
         }
 
@@ -642,8 +720,9 @@ class Member implements \Stringable
         return $this->happeningBooking;
     }
 
-    public function addHappeningBooking(HappeningBooking $happeningBooking): self
-    {
+    public function addHappeningBooking(
+        HappeningBooking $happeningBooking,
+    ): self {
         if (!$this->happeningBooking->contains($happeningBooking)) {
             $this->happeningBooking->add($happeningBooking);
             $happeningBooking->setMember($this);
@@ -652,8 +731,9 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function removeHappeningBooking(HappeningBooking $happeningBooking): self
-    {
+    public function removeHappeningBooking(
+        HappeningBooking $happeningBooking,
+    ): self {
         if ($this->happeningBooking->removeElement($happeningBooking)) {
             $happeningBooking->setMember(null);
         }
@@ -728,9 +808,22 @@ class Member implements \Stringable
         return $this->allowActiveMemberMails;
     }
 
-    public function setAllowActiveMemberMails(bool $allowActiveMemberMails): static
-    {
+    public function setAllowActiveMemberMails(
+        bool $allowActiveMemberMails,
+    ): static {
         $this->allowActiveMemberMails = $allowActiveMemberMails;
+
+        return $this;
+    }
+
+    public function getEpicsUsername(): ?string
+    {
+        return $this->epicsUsername;
+    }
+
+    public function setEpicsUsername(?string $epicsUsername): static
+    {
+        $this->epicsUsername = $epicsUsername;
 
         return $this;
     }
@@ -739,7 +832,7 @@ class Member implements \Stringable
     {
         $streamArtists = [];
         foreach ($this->getArtist() as $artist) {
-            if ($artist->getType() != 'ART') {
+            if ($artist->getType() != "ART") {
                 $streamArtists[] = $artist;
             }
         }

@@ -6,6 +6,15 @@
         <div class="col-sm-4">
             {{ sonata_block_render({type: 'entropy.block.member.info'}) }}
             {{ sonata_block_render({type: 'entropy.block.compensations'}) }}
+            <div class="box mt-3">
+                <div class="box-header">
+                    <h5 class="box-title">{{ 'profile.epics.title'|trans }}</h5>
+                </div>
+                <div class="box-body d-grid gap-2">
+                    <a class="btn btn-primary" href="{{ path('profile_epics_password') }}">{{ 'profile.epics.set_password'|trans }}</a>
+                    <a class="btn btn-outline-primary" href="https://epics.entropy.fi" target="_blank" rel="noopener">{{ 'profile.epics.open'|trans }}</a>
+                </div>
+            </div>
         </div>
         <div class="col-sm-8">
             {{ sonata_block_render({type: 'entropy.block.member.situation'}) }}

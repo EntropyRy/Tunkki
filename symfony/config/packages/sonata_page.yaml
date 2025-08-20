@@ -52,6 +52,7 @@ sonata_page:
     - profile_new
     - profile_edit
     - profile_password_edit
+    - profile_epics_password
     - apply_for_active_member
     - entropy_artist_profile
     - entropy_artist_create

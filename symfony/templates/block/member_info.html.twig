@@ -11,6 +11,15 @@
                     {{ member.name }}, {{ member.username }}
                 </li>
                 <li>
+                    <span class="fa-li"><twig:ux:icon name="image" /></span>
+                    <span>{{ 'member.epics_username'|trans }}:</span>
+                    {% if member.epicsUsername %}
+                        {{ member.epicsUsername }}
+                    {% else %}
+                        <em>{{ 'member.epics_username.not_set'|trans }}</em>
+                    {% endif %}
+                </li>
+                <li>
                     <span class="fa-li"><twig:ux:icon name="envelope" /></span>
                     {% if not member.emailVerified %}
                         <p>Your email is not verified, Please send email to hallitus@entropy.fi to clear this up</p>

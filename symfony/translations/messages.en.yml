@@ -268,6 +268,14 @@ profile:
   apply_for_active_member: Apply to become an active member
   only_for_active_members: This service is only for active members
   logout: logout
+  epics:
+    title: ePics
+    set_password: Set/override ePics password
+    open: Open ePics
+    password_title: ePics password
+    password_page:
+      description: This will create an account on epics.entropy.fi or update the password if one already exists.
+      username_hint: Your ePics username will be your member username.
   no_access_groups: No special privileges
   door:
     log: Clubroom door log
@@ -289,6 +297,11 @@ epics:
     more_button: Pictures
     events_button: Events
     title: Random photos from our events
+  password_set: ePics password saved.
+  password_set_failed: Could not set ePics password. Please try again or contact support.
+  flash:
+    password_set: ePics password saved.
+    password_set_failed: Could not set ePics password. Please try again or contact support.
 artist:
   streams: Streams
   streams_by: Streams by
@@ -337,6 +350,8 @@ artist:
 member:
   allow_info_mails: Info Emails
   allow_active_member_mails: Emails for active members
+  epics_username: ePics username
+  epics_username.not_set: not set
   can_vote: Can vote (Student union member or board has accepted as full member)
   active:
     application_title: Apply for active membership

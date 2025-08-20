@@ -47,16 +47,23 @@ class Happening implements \Stringable
     #[ORM\Column(length: 255)]
     private ?string $type = null;
 
-    #[ORM\OneToMany(mappedBy: 'happening', targetEntity: HappeningBooking::class, orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            mappedBy: "happening",
+            targetEntity: HappeningBooking::class,
+            cascade: ["persist", "remove"],
+            orphanRemoval: true,
+        ),
+    ]
     private Collection $bookings;
 
-    #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'happenings')]
+    #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: "happenings")]
     private Collection $owners;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(cascade: ["persist", "remove"])]
     private ?SonataMediaMedia $picture = null;
 
-    #[ORM\ManyToOne(inversedBy: 'happenings')]
+    #[ORM\ManyToOne(inversedBy: "happenings")]
     private ?Event $event = null;
 
     #[ORM\Column]
@@ -159,8 +166,9 @@ class Happening implements \Stringable
         return $this->needsPreliminarySignUp;
     }
 
-    public function setNeedsPreliminarySignUp(bool $needsPreliminarySignUp): self
-    {
+    public function setNeedsPreliminarySignUp(
+        bool $needsPreliminarySignUp,
+    ): self {
         $this->needsPreliminarySignUp = $needsPreliminarySignUp;
 
         return $this;
@@ -171,8 +179,9 @@ class Happening implements \Stringable
         return $this->needsPreliminaryPayment;
     }
 
-    public function setNeedsPreliminaryPayment(bool $needsPreliminaryPayment): self
-    {
+    public function setNeedsPreliminaryPayment(
+        bool $needsPreliminaryPayment,
+    ): self {
         $this->needsPreliminaryPayment = $needsPreliminaryPayment;
 
         return $this;
@@ -211,7 +220,10 @@ class Happening implements \Stringable
     public function removeBooking(HappeningBooking $booking): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->bookings->removeElement($booking) && $booking->getHappening() === $this) {
+        if (
+            $this->bookings->removeElement($booking) &&
+            $booking->getHappening() === $this
+        ) {
             $booking->setHappening(null);
         }
 
@@ -280,31 +292,31 @@ class Happening implements \Stringable
 
     public function getName($lang): ?string
     {
-        $func = 'name' . ucfirst((string) $lang);
+        $func = "name" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getSlug($lang): ?string
     {
-        $func = 'slug' . ucfirst((string) $lang);
+        $func = "slug" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getDescription($lang): ?string
     {
-        $func = 'description' . ucfirst((string) $lang);
+        $func = "description" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getPaymentInfo($lang): ?string
     {
-        $func = 'paymentInfo' . ucfirst((string) $lang);
+        $func = "paymentInfo" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
     public function getPrice($lang): ?string
     {
-        $func = 'price' . ucfirst((string) $lang);
+        $func = "price" . ucfirst((string) $lang);
         return $this->{$func};
     }
     public function getSlugFi(): ?string
@@ -384,8 +396,9 @@ class Happening implements \Stringable
         return $this->releaseThisHappeningInEvent;
     }
 
-    public function setReleaseThisHappeningInEvent(bool $releaseThisHappeningInEvent): self
-    {
+    public function setReleaseThisHappeningInEvent(
+        bool $releaseThisHappeningInEvent,
+    ): self {
         $this->releaseThisHappeningInEvent = $releaseThisHappeningInEvent;
 
         return $this;
@@ -402,8 +415,9 @@ class Happening implements \Stringable
         return $this->signUpsOpenUntil;
     }
 
-    public function setSignUpsOpenUntil(?\DateTimeInterface $signUpsOpenUntil): static
-    {
+    public function setSignUpsOpenUntil(
+        ?\DateTimeInterface $signUpsOpenUntil,
+    ): static {
         $this->signUpsOpenUntil = $signUpsOpenUntil;
 
         return $this;
@@ -414,7 +428,7 @@ class Happening implements \Stringable
         if (is_null($this->signUpsOpenUntil)) {
             return true;
         }
-        $time = new \DateTime('now');
+        $time = new \DateTime("now");
         return $this->signUpsOpenUntil > $time;
     }
 
