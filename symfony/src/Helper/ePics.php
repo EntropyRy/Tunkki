@@ -33,14 +33,14 @@ class ePics
                     if (str_starts_with($cookie, "XSRF-TOKEN=")) {
                         $parts = explode(";", $cookie);
                         $tokenValue = substr($parts[0], 11); // 11 is length of 'XSRF-TOKEN='
-                        $xsrfToken = str_replace("%3D", "=", $tokenValue);
+                        $xsrfToken = rawurldecode($tokenValue);
                     }
 
                     // Extract session token
                     if (str_starts_with($cookie, "lychee_session=")) {
                         $parts = explode(";", $cookie);
                         $sessionValue = substr($parts[0], 15); // 15 is length of 'lychee_session='
-                        $sessionToken = str_replace("%3D", "=", $sessionValue);
+                        $sessionToken = rawurldecode($sessionValue);
                     }
                 }
             }
@@ -56,14 +56,7 @@ class ePics
                 self::API_BASE . "/api/v2/Photo::random",
                 [
                     "max_duration" => 10,
-                    "headers" => [
-                        "Cookie" => "lychee_session=" . $sessionToken, // Only include the session token
-                        "X-XSRF-TOKEN" => $xsrfToken, // XSRF token as header, not cookie
-                        "Accept" => "application/json",
-                        "Content-Type" => "application/json",
-                        "X-Requested-With" => "XMLHttpRequest",
-                        "Referer" => self::API_BASE . "/",
-                    ],
+                    "headers" => $this->buildHeaders($sessionToken, $xsrfToken),
                 ],
             );
 
@@ -144,20 +137,18 @@ class ePics
                 return false;
             }
 
-            if (
-                !$this->login($adminUser, $adminPass, $sessionToken, $xsrfToken)
-            ) {
+            $tokensAfterLogin = $this->login(
+                $adminUser,
+                $adminPass,
+                $sessionToken,
+                $xsrfToken,
+            );
+            if ($tokensAfterLogin === null) {
                 return false;
             }
+            [$sessionToken, $xsrfToken] = $tokensAfterLogin;
 
-            $headers = [
-                "Cookie" => "lychee_session=" . $sessionToken,
-                "X-XSRF-TOKEN" => $xsrfToken,
-                "Accept" => "application/json",
-                "Content-Type" => "application/json",
-                "X-Requested-With" => "XMLHttpRequest",
-                "Referer" => self::API_BASE . "/",
-            ];
+            $headers = $this->buildHeaders($sessionToken, $xsrfToken);
 
             // Try to find existing user by username
             $userId = null;
@@ -222,6 +213,27 @@ class ePics
         }
     }
 
+    private function buildHeaders(
+        string $sessionToken,
+        string $xsrfToken,
+        array $extra = [],
+    ): array {
+        $cookies = [
+            "lychee_session=" . $sessionToken,
+            "XSRF-TOKEN=" . rawurlencode($xsrfToken),
+        ];
+        $headers = [
+            "Cookie" => implode("; ", $cookies),
+            "X-XSRF-TOKEN" => $xsrfToken,
+            "Accept" => "application/json",
+            "Content-Type" => "application/json",
+            "X-Requested-With" => "XMLHttpRequest",
+            "Referer" => self::API_BASE . "/",
+            "Origin" => self::API_BASE,
+        ];
+        return array_merge($headers, $extra);
+    }
+
     /**
      * Establish anonymous session to get XSRF token and session cookie.
      * @return array{0:string,1:string}|null [sessionToken, xsrfToken] or null on failure
@@ -241,12 +253,12 @@ class ePics
                 if (str_starts_with($cookie, "XSRF-TOKEN=")) {
                     $parts = explode(";", $cookie);
                     $tokenValue = substr($parts[0], 11);
-                    $xsrfToken = str_replace("%3D", "=", $tokenValue);
+                    $xsrfToken = rawurldecode($tokenValue);
                 }
                 if (str_starts_with($cookie, "lychee_session=")) {
                     $parts = explode(";", $cookie);
                     $sessionValue = substr($parts[0], 15);
-                    $sessionToken = str_replace("%3D", "=", $sessionValue);
+                    $sessionToken = rawurldecode($sessionValue);
                 }
             }
         }
@@ -260,26 +272,21 @@ class ePics
 
     /**
      * Login to Lychee API with given credentials.
+     * Returns updated [sessionToken, xsrfToken] if cookies rotated or the original tokens on 2xx.
+     * @return array{0:string,1:string}|null
      */
     private function login(
         string $username,
         string $password,
         string $sessionToken,
         string $xsrfToken,
-    ): bool {
+    ): ?array {
         $response = $this->client->request(
             "POST",
             self::API_BASE . "/api/v2/Auth::login",
             [
                 "max_duration" => 10,
-                "headers" => [
-                    "Cookie" => "lychee_session=" . $sessionToken,
-                    "X-XSRF-TOKEN" => $xsrfToken,
-                    "Accept" => "application/json",
-                    "Content-Type" => "application/json",
-                    "X-Requested-With" => "XMLHttpRequest",
-                    "Referer" => self::API_BASE . "/",
-                ],
+                "headers" => $this->buildHeaders($sessionToken, $xsrfToken),
                 "json" => [
                     "username" => $username,
                     "password" => $password,
@@ -287,8 +294,32 @@ class ePics
             ],
         );
 
-        return $response->getStatusCode() >= 200 &&
-            $response->getStatusCode() < 300;
+        $status = $response->getStatusCode();
+        if ($status < 200 || $status >= 300) {
+            return null;
+        }
+
+        // Refresh cookies/tokens after login if server rotated them
+        $headers = $response->getHeaders();
+        $newSession = $sessionToken;
+        $newXsrf = $xsrfToken;
+
+        if (isset($headers["set-cookie"])) {
+            foreach ($headers["set-cookie"] as $cookie) {
+                if (str_starts_with($cookie, "XSRF-TOKEN=")) {
+                    $parts = explode(";", $cookie);
+                    $tokenValue = substr($parts[0], 11);
+                    $newXsrf = rawurldecode($tokenValue);
+                }
+                if (str_starts_with($cookie, "lychee_session=")) {
+                    $parts = explode(";", $cookie);
+                    $sessionValue = substr($parts[0], 15);
+                    $newSession = rawurldecode($sessionValue);
+                }
+            }
+        }
+
+        return [$newSession, $newXsrf];
     }
 
     /**
