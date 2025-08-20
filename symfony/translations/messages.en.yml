@@ -276,6 +276,10 @@ profile:
     password_page:
       description: This will create an account on epics.entropy.fi or update the password if one already exists.
       username_hint: Your ePics username will be your member username.
+    form:
+      password: Password for ePics
+      password_repeat: Repeat password
+      help: Choose a password for your epics.entropy.fi account. If an account already exists, this will override its password.
   no_access_groups: No special privileges
   door:
     log: Clubroom door log

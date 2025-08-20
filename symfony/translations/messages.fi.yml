@@ -351,6 +351,10 @@ profile:
     password_page:
       description: Tämä luo tilin epics.entropy.fi-palveluun tai päivittää salasanan, jos tili on jo olemassa.
       username_hint: ePics-käyttäjänimesi on jäsentilisi käyttäjänimi.
+    form:
+      password: Salasana ePicsiin
+      password_repeat: Toista salasana
+      help: Valitse salasana epics.entropy.fi-tilillesi. Jos tili on jo olemassa, tämä korvaa salasanan.
   no_access_groups: Ei erityisoikeuksia
   door:
     log: Kertsin ovilogi

@@ -222,6 +222,7 @@ class ProfileController extends AbstractController
         }
         return $this->render("profile/epics_password.html.twig", [
             "form" => $form,
+            "epics_username" => $resolvedUsername,
         ]);
     }
     #[
@@ -281,6 +282,9 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
+        $resolvedUsername =
+            $member->getEpicsUsername() ?:
+            $member->getUsername() ?? (string) $member->getId();
 
         $form = $this->createForm(EPicsPasswordType::class);
         $form->handleRequest($request);

@@ -20,27 +20,26 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  */
 class EPicsPasswordType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder->add('plainPassword', RepeatedType::class, [
-            'type' => PasswordType::class,
-            'mapped' => false,
-            'invalid_message' => 'password.mismatch',
-            'first_options' => [
-                'label' => 'ePics password',
-                'attr' => ['autocomplete' => 'new-password'],
-                'help' => 'Choose a password for your epics.entropy.fi account. If an account already exists, this will override its password.',
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options,
+    ): void {
+        $builder->add("plainPassword", RepeatedType::class, [
+            "type" => PasswordType::class,
+            "mapped" => false,
+            "invalid_message" => "password.mismatch",
+            "first_options" => [
+                "label" => "profile.epics.form.password",
+                "attr" => ["autocomplete" => "new-password"],
+                "help" => "profile.epics.form.help",
             ],
-            'second_options' => [
-                'label' => 'Repeat password',
-                'attr' => ['autocomplete' => 'new-password'],
+            "second_options" => [
+                "label" => "profile.epics.form.password_repeat",
+                "attr" => ["autocomplete" => "new-password"],
             ],
-            'constraints' => [
-                new NotBlank(message: 'password.required'),
-                new Length(
-                    min: 8,
-                    minMessage: 'password.min_length'
-                ),
+            "constraints" => [
+                new NotBlank(message: "password.required"),
+                new Length(min: 8, minMessage: "password.min_length"),
             ],
         ]);
     }
@@ -49,12 +48,12 @@ class EPicsPasswordType extends AbstractType
     {
         $resolver->setDefaults([
             // Unmapped standalone form
-            'data_class' => null,
-            'csrf_protection' => true,
-            'csrf_field_name' => '_token',
-            'csrf_token_id' => 'epics_password',
+            "data_class" => null,
+            "csrf_protection" => true,
+            "csrf_field_name" => "_token",
+            "csrf_token_id" => "epics_password",
             // Allow controllers to override labels via translations if needed
-            'translation_domain' => 'messages',
+            "translation_domain" => "messages",
         ]);
     }
 }
