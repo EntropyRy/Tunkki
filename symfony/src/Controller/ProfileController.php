@@ -26,7 +26,6 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Form\EPicsPasswordType;
 use App\Helper\ePics;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class ProfileController extends AbstractController
 {
@@ -277,7 +276,6 @@ class ProfileController extends AbstractController
     public function epicsPassword(
         Request $request,
         ePics $epics,
-        HttpClientInterface $client,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -291,245 +289,14 @@ class ProfileController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $plain = $form->get("plainPassword")->getData();
-            $username =
-                $member->getEpicsUsername() ?:
-                $member->getUsername() ?? (string) $member->getId();
-            $apiBase = "https://epics.entropy.fi";
 
-            // Establish anonymous session for cookies and XSRF
-            $initResponse = $client->request("GET", $apiBase, [
-                "max_duration" => 5,
-            ]);
-            $headers = $initResponse->getHeaders();
-            $sessionToken = null;
-            $xsrfToken = null;
-
-            if (isset($headers["set-cookie"])) {
-                foreach ($headers["set-cookie"] as $cookie) {
-                    if (str_starts_with($cookie, "XSRF-TOKEN=")) {
-                        $parts = explode(";", $cookie);
-                        $tokenValue = substr($parts[0], 11);
-                        $xsrfToken = str_replace("%3D", "=", $tokenValue);
-                    }
-                    if (str_starts_with($cookie, "lychee_session=")) {
-                        $parts = explode(";", $cookie);
-                        $sessionValue = substr($parts[0], 15);
-                        $sessionToken = str_replace("%3D", "=", $sessionValue);
-                    }
-                }
-            }
-
-            if (!$sessionToken || !$xsrfToken) {
-                $this->addFlash("danger", "epics.password_set_failed");
-                return $this->redirectToRoute(
-                    "profile." . $member->getLocale(),
-                );
-            }
-
-            $adminUser =
-                $_ENV["EPICS_ADMIN_USER"] ??
-                ($_SERVER["EPICS_ADMIN_USER"] ?? null);
-            $adminPass =
-                $_ENV["EPICS_ADMIN_PASSWORD"] ??
-                ($_SERVER["EPICS_ADMIN_PASSWORD"] ?? null);
-
-            if (!$adminUser || !$adminPass) {
-                $this->addFlash("danger", "epics.password_set_failed");
-                return $this->redirectToRoute(
-                    "profile." . $member->getLocale(),
-                );
-            }
-
-            $commonHeaders = [
-                "Cookie" => "lychee_session=" . $sessionToken,
-                "X-XSRF-TOKEN" => $xsrfToken,
-                "Accept" => "application/json",
-                "Content-Type" => "application/json",
-                "X-Requested-With" => "XMLHttpRequest",
-                "Referer" => $apiBase . "/",
-            ];
-
-            // Login as admin
-            $loginResp = $client->request(
-                "POST",
-                $apiBase . "/api/v2/Session::login",
-                [
-                    "max_duration" => 10,
-                    "headers" => $commonHeaders,
-                    "json" => [
-                        "username" => $adminUser,
-                        "password" => $adminPass,
-                    ],
-                ],
+            $success = $epics->createOrUpdateUserPassword(
+                $resolvedUsername,
+                $plain,
             );
-            if ($loginResp->getStatusCode() !== 200) {
-                $this->addFlash("danger", "epics.password_set_failed");
-                return $this->redirectToRoute(
-                    "profile." . $member->getLocale(),
-                );
-            }
 
-            // Check if user exists (try multiple endpoints)
-            $exists = false;
-            $userId = null;
-
-            try {
-                $listResp = $client->request(
-                    "POST",
-                    $apiBase . "/api/v2/Users::list",
-                    [
-                        "max_duration" => 10,
-                        "headers" => $commonHeaders,
-                        "json" => [],
-                    ],
-                );
-                if ($listResp->getStatusCode() === 200) {
-                    $data = json_decode($listResp->getContent(false), true);
-                    $arr = $data["users"] ?? ($data ?? []);
-                    if (is_array($arr)) {
-                        foreach ($arr as $u) {
-                            $uname = $u["username"] ?? ($u["name"] ?? null);
-                            if ($uname === $username) {
-                                $exists = true;
-                                $userId = $u["id"] ?? null;
-                                break;
-                            }
-                        }
-                    }
-                }
-            } catch (\Throwable $e) {
-                // ignore; try next method
-            }
-
-            if (!$exists) {
-                try {
-                    $getResp = $client->request(
-                        "POST",
-                        $apiBase . "/api/v2/Users::get",
-                        [
-                            "max_duration" => 10,
-                            "headers" => $commonHeaders,
-                            "json" => ["username" => $username],
-                        ],
-                    );
-                    if ($getResp->getStatusCode() === 200) {
-                        $ud = json_decode($getResp->getContent(false), true);
-                        // Accept both object and wrapped forms
-                        $exists = true;
-                        $userId = $ud["id"] ?? ($ud["user"]["id"] ?? null);
-                    }
-                } catch (\Throwable $e) {
-                    // ignore; treat as not found
-                }
-            }
-
-            $overallOk = false;
-
-            if ($exists) {
-                // Reset password
-                foreach (
-                    ["/api/v2/User::setPassword", "/api/v2/Users::setPassword"]
-                    as $ep
-                ) {
-                    try {
-                        $payload = $userId
-                            ? ["id" => $userId, "password" => $plain]
-                            : ["username" => $username, "password" => $plain];
-                        $resp = $client->request("POST", $apiBase . $ep, [
-                            "max_duration" => 10,
-                            "headers" => $commonHeaders,
-                            "json" => $payload,
-                        ]);
-                        if ($resp->getStatusCode() === 200) {
-                            $overallOk = true;
-                            break;
-                        }
-                    } catch (\Throwable $e) {
-                        // try next
-                    }
-                }
-            } else {
-                // Create user
-                try {
-                    $createResp = $client->request(
-                        "POST",
-                        $apiBase . "/api/v2/Users::add",
-                        [
-                            "max_duration" => 10,
-                            "headers" => $commonHeaders,
-                            "json" => [
-                                "username" => $username,
-                                "password" => $plain,
-                            ],
-                        ],
-                    );
-                    if ($createResp->getStatusCode() === 200) {
-                        $overallOk = true;
-                        // Try to capture ID from response if provided
-                        $cd = json_decode($createResp->getContent(false), true);
-                        $userId = $cd["id"] ?? ($cd["user"]["id"] ?? $userId);
-                        $exists = true;
-                    }
-                } catch (\Throwable $e) {
-                    $overallOk = false;
-                }
-            }
-
-            // Ensure we have userId (try to resolve post-create)
-            if ($exists && !$userId) {
-                try {
-                    $getResp = $client->request(
-                        "POST",
-                        $apiBase . "/api/v2/Users::get",
-                        [
-                            "max_duration" => 10,
-                            "headers" => $commonHeaders,
-                            "json" => ["username" => $username],
-                        ],
-                    );
-                    if ($getResp->getStatusCode() === 200) {
-                        $ud = json_decode($getResp->getContent(false), true);
-                        $userId = $ud["id"] ?? ($ud["user"]["id"] ?? $userId);
-                    }
-                } catch (\Throwable $e) {
-                    // ignore
-                }
-            }
-
-            // Grant permissions: upload + modify own profile
-            if ($exists) {
-                foreach (["/api/v2/User::set", "/api/v2/Users::set"] as $ep) {
-                    try {
-                        $payload = [
-                            "may_upload" => true,
-                            "may_edit_own_settings" => true,
-                        ];
-                        if ($userId) {
-                            $payload["id"] = $userId;
-                        } else {
-                            $payload["username"] = $username;
-                        }
-                        $resp = $client->request("POST", $apiBase . $ep, [
-                            "max_duration" => 10,
-                            "headers" => $commonHeaders,
-                            "json" => $payload,
-                        ]);
-                        if ($resp->getStatusCode() === 200) {
-                            break;
-                        }
-                    } catch (\Throwable $e) {
-                        // try next
-                    }
-                }
-            }
-
-            if ($overallOk) {
-                $this->addFlash(
-                    "success",
-                    'epics.password_set <a class="btn btn-sm btn-primary ms-2" href="' .
-                        $apiBase .
-                        '" target="_blank" rel="noopener">Login to ePics</a>',
-                );
+            if ($success) {
+                $this->addFlash("success", "epics.password_set");
             } else {
                 $this->addFlash("danger", "epics.password_set_failed");
             }

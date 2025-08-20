@@ -115,6 +115,17 @@ class ePics
         string $username,
         string $password,
     ): bool {
+        return $this->ensureUserPasswordAndPerms($username, $password);
+    }
+
+    /**
+     * Ensure a Lychee (ePics) user exists with the given username and has the provided password + permissions.
+     * Uses Auth::login and UserManagement endpoints.
+     */
+    public function ensureUserPasswordAndPerms(
+        string $username,
+        string $password,
+    ): bool {
         try {
             $tokens = $this->establishSession();
             if ($tokens === null) {
@@ -139,25 +150,71 @@ class ePics
                 return false;
             }
 
-            // Try to create the user first
-            if (
-                $this->createUser(
-                    $username,
-                    $password,
-                    $sessionToken,
-                    $xsrfToken,
-                )
-            ) {
-                return true;
+            $headers = [
+                "Cookie" => "lychee_session=" . $sessionToken,
+                "X-XSRF-TOKEN" => $xsrfToken,
+                "Accept" => "application/json",
+                "Content-Type" => "application/json",
+                "X-Requested-With" => "XMLHttpRequest",
+                "Referer" => self::API_BASE . "/",
+            ];
+
+            // Try to find existing user by username
+            $userId = null;
+            $listResp = $this->client->request(
+                "GET",
+                self::API_BASE . "/api/v2/Users",
+                [
+                    "max_duration" => 10,
+                    "headers" => $headers,
+                ],
+            );
+            if ($listResp->getStatusCode() === 200) {
+                $users = json_decode($listResp->getContent(false), true) ?? [];
+                foreach ($users as $u) {
+                    if (($u["username"] ?? null) === $username) {
+                        $userId = (int) ($u["id"] ?? 0);
+                        break;
+                    }
+                }
             }
 
-            // If user exists, try to update password
-            return $this->setUserPassword(
-                $username,
-                $password,
-                $sessionToken,
-                $xsrfToken,
+            if ($userId) {
+                // Update password and permissions
+                $resp = $this->client->request(
+                    "PATCH",
+                    self::API_BASE . "/api/v2/UserManagement",
+                    [
+                        "max_duration" => 10,
+                        "headers" => $headers,
+                        "json" => [
+                            "id" => (string) $userId,
+                            "username" => $username,
+                            "password" => $password,
+                            "may_upload" => true,
+                            "may_edit_own_settings" => true,
+                        ],
+                    ],
+                );
+                return $resp->getStatusCode() === 200;
+            }
+
+            // Create user if not found
+            $create = $this->client->request(
+                "POST",
+                self::API_BASE . "/api/v2/UserManagement",
+                [
+                    "max_duration" => 10,
+                    "headers" => $headers,
+                    "json" => [
+                        "username" => $username,
+                        "password" => $password,
+                        "may_upload" => true,
+                        "may_edit_own_settings" => true,
+                    ],
+                ],
             );
+            return $create->getStatusCode() === 200;
         } catch (TransportExceptionInterface) {
             return false;
         }
@@ -210,7 +267,7 @@ class ePics
     ): bool {
         $response = $this->client->request(
             "POST",
-            self::API_BASE . "/api/v2/Session::login",
+            self::API_BASE . "/api/v2/Auth::login",
             [
                 "max_duration" => 10,
                 "headers" => [
@@ -242,7 +299,7 @@ class ePics
     ): bool {
         $response = $this->client->request(
             "POST",
-            self::API_BASE . "/api/v2/Users::add",
+            self::API_BASE . "/api/v2/UserManagement",
             [
                 "max_duration" => 10,
                 "headers" => [
@@ -256,16 +313,13 @@ class ePics
                 "json" => [
                     "username" => $username,
                     "password" => $password,
+                    "may_upload" => true,
+                    "may_edit_own_settings" => true,
                 ],
             ],
         );
 
-        if ($response->getStatusCode() === 200) {
-            return true;
-        }
-
-        // Treat conflict/duplicate as "user exists" -> not created
-        return false;
+        return $response->getStatusCode() === 200;
     }
 
     /**
