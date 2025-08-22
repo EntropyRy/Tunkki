@@ -46,12 +46,12 @@
         </li>
         <li class="nav-item">
             <a class="nav-link"
-               href="{{ localized_url('en', page is defined ? page.id : null) }}">EN</a>
+               href="{{ localized_url('en', page.id|default(null)) }}">EN</a>
         </li>
     {% else %}
         <li class="nav-item">
             <a class="nav-link"
-               href="{{ localized_url('fi', page is defined ? page.id : null) }}">FI</a>
+               href="{{ localized_url('fi', page.id|default(null)) }}">FI</a>
         </li>
         <li class="nav-item current">
             <span class="nav-link">EN</span>
@@ -61,9 +61,9 @@
 {%- block mobile_locale %}
     {% if app.request.locale == 'fi' %}
         <span>FI</span> |
-        <a href="{{ localized_url('en', page is defined ? page.id : null) }}">EN</a>
+        <a href="{{ localized_url('en', page.id|default(null)) }}">EN</a>
     {% else %}
-        <a href="{{ localized_url('fi', page is defined ? page.id : null) }}">FI</a> |
+        <a href="{{ localized_url('fi', page.id|default(null)) }}">FI</a> |
         <span>EN</span>
     {% endif %}
 {% endblock -%}

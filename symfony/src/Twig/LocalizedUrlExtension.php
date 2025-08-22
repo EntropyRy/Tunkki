@@ -3,7 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Menu;
-use App\Entity\Sonata\SonataPagePage;
+use App\Entity\SonataPagePage;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sonata\PageBundle\Model\PageInterface;
@@ -64,14 +64,26 @@ class LocalizedUrlExtension extends AbstractExtension
      */
     public function getLocalizedUrl(
         string $targetLocale,
-        ?PageInterface $page = null,
+        PageInterface|int|null $page = null,
     ): string {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request instanceof Request) {
             return "/";
         }
 
-        // If a page object is provided, use it to find the localized version
+        // If an integer id is provided, resolve the page entity
+        if (is_int($page)) {
+            $resolved = $this->entityManager
+                ->getRepository(SonataPagePage::class)
+                ->find($page);
+            if ($resolved instanceof PageInterface) {
+                $page = $resolved;
+            } else {
+                $page = null;
+            }
+        }
+
+        // If a page object (resolved or given) is provided, use it to find the localized version
         if ($page instanceof PageInterface) {
             return $this->getLocalizedUrlFromPage($page, $targetLocale);
         }
@@ -376,21 +388,37 @@ class LocalizedUrlExtension extends AbstractExtension
      */
     public function getLocalizedUrlWithDebug(
         string $targetLocale,
-        ?PageInterface $page = null,
+        PageInterface|int|null $page = null,
     ): array {
+        $inputWasId = is_int($page);
+        $resolvedPage = $page;
+
+        if ($inputWasId) {
+            $resolvedPage = $this->entityManager
+                ->getRepository(SonataPagePage::class)
+                ->find($page);
+        }
+
         $debugInfo = [
             "target_locale" => $targetLocale,
-            "has_page_object" => $page instanceof PageInterface,
+            "input_was_id" => $inputWasId,
+            "has_page_object" => $resolvedPage instanceof PageInterface,
             "strategies_tried" => [],
         ];
 
-        if ($page instanceof PageInterface) {
-            $pageAlias = $page->getPageAlias();
+        if ($resolvedPage instanceof PageInterface) {
+            $pageAlias = $resolvedPage->getPageAlias();
             $debugInfo["page_alias"] = $pageAlias;
+            $debugInfo["source_page_id"] = $this->getPageIdSafely(
+                $resolvedPage,
+            );
 
             // Try menu lookup first (primary method)
             $debugInfo["strategies_tried"][] = "menu_lookup";
-            $targetPage = $this->findPageThroughMenu($page, $targetLocale);
+            $targetPage = $this->findPageThroughMenu(
+                $resolvedPage,
+                $targetLocale,
+            );
             if (
                 $targetPage &&
                 $targetPage->getEnabled() &&
@@ -442,9 +470,9 @@ class LocalizedUrlExtension extends AbstractExtension
             }
         }
 
-        // Fallback to regular URL generation
+        // Fallback to regular URL generation (will resolve id again but cheap)
         $debugInfo["strategies_tried"][] = "fallback";
-        $url = $this->getLocalizedUrl($targetLocale, $page);
+        $url = $this->getLocalizedUrl($targetLocale, $resolvedPage);
 
         return [
             "url" => $url,
