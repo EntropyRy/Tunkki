@@ -3,7 +3,7 @@
 namespace App\Twig;
 
 use App\Entity\Menu;
-use App\Entity\SonataPagePage;
+use App\Entity\Sonata\SonataPagePage;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Sonata\PageBundle\Model\PageInterface;
@@ -34,7 +34,8 @@ class LocalizedUrlExtension extends AbstractExtension
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $entityManager,
         private readonly ?LoggerInterface $logger = null,
-    ) {}
+    ) {
+    }
 
     #[\Override]
     public function getFunctions(): array
