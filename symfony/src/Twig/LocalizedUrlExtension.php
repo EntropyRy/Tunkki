@@ -77,11 +77,7 @@ class LocalizedUrlExtension extends AbstractExtension
             $resolved = $this->entityManager
                 ->getRepository(SonataPagePage::class)
                 ->find($page);
-            if ($resolved instanceof PageInterface) {
-                $page = $resolved;
-            } else {
-                $page = null;
-            }
+            $page = $resolved instanceof PageInterface ? $resolved : null;
         }
 
         // If a page object (resolved or given) is provided, use it to find the localized version
