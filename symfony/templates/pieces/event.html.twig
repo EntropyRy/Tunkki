@@ -342,7 +342,7 @@
         {% else %}
             {% set containerClass = containerClass ~ ' img-filter' %}
         {% endif %}
-        <div class="{{ containerClass }}" {{ block('imgfilter') }}>
+        <div class="{{ containerClass }}">
             {{ block('img') }}
             {{ block('event_badge') }}
         </div>
@@ -357,7 +357,7 @@
     {% if event.picture and event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4' %}
         <div class="img-fluid">{{ block('video_media') }}</div>
     {% else %}
-        <div class="{% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}" {{ block('imgfilter') }}>
+        <div class="{% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% else %}img-filter{% endif %}">
             {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
             {{ block('img') }}
         </div>
@@ -382,6 +382,9 @@
             :alt="block('event_img_title')"
             :title="block('event_img_title')"
             :lazy="lazy"
+            :containerAttributes="{
+                'style': event.imgFilterColor and event.imgFilterBlendMode ? 'background: ' ~ event.imgFilterColor ~ ';' : null
+            }"
             :imgAttributes="{
                 'style': event.imgFilterBlendMode
             }"
@@ -405,9 +408,9 @@
              src="{{ asset('images/placeholders/' ~ event.type ~ online ~ '.png') }}"
              title="{{ block('event_img_title') }}">
     </picture>
-{% endblock %}
-{% block imgfilter %}
-    {% if event.imgFilterColor and event.imgFilterBlendMode %}style="background: {{ event.imgFilterColor }};"{% endif %}
+
+
+
 {% endblock %}
 {%- block links %}
     {% if event.attachment %}
