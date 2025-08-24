@@ -386,7 +386,9 @@
                 'style': event.imgFilterColor and event.imgFilterBlendMode ? 'background: ' ~ event.imgFilterColor ~ ';' : null
             }"
             :placeholderAttributes="{
-                'style': event.imgFilterColor and event.imgFilterBlendMode ? 'background: ' ~ event.imgFilterColor ~ ';' : null
+                'style': event.imgFilterColor and event.imgFilterBlendMode
+                    ? 'background: ' ~ event.imgFilterColor ~ '; ' ~ event.imgFilterBlendMode
+                    : (event.imgFilterBlendMode ? event.imgFilterBlendMode : null)
             }"
             :imgAttributes="{
                 'style': event.imgFilterBlendMode
