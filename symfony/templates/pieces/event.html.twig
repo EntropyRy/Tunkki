@@ -383,15 +383,15 @@
             :title="block('event_img_title')"
             :lazy="lazy"
             :containerAttributes="{
-                'style': event.imgFilterColor and event.imgFilterBlendMode ? 'background: ' ~ event.imgFilterColor ~ ';' : null
-            }"
-            :placeholderAttributes="{
-                'style': event.imgFilterColor and event.imgFilterBlendMode
-                    ? 'background: ' ~ event.imgFilterColor ~ '; ' ~ event.imgFilterBlendMode
-                    : (event.imgFilterBlendMode ? event.imgFilterBlendMode : null)
-            }"
-            :imgAttributes="{
-                'style': event.imgFilterBlendMode
+                'style': (event.imgFilterColor or event.imgFilterBlendMode)
+                    ? (
+                        (event.imgFilterColor ? '--pi-filter-bg: ' ~ event.imgFilterColor ~ '; ' : '')
+                        ~
+                        (event.imgFilterBlendMode
+                            ? '--pi-blend-mode: ' ~ (event.imgFilterBlendMode|replace({'mix-blend-mode:':''})|replace({';':''})|trim) ~ ';'
+                            : '')
+                      )
+                    : null
             }"
         />
     {% else %}

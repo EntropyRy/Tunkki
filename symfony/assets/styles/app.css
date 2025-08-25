@@ -361,8 +361,11 @@ a svg {
 }
 
 .progressive-media-container {
+    --pi-filter-bg: transparent;
+    --pi-blend-mode: normal;
     position: relative;
     overflow: hidden;
+    background: var(--pi-filter-bg, transparent);
 }
 .progressive-media-container.aspect-square {
     aspect-ratio: 1 / 1;
@@ -379,6 +382,8 @@ a svg {
     transition: opacity 0.2s ease;
     filter: blur(5px);
     opacity: 1;
+    background: var(--pi-filter-bg, inherit);
+    mix-blend-mode: var(--pi-blend-mode, normal);
 }
 .progressive-placeholder.faded {
     opacity: 0;
@@ -407,6 +412,8 @@ a svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    background: var(--pi-filter-bg, inherit);
+    mix-blend-mode: var(--pi-blend-mode, normal);
 }
 .progressive-image.rounded-lg {
     border-radius: 0.5rem;

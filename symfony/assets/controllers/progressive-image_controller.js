@@ -155,18 +155,13 @@ export default class extends Controller {
   }
 
   animateImageReveal() {
+    // Simultaneous cross-fade to avoid flash of original colors
     this.batchStyleUpdates(() => {
       this.pictureTarget.style.opacity = "1";
       this.pictureTarget.classList.add("loaded");
+      this.placeholderTarget.style.opacity = "0";
+      this.placeholderTarget.classList.add("faded");
     });
-
-    // Delay placeholder fade for smoother transition
-    setTimeout(() => {
-      this.batchStyleUpdates(() => {
-        this.placeholderTarget.style.opacity = "0";
-        this.placeholderTarget.classList.add("faded");
-      });
-    }, 50);
   }
 
   applyLoadedStyles(isInstant = false) {
