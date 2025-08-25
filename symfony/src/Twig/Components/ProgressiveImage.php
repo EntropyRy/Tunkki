@@ -54,9 +54,9 @@ class ProgressiveImage
         $this->imageClass = $imageClass ?: $class;
 
         // Handle alt and title with fallbacks
-        $this->alt = $alt ?: $media->getName() ?: "Image";
+        $this->alt = ($alt ?: $media->getName()) ?: "Image";
         $this->title =
-            $title ?: $media->getDescription() ?: $media->getName() ?: "";
+            ($title ?: $media->getDescription() ?: $media->getName()) ?: "";
 
         $this->lazy = $lazy;
         $this->placeholderAttributes = $placeholderAttributes;
