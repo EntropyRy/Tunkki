@@ -424,17 +424,13 @@ a svg {
 .img-filter {
     position: relative;
     isolation: isolate;
-}
-.img-filter::before {
-    content: "";
-    position: absolute;
-    inset: 0;
     background: var(--img-filter-color, transparent);
-    mix-blend-mode: var(--img-filter-mode, normal);
-    pointer-events: none;
-    z-index: 1;
 }
-.img-filter > * {
-    position: relative;
-    z-index: 2;
+
+/* Apply blend mode directly to media descendants so no overlay element or ::before is needed */
+.img-filter .progressive-placeholder,
+.img-filter .progressive-image,
+.img-filter picture,
+.img-filter img {
+    mix-blend-mode: var(--img-filter-mode, normal);
 }
