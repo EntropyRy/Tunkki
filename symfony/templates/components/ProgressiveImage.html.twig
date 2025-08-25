@@ -14,10 +14,26 @@
          data-progressive-image-target="placeholder"
          {% for attr, value in placeholderAttributes %}{{ attr }}="{{ value }}"{% endfor %}
     >
+
+    {# Prepare style propagation for picture (needed for blend backdrops like luminosity) #}
+    {% set _containerStyle = '' %}
+    {% for attr, value in containerAttributes %}
+        {% if attr == 'style' %}
+            {% set _containerStyle = value %}
+        {% endif %}
+    {% endfor %}
+    {% set _hasPictureStyle = false %}
+    {% for attr, value in pictureAttributes %}
+        {% if attr == 'style' %}
+            {% set _hasPictureStyle = true %}
+        {% endif %}
+    {% endfor %}
+
     {# High-quality responsive image - loaded progressively #}
     <picture class="{{ this.pictureClasses }}"
              data-progressive-image-target="picture"
-             {% for attr, value in pictureAttributes %}{{ attr }}="{{ value }}"{% endfor %}>
+             {% for attr, value in pictureAttributes %}{{ attr }}="{{ value }}"{% endfor %}
+             {% if not _hasPictureStyle and _containerStyle %}style="{{ _containerStyle }}"{% endif %}>
 
         {% for format, mediaQuery in sizes %}
             <source media="{{ mediaQuery }}"
@@ -27,7 +43,7 @@
                     data-srcset="{{ sonata_path(media, format) }}">
         {% endfor %}
 
-        {# Fallback image #}
+        {# Fallback / final high-res image #}
         <img data-src="{{ sonata_path(media, sizes|keys|last) }}"
              alt="{{ alt }}"
              {% if title %}title="{{ title }}"{% endif %}

@@ -365,12 +365,10 @@ a svg {
     --pi-blend-mode: normal;
     position: relative;
     overflow: hidden;
-    background: var(--pi-filter-bg, transparent);
-    /* Create an isolated stacking context so blend modes are stable */
+    /* Container no longer acts as visible blend surface; background moved to picture */
+    background: transparent;
     isolation: isolate;
-    /* Contain painting to reduce intermediate flashes */
     contain: paint;
-    /* Hint compositor about upcoming opacity changes (children fade) */
     will-change: opacity;
 }
 .progressive-media-container.aspect-square {
@@ -388,8 +386,7 @@ a svg {
     transition: opacity 0.2s ease;
     filter: blur(5px);
     opacity: 1;
-    background: var(--pi-filter-bg, inherit);
-    mix-blend-mode: var(--pi-blend-mode, normal);
+    /* Blend handled by container ::before overlay */
     /* Optimize cross-fade */
     will-change: opacity;
 }
@@ -411,7 +408,8 @@ a svg {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Prepare for opacity transition */
+    /* Background color applied here so the blended image uses it as backdrop */
+    background: var(--pi-filter-bg, transparent);
     will-change: opacity;
 }
 .progressive-picture.loaded {
@@ -422,9 +420,8 @@ a svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    background: var(--pi-filter-bg, inherit);
+    /* Restore direct blend mode on the image so it blends with picture background */
     mix-blend-mode: var(--pi-blend-mode, normal);
-    /* Helps some browsers avoid a single-frame unblended paint */
     will-change: opacity;
 }
 .progressive-image.rounded-lg {
