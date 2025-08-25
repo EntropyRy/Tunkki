@@ -342,7 +342,7 @@
         {% else %}
             {% set containerClass = containerClass ~ ' img-filter' %}
         {% endif %}
-        <div class="{{ containerClass }}">
+        <div class="{{ containerClass }}" {% if event.imgFilterBlendMode %}style="--img-filter-color: {{ event.imgFilterColor }}; --img-filter-mode: {{ event.imgFilterBlendMode|replace({'mix-blend-mode:':''})|replace({';':''})|trim }};"{% endif %}>
             {{ block('img') }}
             {{ block('event_badge') }}
         </div>
@@ -382,18 +382,6 @@
             :alt="block('event_img_title')"
             :title="block('event_img_title')"
             :lazy="lazy"
-            :containerAttributes="{
-                'style': (event.imgFilterColor or event.imgFilterBlendMode)
-                    ? (
-                        (event.imgFilterColor ? '--pi-filter-bg: ' ~ event.imgFilterColor ~ '; ' : '')
-                        ~
-                        (event.imgFilterBlendMode
-                            ? '--pi-blend-mode: ' ~ (event.imgFilterBlendMode|replace({'mix-blend-mode:':''})|replace({';':''})|trim) ~ ';'
-                            : '')
-                      )
-                    : null
-            }"
-
         />
     {% else %}
         {{ block('placeholder_img') }}

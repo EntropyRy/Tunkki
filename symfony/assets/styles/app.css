@@ -361,15 +361,8 @@ a svg {
 }
 
 .progressive-media-container {
-    --pi-filter-bg: transparent;
-    --pi-blend-mode: normal;
     position: relative;
     overflow: hidden;
-    /* Container no longer acts as visible blend surface; background moved to picture */
-    background: transparent;
-    isolation: isolate;
-    contain: paint;
-    will-change: opacity;
 }
 .progressive-media-container.aspect-square {
     aspect-ratio: 1 / 1;
@@ -386,10 +379,6 @@ a svg {
     transition: opacity 0.2s ease;
     filter: blur(5px);
     opacity: 1;
-    background: var(--pi-filter-bg, transparent);
-    mix-blend-mode: var(--pi-blend-mode, normal);
-    /* Optimize cross-fade */
-    will-change: opacity;
 }
 .progressive-placeholder.faded {
     opacity: 0;
@@ -409,9 +398,6 @@ a svg {
     left: 0;
     width: 100%;
     height: 100%;
-    /* Background color applied here so the blended image uses it as backdrop */
-    background: var(--pi-filter-bg, transparent);
-    will-change: opacity;
 }
 .progressive-picture.loaded {
     opacity: 1 !important;
@@ -421,13 +407,34 @@ a svg {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Restore direct blend mode on the image so it blends with picture background */
-    mix-blend-mode: var(--pi-blend-mode, normal);
-    will-change: opacity;
 }
 .progressive-image.rounded-lg {
     border-radius: 0.5rem;
 }
 .progressive-image.shadow-lg {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Generic image filter wrapper independent from ProgressiveImage component.
+   Usage:
+     <div class="img-filter" style="--img-filter-color:#123456; --img-filter-mode:luminosity;">
+         ... ProgressiveImage component output ...
+     </div>
+   You can also set variables via a parent class in your CSS instead of inline. */
+.img-filter {
+    position: relative;
+    isolation: isolate;
+}
+.img-filter::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--img-filter-color, transparent);
+    mix-blend-mode: var(--img-filter-mode, normal);
+    pointer-events: none;
+    z-index: 1;
+}
+.img-filter > * {
+    position: relative;
+    z-index: 2;
 }

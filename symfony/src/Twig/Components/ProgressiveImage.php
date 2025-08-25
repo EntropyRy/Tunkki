@@ -20,7 +20,6 @@ class ProgressiveImage
     public string $alt = "";
     public string $title = "";
     public bool $lazy = true;
-    public array $placeholderAttributes = [];
     public array $pictureAttributes = [];
     public array $imgAttributes = [];
     public array $containerAttributes = [];
@@ -37,7 +36,6 @@ class ProgressiveImage
         string $alt = "",
         string $title = "",
         bool $lazy = true,
-        array $placeholderAttributes = [],
         array $pictureAttributes = [],
         array $imgAttributes = [],
         array $containerAttributes = [],
@@ -54,12 +52,11 @@ class ProgressiveImage
         $this->imageClass = $imageClass ?: $class;
 
         // Handle alt and title with fallbacks
-        $this->alt = ($alt ?: $media->getName()) ?: "Image";
+        $this->alt = $alt ?: $media->getName() ?: "Image";
         $this->title =
-            ($title ?: $media->getDescription() ?: $media->getName()) ?: "";
+            $title ?: $media->getDescription() ?: $media->getName() ?: "";
 
         $this->lazy = $lazy;
-        $this->placeholderAttributes = $placeholderAttributes;
         $this->pictureAttributes = $pictureAttributes;
         $this->imgAttributes = $imgAttributes;
         $this->containerAttributes = $containerAttributes;
