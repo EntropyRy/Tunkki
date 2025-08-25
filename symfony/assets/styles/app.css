@@ -366,6 +366,12 @@ a svg {
     position: relative;
     overflow: hidden;
     background: var(--pi-filter-bg, transparent);
+    /* Create an isolated stacking context so blend modes are stable */
+    isolation: isolate;
+    /* Contain painting to reduce intermediate flashes */
+    contain: paint;
+    /* Hint compositor about upcoming opacity changes (children fade) */
+    will-change: opacity;
 }
 .progressive-media-container.aspect-square {
     aspect-ratio: 1 / 1;
@@ -384,6 +390,8 @@ a svg {
     opacity: 1;
     background: var(--pi-filter-bg, inherit);
     mix-blend-mode: var(--pi-blend-mode, normal);
+    /* Optimize cross-fade */
+    will-change: opacity;
 }
 .progressive-placeholder.faded {
     opacity: 0;
@@ -403,6 +411,8 @@ a svg {
     left: 0;
     width: 100%;
     height: 100%;
+    /* Prepare for opacity transition */
+    will-change: opacity;
 }
 .progressive-picture.loaded {
     opacity: 1 !important;
@@ -414,6 +424,8 @@ a svg {
     object-fit: cover;
     background: var(--pi-filter-bg, inherit);
     mix-blend-mode: var(--pi-blend-mode, normal);
+    /* Helps some browsers avoid a single-frame unblended paint */
+    will-change: opacity;
 }
 .progressive-image.rounded-lg {
     border-radius: 0.5rem;

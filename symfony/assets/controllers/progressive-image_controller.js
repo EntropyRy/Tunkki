@@ -1,4 +1,11 @@
 // assets/controllers/progressive-image_controller.js
+//
+// Opacity / reveal is now handled ONLY via CSS classes:
+// - .progressive-picture (initial opacity 0) -> add .loaded (opacity 1)
+// - .progressive-placeholder (initial opacity 1) -> add .faded (opacity 0)
+// JS no longer writes inline opacity styles to avoid flashes or race conditions.
+// Blend / background attributes are provided from Twig; this controller does
+// not inject style attributes (except filter removal on error).
 
 import { Controller } from "@hotwired/stimulus";
 
@@ -29,7 +36,6 @@ export default class extends Controller {
       return;
     }
 
-    // Check cache first, then determine loading strategy
     if (this.isImageCached(dataSrc)) {
       this.loadImageImmediately();
     } else if (this.lazyValue === false) {
@@ -73,14 +79,20 @@ export default class extends Controller {
   loadImageImmediately() {
     if (this.isLoaded) return;
 
-    // Batch DOM operations for better performance
-    this.batchStyleUpdates(() => {
-      this.disableTransitions();
-      this.updateImageSources();
-      this.applyLoadedStyles(true);
-    });
+    // Swap in sources immediately
+    this.updateImageSources();
 
-    this.markAsLoaded(true);
+    const finalize = () => {
+      this.applyLoadedStyles(true);
+      this.markAsLoaded(true);
+    };
+
+    // Decode to ensure the first painted frame already has correct colors/blending
+    if (this.imageTarget && this.imageTarget.decode) {
+      this.imageTarget.decode().then(finalize).catch(finalize);
+    } else {
+      finalize();
+    }
   }
 
   async loadProgressiveImage() {
@@ -90,7 +102,12 @@ export default class extends Controller {
       this.loadingPromise = this.preloadImage();
       await this.loadingPromise;
 
+      // Swap in actual sources
       this.updateImageSources();
+
+      // Ensure browser fully decodes before we cross-fade; prevents a single-frame flash
+      await this.decodeVisibleImage();
+
       this.animateImageReveal();
       this.markAsLoaded(false);
     } catch (error) {
@@ -98,6 +115,16 @@ export default class extends Controller {
       this.handleLoadError();
     } finally {
       this.loadingPromise = null;
+    }
+  }
+
+  async decodeVisibleImage() {
+    if (this.imageTarget && this.imageTarget.decode) {
+      try {
+        await this.imageTarget.decode();
+      } catch (_) {
+        // Ignore decode errors; browser will still attempt to paint.
+      }
     }
   }
 
@@ -127,7 +154,6 @@ export default class extends Controller {
   }
 
   updateImageSources() {
-    // Update all source elements
     const sources = this.pictureTarget.querySelectorAll("source[data-srcset]");
     sources.forEach((source) => {
       const dataSrcset = source.getAttribute("data-srcset");
@@ -137,7 +163,6 @@ export default class extends Controller {
       }
     });
 
-    // Update main image
     const dataSrc = this.imageTarget.getAttribute("data-src");
     if (dataSrc) {
       this.imageTarget.src = dataSrc;
@@ -145,35 +170,21 @@ export default class extends Controller {
     }
   }
 
-  disableTransitions() {
-    const elements = [this.placeholderTarget, this.pictureTarget];
-    elements.forEach((el) => {
-      el.style.transition = "none";
-      // Force reflow
-      el.offsetHeight;
-    });
-  }
-
   animateImageReveal() {
-    // Simultaneous cross-fade to avoid flash of original colors
     this.batchStyleUpdates(() => {
-      this.pictureTarget.style.opacity = "1";
       this.pictureTarget.classList.add("loaded");
-      this.placeholderTarget.style.opacity = "0";
       this.placeholderTarget.classList.add("faded");
     });
   }
 
   applyLoadedStyles(isInstant = false) {
     if (isInstant) {
-      this.placeholderTarget.style.opacity = "0";
-      this.pictureTarget.style.opacity = "1";
       this.pictureTarget.classList.add("loaded");
+      this.placeholderTarget.classList.add("faded");
     }
   }
 
   batchStyleUpdates(updateFunction) {
-    // Use requestAnimationFrame to batch DOM updates
     requestAnimationFrame(() => {
       updateFunction();
     });
@@ -192,8 +203,8 @@ export default class extends Controller {
 
   handleLoadError() {
     this.batchStyleUpdates(() => {
+      // Keep placeholder visible; base class has opacity:1
       this.placeholderTarget.style.filter = "none";
-      this.placeholderTarget.style.opacity = "1";
       this.element.classList.add("load-error");
     });
 
