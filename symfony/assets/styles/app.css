@@ -386,7 +386,8 @@ a svg {
     transition: opacity 0.2s ease;
     filter: blur(5px);
     opacity: 1;
-    /* Blend handled by container ::before overlay */
+    background: var(--pi-filter-bg, transparent);
+    mix-blend-mode: var(--pi-blend-mode, normal);
     /* Optimize cross-fade */
     will-change: opacity;
 }
