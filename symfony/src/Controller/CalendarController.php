@@ -158,18 +158,18 @@ class CalendarController extends AbstractController
         if ($physicalLocation instanceof \App\Entity\Location && $onlineUrl) {
             $composite = sprintf(
                 "%s – %s (Online: %s)",
-                $physicalLocation->getName(),
+                $physicalLocation->getNameByLocale($locale),
                 $physicalLocation->getStreetAddress(),
                 $onlineUrl,
             );
             $e->setLocation(
-                new Location($composite, $physicalLocation->getName()),
+                new Location($composite, $physicalLocation->getNameByLocale($locale)),
             );
         } elseif ($physicalLocation instanceof \App\Entity\Location) {
             $e->setLocation(
                 new Location(
                     $physicalLocation->getStreetAddress(),
-                    $physicalLocation->getName(),
+                    $physicalLocation->getNameByLocale($locale),
                 ),
             );
         } elseif ($onlineUrl) {

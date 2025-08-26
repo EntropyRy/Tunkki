@@ -21,6 +21,7 @@
                 },
             }] %}
                 <p>{{ 'event.location.description'|trans }}</p>
+                <p><strong>{{ location.getNameByLocale(app.request.locale) }}</strong></p>
                 <twig:ux:map
                     center="{{ center }}"
                     zoom="15"

@@ -98,7 +98,7 @@ final class NotificationAdminController extends CRUDController
                     break;
                 case 'add_venue':
                     $venue = $event->getLocation();
-                    $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $event->getName() . ' @ ' .$venue->getName(), $venue->getStreetAddress());
+                    $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $event->getName() . ' @ ' .$venue->getNameByLocale($locale), $venue->getStreetAddress());
                     break;
                 default:
                     break;

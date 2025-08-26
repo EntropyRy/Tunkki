@@ -20,6 +20,7 @@ final class LocationAdmin extends AbstractAdmin
     {
         $filter
             ->add('name')
+            ->add('nameEn')
             ->add('latitude')
             ->add('longitude')
             ->add('streetAddress');
@@ -30,6 +31,7 @@ final class LocationAdmin extends AbstractAdmin
     {
         $list
             ->add('name')
+            ->add('nameEn', null, ['label' => 'Name (EN)'])
             ->add('latitude')
             ->add('longitude')
             ->add('streetAddress')
@@ -47,10 +49,17 @@ final class LocationAdmin extends AbstractAdmin
     {
         $form
             ->add('name')
-            ->add('latitude', null, [
-                'help' => 'in Helsinki this is something like 60.???'
+            ->add('nameEn', null, [
+                'required' => false,
+                'label' => 'Name (EN)',
             ])
-            ->add('longitude')
+            ->add('latitude', null, [
+                'help' => 'in Helsinki this is something like 60.???',
+                'required' => true,
+            ])
+            ->add('longitude', null, [
+                'required' => true,
+            ])
             ->add('streetAddress');
     }
 
@@ -59,6 +68,7 @@ final class LocationAdmin extends AbstractAdmin
     {
         $show
             ->add('name')
+            ->add('nameEn', null, ['label' => 'Name (EN)'])
             ->add('latitude')
             ->add('longitude')
             ->add('streetAddress');
