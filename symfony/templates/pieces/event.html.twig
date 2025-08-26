@@ -232,7 +232,7 @@
         '{{ happening_list }}': block('happening_list'),
         '{{ menu }}': '',
         })|raw }}
-        {% if '{{ links }}' not in attribute(event, content_attr) %}
+        {% if '{{ links }}' not in event.contentForTwig(app.request.locale) %}
             {{ block('links') }}
         {% endif %}
     </div>

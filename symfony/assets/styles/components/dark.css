@@ -1,77 +1,86 @@
 /* Dark mode styles */
 [data-bs-theme="dark"] {
-    body {
-        background-image: url("../../images/bg_stripe_black.png");
-        background-color: black;
-        color: #ddedf6;
-    }
+  body {
+    background-image: url("../../images/bg_stripe_black.png");
+    background-color: black;
+    color: #ddedf6;
+  }
 
-    body .navbar-brand img,
-    body .header-img img {
-        filter: invert(1);
-    }
+  body .navbar-brand img,
+  body .header-img img {
+    filter: invert(1);
+  }
 
-    .e-container {
-        background: #000;
-    }
+  .e-container {
+    background: #000;
+  }
 
-    .e-container .box {
-        color: #ddedf6;
-        background: transparent;
-        box-shadow: 0 1px 1px rgba(166, 166, 166, 0.8);
-    }
+  .e-container .box {
+    color: #ddedf6;
+    background: transparent;
+    box-shadow: 0 1px 1px rgba(166, 166, 166, 0.8);
+  }
 
-    .e-container .box .box-header {
-        color: #ddedf6;
-    }
+  .e-container .box .box-header {
+    color: #ddedf6;
+  }
 
-    .e-container .tile {
-        box-shadow: 0px 1px 10px 0px rgba(255, 255, 255, 0.25);
-    }
+  .e-container .tile {
+    box-shadow: 0px 1px 10px 0px rgba(255, 255, 255, 0.25);
+  }
 
-    .e-container .linetext {
-        border-bottom: 1px solid #fff;
-    }
+  .e-container .linetext {
+    border-bottom: 1px solid #fff;
+  }
 
-    .e-container .linetext span {
-        background: #000;
-    }
+  .e-container .linetext span {
+    background: #000;
+  }
 
-    .e-container footer {
-        color: #888;
-    }
+  .e-container footer {
+    color: #888;
+  }
 
-    .e-container footer a {
-        color: #64aec1;
-    }
+  .e-container footer a {
+    color: #64aec1;
+  }
 
-    .e-container footer a:hover {
-        color: #8cc3d1;
-    }
+  .e-container footer a:hover {
+    color: #8cc3d1;
+  }
 
-    .e-container .stream-img {
-        filter: invert(0.8);
-    }
+  .e-container .stream-img {
+    filter: invert(0.8);
+  }
 
-    /* Timetable gap chip & line (moved from app.css) */
-    .gap-chip {
-        background: #222;
-        border-color: #555;
-        color: #ddd;
-        box-shadow: 0 1px 2px rgba(255, 255, 255, 0.15);
-    }
+  /* Timetable gap chip & line (moved from app.css) */
+  .gap-chip {
+    background: #222;
+    border-color: #555;
+    color: #ddd;
+    box-shadow: 0 1px 2px rgba(255, 255, 255, 0.15);
+  }
 
-    .timetable tr.time-gap td:before {
-        background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0) 0%,
-            #666 15%,
-            #666 85%,
-            rgba(255, 255, 255, 0) 100%
-        );
-    }
+  .timetable tr.time-gap td:before {
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      #666 15%,
+      #666 85%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+  .leaflet-container {
+    background: #000;
+  }
+  .leaflet-layer,
+  .leaflet-control-zoom-in,
+  .leaflet-control-zoom-out,
+  .leaflet-control-attribution {
+    filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+  }
 }
 
 .invert {
-    filter: invert(0.8);
+  filter: invert(0.8);
 }
