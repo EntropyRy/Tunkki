@@ -339,7 +339,7 @@
             {% set containerClass = containerClass ~ ' img-filter' %}
         {% endif %}
         {% set applyFilter = event.imgFilterBlendMode and (event.picture is null or (event.picture.providername != 'sonata.media.provider.youtube' and not (event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4'))) %}
-        <div class="{{ containerClass }}" {% if applyFilter %}style="--img-filter-color: {{ event.imgFilterColor }}; --img-filter-mode: {{ event.imgFilterBlendMode|replace({'mix-blend-mode:':''})|replace({';':''})|trim }};"{% endif %}>
+        <div class="{{ containerClass }}" {% if applyFilter %}style="--img-filter-color: {{ event.imgFilterColor }}; --img-filter-mode: {{ event.imgFilterBlendMode|replace({'mix-blend-mode:': ''})|replace({';': ''})|trim }};"{% endif %}>
             {{ block('img') }}
             {{ block('event_badge') }}
         </div>
@@ -355,7 +355,7 @@
         <div class="img-fluid">{{ block('video_media') }}</div>
     {% else %}
         {% set applyFilter = event.imgFilterBlendMode and (event.picture is null or (event.picture.providername != 'sonata.media.provider.youtube' and not (event.picture.providername == 'sonata.media.provider.file' and event.picture.contentType == 'video/mp4'))) %}
-        <div class="{% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% elseif applyFilter %}img-filter{% else %}{% endif %}" {% if applyFilter %}style="--img-filter-color: {{ event.imgFilterColor }}; --img-filter-mode: {{ event.imgFilterBlendMode|replace({'mix-blend-mode:':''})|replace({';':''})|trim }};"{% endif %}>
+        <div class="{% if event.picture and event.picture.providername == 'sonata.media.provider.youtube' %}video-fluid{% elseif applyFilter %}img-filter{% else %}{% endif %}" {% if applyFilter %}style="--img-filter-color: {{ event.imgFilterColor }}; --img-filter-mode: {{ event.imgFilterBlendMode|replace({'mix-blend-mode:': ''})|replace({';': ''})|trim }};"{% endif %}>
             {% set class = 'img-fluid w-100 ' ~ event.picturePosition %}
             {{ block('img') }}
         </div>
