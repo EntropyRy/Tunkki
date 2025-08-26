@@ -2,10 +2,10 @@ Announcement: Tiedote
 Responsible: Vastaava
 Responsibles: Vastaavat
 # Tunkki
-Control barcodes: Kontrolli Koodit
+Control barcodes: Kontrollikoodit
 Bank Account: Pankkitili
-name_attribute: nimi
-content_attribute: Sisallys
+# name_attribute removed (was: nimi)
+# content_attribute removed (was: Sisältö)
 packages: paketit
 loading: ladataan
 items: tavarat
@@ -34,7 +34,7 @@ Home: Koti
 Venue: Paikka
 Choose login method: Valitse kirjautumistapa
 # Entropy.fi
-cookie_policy: Käytämme vain välttämättömiä evästeitä jotta kirjautuminen ja maksupalvelu toimii.
+cookie_policy: Käytämme vain välttämättömiä evästeitä, jotta kirjautuminen ja maksupalvelu toimivat.
 whisper: psst. <a href="/liity">liity</a>
 Artists: Artistit
 Artist: Artisti
@@ -47,24 +47,22 @@ You are not responsible of any nakkis: Et ole Nakkivastaava
 Not allowed: Ei sallittu
 Nakki reserved: Nakki varattu
 Nakki cancelled: Nakki peruttu
-Sorry but someone reserved that one already: Joku kerkesi varata kyseisen nakin jo.
+Sorry but someone reserved that one already: Joku ehti varata kyseisen nakin jo.
 Only for active members: Vain aktiivijäsenille
-Nakki is not reserved! Please define username in you profile:
-  Et voi varata nakkia
-  koska profiilissasi ei ole käyttäjänimeä. Linkki profiiliin löytyy menusta.
+Nakki is not reserved! Please define username in you profile: Et voi varata nakkia, määritä ensin käyttäjänimi profiiliisi (linkki profiiliin löytyy valikosta).
 Nakkikone is not enabled: Nakkikone ei ole vielä julkaistu, jotta sitä voisi käyttää.
 Reserve: Varaa
-You cannot reserve overlapping Nakkis: Et voi varata päällekkäisiä Nakkeja
+You cannot reserve overlapping Nakkis: Et voi varata päällekkäisiä nakkeja
 rss_desc: Entropyn tulevat ja menneet tapahtumat ja tiedotukset
 Cancel: Peruuta
 Search by name: Etsi nimellä
-Your Nakkis: Valitsemasi Naki(t)
-Select Nakki: Valitse Nakki
+Your Nakkis: Valitsemasi nakki(t)
+Select Nakki: Valitse nakki
 Nakki descriptions: Nakkien kuvaukset
 Reserve your Nakki: Varaa Nakkisi
 recording: Nauhoite
 entropy_user_dashboard: Yleiskatsaus
-page_edited: Sivua muutettu
+page_edited: Sivua muokattu
 Firstname: Etunimi
 Lastname: Sukunimi
 Email: Sähköposti
@@ -81,10 +79,10 @@ Username: Käyttäjänimi
 stay_tuned: Pysy kuulolla!
 event_not_found: Tapahtumaa ei löytynyt
 released: Julkaistu
-older_from_archive: Vanhemmat löydät arkistosta
+older_from_archive: Vanhemmat löytyvät arkistosta
 register_as_member: Rekisteröidy jäseneksi
 close: Sulje
-clubroom_events: Kerhohuone tapahtumat (Keke)
+clubroom_events: Kerhohuonetapahtumat (Keke)
 search:
   include: Sisällytä
 include_clubroom_events: kerhohuonetapahtumat (Keke)
@@ -93,7 +91,7 @@ include_meeting_events: kokoukset
 privacy_policy: Rekisteriseloste
 submit_and_agree:
   Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
-  Varaamme oikeuden poistaa väärät tiedot.
+  Varaamme oikeuden poistaa virheelliset tiedot.
 cancelled: PERUTTU
 announcements_url: tiedotukset
 frontpage: Etusivu
@@ -116,7 +114,7 @@ updated: Päivitetty
 fb.event: FB tapahtuma
 Kerde door opened by you: Olet avannut kertsin oven
 times: kertaa
-entropy.seo.description: Elektronisen musiikin kulttuuri yhdistys
+entropy.seo.description: Elektronisen musiikin kulttuuriyhdistys
 map: Kartta
 profile_url: profiili
 Total rent price: Kokonaishinta
@@ -166,7 +164,7 @@ Add: Lisää
 delete: poista
 Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
 no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
-bio_attribute: Bio
+# bio_attribute removed (was: Bio)
 succesfully_signed_up_for_the_party: Onnistuneesti ilmoittauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one:
   Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.

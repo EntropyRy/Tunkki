@@ -116,8 +116,7 @@
 {% endblock %}
 {% block event_head_reverse %}
     {{ block('event_banner_media') }}
-    {% set content_attr = 'content_attribute'|trans %}
-    {% if '{{ menu }}' in attribute(event, content_attr) %}
+    {% if '{{ menu }}' in event.contentForTwig(app.request.locale) %}
         {{ block('menu') }}
     {% else %}
         <small>{{ block('published_and_updated') }}</small>
@@ -126,8 +125,8 @@
         {{ block('event_name') }}
         {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
     </h1>
-    {% if '{{ menu }}' in attribute(event, content_attr) %}
-    <small>{{ block('published_and_updated') }}</small>
+    {% if '{{ menu }}' in event.contentForTwig(app.request.locale) %}
+        <small>{{ block('published_and_updated') }}</small>
     {% endif %}
 {% endblock %}
 {% block event_path %}
@@ -182,8 +181,7 @@
     {{ block('event_banner_media') }}
 {% endblock %}
 {%- block event_name -%}
-    {% set name_attr = 'name_attribute'|trans %}
-    {{- attribute(event, name_attr) -}}
+    {{- event.nameByLang(app.request.locale) -}}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
 {%- endblock -%}
 {% block event_time_badge %}
@@ -216,9 +214,8 @@
     {% if event.picture is not null and event.picturePosition == 'right' %}
         <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
-    {% set content_attr = 'content_attribute'|trans %}
     <div class="event-text-content">
-        {{ attribute(event, content_attr)|replace({
+        {{ event.contentForTwig(app.request.locale)|replace({
         '{{ timetable }}': block('timetable'),
         '{{ vj_timetable }}': block('vj_timetable'),
         '{{ timetable_to_page }}': block('timetable_to_page'),
@@ -242,8 +239,7 @@
 {% endblock -%}
 {%- block event_frontpage_content %}
     {% set frontpage = true %}
-    {% set content_attr = 'content_attribute'|trans %}
-    {{ attribute(event, content_attr)|replace({
+    {{ event.contentForTwig(app.request.locale)|replace({
     '{{ timetable }}': block('timetable'),
     '{{ streamplayer }}': block('streamplayer'),
     '{{ bios }}': '',
@@ -587,7 +583,9 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
                         <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                        <div class="col mt-2 d-block d-sm-none">
+                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                        </div>
                     </div>
                 </div>
             {% else %}
@@ -596,7 +594,9 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
                         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                        <div class="col mt-2 d-block d-sm-none">
+                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -651,7 +651,7 @@
     </div>
 {% endblock -%}
 {% block infos %}
-    {% set bio_attribute = 'bio_attribute'|trans %}
+
     {% for info in infos %}
         {% if info.StartTime is not empty %}
             {% set artist = info.artistClone %}
@@ -664,7 +664,9 @@
     {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
         <div class="float-none mx-4 mb-4">
             <small class="fw-light">{{ artist.genre }}</small>
-            <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
+            <div>
+                {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+            </div>
             {{ block('artist_links') }}
         </div>
     {% else %}
@@ -683,7 +685,9 @@
             {% endif %}
         </h3>
         <small>{{ artist.genre }}</small>
-        <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+        <div class="d-none d-sm-block">
+            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+        </div>
         {{ block('artist_links') }}
     {% endif %}
 {% endblock %}
@@ -715,10 +719,12 @@
     </span>
 {% endblock %}
 {% block artist_preview_info %}
-    {% set bio_attribute = 'bio_attribute'|trans %}
+
     <h3>{{ artist.name }}</h3>
     <small>{{ artist.genre }}</small>
-    <div>{{ attribute(artist, bio_attribute) }}</div>
+    <div>
+        {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+    </div>
     {{ block('artist_links') }}
 {% endblock %}
 {% block artist_links -%}
@@ -740,12 +746,14 @@
 {%- endblock %}
 {% block public_artist_info %}
     {% set name = artist.name %}
-    {% set bio_attribute = 'bio_attribute'|trans %}
+
     <div id="{{ name|slug }}" class="col-md-12 pt-3">
         <div class="row">
             <div class="col-6">{{ block('artist_event_info') }}</div>
             <div class="col-6">{{ block('artist_pic') }}</div>
-            <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+            <div class="col mt-2 d-block d-sm-none">
+                {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+            </div>
         </div>
     </div>
 {% endblock %}

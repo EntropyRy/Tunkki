@@ -1,8 +1,8 @@
-under_password_limit: "Your password should be at least {{ limit }} characters"
+under_password_limit: "Your password must be at least {{ limit }} characters long"
 passwords_need_to_match: The password fields must match.
 artist:
   form:
-    error: We use both of the bios as we have 2 language website. Please translate them.
+    error: We use both bios because the site is bilingual. Please translate both.
 stream:
   artist:
-    notnull: You have to select artist
+    notnull: You must select an artist

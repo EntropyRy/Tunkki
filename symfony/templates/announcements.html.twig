@@ -3,8 +3,7 @@
 {% block content %}
     {% set newyear = date('Y') %}
     {% set route = 'entropy_event' %}
-    {% set name_attr = 'name_attribute'|trans %}
-    {% set content_attr = 'content_attribute'|trans %}
+
     <div id="events">
         {% for event in events %}
             {% if app.user %}
@@ -35,14 +34,14 @@
     <h5 class="d-flex justify-content-between">
         <span {% if event.cancelled %}style="text-decoration: line-through;"{% endif %}>
             {% if event.url is empty and event.externalUrl %}
-                {{ attribute(event, name_attr) }}
+                {{ event.nameByLang(app.request.locale) }}
             {% else %}
                 {% if event.url and not event.externalUrl %}
                     <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">
                 {% else %}
                     <a href="{{ path(route, {id: event.id}) }}">
                 {% endif %}
-                    {{ attribute(event, name_attr) }}
+                    {{ event.nameByLang(app.request.locale) }}
                     </a>
             {% endif %}
         </span>

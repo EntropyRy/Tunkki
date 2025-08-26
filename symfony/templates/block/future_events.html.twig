@@ -11,7 +11,6 @@
                     <h5 class="text-center text-sm-start">{{ 'block.events.future_events'|trans }}</h5>
                 {% endif %}
                 <ul class="fa-ul">
-                    {% set name = 'name_attribute'|trans %}
                     {% for event in events %}
                         {{ block('event_link') }}
                     {% else %}
@@ -51,6 +50,6 @@
             {% endif %}
             <li>
                 <span class="fa-li"><twig:ux:icon name="link" /></span>
-                <a href="{{ url }}">{{ attribute(event, name) }} - {{ event.eventDate|date() }}</a>
+                <a href="{{ url }}">{{ event.nameByLang(app.request.locale) }} - {{ event.eventDate|date() }}</a>
             </li>
     {% endblock %}

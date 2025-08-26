@@ -317,8 +317,7 @@
         {% endif %}
     {%- endblock %}
     {%- block event_name -%}
-        {% set name_attr = 'name_attribute'|trans %}
-        {{- attribute(event, name_attr) -}}
+        {{- event.nameByLang(app.request.locale) -}}
         {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
     {%- endblock -%}
     {%- block bios %}
@@ -361,7 +360,6 @@
         </div>
     {% endblock -%}
     {% block infos %}
-        {% set bio_attribute = 'bio_attribute'|trans %}
         {% for info in infos %}
             {% if info.StartTime is not empty %}
                 {% set artist = info.artistClone %}
@@ -398,7 +396,9 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
                         <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                        <div class="col mt-2 d-block d-sm-none">
+                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                        </div>
                     </div>
                 </div>
             {% else %}
@@ -407,7 +407,9 @@
                     <div class="row">
                         <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
                         <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                        <div class="col mt-2 d-block d-sm-none">
+                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                        </div>
                     </div>
                 </div>
             {% endif %}
@@ -426,7 +428,9 @@
         {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
             <div class="float-none mx-4 mb-4">
                 <small class="fw-light">{{ artist.genre }}</small>
-                <div>{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                <div>
+                    {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                </div>
                 {{ block('artist_links') }}
             </div>
         {% else %}
@@ -445,7 +449,9 @@
                 {% endif %}
             </h3>
             <small>{{ artist.genre }}</small>
-            <div class="d-none d-sm-block">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+            <div class="d-none d-sm-block">
+                {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+            </div>
             {{ block('artist_links') }}
         {% endif %}
     {% endblock %}
@@ -541,20 +547,22 @@
     {%- endblock %}
     {% block public_artist_info %}
         {% set name = artist.name %}
-        {% set bio_attribute = 'bio_attribute'|trans %}
         <div id="{{ name|slug }}" class="col-md-12 pt-3">
             <div class="row">
                 <div class="col-6">{{ block('artist_event_info') }}</div>
                 <div class="col-6">{{ block('artist_pic') }}</div>
-                <div class="col mt-2 d-block d-sm-none">{{ attribute(artist, bio_attribute)|nl2br }}</div>
+                <div class="col mt-2 d-block d-sm-none">
+                    {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                </div>
             </div>
         </div>
     {% endblock %}
     {% block artist_preview_info %}
-        {% set bio_attribute = 'bio_attribute'|trans %}
         <h3>{{ artist.name }}</h3>
         <small>{{ artist.genre }}</small>
-        <div>{{ attribute(artist, bio_attribute) }}</div>
+        <div>
+            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+        </div>
         {{ block('artist_links') }}
     {% endblock %}
     {% block timetable_to_page %}
