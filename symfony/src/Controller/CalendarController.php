@@ -30,19 +30,23 @@ use DateTimeZone as PhpDateTimeZone;
 
 class CalendarController extends AbstractController
 {
-    #[Route(
-        path: [
-            'fi' => '/profiili/kalenteri',
-            'en' => '/profile/calendar',
-        ],
-        name: 'entropy_event_calendar_config',
-    )]
-    public function eventCalendarConfig(Request $request, UrlGeneratorInterface $urlG): Response
-    {
+    #[
+        Route(
+            path: [
+                "fi" => "/profiili/kalenteri",
+                "en" => "/profile/calendar",
+            ],
+            name: "entropy_event_calendar_config",
+        ),
+    ]
+    public function eventCalendarConfig(
+        Request $request,
+        UrlGeneratorInterface $urlG,
+    ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
         if ($user == null) {
-            throw new UnauthorizedHttpException('now allowed');
+            throw new UnauthorizedHttpException("now allowed");
         }
         $form = $this->createForm(CalendarConfigType::class);
         $url = null;
@@ -54,63 +58,81 @@ class CalendarController extends AbstractController
             }
             $array[] = $user->getId();
             $id = $sqid->encode($array);
-            $url = $urlG->generate('entropy_event_calendar', ['hash' => $id], UrlGeneratorInterface::ABSOLUTE_URL);
-            $this->addFlash('success', 'calendar.url_generated');
+            $url = $urlG->generate(
+                "entropy_event_calendar",
+                ["hash" => $id],
+                UrlGeneratorInterface::ABSOLUTE_URL,
+            );
+            $this->addFlash("success", "calendar.url_generated");
         }
-        return $this->render('profile/calendar.html.twig', [
-            'form' => $form,
-            'url' => $url
+        return $this->render("profile/calendar.html.twig", [
+            "form" => $form,
+            "url" => $url,
         ]);
     }
-    #[Route(
-        path: [
-            'fi' => '/{hash}/kalenteri.ics',
-            'en' => '/{hash}/calendar.ics',
-        ],
-        name: 'entropy_event_calendar',
-    )]
+    #[
+        Route(
+            path: [
+                "fi" => "/{hash}/kalenteri.ics",
+                "en" => "/{hash}/calendar.ics",
+            ],
+            name: "entropy_event_calendar",
+        ),
+    ]
     public function eventCalendar(
         Request $request,
         EventRepository $eventR,
     ): Response {
         $sqid = new Sqids();
         $locale = $request->getLocale();
-        $config = $sqid->decode($request->get('hash'));
+        $config = $sqid->decode($request->get("hash"));
         $cEvents = [];
         $events = $eventR->findCalendarEvents();
         foreach ($events as $event) {
-            if ($event->getType() == 'event' && $config[0] == 1) {
+            if ($event->getType() == "event" && $config[0] == 1) {
                 $cEvents[] = $this->addEvent($event, $config[1], $locale);
             }
-            if (($event->getType() == 'clubroom' || $event->getType() == 'stream') && $config[2] == 1) {
+            if (
+                ($event->getType() == "clubroom" ||
+                    $event->getType() == "stream") &&
+                $config[2] == 1
+            ) {
                 $cEvents[] = $this->addEvent($event, $config[3], $locale);
             }
-            if ($event->getType() == 'meeting' && $config[4] == 1) {
+            if ($event->getType() == "meeting" && $config[4] == 1) {
                 $cEvents[] = $this->addEvent($event, $config[5], $locale);
             }
         }
         $calendar = new Calendar($cEvents);
-        $calendar->addTimeZone(TimeZone::createFromPhpDateTimeZone(
-            new PhpDateTimeZone('Europe/Helsinki'),
-            new \DateTimeImmutable('now-30years'),
-            new \DateTimeImmutable('now+30years'),
-        ));
+        $calendar->addTimeZone(
+            TimeZone::createFromPhpDateTimeZone(
+                new PhpDateTimeZone("Europe/Helsinki"),
+                new \DateTimeImmutable("now-30years"),
+                new \DateTimeImmutable("now+30years"),
+            ),
+        );
 
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
 
-        header('Content-Type: text/calendar; charset=utf-8');
+        header("Content-Type: text/calendar; charset=utf-8");
         header('Content-Disposition: attachment; filename="entropy.ics"');
 
         return new Response($calendarComponent);
     }
-    protected function addEvent(Event $event, $notification, $locale): CalendarEvent
-    {
-        $uid = new UniqueIdentifier('event/' . $event->getId());
+    protected function addEvent(
+        Event $event,
+        $notification,
+        $locale,
+    ): CalendarEvent {
+        $uid = new UniqueIdentifier("event/" . $event->getId());
         $url = new Uri($event->getUrlByLang($locale));
         $start = $event->getEventDate();
         $end = $event->getUntil();
-        $occurance = new TimeSpan(new DateTime($start, false), new DateTime($end, true));
+        $occurance = new TimeSpan(
+            new DateTime($start, false),
+            new DateTime($end, true),
+        );
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = new CalendarEvent($uid)
             ->setSummary($event->getNameByLang($locale))
@@ -118,21 +140,40 @@ class CalendarController extends AbstractController
             ->setOccurrence($occurance)
             ->setUrl($url);
         if ($notification == 1) {
-            $text = $locale == 'fi' ? 'Muistutus huomisesta Entropy tapahtumasta!' : 'Reminder for Entropy event tommorrow!';
+            $text =
+                $locale == "fi"
+                    ? "Muistutus huomisesta Entropy tapahtumasta!"
+                    : "Reminder for Entropy event tommorrow!";
             $e->addAlarm(
                 new Alarm(
                     new DisplayAction($text),
-                    new RelativeTrigger(\DateInterval::createFromDateString('-1 day'))->withRelationToStart()
-                )
+                    new RelativeTrigger(
+                        \DateInterval::createFromDateString("-1 day"),
+                    )->withRelationToStart(),
+                ),
             );
         }
-        if ($event->getWebMeetingUrl()) {
-            $location = new Location($event->getWebMeetingUrl());
-            $e->setLocation($location);
-        }
-        if ($event->getLocation() instanceof \App\Entity\Location) {
-            $location = new Location($event->getLocation()->getStreetAddress(), $event->getLocation()->getName());
-            $e->setLocation($location);
+        $physicalLocation = $event->getLocation();
+        $onlineUrl = $event->getWebMeetingUrl();
+        if ($physicalLocation instanceof \App\Entity\Location && $onlineUrl) {
+            $composite = sprintf(
+                "%s – %s (Online: %s)",
+                $physicalLocation->getName(),
+                $physicalLocation->getStreetAddress(),
+                $onlineUrl,
+            );
+            $e->setLocation(
+                new Location($composite, $physicalLocation->getName()),
+            );
+        } elseif ($physicalLocation instanceof \App\Entity\Location) {
+            $e->setLocation(
+                new Location(
+                    $physicalLocation->getStreetAddress(),
+                    $physicalLocation->getName(),
+                ),
+            );
+        } elseif ($onlineUrl) {
+            $e->setLocation(new Location($onlineUrl));
         }
         $e->touch($timestamp);
         return $e;
