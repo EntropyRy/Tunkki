@@ -31,7 +31,7 @@ class SSH
 {
     private ?array $lastResult = null;
 
-    public function __construct(private ParameterBagInterface $bag) {}
+    public function __construct(private readonly ParameterBagInterface $bag) {}
 
     /**
      * Execute a predefined command identified by suffix <text> in parameter key: recording.script.<text>
@@ -45,8 +45,6 @@ class SSH
      *
      * @param string $text       Suffix after 'recording.script.' in parameters
      * @param bool   $structured Whether to return structured result
-     *
-     * @return array|string|bool
      */
     public function sendCommand(
         string $text,
@@ -232,8 +230,6 @@ class SSH
 
     /**
      * Consolidate and store result; return according to requested mode.
-     *
-     * @return array|string|bool
      */
     private function finalizeResult(
         bool $success,
