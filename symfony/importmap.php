@@ -93,7 +93,7 @@ return [
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.0.10',
+        'version' => '5.1.0',
     ],
     'moment/min/moment-with-locales.min.js' => [
         'version' => '2.30.1',
