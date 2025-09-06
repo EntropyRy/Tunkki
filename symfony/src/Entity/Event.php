@@ -15,7 +15,7 @@ use function Symfony\Component\String\u;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
+#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "event")]
 class Event implements \Stringable
 {
     #[ORM\Id]
@@ -29,16 +29,16 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $Nimi = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $EventDate = null;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: "datetime")]
     private \DateTimeInterface|\DateTime $publishDate;
 
-    #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: Media::class, cascade: ["persist"])]
     private ?Media $picture = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $css = "/* If you want to play with CSS these help you. First remove this and last line
 [data-bs-theme=dark] body, body {
     background-image: url(/images/bg_stripe_transparent.png);
@@ -50,11 +50,11 @@ class Event implements \Stringable
 }
 */";
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $Content = "Use these: <br>
             {{ timetable }} <br> {{ timetable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa: <br>
             {{ timetable }} <br> {{ timetable_to_page }} <br> {{ bios }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}";
 
@@ -77,7 +77,7 @@ class Event implements \Stringable
     private bool $sticky = false;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private string $picturePosition = 'banner';
+    private string $picturePosition = "banner";
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $cancelled = false;
@@ -88,43 +88,64 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
-    #[ORM\OneToMany(targetEntity: EventArtistInfo::class, mappedBy: \Event::class)]
-    #[ORM\OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
+    #[
+        ORM\OneToMany(
+            targetEntity: EventArtistInfo::class,
+            mappedBy: \Event::class,
+        ),
+    ]
+    #[ORM\OrderBy(["stage" => "ASC", "StartTime" => "ASC"])]
     private $eventArtistInfos;
 
-    #[ORM\Column(type: 'datetime')]
+    #[ORM\Column(type: "datetime")]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(type: "datetime", nullable: true)]
     private ?\DateTimeInterface $until = null;
 
-    #[ORM\OneToMany(targetEntity: RSVP::class, mappedBy: 'event', orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: RSVP::class,
+            mappedBy: "event",
+            orphanRemoval: true,
+        ),
+    ]
     private $RSVPs;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
 
-    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'event', orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: Nakki::class,
+            mappedBy: "event",
+            orphanRemoval: true,
+        ),
+    ]
     #[OrderBy(["startAt" => "ASC"])]
     private $nakkis;
 
-    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'event', orphanRemoval: true)]
+    #[
+        ORM\OneToMany(
+            targetEntity: NakkiBooking::class,
+            mappedBy: "event",
+            orphanRemoval: true,
+        ),
+    ]
     #[OrderBy(["startAt" => "ASC"])]
     private $nakkiBookings;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $NakkikoneEnabled = false;
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $nakkiInfoFi =
-        '
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $nakkiInfoFi = '
         <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
         <h6>Saat ilmaisen sisäänpääsyn</h6>
         ';
 
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $nakkiInfoEn =
-        '
+    #[ORM\Column(type: "text", nullable: true)]
+    private ?string $nakkiInfoEn = '
         <p>Choose at least two (2) Nakkis that are 1 hour length and build up or take down</p>
         <h6>You\'ll get free entry to the party</h6>
         ';
@@ -133,7 +154,7 @@ class Event implements \Stringable
     private ?bool $includeSaferSpaceGuidelines = false;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $headerTheme = 'light';
+    private ?string $headerTheme = "light";
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $streamPlayerUrl = null;
@@ -147,10 +168,10 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $artistSignUpEnabled = false;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private ?\DateTimeImmutable $artistSignUpEnd = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private ?\DateTimeImmutable $artistSignUpStart = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -159,8 +180,14 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'event', orphanRemoval: true)]
-    #[ORM\OrderBy(['id' => 'DESC'])]
+    #[
+        ORM\OneToMany(
+            targetEntity: Ticket::class,
+            mappedBy: "event",
+            orphanRemoval: true,
+        ),
+    ]
+    #[ORM\OrderBy(["id" => "DESC"])]
     private $tickets;
 
     #[ORM\Column(type: Types::INTEGER)]
@@ -172,16 +199,16 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $ticketPrice = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $ticketInfoFi = null;
 
-    #[ORM\Column(type: 'text', nullable: true)]
+    #[ORM\Column(type: "text", nullable: true)]
     private ?string $ticketInfoEn = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private ?\DateTimeImmutable $ticketPresaleStart = null;
 
-    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    #[ORM\Column(type: "datetime_immutable", nullable: true)]
     private ?\DateTimeImmutable $ticketPresaleEnd = null;
 
     #[ORM\Column(type: Types::INTEGER)]
@@ -193,7 +220,7 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
-    #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
+    #[ORM\OneToMany(targetEntity: Email::class, mappedBy: "event")]
     private $emails;
 
     #[ORM\Column(nullable: true)]
@@ -211,14 +238,17 @@ class Event implements \Stringable
     #[ORM\Column(length: 20, nullable: true)]
     private ?string $backgroundEffectPosition = null;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $backgroundEffectConfig = null;
+
     #[ORM\Column]
     private ?bool $artistSignUpAskSetLength = true;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
+    #[ORM\OneToMany(mappedBy: "event", targetEntity: Notification::class)]
     private Collection $notifications;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Happening::class)]
-    #[OrderBy(['time' => 'ASC'])]
+    #[ORM\OneToMany(mappedBy: "event", targetEntity: Happening::class)]
+    #[OrderBy(["time" => "ASC"])]
     private Collection $happenings;
 
     #[ORM\ManyToMany(targetEntity: Member::class)]
@@ -239,8 +269,8 @@ class Event implements \Stringable
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $abstractEn = null;
 
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
-    #[OrderBy(['amount' => 'ASC'])]
+    #[ORM\OneToMany(mappedBy: "event", targetEntity: Product::class)]
+    #[OrderBy(["amount" => "ASC"])]
     private Collection $products;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -389,7 +419,7 @@ class Event implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->getName() ?: 'Happening';
+        return $this->getName() ?: "Happening";
     }
 
     public function getPublished(): ?bool
@@ -428,36 +458,36 @@ class Event implements \Stringable
         $now = new \DateTime();
         if ($this->until instanceof \DateTimeInterface) {
             if ($now >= $this->EventDate && $now <= $this->until) {
-                return 'now';
+                return "now";
             } elseif ($now > $this->until) {
-                return 'after';
+                return "after";
             } elseif ($now < $this->EventDate) {
-                return 'before';
+                return "before";
             }
         } elseif ($now < $this->EventDate) {
-            return 'before';
+            return "before";
         } else {
-            return 'after';
+            return "after";
         }
-        return 'undefined';
+        return "undefined";
     }
     public function getBadgeText(): string
     {
-        if ($this->type == 'announcement') {
-            return 'Announcement';
+        if ($this->type == "announcement") {
+            return "Announcement";
         } else {
-            if ($this->getNowTest() == 'now') {
-                return 'event.now';
+            if ($this->getNowTest() == "now") {
+                return "event.now";
             }
-            if ($this->getNowTest() == 'after') {
-                return 'event.after';
+            if ($this->getNowTest() == "after") {
+                return "event.after";
             }
-            return 'event.in_future';
+            return "event.in_future";
         }
     }
     public function isInPast(): bool
     {
-        return $this->getNowTest() == 'after';
+        return $this->getNowTest() == "after";
     }
     public function getType(): ?string
     {
@@ -556,17 +586,26 @@ class Event implements \Stringable
     }
     public function getContentForTwig($lang): ?string
     {
-        return $lang == 'fi' ? $this->Sisallys : $this->Content;
+        return $lang == "fi" ? $this->Sisallys : $this->Content;
     }
     public function getContentByLang($lang): string
     {
-        $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
+        $abstract =
+            $lang == "fi"
+                ? $this->removeTwigTags($this->Sisallys)
+                : $this->removeTwigTags($this->Content);
         return html_entity_decode(strip_tags($abstract));
     }
     public function getAbstractFromContent($lang): AbstractString
     {
-        $abstract = $lang == 'fi' ? $this->removeTwigTags($this->Sisallys) : $this->removeTwigTags($this->Content);
-        return u(html_entity_decode(strip_tags($abstract)))->truncate(200, '..');
+        $abstract =
+            $lang == "fi"
+                ? $this->removeTwigTags($this->Sisallys)
+                : $this->removeTwigTags($this->Content);
+        return u(html_entity_decode(strip_tags($abstract)))->truncate(
+            200,
+            "..",
+        );
     }
     protected function removeTwigTags($message): string
     {
@@ -586,7 +625,7 @@ class Event implements \Stringable
     }
     public function getNameByLang($lang): ?string
     {
-        if ($lang == 'fi') {
+        if ($lang == "fi") {
             return $this->Nimi;
         } else {
             return $this->Name;
@@ -594,10 +633,10 @@ class Event implements \Stringable
     }
     public function getNameAndDateByLang($lang): string
     {
-        if ($lang == 'fi') {
-            return $this->Nimi . ' - ' . $this->EventDate->format('j.n.Y, H:i');
+        if ($lang == "fi") {
+            return $this->Nimi . " - " . $this->EventDate->format("j.n.Y, H:i");
         } else {
-            return $this->Name . ' - ' . $this->EventDate->format('j.n.Y, H:i');
+            return $this->Name . " - " . $this->EventDate->format("j.n.Y, H:i");
         }
     }
 
@@ -619,8 +658,9 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function removeEventArtistInfo(EventArtistInfo $eventArtistInfo): self
-    {
+    public function removeEventArtistInfo(
+        EventArtistInfo $eventArtistInfo,
+    ): self {
         if ($this->eventArtistInfos->contains($eventArtistInfo)) {
             $this->eventArtistInfos->removeElement($eventArtistInfo);
             // set the owning side to null (unless already changed)
@@ -653,10 +693,10 @@ class Event implements \Stringable
             }
             // add 8 hours to the event date for created event
             $newDateTime = \DateTime::createFromInterface($this->EventDate);
-            if ($this->type == 'meeting') {
-                return $newDateTime->add(new \DateInterval('PT2H'));
+            if ($this->type == "meeting") {
+                return $newDateTime->add(new \DateInterval("PT2H"));
             }
-            return $newDateTime->add(new \DateInterval('PT8H'));
+            return $newDateTime->add(new \DateInterval("PT8H"));
         }
     }
 
@@ -733,7 +773,10 @@ class Event implements \Stringable
     public function removeNakki(Nakki $nakki): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->nakkis->removeElement($nakki) && $nakki->getEvent() === $this) {
+        if (
+            $this->nakkis->removeElement($nakki) &&
+            $nakki->getEvent() === $this
+        ) {
             $nakki->setEvent(null);
         }
 
@@ -761,7 +804,10 @@ class Event implements \Stringable
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getEvent() === $this) {
+        if (
+            $this->nakkiBookings->removeElement($nakkiBooking) &&
+            $nakkiBooking->getEvent() === $this
+        ) {
             $nakkiBooking->setEvent(null);
         }
 
@@ -809,8 +855,9 @@ class Event implements \Stringable
         return $this->includeSaferSpaceGuidelines;
     }
 
-    public function setIncludeSaferSpaceGuidelines(?bool $includeSaferSpaceGuidelines): self
-    {
+    public function setIncludeSaferSpaceGuidelines(
+        ?bool $includeSaferSpaceGuidelines,
+    ): self {
         $this->includeSaferSpaceGuidelines = $includeSaferSpaceGuidelines;
 
         return $this;
@@ -881,8 +928,9 @@ class Event implements \Stringable
         return $this->artistSignUpEnd;
     }
 
-    public function setArtistSignUpEnd(?\DateTimeImmutable $artistSignUpEnd): self
-    {
+    public function setArtistSignUpEnd(
+        ?\DateTimeImmutable $artistSignUpEnd,
+    ): self {
         $this->artistSignUpEnd = $artistSignUpEnd;
 
         return $this;
@@ -893,19 +941,20 @@ class Event implements \Stringable
         return $this->artistSignUpStart;
     }
 
-    public function setArtistSignUpStart(?\DateTimeImmutable $artistSignUpStart): self
-    {
+    public function setArtistSignUpStart(
+        ?\DateTimeImmutable $artistSignUpStart,
+    ): self {
         $this->artistSignUpStart = $artistSignUpStart;
 
         return $this;
     }
     public function getArtistSignUpNow(): bool
     {
-        $now = new \DateTimeImmutable('now');
+        $now = new \DateTimeImmutable("now");
         return $this->getArtistSignUpEnabled() &&
-        $this->getArtistSignUpStart() <= $now &&
-        $this->getArtistSignUpEnd() >= $now &&
-        !$this->isInPast();
+            $this->getArtistSignUpStart() <= $now &&
+            $this->getArtistSignUpEnd() >= $now &&
+            !$this->isInPast();
     }
 
     public function getWebMeetingUrl(): ?string
@@ -925,8 +974,9 @@ class Event implements \Stringable
         return $this->showArtistSignUpOnlyForLoggedInMembers;
     }
 
-    public function setShowArtistSignUpOnlyForLoggedInMembers(?bool $showArtistSignUpOnlyForLoggedInMembers): self
-    {
+    public function setShowArtistSignUpOnlyForLoggedInMembers(
+        ?bool $showArtistSignUpOnlyForLoggedInMembers,
+    ): self {
         $this->showArtistSignUpOnlyForLoggedInMembers = $showArtistSignUpOnlyForLoggedInMembers;
 
         return $this;
@@ -953,7 +1003,10 @@ class Event implements \Stringable
     public function removeTicket(Ticket $ticket): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->tickets->removeElement($ticket) && $ticket->getEvent() === $this) {
+        if (
+            $this->tickets->removeElement($ticket) &&
+            $ticket->getEvent() === $this
+        ) {
             $ticket->setEvent(null);
         }
 
@@ -996,12 +1049,12 @@ class Event implements \Stringable
 
     public function getTicketInfo($lang): ?string
     {
-        $func = 'ticketInfo' . ucfirst((string) $lang);
+        $func = "ticketInfo" . ucfirst((string) $lang);
         return $this->{$func};
     }
     public function getNakkiInfo($lang): ?string
     {
-        $func = 'nakkiInfo' . ucfirst((string) $lang);
+        $func = "nakkiInfo" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
@@ -1021,7 +1074,10 @@ class Event implements \Stringable
     {
         //dd( $this->EventDate->format('U') - $this->until->format('U'));
         if ($this->until instanceof \DateTimeInterface) {
-            if (($this->until->format('U') - $this->EventDate->format('U')) > 86400) {
+            if (
+                $this->until->format("U") - $this->EventDate->format("U") >
+                86400
+            ) {
                 return true;
             } else {
                 return false;
@@ -1035,7 +1091,11 @@ class Event implements \Stringable
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
-            if (!is_null($info->getStartTime()) && ($info->getArtistClone()->getType() == 'DJ' || $info->getArtistClone()->getType() == 'Live')) {
+            if (
+                !is_null($info->getStartTime()) &&
+                ($info->getArtistClone()->getType() == "DJ" ||
+                    $info->getArtistClone()->getType() == "Live")
+            ) {
                 $bystage[$info->getStage()][] = $info;
             }
         }
@@ -1045,7 +1105,10 @@ class Event implements \Stringable
     {
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
-            if (!is_null($info->getStartTime()) && $info->getArtistClone()->getType() == $type) {
+            if (
+                !is_null($info->getStartTime()) &&
+                $info->getArtistClone()->getType() == $type
+            ) {
                 $bystage[$info->getStage()][] = $info;
             }
         }
@@ -1081,8 +1144,9 @@ class Event implements \Stringable
         return $this->ticketPresaleStart;
     }
 
-    public function setTicketPresaleStart(?\DateTimeImmutable $ticketPresaleStart): self
-    {
+    public function setTicketPresaleStart(
+        ?\DateTimeImmutable $ticketPresaleStart,
+    ): self {
         $this->ticketPresaleStart = $ticketPresaleStart;
 
         return $this;
@@ -1093,8 +1157,9 @@ class Event implements \Stringable
         return $this->ticketPresaleEnd;
     }
 
-    public function setTicketPresaleEnd(?\DateTimeImmutable $ticketPresaleEnd): self
-    {
+    public function setTicketPresaleEnd(
+        ?\DateTimeImmutable $ticketPresaleEnd,
+    ): self {
         $this->ticketPresaleEnd = $ticketPresaleEnd;
 
         return $this;
@@ -1102,10 +1167,12 @@ class Event implements \Stringable
 
     public function ticketPresaleEnabled(): bool
     {
-        $now = new \DateTime('now');
+        $now = new \DateTime("now");
         return $this->ticketsEnabled &&
-        is_object($this->ticketPresaleStart) && $this->ticketPresaleStart <= $now &&
-        is_object($this->ticketPresaleEnd) && $this->ticketPresaleEnd >= $now;
+            is_object($this->ticketPresaleStart) &&
+            $this->ticketPresaleStart <= $now &&
+            is_object($this->ticketPresaleEnd) &&
+            $this->ticketPresaleEnd >= $now;
     }
 
     public function getTicketPresaleCount(): ?int
@@ -1125,8 +1192,9 @@ class Event implements \Stringable
         return $this->showNakkikoneLinkInEvent;
     }
 
-    public function setShowNakkikoneLinkInEvent(?bool $showNakkikoneLinkInEvent): self
-    {
+    public function setShowNakkikoneLinkInEvent(
+        ?bool $showNakkikoneLinkInEvent,
+    ): self {
         $this->showNakkikoneLinkInEvent = $showNakkikoneLinkInEvent;
 
         return $this;
@@ -1137,8 +1205,9 @@ class Event implements \Stringable
         return $this->requireNakkiBookingsToBeDifferentTimes;
     }
 
-    public function setRequireNakkiBookingsToBeDifferentTimes(?bool $requireNakkiBookingsToBeDifferentTimes): self
-    {
+    public function setRequireNakkiBookingsToBeDifferentTimes(
+        ?bool $requireNakkiBookingsToBeDifferentTimes,
+    ): self {
         $this->requireNakkiBookingsToBeDifferentTimes = $requireNakkiBookingsToBeDifferentTimes;
 
         return $this;
@@ -1147,10 +1216,20 @@ class Event implements \Stringable
     {
         $bookings = [];
         foreach ($this->getNakkis() as $nakki) {
-            if ($nakki->getResponsible() == $member || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles()) || $this->nakkiResponsibleAdmin->contains($member)) {
-                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'][] = $nakki->getNakkiBookings();
-                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
-                $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
+            if (
+                $nakki->getResponsible() == $member ||
+                in_array("ROLE_SUPER_ADMIN", $member->getUser()->getRoles()) ||
+                $this->nakkiResponsibleAdmin->contains($member)
+            ) {
+                $bookings[
+                    $nakki->getDefinition()->getName($member->getLocale())
+                ]["b"][] = $nakki->getNakkiBookings();
+                $bookings[
+                    $nakki->getDefinition()->getName($member->getLocale())
+                ]["mattermost"] = $nakki->getMattermostChannel();
+                $bookings[
+                    $nakki->getDefinition()->getName($member->getLocale())
+                ]["responsible"] = $nakki->getResponsible();
             }
         }
         return $bookings;
@@ -1161,9 +1240,15 @@ class Event implements \Stringable
         $booking = $member->getEventNakkiBooking($this);
         if ($booking instanceof NakkiBooking) {
             $nakki = $booking->getNakki();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['b'][] = $nakki->getNakkiBookings();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['mattermost'] = $nakki->getMattermostChannel();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())]['responsible'] = $nakki->getResponsible();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
+                "b"
+            ][] = $nakki->getNakkiBookings();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
+                "mattermost"
+            ] = $nakki->getMattermostChannel();
+            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
+                "responsible"
+            ] = $nakki->getResponsible();
         }
         return $bookings;
     }
@@ -1172,8 +1257,12 @@ class Event implements \Stringable
     {
         $responsibles = [];
         foreach ($this->getNakkis() as $nakki) {
-            $responsibles[$nakki->getDefinition()->getName($locale)]['mattermost'] = $nakki->getMattermostChannel();
-            $responsibles[$nakki->getDefinition()->getName($locale)]['responsible'] = $nakki->getResponsible();
+            $responsibles[$nakki->getDefinition()->getName($locale)][
+                "mattermost"
+            ] = $nakki->getMattermostChannel();
+            $responsibles[$nakki->getDefinition()->getName($locale)][
+                "responsible"
+            ] = $nakki->getResponsible();
         }
         return $responsibles;
     }
@@ -1198,7 +1287,10 @@ class Event implements \Stringable
     public function removeEmail(Email $email): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->emails->removeElement($email) && $email->getEvent() === $this) {
+        if (
+            $this->emails->removeElement($email) &&
+            $email->getEvent() === $this
+        ) {
             $email->setEvent(null);
         }
 
@@ -1210,8 +1302,9 @@ class Event implements \Stringable
         return $this->rsvpOnlyToActiveMembers;
     }
 
-    public function setRsvpOnlyToActiveMembers(?bool $rsvpOnlyToActiveMembers): self
-    {
+    public function setRsvpOnlyToActiveMembers(
+        ?bool $rsvpOnlyToActiveMembers,
+    ): self {
         $this->rsvpOnlyToActiveMembers = $rsvpOnlyToActiveMembers;
 
         return $this;
@@ -1222,8 +1315,9 @@ class Event implements \Stringable
         return $this->nakkiRequiredForTicketReservation;
     }
 
-    public function setNakkiRequiredForTicketReservation(?bool $nakkiRequiredForTicketReservation): self
-    {
+    public function setNakkiRequiredForTicketReservation(
+        ?bool $nakkiRequiredForTicketReservation,
+    ): self {
         $this->nakkiRequiredForTicketReservation = $nakkiRequiredForTicketReservation;
 
         return $this;
@@ -1246,8 +1340,9 @@ class Event implements \Stringable
         return $this->backgroundEffectOpacity;
     }
 
-    public function setBackgroundEffectOpacity(?int $backgroundEffectOpacity): self
-    {
+    public function setBackgroundEffectOpacity(
+        ?int $backgroundEffectOpacity,
+    ): self {
         $this->backgroundEffectOpacity = $backgroundEffectOpacity;
 
         return $this;
@@ -1258,20 +1353,35 @@ class Event implements \Stringable
         return $this->backgroundEffectPosition;
     }
 
-    public function setBackgroundEffectPosition(?string $backgroundEffectPosition): self
-    {
+    public function setBackgroundEffectPosition(
+        ?string $backgroundEffectPosition,
+    ): self {
         $this->backgroundEffectPosition = $backgroundEffectPosition;
 
         return $this;
     }
 
-    public function isArtistSignUpAskSetLength(): ?bool
+    public function getBackgroundEffectConfig(): ?string
+    {
+        return $this->backgroundEffectConfig;
+    }
+
+    public function setBackgroundEffectConfig(
+        ?string $backgroundEffectConfig,
+    ): self {
+        $this->backgroundEffectConfig = $backgroundEffectConfig;
+
+        return $this;
+    }
+
+    public function getArtistSignUpAskSetLength(): ?bool
     {
         return $this->artistSignUpAskSetLength;
     }
 
-    public function setArtistSignUpAskSetLength(bool $artistSignUpAskSetLength): self
-    {
+    public function setArtistSignUpAskSetLength(
+        bool $artistSignUpAskSetLength,
+    ): self {
         $this->artistSignUpAskSetLength = $artistSignUpAskSetLength;
 
         return $this;
@@ -1298,7 +1408,10 @@ class Event implements \Stringable
     public function removeNotification(Notification $notification): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->notifications->removeElement($notification) && $notification->getEvent() === $this) {
+        if (
+            $this->notifications->removeElement($notification) &&
+            $notification->getEvent() === $this
+        ) {
             $notification->setEvent(null);
         }
 
@@ -1309,19 +1422,24 @@ class Event implements \Stringable
         if ($this->externalUrl && $this->url) {
             return $this->url;
         }
-        $year = '/' . $this->EventDate->format('Y');
-        $url = '/' . $this->url;
-        $event = '/en/event/';
+        $year = "/" . $this->EventDate->format("Y");
+        $url = "/" . $this->url;
+        $event = "/en/event/";
 
-        if ($lang == 'fi') {
-            $event = '/tapahtuma/';
-            $lang = '';
+        if ($lang == "fi") {
+            $event = "/tapahtuma/";
+            $lang = "";
         }
 
-        if (($this->url === null || $this->url === '' || $this->url === '0') && !$this->externalUrl) {
-            return 'https://entropy.fi' . $event . $this->id;
+        if (
+            ($this->url === null || $this->url === "" || $this->url === "0") &&
+            !$this->externalUrl
+        ) {
+            return "https://entropy.fi" . $event . $this->id;
         }
-        return $lang ? 'https://entropy.fi/' . $lang . $year . $url : 'https://entropy.fi' . $year . $url;
+        return $lang
+            ? "https://entropy.fi/" . $lang . $year . $url
+            : "https://entropy.fi" . $year . $url;
     }
 
     /**
@@ -1345,7 +1463,10 @@ class Event implements \Stringable
     public function removeHappening(Happening $happening): self
     {
         // set the owning side to null (unless already changed)
-        if ($this->happenings->removeElement($happening) && $happening->getEvent() === $this) {
+        if (
+            $this->happenings->removeElement($happening) &&
+            $happening->getEvent() === $this
+        ) {
             $happening->setEvent(null);
         }
 
@@ -1372,8 +1493,9 @@ class Event implements \Stringable
         return $this->nakkiResponsibleAdmin;
     }
 
-    public function addNakkiResponsibleAdmin(Member $nakkiResponsibleAdmin): static
-    {
+    public function addNakkiResponsibleAdmin(
+        Member $nakkiResponsibleAdmin,
+    ): static {
         if (!$this->nakkiResponsibleAdmin->contains($nakkiResponsibleAdmin)) {
             $this->nakkiResponsibleAdmin->add($nakkiResponsibleAdmin);
         }
@@ -1381,8 +1503,9 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function removeNakkiResponsibleAdmin(Member $nakkiResponsibleAdmin): static
-    {
+    public function removeNakkiResponsibleAdmin(
+        Member $nakkiResponsibleAdmin,
+    ): static {
         $this->nakkiResponsibleAdmin->removeElement($nakkiResponsibleAdmin);
 
         return $this;
@@ -1393,8 +1516,9 @@ class Event implements \Stringable
         return $this->allowMembersToCreateHappenings;
     }
 
-    public function setAllowMembersToCreateHappenings(?bool $allowMembersToCreateHappenings): static
-    {
+    public function setAllowMembersToCreateHappenings(
+        ?bool $allowMembersToCreateHappenings,
+    ): static {
         $this->allowMembersToCreateHappenings = $allowMembersToCreateHappenings;
 
         return $this;
@@ -1414,7 +1538,7 @@ class Event implements \Stringable
 
     public function getTemplate(): string
     {
-        return $this->template ?: 'event.html.twig';
+        return $this->template ?: "event.html.twig";
     }
 
     public function setTemplate(?string $template): static
@@ -1450,7 +1574,7 @@ class Event implements \Stringable
 
     public function getAbstract($lang): ?string
     {
-        $func = 'abstract' . ucfirst((string) $lang);
+        $func = "abstract" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
@@ -1468,7 +1592,9 @@ class Event implements \Stringable
     public function getTicketProducts(): Collection
     {
         new ArrayCollection();
-        return $this->products->filter(fn (Product $product): ?bool => $product->isTicket());
+        return $this->products->filter(
+            fn(Product $product): ?bool => $product->isTicket(),
+        );
     }
     public function addProduct(Product $product): static
     {
@@ -1483,7 +1609,10 @@ class Event implements \Stringable
     public function removeProduct(Product $product): static
     {
         // set the owning side to null (unless already changed)
-        if ($this->products->removeElement($product) && $product->getEvent() === $this) {
+        if (
+            $this->products->removeElement($product) &&
+            $product->getEvent() === $this
+        ) {
             $product->setEvent(null);
         }
 
@@ -1526,7 +1655,7 @@ class Event implements \Stringable
     }
     public function getArtistSignUpInfo($lang): ?string
     {
-        $func = 'artistSignUpInfo' . ucfirst((string) $lang);
+        $func = "artistSignUpInfo" . ucfirst((string) $lang);
         return $this->{$func};
     }
 
