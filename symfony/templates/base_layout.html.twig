@@ -39,6 +39,7 @@
                     class="effect_canvas"
                     data-turbo-permanent
                     id="{{ event.backgroundEffect }}"
+                    data-config='{{ event.backgroundEffectConfig }}'
                     style="opacity: {{ event.backgroundEffectOpacity|default(100) / 100 }}; {{ event.backgroundEffectPosition }}"
                 ></canvas>
             {%- endif %}
