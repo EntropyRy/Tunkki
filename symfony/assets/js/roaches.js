@@ -617,6 +617,11 @@
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("mouseleave", onMouseLeave);
     document.addEventListener("visibilitychange", onVisibilityChange);
+    // Turbo lifecycle: pause before snapshot; resume after render/frame load
+    document.addEventListener("turbo:before-cache", () => stop());
+    document.addEventListener("turbo:render", () => start());
+    document.addEventListener("turbo:load", () => start());
+    document.addEventListener("turbo:frame-load", () => start());
 
     // Expose tiny debug API
     // window.roachesApp?. will allow tweaking from console if needed
