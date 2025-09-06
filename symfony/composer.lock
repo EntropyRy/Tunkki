@@ -743,16 +743,16 @@
         },
         {
             "name": "doctrine/dbal",
-            "version": "3.10.1",
+            "version": "3.10.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/dbal.git",
-                "reference": "3626601014388095d3af9de7e9e958623b7ef005"
+                "reference": "c6c16cf787eaba3112203dfcd715fa2059c62282"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/dbal/zipball/3626601014388095d3af9de7e9e958623b7ef005",
-                "reference": "3626601014388095d3af9de7e9e958623b7ef005",
+                "url": "https://api.github.com/repos/doctrine/dbal/zipball/c6c16cf787eaba3112203dfcd715fa2059c62282",
+                "reference": "c6c16cf787eaba3112203dfcd715fa2059c62282",
                 "shasum": ""
             },
             "require": {
@@ -768,10 +768,10 @@
             },
             "require-dev": {
                 "doctrine/cache": "^1.11|^2.0",
-                "doctrine/coding-standard": "13.0.0",
+                "doctrine/coding-standard": "13.0.1",
                 "fig/log-test": "^1",
                 "jetbrains/phpstorm-stubs": "2023.1",
-                "phpstan/phpstan": "2.1.17",
+                "phpstan/phpstan": "2.1.22",
                 "phpstan/phpstan-strict-rules": "^2",
                 "phpunit/phpunit": "9.6.23",
                 "slevomat/coding-standard": "8.16.2",
@@ -837,7 +837,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/dbal/issues",
-                "source": "https://github.com/doctrine/dbal/tree/3.10.1"
+                "source": "https://github.com/doctrine/dbal/tree/3.10.2"
             },
             "funding": [
                 {
@@ -853,7 +853,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-08-05T12:18:06+00:00"
+            "time": "2025-09-04T23:51:27+00:00"
         },
         {
             "name": "doctrine/deprecations",
@@ -905,16 +905,16 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "2.16.0",
+            "version": "2.16.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "cb2ad28708f870ff9534e82798c557bdc79809ba"
+                "reference": "152d5083f0cd205a278131dc4351a8c94d007fe1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/cb2ad28708f870ff9534e82798c557bdc79809ba",
-                "reference": "cb2ad28708f870ff9534e82798c557bdc79809ba",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/152d5083f0cd205a278131dc4351a8c94d007fe1",
+                "reference": "152d5083f0cd205a278131dc4351a8c94d007fe1",
                 "shasum": ""
             },
             "require": {
@@ -951,6 +951,7 @@
                 "phpunit/phpunit": "^9.6.22",
                 "psr/log": "^1.1.4 || ^2.0 || ^3.0",
                 "symfony/doctrine-messenger": "^6.4 || ^7.0",
+                "symfony/expression-language": "^6.4 || ^7.0",
                 "symfony/messenger": "^6.4 || ^7.0",
                 "symfony/phpunit-bridge": "^7.2",
                 "symfony/property-info": "^6.4 || ^7.0",
@@ -1007,7 +1008,7 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/DoctrineBundle/issues",
-                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.16.0"
+                "source": "https://github.com/doctrine/DoctrineBundle/tree/2.16.1"
             },
             "funding": [
                 {
@@ -1023,7 +1024,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-09-02T17:41:12+00:00"
+            "time": "2025-09-05T15:24:53+00:00"
         },
         {
             "name": "doctrine/doctrine-migrations-bundle",
@@ -4805,16 +4806,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.38.0",
+            "version": "4.38.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "4e1536bf44778647735c3641b4086d010491ec69"
+                "reference": "58ca7145d9d34038e6b3ed57b1617e0f0f2632d2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/4e1536bf44778647735c3641b4086d010491ec69",
-                "reference": "4e1536bf44778647735c3641b4086d010491ec69",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/58ca7145d9d34038e6b3ed57b1617e0f0f2632d2",
+                "reference": "58ca7145d9d34038e6b3ed57b1617e0f0f2632d2",
                 "shasum": ""
             },
             "require": {
@@ -4920,7 +4921,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.38.0"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.38.1"
             },
             "funding": [
                 {
@@ -4940,7 +4941,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-24T17:11:01+00:00"
+            "time": "2025-09-05T07:40:05+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -13710,16 +13711,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.1.4",
+            "version": "2.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "fe613c528819222f8686a9a037a315ef9d4915b3"
+                "reference": "729aabc0ec66e700ef164e26454a1357f222a2f3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/fe613c528819222f8686a9a037a315ef9d4915b3",
-                "reference": "fe613c528819222f8686a9a037a315ef9d4915b3",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/729aabc0ec66e700ef164e26454a1357f222a2f3",
+                "reference": "729aabc0ec66e700ef164e26454a1357f222a2f3",
                 "shasum": ""
             },
             "require": {
@@ -13758,7 +13759,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.1.4"
+                "source": "https://github.com/rectorphp/rector/tree/2.1.6"
             },
             "funding": [
                 {
@@ -13766,7 +13767,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-08-15T14:41:36+00:00"
+            "time": "2025-09-05T15:43:08+00:00"
         },
         {
             "name": "symfony/debug-bundle",
