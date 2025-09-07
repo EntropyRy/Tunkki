@@ -60,10 +60,7 @@ return [
         "path" => "./assets/js/flowfields.js",
         "entrypoint" => true,
     ],
-    "bunka" => [
-        "path" => "./assets/js/bunka.js",
-        "entrypoint" => true,
-    ],
+
     "roaches" => [
         "path" => "./assets/js/roaches.js",
         "entrypoint" => true,

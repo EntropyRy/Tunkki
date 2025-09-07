@@ -23,6 +23,11 @@ use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
+use App\Effect\BackgroundEffectConfigProvider;
 use App\Form\UrlsType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -385,7 +390,7 @@ final class EventAdmin extends AbstractAdmin
                             "dark" => "dark",
                         ],
                     ])
-                    ->add("backgroundEffect", ChoiceType::class, [
+                    ->add("backgroundEffect", ChoiceFieldMaskType::class, [
                         "required" => false,
                         "choices" => [
                             "Rain" => "rain",
@@ -400,8 +405,40 @@ final class EventAdmin extends AbstractAdmin
                             "Hypermakkara Game" => "snake",
                             "Chladni Pattern Generator" => "chladni",
                             "Flow Fields" => "flowfields",
-                            "Flow Fields for Bunka" => "bunka",
+
                             "Cockroaches" => "roaches",
+                        ],
+                        "map" => [
+                            "flowfields" => [
+                                "backgroundEffectConfig",
+                                "configTool",
+                            ],
+                            "chladni" => [
+                                "backgroundEffectConfig",
+                                "configTool",
+                            ],
+                            "roaches" => [
+                                "backgroundEffectConfig",
+                                "configTool",
+                            ],
+                        ],
+                    ])
+                    ->add("backgroundEffectConfig", TextareaType::class, [
+                        "required" => false,
+                        "attr" => ["rows" => 12],
+                        "help" =>
+                            'Effect config JSON. Leave empty to use defaults. Supported effects: Flowfields, Chladni, Cockroaches. For Flowfields, open the <a href="/admin/effects/flowfields/' .
+                            $event->getId() .
+                            '" target="_blank" rel="noopener">Flowfields dashboard</a>.',
+                        "help_html" => true,
+                    ])
+                    ->add("configTool", ChoiceType::class, [
+                        "required" => false,
+                        "mapped" => false,
+                        "placeholder" => "— Choose action —",
+                        "choices" => [
+                            "Load defaults" => "load_defaults",
+                            "Apply preset: Bunka (Flowfields)" => "apply_bunka",
                         ],
                     ])
                     ->add("backgroundEffectPosition", ChoiceType::class, [
@@ -602,6 +639,149 @@ final class EventAdmin extends AbstractAdmin
                 ])
                 ->end()
                 ->end();
+
+            // Background effect config management: defaults and effect change safety
+            $builder = $formMapper->getFormBuilder();
+
+            // Ensure config is nulled when effect doesn't support configuration
+            $builder->addEventListener(
+                \Symfony\Component\Form\FormEvents::PRE_SET_DATA,
+                function (\Symfony\Component\Form\FormEvent $event): void {
+                    $data = $event->getData();
+                    if (!$data instanceof \App\Entity\Event) {
+                        return;
+                    }
+                    $effect = $data->getBackgroundEffect();
+                    $supports = in_array(
+                        $effect,
+                        ["flowfields", "chladni", "roaches"],
+                        true,
+                    );
+                    if (!$supports) {
+                        if ($data->getBackgroundEffectConfig() !== null) {
+                            $data->setBackgroundEffectConfig(null);
+                        }
+                    } else {
+                        $current = $data->getBackgroundEffectConfig();
+                        if (
+                            $current === null ||
+                            trim((string) $current) === ""
+                        ) {
+                            $data->setBackgroundEffectConfig(
+                                $this->effectConfig->getDefaultConfigJson(
+                                    (string) $effect,
+                                ),
+                            );
+                        }
+                    }
+                },
+            );
+
+            // On submit, clear config when switching to a non-configurable effect.
+            // If effect changed and no explicit config is provided, clear stale config by default.
+            $builder->addEventListener(
+                \Symfony\Component\Form\FormEvents::PRE_SUBMIT,
+                function (\Symfony\Component\Form\FormEvent $event): void {
+                    $submitted = $event->getData();
+                    $form = $event->getForm();
+                    $original = $form->getData();
+
+                    if (!is_array($submitted)) {
+                        return;
+                    }
+
+                    $supports = static function (?string $effect): bool {
+                        return in_array(
+                            $effect,
+                            ["flowfields", "chladni", "roaches"],
+                            true,
+                        );
+                    };
+
+                    $newEffect = $submitted["backgroundEffect"] ?? null;
+
+                    // Detect button clicks (submit buttons appear in payload only when clicked)
+                    $tool = $submitted["configTool"] ?? null;
+                    $loadDefaultsClicked = $tool === "load_defaults";
+                    $applyBunkaClicked = $tool === "apply_bunka";
+
+                    // If chosen effect doesn't support config, drop any submitted config
+                    if (!$supports($newEffect)) {
+                        $submitted["backgroundEffectConfig"] = null;
+                    } else {
+                        // Handle "Load defaults" button
+                        if ($loadDefaultsClicked) {
+                            $submitted[
+                                "backgroundEffectConfig"
+                            ] = $this->effectConfig->getDefaultConfigJson(
+                                (string) $newEffect,
+                            );
+                        }
+
+                        // Handle "Apply preset: Bunka" for Flowfields
+                        if ($applyBunkaClicked && $newEffect === "flowfields") {
+                            $preset = $this->effectConfig->getPreset(
+                                "flowfields",
+                                "Bunka",
+                            );
+                            if ($preset !== null) {
+                                $submitted[
+                                    "backgroundEffectConfig"
+                                ] = $this->effectConfig->toJson($preset, true);
+                            }
+                        }
+
+                        // If user entered JSON manually, normalize and pretty print to ensure consistent storage
+                        if (
+                            !$loadDefaultsClicked &&
+                            !$applyBunkaClicked &&
+                            array_key_exists(
+                                "backgroundEffectConfig",
+                                $submitted,
+                            ) &&
+                            trim(
+                                (string) $submitted["backgroundEffectConfig"],
+                            ) !== ""
+                        ) {
+                            $submitted[
+                                "backgroundEffectConfig"
+                            ] = $this->effectConfig->normalizeJson(
+                                (string) $submitted["backgroundEffectConfig"],
+                                (string) $newEffect,
+                                true,
+                            );
+                        }
+                    }
+
+                    // If effect changed, and no explicit config was provided, auto-load defaults for configurable effects
+                    if ($original instanceof \App\Entity\Event) {
+                        $oldEffect = $original->getBackgroundEffect();
+                        if ($newEffect !== $oldEffect) {
+                            $noConfigProvided =
+                                !array_key_exists(
+                                    "backgroundEffectConfig",
+                                    $submitted,
+                                ) ||
+                                trim(
+                                    (string) ($submitted[
+                                        "backgroundEffectConfig"
+                                    ] ?? ""),
+                                ) === "";
+                            if ($noConfigProvided) {
+                                $submitted[
+                                    "backgroundEffectConfig"
+                                ] = $supports($newEffect)
+                                    ? $this->effectConfig->getDefaultConfigJson(
+                                        (string) $newEffect,
+                                    )
+                                    : null;
+                            }
+                        }
+                    }
+
+                    $event->setData($submitted);
+                },
+            );
         }
     }
 
@@ -638,6 +818,22 @@ final class EventAdmin extends AbstractAdmin
                 $this->slug->slug($event->getNimi())->lower()->toString(),
             );
         }
+
+        // Normalize and pretty-print effect config before persist
+        $effect = $event->getBackgroundEffect();
+        $config = $event->getBackgroundEffectConfig();
+        if (!in_array($effect, ["flowfields", "chladni", "roaches"], true)) {
+            // Ensure we don't store config for non-configurable effects
+            $event->setBackgroundEffectConfig(null);
+        } elseif (is_string($config) && trim($config) !== "") {
+            $event->setBackgroundEffectConfig(
+                $this->effectConfig->normalizeJson(
+                    $config,
+                    (string) $effect,
+                    true,
+                ),
+            );
+        }
     }
     #[\Override]
     public function preUpdate($event): void
@@ -647,11 +843,28 @@ final class EventAdmin extends AbstractAdmin
                 $this->slug->slug($event->getNimi())->lower()->toString(),
             );
         }
+
+        // Normalize and pretty-print effect config before update
+        $effect = $event->getBackgroundEffect();
+        $config = $event->getBackgroundEffectConfig();
+        if (!in_array($effect, ["flowfields", "chladni", "roaches"], true)) {
+            // Ensure we don't store config for non-configurable effects
+            $event->setBackgroundEffectConfig(null);
+        } elseif (is_string($config) && trim($config) !== "") {
+            $event->setBackgroundEffectConfig(
+                $this->effectConfig->normalizeJson(
+                    $config,
+                    (string) $effect,
+                    true,
+                ),
+            );
+        }
     }
     public function __construct(
         protected SluggerInterface $slug,
         protected LocationRepository $lr,
         protected RequestStack $rs,
+        protected BackgroundEffectConfigProvider $effectConfig,
     ) {}
     #[\Override]
     public function preValidate(object $object): void

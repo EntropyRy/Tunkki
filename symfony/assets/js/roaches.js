@@ -53,17 +53,41 @@
         canvas.style.pointerEvents = "none";
     }
 
-    // Configuration (can be tweaked via data- attributes)
+    // Configuration (can be tweaked via data- attributes or data-config JSON)
+    // Read JSON overrides from data-config attribute, if present
+    function parseJsonSafe(s) {
+        if (!s) return null;
+        const t = String(s).trim();
+        if (!t) return null;
+        try {
+            const o = JSON.parse(t);
+            return o && typeof o === "object" ? o : null;
+        } catch {
+            return null;
+        }
+    }
+    const jsonCfg = parseJsonSafe(canvas.getAttribute("data-config")) || {};
+
     const cfg = {
-        count: clamp(intAttr(canvas.dataset.count, 6), 1, 20),
-        baseSpeed: numAttr(canvas.dataset.speed, 55), // px/s, average; each roach gets +/- variance
-        avoidMouse: boolAttr(canvas.dataset.avoidMouse, true),
-        edgeMargin: clamp(numAttr(canvas.dataset.edgeMargin, 40), 10, 200),
-        bodyColor: canvas.dataset.color || "#3b2f2f",
+        count: clamp(intAttr(canvas.dataset.count, jsonCfg.count ?? 6), 1, 20),
+        baseSpeed: numAttr(canvas.dataset.speed, jsonCfg.baseSpeed ?? 55), // px/s, average; each roach gets +/- variance
+        avoidMouse: boolAttr(
+            canvas.dataset.avoidMouse,
+            jsonCfg.avoidMouse ?? true,
+        ),
+        edgeMargin: clamp(
+            numAttr(canvas.dataset.edgeMargin, jsonCfg.edgeMargin ?? 40),
+            10,
+            200,
+        ),
+        bodyColor: canvas.dataset.color || jsonCfg.bodyColor || "#3b2f2f",
     };
 
-    // Auto-tune count for low-powered devices if author hasn't set data-count
-    if (!("count" in canvas.dataset)) {
+    // Auto-tune count only if neither data-count nor JSON count provided
+    if (
+        !("count" in canvas.dataset) &&
+        !Object.prototype.hasOwnProperty.call(jsonCfg, "count")
+    ) {
         const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
         const cores = navigator.hardwareConcurrency || 4;
         if (isMobile || cores <= 4) cfg.count = 4;
