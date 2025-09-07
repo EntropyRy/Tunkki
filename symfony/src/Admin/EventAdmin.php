@@ -408,20 +408,21 @@ final class EventAdmin extends AbstractAdmin
 
                             "Cockroaches" => "roaches",
                         ],
-                        "map" => [
-                            "flowfields" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
-                            "chladni" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
-                            "roaches" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
+
+                    "map" => [
+                        "flowfields" => [
+                            "backgroundEffectConfig",
+                            "configTool",
                         ],
+                        "chladni" => [
+                            "backgroundEffectConfig",
+                            "configTool",
+                        ],
+                        "roaches" => [
+                            "backgroundEffectConfig",
+                            "configTool",
+                        ],
+                    ],
                     ])
                     ->add("backgroundEffectConfig", TextareaType::class, [
                         "required" => false,

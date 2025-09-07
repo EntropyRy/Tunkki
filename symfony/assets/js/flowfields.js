@@ -41,6 +41,7 @@ const defaults = {
     trailLength: 0.98, // Trail length (0-1, higher = longer trails)
     trailWidth: 1.5, // Width of trail lines
     hueShiftRange: 60, // Range of hue shift for 'analogous' color mode
+    showControls: true, // Set to false to hide/remove the internal control panel
 };
 function isPlainObject(v) {
     return Object.prototype.toString.call(v) === "[object Object]";
@@ -1264,4 +1265,6 @@ function addToggleButton(controls) {
 
     controls.appendChild(toggleButton);
 }
-const controlPanel = createControlPanel(config, initParticles, initTrailCanvas);
+if (config.showControls !== false) {
+    createControlPanel(config, initParticles, initTrailCanvas);
+}
