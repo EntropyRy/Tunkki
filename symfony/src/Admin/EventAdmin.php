@@ -712,23 +712,29 @@ final class EventAdmin extends AbstractAdmin
                     } else {
                         // Handle "Load defaults" button
                         if ($loadDefaultsClicked) {
-                            $submitted[
-                                "backgroundEffectConfig"
-                            ] = $this->effectConfig->getDefaultConfigJson(
-                                (string) $newEffect,
-                            );
+                            // Merge existing stored config with effect defaults so custom keys (e.g. showControls)
+                            // are preserved instead of being replaced wholesale.
+                            $existing = [];
+                            if ($original instanceof \App\Entity\Event) {
+                                $existing = $this->effectConfig->parseJson($original->getBackgroundEffectConfig() ?? null) ?? [];
+                            }
+                            $merged = $this->effectConfig->mergeWithDefaults((string) $newEffect, $existing);
+                            $submitted["backgroundEffectConfig"] = $this->effectConfig->toJson($merged, true);
                         }
 
                         // Handle "Apply preset: Bunka" for Flowfields
                         if ($applyBunkaClicked && $newEffect === "flowfields") {
-                            $preset = $this->effectConfig->getPreset(
-                                "flowfields",
-                                "Bunka",
-                            );
+                            $preset = $this->effectConfig->getPreset("flowfields", "Bunka");
                             if ($preset !== null) {
-                                $submitted[
-                                    "backgroundEffectConfig"
-                                ] = $this->effectConfig->toJson($preset, true);
+                                // Merge existing stored config on top of preset so custom keys (e.g. showControls)
+                                // are preserved, then fill missing keys from defaults.
+                                $existing = [];
+                                if ($original instanceof \App\Entity\Event) {
+                                    $existing = $this->effectConfig->parseJson($original->getBackgroundEffectConfig() ?? null) ?? [];
+                                }
+                                $base = array_replace_recursive($preset, $existing);
+                                $merged = $this->effectConfig->mergeWithDefaults((string) $newEffect, $base);
+                                $submitted["backgroundEffectConfig"] = $this->effectConfig->toJson($merged, true);
                             }
                         }
 

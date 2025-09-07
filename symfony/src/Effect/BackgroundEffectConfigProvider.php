@@ -227,6 +227,7 @@ final class BackgroundEffectConfigProvider
             'trailLength'          => 0.98,
             'trailWidth'           => 1.5,
             'hueShiftRange'        => 60,
+            'showControls'         => true,
         ];
     }
 
