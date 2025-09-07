@@ -241,16 +241,24 @@ final class BackgroundEffectConfigProvider
         $defaults = $this->flowfieldsDefaults();
 
         $bunka = $this->arrayMergeDeep($defaults, [
-            // Slightly denser field, smoother movement, thinner trails, bright lines
-            'particleCount'      => 2400,
-            'flowFieldIntensity' => 0.6,
-            'noiseScale'         => 0.0025,
-            'noiseSpeed'         => 0.0004,
-            'trailLength'        => 0.965,
-            'trailWidth'         => 1.2,
-            'colorMode'          => 'fixed',
-            'particleColor'      => ['r' => 255, 'g' => 255, 'b' => 255],
-            'cursorRepel'        => false,
+            // Legacy bunka.js tuning
+            'particleCount'          => 1100,
+            'particleBaseSpeed'      => 0.3,
+            'particleSpeedVariation' => 1.5,
+            'particleSize'           => 1.0,
+            'particleColor'          => ['r' => 153, 'g' => 28, 'b' => 42],
+            'fadeAmount'             => 0.001,
+            'flowFieldIntensity'     => 0.8,
+            'noiseScale'             => 0.003,
+            'noiseSpeed'             => 0.0001,
+            'particleLifespan'       => 800,
+            'cursorInfluence'        => 250,
+            'cursorRepel'            => false,
+            'colorMode'              => 'complement',
+            'enableTrails'           => true,
+            'trailLength'            => 0.98,
+            'trailWidth'             => 3.0,
+            'hueShiftRange'          => 120,
         ]);
 
         return [
