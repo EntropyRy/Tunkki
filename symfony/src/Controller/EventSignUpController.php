@@ -372,7 +372,7 @@ class EventSignUpController extends Controller
             $artisteventinfo,
             [
                 "artists" => $artists,
-                "ask_time" => $event->isArtistSignUpAskSetLength(),
+                "ask_time" => $event->getArtistSignUpAskSetLength(),
             ],
         );
         $form->handleRequest($request);
@@ -458,7 +458,7 @@ class EventSignUpController extends Controller
             EventArtistInfoType::class,
             $artisteventinfo,
             [
-                "ask_time" => $event->isArtistSignUpAskSetLength(),
+                "ask_time" => $event->getArtistSignUpAskSetLength(),
                 "disable_artist" => true,
             ],
         );
