@@ -646,8 +646,8 @@ final class EventAdmin extends AbstractAdmin
 
             // Ensure config is nulled when effect doesn't support configuration
             $builder->addEventListener(
-                \Symfony\Component\Form\FormEvents::PRE_SET_DATA,
-                function (\Symfony\Component\Form\FormEvent $event): void {
+                FormEvents::PRE_SET_DATA,
+                function (FormEvent $event): void {
                     $data = $event->getData();
                     if (!$data instanceof \App\Entity\Event) {
                         return;
@@ -666,7 +666,7 @@ final class EventAdmin extends AbstractAdmin
                         $current = $data->getBackgroundEffectConfig();
                         if (
                             $current === null ||
-                            trim((string) $current) === ""
+                            trim($current) === ""
                         ) {
                             $data->setBackgroundEffectConfig(
                                 $this->effectConfig->getDefaultConfigJson(
@@ -681,8 +681,8 @@ final class EventAdmin extends AbstractAdmin
             // On submit, clear config when switching to a non-configurable effect.
             // If effect changed and no explicit config is provided, clear stale config by default.
             $builder->addEventListener(
-                \Symfony\Component\Form\FormEvents::PRE_SUBMIT,
-                function (\Symfony\Component\Form\FormEvent $event): void {
+                FormEvents::PRE_SUBMIT,
+                function (FormEvent $event): void {
                     $submitted = $event->getData();
                     $form = $event->getForm();
                     $original = $form->getData();
@@ -691,13 +691,11 @@ final class EventAdmin extends AbstractAdmin
                         return;
                     }
 
-                    $supports = static function (?string $effect): bool {
-                        return in_array(
-                            $effect,
-                            ["flowfields", "chladni", "roaches"],
-                            true,
-                        );
-                    };
+                    $supports = (static fn(?string $effect): bool => in_array(
+                        $effect,
+                        ["flowfields", "chladni", "roaches"],
+                        true,
+                    ));
 
                     $newEffect = $submitted["backgroundEffect"] ?? null;
 
@@ -733,7 +731,7 @@ final class EventAdmin extends AbstractAdmin
                                     $existing = $this->effectConfig->parseJson($original->getBackgroundEffectConfig() ?? null) ?? [];
                                 }
                                 $base = array_replace_recursive($preset, $existing);
-                                $merged = $this->effectConfig->mergeWithDefaults((string) $newEffect, $base);
+                                $merged = $this->effectConfig->mergeWithDefaults($newEffect, $base);
                                 $submitted["backgroundEffectConfig"] = $this->effectConfig->toJson($merged, true);
                             }
                         }
