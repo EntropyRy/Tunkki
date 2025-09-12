@@ -24,7 +24,7 @@
  * @returns {v is Record<string, unknown>}
  */
 function isPlainObject(v) {
-  return Object.prototype.toString.call(v) === '[object Object]';
+    return Object.prototype.toString.call(v) === "[object Object]";
 }
 
 /**
@@ -35,16 +35,16 @@ function isPlainObject(v) {
  * @returns {Record<string, unknown>}
  */
 export function mergeDeep(a, b) {
-  const out = { ...a };
-  for (const [k, v] of Object.entries(b || {})) {
-    const av = out[k];
-    if (isPlainObject(av) && isPlainObject(v)) {
-      out[k] = mergeDeep(av, v);
-    } else {
-      out[k] = v;
+    const out = { ...a };
+    for (const [k, v] of Object.entries(b || {})) {
+        const av = out[k];
+        if (isPlainObject(av) && isPlainObject(v)) {
+            out[k] = mergeDeep(av, v);
+        } else {
+            out[k] = v;
+        }
     }
-  }
-  return out;
+    return out;
 }
 
 /**
@@ -53,15 +53,15 @@ export function mergeDeep(a, b) {
  * @returns {Record<string, unknown> | null}
  */
 export function parseJsonSafe(s) {
-  if (!s) return null;
-  const trimmed = String(s).trim();
-  if (!trimmed) return null;
-  try {
-    const obj = JSON.parse(trimmed);
-    return isPlainObject(obj) ? obj : null;
-  } catch {
-    return null;
-  }
+    if (!s) return null;
+    const trimmed = String(s).trim();
+    if (!trimmed) return null;
+    try {
+        const obj = JSON.parse(trimmed);
+        return isPlainObject(obj) ? obj : null;
+    } catch {
+        return null;
+    }
 }
 
 /**
@@ -70,10 +70,10 @@ export function parseJsonSafe(s) {
  * @returns {HTMLElement|null}
  */
 function resolveElement(elOrId) {
-  if (!elOrId) return null;
-  if (typeof elOrId === 'string') return document.getElementById(elOrId);
-  if (elOrId instanceof HTMLElement) return elOrId;
-  return null;
+    if (!elOrId) return null;
+    if (typeof elOrId === "string") return document.getElementById(elOrId);
+    if (elOrId instanceof HTMLElement) return elOrId;
+    return null;
 }
 
 /**
@@ -83,9 +83,9 @@ function resolveElement(elOrId) {
  * @returns {Record<string, unknown> | null}
  */
 export function readDataConfig(el) {
-  if (!el) return null;
-  const raw = el.getAttribute('data-config');
-  return parseJsonSafe(raw);
+    if (!el) return null;
+    const raw = el.getAttribute("data-config");
+    return parseJsonSafe(raw);
 }
 
 /**
@@ -99,12 +99,12 @@ export function readDataConfig(el) {
  * @returns {T} merged config (defaults overlaid by JSON overrides)
  */
 export function readEffectConfig(elOrId, defaults) {
-  /** @type {T} */
-  const base = (isPlainObject(defaults) ? defaults : {}) as any;
-  const el = resolveElement(elOrId);
-  const overrides = readDataConfig(el) || {};
-  // Ensure we don't mutate provided defaults
-  return mergeDeep(base, overrides) as T;
+    /** @type {T} */
+    const base = isPlainObject(defaults) ? defaults : {};
+    const el = resolveElement(elOrId);
+    const overrides = readDataConfig(el) || {};
+    // Ensure we don't mutate provided defaults
+    return mergeDeep(base, overrides);
 }
 
 /**
@@ -116,5 +116,5 @@ export function readEffectConfig(elOrId, defaults) {
  * @returns {T}
  */
 export function readEffectConfigById(effectId, defaults) {
-  return readEffectConfig(effectId, defaults);
+    return readEffectConfig(effectId, defaults);
 }

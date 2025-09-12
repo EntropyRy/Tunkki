@@ -2,65 +2,91 @@
 
 namespace App\Helper;
 
+use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
+/**
+ * Helper for interacting with the Lychee (ePics) service.
+ *
+ * Improvements:
+ * - Configurable base URL via EPICS_BASE_URL env (fallback to constant)
+ * - Corrected user listing endpoint (UserManagement instead of Users)
+ * - Added structured logging for easier debugging
+ * - More defensive error handling & context logging
+ */
 class ePics
 {
-    private const string API_BASE = "https://epics.entropy.fi";
+    /**
+     * Default base URL (used if no env override).
+     */
+    private const API_BASE = "https://epics.entropy.fi";
 
-    public function __construct(private readonly HttpClientInterface $client) {}
+    private string $baseUrl;
+
+    public function __construct(
+        private readonly HttpClientInterface $client,
+        private readonly ?LoggerInterface $logger = null,
+        ?string $baseUrl = null,
+    ) {
+        $this->baseUrl = rtrim(
+            $baseUrl ??
+                ($_ENV["EPICS_BASE_URL"] ??
+                    ($_SERVER["EPICS_BASE_URL"] ?? self::API_BASE)),
+            "/",
+        );
+    }
 
     public function getRandomPic(): ?array
     {
         $pic = [];
         try {
-            // First establish a session by visiting the main site to get cookies
-            $initResponse = $this->client->request("GET", self::API_BASE, [
+            $initResponse = $this->client->request("GET", $this->baseUrl, [
                 "max_duration" => 5,
             ]);
 
-            // Extract cookies from response
             $headers = $initResponse->getHeaders();
-
-            // Initialize session token and XSRF token
             $sessionToken = null;
             $xsrfToken = null;
 
             if (isset($headers["set-cookie"])) {
                 foreach ($headers["set-cookie"] as $cookie) {
-                    // Extract XSRF token
                     if (str_starts_with($cookie, "XSRF-TOKEN=")) {
                         $parts = explode(";", $cookie);
-                        $tokenValue = substr($parts[0], 11); // 11 is length of 'XSRF-TOKEN='
+                        $tokenValue = substr($parts[0], 11);
                         $xsrfToken = rawurldecode($tokenValue);
                     }
 
-                    // Extract session token
                     if (str_starts_with($cookie, "lychee_session=")) {
                         $parts = explode(";", $cookie);
-                        $sessionValue = substr($parts[0], 15); // 15 is length of 'lychee_session='
+                        $sessionValue = substr($parts[0], 15);
                         $sessionToken = rawurldecode($sessionValue);
                     }
                 }
             }
 
-            // If we don't have what we need, return null
             if (!$sessionToken || !$xsrfToken) {
+                $this->log(
+                    "warning",
+                    "Failed to obtain session or XSRF token for random pic",
+                    [
+                        "session" => (bool) $sessionToken,
+                        "xsrf" => (bool) $xsrfToken,
+                    ],
+                );
                 return null;
             }
 
-            // Make request to the v2 API with proper headers and cookies
             $response = $this->client->request(
                 "GET",
-                self::API_BASE . "/api/v2/Photo::random",
+                $this->baseUrl . "/api/v2/Photo::random",
                 [
                     "max_duration" => 10,
                     "headers" => $this->buildHeaders($sessionToken, $xsrfToken),
                 ],
             );
 
-            if ($response->getStatusCode() == 200) {
+            if ($response->getStatusCode() === 200) {
                 $photoData = json_decode(
                     $response->getContent(),
                     true,
@@ -68,20 +94,16 @@ class ePics
                     JSON_THROW_ON_ERROR,
                 );
 
-                // Process the response format - try different size variants
                 if (!empty($photoData["size_variants"])) {
-                    // Try different size variants in order of preference
                     foreach (
                         ["medium2x", "medium", "thumb2x", "thumb"]
                         as $size
                     ) {
                         if (isset($photoData["size_variants"][$size])) {
-                            // Ensure the URL is complete
                             $url = $photoData["size_variants"][$size]["url"];
-                            // Add base URL if the URL is relative
                             if (!str_starts_with((string) $url, "http")) {
                                 $url =
-                                    self::API_BASE .
+                                    $this->baseUrl .
                                     "/" .
                                     ltrim((string) $url, "/");
                             }
@@ -93,8 +115,20 @@ class ePics
                         }
                     }
                 }
+            } else {
+                $this->log("warning", "Random photo request failed", [
+                    "status" => $response->getStatusCode(),
+                ]);
             }
-        } catch (TransportExceptionInterface) {
+        } catch (TransportExceptionInterface $e) {
+            $this->log("error", "Transport exception fetching random pic", [
+                "exception" => $e->getMessage(),
+            ]);
+            return null;
+        } catch (\Throwable $e) {
+            $this->log("error", "Unhandled exception fetching random pic", [
+                "exception" => $e->getMessage(),
+            ]);
             return null;
         }
         return null;
@@ -122,6 +156,7 @@ class ePics
         try {
             $tokens = $this->establishSession();
             if ($tokens === null) {
+                $this->log("error", "Failed to establish initial session");
                 return false;
             }
             [$sessionToken, $xsrfToken] = $tokens;
@@ -134,6 +169,7 @@ class ePics
                 ($_SERVER["EPICS_ADMIN_PASSWORD"] ?? null);
 
             if (!$adminUser || !$adminPass) {
+                $this->log("error", "Missing admin credentials for ePics");
                 return false;
             }
 
@@ -144,37 +180,52 @@ class ePics
                 $xsrfToken,
             );
             if ($tokensAfterLogin === null) {
+                $this->log("error", "Admin login to ePics failed", [
+                    "adminUser" => $adminUser,
+                ]);
                 return false;
             }
             [$sessionToken, $xsrfToken] = $tokensAfterLogin;
 
             $headers = $this->buildHeaders($sessionToken, $xsrfToken);
 
-            // Try to find existing user by username
+            // Corrected: list users via UserManagement endpoint (previously /Users)
             $userId = null;
             $listResp = $this->client->request(
                 "GET",
-                self::API_BASE . "/api/v2/Users",
+                $this->baseUrl . "/api/v2/UserManagement",
                 [
                     "max_duration" => 10,
                     "headers" => $headers,
                 ],
             );
+
             if ($listResp->getStatusCode() === 200) {
                 $users = json_decode($listResp->getContent(false), true) ?? [];
-                foreach ($users as $u) {
-                    if (($u["username"] ?? null) === $username) {
-                        $userId = (int) ($u["id"] ?? 0);
-                        break;
+                if (!\is_array($users)) {
+                    $this->log(
+                        "warning",
+                        "Unexpected user list response structure",
+                        ["type" => get_debug_type($users)],
+                    );
+                } else {
+                    foreach ($users as $u) {
+                        if (($u["username"] ?? null) === $username) {
+                            $userId = (int) ($u["id"] ?? 0);
+                            break;
+                        }
                     }
                 }
+            } else {
+                $this->log("error", "Failed to list users", [
+                    "status" => $listResp->getStatusCode(),
+                ]);
             }
 
             if ($userId) {
-                // Update password and permissions
                 $resp = $this->client->request(
                     "PATCH",
-                    self::API_BASE . "/api/v2/UserManagement",
+                    $this->baseUrl . "/api/v2/UserManagement",
                     [
                         "max_duration" => 10,
                         "headers" => $headers,
@@ -187,14 +238,22 @@ class ePics
                         ],
                     ],
                 );
-                return $resp->getStatusCode() >= 200 &&
+                $ok =
+                    $resp->getStatusCode() >= 200 &&
                     $resp->getStatusCode() < 300;
+                if (!$ok) {
+                    $this->log("error", "Failed to update existing user", [
+                        "status" => $resp->getStatusCode(),
+                        "username" => $username,
+                    ]);
+                }
+                return $ok;
             }
 
-            // Create user if not found
+            // User not found: create
             $create = $this->client->request(
                 "POST",
-                self::API_BASE . "/api/v2/UserManagement",
+                $this->baseUrl . "/api/v2/UserManagement",
                 [
                     "max_duration" => 10,
                     "headers" => $headers,
@@ -206,9 +265,27 @@ class ePics
                     ],
                 ],
             );
-            return $create->getStatusCode() >= 200 &&
+            $created =
+                $create->getStatusCode() >= 200 &&
                 $create->getStatusCode() < 300;
-        } catch (TransportExceptionInterface) {
+            if (!$created) {
+                $this->log("error", "Failed to create user", [
+                    "status" => $create->getStatusCode(),
+                    "username" => $username,
+                ]);
+            }
+            return $created;
+        } catch (TransportExceptionInterface $e) {
+            $this->log("error", "Transport exception ensuring user", [
+                "exception" => $e->getMessage(),
+                "username" => $username,
+            ]);
+            return false;
+        } catch (\Throwable $e) {
+            $this->log("error", "Unhandled exception ensuring user", [
+                "exception" => $e->getMessage(),
+                "username" => $username,
+            ]);
             return false;
         }
     }
@@ -228,8 +305,8 @@ class ePics
             "Accept" => "application/json",
             "Content-Type" => "application/json",
             "X-Requested-With" => "XMLHttpRequest",
-            "Referer" => self::API_BASE . "/",
-            "Origin" => self::API_BASE,
+            "Referer" => $this->baseUrl . "/",
+            "Origin" => $this->baseUrl,
         ];
         return array_merge($headers, $extra);
     }
@@ -240,34 +317,54 @@ class ePics
      */
     private function establishSession(): ?array
     {
-        $initResponse = $this->client->request("GET", self::API_BASE, [
-            "max_duration" => 5,
-        ]);
+        try {
+            $initResponse = $this->client->request("GET", $this->baseUrl, [
+                "max_duration" => 5,
+            ]);
 
-        $headers = $initResponse->getHeaders();
-        $sessionToken = null;
-        $xsrfToken = null;
+            $headers = $initResponse->getHeaders();
+            $sessionToken = null;
+            $xsrfToken = null;
 
-        if (isset($headers["set-cookie"])) {
-            foreach ($headers["set-cookie"] as $cookie) {
-                if (str_starts_with($cookie, "XSRF-TOKEN=")) {
-                    $parts = explode(";", $cookie);
-                    $tokenValue = substr($parts[0], 11);
-                    $xsrfToken = rawurldecode($tokenValue);
-                }
-                if (str_starts_with($cookie, "lychee_session=")) {
-                    $parts = explode(";", $cookie);
-                    $sessionValue = substr($parts[0], 15);
-                    $sessionToken = rawurldecode($sessionValue);
+            if (isset($headers["set-cookie"])) {
+                foreach ($headers["set-cookie"] as $cookie) {
+                    if (str_starts_with($cookie, "XSRF-TOKEN=")) {
+                        $parts = explode(";", $cookie);
+                        $tokenValue = substr($parts[0], 11);
+                        $xsrfToken = rawurldecode($tokenValue);
+                    }
+                    if (str_starts_with($cookie, "lychee_session=")) {
+                        $parts = explode(";", $cookie);
+                        $sessionValue = substr($parts[0], 15);
+                        $sessionToken = rawurldecode($sessionValue);
+                    }
                 }
             }
-        }
 
-        if (!$sessionToken || !$xsrfToken) {
+            if (!$sessionToken || !$xsrfToken) {
+                $this->log(
+                    "error",
+                    "Missing session or XSRF token after establishSession",
+                    [
+                        "session" => (bool) $sessionToken,
+                        "xsrf" => (bool) $xsrfToken,
+                    ],
+                );
+                return null;
+            }
+
+            return [$sessionToken, $xsrfToken];
+        } catch (TransportExceptionInterface $e) {
+            $this->log("error", "Transport exception establishing session", [
+                "exception" => $e->getMessage(),
+            ]);
+            return null;
+        } catch (\Throwable $e) {
+            $this->log("error", "Unhandled exception establishing session", [
+                "exception" => $e->getMessage(),
+            ]);
             return null;
         }
-
-        return [$sessionToken, $xsrfToken];
     }
 
     /**
@@ -281,44 +378,75 @@ class ePics
         string $sessionToken,
         string $xsrfToken,
     ): ?array {
-        $response = $this->client->request(
-            "POST",
-            self::API_BASE . "/api/v2/Auth::login",
-            [
-                "max_duration" => 10,
-                "headers" => $this->buildHeaders($sessionToken, $xsrfToken),
-                "json" => [
-                    "username" => $username,
-                    "password" => $password,
+        try {
+            $response = $this->client->request(
+                "POST",
+                $this->baseUrl . "/api/v2/Auth::login",
+                [
+                    "max_duration" => 10,
+                    "headers" => $this->buildHeaders($sessionToken, $xsrfToken),
+                    "json" => [
+                        "username" => $username,
+                        "password" => $password,
+                    ],
                 ],
-            ],
-        );
+            );
 
-        $status = $response->getStatusCode();
-        if ($status < 200 || $status >= 300) {
-            return null;
-        }
+            $status = $response->getStatusCode();
+            if ($status < 200 || $status >= 300) {
+                $this->log("error", "Auth::login failed", [
+                    "status" => $status,
+                    "username" => $username,
+                ]);
+                return null;
+            }
 
-        // Refresh cookies/tokens after login if server rotated them
-        $headers = $response->getHeaders();
-        $newSession = $sessionToken;
-        $newXsrf = $xsrfToken;
+            $headers = $response->getHeaders();
+            $newSession = $sessionToken;
+            $newXsrf = $xsrfToken;
 
-        if (isset($headers["set-cookie"])) {
-            foreach ($headers["set-cookie"] as $cookie) {
-                if (str_starts_with($cookie, "XSRF-TOKEN=")) {
-                    $parts = explode(";", $cookie);
-                    $tokenValue = substr($parts[0], 11);
-                    $newXsrf = rawurldecode($tokenValue);
-                }
-                if (str_starts_with($cookie, "lychee_session=")) {
-                    $parts = explode(";", $cookie);
-                    $sessionValue = substr($parts[0], 15);
-                    $newSession = rawurldecode($sessionValue);
+            if (isset($headers["set-cookie"])) {
+                foreach ($headers["set-cookie"] as $cookie) {
+                    if (str_starts_with($cookie, "XSRF-TOKEN=")) {
+                        $parts = explode(";", $cookie);
+                        $tokenValue = substr($parts[0], 11);
+                        $newXsrf = rawurldecode($tokenValue);
+                    }
+                    if (str_starts_with($cookie, "lychee_session=")) {
+                        $parts = explode(";", $cookie);
+                        $sessionValue = substr($parts[0], 15);
+                        $newSession = rawurldecode($sessionValue);
+                    }
                 }
             }
-        }
 
-        return [$newSession, $newXsrf];
+            return [$newSession, $newXsrf];
+        } catch (TransportExceptionInterface $e) {
+            $this->log("error", "Transport exception during login", [
+                "exception" => $e->getMessage(),
+                "username" => $username,
+            ]);
+            return null;
+        } catch (\Throwable $e) {
+            $this->log("error", "Unhandled exception during login", [
+                "exception" => $e->getMessage(),
+                "username" => $username,
+            ]);
+            return null;
+        }
+    }
+
+    private function log(
+        string $level,
+        string $message,
+        array $context = [],
+    ): void {
+        if ($this->logger) {
+            try {
+                $this->logger->log($level, "[ePics] " . $message, $context);
+            } catch (\Throwable) {
+                // Swallow logger errors silently
+            }
+        }
     }
 }

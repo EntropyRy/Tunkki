@@ -25,10 +25,17 @@ final class BackgroundEffectConfigProvider
      *
      * @var array<string, bool>
      */
-    private const array SUPPORTED_EFFECTS = [
-        'flowfields' => true,
-        'chladni'    => true,
-        'roaches'    => true,
+    private const SUPPORTED_EFFECTS = [
+        "flowfields" => true,
+        "chladni" => true,
+        "roaches" => true,
+        "grid" => true,
+        "lines" => true,
+        "rain" => true,
+        "snow" => true,
+        "stars" => true,
+        "tv" => true,
+        "vhs" => true,
     ];
 
     /**
@@ -48,10 +55,17 @@ final class BackgroundEffectConfigProvider
     public function getDefaultConfig(string $effect): array
     {
         return match ($effect) {
-            'flowfields' => $this->flowfieldsDefaults(),
-            'chladni'    => $this->chladniDefaults(),
-            'roaches'    => $this->roachesDefaults(),
-            default      => [],
+            "flowfields" => $this->flowfieldsDefaults(),
+            "chladni" => $this->chladniDefaults(),
+            "roaches" => $this->roachesDefaults(),
+            "grid" => $this->gridDefaults(),
+            "lines" => $this->linesDefaults(),
+            "rain" => $this->rainDefaults(),
+            "snow" => $this->snowDefaults(),
+            "stars" => $this->starsDefaults(),
+            "tv" => $this->tvDefaults(),
+            "vhs" => $this->vhsDefaults(),
+            default => [],
         };
     }
 
@@ -74,8 +88,8 @@ final class BackgroundEffectConfigProvider
     public function getPresets(string $effect): array
     {
         return match ($effect) {
-            'flowfields' => $this->flowfieldsPresets(),
-            default      => [],
+            "flowfields" => $this->flowfieldsPresets(),
+            default => [],
         };
     }
 
@@ -129,7 +143,7 @@ final class BackgroundEffectConfigProvider
             return null;
         }
         $trimmed = trim($json);
-        if ($trimmed === '') {
+        if ($trimmed === "") {
             return null;
         }
 
@@ -145,7 +159,7 @@ final class BackgroundEffectConfigProvider
 
         if (!is_array($decoded)) {
             if ($throwOnError) {
-                throw new \JsonException('JSON must decode to an object');
+                throw new \JsonException("JSON must decode to an object");
             }
             return null;
         }
@@ -161,11 +175,12 @@ final class BackgroundEffectConfigProvider
      */
     public function toJson(array $config, bool $pretty = false): string
     {
-        $flags = \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE | \JSON_PRESERVE_ZERO_FRACTION;
+        $flags =
+            \JSON_UNESCAPED_SLASHES |
+            \JSON_UNESCAPED_UNICODE |
+            \JSON_PRESERVE_ZERO_FRACTION;
 
-        $normalized = $pretty
-            ? $this->ksortDeep($config)
-            : $config;
+        $normalized = $pretty ? $this->ksortDeep($config) : $config;
 
         if ($pretty) {
             $flags |= \JSON_PRETTY_PRINT;
@@ -180,10 +195,15 @@ final class BackgroundEffectConfigProvider
      *
      * If the input cannot be parsed, returns the defaults for the effect as JSON.
      */
-    public function normalizeJson(?string $json, string $effect, bool $mergeWithDefaults = true): string
-    {
+    public function normalizeJson(
+        ?string $json,
+        string $effect,
+        bool $mergeWithDefaults = true,
+    ): string {
         $parsed = $this->parseJson($json) ?? [];
-        $normalized = $mergeWithDefaults ? $this->mergeWithDefaults($effect, $parsed) : $parsed;
+        $normalized = $mergeWithDefaults
+            ? $this->mergeWithDefaults($effect, $parsed)
+            : $parsed;
 
         return $this->toJson($normalized, true);
     }
@@ -210,30 +230,30 @@ final class BackgroundEffectConfigProvider
     private function flowfieldsDefaults(): array
     {
         return [
-            'particleCount'        => 1500,
-            'particleBaseSpeed'    => 1.0,
-            'particleSpeedVariation' => 0.5,
-            'particleSize'         => 1.0,
-            'particleColor'        => ['r' => 153, 'g' => 28, 'b' => 42],
-            'fadeAmount'           => 0.03,
-            'flowFieldIntensity'   => 0.5,
-            'noiseScale'           => 0.003,
-            'noiseSpeed'           => 0.0005,
-            'particleLifespan'     => 100,
-            'cursorInfluence'      => 150,
-            'cursorRepel'          => false,
-            'colorMode'            => 'complement', // 'fixed' | 'age' | 'position' | 'flow' | 'complement' | 'analogous'
-            'enableTrails'         => true,
-            'trailLength'          => 0.98,
-            'trailWidth'           => 1.5,
-            'hueShiftRange'        => 60,
-            'showControls'         => true,
+            "particleCount" => 1500,
+            "particleBaseSpeed" => 1.0,
+            "particleSpeedVariation" => 0.5,
+            "particleSize" => 1.0,
+            "particleColor" => ["r" => 153, "g" => 28, "b" => 42],
+            "fadeAmount" => 0.03,
+            "flowFieldIntensity" => 0.5,
+            "noiseScale" => 0.003,
+            "noiseSpeed" => 0.0005,
+            "particleLifespan" => 100,
+            "cursorInfluence" => 150,
+            "cursorRepel" => false,
+            "colorMode" => "complement", // 'fixed' | 'age' | 'position' | 'flow' | 'complement' | 'analogous'
+            "enableTrails" => true,
+            "trailLength" => 0.98,
+            "trailWidth" => 1.5,
+            "hueShiftRange" => 60,
+            "showControls" => true,
         ];
     }
 
     /**
      * A small set of curated Flowfields presets.
-     * "Default" mirrors the defaults; "Bunka" is tuned slightly differently.
+     * "Default" mirrors the defaults.
      *
      * @return array<string, array<string, mixed>>
      */
@@ -241,30 +261,8 @@ final class BackgroundEffectConfigProvider
     {
         $defaults = $this->flowfieldsDefaults();
 
-        $bunka = $this->arrayMergeDeep($defaults, [
-            // Legacy bunka.js tuning
-            'particleCount'          => 1100,
-            'particleBaseSpeed'      => 0.3,
-            'particleSpeedVariation' => 1.5,
-            'particleSize'           => 1.0,
-            'particleColor'          => ['r' => 153, 'g' => 28, 'b' => 42],
-            'fadeAmount'             => 0.001,
-            'flowFieldIntensity'     => 0.8,
-            'noiseScale'             => 0.003,
-            'noiseSpeed'             => 0.0001,
-            'particleLifespan'       => 800,
-            'cursorInfluence'        => 250,
-            'cursorRepel'            => false,
-            'colorMode'              => 'complement',
-            'enableTrails'           => true,
-            'trailLength'            => 0.98,
-            'trailWidth'             => 3.0,
-            'hueShiftRange'          => 120,
-        ]);
-
         return [
-            'Default' => $defaults,
-            'Bunka'   => $bunka,
+            "Default" => $defaults,
         ];
     }
 
@@ -278,19 +276,19 @@ final class BackgroundEffectConfigProvider
     {
         return [
             // Mode: "time" changes params with time of day; "static" renders fixed params below.
-            'mode'            => 'time', // 'time' | 'static'
+            "mode" => "time", // 'time' | 'static'
             // Static parameters (used when mode === 'static')
-            'a'               => 1.0,
-            'b'               => 1.0,
-            'n'               => 3.0,
-            'm'               => 3.0,
+            "a" => 1.0,
+            "b" => 1.0,
+            "n" => 3.0,
+            "m" => 3.0,
             // Render / update behavior
-            'updateIntervalMs'=> 100,   // render cadence; higher reduces CPU
-            'timeScale'       => 1.0,   // multiplier for time progression in time-mode
-            'resolutionScale' => 1.0,   // 0.5 .. 1.0 to trade detail for performance
+            "updateIntervalMs" => 100, // render cadence; higher reduces CPU
+            "timeScale" => 1.0, // multiplier for time progression in time-mode
+            "resolutionScale" => 1.0, // 0.5 .. 1.0 to trade detail for performance
             // Color & blending
-            'alpha'           => 1.0,   // 0..1 additional opacity multiplier
-            'tint'            => '#ffffff', // optional post-tint (currently informational for future JS)
+            "alpha" => 1.0, // 0..1 additional opacity multiplier
+            "tint" => "#ffffff", // optional post-tint (currently informational for future JS)
         ];
     }
 
@@ -302,11 +300,124 @@ final class BackgroundEffectConfigProvider
     private function roachesDefaults(): array
     {
         return [
-            'count'      => 6,           // 1..20
-            'baseSpeed'  => 55,          // px/s
-            'avoidMouse' => true,
-            'edgeMargin' => 40,          // px
-            'bodyColor'  => '#3b2f2f',   // hex color
+            "count" => 6, // 1..20
+            "baseSpeed" => 55, // px/s
+            "avoidMouse" => true,
+            "edgeMargin" => 40, // px
+            "bodyColor" => "#3b2f2f", // hex color
+        ];
+    }
+
+    /**
+     * Defaults for Grid effect. Current JS is not yet parameterized; these keys are future-proof.
+     *
+     * @return array<string, mixed>
+     */
+    private function gridDefaults(): array
+    {
+        return [
+            "gridSize" => 40, // coarse control over grid resolution
+            "colorCycle" => 0.5, // hue cycle speed
+            "spring" => [
+                "p1" => 0.0005,
+                "p2" => 0.01,
+                "n" => 0.98,
+                "nVel" => 0.02,
+            ],
+            "interactive" => true,
+        ];
+    }
+
+    /**
+     * Defaults for Wavy Lines effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function linesDefaults(): array
+    {
+        return [
+            "amplitude" => 50,
+            "frequency" => 0.005,
+            "phase" => 0,
+            "lineWidth" => 1,
+            "color" => "black",
+            "speed" => 0.1,
+        ];
+    }
+
+    /**
+     * Defaults for Rain effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function rainDefaults(): array
+    {
+        return [
+            "raindropsCount" => 150,
+            "speedMin" => 1,
+            "speedMax" => 8,
+            "depthSort" => true, // keep painter's order
+        ];
+    }
+
+    /**
+     * Defaults for Snow effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function snowDefaults(): array
+    {
+        return [
+            "amount" => 500,
+            "size" => 2,
+            "speed" => 5,
+            "color" => "rgba(230, 230, 230, 1)",
+        ];
+    }
+
+    /**
+     * Defaults for Stars effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function starsDefaults(): array
+    {
+        return [
+            "starCount" => 60,
+            "meteoriteCount" => 3,
+            "starSpeedMin" => 0.1,
+            "starSpeedMax" => 1.1,
+            "meteoriteSpeedMin" => 2.0,
+            "meteoriteSpeedMax" => 5.0,
+        ];
+    }
+
+    /**
+     * Defaults for TV static effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function tvDefaults(): array
+    {
+        return [
+            "scaleFactor" => 2.5,
+            "fps" => 60,
+            "sampleCount" => 10,
+        ];
+    }
+
+    /**
+     * Defaults for VHS static/scanline effect.
+     *
+     * @return array<string, mixed>
+     */
+    private function vhsDefaults(): array
+    {
+        return [
+            "scaleFactor" => 2.5,
+            "fps" => 50,
+            "sampleCount" => 10,
+            "scanDurationSec" => 15, // seconds for scanline to travel top->bottom
         ];
     }
 
@@ -325,9 +436,12 @@ final class BackgroundEffectConfigProvider
 
         foreach ($override as $key => $value) {
             if (is_array($value) && array_is_list($value) === false) {
-                $result[$key] = isset($result[$key]) && is_array($result[$key]) && array_is_list($result[$key]) === false
-                    ? $this->arrayMergeDeep($result[$key], $value)
-                    : $value;
+                $result[$key] =
+                    isset($result[$key]) &&
+                    is_array($result[$key]) &&
+                    array_is_list($result[$key]) === false
+                        ? $this->arrayMergeDeep($result[$key], $value)
+                        : $value;
             } else {
                 $result[$key] = $value;
             }
