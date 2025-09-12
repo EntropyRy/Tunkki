@@ -17,20 +17,6 @@ var w = window.innerWidth,
 canvas.setAttribute("width", w);
 canvas.setAttribute("height", h);
 
-// Read JSON config overrides
-const defaults = {
-    amount: 500,
-    size: 2,
-    speed: 5,
-    color: "rgba(230, 230, 230,1)",
-};
-const cfg = readEffectConfigById("snow", defaults);
-// Apply to variables defined above
-amountOfSnow = Number(cfg.amount ?? defaults.amount);
-size = Number(cfg.size ?? defaults.size);
-speed = Number(cfg.speed ?? defaults.speed);
-snowColor = String(cfg.color ?? defaults.color);
-
 function init() {
     time = 0;
     count = 0;

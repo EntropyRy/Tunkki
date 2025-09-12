@@ -30,6 +30,7 @@ use Symfony\Component\Form\FormEvents;
 use App\Effect\BackgroundEffectConfigProvider;
 use App\Form\UrlsType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
+
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -369,7 +370,7 @@ final class EventAdmin extends AbstractAdmin
                     "choices" => $PicChoices,
                 ])
                 ->add("imgFilterColor", ColorType::class)
-                ->add("imgFilterBlendMode", ChoiceType::class, [
+                ->add("imgFilterBlendMode", ChoiceFieldMaskType::class, [
                     "required" => false,
                     "help" =>
                         "Color does not work if you dont choose here how it should work",
@@ -379,6 +380,13 @@ final class EventAdmin extends AbstractAdmin
                         "exclusion" => "mix-blend-mode: exclusion",
                         "difference" => "mix-blend-mode: difference",
                         "screen" => "mix-blend-mode: screen",
+                    ],
+                    "map" => [
+                        "mix-blend-mode: luminosity" => ["imgFilterColor"],
+                        "mix-blend-mode: multiply" => ["imgFilterColor"],
+                        "mix-blend-mode: exclusion" => ["imgFilterColor"],
+                        "mix-blend-mode: difference" => ["imgFilterColor"],
+                        "mix-blend-mode: screen" => ["imgFilterColor"],
                     ],
                 ]);
             if ($event->getexternalUrl() == false) {
@@ -410,25 +418,16 @@ final class EventAdmin extends AbstractAdmin
                         ],
 
                         "map" => [
-                            "flowfields" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
-                            "chladni" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
-                            "roaches" => [
-                                "backgroundEffectConfig",
-                                "configTool",
-                            ],
-                            "grid" => ["backgroundEffectConfig", "configTool"],
-                            "lines" => ["backgroundEffectConfig", "configTool"],
-                            "rain" => ["backgroundEffectConfig", "configTool"],
-                            "snow" => ["backgroundEffectConfig", "configTool"],
-                            "stars" => ["backgroundEffectConfig", "configTool"],
-                            "tv" => ["backgroundEffectConfig", "configTool"],
-                            "vhs" => ["backgroundEffectConfig", "configTool"],
+                            "flowfields" => ["backgroundEffectConfig"],
+                            "chladni" => ["backgroundEffectConfig"],
+                            "roaches" => ["backgroundEffectConfig"],
+                            "grid" => ["backgroundEffectConfig"],
+                            "lines" => ["backgroundEffectConfig"],
+                            "rain" => ["backgroundEffectConfig"],
+                            "snow" => ["backgroundEffectConfig"],
+                            "stars" => ["backgroundEffectConfig"],
+                            "tv" => ["backgroundEffectConfig"],
+                            "vhs" => ["backgroundEffectConfig"],
                         ],
                     ])
                     ->add("backgroundEffectConfig", TextareaType::class, [
@@ -440,14 +439,7 @@ final class EventAdmin extends AbstractAdmin
                             '" target="_blank" rel="noopener">Flowfields dashboard</a>.',
                         "help_html" => true,
                     ])
-                    ->add("configTool", ChoiceType::class, [
-                        "required" => false,
-                        "mapped" => false,
-                        "placeholder" => "— Choose action —",
-                        "choices" => [
-                            "Load defaults" => "load_defaults",
-                        ],
-                    ])
+
                     ->add("backgroundEffectPosition", ChoiceType::class, [
                         "required" => true,
                         "choices" => [
@@ -695,38 +687,12 @@ final class EventAdmin extends AbstractAdmin
 
                 $newEffect = $submitted["backgroundEffect"] ?? null;
 
-                // Detect button clicks (submit buttons appear in payload only when clicked)
-                $tool = $submitted["configTool"] ?? null;
-                $loadDefaultsClicked = $tool === "load_defaults";
-
                 // If chosen effect doesn't support config, drop any submitted config
                 if (!$supports($newEffect)) {
                     $submitted["backgroundEffectConfig"] = null;
                 } else {
-                    // Handle "Load defaults" button
-                    if ($loadDefaultsClicked) {
-                        // Merge existing stored config with effect defaults so custom keys (e.g. showControls)
-                        // are preserved instead of being replaced wholesale.
-                        $existing = [];
-                        if ($original instanceof \App\Entity\Event) {
-                            $existing =
-                                $this->effectConfig->parseJson(
-                                    $original->getBackgroundEffectConfig() ??
-                                        null,
-                                ) ?? [];
-                        }
-                        $merged = $this->effectConfig->mergeWithDefaults(
-                            (string) $newEffect,
-                            $existing,
-                        );
-                        $submitted[
-                            "backgroundEffectConfig"
-                        ] = $this->effectConfig->toJson($merged, true);
-                    }
-
                     // If user entered JSON manually, normalize and pretty print to ensure consistent storage
                     if (
-                        !$loadDefaultsClicked &&
                         array_key_exists(
                             "backgroundEffectConfig",
                             $submitted,
@@ -856,6 +822,7 @@ final class EventAdmin extends AbstractAdmin
         protected RequestStack $rs,
         protected BackgroundEffectConfigProvider $effectConfig,
     ) {}
+
     #[\Override]
     public function preValidate(object $object): void
     {

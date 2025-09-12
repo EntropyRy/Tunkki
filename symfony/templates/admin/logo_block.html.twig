@@ -1,4 +1,8 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ importmap('admin_effects') }}
+{% endblock %}
 {%- block logo %}
     <a class="logo w-100"
        href="{{ path('dashboard', {_locale: app.request.locale}) }}">

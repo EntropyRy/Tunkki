@@ -6,27 +6,6 @@ const context = canvas.getContext("2d");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// Read JSON overrides
-const defaults = {
-    starCount: 60,
-    meteoriteCount: 3,
-    starSpeedMin: 0.1,
-    starSpeedMax: 1.1,
-    meteoriteSpeedMin: 2.0,
-    meteoriteSpeedMax: 5.0,
-};
-const cfg = readEffectConfigById("stars", defaults);
-const STAR_COUNT = Number(cfg.starCount ?? defaults.starCount);
-const METEORITE_COUNT = Number(cfg.meteoriteCount ?? defaults.meteoriteCount);
-const STAR_SPEED_MIN = Number(cfg.starSpeedMin ?? defaults.starSpeedMin);
-const STAR_SPEED_MAX = Number(cfg.starSpeedMax ?? defaults.starSpeedMax);
-const METEORITE_SPEED_MIN = Number(
-    cfg.meteoriteSpeedMin ?? defaults.meteoriteSpeedMin,
-);
-const METEORITE_SPEED_MAX = Number(
-    cfg.meteoriteSpeedMax ?? defaults.meteoriteSpeedMax,
-);
-
 // Star class
 class Star {
     constructor(x, y, size, speed) {

@@ -1,120 +1,130 @@
 sonata_admin:
-  title: Tunkki
-  security:
-    handler: sonata.admin.security.handler.role
-  title_logo: /images/header-logo-text.svg
-  global_search:
-    empty_boxes: hide
-  persist_filters: true
-  options:
-    use_select2: true
-    use_stickyforms: false
-    html5_validate: true
-    pager_links: 5
-    lock_protection: true
-    logo_content: icon
-  templates:
-    user_block: "admin/user_block.html.twig"
-    layout: "admin/logo_block.html.twig"
-  dashboard:
-    blocks:
-      - { position: right, type: entropy_tunkki.block.bookings }
-      - { position: right, type: entropy.block.brokenitems }
-      - { position: left, type: sonata.admin.block.admin_list }
-      - {
-          position: top,
-          type: sonata.admin.block.stats,
-          settings: { code: entropy_tunkki.admin.member, text: Members },
-        }
-      - {
-          position: top,
-          type: sonata.admin.block.stats,
-          settings:
-            { code: entropy.admin.event, text: Events, color: bg-green },
-        }
-      - {
-          position: top,
-          type: sonata.admin.block.stats,
-          settings:
-            {
-              code: entropy_tunkki.admin.booking,
-              text: Bookings,
-              color: bg-yellow,
-            },
-        }
-    groups:
-      sonata.admin.group.inventory:
-        label: Inventory
-        icon: '<i class="fa fa-archive"></i>'
-        items:
-          - entropy_tunkki.admin.item
-          - entropy_tunkki.admin.accessory_choices
-      sonata.admin.group.rentals:
-        label: Rentals
-        icon: '<i class="fa fa-sign-out"></i>'
-        items:
-          - entropy_tunkki.admin.booking
-          - entropy.admin.reward
-      sonata.admin.group.events:
-        label: Events
-        icon: '<i class="fa fa-sitemap"></i>'
-        items:
-          - entropy.admin.event
-          - entropy.admin.rsvp
-          - admin.ticket
-      sonata.admin.group.content:
-        label: Content
-        icon: '<i class="fa fa-sitemap"></i>'
-        items:
-          - sonata.page.admin.page
-          - entropy.admin.menu
-          - sonata.media.admin.media
-          - sonata.media.admin.gallery
-      sonata.admin.group.shop:
-        label: Shop
-        icon: '<i class="fa fa-archive"></i>'
-        items:
-          - admin.product
-          - admin.checkout
-        roles: [SONATA_SUPER_ADMIN, MEMBERS]
-      sonata.admin.group.members:
-        label: Members
-        icon: '<i class="fa fa-users"></i>'
-        items:
-          - entropy_tunkki.admin.member
-          - admin.door_log
-        roles: [SONATA_SUPER_ADMIN, MEMBERS]
-      sonata.admin.group.config:
-        label: Configuration
-        icon: '<i class="fa fa-cogs"></i>'
-        items:
-          - entropy_tunkki.admin.package
-          - entropy_tunkki.admin.renter
-          - entropy_tunkki.admin.who_can_rent_choice
-          - entropy_tunkki.admin.billable_event
-          - entropy_tunkki.admin.file
-          - entropy.admin.contract
-          - sonata.classification.admin.category
-          - entropy.admin.nakki_definition
-          - entropy.admin.nakki_booking
-          #            sonata.admin.group.classification:
-          #                label:           Classification
-          #                label_catalogue: SonataClassificationBundle
-          #                items:
-          #                    - sonata.classification.admin.tag
-          #                    - sonata.classification.admin.context
-          #                    - sonata.classification.admin.collection
-          #                    - sonata.classification.admin.category
-          #                roles: [SONATA_SUPER_ADMIN]
-          #
-      sonata.admin.group.administration:
-        label: Administration
-        items:
-          #- entropy_tunkki.admin.statusevent
-          - admin.email
-          - sonata.page.admin.site
-          - entropy.admin.access_groups
-        roles: [SONATA_SUPER_ADMIN]
-  assets:
-    extra_stylesheets:
-      - css/admin.css
+    title: Tunkki
+    security:
+        handler: sonata.admin.security.handler.role
+    title_logo: /images/header-logo-text.svg
+    global_search:
+        empty_boxes: hide
+    persist_filters: true
+    options:
+        use_select2: true
+        use_stickyforms: false
+        html5_validate: true
+        pager_links: 5
+        lock_protection: true
+        logo_content: icon
+    templates:
+        user_block: "admin/user_block.html.twig"
+        layout: "admin/logo_block.html.twig"
+    dashboard:
+        blocks:
+            - { position: right, type: entropy_tunkki.block.bookings }
+            - { position: right, type: entropy.block.brokenitems }
+            - { position: left, type: sonata.admin.block.admin_list }
+            - {
+                  position: top,
+                  type: sonata.admin.block.stats,
+                  settings:
+                      { code: entropy_tunkki.admin.member, text: Members },
+              }
+            - {
+                  position: top,
+                  type: sonata.admin.block.stats,
+                  settings:
+                      {
+                          code: entropy.admin.event,
+                          text: Events,
+                          color: bg-green,
+                      },
+              }
+            - {
+                  position: top,
+                  type: sonata.admin.block.stats,
+                  settings:
+                      {
+                          code: entropy_tunkki.admin.booking,
+                          text: Bookings,
+                          color: bg-yellow,
+                      },
+              }
+        groups:
+            sonata.admin.group.inventory:
+                label: Inventory
+                icon: '<i class="fa fa-archive"></i>'
+                items:
+                    - entropy_tunkki.admin.item
+                    - entropy_tunkki.admin.accessory_choices
+            sonata.admin.group.rentals:
+                label: Rentals
+                icon: '<i class="fa fa-sign-out"></i>'
+                items:
+                    - entropy_tunkki.admin.booking
+                    - entropy.admin.reward
+            sonata.admin.group.events:
+                label: Events
+                icon: '<i class="fa fa-sitemap"></i>'
+                items:
+                    - entropy.admin.event
+                    - entropy.admin.rsvp
+                    - admin.ticket
+            sonata.admin.group.content:
+                label: Content
+                icon: '<i class="fa fa-sitemap"></i>'
+                items:
+                    - sonata.page.admin.page
+                    - entropy.admin.menu
+                    - sonata.media.admin.media
+                    - sonata.media.admin.gallery
+            sonata.admin.group.shop:
+                label: Shop
+                icon: '<i class="fa fa-archive"></i>'
+                items:
+                    - admin.product
+                    - admin.checkout
+                roles: [SONATA_SUPER_ADMIN, MEMBERS]
+            sonata.admin.group.members:
+                label: Members
+                icon: '<i class="fa fa-users"></i>'
+                items:
+                    - entropy_tunkki.admin.member
+                    - admin.door_log
+                roles: [SONATA_SUPER_ADMIN, MEMBERS]
+            sonata.admin.group.config:
+                label: Configuration
+                icon: '<i class="fa fa-cogs"></i>'
+                items:
+                    - entropy_tunkki.admin.package
+                    - entropy_tunkki.admin.renter
+                    - entropy_tunkki.admin.who_can_rent_choice
+                    - entropy_tunkki.admin.billable_event
+                    - entropy_tunkki.admin.file
+                    - entropy.admin.contract
+                    - sonata.classification.admin.category
+                    - entropy.admin.nakki_definition
+                    - entropy.admin.nakki_booking
+                    #            sonata.admin.group.classification:
+                    #                label:           Classification
+                    #                label_catalogue: SonataClassificationBundle
+                    #                items:
+                    #                    - sonata.classification.admin.tag
+                    #                    - sonata.classification.admin.context
+                    #                    - sonata.classification.admin.collection
+                    #                    - sonata.classification.admin.category
+                    #                roles: [SONATA_SUPER_ADMIN]
+                    #
+            sonata.admin.group.administration:
+                label: Administration
+                items:
+                    #- entropy_tunkki.admin.statusevent
+                    - admin.email
+                    - sonata.page.admin.site
+                    - entropy.admin.access_groups
+                roles: [SONATA_SUPER_ADMIN]
+    assets:
+        extra_stylesheets:
+            - css/admin.css
+        extra_javascripts:
+            - {
+                  "path": "./assets/js/admin_effects.js",
+                  "package_name": "admin_effects",
+              }
