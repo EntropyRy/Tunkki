@@ -5,31 +5,49 @@ namespace App\Controller;
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route(path: '/login', name: 'app_login')]
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
+    #[Route(path: "/login", name: "app_login")]
+    public function login(
+        Request $request,
+        AuthenticationUtils $authenticationUtils,
+    ): Response {
         $user = $this->getUser();
         if ($user != null) {
             assert($user instanceof User);
-            return $this->redirectToRoute('dashboard.' . $user->getMember()->getLocale());
+            return $this->redirectToRoute(
+                "dashboard." . $user->getMember()->getLocale(),
+            );
         }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
+        // suppress generic invalid credentials if we came from Mattermost failure
+        if (
+            $request->getSession() !== null &&
+            $request->getSession()->has("auth.mm.failure")
+        ) {
+            $error = null;
+            $request->getSession()->remove("auth.mm.failure");
+        }
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
-        return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
+        return $this->render("security/login.html.twig", [
+            "last_username" => $lastUsername,
+            "error" => $error,
+        ]);
     }
 
-    #[Route(path: '/logout', name: 'app_logout')]
+    #[Route(path: "/logout", name: "app_logout")]
     public function logout(): never
     {
-        throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+        throw new \LogicException(
+            "This method can be blank - it will be intercepted by the logout key on your firewall.",
+        );
     }
 }

@@ -20,7 +20,8 @@ use App\Entity\Member;
 use App\Entity\User;
 use Symfony\Component\HttpFoundation\Session\Session;
 
-class MattermostAuthenticator extends OAuth2Authenticator implements AuthenticationEntryPointInterface
+class MattermostAuthenticator extends OAuth2Authenticator implements
+    AuthenticationEntryPointInterface
 {
     use TargetPathTrait;
 
@@ -28,52 +29,72 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         private readonly ClientRegistry $clientRegistry,
         private readonly EntityManagerInterface $em,
         private readonly UrlGeneratorInterface $urlG,
-    ) {
-    }
+    ) {}
     #[\Override]
     public function supports(Request $request): ?bool
     {
         // continue ONLY if the current ROUTE matches the check ROUTE
-        return $request->attributes->get('_route') === '_entropy_mattermost_check';
+        return $request->attributes->get("_route") ===
+            "_entropy_mattermost_check";
     }
     #[\Override]
     public function authenticate(Request $request): Passport
     {
-        $client = $this->clientRegistry->getClient('mattermost');
+        $client = $this->clientRegistry->getClient("mattermost");
         $accessToken = $this->fetchAccessToken($client);
         $session = $request->getSession();
         assert($session instanceof Session);
         $fb = $session->getFlashBag();
 
         return new SelfValidatingPassport(
-            new UserBadge($accessToken->getToken(), function () use ($accessToken, $client, $fb) {
+            new UserBadge($accessToken->getToken(), function () use (
+                $accessToken,
+                $client,
+                $fb,
+            ) {
                 $mmUser = $client->fetchUserFromToken($accessToken);
                 $mmUserA = $mmUser->toArray();
-                $email = $mmUserA['email'];
-                $username = $mmUserA['username'];
-                $id = $mmUserA['id'];
+                $email = $mmUserA["email"];
+                $username = $mmUserA["username"];
+                $id = $mmUserA["id"];
 
                 // 1) have they logged in with Mattermost before? Easy!
-                $existingUser = $this->em->getRepository(User::class)->findOneBy(['MattermostId' => $id]);
+                $existingUser = $this->em
+                    ->getRepository(User::class)
+                    ->findOneBy(["MattermostId" => $id]);
 
                 if ($existingUser !== null) {
-                    if (strtolower((string) $existingUser->getMember()->getUsername()) != $username) {
+                    if (
+                        strtolower(
+                            (string) $existingUser->getMember()->getUsername(),
+                        ) != $username
+                    ) {
                         $existingUser->getMember()->setUsername($username);
                         $this->em->persist($existingUser);
                         $this->em->flush();
-                        $fb->add('success', 'Your username was updated to your Mattermost username');
+                        $fb->add(
+                            "success",
+                            "Your username was updated to your Mattermost username",
+                        );
                     }
                     return $existingUser;
                 }
 
                 // 2) do we have a matching user by email?
-                $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
+                $member = $this->em
+                    ->getRepository(Member::class)
+                    ->findOneBy(["email" => $email]);
                 if ($member !== null) {
-                    if (strtolower((string) $member->getUsername()) != $username) {
+                    if (
+                        strtolower((string) $member->getUsername()) != $username
+                    ) {
                         $member->setUsername($username);
                         $this->em->persist($member);
                         $this->em->flush();
-                        $fb->add('success', 'Your username was updated to your Mattermost username');
+                        $fb->add(
+                            "success",
+                            "Your username was updated to your Mattermost username",
+                        );
                     }
                     $user = $member->getUser();
                     $user->setMattermostId($id);
@@ -81,32 +102,51 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     $this->em->flush();
                     return $user;
                 }
-                $fb->add('warning', 'user not found');
-            })
+                // No matching user found; fail authentication and show a translated flash
+                throw new AuthenticationException("login.join_us_plain");
+            }),
         );
     }
     #[\Override]
-    public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
-    {
-        $message = strtr($exception->getMessageKey(), $exception->getMessageData());
-
-        return new Response($message, Response::HTTP_FORBIDDEN);
+    public function onAuthenticationFailure(
+        Request $request,
+        AuthenticationException $exception,
+    ): ?Response {
+        $session = $request->getSession();
+        if ($session instanceof Session) {
+            $session->getFlashBag()->add("warning", "login.join_us_plain");
+            $session->remove("_security.last_error");
+            $session->set("auth.mm.failure", true);
+        }
+        return new RedirectResponse($this->urlG->generate("app_login"));
     }
     #[\Override]
-    public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
-        if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
+    public function onAuthenticationSuccess(
+        Request $request,
+        TokenInterface $token,
+        string $firewallName,
+    ): ?Response {
+        if (
+            $targetPath = $this->getTargetPath(
+                $request->getSession(),
+                $firewallName,
+            )
+        ) {
             return new RedirectResponse($targetPath);
         }
-        return new RedirectResponse($this->urlG->generate('dashboard.' . $request->getLocale()));
+        return new RedirectResponse(
+            $this->urlG->generate("dashboard." . $request->getLocale()),
+        );
     }
 
     #[\Override]
-    public function start(Request $request, ?AuthenticationException $authException = null): RedirectResponse
-    {
+    public function start(
+        Request $request,
+        ?AuthenticationException $authException = null,
+    ): RedirectResponse {
         return new RedirectResponse(
-            '/login/', // might be the site, where users choose their oauth provider
-            Response::HTTP_TEMPORARY_REDIRECT
+            "/login/", // might be the site, where users choose their oauth provider
+            Response::HTTP_TEMPORARY_REDIRECT,
         );
     }
 }

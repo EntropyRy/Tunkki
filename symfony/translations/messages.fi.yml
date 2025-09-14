@@ -460,6 +460,7 @@ The link in your email is expired. Please try to reset your password again.:
   linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 login:
   join_us: Jotta voit kirjautua sinun täytyy olla jäsen, joten <a href="/liity">liity!</a>
+  join_us_plain: Jotta voit kirjautua sinun täytyy olla jäsen. Liity ensin.
 dark: Tumma
 bright: Kirkas
 light: Kirkas
