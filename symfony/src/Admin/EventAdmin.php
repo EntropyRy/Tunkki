@@ -690,24 +690,20 @@ final class EventAdmin extends AbstractAdmin
                 // If chosen effect doesn't support config, drop any submitted config
                 if (!$supports($newEffect)) {
                     $submitted["backgroundEffectConfig"] = null;
-                } else {
+                } elseif (array_key_exists(
+                    "backgroundEffectConfig",
+                    $submitted,
+                ) &&
+                trim((string) $submitted["backgroundEffectConfig"]) !==
+                    "") {
                     // If user entered JSON manually, normalize and pretty print to ensure consistent storage
-                    if (
-                        array_key_exists(
-                            "backgroundEffectConfig",
-                            $submitted,
-                        ) &&
-                        trim((string) $submitted["backgroundEffectConfig"]) !==
-                            ""
-                    ) {
-                        $submitted[
-                            "backgroundEffectConfig"
-                        ] = $this->effectConfig->normalizeJson(
-                            (string) $submitted["backgroundEffectConfig"],
-                            (string) $newEffect,
-                            true,
-                        );
-                    }
+                    $submitted[
+                        "backgroundEffectConfig"
+                    ] = $this->effectConfig->normalizeJson(
+                        (string) $submitted["backgroundEffectConfig"],
+                        (string) $newEffect,
+                        true,
+                    );
                 }
 
                 // If effect changed, and no explicit config was provided, auto-load defaults for configurable effects

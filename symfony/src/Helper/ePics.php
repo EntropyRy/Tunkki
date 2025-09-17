@@ -20,9 +20,9 @@ class ePics
     /**
      * Default base URL (used if no env override).
      */
-    private const API_BASE = "https://epics.entropy.fi";
+    private const string API_BASE = "https://epics.entropy.fi";
 
-    private string $baseUrl;
+    private readonly string $baseUrl;
 
     public function __construct(
         private readonly HttpClientInterface $client,
@@ -441,7 +441,7 @@ class ePics
         string $message,
         array $context = [],
     ): void {
-        if ($this->logger) {
+        if ($this->logger instanceof LoggerInterface) {
             try {
                 $this->logger->log($level, "[ePics] " . $message, $context);
             } catch (\Throwable) {

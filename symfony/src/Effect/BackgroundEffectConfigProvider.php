@@ -308,14 +308,127 @@ final class BackgroundEffectConfigProvider
         ];
     }
 
+    /**
+     * Defaults for Grid effect (mirrors assets/js/admin_effects.js gridDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function gridDefaults(): array
+    {
+        return [
+            "gridSize" => 40,
+            "colorCycle" => 0.5,
+            "spring" => [
+                "p1" => 0.0005,
+                "p2" => 0.01,
+                "n" => 0.98,
+                "nVel" => 0.02,
+            ],
+            "interactive" => true,
+        ];
+    }
+
+    /**
+     * Defaults for Lines effect (mirrors assets/js/admin_effects.js linesDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function linesDefaults(): array
+    {
+        return [
+            "amplitude" => 50,
+            "frequency" => 0.005,
+            "phase" => 0,
+            "lineWidth" => 1,
+            "color" => "black",
+            "speed" => 0.1,
+        ];
+    }
+
+    /**
+     * Defaults for Rain effect (mirrors assets/js/admin_effects.js rainDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function rainDefaults(): array
+    {
+        return [
+            "raindropsCount" => 150,
+            "speedMin" => 1,
+            "speedMax" => 8,
+            "depthSort" => true,
+        ];
+    }
+
+    /**
+     * Defaults for Snow effect (mirrors assets/js/admin_effects.js snowDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function snowDefaults(): array
+    {
+        return [
+            "amount" => 500,
+            "size" => 2,
+            "speed" => 5,
+            "color" => "rgba(230, 230, 230, 1)",
+        ];
+    }
+
+    /**
+     * Defaults for Stars effect (mirrors assets/js/admin_effects.js starsDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function starsDefaults(): array
+    {
+        return [
+            "starCount" => 60,
+            "meteoriteCount" => 3,
+            "starSpeedMin" => 0.1,
+            "starSpeedMax" => 1.1,
+            "meteoriteSpeedMin" => 2.0,
+            "meteoriteSpeedMax" => 5.0,
+        ];
+    }
+
+    /**
+     * Defaults for TV effect (mirrors assets/js/admin_effects.js tvDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function tvDefaults(): array
+    {
+        return [
+            "scaleFactor" => 2.5,
+            "fps" => 60,
+            "sampleCount" => 10,
+        ];
+    }
+
+    /**
+     * Defaults for VHS effect (mirrors assets/js/admin_effects.js vhsDefaults()).
+     *
+     * @return array<string, mixed>
+     */
+    private function vhsDefaults(): array
+    {
+        return [
+            "scaleFactor" => 2.5,
+            "fps" => 50,
+            "sampleCount" => 10,
+            "scanDurationSec" => 15,
+        ];
+    }
+
     // ---- Utilities ----
 
     /**
      * Deep merge $override on top of $base. Arrays are merged recursively; scalar values override.
      *
-     * @param array<string, mixed> $base
-     * @param array<string, mixed> $override
-     * @return array<string, mixed>
+     * @param array<int|string, mixed> $base
+     * @param array<int|string, mixed> $override
+     * @return array<int|string, mixed>
      */
     private function arrayMergeDeep(array $base, array $override): array
     {
@@ -340,8 +453,8 @@ final class BackgroundEffectConfigProvider
     /**
      * Recursively ksorts associative arrays (objects), preserving lists as-is.
      *
-     * @param array<string, mixed> $arr
-     * @return array<string, mixed>
+     * @param array<mixed> $arr Array may contain int or string keys; lists are preserved.
+     * @return array<int|string, mixed>
      */
     private function ksortDeep(array $arr): array
     {

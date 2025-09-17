@@ -28,7 +28,6 @@ class SecurityController extends AbstractController
         $error = $authenticationUtils->getLastAuthenticationError();
         // suppress generic invalid credentials if we came from Mattermost failure
         if (
-            $request->getSession() !== null &&
             $request->getSession()->has("auth.mm.failure")
         ) {
             $error = null;
