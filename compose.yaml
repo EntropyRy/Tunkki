@@ -38,6 +38,8 @@ services:
         GID: ${GROUPID}
         ENABLE_MODULES: brotli
     restart: unless-stopped
+    environment:
+      REAL_IP_MODE: ${REAL_IP_MODE:-xff}
     ports:
       - "${SERVER_PORT:-9090}:80"
     links:
