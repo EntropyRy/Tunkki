@@ -1,0 +1,150 @@
+# nginx.conf.template
+#
+# This template is intended to be rendered at container start (e.g. with a tiny
+# shell entrypoint + envsubst or a custom script) to produce /etc/nginx/nginx.conf.
+#
+# Environment variables driving the behavior:
+#
+#   REAL_IP_MODE     One of:
+#                      cf   = Trust Cloudflare + internal docker networks; use CF-Connecting-IP
+#                      xff  = Trust only internal docker networks; use X-Forwarded-For
+#                      off  = Do not attempt real IP restoration (log socket IP)
+#                    Default: xff
+#
+#   EXTRA_SET_REAL_IP_FROM
+#                    (Optional) Space-separated list of additional CIDRs you want to trust
+#                    e.g. "192.0.2.10/32 198.51.100.0/24"
+#
+#   ACCESS_LOG       Path for access log (default: /var/log/nginx/access.log)
+#   ERROR_LOG        Path for error log  (default: /var/log/nginx/error.log)
+#
+# Rendering Strategy:
+#   A startup script should:
+#     1. Decide REAL_IP_MODE (default xff)
+#     2. Build a block of directives and export it as REAL_IP_DIRECTIVES
+#     3. Run: envsubst '\$REAL_IP_DIRECTIVES \$ACCESS_LOG \$ERROR_LOG' < nginx.conf.template > /etc/nginx/nginx.conf
+#
+# Example pseudo-code in entrypoint (sh):
+#
+#   : "${REAL_IP_MODE:=xff}"
+#   INTERNAL_NETS="set_real_ip_from 172.16.0.0/12;\n    set_real_ip_from 10.0.0.0/8;"
+#   if [ -n "${EXTRA_SET_REAL_IP_FROM}" ]; then
+#       for cidr in ${EXTRA_SET_REAL_IP_FROM}; do
+#           INTERNAL_NETS="${INTERNAL_NETS}\n    set_real_ip_from ${cidr};"
+#       done
+#   fi
+#   case "$REAL_IP_MODE" in
+#     cf)
+#       CF_NETS=$(cat <<'EOF'
+# set_real_ip_from 173.245.48.0/20;
+# set_real_ip_from 103.21.244.0/22;
+# set_real_ip_from 103.22.200.0/22;
+# set_real_ip_from 103.31.4.0/22;
+# set_real_ip_from 141.101.64.0/18;
+# set_real_ip_from 108.162.192.0/18;
+# set_real_ip_from 190.93.240.0/20;
+# set_real_ip_from 188.114.96.0/20;
+# set_real_ip_from 197.234.240.0/22;
+# set_real_ip_from 198.41.128.0/17;
+# set_real_ip_from 162.158.0.0/15;
+# set_real_ip_from 104.16.0.0/13;
+# set_real_ip_from 104.24.0.0/14;
+# set_real_ip_from 172.64.0.0/13;
+# set_real_ip_from 131.0.72.0/22;
+# EOF
+# )
+#       REAL_IP_DIRECTIVES="${INTERNAL_NETS}\n    ${CF_NETS}\n    real_ip_header CF-Connecting-IP;\n    real_ip_recursive on;"
+#       ;;
+#     xff)
+#       REAL_IP_DIRECTIVES="${INTERNAL_NETS}\n    real_ip_header X-Forwarded-For;\n    real_ip_recursive on;"
+#       ;;
+#     off)
+#       REAL_IP_DIRECTIVES="# REAL_IP_MODE=off (no real IP restoration)"
+#       ;;
+#     *)
+#       echo "Unknown REAL_IP_MODE=${REAL_IP_MODE}" >&2; exit 1
+#       ;;
+#   esac
+#
+#   : "${ACCESS_LOG:=/var/log/nginx/access.log}"
+#   : "${ERROR_LOG:=/var/log/nginx/error.log}"
+#   export REAL_IP_DIRECTIVES ACCESS_LOG ERROR_LOG
+#   envsubst '\$REAL_IP_DIRECTIVES \$ACCESS_LOG \$ERROR_LOG' \
+#     < /templates/nginx.conf.template > /etc/nginx/nginx.conf
+#
+# After rendering, start nginx normally.
+#
+# NOTE: log_format references $realip_remote_addr which resolves to $remote_addr
+#       if real_ip module does not rewrite it (i.e. REAL_IP_MODE=off).
+#
+
+load_module modules/ngx_http_brotli_static_module.so;
+
+user symfony;
+worker_processes auto;
+pid /run/nginx.pid;
+
+events {
+  worker_connections  2048;
+  multi_accept on;
+  use epoll;
+}
+
+http {
+  server_tokens off;
+  client_max_body_size 50M;
+  sendfile on;
+  brotli_static on;
+  gzip_static on;
+  gzip off;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 15;
+  types_hash_max_size 2048;
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  # Access logging:
+  # Fields:
+  #   $realip_remote_addr  => post-real-ip module client IP (or socket IP if not rewritten)
+  #   cf=$http_cf_connecting_ip (will be '-' if not present)
+  #   remote=$remote_addr   => socket peer (Traefik or Cloudflare)
+  #   xfwd="$http_x_forwarded_for" => raw chain for diagnostics
+  log_format main '$realip_remote_addr (cf=$http_cf_connecting_ip remote=$remote_addr) - $remote_user [$time_local] '
+                  '"$request" $status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" xfwd="$http_x_forwarded_for"';
+
+  # === REAL IP DIRECTIVES (Injected) ===
+  # Will be replaced by the startup script using envsubst.
+  # For example (REAL_IP_MODE=cf):
+  #   set_real_ip_from 172.16.0.0/12;
+  #   set_real_ip_from 10.0.0.0/8;
+  #   set_real_ip_from 173.245.48.0/20;
+  #   ...
+  #   real_ip_header CF-Connecting-IP;
+  #   real_ip_recursive on;
+  # Or (REAL_IP_MODE=off):
+  #   # REAL_IP_MODE=off (no real IP restoration)
+  #
+  include /etc/nginx/real_ip.conf;
+
+  # Logging destinations (templated):
+  access_log ${ACCESS_LOG} main;
+  error_log  ${ERROR_LOG};
+
+  # Common performance and proxy tuning knobs (optional / can be adjusted):
+  open_file_cache max=1000;
+  proxy_buffers 16 32k;
+  proxy_buffer_size 64k;
+  proxy_busy_buffers_size 128k;
+  proxy_temp_file_write_size 128k;
+  proxy_connect_timeout 30s;
+  proxy_read_timeout 30s;
+  proxy_send_timeout 30s;
+
+  # Include site/server definitions
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+}
+
+daemon off;
