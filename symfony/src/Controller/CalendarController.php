@@ -129,9 +129,19 @@ class CalendarController extends AbstractController
         $url = new Uri($event->getUrlByLang($locale));
         $start = $event->getEventDate();
         $end = $event->getUntil();
+        // Ensure both start and end are timezone-aware (Europe/Helsinki) and non-floating.
+        // Previously the end DateTime was created as floating (second argument true),
+        // which could cause macOS Calendar to interpret it differently and shift times.
+        $tz = new \DateTimeZone('Europe/Helsinki');
+        if ($start instanceof \DateTimeInterface) {
+            $start = \DateTimeImmutable::createFromInterface($start)->setTimezone($tz);
+        }
+        if ($end instanceof \DateTimeInterface) {
+            $end = \DateTimeImmutable::createFromInterface($end)->setTimezone($tz);
+        }
         $occurance = new TimeSpan(
-            new DateTime($start, false),
-            new DateTime($end, true),
+            new DateTime($start, false), // not floating, includes TZ
+            new DateTime($end, false),   // not floating, includes TZ
         );
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = new CalendarEvent($uid)

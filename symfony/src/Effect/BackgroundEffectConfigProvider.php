@@ -25,7 +25,7 @@ final class BackgroundEffectConfigProvider
      *
      * @var array<string, bool>
      */
-    private const SUPPORTED_EFFECTS = [
+    private const array SUPPORTED_EFFECTS = [
         "flowfields" => true,
         "chladni" => true,
         "roaches" => true,
