@@ -1,5 +1,6 @@
 framework:
   secret: "%env(APP_SECRET)%"
+  trusted_hosts: "%env(TRUSTED_HOSTS)%"
   trusted_proxies: "%env(TRUSTED_PROXIES)%"
   trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
   csrf_protection: true
@@ -29,8 +30,5 @@ framework:
 when@prod:
   framework:
     http_cache: true
-    trusted_hosts: "%env(TRUSTED_HOSTS)%"
-    trusted_proxies: "%env(TRUSTED_PROXIES)%"
-    trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
     session:
       cookie_httponly: false

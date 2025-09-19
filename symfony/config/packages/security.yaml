@@ -116,13 +116,13 @@ security:
     - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
     - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
     # Door route: allow only from configured IPs; otherwise deny explicitly
-    - path: "^/(en/kerde/door|kerde/ovi)/?$"
-      ips:
-        - "%env(DOOR_ALLOWED_IPS_1)%"
-        - "%env(DOOR_ALLOWED_IPS_2)%"
-      roles: ROLE_USER
-
-    - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
+    #    - path: "^/(en/kerde/door|kerde/ovi)/?$"
+    #      ips:
+    #        - "%env(DOOR_ALLOWED_IPS_1)%"
+    #        - "%env(DOOR_ALLOWED_IPS_2)%"
+    #      roles: ROLE_USER
+    #
+    #    - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
     # Other Kerde routes require login
     - { path: ^/kerde, roles: ROLE_USER }
     - { path: ^/dashboard, role: ROLE_USER }
