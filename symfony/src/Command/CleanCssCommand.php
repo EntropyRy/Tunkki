@@ -75,7 +75,7 @@ class CleanCssCommand extends Command
             }
 
             // Add dark theme variants if requested
-            if ($addDarkTheme && !empty($cssContent)) {
+            if ($addDarkTheme && ($cssContent !== '' && $cssContent !== '0')) {
                 $newCssContent = $this->addDarkThemeVariants($cssContent);
                 if ($newCssContent !== $cssContent) {
                     $event->setCss($newCssContent);
