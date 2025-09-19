@@ -5,6 +5,20 @@ login:
 cookie_policy: We only use essential cookies to ensure login (and payments) work.
 whisper: psst. <a href="/en/join-us">join us</a>
 
+error:
+  access_denied:
+    title: Access denied
+    description: You don't have permission to view this page. You can check your access or
+  not_found:
+    title: Page not found
+    description: The requested page couldn't be located. Check for any URL misspelling or
+  internal:
+    title: Something went wrong
+    description: The requested page couldn't be loaded due to a server error.
+  return_home: return to the homepage
+  try_again_hint: You can also try again:
+  try_again: Try again
+
 packages: packages
 items: items
 accessories: accessories

@@ -1,13 +1,14 @@
 {% extends 'onecolumn.html.twig' %}
 {% block content %}
-    <h1>You do not have permission to this page: Error 403</h1>
+    <h1>{{ 'error.access_denied.title'|trans }}</h1>
     <p>
-        The requested page couldn't be figured out. Maybe <a href="/">return to the homepage</a>.
+        {{ 'error.access_denied.description'|trans }}
+        <a href="/">{{ 'error.return_home'|trans }}</a>.
     </p>
-    <p>If you report this problem: Do not send us a picture of this web page! instead report:</p>
-    <ul>
-        <li>Error: 403</li>
-        <li>What were you doing</li>
-        <li>Your current url in full</li>
-    </ul>
+    <p>
+        {{ 'error.try_again_hint'|trans }}
+    </p>
+    <p>
+        <a href="{{ app.request.attributes.get('_route') ? path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|default({}))|merge(app.request.query.all)) : app.request.uri }}" class="btn">{{ 'error.try_again'|trans }}</a>
+    </p>
 {% endblock %}

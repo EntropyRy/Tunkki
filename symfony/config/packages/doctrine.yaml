@@ -10,6 +10,7 @@ doctrine:
     auto_mapping: true
     validate_xml_mapping: true
     enable_lazy_ghost_objects: true
+    enable_native_lazy_objects: true
     report_fields_where_declared: true
     second_level_cache:
       enabled: true

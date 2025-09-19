@@ -2,6 +2,19 @@ Announcement: Tiedote
 Responsible: Vastaava
 Responsibles: Vastaavat
 # Tunkki
+error:
+  access_denied:
+    title: Pääsy estetty
+    description: Sinulla ei ole oikeutta nähdä tätä sivua. Voit tarkistaa käyttöoikeutesi tai
+  not_found:
+    title: Sivua ei löytynyt
+    description: Pyydettyä sivua ei löydy. Tarkista mahdolliset kirjoitusvirheet tai
+  internal:
+    title: Jokin meni pieleen
+    description: Sivua ei voitu ladata palvelinvirheen vuoksi.
+  return_home: palaa etusivulle
+  try_again_hint: Voit myös yrittää uudelleen:
+  try_again: Yritä uudelleen
 Control barcodes: Kontrollikoodit
 Bank Account: Pankkitili
 # name_attribute removed (was: nimi)

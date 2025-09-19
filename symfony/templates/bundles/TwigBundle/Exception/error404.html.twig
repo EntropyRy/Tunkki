@@ -1,8 +1,7 @@
 {% extends 'onecolumn.html.twig' %}
 {% block content %}
-    <h1>Page not found</h1>
+    <h1>{{ 'error.not_found.title'|trans }}</h1>
     <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="/">return to the homepage</a>.
+        {{ 'error.not_found.description'|trans }} <a href="/">{{ 'error.return_home'|trans }}</a>.
     </p>
 {% endblock %}
