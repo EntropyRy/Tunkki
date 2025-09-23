@@ -33,29 +33,33 @@
     {% endfor %}
 {% endblock %}
 {% block prev_next_navigation %}
-    {% if prev %}
-        <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
-           class="btn btn-secondary"><twig:ux:icon name="arrow-left" /> {{ prev.name(app.request.locale) }}</a>
-    {% else %}
-        <button class="btn btn-secondary disabled">
-            <twig:ux:icon name="ban" />
-        </button>
-    {% endif %}
-    {% if next %}
-        <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: next.slug(app.request.locale)}) }}"
-           class="btn btn-secondary float-end">{{ next.name(app.request.locale) }} <twig:ux:icon name="arrow-right" /></a>
-    {% else %}
-        <button class="btn btn-secondary disabled float-end">
-            <twig:ux:icon name="ban" />
-        </button>
+    {% if prev or next %}
+        {% if prev %}
+            <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: prev.slug(app.request.locale)}) }}"
+               class="btn btn-secondary"><twig:ux:icon name="arrow-left" /> {{ prev.name(app.request.locale) }}</a>
+        {% else %}
+            <button class="btn btn-secondary disabled">
+                <twig:ux:icon name="ban" />
+            </button>
+        {% endif %}
+        {% if next %}
+            <a href="{{ path('entropy_event_happening_show', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: next.slug(app.request.locale)}) }}"
+               class="btn btn-secondary float-end">{{ next.name(app.request.locale) }} <twig:ux:icon name="arrow-right" /></a>
+        {% else %}
+            <button class="btn btn-secondary disabled float-end">
+                <twig:ux:icon name="ban" />
+            </button>
+        {% endif %}
     {% endif %}
 {% endblock %}
 {% block happening_info %}
     {% set name = happening.name(app.request.locale) %}
     {% set space_left = happening.maxSignUps - happening.bookings|length %}
-    <div class="row mb-3">
-        <div class="col-12">{{ block('prev_next_navigation') }}</div>
-    </div>
+    {% if event.happenings|length > 1 %}
+        <div class="row mb-3">
+            <div class="col-12">{{ block('prev_next_navigation') }}</div>
+        </div>
+    {% endif %}
     <div class="row">
         <div class="col-12">
             <h1>
@@ -147,9 +151,11 @@
                 </div>
             {% endif %}
         </div>
-        <div class="row mt-3">
-            <div class="col-12">{{ block('prev_next_navigation') }}</div>
-        </div>
+        {% if event.happenings|length > 1 %}
+            <div class="row mt-3">
+                <div class="col-12">{{ block('prev_next_navigation') }}</div>
+            </div>
+        {% endif %}
     {% endblock %}
     {% block happening_pic %}
         <span class="polaroid">
