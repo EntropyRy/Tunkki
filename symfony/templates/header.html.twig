@@ -6,14 +6,25 @@
                 <img src="{{ asset('/images/header-logo-text.svg') }}" width="50%" height="auto" z-index="0" alt="ENTROPY">
             </a>
             {% if event is not defined %}
-                <button
-                    aria-label="{{ 'button.theme-switcher'|trans }}"
-                    class="btn position-absolute top-0 end-0"
-                    {{ stimulus_controller('theme-switcher') }}
-                    {{ stimulus_action('theme-switcher', 'switch') }}
-                >
-                    <twig:ux:icon name="dark-theme" height="2em"/>
-                </button>
+                {% if app.user %}
+                    <a
+                        aria-label="{{ 'button.theme-switcher'|trans }}"
+                        class="btn position-absolute top-0 end-0"
+                        href="{{ path('profile_edit') }}#theme"
+                        title="{{ 'button.theme-switcher'|trans }}"
+                    >
+                        <twig:ux:icon name="dark-theme" height="2em"/>
+                    </a>
+                {% else %}
+                    <button
+                        aria-label="{{ 'button.theme-switcher'|trans }}"
+                        class="btn position-absolute top-0 end-0"
+                        {{ stimulus_controller('theme-switcher') }}
+                        {{ stimulus_action('theme-switcher', 'toggle') }}
+                    >
+                        <twig:ux:icon name="dark-theme" height="2em"/>
+                    </button>
+                {% endif %}
             {% endif %}
         </div>
         {{ block('menu') }}

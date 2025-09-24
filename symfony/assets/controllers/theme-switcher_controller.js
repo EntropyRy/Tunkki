@@ -1,28 +1,34 @@
-import { Controller } from '@hotwired/stimulus';
+import { Controller } from "@hotwired/stimulus";
 
+/**
+ * Simplified theme switcher for guests.
+ * - Uses localStorage key: 'user-theme'
+ * - Applies stored preference on connect (if any)
+ * - Toggles immediately without delays or extra attributes
+ *
+ * Logged-in users should not have this controller attached; they use profile edit to change theme.
+ */
 export default class extends Controller {
-    switch() {
-        let currentTheme = localStorage.getItem('user-theme');
-        if (!currentTheme) {
-            currentTheme = document.documentElement.getAttribute('data-bs-theme');
-        }
-
-        const theme = currentTheme === 'dark' ? 'light' : 'dark';
-
-        this.select(theme);
+  connect() {
+    const stored = localStorage.getItem("user-theme");
+    if (
+      stored &&
+      stored !== document.documentElement.getAttribute("data-bs-theme")
+    ) {
+      document.documentElement.setAttribute("data-bs-theme", stored);
     }
+  }
 
-    select (theme) {
-        clearTimeout(this.timeout);
+  toggle() {
+    const html = document.documentElement;
+    const current = html.getAttribute("data-bs-theme") || "light";
+    const next = current === "dark" ? "light" : "dark";
 
-        this.element.setAttribute('data-switch', theme);
-        localStorage.setItem('user-theme', theme);
-
-        this.timeout = setTimeout(() => {
-            /**
-             * Small delay to allow CSS transitions during theme switch.
-             */
-            document.documentElement.setAttribute('data-bs-theme', theme);
-        }, 250);
+    html.setAttribute("data-bs-theme", next);
+    try {
+      localStorage.setItem("user-theme", next);
+    } catch (_e) {
+      // Ignore storage failures (private mode, quota, etc.)
     }
+  }
 }
