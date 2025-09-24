@@ -21,11 +21,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Mailer\MailerInterface;
+
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Form\EPicsPasswordType;
 use App\Helper\ePics;
+use App\Security\EmailVerifier;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
 {
@@ -45,7 +47,8 @@ class ProfileController extends AbstractController
         EmailRepository $emailRepo,
         UserPasswordHasherInterface $hasher,
         Mattermost $mm,
-        MailerInterface $mailer,
+        TranslatorInterface $translator,
+        EmailVerifier $emailVerifier,
         Barcode $bc,
         EntityManagerInterface $em,
     ): Response {
@@ -76,17 +79,43 @@ class ProfileController extends AbstractController
                     $em->persist($member);
                     $em->flush();
 
+                    // Build and send single merged welcome + verification email
                     $email_content = $emailRepo->findOneBy([
                         "purpose" => "member",
                     ]);
                     $this->announceToMattermost($mm, $member->getName());
-                    if ($email_content) {
-                        $this->sendEmailToMember(
-                            $email_content,
-                            $member,
-                            $mailer,
+
+                    $body = $email_content ? $email_content->getBody() : "";
+                    $subject =
+                        ($email_content
+                            ? $email_content->getSubject()
+                            : $translator->trans("member.welcome.subject")) .
+                        $translator->trans(
+                            "member.welcome.subject_verify_suffix",
                         );
-                    }
+
+                    $welcomeEmail = new TemplatedEmail();
+                    $welcomeEmail
+                        ->from(
+                            new Address(
+                                "webmaster@entropy.fi",
+                                "Entropy Webmaster",
+                            ),
+                        )
+                        ->to($member->getEmail())
+                        ->subject($subject)
+                        ->htmlTemplate("emails/member.html.twig")
+                        ->context([
+                            "body" => $body,
+                        ]);
+
+                    $emailVerifier->sendEmailConfirmation(
+                        "app_verify_email",
+                        $member->getUser(),
+                        $welcomeEmail,
+                        ["id" => $member->getUser()->getId()],
+                    );
+
                     $this->addFlash("info", "member.join.added");
                     $this->redirectToRoute("app_login");
                 } else {
@@ -100,18 +129,6 @@ class ProfileController extends AbstractController
             "form" => $form,
             "email" => $email_content,
         ]);
-    }
-    protected function sendEmailToMember($email_content, $member, $mailer): void
-    {
-        $email = new TemplatedEmail()
-            ->from(new Address("webmaster@entropy.fi", "Entropy Webmaster"))
-            ->to($member->getEmail())
-            ->subject($email_content->getSubject())
-            ->htmlTemplate("emails/member.html.twig")
-            ->context([
-                "body" => $email_content->getBody(),
-            ]);
-        $mailer->send($email);
     }
     protected function announceToMattermost($mm, string $member): void
     {

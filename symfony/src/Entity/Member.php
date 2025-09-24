@@ -174,7 +174,7 @@ class Member implements \Stringable
     private ?string $code = null;
 
     #[ORM\Column]
-    private ?bool $emailVerified = true;
+    private ?bool $emailVerified = false;
 
     #[ORM\Column]
     private ?bool $allowInfoMails = true;
@@ -222,6 +222,17 @@ class Member implements \Stringable
 
     public function setEmail(?string $email): self
     {
+        // If the email is actually changing (non-null to a different non-null value)
+        // and the current email was verified, force re-verification.
+        if (
+            $this->email !== null &&
+            $email !== null &&
+            $this->email !== $email &&
+            $this->emailVerified
+        ) {
+            $this->emailVerified = false;
+        }
+
         $this->email = $email;
 
         return $this;

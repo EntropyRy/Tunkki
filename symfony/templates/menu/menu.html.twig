@@ -7,7 +7,8 @@
     {% else %}
         {% set theme = 'light' %}
     {% endif %}
-    <nav class="navbar navbar-expand-lg g-4 {{ theme == 'dark' ? 'navbar-dark' : 'navbar-light' }}">
+    <nav id="main-nav" class="navbar navbar-expand-lg g-4{% if app.user or event is defined %} {{ theme == 'dark' ? 'navbar-dark' : 'navbar-light' }}{% endif %}">
+
         <div class="container-fluid">
             <a class="navbar-brand d-lg-none d-inline-block"
                href="/{% if app.request.locale == 'en' %}en{% endif %}">

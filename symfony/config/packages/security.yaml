@@ -1,147 +1,150 @@
 parameters:
-  env(DOOR_ALLOWED_IPS): "%env(json:DOOR_ALLOWED_IPS)%"
+    env(DOOR_ALLOWED_IPS): "%env(json:DOOR_ALLOWED_IPS)%"
 
 security:
-  password_hashers:
-    App\Entity\User: auto
-  role_hierarchy:
-    ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
-    ROLE_ADMIN: [ROLE_USER, ROLE_SONATA_ADMIN]
-    BOARD: [ROLE_SUPER_ADMIN]
-    CONTENT:
-      - ROLE_ADMIN
-      - ROLE_ENTROPY_ADMIN_MENU_ALL
-      - ROLE_ENTROPY_ADMIN_EVENT_EDIT
-      - ROLE_ENTROPY_ADMIN_EVENT_LIST
-      - ROLE_ENTROPY_ADMIN_EVENT_CREATE
-      - ROLE_ENTROPY_ADMIN_EVENT_VIEW
-      - ROLE_ADMIN_LOCATION_ALL
-      - ROLE_ADMIN_TICKET_ALL
-      - ROLE_ADMIN_EMAIL_ALL
-      - ROLE_ADMIN_NOTIFICATION_ALL
-      - ROLE_ADMIN_EVENT_ARTIST_INFO_ALL
-      - ROLE_ENTROPY_ADMIN_RSVP_ALL
-      - ROLE_ENTROPY_ADMIN_NAKKI_ALL
-      - ROLE_ENTROPY_ADMIN_NAKKI_BOOKING_ALL
-      - ROLE_ENTROPY_ADMIN_NAKKI_DEFINITION_ALL
-      - ROLE_SONATA_PAGE_ADMIN_PAGE_ALL
-      - ROLE_SONATA_PAGE_ADMIN_BLOCK_ALL
-      - ROLE_SONATA_PAGE_ADMIN_SHARED_BLOCK_ALL
-      - ROLE_SONATA_PAGE_ADMIN_SNAPSHOT_ALL
-      - ROLE_SONATA_MEDIA_ADMIN_MEDIA_ALL
-    MEMBERS:
-      - ROLE_ADMIN
-      - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_CREATE
-      - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_VIEW
-      - ROLE_ADMIN_EMAIL_EDIT
-      - ROLE_ADMIN_EMAIL_LIST
-      - ROLE_ADMIN_EMAIL_VIEW
-    REWARDS:
-      - ROLE_ADMIN
-      - ROLE_ENTROPY_ADMIN_REWARD_EDIT
-      - ROLE_ENTROPY_ADMIN_REWARD_LIST
-      - ROLE_ENTROPY_ADMIN_REWARD_VIEW
-      - ROLE_ENTROPY_ADMIN_REWARD_EXPORT
-    RENTERS:
-      - ROLE_ADMIN
-      - ROLE_SONATA_CLASSIFICATION_ADMIN_CATEGORY_ALL
-      - ROLE_SONATA_CLASSIFICATION_ADMIN_TAG_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_PACKAGE_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_CREATE
-      - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_VIEW
-      - ROLE_ENTROPY_TUNKKI_ADMIN_BILLABLE_EVENT_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_CREATE
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_VIEW
-      - ROLE_SONATA_MEDIA_ADMIN_MEDIA_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_EVENT_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_FILE_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_RENTER_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_PACKAGE_ALL
-      - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_CREATE
-      - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_VIEW
-      - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_CREATE
-      - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_VIEW
-      - ROLE_ENTROPY_ADMIN_CONTRACT_EDIT
-      - ROLE_ENTROPY_ADMIN_CONTRACT_LIST
-      - ROLE_ENTROPY_ADMIN_CONTRACT_VIEW
-      - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_EDIT
-      - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_LIST
-      - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_CREATE
-  providers:
-    app_user_provider:
-      entity:
-        class: App\Entity\User
-  firewalls:
-    dev:
-      pattern: ^/(_(profiler|wdt)|css|images|js)/
-      security: false
-      #        api_token:
-      #            pattern: ^/oauth/token$
-      #            security: false
-    api_me:
-      pattern: ^/api/me
-      security: true
-      stateless: true
-      oauth2: true
-    main:
-      lazy: true
-      provider: app_user_provider
-      form_login:
-        login_path: app_login
-        check_path: app_login
-        use_referer: true
-        enable_csrf: true
-      logout:
-        path: app_logout
-      entry_point: form_login
-      custom_authenticators:
-        - App\Security\MattermostAuthenticator
-  access_control:
-    - { path: ^/oauth$, role: PUBLIC_ACCESS }
-    - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
-    - { path: ^/login$, role: PUBLIC_ACCESS }
-    - { path: ^/profile/new, role: PUBLIC_ACCESS }
-    - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
-    - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
-    # Door route: allow only from configured IPs; otherwise deny explicitly
-    #    - path: "^/(en/kerde/door|kerde/ovi)/?$"
-    #      ips:
-    #        - "%env(DOOR_ALLOWED_IPS_1)%"
-    #        - "%env(DOOR_ALLOWED_IPS_2)%"
-    #      roles: ROLE_USER
-    #
-    #    - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
-    # Other Kerde routes require login
-    - { path: ^/kerde, roles: ROLE_USER }
-    - { path: ^/dashboard, role: ROLE_USER }
-    - { path: ^/yleiskatsaus, role: ROLE_USER }
-    - { path: ^/profile, role: ROLE_USER }
-    - { path: ^/profiili, role: ROLE_USER }
-    - { path: ^/logout$, role: PUBLIC_ACCESS }
-    - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
-    - { path: ^/.*, role: PUBLIC_ACCESS }
+    password_hashers:
+        App\Entity\User: auto
+    role_hierarchy:
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        ROLE_ADMIN: [ROLE_USER, ROLE_SONATA_ADMIN]
+        BOARD: [ROLE_SUPER_ADMIN]
+        CONTENT:
+            - ROLE_ADMIN
+            - ROLE_ENTROPY_ADMIN_MENU_ALL
+            - ROLE_ENTROPY_ADMIN_EVENT_EDIT
+            - ROLE_ENTROPY_ADMIN_EVENT_LIST
+            - ROLE_ENTROPY_ADMIN_EVENT_CREATE
+            - ROLE_ENTROPY_ADMIN_EVENT_VIEW
+            - ROLE_ADMIN_LOCATION_ALL
+            - ROLE_ADMIN_TICKET_ALL
+            - ROLE_ADMIN_EMAIL_ALL
+            - ROLE_ADMIN_NOTIFICATION_ALL
+            - ROLE_ADMIN_EVENT_ARTIST_INFO_ALL
+            - ROLE_ENTROPY_ADMIN_RSVP_ALL
+            - ROLE_ENTROPY_ADMIN_NAKKI_ALL
+            - ROLE_ENTROPY_ADMIN_NAKKI_BOOKING_ALL
+            - ROLE_ENTROPY_ADMIN_NAKKI_DEFINITION_ALL
+            - ROLE_SONATA_PAGE_ADMIN_PAGE_ALL
+            - ROLE_SONATA_PAGE_ADMIN_BLOCK_ALL
+            - ROLE_SONATA_PAGE_ADMIN_SHARED_BLOCK_ALL
+            - ROLE_SONATA_PAGE_ADMIN_SNAPSHOT_ALL
+            - ROLE_SONATA_MEDIA_ADMIN_MEDIA_ALL
+        MEMBERS:
+            - ROLE_ADMIN
+            - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_CREATE
+            - ROLE_ENTROPY_TUNKKI_ADMIN_MEMBER_VIEW
+            - ROLE_ADMIN_EMAIL_EDIT
+            - ROLE_ADMIN_EMAIL_LIST
+            - ROLE_ADMIN_EMAIL_VIEW
+        REWARDS:
+            - ROLE_ADMIN
+            - ROLE_ENTROPY_ADMIN_REWARD_EDIT
+            - ROLE_ENTROPY_ADMIN_REWARD_LIST
+            - ROLE_ENTROPY_ADMIN_REWARD_VIEW
+            - ROLE_ENTROPY_ADMIN_REWARD_EXPORT
+        RENTERS:
+            - ROLE_ADMIN
+            - ROLE_SONATA_CLASSIFICATION_ADMIN_CATEGORY_ALL
+            - ROLE_SONATA_CLASSIFICATION_ADMIN_TAG_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_PACKAGE_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_CREATE
+            - ROLE_ENTROPY_TUNKKI_ADMIN_INVOICEE_VIEW
+            - ROLE_ENTROPY_TUNKKI_ADMIN_BILLABLE_EVENT_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_CREATE
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_VIEW
+            - ROLE_SONATA_MEDIA_ADMIN_MEDIA_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_EVENT_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_FILE_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_RENTER_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_CHOICES_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_ACCESSORY_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_PACKAGE_ALL
+            - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_CREATE
+            - ROLE_ENTROPY_TUNKKI_ADMIN_WHO_CAN_RENT_CHOICE_VIEW
+            - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_CREATE
+            - ROLE_ENTROPY_TUNKKI_ADMIN_BOOKING_VIEW
+            - ROLE_ENTROPY_ADMIN_CONTRACT_EDIT
+            - ROLE_ENTROPY_ADMIN_CONTRACT_LIST
+            - ROLE_ENTROPY_ADMIN_CONTRACT_VIEW
+            - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_EDIT
+            - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_LIST
+            - ROLE_ENTROPY_TUNKKI_ADMIN_STATUSEVENT_CREATE
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            #        api_token:
+            #            pattern: ^/oauth/token$
+            #            security: false
+        api_me:
+            pattern: ^/api/me
+            security: true
+            stateless: true
+            oauth2: true
+        main:
+            lazy: true
+            provider: app_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login
+                use_referer: true
+                enable_csrf: true
+            logout:
+                path: app_logout
+            entry_point: form_login
+            custom_authenticators:
+                - App\Security\MattermostAuthenticator
+    access_control:
+        - { path: ^/oauth$, role: PUBLIC_ACCESS }
+        - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
+        - { path: ^/login$, role: PUBLIC_ACCESS }
+        - { path: ^/profile/new, role: PUBLIC_ACCESS }
+        - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
+        - { path: ^/verify/email, role: PUBLIC_ACCESS }
+        - { path: ^/vahvista/sahkoposti, role: PUBLIC_ACCESS }
+        # Resend verification now requires authentication (removed PUBLIC_ACCESS)
+        - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+        # Door route: allow only from configured IPs; otherwise deny explicitly
+        #    - path: "^/(en/kerde/door|kerde/ovi)/?$"
+        #      ips:
+        #        - "%env(DOOR_ALLOWED_IPS_1)%"
+        #        - "%env(DOOR_ALLOWED_IPS_2)%"
+        #      roles: ROLE_USER
+        #
+        #    - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
+        # Other Kerde routes require login
+        - { path: ^/kerde, roles: ROLE_USER }
+        - { path: ^/dashboard, role: ROLE_USER }
+        - { path: ^/yleiskatsaus, role: ROLE_USER }
+        - { path: ^/profile, role: ROLE_USER }
+        - { path: ^/profiili, role: ROLE_USER }
+        - { path: ^/logout$, role: PUBLIC_ACCESS }
+        - { path: ^/admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/.*, role: PUBLIC_ACCESS }
 
 when@test:
-  security:
-    password_hashers:
-      # By default, password hashers are resource intensive and take time. This is
-      # important to generate secure password hashes. In tests however, secure hashes
-      # are not important, waste resources and increase test times. The following
-      # reduces the work factor to the lowest possible values.
-      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-        algorithm: auto
-        cost: 4 # Lowest possible value for bcrypt
-        time_cost: 3 # Lowest possible value for argon
-        memory_cost: 10 # Lowest possible value for argon
+    security:
+        password_hashers:
+            # By default, password hashers are resource intensive and take time. This is
+            # important to generate secure password hashes. In tests however, secure hashes
+            # are not important, waste resources and increase test times. The following
+            # reduces the work factor to the lowest possible values.
+            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+                algorithm: auto
+                cost: 4 # Lowest possible value for bcrypt
+                time_cost: 3 # Lowest possible value for argon
+                memory_cost: 10 # Lowest possible value for argon

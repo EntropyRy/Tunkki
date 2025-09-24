@@ -1,0 +1,27 @@
+{# Email verification template using the shared base layout #}
+{% extends 'emails/base.html.twig' %}
+{% trans_default_domain 'messages' %}
+
+{% block content %}
+    <h2 style="margin:0 0 15px 0;">{{ 'verify.email.subject'|trans }}</h2>
+
+    <p style="margin:0 0 15px 0;">
+        {{ 'verify.email.instructions'|trans }}
+    </p>
+
+    <p style="margin:0 0 25px 0; text-align:center;">
+        <a href="{{ signedUrl }}"
+           style="background:#0d6efd;color:#ffffff;text-decoration:none;padding:12px 22px;border-radius:4px;display:inline-block;font-weight:bold;">
+            {{ 'verify.email.button'|trans }}
+        </a>
+    </p>
+
+    <p style="margin:0 0 10px 0;font-size:90%;color:#666;">
+        {{ 'verify.email.ignore'|trans }}
+    </p>
+
+    <p style="margin:0 0 5px 0;font-size:90%;color:#666;">
+        {{ 'verify.email.link_plain'|trans }}:<br>
+        <span style="word-break:break-all;">{{ signedUrl }}</span>
+    </p>
+{% endblock %}

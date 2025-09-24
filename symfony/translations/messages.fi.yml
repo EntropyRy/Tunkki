@@ -1,27 +1,43 @@
+# (removed duplicate member.welcome block; merged into main member: block below)
+
 Announcement: Tiedote
+
+verify:
+    email:
+        subject: Vahvista sähköpostiosoitteesi
+        instructions: Vahvista sähköpostiosoitteesi klikkaamalla alla olevaa painiketta.
+        button: Vahvista sähköposti
+        ignore: Jos et luonut tiliä, voit jättää tämän viestin huomiotta.
+        link_plain: Jos painike ei toimi, kopioi ja liitä tämä linkki selaimeesi
+        sent: Vahvistussähköposti lähetetty. Tarkista sähköpostisi.
+        resent: Vahvistussähköposti lähetetty uudestaan. Tarkista sähköpostisi.
+        success: Sähköpostiosoitteesi on vahvistettu. Voit nyt kirjautua sisään.
+        invalid: Vahvistuslinkki on virheellinen tai vanhentunut.
+        already: Sähköpostisi on jo vahvistettu.
+resend_verification: Lähetä vahvistussähköposti uudelleen
 Responsible: Vastaava
 Responsibles: Vastaavat
 # Tunkki
 error:
-  access_denied:
-    title: Pääsy estetty
-    description: Sinulla ei ole oikeutta nähdä tätä sivua. Voit tarkistaa käyttöoikeutesi tai
-  not_found:
-    title: Sivua ei löytynyt
-    description: Pyydettyä sivua ei löydy. Tarkista mahdolliset kirjoitusvirheet tai
-  internal:
-    title: Jokin meni pieleen
-    description: Sivua ei voitu ladata palvelinvirheen vuoksi.
-  return_home: palaa etusivulle
-  try_again_hint: Voit myös yrittää uudelleen
+    access_denied:
+        title: Pääsy estetty
+        description: Sinulla ei ole oikeutta nähdä tätä sivua. Voit tarkistaa käyttöoikeutesi tai
+    not_found:
+        title: Sivua ei löytynyt
+        description: Pyydettyä sivua ei löydy. Tarkista mahdolliset kirjoitusvirheet tai
+    internal:
+        title: Jokin meni pieleen
+        description: Sivua ei voitu ladata palvelinvirheen vuoksi.
+    return_home: palaa etusivulle
+    try_again_hint: Voit myös yrittää uudelleen
 
 checkout:
-  email:
-    confirmation: Käytämme tätä sähköpostia ostoksiisi.
-    change: Vaihda sähköposti
-  cart:
-    empty: Ostoskorisi on tyhjä.
-  try_again: Yritä uudelleen
+    email:
+        confirmation: Käytämme tätä sähköpostia ostoksiisi.
+        change: Vaihda sähköposti
+    cart:
+        empty: Ostoskorisi on tyhjä.
+    try_again: Yritä uudelleen
 Control barcodes: Kontrollikoodit
 Bank Account: Pankkitili
 # name_attribute removed (was: nimi)
@@ -38,11 +54,11 @@ Agree: Hyväksy
 Events: Tapahtumat
 Chat: Keskustelu
 tg:
-  event: Tapahtuma
-  info: Telegram-infokanava
-  ticket_shop: Lippukauppa
+    event: Tapahtuma
+    info: Telegram-infokanava
+    ticket_shop: Lippukauppa
 footer:
-  side_title: Elektronisen musiikin kulttuuriyhdistys
+    side_title: Elektronisen musiikin kulttuuriyhdistys
 Signed: Allekirjoitettu
 Address: Osoite
 Stage: lava
@@ -104,14 +120,14 @@ register_as_member: Rekisteröidy jäseneksi
 close: Sulje
 clubroom_events: Kerhohuonetapahtumat (Keke)
 search:
-  include: Sisällytä
+    include: Sisällytä
 include_clubroom_events: kerhohuonetapahtumat (Keke)
 include_stream_events: streamit
 include_meeting_events: kokoukset
 privacy_policy: Rekisteriseloste
 submit_and_agree:
-  Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
-  Varaamme oikeuden poistaa virheelliset tiedot.
+    Lähettämällä tämän lomakkeen hyväksyt rekisteriselosteemme ehdot.
+    Varaamme oikeuden poistaa virheelliset tiedot.
 cancelled: PERUTTU
 announcements_url: tiedotukset
 frontpage: Etusivu
@@ -141,11 +157,11 @@ Total rent price: Kokonaishinta
 reset_your_password: Vaihda salasanasi
 send_password_reset_email: Lähetä
 reset_password_form_help:
-  Kun annat sähköpostisi niin lähetämme sinulle sähköpostin
-  josta löydät linkin salasanan vaihtamiseksi
+    Kun annat sähköpostisi niin lähetämme sinulle sähköpostin
+    josta löydät linkin salasanan vaihtamiseksi
 reset_password_info:
-  Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit
-  nollata salasanasi. Linkki vanhentuu
+    Lähetimme juuri sähköpostin, joka sisältää linkin, josta voit
+    nollata salasanasi. Linkki vanhentuu
 hours: tunnissa
 Password Reset Email Sent: Salasanan nollaus sähköposti lähetetty
 reset_password_email_info: Jos et saanut sähköpostia tarkista roskapostisi tai
@@ -163,8 +179,8 @@ membership_information: Jäsentiedot
 membership_status: Jäsentilanne
 used_in_other_services: Käytetään meidän muissa palveluissa
 you_can_change_your_member_information_by_loging_in:
-  Voit vaihtaa jäsentietojasi kirjautumalla
-  sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
+    Voit vaihtaa jäsentietojasi kirjautumalla
+    sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
 edit: muokkaa
 add_new_artist: lisää uusi artistiprofiili
 preview: Esikatselu
@@ -187,8 +203,8 @@ no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnist
 # bio_attribute removed (was: Bio)
 succesfully_signed_up_for_the_party: Onnistuneesti ilmoittauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one:
-  Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.
-  Haluatko luoda uuden?
+    Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.
+    Haluatko luoda uuden?
 this_artist_signed_up_already: Tämä artisti on jo ilmoitettu tapahtumaan.
 duplicate_artist_found: Saman niminen artisti löytyy jo!
 Please enter a password: Anna salasana
@@ -198,380 +214,384 @@ Full list: Koko lista
 logged_in_as: Olet kirjautuneena käyttäjänä
 Choose a shift ("Nakki") to see the description: Valitse Nakki nähdäksesi sen kuvauksen
 timetable:
-  now: nyt
-  gap: "%hours%h tauko"
+    now: nyt
+    gap: "%hours%h tauko"
 stream:
-  page:
-    players: Streamissa tällä hetkellä
-  tile:
-    button: Streami sivu
-  live:
-    now: Livenä tällä hetkellä
-  label: Streami
-  labels: Streamit
-  no_streams: Artisti ei ole osallistunut yhtään streamiin
-  loading: ladataan..
-  artist:
-    not_yours: Ei sinun artistisi
-    played_at: Artisti soitti näinä ajankohtina
-    other_artists: Muut artistit samaan aikaan
-    notnull: Sinun täytyy valita artisti
-    your: Artistisi
-    remove: Poista artistisi streamista
-    currently_in_stream: on tällä hetkellä streamissa
-    add: Lisää streamiin
-    note: Huomaa
-    note_text: Vain yksi sinun artisteista voi olla yhtäaikaa aktiivinen streamissa. Jos lisäät toisen artisteistasi niin edellinen otetaan pois streamista.
-    management: Stream artisti muokkaus
-    label: Artisti
-    select: Valitse artisti
-  download:
-    mp3: Lataa Mp3
-    flac: Lataa Flac
-    opus: Lataa Opus
-  recommended_quality: Paras laatu
-  better_compability: Parempi yhteensopivuus
-  listeners: kuuntelijoita
-  command:
-    successful: Stream käsky OK
-  control:
-    off: Automaattinen streamaus/tallennus pois päältä
-    on: Automaattinen streamaus/tallennus päällä
-    start: Aloita
-    end: Lopeta
+    page:
+        players: Streamissa tällä hetkellä
+    tile:
+        button: Streami sivu
+    live:
+        now: Livenä tällä hetkellä
+    label: Streami
+    labels: Streamit
+    no_streams: Artisti ei ole osallistunut yhtään streamiin
+    loading: ladataan..
+    artist:
+        not_yours: Ei sinun artistisi
+        played_at: Artisti soitti näinä ajankohtina
+        other_artists: Muut artistit samaan aikaan
+        notnull: Sinun täytyy valita artisti
+        your: Artistisi
+        remove: Poista artistisi streamista
+        currently_in_stream: on tällä hetkellä streamissa
+        add: Lisää streamiin
+        note: Huomaa
+        note_text: Vain yksi sinun artisteista voi olla yhtäaikaa aktiivinen streamissa. Jos lisäät toisen artisteistasi niin edellinen otetaan pois streamista.
+        management: Stream artisti muokkaus
+        label: Artisti
+        select: Valitse artisti
+    download:
+        mp3: Lataa Mp3
+        flac: Lataa Flac
+        opus: Lataa Opus
+    recommended_quality: Paras laatu
+    better_compability: Parempi yhteensopivuus
+    listeners: kuuntelijoita
+    command:
+        successful: Stream käsky OK
+    control:
+        off: Automaattinen streamaus/tallennus pois päältä
+        on: Automaattinen streamaus/tallennus päällä
+        start: Aloita
+        end: Lopeta
 block:
-  tickets:
-    name: Omistamasi liput
-  stats:
-    name: Statistiikkaa
-    members: Jäseniä
-    active_members: Aktiivijäseniä
-    bookings: Vuokratapahtumia
-    events: Tapahtumia
-  events:
-    manage: Hallitse
-    upcoming_events: Tulevat tapahtumat
-    future_events: Tulevat tapahtumat
-  bookings:
-    manage: Hallitse
-    no_bookings: Ei kesken olevia vuokracaseja
-    bookings: Kesken olevat vuokratapahtumat
-    help: Tule auttamaan vuokrauksessa?
-  items:
-    title: Huollettava laitteisto
-    help: Tule auttamaan huoltotöissä?
-  email_lists:
-    name: Sähköpostilistat
-    tiedotus: Tiedotuslista
-    aktiivit: Aktiivien lista
-    vuokra: Vuokraajien lista
-    control: Hallinnointi
-  future_events:
-    checkout_old_events: Kato vanhat
-    events: tapahtumat
+    tickets:
+        name: Omistamasi liput
+    stats:
+        name: Statistiikkaa
+        members: Jäseniä
+        active_members: Aktiivijäseniä
+        bookings: Vuokratapahtumia
+        events: Tapahtumia
+    events:
+        manage: Hallitse
+        upcoming_events: Tulevat tapahtumat
+        future_events: Tulevat tapahtumat
+    bookings:
+        manage: Hallitse
+        no_bookings: Ei kesken olevia vuokracaseja
+        bookings: Kesken olevat vuokratapahtumat
+        help: Tule auttamaan vuokrauksessa?
+    items:
+        title: Huollettava laitteisto
+        help: Tule auttamaan huoltotöissä?
+    email_lists:
+        name: Sähköpostilistat
+        tiedotus: Tiedotuslista
+        aktiivit: Aktiivien lista
+        vuokra: Vuokraajien lista
+        control: Hallinnointi
+    future_events:
+        checkout_old_events: Kato vanhat
+        events: tapahtumat
 menu:
-  logon_to: Kirjaudu
+    logon_to: Kirjaudu
 page:
-  email_unsubscribe:
-    removed: poistettu
-    title: Sähköposti poistettu tiedotuslistalta
-    message: Entropy tiedotus uutiskirjeen tilaus on nyt peruutettu. Jos haluat saada sähköposteja uudestaan kirjaudu tilillesi ja muuta sähköpostiasetuksia.
-    link: Kirjaudu muokkaamaan profiiliasi
-  title:
-    checkout: Kassa
-  fixing:
-    icon:
-      wrench: Tarkoittaa että tarvitsee korjausta
-      puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
+    email_unsubscribe:
+        removed: poistettu
+        title: Sähköposti poistettu tiedotuslistalta
+        message: Entropy tiedotus uutiskirjeen tilaus on nyt peruutettu. Jos haluat saada sähköposteja uudestaan kirjaudu tilillesi ja muuta sähköpostiasetuksia.
+        link: Kirjaudu muokkaamaan profiiliasi
+    title:
+        checkout: Kassa
+    fixing:
+        icon:
+            wrench: Tarkoittaa että tarvitsee korjausta
+            puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
 event:
-  no_artists: Aristeja ei ole vielä valittu
-  badge:
-    stream: Internet lähetys
-    clubroom: Tapahtuu kerhohuoneella
-    music: Musiikkia
-    meeting: Keskustelu tilaisuus
-    announcement: Ilmoitus asia
-    web: online mahdollisuus
-  stripe:
-    fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
-    complete: Kiitos ostoksestasi!
-    mail_sent: Ostoksesi saapuivat juuri sähköpostilaatikkoosi. Ongelmatilanteissa ota yhteyttä hallitus@entropy.fi
-  meta:
-    keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
-  location:
-    title: Paikka
-    description: Paikan osoite, kartta ja linkit karttapalveluihin löytyy alta
-    not_found: Paikkaa ei ole julkaistu
-  edit: Muokkaa
-  only_for_members: tapahtuma näkyy vain jäsenille
-  not_public: ei julkinen
-  in_future: Tuleva tapahtuma
-  after: Mennyt tapahtuma
-  now: Tapahtuma meneillään
-  safer_space: Turvallisempi tila
-  ticket:
-    shop: Lippukauppa
-    to_shop: Lippukauppaan
-  player:
-    will_appear_here_when_the_stream_is_on:
-      Voit kuunnella streamausta suoraan tältä
-      sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
-  form:
-    sign_up:
-      request_edited: Ilmottautumista muokattu
-      request_deleted: Ilmottautuminen poistettu
-      artist: Artisti
-      description:
-        Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
-        koska profilli on aina tapahtumakohtainen
-      why_should_we_choose_you: Miksi valitsisimme sinut?
-      wish_for_playtime: Toive ajankohdasta
-      set_length: Toive setin pituudesta
-      free_word: Vapaa sana
-      save: Tallenna
-      delete: Poista
-      new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen <a href="/profiili/artisti/">profiilisivultasi</a>
-      ends: Ilmoittautuminen suljetaan
-      agree_on_recording: Hyväksy tallennus
-      agree_on_recording_help: Tapahtuman esiintymiset taltioidaan arkistointia varten. Tallenne poistetaan pyydettäessä.
-url:
-  form:
-    open_in_new_window: Avaa uudessa ikkunassa
-    title: Linkin teksti
-    url: Url-osoite
-    icon: ikoni
-    icon_placeholder: Valitse ikoni
-profile:
-  edit: Profiilin muokkaus
-  email_notifications: Sähköposti asetukset
-  change_password: Vaihda salasana
-  member_data_changed: Salasana tai tiedot muutettu
-  name: Profiili
-  add_new_artist: Lisää uusi artistiprofiili
-  access_groups: Tämän sivuston erityisoikeudet
-  apply_for_active_member: Hae aktiivijäsenyyttä
-  application_saved: Hakemus tallennettu
-  paid_renting_rewards: Vuokratehtävien kompensaatiot
-  no_renting_rewards:
-    Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa,
-    miten voit osallistua.
-  next_reward_is_bubling_under: Seuraava on tulossa..
-  you_are_active_member_already: Olet jo aktiivijäsen
-  application_for_active_member: Aktiivijäsen hakemuksesi
-  save: tallenna
-  only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
-  logout: Uloskirjautuminen
-  epics:
-    title: ePics
-    set_password: Aseta/vaihda ePics-salasana
-    open: Avaa ePics
-    password_title: ePics-salasana
-    password_page:
-      description: Tämä luo tilin epics.entropy.fi-palveluun tai päivittää salasanan, jos tili on jo olemassa.
-      username_hint: ePics-käyttäjänimesi on jäsentilisi käyttäjänimi.
+    no_artists: Aristeja ei ole vielä valittu
+    badge:
+        stream: Internet lähetys
+        clubroom: Tapahtuu kerhohuoneella
+        music: Musiikkia
+        meeting: Keskustelu tilaisuus
+        announcement: Ilmoitus asia
+        web: online mahdollisuus
+    stripe:
+        fee: Jokaiseen ostokseen lisätään 1 € kattamaan maksunvälittäjän ottamat kulut.
+        complete: Kiitos ostoksestasi!
+        mail_sent: Ostoksesi saapuivat juuri sähköpostilaatikkoosi. Ongelmatilanteissa ota yhteyttä hallitus@entropy.fi
+    meta:
+        keywords: Entropy, musiikki, yhdistys, kulttuuri, voittoatavoittelematon, tapahtuma
+    location:
+        title: Paikka
+        description: Paikan osoite, kartta ja linkit karttapalveluihin löytyy alta
+        not_found: Paikkaa ei ole julkaistu
+    edit: Muokkaa
+    only_for_members: tapahtuma näkyy vain jäsenille
+    not_public: ei julkinen
+    in_future: Tuleva tapahtuma
+    after: Mennyt tapahtuma
+    now: Tapahtuma meneillään
+    safer_space: Turvallisempi tila
+    ticket:
+        shop: Lippukauppa
+        to_shop: Lippukauppaan
+    player:
+        will_appear_here_when_the_stream_is_on:
+            Voit kuunnella streamausta suoraan tältä
+            sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
     form:
-      password: Salasana ePicsiin
-      password_repeat: Toista salasana
-      help: Valitse salasana epics.entropy.fi-tilillesi. Jos tili on jo olemassa, tämä korvaa salasanan.
-  no_access_groups: Ei erityisoikeuksia
-  door:
-    log: Kertsin ovilogi
-    opener: Kertsin oven avaaja
-    no_message: Ei viestiä
-    opened: Ovi avattu
-    open_the_door: Avaa
-    open_the_door_page: Ovenavaussivu
-    latest: Viimeisin
-    not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
-    last: lukon viimeisin muutos
-    connection_problems: Yhteys ongelma
-    connection_ok: Yhteys ok
-    wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. iPhone <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
+        sign_up:
+            request_edited: Ilmottautumista muokattu
+            request_deleted: Ilmottautuminen poistettu
+            artist: Artisti
+            description:
+                Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
+                koska profilli on aina tapahtumakohtainen
+            why_should_we_choose_you: Miksi valitsisimme sinut?
+            wish_for_playtime: Toive ajankohdasta
+            set_length: Toive setin pituudesta
+            free_word: Vapaa sana
+            save: Tallenna
+            delete: Poista
+            new_artist_help_html: Jos haluat luoda uuden artistin, voit tehdä sen <a href="/profiili/artisti/">profiilisivultasi</a>
+            ends: Ilmoittautuminen suljetaan
+            agree_on_recording: Hyväksy tallennus
+            agree_on_recording_help: Tapahtuman esiintymiset taltioidaan arkistointia varten. Tallenne poistetaan pyydettäessä.
+url:
+    form:
+        open_in_new_window: Avaa uudessa ikkunassa
+        title: Linkin teksti
+        url: Url-osoite
+        icon: ikoni
+        icon_placeholder: Valitse ikoni
+profile:
+    edit: Profiilin muokkaus
+    email_notifications: Sähköposti asetukset
+    change_password: Vaihda salasana
+    member_data_changed: Salasana tai tiedot muutettu
+    name: Profiili
+    add_new_artist: Lisää uusi artistiprofiili
+    access_groups: Tämän sivuston erityisoikeudet
+    apply_for_active_member: Hae aktiivijäsenyyttä
+    application_saved: Hakemus tallennettu
+    paid_renting_rewards: Vuokratehtävien kompensaatiot
+    no_renting_rewards:
+        Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa,
+        miten voit osallistua.
+    next_reward_is_bubling_under: Seuraava on tulossa..
+    you_are_active_member_already: Olet jo aktiivijäsen
+    application_for_active_member: Aktiivijäsen hakemuksesi
+    save: tallenna
+    only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
+    logout: Uloskirjautuminen
+    epics:
+        title: ePics
+        set_password: Aseta/vaihda ePics-salasana
+        open: Avaa ePics
+        password_title: ePics-salasana
+        password_page:
+            description: Tämä luo tilin epics.entropy.fi-palveluun tai päivittää salasanan, jos tili on jo olemassa.
+            username_hint: ePics-käyttäjänimesi on jäsentilisi käyttäjänimi.
+        form:
+            password: Salasana ePicsiin
+            password_repeat: Toista salasana
+            help: Valitse salasana epics.entropy.fi-tilillesi. Jos tili on jo olemassa, tämä korvaa salasanan.
+    no_access_groups: Ei erityisoikeuksia
+    door:
+        log: Kertsin ovilogi
+        opener: Kertsin oven avaaja
+        no_message: Ei viestiä
+        opened: Ovi avattu
+        open_the_door: Avaa
+        open_the_door_page: Ovenavaussivu
+        latest: Viimeisin
+        not_active_member: Et ole aktiivijäsen, joten tämä ei ole sallittu
+        last: lukon viimeisin muutos
+        connection_problems: Yhteys ongelma
+        connection_ok: Yhteys ok
+        wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. iPhone <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
 artist:
-  streams: Streamit
-  streams_by: Artistin streamit
-  not_confirmed_yet: Ei vahvistettu (vielä)
-  not_selected: Artistia ei valittu
-  explanation:
-    Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla
-    näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina.
-    Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan.
-    Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään
-    tulevissa tapahtumissa, ja aiempi versio jää näkyville aiempaan tapahtumaan.
-  no_artist_profile: Ei yhtään profiilia
-  information: Perustiedot
-  profiles: Artistiprofiilit
-  list: Artistilistaus
-  tile:
-    button_event: Tapahtuma
-    heading: Yksi satunnainen artisti
-    button_artists: Artistit
-  random:
-    preview: Yksi satunnainen artistiesittely
-  form:
-    name: Artistinimi
-    type: Tyyppi
-    bio: Bio suomeksi
-    bio_en: Bio englanniksi
-    pic_missing: Kuva puuttuu!
-    genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä. ÄLÄ LAITA BPM TÄHÄN.
-    bio_help:
-      Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
-      sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää
-      linkit alla olevaan linkkilistaan, ei tähän. Tämä teksti on julkinen.
-    hardware_help:
-      Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua.
-      (Vinyyli, CDJ)
-    promo_picture:
-      Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa
-      tehdä se ennen kuin lisäät tänne)
-    genre: Genre(t)
-    hardware: Laitteisto
-    links: Linkit medianäytteisiin ja muihin palveluihin
+    streams: Streamit
+    streams_by: Artistin streamit
+    not_confirmed_yet: Ei vahvistettu (vielä)
+    not_selected: Artistia ei valittu
+    explanation:
+        Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla
+        näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina.
+        Mikäli muokkaat profiilia ennen tapahtumaa, se päivittyy kyseiseen tapahtumaan.
+        Mikäli muokkaat profiilia tapahtuman jälkeen, muokattu profiili tulee näkymään
+        tulevissa tapahtumissa, ja aiempi versio jää näkyville aiempaan tapahtumaan.
+    no_artist_profile: Ei yhtään profiilia
+    information: Perustiedot
+    profiles: Artistiprofiilit
+    list: Artistilistaus
+    tile:
+        button_event: Tapahtuma
+        heading: Yksi satunnainen artisti
+        button_artists: Artistit
+    random:
+        preview: Yksi satunnainen artistiesittely
+    form:
+        name: Artistinimi
+        type: Tyyppi
+        bio: Bio suomeksi
+        bio_en: Bio englanniksi
+        pic_missing: Kuva puuttuu!
+        genre_help: Vj voi merkitä minkälaista materiaalia. Tätä kenttää ei käännetä. ÄLÄ LAITA BPM TÄHÄN.
+        bio_help:
+            Kerro lyhyesti itsestäsi artistina. Voit esimerkiksi kertoa taustastasi
+            sekä siitä, millaista musiikkia tulet soittamaan seuraavissa bileissä. Lisää
+            linkit alla olevaan linkkilistaan, ei tähän. Tämä teksti on julkinen.
+        hardware_help:
+            Mitä tekniikkaa käytät esiintymiseen, jotta tiedämme miten varautua.
+            (Vinyyli, CDJ)
+        promo_picture:
+            Promokuva (skaalataan neliöksi jonka sivu on 800px, joten kannattaa
+            tehdä se ennen kuin lisäät tänne)
+        genre: Genre(t)
+        hardware: Laitteisto
+        links: Linkit medianäytteisiin ja muihin palveluihin
 epics:
-  password_set: ePics-salasana tallennettu.
-  password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
-  tile:
-    heading: Satunnaisia kuvia Entropyn
-    heading_events: tapahtumista
-    more_button: Kuvia
-    events_button: Tapahtumia
-    title: Satunnaisia kuvia Entropyn tapahtumista
+    password_set: ePics-salasana tallennettu.
+    password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
+    tile:
+        heading: Satunnaisia kuvia Entropyn
+        heading_events: tapahtumista
+        more_button: Kuvia
+        events_button: Tapahtumia
+        title: Satunnaisia kuvia Entropyn tapahtumista
 flash:
-  password_set: ePics-salasana tallennettu.
-  password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
+    password_set: ePics-salasana tallennettu.
+    password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
 member:
-  allow_info_mails: Info mailit
-  allow_active_member_mails: Aktiivien mailit
-  epics_username: ePics-käyttäjänimi
-  epics_username.not_set: ei asetettu
-  can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
-  active:
-    application_title: Hae aktiivijäseneksi
-    application: Hakemuksesi Entropyn aktiivijäseneksi
-    apply_help:
-      Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa,
-      mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään
-      seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan
-      asti.
-    requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
-    requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
-    requirements3: Hallitus tietää kuka olet
-    requirements2: Viimeaikainen aktiivisuutesi
-    requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
-  join:
-    error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
-    info:
-      Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli
-      perille.
-    added: Tietosi on nyt tallennettu jäsenrekisteriimme.
-    update:
-      Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi.
-      Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
+    welcome:
+        subject: "[Entropy] Entropyn Jäsenyys / Entropy Membership"
+        subject_verify_suffix: " - Vahvista sähköpostisi / Please verify your email"
+    allow_info_mails: Info mailit
+    allow_active_member_mails: Aktiivien mailit
+    epics_username: ePics-käyttäjänimi
+    epics_username.not_set: ei asetettu
+    email_unverified: sähköpostiosoitteesi ei ole vahvistettu
+    can_vote: Äänioikeus (AYY:n jäsen tai hallituksen myöntämä erityisoikeus)
+    active:
+        application_title: Hae aktiivijäseneksi
+        application: Hakemuksesi Entropyn aktiivijäseneksi
+        apply_help:
+            Toivomme, että kerrot meille hakemuksessasi mitä olet tehnyt Entropyssa,
+            mitä haluisit tehdä ja miksi haet aktiivijäsenyyttä. Hakemuksesi käsitellään
+            seuraavassa hallituksen kokouksessa. Voit muokata hakemusta vapaasti käsittelyajankohtaan
+            asti.
+        requirements: Yleisiä vaatimuksia, joiden perusteella hallitus muodostaa päätöksensä.
+        requirements_help: Vaatimukset ovat hallitukselle vain ohjenuora.
+        requirements3: Hallitus tietää kuka olet
+        requirements2: Viimeaikainen aktiivisuutesi
+        requirements1: Olet ollut järjestämässä Entropyssä vähintään 3 tapahtumaa
+    join:
+        error: Lomakkeessa oli virhe. Ole hyvä ja avaa se liity nappulasta uudelleen
+        info:
+            Alla näet sähköpostin jonka juuri lähetimme sinulle. Toivottavasti se tuli
+            perille.
+        added: Tietosi on nyt tallennettu jäsenrekisteriimme.
+        update:
+            Näyttäisit olevan jo jäsen. Kirjaudu sisään muokataksesi jäsentietojasi.
+            Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
 You have already requested a reset password email. Please check your email or try again soon.:
-  Olet
-  jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin
-  uudelleen.
+    Olet
+    jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin
+    uudelleen.
 The reset password link is invalid. Please try to reset your password again.:
-  Linkki
-  ei kelpaa. Yritä aloittaa prosessi alusta.
+    Linkki
+    ei kelpaa. Yritä aloittaa prosessi alusta.
 The link in your email is expired. Please try to reset your password again.:
-  Sähköpostisi
-  linkki on vanhentunut. Yritä aloittaa prosessi alusta.
+    Sähköpostisi
+    linkki on vanhentunut. Yritä aloittaa prosessi alusta.
 login:
-  join_us: Jotta voit kirjautua sinun täytyy olla jäsen, joten <a href="/liity">liity!</a>
-  join_us_plain: Jotta voit kirjautua sinun täytyy olla jäsen. Liity ensin.
+    join_us: Jotta voit kirjautua sinun täytyy olla jäsen, joten <a href="/liity">liity!</a>
+    join_us_plain: Jotta voit kirjautua sinun täytyy olla jäsen. Liity ensin.
 dark: Tumma
 bright: Kirkas
 light: Kirkas
 rsvp:
-  email_in_use: Oletko jäsen? kirjaudu ensin.
-  receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
-  no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
-  already_rsvpd:
-    Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
-    tapahtumaa.
-  rsvpd_succesfully:
-    Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
-    tapahtumaa.
-  info:
-    Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>.
-    Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi
-    alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
-  closed: Ilmoittautuminen suljettu
+    email_in_use: Oletko jäsen? kirjaudu ensin.
+    receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
+    no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
+    already_rsvpd:
+        Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
+        tapahtumaa.
+    rsvpd_succesfully:
+        Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
+        tapahtumaa.
+    info:
+        Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>.
+        Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi
+        alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
+    closed: Ilmoittautuminen suljettu
 ticket:
-  ticket: Lippu
-  your_tickets: Lippusi
-  form:
-    reserve: Varaa
-    reserve_and_recommend: Varaa ja suosittele
-  and_nakki: Nakki/Lippu
-  situation: Lippusi tila
-  available: Saatavilla
-  recipient: Vastaanottajan nimi
-  reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
-  not_available: Lippuja ei ole saatavilla
-  reserve_yours: Varaa lippusi tästä!
-  buy_yours: Osta lippusi tästä!
-  details: Katso lippusi tiedot
-  details_with_nakki: Katso nakkisi/lippusi tiedot
-  payment_info: Maksutiedot
-  reference_number: Viite (pitää käyttää)
-  code: Lippukoodi
-  paid: maksettu
-  not_paid: Ei maksettu
-  paid_with_bus: Lippu ja bussi maksettu
-  all_sold: Kaikki liput on myyty.
-  to_ticket_shop: Lippukauppaan
-  sale_starts: Ennakkolipunmyynti alkaa
-  sale_ends: Ennakkolipunmyynti loppuu
-  sale_ended: Ennakkolipunmyynti loppui
-  sum: Hinta
-  check: Lipputarkistus
-  error: Katso oheinen virhe
-  already_given: Lippu on jo annettu
-  given_out: Lippu on nyt annettu
-  give: Anna lippu
-  go_to_event_page: Lippu tapahtuma sivulta
-  reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaa eteenpäin.
-  presale:
-    off: Ennakkomyynti ei ole käytössä
+    ticket: Lippu
+    your_tickets: Lippusi
+    form:
+        reserve: Varaa
+        reserve_and_recommend: Varaa ja suosittele
+    and_nakki: Nakki/Lippu
+    situation: Lippusi tila
+    available: Saatavilla
+    recipient: Vastaanottajan nimi
+    reserved: Lippu on nyt varattu sinulle! Maksutiedot alla.
+    not_available: Lippuja ei ole saatavilla
+    reserve_yours: Varaa lippusi tästä!
+    buy_yours: Osta lippusi tästä!
+    details: Katso lippusi tiedot
+    details_with_nakki: Katso nakkisi/lippusi tiedot
+    payment_info: Maksutiedot
+    reference_number: Viite (pitää käyttää)
+    code: Lippukoodi
+    paid: maksettu
+    not_paid: Ei maksettu
+    paid_with_bus: Lippu ja bussi maksettu
+    all_sold: Kaikki liput on myyty.
+    to_ticket_shop: Lippukauppaan
+    sale_starts: Ennakkolipunmyynti alkaa
+    sale_ends: Ennakkolipunmyynti loppuu
+    sale_ended: Ennakkolipunmyynti loppui
+    sum: Hinta
+    check: Lipputarkistus
+    error: Katso oheinen virhe
+    already_given: Lippu on jo annettu
+    given_out: Lippu on nyt annettu
+    give: Anna lippu
+    go_to_event_page: Lippu tapahtuma sivulta
+    reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaa eteenpäin.
+    presale:
+        off: Ennakkomyynti ei ole käytössä
 join_us:
-  title: Liity jäseneksi!
-  button: Liity jäseneksi
-  mattermost: Liity Mattermostiin
-  1:
-    Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme
-    kuuluu muun muassa
-  2: Tapahtumien järjestäminen
-  3: Tapahtumatekniikan koulutus
-  4: Tekniikan vuokraus
+    title: Liity jäseneksi!
+    button: Liity jäseneksi
+    mattermost: Liity Mattermostiin
+    1:
+        Entropy on 1993 perustettu elektronisen musiikin kulttuuriyhdistys. Toimenkuvaamme
+        kuuluu muun muassa
+    2: Tapahtumien järjestäminen
+    3: Tapahtumatekniikan koulutus
+    4: Tekniikan vuokraus
 barcode.expl: Ensin oma koodi ja sitte voit käyttää muita koodeja ja hyväksyminen omalla koodilla
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
-  join_mattermost: Liity Mattermostiin
-  old_announcements: Vanhat tiedotteet
-  theme-swithcer: Teeman vaihtaja
+    join_mattermost: Liity Mattermostiin
+    old_announcements: Vanhat tiedotteet
+    theme-swithcer: Teeman vaihtaja
 happening:
-  heading:
-    edit: Muokkaa tapahtumaa
-  create: Luo tapahtuma/ravintola yms.
-  paymentInfo: Maksutiedot
-  bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
-  no_reservations: Ei varauksia
-  description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmottautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
-  price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
-  payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
-  show_payment_info: Näytä maksutiedot tapahtumassa
-  sign_ups_have_ended: Ilmottautuminen suljettu
-  markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatointi</a> sallittu
-  you_have_signed_up: Ilmoittauduttu onnistuneesti!
-  reservation_cancelled: Ilmottautuminen poistettu!
-  created: Tapahtuma luotu
-  same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
-  edited: Muokkaukset tallennettu onnistuneesti.
-  ticket_missing: Tarvitset lipun ensin.
-  happenings: Tapahtumat
+    heading:
+        edit: Muokkaa tapahtumaa
+    create: Luo tapahtuma/ravintola yms.
+    paymentInfo: Maksutiedot
+    bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
+    no_reservations: Ei varauksia
+    description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmottautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
+    price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
+    payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
+    show_payment_info: Näytä maksutiedot tapahtumassa
+    sign_ups_have_ended: Ilmottautuminen suljettu
+    markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatointi</a> sallittu
+    you_have_signed_up: Ilmoittauduttu onnistuneesti!
+    reservation_cancelled: Ilmottautuminen poistettu!
+    created: Tapahtuma luotu
+    same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
+    edited: Muokkaukset tallennettu onnistuneesti.
+    ticket_missing: Tarvitset lipun ensin.
+    happenings: Tapahtumat
 Name fi: Nimi suomeksi
 Name en: Nimi englanniksi
 Description fi: Kuvaus suomeksi
@@ -602,118 +622,118 @@ Release this happening in event: Julkaise tapahtuma sivulle
 SHOWN ONLY TO: NÄYTETÄÄN VAIN
 missing: puuttuu
 location:
-  location: sijainti
-  former_industrial_complex: entinen teollisuuskompleksi
+    location: sijainti
+    former_industrial_complex: entinen teollisuuskompleksi
 Your username was updated to your Mattermost username: Käyttäjänimesi vaihdettiin Mattermost käyttäjänimeksi.
 Sign ups open until: Varaukset ovat auki tähän asti
 Allow sign up comments: Kommentti varauksen yhteydessä?
 edited: Muokkaukset tallennettu onnistuneesti.
 Back to: Takaisin
 contract:
-  accessories:
-    prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
-  signed: Allerkirjoitettu!
-  error: Allekirjoita uudestaan ja hyväksy ehdot
+    accessories:
+        prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
+    signed: Allerkirjoitettu!
+    error: Allekirjoita uudestaan ja hyväksy ehdot
 pcs: kpl
 Previous: Edellinen
 Next: Seuraava
 share:
-  share: Jaa tämä sivu
-  copied: Linkki kopioitu leikepöydälle
-  copy: Kopio linkki
+    share: Jaa tämä sivu
+    copied: Linkki kopioitu leikepöydälle
+    copy: Kopio linkki
 calendar:
-  heading: Kalenterin konfigurointi
-  help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
-  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla
-  add_events: Lisää tapahtumat
-  add_notifications_for_events: Lisää muistutukset tapahtumille
-  add_clubroom_events: Lisää kerhohuone tapahtumat
-  add_notifications_for_clubroom_events: Lisää muistutukset kerhohuone tapahtumille
-  add_meetings: Lisää kokoukset
-  add_notifications_for_meetings: Lisää muistutukset kokouksille
-  generate: Generoi kalenteri linkki
-  url_generated: Linkki generoitu
+    heading: Kalenterin konfigurointi
+    help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
+    help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla
+    add_events: Lisää tapahtumat
+    add_notifications_for_events: Lisää muistutukset tapahtumille
+    add_clubroom_events: Lisää kerhohuone tapahtumat
+    add_notifications_for_clubroom_events: Lisää muistutukset kerhohuone tapahtumille
+    add_meetings: Lisää kokoukset
+    add_notifications_for_meetings: Lisää muistutukset kokouksille
+    generate: Generoi kalenteri linkki
+    url_generated: Linkki generoitu
 product:
-  quantity: määrä
-  sold_out: Loppuunmyyty
+    quantity: määrä
+    sold_out: Loppuunmyyty
 nakkikone:
-  build_up: Rakennus
-  during: Tapahtuman aikana
-  tear_down: Purku
+    build_up: Rakennus
+    during: Tapahtuman aikana
+    tear_down: Purku
 shop:
-  buy: Kassalle
-  cart:
-    empty: Ostoskorisi on tyhjä
-    email:
-      label: Sähköposti, johon ostoksesi lähetetään
-      help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme ostoksesi tiliisi.
+    buy: Kassalle
+    cart:
+        empty: Ostoskorisi on tyhjä
+        email:
+            label: Sähköposti, johon ostoksesi lähetetään
+            help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme ostoksesi tiliisi.
 e30v:
-  sponsors: Sponsorit
-  merch_shop: Oheistuotekauppa
-  nav:
-    home: entropy 30 vuotta
-    info: info
-    tickets: Liput
-    artists: Artistit
-    timetable: Aikataulu
-    safer_space: Turvalli&shy;sempi tila
-  buy_tickets: Osta liput
-  years: vuotta
-  fee: Jokaiseen ostokseen lisätään 0,75 € kattamaan maksunvälittäjän ottamat kulut.
-  buy: Kassalle
-  gdpr: Käytämme vain välttämättömiä evästeitä, jotta kirjautuminen sekä Stripe-integraatio toimii.
-  cart:
-    empty: Ostoskorisi on tyhjä
-    email:
-      label: Sähköposti, johon ostoksesi lähetetään
-      help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme lipun tiliisi.
+    sponsors: Sponsorit
+    merch_shop: Oheistuotekauppa
+    nav:
+        home: entropy 30 vuotta
+        info: info
+        tickets: Liput
+        artists: Artistit
+        timetable: Aikataulu
+        safer_space: Turvalli&shy;sempi tila
+    buy_tickets: Osta liput
+    years: vuotta
+    fee: Jokaiseen ostokseen lisätään 0,75 € kattamaan maksunvälittäjän ottamat kulut.
+    buy: Kassalle
+    gdpr: Käytämme vain välttämättömiä evästeitä, jotta kirjautuminen sekä Stripe-integraatio toimii.
+    cart:
+        empty: Ostoskorisi on tyhjä
+        email:
+            label: Sähköposti, johon ostoksesi lähetetään
+            help: Kannattaa kirjautua <a href="/login">sisään</a>, niin liitämme lipun tiliisi.
 icons:
-  brand_icons_label: Brändi-ikonit
-  common_icons_label: Yleiset ikonit
-  brand_icons:
-    bandcamp: Bandcamp
-    behance: Behance
-    discord: Discord
-    facebook: Facebook
-    github: GitHub
-    instagram: Instagram
-    linkedin: LinkedIn
-    linktree: Linktree
-    mastodon: Mastodon
-    mixcloud: Mixcloud
-    pinterest: Pinterest
-    reddit: Reddit
-    ra: Resident Advisor
-    soundcloud: SoundCloud
-    spotify: Spotify
-    telegram: Telegram
-    tiktok: TikTok
-    twitch: Twitch
-    twitter: Twitter
-    whatsapp: WhatsApp
-    youtube: YouTube
-  common_icons:
-    bus: Bussi
-    calendar: Kalenteri
-    coffee: Kahvi
-    comments: Kommentit
-    cubes: Kuutiot
-    download: Lataa
-    email: Sähköposti
-    heart: Sydän
-    home: Koti
-    image: Kuva
-    link: Linkki
-    location-dot: Sijainti
-    map-pin: Karttapiste
-    music: Musiikki
-    pause: Tauko
-    phone: Puhelin
-    play: Toisto
-    rss: RSS
-    smiley: Hymiö
-    star: Tähti
-    ticket: Lippu
-    upload: Lataa ylös
-    user: Käyttäjä
-    video: Video
+    brand_icons_label: Brändi-ikonit
+    common_icons_label: Yleiset ikonit
+    brand_icons:
+        bandcamp: Bandcamp
+        behance: Behance
+        discord: Discord
+        facebook: Facebook
+        github: GitHub
+        instagram: Instagram
+        linkedin: LinkedIn
+        linktree: Linktree
+        mastodon: Mastodon
+        mixcloud: Mixcloud
+        pinterest: Pinterest
+        reddit: Reddit
+        ra: Resident Advisor
+        soundcloud: SoundCloud
+        spotify: Spotify
+        telegram: Telegram
+        tiktok: TikTok
+        twitch: Twitch
+        twitter: Twitter
+        whatsapp: WhatsApp
+        youtube: YouTube
+    common_icons:
+        bus: Bussi
+        calendar: Kalenteri
+        coffee: Kahvi
+        comments: Kommentit
+        cubes: Kuutiot
+        download: Lataa
+        email: Sähköposti
+        heart: Sydän
+        home: Koti
+        image: Kuva
+        link: Linkki
+        location-dot: Sijainti
+        map-pin: Karttapiste
+        music: Musiikki
+        pause: Tauko
+        phone: Puhelin
+        play: Toisto
+        rss: RSS
+        smiley: Hymiö
+        star: Tähti
+        ticket: Lippu
+        upload: Lataa ylös
+        user: Käyttäjä
+        video: Video

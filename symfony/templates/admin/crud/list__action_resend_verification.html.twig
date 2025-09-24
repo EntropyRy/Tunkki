@@ -1,0 +1,29 @@
+{#
+  Sonata Admin list action: Resend verification email.
+
+  Usage:
+    Added in MemberAdmin::configureListFields under actions as 'resendverification'.
+
+  Behavior:
+    - If the member's email is already verified, show a passive badge.
+    - Otherwise show a button that triggers the custom 'resendverification' route
+      defined in MemberAdmin::configureRoutes (mapped to /resend-verification-email).
+
+  Translations expected:
+    - resend_verification
+    - verify.email.already
+#}
+
+{% trans_default_domain 'messages' %}
+
+{% if object.emailVerified %}
+    <span class="badge bg-success" title="{{ 'verify.email.already'|trans }}">
+        ✓
+    </span>
+{% else %}
+    <a class="btn btn-sm btn-warning"
+       href="{{ admin.generateObjectUrl('resendverification', object) }}"
+       title="{{ 'resend_verification'|trans }}">
+        <i class="fa fa-envelope"></i>
+    </a>
+{% endif %}

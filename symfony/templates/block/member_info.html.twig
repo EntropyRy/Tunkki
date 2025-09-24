@@ -22,8 +22,8 @@
                 <li>
                     <span class="fa-li"><twig:ux:icon name="envelope" /></span>
                     {% if not member.emailVerified %}
-                        <p>Your email is not verified, Please send email to hallitus@entropy.fi to clear this up</p>
-                        {# <a href="{{ path('profile_resend_verification') }}" class="btn btn-primary btn-sm">{{ 'resend_verification'|trans }}</a> #}
+                        <p class="text-danger">{{ member.email }} - {{ 'member.email_unverified'|trans }}</p>
+                        <a href="{{ path('profile_resend_verification') }}" class="btn btn-primary btn-sm" data-turbo="false">{{ 'resend_verification'|trans }}</a>
                     {% else %}
                         {{ member.email }}
                     {% endif %}

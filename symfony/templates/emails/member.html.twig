@@ -1,2 +1,30 @@
 {% extends 'emails/base.html.twig' %}
-{% block content %}<div>{{ body|raw }}</div>{% endblock %}
+{% block content %}
+    <div style="line-height:1.5;">
+        {{ body|raw }}
+    </div>
+
+    {% if signedUrl is defined %}
+        <hr style="margin:32px 0; border:none; border-top:1px solid #ccc;" />
+        <h3 style="font-family:Arial,sans-serif; margin:0 0 14px 0;">
+            {{ 'verify.email.subject'|trans }}
+        </h3>
+        <p style="margin:0 0 18px 0;">
+            {{ 'verify.email.instructions'|trans }}
+        </p>
+        <p style="margin:0 0 24px 0; text-align:center;">
+            <a href="{{ signedUrl }}"
+               style="background:#0d6efd;color:#fff;text-decoration:none;padding:12px 22px;
+                      border-radius:4px;font-weight:bold;display:inline-block;">
+                {{ 'verify.email.button'|trans }}
+            </a>
+        </p>
+        <p style="margin:0 0 10px 0; font-size:90%; color:#555;">
+            {{ 'verify.email.ignore'|trans }}
+        </p>
+        <p style="margin:0; font-size:90%; color:#555;">
+            {{ 'verify.email.link_plain'|trans }}:<br>
+            <span style="word-break:break-all;">{{ signedUrl }}</span>
+        </p>
+    {% endif %}
+{% endblock %}

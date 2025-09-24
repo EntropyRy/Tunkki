@@ -116,6 +116,10 @@ final class MemberAdmin extends AbstractAdmin
                         "template" =>
                             "admin/crud/list__action_email_active_member_info.html.twig",
                     ],
+                    "resendverification" => [
+                        "template" =>
+                            "admin/crud/list__action_resend_verification.html.twig",
+                    ],
                 ],
             ]);
     }
@@ -223,6 +227,10 @@ final class MemberAdmin extends AbstractAdmin
         $collection->add(
             "activememberinfo",
             $this->getRouterIdParameter() . "/activememberinfo",
+        );
+        $collection->add(
+            "resendverification",
+            $this->getRouterIdParameter() . "/resend-verification-email",
         );
     }
     #[\Override]
