@@ -13,7 +13,14 @@ error:
     title: Jokin meni pieleen
     description: Sivua ei voitu ladata palvelinvirheen vuoksi.
   return_home: palaa etusivulle
-  try_again_hint: Voit myös yrittää uudelleen:
+  try_again_hint: Voit myös yrittää uudelleen
+
+checkout:
+  email:
+    confirmation: Käytämme tätä sähköpostia ostoksiisi.
+    change: Vaihda sähköposti
+  cart:
+    empty: Ostoskorisi on tyhjä.
   try_again: Yritä uudelleen
 Control barcodes: Kontrollikoodit
 Bank Account: Pankkitili

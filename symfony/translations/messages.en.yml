@@ -16,7 +16,14 @@ error:
     title: Something went wrong
     description: The requested page couldn't be loaded due to a server error.
   return_home: return to the homepage
-  try_again_hint: You can also try again:
+  try_again_hint: You can also try again
+
+checkout:
+  email:
+    confirmation: We will use this email for your purchases.
+    change: Change email
+  cart:
+    empty: Your cart is empty.
   try_again: Try again
 
 packages: packages
