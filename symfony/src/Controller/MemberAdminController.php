@@ -49,20 +49,8 @@ final class MemberAdminController extends CRUDController
         TranslatorInterface $translator,
     ): RedirectResponse {
         $member = $this->admin->getSubject();
-        if (!$member) {
-            $this->addFlash("sonata_flash_error", "verify.email.invalid");
-            return new RedirectResponse(
-                $this->admin->generateUrl(
-                    "list",
-                    $this->admin->getFilterParameters(),
-                ),
-            );
-        }
 
-        if (
-            method_exists($member, "isEmailVerified") &&
-            $member->isEmailVerified()
-        ) {
+        if ($member->isEmailVerified()) {
             $this->addFlash("sonata_flash_info", "verify.email.already");
             return new RedirectResponse(
                 $this->admin->generateUrl(
@@ -72,16 +60,7 @@ final class MemberAdminController extends CRUDController
             );
         }
 
-        $user = method_exists($member, "getUser") ? $member->getUser() : null;
-        if (!$user) {
-            $this->addFlash("sonata_flash_error", "verify.email.invalid");
-            return new RedirectResponse(
-                $this->admin->generateUrl(
-                    "list",
-                    $this->admin->getFilterParameters(),
-                ),
-            );
-        }
+        $user = $member->getUser();
 
         $verificationEmail = new TemplatedEmail()
             ->from(new Address("webmaster@entropy.fi", "Entropy Webmaster"))

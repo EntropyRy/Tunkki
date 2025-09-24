@@ -2,6 +2,7 @@
 
 namespace App\EventListener;
 
+use Symfony\Component\HttpFoundation\Session\Session;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -15,7 +16,8 @@ class LoginListener implements EventSubscriberInterface
         private readonly LocaleSwitcher $localeSwitcher,
         private readonly EntityManagerInterface $em,
         private readonly UrlGeneratorInterface $urlGenerator,
-    ) {}
+    ) {
+    }
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         // get user
@@ -30,13 +32,9 @@ class LoginListener implements EventSubscriberInterface
 
         // flash notice if email not verified
         $member = $user->getMember();
-        if (
-            $member &&
-            method_exists($member, "isEmailVerified") &&
-            !$member->isEmailVerified()
-        ) {
-            $session = $event->getRequest()->getSession();
-            if ($session) {
+        if ($member && !$member->isEmailVerified()) {
+            $request = $event->getRequest();
+            if ($request->hasSession()) {
                 $resendUrl = $this->urlGenerator->generate(
                     "profile_resend_verification",
                     ["_locale" => $userLocale],
@@ -52,6 +50,8 @@ class LoginListener implements EventSubscriberInterface
                         $resendUrl .
                         '">Resend verification email</a>.';
                 }
+                $session = $request->getSession();
+                assert($session instanceof Session);
                 $session->getFlashBag()->add("warning", $message);
             }
         }

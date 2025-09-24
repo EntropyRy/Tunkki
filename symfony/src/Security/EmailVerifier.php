@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Security;
 
 use App\Entity\Member;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Security\Core\User\UserInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
@@ -48,34 +48,31 @@ class EmailVerifier
      * Generate a signed URL and send a verification email.
      *
      * @param string         $verifyEmailRouteName The route name that will handle verification
-     * @param UserInterface  $user                 The authenticated (or newly created) user object
+     * @param User           $user                 The authenticated (or newly created) user object
      * @param TemplatedEmail $email                Pre-configured email (template, subject, etc.)
      * @param array          $extraParams          Extra query params to append (e.g. ['id' => $user->getId()])
      */
     public function sendEmailConfirmation(
         string $verifyEmailRouteName,
-        UserInterface $user,
+        User $user,
         TemplatedEmail $email,
-        array $extraParams = []
+        array $extraParams = [],
     ): void {
-        if (!method_exists($user, 'getId')) {
-            throw new \InvalidArgumentException('User object must have a getId() method.');
-        }
-        if (!method_exists($user, 'getEmail')) {
-            throw new \InvalidArgumentException('User object must have a getEmail() method that returns the email address to verify.');
-        }
-
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
-            (string) $user->getEmail(),
-            $extraParams
+            $user->getEmail() ?? "",
+            $extraParams,
         );
 
         $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
+        $context["signedUrl"] = $signatureComponents->getSignedUrl();
+        $context[
+            "expiresAtMessageKey"
+        ] = $signatureComponents->getExpirationMessageKey();
+        $context[
+            "expiresAtMessageData"
+        ] = $signatureComponents->getExpirationMessageData();
 
         $email->context($context);
 
@@ -92,12 +89,12 @@ class EmailVerifier
      */
     public function handleEmailConfirmationForAuthenticatedUser(
         Request $request,
-        UserInterface $user
+        User $user,
     ): void {
         $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
             $request,
             (string) $user->getId(),
-            (string) $user->getEmail()
+            $user->getEmail() ?? "",
         );
 
         $member = $this->resolveMemberFromUser($user);
@@ -115,12 +112,12 @@ class EmailVerifier
      */
     public function handleEmailConfirmationAnonymous(
         Request $request,
-        UserInterface $user
+        User $user,
     ): void {
         $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
             $request,
             (string) $user->getId(),
-            (string) $user->getEmail()
+            $user->getEmail() ?? "",
         );
 
         $member = $this->resolveMemberFromUser($user);
@@ -133,13 +130,8 @@ class EmailVerifier
     /**
      * Small helper to map a User to its Member (if relationship exists).
      */
-    private function resolveMemberFromUser(UserInterface $user): ?Member
+    private function resolveMemberFromUser(User $user): ?Member
     {
-        if (method_exists($user, 'getMember')) {
-            $m = $user->getMember();
-            return $m instanceof Member ? $m : null;
-        }
-
-        return null;
+        return $user->getMember() ?? null;
     }
 }
