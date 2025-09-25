@@ -20,7 +20,7 @@
             </a>
         </p>
         <p style="margin:0 0 10px 0; font-size:90%; color:#555;">
-            {{ 'verify.email.ignore'|trans }}
+            {{ expiresAtMessageKey|trans(expiresAtMessageData, 'VerifyEmailBundle') }}
         </p>
         <p style="margin:0; font-size:90%; color:#555;">
             {{ 'verify.email.link_plain'|trans }}:<br>

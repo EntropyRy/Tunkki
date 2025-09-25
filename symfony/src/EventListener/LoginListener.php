@@ -16,8 +16,7 @@ class LoginListener implements EventSubscriberInterface
         private readonly LocaleSwitcher $localeSwitcher,
         private readonly EntityManagerInterface $em,
         private readonly UrlGeneratorInterface $urlGenerator,
-    ) {
-    }
+    ) {}
     public function onLoginSuccess(LoginSuccessEvent $event): void
     {
         // get user
@@ -52,7 +51,7 @@ class LoginListener implements EventSubscriberInterface
                 }
                 $session = $request->getSession();
                 assert($session instanceof Session);
-                $session->getFlashBag()->add("warning", $message);
+                $session->getFlashBag()->add("warning_html", $message);
             }
         }
     }

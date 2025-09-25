@@ -1,9 +1,14 @@
 {% for label, messages in app.flashes %}
     <div class="col-md-8 mx-auto">
         {% for message in messages %}
-            <div class="alert alert-{{ label }} alert-dismissible fade show"
+            <div class="alert alert-{{ label ends with '_html' ? label|replace({_html: ''}) : label }} alert-dismissible fade show"
                  role="alert">
-                <twig:ux:icon name="arrow-right" />  {{ message|trans }}
+                <twig:ux:icon name="arrow-right" />
+                {% if label ends with '_html' %}
+                    {{ message|raw }}
+                {% else %}
+                    {{ message|trans }}
+                {% endif %}
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="alert"
