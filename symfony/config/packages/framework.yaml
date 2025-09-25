@@ -1,34 +1,38 @@
 framework:
-  secret: "%env(APP_SECRET)%"
-  trusted_hosts: "%env(TRUSTED_HOSTS)%"
-  trusted_proxies: "%env(TRUSTED_PROXIES)%"
-  trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
-  csrf_protection: true
-  http_method_override: false
-  handle_all_throwables: true
-  annotations:
-    enabled: false
-  session:
-    save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
-    cookie_lifetime: 1209600
-    cookie_secure: auto
-    cookie_samesite: lax
-    storage_factory_id: session.storage.factory.native
-  #esi: true
-  fragments: true
-  property_info:
-    with_constructor_extractor: true
-  php_errors:
-    log: true
-  cache:
-    #default_doctrine_provider: 'cache.adapter.apcu'
-    pools:
-      doctrine.acpu_cache_pool:
-        adapter: cache.adapter.apcu
-      doctrine.snd_level_pool:
-        adapter: cache.adapter.apcu
-when@prod:
-  framework:
-    http_cache: true
+    secret: "%env(APP_SECRET)%"
+    trusted_hosts: "%env(TRUSTED_HOSTS)%"
+    trusted_proxies: "%env(TRUSTED_PROXIES)%"
+    trusted_headers: ["x-forwarded-for", "x-forwarded-proto"]
+    csrf_protection: true
+    http_method_override: false
+    handle_all_throwables: true
+    annotations:
+        enabled: false
     session:
-      cookie_httponly: false
+        save_path: "%kernel.project_dir%/var/sessions/%kernel.environment%"
+        cookie_lifetime: 1209600
+        cookie_secure: auto
+        cookie_samesite: lax
+        storage_factory_id: session.storage.factory.native
+    #esi: true
+    fragments: true
+    property_info:
+        with_constructor_extractor: true
+    php_errors:
+        log: true
+    cache:
+        #default_doctrine_provider: 'cache.adapter.apcu'
+        pools:
+            doctrine.acpu_cache_pool:
+                adapter: cache.adapter.apcu
+            doctrine.snd_level_pool:
+                adapter: cache.adapter.apcu
+when@prod:
+    framework:
+        http_cache: true
+        session:
+            cookie_httponly: false
+
+when@test:
+    framework:
+        test: true

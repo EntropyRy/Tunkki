@@ -3,6 +3,7 @@ logs/
 .env
 docker/data
 docker/backup
+compose.override.yaml
 dev.sql
 .php-cs-fixer.cache
 .phpactor.yml

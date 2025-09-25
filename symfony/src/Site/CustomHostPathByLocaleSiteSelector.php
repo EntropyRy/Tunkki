@@ -24,7 +24,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
         protected SiteManagerInterface $siteManager,
         protected DecoratorStrategyInterface $decoratorStrategy,
         protected SeoPageInterface $seoPage,
-        protected RouterInterface $router
+        protected RouterInterface $router,
     ) {
         parent::__construct($siteManager, $decoratorStrategy, $seoPage);
     }
@@ -94,20 +94,26 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
         }
 
         if ($this->site instanceof SiteInterface) {
-            $request->setPathInfo($pathInfo ?? '/');
+            $request->setPathInfo($pathInfo ?? "/");
         }
 
         // no valid site, but try to find a default site for the current request
-        if (!$this->site instanceof SiteInterface && \count($enabledSites) > 0) {
+        if (
+            !$this->site instanceof SiteInterface &&
+            \count($enabledSites) > 0
+        ) {
             $defaultSite = $this->getPreferredSite($enabledSites, $request);
             \assert($defaultSite instanceof SiteInterface);
 
             $url = $defaultSite->getUrl();
             \assert(null !== $url);
 
-            $event->setResponse(new RedirectResponse($url ?: '/'));
-        } elseif ($this->site instanceof SiteInterface && null !== $this->site->getLocale()) {
-            $request->attributes->set('_locale', $this->site->getLocale());
+            $event->setResponse(new RedirectResponse($url ?: "/"));
+        } elseif (
+            $this->site instanceof SiteInterface &&
+            null !== $this->site->getLocale()
+        ) {
+            $request->attributes->set("_locale", $this->site->getLocale());
         }
     }
 }
