@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests;
 
 use App\DataFixtures\EventFixtures;
+use App\DataFixtures\UserFixtures;
 use App\Entity\Event;
 use App\Entity\Sonata\SonataPageSite;
 use App\Tests\Http\SiteAwareKernelBrowser;
@@ -85,6 +86,13 @@ final class EventScenariosTest extends WebTestCase
         $executor->purge();
 
         $loader = new FixturesLoader();
+        $loader->addFixture(
+            new UserFixtures(
+                static::getContainer()->get(
+                    \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class,
+                ),
+            ),
+        );
         $loader->addFixture(new EventFixtures());
         $executor->execute($loader->getFixtures(), true);
     }
@@ -208,5 +216,68 @@ final class EventScenariosTest extends WebTestCase
                 $client->getResponse()->headers->get("Location") ?? "",
             );
         }
+    }
+
+    public function testShopReadyEventShopPage200(): void
+    {
+        $client = $this->client;
+
+        $event = $this->getEventBySlug("shop-event");
+        $this->assertNotNull($event, "Shop-ready event fixture missing");
+
+        $year = (int) $event->getEventDate()->format("Y");
+
+        $client->request("GET", sprintf("/en/%d/%s/shop", $year, "shop-event"));
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertStringContainsString(
+            "Shop Ready Event",
+            $client->getResponse()->getContent(),
+        );
+        $this->assertStringContainsString(
+            'lang="en"',
+            $client->getResponse()->getContent(),
+        );
+    }
+
+    public function testUserCanLoginAndAccessUnpublishedEvent(): void
+    {
+        $client = $this->client;
+        $client->followRedirects(true);
+
+        $user = self::$em
+            ->getRepository(\App\Entity\User::class)
+            ->findOneBy(["authId" => "local-user"]);
+        $this->assertNotNull($user, "Fixture user not found");
+
+        $client->loginUser($user, "main");
+
+        $event = $this->getEventBySlug("unpublished-event");
+        $this->assertNotNull($event, "Unpublished event fixture missing");
+        $year = (int) $event->getEventDate()->format("Y");
+
+        $client->request(
+            "GET",
+            sprintf("/en/%d/%s", $year, "unpublished-event"),
+        );
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
+    }
+
+    public function testAdminCanAccessAdminDashboard(): void
+    {
+        $client = $this->client;
+
+        $admin = self::$em
+            ->getRepository(\App\Entity\User::class)
+            ->findOneBy(["authId" => "local-admin"]);
+        $this->assertNotNull($admin, "Fixture admin not found");
+
+        $client->loginUser($admin);
+        $client->followRedirects(true);
+
+        $client->request("GET", "/admin/");
+
+        $this->assertSame(200, $client->getResponse()->getStatusCode());
     }
 }
