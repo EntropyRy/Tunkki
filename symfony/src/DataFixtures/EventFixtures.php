@@ -91,9 +91,7 @@ final class EventFixtures extends Fixture
         );
         $external->setPublished(true);
         // If the entity supports marking an event as "external", set the flag
-        if (method_exists($external, "setExternalUrl")) {
-            $external->setExternalUrl(true);
-        }
+        $external->setExternalUrl(true);
         // For external events, the controller uses the value of getUrl() as the redirect target
         $external->setUrl("https://example.com/external-event");
         $external->setTemplate("event.html.twig");
@@ -120,15 +118,8 @@ final class EventFixtures extends Fixture
         $tickets->setSisallys(
             "<p>FI: Tähän tapahtumaan on saatavilla lippuja.</p>",
         );
-        if (method_exists($tickets, "setTicketsEnabled")) {
-            $tickets->setTicketsEnabled(true);
-        }
-        if (method_exists($tickets, "setTicketPresaleEnabled")) {
-            $tickets->setTicketPresaleEnabled(true);
-        }
-        if (method_exists($tickets, "setNakkiRequiredForTicketReservation")) {
-            $tickets->setNakkiRequiredForTicketReservation(false);
-        }
+        $tickets->setTicketsEnabled(true);
+        $tickets->setNakkiRequiredForTicketReservation(false);
         $manager->persist($tickets);
         $this->addReference(self::TICKETS_EVENT, $tickets);
 
