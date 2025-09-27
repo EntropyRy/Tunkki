@@ -28,6 +28,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
     ) {
         parent::__construct($siteManager, $decoratorStrategy, $seoPage);
     }
+
     /**
      * Check if this is a raw localized route that should not be directly accessible.
      */
@@ -47,6 +48,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
 
         return false;
     }
+
     #[\Override]
     public function handleKernelRequest(RequestEvent $event): void
     {
@@ -61,7 +63,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
 
         // First, check if this is a raw localized route that should be blocked
         if ($this->isRawLocalizedRoute($currentPath)) {
-            // Don't set any site - this will cause 404 for raw localized routes
+            // Don\'t set any site - this will cause 404 for raw localized routes
             return;
         }
 
@@ -80,11 +82,7 @@ final class CustomHostPathByLocaleSiteSelector extends HostPathSiteSelector
             if (false === $match) {
                 continue;
             }
-            /* if (!$this->shouldSiteHandlePath($match, $site)) { */
-            /*     $this->site = $site; */
-            /*     $pathInfo = $match; */
-            /*     continue; */
-            /* } */
+
             $this->site = $site;
             $pathInfo = $match;
 

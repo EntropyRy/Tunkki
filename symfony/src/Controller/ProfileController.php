@@ -139,8 +139,7 @@ class ProfileController extends AbstractController
         Route(
             path: [
                 "en" => "/dashboard",
-                "fi" => '/yleiskatsaus
-    ',
+                "fi" => "/yleiskatsaus",
             ],
             name: "dashboard",
         ),

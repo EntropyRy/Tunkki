@@ -2,99 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Tests;
+namespace App\Tests\Functional;
 
-use App\DataFixtures\EventFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Event;
-use App\Entity\Sonata\SonataPageSite;
 use App\Tests\Http\SiteAwareKernelBrowser;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader as FixturesLoader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Doctrine\Persistence\ObjectManager;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\_Base\FixturesWebTestCase;
 
-require_once __DIR__ . "/Http/SiteAwareKernelBrowser.php";
+require_once __DIR__ . "/../Http/SiteAwareKernelBrowser.php";
 
-final class EventScenariosTest extends WebTestCase
+final class EventScenariosTest extends FixturesWebTestCase
 {
-    private static ?ObjectManager $em = null;
     private ?SiteAwareKernelBrowser $client = null;
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->client = new SiteAwareKernelBrowser(static::bootKernel());
         $this->client->setServerParameter("HTTP_HOST", "localhost");
-        self::$em = static::getContainer()->get("doctrine")->getManager();
-
-        $this->purgeAndLoadFixtures();
-        $this->ensureSites();
-    }
-
-    private function ensureSites(): void
-    {
-        $em = self::$em;
-        $this->assertNotNull($em, "EntityManager not available");
-
-        $repo = $em->getRepository(SonataPageSite::class);
-
-        // Remove existing sites to ensure exactly two
-        foreach ($repo->findAll() as $site) {
-            $em->remove($site);
-        }
-        $em->flush();
-
-        // FI default site "/"
-        $fi = new SonataPageSite();
-        $fi->setName("FI");
-        $fi->setEnabled(true);
-        $fi->setHost("localhost");
-        $fi->setRelativePath("/");
-        $fi->setLocale("fi");
-        $fi->setIsDefault(true);
-        $fi->setEnabledFrom(new \DateTimeImmutable("-1 day"));
-        $fi->setEnabledTo(null);
-        $em->persist($fi);
-
-        // EN site "/en"
-        $en = new SonataPageSite();
-        $en->setName("EN");
-        $en->setEnabled(true);
-        $en->setHost("localhost");
-        $en->setRelativePath("/en");
-        $en->setLocale("en");
-        $en->setIsDefault(false);
-        $en->setEnabledFrom(new \DateTimeImmutable("-1 day"));
-        $en->setEnabledTo(null);
-        $em->persist($en);
-
-        $em->flush();
-
-        $sites = $repo->findAll();
-        $this->assertCount(2, $sites, "Expected exactly 2 Sonata sites");
-    }
-
-    private function purgeAndLoadFixtures(): void
-    {
-        $em = self::$em;
-        $this->assertNotNull($em, "EntityManager not available");
-
-        $purger = new ORMPurger($em);
-        $purger->setPurgeMode(ORMPurger::PURGE_MODE_DELETE);
-        $executor = new ORMExecutor($em, $purger);
-        $executor->purge();
-
-        $loader = new FixturesLoader();
-        $loader->addFixture(
-            new UserFixtures(
-                static::getContainer()->get(
-                    \Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface::class,
-                ),
-            ),
-        );
-        $loader->addFixture(new EventFixtures());
-        $executor->execute($loader->getFixtures(), true);
     }
 
     private function getEventBySlug(string $slug): ?Event
@@ -199,23 +123,21 @@ final class EventScenariosTest extends WebTestCase
 
         $year = (int) $event->getEventDate()->format("Y");
 
-        // EN site path to the shop page
         $client->request(
             "GET",
             sprintf("/en/%d/%s/shop", $year, "tickets-event"),
         );
 
         $status = $client->getResponse()->getStatusCode();
-        $this->assertTrue(
-            in_array($status, [302, 403], true),
-            "Shop page should redirect or be forbidden when tickets are unavailable",
+        $this->assertSame(
+            302,
+            $status,
+            "Anonymous user should be redirected to login for tickets-enabled event",
         );
-        if ($status === 302) {
-            $this->assertStringContainsString(
-                "/login",
-                $client->getResponse()->headers->get("Location") ?? "",
-            );
-        }
+        $this->assertStringContainsString(
+            "/login",
+            $client->getResponse()->headers->get("Location") ?? "",
+        );
     }
 
     public function testShopReadyEventShopPage200(): void
@@ -245,13 +167,33 @@ final class EventScenariosTest extends WebTestCase
         $client = $this->client;
         $client->followRedirects(true);
 
+        // Ensure fixture user exists
         $user = self::$em
             ->getRepository(\App\Entity\User::class)
             ->findOneBy(["authId" => "local-user"]);
         $this->assertNotNull($user, "Fixture user not found");
 
-        $client->loginUser($user, "main");
+        // Perform real form login (programmatic loginUser was unreliable with custom request wrapper)
+        $crawler = $client->request("GET", "/login");
+        $this->assertSame(
+            200,
+            $client->getResponse()->getStatusCode(),
+            "Login page should load",
+        );
 
+        $formNode = $crawler->filter("form")->first();
+        $this->assertTrue(
+            $formNode->count() > 0,
+            "Login form not found on /login",
+        );
+
+        $form = $formNode->form([
+            "_username" => "local-user",
+            "_password" => "userpass123",
+        ]);
+        $client->submit($form);
+
+        // Fetch unpublished event after authenticated login
         $event = $this->getEventBySlug("unpublished-event");
         $this->assertNotNull($event, "Unpublished event fixture missing");
         $year = (int) $event->getEventDate()->format("Y");
@@ -261,7 +203,11 @@ final class EventScenariosTest extends WebTestCase
             sprintf("/en/%d/%s", $year, "unpublished-event"),
         );
 
-        $this->assertSame(200, $client->getResponse()->getStatusCode());
+        $this->assertSame(
+            200,
+            $client->getResponse()->getStatusCode(),
+            "Authenticated user should access unpublished event",
+        );
     }
 
     public function testAdminCanAccessAdminDashboard(): void

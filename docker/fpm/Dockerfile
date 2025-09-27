@@ -5,28 +5,28 @@ ADD --chmod=0755 https://github.com/mlocati/docker-php-extension-installer/relea
 
 RUN apk upgrade --update \
     && apk add --no-cache \
-        libwebp freetype libltdl \ 
-        libjpeg libpng \
-        libzip libxml2 \ 
-        gnupg curl \
-        libzmq zeromq \ 
-        git icu icu-data-full libssh2 \
-        libev imagemagick \
-        brotli \
+    libwebp freetype libltdl \
+    libjpeg libpng \
+    libzip libxml2 \
+    gnupg curl \
+    libzmq zeromq \
+    git icu icu-data-full libssh2 \
+    libev imagemagick \
+    brotli \
     && apk add --virtual build-deps \
-        bash grep build-base tar re2c make file \ 
-        zeromq-dev libpng-dev libwebp-dev \ 
-        libxml2-dev libjpeg-turbo-dev freetype-dev \
-        libssh2-dev zlib-dev icu-dev \ 
-        libmcrypt-dev \
-        autoconf libzip-dev \
-        linux-headers \
-        $PHPIZE_DEPS imagemagick-dev \
+    bash grep build-base tar re2c make file \
+    zeromq-dev libpng-dev libwebp-dev \
+    libxml2-dev libjpeg-turbo-dev freetype-dev \
+    libssh2-dev zlib-dev icu-dev \
+    libmcrypt-dev \
+    autoconf libzip-dev \
+    linux-headers \
+    $PHPIZE_DEPS imagemagick-dev \
     && addgroup -g ${GID} -S symfony && adduser -u ${UID} -D -S -G symfony symfony \
     && docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) gd intl bcmath pdo_mysql opcache zip \
-    && install-php-extensions imagick apcu ssh2 zmq brotli \
-    && docker-php-ext-enable imagick apcu ssh2 zmq brotli \
+    && install-php-extensions imagick apcu ssh2 zmq brotli pcov \
+    && docker-php-ext-enable imagick apcu ssh2 zmq brotli pcov \
     && apk del build-deps \
     && rm -rf /var/cache/apk/* && rm -rf /tmp/* && rm /usr/local/bin/install-php-extensions
 # install composer
@@ -44,6 +44,8 @@ EXPOSE 9000
 FROM dev AS prod
 USER root
 RUN apk del --no-cache git \
-    && rm /usr/local/bin/composer
+    && rm /usr/local/bin/composer \
+    && docker-php-ext-disable pcov || true \
+    && find /usr/local/lib/php/extensions/ -maxdepth 2 -name pcov.so -delete || true
 USER symfony
 COPY ./symfony.ini /usr/local/etc/php/php.ini

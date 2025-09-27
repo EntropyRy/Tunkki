@@ -8,6 +8,11 @@
             "App\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\_Base\\": "tests/_Base/"
+        }
+    },
     "require": {
         "php": "^8.4",
         "arkounay/ux-collection": "^4.0",

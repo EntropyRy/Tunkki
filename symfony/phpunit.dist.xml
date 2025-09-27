@@ -15,13 +15,32 @@
         <ini name="error_reporting" value="-1" />
         <server name="APP_ENV" value="test" force="true" />
         <server name="SHELL_VERBOSITY" value="-1" />
+        <!-- Enable pcov if installed; fall back to xdebug if user runs with XDEBUG_MODE=coverage -->
+        <env name="PCOV_ENABLED" value="1" />
+        <env name="XDEBUG_MODE" value="coverage" />
     </php>
 
     <testsuites>
-        <testsuite name="Project Test Suite">
-            <directory>tests</directory>
+        <testsuite name="Unit">
+            <directory>tests/Unit</directory>
+        </testsuite>
+        <testsuite name="Integration">
+            <directory>tests/Integration</directory>
+        </testsuite>
+        <testsuite name="Functional">
+            <directory>tests/Functional</directory>
         </testsuite>
     </testsuites>
+
+    <!-- Removed invalid attribute 'processUncoveredFiles'. PHPUnit 12 requires different config;
+         include/exclude logic handled in <source>. -->
+    <coverage>
+        <report>
+            <clover outputFile="public/coverage/clover.xml"/>
+            <html outputDirectory="public/coverage/html"/>
+            <text outputFile="php://stdout" showUncoveredFiles="false"/>
+        </report>
+    </coverage>
 
     <source ignoreSuppressionOfDeprecations="true"
             ignoreIndirectDeprecations="true"
@@ -31,6 +50,9 @@
         <include>
             <directory>src</directory>
         </include>
+        <exclude>
+            <directory>src/DataFixtures</directory>
+        </exclude>
 
         <deprecationTrigger>
             <method>Doctrine\Deprecations\Deprecation::trigger</method>
