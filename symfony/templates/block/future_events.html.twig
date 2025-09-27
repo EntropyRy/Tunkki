@@ -43,7 +43,9 @@
             {% endif %}
         {% endblock %}
         {% block event_link %}
-            {% if event.url %}
+            {% if event.externalUrl or (event.url and event.url starts with 'http') %}
+                {% set url = event.url %}
+            {% elseif event.url %}
                 {% set url = path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) %}
             {% else %}
                 {% set url = path('entropy_event', {id: event.id}) %}

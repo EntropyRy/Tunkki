@@ -26,6 +26,7 @@ final class EventFixtures extends Fixture
     public const PAST_EVENT = "event_past";
     public const EXTERNAL_EVENT = "event_external";
     public const TICKETS_EVENT = "event_tickets";
+    public const ARTIST_SIGNUP_EVENT = "event_artist_signup";
 
     public function load(ObjectManager $manager): void
     {
@@ -155,6 +156,31 @@ final class EventFixtures extends Fixture
         $shop->addProduct($ticket);
         $manager->persist($shop);
         $manager->persist($ticket);
+
+        // Artist signup enabled event
+        $artistSignup = new Event();
+        $artistSignup->setName("Artist Signup Event");
+        $artistSignup->setNimi("Artistihaku tapahtuma");
+        $artistSignup->setType("event");
+        $artistSignup->setPublishDate(new \DateTimeImmutable("-1 hour"));
+        $artistSignup->setEventDate(new \DateTimeImmutable("+14 days")->setTime(20, 0));
+        $artistSignup->setPublished(true);
+        $artistSignup->setUrl("artist-signup-event");
+        $artistSignup->setTemplate("event.html.twig");
+        $artistSignup->setContent("<p>EN: Open call for artists - sign up to perform!</p>");
+        $artistSignup->setSisallys("<p>FI: Avoin haku artisteille - ilmoittaudu esiintymään!</p>");
+
+        // Enable artist signup
+        $artistSignup->setArtistSignUpEnabled(true);
+        $artistSignup->setArtistSignUpStart(new \DateTimeImmutable("-1 hour"));
+        $artistSignup->setArtistSignUpEnd(new \DateTimeImmutable("+7 days"));
+        $artistSignup->setShowArtistSignUpOnlyForLoggedInMembers(true);
+        $artistSignup->setArtistSignUpAskSetLength(true);
+        $artistSignup->setArtistSignUpInfoEn("Sign up to perform at this event!");
+        $artistSignup->setArtistSignUpInfoFi("Ilmoittaudu esiintymään tässä tapahtumassa!");
+
+        $manager->persist($artistSignup);
+        $this->addReference(self::ARTIST_SIGNUP_EVENT, $artistSignup);
 
         $manager->flush();
     }

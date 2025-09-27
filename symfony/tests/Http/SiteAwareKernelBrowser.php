@@ -42,13 +42,6 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                 );
             }
 
-            // Skip wrapping for POST /login (let security handle plain Request)
-            if (
-                strtoupper($request->getMethod()) === "POST" &&
-                $this->isLoginPath($request)
-            ) {
-                return parent::doRequest($request);
-            }
 
             if (!($request instanceof SiteRequest)) {
                 $request = self::wrapAsSiteRequest($request);

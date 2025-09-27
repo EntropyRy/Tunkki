@@ -51,6 +51,7 @@ abstract class FixturesWebTestCase extends WebTestCase
             \App\DataFixtures\UserFixtures::class,
             \App\DataFixtures\ArtistFixtures::class,
             \App\DataFixtures\EventFixtures::class,
+            \App\DataFixtures\ItemFixtures::class,
         ];
 
         // Fail early if any required fixture is missing

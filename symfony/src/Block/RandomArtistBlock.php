@@ -21,8 +21,11 @@ class RandomArtistBlock extends BaseBlockService
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
-        shuffle($artists);
-        $artist = array_pop($artists);
+        $artist = null;
+        if (!empty($artists)) {
+            shuffle($artists);
+            $artist = array_pop($artists);
+        }
         return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'artist'  => $artist, 'settings' => $blockContext->getSettings()], $response);
     }
 
