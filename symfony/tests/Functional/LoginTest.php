@@ -43,12 +43,14 @@ final class LoginTest extends FixturesWebTestCase
             "Expected a login form on /login page.",
         );
 
-        $csrfToken = $crawler->filter('input[name="_csrf_token"]')->attr('value');
+        $csrfToken = $crawler
+            ->filter('input[name="_csrf_token"]')
+            ->attr("value");
 
-        $client->request('POST', '/login', [
-            '_username' => 'testuser@example.com',
-            '_password' => 'userpass123',
-            '_csrf_token' => $csrfToken,
+        $client->request("POST", "/login", [
+            "_username" => "testuser@example.com",
+            "_password" => "userpass123",
+            "_csrf_token" => $csrfToken,
         ]);
 
         $container = static::getContainer();
@@ -60,17 +62,6 @@ final class LoginTest extends FixturesWebTestCase
         $currentPath = $requestStack->getCurrentRequest()
             ? $requestStack->getCurrentRequest()->getPathInfo()
             : "N/A";
-
-        fwrite(
-            \STDOUT,
-            "[LOGIN DEBUG USER RAW] after submit status={$status} location='{$loc}' path='{$currentPath}' token=" .
-                ($token
-                    ? get_class($token) .
-                        " roles=" .
-                        implode(",", $token->getRoleNames())
-                    : "NULL") .
-                "\n",
-        );
 
         for ($i = 0; $i < 5; $i++) {
             $status = $client->getResponse()->getStatusCode();
@@ -103,10 +94,7 @@ final class LoginTest extends FixturesWebTestCase
                     "Redirect loop back to /login. Snippet:\n{$snippet}",
                 );
             }
-            fwrite(
-                \STDOUT,
-                "[LOGIN DEBUG USER RAW] redirect hop {$i} -> {$loc}\n",
-            );
+
             $client->request("GET", $loc);
         }
 
@@ -124,25 +112,16 @@ final class LoginTest extends FixturesWebTestCase
         if ($client->getResponse()->getStatusCode() === 500) {
             $content = $client->getResponse()->getContent() ?? "";
             $snippet = substr($content, 0, 1000);
-            fwrite(\STDOUT, "[ERROR 500] Dashboard content snippet: " . $snippet . "\n");
+            fwrite(
+                \STDOUT,
+                "[ERROR 500] Dashboard content snippet: " . $snippet . "\n",
+            );
         }
 
         $token = $tokenStorage->getToken();
         $finalPath = $requestStack->getCurrentRequest()
             ? $requestStack->getCurrentRequest()->getPathInfo()
             : "N/A";
-        fwrite(
-            \STDOUT,
-            "[LOGIN DEBUG USER RAW] final status=" .
-                $client->getResponse()->getStatusCode() .
-                " path='{$finalPath}' token=" .
-                ($token
-                    ? get_class($token) .
-                        " roles=" .
-                        implode(",", $token->getRoleNames())
-                    : "NULL") .
-                "\n",
-        );
 
         // After successful authentication and redirect, dashboard should load with 200 status
         $finalStatus = $client->getResponse()->getStatusCode();
@@ -155,8 +134,8 @@ final class LoginTest extends FixturesWebTestCase
         $content = $client->getResponse()->getContent() ?? "";
         $this->assertTrue(
             str_contains(strtolower($content), "dashboard") ||
-            str_contains(strtolower($content), "yleiskatsaus") ||
-            !empty($content),
+                str_contains(strtolower($content), "yleiskatsaus") ||
+                !empty($content),
             "Expected dashboard content after successful login (len=" .
                 strlen($content) .
                 ").",

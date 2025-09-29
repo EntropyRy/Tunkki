@@ -20,13 +20,13 @@ use Doctrine\Persistence\ObjectManager;
 final class EventFixtures extends Fixture
 {
     // Keep original reference name for backward compatibility with older tests
-    public const TEST_EVENT = "test_event";
+    public const string TEST_EVENT = "test_event";
 
-    public const UNPUBLISHED_EVENT = "event_unpublished";
-    public const PAST_EVENT = "event_past";
-    public const EXTERNAL_EVENT = "event_external";
-    public const TICKETS_EVENT = "event_tickets";
-    public const ARTIST_SIGNUP_EVENT = "event_artist_signup";
+    public const string UNPUBLISHED_EVENT = "event_unpublished";
+    public const string PAST_EVENT = "event_past";
+    public const string EXTERNAL_EVENT = "event_external";
+    public const string TICKETS_EVENT = "event_tickets";
+    public const string ARTIST_SIGNUP_EVENT = "event_artist_signup";
 
     public function load(ObjectManager $manager): void
     {

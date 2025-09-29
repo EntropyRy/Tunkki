@@ -22,7 +22,7 @@ class RandomArtistBlock extends BaseBlockService
     {
         $artists = $this->em->getRepository(Artist::class)->findBy(['copyForArchive' => false]);
         $artist = null;
-        if (!empty($artists)) {
+        if ($artists !== []) {
             shuffle($artists);
             $artist = array_pop($artists);
         }

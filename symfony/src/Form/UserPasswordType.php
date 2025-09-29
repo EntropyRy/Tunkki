@@ -25,8 +25,8 @@ class UserPasswordType extends AbstractType
                     new NotBlank(message: "Please enter a password"),
                     new Length(
                         min: 8,
-                        minMessage: "under_password_limit",
                         max: 4096,
+                        minMessage: "under_password_limit",
                     ), // max length allowed by Symfony for security reasons
                 ],
                 "label" => "New password",

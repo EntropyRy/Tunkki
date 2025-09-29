@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Entity\User;
 use App\Entity\Artist;
 use App\Entity\Member;
 use App\Entity\Sonata\SonataMediaMedia;
@@ -27,8 +28,8 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class ArtistFixtures extends AbstractFixture
 {
-    public const ARTIST_REFERENCE = "fixture_artist_for_user";
-    public const ARTIST_MEDIA_REFERENCE = "fixture_artist_media";
+    public const string ARTIST_REFERENCE = "fixture_artist_for_user";
+    public const string ARTIST_MEDIA_REFERENCE = "fixture_artist_media";
 
     public function load(ObjectManager $manager): void
     {
@@ -36,16 +37,16 @@ final class ArtistFixtures extends AbstractFixture
         $member = null;
         if (
             !$this->hasReference(
-                \App\DataFixtures\UserFixtures::USER_REFERENCE,
-                \App\Entity\User::class,
+                UserFixtures::USER_REFERENCE,
+                User::class,
             )
         ) {
             return;
         }
-        /** @var \App\Entity\User $user */
+        /** @var User $user */
         $user = $this->getReference(
-            \App\DataFixtures\UserFixtures::USER_REFERENCE,
-            \App\Entity\User::class,
+            UserFixtures::USER_REFERENCE,
+            User::class,
         );
         $member = $user->getMember();
 

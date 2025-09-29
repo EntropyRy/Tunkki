@@ -39,7 +39,7 @@ class DoorInfoBlock extends BaseBlockService
 
         try {
             $logs = $this->doorLogR->getLatest(3);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // Door log repository might fail if table doesn't exist
             $logs = [];
         }

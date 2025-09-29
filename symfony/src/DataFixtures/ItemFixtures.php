@@ -14,8 +14,8 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class ItemFixtures extends Fixture
 {
-    public const WORKING_ITEM_REFERENCE = "fixture_item_working";
-    public const BROKEN_ITEM_REFERENCE = "fixture_item_broken";
+    public const string WORKING_ITEM_REFERENCE = "fixture_item_working";
+    public const string BROKEN_ITEM_REFERENCE = "fixture_item_broken";
 
     public function load(ObjectManager $manager): void
     {

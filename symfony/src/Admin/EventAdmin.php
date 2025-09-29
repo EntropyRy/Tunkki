@@ -27,7 +27,6 @@ use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use App\Effect\BackgroundEffectConfigProvider;
 use App\Form\UrlsType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 
@@ -434,9 +433,7 @@ final class EventAdmin extends AbstractAdmin
                         "required" => false,
                         "attr" => ["rows" => 12],
                         "help" =>
-                            'Effect config JSON. Leave empty to use defaults. Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static. For Flowfields, open the <a href="/admin/effects/flowfields/' .
-                            $event->getId() .
-                            '" target="_blank" rel="noopener">Flowfields dashboard</a>.',
+                            "Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static.",
                         "help_html" => true,
                     ])
 
@@ -650,22 +647,7 @@ final class EventAdmin extends AbstractAdmin
                 if (!$data instanceof \App\Entity\Event) {
                     return;
                 }
-                $effect = $data->getBackgroundEffect();
-                $supports = $this->effectConfig->supports((string) $effect);
-                if (!$supports) {
-                    if ($data->getBackgroundEffectConfig() !== null) {
-                        $data->setBackgroundEffectConfig(null);
-                    }
-                } else {
-                    $current = $data->getBackgroundEffectConfig();
-                    if ($current === null || trim($current) === "") {
-                        $data->setBackgroundEffectConfig(
-                            $this->effectConfig->getDefaultConfigJson(
-                                (string) $effect,
-                            ),
-                        );
-                    }
-                }
+                // BackgroundEffectConfigProvider removed; no server-side default injection
             });
 
             // On submit, clear config when switching to a non-configurable effect.
@@ -681,29 +663,34 @@ final class EventAdmin extends AbstractAdmin
                     return;
                 }
 
-                $supports = fn(
-                    ?string $effect,
-                ): bool => $this->effectConfig->supports((string) $effect);
+                $supports = static function (?string $effect): bool {
+                    if ($effect === null) {
+                        return false;
+                    }
+                    return in_array(
+                        $effect,
+                        [
+                            "flowfields",
+                            "chladni",
+                            "roaches",
+                            "grid",
+                            "lines",
+                            "rain",
+                            "snow",
+                            "stars",
+                            "tv",
+                            "vhs",
+                        ],
+                        true,
+                    );
+                };
 
                 $newEffect = $submitted["backgroundEffect"] ?? null;
 
                 // If chosen effect doesn't support config, drop any submitted config
+                // Removed BackgroundEffectConfigProvider normalization block
                 if (!$supports($newEffect)) {
                     $submitted["backgroundEffectConfig"] = null;
-                } elseif (array_key_exists(
-                    "backgroundEffectConfig",
-                    $submitted,
-                ) &&
-                trim((string) $submitted["backgroundEffectConfig"]) !==
-                    "") {
-                    // If user entered JSON manually, normalize and pretty print to ensure consistent storage
-                    $submitted[
-                        "backgroundEffectConfig"
-                    ] = $this->effectConfig->normalizeJson(
-                        (string) $submitted["backgroundEffectConfig"],
-                        (string) $newEffect,
-                        true,
-                    );
                 }
 
                 // If effect changed, and no explicit config was provided, auto-load defaults for configurable effects
@@ -720,14 +707,8 @@ final class EventAdmin extends AbstractAdmin
                                     "backgroundEffectConfig"
                                 ] ?? ""),
                             ) === "";
-                        if ($noConfigProvided) {
-                            $submitted["backgroundEffectConfig"] = $supports(
-                                $newEffect,
-                            )
-                                ? $this->effectConfig->getDefaultConfigJson(
-                                    (string) $newEffect,
-                                )
-                                : null;
+                        if ($noConfigProvided && !$supports($newEffect)) {
+                            $submitted["backgroundEffectConfig"] = null;
                         }
                     }
                 }
@@ -771,21 +752,7 @@ final class EventAdmin extends AbstractAdmin
             );
         }
 
-        // Normalize and pretty-print effect config before persist
-        $effect = $event->getBackgroundEffect();
-        $config = $event->getBackgroundEffectConfig();
-        if (!$this->effectConfig->supports((string) $effect)) {
-            // Ensure we don't store config for non-configurable effects
-            $event->setBackgroundEffectConfig(null);
-        } elseif (is_string($config) && trim($config) !== "") {
-            $event->setBackgroundEffectConfig(
-                $this->effectConfig->normalizeJson(
-                    $config,
-                    (string) $effect,
-                    true,
-                ),
-            );
-        }
+        // BackgroundEffectConfigProvider removed: no normalization on persist
     }
     #[\Override]
     public function preUpdate($event): void
@@ -796,27 +763,12 @@ final class EventAdmin extends AbstractAdmin
             );
         }
 
-        // Normalize and pretty-print effect config before update
-        $effect = $event->getBackgroundEffect();
-        $config = $event->getBackgroundEffectConfig();
-        if (!$this->effectConfig->supports((string) $effect)) {
-            // Ensure we don't store config for non-configurable effects
-            $event->setBackgroundEffectConfig(null);
-        } elseif (is_string($config) && trim($config) !== "") {
-            $event->setBackgroundEffectConfig(
-                $this->effectConfig->normalizeJson(
-                    $config,
-                    (string) $effect,
-                    true,
-                ),
-            );
-        }
+        // BackgroundEffectConfigProvider removed: no normalization on update
     }
     public function __construct(
         protected SluggerInterface $slug,
         protected LocationRepository $lr,
         protected RequestStack $rs,
-        protected BackgroundEffectConfigProvider $effectConfig,
     ) {}
 
     #[\Override]

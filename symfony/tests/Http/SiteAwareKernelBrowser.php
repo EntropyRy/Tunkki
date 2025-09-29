@@ -12,56 +12,17 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * Test-only KernelBrowser that wraps outgoing requests into Sonata's SiteRequest.
  *
- * Adds debug + a conditional skip for POST /login so the security firewall
- * can authenticate before Sonata Page site resolution (which was causing 404s).
+ * Minimal version (debug logging removed).
  */
 final class SiteAwareKernelBrowser extends KernelBrowser
 {
     protected function doRequest(object $request): Response
     {
-        if ($request instanceof Request) {
-            // Debug logging for POST /login BEFORE any wrapping
-            if (
-                strtoupper($request->getMethod()) === "POST" &&
-                ($request->getPathInfo() === "/login" ||
-                    // fallback if pathInfo not yet normalized
-                    rtrim($request->getRequestUri(), "/") === "/login")
-            ) {
-                $keys = implode(",", array_keys($request->request->all()));
-                fwrite(
-                    \STDOUT,
-                    "[TEST_DEBUG_LOGIN] RAW_POST pathInfo=" .
-                        $request->getPathInfo() .
-                        " requestUri=" .
-                        $request->getRequestUri() .
-                        " keys=" .
-                        $keys .
-                        " csrf=" .
-                        ($request->request->has("_csrf_token") ? "yes" : "no") .
-                        "\n",
-                );
-            }
-
-
-            if (!($request instanceof SiteRequest)) {
-                $request = self::wrapAsSiteRequest($request);
-            }
+        if ($request instanceof Request && !($request instanceof SiteRequest)) {
+            $request = self::wrapAsSiteRequest($request);
         }
 
         return parent::doRequest($request);
-    }
-
-    private function isLoginPath(Request $request): bool
-    {
-        $pi = $request->getPathInfo();
-        if ($pi === "/login") {
-            return true;
-        }
-        $uri = $request->getRequestUri();
-        if ($uri === "/login" || $uri === "/login/") {
-            return true;
-        }
-        return false;
     }
 
     private static function wrapAsSiteRequest(Request $request): SiteRequest

@@ -13,11 +13,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 final class UserFixtures extends Fixture
 {
-    public const USER_REFERENCE = "fixture_user_user";
-    public const ADMIN_REFERENCE = "fixture_user_admin";
-    public const ACTIVE_MEMBER_REFERENCE = "fixture_user_active_member";
-    public const STAGE_MEMBER_REFERENCE = "fixture_user_stage_member";
-    public const SUPER_ADMIN_REFERENCE = "fixture_user_super_admin";
+    public const string USER_REFERENCE = "fixture_user_user";
+    public const string ADMIN_REFERENCE = "fixture_user_admin";
+    public const string ACTIVE_MEMBER_REFERENCE = "fixture_user_active_member";
+    public const string STAGE_MEMBER_REFERENCE = "fixture_user_stage_member";
+    public const string SUPER_ADMIN_REFERENCE = "fixture_user_super_admin";
 
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,

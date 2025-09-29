@@ -28,8 +28,8 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class SiteFixtures extends Fixture
 {
-    public const REFERENCE_DEFAULT_FI = 'site_fi_default';
-    public const REFERENCE_EN = 'site_en';
+    public const string REFERENCE_DEFAULT_FI = 'site_fi_default';
+    public const string REFERENCE_EN = 'site_en';
 
     public function load(ObjectManager $manager): void
     {
