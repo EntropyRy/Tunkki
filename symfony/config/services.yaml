@@ -489,7 +489,6 @@ services:
       - "@sonata.page.manager.site"
       - "@sonata.page.decorator_strategy"
       - "@sonata.seo.page"
-      - "@router"
     tags:
       - {
           name: kernel.event_listener,
@@ -497,14 +496,12 @@ services:
           method: onKernelRequest,
           priority: 40,
         }
-      - {
-          name: kernel.event_listener,
-          event: kernel.request,
-          method: onKernelRequestRedirect,
-          priority: 44,
-        }
 
   # Override the default site selector
   sonata.page.site.selector.host_with_path_by_locale:
     alias: App\Site\CustomHostPathByLocaleSiteSelector
     public: true
+
+  App\EventSubscriber\HeuristicLocalePrefixSubscriber:
+    tags:
+      - { name: kernel.event_subscriber }
