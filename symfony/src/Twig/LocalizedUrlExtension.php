@@ -121,28 +121,32 @@ class LocalizedUrlExtension extends AbstractExtension
             $routeParams = $request->attributes->get("_route_params", []);
 
             try {
-                // Generate URL with the current parameters
-                $url = $this->router->generate($targetRoute, $routeParams);
+                // Prefer structural base route + _locale generation; fall back to suffixed targetRoute.
+                $baseRoute ??= preg_replace('/\.(en|fi)$/', '', (string)$currentRoute);
+                $generated = null;
 
-                // For English locale, ensure /en prefix
-                if ($targetLocale === "en" && !str_starts_with($url, "/en")) {
-                    return "/en" . $url;
+                // 1. Attempt base route + _locale (works with SiteAwareRouter alias logic).
+                try {
+                    $generated = $this->router->generate(
+                        $baseRoute,
+                        array_merge($routeParams, ['_locale' => $targetLocale])
+                    );
+                } catch (\Throwable) {
+                    // ignore and try suffixed variant
                 }
 
-                // For Finnish locale, remove /en prefix if present
-                if ($targetLocale === "fi" && str_starts_with($url, "/en")) {
-                    return substr($url, 3);
+                // 2. If base attempt failed, try explicit suffixed route name.
+                if ($generated === null) {
+                    $generated = $this->router->generate($targetRoute, $routeParams);
                 }
 
-                return $url;
+                return $this->formatUrlForLocale($generated, $targetLocale);
             } catch (\Throwable) {
-                // Fallback if route generation fails
+                // Fallback: structural transformation of current path
                 $pathWithoutPrefix = str_starts_with($currentPath, "/en")
                     ? substr($currentPath, 3)
                     : $currentPath;
-                return $targetLocale === "en"
-                    ? "/en" . $pathWithoutPrefix
-                    : $pathWithoutPrefix;
+                return $this->formatUrlForLocale($pathWithoutPrefix, $targetLocale);
             }
         }
 
@@ -189,13 +193,7 @@ class LocalizedUrlExtension extends AbstractExtension
                 );
 
                 // Handle the URL based on locale and prefix requirements
-                if ($targetLocale === "en" && !str_starts_with($url, "/en")) {
-                    return "/en" . $url;
-                }
-                if ($targetLocale === "fi" && str_starts_with($url, "/en")) {
-                    return substr($url, 3) ?: "/";
-                }
-                return $url;
+                return $this->formatUrlForLocale($url, $targetLocale);
             }
         }
 
@@ -225,19 +223,7 @@ class LocalizedUrlExtension extends AbstractExtension
                     );
 
                     // Handle the URL based on locale and prefix requirements
-                    if (
-                        $targetLocale === "en" &&
-                        !str_starts_with($url, "/en")
-                    ) {
-                        return "/en" . $url;
-                    }
-                    if (
-                        $targetLocale === "fi" &&
-                        str_starts_with($url, "/en")
-                    ) {
-                        return substr($url, 3) ?: "/";
-                    }
-                    return $url;
+                    return $this->formatUrlForLocale($url, $targetLocale);
                 }
             }
         }
@@ -489,12 +475,38 @@ class LocalizedUrlExtension extends AbstractExtension
         string $url,
         string $targetLocale,
     ): string {
-        if ($targetLocale === "en" && !str_starts_with($url, "/en")) {
-            return "/en" . $url;
+        // Absolute URL guard: if already fully qualified (http/https),
+        // skip locale prefix manipulation (only normalize trailing slash).
+        if (preg_match('#^https?://#i', $url) === 1) {
+            if ($url !== '/' && str_ends_with($url, '/')) {
+                $url = rtrim($url, '/');
+            }
+            return $url;
         }
-        if ($targetLocale === "fi" && str_starts_with($url, "/en")) {
-            return substr($url, 3) ?: "/";
+
+        // Normalize trailing slash (except for root)
+        if ($url !== '/' && str_ends_with($url, '/')) {
+            $url = rtrim($url, '/');
         }
+
+        if ($targetLocale === 'en') {
+            if ($url === '/') {
+                return '/en';
+            }
+            if (!str_starts_with($url, '/en')) {
+                $url = '/en' . $url;
+            }
+        } elseif ($url === '/en') {
+            // fi
+            $url = '/';
+        } elseif (str_starts_with($url, '/en/')) {
+            $url = substr($url, 3) ?: '/';
+        }
+
+        if ($url === '') {
+            $url = '/';
+        }
+
         return $url;
     }
 
@@ -532,23 +544,24 @@ class LocalizedUrlExtension extends AbstractExtension
         $targetRoute = $baseRoute . "." . $targetLocale;
 
         try {
-            // Generate URL with the provided parameters
-            $url = $this->router->generate($targetRoute, $parameters);
-
-            // For English locale, ensure /en prefix
-            if ($targetLocale === "en" && !str_starts_with($url, "/en")) {
-                return "/en" . $url;
+            // Prefer base route + forced _locale first
+            $generated = null;
+            try {
+                $generated = $this->router->generate(
+                    $baseRoute,
+                    array_merge($parameters, ['_locale' => $targetLocale])
+                );
+            } catch (\Throwable) {
+                // ignore and try suffixed
             }
 
-            // For Finnish locale, remove /en prefix if present
-            if ($targetLocale === "fi" && str_starts_with($url, "/en")) {
-                return substr($url, 3);
+            if ($generated === null) {
+                $generated = $this->router->generate($targetRoute, $parameters);
             }
 
-            return $url;
+            return $this->formatUrlForLocale($generated, $targetLocale);
         } catch (\Throwable) {
-            // Fallback to root URL if route generation fails
-            return $targetLocale === "en" ? "/en" : "/";
+            return $this->formatUrlForLocale('/', $targetLocale);
         }
     }
 }

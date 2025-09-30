@@ -3,6 +3,9 @@ controllers:
     path: ../src/Controller/
     namespace: App\Controller
   type: attribute
+  prefix:
+    fi: ""
+    en: "/en"
 _entropy_mattermost_auth:
   path: /oauth
   controller: App\Controller\MattermostAuthController::connectAction

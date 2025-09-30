@@ -74,8 +74,8 @@
                             <h5 class="box-title">
                                 {{ 'Quick preview'|trans }}
                                 <span class="float-end">{{ 'Full'|trans }}:
-                                    <a href="{{ localized_route('entropy_public_artist', 'fi', {name: artist.name, id: artist.id}) }}">FI</a> |
-                                    <a href="{{ localized_route('entropy_public_artist', 'en', {name: artist.name, id: artist.id}) }}">EN</a>
+                                    <a href="{{ path('entropy_public_artist', {_locale: 'fi', name: artist.name, id: artist.id}) }}">FI</a> |
+                                    <a href="{{ path('entropy_public_artist', {_locale: 'en', name: artist.name, id: artist.id}) }}">EN</a>
                                 </span>
                             </h5>
                         </div>

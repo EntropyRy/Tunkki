@@ -32,7 +32,7 @@ class DoorInfoBlock extends BaseBlockService
 
         try {
             $status = $this->zmq->send('dev init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
-        } catch (\Exception $e) {
+        } catch (\Exception) {
             // ZMQ service might not be available in test environment
             $status = 'Service unavailable';
         }

@@ -3,6 +3,12 @@
     "license": "MIT",
     "type": "project",
     "description": "Entropy Tunkki",
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/haivala/SonataPageBundle.git"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "src/"
@@ -36,7 +42,7 @@
         "sonata-project/entity-audit-bundle": "^1.8",
         "sonata-project/formatter-bundle": "^5",
         "sonata-project/media-bundle": "^4.0",
-        "sonata-project/page-bundle": "^4.7",
+        "sonata-project/page-bundle": "4.x-dev as 4.7.99",
         "sonata-project/seo-bundle": "^3.0",
         "sqids/sqids": "^0.4.1",
         "stof/doctrine-extensions-bundle": "^1.3",

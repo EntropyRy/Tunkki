@@ -479,29 +479,3 @@ services:
           group: admin,
           label: Checkouts,
         }
-
-  # Custom site selector for Symfony localized routing support
-  App\Site\CustomHostPathByLocaleSiteSelector:
-    autowire: false
-    autoconfigure: false
-    public: true
-    arguments:
-      - "@sonata.page.manager.site"
-      - "@sonata.page.decorator_strategy"
-      - "@sonata.seo.page"
-    tags:
-      - {
-          name: kernel.event_listener,
-          event: kernel.request,
-          method: onKernelRequest,
-          priority: 40,
-        }
-
-  # Override the default site selector
-  sonata.page.site.selector.host_with_path_by_locale:
-    alias: App\Site\CustomHostPathByLocaleSiteSelector
-    public: true
-
-  App\EventSubscriber\HeuristicLocalePrefixSubscriber:
-    tags:
-      - { name: kernel.event_subscriber }

@@ -83,6 +83,7 @@ sonata_page:
     - entropy_event_happening_show
     - event_stripe_checkouts
     - entropy_event_shop_complete
+    - path_test
   ignore_uri_patterns:
     - ^/admin\/
     - ^/api\/
