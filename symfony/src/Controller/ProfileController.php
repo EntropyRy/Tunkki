@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\MemberType;
-use App\Form\MemberEditType;
+
 use App\Form\ActiveMemberType;
 use App\Entity\Member;
 use App\Entity\User;
@@ -117,7 +117,7 @@ class ProfileController extends AbstractController
                     );
 
                     $this->addFlash("info", "member.join.added");
-                    $this->redirectToRoute("app_login");
+                    return $this->redirectToRoute("app_login");
                 } else {
                     $this->addFlash("warning", "member.join.update");
                 }
@@ -190,7 +190,7 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $form = $this->createForm(MemberEditType::class, $member);
+        $form = $this->createForm(MemberType::class, $member, ['include_user' => false, 'edit' => true]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
