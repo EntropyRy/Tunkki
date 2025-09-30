@@ -223,15 +223,25 @@ class ProfileController extends AbstractController
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
+
             $user = $form->getData();
-            $user->setPassword(
-                $hasher->hashPassword(
-                    $user,
-                    $form->get("plainPassword")->getData(),
-                ),
-            );
+            $plainPassword = $form->get("plainPassword")->getData();
+
+            // Extra safeguard: ensure non-empty string before hashing
+            if (!is_string($plainPassword) || $plainPassword === '') {
+                return $this->render("profile/password.html.twig", [
+                    "form" => $form,
+                ]);
+            }
+
+            $hashed = $hasher->hashPassword($user, $plainPassword);
+            $user->setPassword($hashed);
             $em->persist($user);
             $em->flush();
+
+
+
             $this->addFlash("success", "profile.member_data_changed");
             return $this->redirectToRoute("profile");
         }

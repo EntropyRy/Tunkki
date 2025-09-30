@@ -107,23 +107,89 @@ final class MemberPasswordFormTest extends FixturesWebTestCase
                 $user = $em->getRepository(User::class)->find($user->getId());
                 self::assertInstanceOf(User::class, $user, 'Re-fetched user should exist after password change.');
 
-                /** @var UserPasswordHasherInterface $hasher */
-                $hasher = static::getContainer()->get(UserPasswordHasherInterface::class);
+                /**
+                 * Instead of validating by hash directly (which was unreliable in the functional
+                 * test context due to detached entities / caching), perform an end-to-end
+                 * authentication verification:
+                 *
+                 *  1. Log out
+                 *  2. Attempt login with OLD password (should fail / not authenticate)
+                 *  3. Attempt login with NEW password (should succeed / authenticate)
+                 */
+                $client = $this->client;
+                $userId = $user->getId();
 
-                $newValid = $hasher->isPasswordValid($user, $newPlain);
-                $oldStillValid = $hasher->isPasswordValid($user, 'userpass123');
+                // Step 1: logout (ignore status; some setups redirect or 200)
+                $client->request('GET', '/en/logout');
 
-                $this->assertTrue($newValid, 'New password must validate.');
-                if ($oldStillValid) {
-                    $this->fail('Old password still validates after change.');
+                // Helper to check authenticated token existence after request
+                $isAuthenticated = function (): bool {
+                    $tokenStorage = static::getContainer()->get('security.token_storage');
+                    $token = $tokenStorage->getToken();
+                    if (!$token) {
+                        return false;
+                    }
+                    $user = $token->getUser();
+                    if (!is_object($user)) {
+                        return false;
+                    }
+                    $roles = method_exists($token, 'getRoleNames') ? $token->getRoleNames() : [];
+                    return count(array_filter($roles, static fn($r) => $r !== 'ROLE_ANONYMOUS')) > 0;
+                };
+
+                // Step 2: try old password (should not authenticate)
+                $crawler = $client->request('GET', '/en/login');
+                $this->assertSame(200, $client->getResponse()->getStatusCode(), 'Login page should load before old password attempt.');
+                $loginFormNode = $crawler->filter('form')->first();
+                $this->assertGreaterThan(0, $loginFormNode->count(), 'Login form should exist.');
+                $oldLoginForm = $loginFormNode->form([
+                    '_username'   => $user->getMember() ? $user->getMember()->getEmail() : 'testuser@example.com',
+                    '_password'   => 'userpass123',
+                ]);
+                $client->submit($oldLoginForm);
+
+                // Follow potential redirect loop up to 2 steps
+                for ($i = 0; $i < 2; $i++) {
+                    $status = $client->getResponse()->getStatusCode();
+                    if (!in_array($status, [301, 302, 303], true)) {
+                        break;
+                    }
+                    $loc = $client->getResponse()->headers->get('Location');
+                    if (!$loc) {
+                        break;
+                    }
+                    $client->request('GET', $loc);
                 }
 
-                if ($oldHash === $user->getPassword()) {
-                    // Accept semantic success but warn about unchanged hash (unexpected)
-                    fwrite(\STDOUT, "[WARN] Hash unchanged but semantic password change succeeded.\n");
-                } else {
-                    $this->assertNotSame($oldHash, $user->getPassword(), 'Hash should change when password changes.');
+                $this->assertFalse($isAuthenticated(), 'User should NOT be authenticated with old password.');
+
+                // Step 3: try new password (should authenticate)
+                $crawler = $client->request('GET', '/en/login');
+                $this->assertSame(200, $client->getResponse()->getStatusCode(), 'Login page should load before new password attempt.');
+                $newLoginFormNode = $crawler->filter('form')->first();
+                $this->assertGreaterThan(0, $newLoginFormNode->count(), 'Login form should exist for new password attempt.');
+                $newLoginForm = $newLoginFormNode->form([
+                    '_username' => $user->getMember() ? $user->getMember()->getEmail() : 'testuser@example.com',
+                    '_password' => $newPlain,
+                ]);
+                $client->submit($newLoginForm);
+
+                for ($i = 0; $i < 3; $i++) {
+                    $status = $client->getResponse()->getStatusCode();
+                    if (!in_array($status, [301, 302, 303], true)) {
+                        break;
+                    }
+                    $loc = $client->getResponse()->headers->get('Location');
+                    if (!$loc) {
+                        break;
+                    }
+                    $client->request('GET', $loc);
                 }
+
+                $this->assertTrue(
+                    $isAuthenticated(),
+                    "User should be authenticated with the new password (user id: {$userId})."
+                );
     }
 
     /**
