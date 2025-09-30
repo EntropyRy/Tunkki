@@ -203,6 +203,13 @@ main() {
   migrate_or_update_schema
   load_fixtures
 
+  log "Creating Sonata page snapshots..."
+  if $DC exec -T -e APP_ENV=test fpm ./bin/console sonata:page:create-snapshots --no-interaction >/dev/null 2>&1; then
+    log "Snapshots created."
+  else
+    log "Snapshot creation skipped or failed."
+  fi
+
   run_phpunit "$@"
 }
 

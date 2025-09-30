@@ -51,8 +51,7 @@ class FrontPage implements PageServiceInterface
         }*/
         // $epic = $this->ePics->getRandomPic();
         $future = array_merge($future, $unpublished);
-        $events = array_merge($future, [$announcement]);
-
+        $events = $announcement !== null ? array_merge($future, [$announcement]) : $future;
         $this->updateSeoPage($page);
 
         return $this->templateManager->renderResponse(
