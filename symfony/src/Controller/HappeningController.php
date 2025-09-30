@@ -159,6 +159,12 @@ class HappeningController extends AbstractController
         if ($happening->getOwners()->contains($member)) {
             $admin = true;
         }
+
+        // Hide unreleased happenings from non-owners
+        if (!$happening->isReleaseThisHappeningInEvent() && !$admin) {
+            throw $this->createNotFoundException();
+        }
+
         $happeningB = $HBR->findMemberBooking($member, $happening);
         if (is_null($happeningB)) {
             $happeningB = new HappeningBooking();
