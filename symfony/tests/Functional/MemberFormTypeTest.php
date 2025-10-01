@@ -26,6 +26,9 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         parent::setUp();
         $this->client = new SiteAwareKernelBrowser(static::bootKernel());
         $this->client->setServerParameter('HTTP_HOST', 'localhost');
+
+        // Clear EntityManager to prevent state pollution from previous tests
+        $this->em()->clear();
     }
 
     public function testEditMemberFormContainsAllowInfoMailsAndNotUserPassword(): void

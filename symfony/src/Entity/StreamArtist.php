@@ -14,7 +14,7 @@ class StreamArtist implements \Stringable
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Artist $artist = null;
 
@@ -24,7 +24,7 @@ class StreamArtist implements \Stringable
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $stoppedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'artists')]
+    #[ORM\ManyToOne(inversedBy: 'artists', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Stream $stream = null;
 

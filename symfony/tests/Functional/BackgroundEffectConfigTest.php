@@ -70,6 +70,9 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
             $reloaded2->getBackgroundEffectConfig(),
             'Updated raw JSON must remain exactly as provided (no normalization).'
         );
+
+        // Note: Test data cleanup is handled by tearDown() clearing EntityManager state.
+        // Actual DB rows remain but fixtures are reloaded before each test run.
     }
 
     public function testUnsupportedEffectDoesNotAutomaticallyClearConfigOnEntityPersist(): void
@@ -108,5 +111,8 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
             $reloaded->getBackgroundEffectConfig(),
             'Config for unsupported effect should remain (only admin form listener clears it, not entity persistence).'
         );
+
+        // Note: Test data cleanup is handled by tearDown() clearing EntityManager state.
+        // Actual DB rows remain but fixtures are reloaded before each test run.
     }
 }

@@ -49,6 +49,7 @@ abstract class FixturesWebTestCase extends WebTestCase
         }
     }
 
+
     /**
      * Deprecated: Fixtures are loaded externally (CI or bootstrap).
      *
