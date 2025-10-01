@@ -6,8 +6,9 @@
     {% set title = page.title %}
     {% set keywords = page.metaKeyword %}
     {% set description = page.metaDescription %}
-    {% if artists|length > 0 %}
-        {% set desctiption = description ~ ' ' ~ 'stream.live.now'|trans ~ ': ' ~ artists|join(' B2B ') %}
+    {% set artists_list = artists|default([]) %}
+    {% if artists_list|length > 0 %}
+        {% set description = description ~ ' ' ~ 'stream.live.now'|trans ~ ': ' ~ artists_list|join(' B2B ') %}
     {% endif %}
     {% set height = 512 %}
     {% set width = 512 %}

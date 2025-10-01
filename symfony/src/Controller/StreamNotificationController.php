@@ -12,66 +12,80 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class StreamNotificationController extends AbstractController
 {
+    /**
+     * IceCast webhook endpoint to start / stop the active stream state.
+     *
+     * Events:
+     *  - stream-start: creates one new Stream (does NOT auto-stop older ones)
+     *  - stream-stop : stops ALL currently online streams (defensive; normally only one)
+     *
+     * Notes:
+     *  - Twig Live Components query the latest online stream; after stop there is none.
+     *  - Inline logic kept (no separate service) per current scope.
+     *  - Filename column is non-nullable in the entity, so we coerce to '' when missing.
+     */
     #[Route('/api/stream-notifications', name: 'stream_notifications', methods: ['POST'])]
     public function handleStreamNotification(
         Request $request,
         LoggerInterface $logger,
         StreamRepository $streamRepository,
     ): Response {
-        // Get the request content (JSON)
-        $data = json_decode($request->getContent(), true);
+        $raw = $request->getContent();
+        $data = json_decode($raw, true);
 
-        // Validate the request
-        if (!isset($data['event']) || !in_array($data['event'], ['stream-start', 'stream-stop'])) {
+        if (!is_array($data)) {
+            return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $event = $data['event'] ?? null;
+        if (!in_array($event, ['stream-start', 'stream-stop'], true)) {
             return $this->json(['error' => 'Invalid event type'], Response::HTTP_BAD_REQUEST);
         }
 
-        // Validate authentication token
-        $token = $request->headers->get('X-Stream-Auth-Token');
-        if ($token !== $_ENV['STREAM_NOTIFICATION_TOKEN']) {
+        // Shared secret auth (simple header token).
+        $provided = (string) $request->headers->get('X-Stream-Auth-Token', '');
+        $expected = (string) ($_ENV['STREAM_NOTIFICATION_TOKEN'] ?? '');
+        if ($expected === '' || !hash_equals($expected, $provided)) {
             $logger->warning('Unauthorized stream notification attempt', [
                 'ip' => $request->getClientIp(),
-                'event' => $data['event'],
+                'event' => $event,
             ]);
 
             return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
-        // Log the event
         $logger->info('Stream event received', [
-            'event' => $data['event'],
-            'timestamp' => $data['timestamp'] ?? 'unknown',
-            'recording_file' => $data['recording_file'] ?? 'unknown',
+            'event' => $event,
+            'timestamp' => $data['timestamp'] ?? null,
+            'recording_file' => $data['recording_file'] ?? null,
         ]);
 
         $stream = null;
+        $message = 'OK';
 
-        if ('stream-start' === $data['event']) {
-            // Save to database
+        if ('stream-start' === $event) {
             $stream = new Stream();
             $stream->setOnline(true);
-            $stream->setFilename($data['recording_file'] ?? null);
+            $stream->setFilename($data['recording_file'] ?? '');
             $streamRepository->save($stream, true);
-        } elseif ('stream-stop' === $data['event']) {
-            $stream = $streamRepository->findOneBy(['online' => true]);
-            if (null !== $stream) {
-                $stream->setOnline(false);
-                foreach ($stream->getArtists() as $artist) {
-                    $artist->setStoppedAt(new \DateTimeImmutable());
-                }
-                $streamRepository->save($stream, true);
+            $message = 'Stream started';
+        } else { // stream-stop
+            $onlineStreams = $streamRepository->stopAllOnline();
+            if (0 === count($onlineStreams)) {
+                $logger->info('Stream stop: no active stream');
+                $message = 'No active stream';
             } else {
-                $logger->warning('Stream stop event received but no matching stream found', [
-                    'recording_file' => $data['recording_file'] ?? null,
-                ]);
+                // Return the most recent (highest id) as representative
+                usort($onlineStreams, static fn(Stream $a, Stream $b) => $b->getId() <=> $a->getId());
+                $stream = $onlineStreams[0];
+                $message = 'Stream stopped';
             }
         }
 
-        // Return success response
         return $this->json([
             'status' => 'success',
-            'message' => 'Stream notification received',
-            'event_id' => (null !== $stream ? $stream->getId() : null),
+            'message' => $message,
+            'event_id' => $stream ? $stream->getId() : null,
         ]);
     }
 }

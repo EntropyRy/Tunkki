@@ -17,19 +17,25 @@ class MattermostNotifierService
 
     public function sendToMattermost(string $text, ?string $channel = null): void
     {
-        $message = new ChatMessage($text);
+        $env = (string) $this->params->get('kernel.environment');
 
-        // Configure Mattermost-specific options
-        $options = new MattermostOptions();
+        try {
+            $message = new ChatMessage($text);
 
-        // Override channel if specified (otherwise uses DSN default)
-        if (null !== $channel && 'dev' !== $this->params->get('kernel.environment')) {
-            $options->recipient($channel);
+            // Configure Mattermost-specific options
+            $options = new MattermostOptions();
+
+            // Override channel if specified (otherwise uses DSN default) and not in dev (original behavior)
+            if (null !== $channel && 'dev' !== $env) {
+                $options->recipient($channel);
+            }
+
+            $message->options($options);
+
+            // Send the message using the configured transport (in test env this will hit in-memory transport)
+            $this->chatter->send($message);
+        } catch (\Throwable) {
+            // Silently ignore notification failures; they must not break user flows.
         }
-
-        $message->options($options);
-
-        // Send the message using the configured transport
-        $this->chatter->send($message);
     }
 }

@@ -26,9 +26,20 @@ class StreamPage implements PageServiceInterface
     {
         $stream = $this->em->getRepository(Stream::class)->findOneBy(['online' => true]);
 
+        // Flatten active stream artist entities into a simple array of artist names for the template.
+        $artistNames = [];
+        if ($stream) {
+            foreach ($stream->getArtistsOnline() as $streamArtist) {
+                $name = $streamArtist->getArtist()?->getName();
+                if ($name) {
+                    $artistNames[] = $name;
+                }
+            }
+        }
+
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...['artists' => ($stream ? $stream->getArtistsOnline() : null)]], // 'clubroom'=>$clubroom)),
+            [...$parameters, ...['artists' => $artistNames]],
             $response
         );
     }

@@ -118,7 +118,7 @@ services:
       - "@sonata.page.template_manager"
       - "@doctrine.orm.entity_manager"
     tags:
-      - { name: sonata.page, alias: Streeam }
+      - { name: sonata.page, alias: stream }
   entropy.page.eventspage:
     class: App\PageService\EventsPage
     arguments:

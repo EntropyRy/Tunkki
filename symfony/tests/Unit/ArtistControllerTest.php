@@ -8,7 +8,7 @@ use App\Controller\ArtistController;
 use App\Entity\Artist;
 use App\Entity\Member;
 use App\Entity\User;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -86,8 +86,8 @@ final class ArtistControllerTest extends TestCase
             ->with(self::anything(), self::isInstanceOf(Artist::class))
             ->willReturn($form);
 
-        /** @var Mattermost&MockObject $mm */
-        $mm = $this->createMock(Mattermost::class);
+        /** @var MattermostNotifierService&MockObject $mm */
+        $mm = $this->createMock(MattermostNotifierService::class);
         /** @var EntityManagerInterface&MockObject $em */
         $em = $this->createMock(EntityManagerInterface::class);
 
@@ -120,9 +120,9 @@ final class ArtistControllerTest extends TestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
-        /** @var Mattermost&MockObject $mm */
-        $mm = $this->createMock(Mattermost::class);
-        $mm->expects(self::never())->method('SendToMattermost');
+        /** @var MattermostNotifierService&MockObject $mm */
+        $mm = $this->createMock(MattermostNotifierService::class);
+        $mm->expects(self::never())->method('sendToMattermost');
 
         /** @var EntityManagerInterface&MockObject $em */
         $em = $this->createMock(EntityManagerInterface::class);
@@ -174,10 +174,10 @@ final class ArtistControllerTest extends TestCase
         $formFactory = $this->createMock(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
-        /** @var Mattermost&MockObject $mm */
-        $mm = $this->createMock(Mattermost::class);
+        /** @var MattermostNotifierService&MockObject $mm */
+        $mm = $this->createMock(MattermostNotifierService::class);
         $mm->expects(self::once())
-            ->method('SendToMattermost')
+            ->method('sendToMattermost')
             ->with(
                 self::callback(function (string $msg): bool {
                     return str_contains(

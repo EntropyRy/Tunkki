@@ -16,11 +16,67 @@ class StreamRepository extends ServiceEntityRepository
         parent::__construct($registry, Stream::class);
     }
 
+    /**
+     * Persist a single Stream entity.
+     */
     public function save(Stream $entity, bool $flush = true): void
     {
-        $this->getEntityManager()->persist($entity);
+        $em = $this->getEntityManager();
+        $em->persist($entity);
         if ($flush) {
-            $this->getEntityManager()->flush();
+            $em->flush();
         }
+    }
+
+    /**
+     * Persist multiple Stream entities (no validation, assumes correct instances).
+     *
+     * @param iterable<Stream> $streams
+     */
+    public function saveAll(iterable $streams, bool $flush = true): void
+    {
+        $em = $this->getEntityManager();
+        foreach ($streams as $stream) {
+            $em->persist($stream);
+        }
+        if ($flush) {
+            $em->flush();
+        }
+    }
+
+    /**
+     * Stop all currently online streams.
+     *
+     * For each online stream:
+     *  - Sets online=false
+     *  - Sets stoppedAt timestamp for any attached StreamArtist without one
+     *
+     * Returns array of affected streams (now offline). If none were online, returns [].
+     *
+     * @return Stream[]
+     */
+    public function stopAllOnline(): array
+    {
+        $online = $this->findBy(['online' => true]);
+        if (!$online) {
+            return [];
+        }
+
+        $now = new \DateTimeImmutable();
+        $em = $this->getEntityManager();
+
+        foreach ($online as $stream) {
+            $stream->setOnline(false);
+            foreach ($stream->getArtists() as $artist) {
+                if (null === $artist->getStoppedAt()) {
+                    $artist->setStoppedAt($now);
+                }
+            }
+            $em->persist($stream);
+        }
+
+        $em->flush();
+
+        return $online;
     }
 }

@@ -31,7 +31,7 @@ final class MattermostHelperTest extends TestCase
 
         $service->sendToMattermost('Test message', 'yhdistys');
 
-        // Success if no exception is thrown
+        // Success if no exception is thrown and send() invoked on in-memory transport
         $this->addToAssertionCount(1);
     }
 

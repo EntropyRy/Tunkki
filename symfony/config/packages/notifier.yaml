@@ -1,18 +1,25 @@
 framework:
     notifier:
-        message_bus: 'messenger.default_bus'  # Use default message bus for message handling
+        message_bus: "messenger.default_bus" # Use default message bus for message handling
         chatter_transports:
-            mattermost: '%env(MATTERMOST_DSN)%'
-        #    slack: '%env(SLACK_DSN)%'
-            telegram: '%env(TELEGRAM_DSN)%'
+            mattermost: "%env(MATTERMOST_DSN)%"
+            #    slack: '%env(SLACK_DSN)%'
+            telegram: "%env(TELEGRAM_DSN)%"
         #texter_transports:
         #    twilio: '%env(TWILIO_DSN)%'
         #    nexmo: '%env(NEXMO_DSN)%'
         channel_policy:
             # use chat/slack, chat/telegram, sms/twilio or sms/nexmo
-            urgent: ['email']
-            high: ['email']
-            medium: ['email']
-            low: ['email']
+            urgent: ["email"]
+            high: ["email"]
+            medium: ["email"]
+            low: ["email"]
         admin_recipients:
             - { email: webmaster@entropy.fi }
+
+when@test:
+    framework:
+        notifier:
+            chatter_transports:
+                mattermost: "null://null"
+                telegram: "null://null"
