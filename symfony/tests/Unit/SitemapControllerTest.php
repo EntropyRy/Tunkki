@@ -40,18 +40,21 @@ final class SitemapControllerTest extends TestCase
     private function makeStubEvent(
         string $fiUrl,
         string $enUrl,
-        \DateTimeImmutable $updatedAt
+        \DateTimeImmutable $updatedAt,
     ): object {
         return new class($fiUrl, $enUrl, $updatedAt) {
             public function __construct(
                 private string $fiUrl,
                 private string $enUrl,
-                private \DateTimeImmutable $updatedAt
-            ) {}
+                private \DateTimeImmutable $updatedAt,
+            ) {
+            }
+
             public function getUrlByLang(string $lang): string
             {
-                return $lang === 'fi' ? $this->fiUrl : $this->enUrl;
+                return 'fi' === $lang ? $this->fiUrl : $this->enUrl;
             }
+
             public function getUpdatedAt(): \DateTimeImmutable
             {
                 return $this->updatedAt;
@@ -68,19 +71,21 @@ final class SitemapControllerTest extends TestCase
     private function makeController(
         EventRepository $eventRepo,
         MenuRepository $menuRepo,
-        array &$capturedUrls
+        array &$capturedUrls,
     ): SitemapController {
         return new class($eventRepo, $menuRepo, $capturedUrls) extends SitemapController {
             public function __construct(
                 EventRepository $eventRepo,
                 MenuRepository $menuRepo,
-                private array &$captured
+                private array &$captured,
             ) {
                 parent::__construct($eventRepo, $menuRepo);
             }
+
             protected function renderView(string $view, array $parameters = []): string
             {
                 $this->captured = $parameters['urls'] ?? [];
+
                 // Return minimal valid XML snippet to satisfy Response usage.
                 return '<urlset/>';
             }

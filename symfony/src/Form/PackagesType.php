@@ -2,15 +2,13 @@
 
 namespace App\Form;
 
+use App\Entity\Package;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
-
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use App\Entity\Package;
-
-use Doctrine\ORM\EntityManagerInterface;
 
 class PackagesType extends AbstractType
 {
@@ -28,6 +26,7 @@ class PackagesType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
     }
+
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -46,6 +45,7 @@ class PackagesType extends AbstractType
             'btn_catalogue' => 'SonataAdminBundle',
         ]);
     }
+
     #[\Override]
     public function getParent(): string
     {

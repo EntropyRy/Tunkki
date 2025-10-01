@@ -10,4 +10,6 @@ return (new PhpCsFixer\Config())
         '@Symfony' => true,
     ])
     ->setFinder($finder)
+    // Enable parallel processing with auto-detected optimal settings
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
 ;

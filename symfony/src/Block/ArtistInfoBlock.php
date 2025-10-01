@@ -3,16 +3,16 @@
 namespace App\Block;
 
 use App\Entity\User;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
-use Sonata\BlockBundle\Form\Mapper\FormMapper;
-use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
 use Sonata\BlockBundle\Block\Service\EditableBlockService;
-use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\BlockBundle\Meta\Metadata;
+use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\Form\Validator\ErrorElement;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
 class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
@@ -23,23 +23,26 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
         $user = $this->security->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
+
         return $this->renderResponse($blockContext->getTemplate(), [
-            'block'     => $blockContext->getBlock(),
-            'settings'  => $blockContext->getSettings(),
-            'member'    => $member
+            'block' => $blockContext->getBlock(),
+            'settings' => $blockContext->getSettings(),
+            'member' => $member,
         ], $response);
     }
+
     #[\Override]
     public function configureEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->configureCreateForm($formMapper, $block);
     }
+
     #[\Override]
     public function configureCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
 
-    public function __construct(Environment $twig, protected \Symfony\Bundle\SecurityBundle\Security $security) //, EntityManagerInterface $em)
+    public function __construct(Environment $twig, protected Security $security) // , EntityManagerInterface $em)
     {
         parent::__construct($twig);
     }
@@ -51,6 +54,7 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
             'template' => 'block/artist_info.html.twig',
         ]);
     }
+
     #[\Override]
     public function getMetadata(): Metadata
     {
@@ -58,10 +62,12 @@ class ArtistInfoBlock extends BaseBlockService implements EditableBlockService
             'class' => 'fa fa-link',
         ]);
     }
+
     #[\Override]
     public function validate(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
+
     public function getName(): string
     {
         return 'Artist Info Block';

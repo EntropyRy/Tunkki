@@ -27,12 +27,14 @@ class DoorLogRepository extends ServiceEntityRepository
         if (is_null($count)) {
             $count = 10;
         }
+
         return $this->createQueryBuilder('d')
             ->orderBy('d.createdAt', 'DESC')
             ->setMaxResults($count)
             ->getQuery()
             ->getResult();
     }
+
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */

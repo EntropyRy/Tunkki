@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -97,8 +97,10 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         if ($this->member instanceof Member && $this->member->getUsername()) {
             return $this->member->getUsername();
         }
+
         return 'N/A';
     }
+
     /**
      * A visual identifier that represents this user.
      *
@@ -110,8 +112,10 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         if ($this->member instanceof Member && $this->member->getEmail()) {
             return $this->member->getEmail();
         }
+
         return 'N/A';
     }
+
     /**
      * @see UserInterface
      */
@@ -220,6 +224,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
 
         return $this;
     }
+
     /**
      * @return Collection|Reward[]
      */
@@ -262,10 +267,12 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
 
         return $this;
     }
+
     public function getPlainPassword()
     {
         return $this->plainPassword;
     }
+
     public function setPlainPassword($plainPassword): void
     {
         $this->plainPassword = $plainPassword;
@@ -298,15 +305,17 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
 
         return $this;
     }
+
     #[\Override]
     public function __toString(): string
     {
         if ($this->member instanceof Member) {
             return (string) $this->member->getName();
         } else {
-            return 'user: ' . $this->id;
+            return 'user: '.$this->id;
         }
     }
+
     public function getLocale(): string
     {
         return $this->member->getLocale();

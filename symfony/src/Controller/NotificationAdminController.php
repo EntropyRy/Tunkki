@@ -8,11 +8,11 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\Button\InlineKeyboardButton;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\InlineKeyboardMarkup;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
 use Symfony\Component\Notifier\ChatterInterface;
+use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class NotificationAdminController extends CRUDController
@@ -21,7 +21,7 @@ final class NotificationAdminController extends CRUDController
         ChatterInterface $chatter,
         Request $request,
         Pool $pool,
-        TranslatorInterface $ts
+        TranslatorInterface $ts,
     ): RedirectResponse {
         $notification = $this->admin->getSubject();
         $locale = $notification->getLocale();
@@ -30,32 +30,32 @@ final class NotificationAdminController extends CRUDController
 
         // Prepare picture URL
         $publicUrl = null;
-        if ($picture !== null) {
+        if (null !== $picture) {
             // Get base URL from request
             $scheme = $request->isSecure() ? 'https' : 'http';
             $host = $request->getHost();
-            $baseUrl = $scheme . '://' . $host;
+            $baseUrl = $scheme.'://'.$host;
 
             $provider = $pool->getProvider($picture->getProviderName());
             $format = $provider->getFormatName($picture, 'reference');
             $publicUrl = 'https://entropy.fi'.$provider->generatePublicUrl($picture, $format);
         }
 
-        if ($_ENV["APP_ENV"] == 'dev') {
+        if ('dev' == $_ENV['APP_ENV']) {
             $publicUrl = 'https://entropy.fi/upload/media/event/0001/01/c9ae350d6d50efeadd95eab3270604a78719fb1b.jpg';
         }
         // Prepare event URLs
-        $path = '/'. $event->getEventDate()->format('Y') . '/' . $event->getUrl();
-        $host = 'https://' . $request->headers->get('host');
-        if ($notification->getLocale() == 'fi') {
-            $nakkikone = $host . $path . '/nakkikone?source=tg';
-            $shop = $host . $path . '/kauppa?source=tg';
+        $path = '/'.$event->getEventDate()->format('Y').'/'.$event->getUrl();
+        $host = 'https://'.$request->headers->get('host');
+        if ('fi' == $notification->getLocale()) {
+            $nakkikone = $host.$path.'/nakkikone?source=tg';
+            $shop = $host.$path.'/kauppa?source=tg';
         } else {
-            $nakkikone = $host . '/en' . $path . '/nakkikone?source=tg';
-            $shop = $host . '/en'. $path . '/shop?source=tg';
+            $nakkikone = $host.'/en'.$path.'/nakkikone?source=tg';
+            $shop = $host.'/en'.$path.'/shop?source=tg';
         }
 
-        $url = $host . '/tapahtuma/'.$event->getId().'?source=tg';
+        $url = $host.'/tapahtuma/'.$event->getId().'?source=tg';
         $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
 
         // Prepare buttons with each button on its own row
@@ -98,7 +98,7 @@ final class NotificationAdminController extends CRUDController
                     break;
                 case 'add_venue':
                     $venue = $event->getLocation();
-                    $telegramOptions->venue((float)$venue->getLatitude(), (float)$venue->getLongitude(), $event->getName() . ' @ ' .$venue->getNameByLocale($locale), $venue->getStreetAddress());
+                    $telegramOptions->venue((float) $venue->getLatitude(), (float) $venue->getLongitude(), $event->getName().' @ '.$venue->getNameByLocale($locale), $venue->getStreetAddress());
                     break;
                 default:
                     break;
@@ -111,12 +111,12 @@ final class NotificationAdminController extends CRUDController
         }
 
         // Add the photo if available and requested
-        if ($publicUrl !== null && in_array('add_event_picture', $options) && $notification->getMessageId() === null) {
+        if (null !== $publicUrl && in_array('add_event_picture', $options) && null === $notification->getMessageId()) {
             $telegramOptions->photo($publicUrl);
         }
 
         // Add reply markup with buttons if any exist
-        if ($buttonRows !== []) {
+        if ([] !== $buttonRows) {
             $telegramOptions
                 ->replyMarkup(
                     new InlineKeyboardMarkup()
@@ -142,7 +142,7 @@ final class NotificationAdminController extends CRUDController
             $this->admin->update($notification);
             $this->addFlash('success', 'Message sent');
         } catch (\Exception $e) {
-            $this->addFlash('warning', 'Message NOT sent: ' . $e->getMessage());
+            $this->addFlash('warning', 'Message NOT sent: '.$e->getMessage());
             // error_log('Telegram error: ' . $e->getMessage() . "\n" . $e->getTraceAsString());
         }
 

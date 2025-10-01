@@ -17,6 +17,7 @@ final class RSVPAdmin extends AbstractAdmin
     {
         return 'rsvp';
     }
+
     #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {

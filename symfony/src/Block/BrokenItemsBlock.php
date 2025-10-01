@@ -2,15 +2,14 @@
 
 namespace App\Block;
 
+use App\Entity\Item;
+use Doctrine\ORM\EntityManagerInterface;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Model\BlockInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
-use Sonata\BlockBundle\Block\BlockContextInterface;
-use Sonata\AdminBundle\Form\FormMapper;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Item;
 use Twig\Environment;
 
 class BrokenItemsBlock extends BaseBlockService
@@ -18,9 +17,11 @@ class BrokenItemsBlock extends BaseBlockService
     public function buildiCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
+
     public function buildiEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
+
     public function getName(): string
     {
         return 'Broken Items Block';
@@ -40,7 +41,8 @@ class BrokenItemsBlock extends BaseBlockService
             }
             $broken = array_splice($broken, 0, $l);
         }
-        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'broken'  => $broken, 'settings' => $settings], $response);
+
+        return $this->renderResponse($blockContext->getTemplate(), ['block' => $blockContext->getBlock(), 'broken' => $broken, 'settings' => $settings], $response);
     }
 
     public function __construct(Environment $twig, protected EntityManagerInterface $em)

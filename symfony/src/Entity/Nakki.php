@@ -2,10 +2,10 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\NakkiRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -40,7 +40,7 @@ class Nakki implements \Stringable
     private \DateInterval $nakkiInterval;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
-    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Member $responsible = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -58,8 +58,9 @@ class Nakki implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) ((string) $this->definition !== '' && (string) $this->definition !== '0' ? $this->definition->getNameEn() : 'N/A');
+        return (string) ('' !== (string) $this->definition && '0' !== (string) $this->definition ? $this->definition->getNameEn() : 'N/A');
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -159,10 +160,11 @@ class Nakki implements \Stringable
         $diff = $this->getStartAt()->diff($this->getEndAt());
         $hours = $diff->h;
         $hours = ($hours + ($diff->days * 24)) / ((int) $this->getNakkiInterval()->format('%h'));
-        for ($i = 0; $i < $hours; $i++) {
+        for ($i = 0; $i < $hours; ++$i) {
             $start = $i * (int) $this->getNakkiInterval()->format('%h');
-            $times[] = $this->getStartAt()->modify($start . ' hour');
+            $times[] = $this->getStartAt()->modify($start.' hour');
         }
+
         return $times;
     }
 
@@ -173,6 +175,7 @@ class Nakki implements \Stringable
                 return $booking->getMember();
             }
         }
+
         return null;
     }
 

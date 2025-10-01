@@ -2,21 +2,22 @@
 
 namespace App\PageService;
 
-use Sonata\PageBundle\Page\TemplateManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
+use App\Repository\EventRepository;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
-use App\Repository\EventRepository;
+use Sonata\PageBundle\Page\TemplateManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AllEventsPage implements PageServiceInterface
 {
     public function __construct(
         private $name,
         private readonly TemplateManagerInterface $templateManager,
-        private readonly EventRepository $eventR
+        private readonly EventRepository $eventR,
     ) {
     }
+
     #[\Override]
     public function getName(): string
     {
@@ -31,6 +32,7 @@ class AllEventsPage implements PageServiceInterface
         if ($sticky) {
             $events = array_merge([$sticky], $events);
         }
+
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
             ['events' => $events],

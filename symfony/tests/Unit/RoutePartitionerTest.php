@@ -26,6 +26,7 @@ final class RoutePartitionerTest extends TestCase
         foreach ($definitions as $name => $path) {
             $c->add($name, new Route($path));
         }
+
         return $c;
     }
 

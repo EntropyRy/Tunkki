@@ -3,18 +3,18 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 final class UrlWithIconType extends AbstractType
 {
     #[\Override]
     public function buildForm(
         FormBuilderInterface $builder,
-        array $options
+        array $options,
     ): void {
         // Define commonly used icon aliases with display labels (alphabetically ordered)
         $iconChoices = [
@@ -70,26 +70,26 @@ final class UrlWithIconType extends AbstractType
             ],
         ];
         $builder
-            ->add("url", UrlType::class, [
-                "label" => "url.form.url",
-                "attr" => ["placeholder" => "https://soundcloud.com/chipheadi"],
+            ->add('url', UrlType::class, [
+                'label' => 'url.form.url',
+                'attr' => ['placeholder' => 'https://soundcloud.com/chipheadi'],
             ])
-            ->add("icon", ChoiceType::class, [
-                "label" => "url.form.icon",
-                "choices" => $iconChoices,
-                "required" => false,
-                "placeholder" => "url.form.icon_placeholder",
-                "attr" => [
-                    "class" => "icon-select form-select"
+            ->add('icon', ChoiceType::class, [
+                'label' => 'url.form.icon',
+                'choices' => $iconChoices,
+                'required' => false,
+                'placeholder' => 'url.form.icon_placeholder',
+                'attr' => [
+                    'class' => 'icon-select form-select',
                 ],
-                "choice_attr" => fn ($choice, $key, $value): array => ["data-icon" => $choice],
+                'choice_attr' => fn ($choice, $key, $value): array => ['data-icon' => $choice],
             ])
-            ->add("title", TextType::class, [
-                "label" => "url.form.title",
-                "attr" => ["placeholder" => "Soundcloud"],
+            ->add('title', TextType::class, [
+                'label' => 'url.form.title',
+                'attr' => ['placeholder' => 'Soundcloud'],
             ])
-            ->add("open_in_new_window", CheckboxType::class, [
-                "label" => "url.form.open_in_new_window",
+            ->add('open_in_new_window', CheckboxType::class, [
+                'label' => 'url.form.open_in_new_window',
             ]);
     }
 }

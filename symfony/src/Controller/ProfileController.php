@@ -4,29 +4,27 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Form\MemberType;
-
-use App\Form\ActiveMemberType;
 use App\Entity\Member;
 use App\Entity\User;
+use App\Form\ActiveMemberType;
+use App\Form\EPicsPasswordType;
+use App\Form\MemberType;
 use App\Form\UserPasswordType;
 use App\Helper\Barcode;
-use App\Service\MattermostNotifierService;
-use App\Repository\MemberRepository;
+use App\Helper\ePics;
 use App\Repository\EmailRepository;
+use App\Repository\MemberRepository;
+use App\Security\EmailVerifier;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
-
 use Symfony\Component\Mime\Address;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use App\Form\EPicsPasswordType;
-use App\Helper\ePics;
-use App\Security\EmailVerifier;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
@@ -34,11 +32,11 @@ class ProfileController extends AbstractController
     #[
         Route(
             path: [
-                "en" => "/profile/new",
-                "fi" => '/profiili/uusi
+                'en' => '/profile/new',
+                'fi' => '/profiili/uusi
     ',
             ],
-            name: "profile_new",
+            name: 'profile_new',
         ),
     ]
     public function newMember(
@@ -69,7 +67,7 @@ class ProfileController extends AbstractController
                     $user->setPassword(
                         $hasher->hashPassword(
                             $user,
-                            $form->get("user")->get("plainPassword")->getData(),
+                            $form->get('user')->get('plainPassword')->getData(),
                         ),
                     );
                     $member->setLocale($request->getLocale());
@@ -81,67 +79,71 @@ class ProfileController extends AbstractController
 
                     // Build and send single merged welcome + verification email
                     $email_content = $emailRepo->findOneBy([
-                        "purpose" => "member",
+                        'purpose' => 'member',
                     ]);
                     $this->announceToMattermost($mm, $member->getName());
 
-                    $body = $email_content ? $email_content->getBody() : "";
+                    $body = $email_content ? $email_content->getBody() : '';
                     $subject =
                         ($email_content
                             ? $email_content->getSubject()
-                            : $translator->trans("member.welcome.subject")) .
+                            : $translator->trans('member.welcome.subject')).
                         $translator->trans(
-                            "member.welcome.subject_verify_suffix",
+                            'member.welcome.subject_verify_suffix',
                         );
 
                     $welcomeEmail = new TemplatedEmail();
                     $welcomeEmail
                         ->from(
                             new Address(
-                                "webmaster@entropy.fi",
-                                "Entropy Webmaster",
+                                'webmaster@entropy.fi',
+                                'Entropy Webmaster',
                             ),
                         )
                         ->to($member->getEmail())
                         ->subject($subject)
-                        ->htmlTemplate("emails/member.html.twig")
+                        ->htmlTemplate('emails/member.html.twig')
                         ->context([
-                            "body" => $body,
+                            'body' => $body,
                         ]);
 
                     $emailVerifier->sendEmailConfirmation(
-                        "app_verify_email",
+                        'app_verify_email',
                         $member->getUser(),
                         $welcomeEmail,
-                        ["id" => $member->getUser()->getId()],
+                        ['id' => $member->getUser()->getId()],
                     );
 
-                    $this->addFlash("info", "member.join.added");
-                    return $this->redirectToRoute("app_login");
+                    $this->addFlash('info', 'member.join.added');
+
+                    return $this->redirectToRoute('app_login');
                 } else {
-                    $this->addFlash("warning", "member.join.update");
+                    $this->addFlash('warning', 'member.join.update');
                 }
             } else {
-                $this->addFlash("danger", $form->getErrors());
+                $this->addFlash('danger', $form->getErrors());
             }
         }
-        return $this->render("member/new.html.twig", [
-            "form" => $form,
-            "email" => $email_content,
+
+        return $this->render('member/new.html.twig', [
+            'form' => $form,
+            'email' => $email_content,
         ]);
     }
+
     protected function announceToMattermost($mm, string $member): void
     {
-        $text = "**New Member: " . $member . "**";
-        $mm->sendToMattermost($text, "yhdistys");
+        $text = '**New Member: '.$member.'**';
+        $mm->sendToMattermost($text, 'yhdistys');
     }
+
     #[
         Route(
             path: [
-                "en" => "/dashboard",
-                "fi" => "/yleiskatsaus",
+                'en' => '/dashboard',
+                'fi' => '/yleiskatsaus',
             ],
-            name: "dashboard",
+            name: 'dashboard',
         ),
     ]
     public function dashboard(Barcode $bc): Response
@@ -149,20 +151,22 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
+
         // $barcode = $bc->getBarcode($member);
-        return $this->render("profile/dashboard.html.twig", [
-            "member" => $member,
-            //'barcode' => $barcode
+        return $this->render('profile/dashboard.html.twig', [
+            'member' => $member,
+            // 'barcode' => $barcode
         ]);
     }
+
     #[
         Route(
             path: [
-                "en" => "/profile",
-                "fi" => '/profiili
+                'en' => '/profile',
+                'fi' => '/profiili
     ',
             ],
-            name: "profile",
+            name: 'profile',
         ),
     ]
     public function index(): Response
@@ -170,17 +174,19 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        return $this->render("profile/main.html.twig", [
-            "member" => $member,
+
+        return $this->render('profile/main.html.twig', [
+            'member' => $member,
         ]);
     }
+
     #[
         Route(
             path: [
-                "en" => "/profile/edit",
-                "fi" => "/profiili/muokkaa",
+                'en' => '/profile/edit',
+                'fi' => '/profiili/muokkaa',
             ],
-            name: "profile_edit",
+            name: 'profile_edit',
         ),
     ]
     public function edit(
@@ -197,21 +203,24 @@ class ProfileController extends AbstractController
             $em->persist($member);
             $em->flush();
             $request->setLocale($member->getLocale());
-            $this->addFlash("success", "profile.member_data_changed");
-            return $this->redirectToRoute("profile." . $member->getLocale());
+            $this->addFlash('success', 'profile.member_data_changed');
+
+            return $this->redirectToRoute('profile.'.$member->getLocale());
         }
-        return $this->render("profile/edit.html.twig", [
-            "member" => $member,
-            "form" => $form,
+
+        return $this->render('profile/edit.html.twig', [
+            'member' => $member,
+            'form' => $form,
         ]);
     }
+
     #[
         Route(
             path: [
-                "en" => "/profile/password",
-                "fi" => "/profiili/salasana",
+                'en' => '/profile/password',
+                'fi' => '/profiili/salasana',
             ],
-            name: "profile_password_edit",
+            name: 'profile_password_edit',
         ),
     ]
     public function password(
@@ -223,15 +232,13 @@ class ProfileController extends AbstractController
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-
-
             $user = $form->getData();
-            $plainPassword = $form->get("plainPassword")->getData();
+            $plainPassword = $form->get('plainPassword')->getData();
 
             // Extra safeguard: ensure non-empty string before hashing
-            if (!is_string($plainPassword) || $plainPassword === '') {
-                return $this->render("profile/password.html.twig", [
-                    "form" => $form,
+            if (!is_string($plainPassword) || '' === $plainPassword) {
+                return $this->render('profile/password.html.twig', [
+                    'form' => $form,
                 ]);
             }
 
@@ -240,22 +247,23 @@ class ProfileController extends AbstractController
             $em->persist($user);
             $em->flush();
 
+            $this->addFlash('success', 'profile.member_data_changed');
 
-
-            $this->addFlash("success", "profile.member_data_changed");
-            return $this->redirectToRoute("profile");
+            return $this->redirectToRoute('profile');
         }
-        return $this->render("profile/password.html.twig", [
-            "form" => $form,
+
+        return $this->render('profile/password.html.twig', [
+            'form' => $form,
         ]);
     }
+
     #[
         Route(
             path: [
-                "en" => "/profile/apply",
-                "fi" => "/profiili/aktiiviksi",
+                'en' => '/profile/apply',
+                'fi' => '/profiili/aktiiviksi',
             ],
-            name: "apply_for_active_member",
+            name: 'apply_for_active_member',
         ),
     ]
     public function apply(
@@ -267,35 +275,38 @@ class ProfileController extends AbstractController
         assert($user instanceof User);
         $member = $user->getMember();
         if ($member->getIsActiveMember()) {
-            $this->addFlash("success", "profile.you_are_active_member_already");
-            return $this->redirectToRoute("profile." . $member->getLocale());
+            $this->addFlash('success', 'profile.you_are_active_member_already');
+
+            return $this->redirectToRoute('profile.'.$member->getLocale());
         }
         $form = $this->createForm(ActiveMemberType::class, $member);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
             if (empty($member->getApplicationDate())) {
-                $text = "**Active member application by " . $member . "**";
-                $mm->sendToMattermost($text, "yhdistys");
+                $text = '**Active member application by '.$member.'**';
+                $mm->sendToMattermost($text, 'yhdistys');
             }
             $member->setApplicationDate(new \DateTime());
             $em->persist($member);
             $em->flush();
-            $this->addFlash("success", "profile.application_saved");
-            return $this->redirectToRoute("profile." . $member->getLocale());
+            $this->addFlash('success', 'profile.application_saved');
+
+            return $this->redirectToRoute('profile.'.$member->getLocale());
         }
-        return $this->render("profile/apply.html.twig", [
-            "form" => $form,
+
+        return $this->render('profile/apply.html.twig', [
+            'form' => $form,
         ]);
     }
 
     #[
         Route(
             path: [
-                "en" => "/profile/epics/password",
-                "fi" => "/profiili/epics/salasana",
+                'en' => '/profile/epics/password',
+                'fi' => '/profiili/epics/salasana',
             ],
-            name: "profile_epics_password",
+            name: 'profile_epics_password',
         ),
     ]
     public function epicsPassword(
@@ -314,7 +325,7 @@ class ProfileController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $plain = $form->get("plainPassword")->getData();
+            $plain = $form->get('plainPassword')->getData();
 
             $success = $epics->createOrUpdateUserPassword(
                 $resolvedUsername,
@@ -327,17 +338,17 @@ class ProfileController extends AbstractController
                     $em->persist($member);
                     $em->flush();
                 }
-                $this->addFlash("success", "epics.password_set");
+                $this->addFlash('success', 'epics.password_set');
             } else {
-                $this->addFlash("danger", "epics.password_set_failed");
+                $this->addFlash('danger', 'epics.password_set_failed');
             }
 
-            return $this->redirectToRoute("profile." . $member->getLocale());
+            return $this->redirectToRoute('profile.'.$member->getLocale());
         }
 
-        return $this->render("profile/epics_password.html.twig", [
-            "form" => $form,
-            "epics_username" => $resolvedUsername,
+        return $this->render('profile/epics_password.html.twig', [
+            'form' => $form,
+            'epics_username' => $resolvedUsername,
         ]);
     }
 }

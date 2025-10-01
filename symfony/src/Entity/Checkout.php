@@ -117,6 +117,7 @@ class Checkout
             }
             $max[$item->getProduct()->getId()] += $item->getQuantity();
         }
+
         return $max;
     }
 }

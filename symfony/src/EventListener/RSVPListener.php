@@ -2,12 +2,12 @@
 
 namespace App\EventListener;
 
-use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\RSVP;
+use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\EmailRepository;
 use Doctrine\Bundle\DoctrineBundle\Attribute\AsEntityListener;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Doctrine\ORM\Events;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
@@ -16,9 +16,10 @@ final readonly class RSVPListener
 {
     public function __construct(
         private MailerInterface $mailer,
-        private EmailRepository $emailRepository
+        private EmailRepository $emailRepository,
     ) {
     }
+
     public function sendRSVPMailListener(RSVP $rsvp): void
     {
         // Send an email to the user who RSVP'd
@@ -27,7 +28,7 @@ final readonly class RSVPListener
         if ($event->getRsvpSystemEnabled() && $event->isSendRsvpEmail() && $userMail) {
             $emailTemplate = $this->emailRepository->findOneBy([
                 'event' => $event,
-                'purpose' => 'rsvp'
+                'purpose' => 'rsvp',
             ]);
             if ($emailTemplate) {
                 $email = $this->generateMail(
@@ -42,13 +43,14 @@ final readonly class RSVPListener
             }
         }
     }
+
     private function generateMail(string $to, Address|string $replyto, string $subject, $body, $links, ?SonataMediaMedia $img): TemplatedEmail
     {
         return new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyto)
-            ->subject('[Entropy]' . $subject)
+            ->subject('[Entropy]'.$subject)
             ->htmlTemplate('emails/email.html.twig')
             ->context(['body' => $body, 'links' => $links, 'img' => $img]);
     }

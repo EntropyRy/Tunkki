@@ -43,6 +43,7 @@ final class UserCommandTest extends TestCase
         $app = new Application();
         $app->add($command);
         $cmd = $app->find('entropy:member');
+
         return new CommandTester($cmd);
     }
 
@@ -59,6 +60,7 @@ final class UserCommandTest extends TestCase
             ->with(
                 self::callback(function ($u) use (&$capturedUser): bool {
                     $capturedUser = $u;
+
                     return $u instanceof User;
                 }),
                 'S3cretPwd!'
@@ -94,6 +96,7 @@ final class UserCommandTest extends TestCase
                 self::assertContains('ROLE_SUPER_ADMIN', $entity->getRoles(), 'Super admin role expected.');
                 self::assertContains('ROLE_ADMIN', $entity->getRoles(), 'Admin role expected.');
                 $capturedUser = $entity;
+
                 return true;
             }));
 
@@ -166,6 +169,7 @@ final class UserCommandTest extends TestCase
             ->with(self::callback(function ($entity) use (&$capturedUser, $user) {
                 self::assertSame($user, $entity, 'Persist should receive existing User instance.');
                 $capturedUser = $entity;
+
                 return true;
             }));
 

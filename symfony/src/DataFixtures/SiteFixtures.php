@@ -12,7 +12,7 @@ use Doctrine\Persistence\ObjectManager;
  * Provides a minimal pair of SonataPageSite entities for functional tests
  * and local development:
  *   - FI default site at "/"
- *   - EN site at "/en"
+ *   - EN site at "/en".
  *
  * Tests currently duplicate on-the-fly site creation logic. Introducing this
  * fixture allows those tests to be simplified so they only need to rely on

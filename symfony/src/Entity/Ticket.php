@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\TicketRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -22,7 +22,7 @@ class Ticket implements \Stringable
     private ?Event $event = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
-    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Member $owner = null;
 
     #[ORM\Column(type: Types::INTEGER)]
@@ -54,11 +54,13 @@ class Ticket implements \Stringable
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
     #[\Override]
     public function __toString(): string
     {
         return (string) $this->referenceNumber;
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -140,6 +142,7 @@ class Ticket implements \Stringable
 
         return $this;
     }
+
     public function ticketHolderHasNakki(): ?NakkiBooking
     {
         $event = $this->getEvent();
@@ -148,6 +151,7 @@ class Ticket implements \Stringable
             // find member Nakki only if it is mandatory
             return $event->ticketHolderHasNakki($member);
         }
+
         return null;
     }
 

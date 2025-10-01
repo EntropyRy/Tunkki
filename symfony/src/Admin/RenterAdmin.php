@@ -68,6 +68,7 @@ class RenterAdmin extends AbstractAdmin
             ->add('city')
         ;
     }
+
     public function validate(ErrorElement $errorElement, $object): void
     {
         if (empty($object->getEmail())) {

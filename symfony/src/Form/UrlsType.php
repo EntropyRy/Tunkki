@@ -3,10 +3,10 @@
 namespace App\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\FormBuilderInterface;
 
 final class UrlsType extends AbstractType
 {
@@ -29,7 +29,7 @@ final class UrlsType extends AbstractType
             ])
             ->add('title', TextType::class, [
                 'label' => 'url.form.title',
-                'attr' => ['placeholder' => 'Soundcloud']
+                'attr' => ['placeholder' => 'Soundcloud'],
             ])
             ->add('open_in_new_window', CheckboxType::class, [
                 'required' => false,

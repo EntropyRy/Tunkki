@@ -45,7 +45,7 @@ final class RssFeedControllerTest extends TestCase
         return new class($repo, $capture) extends RssFeedController {
             public function __construct(
                 private EventRepository $repo,
-                private array &$capture
+                private array &$capture,
             ) {
             }
 
@@ -56,6 +56,7 @@ final class RssFeedControllerTest extends TestCase
                     'events' => $parameters['events'] ?? null,
                     'locale' => $parameters['locale'] ?? null,
                 ];
+
                 // Minimal valid RSS-like skeleton for Response body
                 return '<rss><channel/></rss>';
             }

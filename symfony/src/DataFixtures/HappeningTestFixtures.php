@@ -27,13 +27,12 @@ use Doctrine\Persistence\ObjectManager;
  * Static analysis adjustments:
  *  - Removed redundant method_exists checks (method is defined on Event).
  *  - Removed incorrect @var User|null docblock causing native type mismatch.
- *
  */
 final class HappeningTestFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const string EVENT_PUBLIC_REFERENCE   = 'fixture_event_happening_public';
-    public const string EVENT_PRIVATE_REFERENCE  = 'fixture_event_happening_private';
-    public const string HAPPENING_PUBLIC_REFERENCE  = 'fixture_happening_public';
+    public const string EVENT_PUBLIC_REFERENCE = 'fixture_event_happening_public';
+    public const string EVENT_PRIVATE_REFERENCE = 'fixture_event_happening_private';
+    public const string HAPPENING_PUBLIC_REFERENCE = 'fixture_happening_public';
     public const string HAPPENING_PRIVATE_REFERENCE = 'fixture_happening_private';
 
     public function load(ObjectManager $manager): void
@@ -47,7 +46,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         }
 
         // 1. Public Event (allows member happenings)
-        $eventPublic = (new Event())
+        $eventPublic = new Event()
             ->setName('Happening Enabled Event (EN)')
             ->setNimi('Tapahtuma jossa happeningit (FI)')
             ->setType('party')
@@ -61,7 +60,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         $this->addReference(self::EVENT_PUBLIC_REFERENCE, $eventPublic);
 
         // 2. Private Event (members cannot create happenings)
-        $eventPrivate = (new Event())
+        $eventPrivate = new Event()
             ->setName('Secret Event (EN)')
             ->setNimi('Salainen tapahtuma (FI)')
             ->setType('internal')
@@ -75,7 +74,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         $this->addReference(self::EVENT_PRIVATE_REFERENCE, $eventPrivate);
 
         // 3. Public Happening (released)
-        $publicHappening = (new Happening())
+        $publicHappening = new Happening()
             ->setEvent($eventPublic)
             ->addOwner($ownerMember)
             ->setNameFi('Julkinen Happeninki')
@@ -97,7 +96,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         $this->addReference(self::HAPPENING_PUBLIC_REFERENCE, $publicHappening);
 
         // 4. Private (unreleased) Happening
-        $privateHappening = (new Happening())
+        $privateHappening = new Happening()
             ->setEvent($eventPrivate)
             ->addOwner($ownerMember)
             ->setNameFi('Salainen Happeninki')

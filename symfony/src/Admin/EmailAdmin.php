@@ -8,10 +8,10 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @extends AbstractAdmin<object>
@@ -23,6 +23,7 @@ final class EmailAdmin extends AbstractAdmin
     {
         return 'email';
     }
+
     #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -75,13 +76,13 @@ final class EmailAdmin extends AbstractAdmin
                         'Email to All VJs in our roster, meaming the VJs who have artist profile in our site' => 'vj_roster',
                         'Email to All DJs in our roster, meaming the DJs who have artist profile in our site' => 'dj_roster',
                         'Tiedotus (all members on the site, including active members)' => 'tiedotus',
-                        'Aktiivit (all active members)' => 'aktiivit'
-                        //'Other' => 'other'
+                        'Aktiivit (all active members)' => 'aktiivit',
+                        // 'Other' => 'other'
                     ],
                     'required' => false,
                     'expanded' => true,
                     'multiple' => false,
-                    'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.'
+                    'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.',
                 ]);
         } else {
             $formMapper
@@ -93,25 +94,25 @@ final class EmailAdmin extends AbstractAdmin
                             'To people who have reserved Nakki' => 'nakkikone',
                             'To all artists' => 'artist',
                             'Tiedotus (all members on the site, including active members)' => 'tiedotus',
-                            'Aktiivit (all active members)' => 'aktiivit'
+                            'Aktiivit (all active members)' => 'aktiivit',
                         ],
                         'Sent as part of User action' => [
                             'To Stiripe tickets buyers. QR code email' => 'ticket_qr',
-                        ]
+                        ],
                     ],
                     'required' => false,
                     'expanded' => false,
                     'multiple' => false,
                 ])
                 ->add('replyTo', null, [
-                    'help' => 'Empty defaults to hallitus@entropy.fi.'
+                    'help' => 'Empty defaults to hallitus@entropy.fi.',
                 ]);
         }
         $subjectHelp = 'All mails have forced prefix "[Entropy]" for consistency. Include Finnish and English version to same message!';
         $email = $this->getSubject();
         $disabled = false;
         $placeholder = $this->getSubject()->getSubject();
-        if ($email != null && $email->getPurpose() == 'ticket_qr') {
+        if (null != $email && 'ticket_qr' == $email->getPurpose()) {
             $subjectHelp = 'Generated automatically';
             $disabled = true;
             $placeholder = '[event name] Ticket #1 / Lippusi #1';
@@ -120,7 +121,7 @@ final class EmailAdmin extends AbstractAdmin
             ->add('subject', null, [
                 'help' => $subjectHelp,
                 'disabled' => $disabled,
-                'data' => $placeholder
+                'data' => $placeholder,
             ])
             ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
@@ -142,8 +143,8 @@ final class EmailAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollection $collection): void
     {
         $collection->remove('show');
-        $collection->add('preview', $this->getRouterIdParameter() . '/preview');
-        $collection->add('send', $this->getRouterIdParameter() . '/send');
-        $collection->add('send_progress', $this->getRouterIdParameter() . '/send-progress');
+        $collection->add('preview', $this->getRouterIdParameter().'/preview');
+        $collection->add('send', $this->getRouterIdParameter().'/send');
+        $collection->add('send_progress', $this->getRouterIdParameter().'/send-progress');
     }
 }

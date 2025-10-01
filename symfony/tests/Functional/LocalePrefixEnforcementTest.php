@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Entity\Event;
-use App\Tests\Http\SiteAwareKernelBrowser;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Http\SiteAwareKernelBrowser;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment as TwigEnvironment;
@@ -88,7 +88,7 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
         );
 
         // English prefix added to Finnish path should 404
-        $this->client->request('GET', '/en' . $this->finnishPath());
+        $this->client->request('GET', '/en'.$this->finnishPath());
         $this->assertSame(
             404,
             $this->client->getResponse()->getStatusCode(),

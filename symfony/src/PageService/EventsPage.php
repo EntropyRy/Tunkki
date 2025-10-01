@@ -3,13 +3,13 @@
 namespace App\PageService;
 
 use App\Repository\EventRepository;
+use Sonata\PageBundle\Model\PageInterface;
+use Sonata\PageBundle\Page\Service\PageServiceInterface;
 use Sonata\PageBundle\Page\TemplateManagerInterface;
 use Sonata\SeoBundle\Seo\SeoPageInterface;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-use Sonata\PageBundle\Model\PageInterface;
-use Sonata\PageBundle\Page\Service\PageServiceInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class EventsPage implements PageServiceInterface
 {
@@ -18,9 +18,10 @@ class EventsPage implements PageServiceInterface
         private readonly TemplateManagerInterface $templateManager,
         private readonly EventRepository $eventRepository,
         private readonly AssetMapperInterface $assetMapper,
-        private readonly SeoPageInterface $seoPage
+        private readonly SeoPageInterface $seoPage,
     ) {
     }
+
     #[\Override]
     public function getName(): string
     {
@@ -31,15 +32,17 @@ class EventsPage implements PageServiceInterface
     public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $events = $this->eventRepository->findPublicEventsByNotType('announcement');
-        //$clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
+        // $clubroom = $this->em->getRepository('App:Event')->findEventsByType('clubroom');
         $host = $request->getSchemeAndHttpHost();
         $this->updateSeoPage($page, $host);
+
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),
-            [...$parameters, ...['events' => $events]], //'clubroom'=>$clubroom)),
+            [...$parameters, ...['events' => $events]], // 'clubroom'=>$clubroom)),
             $response
         );
     }
+
     private function updateSeoPage(PageInterface $page, string $host): void
     {
         $title = $page->getTitle();
@@ -58,9 +61,9 @@ class EventsPage implements PageServiceInterface
             $this->seoPage->addMeta('name', 'keywords', $metaKeywords);
         }
 
-        $this->seoPage->addMeta('property', 'twitter:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'twitter:image', $host.$this->assetMapper->getPublicPath('images/header-logo.svg'));
 
-        $this->seoPage->addMeta('property', 'og:image', $host . $this->assetMapper->getPublicPath('images/header-logo.svg'));
+        $this->seoPage->addMeta('property', 'og:image', $host.$this->assetMapper->getPublicPath('images/header-logo.svg'));
         $this->seoPage->addMeta('property', 'og:type', 'article');
         $this->seoPage->addHtmlAttributes('prefix', 'og: http://ogp.me/ns#');
     }

@@ -29,14 +29,14 @@ final class NotificationAdmin extends AbstractAdmin
     {
         $list
             ->add('message', 'html', [
-                'safe' => true
+                'safe' => true,
             ])
             ->add('updatedAt')
             ->add('sentAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'send' => [
-                        'template' => 'admin/event/button_announce_telegram.html.twig'
+                        'template' => 'admin/event/button_announce_telegram.html.twig',
                     ],
                     'edit' => [],
                     'delete' => [],
@@ -51,9 +51,9 @@ final class NotificationAdmin extends AbstractAdmin
             ->add('locale', ChoiceType::class, [
                 'choices' => [
                     'Finnish' => 'fi',
-                    'English' => 'en'
+                    'English' => 'en',
                 ],
-                'help' => 'Defines links language'
+                'help' => 'Defines links language',
             ])
             ->add(
                 'message',
@@ -63,7 +63,7 @@ final class NotificationAdmin extends AbstractAdmin
                     'required' => true,
                     'attr' => ['rows' => 20],
                     'ckeditor_context' => 'simple',
-                    'help' => 'Telegram does not support lists of any kind'
+                    'help' => 'Telegram does not support lists of any kind',
                 ]
             )
             ->add('options', ChoiceType::class, [
@@ -77,7 +77,7 @@ final class NotificationAdmin extends AbstractAdmin
                     'Add Nakkikone Button' => 'add_nakkikone_button',
                     'Add Buy Ticket Button' => 'add_shop_button',
                     'Add Venue: Inserts map to the event venue defined in Event Location in Event-tab. If used it is the only info to send. Sent message cannot be edited. New message has to be sent' => 'add_venue',
-                ]
+                ],
             ]);
     }
 
@@ -91,11 +91,12 @@ final class NotificationAdmin extends AbstractAdmin
             ->add('sentAt')
             ->add('messageId');
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');
         $collection->remove('delete');
-        $collection->add('send', $this->getRouterIdParameter() . '/send');
+        $collection->add('send', $this->getRouterIdParameter().'/send');
     }
 }

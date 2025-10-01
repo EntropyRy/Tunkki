@@ -3,16 +3,15 @@
 namespace App\Form;
 
 use App\Entity\Member;
-use App\Form\UserPasswordType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * Unified member form for both creation and editing.
@@ -45,14 +44,14 @@ class MemberType extends AbstractType
             ->add('CityOfResidence', TextType::class)
             ->add('StudentUnionMember', CheckboxType::class, [
                 'label_attr' => ['class' => 'switch-custom'],
-                'required' => false
+                'required' => false,
             ])
             ->add('theme', ChoiceType::class, [
                 'choices' => [
                     'bright' => 'light',
-                    'dark' => 'dark'
+                    'dark' => 'dark',
                 ],
-                'required' => true
+                'required' => true,
             ]);
 
         if ($options['edit']) {
@@ -60,7 +59,7 @@ class MemberType extends AbstractType
             $builder->add('allowInfoMails', CheckboxType::class, [
                 'label_attr' => ['class' => 'switch-custom'],
                 'required' => false,
-                'label' => 'member.allow_info_mails'
+                'label' => 'member.allow_info_mails',
             ]);
 
             // Conditionally add active member mails only if entity is active
@@ -70,7 +69,7 @@ class MemberType extends AbstractType
                     $event->getForm()->add('allowActiveMemberMails', CheckboxType::class, [
                         'label_attr' => ['class' => 'switch-custom'],
                         'label' => 'member.allow_active_member_mails',
-                        'required' => false
+                        'required' => false,
                     ]);
                 }
             });

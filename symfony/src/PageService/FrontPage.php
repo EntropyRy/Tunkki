@@ -3,15 +3,15 @@
 namespace App\PageService;
 
 use App\Entity\Event;
-use App\Repository\EventRepository;
-use Sonata\PageBundle\Page\TemplateManagerInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use Sonata\PageBundle\Model\PageInterface;
-use Sonata\PageBundle\Page\Service\PageServiceInterface;
-use Sonata\SeoBundle\Seo\SeoPageInterface;
 use App\Helper\ePics;
 use App\Repository\EventArtistInfoRepository;
+use App\Repository\EventRepository;
+use Sonata\PageBundle\Model\PageInterface;
+use Sonata\PageBundle\Page\Service\PageServiceInterface;
+use Sonata\PageBundle\Page\TemplateManagerInterface;
+use Sonata\SeoBundle\Seo\SeoPageInterface;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class FrontPage implements PageServiceInterface
 {
@@ -21,9 +21,10 @@ class FrontPage implements PageServiceInterface
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
         // private readonly ePics $ePics,
-        private readonly ?SeoPageInterface $seoPage = null
+        private readonly ?SeoPageInterface $seoPage = null,
     ) {
     }
+
     #[\Override]
     public function getName(): string
     {
@@ -38,8 +39,8 @@ class FrontPage implements PageServiceInterface
         $unpublished = $this->eventR->getUnpublishedFutureEvents();
         $info = $this->eventArtistR->findOnePublicEventArtistInfo();
         $announcement = $this->eventR->findOneEventByType('announcement');
-        //$event = $r->findOneEventByTypeWithSticky('event');
-        //$clubroom = $r->findOneEventByTypeWithSticky('clubroom');
+        // $event = $r->findOneEventByTypeWithSticky('event');
+        // $clubroom = $r->findOneEventByTypeWithSticky('clubroom');
         /*if ($clubroom->getEventDate() > $event->getEventDate()){
             $events = [$clubroom, $event];
         } else {
@@ -60,11 +61,12 @@ class FrontPage implements PageServiceInterface
             [
                 'events' => $events,
                 // 'epic' => $epic,
-                'info' => $info
+                'info' => $info,
             ],
             $response
         );
     }
+
     private function updateSeoPage(PageInterface $page): void
     {
         if (!$this->seoPage instanceof SeoPageInterface) {

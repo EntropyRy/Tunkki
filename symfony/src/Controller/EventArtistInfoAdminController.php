@@ -29,6 +29,7 @@ final class EventArtistInfoAdminController extends CRUDController
         } else {
             $this->addFlash('warning', 'Nothing to do!');
         }
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

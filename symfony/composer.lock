@@ -5980,12 +5980,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/haivala/SonataPageBundle.git",
-                "reference": "e07c25def076a9b2950d8c11b5a5f28d63771b0a"
+                "reference": "b6cba118845b056ad6562f0e2901036bb8d36e77"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/haivala/SonataPageBundle/zipball/e07c25def076a9b2950d8c11b5a5f28d63771b0a",
-                "reference": "e07c25def076a9b2950d8c11b5a5f28d63771b0a",
+                "url": "https://api.github.com/repos/haivala/SonataPageBundle/zipball/b6cba118845b056ad6562f0e2901036bb8d36e77",
+                "reference": "b6cba118845b056ad6562f0e2901036bb8d36e77",
                 "shasum": ""
             },
             "require": {
@@ -6105,7 +6105,7 @@
                     "url": "https://github.com/VincentLanglet"
                 }
             ],
-            "time": "2025-09-30T12:06:23+00:00"
+            "time": "2025-10-01T08:25:03+00:00"
         },
         {
             "name": "sonata-project/seo-bundle",

@@ -12,6 +12,7 @@ class BookingRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Booking::class);
     }
+
     public function findBookingsAtTheSameTime(int $id, $startAt, $endAt): mixed
     {
         $queryBuilder = $this->createQueryBuilder('b')
@@ -24,14 +25,17 @@ class BookingRepository extends ServiceEntityRepository
             ->setParameter('endAt', $endAt)
             ->setParameter('id', $id)
             ->orderBy('b.name', 'ASC');
+
         return $queryBuilder->getQuery()->getResult();
     }
+
     public function countHandled(): int
     {
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'))
             ->where('b.cancelled = :is')
             ->setParameter('is', false);
+
         return $qb->getQuery()->getSingleScalarResult();
     }
 }

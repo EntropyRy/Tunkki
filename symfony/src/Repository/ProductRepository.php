@@ -2,10 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Event;
 
 /**
  * @extends ServiceEntityRepository<Product>

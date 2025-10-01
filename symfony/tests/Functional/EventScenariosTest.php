@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Entity\Event;
-use App\Tests\Http\SiteAwareKernelBrowser;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Http\SiteAwareKernelBrowser;
 
-require_once __DIR__ . "/../Http/SiteAwareKernelBrowser.php";
+require_once __DIR__.'/../Http/SiteAwareKernelBrowser.php';
 
 final class EventScenariosTest extends FixturesWebTestCase
 {
@@ -18,7 +18,7 @@ final class EventScenariosTest extends FixturesWebTestCase
     {
         parent::setUp();
         $this->client = new SiteAwareKernelBrowser(static::bootKernel());
-        $this->client->setServerParameter("HTTP_HOST", "localhost");
+        $this->client->setServerParameter('HTTP_HOST', 'localhost');
     }
 
     private function getEventBySlug(string $slug): ?Event
@@ -29,32 +29,32 @@ final class EventScenariosTest extends FixturesWebTestCase
         /** @var \App\Repository\EventRepository $repo */
         $repo = $em->getRepository(Event::class);
 
-        return $repo->findOneBy(["url" => $slug]);
+        return $repo->findOneBy(['url' => $slug]);
     }
 
     public function testUnpublishedEventIsDeniedForAnonymous(): void
     {
         $client = $this->client;
 
-        $event = $this->getEventBySlug("unpublished-event");
-        $this->assertNotNull($event, "Unpublished event fixture missing");
+        $event = $this->getEventBySlug('unpublished-event');
+        $this->assertNotNull($event, 'Unpublished event fixture missing');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
         // EN site path with slug route
         $client->request(
-            "GET",
-            sprintf("/en/%d/%s", $year, "unpublished-event"),
+            'GET',
+            sprintf('/en/%d/%s', $year, 'unpublished-event'),
         );
 
         $this->assertSame(
             302,
             $client->getResponse()->getStatusCode(),
-            "Anonymous should be redirected to login for unpublished event",
+            'Anonymous should be redirected to login for unpublished event',
         );
         $this->assertStringContainsString(
-            "/login",
-            $client->getResponse()->headers->get("Location") ?? "",
+            '/login',
+            $client->getResponse()->headers->get('Location') ?? '',
         );
     }
 
@@ -62,16 +62,16 @@ final class EventScenariosTest extends FixturesWebTestCase
     {
         $client = $this->client;
 
-        $event = $this->getEventBySlug("past-event");
-        $this->assertNotNull($event, "Past event fixture missing");
+        $event = $this->getEventBySlug('past-event');
+        $this->assertNotNull($event, 'Past event fixture missing');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
-        $client->request("GET", sprintf("/en/%d/%s", $year, "past-event"));
+        $client->request('GET', sprintf('/en/%d/%s', $year, 'past-event'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString(
-            "Past Event",
+            'Past Event',
             $client->getResponse()->getContent(),
         );
         $this->assertStringContainsString(
@@ -85,32 +85,32 @@ final class EventScenariosTest extends FixturesWebTestCase
         $client = $this->client;
 
         // The "external" event uses the ID-based route and should redirect to the external URL
-        $external = $this->getEventBySlug("https://example.com/external-event");
+        $external = $this->getEventBySlug('https://example.com/external-event');
         if (null === $external) {
             // Some projects may use a different flag; if fixture didn't create it as expected, skip gracefully
             $this->markTestSkipped(
-                "External event fixture not available in this environment.",
+                'External event fixture not available in this environment.',
             );
         }
 
         // If the entity supports the external flag, ensure it is set
-        if (method_exists($external, "getExternalUrl")) {
+        if (method_exists($external, 'getExternalUrl')) {
             $this->assertTrue(
                 (bool) $external->getExternalUrl(),
-                "External URL flag must be true for external event",
+                'External URL flag must be true for external event',
             );
         }
 
         $id = $external->getId();
-        $this->assertNotNull($id, "External event must have an ID");
+        $this->assertNotNull($id, 'External event must have an ID');
 
         // EN site path + locale-specific route for id
-        $client->request("GET", sprintf("/en/event/%d", $id));
+        $client->request('GET', sprintf('/en/event/%d', $id));
 
         $this->assertSame(302, $client->getResponse()->getStatusCode());
         $this->assertSame(
-            "https://example.com/external-event",
-            $client->getResponse()->headers->get("Location"),
+            'https://example.com/external-event',
+            $client->getResponse()->headers->get('Location'),
         );
     }
 
@@ -118,25 +118,25 @@ final class EventScenariosTest extends FixturesWebTestCase
     {
         $client = $this->client;
 
-        $event = $this->getEventBySlug("tickets-event");
-        $this->assertNotNull($event, "Tickets-enabled event fixture missing");
+        $event = $this->getEventBySlug('tickets-event');
+        $this->assertNotNull($event, 'Tickets-enabled event fixture missing');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
         $client->request(
-            "GET",
-            sprintf("/en/%d/%s/shop", $year, "tickets-event"),
+            'GET',
+            sprintf('/en/%d/%s/shop', $year, 'tickets-event'),
         );
 
         $status = $client->getResponse()->getStatusCode();
         $this->assertSame(
             302,
             $status,
-            "Anonymous user should be redirected to login for tickets-enabled event",
+            'Anonymous user should be redirected to login for tickets-enabled event',
         );
         $this->assertStringContainsString(
-            "/login",
-            $client->getResponse()->headers->get("Location") ?? "",
+            '/login',
+            $client->getResponse()->headers->get('Location') ?? '',
         );
     }
 
@@ -144,16 +144,16 @@ final class EventScenariosTest extends FixturesWebTestCase
     {
         $client = $this->client;
 
-        $event = $this->getEventBySlug("shop-event");
-        $this->assertNotNull($event, "Shop-ready event fixture missing");
+        $event = $this->getEventBySlug('shop-event');
+        $this->assertNotNull($event, 'Shop-ready event fixture missing');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
-        $client->request("GET", sprintf("/en/%d/%s/shop", $year, "shop-event"));
+        $client->request('GET', sprintf('/en/%d/%s/shop', $year, 'shop-event'));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString(
-            "Shop Ready Event",
+            'Shop Ready Event',
             $client->getResponse()->getContent(),
         );
         $this->assertStringContainsString(
@@ -170,43 +170,43 @@ final class EventScenariosTest extends FixturesWebTestCase
         // Ensure fixture user exists
         $user = self::$em
             ->getRepository(\App\Entity\User::class)
-            ->findOneBy(["authId" => "local-user"]);
-        $this->assertNotNull($user, "Fixture user not found");
+            ->findOneBy(['authId' => 'local-user']);
+        $this->assertNotNull($user, 'Fixture user not found');
 
         // Perform real form login (programmatic loginUser was unreliable with custom request wrapper)
-        $crawler = $client->request("GET", "/login");
+        $crawler = $client->request('GET', '/login');
         $this->assertSame(
             200,
             $client->getResponse()->getStatusCode(),
-            "Login page should load",
+            'Login page should load',
         );
 
-        $formNode = $crawler->filter("form")->first();
+        $formNode = $crawler->filter('form')->first();
         $this->assertTrue(
             $formNode->count() > 0,
-            "Login form not found on /login",
+            'Login form not found on /login',
         );
 
         $form = $formNode->form([
-            "_username" => "local-user",
-            "_password" => "userpass123",
+            '_username' => 'local-user',
+            '_password' => 'userpass123',
         ]);
         $client->submit($form);
 
         // Fetch unpublished event after authenticated login
-        $event = $this->getEventBySlug("unpublished-event");
-        $this->assertNotNull($event, "Unpublished event fixture missing");
-        $year = (int) $event->getEventDate()->format("Y");
+        $event = $this->getEventBySlug('unpublished-event');
+        $this->assertNotNull($event, 'Unpublished event fixture missing');
+        $year = (int) $event->getEventDate()->format('Y');
 
         $client->request(
-            "GET",
-            sprintf("/en/%d/%s", $year, "unpublished-event"),
+            'GET',
+            sprintf('/en/%d/%s', $year, 'unpublished-event'),
         );
 
         $this->assertSame(
             200,
             $client->getResponse()->getStatusCode(),
-            "Authenticated user should access unpublished event",
+            'Authenticated user should access unpublished event',
         );
     }
 
@@ -216,13 +216,13 @@ final class EventScenariosTest extends FixturesWebTestCase
 
         $admin = self::$em
             ->getRepository(\App\Entity\User::class)
-            ->findOneBy(["authId" => "local-admin"]);
-        $this->assertNotNull($admin, "Fixture admin not found");
+            ->findOneBy(['authId' => 'local-admin']);
+        $this->assertNotNull($admin, 'Fixture admin not found');
 
         $client->loginUser($admin);
         $client->followRedirects(true);
 
-        $client->request("GET", "/admin/");
+        $client->request('GET', '/admin/');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
     }

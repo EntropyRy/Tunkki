@@ -2,8 +2,8 @@
 
 namespace App\Menu;
 
-use App\Entity\Sonata\SonataPagePage;
 use App\Entity\Menu;
+use App\Entity\Sonata\SonataPagePage;
 use App\Repository\MenuRepository;
 use Knp\Menu\FactoryInterface;
 use Knp\Menu\ItemInterface;
@@ -12,25 +12,26 @@ class MenuBuilder
 {
     public function __construct(
         private readonly FactoryInterface $factory,
-        private readonly MenuRepository $mRepo
-    ) {}
+        private readonly MenuRepository $mRepo,
+    ) {
+    }
 
     public function createMainMenu(array $options): ItemInterface
     {
-        $locale = $options["locale"];
-        $nameFunc = $locale == "fi" ? "getNimi" : "getLabel";
+        $locale = $options['locale'];
+        $nameFunc = 'fi' == $locale ? 'getNimi' : 'getLabel';
         $roots = $this->mRepo->getRootNodes();
-        $menu = $this->factory->createItem("root");
-        $menu->setChildrenAttribute("class", "navbar-nav navbar-nav-scroll");
+        $menu = $this->factory->createItem('root');
+        $menu->setChildrenAttribute('class', 'navbar-nav navbar-nav-scroll');
         foreach ($roots as $m) {
             $menu = $this->addItem($menu, $m, $locale, 1);
             $m = $this->sortByPosition($m);
             foreach ($m as $item) {
                 if ($item->getEnabled()) {
-                    if ($item->getUrl() == "#") {
+                    if ('#' == $item->getUrl()) {
                         $dropdown = $menu->addChild($item->{$nameFunc}(), [
-                            "attributes" => [
-                                "dropdown" => true,
+                            'attributes' => [
+                                'dropdown' => true,
                             ],
                         ]);
                         $items = $this->sortByPosition($item);
@@ -61,16 +62,18 @@ class MenuBuilder
                 }
             }
         }
+
         return $menu;
     }
+
     private function addItem(
         ItemInterface $menu,
         Menu $item,
         string $locale,
-        ?int $lvl = null
+        ?int $lvl = null,
     ): ItemInterface {
-        $level = "level-" . $lvl;
-        $nameFunc = $locale === "fi" ? "getNimi" : "getLabel";
+        $level = 'level-'.$lvl;
+        $nameFunc = 'fi' === $locale ? 'getNimi' : 'getLabel';
         $page = $item->getPageByLang($locale);
         if ($page instanceof SonataPagePage) {
             // if page is set
@@ -79,24 +82,24 @@ class MenuBuilder
             $url = $item->getUrl();
         }
         $menu->addChild($item->{$nameFunc}(), [
-            "route" => "page_slug",
-            "routeParameters" => ["path" => "" . $url],
-            "linkAttributes" => [
-                "class" => $level,
+            'route' => 'page_slug',
+            'routeParameters' => ['path' => ''.$url],
+            'linkAttributes' => [
+                'class' => $level,
             ],
         ]);
+
         return $menu;
     }
-    /**
-     * @param mixed $m
-     */
+
     private function sortByPosition($m): array
     {
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            fn($a, $b): int => $a->getPosition() <=> $b->getPosition()
+            fn ($a, $b): int => $a->getPosition() <=> $b->getPosition()
         );
+
         return $array;
     }
 }

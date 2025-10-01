@@ -10,13 +10,13 @@ use App\Form\ArtistType;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class ArtistController extends AbstractController
@@ -38,6 +38,7 @@ class ArtistController extends AbstractController
             'member' => $member,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/profiili/artisti/uusi',
@@ -49,7 +50,7 @@ class ArtistController extends AbstractController
         Request $request,
         FormFactoryInterface $formF,
         MattermostNotifierService $mm,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -65,24 +66,28 @@ class ArtistController extends AbstractController
                 $em->flush();
                 $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
                 $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
-                $text = 'New artist! type: ' . $artist->getType() . ', name: ' . $artist->getName() . '; **LINKS**: [FI](' . $url_fi . '), [EN](' . $url_en . ')';
+                $text = 'New artist! type: '.$artist->getType().', name: '.$artist->getName().'; **LINKS**: [FI]('.$url_fi.'), [EN]('.$url_en.')';
                 $mm->sendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');
                 if ($referer) {
                     $request->getSession()->remove('referer');
+
                     return $this->redirect($referer);
                 }
                 $this->addFlash('success', 'edited');
+
                 return $this->redirectToRoute('entropy_artist_profile');
             } else {
                 $this->addFlash('warning', 'artist.form.pic_missing');
             }
         }
+
         return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
-            'form' => $form
+            'form' => $form,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/profiili/artisti/{id}/muokkaa',
@@ -97,7 +102,7 @@ class ArtistController extends AbstractController
         Request $request,
         Artist $artist,
         FormFactoryInterface $formF,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $form = $formF->create(ArtistType::class, $artist);
         $form->handleRequest($request);
@@ -106,13 +111,16 @@ class ArtistController extends AbstractController
             $em->persist($artist);
             $em->flush();
             $this->addFlash('success', 'edited');
+
             return $this->redirectToRoute('entropy_artist_profile');
         }
+
         return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
-            'form' => $form
+            'form' => $form,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/profiili/artisti/{id}/poista',
@@ -131,8 +139,10 @@ class ArtistController extends AbstractController
         $em->persist($artist);
         $em->remove($artist);
         $em->flush();
+
         return $this->redirectToRoute('entropy_artist_profile');
     }
+
     #[Route(
         path: [
             'fi' => '/profiili/artisti/{id}/streamit',
@@ -146,7 +156,7 @@ class ArtistController extends AbstractController
     public function streams(
         Request $request,
         EntityManagerInterface $em,
-        Artist $artist
+        Artist $artist,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -155,8 +165,10 @@ class ArtistController extends AbstractController
         // If not, redirect to the artist profile
         if ($member->getId() !== $artist->getMember()->getId()) {
             $this->addFlash('warning', 'stream.artist.not_yours');
+
             return $this->redirectToRoute('entropy_artist_profile');
         }
+
         return $this->render('artist/streams.html.twig', [
             'artist' => $artist,
         ]);

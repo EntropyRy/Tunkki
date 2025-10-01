@@ -27,23 +27,23 @@ final class SiteAwareKernelBrowser extends KernelBrowser
 
     private static function wrapAsSiteRequest(Request $request): SiteRequest
     {
-        $raw = $request->getRequestUri() ?: "/";
-        if ($raw[0] !== "/") {
-            $raw = "/" . ltrim($raw, "/");
+        $raw = $request->getRequestUri() ?: '/';
+        if ('/' !== $raw[0]) {
+            $raw = '/'.ltrim($raw, '/');
         }
-        while (str_starts_with($raw, "//")) {
-            $raw = "/" . ltrim($raw, "/");
+        while (str_starts_with($raw, '//')) {
+            $raw = '/'.ltrim($raw, '/');
         }
 
         $server = $request->server->all();
-        $server["HTTP_HOST"] = "localhost";
-        $server["SERVER_NAME"] = "localhost";
-        if (!isset($server["SERVER_PORT"])) {
-            $server["SERVER_PORT"] = 80;
+        $server['HTTP_HOST'] = 'localhost';
+        $server['SERVER_NAME'] = 'localhost';
+        if (!isset($server['SERVER_PORT'])) {
+            $server['SERVER_PORT'] = 80;
         }
-        $server["REQUEST_URI"] = $raw;
+        $server['REQUEST_URI'] = $raw;
 
-        $absolute = "http://localhost" . $raw;
+        $absolute = 'http://localhost'.$raw;
 
         $siteRequest = SiteRequest::create(
             $absolute,
@@ -62,12 +62,12 @@ final class SiteAwareKernelBrowser extends KernelBrowser
         }
 
         $locale = $request->getLocale();
-        if ($locale !== null && $locale !== "") {
+        if (null !== $locale && '' !== $locale) {
             $siteRequest->setLocale($locale);
         }
 
         $siteRequest->setBaseUrl($request->getBaseUrl());
-        $siteRequest->setPathInfo(parse_url($raw, PHP_URL_PATH) ?: "/");
+        $siteRequest->setPathInfo(parse_url($raw, PHP_URL_PATH) ?: '/');
 
         return $siteRequest;
     }

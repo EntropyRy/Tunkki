@@ -3,23 +3,25 @@
 namespace App\Helper;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use ZMQ;
 
 class ZMQHelper
 {
     public function __construct(protected ParameterBagInterface $bag)
     {
     }
+
     public function connect()
     {
         $hook = $this->bag->get('door_socket');
         $context = new \ZMQContext();
-        $socket = $context->getSocket(ZMQ::SOCKET_REQ);
-        $socket->setSockOpt(ZMQ::SOCKOPT_RCVTIMEO, 1000);
-        $socket->setSockOpt(ZMQ::SOCKOPT_LINGER, 2000);
+        $socket = $context->getSocket(\ZMQ::SOCKET_REQ);
+        $socket->setSockOpt(\ZMQ::SOCKOPT_RCVTIMEO, 1000);
+        $socket->setSockOpt(\ZMQ::SOCKOPT_LINGER, 2000);
         $socket->connect($hook);
+
         return $socket;
     }
+
     public function send($text)
     {
         try {
@@ -32,6 +34,7 @@ class ZMQHelper
         if (empty($resp)) {
             $resp = 'broken';
         }
+
         return $resp;
     }
 }

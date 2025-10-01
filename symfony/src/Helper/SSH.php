@@ -31,10 +31,12 @@ class SSH
 {
     private ?array $lastResult = null;
 
-    public function __construct(private readonly ParameterBagInterface $bag) {}
+    public function __construct(private readonly ParameterBagInterface $bag)
+    {
+    }
 
     /**
-     * Execute a predefined command identified by suffix <text> in parameter key: recording.script.<text>
+     * Execute a predefined command identified by suffix <text> in parameter key: recording.script.<text>.
      *
      * Legacy mode (structured = false):
      *   Returns false when command considered successful (no stderr and exit_status == 0 or null),
@@ -50,14 +52,14 @@ class SSH
         string $text,
         bool $structured = false,
     ): array|string|bool {
-        $paramKey = "recording.script." . $text;
+        $paramKey = 'recording.script.'.$text;
 
         if (!$this->bag->has($paramKey)) {
             return $this->finalizeResult(
                 success: false,
                 command: $paramKey,
-                stdout: "",
-                stderr: "",
+                stdout: '',
+                stderr: '',
                 exitStatus: null,
                 error: "Missing parameter '$paramKey'",
                 structured: $structured,
@@ -73,8 +75,8 @@ class SSH
             return $this->finalizeResult(
                 success: false,
                 command: $command,
-                stdout: "",
-                stderr: "",
+                stdout: '',
+                stderr: '',
                 exitStatus: null,
                 error: $e->getMessage(),
                 structured: $structured,
@@ -84,12 +86,12 @@ class SSH
 
         $execStart = microtime(true);
         $stream = @ssh2_exec($connection, $command);
-        if ($stream === false) {
+        if (false === $stream) {
             return $this->finalizeResult(
                 success: false,
                 command: $command,
-                stdout: "",
-                stderr: "",
+                stdout: '',
+                stderr: '',
                 exitStatus: null,
                 error: "Failed to execute SSH command '$command'",
                 structured: $structured,
@@ -98,7 +100,7 @@ class SSH
         }
 
         $errorStream = @ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
-        if ($errorStream === false) {
+        if (false === $errorStream) {
             // Still proceed, but note missing stderr stream
             $errorStream = null;
         }
@@ -109,8 +111,8 @@ class SSH
             stream_set_blocking($errorStream, true);
         }
 
-        $stdout = stream_get_contents($stream) ?: "";
-        $stderr = $errorStream ? (stream_get_contents($errorStream) ?: "") : "";
+        $stdout = stream_get_contents($stream) ?: '';
+        $stderr = $errorStream ? (stream_get_contents($errorStream) ?: '') : '';
 
         if ($errorStream) {
             fclose($errorStream);
@@ -119,9 +121,9 @@ class SSH
 
         // Retrieve exit status (may be null if not provided and function may not exist)
         $exitStatus = null;
-        if (function_exists("ssh2_get_exit_status")) {
+        if (function_exists('ssh2_get_exit_status')) {
             $statusRaw = @ssh2_get_exit_status($stream);
-            if ($statusRaw !== null && $statusRaw !== false) {
+            if (null !== $statusRaw && false !== $statusRaw) {
                 $exitStatus = (int) $statusRaw;
             }
         }
@@ -129,7 +131,7 @@ class SSH
         $execMs = (int) round((microtime(true) - $execStart) * 1000);
 
         $success =
-            $stderr === "" && ($exitStatus === null || $exitStatus === 0);
+            '' === $stderr && (null === $exitStatus || 0 === $exitStatus);
 
         return $this->finalizeResult(
             success: $success,
@@ -139,9 +141,9 @@ class SSH
             exitStatus: $exitStatus,
             error: $success
                 ? null
-                : ($stderr !== ""
+                : ('' !== $stderr
                     ? trim($stderr)
-                    : "Command failed"),
+                    : 'Command failed'),
             structured: $structured,
             connectMs: $connectMs,
             execMs: $execMs,
@@ -153,7 +155,7 @@ class SSH
      */
     public function checkStatus(): bool
     {
-        $paramKey = "recording.script.check";
+        $paramKey = 'recording.script.check';
         if (!$this->bag->has($paramKey)) {
             return false;
         }
@@ -166,7 +168,7 @@ class SSH
         }
 
         $stream = @ssh2_exec($connection, $command);
-        if ($stream === false) {
+        if (false === $stream) {
             return false;
         }
 
@@ -174,7 +176,7 @@ class SSH
         $output = stream_get_contents($stream);
         fclose($stream);
 
-        return trim((string) $output) === "1";
+        return '1' === trim((string) $output);
     }
 
     /**
@@ -184,6 +186,7 @@ class SSH
     {
         try {
             $this->getConnectionOrFail();
+
             return true;
         } catch (\Throwable) {
             return false;
@@ -202,27 +205,24 @@ class SSH
      * Internal: establish SSH connection and authenticate or throw.
      *
      * @return resource
+     *
      * @throws \RuntimeException
      */
     protected function getConnectionOrFail()
     {
-        $host = (string) $this->bag->get("recording.host");
-        $port = (int) $this->bag->get("recording.port");
-        $user = (string) $this->bag->get("recording.user");
-        $pass = (string) $this->bag->get("recording.pass");
+        $host = (string) $this->bag->get('recording.host');
+        $port = (int) $this->bag->get('recording.port');
+        $user = (string) $this->bag->get('recording.user');
+        $pass = (string) $this->bag->get('recording.pass');
 
         $connection = @ssh2_connect($host, $port);
-        if ($connection === false) {
-            throw new \RuntimeException(
-                "SSH connect failed to {$host}:{$port}",
-            );
+        if (false === $connection) {
+            throw new \RuntimeException("SSH connect failed to {$host}:{$port}");
         }
 
         $authed = @ssh2_auth_password($connection, $user, $pass);
-        if ($authed === false) {
-            throw new \RuntimeException(
-                "SSH authentication failed for user '{$user}' at {$host}:{$port}",
-            );
+        if (false === $authed) {
+            throw new \RuntimeException("SSH authentication failed for user '{$user}' at {$host}:{$port}");
         }
 
         return $connection;
@@ -243,15 +243,15 @@ class SSH
         ?int $execMs = null,
     ): array|string|bool {
         $result = [
-            "success" => $success,
-            "command" => $command,
-            "stdout" => $stdout,
-            "stderr" => $stderr,
-            "exit_status" => $exitStatus,
-            "error" => $error,
-            "timing" => [
-                "connect_ms" => $connectMs,
-                "exec_ms" => $execMs,
+            'success' => $success,
+            'command' => $command,
+            'stdout' => $stdout,
+            'stderr' => $stderr,
+            'exit_status' => $exitStatus,
+            'error' => $error,
+            'timing' => [
+                'connect_ms' => $connectMs,
+                'exec_ms' => $execMs,
             ],
         ];
 
@@ -267,6 +267,6 @@ class SSH
         }
 
         // Prefer stderr message; fallback to generic error.
-        return $stderr !== "" ? trim($stderr) : $error ?? "Unknown SSH error";
+        return '' !== $stderr ? trim($stderr) : $error ?? 'Unknown SSH error';
     }
 }

@@ -6,6 +6,6 @@ namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
 
-final class HappeningAdminController extends CRUDController{
-
+final class HappeningAdminController extends CRUDController
+{
 }

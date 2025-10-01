@@ -8,10 +8,10 @@ use App\Entity\HappeningBooking;
 use App\Entity\User;
 use App\Form\HappeningBookingType;
 use App\Form\HappeningType;
-use App\Service\MattermostNotifierService;
 use App\Repository\HappeningBookingRepository;
 use App\Repository\HappeningRepository;
 use App\Repository\TicketRepository;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -42,7 +42,7 @@ class HappeningController extends AbstractController
         Event $event,
         HappeningRepository $hr,
         SluggerInterface $slugger,
-        MattermostNotifierService $mm
+        MattermostNotifierService $mm,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -57,36 +57,40 @@ class HappeningController extends AbstractController
             $happening->setSlugFi($slugger->slug($happening->getNameFi())->lower());
             $happening->setSlugEn($slugger->slug($happening->getNameEn())->lower());
             if (
-                $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi()) ||
-                $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
+                $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi())
+                || $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
             ) {
                 $this->addFlash('warning', 'happening.same_name_exits');
+
                 return $this->redirectToRoute('entropy_event_happening_edit', [
                     'slug' => $event->getUrl(),
                     'year' => $event->getEventDate()->format('Y'),
-                    'happeningSlug' => $happening->getSlug($request->getLocale())
+                    'happeningSlug' => $happening->getSlug($request->getLocale()),
                 ]);
             } else {
                 $hr->save($happening, true);
-                $text = '** New Happening: ** ' . $happening->getNameEn() .  ' for ' . $event->getName();
+                $text = '** New Happening: ** '.$happening->getNameEn().' for '.$event->getName();
                 $mm->sendToMattermost($text, 'yhdistys');
                 $this->addFlash('success', 'happening.created');
+
                 return $this->redirectToRoute('entropy_event_happening_show', [
                     'slug' => $event->getUrl(),
                     'year' => $event->getEventDate()->format('Y'),
-                    'happeningSlug' => $happening->getSlug($request->getLocale())
+                    'happeningSlug' => $happening->getSlug($request->getLocale()),
                 ]);
             }
         }
+
         return $this->render('happening/create.html.twig', [
             'form' => $form,
             'event' => $event,
         ]);
     }
+
     #[Route(
         path: [
             'en' => '/{year}/{slug}/happening/{happeningSlug}/edit',
-            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}/muokkaa'
+            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}/muokkaa',
         ],
         name: 'entropy_event_happening_edit',
         requirements: [
@@ -104,11 +108,12 @@ class HappeningController extends AbstractController
         assert($user instanceof User);
         $member = $user->getMember();
         $event = $happening->getEvent();
-        if ($happening->getOwners()->contains($member) == false) {
+        if (false == $happening->getOwners()->contains($member)) {
             $this->addFlash('warning', 'You cannot edit this happening');
+
             return $this->redirectToRoute('entropy_event_slug', [
                 'slug' => $event->getUrl(),
-                'year' => $event->getEventDate()->format('Y')
+                'year' => $event->getEventDate()->format('Y'),
             ]);
         }
         $form = $this->createForm(HappeningType::class, $happening);
@@ -119,22 +124,25 @@ class HappeningController extends AbstractController
             $em->persist($happening);
             $em->flush();
             $this->addFlash('success', 'happening.edited');
+
             return $this->redirectToRoute('entropy_event_happening_show', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
-                'happeningSlug' => $happening->getSlug($request->getLocale())
+                'happeningSlug' => $happening->getSlug($request->getLocale()),
             ]);
         }
+
         return $this->render('happening/edit.html.twig', [
             'form' => $form,
             'event' => $event,
-            'happening' => $happening
+            'happening' => $happening,
         ]);
     }
+
     #[Route(
         path: [
             'en' => '/{year}/{slug}/happening/{happeningSlug}',
-            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}'
+            'fi' => '/{year}/{slug}/tapahtuma/{happeningSlug}',
         ],
         name: 'entropy_event_happening_show',
         requirements: [
@@ -148,7 +156,7 @@ class HappeningController extends AbstractController
         HappeningRepository $happeningRepository,
         HappeningBookingRepository $HBR,
         TicketRepository $ticketR,
-        TranslatorInterface $trans
+        TranslatorInterface $trans,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -180,10 +188,11 @@ class HappeningController extends AbstractController
             $happeningB->setMember($member);
             $HBR->save($happeningB, true);
             $this->addFlash('success', 'happening.you_have_signed_up');
+
             return $this->redirectToRoute('entropy_event_happening_show', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
-                'happeningSlug' => $happening->getSlug($request->getLocale())
+                'happeningSlug' => $happening->getSlug($request->getLocale()),
             ]);
         }
         $converter = new GithubFlavoredMarkdownConverter();
@@ -191,6 +200,7 @@ class HappeningController extends AbstractController
         if (!is_null($happening->getPaymentInfo($request->getLocale()))) {
             $payment_info = $converter->convert($happening->getPaymentInfo($request->getLocale()));
         }
+
         return $this->render('happening/show.html.twig', [
             'prev' => $prevAndNext[0],
             'next' => $prevAndNext[1] ?? null,
@@ -201,9 +211,10 @@ class HappeningController extends AbstractController
             'happeningB' => $happeningB,
             'admin' => $admin,
             'form' => $form,
-            'ticket_ref' => $ticket_ref
+            'ticket_ref' => $ticket_ref,
         ]);
     }
+
     #[Route(
         '/happening/{id}/remove',
         name: 'entropy_event_happening_remove',
@@ -214,7 +225,7 @@ class HappeningController extends AbstractController
     )]
     public function remove(
         HappeningBooking $happeningB,
-        HappeningBookingRepository $hbr
+        HappeningBookingRepository $hbr,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -225,6 +236,7 @@ class HappeningController extends AbstractController
             $hbr->remove($happeningB, true);
             $this->addFlash('success', 'happening.reservation_cancelled');
         }
+
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $event->getUrl(),
             'year' => $event->getEventDate()->format('Y'),

@@ -5,13 +5,12 @@ namespace App\Controller;
 use App\Entity\DoorLog;
 use App\Entity\User;
 use App\Form\OpenDoorType;
-use App\Helper\SSH;
-use App\Service\MattermostNotifierService;
-use App\Helper\ZMQHelper;
 use App\Helper\Barcode;
+use App\Helper\SSH;
+use App\Helper\ZMQHelper;
 use App\Repository\DoorLogRepository;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
-use Picqer\Barcode\BarcodeGeneratorHTML;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -32,7 +31,7 @@ class KerdeController extends AbstractController
         Barcode $barcodeGenerator,
         EntityManagerInterface $em,
         DoorLogRepository $doorlogrepo,
-        SSH $ssh
+        SSH $ssh,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -42,27 +41,27 @@ class KerdeController extends AbstractController
         $DoorLog->setMember($member);
         $since = new \DateTime('now-1day');
         if ($request->get('since')) {
-            //$datestring = strtotime($request->get('since'));
+            // $datestring = strtotime($request->get('since'));
             $since = new \DateTime($request->get('since'));
         }
         $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTime('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
-        $status = $zmq->send($env . ' init: ' . $member->getUsername() . ' ' . $now->getTimestamp());
+        $status = $zmq->send($env.' init: '.$member->getUsername().' '.$now->getTimestamp());
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $status = $zmq->send($env . ' open: ' . $member->getUsername() . ' ' . $now->getTimestamp());
+            $status = $zmq->send($env.' open: '.$member->getUsername().' '.$now->getTimestamp());
             // $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
 
             $send = true;
-            $text = '**Kerde door opened by ' . $doorlog->getMember();
+            $text = '**Kerde door opened by '.$doorlog->getMember();
             if ($doorlog->getMessage()) {
-                $text .= ' - ' . $doorlog->getMessage();
+                $text .= ' - '.$doorlog->getMessage();
             } else {
                 foreach ($logs as $log) {
                     if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimestamp() < 60 * 60 * 4)) {
@@ -79,6 +78,7 @@ class KerdeController extends AbstractController
             return $this->redirectToRoute('kerde_door');
         }
         $barcode = $barcodeGenerator->getBarcodeForCode($member->getCode());
+
         // $status = $ssh->checkStatus();
         // if ($status == 1) {
         //     $this->addFlash('success', 'Stream is on!');
@@ -88,9 +88,10 @@ class KerdeController extends AbstractController
             'logs' => $logs,
             'member' => $member,
             'status' => $status,
-            'barcode' => $barcode
+            'barcode' => $barcode,
         ]);
     }
+
     #[Route('/kerde/recording/start', name: 'recording_start')]
     public function recordingStart(SSH $ssh): RedirectResponse
     {
@@ -100,13 +101,15 @@ class KerdeController extends AbstractController
         if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('start');
             if ($err) {
-                $this->addFlash('warning', 'Error: ' . $err);
+                $this->addFlash('warning', 'Error: '.$err);
             } else {
                 $this->addFlash('success', 'stream.command.successful');
             }
         }
+
         return $this->redirectToRoute('kerde_door');
     }
+
     #[Route('/kerde/recording/stop', name: 'recording_stop')]
     public function recordingStop(SSH $ssh): RedirectResponse
     {
@@ -116,13 +119,15 @@ class KerdeController extends AbstractController
         if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('stop');
             if ($err) {
-                $this->addFlash('warning', 'Error: ' . $err);
+                $this->addFlash('warning', 'Error: '.$err);
             } else {
                 $this->addFlash('success', 'stream.command.successful');
             }
         }
+
         return $this->redirectToRoute('kerde_door');
     }
+
     #[Route('/kerde/barcodes', name: 'kerde_barcodes')]
     public function index(Barcode $gen): Response
     {
@@ -136,9 +141,10 @@ class KerdeController extends AbstractController
         $barcodes['20€'] = $gen->getBarcodeForCode('_20e_')[1];
         $barcodes['Cancel'] = $gen->getBarcodeForCode('_CANCEL_')[1];
         $barcodes['Manual'] = $gen->getBarcodeForCode('1812271001')[1];
+
         // $barcodes['Statistics'] = $generator->getBarcode('0348030005', $generator::TYPE_CODE_128, 2, 90);
         return $this->render('kerde/barcodes.html.twig', [
-            'barcodes' => $barcodes
+            'barcodes' => $barcodes,
         ]);
     }
 }

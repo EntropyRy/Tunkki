@@ -59,6 +59,7 @@ class EventArtistInfoRepository extends ServiceEntityRepository
             ->getResult()
         ;
         shuffle($infos);
+
         return array_pop($infos);
     }
 }

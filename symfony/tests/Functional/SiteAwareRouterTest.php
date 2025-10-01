@@ -48,6 +48,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
         $event = $em->getRepository(\App\Entity\Event::class)->findOneBy(['url' => 'shop-event']);
         self::assertNotNull($event, 'Fixture event "shop-event" must exist.');
         $year = (int) $event->getEventDate()->format('Y');
+
         return [
             'year' => $year,
             'slug' => 'shop-event',

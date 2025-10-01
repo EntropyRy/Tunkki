@@ -49,11 +49,11 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
         $form
             ->add('nameFi')
             ->add('DescriptionFi', SimpleFormatterType::class, [
-                'format' => 'richhtml'
+                'format' => 'richhtml',
             ])
             ->add('nameEn')
             ->add('DescriptionEn', SimpleFormatterType::class, [
-                'format' => 'richhtml'
+                'format' => 'richhtml',
             ])
             ->add('onlyForActiveMembers')
         ;

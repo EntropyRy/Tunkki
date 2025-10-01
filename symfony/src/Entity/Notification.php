@@ -39,8 +39,9 @@ class Notification implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->locale . ' tgID: ' . $this->messageId;
+        return $this->locale.' tgID: '.$this->messageId;
     }
+
     public function getId(): ?int
     {
         return $this->id;

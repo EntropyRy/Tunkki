@@ -27,16 +27,16 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class EventsPageFixtures extends Fixture implements DependentFixtureInterface
 {
-    public const string ROUTE_NAME       = 'page_slug';
-    public const string TYPE             = 'entropy.page.eventspage';
-    public const string TEMPLATE         = 'events';
-    public const string REQUEST_METHOD   = 'GET|POST|HEAD|DELETE|PUT';
+    public const string ROUTE_NAME = 'page_slug';
+    public const string TYPE = 'entropy.page.eventspage';
+    public const string TEMPLATE = 'events';
+    public const string REQUEST_METHOD = 'GET|POST|HEAD|DELETE|PUT';
 
-    public const string ALIAS_FI         = '_page_alias_events_fi';
-    public const string ALIAS_EN         = '_page_alias_events_en';
+    public const string ALIAS_FI = '_page_alias_events_fi';
+    public const string ALIAS_EN = '_page_alias_events_en';
 
-    public const string REFERENCE_FI     = 'page_events_fi';
-    public const string REFERENCE_EN     = 'page_events_en';
+    public const string REFERENCE_FI = 'page_events_fi';
+    public const string REFERENCE_EN = 'page_events_en';
 
     public function getDependencies(): array
     {
@@ -58,15 +58,15 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
                 continue; // Only create for the two canonical locales
             }
 
-            $alias = $locale === 'en' ? self::ALIAS_EN : self::ALIAS_FI;
-            $slug  = $locale === 'en' ? 'events' : 'tapahtumat';
-            $name  = $locale === 'en' ? 'Events' : 'Tapahtumat';
-            $url   = '/' . $slug; // Matches legacy example (site relative path handled by Sonata Site)
+            $alias = 'en' === $locale ? self::ALIAS_EN : self::ALIAS_FI;
+            $slug = 'en' === $locale ? 'events' : 'tapahtumat';
+            $name = 'en' === $locale ? 'Events' : 'Tapahtumat';
+            $url = '/'.$slug; // Matches legacy example (site relative path handled by Sonata Site)
 
             // Locate the root page for this site (url '/')
             $root = $pageRepo->findOneBy([
                 'site' => $site->getId(),
-                'url'  => '/',
+                'url' => '/',
             ]);
 
             if (!$root instanceof SonataPagePage) {
@@ -76,7 +76,7 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Try to find existing events page by alias first
             $page = $pageRepo->findOneBy([
-                'site'      => $site->getId(),
+                'site' => $site->getId(),
                 'pageAlias' => $alias,
             ]);
 
@@ -87,7 +87,7 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
                     'slug' => $slug,
                 ]) ?? $pageRepo->findOneBy([
                     'site' => $site->getId(),
-                    'url'  => $url,
+                    'url' => $url,
                 ]);
             }
 
@@ -117,7 +117,7 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
 
             $manager->persist($page);
 
-            if ($locale === 'en') {
+            if ('en' === $locale) {
                 $this->addReference(self::REFERENCE_EN, $page);
             } else {
                 $this->addReference(self::REFERENCE_FI, $page);

@@ -97,6 +97,7 @@ class Contract implements \Stringable
 
         return $this;
     }
+
     #[\Override]
     public function __toString(): string
     {

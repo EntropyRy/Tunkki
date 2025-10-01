@@ -23,13 +23,13 @@ class e30vCartType extends AbstractType
                 'disabled' => $disabled,
                 'data' => $options['data']['email'],
                 'help' => 'e30v.cart.email.help',
-                'help_html' => true
+                'help_html' => true,
             ])
             ->add('quantity', IntegerType::class, [
                 'constraints' => [new Positive()],
                 'attr' => [
-                    'min' => 1
-                ]
+                    'min' => 1,
+                ],
             ]);
     }
 

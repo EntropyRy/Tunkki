@@ -56,7 +56,7 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
         );
 
         // Now update with a different raw structure (different spacing + added key)
-        $updatedJson = "{\"z\":1,\"a\":2,\"nested\":{\"b\":3},\"extra\":[3,2,1] }";
+        $updatedJson = '{"z":1,"a":2,"nested":{"b":3},"extra":[3,2,1] }';
         $reloaded->setBackgroundEffectConfig($updatedJson);
         $em->flush();
         $em->clear();

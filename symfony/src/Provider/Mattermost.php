@@ -9,14 +9,14 @@ use League\OAuth2\Client\Tool\BearerAuthorizationTrait;
 use Psr\Http\Message\ResponseInterface;
 
 /**
- * Class Mattermost
+ * Class Mattermost.
  *
  * @author Harri Häivälä <webmaster@entropy.fi>
- *
  */
 class Mattermost extends AbstractProvider
 {
     use BearerAuthorizationTrait;
+
     /**
      * Returns the base URL for authorizing a client.
      *
@@ -27,9 +27,9 @@ class Mattermost extends AbstractProvider
     {
         return 'https://chat.entropy.fi/oauth/authorize';
     }
+
     /**
      * Returns the base URL for requesting an access token.
-     *
      *
      * @return string
      */
@@ -38,9 +38,9 @@ class Mattermost extends AbstractProvider
     {
         return 'https://chat.entropy.fi/oauth/access_token';
     }
+
     /**
      * Returns the URL for requesting the resource owner's details.
-     *
      *
      * @return string
      */
@@ -54,13 +54,15 @@ class Mattermost extends AbstractProvider
            */
         return 'https://chat.entropy.fi/api/v4/users/me';
     }
+
     /**
      * Checks a provider response for errors.
      *
-     * @throws IdentityProviderException
+     * @param array|string $data Parsed response data
      *
-     * @param array|string      $data     Parsed response data
      * @return void
+     *
+     * @throws IdentityProviderException
      */
     #[\Override]
     protected function checkResponse(ResponseInterface $response, $data)
@@ -71,9 +73,9 @@ class Mattermost extends AbstractProvider
             throw new IdentityProviderException($error, $code, $data);
         }
     }
+
     /**
      * Create new resources owner using the generated access token.
-     *
      *
      * @return MattermostResourceOwner
      */
@@ -82,6 +84,7 @@ class Mattermost extends AbstractProvider
     {
         return new MattermostResourceOwner($response);
     }
+
     /**
      * @return array
      */

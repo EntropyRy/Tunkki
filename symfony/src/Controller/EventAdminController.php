@@ -16,11 +16,13 @@ final class EventAdminController extends CRUDController
     {
         $event = $this->admin->getSubject();
         $infos = $event->getEventArtistInfos();
+
         return $this->render('admin/event/artist_list.html.twig', [
             'event' => $event,
-            'infos' => $infos
+            'infos' => $infos,
         ]);
     }
+
     public function nakkiListAction(): Response
     {
         $event = $this->admin->getSubject();
@@ -33,21 +35,24 @@ final class EventAdminController extends CRUDController
             }
         }
         $emails = implode(';', $emails);
+
         return $this->render('admin/event/nakki_list.html.twig', [
             'event' => $event,
             'nakkiBookings' => $nakkis,
-            'emails' => $emails
+            'emails' => $emails,
         ]);
     }
+
     public function rsvpAction(): Response
     {
         $event = $this->admin->getSubject();
         $rsvps = $event->getRSVPs();
-        //$email_url = $this->admin->generateUrl('rsvpEmail', ['id' => $event->getId()]);
+
+        // $email_url = $this->admin->generateUrl('rsvpEmail', ['id' => $event->getId()]);
         return $this->render('admin/event/rsvps.html.twig', [
             'event' => $event,
             'rsvps' => $rsvps,
-            //'email_url' => $email_url
+            // 'email_url' => $email_url
         ]);
     }
 }

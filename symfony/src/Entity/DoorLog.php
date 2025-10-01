@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\DoorLogRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: DoorLogRepository::class)]
@@ -65,6 +65,7 @@ class DoorLog
 
         return $this;
     }
+
     #[ORM\PrePersist]
     public function prePersist(): void
     {

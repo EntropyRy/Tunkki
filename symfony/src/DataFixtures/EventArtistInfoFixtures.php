@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
-use App\Entity\Event;
 use App\Entity\Artist;
+use App\Entity\Event;
 use App\Entity\EventArtistInfo;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
@@ -46,7 +46,7 @@ final class EventArtistInfoFixtures extends Fixture implements DependentFixtureI
 
         // Try to find an existing EventArtistInfo for idempotency
         $existing = $manager->getRepository(EventArtistInfo::class)->findOneBy([
-            'Event'  => $event->getId(),
+            'Event' => $event->getId(),
             'Artist' => $artist->getId(),
         ]);
 
@@ -67,7 +67,7 @@ final class EventArtistInfoFixtures extends Fixture implements DependentFixtureI
                 }
                 $existing->setStartTime($start);
             }
-            if ($existing->getStage() === null) {
+            if (null === $existing->getStage()) {
                 $existing->setStage('Main');
             }
             $existing->setSetLength($existing->getSetLength() ?? '60');
@@ -76,6 +76,7 @@ final class EventArtistInfoFixtures extends Fixture implements DependentFixtureI
             $manager->persist($existing);
             $manager->flush();
             $this->addReference(self::REFERENCE_EVENT_ARTIST_INFO, $existing);
+
             return;
         }
 

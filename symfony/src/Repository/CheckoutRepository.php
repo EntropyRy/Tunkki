@@ -57,6 +57,7 @@ class CheckoutRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function findProductQuantitiesInOngoingCheckouts(): ?array
     {
         $itemsInCheckouts = [];
@@ -70,6 +71,7 @@ class CheckoutRepository extends ServiceEntityRepository
                 $itemsInCheckouts[$item->getProduct()->getId()] += $item->getQuantity();
             }
         }
+
         return $itemsInCheckouts;
     }
 

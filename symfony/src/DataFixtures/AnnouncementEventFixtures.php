@@ -43,7 +43,7 @@ final class AnnouncementEventFixtures extends Fixture
         // Avoid creating duplicates if an announcement already exists (same type + slug).
         $existing = $manager->getRepository(Event::class)->findOneBy([
             'type' => 'announcement',
-            'url'  => 'announcement',
+            'url' => 'announcement',
         ]);
 
         if ($existing instanceof Event) {
@@ -61,6 +61,7 @@ final class AnnouncementEventFixtures extends Fixture
             $manager->persist($existing);
             $manager->flush();
             $this->addReference(self::REFERENCE_ANNOUNCEMENT, $existing);
+
             return;
         }
 

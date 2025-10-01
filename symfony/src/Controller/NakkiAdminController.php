@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -21,6 +21,7 @@ final class NakkiAdminController extends CRUDController
             $date = new \DateTimeImmutable();
         }
         $object->setStartAt($date);
+
         return null;
     }
 
@@ -28,12 +29,13 @@ final class NakkiAdminController extends CRUDController
     {
         $object = $this->admin->getSubject();
 
-        if ($object == null) {
+        if (null == $object) {
             throw new NotFoundHttpException('unable to find the object');
         }
         $clone = clone $object;
         $this->admin->create($clone);
         $this->addFlash('sonata_flash_success', 'Cloned successfully');
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

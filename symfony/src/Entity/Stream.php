@@ -47,6 +47,7 @@ class Stream implements \Stringable
     {
         return 'Stream: '.$this->getCreatedAt()->format('d.m.Y H:i:s');
     }
+
     #[ORM\PrePersist]
     public function prePersist(): void
     {
@@ -59,6 +60,7 @@ class Stream implements \Stringable
     {
         $this->updatedAt = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -152,14 +154,16 @@ class Stream implements \Stringable
 
     public function getMp3Filename(): string
     {
-        return $this->filename . '.mp3';
+        return $this->filename.'.mp3';
     }
+
     public function getOpusFilename(): string
     {
-        return $this->filename . '.opus';
+        return $this->filename.'.opus';
     }
+
     public function getFlacFilename(): string
     {
-        return $this->filename . '_unprocessed.flac';
+        return $this->filename.'_unprocessed.flac';
     }
 }

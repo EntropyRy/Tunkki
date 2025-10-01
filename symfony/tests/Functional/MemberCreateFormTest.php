@@ -70,7 +70,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
         $form = $crawler->filter('form')->first()->form();
 
-        $username = 'user_' . substr(md5($email), 0, 6);
+        $username = 'user_'.substr(md5($email), 0, 6);
 
         $form['member[username]'] = $username;
         $form['member[firstname]'] = 'Reg';
@@ -90,7 +90,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(in_array($status, [302, 303], true), 'Expected redirect after successful registration (got ' . $status . ').');
+        $this->assertTrue(in_array($status, [302, 303], true), 'Expected redirect after successful registration (got '.$status.').');
 
         $redirectUrl = $this->client->getResponse()->headers->get('Location');
         $this->assertNotEmpty($redirectUrl, 'Redirect location header missing after registration.');
@@ -124,7 +124,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         $form = $crawler->filter('form')->first()->form();
 
-        $form['member[username]'] = 'mm_' . substr(md5($email), 0, 5);
+        $form['member[username]'] = 'mm_'.substr(md5($email), 0, 5);
         $form['member[firstname]'] = 'Mismatch';
         $form['member[lastname]'] = 'Case';
         $form['member[email]'] = $email;
@@ -142,12 +142,12 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
         $status = $this->client->getResponse()->getStatusCode();
         // Expect non-redirect (likely 200 with form + errors)
-        $this->assertTrue(in_array($status, [200, 422], true), 'Expected 200 or 422 (validation error) for mismatched passwords, got ' . $status . '.');
+        $this->assertTrue(in_array($status, [200, 422], true), 'Expected 200 or 422 (validation error) for mismatched passwords, got '.$status.'.');
 
         $content = $this->client->getResponse()->getContent() ?? '';
         $this->assertTrue(
-            str_contains($content, 'passwords_need_to_match') ||
-            str_contains($content, 'The password fields must match'),
+            str_contains($content, 'passwords_need_to_match')
+            || str_contains($content, 'The password fields must match'),
             'Expected mismatch validation message (translation key or rendered text) in response content.'
         );
 
@@ -167,7 +167,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         $form = $crawler->filter('form')->first()->form();
 
-        $form['member[username]'] = 'dup_' . substr(md5($existingEmail), 0, 4);
+        $form['member[username]'] = 'dup_'.substr(md5($existingEmail), 0, 4);
         $form['member[firstname]'] = 'Dupe';
         $form['member[lastname]'] = 'Check';
         $form['member[email]'] = $existingEmail;
@@ -186,7 +186,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
         // Duplicate should not redirect; expect to stay on form
-        $this->assertTrue(in_array($status, [200, 422], true), 'Expected 200 or 422 after duplicate email attempt, got ' . $status . '.');
+        $this->assertTrue(in_array($status, [200, 422], true), 'Expected 200 or 422 after duplicate email attempt, got '.$status.'.');
 
         $postCount = $this->countMembersByEmail($existingEmail);
         $this->assertSame(
@@ -198,7 +198,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
     private function uniqueEmail(): string
     {
-        return 'membertest+' . uniqid('', true) . '@example.com';
+        return 'membertest+'.uniqid('', true).'@example.com';
     }
 
     private function countMembersByEmail(string $email): int

@@ -4,8 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Menu;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface;
-use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
  * @method Menu|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,14 +15,14 @@ use Doctrine\ORM\EntityManagerInterface;
  */
 class MenuRepository extends NestedTreeRepository implements ServiceEntityRepositoryInterface
 {
-        public function __construct(EntityManagerInterface $manager)
-        {
-                parent::__construct($manager, $manager->getClassMetadata(Menu::class));
-        }
-        // /**
-        //  * @return Menu[] Returns an array of Menu objects
-        //  */
-        /*
+    public function __construct(EntityManagerInterface $manager)
+    {
+        parent::__construct($manager, $manager->getClassMetadata(Menu::class));
+    }
+    // /**
+    //  * @return Menu[] Returns an array of Menu objects
+    //  */
+    /*
     public function findByExampleField($value)
     {
     return $this->createQueryBuilder('m')
@@ -36,7 +36,7 @@ class MenuRepository extends NestedTreeRepository implements ServiceEntityReposi
     }
     */
 
-        /*
+    /*
     public function findOneBySomeField($value): ?Menu
     {
     return $this->createQueryBuilder('m')

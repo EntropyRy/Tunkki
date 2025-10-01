@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Form\ChengeTicketOwnerType;
+use App\Helper\Qr;
 use App\Repository\EmailRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
-use App\Helper\Qr;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -29,13 +29,16 @@ final class TicketAdminController extends CRUDController
             $ticket->setGiven(true);
             $repo->save($ticket, true);
         }
+
         return $this->redirect($this->admin->generateUrl('list'));
     }
+
     public function changeOwnerAction(Request $request, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiRepo): Response
     {
         $ticket = $this->admin->getSubject();
         if (is_null($ticket->getOwner())) {
             $this->addFlash('warning', 'ticket does not have owner!');
+
             return $this->redirect($this->admin->generateUrl('list'));
         } else {
             $nakki = $ticket->ticketHolderHasNakki();
@@ -51,36 +54,39 @@ final class TicketAdminController extends CRUDController
                     $info = 'Nakki and ';
                 }
                 $ticketRepo->save($ticket, true);
-                $info .= 'Ticket moved to new member: ' . $new_owner;
+                $info .= 'Ticket moved to new member: '.$new_owner;
                 $this->addFlash('success', $info);
+
                 return $this->redirect($this->admin->generateUrl('list'));
             }
         }
+
         return $this->render('admin/ticket/change_owner.html.twig', [
             'ticket' => $ticket,
-            'form' => $form
+            'form' => $form,
         ]);
     }
+
     public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, Qr $qrGenerator): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
-        $to = $ticket->getOwner() == null ? $ticket->getEmail() : $ticket->getOwner()->getEmail();
+        $to = null == $ticket->getOwner() ? $ticket->getEmail() : $ticket->getOwner()->getEmail();
         $email = $emailRepo->findOneBy(['purpose' => 'ticket_qr', 'event' => $ticket->getEvent()]);
         $replyTo = 'hallitus@entropy.fi';
         $body = '';
-        if ($email != null) {
+        if (null != $email) {
             $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
             $body = $email->getBody();
         }
         $qr = [
-            'qr' => $qrGenerator->getQr((string)$ticket->getReferenceNumber()),
-            'name' => $ticket->getName()
+            'qr' => $qrGenerator->getQr((string) $ticket->getReferenceNumber()),
+            'name' => $ticket->getName(),
         ];
-        $mail =  new TemplatedEmail()
+        $mail = new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
             ->to($to)
             ->replyTo($replyTo)
-            ->subject('[' . $ticket->getEvent()->getName() . '] Your ticket / Lippusi')
+            ->subject('['.$ticket->getEvent()->getName().'] Your ticket / Lippusi')
             ->addPart(new DataPart($qr['qr'], 'ticket', 'image/png', 'base64')->asInline())
             ->htmlTemplate('emails/ticket.html.twig')
             ->context([
@@ -88,10 +94,11 @@ final class TicketAdminController extends CRUDController
                 'qr' => $qr,
                 'links' => $email->getAddLoginLinksToFooter() ?: false,
                 'img' => $ticket->getEvent()->getPicture(),
-                'user_email' => $to
+                'user_email' => $to,
             ]);
         $mailer->send($mail);
         $this->addFlash('success', 'QR-code email sent!');
+
         return $this->redirect($this->admin->generateUrl('list'));
     }
 }

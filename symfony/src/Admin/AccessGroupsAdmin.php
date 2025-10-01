@@ -53,7 +53,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
             ->add('roles', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,
-                'choices'  => $rolesChoices,
+                'choices' => $rolesChoices,
             ])
 
         ;
@@ -72,6 +72,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
     public function __construct(protected ParameterBagInterface $bag)
     {
     }
+
     /**
      * Turns the role's array keys into string <ROLES_NAME> keys.
      */
@@ -82,11 +83,12 @@ final class AccessGroupsAdmin extends AbstractAdmin
             if (empty($roles)) {
                 continue;
             }
-            if ($key == 'ROLE_ADMIN' || $key == 'ROLE_SUPER_ADMIN') {
+            if ('ROLE_ADMIN' == $key || 'ROLE_SUPER_ADMIN' == $key) {
                 continue;
             }
             $flatRoles[$key] = $key;
         }
+
         return $flatRoles;
     }
 }

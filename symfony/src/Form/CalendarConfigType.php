@@ -16,32 +16,32 @@ class CalendarConfigType extends AbstractType
             ->add('add_events', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_events'
+                'label' => 'calendar.add_events',
             ])
             ->add('add_notifications_for_events', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_notifications_for_events'
+                'label' => 'calendar.add_notifications_for_events',
             ])
             ->add('add_clubroom_events', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_clubroom_events'
+                'label' => 'calendar.add_clubroom_events',
             ])
             ->add('add_notifications_for_clubroom_events', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_notifications_for_clubroom_events'
+                'label' => 'calendar.add_notifications_for_clubroom_events',
             ])
             ->add('add_meetings', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_meetings'
+                'label' => 'calendar.add_meetings',
             ])
             ->add('add_notifications_for_meetings', CheckboxType::class, [
                 'required' => false,
                 'data' => true,
-                'label' => 'calendar.add_notifications_for_meetings'
+                'label' => 'calendar.add_notifications_for_meetings',
             ]);
     }
 

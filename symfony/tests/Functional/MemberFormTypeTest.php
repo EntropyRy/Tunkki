@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Entity\User;
 use App\Entity\Member;
-use App\Tests\Http\SiteAwareKernelBrowser;
+use App\Entity\User;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Http\SiteAwareKernelBrowser;
 
 /**
  * Functional tests for member profile editing (unified MemberType in edit mode).
@@ -46,7 +46,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
     public function testEditMemberFormShowsActiveMemberMailCheckboxWhenActive(): void
     {
         // Create isolated user to avoid fixture relational side-effects
-        $user = $this->createIsolatedUser('activeedit+' . uniqid() . '@example.com', isActive: true);
+        $user = $this->createIsolatedUser('activeedit+'.uniqid().'@example.com', isActive: true);
 
         $this->client->loginUser($user);
         $this->client->request('GET', '/en/profile/edit');
@@ -62,7 +62,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
     public function testEditMemberFormSubmissionUpdatesPreferences(): void
     {
-        $user = $this->createIsolatedUser('editprefs+' . uniqid() . '@example.com', isActive: true);
+        $user = $this->createIsolatedUser('editprefs+'.uniqid().'@example.com', isActive: true);
         $this->client->loginUser($user);
 
         // Load edit form
@@ -81,7 +81,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $form['member[lastname]'] = 'ChangedLast';
         $form['member[email]'] = $member->getEmail(); // unchanged
         $form['member[phone]'] = '555-000';
-        $form['member[locale]'] = $originalLocale === 'en' ? 'fi' : 'en';
+        $form['member[locale]'] = 'en' === $originalLocale ? 'fi' : 'en';
         $form['member[CityOfResidence]'] = 'Espoo';
         if ($form->has('member[StudentUnionMember]')) {
             $form['member[StudentUnionMember]']->untick();
@@ -97,7 +97,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertSame(302, $status, 'Edit submission should redirect (got ' . $status . ').');
+        $this->assertSame(302, $status, 'Edit submission should redirect (got '.$status.').');
 
         if ($loc = $this->client->getResponse()->headers->get('Location')) {
             $this->client->request('GET', $loc);
@@ -128,6 +128,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
             }
         }
         $this->assertNotNull($user, sprintf('User with (member) email %s should exist in fixtures.', $email));
+
         return $user;
     }
 
@@ -137,16 +138,16 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
         $user = new User();
         $user->setRoles([]);
-        $user->setAuthId('test-' . uniqid());
+        $user->setAuthId('test-'.uniqid());
         $user->setPassword('temp-hash');
 
         $member = new Member();
         $member->setEmail($email);
         $member->setFirstname('Iso');
         $member->setLastname('User');
-        $member->setUsername('iso_' . substr(md5($email), 0, 5));
+        $member->setUsername('iso_'.substr(md5($email), 0, 5));
         $member->setLocale('en');
-        $member->setCode('ISO' . substr(md5($email), 0, 6));
+        $member->setCode('ISO'.substr(md5($email), 0, 6));
         $member->setEmailVerified(true);
         $member->setIsActiveMember($isActive);
 
@@ -162,7 +163,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
     public function testLocaleSwitchOnEditRedirectsToLocalizedProfile(): void
     {
-        $user = $this->createIsolatedUser('localechange+' . uniqid() . '@example.com', isActive: false);
+        $user = $this->createIsolatedUser('localechange+'.uniqid().'@example.com', isActive: false);
         $this->client->loginUser($user);
 
         // Load edit form in English
@@ -196,7 +197,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertSame(302, $status, 'Locale change edit should redirect (got ' . $status . ').');
+        $this->assertSame(302, $status, 'Locale change edit should redirect (got '.$status.').');
 
         $location = $this->client->getResponse()->headers->get('Location');
         $this->assertNotEmpty($location, 'Redirect location missing after locale change.');
@@ -210,9 +211,10 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->em()->refresh($member);
         $this->assertSame('fi', $member->getLocale(), 'Member locale should be updated to fi.');
     }
+
     public function testLocaleRevertOnEditRedirectsToEnglishProfile(): void
     {
-        $user = $this->createIsolatedUser('localerevert+' . uniqid() . '@example.com', isActive: false);
+        $user = $this->createIsolatedUser('localerevert+'.uniqid().'@example.com', isActive: false);
         $this->client->loginUser($user);
 
         // Step 1: switch locale from en -> fi
@@ -235,7 +237,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(in_array($status, [302, 303], true), 'Locale switch to fi should redirect (got ' . $status . ').');
+        $this->assertTrue(in_array($status, [302, 303], true), 'Locale switch to fi should redirect (got '.$status.').');
         $loc = $this->client->getResponse()->headers->get('Location');
         $this->assertNotEmpty($loc, 'Redirect location missing after switching to fi.');
         $this->client->request('GET', $loc);
@@ -259,7 +261,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         foreach ($paths as $p) {
             $pathsTried[] = $p;
             $crawler = $this->client->request('GET', $p);
-            if ($this->client->getResponse()->getStatusCode() === 200 && $crawler->filter('form')->count() > 0) {
+            if (200 === $this->client->getResponse()->getStatusCode() && $crawler->filter('form')->count() > 0) {
                 $responseOk = true;
                 break;
             }
@@ -269,8 +271,8 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         if (!$responseOk) {
             $status = $this->client->getResponse()->getStatusCode();
             $this->fail(
-                'Could not load edit form for locale revert. Last status=' . $status .
-                ' Paths tried: ' . implode(', ', $pathsTried)
+                'Could not load edit form for locale revert. Last status='.$status.
+                ' Paths tried: '.implode(', ', $pathsTried)
             );
         }
 
@@ -290,7 +292,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
         $this->client->submit($form);
         $status2 = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(in_array($status2, [302, 303], true), 'Revert locale to en should redirect (got ' . $status2 . ').');
+        $this->assertTrue(in_array($status2, [302, 303], true), 'Revert locale to en should redirect (got '.$status2.').');
         $loc2 = $this->client->getResponse()->headers->get('Location');
         $this->assertNotEmpty($loc2, 'Redirect location missing after reverting to en.');
         $this->assertStringContainsString('/profile', $loc2, 'Expected English profile route in redirect after revert.');

@@ -9,10 +9,10 @@ use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
 
 return RectorConfig::configure()
     ->withPaths([
-        __DIR__ . '/assets',
-        __DIR__ . '/config',
-        __DIR__ . '/public',
-        __DIR__ . '/src',
+        __DIR__.'/assets',
+        __DIR__.'/config',
+        __DIR__.'/public',
+        __DIR__.'/src',
     ])
     ->withPhpSets()
     ->withPreparedSets(typeDeclarations: true)
@@ -25,7 +25,7 @@ return RectorConfig::configure()
             'integer' => 'INTEGER',
             'json' => 'JSON',
             'boolean' => 'BOOLEAN',
-    ]),
+        ]),
     ])
     ->withImportNames(importShortClasses: false)
     ->withPreparedSets(deadCode: true);

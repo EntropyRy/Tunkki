@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\RSVPRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RSVPRepository::class)]
@@ -84,7 +84,7 @@ class RSVP implements \Stringable
 
     public function getName(): ?string
     {
-        return $this->firstName . ' ' . $this->lastName;
+        return $this->firstName.' '.$this->lastName;
     }
 
     public function getEmail(): ?string
@@ -128,18 +128,22 @@ class RSVP implements \Stringable
         if ($this->getMember() instanceof Member) {
             return ucfirst((string) $this->getMember()->getLastname());
         }
+
         return ucfirst((string) $this->lastName);
     }
+
     public function getAvailableEmail(): string
     {
         if ($this->getMember() instanceof Member) {
             return $this->getMember()->getEmail();
         }
+
         return $this->email;
     }
+
     #[\Override]
     public function __toString(): string
     {
-        return 'ID: ' . $this->id;
+        return 'ID: '.$this->id;
     }
 }

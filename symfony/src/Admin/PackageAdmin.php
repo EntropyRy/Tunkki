@@ -2,15 +2,15 @@
 
 namespace App\Admin;
 
+use App\Entity\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use App\Entity\Item;
 
 class PackageAdmin extends AbstractAdmin
 {
@@ -37,7 +37,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('itemsNeedingFixing', 'array')
             ->add('notes')
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => ['show' => [], 'edit' => [], 'delete' => []]
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []],
             ]);
     }
 
@@ -69,7 +69,7 @@ class PackageAdmin extends AbstractAdmin
                 'expanded' => false,
                 'by_reference' => false,
                 'query' => $query,
-                'help' => 'Item cannot be in two packages at the same time'
+                'help' => 'Item cannot be in two packages at the same time',
             ])
             ->add('rentFromItems', TextType::class, ['disabled' => true])
             ->add('rent')
@@ -89,6 +89,7 @@ class PackageAdmin extends AbstractAdmin
             ->add('compensationPrice')
             ->add('notes');
     }
+
     public function __construct(
         protected EntityManagerInterface $em,
     ) {

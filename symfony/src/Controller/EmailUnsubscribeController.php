@@ -16,7 +16,7 @@ final class EmailUnsubscribeController extends AbstractController
     ], name: 'app_email_unsubscribe')]
     public function index(
         #[MapEntity(mapping: ['code' => 'code'])]
-        Member $member
+        Member $member,
     ): Response {
         return $this->render('email_unsubscribe/index.html.twig', [
             'email' => $member->getEmail(),

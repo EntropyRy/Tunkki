@@ -18,14 +18,14 @@ class HappeningType extends AbstractType
             ->add('type', ChoiceType::class, [
                 'choices' => [
                     'Restaurant' => 'restaurant',
-                    'Event' => 'event'
+                    'Event' => 'event',
                 ],
-                'required' => true
+                'required' => true,
             ])
             ->add('time', null, [
                 'help' => 'When is this happening?',
-                //'html5' => false,
-                //'date_format' => 'D, G:i'
+                // 'html5' => false,
+                // 'date_format' => 'D, G:i'
             ])
             ->add('picture', MediaType::class, [
                 'context' => 'artist',
@@ -36,17 +36,15 @@ class HappeningType extends AbstractType
             ->add('descriptionFi', null, [
                 'attr' => ['placeholder' => 'happening.description_fi', 'rows' => 3],
                 'help' => 'happening.markdown_allowed',
-                'help_html' => true
+                'help_html' => true,
             ])
             ->add('paymentInfoFi', null, [
                 'attr' => ['placeholder' => 'happening.payment_info_fi', 'rows' => 3],
                 'help' => 'happening.markdown_allowed',
-                'help_html' => true
-
+                'help_html' => true,
             ])
             ->add('priceFi', null, [
-                'attr' => ['placeholder' => 'happening.price_fi']
-
+                'attr' => ['placeholder' => 'happening.price_fi'],
             ])
             ->add('nameEn', null, [])
             ->add('descriptionEn', null, [
@@ -65,8 +63,8 @@ class HappeningType extends AbstractType
                     'data-bs-toggle' => 'collapse',
                     'data-bs-target' => '#signups',
                     'aria-expanded' => 'false',
-                    'aria-controls' => 'signups'
-                ]
+                    'aria-controls' => 'signups',
+                ],
             ])
             ->add('maxSignUps')
             ->add('signUpsOpenUntil')
@@ -77,8 +75,8 @@ class HappeningType extends AbstractType
                     'data-bs-toggle' => 'collapse',
                     'data-bs-target' => '#payment',
                     'aria-expanded' => 'false',
-                    'aria-controls' => 'payment'
-                ]
+                    'aria-controls' => 'payment',
+                ],
             ])
             ->add('releaseThisHappeningInEvent');
     }

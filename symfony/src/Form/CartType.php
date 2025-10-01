@@ -24,14 +24,13 @@ class CartType extends AbstractType
             ->add('email', EmailType::class, [
                 'help' => $help,
                 'help_html' => true,
-                'label' => 'shop.cart.email.label'
+                'label' => 'shop.cart.email.label',
             ])
             ->add('products', CollectionType::class, [
                 'entry_type' => CartItemType::class,
-                'delete_empty' => fn (?CartItem $item = null): bool => !$item instanceof CartItem || $item->getQuantity() == 0,
+                'delete_empty' => fn (?CartItem $item = null): bool => !$item instanceof CartItem || 0 == $item->getQuantity(),
                 'allow_delete' => true,
             ]);
-        ;
     }
 
     #[\Override]

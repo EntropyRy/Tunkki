@@ -2,17 +2,16 @@
 
 namespace App\Block;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-
-use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
-use Sonata\BlockBundle\Block\BlockContextInterface;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\Form\Validator\ErrorElement;
-use Sonata\BlockBundle\Meta\Metadata;
 use App\Entity\Booking;
 use Doctrine\ORM\EntityManagerInterface;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Meta\Metadata;
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\Form\Validator\ErrorElement;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
 class BookingsBlock extends BaseBlockService
@@ -22,12 +21,12 @@ class BookingsBlock extends BaseBlockService
     {
         $bookings = $this->em->getRepository(Booking::class)->findBy([
             'itemsReturned' => false,
-            'cancelled' => false
+            'cancelled' => false,
         ], [
-            'bookingDate' => 'DESC'
+            'bookingDate' => 'DESC',
         ]);
 
-        return $this->renderResponse($blockContext->getTemplate(), ['block'     => $blockContext->getBlock(), 'bookings'  => $bookings], $response);
+        return $this->renderResponse($blockContext->getTemplate(), ['block' => $blockContext->getBlock(), 'bookings' => $bookings], $response);
     }
 
     public function __construct(Environment $twig, protected EntityManagerInterface $em)
@@ -40,22 +39,27 @@ class BookingsBlock extends BaseBlockService
     {
         $resolver->setDefaults(['position' => '1', 'template' => 'block/bookings.html.twig']);
     }
+
     public function getBlockMetadata($code = null): Metadata
     {
-        return new Metadata($this->getName(), ($code ?? $this->getName()), null, 'messages', [
+        return new Metadata($this->getName(), $code ?? $this->getName(), null, 'messages', [
             'class' => 'fa fa-book',
         ]);
     }
+
     public function getName(): string
     {
         return 'Bookings Block';
     }
+
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
+
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
+
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }

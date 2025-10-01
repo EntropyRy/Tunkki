@@ -4,14 +4,13 @@ namespace App\Twig\Components\Stream;
 
 use App\Entity\Stream;
 use App\Repository\StreamRepository;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
-use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\UX\TwigComponent\Attribute\PostMount;
 
 #[AsLiveComponent]
@@ -58,7 +57,7 @@ final class Player
 
     public function __construct(
         private readonly HttpClientInterface $httpClient,
-        private readonly StreamRepository $streamRepository
+        private readonly StreamRepository $streamRepository,
     ) {
         // Initialize the current image to the offline image
         $this->currentImg = $this->offlineImg;
@@ -74,8 +73,9 @@ final class Player
     public function checkStreamStatus(): void
     {
         $this->stream = $this->streamRepository->findOneBy(['online' => true], ['id' => 'DESC']);
-        if ($this->stream === null) {
+        if (null === $this->stream) {
             $this->setOfflineState();
+
             return;
         } else {
             $this->setOnlineState();
@@ -88,7 +88,7 @@ final class Player
                 'timeout' => 5.0,
             ]);
 
-            if ($response->getStatusCode() === 200) {
+            if (200 === $response->getStatusCode()) {
                 $content = $response->getContent();
 
                 // Check if there are any mount points by looking for the mount class
@@ -102,14 +102,14 @@ final class Player
                             $this->listeners += (int) $count;
                         }
                     }
-                    $this->badgeText = 'ONLINE: ' . $this->listeners;
+                    $this->badgeText = 'ONLINE: '.$this->listeners;
                     $this->updateStreamListeners($this->listeners);
                     $this->showPlayer = true;
                 }
             }
         } catch (\Exception $e) {
             // Log the error but don't break the component
-            error_log('StreamPlayer listener update error: ' . $e->getMessage());
+            error_log('StreamPlayer listener update error: '.$e->getMessage());
             /* dd($e->getMessage()); */
             /* $this->setOfflineState(); */
         }
@@ -118,7 +118,7 @@ final class Player
     private function setOfflineState(): void
     {
         // Set the stream to offline stated
-        if ($this->isOnline == false) {
+        if (false == $this->isOnline) {
             return;
         }
         $this->stream = null;
@@ -134,7 +134,7 @@ final class Player
     private function setOnlineState(): void
     {
         // Set the stream to online state
-        if ($this->isOnline == true) {
+        if (true == $this->isOnline) {
             return;
         }
         $this->isOnline = true;
@@ -166,7 +166,7 @@ final class Player
             // Emit an event to notify the Howler.js controller that the format changed
             if ($oldFormat !== $format) {
                 $this->dispatchBrowserEvent('stream:format-changed', [
-                    'format' => $format
+                    'format' => $format,
                 ]);
             }
         }
@@ -174,11 +174,11 @@ final class Player
 
     public function getStreamUrl(): string
     {
-        return $this->url . '/kerde.' . $this->streamFormat;
+        return $this->url.'/kerde.'.$this->streamFormat;
     }
 
     public function getStreamMimeType(): string
     {
-        return $this->streamFormat === self::FORMAT_MP3 ? 'audio/mpeg' : 'application/ogg';
+        return self::FORMAT_MP3 === $this->streamFormat ? 'audio/mpeg' : 'application/ogg';
     }
 }

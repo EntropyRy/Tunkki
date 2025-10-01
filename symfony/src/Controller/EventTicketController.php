@@ -2,25 +2,24 @@
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use App\Entity\Member;
+use App\Entity\Ticket;
+use App\Entity\User;
 use App\Helper\Qr;
+use App\Repository\NakkiBookingRepository;
+use App\Repository\TicketRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Form\TicketType;
-use App\Repository\NakkiBookingRepository;
-use App\Repository\TicketRepository;
-use App\Entity\User;
-use App\Entity\Event;
-use App\Entity\Ticket;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventTicketController extends Controller
@@ -28,7 +27,7 @@ class EventTicketController extends Controller
     #[Route(
         path: [
             'en' => '/{year}/{slug}/ticket/presale',
-            'fi' => '/{year}/{slug}/lippu/ennakkomyynti'
+            'fi' => '/{year}/{slug}/lippu/ennakkomyynti',
         ],
         name: 'entropy_event_ticket_presale',
         requirements: [
@@ -39,7 +38,7 @@ class EventTicketController extends Controller
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TicketRepository $ticketRepo,
-        NakkiBookingRepository $nakkiBookingRepo
+        NakkiBookingRepository $nakkiBookingRepo,
     ): RedirectResponse {
         if ($event->ticketPresaleEnabled()) {
             $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
@@ -50,15 +49,17 @@ class EventTicketController extends Controller
         } else {
             $this->addFlash('warning', 'ticket.presale.off');
         }
+
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $event->getUrl(),
-            'year' => $event->getEventDate()->format('Y')
+            'year' => $event->getEventDate()->format('Y'),
         ]);
     }
+
     #[Route(
         path: [
             'en' => '/{year}/{slug}/ticket/sale',
-            'fi' => '/{year}/{slug}/lippu/myynti'
+            'fi' => '/{year}/{slug}/lippu/myynti',
         ],
         name: 'entropy_event_ticket_sale',
         requirements: [
@@ -69,7 +70,7 @@ class EventTicketController extends Controller
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         TicketRepository $ticketRepo,
-        NakkiBookingRepository $nakkiBookingRepo
+        NakkiBookingRepository $nakkiBookingRepo,
     ): RedirectResponse {
         if (!$event->ticketPresaleEnabled()) {
             $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
@@ -78,15 +79,17 @@ class EventTicketController extends Controller
                 return $response;
             }
         }
+
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $event->getUrl(),
-            'year' => $event->getEventDate()->format('Y')
+            'year' => $event->getEventDate()->format('Y'),
         ]);
     }
+
     #[Route(
         path: [
             'en' => '/{year}/{slug}/ticket/{reference}',
-            'fi' => '/{year}/{slug}/lippu/{reference}'
+            'fi' => '/{year}/{slug}/lippu/{reference}',
         ],
         name: 'entropy_event_ticket',
         requirements: [
@@ -106,26 +109,27 @@ class EventTicketController extends Controller
         Qr $qr,
     ): Response {
         if ($ticket->getEvent() != $event) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
+            throw new NotFoundHttpException($trans->trans('event_not_found'));
         }
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
         if ($ticket->getOwner() !== $member) {
-            throw new NotFoundHttpException($trans->trans("event_not_found"));
+            throw new NotFoundHttpException($trans->trans('event_not_found'));
         }
         $nakkirepo->findMemberEventBookings($member, $event);
 
         return $this->render('ticket/one.html.twig', [
             'event' => $event,
             'ticket' => $ticket,
-            'qr' => $qr->getQrBase64((string)$ticket->getReferenceNumber())
+            'qr' => $qr->getQrBase64((string) $ticket->getReferenceNumber()),
         ]);
     }
+
     #[Route(
         path: [
             'en' => '/{year}/{slug}/tickets',
-            'fi' => '/{year}/{slug}/liput'
+            'fi' => '/{year}/{slug}/liput',
         ],
         name: 'entropy_event_tickets',
         requirements: [
@@ -141,7 +145,7 @@ class EventTicketController extends Controller
         NakkiBookingRepository $nakkirepo,
         EntityManagerInterface $em,
         TicketRepository $ticketRepo,
-        Qr $qr
+        Qr $qr,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -152,8 +156,8 @@ class EventTicketController extends Controller
 
         foreach ($tickets as $ticket) {
             $qrs[] = [
-                'qr' => $qr->getQrBase64((string)$ticket->getReferenceNumber()),
-                'name' => $ticket->getName() ?? 'Ticket'
+                'qr' => $qr->getQrBase64((string) $ticket->getReferenceNumber()),
+                'name' => $ticket->getName() ?? 'Ticket',
             ];
         }
         // check that event does not have other type of tickets available
@@ -168,22 +172,23 @@ class EventTicketController extends Controller
         } else {
             $showShop = true;
         }
+
         return $this->render('ticket/multiple.html.twig', [
             'event' => $event,
             'selected' => $selected,
             'nakkis' => $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale()),
-            'hasNakki' => (array) $selected !== [],
+            'hasNakki' => [] !== (array) $selected,
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'tickets' => $tickets,
             'showShop' => $showShop,
-            'qrs' => $qrs
+            'qrs' => $qrs,
         ]);
     }
 
     #[Route(
         path: [
             'en' => '/{year}/{slug}/ticket/check',
-            'fi' => '/{year}/{slug}/lippu/tarkistus'
+            'fi' => '/{year}/{slug}/lippu/tarkistus',
         ],
         name: 'entropy_event_ticket_check',
         requirements: [
@@ -218,12 +223,13 @@ class EventTicketController extends Controller
                 'email' => $ticket->getOwner() instanceof Member ? $ticket->getOwnerEmail() : 'email',
                 'status' => $ticket->getStatus(),
                 'given' => $ticket->isGiven(),
-                'referenceNumber' => $ticket->getReferenceNumber()
+                'referenceNumber' => $ticket->getReferenceNumber(),
             ];
             $data = json_encode($ticketA);
         } else {
             $data = json_encode(['error' => 'not valid']);
         }
+
         return new JsonResponse($data);
     }
 
@@ -239,11 +245,12 @@ class EventTicketController extends Controller
         Event $event,
         #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber'])]
         Ticket $ticket,
-        TicketRepository $ticketR
+        TicketRepository $ticketR,
     ): JsonResponse {
         try {
             $ticket->setGiven(true);
             $ticketR->save($ticket, true);
+
             return new JsonResponse(json_encode(['ok' => 'TICKET_GIVEN_OUT']));
         } catch (\Exception $e) {
             return new JsonResponse(json_encode(['error' => $e->getMessage()]));
@@ -257,7 +264,7 @@ class EventTicketController extends Controller
         $member = $user->getMember();
         $ticket = $ticketRepo->findOneBy(['event' => $event, 'owner' => $member]);
         if (is_null($ticket)) {
-            $ticket = $for === 'presale' ? $ticketRepo->findAvailablePresaleTicket($event) : $ticketRepo->findAvailableTicket($event);
+            $ticket = 'presale' === $for ? $ticketRepo->findAvailablePresaleTicket($event) : $ticketRepo->findAvailableTicket($event);
         }
         if (is_null($ticket)) {
             $this->addFlash('warning', 'ticket.not_available');
@@ -265,19 +272,22 @@ class EventTicketController extends Controller
             $ticket->setOwner($member);
             $ticketRepo->add($ticket, true);
             $this->addFlash('success', 'ticket.reserved_for_two_hours');
+
             return $this->redirectToRoute('entropy_event_ticket', [
                 'slug' => $event->getUrl(),
                 'year' => $event->getEventDate()->format('Y'),
-                'reference' => $ticket->getReferenceNumber()
+                'reference' => $ticket->getReferenceNumber(),
             ]);
         }
+
         return null;
     }
+
     private function freeAvailableTickets(Event $event, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiBookingRepo): void
     {
         $now = new \DateTime('now');
         foreach ($event->getTickets() as $ticket) {
-            if ($ticket->getStatus() == 'available' && !is_null($ticket->getOwner()) && ($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
+            if ('available' == $ticket->getStatus() && !is_null($ticket->getOwner()) && ($now->format('U') - $ticket->getUpdatedAt()->format('U')) >= 10800) {
                 if ($event->isNakkiRequiredForTicketReservation()) {
                     foreach ($event->getNakkiBookings() as $nakkiB) {
                         if ($nakkiB->getMember() == $ticket->getOwner()) {
@@ -291,11 +301,12 @@ class EventTicketController extends Controller
             }
         }
     }
+
     protected function getNakkiFromGroup($event, $member, $selected, $locale): array
     {
         $nakkis = [];
         foreach ($event->getNakkis() as $nakki) {
-            if ($nakki->isDisableBookings() == true) {
+            if (true == $nakki->isDisableBookings()) {
                 continue;
             }
             foreach ($selected as $booking) {
@@ -316,8 +327,10 @@ class EventTicketController extends Controller
                 }
             }
         }
+
         return $nakkis;
     }
+
     protected function addNakkiToArray(array $nakkis, $booking, $locale): array
     {
         $name = $booking->getNakki()->getDefinition()->getName($locale);
@@ -325,6 +338,7 @@ class EventTicketController extends Controller
         $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
         $nakkis[$name]['bookings'][] = $booking;
         $nakkis[$name]['durations'][$duration] = $duration;
+
         return $nakkis;
     }
 }

@@ -2,14 +2,12 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Booking;
 
 /**
- * Renter
+ * Renter.
  */
 #[ORM\Table(name: 'Renter')]
 #[ORM\Entity]
@@ -45,9 +43,7 @@ class Renter implements \Stringable
     private ?string $email = null;
 
     /**
-     * Get id
-     *
-     * @return integer
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -55,9 +51,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set name
-     *
-     *
+     * Set name.
      */
     public function setName(string $name): static
     {
@@ -67,7 +61,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get name
+     * Get name.
      */
     public function getName(): string
     {
@@ -75,9 +69,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set streetadress
-     *
-     * @param string $streetadress
+     * Set streetadress.
      */
     public function setStreetadress(?string $streetadress): static
     {
@@ -87,9 +79,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get streetadress
-     *
-     * @return string
+     * Get streetadress.
      */
     public function getStreetadress(): ?string
     {
@@ -97,9 +87,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set zipcode
-     *
-     * @param string $zipcode
+     * Set zipcode.
      */
     public function setZipcode(?string $zipcode): static
     {
@@ -109,9 +97,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get zipcode
-     *
-     * @return string
+     * Get zipcode.
      */
     public function getZipcode(): ?string
     {
@@ -119,9 +105,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set city
-     *
-     * @param string $city
+     * Set city.
      */
     public function setCity(?string $city): static
     {
@@ -131,9 +115,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get city
-     *
-     * @return string
+     * Get city.
      */
     public function getCity(): ?string
     {
@@ -141,9 +123,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set phone
-     *
-     * @param string $phone
+     * Set phone.
      */
     public function setPhone(?string $phone): static
     {
@@ -153,9 +133,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get phone
-     *
-     * @return string
+     * Get phone.
      */
     public function getPhone(): ?string
     {
@@ -163,9 +141,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set email
-     *
-     * @param string $email
+     * Set email.
      */
     public function setEmail(?string $email): static
     {
@@ -175,9 +151,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get email
-     *
-     * @return string
+     * Get email.
      */
     public function getEmail(): ?string
     {
@@ -185,8 +159,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set bookings
-     *
+     * Set bookings.
      */
     public function setBookings(?Booking $bookings = null): static
     {
@@ -196,7 +169,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get bookings
+     * Get bookings.
      *
      * @return Booking
      */
@@ -204,13 +177,15 @@ class Renter implements \Stringable
     {
         return $this->bookings;
     }
+
     #[\Override]
     public function __toString(): string
     {
-        return ($this->organization ? $this->name . ' / ' . $this->organization : $this->name);
+        return $this->organization ? $this->name.' / '.$this->organization : $this->name;
     }
+
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -218,9 +193,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Set organization
-     *
-     * @param string $organization
+     * Set organization.
      */
     public function setOrganization(?string $organization): static
     {
@@ -230,9 +203,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Get organization
-     *
-     * @return string
+     * Get organization.
      */
     public function getOrganization(): ?string
     {
@@ -240,8 +211,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Add booking
-     *
+     * Add booking.
      */
     public function addBooking(Booking $booking): static
     {
@@ -251,7 +221,7 @@ class Renter implements \Stringable
     }
 
     /**
-     * Remove booking
+     * Remove booking.
      */
     public function removeBooking(Booking $booking): void
     {

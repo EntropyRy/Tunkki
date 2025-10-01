@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use Symfony\Component\Validator\Constraints\NotNull;
 use App\Entity\Artist;
 use App\Entity\StreamArtist;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
@@ -10,6 +9,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\NotNull;
 
 class StreamArtistType extends AbstractType
 {

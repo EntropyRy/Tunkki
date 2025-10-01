@@ -8,10 +8,10 @@ use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class StatusEventAdmin extends AbstractAdmin
@@ -43,7 +43,7 @@ class StatusEventAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => [],
                     'edit' => [],
-                ]
+                ],
             ]);
     }
 
@@ -60,11 +60,11 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('booking')
                 ->end();
         }
-        if ($this->getSubject()->getItem() != null) {
+        if (null != $this->getSubject()->getItem()) {
             $events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0, 5));
             $help = '';
             foreach ($events as $event) {
-                $help .= "[" . $event->getCreatedAt()->format('d.m.y H:i') . '] ' . $event->getCreator() . ': ' . $event->getDescription() . '<br>';
+                $help .= '['.$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
             }
             $formMapper
                 ->with('Status', ['class' => 'col-md-4'])
@@ -77,11 +77,11 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('description', TextareaType::class, [
                     'required' => true,
                     'help' => $help,
-                    'help_html' => true
+                    'help_html' => true,
                 ])
                 ->end();
         }
-        if ($this->getSubject()->getBooking() != null) {
+        if (null != $this->getSubject()->getBooking()) {
             $formMapper
                 ->with('Status', ['class' => 'col-md-4'])
                 ->add('booking.cancelled', CheckboxType::class, ['required' => false])
@@ -90,7 +90,7 @@ class StatusEventAdmin extends AbstractAdmin
                 ->add('booking.invoiceSent', CheckboxType::class, ['required' => false])
                 ->add('booking.paid', CheckboxType::class, [
                     'required' => false,
-                    'help' => 'please make sure booking handler has been selected'
+                    'help' => 'please make sure booking handler has been selected',
                 ])
                 ->add('booking.givenAwayBy', null, ['disabled' => true])
                 ->add('booking.receivedBy', null, ['disabled' => true])
@@ -125,6 +125,7 @@ class StatusEventAdmin extends AbstractAdmin
             ->add('modifier')
             ->add('updatedAt');
     }
+
     #[\Override]
     public function prePersist($Event): void
     {
@@ -132,6 +133,7 @@ class StatusEventAdmin extends AbstractAdmin
         $Event->setCreator($user);
         $Event->setModifier($user);
     }
+
     #[\Override]
     public function postPersist($Event): void
     {
@@ -139,12 +141,14 @@ class StatusEventAdmin extends AbstractAdmin
         $text = $this->getMMtext($Event, $user);
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
+
     #[\Override]
     public function preUpdate($Event): void
     {
         $user = $this->ts->getToken()->getUser();
         $Event->setModifier($user);
     }
+
     #[\Override]
     public function postUpdate($Event): void
     {
@@ -152,35 +156,38 @@ class StatusEventAdmin extends AbstractAdmin
         $text = $this->getMMtext($Event, $user);
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
+
     private function getMMtext($Event, string $user): string
     {
-        $text = 'EVENT: <' . $this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|';
+        $text = 'EVENT: <'.$this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|';
         $fix = null;
         $rent = null;
         if (!empty($Event->getItem())) {
             $thing = $Event->getItem();
             $fix = $thing->getNeedsFixing();
             $rent = $thing->getCannotBeRented();
-            $text .= $thing->getName() . '> ';
-            if ($fix === true) {
+            $text .= $thing->getName().'> ';
+            if (true === $fix) {
                 $text .= '**_NEEDS FIXING_** ';
-            } elseif ($fix === false) {
+            } elseif (false === $fix) {
                 $text .= '**_FIXED_** ';
             }
-            if ($rent === true) {
+            if (true === $rent) {
                 $text .= 'cannot be rented ';
-            } elseif ($fix === false) {
+            } elseif (false === $fix) {
                 $text .= 'can be rented ';
             }
         } else {
             $thing = $Event->getBooking();
-            $text .= $thing->getName() . '> ';
+            $text .= $thing->getName().'> ';
         }
         if ($Event->getDescription()) {
-            $text .= 'with comment: ' . $Event->getDescription();
+            $text .= 'with comment: '.$Event->getDescription();
         }
-        return $text . (' by ' . $user);
+
+        return $text.(' by '.$user);
     }
+
     public function __construct(protected MattermostNotifierService $mm, protected TokenStorageInterface $ts)
     {
     }

@@ -6,8 +6,6 @@ use App\Entity\Event;
 use App\Entity\Product;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
-use Stripe\Product as StripeProduct;
-use Stripe\Price as StripePrice;
 use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -16,7 +14,7 @@ class AppStripeClient
 {
     public function __construct(
         protected readonly ParameterBagInterface $bag,
-        protected readonly UrlGeneratorInterface $urlG
+        protected readonly UrlGeneratorInterface $urlG,
     ) {
     }
 
@@ -27,21 +25,22 @@ class AppStripeClient
 
     public function getReturnUrl(?Event $event): string
     {
-        if ($event == null) {
+        if (null == $event) {
             return $this->urlG->generate(
                 'entropy_shop_complete',
                 [],
                 $this->urlG::ABSOLUTE_URL
-            ) . '?session_id={CHECKOUT_SESSION_ID}';
+            ).'?session_id={CHECKOUT_SESSION_ID}';
         }
+
         return $this->urlG->generate(
             'entropy_event_shop_complete',
             [
                 'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl()
+                'slug' => $event->getUrl(),
             ],
             $this->urlG::ABSOLUTE_URL
-        ) . '?session_id={CHECKOUT_SESSION_ID}';
+        ).'?session_id={CHECKOUT_SESSION_ID}';
     }
 
     public function updateOurProduct(
@@ -49,17 +48,18 @@ class AppStripeClient
         ?StripeObject $stripePrice,
         ?StripeObject $stripeProduct,
     ): Product {
-        if ($stripeProduct != null && $stripePrice == null) {
-            $product->setActive($stripeProduct['active'] == 1);
+        if (null != $stripeProduct && null == $stripePrice) {
+            $product->setActive(1 == $stripeProduct['active']);
             $product->setNameEn($stripeProduct['name']);
             $product->setStripeId($stripeProduct['id']);
+
             return $product;
         }
-        if ($stripeProduct == null && $stripePrice != null) {
+        if (null == $stripeProduct && null != $stripePrice) {
             $stripeProduct = $this->getClient()->products->retrieve($stripePrice['product']);
         }
         $active = true;
-        if ($stripeProduct['active'] == 0 || $stripePrice['active'] == 0) {
+        if (0 == $stripeProduct['active'] || 0 == $stripePrice['active']) {
             $active = false;
         }
         $product->setAmount($stripePrice['unit_amount']);
@@ -67,12 +67,14 @@ class AppStripeClient
         $product->setNameEn($stripeProduct['name']);
         $product->setStripeId($stripeProduct['id']);
         $product->setStripePriceId($stripePrice['id']);
+
         return $product;
     }
 
     public function getCheckoutSession($sessionId): Session
     {
         $stripe = $this->getClient();
+
         return $stripe->checkout->sessions->retrieve($sessionId);
     }
 }

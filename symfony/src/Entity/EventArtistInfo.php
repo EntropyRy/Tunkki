@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\EventArtistInfoRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EventArtistInfoRepository::class)]
@@ -94,12 +94,14 @@ class EventArtistInfo implements \Stringable
 
         return $this;
     }
+
     public function removeArtist(): self
     {
         $this->Artist = null;
 
         return $this;
     }
+
     #[\Override]
     public function __toString(): string
     {
@@ -157,10 +159,12 @@ class EventArtistInfo implements \Stringable
     public function timediff(?\DateTimeInterface $date): ?int
     {
         if ($date instanceof \DateTimeInterface) {
-            return (int)$date->diff($this->StartTime)->format('%r%h');
+            return (int) $date->diff($this->StartTime)->format('%r%h');
         }
+
         return null;
     }
+
     public function getArtistDataHasUpdate(\DateTimeInterface $eventDate): bool
     {
         if ($eventDate < new \DateTime('now')->modify('-1 day')) {
@@ -169,8 +173,10 @@ class EventArtistInfo implements \Stringable
         if ($this->getArtist() instanceof Artist) {
             return $this->getArtistClone()->getUpdatedAt()->format('U') < $this->getArtist()->getUpdatedAt()->format('U');
         }
+
         return false;
     }
+
     public function getArtistName(): string
     {
         return $this->getArtist() instanceof Artist ? $this->getArtist()->getName() : $this->getArtistClone()->getName();

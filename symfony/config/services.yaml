@@ -8,9 +8,7 @@ parameters:
   recording.script.start: "%env(RECORDING_SCRIPT_START)%"
   recording.script.stop: "%env(RECORDING_SCRIPT_STOP)%"
   recording.script.check: "%env(RECORDING_SCRIPT_CHECK)%"
-  mm_tunkki_hook: "%env(MM_TUNKKI_HOOK)%"
-  mm_tunkki_img: "%env(MM_TUNKKI_IMG)%"
-  mm_tunkki_botname: "%env(MM_TUNKKI_BOTNAME)%"
+
   mattermost_client_id: "%env(MM_CLIENT_ID)%"
   mattermost_client_secret: "%env(MM_CLIENT_SECRET)%"
   mattermost_redirect_route: "%env(MM_REDIRECT)%"

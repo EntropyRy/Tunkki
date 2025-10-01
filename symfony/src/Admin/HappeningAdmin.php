@@ -8,10 +8,10 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class HappeningAdmin extends AbstractAdmin
 {
@@ -19,44 +19,43 @@ final class HappeningAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add("nameFi")
-            ->add("nameEn")
-            ->add("descriptionFi")
-            ->add("descriptionEn")
-            ->add("time")
-            ->add("needsPreliminarySignUp")
-            ->add("needsPreliminaryPayment")
-            ->add("paymentInfoFi")
-            ->add("paymentInfoEn")
-            ->add("type")
-            ->add("maxSignUps")
-            ->add("slugFi")
-            ->add("slugEn")
-            ->add("priceFi")
-            ->add("priceEn")
-            ->add("owners")
-            ->add("releaseThisHappeningInEvent");
+            ->add('nameFi')
+            ->add('nameEn')
+            ->add('descriptionFi')
+            ->add('descriptionEn')
+            ->add('time')
+            ->add('needsPreliminarySignUp')
+            ->add('needsPreliminaryPayment')
+            ->add('paymentInfoFi')
+            ->add('paymentInfoEn')
+            ->add('type')
+            ->add('maxSignUps')
+            ->add('slugFi')
+            ->add('slugEn')
+            ->add('priceFi')
+            ->add('priceEn')
+            ->add('owners')
+            ->add('releaseThisHappeningInEvent');
     }
 
     #[\Override]
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add("nameFi")
-            ->add("nameEn")
-            ->add("time")
-            ->add("type")
-            ->add("releaseThisHappeningInEvent")
-            ->add("owners")
-            ->add("bookings")
+            ->add('nameFi')
+            ->add('nameEn')
+            ->add('time')
+            ->add('type')
+            ->add('releaseThisHappeningInEvent')
+            ->add('owners')
+            ->add('bookings')
             ->add(ListMapper::NAME_ACTIONS, null, [
-                "actions" => [
-                    "preview" => [
-                        "template" =>
-                            "admin/crud/list__action_happening_preview.html.twig",
+                'actions' => [
+                    'preview' => [
+                        'template' => 'admin/crud/list__action_happening_preview.html.twig',
                     ],
-                    "edit" => [],
-                    "delete" => [],
+                    'edit' => [],
+                    'delete' => [],
                 ],
             ]);
     }
@@ -66,49 +65,49 @@ final class HappeningAdmin extends AbstractAdmin
     {
         $form
             ->add(
-                "picture",
+                'picture',
                 ModelListType::class,
                 [
-                    "required" => false,
+                    'required' => false,
                 ],
                 [
-                    "link_parameters" => [
-                        "context" => "artist",
+                    'link_parameters' => [
+                        'context' => 'artist',
                     ],
                 ],
             )
-            ->add("type", ChoiceType::class, [
-                "choices" => [
-                    "Restaurant" => "restaurant",
-                    "Event" => "event",
+            ->add('type', ChoiceType::class, [
+                'choices' => [
+                    'Restaurant' => 'restaurant',
+                    'Event' => 'event',
                 ],
             ])
-            ->add("nameFi")
-            ->add("slugFi")
-            ->add("descriptionFi")
-            ->add("paymentInfoFi")
-            ->add("priceFi")
-            ->add("nameEn")
-            ->add("slugEn")
-            ->add("descriptionEn")
-            ->add("paymentInfoEn")
-            ->add("priceEn")
-            ->add("time")
-            ->add("needsPreliminarySignUp")
-            ->add("needsPreliminaryPayment")
-            ->add("maxSignUps")
-            ->add("releaseThisHappeningInEvent")
-            ->add("owners")
+            ->add('nameFi')
+            ->add('slugFi')
+            ->add('descriptionFi')
+            ->add('paymentInfoFi')
+            ->add('priceFi')
+            ->add('nameEn')
+            ->add('slugEn')
+            ->add('descriptionEn')
+            ->add('paymentInfoEn')
+            ->add('priceEn')
+            ->add('time')
+            ->add('needsPreliminarySignUp')
+            ->add('needsPreliminaryPayment')
+            ->add('maxSignUps')
+            ->add('releaseThisHappeningInEvent')
+            ->add('owners')
             ->add(
-                "bookings",
+                'bookings',
                 CollectionType::class,
                 [
-                    "by_reference" => false,
-                    "required" => false,
+                    'by_reference' => false,
+                    'required' => false,
                 ],
                 [
-                    "edit" => "inline",
-                    "inline" => "table",
+                    'edit' => 'inline',
+                    'inline' => 'table',
                 ],
             );
     }
@@ -117,24 +116,24 @@ final class HappeningAdmin extends AbstractAdmin
     protected function configureShowFields(ShowMapper $show): void
     {
         $show
-            ->add("id")
-            ->add("nameFi")
-            ->add("nameEn")
-            ->add("descriptionFi")
-            ->add("descriptionEn")
-            ->add("time")
-            ->add("needsPreliminarySignUp")
-            ->add("needsPreliminaryPayment")
-            ->add("paymentInfoFi")
-            ->add("paymentInfoEn")
-            ->add("type")
-            ->add("maxSignUps")
-            ->add("slugFi")
-            ->add("slugEn")
-            ->add("priceFi")
-            ->add("priceEn")
-            ->add("releaseThisHappeningInEvent")
-            ->add("owners")
-            ->add("bookings");
+            ->add('id')
+            ->add('nameFi')
+            ->add('nameEn')
+            ->add('descriptionFi')
+            ->add('descriptionEn')
+            ->add('time')
+            ->add('needsPreliminarySignUp')
+            ->add('needsPreliminaryPayment')
+            ->add('paymentInfoFi')
+            ->add('paymentInfoEn')
+            ->add('type')
+            ->add('maxSignUps')
+            ->add('slugFi')
+            ->add('slugEn')
+            ->add('priceFi')
+            ->add('priceEn')
+            ->add('releaseThisHappeningInEvent')
+            ->add('owners')
+            ->add('bookings');
     }
 }

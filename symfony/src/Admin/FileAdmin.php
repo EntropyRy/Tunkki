@@ -6,8 +6,8 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 class FileAdmin extends AbstractAdmin
 {
@@ -35,7 +35,7 @@ class FileAdmin extends AbstractAdmin
         }
         $listMapper
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => ['edit' => [], 'delete' => []]
+                'actions' => ['edit' => [], 'delete' => []],
             ]);
     }
 
@@ -49,8 +49,8 @@ class FileAdmin extends AbstractAdmin
                 'btn_delete' => 'unlink',
             ], [
                 'link_parameters' => [
-                    'context' => 'item'
-                ]
+                    'context' => 'item',
+                ],
             ]);
         if (!$this->isChild()) {
             $formMapper

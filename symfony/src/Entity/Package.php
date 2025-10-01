@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\PackagesRepository;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'Package')]
@@ -38,7 +38,6 @@ class Package implements \Stringable
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $compensationPrice = null;
-
 
     public function getId(): ?int
     {
@@ -136,8 +135,10 @@ class Package implements \Stringable
         foreach ($this->getItems() as $item) {
             $price += $item->getRent();
         }
+
         return $price;
     }
+
     public function getItemsNeedingFixing(): ArrayCollection
     {
         $needsfix = new ArrayCollection();
@@ -147,6 +148,7 @@ class Package implements \Stringable
                 $this->setNeedsFixing(true);
             }
         }
+
         return $needsfix;
     }
 
@@ -154,11 +156,12 @@ class Package implements \Stringable
     {
         if ($this->getItems() instanceof Collection) {
             foreach ($this->getItems() as $item) {
-                if ($item->getNeedsFixing() == true) {
+                if (true == $item->getNeedsFixing()) {
                     return true;
                 }
             }
         }
+
         return false;
     }
 

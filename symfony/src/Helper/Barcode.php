@@ -9,14 +9,17 @@ class Barcode
 {
     public function getCode(): string
     {
-        $uniquecode = (int)date('ismnydhis');
+        $uniquecode = (int) date('ismnydhis');
         $sqid = new Sqids('', 9);
+
         return $sqid->encode([$uniquecode]);
     }
+
     public function getBarcodeForCode(string $code): array
     {
         $generator = new BarcodeGeneratorHTML();
         $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_128, 2, 90);
+
         return [$code, $barcode];
     }
 }

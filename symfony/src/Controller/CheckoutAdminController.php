@@ -17,6 +17,7 @@ final class CheckoutAdminController extends CRUDController
         private readonly CheckoutRepository $cRepo,
     ) {
     }
+
     public function removeUnneededAction(): RedirectResponse
     {
         $removed = 0;
@@ -27,7 +28,8 @@ final class CheckoutAdminController extends CRUDController
             $removed += count($checkouts);
         }
 
-        $this->addFlash('success', 'Removed: ' . $removed);
+        $this->addFlash('success', 'Removed: '.$removed);
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

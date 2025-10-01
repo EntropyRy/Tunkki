@@ -34,9 +34,9 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class AnnouncementsPageFixtures extends Fixture implements DependentFixtureInterface
 {
-    private const string ROUTE_NAME     = 'page_slug';
-    private const string TYPE           = 'entropy.page.announcementspage';
-    private const string TEMPLATE       = 'annnouncements';
+    private const string ROUTE_NAME = 'page_slug';
+    private const string TYPE = 'entropy.page.announcementspage';
+    private const string TEMPLATE = 'annnouncements';
     private const string REQUEST_METHOD = 'GET|POST|HEAD|DELETE|PUT';
 
     public const string ALIAS_FI = '_page_alias_announcements_fi';
@@ -59,7 +59,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
     public function load(ObjectManager $manager): void
     {
         /** @var SonataPageSite[] $sites */
-        $sites    = $manager->getRepository(SonataPageSite::class)->findAll();
+        $sites = $manager->getRepository(SonataPageSite::class)->findAll();
         $pageRepo = $manager->getRepository(SonataPagePage::class);
 
         foreach ($sites as $site) {
@@ -68,15 +68,15 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
                 continue;
             }
 
-            $alias = $locale === 'en' ? self::ALIAS_EN : self::ALIAS_FI;
-            $slug  = $locale === 'en' ? 'announcements' : 'tiedotukset';
-            $name  = $locale === 'en' ? 'Announcements' : 'Tiedotukset';
-            $url   = '/' . $slug;
+            $alias = 'en' === $locale ? self::ALIAS_EN : self::ALIAS_FI;
+            $slug = 'en' === $locale ? 'announcements' : 'tiedotukset';
+            $name = 'en' === $locale ? 'Announcements' : 'Tiedotukset';
+            $url = '/'.$slug;
 
             // Find the root (homepage) page (url '/')
             $root = $pageRepo->findOneBy([
                 'site' => $site->getId(),
-                'url'  => '/',
+                'url' => '/',
             ]);
 
             if (!$root instanceof SonataPagePage) {
@@ -86,7 +86,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
 
             // Locate existing announcements page by alias first
             $page = $pageRepo->findOneBy([
-                'site'      => $site->getId(),
+                'site' => $site->getId(),
                 'pageAlias' => $alias,
             ]);
 
@@ -97,7 +97,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
                     'slug' => $slug,
                 ]) ?? $pageRepo->findOneBy([
                     'site' => $site->getId(),
-                    'url'  => $url,
+                    'url' => $url,
                 ]);
             }
 
@@ -125,7 +125,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
 
             $manager->persist($page);
 
-            if ($locale === 'en') {
+            if ('en' === $locale) {
                 $this->addReference(self::REFERENCE_EN, $page);
             } else {
                 $this->addReference(self::REFERENCE_FI, $page);

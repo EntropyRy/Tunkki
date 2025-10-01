@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\NakkiBookingRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NakkiBookingRepository::class)]
@@ -19,7 +19,7 @@ class NakkiBooking implements \Stringable
     private ?Nakki $nakki = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
-    #[ORM\JoinColumn(onDelete: "SET NULL", nullable: true)]
+    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -36,11 +36,13 @@ class NakkiBooking implements \Stringable
     public function __toString(): string
     {
         if (is_object($this->getEvent()) && $this->getEvent()->isNakkiRequiredForTicketReservation()) {
-            return $this->event . ': ' . $this->nakki;
+            return $this->event.': '.$this->nakki;
         }
         $aika = is_object($this->getStartAt()) ? $this->getStartAt()->format('H:i') : '';
-        return $this->event . ': ' . $this->nakki . ' at ' . $aika;
+
+        return $this->event.': '.$this->nakki.' at '.$aika;
     }
+
     public function getId(): ?int
     {
         return $this->id;

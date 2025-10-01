@@ -2,19 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ItemRepository;
-use Doctrine\DBAL\Types\Types;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\Sonata\SonataClassificationTag as Tag;
-use DateTime;
-use DateTimeImmutable;
-use DateTimeInterface;
+use App\Repository\ItemRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * item
+ * item.
  */
 #[ORM\Table(name: 'Item')]
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
@@ -178,6 +175,7 @@ class Item implements \Stringable
     {
         return $this->rent;
     }
+
     public function setRentNotice(mixed $rentNotice): Item
     {
         $this->rentNotice = $rentNotice;
@@ -189,6 +187,7 @@ class Item implements \Stringable
     {
         return $this->rentNotice;
     }
+
     public function setNeedsFixing(mixed $needsFixing): Item
     {
         $this->needsFixing = $needsFixing;
@@ -200,6 +199,7 @@ class Item implements \Stringable
     {
         return $this->needsFixing;
     }
+
     public function setForSale(mixed $forSale): Item
     {
         $this->forSale = $forSale;
@@ -239,7 +239,7 @@ class Item implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if ($this->name !== '' && $this->name !== '0') {
+        if ('' !== $this->name && '0' !== $this->name) {
             return $this->name;
         } else {
             return 'N/A';
@@ -277,13 +277,13 @@ class Item implements \Stringable
 
     public function getFixingHistoryMessages(int $count, ?string $endofline = null): ?string
     {
-        $eol = $endofline == 'html' ? "<br>" : PHP_EOL;
+        $eol = 'html' == $endofline ? '<br>' : PHP_EOL;
         $messages = '';
         foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
             $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';
-            $messages .= '[' . $event->getCreatedAt()->format('j.n.Y H:m') . '] ' . $user . ': ' . $event->getDescription() . '' . $eol;
+            $messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$user.': '.$event->getDescription().''.$eol;
         }
-        if ($messages != null) {
+        if (null != $messages) {
             return $messages;
         } else {
             return 'no messages';
@@ -296,12 +296,14 @@ class Item implements \Stringable
             $this->removeFixingHistory($fix);
         }
     }
+
     public function resetWhoCanRent(): void
     {
         foreach ($this->getWhoCanRent() as $who) {
             $this->removeWhoCanRent($who);
         }
     }
+
     public function setCommission(mixed $commission): Item
     {
         $this->commission = $commission;
@@ -309,10 +311,11 @@ class Item implements \Stringable
         return $this;
     }
 
-    public function getCommission(): ?DateTime
+    public function getCommission(): ?\DateTime
     {
         return $this->commission;
     }
+
     public function setSerialnumber(mixed $serialnumber): Item
     {
         $this->serialnumber = $serialnumber;
@@ -343,6 +346,7 @@ class Item implements \Stringable
     {
         return $this->files;
     }
+
     public function setPlaceinstorage(mixed $placeinstorage): Item
     {
         $this->placeinstorage = $placeinstorage;
@@ -412,6 +416,7 @@ class Item implements \Stringable
     {
         return $this->packages;
     }
+
     public function setToSpareParts(mixed $toSpareParts): Item
     {
         $this->toSpareParts = $toSpareParts;
@@ -483,6 +488,7 @@ class Item implements \Stringable
     {
         return $this->whoCanRent;
     }
+
     public function setUrl(mixed $url = null): Item
     {
         $this->url = $url;
@@ -494,6 +500,7 @@ class Item implements \Stringable
     {
         return $this->url;
     }
+
     public function setCannotBeRented(mixed $cannotBeRented): Item
     {
         $this->cannotBeRented = $cannotBeRented;
@@ -505,6 +512,7 @@ class Item implements \Stringable
     {
         return $this->cannotBeRented;
     }
+
     public function setCompensationPrice(mixed $compensationPrice = null): Item
     {
         $this->compensationPrice = $compensationPrice;
@@ -516,6 +524,7 @@ class Item implements \Stringable
     {
         return $this->compensationPrice;
     }
+
     public function setPurchasePrice(mixed $purchasePrice = null): Item
     {
         $this->purchasePrice = $purchasePrice;

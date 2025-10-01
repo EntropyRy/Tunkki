@@ -2,23 +2,20 @@
 
 namespace App\Form;
 
-use Symfony\Component\Form\AbstractType;
-
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormView;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Entity\Item;
 use App\Repository\ItemRepository;
-
-use Doctrine\ORM\EntityManagerInterface;
 use Sonata\ClassificationBundle\Model\CategoryManagerInterface as Category;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ItemsType extends AbstractType
 {
     public function __construct(
         protected ItemRepository $itemR,
-        protected Category $cm
+        protected Category $cm,
     ) {
     }
 
@@ -33,6 +30,7 @@ class ItemsType extends AbstractType
         $view->vars['btn_delete'] = $options['btn_delete'];
         $view->vars['btn_catalogue'] = $options['btn_catalogue'];
     }
+
     private function getCategories($choices): array
     {
         $slug = $this->cm->getBySlug('item');
@@ -42,14 +40,16 @@ class ItemsType extends AbstractType
         foreach ($choices as $choice) {
             foreach ($root->getChildren() as $cat) {
                 if ($choice->getCategory() == $cat) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 } elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()]=$choice;
+                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 }
             }
         }
+
         return $cats;
     }
+
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
@@ -58,22 +58,23 @@ class ItemsType extends AbstractType
 
         $resolver->setDefaults(
             [
-            'class' => Item::class,
-            'required' => false,
-            'choices' => $choices,
-            'bookings' => null,
-            'categories' => $categories,
-            'by_reference' => false,
-            'compound' => true,
-            'multiple' => true,
-            'expanded' => true,
-            'btn_add' => 'link_add',
-            'btn_list' => 'link_list',
-            'btn_delete' => 'link_delete',
-            'btn_catalogue' => 'SonataAdminBundle',
+                'class' => Item::class,
+                'required' => false,
+                'choices' => $choices,
+                'bookings' => null,
+                'categories' => $categories,
+                'by_reference' => false,
+                'compound' => true,
+                'multiple' => true,
+                'expanded' => true,
+                'btn_add' => 'link_add',
+                'btn_list' => 'link_list',
+                'btn_delete' => 'link_delete',
+                'btn_catalogue' => 'SonataAdminBundle',
             ]
         );
     }
+
     #[\Override]
     public function getParent(): string
     {

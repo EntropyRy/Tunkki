@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use Knp\Menu\ItemInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 
 final class RewardAdmin extends AbstractAdmin
@@ -21,6 +21,7 @@ final class RewardAdmin extends AbstractAdmin
     {
         return 'reward';
     }
+
     #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
@@ -48,7 +49,7 @@ final class RewardAdmin extends AbstractAdmin
                 'actions' => [
                     'show' => [],
                     'makepaid' => [
-                        'template' => 'admin/crud/list__action_makepaid.html.twig'
+                        'template' => 'admin/crud/list__action_makepaid.html.twig',
                     ],
                 ],
             ]);
@@ -81,17 +82,20 @@ final class RewardAdmin extends AbstractAdmin
             ->add('paymentHandledBy')
             ->add('updatedAt');
     }
+
     #[\Override]
     public function preUpdate($reward): void
     {
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('makepaid', $this->getRouterIdParameter() . '/makepaid');
+        $collection->add('makepaid', $this->getRouterIdParameter().'/makepaid');
         $collection->add('PrepareEvenout', 'evenout/prepare');
         $collection->add('Evenout', 'evenout/make');
     }
+
     #[\Override]
     public function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {

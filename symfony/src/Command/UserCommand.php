@@ -2,29 +2,30 @@
 
 namespace App\Command;
 
-use Symfony\Component\Console\Attribute\AsCommand;
+use App\Entity\Member;
 use App\Entity\User;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Console\Question\Question;
-use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Member;
 
 #[AsCommand('entropy:member')]
 class UserCommand extends Command
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordEncoder,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
     ) {
         parent::__construct();
     }
+
     #[\Override]
     protected function configure(): void
     {

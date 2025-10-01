@@ -51,9 +51,9 @@ final class ArtistControl extends AbstractController
     public function __construct(
         private readonly StreamRepository $streamRepository,
         private readonly StreamArtistRepository $streamArtistRepository,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
     ) {
-        $this->stream = $this->streamRepository->findOneBy(["online" => true]);
+        $this->stream = $this->streamRepository->findOneBy(['online' => true]);
     }
 
     public function mount(): void
@@ -78,13 +78,13 @@ final class ArtistControl extends AbstractController
 
         if (!$this->stream instanceof Stream) {
             $this->stream = $this->streamRepository->findOneBy(
-                ["online" => true],
-                ["id" => "DESC"]
+                ['online' => true],
+                ['id' => 'DESC']
             );
         }
 
         // Check if member already has an active artist in the stream
-        if ($this->stream !== null) {
+        if (null !== $this->stream) {
             // Find if any of the member's artists are active in the stream
             $activeStreamArtist = $this->streamArtistRepository->findActiveMemberArtistInStream(
                 $this->member,
@@ -97,14 +97,15 @@ final class ArtistControl extends AbstractController
             }
         }
     }
+
     #[\Override]
     protected function instantiateForm(): FormInterface
     {
         // If member doesn't exist, return an empty form
         if (!$this->member instanceof Member) {
             return $this->createForm(StreamArtistType::class, null, [
-                "member" => null,
-                "stream" => null,
+                'member' => null,
+                'stream' => null,
             ]);
         }
 
@@ -114,9 +115,9 @@ final class ArtistControl extends AbstractController
                 StreamArtistType::class,
                 $this->existingStreamArtist,
                 [
-                    "member" => $this->member,
-                    "stream" => $this->stream,
-                    "is_in_stream" => true,
+                    'member' => $this->member,
+                    'stream' => $this->stream,
+                    'is_in_stream' => true,
                 ]
             );
         }
@@ -127,10 +128,11 @@ final class ArtistControl extends AbstractController
             $sa->setStream($this->stream);
         }
         $this->initialForm = $sa;
+
         return $this->createForm(StreamArtistType::class, $this->initialForm, [
-            "member" => $this->member,
-            "stream" => $this->stream,
-            "is_in_stream" => false,
+            'member' => $this->member,
+            'stream' => $this->stream,
+            'is_in_stream' => false,
         ]);
     }
 
@@ -190,16 +192,16 @@ final class ArtistControl extends AbstractController
         }
 
         // Force component re-render
-        $this->emit("stream:updated");
+        $this->emit('stream:updated');
     }
 
-    #[LiveListener("stream:started")]
+    #[LiveListener('stream:started')]
     public function onStreamStarted(): void
     {
         $this->init();
     }
 
-    #[LiveListener("stream:stopped")]
+    #[LiveListener('stream:stopped')]
     public function onStreamStopped(): void
     {
         // If there's an existing stream artist, mark it as stopped
@@ -212,7 +214,7 @@ final class ArtistControl extends AbstractController
         $this->isInStream = false;
         $this->existingStreamArtist = null;
         $this->stream = null;
-        $this->emit("stream:updated");
+        $this->emit('stream:updated');
     }
 
     #[LiveAction]
@@ -234,7 +236,7 @@ final class ArtistControl extends AbstractController
             $this->resetForm();
 
             // Force component re-render
-            $this->emit("stream:updated");
+            $this->emit('stream:updated');
         }
     }
 }

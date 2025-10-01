@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Entity\Event;
-use App\Tests\Http\SiteAwareKernelBrowser;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Http\SiteAwareKernelBrowser;
 
-require_once __DIR__ . "/../Http/SiteAwareKernelBrowser.php";
+require_once __DIR__.'/../Http/SiteAwareKernelBrowser.php';
 
 final class EventPageTest extends FixturesWebTestCase
 {
-    private const TEST_SLUG = "test-event";
+    private const TEST_SLUG = 'test-event';
 
     private ?SiteAwareKernelBrowser $client = null;
 
@@ -20,22 +20,22 @@ final class EventPageTest extends FixturesWebTestCase
     {
         parent::setUp();
         $this->client = new SiteAwareKernelBrowser(static::bootKernel());
-        $this->client->setServerParameter("HTTP_HOST", "localhost");
+        $this->client->setServerParameter('HTTP_HOST', 'localhost');
     }
 
     public function testEventPageLoadsBySlugForFi(): void
     {
         $client = $this->client;
         $event = $this->getEventBySlug(self::TEST_SLUG);
-        $this->assertNotNull($event, "Expected test Event to exist");
+        $this->assertNotNull($event, 'Expected test Event to exist');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
-        $client->request("GET", sprintf("/%d/%s", $year, self::TEST_SLUG));
+        $client->request('GET', sprintf('/%d/%s', $year, self::TEST_SLUG));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString(
-            "Testitapahtuma",
+            'Testitapahtuma',
             $client->getResponse()->getContent(),
         );
         $this->assertStringContainsString(
@@ -48,15 +48,15 @@ final class EventPageTest extends FixturesWebTestCase
     {
         $client = $this->client;
         $event = $this->getEventBySlug(self::TEST_SLUG);
-        $this->assertNotNull($event, "Expected test Event to exist");
+        $this->assertNotNull($event, 'Expected test Event to exist');
 
-        $year = (int) $event->getEventDate()->format("Y");
+        $year = (int) $event->getEventDate()->format('Y');
 
-        $client->request("GET", sprintf("/en/%d/%s", $year, self::TEST_SLUG));
+        $client->request('GET', sprintf('/en/%d/%s', $year, self::TEST_SLUG));
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $this->assertStringContainsString(
-            "Test Event",
+            'Test Event',
             $client->getResponse()->getContent(),
         );
         $this->assertStringContainsString(
@@ -73,6 +73,6 @@ final class EventPageTest extends FixturesWebTestCase
         /** @var \App\Repository\EventRepository $repo */
         $repo = $em->getRepository(Event::class);
 
-        return $repo->findOneBy(["url" => $slug]);
+        return $repo->findOneBy(['url' => $slug]);
     }
 }

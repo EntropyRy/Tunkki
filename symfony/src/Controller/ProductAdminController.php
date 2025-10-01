@@ -19,6 +19,7 @@ final class ProductAdminController extends CRUDController
         private readonly ProductRepository $pRepo,
     ) {
     }
+
     public function fetchFromStripeAction(AppStripeClient $stripe): RedirectResponse
     {
         $client = $stripe->getClient();
@@ -28,16 +29,17 @@ final class ProductAdminController extends CRUDController
         foreach ($stripePrices as $stripePrice) {
             $product = $this->pRepo->findOneBy(['stripePriceId' => $stripePrice['id']]);
             if ($product) {
-                $updated += 1;
+                ++$updated;
             } else {
                 $product = new Product();
-                $added += 1;
+                ++$added;
             }
             $stripeProduct = $client->products->retrieve($stripePrice['product']);
             $product = $stripe->updateOurProduct($product, $stripePrice, $stripeProduct);
             $this->admin->update($product);
         }
-        $this->addFlash('success', 'Updated: ' . $updated . ', Added: ' . $added);
+        $this->addFlash('success', 'Updated: '.$updated.', Added: '.$added);
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
 }

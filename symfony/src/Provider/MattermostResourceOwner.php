@@ -5,8 +5,7 @@ namespace App\Provider;
 use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 
 /**
- * Class MattermostResourceOwner
- *
+ * Class MattermostResourceOwner.
  */
 class MattermostResourceOwner implements ResourceOwnerInterface
 {
@@ -16,6 +15,7 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     public function __construct(protected array $response)
     {
     }
+
     /**
      * Return all of the owner details available as an array.
      *
@@ -26,8 +26,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response;
     }
+
     /**
-     * Get user id
+     * Get user id.
      *
      * @return string|null
      */
@@ -36,8 +37,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['id'] ?: null;
     }
+
     /**
-     * Get user name
+     * Get user name.
      *
      * @return string|null
      */
@@ -45,8 +47,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['name'] ?: null;
     }
+
     /**
-     * Get user first name
+     * Get user first name.
      *
      * @return string|null
      */
@@ -54,8 +57,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['first_name'] ?: null;
     }
+
     /**
-     * Get user last name
+     * Get user last name.
      *
      * @return string|null
      */
@@ -63,8 +67,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['last_name'] ?: null;
     }
+
     /**
-     * Get user real name
+     * Get user real name.
      *
      * @return string|null
      */
@@ -72,8 +77,9 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['real_name'] ?: null;
     }
+
     /**
-     * Get user email
+     * Get user email.
      *
      * @return string|null
      */

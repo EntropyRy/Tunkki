@@ -49,21 +49,21 @@ class Happening implements \Stringable
 
     #[
         ORM\OneToMany(
-            mappedBy: "happening",
+            mappedBy: 'happening',
             targetEntity: HappeningBooking::class,
-            cascade: ["persist", "remove"],
+            cascade: ['persist', 'remove'],
             orphanRemoval: true,
         ),
     ]
     private Collection $bookings;
 
-    #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: "happenings")]
+    #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'happenings')]
     private Collection $owners;
 
-    #[ORM\OneToOne(cascade: ["persist", "remove"])]
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?SonataMediaMedia $picture = null;
 
-    #[ORM\ManyToOne(inversedBy: "happenings")]
+    #[ORM\ManyToOne(inversedBy: 'happenings')]
     private ?Event $event = null;
 
     #[ORM\Column]
@@ -221,8 +221,8 @@ class Happening implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->bookings->removeElement($booking) &&
-            $booking->getHappening() === $this
+            $this->bookings->removeElement($booking)
+            && $booking->getHappening() === $this
         ) {
             $booking->setHappening(null);
         }
@@ -292,33 +292,39 @@ class Happening implements \Stringable
 
     public function getName($lang): ?string
     {
-        $func = "name" . ucfirst((string) $lang);
+        $func = 'name'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 
     public function getSlug($lang): ?string
     {
-        $func = "slug" . ucfirst((string) $lang);
+        $func = 'slug'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 
     public function getDescription($lang): ?string
     {
-        $func = "description" . ucfirst((string) $lang);
+        $func = 'description'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 
     public function getPaymentInfo($lang): ?string
     {
-        $func = "paymentInfo" . ucfirst((string) $lang);
+        $func = 'paymentInfo'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 
     public function getPrice($lang): ?string
     {
-        $func = "price" . ucfirst((string) $lang);
+        $func = 'price'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
+
     public function getSlugFi(): ?string
     {
         return $this->slugFi;
@@ -428,7 +434,8 @@ class Happening implements \Stringable
         if (is_null($this->signUpsOpenUntil)) {
             return true;
         }
-        $time = new \DateTime("now");
+        $time = new \DateTime('now');
+
         return $this->signUpsOpenUntil > $time;
     }
 

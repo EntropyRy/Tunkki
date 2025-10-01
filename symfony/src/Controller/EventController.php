@@ -7,30 +7,26 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
-use App\Form\RSVPType;
 use App\Form\CartType;
+use App\Form\RSVPType;
 use App\Helper\AppStripeClient;
-use App\Helper\ReferenceNumber;
 use App\Repository\CartRepository;
-use App\Repository\TicketRepository;
 use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\NakkiBookingRepository;
+use App\Repository\TicketRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\PageBundle\Model\SiteManagerInterface;
-use Sonata\PageBundle\Route\CmsPageRouter;
 use Sonata\PageBundle\Site\SiteSelectorInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
-use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
 
 class EventController extends Controller
 {
@@ -57,7 +53,7 @@ class EventController extends Controller
                 return new RedirectResponse($event->getUrl());
             }
             $acceptLang = $request->getPreferredLanguage();
-            $locale = $acceptLang == 'fi' ? 'fi' : 'en';
+            $locale = 'fi' == $acceptLang ? 'fi' : 'en';
 
             // If we're switching languages, we need to find the correct site first
             $currentSite = $siteSelector->retrieve();
@@ -65,10 +61,10 @@ class EventController extends Controller
                 // Find the site for the target locale
                 $targetSite = $siteManager->findOneBy([
                     'locale' => $locale,
-                    'enabled' => true
+                    'enabled' => true,
                 ]);
 
-                if ($targetSite !== null) {
+                if (null !== $targetSite) {
                     // Get the relative path from the target site
                     $relativePath = $targetSite->getRelativePath();
 
@@ -77,13 +73,13 @@ class EventController extends Controller
                         'entropy_event_slug',
                         [
                             'year' => $event->getEventDate()->format('Y'),
-                            'slug' => $event->getUrl()
+                            'slug' => $event->getUrl(),
                         ],
                         UrlGeneratorInterface::ABSOLUTE_PATH
                     );
 
                     // Combine the site's relative path with the generated URL
-                    $url = rtrim($relativePath ?? '', '/') . '/' . ltrim($baseUrl, '/');
+                    $url = rtrim($relativePath ?? '', '/').'/'.ltrim($baseUrl, '/');
 
                     return new RedirectResponse($url);
                 }
@@ -94,20 +90,22 @@ class EventController extends Controller
                 'entropy_event_slug',
                 [
                     'year' => $event->getEventDate()->format('Y'),
-                    'slug' => $event->getUrl()
+                    'slug' => $event->getUrl(),
                 ]
             );
         }
         $template = $event->getTemplate();
+
         return $this->render(
             $template,
             [
-            'event' => $event,
+                'event' => $event,
             ]
         );
     }
+
     #[Route(
-        path:'/{year}/{slug}',
+        path: '/{year}/{slug}',
         name: 'entropy_event_slug',
         requirements: [
             'year' => '\d+',
@@ -119,7 +117,7 @@ class EventController extends Controller
         Event $event,
         TranslatorInterface $trans,
         TicketRepository $ticketRepo,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
     ): Response {
         $form = null;
         $user = $this->getUser();
@@ -128,7 +126,7 @@ class EventController extends Controller
             $member = $user->getMember();
             $tickets = $ticketRepo->findBy(
                 ['event' => $event, 'owner' => $member]
-            ); //own ticket
+            ); // own ticket
         }
         if ($event->getRsvpSystemEnabled() && is_null($user)) {
             $rsvp = new RSVP();
@@ -161,15 +159,17 @@ class EventController extends Controller
             throw $this->createAccessDeniedException('');
         }
         $template = $event->getTemplate();
+
         return $this->render(
             $template,
             [
-            'event' => $event,
-            'rsvpForm' => $form,
-            'tickets' => $tickets ?? null
+                'event' => $event,
+                'rsvpForm' => $form,
+                'tickets' => $tickets ?? null,
             ]
         );
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/kauppa',
@@ -187,9 +187,9 @@ class EventController extends Controller
         CartRepository $cartR,
         CheckoutRepository $checkoutR,
         NakkiBookingRepository $nakkirepo,
-        TicketRepository $ticketRepo
+        TicketRepository $ticketRepo,
     ): Response {
-        if ($event->ticketPresaleEnabled() == false) {
+        if (false == $event->ticketPresaleEnabled()) {
             throw $this->createAccessDeniedException('');
         }
         $selected = [];
@@ -200,24 +200,24 @@ class EventController extends Controller
         if ((!$event->isPublished() && is_null($user)) || (is_null($user) && $event->isNakkiRequiredForTicketReservation())) {
             throw $this->createAccessDeniedException('');
         }
-        if ($user != null) {
+        if (null != $user) {
             assert($user instanceof User);
             $email = $user->getEmail();
             $member = $user->getMember();
             $selected = $nakkirepo->findMemberEventBookings($member, $event);
             $nakkis = $this->getNakkiFromGroup($event, $member, $selected, $request->getLocale());
-            $hasNakki = (array) $selected !== [];
+            $hasNakki = [] !== (array) $selected;
         }
         $session = $request->getSession();
         $cart = new Cart();
         $cartId = $session->get('cart');
-        if ($cartId != null) {
+        if (null != $cartId) {
             $cart = $cartR->findOneBy(['id' => $cartId]);
-            if ($cart == null) {
+            if (null == $cart) {
                 $cart = new Cart();
             }
         }
-        if ($cart->getEmail() == null) {
+        if (null == $cart->getEmail()) {
             $cart->setEmail($email);
         }
         $products = $event->getProducts();
@@ -227,7 +227,7 @@ class EventController extends Controller
         foreach ($products as $key => $product) {
             // if there can be only one ticket per user, check that user does not have the ticket already
             $minus = array_key_exists($product->getId(), $max) ? $max[$product->getId()] : 0;
-            if ($product->getHowManyOneCanBuyAtOneTime() == 1 && $product->getMax($minus) >= 1 && $product->isTicket()) {
+            if (1 == $product->getHowManyOneCanBuyAtOneTime() && $product->getMax($minus) >= 1 && $product->isTicket()) {
                 foreach ($ticketRepo->findTicketsByEmailAndEvent($email, $event) as $ticket) {
                     if ($ticket->getStripeProductId() == $product->getStripeId()) {
                         unset($products[$key]);
@@ -242,13 +242,15 @@ class EventController extends Controller
             $cart = $form->getData();
             $cartR->save($cart, true);
             $session->set('cart', $cart->getId());
+
             return $this->redirectToRoute('event_stripe_checkouts', [
                 'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl()
+                'slug' => $event->getUrl(),
             ]);
         }
         // if use clicks on the login button then redirect them back to this page
         $this->saveTargetPath($session, 'main', $request->getUri());
+
         return $this->render('event/shop.html.twig', [
             'selected' => $selected,
             'nakkis' => $nakkis,
@@ -256,14 +258,15 @@ class EventController extends Controller
             'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
             'event' => $event,
             'form' => $form,
-            'inCheckouts' => $max
+            'inCheckouts' => $max,
         ]);
     }
+
     protected function getNakkiFromGroup($event, $member, $selected, $locale): array
     {
         $nakkis = [];
         foreach ($event->getNakkis() as $nakki) {
-            if ($nakki->isDisableBookings() == true) {
+            if (true == $nakki->isDisableBookings()) {
                 continue;
             }
             foreach ($selected as $booking) {
@@ -284,8 +287,10 @@ class EventController extends Controller
                 }
             }
         }
+
         return $nakkis;
     }
+
     protected function addNakkiToArray(array $nakkis, $booking, $locale): array
     {
         $name = $booking->getNakki()->getDefinition()->getName($locale);
@@ -293,8 +298,10 @@ class EventController extends Controller
         $nakkis[$name]['description'] = $booking->getNakki()->getDefinition()->getDescription($locale);
         $nakkis[$name]['bookings'][] = $booking;
         $nakkis[$name]['durations'][$duration] = $duration;
+
         return $nakkis;
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/valmis',
@@ -314,25 +321,28 @@ class EventController extends Controller
     ): Response {
         $sessionId = $request->get('session_id');
         $stripeSession = $stripe->getCheckoutSession($sessionId);
-        if ($stripeSession->status == 'open') {
+        if ('open' == $stripeSession->status) {
             $this->addFlash('warning', 'e30v.checkout.open');
+
             return $this->redirectToRoute('event_stripe_checkouts', [
                 'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl()
+                'slug' => $event->getUrl(),
             ]);
         }
         $email = '';
-        if ($stripeSession->status == 'complete') {
+        if ('complete' == $stripeSession->status) {
             $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
             $cart = $checkout->getCart();
             $email = $cart->getEmail();
             $request->getSession()->remove('cart');
         }
+
         return $this->render('event/shop_complete.html.twig', [
             'event' => $event,
-            'email' => $email
+            'email' => $email,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/artistit',
@@ -351,10 +361,12 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+
         return $this->render('event/artists.html.twig', [
             'event' => $event,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/aikataulu',
@@ -373,10 +385,12 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+
         return $this->render('event/timetable.html.twig', [
             'event' => $event,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/paikka',
@@ -395,10 +409,12 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user) || !$event->isLocationPublic()) {
             throw $this->createAccessDeniedException('');
         }
+
         return $this->render('event/location.html.twig', [
             'event' => $event,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/info',
@@ -417,10 +433,12 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+
         return $this->render('event/info.html.twig', [
             'event' => $event,
         ]);
     }
+
     #[Route(
         path: [
             'fi' => '/{year}/{slug}/turvallisempi-tila',
@@ -439,6 +457,7 @@ class EventController extends Controller
         if (!$event->isPublished() && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
+
         return $this->render('event/safer_space.html.twig', [
             'event' => $event,
         ]);

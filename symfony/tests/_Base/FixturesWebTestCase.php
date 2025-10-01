@@ -36,7 +36,6 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
  */
 abstract class FixturesWebTestCase extends WebTestCase
 {
-    /** @var ObjectManager|null */
     protected static ?ObjectManager $em = null;
 
     protected function setUp(): void
@@ -57,10 +56,7 @@ abstract class FixturesWebTestCase extends WebTestCase
      */
     protected function reloadFixtures(): void
     {
-        throw new \LogicException(
-            'reloadFixtures() is disabled. Fixtures are loaded before the test run. ' .
-            'Create/modify entities directly inside your test instead.',
-        );
+        throw new \LogicException('reloadFixtures() is disabled. Fixtures are loaded before the test run. Create/modify entities directly inside your test instead.');
     }
 
     /**
@@ -71,6 +67,7 @@ abstract class FixturesWebTestCase extends WebTestCase
         if (null === self::$em) {
             self::fail('EntityManager not initialized.');
         }
+
         return self::$em;
     }
 
@@ -78,8 +75,10 @@ abstract class FixturesWebTestCase extends WebTestCase
      * Helper: Fetch an entity by class & criteria with assertions.
      *
      * @template T of object
-     * @param class-string<T> $class
+     *
+     * @param class-string<T>     $class
      * @param array<string,mixed> $criteria
+     *
      * @return T
      */
     protected function findOneOrFail(string $class, array $criteria): object
@@ -94,6 +93,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 json_encode($criteria, JSON_THROW_ON_ERROR),
             ),
         );
+
         return $entity;
     }
 

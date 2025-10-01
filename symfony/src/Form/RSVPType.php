@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\RSVP;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class RSVPType extends AbstractType
 {
@@ -15,13 +15,13 @@ class RSVPType extends AbstractType
     {
         $builder
             ->add('firstName', null, [
-                'required' => true
+                'required' => true,
             ])
             ->add('lastName', null, [
-                'required' => true
+                'required' => true,
             ])
             ->add('email', EmailType::class, [
-                'required' => true
+                'required' => true,
             ])
         ;
     }

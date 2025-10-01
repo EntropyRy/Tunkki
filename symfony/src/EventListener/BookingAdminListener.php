@@ -3,42 +3,44 @@
 namespace App\EventListener;
 
 use App\Entity\Booking;
-use App\Entity\StatusEvent;
 use App\Entity\Reward;
-use Sonata\AdminBundle\Event\PersistenceEvent;
+use App\Entity\StatusEvent;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\MailerInterface;
+use Sonata\AdminBundle\Event\PersistenceEvent;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\Mime\Address;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
 
 class BookingAdminListener implements EventSubscriberInterface
 {
     public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $em)
     {
     }
+
     /**
      * @param PersistenceEvent<object> $event
      */
     public function sendEmailNotification(PersistenceEvent $event): void
     {
-        if ($this->email !== '' && $this->email !== '0') {
+        if ('' !== $this->email && '0' !== $this->email) {
             $booking = $event->getObject();
             if ($booking instanceof Booking) {
                 $mailer = $this->mailer;
                 $email = new TemplatedEmail()
                     ->from(new Address($this->fromEmail, 'Tunkki'))
                     ->to($this->email)
-                    ->subject("[Entropy Tunkki] New Booking on " . $booking->getBookingDate()->format('d.m.Y'))
+                    ->subject('[Entropy Tunkki] New Booking on '.$booking->getBookingDate()->format('d.m.Y'))
                     ->htmlTemplate('emails/notification.html.twig')
                     ->context([
                         'booking' => $booking,
-                        'links' => true
+                        'links' => true,
                     ]);
                 $mailer->send($email);
             }
         }
     }
+
     /**
      * @param PersistenceEvent<object> $args
      */
@@ -70,6 +72,7 @@ class BookingAdminListener implements EventSubscriberInterface
             }
         }
     }
+
     private function giveRewardToUser(mixed $amount, mixed $booking, mixed $user): Reward
     {
         $all = $user->getRewards();
@@ -88,8 +91,10 @@ class BookingAdminListener implements EventSubscriberInterface
             $r->addBooking($booking);
         }
         $r->addReward($amount);
+
         return $r;
     }
+
     /**
      * @return array<string, mixed>
      */
@@ -98,7 +103,7 @@ class BookingAdminListener implements EventSubscriberInterface
     {
         return [
             'sonata.admin.event.persistence.post_persist' => 'sendEmailNotification',
-            'sonata.admin.event.persistence.pre_persist' => 'updateRewards'
+            'sonata.admin.event.persistence.pre_persist' => 'updateRewards',
         ];
     }
 }

@@ -3,13 +3,10 @@
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
-use App\Entity\User;
-use DateTime;
-use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Events
+ * Events.
  */
 #[ORM\Table(name: 'StatusEvent')]
 #[ORM\Entity]
@@ -81,7 +78,7 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->createdAt;
     }
@@ -93,7 +90,7 @@ class StatusEvent implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->updatedAt;
     }
@@ -114,9 +111,9 @@ class StatusEvent implements \Stringable
     public function __toString(): string
     {
         if (is_object($this->getItem())) {
-            return 'Event for ' . $this->getItem()->getName();
+            return 'Event for '.$this->getItem()->getName();
         } elseif (is_object($this->getBooking())) {
-            return 'Event for ' . $this->getBooking()->getName();
+            return 'Event for '.$this->getBooking()->getName();
         } else {
             return 'No associated item';
         }

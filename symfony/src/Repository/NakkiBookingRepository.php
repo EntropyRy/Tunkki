@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\NakkiBooking;
-use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -14,6 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method NakkiBooking|null findOneBy(array $criteria, array $orderBy = null)
  * @method NakkiBooking[]    findAll()
  * @method NakkiBooking[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ *
  * @extends ServiceEntityRepository<object>
  */
 class NakkiBookingRepository extends ServiceEntityRepository
@@ -44,7 +44,6 @@ class NakkiBookingRepository extends ServiceEntityRepository
     /**
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
-
     public function findMemberEventBookings(Member $member, Event $event): ?array
     {
         return $this->createQueryBuilder('n')
@@ -57,13 +56,14 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     /**
      * @return NakkiBooking[] Returns an array of NakkiBooking objects
      */
-    public function findMemberEventBookingsAtSameTime(Member $member, Event $event, DateTimeImmutable $start, DateTimeImmutable $end): ?array
+    public function findMemberEventBookingsAtSameTime(Member $member, Event $event, \DateTimeImmutable $start, \DateTimeImmutable $end): ?array
     {
         return $this->createQueryBuilder('n')
-            //->where('n.startAt BETWEEN :start and :end OR n.endAt BETWEEN :start and :end' )
+            // ->where('n.startAt BETWEEN :start and :end OR n.endAt BETWEEN :start and :end' )
             ->where('n.startAt = :start OR n.endAt = :end')
             ->orWhere('n.startAt BETWEEN :startMod and :endMod OR n.endAt BETWEEN :startMod and :endMod')
             ->andWhere('n.event = :event')
@@ -102,7 +102,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->setParameter('definition', $definition)
             ->getQuery()
             ->getSingleScalarResult();
-        return $reserved . '/' . $total;
+
+        return $reserved.'/'.$total;
     }
     /*
     public function findOneBySomeField($value): ?NakkiBooking

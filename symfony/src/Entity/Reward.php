@@ -2,9 +2,9 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -112,10 +112,11 @@ class Reward implements \Stringable
 
         return $this;
     }
+
     public function addReward(?string $reward): self
     {
-        $new = (float)$this->reward + (float)$reward;
-        $this->reward = (string)$new;
+        $new = (float) $this->reward + (float) $reward;
+        $this->reward = (string) $new;
 
         return $this;
     }
@@ -167,10 +168,11 @@ class Reward implements \Stringable
 
         return $this;
     }
+
     #[\Override]
     public function __toString(): string
     {
-        return '#' . $this->id . ' for ' . $this->user;
+        return '#'.$this->id.' for '.$this->user;
     }
 
     public function getWeight(): ?int
@@ -184,6 +186,7 @@ class Reward implements \Stringable
 
         return $this;
     }
+
     public function addWeight(int $Weight): self
     {
         $this->Weight += $Weight;

@@ -18,26 +18,26 @@ class UserPasswordType extends AbstractType
         FormBuilderInterface $builder,
         array $options,
     ): void {
-        $builder->add("plainPassword", RepeatedType::class, [
-            "type" => PasswordType::class,
-            "first_options" => [
-                "constraints" => [
-                    new NotBlank(message: "Please enter a password"),
+        $builder->add('plainPassword', RepeatedType::class, [
+            'type' => PasswordType::class,
+            'first_options' => [
+                'constraints' => [
+                    new NotBlank(message: 'Please enter a password'),
                     new Length(
                         min: 8,
                         max: 4096,
-                        minMessage: "under_password_limit",
+                        minMessage: 'under_password_limit',
                     ), // max length allowed by Symfony for security reasons
                 ],
-                "label" => "New password",
+                'label' => 'New password',
             ],
-            "second_options" => [
-                "label" => "Repeat Password",
+            'second_options' => [
+                'label' => 'Repeat Password',
             ],
-            "invalid_message" => "passwords_need_to_match",
+            'invalid_message' => 'passwords_need_to_match',
             // Instead of being set onto the object directly,
             // this is read and encoded in the controller
-            "mapped" => false,
+            'mapped' => false,
         ]);
     }
 
@@ -45,7 +45,7 @@ class UserPasswordType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            "data_class" => User::class,
+            'data_class' => User::class,
         ]);
     }
 }

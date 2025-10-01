@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Entity\Sonata\SonataMediaMedia as Media;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Table(name: 'File')]
@@ -69,9 +69,9 @@ class File implements \Stringable
     {
         if (is_object($this->getFile())) {
             if (is_string($this->getFileinfo())) {
-                return '<a href="/media/download/' . $this->getFile()->getId() . '">' . $this->getFileinfo() . '</a>';
+                return '<a href="/media/download/'.$this->getFile()->getId().'">'.$this->getFileinfo().'</a>';
             } else {
-                return '<a href="/media/download/' . $this->getFile()->getId() . '">Download</a>';
+                return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
             }
         } else {
             return 'X';

@@ -31,6 +31,7 @@ class HappeningBooking implements \Stringable
     {
         $this->createdAt = new \DateTimeImmutable();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -75,7 +76,7 @@ class HappeningBooking implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->createdAt->format('d.m. H:i') . ' ' . $this->member;
+        return $this->createdAt->format('d.m. H:i').' '.$this->member;
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

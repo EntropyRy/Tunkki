@@ -2,13 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Stream;
 use App\Repository\StreamRepository;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Psr\Log\LoggerInterface;
-use App\Entity\Stream;
 
 class StreamNotificationController extends AbstractController
 {
@@ -31,8 +31,9 @@ class StreamNotificationController extends AbstractController
         if ($token !== $_ENV['STREAM_NOTIFICATION_TOKEN']) {
             $logger->warning('Unauthorized stream notification attempt', [
                 'ip' => $request->getClientIp(),
-                'event' => $data['event']
+                'event' => $data['event'],
             ]);
+
             return $this->json(['error' => 'Unauthorized'], Response::HTTP_UNAUTHORIZED);
         }
 
@@ -40,21 +41,20 @@ class StreamNotificationController extends AbstractController
         $logger->info('Stream event received', [
             'event' => $data['event'],
             'timestamp' => $data['timestamp'] ?? 'unknown',
-            'recording_file' => $data['recording_file'] ?? 'unknown'
+            'recording_file' => $data['recording_file'] ?? 'unknown',
         ]);
 
         $stream = null;
 
-        if ($data['event'] === 'stream-start') {
+        if ('stream-start' === $data['event']) {
             // Save to database
             $stream = new Stream();
             $stream->setOnline(true);
             $stream->setFilename($data['recording_file'] ?? null);
             $streamRepository->save($stream, true);
-
-        } elseif ($data['event'] === 'stream-stop') {
+        } elseif ('stream-stop' === $data['event']) {
             $stream = $streamRepository->findOneBy(['online' => true]);
-            if ($stream !== null) {
+            if (null !== $stream) {
                 $stream->setOnline(false);
                 foreach ($stream->getArtists() as $artist) {
                     $artist->setStoppedAt(new \DateTimeImmutable());
@@ -62,15 +62,16 @@ class StreamNotificationController extends AbstractController
                 $streamRepository->save($stream, true);
             } else {
                 $logger->warning('Stream stop event received but no matching stream found', [
-                    'recording_file' => $data['recording_file'] ?? null
+                    'recording_file' => $data['recording_file'] ?? null,
                 ]);
             }
         }
+
         // Return success response
         return $this->json([
             'status' => 'success',
             'message' => 'Stream notification received',
-            'event_id' => ($stream !== null ? $stream->getId() : null),
+            'event_id' => (null !== $stream ? $stream->getId() : null),
         ]);
     }
 }

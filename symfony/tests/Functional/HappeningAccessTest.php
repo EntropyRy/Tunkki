@@ -6,7 +6,6 @@ namespace App\Tests\Functional;
 
 use App\Entity\Event;
 use App\Entity\Happening;
-use App\Entity\HappeningBooking;
 use App\Entity\User;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Http\SiteAwareKernelBrowser;
@@ -148,11 +147,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         $form['happening[type]'] = 'event';
         $form['happening[time]'] = $publicEvent->getEventDate()->format('Y-m-d H:i:s');
-        $form['happening[nameFi]'] = 'Luo FI ' . $uniqueSuffix;
+        $form['happening[nameFi]'] = 'Luo FI '.$uniqueSuffix;
         $form['happening[descriptionFi]'] = 'Fi desc';
         $form['happening[paymentInfoFi]'] = '';
         $form['happening[priceFi]'] = '';
-        $form['happening[nameEn]'] = 'Create EN ' . $uniqueSuffix;
+        $form['happening[nameEn]'] = 'Create EN '.$uniqueSuffix;
         $form['happening[descriptionEn]'] = 'En desc';
         $form['happening[paymentInfoEn]'] = '';
         $form['happening[priceEn]'] = '';
@@ -173,7 +172,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(in_array($status, [302, 303], true), 'Successful creation should redirect (got ' . $status . ').');
+        $this->assertTrue(in_array($status, [302, 303], true), 'Successful creation should redirect (got '.$status.').');
 
         if ($loc = $this->client->getResponse()->headers->get('Location')) {
             $this->client->request('GET', $loc);
@@ -207,7 +206,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
             in_array($status, [200, 302, 303], true),
             'Non-owner edit attempt should not hard error.'
         );
-        if ($status === 200) {
+        if (200 === $status) {
             $this->assertStringNotContainsString(
                 'name="happening[nameEn]"',
                 $this->client->getResponse()->getContent() ?? '',
@@ -232,7 +231,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $this->assertSame(200, $this->client->getResponse()->getStatusCode(), 'Show page should load for booking user.');
 
         $formNode = $crawler->filter('form[name="happening_booking"]');
-        if ($formNode->count() === 0) {
+        if (0 === $formNode->count()) {
             $formNode = $crawler->filter('form')->first();
         }
         $this->assertGreaterThan(0, $formNode->count(), 'Booking form missing (no form with name=\"happening_booking\" found).');
@@ -245,7 +244,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         // After booking expect redirect back or success flash; accept 302 or 303
         $status = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(in_array($status, [302, 303], true), 'Booking submission should redirect (got ' . $status . ').');
+        $this->assertTrue(in_array($status, [302, 303], true), 'Booking submission should redirect (got '.$status.').');
     }
 
     /**
@@ -254,6 +253,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
     private function findHappeningBySlugEn(string $slug): ?Happening
     {
         $repo = $this->em()->getRepository(Happening::class);
+
         return $repo->findOneBy(['slugEn' => $slug]) ?? null;
     }
 
@@ -271,6 +271,6 @@ final class HappeningAccessTest extends FixturesWebTestCase
                 return $u;
             }
         }
-        self::fail('User with member email ' . $email . ' not found in fixtures.');
+        self::fail('User with member email '.$email.' not found in fixtures.');
     }
 }

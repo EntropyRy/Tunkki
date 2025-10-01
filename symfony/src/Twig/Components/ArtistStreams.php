@@ -2,11 +2,11 @@
 
 namespace App\Twig\Components;
 
-use App\Entity\Stream;
-use Symfony\Component\Security\Core\User\UserInterface;
 use App\Entity\Artist;
+use App\Entity\Stream;
 use App\Repository\StreamArtistRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
@@ -16,17 +16,18 @@ final class ArtistStreams extends AbstractController
     #[LiveProp(updateFromParent: true)]
     public Artist $artist;
 
-    public string $domain = "";
+    public string $domain = '';
 
     public function __construct(
-        private readonly StreamArtistRepository $streamArtistRepository
-    ) {}
+        private readonly StreamArtistRepository $streamArtistRepository,
+    ) {
+    }
 
     public function mount(): void
     {
         $user = $this->getUser();
         if ($user instanceof UserInterface) {
-            $this->domain = $_ENV["STREAM_DOMAIN"];
+            $this->domain = $_ENV['STREAM_DOMAIN'];
         }
     }
 
@@ -34,7 +35,7 @@ final class ArtistStreams extends AbstractController
     {
         // Fetch the streams for the given artist from the repository
         // and assign them to the $streams property.
-        $streams = $this->streamArtistRepository->findBy(["artist" => $artist]);
+        $streams = $this->streamArtistRepository->findBy(['artist' => $artist]);
 
         $groupedStreams = [];
         foreach ($streams as $stream) {
@@ -42,27 +43,27 @@ final class ArtistStreams extends AbstractController
 
             if (!isset($groupedStreams[$streamId])) {
                 $groupedStreams[$streamId] = [
-                    "stream" => $stream->getStream(),
-                    "items" => [],
+                    'stream' => $stream->getStream(),
+                    'items' => [],
                 ];
             }
 
-            $groupedStreams[$streamId]["items"][] = $stream;
+            $groupedStreams[$streamId]['items'][] = $stream;
         }
 
         // For each grouped stream, add overlapping artists to each item
         foreach ($groupedStreams as &$group) {
-            foreach ($group["items"] as $index => &$item) {
+            foreach ($group['items'] as $index => &$item) {
                 $overlappingArtists = $this->getOverlappingArtistsForTimeSlot(
-                    $group["stream"],
+                    $group['stream'],
                     $artist,
                     $item
                 );
 
                 // Store overlapping artists data alongside the item
-                $group["items"][$index] = [
-                    "streamArtist" => $item,
-                    "overlappingArtists" => $overlappingArtists,
+                $group['items'][$index] = [
+                    'streamArtist' => $item,
+                    'overlappingArtists' => $overlappingArtists,
                 ];
             }
         }
@@ -73,11 +74,11 @@ final class ArtistStreams extends AbstractController
     private function getOverlappingArtistsForTimeSlot(
         ?Stream $stream,
         Artist $currentArtist,
-        $currentItem
+        $currentItem,
     ): array {
         // Get all stream artists for this stream except the current artist
         $allStreamArtists = $this->streamArtistRepository->findBy([
-            "stream" => $stream,
+            'stream' => $stream,
         ]);
 
         $overlappingArtists = [];

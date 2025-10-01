@@ -14,17 +14,17 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class ItemFixtures extends Fixture
 {
-    public const string WORKING_ITEM_REFERENCE = "fixture_item_working";
-    public const string BROKEN_ITEM_REFERENCE = "fixture_item_broken";
+    public const string WORKING_ITEM_REFERENCE = 'fixture_item_working';
+    public const string BROKEN_ITEM_REFERENCE = 'fixture_item_broken';
 
     public function load(ObjectManager $manager): void
     {
         // Create a working item
         $workingItem = new Item();
-        $workingItem->setName("Working Microphone");
-        $workingItem->setManufacturer("Shure");
-        $workingItem->setModel("SM58");
-        $workingItem->setDescription("A reliable dynamic microphone");
+        $workingItem->setName('Working Microphone');
+        $workingItem->setManufacturer('Shure');
+        $workingItem->setModel('SM58');
+        $workingItem->setDescription('A reliable dynamic microphone');
         $workingItem->setNeedsFixing(false);
         $workingItem->setToSpareParts(false);
 
@@ -33,20 +33,20 @@ final class ItemFixtures extends Fixture
 
         // Create broken items for the BrokenItemsBlock
         $brokenMixer = new Item();
-        $brokenMixer->setName("Broken Audio Mixer");
-        $brokenMixer->setManufacturer("Yamaha");
-        $brokenMixer->setModel("MG12XU");
-        $brokenMixer->setDescription("Channel 3 not working properly");
+        $brokenMixer->setName('Broken Audio Mixer');
+        $brokenMixer->setManufacturer('Yamaha');
+        $brokenMixer->setModel('MG12XU');
+        $brokenMixer->setDescription('Channel 3 not working properly');
         $brokenMixer->setNeedsFixing(true);
         $brokenMixer->setToSpareParts(false);
 
         $manager->persist($brokenMixer);
 
         $brokenCable = new Item();
-        $brokenCable->setName("Damaged XLR Cable");
-        $brokenCable->setManufacturer("Neutrik");
-        $brokenCable->setModel("NC3MXX");
-        $brokenCable->setDescription("Connector is loose");
+        $brokenCable->setName('Damaged XLR Cable');
+        $brokenCable->setManufacturer('Neutrik');
+        $brokenCable->setModel('NC3MXX');
+        $brokenCable->setDescription('Connector is loose');
         $brokenCable->setNeedsFixing(true);
         $brokenCable->setToSpareParts(false);
 

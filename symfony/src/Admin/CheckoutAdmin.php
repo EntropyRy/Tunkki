@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use Knp\Menu\ItemInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
@@ -63,6 +63,7 @@ final class CheckoutAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt');
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
@@ -70,6 +71,7 @@ final class CheckoutAdmin extends AbstractAdmin
         $collection->remove('create');
         $collection->add('remove_unneeded', 'remove-unneeded');
     }
+
     #[\Override]
     public function configureTabMenu(ItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {

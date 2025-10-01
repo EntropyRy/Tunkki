@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
 use App\Repository\NakkiDefinitionRepository;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NakkiDefinitionRepository::class)]
@@ -33,20 +33,24 @@ class NakkiDefinition implements \Stringable
     {
         return $this->id;
     }
+
     #[\Override]
     public function __toString(): string
     {
         return (string) $this->nameEn;
     }
+
     public function getName($lang): ?string
     {
-        $func = 'name' . ucfirst((string) $lang);
+        $func = 'name'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 
     public function getDescription($lang): ?string
     {
-        $func = 'Description' . ucfirst((string) $lang);
+        $func = 'Description'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
 

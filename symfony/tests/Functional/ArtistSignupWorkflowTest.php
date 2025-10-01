@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Entity\User;
-use App\Entity\Event;
 use App\Entity\Artist;
-use App\Tests\Http\SiteAwareKernelBrowser;
+use App\Entity\Event;
+use App\Entity\User;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Http\SiteAwareKernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -34,7 +34,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     private function generateSignupPath(Event $event, string $locale): string
     {
         // Actual concrete route names are suffixed: entropy_event_slug_artist_signup.en / .fi
-        $route = 'entropy_event_slug_artist_signup.' . $locale;
+        $route = 'entropy_event_slug_artist_signup.'.$locale;
+
         return $this->router->generate($route, [
             'year' => $event->getEventDate()->format('Y'),
             'slug' => $event->getUrl(),
@@ -110,7 +111,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
             \in_array($status, [200, 302], true),
             "Expected 200 or 302 for signup access, got {$status}"
         );
-        if ($status === 302) {
+        if (302 === $status) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->assertStringContainsString('/artist/create', $loc, 'Redirect should go to artist creation.');
         }

@@ -23,5 +23,4 @@ class StreamRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
-
 }

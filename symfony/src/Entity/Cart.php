@@ -18,7 +18,7 @@ class Cart
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ["persist", "remove"])]
+    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ['persist', 'remove'])]
     private Collection $products;
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Checkout::class)]

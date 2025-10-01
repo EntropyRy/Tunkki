@@ -61,17 +61,17 @@ class EmailVerifier
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             (string) $user->getId(),
-            $user->getEmail() ?? "",
+            $user->getEmail() ?? '',
             $extraParams,
         );
 
         $context = $email->getContext();
-        $context["signedUrl"] = $signatureComponents->getSignedUrl();
+        $context['signedUrl'] = $signatureComponents->getSignedUrl();
         $context[
-            "expiresAtMessageKey"
+            'expiresAtMessageKey'
         ] = $signatureComponents->getExpirationMessageKey();
         $context[
-            "expiresAtMessageData"
+            'expiresAtMessageData'
         ] = $signatureComponents->getExpirationMessageData();
 
         $email->context($context);
@@ -94,7 +94,7 @@ class EmailVerifier
         $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
             $request,
             (string) $user->getId(),
-            $user->getEmail() ?? "",
+            $user->getEmail() ?? '',
         );
 
         $member = $this->resolveMemberFromUser($user);
@@ -117,7 +117,7 @@ class EmailVerifier
         $this->verifyEmailHelper->validateEmailConfirmationFromRequest(
             $request,
             (string) $user->getId(),
-            $user->getEmail() ?? "",
+            $user->getEmail() ?? '',
         );
 
         $member = $this->resolveMemberFromUser($user);

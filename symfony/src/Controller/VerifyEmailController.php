@@ -4,22 +4,21 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Security\EmailVerifier;
-use App\Repository\UserRepository;
-use App\Repository\MemberRepository;
-use App\Entity\User;
 use App\Entity\Member;
+use App\Entity\User;
+use App\Repository\MemberRepository;
+use App\Repository\UserRepository;
+use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
-use App\Repository\EmailRepository;
 
 /**
  * Handles verification & resending of verification emails.
@@ -38,7 +37,8 @@ class VerifyEmailController extends AbstractController
     public function __construct(
         private readonly EmailVerifier $emailVerifier,
         private readonly EntityManagerInterface $em,
-    ) {}
+    ) {
+    }
 
     /**
      * Anonymous email verification endpoint.
@@ -52,10 +52,10 @@ class VerifyEmailController extends AbstractController
     #[
         Route(
             path: [
-                "en" => "/verify/email",
-                "fi" => "/vahvista/sahkoposti",
+                'en' => '/verify/email',
+                'fi' => '/vahvista/sahkoposti',
             ],
-            name: "app_verify_email",
+            name: 'app_verify_email',
         ),
     ]
     public function verify(
@@ -64,11 +64,12 @@ class VerifyEmailController extends AbstractController
         MemberRepository $memberRepository,
         VerifyEmailHelperInterface $verifyEmailHelper,
     ): RedirectResponse {
-        $id = $request->query->get("id");
+        $id = $request->query->get('id');
 
         if (null === $id) {
-            $this->addFlash("danger", "verify.email.invalid");
-            return $this->redirectToRoute("app_login");
+            $this->addFlash('danger', 'verify.email.invalid');
+
+            return $this->redirectToRoute('app_login');
         }
 
         // First: try resolving User
@@ -88,8 +89,9 @@ class VerifyEmailController extends AbstractController
         }
 
         if (!$user instanceof User || !$member instanceof Member) {
-            $this->addFlash("danger", "verify.email.invalid");
-            return $this->redirectToRoute("app_login");
+            $this->addFlash('danger', 'verify.email.invalid');
+
+            return $this->redirectToRoute('app_login');
         }
 
         // Validate signature & email
@@ -101,8 +103,9 @@ class VerifyEmailController extends AbstractController
                 (string) ($user->getEmail() ?? $member->getEmail()),
             );
         } catch (VerifyEmailExceptionInterface) {
-            $this->addFlash("danger", "verify.email.invalid");
-            return $this->redirectToRoute("app_login");
+            $this->addFlash('danger', 'verify.email.invalid');
+
+            return $this->redirectToRoute('app_login');
         }
 
         if (!$member->isEmailVerified()) {
@@ -110,10 +113,10 @@ class VerifyEmailController extends AbstractController
             $this->em->flush();
         }
 
-        $this->addFlash("success", "verify.email.success");
+        $this->addFlash('success', 'verify.email.success');
 
         // Redirect to login (or profile dashboard if you prefer)
-        return $this->redirectToRoute("app_login");
+        return $this->redirectToRoute('app_login');
     }
 
     /**
@@ -122,10 +125,10 @@ class VerifyEmailController extends AbstractController
     #[
         Route(
             path: [
-                "en" => "/profile/resend-verification",
-                "fi" => "/profiili/laheta-vahvistus",
+                'en' => '/profile/resend-verification',
+                'fi' => '/profiili/laheta-vahvistus',
             ],
-            name: "profile_resend_verification",
+            name: 'profile_resend_verification',
         ),
     ]
     public function resend(TranslatorInterface $translator): RedirectResponse
@@ -133,37 +136,39 @@ class VerifyEmailController extends AbstractController
         $user = $this->getUser();
 
         if (!$user instanceof User) {
-            return $this->redirectToRoute("app_login");
+            return $this->redirectToRoute('app_login');
         }
 
         $member = $user->getMember();
         if (!$member instanceof Member) {
-            $this->addFlash("danger", "verify.email.invalid");
-            return $this->redirectToRoute("app_login");
+            $this->addFlash('danger', 'verify.email.invalid');
+
+            return $this->redirectToRoute('app_login');
         }
 
         if ($member->isEmailVerified()) {
-            $this->addFlash("info", "verify.email.already");
-            return $this->redirectToRoute("profile." . $member->getLocale());
+            $this->addFlash('info', 'verify.email.already');
+
+            return $this->redirectToRoute('profile.'.$member->getLocale());
         }
 
         // Prepare standalone verification email (no welcome content for resend)
         $email = new TemplatedEmail()
-            ->from(new Address("webmaster@entropy.fi", "Entropy Webmaster"))
+            ->from(new Address('webmaster@entropy.fi', 'Entropy Webmaster'))
             ->to($member->getEmail())
-            ->subject("[Entropy] " . $translator->trans("verify.email.subject"))
-            ->htmlTemplate("emails/verify_email.html.twig");
+            ->subject('[Entropy] '.$translator->trans('verify.email.subject'))
+            ->htmlTemplate('emails/verify_email.html.twig');
 
         // Pass user + extra param for anonymous validation
         $this->emailVerifier->sendEmailConfirmation(
-            "app_verify_email",
+            'app_verify_email',
             $user,
             $email,
-            ["id" => $user->getId()],
+            ['id' => $user->getId()],
         );
 
-        $this->addFlash("success", "verify.email.resent");
+        $this->addFlash('success', 'verify.email.resent');
 
-        return $this->redirectToRoute("profile." . $member->getLocale());
+        return $this->redirectToRoute('profile.'.$member->getLocale());
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 // src/Twig/Components/ProgressiveImageComponent.php
 
 namespace App\Twig\Components;
@@ -12,13 +13,13 @@ class ProgressiveImage
     public MediaInterface $media;
     public array $sizes = [];
     public ?string $placeholder = null;
-    public string $class = "";
-    public string $containerClass = "";
-    public string $placeholderClass = "";
-    public string $pictureClass = "";
-    public string $imageClass = "";
-    public string $alt = "";
-    public string $title = "";
+    public string $class = '';
+    public string $containerClass = '';
+    public string $placeholderClass = '';
+    public string $pictureClass = '';
+    public string $imageClass = '';
+    public string $alt = '';
+    public string $title = '';
     public bool $lazy = true;
     public array $pictureAttributes = [];
     public array $imgAttributes = [];
@@ -28,13 +29,13 @@ class ProgressiveImage
         MediaInterface $media,
         array $sizes = [],
         ?string $placeholder = null,
-        string $class = "",
-        string $containerClass = "",
-        string $placeholderClass = "",
-        string $pictureClass = "",
-        string $imageClass = "",
-        string $alt = "",
-        string $title = "",
+        string $class = '',
+        string $containerClass = '',
+        string $placeholderClass = '',
+        string $pictureClass = '',
+        string $imageClass = '',
+        string $alt = '',
+        string $title = '',
         bool $lazy = true,
         array $pictureAttributes = [],
         array $imgAttributes = [],
@@ -52,9 +53,9 @@ class ProgressiveImage
         $this->imageClass = $imageClass ?: $class;
 
         // Handle alt and title with fallbacks
-        $this->alt = ($alt ?: $media->getName()) ?: "Image";
+        $this->alt = ($alt ?: $media->getName()) ?: 'Image';
         $this->title =
-            ($title ?: $media->getDescription() ?: $media->getName()) ?: "";
+            ($title ?: $media->getDescription() ?: $media->getName()) ?: '';
 
         $this->lazy = $lazy;
         $this->pictureAttributes = $pictureAttributes;
@@ -65,9 +66,9 @@ class ProgressiveImage
     private function getDefaultSizes(): array
     {
         return [
-            "small" => "(max-width: 480px)",
-            "medium" => "(max-width: 768px)",
-            "large" => "(min-width: 769px)",
+            'small' => '(max-width: 480px)',
+            'medium' => '(max-width: 768px)',
+            'large' => '(min-width: 769px)',
         ];
     }
 
@@ -77,7 +78,7 @@ class ProgressiveImage
             return $this->placeholder;
         }
 
-        return "data:image/svg+xml;base64," .
+        return 'data:image/svg+xml;base64,'.
             base64_encode(
                 '<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
                 <rect width="100%" height="100%" fill="#f0f0f0"/>
@@ -88,45 +89,45 @@ class ProgressiveImage
 
     public function getContainerClasses(): string
     {
-        $classes = ["progressive-media-container"];
+        $classes = ['progressive-media-container'];
 
-        if ($this->containerClass !== "" && $this->containerClass !== "0") {
+        if ('' !== $this->containerClass && '0' !== $this->containerClass) {
             $classes[] = $this->containerClass;
         }
 
-        return implode(" ", $classes);
+        return implode(' ', $classes);
     }
 
     public function getPlaceholderClasses(): string
     {
-        $classes = ["progressive-placeholder"];
+        $classes = ['progressive-placeholder'];
 
-        if ($this->placeholderClass !== "" && $this->placeholderClass !== "0") {
+        if ('' !== $this->placeholderClass && '0' !== $this->placeholderClass) {
             $classes[] = $this->placeholderClass;
         }
 
-        return implode(" ", $classes);
+        return implode(' ', $classes);
     }
 
     public function getPictureClasses(): string
     {
-        $classes = ["progressive-picture"];
+        $classes = ['progressive-picture'];
 
-        if ($this->pictureClass !== "" && $this->pictureClass !== "0") {
+        if ('' !== $this->pictureClass && '0' !== $this->pictureClass) {
             $classes[] = $this->pictureClass;
         }
 
-        return implode(" ", $classes);
+        return implode(' ', $classes);
     }
 
     public function getImageClasses(): string
     {
-        $classes = ["progressive-image"];
+        $classes = ['progressive-image'];
 
-        if ($this->imageClass !== "" && $this->imageClass !== "0") {
+        if ('' !== $this->imageClass && '0' !== $this->imageClass) {
             $classes[] = $this->imageClass;
         }
 
-        return implode(" ", $classes);
+        return implode(' ', $classes);
     }
 }

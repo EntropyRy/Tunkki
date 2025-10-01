@@ -61,6 +61,7 @@ final class DoorLogAdmin extends AbstractAdmin
             ->add('message')
         ;
     }
+
     #[\Override]
     public function configureRoutes(RouteCollectionInterface $collection): void
     {

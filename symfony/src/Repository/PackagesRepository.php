@@ -13,6 +13,7 @@ class PackagesRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Package::class);
     }
+
     public function getPackageChoicesWithPrivileges(?WhoCanRentChoice $privileges): mixed
     {
         $queryBuilder = $this->createQueryBuilder('p')
@@ -21,6 +22,7 @@ class PackagesRepository extends ServiceEntityRepository
             ->andWhere('r = :privilege')
             ->setParameter('privilege', $privileges)
             ->orderBy('p.name', 'ASC');
+
         return $queryBuilder->getQuery()->getResult();
     }
 }

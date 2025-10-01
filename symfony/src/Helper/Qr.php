@@ -11,7 +11,7 @@ class Qr
     public function __construct(
         private readonly AssetMapperInterface $assetMapper,
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir
+        private readonly string $projectDir,
     ) {
     }
 
@@ -23,11 +23,11 @@ class Qr
         $publicPath = $this->assetMapper->getPublicPath('images/golden-logo.png');
 
         // Convert the public path to filesystem path
-        $logoPath = $this->projectDir . '/public' . $publicPath;
+        $logoPath = $this->projectDir.'/public'.$publicPath;
 
         // Fallback to original location if the mapped file doesn't exist
         if (!file_exists($logoPath)) {
-            $logoPath = $this->projectDir . '/assets/images/golden-logo.png';
+            $logoPath = $this->projectDir.'/assets/images/golden-logo.png';
         }
 
         return $generator

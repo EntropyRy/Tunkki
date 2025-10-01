@@ -6,8 +6,6 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Ticket;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\Exeption\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -57,8 +55,10 @@ class TicketRepository extends ServiceEntityRepository
             ->andWhere('t.status != :status')
             ->setParameter('event', $event)
             ->setParameter('status', 'paid');
+
         return $qb->getQuery()->getSingleScalarResult();
     }
+
     public function findAvailableTickets(Event $event): mixed
     {
         return $this->createQueryBuilder('t')
@@ -70,18 +70,20 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function findPresaleTickets(Event $event): mixed
     {
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
-            //->andWhere('t.status = :status')
+            // ->andWhere('t.status = :status')
             ->setParameter('event', $event)
-            //->setParameter('status', 'available')
+            // ->setParameter('status', 'available')
             ->orderBy('t.id', 'ASC')
             ->setMaxResults($event->getTicketPresaleCount())
             ->getQuery()
             ->getResult();
     }
+
     public function findAvailableTicket(Event $event): ?Ticket
     {
         return $this->createQueryBuilder('t')
@@ -94,14 +96,16 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
     public function findAvailablePresaleTicket(Event $event): ?Ticket
     {
         $all = $this->findPresaleTickets($event);
         foreach ($all as $ticket) {
-            if ($ticket->getStatus() == 'available' && is_null($ticket->getOwner())) {
+            if ('available' == $ticket->getStatus() && is_null($ticket->getOwner())) {
                 return $ticket;
             }
         }
+
         return null;
     }
 
@@ -119,6 +123,7 @@ class TicketRepository extends ServiceEntityRepository
         if ($ticket) {
             return $ticket['referenceNumber'];
         }
+
         return null;
     }
 
@@ -130,6 +135,7 @@ class TicketRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
     public function findTicketsByEmailAndEvent(string $email, Event $event): mixed
     {
         return $this->createQueryBuilder('t')

@@ -14,7 +14,7 @@ class CartItemType extends AbstractType
     {
         $builder
             ->add('quantity', null, [
-                'attr' => ['data-product-target' => 'formquantity']
+                'attr' => ['data-product-target' => 'formquantity'],
             ])
             ->add('product');
     }

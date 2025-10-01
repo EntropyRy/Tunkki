@@ -28,9 +28,9 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class PageFixtures extends Fixture implements DependentFixtureInterface
 {
-    private const string ROUTE_NAME     = 'page_slug';
-    private const string TYPE           = 'App\\PageService\\FrontPage';
-    private const string TEMPLATE       = 'frontpage';
+    private const string ROUTE_NAME = 'page_slug';
+    private const string TYPE = 'App\\PageService\\FrontPage';
+    private const string TEMPLATE = 'frontpage';
     private const string REQUEST_METHOD = 'GET|POST|HEAD|DELETE|PUT';
 
     public function getDependencies(): array
@@ -46,7 +46,7 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
         foreach ($sites as $site) {
             $root = $manager->getRepository(SonataPagePage::class)->findOneBy([
                 'site' => $site->getId(),
-                'url'  => '/',
+                'url' => '/',
             ]);
 
             if ($root instanceof SonataPagePage) {
@@ -56,7 +56,7 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
 
             $page = new SonataPagePage();
             $page->setSite($site);
-            $page->setName($site->getLocale() === 'en' ? 'Home' : 'Etusivu');
+            $page->setName('en' === $site->getLocale() ? 'Home' : 'Etusivu');
             $page->setTitle($page->getName());
             $page->setSlug('');
             $page->setUrl('/');
@@ -66,7 +66,7 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
             $page->setTemplateCode(self::TEMPLATE);
             $page->setType(self::TYPE);
             $page->setRequestMethod(self::REQUEST_METHOD);
-// Publication dates intentionally omitted (setPublicationDate* not available on this Page entity)
+            // Publication dates intentionally omitted (setPublicationDate* not available on this Page entity)
 
             $manager->persist($page);
         }
@@ -79,38 +79,38 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
         $changed = false;
 
         // Localize name/title
-        $expectedName = $locale === 'en' ? 'Home' : 'Etusivu';
+        $expectedName = 'en' === $locale ? 'Home' : 'Etusivu';
         if ($page->getName() !== $expectedName) {
             $page->setName($expectedName);
             $page->setTitle($expectedName);
             $changed = true;
         }
 
-        if ($page->getRouteName() !== self::ROUTE_NAME) {
+        if (self::ROUTE_NAME !== $page->getRouteName()) {
             $page->setRouteName(self::ROUTE_NAME);
             $changed = true;
         }
-        if ($page->getTemplateCode() !== self::TEMPLATE) {
+        if (self::TEMPLATE !== $page->getTemplateCode()) {
             $page->setTemplateCode(self::TEMPLATE);
             $changed = true;
         }
-        if ($page->getType() !== self::TYPE) {
+        if (self::TYPE !== $page->getType()) {
             $page->setType(self::TYPE);
             $changed = true;
         }
-        if ($page->getSlug() !== '') {
+        if ('' !== $page->getSlug()) {
             $page->setSlug('');
             $changed = true;
         }
-        if ($page->getUrl() !== '/') {
+        if ('/' !== $page->getUrl()) {
             $page->setUrl('/');
             $changed = true;
         }
-        if ($page->getRequestMethod() !== self::REQUEST_METHOD) {
+        if (self::REQUEST_METHOD !== $page->getRequestMethod()) {
             $page->setRequestMethod(self::REQUEST_METHOD);
             $changed = true;
         }
-// Skipping publication date normalization (setPublicationDate* methods not available)
+        // Skipping publication date normalization (setPublicationDate* methods not available)
 
         if ($changed) {
             $manager->persist($page);

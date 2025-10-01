@@ -3,39 +3,37 @@
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
-use Doctrine\DBAL\Types\Types;
-use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use App\Entity\Ticket;
 
 /**
- * Member
+ * Member.
  */
-#[ORM\Table(name: "member")]
+#[ORM\Table(name: 'member')]
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
-#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
 #[ORM\HasLifecycleCallbacks]
 class Member implements \Stringable
 {
-    #[ORM\Column(name: "id", type: Types::INTEGER)]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: "firstname", type: Types::STRING, length: 190)]
-    private string $firstname = "";
+    #[ORM\Column(name: 'firstname', type: Types::STRING, length: 190)]
+    private string $firstname = '';
 
-    #[ORM\Column(name: "lastname", type: Types::STRING, length: 190)]
-    private string $lastname = "";
+    #[ORM\Column(name: 'lastname', type: Types::STRING, length: 190)]
+    private string $lastname = '';
 
-    #[ORM\Column(name: "email", type: Types::STRING, length: 190, unique: true)]
+    #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
     private $email;
 
     #[
         ORM\Column(
-            name: "username",
+            name: 'username',
             type: Types::STRING,
             length: 190,
             nullable: true,
@@ -45,7 +43,7 @@ class Member implements \Stringable
 
     #[
         ORM\Column(
-            name: "phone",
+            name: 'phone',
             type: Types::STRING,
             length: 190,
             nullable: true,
@@ -55,7 +53,7 @@ class Member implements \Stringable
 
     #[
         ORM\Column(
-            name: "CityOfResidence",
+            name: 'CityOfResidence',
             type: Types::STRING,
             length: 190,
             nullable: true,
@@ -63,40 +61,40 @@ class Member implements \Stringable
     ]
     private ?string $CityOfResidence = null;
 
-    #[ORM\Column(name: "createdAt", type: "datetime")]
+    #[ORM\Column(name: 'createdAt', type: 'datetime')]
     private \DateTime $createdAt;
 
-    #[ORM\Column(name: "updatedAt", type: "datetime")]
+    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
     private \DateTime $updatedAt;
 
-    #[ORM\Column(name: "isActiveMember", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
 
-    #[ORM\Column(name: "rejectReasonSent", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'rejectReasonSent', type: Types::BOOLEAN)]
     private bool $rejectReasonSent = false;
 
-    #[ORM\Column(name: "StudentUnionMember", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'StudentUnionMember', type: Types::BOOLEAN)]
     private bool $StudentUnionMember = false;
 
-    #[ORM\Column(name: "Application", type: "text", nullable: true)]
+    #[ORM\Column(name: 'Application', type: 'text', nullable: true)]
     private ?string $Application = null;
 
-    #[ORM\Column(name: "reject_reason", type: "text", nullable: true)]
+    #[ORM\Column(name: 'reject_reason', type: 'text', nullable: true)]
     private ?string $rejectReason = null;
 
-    #[ORM\Column(name: "ApplicationDate", type: "datetime", nullable: true)]
+    #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
     private ?\DateTime $ApplicationDate = null;
 
     #[
         ORM\Column(
-            name: "ApplicationHandledDate",
-            type: "datetime",
+            name: 'ApplicationHandledDate',
+            type: 'datetime',
             nullable: true,
         ),
     ]
     private ?\DateTime $ApplicationHandledDate = null;
 
-    #[ORM\Column(type: "datetime", nullable: true)]
+    #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $AcceptedAsHonoraryMember = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -105,30 +103,30 @@ class Member implements \Stringable
     #[
         ORM\OneToOne(
             targetEntity: User::class,
-            mappedBy: "member",
-            cascade: ["persist", "remove"],
+            mappedBy: 'member',
+            cascade: ['persist', 'remove'],
         ),
     ]
-    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private ?User $user = null;
 
     #[ORM\Column(type: Types::STRING, length: 8)]
-    private ?string $locale = "fi";
+    private ?string $locale = 'fi';
 
     #[
         ORM\OneToMany(
             targetEntity: Artist::class,
-            mappedBy: "member",
+            mappedBy: 'member',
             orphanRemoval: true,
         ),
     ]
-    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private $artist;
 
     #[
         ORM\OneToMany(
             targetEntity: DoorLog::class,
-            mappedBy: "member",
+            mappedBy: 'member',
             orphanRemoval: true,
         ),
     ]
@@ -140,19 +138,19 @@ class Member implements \Stringable
     #[
         ORM\OneToMany(
             targetEntity: RSVP::class,
-            mappedBy: "member",
+            mappedBy: 'member',
             orphanRemoval: true,
         ),
     ]
     private $RSVPs;
 
-    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: "member")]
+    #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
     private $nakkiBookings;
 
-    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: "owner")]
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
     private $tickets;
 
-    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: "responsible")]
+    #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
     private $responsibleForNakkis;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
@@ -161,13 +159,13 @@ class Member implements \Stringable
     #[
         ORM\OneToMany(
             targetEntity: HappeningBooking::class,
-            mappedBy: "member",
-            cascade: ["persist", "remove"],
+            mappedBy: 'member',
+            cascade: ['persist', 'remove'],
         ),
     ]
     private Collection $happeningBooking;
 
-    #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: "owners")]
+    #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
     private Collection $happenings;
 
     #[ORM\Column(length: 255)]
@@ -217,7 +215,7 @@ class Member implements \Stringable
 
     public function getName(): ?string
     {
-        return $this->firstname . " " . $this->lastname;
+        return $this->firstname.' '.$this->lastname;
     }
 
     public function setEmail(?string $email): self
@@ -225,10 +223,10 @@ class Member implements \Stringable
         // If the email is actually changing (non-null to a different non-null value)
         // and the current email was verified, force re-verification.
         if (
-            $this->email !== null &&
-            $email !== null &&
-            $this->email !== $email &&
-            $this->emailVerified
+            null !== $this->email
+            && null !== $email
+            && $this->email !== $email
+            && $this->emailVerified
         ) {
             $this->emailVerified = false;
         }
@@ -254,6 +252,7 @@ class Member implements \Stringable
     {
         return $this->phone;
     }
+
     public function setCreatedAt(mixed $createdAt): self
     {
         $this->createdAt = $createdAt;
@@ -265,6 +264,7 @@ class Member implements \Stringable
     {
         return $this->createdAt;
     }
+
     public function setUpdatedAt(mixed $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
@@ -276,6 +276,7 @@ class Member implements \Stringable
     {
         return $this->updatedAt;
     }
+
     public function setStudentUnionMember(
         mixed $studentUnionMember = null,
     ): self {
@@ -288,6 +289,7 @@ class Member implements \Stringable
     {
         return $this->StudentUnionMember;
     }
+
     public function setApplication(mixed $application = null): self
     {
         $this->Application = $application;
@@ -299,6 +301,7 @@ class Member implements \Stringable
     {
         return $this->Application;
     }
+
     public function setApplicationDate(mixed $applicationDate = null): self
     {
         $this->ApplicationDate = $applicationDate;
@@ -310,6 +313,7 @@ class Member implements \Stringable
     {
         return $this->ApplicationDate;
     }
+
     public function setCityOfResidence(mixed $cityOfResidence = null): self
     {
         $this->CityOfResidence = $cityOfResidence;
@@ -327,6 +331,7 @@ class Member implements \Stringable
     {
         return (string) $this->getName();
     }
+
     public function setFirstname(mixed $firstname): self
     {
         $this->firstname = $firstname;
@@ -338,6 +343,7 @@ class Member implements \Stringable
     {
         return $this->firstname;
     }
+
     public function setLastname(mixed $lastname): self
     {
         $this->lastname = $lastname;
@@ -349,6 +355,7 @@ class Member implements \Stringable
     {
         return $this->lastname;
     }
+
     public function setIsActiveMember(mixed $isActiveMember): self
     {
         $this->isActiveMember = $isActiveMember;
@@ -360,6 +367,7 @@ class Member implements \Stringable
     {
         return $this->isActiveMember;
     }
+
     public function setRejectReason(mixed $rejectReason = null): self
     {
         $this->rejectReason = $rejectReason;
@@ -371,6 +379,7 @@ class Member implements \Stringable
     {
         return $this->rejectReason;
     }
+
     public function setRejectReasonSent(mixed $rejectReasonSent): self
     {
         $this->rejectReasonSent = $rejectReasonSent;
@@ -382,6 +391,7 @@ class Member implements \Stringable
     {
         return $this->rejectReasonSent;
     }
+
     public function setApplicationHandledDate(
         mixed $applicationHandledDate = null,
     ): self {
@@ -394,6 +404,7 @@ class Member implements \Stringable
     {
         return $this->ApplicationHandledDate;
     }
+
     public function setUsername(mixed $username = null): self
     {
         $this->username = $username;
@@ -448,15 +459,16 @@ class Member implements \Stringable
 
         return $this;
     }
+
     public function getProgressP(): string
     {
         if ($this->AcceptedAsHonoraryMember instanceof \DateTimeInterface) {
-            return "100";
+            return '100';
         }
         if ($this->isActiveMember) {
-            return "66";
+            return '66';
         } else {
-            return "33";
+            return '33';
         }
     }
 
@@ -465,6 +477,7 @@ class Member implements \Stringable
         if ($this->StudentUnionMember) {
             return true;
         }
+
         return $this->isFullMember;
     }
 
@@ -487,6 +500,7 @@ class Member implements \Stringable
     {
         return $this->artist;
     }
+
     /**
      * @param int $id
      */
@@ -497,8 +511,10 @@ class Member implements \Stringable
                 return $artist;
             }
         }
+
         return null;
     }
+
     public function addArtist(Artist $artist): self
     {
         if (!$this->artist->contains($artist)) {
@@ -544,8 +560,8 @@ class Member implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->doorLogs->removeElement($doorLog) &&
-            $doorLog->getMember() === $this
+            $this->doorLogs->removeElement($doorLog)
+            && $doorLog->getMember() === $this
         ) {
             $doorLog->setMember(null);
         }
@@ -587,8 +603,8 @@ class Member implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->RSVPs->removeElement($rSVP) &&
-            $rSVP->getMember() === $this
+            $this->RSVPs->removeElement($rSVP)
+            && $rSVP->getMember() === $this
         ) {
             $rSVP->setMember(null);
         }
@@ -618,8 +634,8 @@ class Member implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->nakkiBookings->removeElement($nakkiBooking) &&
-            $nakkiBooking->getMember() === $this
+            $this->nakkiBookings->removeElement($nakkiBooking)
+            && $nakkiBooking->getMember() === $this
         ) {
             $nakkiBooking->setMember(null);
         }
@@ -649,14 +665,15 @@ class Member implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->tickets->removeElement($ticket) &&
-            $ticket->getOwner() === $this
+            $this->tickets->removeElement($ticket)
+            && $ticket->getOwner() === $this
         ) {
             $ticket->setOwner(null);
         }
 
         return $this;
     }
+
     /**
      * @param Event $event
      */
@@ -667,6 +684,7 @@ class Member implements \Stringable
                 return $ticket;
             }
         }
+
         return null;
     }
 
@@ -692,14 +710,15 @@ class Member implements \Stringable
     {
         // set the owning side to null (unless already changed)
         if (
-            $this->responsibleForNakkis->removeElement($responsibleForNakki) &&
-            $responsibleForNakki->getResponsible() === $this
+            $this->responsibleForNakkis->removeElement($responsibleForNakki)
+            && $responsibleForNakki->getResponsible() === $this
         ) {
             $responsibleForNakki->setResponsible(null);
         }
 
         return $this;
     }
+
     /**
      * @param Event $event
      */
@@ -711,6 +730,7 @@ class Member implements \Stringable
                 return $b;
             }
         }
+
         return null;
     }
 
@@ -751,6 +771,7 @@ class Member implements \Stringable
 
         return $this;
     }
+
     /**
      * @return Collection<int, Happening>
      */
@@ -843,7 +864,7 @@ class Member implements \Stringable
     {
         $streamArtists = [];
         foreach ($this->getArtist() as $artist) {
-            if ($artist->getType() != "ART") {
+            if ('ART' != $artist->getType()) {
                 $streamArtists[] = $artist;
             }
         }

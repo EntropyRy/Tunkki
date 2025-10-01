@@ -3,90 +3,89 @@
 namespace App\Entity;
 
 use App\Repository\BookingRepository;
-use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[ORM\Table("Booking")]
+#[ORM\Table('Booking')]
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Booking implements \Stringable
 {
-    #[ORM\Column(name: "id", type: Types::INTEGER)]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
-    #[ORM\GeneratedValue(strategy: "AUTO")]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\Column(name: "name", type: Types::STRING, length: 190)]
+    #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private ?string $name = null;
 
-    #[ORM\Column(name: "referenceNumber", type: Types::STRING, length: 190)]
+    #[ORM\Column(name: 'referenceNumber', type: Types::STRING, length: 190)]
     private int|string $referenceNumber = 0;
 
-    #[ORM\Column(name: "renterHash", type: Types::STRING, length: 199)]
+    #[ORM\Column(name: 'renterHash', type: Types::STRING, length: 199)]
     private int|string $renterHash = 0;
 
-    #[ORM\Column(name: "renterConsent", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'renterConsent', type: Types::BOOLEAN)]
     private bool $renterConsent = false;
 
-    #[ORM\Column(name: "itemsReturned", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'itemsReturned', type: Types::BOOLEAN)]
     private bool $itemsReturned = false;
 
-    #[ORM\Column(name: "invoiceSent", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'invoiceSent', type: Types::BOOLEAN)]
     private bool $invoiceSent = false;
 
-    #[ORM\Column(name: "paid", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'paid', type: Types::BOOLEAN)]
     private bool $paid = false;
 
-    #[ORM\Column(name: "cancelled", type: Types::BOOLEAN)]
+    #[ORM\Column(name: 'cancelled', type: Types::BOOLEAN)]
     private bool $cancelled = false;
 
-    #[ORM\Column(name: "retrieval", type: "datetime_immutable", nullable: true)]
+    #[ORM\Column(name: 'retrieval', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $retrieval = null;
 
     #[
         ORM\Column(
-            name: "return_date",
-            type: "datetime_immutable",
+            name: 'return_date',
+            type: 'datetime_immutable',
             nullable: true,
         ),
     ]
     private ?\DateTimeImmutable $returning = null;
 
-    #[ORM\Column(name: "paid_date", type: "datetime_immutable", nullable: true)]
+    #[ORM\Column(name: 'paid_date', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $paid_date = null;
 
     #[ORM\ManyToMany(targetEntity: Item::class)]
-    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE")]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $items;
 
     #[ORM\ManyToMany(targetEntity: Package::class)]
-    #[ORM\Cache(usage: "NONSTRICT_READ_WRITE")]
+    #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private $packages;
 
-    #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ["persist"])]
+    #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private $accessories;
 
     #[
         ORM\ManyToOne(
             targetEntity: WhoCanRentChoice::class,
-            cascade: ["persist"],
+            cascade: ['persist'],
         ),
     ]
     private ?WhoCanRentChoice $rentingPrivileges = null;
 
-    #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: "bookings")]
+    #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
     #[Assert\NotBlank]
     private ?Renter $renter = null;
 
     #[
         ORM\OneToMany(
             targetEntity: BillableEvent::class,
-            mappedBy: "booking",
-            cascade: ["persist"],
+            mappedBy: 'booking',
+            cascade: ['persist'],
             orphanRemoval: true,
         ),
     ]
@@ -100,8 +99,8 @@ class Booking implements \Stringable
 
     #[
         ORM\Column(
-            name: "actualPrice",
-            type: "decimal",
+            name: 'actualPrice',
+            type: 'decimal',
             precision: 7,
             scale: 2,
             nullable: true,
@@ -109,15 +108,15 @@ class Booking implements \Stringable
     ]
     private $actualPrice;
 
-    #[ORM\Column(name: "numberOfRentDays", type: Types::INTEGER)]
+    #[ORM\Column(name: 'numberOfRentDays', type: Types::INTEGER)]
     private int $numberOfRentDays = 1;
 
     #[
         ORM\OneToMany(
             targetEntity: StatusEvent::class,
-            mappedBy: "booking",
-            cascade: ["all"],
-            fetch: "LAZY",
+            mappedBy: 'booking',
+            cascade: ['all'],
+            fetch: 'LAZY',
         ),
     ]
     private $statusEvents;
@@ -125,26 +124,26 @@ class Booking implements \Stringable
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $creator = null;
 
-    #[ORM\Column(name: "created_at", type: "datetime_immutable")]
+    #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $modifier = null;
 
-    #[ORM\Column(name: "modified_at", type: "datetime_immutable")]
+    #[ORM\Column(name: 'modified_at', type: 'datetime_immutable')]
     private ?\DateTimeImmutable $modifiedAt = null;
 
-    #[ORM\Column(name: "booking_date", type: "date_immutable")]
+    #[ORM\Column(name: 'booking_date', type: 'date_immutable')]
     #[Assert\NotBlank]
     private ?\DateTimeImmutable $bookingDate = null;
 
-    #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: "bookings")]
+    #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
     private $rewards;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $reasonForDiscount = null;
 
-    #[ORM\Column(type: "text", nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $renterSignature = null;
 
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
@@ -190,12 +189,13 @@ class Booking implements \Stringable
     {
         return $this->packages;
     }
+
     #[\Override]
     public function __toString(): string
     {
         return $this->name
-            ? $this->name . " - " . date_format($this->bookingDate, "d.m.Y")
-            : "n/a";
+            ? $this->name.' - '.date_format($this->bookingDate, 'd.m.Y')
+            : 'n/a';
     }
 
     public function setPaid(bool $paid): Booking
@@ -234,6 +234,7 @@ class Booking implements \Stringable
                 $price += $package->getRent();
             }
         }
+
         return $price;
     }
 
@@ -241,7 +242,7 @@ class Booking implements \Stringable
     {
         if ($this->getItems()) {
             foreach ($this->getItems() as $item) {
-                if ($item->getNeedsFixing() == true) {
+                if (true == $item->getNeedsFixing()) {
                     return true;
                 }
             }
@@ -253,19 +254,20 @@ class Booking implements \Stringable
                 }
             }
         }
+
         return false;
     }
 
     public function getRentInformation(): string
     {
-        $return = "";
+        $return = '';
         foreach ($this->getItems() as $item) {
             if ($item->getRentNotice()) {
                 $return .=
-                    $item->getName() .
-                    ": " .
-                    $item->getRentNotice() .
-                    " " .
+                    $item->getName().
+                    ': '.
+                    $item->getRentNotice().
+                    ' '.
                     PHP_EOL;
             }
         }
@@ -273,10 +275,11 @@ class Booking implements \Stringable
             foreach ($this->getPackages() as $package) {
                 foreach ($package->getItems() as $item) {
                     $return .=
-                        $item->getName() . ": " . $item->getRentNotice() . " ";
+                        $item->getName().': '.$item->getRentNotice().' ';
                 }
             }
         }
+
         return $return;
     }
 
@@ -673,6 +676,7 @@ class Booking implements \Stringable
 
         return $this;
     }
+
     public function getDataArray(): array
     {
         $object = $this;
@@ -682,43 +686,44 @@ class Booking implements \Stringable
         $items = [];
         $packages = [];
         $accessories = [];
-        $rent["items"] = 0;
-        $compensation["items"] = 0;
-        $rent["packages"] = 0;
-        $compensation["packages"] = 0;
-        $rent["accessories"] = 0;
-        $compensation["accessories"] = 0;
+        $rent['items'] = 0;
+        $compensation['items'] = 0;
+        $rent['packages'] = 0;
+        $compensation['packages'] = 0;
+        $rent['accessories'] = 0;
+        $compensation['accessories'] = 0;
         foreach ($object->getItems() as $item) {
             $items[] = $item;
-            $rent["items"] += $item->getRent();
-            $compensation["items"] += $item->getCompensationPrice();
+            $rent['items'] += $item->getRent();
+            $compensation['items'] += $item->getCompensationPrice();
         }
         foreach ($object->getPackages() as $item) {
             $packages[] = $item;
-            $rent["packages"] += $item->getRent();
-            $compensation["packages"] += $item->getCompensationPrice();
+            $rent['packages'] += $item->getRent();
+            $compensation['packages'] += $item->getCompensationPrice();
         }
         foreach ($object->getAccessories() as $item) {
             $accessories[] = $item;
             if (is_int($item->getCount())) {
-                $compensation["accessories"] +=
+                $compensation['accessories'] +=
                     $item->getName()->getCompensationPrice() *
                     $item->getCount();
             }
         }
-        $rent["total"] = $rent["items"] + $rent["packages"]; //+ $rent['accessories'];
+        $rent['total'] = $rent['items'] + $rent['packages']; // + $rent['accessories'];
 
-        $data["actualTotal"] = $object->getActualPrice();
-        $rent["actualTotal"] = $object->getActualPrice();
-        $rent["accessories"] = $object->getAccessoryPrice();
-        $data["name"] = $object->getName();
-        $data["date"] = $object->getBookingDate()->format("j.n.Y");
-        $data["items"] = $items;
-        $data["packages"] = $packages;
-        $data["accessories"] = $accessories;
-        $data["rent"] = $rent;
-        $data["compensation"] = $compensation;
-        $data["renterSignature"] = $object->getRenterSignature();
+        $data['actualTotal'] = $object->getActualPrice();
+        $rent['actualTotal'] = $object->getActualPrice();
+        $rent['accessories'] = $object->getAccessoryPrice();
+        $data['name'] = $object->getName();
+        $data['date'] = $object->getBookingDate()->format('j.n.Y');
+        $data['items'] = $items;
+        $data['packages'] = $packages;
+        $data['accessories'] = $accessories;
+        $data['rent'] = $rent;
+        $data['compensation'] = $compensation;
+        $data['renterSignature'] = $object->getRenterSignature();
+
         return $data;
     }
 }

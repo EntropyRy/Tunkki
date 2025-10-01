@@ -57,86 +57,87 @@ final class EventUrlGenerationTest extends TestCase
         \DateTimeImmutable $eventDate,
     ): Event {
         $e = new Event();
-        $e->setName("Test EN");
-        $e->setNimi("Test FI");
-        $e->setType("event");
+        $e->setName('Test EN');
+        $e->setNimi('Test FI');
+        $e->setType('event');
         $e->setEventDate($eventDate);
         $e->setUrl($slug);
-        $e->setPublishDate(new \DateTimeImmutable("-1 hour"));
+        $e->setPublishDate(new \DateTimeImmutable('-1 hour'));
         $e->setPublished(true);
+
         return $e;
     }
 
     public function testExternalUrlByLangReturnsRawUrl(): void
     {
         $e = $this->makeInternalEvent(
-            "ignored-slug",
-            new \DateTimeImmutable("+3 days"),
+            'ignored-slug',
+            new \DateTimeImmutable('+3 days'),
         );
 
         // Simulate external event
         $e->setExternalUrl(true);
-        $e->setUrl("https://example.org/external-destination");
+        $e->setUrl('https://example.org/external-destination');
 
-        $fi = $e->getUrlByLang("fi");
-        $en = $e->getUrlByLang("en");
+        $fi = $e->getUrlByLang('fi');
+        $en = $e->getUrlByLang('en');
 
         self::assertSame(
-            "https://example.org/external-destination",
+            'https://example.org/external-destination',
             $fi,
-            "Finnish path should be raw external URL.",
+            'Finnish path should be raw external URL.',
         );
         self::assertSame(
-            "https://example.org/external-destination",
+            'https://example.org/external-destination',
             $en,
-            "English path should be raw external URL.",
+            'English path should be raw external URL.',
         );
     }
 
     public function testInternalUrlPatternsDifferBetweenLanguages(): void
     {
-        $slug = "unit-test-event-slug";
-        $eventDate = new \DateTimeImmutable("+5 days");
-        $year = $eventDate->format("Y");
+        $slug = 'unit-test-event-slug';
+        $eventDate = new \DateTimeImmutable('+5 days');
+        $year = $eventDate->format('Y');
 
         $e = $this->makeInternalEvent($slug, $eventDate);
         $e->setExternalUrl(false); // explicit clarity
 
-        $fi = $e->getUrlByLang("fi");
-        $en = $e->getUrlByLang("en");
+        $fi = $e->getUrlByLang('fi');
+        $en = $e->getUrlByLang('en');
 
-        self::assertNotNull($fi, "Finnish URL should not be null.");
-        self::assertNotNull($en, "English URL should not be null.");
+        self::assertNotNull($fi, 'Finnish URL should not be null.');
+        self::assertNotNull($en, 'English URL should not be null.');
         self::assertNotSame(
             $fi,
             $en,
-            "Finnish and English URLs should differ for internal events.",
+            'Finnish and English URLs should differ for internal events.',
         );
 
         // Invariants for Finnish: must not start with /en/
         self::assertFalse(
-            str_starts_with($fi, "/en/"),
-            "Finnish URL must not start with /en/.",
+            str_starts_with($fi, '/en/'),
+            'Finnish URL must not start with /en/.',
         );
 
         // Invariants for English: should start with /en/
         self::assertTrue(
-            str_starts_with($en, "/en/") ||
-                (str_contains($en, "/" . $year . "/") &&
-                    str_contains($en, $slug)),
-            "English URL should start with /en/ prefix or match a year/slug pattern.",
+            str_starts_with($en, '/en/')
+                || (str_contains($en, '/'.$year.'/')
+                    && str_contains($en, $slug)),
+            'English URL should start with /en/ prefix or match a year/slug pattern.',
         );
 
         // Accept either slug-based pattern (year+slug) or legacy ID-based pattern.
         $fiContainsYearOrKeyword =
-            str_contains($fi, "/" . $year . "/") ||
-            str_contains($fi, "/tapahtuma/") ||
-            preg_match("#/tapahtuma/\d+#", $fi) === 1;
+            str_contains($fi, '/'.$year.'/')
+            || str_contains($fi, '/tapahtuma/')
+            || 1 === preg_match("#/tapahtuma/\d+#", $fi);
 
         $enContainsYearOrKeyword =
-            str_contains($en, "/" . $year . "/") ||
-            str_contains($en, "/event/") ||
-            preg_match("#/event/\d+#", $en) === 1;
+            str_contains($en, '/'.$year.'/')
+            || str_contains($en, '/event/')
+            || 1 === preg_match("#/event/\d+#", $en);
 
         self::assertTrue(
             $fiContainsYearOrKeyword,
@@ -149,9 +150,9 @@ final class EventUrlGenerationTest extends TestCase
 
         // Ensure the slug OR a numeric id appears (at least one of those forms)
         $fiHasSlugOrId =
-            str_contains($fi, $slug) || preg_match('#/\d+(/|$)#', $fi) === 1;
+            str_contains($fi, $slug) || 1 === preg_match('#/\d+(/|$)#', $fi);
         $enHasSlugOrId =
-            str_contains($en, $slug) || preg_match('#/\d+(/|$)#', $en) === 1;
+            str_contains($en, $slug) || 1 === preg_match('#/\d+(/|$)#', $en);
 
         self::assertTrue(
             $fiHasSlugOrId,

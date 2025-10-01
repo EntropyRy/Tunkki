@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Artist;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
-use App\Entity\Artist;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
@@ -49,7 +49,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     'edit' => [],
                     'delete' => [],
                     'update' => [
-                        'template' => 'admin/crud/list__action_update_artist.html.twig'
+                        'template' => 'admin/crud/list__action_update_artist.html.twig',
                     ],
                 ],
             ]);
@@ -65,7 +65,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     'query_builder' => fn ($repo) => $repo->createQueryBuilder('a')
                         ->andWhere('a.copyForArchive = :copy')
                         ->setParameter('copy', false),
-                    'choice_label' => fn (Artist $artist): ?string => $artist->getGenre() ? $artist->getType().': ' .$artist->getName() . ' (' . $artist->getGenre() . ')' : $artist->getName(),
+                    'choice_label' => fn (Artist $artist): ?string => $artist->getGenre() ? $artist->getType().': '.$artist->getName().' ('.$artist->getGenre().')' : $artist->getName(),
                 ]);
         } else {
             $formMapper
@@ -82,10 +82,10 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                             'sideBySide' => true,
                             'components' => [
                                 'seconds' => false,
-                            ]
-                        ]
+                            ],
+                        ],
                     ],
-                    'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page'
+                    'help' => 'Please select right date so that we can have right order in the timetable. This also tells the artist they have been chosen to play in their profile page',
                 ]);
         }
     }
@@ -97,6 +97,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
             ->add('SetLength')
             ->add('StartTime');
     }
+
     #[\Override]
     public function prePersist($eventinfo): void
     {
@@ -104,20 +105,21 @@ final class EventArtistInfoAdmin extends AbstractAdmin
         $i = 1;
         foreach ($event->getEventArtistInfos() as $info) {
             if ($info->getArtist() == $eventinfo->getArtist()) {
-                $i += 1;
+                ++$i;
             }
         }
         $artistClone = clone $eventinfo->getArtist();
         $artistClone->setMember(null);
         $artistClone->setCopyForArchive(true);
-        $artistClone->setName($artistClone->getName() . ' for ' . $eventinfo->getEvent()->getName() . ' #' . $i);
+        $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName().' #'.$i);
         $eventinfo->setArtistClone($artistClone);
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('delete');
-        $collection->add('update', $this->getRouterIdParameter() . '/update');
+        $collection->add('update', $this->getRouterIdParameter().'/update');
     }
 
     #[\Override]

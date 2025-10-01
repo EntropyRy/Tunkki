@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * BillableEvent
+ * BillableEvent.
  */
 #[ORM\Table(name: 'BillableEvent')]
 #[ORM\Entity]
@@ -17,7 +17,7 @@ class BillableEvent implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: '\\' . Booking::class, inversedBy: 'billableEvents')]
+    #[ORM\ManyToOne(targetEntity: '\\'.Booking::class, inversedBy: 'billableEvents')]
     private ?Booking $booking = null;
 
     #[ORM\Column(name: 'description', type: 'text')]
@@ -71,7 +71,7 @@ class BillableEvent implements \Stringable
     public function __toString(): string
     {
         if (!in_array($this->getUnitPrice(), ['', '0'], true)) {
-            return $this->description !== '' && $this->description !== '0' ? $this->description.': '.$this->getUnitPrice() : '';
+            return '' !== $this->description && '0' !== $this->description ? $this->description.': '.$this->getUnitPrice() : '';
         } else {
             return '';
         }

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Accessory
+ * Accessory.
  */
 #[ORM\Table(name: 'Accessory')]
 #[ORM\Entity]
@@ -25,11 +25,8 @@ class Accessory implements \Stringable
     #[Assert\NotBlank]
     private ?string $count = null;
 
-
     /**
-     * Get id
-     *
-     * @return integer
+     * Get id.
      */
     public function getId(): ?int
     {
@@ -37,9 +34,7 @@ class Accessory implements \Stringable
     }
 
     /**
-     * Set count
-     *
-     * @param string $count
+     * Set count.
      */
     public function setCount(?string $count): static
     {
@@ -49,9 +44,7 @@ class Accessory implements \Stringable
     }
 
     /**
-     * Get count
-     *
-     * @return string
+     * Get count.
      */
     public function getCount(): ?string
     {
@@ -59,7 +52,7 @@ class Accessory implements \Stringable
     }
 
     /**
-     * Set name
+     * Set name.
      */
     public function setName(?AccessoryChoice $name = null): static
     {
@@ -69,9 +62,7 @@ class Accessory implements \Stringable
     }
 
     /**
-     * Get name
-     *
-     * @return AccessoryChoice
+     * Get name.
      */
     public function getName(): ?AccessoryChoice
     {
@@ -83,6 +74,7 @@ class Accessory implements \Stringable
     {
         $name = $this->name ?: 'n/a';
         $count = $this->count ?: '';
-        return $count .' X '.$name;
+
+        return $count.' X '.$name;
     }
 }

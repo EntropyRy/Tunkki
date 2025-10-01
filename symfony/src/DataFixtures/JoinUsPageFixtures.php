@@ -37,12 +37,12 @@ use Doctrine\Persistence\ObjectManager;
  */
 final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterface
 {
-    private const string ROUTE_NAME     = 'page_slug';
+    private const string ROUTE_NAME = 'page_slug';
     // Legacy data shows FI join-us page using Sonata default service and template 'onecolumn'.
     // Keep a custom type only if it already exists; otherwise fall back to Sonata default.
     // We will normalize existing pages but not forcibly override an existing legacy type differing from this.
-    private const string TYPE           = 'sonata.page.service.default';
-    private const string TEMPLATE       = 'onecolumn';
+    private const string TYPE = 'sonata.page.service.default';
+    private const string TEMPLATE = 'onecolumn';
     private const string REQUEST_METHOD = 'GET|POST|HEAD|DELETE|PUT';
 
     public const string ALIAS_FI = '_page_alias_join_us_fi';
@@ -74,25 +74,25 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
                 continue;
             }
 
-            $alias = $locale === 'en' ? self::ALIAS_EN : self::ALIAS_FI;
-            $slug  = $locale === 'en' ? 'join-us' : 'liity';
+            $alias = 'en' === $locale ? self::ALIAS_EN : self::ALIAS_FI;
+            $slug = 'en' === $locale ? 'join-us' : 'liity';
             // Legacy Finnish name/title:
             //   name  = "Liity"
             //   title = "Liity Jäseneksi"
             // Legacy English keeps both as "Join Us"
-            if ($locale === 'en') {
-                $name  = 'Join Us';
+            if ('en' === $locale) {
+                $name = 'Join Us';
                 $title = 'Join Us';
             } else {
-                $name  = 'Liity';
+                $name = 'Liity';
                 $title = 'Liity Jäseneksi';
             }
-            $url = '/' . $slug;
+            $url = '/'.$slug;
 
             // Root page (url '/')
             $root = $pageRepo->findOneBy([
                 'site' => $site->getId(),
-                'url'  => '/',
+                'url' => '/',
             ]);
 
             if (!$root instanceof SonataPagePage) {
@@ -102,7 +102,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Find existing by alias
             $page = $pageRepo->findOneBy([
-                'site'      => $site->getId(),
+                'site' => $site->getId(),
                 'pageAlias' => $alias,
             ]);
 
@@ -113,7 +113,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
                     'slug' => $slug,
                 ]) ?? $pageRepo->findOneBy([
                     'site' => $site->getId(),
-                    'url'  => $url,
+                    'url' => $url,
                 ]);
             }
 
@@ -133,7 +133,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
             $page->setName($name);
             $page->setTitle($title);
             // Provide a minimal meta description if missing (helps debugging / SEO tests)
-            if ($page->getMetaDescription() === null) {
+            if (null === $page->getMetaDescription()) {
                 $page->setMetaDescription($title);
             }
             $page->setSlug($slug);
@@ -141,7 +141,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
             $page->setEnabled(true);
             $page->setDecorate(true);
             // Preserve existing type if it differs (legacy might already have 'sonata.page.service.default')
-            if ($page->getType() !== self::TYPE) {
+            if (self::TYPE !== $page->getType()) {
                 $page->setType(self::TYPE);
             }
             $page->setRequestMethod(self::REQUEST_METHOD);
@@ -151,7 +151,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
 
             $manager->persist($page);
 
-            if ($locale === 'en') {
+            if ('en' === $locale) {
                 $this->addReference(self::REFERENCE_EN, $page);
             } else {
                 $this->addReference(self::REFERENCE_FI, $page);

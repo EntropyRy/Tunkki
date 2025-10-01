@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -64,15 +64,15 @@ final class ContractAdmin extends AbstractAdmin
                         'sideBySide' => true,
                         'components' => [
                             'seconds' => false,
-                        ]
-                    ]
+                        ],
+                    ],
                 ],
             ])
             ->add('ContentFi', CKEditorType::class, [
-                'config' => ['full']
+                'config' => ['full'],
             ])
             ->add('ContentEn', CKEditorType::class, [
-                'config' => ['full']
+                'config' => ['full'],
             ]);
     }
 
@@ -87,6 +87,7 @@ final class ContractAdmin extends AbstractAdmin
             ->add('createdAt')
             ->add('updatedAt');
     }
+
     /**
      * @return array<string,string>
      */

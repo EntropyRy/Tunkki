@@ -55,17 +55,17 @@ final class PathTestController extends AbstractController
         // Automatic site-locale generation (no _locale param) and forced cross-locale variants
         $autoRelative = $router->generate('path_test', [], UrlGeneratorInterface::ABSOLUTE_PATH);
         $autoAbsolute = $router->generate('path_test', [], UrlGeneratorInterface::ABSOLUTE_URL);
-        $autoNetwork  = $router->generate('path_test', [], UrlGeneratorInterface::NETWORK_PATH);
+        $autoNetwork = $router->generate('path_test', [], UrlGeneratorInterface::NETWORK_PATH);
 
         // Forced variants (explicit locale override)
         // Use ABSOLUTE_PATH so "relative" values always include a leading slash.
         $fiRelative = $router->generate('path_test', ['_locale' => 'fi'], UrlGeneratorInterface::ABSOLUTE_PATH);
         $fiAbsolute = $router->generate('path_test', ['_locale' => 'fi'], UrlGeneratorInterface::ABSOLUTE_URL);
-        $fiNetwork  = $router->generate('path_test', ['_locale' => 'fi'], UrlGeneratorInterface::NETWORK_PATH);
+        $fiNetwork = $router->generate('path_test', ['_locale' => 'fi'], UrlGeneratorInterface::NETWORK_PATH);
 
         $enRelative = $router->generate('path_test', ['_locale' => 'en'], UrlGeneratorInterface::ABSOLUTE_PATH);
         $enAbsolute = $router->generate('path_test', ['_locale' => 'en'], UrlGeneratorInterface::ABSOLUTE_URL);
-        $enNetwork  = $router->generate('path_test', ['_locale' => 'en'], UrlGeneratorInterface::NETWORK_PATH);
+        $enNetwork = $router->generate('path_test', ['_locale' => 'en'], UrlGeneratorInterface::NETWORK_PATH);
 
         // Cross-locale generation summary
         $data = [
@@ -75,19 +75,19 @@ final class PathTestController extends AbstractController
                 'auto' => [
                     'relative' => $autoRelative,
                     'absolute' => $autoAbsolute,
-                    'network'  => $autoNetwork,
-                    'locale'   => $currentLocale,
+                    'network' => $autoNetwork,
+                    'locale' => $currentLocale,
                 ],
                 'forced' => [
                     'fi' => [
                         'relative' => $fiRelative,
                         'absolute' => $fiAbsolute,
-                        'network'  => $fiNetwork,
+                        'network' => $fiNetwork,
                     ],
                     'en' => [
                         'relative' => $enRelative,
                         'absolute' => $enAbsolute,
-                        'network'  => $enNetwork,
+                        'network' => $enNetwork,
                     ],
                 ],
             ],
@@ -96,12 +96,12 @@ final class PathTestController extends AbstractController
                 // Expect English relative URL (always begins with a leading slash):
                 //   - Finnish site: /en/path-test
                 //   - English site: /path-test
-                'en.relative_should_start_with' => $currentLocale === 'en' ? '/path-test' : '/en',
+                'en.relative_should_start_with' => 'en' === $currentLocale ? '/path-test' : '/en',
                 'no_double_en_prefix' => !str_contains($enRelative, '/en/en/'),
             ],
         ];
 
-        if ($request->query->getBoolean('json', false) || $request->getRequestFormat() === 'json') {
+        if ($request->query->getBoolean('json', false) || 'json' === $request->getRequestFormat()) {
             return new JsonResponse($data);
         }
 
@@ -113,7 +113,7 @@ final class PathTestController extends AbstractController
 
     private function renderHtml(array $data): string
     {
-        $esc = static fn(string $v): string => htmlspecialchars($v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $esc = static fn (string $v): string => htmlspecialchars($v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 
         $rows = [];
         foreach (['fi', 'en'] as $loc) {
@@ -133,7 +133,7 @@ final class PathTestController extends AbstractController
             $expectRows[] = sprintf(
                 '<tr><td>%s</td><td><code>%s</code></td></tr>',
                 $esc($k),
-                $esc(is_bool($v) ? ($v ? 'true' : 'false') : (string)$v)
+                $esc(is_bool($v) ? ($v ? 'true' : 'false') : (string) $v)
             );
         }
 
@@ -158,7 +158,7 @@ final class PathTestController extends AbstractController
 <body>
   <h1>Path Test Controller</h1>
   <p>Current locale: <strong>{$esc($data['current_locale'])}</strong></p>
-  <p>Current site relativePath: <strong>{$esc((string)($data['current_site_relative_path'] ?? ''))}</strong></p>
+  <p>Current site relativePath: <strong>{$esc((string) ($data['current_site_relative_path'] ?? ''))}</strong></p>
 
   <table>
     <caption>Generated URLs</caption>

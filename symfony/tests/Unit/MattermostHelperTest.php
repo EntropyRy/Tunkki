@@ -37,29 +37,26 @@ final class MattermostHelperTest extends TestCase
     private function makeTempHookFile(): string
     {
         // Correct function is sys_get_temp_dir (previously misspelled).
-        $tmp = tempnam(sys_get_temp_dir(), "mmhook_");
-        file_put_contents($tmp, "ok");
+        $tmp = tempnam(sys_get_temp_dir(), 'mmhook_');
+        file_put_contents($tmp, 'ok');
+
         // curl with file:// needs absolute path
-        return "file://" . $tmp;
+        return 'file://'.$tmp;
     }
 
     private function makeHelperForEnv(string $env): Mattermost
     {
         // Capture original only once (first mutation in this test class).
-        if ($this->originalEnv === null) {
+        if (null === $this->originalEnv) {
             $this->originalEnv =
-                $_ENV["APP_ENV"] ?? (getenv("APP_ENV") ?: "test");
+                $_ENV['APP_ENV'] ?? (getenv('APP_ENV') ?: 'test');
         }
 
         // Set both $_ENV and process env so the helper's check sees it.
-        $_ENV["APP_ENV"] = $env;
+        $_ENV['APP_ENV'] = $env;
         putenv("APP_ENV={$env}");
 
-        $params = new ParameterBag([
-            "mm_tunkki_hook" => $this->makeTempHookFile(),
-            "mm_tunkki_botname" => "test-bot",
-            "mm_tunkki_img" => "https://example.org/bot.png",
-        ]);
+        $params = new ParameterBag([]);
 
         return new Mattermost($params);
     }
@@ -67,23 +64,23 @@ final class MattermostHelperTest extends TestCase
     protected function tearDown(): void
     {
         // Always restore APP_ENV after each test to keep functional tests in "test" env.
-        if ($this->originalEnv !== null) {
-            $_ENV["APP_ENV"] = $this->originalEnv;
-            putenv("APP_ENV=" . $this->originalEnv);
+        if (null !== $this->originalEnv) {
+            $_ENV['APP_ENV'] = $this->originalEnv;
+            putenv('APP_ENV='.$this->originalEnv);
         }
         parent::tearDown();
     }
 
     public function testSendToMattermostReturnsDoneInTestEnv(): void
     {
-        $helper = $this->makeHelperForEnv("test");
+        $helper = $this->makeHelperForEnv('test');
 
-        $result = $helper->SendToMattermost("Test message", "yhdistys");
+        $result = $helper->SendToMattermost('Test message', 'yhdistys');
 
         self::assertSame(
-            "Done",
+            'Done',
             $result,
-            "Expected SendToMattermost to complete successfully in test env.",
+            'Expected SendToMattermost to complete successfully in test env.',
         );
         // No explicit channel assertion possible without modifying helper
         // internals; success path implies no trigger_error was fired.
@@ -91,16 +88,16 @@ final class MattermostHelperTest extends TestCase
 
     public function testSendToMattermostReturnsDoneInDevEnvWithChannelNulling(): void
     {
-        $helper = $this->makeHelperForEnv("dev");
+        $helper = $this->makeHelperForEnv('dev');
 
         // In dev the helper sets $channel = null internally, but since the
         // method only returns "Done" we simply ensure it completes.
-        $result = $helper->SendToMattermost("Dev message", "some-channel");
+        $result = $helper->SendToMattermost('Dev message', 'some-channel');
 
         self::assertSame(
-            "Done",
+            'Done',
             $result,
-            "Expected SendToMattermost to complete successfully in dev env.",
+            'Expected SendToMattermost to complete successfully in dev env.',
         );
     }
 }

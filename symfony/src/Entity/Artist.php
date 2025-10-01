@@ -2,18 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\DBAL\Types\Types;
-use App\Entity\Member;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\ArtistRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ArtistRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-#[ORM\Cache(usage: "NONSTRICT_READ_WRITE", region: "member")]
+#[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
 class Artist implements \Stringable
 {
     #[ORM\Id]
@@ -32,11 +31,11 @@ class Artist implements \Stringable
 
     #[
         Assert\Expression(
-            "!(!value or !this.getBioEn())",
-            message: "artist.form.error",
+            '!(!value or !this.getBioEn())',
+            message: 'artist.form.error',
         ),
     ]
-    #[ORM\Column(type: "text", nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bio = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -45,23 +44,23 @@ class Artist implements \Stringable
     #[
         ORM\OneToMany(
             targetEntity: EventArtistInfo::class,
-            mappedBy: "Artist",
-            cascade: ["persist", "detach"],
+            mappedBy: 'Artist',
+            cascade: ['persist', 'detach'],
         ),
     ]
-    #[ORM\JoinColumn(nullable: true, onDelete: "CASCADE")]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private $eventArtistInfos;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $createdAt = null;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: "artist")]
+    #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
     private ?Member $member = null;
 
-    #[ORM\Column(type: "text", nullable: true)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bioEn = null;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
@@ -70,7 +69,7 @@ class Artist implements \Stringable
     #[
         ORM\ManyToOne(
             targetEntity: SonataMediaMedia::class,
-            cascade: ["persist", "detach"],
+            cascade: ['persist', 'detach'],
         ),
     ]
     private ?SonataMediaMedia $Picture = null;
@@ -221,6 +220,7 @@ class Artist implements \Stringable
 
         return $this;
     }
+
     #[\Override]
     public function __toString(): string
     {
@@ -238,6 +238,7 @@ class Artist implements \Stringable
         if (!is_null($member)) {
             $member->addArtist($this);
         }
+
         return $this;
     }
 
@@ -253,9 +254,10 @@ class Artist implements \Stringable
      */
     public function getBioByLocale(?string $locale): ?string
     {
-        if ($locale === "fi") {
+        if ('fi' === $locale) {
             return $this->bio ?? $this->bioEn;
         }
+
         return $this->bioEn ?? $this->bio;
     }
 
@@ -301,15 +303,17 @@ class Artist implements \Stringable
 
         return $this;
     }
+
     public function getLinkUrls(): ?string
     {
-        $ret = "";
+        $ret = '';
         foreach ($this->links as $link) {
-            $ret .= '<a href="' . $link["url"] . '">' . $link["title"] . "</a>";
+            $ret .= '<a href="'.$link['url'].'">'.$link['title'].'</a>';
             if (end($this->links) !== $link) {
-                $ret .= " | ";
+                $ret .= ' | ';
             }
         }
+
         return $ret;
     }
 }

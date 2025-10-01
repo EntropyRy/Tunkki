@@ -87,7 +87,6 @@ final class CmsRootPageTest extends FixturesWebTestCase
 
     public function testWrongLocalePatternDoesNotRedirectSilently(): void
     {
-
         // Simulate a Finnish-only request to English root variant without prefix:
         // There is no assumption of redirect from "/" to "/en".
         $this->client->request('GET', '/');

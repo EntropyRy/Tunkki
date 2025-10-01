@@ -71,12 +71,13 @@ class CartItem implements \Stringable
                 'quantity' => $forcedQuantity ?: $this->quantity,
             ];
         }
+
         return null;
     }
 
     #[\Override]
     public function __toString(): string
     {
-        return $this->product instanceof Product ? $this->product->getNameEn() . ' X ' . $this->quantity : 'N/A';
+        return $this->product instanceof Product ? $this->product->getNameEn().' X '.$this->quantity : 'N/A';
     }
 }

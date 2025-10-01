@@ -6,7 +6,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * WhoCanRentCoice
+ * WhoCanRentCoice.
  */
 #[ORM\Table(name: 'WhoCanRentChoice')]
 #[ORM\Entity]
@@ -36,6 +36,7 @@ class WhoCanRentChoice implements \Stringable
     {
         return $this->name;
     }
+
     #[\Override]
     public function __toString(): string
     {

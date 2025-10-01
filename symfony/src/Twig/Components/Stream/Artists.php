@@ -7,9 +7,9 @@ use App\Repository\StreamRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
+use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\UX\LiveComponent\Attribute\LiveProp;
 
 #[AsLiveComponent]
 final class Artists extends AbstractController
@@ -33,7 +33,7 @@ final class Artists extends AbstractController
     public function mount(): void
     {
         $stream = $this->streamRepository->findOneBy(['online' => true], ['id' => 'DESC']);
-        if ($stream !== null) {
+        if (null !== $stream) {
             $this->stream = $stream;
             $this->isOnline = true;
         }
@@ -43,7 +43,7 @@ final class Artists extends AbstractController
     public function onStreamUpdated(): void
     {
         $stream = $this->streamRepository->findOneBy(['online' => true], ['id' => 'DESC']);
-        if ($stream !== null) {
+        if (null !== $stream) {
             $this->stream = $stream;
             $this->isOnline = true;
             $this->hash = $stream->getUpdatedAt()->format('U');

@@ -28,11 +28,11 @@ final class Version20250130201552 extends AbstractMigration
         while ($row = $artistResult->fetchAssociative()) {
             try {
                 $links = @unserialize($row['links']);
-                $jsonLinks = $links !== false ? json_encode($links) : 'null';
+                $jsonLinks = false !== $links ? json_encode($links) : 'null';
 
                 $this->addSql('UPDATE artist SET links = :links WHERE id = :id', [
                     'links' => $jsonLinks,
-                    'id' => $row['id']
+                    'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
                 $this->write(sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
@@ -46,11 +46,11 @@ final class Version20250130201552 extends AbstractMigration
         while ($row = $eventResult->fetchAssociative()) {
             try {
                 $links = @unserialize($row['links']);
-                $jsonLinks = $links !== false ? json_encode($links) : 'null';
+                $jsonLinks = false !== $links ? json_encode($links) : 'null';
 
                 $this->addSql('UPDATE event SET links = :links WHERE id = :id', [
                     'links' => $jsonLinks,
-                    'id' => $row['id']
+                    'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
                 $this->write(sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));
@@ -75,11 +75,11 @@ final class Version20250130201552 extends AbstractMigration
         while ($row = $artistResult->fetchAssociative()) {
             try {
                 $links = json_decode($row['links'], true);
-                $serializedLinks = $links !== null ? serialize($links) : 'N;';
+                $serializedLinks = null !== $links ? serialize($links) : 'N;';
 
                 $this->addSql('UPDATE artist SET links = :links WHERE id = :id', [
                     'links' => $serializedLinks,
-                    'id' => $row['id']
+                    'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
                 $this->write(sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
@@ -93,11 +93,11 @@ final class Version20250130201552 extends AbstractMigration
         while ($row = $eventResult->fetchAssociative()) {
             try {
                 $links = json_decode($row['links'], true);
-                $serializedLinks = $links !== null ? serialize($links) : 'N;';
+                $serializedLinks = null !== $links ? serialize($links) : 'N;';
 
                 $this->addSql('UPDATE event SET links = :links WHERE id = :id', [
                     'links' => $serializedLinks,
-                    'id' => $row['id']
+                    'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
                 $this->write(sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));

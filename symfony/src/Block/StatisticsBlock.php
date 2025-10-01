@@ -2,19 +2,19 @@
 
 namespace App\Block;
 
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Security\Core\Security;
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
-use Sonata\BlockBundle\Block\BlockContextInterface;
-use Sonata\BlockBundle\Meta\Metadata;
-use Sonata\Form\Validator\ErrorElement;
 use App\Entity\User;
-use App\Repository\MemberRepository;
 use App\Repository\BookingRepository;
 use App\Repository\EventRepository;
+use App\Repository\MemberRepository;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
+use Sonata\BlockBundle\Meta\Metadata;
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\Form\Validator\ErrorElement;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
 class StatisticsBlock extends BaseBlockService
@@ -30,31 +30,34 @@ class StatisticsBlock extends BaseBlockService
         $user = $this->security->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
+
         return $this->renderResponse(
             $blockContext->getTemplate(),
             [
-                'block'     => $blockContext->getBlock(),
-                'settings'  => $blockContext->getSettings(),
-                'member'    => $member,
-                'stats'     => $stats
+                'block' => $blockContext->getBlock(),
+                'settings' => $blockContext->getSettings(),
+                'member' => $member,
+                'stats' => $stats,
             ],
             $response
         );
     }
+
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block): void
     {
         $this->buildCreateForm($formMapper, $block);
     }
+
     public function buildCreateForm(FormMapper $formMapper, BlockInterface $block): void
     {
     }
 
     public function __construct(
         Environment $twig,
-        protected \Symfony\Bundle\SecurityBundle\Security $security,
+        protected Security $security,
         protected MemberRepository $memberR,
         protected BookingRepository $bookingR,
-        protected EventRepository $eventR
+        protected EventRepository $eventR,
     ) {
         parent::__construct($twig);
     }
@@ -68,11 +71,12 @@ class StatisticsBlock extends BaseBlockService
             ]
         );
     }
+
     public function getBlockMetadata($code = null): Metadata
     {
         return new Metadata(
             $this->getName(),
-            ($code ?? $this->getName()),
+            $code ?? $this->getName(),
             null,
             'messages',
             [
@@ -80,9 +84,11 @@ class StatisticsBlock extends BaseBlockService
             ]
         );
     }
+
     public function validateBlock(ErrorElement $errorElement, BlockInterface $block): void
     {
     }
+
     public function getName(): string
     {
         return 'Statistics Block';

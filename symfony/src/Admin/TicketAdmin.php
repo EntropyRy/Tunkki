@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
-use App\Entity\Ticket;
 use App\Helper\ReferenceNumber;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
-use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 final class TicketAdmin extends AbstractAdmin
 {
@@ -39,16 +38,15 @@ final class TicketAdmin extends AbstractAdmin
             ->add('referenceNumber')
             ->add('status', ChoiceFilter::class, [
                 'field_type' => ChoiceType::class,
-                'field_options' =>
-                [
+                'field_options' => [
                     'multiple' => true,
                     'choices' => [
                         'available' => 'available',
                         'reserved' => 'reserved',
                         'paid' => 'paid',
-                        'paid_with_bus' => 'paid_with_bus'
-                    ]
-                ]
+                        'paid_with_bus' => 'paid_with_bus',
+                    ],
+                ],
             ])
             ->add('updatedAt');
     }
@@ -75,13 +73,13 @@ final class TicketAdmin extends AbstractAdmin
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
                     'changeOwner' => [
-                        'template' => 'admin/ticket/button_change_owner.html.twig'
+                        'template' => 'admin/ticket/button_change_owner.html.twig',
                     ],
                     'give' => [
-                        'template' => 'admin/ticket/button_give.html.twig'
+                        'template' => 'admin/ticket/button_give.html.twig',
                     ],
                     'sendQrCodeEmail' => [
-                        'template' => 'admin/ticket/button_send_qr_code_email.html.twig'
+                        'template' => 'admin/ticket/button_send_qr_code_email.html.twig',
                     ],
                     'edit' => [],
                 ],
@@ -107,8 +105,8 @@ final class TicketAdmin extends AbstractAdmin
                     'available' => 'available',
                     'reserved' => 'reserved',
                     'paid' => 'paid',
-                    'paid_with_bus' => 'paid_with_bus'
-                ]
+                    'paid_with_bus' => 'paid_with_bus',
+                ],
             ]);
     }
 
@@ -124,25 +122,28 @@ final class TicketAdmin extends AbstractAdmin
             ->add('status')
             ->add('updatedAt');
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
-        $collection->add('give', $this->getRouterIdParameter() . '/give');
-        $collection->add('makePaid', $this->getRouterIdParameter() . '/bought');
-        $collection->add('addBus', $this->getRouterIdParameter() . '/bus');
-        $collection->add('changeOwner', $this->getRouterIdParameter() . '/change');
-        $collection->add('sendQrCodeEmail', $this->getRouterIdParameter() . '/send-qr-code-email');
+        $collection->add('give', $this->getRouterIdParameter().'/give');
+        $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
+        $collection->add('addBus', $this->getRouterIdParameter().'/bus');
+        $collection->add('changeOwner', $this->getRouterIdParameter().'/change');
+        $collection->add('sendQrCodeEmail', $this->getRouterIdParameter().'/send-qr-code-email');
     }
+
     #[\Override]
     public function postPersist($object): void
     {
-        if ($object->getReferenceNumber() == null) {
+        if (null == $object->getReferenceNumber()) {
             $object->setReferenceNumber($this->rn->calculateReferenceNumber($object, 9000, 909));
             $this->update($object);
         }
     }
+
     public function __construct(
         protected ReferenceNumber $rn,
     ) {

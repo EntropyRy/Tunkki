@@ -41,12 +41,12 @@ class LocalizedUrlExtension extends AbstractExtension
     public function getFunctions(): array
     {
         return [
-            new TwigFunction("localized_url", $this->getLocalizedUrl(...)),
+            new TwigFunction('localized_url', $this->getLocalizedUrl(...)),
             new TwigFunction(
-                "localized_url_debug",
+                'localized_url_debug',
                 $this->getLocalizedUrlWithDebug(...),
             ),
-            new TwigFunction("localized_route", $this->getLocalizedRoute(...)),
+            new TwigFunction('localized_route', $this->getLocalizedRoute(...)),
         ];
     }
 
@@ -59,8 +59,9 @@ class LocalizedUrlExtension extends AbstractExtension
      * 3. For regular routes, uses route name transformation
      * 4. Final fallback uses URL path manipulation
      *
-     * @param string $targetLocale The target locale ('fi' or 'en')
-     * @param PageInterface|null $page Optional page object. If provided, will find the localized version of this page.
+     * @param string             $targetLocale The target locale ('fi' or 'en')
+     * @param PageInterface|null $page         Optional page object. If provided, will find the localized version of this page.
+     *
      * @return string The localized URL
      */
     public function getLocalizedUrl(
@@ -69,7 +70,7 @@ class LocalizedUrlExtension extends AbstractExtension
     ): string {
         $request = $this->requestStack->getCurrentRequest();
         if (!$request instanceof Request) {
-            return "/";
+            return '/';
         }
 
         // If an integer id is provided, resolve the page entity
@@ -86,15 +87,15 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         $currentPath = $request->getPathInfo();
-        $currentRoute = $request->attributes->get("_route");
+        $currentRoute = $request->attributes->get('_route');
 
         // Handle root path
-        if ($currentPath === "/" || $currentPath === "/en") {
-            return $targetLocale === "en" ? "/en" : "/";
+        if ('/' === $currentPath || '/en' === $currentPath) {
+            return 'en' === $targetLocale ? '/en' : '/';
         }
 
         // Check if current route is a Sonata Page route (they start with 'page_')
-        if ($currentRoute && str_starts_with((string) $currentRoute, "page_")) {
+        if ($currentRoute && str_starts_with((string) $currentRoute, 'page_')) {
             // Try to find the current page by route name and get its localized version
             $currentPage = $this->findPageByRouteName($currentRoute);
             if ($currentPage instanceof PageInterface) {
@@ -103,8 +104,9 @@ class LocalizedUrlExtension extends AbstractExtension
                     $targetLocale,
                 );
             }
+
             // Fallback for Sonata pages
-            return $targetLocale === "en" ? "/en" : "/";
+            return 'en' === $targetLocale ? '/en' : '/';
         }
 
         // If we have a route, try to get its localized version
@@ -112,17 +114,17 @@ class LocalizedUrlExtension extends AbstractExtension
             // Strip locale suffix if present
             $baseRoute = preg_replace(
                 '/\.(en|fi)$/',
-                "",
+                '',
                 (string) $currentRoute,
             );
-            $targetRoute = $baseRoute . "." . $targetLocale;
+            $targetRoute = $baseRoute.'.'.$targetLocale;
 
             // Get route parameters from the current request
-            $routeParams = $request->attributes->get("_route_params", []);
+            $routeParams = $request->attributes->get('_route_params', []);
 
             try {
                 // Prefer structural base route + _locale generation; fall back to suffixed targetRoute.
-                $baseRoute ??= preg_replace('/\.(en|fi)$/', '', (string)$currentRoute);
+                $baseRoute ??= preg_replace('/\.(en|fi)$/', '', (string) $currentRoute);
                 $generated = null;
 
                 // 1. Attempt base route + _locale (works with SiteAwareRouter alias logic).
@@ -136,26 +138,28 @@ class LocalizedUrlExtension extends AbstractExtension
                 }
 
                 // 2. If base attempt failed, try explicit suffixed route name.
-                if ($generated === null) {
+                if (null === $generated) {
                     $generated = $this->router->generate($targetRoute, $routeParams);
                 }
 
                 return $this->formatUrlForLocale($generated, $targetLocale);
             } catch (\Throwable) {
                 // Fallback: structural transformation of current path
-                $pathWithoutPrefix = str_starts_with($currentPath, "/en")
+                $pathWithoutPrefix = str_starts_with($currentPath, '/en')
                     ? substr($currentPath, 3)
                     : $currentPath;
+
                 return $this->formatUrlForLocale($pathWithoutPrefix, $targetLocale);
             }
         }
 
         // Fallback to default handling
-        $pathWithoutPrefix = str_starts_with($currentPath, "/en")
+        $pathWithoutPrefix = str_starts_with($currentPath, '/en')
             ? substr($currentPath, 3)
             : $currentPath;
-        return $targetLocale === "en"
-            ? "/en" . $pathWithoutPrefix
+
+        return 'en' === $targetLocale
+            ? '/en'.$pathWithoutPrefix
             : $pathWithoutPrefix;
     }
 
@@ -169,8 +173,9 @@ class LocalizedUrlExtension extends AbstractExtension
      * The Menu-based lookup is the primary method as it's more reliable and leverages
      * the existing Menu structure that properly links pages across locales.
      *
-     * @param PageInterface $page The source page object
-     * @param string $targetLocale The target locale ('fi' or 'en')
+     * @param PageInterface $page         The source page object
+     * @param string        $targetLocale The target locale ('fi' or 'en')
+     *
      * @return string The localized URL
      */
     private function getLocalizedUrlFromPage(
@@ -183,12 +188,12 @@ class LocalizedUrlExtension extends AbstractExtension
             $url = $targetPage->getUrl();
             if ($url) {
                 $this->logger?->debug(
-                    "LocalizedUrlExtension: Found page via Menu lookup",
+                    'LocalizedUrlExtension: Found page via Menu lookup',
                     [
-                        "source_page_id" => $this->getPageIdSafely($page),
-                        "target_locale" => $targetLocale,
-                        "target_page_id" => $this->getPageIdSafely($targetPage),
-                        "strategy" => "menu_lookup",
+                        'source_page_id' => $this->getPageIdSafely($page),
+                        'target_locale' => $targetLocale,
+                        'target_page_id' => $this->getPageIdSafely($targetPage),
+                        'strategy' => 'menu_lookup',
                     ],
                 );
 
@@ -202,23 +207,23 @@ class LocalizedUrlExtension extends AbstractExtension
         // Extract the base alias and current locale from technical alias
         // Expected format: _page_alias_services_fi or _page_alias_services_en
         if (
-            $pageAlias &&
-            preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
+            $pageAlias
+            && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
         ) {
             $baseAlias = $matches[1];
-            $targetAlias = $baseAlias . "_" . $targetLocale;
+            $targetAlias = $baseAlias.'_'.$targetLocale;
             // Find the page with the target alias
             $targetPage = $this->findPageByAlias($targetAlias);
             if ($targetPage && $targetPage->getEnabled()) {
                 $url = $targetPage->getUrl();
                 if ($url) {
                     $this->logger?->debug(
-                        "LocalizedUrlExtension: Found page via technical alias",
+                        'LocalizedUrlExtension: Found page via technical alias',
                         [
-                            "source_alias" => $pageAlias,
-                            "target_alias" => $targetAlias,
-                            "target_locale" => $targetLocale,
-                            "strategy" => "technical_alias",
+                            'source_alias' => $pageAlias,
+                            'target_alias' => $targetAlias,
+                            'target_locale' => $targetLocale,
+                            'strategy' => 'technical_alias',
                         ],
                     );
 
@@ -230,21 +235,22 @@ class LocalizedUrlExtension extends AbstractExtension
 
         // Fallback if we can't find the localized page
         $this->logger?->debug(
-            "LocalizedUrlExtension: Using fallback URL generation",
+            'LocalizedUrlExtension: Using fallback URL generation',
             [
-                "source_page_id" => $this->getPageIdSafely($page),
-                "target_locale" => $targetLocale,
-                "strategy" => "fallback",
+                'source_page_id' => $this->getPageIdSafely($page),
+                'target_locale' => $targetLocale,
+                'strategy' => 'fallback',
             ],
         );
 
-        return $targetLocale === "en" ? "/en" : "/";
+        return 'en' === $targetLocale ? '/en' : '/';
     }
 
     /**
      * Finds a Sonata Page by its route name.
      *
      * @param string $routeName The route name to search for
+     *
      * @return PageInterface|null The found page or null if not found
      */
     private function findPageByRouteName(string $routeName): ?PageInterface
@@ -252,9 +258,10 @@ class LocalizedUrlExtension extends AbstractExtension
         $repository = $this->entityManager->getRepository(
             SonataPagePage::class,
         );
+
         return $repository->findOneBy([
-            "routeName" => $routeName,
-            "enabled" => true,
+            'routeName' => $routeName,
+            'enabled' => true,
         ]);
     }
 
@@ -262,6 +269,7 @@ class LocalizedUrlExtension extends AbstractExtension
      * Finds a Sonata Page by its technical alias.
      *
      * @param string $alias The technical alias to search for (e.g., '_page_alias_services_fi')
+     *
      * @return PageInterface|null The found page or null if not found
      */
     private function findPageByAlias(string $alias): ?PageInterface
@@ -269,9 +277,10 @@ class LocalizedUrlExtension extends AbstractExtension
         $repository = $this->entityManager->getRepository(
             SonataPagePage::class,
         );
+
         return $repository->findOneBy([
-            "pageAlias" => $alias,
-            "enabled" => true,
+            'pageAlias' => $alias,
+            'enabled' => true,
         ]);
     }
 
@@ -290,8 +299,9 @@ class LocalizedUrlExtension extends AbstractExtension
      * Note: Uses try-catch to handle SnapshotPageProxy objects which may cause comparison issues
      * during Doctrine's findOneBy operations.
      *
-     * @param PageInterface $page The source page object
-     * @param string $targetLocale The target locale ('fi' or 'en')
+     * @param PageInterface $page         The source page object
+     * @param string        $targetLocale The target locale ('fi' or 'en')
+     *
      * @return PageInterface|null The found page or null if not found
      */
     private function findPageThroughMenu(
@@ -302,19 +312,19 @@ class LocalizedUrlExtension extends AbstractExtension
 
         // 1. Try direct object comparison first (works when $page is a managed SonataPagePage entity)
         try {
-            $menuItem = $menuRepository->findOneBy(["pageFi" => $page]);
-            if ($menuItem === null) {
-                $menuItem = $menuRepository->findOneBy(["pageEn" => $page]);
+            $menuItem = $menuRepository->findOneBy(['pageFi' => $page]);
+            if (null === $menuItem) {
+                $menuItem = $menuRepository->findOneBy(['pageEn' => $page]);
             }
-            if ($menuItem !== null) {
+            if (null !== $menuItem) {
                 return $menuItem->getPageByLang($targetLocale);
             }
         } catch (\Throwable $e) {
             // Ignore and fallback to ID-based resolution
             $this->logger?->debug(
-                "LocalizedUrlExtension: direct menu lookup failed, falling back to ID-based lookup",
+                'LocalizedUrlExtension: direct menu lookup failed, falling back to ID-based lookup',
                 [
-                    "exception" => $e::class,
+                    'exception' => $e::class,
                 ],
             );
         }
@@ -325,36 +335,37 @@ class LocalizedUrlExtension extends AbstractExtension
             try {
                 $pid = (int) $pageIdString;
                 $qb = $menuRepository
-                    ->createQueryBuilder("m")
-                    ->leftJoin("m.pageFi", "pf")
-                    ->leftJoin("m.pageEn", "pe")
-                    ->andWhere("pf.id = :pid OR pe.id = :pid")
-                    ->setParameter("pid", $pid)
+                    ->createQueryBuilder('m')
+                    ->leftJoin('m.pageFi', 'pf')
+                    ->leftJoin('m.pageEn', 'pe')
+                    ->andWhere('pf.id = :pid OR pe.id = :pid')
+                    ->setParameter('pid', $pid)
                     ->setMaxResults(1);
 
                 $menuItem = $qb->getQuery()->getOneOrNullResult();
-                if ($menuItem !== null) {
+                if (null !== $menuItem) {
                     $this->logger?->debug(
-                        "LocalizedUrlExtension: menu item found via ID-based lookup",
+                        'LocalizedUrlExtension: menu item found via ID-based lookup',
                         [
-                            "page_id" => $pid,
-                            "target_locale" => $targetLocale,
+                            'page_id' => $pid,
+                            'target_locale' => $targetLocale,
                         ],
                     );
+
                     return $menuItem->getPageByLang($targetLocale);
                 }
             } catch (\Throwable $e) {
                 $this->logger?->debug(
-                    "LocalizedUrlExtension: ID-based menu lookup failed",
+                    'LocalizedUrlExtension: ID-based menu lookup failed',
                     [
-                        "page_id" => $pageIdString,
-                        "exception" => $e::class,
+                        'page_id' => $pageIdString,
+                        'exception' => $e::class,
                     ],
                 );
             }
         } else {
             $this->logger?->debug(
-                "LocalizedUrlExtension: cannot perform ID-based lookup, unknown page id",
+                'LocalizedUrlExtension: cannot perform ID-based lookup, unknown page id',
             );
         }
 
@@ -365,8 +376,9 @@ class LocalizedUrlExtension extends AbstractExtension
      * Debug version of getLocalizedUrl that returns both URL and strategy information.
      * Useful for debugging which strategy was used to generate the URL.
      *
-     * @param string $targetLocale The target locale ('fi' or 'en')
-     * @param PageInterface|null $page Optional page object
+     * @param string             $targetLocale The target locale ('fi' or 'en')
+     * @param PageInterface|null $page         Optional page object
+     *
      * @return array{url: string, strategy: string, debug_info: array} URL and debug information
      */
     public function getLocalizedUrlWithDebug(
@@ -383,68 +395,70 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         $debugInfo = [
-            "target_locale" => $targetLocale,
-            "input_was_id" => $inputWasId,
-            "has_page_object" => $resolvedPage instanceof PageInterface,
-            "strategies_tried" => [],
+            'target_locale' => $targetLocale,
+            'input_was_id' => $inputWasId,
+            'has_page_object' => $resolvedPage instanceof PageInterface,
+            'strategies_tried' => [],
         ];
 
         if ($resolvedPage instanceof PageInterface) {
             $pageAlias = $resolvedPage->getPageAlias();
-            $debugInfo["page_alias"] = $pageAlias;
-            $debugInfo["source_page_id"] = $this->getPageIdSafely(
+            $debugInfo['page_alias'] = $pageAlias;
+            $debugInfo['source_page_id'] = $this->getPageIdSafely(
                 $resolvedPage,
             );
 
             // Try menu lookup first (primary method)
-            $debugInfo["strategies_tried"][] = "menu_lookup";
+            $debugInfo['strategies_tried'][] = 'menu_lookup';
             $targetPage = $this->findPageThroughMenu(
                 $resolvedPage,
                 $targetLocale,
             );
             if (
-                $targetPage &&
-                $targetPage->getEnabled() &&
-                $targetPage->getUrl()
+                $targetPage
+                && $targetPage->getEnabled()
+                && $targetPage->getUrl()
             ) {
                 $url = $this->formatUrlForLocale(
                     $targetPage->getUrl(),
                     $targetLocale,
                 );
+
                 return [
-                    "url" => $url,
-                    "strategy" => "menu_lookup",
-                    "debug_info" => array_merge($debugInfo, [
-                        "target_page_id" => $this->getPageIdSafely($targetPage),
+                    'url' => $url,
+                    'strategy' => 'menu_lookup',
+                    'debug_info' => array_merge($debugInfo, [
+                        'target_page_id' => $this->getPageIdSafely($targetPage),
                     ]),
                 ];
             }
 
             // Try technical alias as fallback
             if (
-                $pageAlias &&
-                preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
+                $pageAlias
+                && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
             ) {
-                $debugInfo["strategies_tried"][] = "technical_alias";
+                $debugInfo['strategies_tried'][] = 'technical_alias';
                 $baseAlias = $matches[1];
-                $targetAlias = $baseAlias . "_" . $targetLocale;
+                $targetAlias = $baseAlias.'_'.$targetLocale;
                 $targetPage = $this->findPageByAlias($targetAlias);
 
                 if (
-                    $targetPage &&
-                    $targetPage->getEnabled() &&
-                    $targetPage->getUrl()
+                    $targetPage
+                    && $targetPage->getEnabled()
+                    && $targetPage->getUrl()
                 ) {
                     $url = $this->formatUrlForLocale(
                         $targetPage->getUrl(),
                         $targetLocale,
                     );
+
                     return [
-                        "url" => $url,
-                        "strategy" => "technical_alias",
-                        "debug_info" => array_merge($debugInfo, [
-                            "target_alias" => $targetAlias,
-                            "target_page_id" => $this->getPageIdSafely(
+                        'url' => $url,
+                        'strategy' => 'technical_alias',
+                        'debug_info' => array_merge($debugInfo, [
+                            'target_alias' => $targetAlias,
+                            'target_page_id' => $this->getPageIdSafely(
                                 $targetPage,
                             ),
                         ]),
@@ -454,21 +468,22 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         // Fallback to regular URL generation (will resolve id again but cheap)
-        $debugInfo["strategies_tried"][] = "fallback";
+        $debugInfo['strategies_tried'][] = 'fallback';
         $url = $this->getLocalizedUrl($targetLocale, $resolvedPage);
 
         return [
-            "url" => $url,
-            "strategy" => "fallback",
-            "debug_info" => $debugInfo,
+            'url' => $url,
+            'strategy' => 'fallback',
+            'debug_info' => $debugInfo,
         ];
     }
 
     /**
      * Formats a URL according to locale prefix requirements.
      *
-     * @param string $url The base URL
+     * @param string $url          The base URL
      * @param string $targetLocale The target locale
+     *
      * @return string The formatted URL
      */
     private function formatUrlForLocale(
@@ -477,33 +492,34 @@ class LocalizedUrlExtension extends AbstractExtension
     ): string {
         // Absolute URL guard: if already fully qualified (http/https),
         // skip locale prefix manipulation (only normalize trailing slash).
-        if (preg_match('#^https?://#i', $url) === 1) {
-            if ($url !== '/' && str_ends_with($url, '/')) {
+        if (1 === preg_match('#^https?://#i', $url)) {
+            if ('/' !== $url && str_ends_with($url, '/')) {
                 $url = rtrim($url, '/');
             }
+
             return $url;
         }
 
         // Normalize trailing slash (except for root)
-        if ($url !== '/' && str_ends_with($url, '/')) {
+        if ('/' !== $url && str_ends_with($url, '/')) {
             $url = rtrim($url, '/');
         }
 
-        if ($targetLocale === 'en') {
-            if ($url === '/') {
+        if ('en' === $targetLocale) {
+            if ('/' === $url) {
                 return '/en';
             }
             if (!str_starts_with($url, '/en')) {
-                $url = '/en' . $url;
+                $url = '/en'.$url;
             }
-        } elseif ($url === '/en') {
+        } elseif ('/en' === $url) {
             // fi
             $url = '/';
         } elseif (str_starts_with($url, '/en/')) {
             $url = substr($url, 3) ?: '/';
         }
 
-        if ($url === '') {
+        if ('' === $url) {
             $url = '/';
         }
 
@@ -514,24 +530,27 @@ class LocalizedUrlExtension extends AbstractExtension
      * Safely gets the page ID as a string, handling proxy objects that may not have getId().
      *
      * @param PageInterface $page The page object
+     *
      * @return string The page ID as string or 'unknown' if not available
      */
     private function getPageIdSafely(PageInterface $page): string
     {
         try {
             $id = $page->getId();
-            return $id !== null ? (string) $id : "unknown";
+
+            return null !== $id ? (string) $id : 'unknown';
         } catch (\Throwable) {
-            return "unknown";
+            return 'unknown';
         }
     }
 
     /**
      * Generate a localized URL based on a specified route and parameters.
      *
-     * @param string $route The route name without locale suffix
+     * @param string $route        The route name without locale suffix
      * @param string $targetLocale The target locale (e.g., 'en', 'fi')
-     * @param array $parameters The route parameters
+     * @param array  $parameters   The route parameters
+     *
      * @return string The generated URL
      */
     public function getLocalizedRoute(
@@ -540,8 +559,8 @@ class LocalizedUrlExtension extends AbstractExtension
         array $parameters = [],
     ): string {
         // Strip any existing locale suffix if present
-        $baseRoute = preg_replace('/\.(en|fi)$/', "", $route);
-        $targetRoute = $baseRoute . "." . $targetLocale;
+        $baseRoute = preg_replace('/\.(en|fi)$/', '', $route);
+        $targetRoute = $baseRoute.'.'.$targetLocale;
 
         try {
             // Prefer base route + forced _locale first
@@ -555,7 +574,7 @@ class LocalizedUrlExtension extends AbstractExtension
                 // ignore and try suffixed
             }
 
-            if ($generated === null) {
+            if (null === $generated) {
                 $generated = $this->router->generate($targetRoute, $parameters);
             }
 

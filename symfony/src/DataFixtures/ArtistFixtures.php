@@ -9,8 +9,8 @@ use App\Entity\Member;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Persistence\ObjectManager;
 
 /**
  * Provides a dedicated Artist entity linked to an existing Member created by UserFixtures.
@@ -58,12 +58,13 @@ final class ArtistFixtures extends Fixture implements DependentFixtureInterface
             break;
         }
 
-        if ($existingArtist !== null) {
+        if (null !== $existingArtist) {
             $this->addReference(self::ARTIST_REFERENCE, $existingArtist);
             $picture = $existingArtist->getPicture();
             if ($picture instanceof SonataMediaMedia) {
                 $this->addReference(self::ARTIST_MEDIA_REFERENCE, $picture);
             }
+
             return;
         }
 

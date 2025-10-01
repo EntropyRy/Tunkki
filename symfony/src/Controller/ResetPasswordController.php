@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use App\Form\ChangePasswordFormType;
 use App\Form\ResetPasswordRequestFormType;
 use App\Repository\MemberRepository;
@@ -14,12 +13,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
+use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route(path: '/reset-password')]
 class ResetPasswordController extends AbstractController
@@ -29,7 +29,7 @@ class ResetPasswordController extends AbstractController
     public function __construct(
         private readonly ResetPasswordHelperInterface $resetPasswordHelper,
         private readonly EntityManagerInterface $em,
-        private readonly MemberRepository $repo
+        private readonly MemberRepository $repo,
     ) {
     }
 
@@ -68,7 +68,7 @@ class ResetPasswordController extends AbstractController
 
         return $this->render('reset_password/check_email.html.twig', [
             'tokenLifetime' => $this->resetPasswordHelper->getTokenLifetime(),
-            'resetToken' => $resetToken
+            'resetToken' => $resetToken,
         ]);
     }
 
@@ -80,7 +80,7 @@ class ResetPasswordController extends AbstractController
         Request $request,
         TranslatorInterface $trans,
         UserPasswordHasherInterface $passwordHasher,
-        ?string $token = null
+        ?string $token = null,
     ): Response {
         if ($token) {
             // We store the token in session and remove it from the URL, to avoid the URL being
@@ -170,6 +170,7 @@ class ResetPasswordController extends AbstractController
 
         $mailer->send($email);
         $this->setTokenObjectInSession($resetToken);
+
         return $this->redirectToRoute('app_check_email');
     }
 }

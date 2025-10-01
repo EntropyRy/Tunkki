@@ -2,7 +2,6 @@
 
 namespace App\Twig\Components\Stream;
 
-use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use App\Helper\SSH;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
@@ -26,5 +25,4 @@ final class Control
     {
         return $this->streamStatus;
     }
-
 }

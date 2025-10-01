@@ -2,28 +2,26 @@
 
 namespace App\Admin;
 
+use App\Entity\Sonata\SonataClassificationCategory as Category;
+use App\Entity\User;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\AdminBundle\Route\RouteCollectionInterface;
-use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
-use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
-use App\Entity\Sonata\SonataClassificationCategory as Category;
-use App\Entity\User;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-
-use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
-use Sonata\ClassificationBundle\Admin\Filter\CategoryFilter;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Sonata\Form\Type\DateTimePickerType;
-use Sonata\Form\Type\DatePickerType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\ClassificationBundle\Admin\Filter\CategoryFilter;
+use Sonata\ClassificationBundle\Form\Type\CategorySelectorType;
+use Sonata\ClassificationBundle\Model\CategoryManagerInterface;
+use Sonata\Form\Type\DatePickerType;
+use Sonata\Form\Type\DateTimePickerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ItemAdmin extends AbstractAdmin
@@ -37,7 +35,7 @@ class ItemAdmin extends AbstractAdmin
     #[\Override]
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
-        //$currentContext = $this->cm->getRootCategoriesForContext($context);
+        // $currentContext = $this->cm->getRootCategoriesForContext($context);
         $datagridMapper
             ->add('name')
             ->add('manufacturer')
@@ -54,8 +52,8 @@ class ItemAdmin extends AbstractAdmin
             ->add('cannotBeRented')
             ->add('forSale')
             ->add('category', CategoryFilter::class, [
-		    //'context' => $context,
-	    ]);
+                // 'context' => $context,
+            ]);
     }
 
     #[\Override]
@@ -76,8 +74,8 @@ class ItemAdmin extends AbstractAdmin
                     'clone' => ['template' => 'admin/crud/list__action_clone.html.twig'],
                     'show' => [],
                     'edit' => [],
-                    'delete' => []
-                ]
+                    'delete' => [],
+                ],
             ]);
     }
 
@@ -100,14 +98,14 @@ class ItemAdmin extends AbstractAdmin
             ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
             ->add('commission', DatePickerType::class, [
                 'required' => false,
-                'format' => 'd.M.y'
+                'format' => 'd.M.y',
             ])
             ->add('purchasePrice')
             ->add('tags', ModelAutocompleteType::class, [
                 'property' => 'name',
                 'multiple' => true,
                 'required' => false,
-                'minimum_input_length' => 2
+                'minimum_input_length' => 2,
             ])
             ->add('category', CategorySelectorType::class, [
                 'class' => $categoryAdmin->getClass(),
@@ -116,14 +114,14 @@ class ItemAdmin extends AbstractAdmin
                 'context' => $currentContext,
                 'model_manager' => $categoryAdmin->getModelManager(),
                 'category' => new Category(),
-                'btn_add' => false
+                'btn_add' => false,
             ])
             ->end()
             ->with('Rent Information', ['class' => 'col-md-6'])
             ->add('whoCanRent', null, [
                 'multiple' => true,
                 'expanded' => true,
-                'help' => 'Select all fitting groups!'
+                'help' => 'Select all fitting groups!',
             ])
             ->add('rent', null, ['label' => 'Rental price (€)'])
             ->add('rentNotice', TextareaType::class, ['required' => false, 'label' => 'Rental Notice'])
@@ -175,6 +173,7 @@ class ItemAdmin extends AbstractAdmin
             ->add('creator')
             ->add('modifier');
     }
+
     #[\Override]
     protected function configureTabMenu(MenuItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
     {
@@ -193,6 +192,7 @@ class ItemAdmin extends AbstractAdmin
             $menu->addChild('Files', ['uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', ['id' => $id])]);
         }
     }
+
     #[\Override]
     public function prePersist($Item): void
     {
@@ -200,14 +200,16 @@ class ItemAdmin extends AbstractAdmin
         $Item->setModifier($user);
         $Item->setCreator($user);
     }
+
     #[\Override]
     public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
-        $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '> created by ' . $user;
+        $text = 'ITEM: <'.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
+
     #[\Override]
     public function preUpdate($Item): void
     {
@@ -215,39 +217,44 @@ class ItemAdmin extends AbstractAdmin
         assert($user instanceof User);
         $Item->setModifier($user);
         $original = $this->em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '>:';
+        $text = 'ITEM: <'.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>:';
         if ($original['name'] != $Item->getName()) {
-            $text .= ' renamed from ' . $original['name'];
-            $text .= ' by ' . $user;
+            $text .= ' renamed from '.$original['name'];
+            $text .= ' by '.$user;
             $this->mm->sendToMattermost($text, 'vuokraus');
         }
     }
+
     #[\Override]
     public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
-        $text = '#### ITEM: ' . $Item->getName() . ' deleted by ' . $user;
+        $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
+
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
-        $collection->add('clone', $this->getRouterIdParameter() . '/clone');
+        $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
+
     #[\Override]
     public function configureBatchActions(array $actions): array
     {
         if ($this->hasRoute('edit') && $this->hasAccess('edit')) {
             $actions['batchEdit'] = ['ask_confirmation' => true];
         }
+
         return $actions;
     }
+
     public function __construct(
         protected MattermostNotifierService $mm,
         protected TokenStorageInterface $ts,
         protected CategoryManagerInterface $cm,
-        protected EntityManagerInterface $em
+        protected EntityManagerInterface $em,
     ) {
     }
 }

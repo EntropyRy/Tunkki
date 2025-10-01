@@ -8,14 +8,15 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
+use Sonata\AdminBundle\Show\ShowMapper;
 
 final class MenuAdmin extends AbstractAdmin
 {
     protected array $accessMapping = [
         'tree' => 'LIST',
     ];
+
     #[\Override]
     public function configureRoutes(RouteCollectionInterface $collection): void
     {

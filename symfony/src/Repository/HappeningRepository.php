@@ -53,15 +53,16 @@ class HappeningRepository extends ServiceEntityRepository
             ->getResult();
         $key = array_search($happening, $array);
         $lenght = count($array);
-        if ($key == 0 && $lenght <= 1) {
+        if (0 == $key && $lenght <= 1) {
             return [null, null];
         }
-        if ($key == 0 && $lenght >= 2) {
+        if (0 == $key && $lenght >= 2) {
             return [null, $array[$key + 1]];
         }
         if ($key + 1 >= $lenght) {
             return [$array[$key - 1], null];
         }
+
         return [$array[$key - 1], $array[$key + 1]];
     }
 

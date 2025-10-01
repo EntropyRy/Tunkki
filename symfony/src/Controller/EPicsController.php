@@ -2,10 +2,10 @@
 
 namespace App\Controller;
 
+use App\Helper\ePics;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Helper\ePics;
 
 class EPicsController extends AbstractController
 {

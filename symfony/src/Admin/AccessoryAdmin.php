@@ -26,7 +26,7 @@ class AccessoryAdmin extends AbstractAdmin
             ->add('name')
             ->add('count')
             ->add(ListMapper::NAME_ACTIONS, null, [
-            'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
+                'actions' => ['show' => [], 'edit' => [], 'delete' => []]])
         ;
     }
 

@@ -19,7 +19,7 @@ class StreamArtistRepository extends ServiceEntityRepository
     }
 
     /**
-     * Find active stream artists for a particular stream
+     * Find active stream artists for a particular stream.
      */
     public function findActiveArtistsInStream(Stream $stream): mixed
     {
@@ -33,7 +33,7 @@ class StreamArtistRepository extends ServiceEntityRepository
 
     /**
      * Find active artist in stream for a specific member
-     * Since a member can have multiple artists, we need to check all of them
+     * Since a member can have multiple artists, we need to check all of them.
      */
     public function findActiveMemberArtistInStream(Member $member, Stream $stream)
     {
@@ -43,7 +43,7 @@ class StreamArtistRepository extends ServiceEntityRepository
             $artistIds[] = $artist->getId();
         }
 
-        if ($artistIds === []) {
+        if ([] === $artistIds) {
             return null;
         }
 

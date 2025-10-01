@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Sonata\AdminBundle\Controller\CRUDController as Controller;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Item;
+use Sonata\AdminBundle\Controller\CRUDController as Controller;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ItemAdminController extends Controller
 {
@@ -15,12 +15,12 @@ class ItemAdminController extends Controller
     {
         $object = $this->admin->getSubject();
 
-        if ($object == null) {
+        if (null == $object) {
             throw new NotFoundHttpException('unable to find the object');
         }
         $clonedObject = new Item();
-        //$clonedObject = clone $object;
-        $clonedObject->setName($object->getName() . ' (Clone)');
+        // $clonedObject = clone $object;
+        $clonedObject->setName($object->getName().' (Clone)');
         $clonedObject->setManufacturer($object->getManufacturer());
         $clonedObject->setModel($object->getModel());
         $clonedObject->setPlaceinstorage($object->getPlaceinstorage());
@@ -42,7 +42,7 @@ class ItemAdminController extends Controller
 
         $this->addFlash('sonata_flash_success', 'Cloned successfully');
 
-        //return new RedirectResponse($this->admin->generateUrl('list'));
+        // return new RedirectResponse($this->admin->generateUrl('list'));
 
         // if you have a filtered list and want to keep your filters after the redirect
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
@@ -55,12 +55,11 @@ class ItemAdminController extends Controller
         }
 
         if (count($selectedIds) < 2) {
-            return "not enough selected";
+            return 'not enough selected';
         } else {
             return true;
         }
     }
-
 
     public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery): RedirectResponse
     {
@@ -93,7 +92,7 @@ class ItemAdminController extends Controller
             );
         }
 
-        $this->addFlash('sonata_flash_success', 'Batch edit success! who can rent, description, rent and rent notice copied! from:' . $sourceModel->getName());
+        $this->addFlash('sonata_flash_success', 'Batch edit success! who can rent, description, rent and rent notice copied! from:'.$sourceModel->getName());
 
         return new RedirectResponse(
             $this->admin->generateUrl('list', ['filter' => $this->admin->getFilterParameters()])

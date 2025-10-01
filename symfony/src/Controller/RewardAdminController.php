@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Reward;
 use Doctrine\ORM\EntityManagerInterface;
+use Sonata\AdminBundle\Controller\CRUDController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
@@ -15,19 +15,22 @@ final class RewardAdminController extends CRUDController
 {
     public function __construct(
         private readonly TokenStorageInterface $usageTrackingTokenStorage,
-        private readonly EntityManagerInterface $em
+        private readonly EntityManagerInterface $em,
     ) {
     }
+
     public function makepaidAction(): RedirectResponse
     {
         $reward = $this->admin->getSubject();
         $reward->setPaid(true);
-        $reward->setPaidDate(new \Datetime());
+        $reward->setPaidDate(new \DateTime());
         $handler = $this->usageTrackingTokenStorage->getToken()->getUser();
         $reward->setPaymentHandledBy($handler);
         $this->admin->update($reward);
+
         return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
     }
+
     public function prepareEvenoutAction(): Response
     {
         $total = [];
@@ -40,12 +43,13 @@ final class RewardAdminController extends CRUDController
             $total['pool'] += $reward->getReward();
             $total['sum'] += $reward->getWeight();
         }
-        $data['button'] = '<a class="btn btn-primary" role="button" href="' . $link . '">EVENOUT</a>';
+        $data['button'] = '<a class="btn btn-primary" role="button" href="'.$link.'">EVENOUT</a>';
         $data['rewards'] = $rewards;
         $data['total'] = $total;
 
         return $this->render('admin/reward/prepare.html.twig', $data);
     }
+
     public function EvenoutAction(): RedirectResponse
     {
         $total = [];
