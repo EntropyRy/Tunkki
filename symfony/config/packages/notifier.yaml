@@ -1,6 +1,6 @@
 framework:
     notifier:
-        message_bus: true  # Enable MessageBus integration for async/sync message handling
+        message_bus: 'messenger.default_bus'  # Use default message bus for message handling
         chatter_transports:
             mattermost: '%env(MATTERMOST_DSN)%'
         #    slack: '%env(SLACK_DSN)%'
