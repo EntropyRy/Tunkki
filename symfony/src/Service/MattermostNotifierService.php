@@ -21,7 +21,6 @@ class MattermostNotifierService
 
         // Configure Mattermost-specific options
         $options = (new MattermostOptions())
-            ->username($this->params->get('mm_tunkki_botname'))
             ->iconUrl($this->params->get('mm_tunkki_img'));
 
         // Override channel if specified (otherwise uses DSN default)
