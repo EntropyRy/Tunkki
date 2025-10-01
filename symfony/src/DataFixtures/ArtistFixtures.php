@@ -20,6 +20,10 @@ use Doctrine\Common\DataFixtures\DependentFixtureInterface;
  *  - Idempotent: reuse an existing artist if present.
  *  - Register media & artist references for downstream fixtures/tests.
  *  - Enforce uppercase 'DJ' as requested.
+ *
+ * Static analysis cleanups:
+ *  - Removed always-true instanceof inside iteration (collection already typed).
+ *  - Removed redundant negated hasReference() check (earlier guard assures it's false).
  */
 final class ArtistFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -28,12 +32,11 @@ final class ArtistFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        // Already created?
+        // Abort if reference already registered (idempotent run).
         if ($this->hasReference(self::ARTIST_REFERENCE, Artist::class)) {
             return;
         }
 
-        // Resolve base user (reference first, fallback to repository).
         /** @var User|null $user */
         $user = $this->hasReference(UserFixtures::USER_REFERENCE, User::class)
             ? $this->getReference(UserFixtures::USER_REFERENCE, User::class)
@@ -48,28 +51,23 @@ final class ArtistFixtures extends Fixture implements DependentFixtureInterface
             return;
         }
 
-        // Reuse existing artist if present.
+        // Attempt to reuse an existing artist (first one found).
         $existingArtist = null;
-        $artists = $member->getArtist(); // Collection<Artist>
-        foreach ($artists as $artistCandidate) {
-            if ($artistCandidate instanceof Artist) {
-                $existingArtist = $artistCandidate;
-                break;
-            }
+        foreach ($member->getArtist() as $artistCandidate) {
+            $existingArtist = $artistCandidate; // Collection already guarantees type Artist
+            break;
         }
 
-        if ($existingArtist instanceof Artist) {
-            if (!$this->hasReference(self::ARTIST_REFERENCE, Artist::class)) {
-                $this->addReference(self::ARTIST_REFERENCE, $existingArtist);
-            }
+        if ($existingArtist !== null) {
+            $this->addReference(self::ARTIST_REFERENCE, $existingArtist);
             $picture = $existingArtist->getPicture();
-            if ($picture instanceof SonataMediaMedia && !$this->hasReference(self::ARTIST_MEDIA_REFERENCE, SonataMediaMedia::class)) {
+            if ($picture instanceof SonataMediaMedia) {
                 $this->addReference(self::ARTIST_MEDIA_REFERENCE, $picture);
             }
             return;
         }
 
-        // Create media.
+        // Create media (simple in-memory object, minimal required fields).
         $media = new SonataMediaMedia();
         $media->setProviderName('sonata.media.provider.image');
         $media->setContext('artist');

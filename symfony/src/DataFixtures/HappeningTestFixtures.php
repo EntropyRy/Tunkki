@@ -23,6 +23,11 @@ use Doctrine\Persistence\ObjectManager;
  *  - EVENT_PRIVATE_REFERENCE
  *  - HAPPENING_PUBLIC_REFERENCE
  *  - HAPPENING_PRIVATE_REFERENCE
+ *
+ * Static analysis adjustments:
+ *  - Removed redundant method_exists checks (method is defined on Event).
+ *  - Removed incorrect @var User|null docblock causing native type mismatch.
+ *
  */
 final class HappeningTestFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -33,54 +38,44 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
 
     public function load(ObjectManager $manager): void
     {
-        /** @var User|null $user */
+        /** @var User $user */
         $user = $this->getReference(UserFixtures::USER_REFERENCE, User::class);
-        $ownerMember = $user instanceof User ? $user->getMember() : null;
+
+        $ownerMember = $user->getMember();
         if (!$ownerMember instanceof Member) {
-            // Fail-safe: do not proceed without a valid owner
             return;
         }
 
         // 1. Public Event (allows member happenings)
-        $eventPublic = (new Event());
-        $eventPublic
+        $eventPublic = (new Event())
             ->setName('Happening Enabled Event (EN)')
             ->setNimi('Tapahtuma jossa happeningit (FI)')
             ->setType('party')
             ->setEventDate(new \DateTimeImmutable('+5 days'))
             ->setPublishDate(new \DateTimeImmutable('-1 day'))
             ->setUrl('happening-event')
-            ->setPublished(true);
-
-        // Graceful: only call allowMembersToCreateHappenings if it exists
-        if (method_exists($eventPublic, 'setAllowMembersToCreateHappenings')) {
-            $eventPublic->setAllowMembersToCreateHappenings(true);
-        }
+            ->setPublished(true)
+            ->setAllowMembersToCreateHappenings(true);
 
         $manager->persist($eventPublic);
         $this->addReference(self::EVENT_PUBLIC_REFERENCE, $eventPublic);
 
-        // 2. Private Event
-        $eventPrivate = (new Event());
-        $eventPrivate
+        // 2. Private Event (members cannot create happenings)
+        $eventPrivate = (new Event())
             ->setName('Secret Event (EN)')
             ->setNimi('Salainen tapahtuma (FI)')
             ->setType('internal')
             ->setEventDate(new \DateTimeImmutable('+10 days'))
             ->setPublishDate(new \DateTimeImmutable('-1 day'))
             ->setUrl('secret-event')
-            ->setPublished(true);
-
-        if (method_exists($eventPrivate, 'setAllowMembersToCreateHappenings')) {
-            $eventPrivate->setAllowMembersToCreateHappenings(false);
-        }
+            ->setPublished(true)
+            ->setAllowMembersToCreateHappenings(false);
 
         $manager->persist($eventPrivate);
         $this->addReference(self::EVENT_PRIVATE_REFERENCE, $eventPrivate);
 
         // 3. Public Happening (released)
-        $publicHappening = new Happening();
-        $publicHappening
+        $publicHappening = (new Happening())
             ->setEvent($eventPublic)
             ->addOwner($ownerMember)
             ->setNameFi('Julkinen Happeninki')
@@ -102,8 +97,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         $this->addReference(self::HAPPENING_PUBLIC_REFERENCE, $publicHappening);
 
         // 4. Private (unreleased) Happening
-        $privateHappening = new Happening();
-        $privateHappening
+        $privateHappening = (new Happening())
             ->setEvent($eventPrivate)
             ->addOwner($ownerMember)
             ->setNameFi('Salainen Happeninki')
@@ -126,13 +120,8 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
         $manager->flush();
     }
 
-    /**
-     * This fixture depends on base user/member fixtures.
-     */
     public function getDependencies(): array
     {
-        return [
-            UserFixtures::class,
-        ];
+        return [UserFixtures::class];
     }
 }
