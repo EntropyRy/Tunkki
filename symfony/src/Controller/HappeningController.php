@@ -8,7 +8,7 @@ use App\Entity\HappeningBooking;
 use App\Entity\User;
 use App\Form\HappeningBookingType;
 use App\Form\HappeningType;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Repository\HappeningBookingRepository;
 use App\Repository\HappeningRepository;
 use App\Repository\TicketRepository;
@@ -42,7 +42,7 @@ class HappeningController extends AbstractController
         Event $event,
         HappeningRepository $hr,
         SluggerInterface $slugger,
-        Mattermost $mm
+        MattermostNotifierService $mm
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -69,7 +69,7 @@ class HappeningController extends AbstractController
             } else {
                 $hr->save($happening, true);
                 $text = '** New Happening: ** ' . $happening->getNameEn() .  ' for ' . $event->getName();
-                $mm->SendToMattermost($text, 'yhdistys');
+                $mm->sendToMattermost($text, 'yhdistys');
                 $this->addFlash('success', 'happening.created');
                 return $this->redirectToRoute('entropy_event_happening_show', [
                     'slug' => $event->getUrl(),

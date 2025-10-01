@@ -3,7 +3,7 @@
 namespace App\Admin;
 
 use App\Helper\ReferenceNumber;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -367,7 +367,7 @@ class BookingAdmin extends AbstractAdmin
             UrlGeneratorInterface::ABSOLUTE_URL
         ) . '|' . $booking->getName() . '> on ' .
             $booking->getBookingDate()->format('d.m.Y') . ' created by ' . $user;
-        $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->mm->sendToMattermost($text, 'vuokraus');
         $this->update($booking);
         //$this->sendNotificationMail($booking);
     }
@@ -422,7 +422,7 @@ class BookingAdmin extends AbstractAdmin
         $collection->remove('delete');
     }
     public function __construct(
-        protected Mattermost $mm,
+        protected MattermostNotifierService $mm,
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
         protected CategoryManagerInterface $cm,

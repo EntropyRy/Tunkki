@@ -7,7 +7,7 @@ use App\Entity\Product;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\Ticket;
 use App\Helper\AppStripeClient;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Helper\ReferenceNumber;
 use App\Helper\Qr;
 use App\Repository\CheckoutRepository;
@@ -36,7 +36,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly EmailRepository $emailRepo,
         private readonly ReferenceNumber $rn,
         private readonly MailerInterface $mailer,
-        private readonly Mattermost $mm,
+        private readonly MattermostNotifierService $mm,
         private readonly Qr $qrGenerator
     ) {
     }
@@ -166,7 +166,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
                         $sold = $cartItem->getQuantity() > 1 ? 'Sold ' . $cartItem->getQuantity() . ' tickets.' : 'Sold 1 ticket.';
-                        $this->mm->SendToMattermost('[' . $product->getNameEn() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
+                        $this->mm->sendToMattermost('[' . $product->getNameEn() . '] '. $sold .' Total:' . $product->getSold() .'/'.$product->getQuantity(), 'yhdistys');
                     }
                 }
             }

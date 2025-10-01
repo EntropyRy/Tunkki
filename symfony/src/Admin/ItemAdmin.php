@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -206,7 +206,7 @@ class ItemAdmin extends AbstractAdmin
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
         $text = 'ITEM: <' . $this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL) . '|' . $Item->getName() . '> created by ' . $user;
-        $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->mm->sendToMattermost($text, 'vuokraus');
     }
     #[\Override]
     public function preUpdate($Item): void
@@ -219,7 +219,7 @@ class ItemAdmin extends AbstractAdmin
         if ($original['name'] != $Item->getName()) {
             $text .= ' renamed from ' . $original['name'];
             $text .= ' by ' . $user;
-            $this->mm->SendToMattermost($text, 'vuokraus');
+            $this->mm->sendToMattermost($text, 'vuokraus');
         }
     }
     #[\Override]
@@ -228,7 +228,7 @@ class ItemAdmin extends AbstractAdmin
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
         $text = '#### ITEM: ' . $Item->getName() . ' deleted by ' . $user;
-        $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->mm->sendToMattermost($text, 'vuokraus');
     }
     #[\Override]
     protected function configureRoutes(RouteCollectionInterface $collection): void
@@ -244,7 +244,7 @@ class ItemAdmin extends AbstractAdmin
         return $actions;
     }
     public function __construct(
-        protected Mattermost $mm,
+        protected MattermostNotifierService $mm,
         protected TokenStorageInterface $ts,
         protected CategoryManagerInterface $cm,
         protected EntityManagerInterface $em

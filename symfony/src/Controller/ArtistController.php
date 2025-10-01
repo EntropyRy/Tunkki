@@ -7,7 +7,7 @@ namespace App\Controller;
 use App\Entity\Artist;
 use App\Entity\User;
 use App\Form\ArtistType;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,7 +48,7 @@ class ArtistController extends AbstractController
     public function create(
         Request $request,
         FormFactoryInterface $formF,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         EntityManagerInterface $em
     ): RedirectResponse|Response {
         $user = $this->getUser();
@@ -66,7 +66,7 @@ class ArtistController extends AbstractController
                 $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
                 $url_en = $this->generateUrl('entropy_public_artist.en', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
                 $text = 'New artist! type: ' . $artist->getType() . ', name: ' . $artist->getName() . '; **LINKS**: [FI](' . $url_fi . '), [EN](' . $url_en . ')';
-                $mm->SendToMattermost($text, 'yhdistys');
+                $mm->sendToMattermost($text, 'yhdistys');
                 $referer = $request->getSession()->get('referer');
                 if ($referer) {
                     $request->getSession()->remove('referer');

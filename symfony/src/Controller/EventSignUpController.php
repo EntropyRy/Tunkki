@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Repository\NakkiBookingRepository;
 use App\Entity\User;
 use App\Entity\Event;
@@ -39,7 +39,7 @@ class EventSignUpController extends Controller
             MapEntity(expr: "repository.findEventBySlugAndYear(slug,year)"),
         ]
         Event $event,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         NakkiBooking $booking,
         NakkiBookingRepository $NakkiBookingR,
         EntityManagerInterface $em,
@@ -60,7 +60,7 @@ class EventSignUpController extends Controller
                 "** (" .
                 $count .
                 ")";
-            $mm->SendToMattermost($text, "nakkikone");
+            $mm->sendToMattermost($text, "nakkikone");
             $this->addFlash("success", "Nakki cancelled");
         }
         return $this->redirect($request->headers->get("referer"));
@@ -79,7 +79,7 @@ class EventSignUpController extends Controller
             MapEntity(expr: "repository.findEventBySlugAndYear(slug,year)"),
         ]
         Event $event,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         NakkiBooking $booking,
         NakkiBookingRepository $NakkiBookingR,
         EntityManagerInterface $em,
@@ -126,7 +126,7 @@ class EventSignUpController extends Controller
                 $count = $NakkiBookingR->findEventNakkiCount($booking, $event);
                 $text = $text =
                     "**Nakki reservation** " . $booking . " (" . $count . ")";
-                $mm->SendToMattermost($text, "nakkikone");
+                $mm->sendToMattermost($text, "nakkikone");
                 $this->addFlash("success", "Nakki reserved");
             } else {
                 $this->addFlash(

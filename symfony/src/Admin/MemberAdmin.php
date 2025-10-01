@@ -15,7 +15,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DateRangeType;
 use Sonata\Form\Type\DatePickerType;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 
 final class MemberAdmin extends AbstractAdmin
 {
@@ -261,10 +261,10 @@ final class MemberAdmin extends AbstractAdmin
     public function postRemove($member): void
     {
         $text = "**Member deleted: " . $member . "**";
-        $this->mm->SendToMattermost($text, "yhdistys");
+        $this->mm->sendToMattermost($text, "yhdistys");
     }
     public function __construct(
-        protected Mattermost $mm,
+        protected MattermostNotifierService $mm,
         protected EntityManagerInterface $em,
     ) {}
 }

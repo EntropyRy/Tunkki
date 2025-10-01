@@ -2,7 +2,7 @@
 
 namespace App\Admin;
 
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -137,7 +137,7 @@ class StatusEventAdmin extends AbstractAdmin
     {
         $user = $Event->getCreator();
         $text = $this->getMMtext($Event, $user);
-        $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->mm->sendToMattermost($text, 'vuokraus');
     }
     #[\Override]
     public function preUpdate($Event): void
@@ -150,7 +150,7 @@ class StatusEventAdmin extends AbstractAdmin
     {
         $user = $Event->getModifier();
         $text = $this->getMMtext($Event, $user);
-        $this->mm->SendToMattermost($text, 'vuokraus');
+        $this->mm->sendToMattermost($text, 'vuokraus');
     }
     private function getMMtext($Event, string $user): string
     {
@@ -181,7 +181,7 @@ class StatusEventAdmin extends AbstractAdmin
         }
         return $text . (' by ' . $user);
     }
-    public function __construct(protected Mattermost $mm, protected TokenStorageInterface $ts)
+    public function __construct(protected MattermostNotifierService $mm, protected TokenStorageInterface $ts)
     {
     }
 }

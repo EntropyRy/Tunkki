@@ -11,7 +11,7 @@ use App\Entity\Member;
 use App\Entity\User;
 use App\Form\UserPasswordType;
 use App\Helper\Barcode;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Repository\MemberRepository;
 use App\Repository\EmailRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -46,7 +46,7 @@ class ProfileController extends AbstractController
         MemberRepository $memberRepo,
         EmailRepository $emailRepo,
         UserPasswordHasherInterface $hasher,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         TranslatorInterface $translator,
         EmailVerifier $emailVerifier,
         Barcode $bc,
@@ -133,7 +133,7 @@ class ProfileController extends AbstractController
     protected function announceToMattermost($mm, string $member): void
     {
         $text = "**New Member: " . $member . "**";
-        $mm->SendToMattermost($text, "yhdistys");
+        $mm->sendToMattermost($text, "yhdistys");
     }
     #[
         Route(
@@ -260,7 +260,7 @@ class ProfileController extends AbstractController
     ]
     public function apply(
         Request $request,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
@@ -276,7 +276,7 @@ class ProfileController extends AbstractController
             $member = $form->getData();
             if (empty($member->getApplicationDate())) {
                 $text = "**Active member application by " . $member . "**";
-                $mm->SendToMattermost($text, "yhdistys");
+                $mm->sendToMattermost($text, "yhdistys");
             }
             $member->setApplicationDate(new \DateTime());
             $em->persist($member);

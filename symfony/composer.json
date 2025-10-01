@@ -53,6 +53,7 @@
         "symfony/framework-bundle": "^7.1",
         "symfony/http-client": "^7.1",
         "symfony/mailer": "^7.1",
+        "symfony/mattermost-notifier": "^7.3",
         "symfony/monolog-bridge": "^7.1",
         "symfony/monolog-bundle": "^3.7",
         "symfony/notifier": "^7.1",
@@ -79,6 +80,7 @@
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.1",
+        "friendsofphp/php-cs-fixer": "^3.88",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3",

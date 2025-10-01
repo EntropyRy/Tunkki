@@ -15,7 +15,7 @@ use Sonata\Form\Validator\ErrorElement;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use App\Entity\NakkiBooking;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -172,7 +172,7 @@ final class NakkiAdmin extends AbstractAdmin
     }
 
     public function __construct(
-        protected Mattermost $mm,
+        protected MattermostNotifierService $mm,
         protected TokenStorageInterface $ts,
         protected EntityManagerInterface $em,
         protected RequestStack $rs

@@ -6,7 +6,7 @@ use App\Entity\DoorLog;
 use App\Entity\User;
 use App\Form\OpenDoorType;
 use App\Helper\SSH;
-use App\Helper\Mattermost;
+use App\Service\MattermostNotifierService;
 use App\Helper\ZMQHelper;
 use App\Helper\Barcode;
 use App\Repository\DoorLogRepository;
@@ -27,7 +27,7 @@ class KerdeController extends AbstractController
     public function door(
         Request $request,
         FormFactoryInterface $formF,
-        Mattermost $mm,
+        MattermostNotifierService $mm,
         ZMQHelper $zmq,
         Barcode $barcodeGenerator,
         EntityManagerInterface $em,
@@ -73,7 +73,7 @@ class KerdeController extends AbstractController
             }
             $text .= '**';
             if ($send) {
-                $mm->SendToMattermost($text, 'kerde');
+                $mm->sendToMattermost($text, 'kerde');
             }
 
             return $this->redirectToRoute('kerde_door');
