@@ -2,6 +2,7 @@
 
 namespace App\PageService;
 
+use App\Entity\Event;
 use App\Repository\EventRepository;
 use Sonata\PageBundle\Page\TemplateManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +52,7 @@ class FrontPage implements PageServiceInterface
         }*/
         // $epic = $this->ePics->getRandomPic();
         $future = array_merge($future, $unpublished);
-        $events = $announcement !== null ? array_merge($future, [$announcement]) : $future;
+        $events = $announcement instanceof Event ? array_merge($future, [$announcement]) : $future;
         $this->updateSeoPage($page);
 
         return $this->templateManager->renderResponse(

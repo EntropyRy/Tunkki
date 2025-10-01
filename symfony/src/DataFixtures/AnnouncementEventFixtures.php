@@ -72,7 +72,7 @@ final class AnnouncementEventFixtures extends Fixture
         $announcement->setPublished(true);
         $announcement->setPublishDate(new \DateTimeImmutable('-15 minutes'));
         // Event date a few days ahead so it still appears among future events.
-        $announcement->setEventDate((new \DateTimeImmutable('+5 days'))->setTime(12, 0));
+        $announcement->setEventDate(new \DateTimeImmutable('+5 days')->setTime(12, 0));
         $announcement->setUrl('announcement');
         $announcement->setTemplate('event.html.twig');
         $announcement->setContent('<p>EN: Fixture announcement content.</p>');
