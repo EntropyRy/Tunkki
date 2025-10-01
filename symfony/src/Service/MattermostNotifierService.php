@@ -17,11 +17,6 @@ class MattermostNotifierService
 
     public function sendToMattermost(string $text, ?string $channel = null): void
     {
-        // In dev environment, don't send to specific channels
-        if ($this->params->get('kernel.environment') === 'dev') {
-            $channel = null;
-        }
-
         $message = new ChatMessage($text);
 
         // Configure Mattermost-specific options
@@ -29,14 +24,14 @@ class MattermostNotifierService
             ->username($this->params->get('mm_tunkki_botname'))
             ->iconUrl($this->params->get('mm_tunkki_img'));
 
-        // Set channel if specified
-        if ($channel !== null) {
+        // Override channel if specified (otherwise uses DSN default)
+        if ($channel !== null && $this->params->get('kernel.environment') !== 'dev') {
             $options->channel($channel);
         }
 
         $message->options($options);
 
-        // Send the message
+        // Send the message using the configured transport
         $this->chatter->send($message);
     }
 }
