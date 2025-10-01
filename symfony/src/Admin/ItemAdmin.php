@@ -206,7 +206,7 @@ class ItemAdmin extends AbstractAdmin
     {
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
-        $text = 'ITEM: <'.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'> created by '.$user;
+        $text = 'ITEM: ['.$Item->getName().']('.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).') created by '.$user;
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
 
@@ -217,7 +217,7 @@ class ItemAdmin extends AbstractAdmin
         assert($user instanceof User);
         $Item->setModifier($user);
         $original = $this->em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = 'ITEM: <'.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|'.$Item->getName().'>:';
+        $text = 'ITEM: ['.$Item->getName().']('.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'):';
         if ($original['name'] != $Item->getName()) {
             $text .= ' renamed from '.$original['name'];
             $text .= ' by '.$user;

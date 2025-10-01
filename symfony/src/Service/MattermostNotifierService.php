@@ -19,12 +19,12 @@ class MattermostNotifierService
     {
         $message = new ChatMessage($text);
 
-        // Configure Mattermost-specific options (iconUrl removed - not supported by current MattermostOptions)
+        // Configure Mattermost-specific options
         $options = new MattermostOptions();
 
         // Override channel if specified (otherwise uses DSN default)
         if (null !== $channel && 'dev' !== $this->params->get('kernel.environment')) {
-            $options->channel($channel);
+            $options->recipient($channel);
         }
 
         $message->options($options);

@@ -361,11 +361,11 @@ class BookingAdmin extends AbstractAdmin
         $booking->setRenterHash($this->calculateOwnerHash($booking));
         $user = $this->ts->getToken()->getUser();
         assert($user instanceof User);
-        $text = '#### BOOKING: <'.$this->generateUrl(
+        $text = '#### BOOKING: ['.$booking->getName().']('.$this->generateUrl(
             'edit',
             ['id' => $booking->getId()],
             UrlGeneratorInterface::ABSOLUTE_URL
-        ).'|'.$booking->getName().'> on '.
+        ).') on '.
             $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
         $this->mm->sendToMattermost($text, 'vuokraus');
         $this->update($booking);

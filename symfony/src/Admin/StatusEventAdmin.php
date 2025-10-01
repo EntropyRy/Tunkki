@@ -159,14 +159,14 @@ class StatusEventAdmin extends AbstractAdmin
 
     private function getMMtext($Event, string $user): string
     {
-        $text = 'EVENT: <'.$this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'|';
+        $url = $this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
         $fix = null;
         $rent = null;
         if (!empty($Event->getItem())) {
             $thing = $Event->getItem();
             $fix = $thing->getNeedsFixing();
             $rent = $thing->getCannotBeRented();
-            $text .= $thing->getName().'> ';
+            $text = 'EVENT: ['.$thing->getName().']('.$url.') ';
             if (true === $fix) {
                 $text .= '**_NEEDS FIXING_** ';
             } elseif (false === $fix) {
@@ -179,7 +179,7 @@ class StatusEventAdmin extends AbstractAdmin
             }
         } else {
             $thing = $Event->getBooking();
-            $text .= $thing->getName().'> ';
+            $text = 'EVENT: ['.$thing->getName().']('.$url.') ';
         }
         if ($Event->getDescription()) {
             $text .= 'with comment: '.$Event->getDescription();
