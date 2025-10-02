@@ -16,7 +16,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "App\\Tests\\_Base\\": "tests/_Base/"
+            "App\\Tests\\_Base\\": "tests/_Base/",
+            "App\\Tests\\": "tests/"
         }
     },
     "require": {
@@ -80,9 +81,12 @@
         "symfony/symfony": "*"
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "*",
         "doctrine/doctrine-fixtures-bundle": "^4.1",
         "friendsofphp/php-cs-fixer": "^3.88",
+        "infection/infection": "^0.29",
         "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3",
         "rector/rector": "^2.0",
@@ -92,7 +96,8 @@
         "symfony/maker-bundle": "^1",
         "symfony/stopwatch": "^7.1",
         "symfony/web-profiler-bundle": "^7.1",
-        "vincentlanglet/twig-cs-fixer": "^3.1"
+        "vincentlanglet/twig-cs-fixer": "^3.1",
+        "zenstruck/foundry": "^2.7"
     },
     "scripts": {
         "post-root-package-install": [
@@ -104,6 +109,7 @@
         "post-update-cmd": [
             "@auto-scripts"
         ],
+        "mutation": "infection --threads=4 --min-msi=80 --min-covered-msi=90 --ansi",
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
             "ckeditor:install --tag=4.22.1 --clear=skip": "symfony-cmd",
@@ -117,7 +123,8 @@
             "composer/package-versions-deprecated": true,
             "symfony/flex": true,
             "phpstan/extension-installer": true,
-            "symfony/runtime": true
+            "symfony/runtime": true,
+            "infection/extension-installer": true
         }
     },
     "prefer-stable": true,
