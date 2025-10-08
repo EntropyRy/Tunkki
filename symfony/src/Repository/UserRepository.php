@@ -64,6 +64,22 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
     }
+
+    /**
+     * Find a single User by its related Member email (case-insensitive).
+     *
+     * Returns null if no user has a Member with the provided email.
+     */
+    public function findOneByMemberEmail(string $email): ?User
+    {
+        return $this->createQueryBuilder('u')
+            ->innerJoin('u.member', 'm')
+            ->andWhere('LOWER(m.email) = LOWER(:email)')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     // /**
     //  * @return User[] Returns an array of User objects
     //  */

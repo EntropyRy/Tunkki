@@ -1,0 +1,82 @@
+{
+  "$schema": "https://infection.github.io/schema.json",
+  "source": {
+    "directories": [
+      "src/Repository",
+      "src/Security"
+    ],
+    "excludes": [
+      "src/Kernel.php"
+    ]
+  },
+
+  /*
+   * NOTE:
+   * The project-wide composer script uses strict thresholds:
+   *   "mutation": "infection --threads=4 --min-msi=80 --min-covered-msi=90 --ansi"
+   * This baseline config deliberately sets the JSON thresholds to 0 so that
+   * a first exploratory run (without the composer script) will not fail.
+   * Use:  vendor/bin/infection --threads=4  (or the composer script once ready).
+   */
+
+  "minMsi": 0,
+  "minCoveredMsi": 0,
+
+  "logs": {
+    "text": "build/infection/infection.log",
+    "summary": "build/infection/summary.log",
+    "html": "build/infection/html",
+    "badge": "build/infection/badge.svg"
+  },
+
+  "tmpDir": "build/infection/tmp",
+
+  "phpUnit": {
+    "configDir": ".",
+    "customPath": "vendor/bin/phpunit",
+    "executedLinesOnly": true
+  },
+
+  "timeout": 10,
+  "threads": 4,
+
+  "mutators": {
+    "@default": true,
+
+    "@function_signature": false,          /* Often noisy early on */
+    "global-ignore": [
+      "assert",
+      "dd",
+      "dump"
+    ],
+
+    /*
+     * Example targeted toggles:
+     * "@casting": false,
+     * "UnwrapArrayDiff": true
+     */
+    "CastNumerical": true,
+    "IncrementInteger": true,
+    "DecrementInteger": true,
+    "PregQuote": true
+  },
+
+  "ignoreSourceCodeByPaths": [
+    "*/var/*",
+    "*/vendor/*"
+  ],
+
+  "ignoreSourceCodeByRegex": [
+    "/@codeCoverageIgnore/",
+    "/@generated/"
+  ],
+
+  "extensions": [],
+
+  "infection": {
+    "initialTestsPhpOptions": "",
+    "testFrameworkOptions": "--order-by=default --resolve-dependencies --testsuite=Unit"
+  },
+
+  "phpVersion": null
+}

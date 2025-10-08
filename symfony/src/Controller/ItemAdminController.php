@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @extends Controller<Item>
+ */
 class ItemAdminController extends Controller
 {
     public function cloneAction(): RedirectResponse

@@ -49,13 +49,16 @@ class Artist implements \Stringable
         ),
     ]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
-    private $eventArtistInfos;
+    /**
+     * @var Collection<int, EventArtistInfo>
+     */
+    private Collection $eventArtistInfos;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
     private ?Member $member = null;
@@ -85,14 +88,15 @@ class Artist implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -197,24 +201,24 @@ class Artist implements \Stringable
         $this->eventArtistInfos->clear();
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

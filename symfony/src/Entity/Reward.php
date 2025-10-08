@@ -20,8 +20,11 @@ class Reward implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    /**
+     * @var Collection&lt;int, Booking&gt;
+     */
     #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'rewards')]
-    private $bookings;
+    private Collection $bookings;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: true)]
     private ?string $reward = null;
@@ -29,14 +32,14 @@ class Reward implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $paid = false;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $paidDate = null;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $paidDate = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $PaymentHandledBy = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $Weight = 0;
@@ -52,13 +55,13 @@ class Reward implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Email;
 use App\Entity\User;
 use App\Helper\Qr;
 use App\Repository\ArtistRepository;
@@ -17,6 +18,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
+/**
+ * @extends CRUDController<Email>
+ */
 final class EmailAdminController extends CRUDController
 {
     public function __construct(

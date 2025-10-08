@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Checkout;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -14,7 +15,7 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
- * @extends AbstractAdmin<object>
+ * @extends AbstractAdmin<Checkout>
  */
 final class CheckoutAdmin extends AbstractAdmin
 {

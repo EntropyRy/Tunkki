@@ -7,6 +7,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Member.
@@ -15,6 +17,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: MemberRepository::class)]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields: ['email'], message: 'email.unique')]
 class Member implements \Stringable
 {
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
@@ -28,6 +31,8 @@ class Member implements \Stringable
     #[ORM\Column(name: 'lastname', type: Types::STRING, length: 190)]
     private string $lastname = '';
 
+    #[Assert\NotBlank(message: 'email.required')]
+    #[Assert\Email(message: 'email.invalid')]
     #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
     private $email;
 
@@ -39,6 +44,8 @@ class Member implements \Stringable
             nullable: true,
         ),
     ]
+    #[Assert\Length(max: 190, maxMessage: 'username.max_length')]
+    #[Assert\NotBlank(allowNull: true, message: 'username.required')]
     private ?string $username = null;
 
     #[
@@ -61,11 +68,11 @@ class Member implements \Stringable
     ]
     private ?string $CityOfResidence = null;
 
-    #[ORM\Column(name: 'createdAt', type: 'datetime')]
-    private \DateTime $createdAt;
+    #[ORM\Column(name: 'createdAt', type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
-    private \DateTime $updatedAt;
+    #[ORM\Column(name: 'updatedAt', type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
@@ -168,7 +175,7 @@ class Member implements \Stringable
     #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
     private Collection $happenings;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $code = null;
 
     #[ORM\Column]
@@ -198,14 +205,15 @@ class Member implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -253,26 +261,26 @@ class Member implements \Stringable
         return $this->phone;
     }
 
-    public function setCreatedAt(mixed $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTime
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(mixed $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTime
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -451,8 +459,13 @@ class Member implements \Stringable
     {
         $this->user = $user;
 
+        // Guard: if null user provided, just detach existing relation (owning side cleared above)
+        if (!$user instanceof User) {
+            return $this;
+        }
+
         // set (or unset) the owning side of the relation if necessary
-        $newMember = $user instanceof User ? $this : null;
+        $newMember = $this;
         if ($user->getMember() !== $newMember) {
             $user->setMember($newMember);
         }

@@ -1,0 +1,15 @@
+# PHPStan configuration for dev environment
+# ---------------------------------------
+# This file overrides only the Symfony container XML path to point at the dev cache.
+# Usage:
+#   - Run PHPStan in dev mode by passing this config:
+#       docker compose exec -T fpm php vendor/bin/phpstan analyse -c phpstan.dev.neon
+#   - Or update your Makefile/command to use this config when APP_ENV=dev.
+
+includes:
+  - phpstan.neon
+
+parameters:
+  symfony:
+    # Dev container cache path (kept in sync with APP_ENV=dev)
+    containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml

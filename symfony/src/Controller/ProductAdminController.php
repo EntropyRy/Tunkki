@@ -11,7 +11,7 @@ use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @extends CRUDController<object>
+ * @extends CRUDController<Product>
  */
 final class ProductAdminController extends CRUDController
 {

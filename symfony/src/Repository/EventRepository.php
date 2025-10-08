@@ -21,7 +21,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function getSitemapEvents(): mixed
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
@@ -37,7 +37,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function getRSSEvents(): mixed
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
@@ -51,40 +51,36 @@ class EventRepository extends ServiceEntityRepository
 
     public function getFutureEvents(): mixed
     {
-        $now = new \DateTime();
-        $end = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $end = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
-            ->andWhere('e.type != :type')
+            ->andWhere('LOWER(e.type) != :type')
             ->andWhere('e.published = :pub')
             ->setParameter('now', $now)
             ->setParameter('date', $end->modify('-30 hours'))
-            ->setParameter('type', 'Announcement')
+            ->setParameter('type', 'announcement')
             ->setParameter('pub', true)
             ->orderBy('e.EventDate', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
 
     public function getUnpublishedFutureEvents(): mixed
     {
-        $now = new \DateTime();
-        $end = new \DateTime();
+        new \DateTimeImmutable();
+        $end = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('e')
-            ->andWhere('e.publishDate <= :now')
             ->andWhere('e.EventDate > :date')
-            ->andWhere('e.type != :type')
+            ->andWhere('LOWER(e.type) != :type')
             ->andWhere('e.published = :pub')
-            ->setParameter('now', $now)
             ->setParameter('date', $end->modify('-30 hours'))
-            ->setParameter('type', 'Announcement')
+            ->setParameter('type', 'announcement')
             ->setParameter('pub', false)
             ->orderBy('e.EventDate', 'ASC')
-            ->setMaxResults(10)
             ->getQuery()
             ->getResult();
     }
@@ -92,9 +88,9 @@ class EventRepository extends ServiceEntityRepository
     public function findOneEventByType(string $type): ?Event
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.type = :val')
+            ->andWhere('LOWER(c.type) = :val')
             ->andWhere('c.published = :pub')
-            ->setParameter('val', $type)
+            ->setParameter('val', strtolower($type))
             ->setParameter('pub', true)
             ->orderBy('c.EventDate', 'DESC')
             ->setMaxResults(1)
@@ -115,11 +111,21 @@ class EventRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findEventsByType(string $type): mixed
+    /**
+     * Public events by type: requires published flag and publishDate reached.
+     * Mirrors EventPublicationDecider semantics for list queries.
+     */
+    public function findPublicEventsByType(string $type): mixed
     {
+        $now = new \DateTimeImmutable();
+
         return $this->createQueryBuilder('r')
-            ->andWhere('r.type = :val')
-            ->setParameter('val', $type)
+            ->andWhere('LOWER(r.type) = :val')
+            ->andWhere('r.published = :pub')
+            ->andWhere('r.publishDate <= :pubDate')
+            ->setParameter('val', strtolower($type))
+            ->setParameter('pub', true)
+            ->setParameter('pubDate', $now)
             ->orderBy('r.EventDate', 'DESC')
             ->getQuery()
             ->getResult();
@@ -127,7 +133,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function findCalendarEvents(): mixed
     {
-        $yearAgo = new \DateTime('now-1year');
+        $yearAgo = new \DateTimeImmutable('-1 year');
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.externalUrl = :ext')
@@ -143,15 +149,29 @@ class EventRepository extends ServiceEntityRepository
 
     public function findPublicEventsByNotType(string $type): mixed
     {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
 
         return $this->createQueryBuilder('r')
-            ->andWhere('r.type != :val')
+            ->andWhere('LOWER(r.type) != :val')
             ->andWhere('r.published = :pub')
             ->andWhere('r.publishDate <= :pubDate')
             ->setParameter('pub', true)
             ->setParameter('pubDate', $now)
-            ->setParameter('val', $type)
+            ->setParameter('val', strtolower($type))
+            ->orderBy('r.EventDate', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Fetch all events excluding the given type (no publish gating).
+     * Intended for authenticated active members view.
+     */
+    public function findAllByNotType(string $type): mixed
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('LOWER(r.type) != :val')
+            ->setParameter('val', strtolower($type))
             ->orderBy('r.EventDate', 'DESC')
             ->getQuery()
             ->getResult();
@@ -162,7 +182,7 @@ class EventRepository extends ServiceEntityRepository
         $qb = $this->createQueryBuilder('b');
         $qb->select($qb->expr()->count('b'))
             ->where('b.cancelled = :is')
-            ->andWhere('b.type != :val')
+            ->andWhere('LOWER(b.type) != :val')
             ->setParameter('val', 'announcement')
             ->setParameter('is', false);
 

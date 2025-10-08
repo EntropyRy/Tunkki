@@ -34,7 +34,7 @@
         <div class="justify-content-between d-flex">
             <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>
             <a class="btn btn-outline-primary"
-               href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'epics.tile.events_button'|trans }}</a>
+               href="{{ 'url.events'|trans }}">{{ 'epics.tile.events_button'|trans }}</a>
         </div>
     </div>
 {% endblock %}
@@ -52,7 +52,7 @@
         </ul>
         <div class="justify-content-between d-flex">
             <a class="btn btn-primary"
-               href="{{ path('_page_alias_join_us_' ~ app.request.locale) }}">{{ 'join_us.button'|trans }}</a>
+               href="{{ 'url.join_us'|trans }}">{{ 'join_us.button'|trans }}</a>
             <a data-turbo="false"
                class="btn btn-primary"
                href="https://entropy.fi/mm">{{ 'join_us.mattermost'|trans }}</a>
@@ -77,9 +77,9 @@
         {# <h4>{{'artist.tile.heading'|trans}}: {{name}}</h4> #}
         <div class="mb-2 justify-content-between d-flex">
             {% if app.request.locale == 'fi' %}
-                {% set artist_url = '/artistit' %}
+                {% set artist_url = 'url.artists'|trans %}
             {% else %}
-                {% set artist_url = '/en/artists' %}
+                {% set artist_url = 'url.artists'|trans %}
             {% endif %}
             <a class="btn btn-outline-primary" href="{{ block('event_path') }}">{{ 'artist.tile.button_event'|trans }}</a>
             <a class="btn btn-outline-primary" href="{{ artist_url }}">{{ 'artist.tile.button_artists'|trans }}</a>
@@ -90,7 +90,7 @@
 {% block stream_tile %}
     <div {{ stimulus_controller('stream') }} data-stream-url-value="https://stream.entropy.fi" data-stream-online-img-value="{{ asset('/images/entropy-stream-online.svg') }}" data-stream-offline-img-value="{{ asset('/images/entropy-stream-offline.svg') }}" data-stream-refresh-interval-value="20000">
         <div class="tile col-12 p-2">
-            <a href="{{ app.request.locale == 'fi' ? '' : '/en' }}/stream">
+            <a href="{{ 'url.stream'|trans }}">
                 <div class="rect-img-container">
                     <img data-stream-target="pic" src="{{ asset('/images/entropy-stream-offline.svg') }}" loading="lazy" class="rect-img fill stream-img" title="{{ 'Stream'|trans }}">
                     <div class="badge-container">
@@ -107,7 +107,7 @@
                     </audio>
                 </div>
             </div>
-            <a class="btn btn-primary w-100" href="{{ app.request.locale == 'fi' ? '' : '/en' }}/stream">
+            <a class="btn btn-primary w-100" href="{{ 'url.stream'|trans }}">
                 {{ 'stream.tile.button'|trans }}
             </a>
         </div>

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Menu;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,6 +12,12 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+/**
+ * @extends AbstractAdmin<Menu>
+ *
+ * TODO: Confirm the managed entity FQCN. If the actual entity differs,
+ *       update this annotation accordingly.
+ */
 final class MenuAdmin extends AbstractAdmin
 {
     protected array $accessMapping = [

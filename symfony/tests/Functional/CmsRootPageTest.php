@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Tests\_Base\FixturesWebTestCase;
-use App\Tests\Http\SiteAwareKernelBrowser;
 
 /**
  * Verifies canonical root page behavior for CMS (Sonata Page) sites:
@@ -21,18 +20,18 @@ use App\Tests\Http\SiteAwareKernelBrowser;
  *
  * This test focuses strictly on observable HTTP behavior rather than internal Page
  * objects. It assumes:
- *   - SiteFixtures loaded (two sites: fi with relativePath "", en with "/en")
- *   - A CMS root page exists for each site (fixtures or automatic generation)
+ *   - CmsBaselineStory loaded (immutable baseline: FI site '/', EN site '/en')
+ *   - Root pages provided by baseline Story (Site/Page factories) instead of legacy fixtures
  */
 final class CmsRootPageTest extends FixturesWebTestCase
 {
-    private ?SiteAwareKernelBrowser $client = null;
+    // (Removed explicit $client property; relying on FixturesWebTestCase magic accessor & static registration)
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = new SiteAwareKernelBrowser(static::bootKernel());
-        $this->client->setServerParameter('HTTP_HOST', 'localhost');
+        $this->initSiteAwareClient();
+        // (Removed redundant $this->client assignment; base class registered the site-aware client for assertions)
     }
 
     public function testFinnishRootReturns200(): void
@@ -49,19 +48,19 @@ final class CmsRootPageTest extends FixturesWebTestCase
 
     public function testEnglishRootReturns200(): void
     {
-        $this->client->request('GET', '/en');
+        $this->client->request('GET', '/en/');
         $status = $this->client->getResponse()->getStatusCode();
 
         $this->assertSame(
             200,
             $status,
-            "English root '/en' should return 200 (got {$status})."
+            "English root '/en/' should return 200 (got {$status})."
         );
     }
 
     public function testEnglishRootWithTrailingSlashCanonicalizes(): void
     {
-        $this->client->request('GET', '/en/');
+        $this->client->request('GET', '/en');
         $firstStatus = $this->client->getResponse()->getStatusCode();
 
         // If the response is a redirect (301/302) follow once and assert final 200.
@@ -72,7 +71,7 @@ final class CmsRootPageTest extends FixturesWebTestCase
             $this->assertSame(
                 '/en',
                 rtrim($canonical, '/'),
-                "Trailing slash English root should redirect to '/en' (got {$canonical})."
+                "Non-slashed English root should redirect to '/en/' (got {$canonical})."
             );
             $this->client->request('GET', $canonical);
         }
@@ -81,7 +80,7 @@ final class CmsRootPageTest extends FixturesWebTestCase
         $this->assertSame(
             200,
             $finalStatus,
-            "Final response for '/en/' canonicalization should be 200 (got {$finalStatus})."
+            "Final response for '/en' canonicalization should be 200 (got {$finalStatus})."
         );
     }
 
@@ -98,18 +97,17 @@ final class CmsRootPageTest extends FixturesWebTestCase
         );
 
         // Conversely, ensure we can still access /en directly (already covered above).
-        $this->client->request('GET', '/en');
+        $this->client->request('GET', '/en/');
         $enStatus = $this->client->getResponse()->getStatusCode();
         $this->assertSame(
             200,
             $enStatus,
-            "English root '/en' should remain 200 in wrong-locale test scenario."
+            "English root '/en/' should remain 200 in wrong-locale test scenario."
         );
     }
 
     public function testLocalizedUrlHelperProducesCanonicalRoots(): void
     {
-        static::bootKernel();
         $twig = static::getContainer()->get('twig');
         $requestStack = static::getContainer()->get('request_stack');
 

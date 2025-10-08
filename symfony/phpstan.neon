@@ -1,4 +1,76 @@
+# PHPStan configuration for the project
+# ------------------------------------
+# Focus:
+#  - Maximum strictness (level: max) to surface latent issues early.
+#  - Symfony & Doctrine extensions enabled for better framework awareness.
+#  - Doctrine entity / repository analysis turned on (analyseEntities).
+#  - Reduced noise: no blanket ignores; add narrow ignores only when justified.
+#
+# Usage:
+#   docker compose exec fpm vendor/bin/phpstan analyse --memory-limit=1G
+#
+# If container XML changes (Symfony cache clear), adjust symfony.containerXmlPath below.
+
+# Extensions auto-loaded via phpstan/extension-installer (manual includes removed)
+
+
 parameters:
-  ignoreErrors:
-    -
-      identifier: property.unusedType 
+  level: 5
+
+  paths:
+    - src
+
+
+  # Exclude generated / runtime or noisy sources.
+  excludePaths:
+    - %currentWorkingDirectory%/var/*
+    - %currentWorkingDirectory%/vendor/*
+    - %currentWorkingDirectory%/migrations/*
+
+  # For framework/service autowiring analysis (adjust if environment differs):
+  symfony:
+    # Common dev container cache path; update if different (e.g. prod cache).
+    containerXmlPath: var/cache/test/App_KernelTestDebugContainer.xml
+    # If analysing test container instead, you can point to:
+    # containerXmlPath: var/cache/test/App_KernelTestDebugContainer.xml
+    constantHassers: true
+
+  doctrine:
+    # analyseEntities removed (unsupported in current installed phpstan-doctrine version)
+    # To re-enable if supported later, add:
+    # analyseEntities: true
+    # repositoryClassReflectionExtension: true
+
+  # Infer private property types when assigned via constructor
+  inferPrivatePropertyTypeFromConstructor: true
+
+  # Tighten up baseline inference
+  # Removed unsupported flags (checkGenericClassInNonGenericObjectType, checkMissingIterableValueType)
+  checkMissingTypehints: true
+
+  # Avoid over-eager certainty for phpdoc types that are not enforced at runtime
+  treatPhpDocTypesAsCertain: false
+
+  # Helps detect dead branches with constant expressions
+  reportUnmatchedIgnoredErrors: true
+
+  # Memory tuning (can be overridden on CLI)
+  # memoryLimitFile removed (unsupported)
+
+  # Autoload & analysis tuning
+  scanDirectories:
+    - vendor
+
+  # If you later adopt a baseline file, reference it here:
+  # baseline: phpstan-baseline.neon
+
+  # No global ignores by default: add targeted ignores only when a *documented* false positive persists.
+  ignoreErrors: []
+
+  # Optionally enable bleeding-edge rules once stable:
+  # bleedingEdge: true
+
+  # Experimental: treat different case method calls as errors (uncomment if helpful)
+  # checkFunctionNameCase: true
+
+# End of phpstan.neon

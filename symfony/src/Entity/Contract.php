@@ -17,20 +17,29 @@ class Contract implements \Stringable
     #[ORM\Column(type: 'text')]
     private ?string $ContentFi = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $updatedAt = null;
+    /**
+     * Stored as immutable timestamp. Migration required if DB platform differentiates.
+     */
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     private ?string $purpose = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $createdAt = null;
+    /**
+     * Stored as immutable timestamp. Set on persist only.
+     */
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $ContentEn = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $validFrom = null;
+    /**
+     * Domain decision: validFrom represents a planned activation instant; immutable is appropriate.
+     */
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $validFrom = null;
 
     public function getId(): ?int
     {
@@ -40,14 +49,15 @@ class Contract implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getContentFi(): ?string
@@ -62,12 +72,12 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -86,12 +96,16 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * Setter retained only if needed for fixtures/manual adjustments.
+     * Prefer not to modify createdAt after persistence.
+     */
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -116,12 +130,12 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getValidFrom(): ?\DateTimeInterface
+    public function getValidFrom(): ?\DateTimeImmutable
     {
         return $this->validFrom;
     }
 
-    public function setValidFrom(\DateTimeInterface $validFrom): static
+    public function setValidFrom(?\DateTimeImmutable $validFrom): static
     {
         $this->validFrom = $validFrom;
 

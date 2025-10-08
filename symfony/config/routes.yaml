@@ -1,18 +1,18 @@
 controllers:
-  resource:
-    path: ../src/Controller/
-    namespace: App\Controller
-  type: attribute
-  prefix:
-    fi: ""
-    en: "/en"
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+    prefix:
+        fi: ""
+        en: "/en"
 _entropy_mattermost_auth:
-  path: /oauth
-  controller: App\Controller\MattermostAuthController::connectAction
+    path: /oauth
+    controller: App\Controller\MattermostAuthController::connectAction
 _entropy_mattermost_check:
-  path: /oauth/check
-  controller: App\Controller\MattermostAuthController::connectCheckAction
+    path: /oauth/check
+    controller: App\Controller\MattermostAuthController::connectCheckAction
 _entropy_mattermost_check_ssl:
-  path: /oauth/check
-  controller: App\Controller\MattermostAuthController::connectCheckAction
-  schemes: [https]
+    path: /oauth/check
+    controller: App\Controller\MattermostAuthController::connectCheckAction
+    schemes: [https]

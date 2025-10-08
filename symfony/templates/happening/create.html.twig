@@ -18,7 +18,7 @@
                 {{ form_row(form.needsPreliminarySignUp, {row_attr: {class: 'my-2'}}) }}
                 <div class="accordion">
                     <div class="accordion-item">
-                        <div id="signups" class="accordion-collapse collapse">
+                        <div id="signups" class="accordion-collapse collapse {{ (form.needsPreliminarySignUp.vars.data or form_errors(form.maxSignUps) or form_errors(form.signUpsOpenUntil) or form_errors(form.allowSignUpComments)) ? 'show' : '' }}">
                             <div class="row accordion-body">
                                 <div class="col-md-6">
                                 {{ form_row(form.maxSignUps) }}
@@ -34,7 +34,7 @@
                 {{ form_row(form.needsPreliminaryPayment, {row_attr: {class: 'my-2'}}) }}
                 <div class="accordion">
                     <div class="accordion-item">
-                        <div id="payment" class="accordion-collapse collapse">
+                        <div id="payment" class="accordion-collapse collapse {{ (form.needsPreliminaryPayment.vars.data or form_errors(form.paymentInfoFi) or form_errors(form.paymentInfoEn) or form_errors(form.priceFi) or form_errors(form.priceEn)) ? 'show' : '' }}">
                             <div class="row accordion-body">
                                 <div class="col-md-6">
                                     {{ form_row(form.priceFi) }}
@@ -49,7 +49,7 @@
                     </div>
                 </div>
             </div>
-            {{ form_widget(form) }}
+            {{ form_rest(form) }}
             <input class="btn btn-primary"
                    type="submit"
                    data-turbo="false"

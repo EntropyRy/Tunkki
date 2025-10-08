@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\StatusEvent;
 use App\Service\MattermostNotifierService;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -14,6 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @extends AbstractAdmin<StatusEvent>
+ */
 class StatusEventAdmin extends AbstractAdmin
 {
     #[\Override]

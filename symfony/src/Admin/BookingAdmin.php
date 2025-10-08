@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Booking;
 use App\Entity\User;
 use App\Form\ItemsType;
 use App\Form\PackagesType;
@@ -36,6 +37,9 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @extends AbstractAdmin<Booking>
+ */
 class BookingAdmin extends AbstractAdmin
 {
     #[\Override]

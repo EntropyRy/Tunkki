@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Ticket;
 use App\Form\ChengeTicketOwnerType;
 use App\Helper\Qr;
 use App\Repository\EmailRepository;
@@ -18,6 +19,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Part\DataPart;
 
+/**
+ * @extends CRUDController<Ticket>
+ */
 final class TicketAdminController extends CRUDController
 {
     public function giveAction(TicketRepository $repo): RedirectResponse

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Contract;
 use FOS\CKEditorBundle\Form\Type\CKEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -15,7 +16,9 @@ use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @extends AbstractAdmin<object>
+ * @extends AbstractAdmin<Contract>
+ *
+ * TODO: Verify the actual Contract entity FQCN (e.g. \App\Entity\Contract). Update if different.
  */
 final class ContractAdmin extends AbstractAdmin
 {

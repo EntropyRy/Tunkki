@@ -11,6 +11,6 @@ use Sonata\ClassificationBundle\Entity\BaseContext;
 class SonataClassificationContext extends BaseContext
 {
     #[ORM\Id]
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     protected ?string $id = null;
 }

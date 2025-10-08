@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @extends CRUDController<Reward>
+ */
 final class RewardAdminController extends CRUDController
 {
     public function __construct(

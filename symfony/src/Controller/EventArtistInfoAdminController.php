@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\EventArtistInfo;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
+/**
+ * @extends CRUDController<EventArtistInfo>
+ */
 final class EventArtistInfoAdminController extends CRUDController
 {
     public function updateAction(): RedirectResponse

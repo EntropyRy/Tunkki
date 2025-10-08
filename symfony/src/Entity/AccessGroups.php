@@ -20,8 +20,11 @@ class AccessGroups implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255)]
     private ?string $name = null;
 
+    /**
+     * @var Collection<int, User>
+     */
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'accessGroups')]
-    private $users;
+    private Collection $users;
 
     #[ORM\Column(type: Types::JSON)]
     private array $roles = [];
@@ -58,7 +61,7 @@ class AccessGroups implements \Stringable
     }
 
     /**
-     * @return Collection|User[]
+     * @return Collection<int, User>
      */
     public function getUsers(): Collection
     {

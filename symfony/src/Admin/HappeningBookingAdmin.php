@@ -15,6 +15,9 @@ use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractAdmin<HappeningBooking>
+ */
 final class HappeningBookingAdmin extends AbstractAdmin
 {
     /**

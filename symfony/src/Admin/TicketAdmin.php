@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Ticket;
 use App\Helper\ReferenceNumber;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -14,6 +15,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractAdmin<Ticket>
+ */
 final class TicketAdmin extends AbstractAdmin
 {
     #[\Override]

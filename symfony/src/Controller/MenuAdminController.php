@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Menu;
 use App\Repository\MenuRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @extends CRUDController<Menu>
+ */
 class MenuAdminController extends CRUDController
 {
     #[\Override]

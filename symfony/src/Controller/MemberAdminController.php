@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Email;
+use App\Entity\Member;
 use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
@@ -14,6 +15,9 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @extends CRUDController<Member>
+ */
 final class MemberAdminController extends CRUDController
 {
     public function activememberinfoAction(

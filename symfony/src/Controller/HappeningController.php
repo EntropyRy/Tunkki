@@ -20,7 +20,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
@@ -41,7 +40,6 @@ class HappeningController extends AbstractController
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
         HappeningRepository $hr,
-        SluggerInterface $slugger,
         MattermostNotifierService $mm,
     ): Response {
         $user = $this->getUser();
@@ -54,8 +52,6 @@ class HappeningController extends AbstractController
         $form = $this->createForm(HappeningType::class, $happening);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $happening->setSlugFi($slugger->slug($happening->getNameFi())->lower());
-            $happening->setSlugEn($slugger->slug($happening->getNameEn())->lower());
             if (
                 $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi())
                 || $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
@@ -102,7 +98,6 @@ class HappeningController extends AbstractController
         #[MapEntity(expr: 'repository.findHappeningByEventSlugAndSlug(slug,happeningSlug)')]
         Happening $happening,
         EntityManagerInterface $em,
-        SluggerInterface $slugger,
     ): Response {
         $user = $this->getUser();
         assert($user instanceof User);
@@ -119,8 +114,6 @@ class HappeningController extends AbstractController
         $form = $this->createForm(HappeningType::class, $happening);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $happening->setSlugFi($slugger->slug($happening->getNameFi())->lower());
-            $happening->setSlugEn($slugger->slug($happening->getNameEn())->lower());
             $em->persist($happening);
             $em->flush();
             $this->addFlash('success', 'happening.edited');

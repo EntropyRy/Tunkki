@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Artist;
+use App\Entity\EventArtistInfo;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -15,6 +16,12 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractAdmin<EventArtistInfo>
+ *
+ * TODO: Verify the actual managed entity FQCN. If the entity class name differs
+ * (e.g. EventArtistInfo vs EventArtist or a join entity), update this annotation.
+ */
 final class EventArtistInfoAdmin extends AbstractAdmin
 {
     #[\Override]

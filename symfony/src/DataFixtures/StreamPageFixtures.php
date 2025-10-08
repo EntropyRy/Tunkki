@@ -39,7 +39,7 @@ final class StreamPageFixtures extends Fixture implements DependentFixtureInterf
 {
     private const string ROUTE_NAME = 'page_slug';
     private const string TEMPLATE_CODE = 'stream';
-    private const string TYPE = 'App\\PageService\\StreamPage';
+    private const string TYPE = 'entropy.page.stream';
     private const string REQUEST_METHOD = 'GET|POST|HEAD';
     private const string PAGE_URL = '/stream';
     private const string PAGE_SLUG = 'stream';
@@ -86,23 +86,23 @@ final class StreamPageFixtures extends Fixture implements DependentFixtureInterf
 
         if ($existing instanceof SonataPagePage) {
             $changed = false;
-            if ($existing->getTemplateCode() !== self::TEMPLATE_CODE) {
+            if (self::TEMPLATE_CODE !== $existing->getTemplateCode()) {
                 $existing->setTemplateCode(self::TEMPLATE_CODE);
                 $changed = true;
             }
-            if ($existing->getType() !== self::TYPE) {
+            if (self::TYPE !== $existing->getType()) {
                 $existing->setType(self::TYPE);
                 $changed = true;
             }
-            if ($existing->getRouteName() !== self::ROUTE_NAME) {
+            if (self::ROUTE_NAME !== $existing->getRouteName()) {
                 $existing->setRouteName(self::ROUTE_NAME);
                 $changed = true;
             }
-            if ($existing->getSlug() !== self::PAGE_SLUG) {
+            if (self::PAGE_SLUG !== $existing->getSlug()) {
                 $existing->setSlug(self::PAGE_SLUG);
                 $changed = true;
             }
-            if ($existing->getName() !== self::PAGE_NAME) {
+            if (self::PAGE_NAME !== $existing->getName()) {
                 $existing->setName(self::PAGE_NAME);
                 $existing->setTitle(self::PAGE_NAME);
                 $changed = true;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Email;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -14,7 +15,7 @@ use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @extends AbstractAdmin<object>
+ * @extends AbstractAdmin<Email>
  */
 final class EmailAdmin extends AbstractAdmin
 {

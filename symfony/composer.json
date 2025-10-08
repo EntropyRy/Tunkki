@@ -67,6 +67,7 @@
         "symfony/ux-map": "^2.27",
         "symfony/ux-turbo": "^2.4",
         "symfony/ux-twig-component": "^2.22",
+        "symfony/validator": "^7.1",
         "symfony/web-link": "^7.1",
         "symfony/yaml": "^7.1",
         "symfonycasts/reset-password-bundle": "^1.16",
@@ -97,6 +98,7 @@
         "symfony/stopwatch": "^7.1",
         "symfony/web-profiler-bundle": "^7.1",
         "vincentlanglet/twig-cs-fixer": "^3.1",
+        "brianium/paratest": "^7",
         "zenstruck/foundry": "^2.7"
     },
     "scripts": {

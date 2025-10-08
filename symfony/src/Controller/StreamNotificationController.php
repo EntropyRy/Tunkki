@@ -45,7 +45,7 @@ class StreamNotificationController extends AbstractController
         // Shared secret auth (simple header token).
         $provided = (string) $request->headers->get('X-Stream-Auth-Token', '');
         $expected = (string) ($_ENV['STREAM_NOTIFICATION_TOKEN'] ?? '');
-        if ($expected === '' || !hash_equals($expected, $provided)) {
+        if ('' === $expected || !hash_equals($expected, $provided)) {
             $logger->warning('Unauthorized stream notification attempt', [
                 'ip' => $request->getClientIp(),
                 'event' => $event,
@@ -76,7 +76,7 @@ class StreamNotificationController extends AbstractController
                 $message = 'No active stream';
             } else {
                 // Return the most recent (highest id) as representative
-                usort($onlineStreams, static fn(Stream $a, Stream $b) => $b->getId() <=> $a->getId());
+                usort($onlineStreams, static fn (Stream $a, Stream $b): int => $b->getId() <=> $a->getId());
                 $stream = $onlineStreams[0];
                 $message = 'Stream stopped';
             }

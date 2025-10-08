@@ -27,7 +27,7 @@ class EPicsPasswordType extends AbstractType
         $builder->add('plainPassword', RepeatedType::class, [
             'type' => PasswordType::class,
             'mapped' => false,
-            'invalid_message' => 'password.mismatch',
+            'invalid_message' => 'passwords_need_to_match',
             'first_options' => [
                 'label' => 'profile.epics.form.password',
                 'attr' => ['autocomplete' => 'new-password'],

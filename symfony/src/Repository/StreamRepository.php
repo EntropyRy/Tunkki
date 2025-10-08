@@ -49,7 +49,7 @@ class StreamRepository extends ServiceEntityRepository
      *
      * For each online stream:
      *  - Sets online=false
-     *  - Sets stoppedAt timestamp for any attached StreamArtist without one
+     *  - Sets stoppedAt timestamp for any currently online (active) StreamArtist without one
      *
      * Returns array of affected streams (now offline). If none were online, returns [].
      *
@@ -58,7 +58,7 @@ class StreamRepository extends ServiceEntityRepository
     public function stopAllOnline(): array
     {
         $online = $this->findBy(['online' => true]);
-        if (!$online) {
+        if ([] === $online) {
             return [];
         }
 
@@ -67,9 +67,12 @@ class StreamRepository extends ServiceEntityRepository
 
         foreach ($online as $stream) {
             $stream->setOnline(false);
-            foreach ($stream->getArtists() as $artist) {
+            // Only process artists that are currently "online" (no stoppedAt yet)
+            foreach ($stream->getArtistsOnline() as $artist) {
                 if (null === $artist->getStoppedAt()) {
                     $artist->setStoppedAt($now);
+                    // Explicitly persist in case changes on the owning side are not auto-detected
+                    $em->persist($artist);
                 }
             }
             $em->persist($stream);

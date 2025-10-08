@@ -24,7 +24,7 @@ class AnnouncementsPage implements PageServiceInterface
     #[\Override]
     public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
-        $events = $this->em->getRepository(Event::class)->findEventsByType('announcement');
+        $events = $this->em->getRepository(Event::class)->findPublicEventsByType('announcement');
 
         return $this->templateManager->renderResponse(
             $page->getTemplateCode(),

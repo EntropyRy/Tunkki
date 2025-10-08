@@ -33,8 +33,7 @@ class ProfileController extends AbstractController
         Route(
             path: [
                 'en' => '/profile/new',
-                'fi' => '/profiili/uusi
-    ',
+                'fi' => '/profiili/uusi',
             ],
             name: 'profile_new',
         ),
@@ -54,75 +53,82 @@ class ProfileController extends AbstractController
         $email_content = null;
         $form = $this->createForm(MemberType::class, $member);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
-            if ($form->isValid()) {
-                $member = $form->getData();
-                $name = $memberRepo->getByName(
-                    $member->getFirstname(),
-                    $member->getLastname(),
-                );
-                $email = $memberRepo->getByEmail($member->getEmail());
-                if (!$name && !$email) {
-                    $user = $member->getUser();
-                    $user->setPassword(
-                        $hasher->hashPassword(
-                            $user,
-                            $form->get('user')->get('plainPassword')->getData(),
-                        ),
-                    );
-                    $member->setLocale($request->getLocale());
-                    $member->setCode($bc->getCode());
-                    $user->setAuthId(bin2hex(openssl_random_pseudo_bytes(10)));
-                    $em->persist($user);
-                    $em->persist($member);
-                    $em->flush();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $member = $form->getData();
 
-                    // Build and send single merged welcome + verification email
-                    $email_content = $emailRepo->findOneBy([
-                        'purpose' => 'member',
-                    ]);
-                    $this->announceToMattermost($mm, $member->getName());
-
-                    $body = $email_content ? $email_content->getBody() : '';
-                    $subject =
-                        ($email_content
-                            ? $email_content->getSubject()
-                            : $translator->trans('member.welcome.subject')).
-                        $translator->trans(
-                            'member.welcome.subject_verify_suffix',
-                        );
-
-                    $welcomeEmail = new TemplatedEmail();
-                    $welcomeEmail
-                        ->from(
-                            new Address(
-                                'webmaster@entropy.fi',
-                                'Entropy Webmaster',
-                            ),
-                        )
-                        ->to($member->getEmail())
-                        ->subject($subject)
-                        ->htmlTemplate('emails/member.html.twig')
-                        ->context([
-                            'body' => $body,
-                        ]);
-
-                    $emailVerifier->sendEmailConfirmation(
-                        'app_verify_email',
-                        $member->getUser(),
-                        $welcomeEmail,
-                        ['id' => $member->getUser()->getId()],
-                    );
-
-                    $this->addFlash('info', 'member.join.added');
-
-                    return $this->redirectToRoute('app_login');
-                } else {
-                    $this->addFlash('warning', 'member.join.update');
-                }
-            } else {
-                $this->addFlash('danger', $form->getErrors());
+            // Ensure locale and code are populated before persistence
+            if (null === $member->getLocale()) {
+                $member->setLocale($request->getLocale());
             }
+            if (null === $member->getCode()) {
+                $member->setCode($bc->getCode());
+            }
+
+            // Create a fresh User and attach (password read from unmapped sub-form)
+            $user = new User();
+            $user->setMember($member);
+            $member->setUser($user);
+
+            $plain = (string) $form->get('user')->get('plainPassword')->get('first')->getData();
+            $user->setPassword(
+                $hasher->hashPassword(
+                    $user,
+                    $plain,
+                ),
+            );
+            $user->setAuthId(bin2hex(openssl_random_pseudo_bytes(10)));
+
+            $em->persist($user);
+            $em->persist($member);
+            $em->flush();
+
+            // Build and send single merged welcome + verification email
+            $email_content = $emailRepo->findOneBy([
+                'purpose' => 'member',
+            ]);
+            $this->announceToMattermost($mm, $member->getName());
+
+            $body = $email_content ? $email_content->getBody() : '';
+            $subject =
+                ($email_content
+                    ? $email_content->getSubject()
+                    : $translator->trans('member.welcome.subject')).
+                $translator->trans(
+                    'member.welcome.subject_verify_suffix',
+                );
+
+            $welcomeEmail = new TemplatedEmail();
+            $welcomeEmail
+                ->from(
+                    new Address(
+                        'webmaster@entropy.fi',
+                        'Entropy Webmaster',
+                    ),
+                )
+                ->to($member->getEmail())
+                ->subject($subject)
+                ->htmlTemplate('emails/member.html.twig')
+                ->context([
+                    'body' => $body,
+                ]);
+
+            $emailVerifier->sendEmailConfirmation(
+                'app_verify_email',
+                $member->getUser(),
+                $welcomeEmail,
+                ['id' => $member->getUser()->getId()],
+            );
+
+            $this->addFlash('info', 'member.join.added');
+
+            return $this->redirectToRoute('app_login');
+        }
+
+        if ($form->isSubmitted() && !$form->isValid()) {
+            return $this->render('member/new.html.twig', [
+                'form' => $form,
+                'email' => $email_content,
+            ], new Response('', 422));
         }
 
         return $this->render('member/new.html.twig', [
@@ -163,8 +169,7 @@ class ProfileController extends AbstractController
         Route(
             path: [
                 'en' => '/profile',
-                'fi' => '/profiili
-    ',
+                'fi' => '/profiili',
             ],
             name: 'profile',
         ),

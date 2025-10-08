@@ -57,7 +57,13 @@ class Happening implements \Stringable
     ]
     private Collection $bookings;
 
-    #[ORM\ManyToMany(targetEntity: Member::class, inversedBy: 'happenings')]
+    #[
+        ORM\ManyToMany(
+            targetEntity: Member::class,
+            inversedBy: 'happenings',
+            cascade: ['persist'],
+        ),
+    ]
     private Collection $owners;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]

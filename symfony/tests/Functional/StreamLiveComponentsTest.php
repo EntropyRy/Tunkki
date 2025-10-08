@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\DataFixtures\ArtistFixtures;
-use App\DataFixtures\UserFixtures;
 use App\Entity\Artist;
 use App\Entity\Stream;
 use App\Entity\StreamArtist;
 use App\Entity\User;
+use App\Factory\ArtistFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
-use App\Tests\Http\SiteAwareKernelBrowser;
+use App\Tests\Support\LoginHelperTrait;
 
 require_once __DIR__.'/../Http/SiteAwareKernelBrowser.php';
 
@@ -36,13 +36,18 @@ require_once __DIR__.'/../Http/SiteAwareKernelBrowser.php';
  */
 final class StreamLiveComponentsTest extends FixturesWebTestCase
 {
-    private ?SiteAwareKernelBrowser $client = null;
+    use LoginHelperTrait;
+    // Removed explicit $client property; rely on FixturesWebTestCase magic accessor & static site-aware client
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->client = new SiteAwareKernelBrowser(static::bootKernel());
-        $this->client->setServerParameter('HTTP_HOST', 'localhost');
+        // Use unified site-aware initialization (ensures Sonata Page multisite context + SiteRequest wrapping)
+        $this->initSiteAwareClient();
+        // Seed a harmless request to ensure BrowserKit traits have a response/crawler
+        $this->seedClientHome('fi');
+        $this->seedClientHome('en');
+        // Removed redundant assignment; site-aware client registered in base class
     }
 
     public function testStreamPageRendersComponentsWhenNoStreamOnline(): void
@@ -56,8 +61,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Verify Live Components are present in the page
-        $this->assertStringContainsString('data-controller', $content, 'Live components should be rendered with data-controller attributes');
+        // Verify Live Components are present in the page (use local Crawler)
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected at least one element with data-controller attribute (live components).');
     }
 
     public function testStreamPageRendersComponentsWhenStreamIsOnline(): void
@@ -76,8 +82,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Verify components render with stream data
-        $this->assertStringContainsString('data-controller', $content);
+        // Verify components render with stream data (use local Crawler)
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected at least one element with data-controller attribute (stream online).');
 
         // Clean up
         $stream->setOnline(false);
@@ -94,18 +101,22 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->em()->flush();
 
         // Login as user with artist
-        /** @var User $user */
-        $user = $this->getReference(UserFixtures::USER_REFERENCE, User::class);
+        // Create a member with an associated artist and log in
+        $member = MemberFactory::new()->english()->create();
+
+        ArtistFactory::new()->withMember($member)->dj()->create();
         $client = $this->client;
-        $client->loginUser($user);
+        $client->loginUser($member->getUser());
+        $this->stabilizeSessionAfterLogin();
 
         $client->request('GET', '/en/stream');
 
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Verify ArtistControl component is rendered (contains form elements)
-        $this->assertStringContainsString('data-controller', $content);
+        // Verify ArtistControl component is rendered (contains form elements) - local crawler to avoid static client dependency
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected at least one element with data-controller attribute (artist control).');
 
         // Clean up
         $stream->setOnline(false);
@@ -121,11 +132,16 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->em()->persist($stream);
         $this->em()->flush();
 
-        // Get user with artist (refetch from EM to ensure it's managed)
+        // Create a user with an associated artist
+        $member = MemberFactory::new()->english()->create();
+
         /** @var User $user */
-        $user = $this->em()->find(User::class, $this->getReference(UserFixtures::USER_REFERENCE, User::class)->getId());
+        $user = $member->getUser();
         /** @var Artist $artist */
-        $artist = $this->em()->find(Artist::class, $this->getReference(ArtistFixtures::ARTIST_REFERENCE, Artist::class)->getId());
+        $artist = ArtistFactory::new()->withMember($member)->dj()->create();
+        // Reload managed entities to avoid cascade persist errors via artist->member
+        $artist = $this->em()->find(Artist::class, $artist->getId());
+        $member = $this->em()->find(\App\Entity\Member::class, $member->getId());
 
         $this->assertNotNull($user->getMember(), 'User should have a member');
         $this->assertGreaterThan(0, $user->getMember()->getArtist()->count(), 'Member should have artists');
@@ -165,7 +181,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->em()->persist($stream);
 
         /** @var Artist $artist */
-        $artist = $this->em()->find(Artist::class, $this->getReference(ArtistFixtures::ARTIST_REFERENCE, Artist::class)->getId());
+        $artist = ArtistFactory::new()->dj()->create();
+        // Ensure artist is managed in current EntityManager
+        $artist = $this->em()->find(Artist::class, $artist->getId());
 
         $streamArtist = new StreamArtist();
         $streamArtist->setStream($stream);
@@ -205,8 +223,10 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $stream->setFilename('test-stream-multiple');
         $this->em()->persist($stream);
 
-        /** @var Artist $artist */
-        $artist = $this->em()->find(Artist::class, $this->getReference(ArtistFixtures::ARTIST_REFERENCE, Artist::class)->getId());
+        $artistName = 'Artist '.substr(md5((string) microtime(true)), 0, 6);
+        $artist = ArtistFactory::new(['name' => $artistName])->create();
+        // Reload to ensure managed association graph
+        $artist = $this->em()->find(Artist::class, $artist->getId());
 
         $streamArtist = new StreamArtist();
         $streamArtist->setStream($stream);
@@ -221,8 +241,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Verify artist name appears in the page (rendered by Artists component)
-        $this->assertStringContainsString('Fixture Artist', $content, 'Artist name should be displayed on stream page');
+        // Verify artist name appears in the page (rendered by Artists component) - use local crawler
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertStringContainsString($artistName, $crawler->filter('body')->text('', true), 'Artist name should be displayed on stream page');
 
         // Clean up
         $stream->setOnline(false);
@@ -240,8 +261,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Player component should render (even when offline)
-        $this->assertStringContainsString('data-controller', $content);
+        // Player component should render (even when offline) - use local Crawler
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected component root with data-controller attribute (player offline).');
     }
 
     public function testPlayerComponentShowsOnlineWhenStreamExists(): void
@@ -260,8 +282,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Verify player component is present
-        $this->assertStringContainsString('data-controller', $content);
+        // Verify player component is present (use local Crawler)
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected component root with data-controller attribute (player online).');
 
         // Clean up
         $stream->setOnline(false);
@@ -276,18 +299,17 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $stream->setFilename('test-stream-multi');
         $this->em()->persist($stream);
 
-        // Get the fixture artist (refetch to ensure managed)
-        /** @var Artist $artist1 */
-        $artist1 = $this->em()->find(Artist::class, $this->getReference(ArtistFixtures::ARTIST_REFERENCE, Artist::class)->getId());
+        // Create two artists linked to distinct members
+        $member1 = MemberFactory::new()->english()->create();
 
-        // Create a second artist for testing
-        /** @var User $activeUser */
-        $activeUser = $this->em()->find(User::class, $this->getReference(UserFixtures::ACTIVE_MEMBER_REFERENCE, User::class)->getId());
-        $artist2 = new Artist();
-        $artist2->setName('Second DJ');
-        $artist2->setType('DJ');
-        $artist2->setMember($activeUser->getMember());
-        $this->em()->persist($artist2);
+        /** @var Artist $artist1 */
+        $artist1 = ArtistFactory::new(['name' => 'First Artist'])->withMember($member1)->dj()->create();
+        $artist1 = $this->em()->find(Artist::class, $artist1->getId());
+
+        $member2 = MemberFactory::new()->english()->create();
+
+        $artist2 = ArtistFactory::new(['name' => 'Second DJ'])->withMember($member2)->dj()->create();
+        $artist2 = $this->em()->find(Artist::class, $artist2->getId());
 
         // Add both artists to stream
         $streamArtist1 = new StreamArtist();
@@ -314,8 +336,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $client->request('GET', '/en/stream');
         $content = $client->getResponse()->getContent();
 
-        $this->assertStringContainsString('Fixture Artist', $content);
-        $this->assertStringContainsString('Second DJ', $content);
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertStringContainsString('First Artist', $crawler->filter('body')->text('', true));
+        $this->assertStringContainsString('Second DJ', $crawler->filter('body')->text('', true));
 
         // Clean up
         $stream->setOnline(false);
@@ -330,8 +353,11 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $stream->setFilename('test-timestamps');
         $this->em()->persist($stream);
 
+        $member = MemberFactory::new()->english()->create();
+
         /** @var Artist $artist */
-        $artist = $this->em()->find(Artist::class, $this->getReference(ArtistFixtures::ARTIST_REFERENCE, Artist::class)->getId());
+        $artist = ArtistFactory::new()->withMember($member)->dj()->create();
+        $artist = $this->em()->find(Artist::class, $artist->getId());
 
         $streamArtist = new StreamArtist();
         $streamArtist->setStream($stream);
@@ -377,8 +403,9 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->assertSame(200, $client->getResponse()->getStatusCode());
         $content = $client->getResponse()->getContent();
 
-        // Page should still render successfully (components handle no auth gracefully)
-        $this->assertStringContainsString('data-controller', $content);
+        // Page should still render successfully (components handle no auth gracefully) - use local Crawler
+        $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
+        $this->assertGreaterThan(0, $crawler->filter('[data-controller]')->count(), 'Expected live component root(s) with data-controller attribute (no-auth scenario).');
 
         // Clean up
         $stream->setOnline(false);
@@ -386,7 +413,7 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
     }
 
     /**
-     * Helper method to stop all online streams
+     * Helper method to stop all online streams.
      */
     private function stopAllOnlineStreams(): void
     {
@@ -397,24 +424,7 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $this->em()->flush();
     }
 
-    /**
-     * Get a fixture reference (helper for readability)
+    /*
+     * Get a fixture reference (helper for readability).
      */
-    private function getReference(string $name, string $class): object
-    {
-        // Fetch directly from database by known criteria from fixtures
-        if ($class === User::class) {
-            if ($name === UserFixtures::USER_REFERENCE) {
-                return $this->findOneOrFail(User::class, ['authId' => 'local-user']);
-            }
-            if ($name === UserFixtures::ACTIVE_MEMBER_REFERENCE) {
-                return $this->findOneOrFail(User::class, ['authId' => 'local-active']);
-            }
-        }
-        if ($class === Artist::class && $name === ArtistFixtures::ARTIST_REFERENCE) {
-            return $this->findOneOrFail(Artist::class, ['name' => 'Fixture Artist']);
-        }
-
-        throw new \RuntimeException("Unknown fixture reference: {$name} for class {$class}");
-    }
 }

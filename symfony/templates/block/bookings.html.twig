@@ -7,15 +7,15 @@
         </div>
         <div class="box-body">
             {% for booking in bookings %}
-                {% if booking.bookingdate < date('now-1days') and shown == false %}
+                {% if booking.bookingDate < date('now-1days') and shown == false %}
                     <h3 style="text-align: center;">Should be returned</h3>
                     {% set shown = true %}
                 {% endif %}
                 <div class="box box-solid collapsed-box">
-                    <div class="box-header {% if booking.IsSomethingBroken %}bg-warning{% endif %}">
+                    <div class="box-header {% if booking.isSomethingBroken %}bg-warning{% endif %}">
                         <div class="pull-left">
-                            {{ booking.bookingdate|date('d.m.Y') }}
-                            {% if booking.IsSomethingBroken %}- <twig:ux:icon name="kit-medical" />{% endif %}
+                            {{ booking.bookingDate|date('d.m.Y') }}
+                            {% if booking.isSomethingBroken %}- <twig:ux:icon name="kit-medical" />{% endif %}
                             <br>
                             <a href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">{{ booking.name }}</a>
                         </div>
@@ -24,11 +24,19 @@
                                href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
                                 <twig:ux:icon name="edit" /> edit
                             </a>
-                            <a class="btn btn-default btn-sm"
-                               href="{{ path('admin_app_booking_statusevent_create', {id: booking.id}) }}">
-                                <twig:ux:icon name="edit" />
-                                Change Status
-                            </a>
+                            {% if admin_pool is defined and admin_pool.getAdminByAdminCode('entropy_tunkki.admin.statusevent') is not null %}
+                                <a class="btn btn-default btn-sm"
+                                   href="{{ admin_pool.getAdminByAdminCode('entropy_tunkki.admin.statusevent').generateUrl('create', {id: booking.id}) }}">
+                                    <twig:ux:icon name="edit" />
+                                    Change Status
+                                </a>
+                            {% else %}
+                                <a class="btn btn-default btn-sm"
+                                   href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
+                                    <twig:ux:icon name="edit" />
+                                    Change Status
+                                </a>
+                            {% endif %}
                             <button class="btn btn-default btn-sm" data-widget="collapse">
                                 <twig:ux:icon name="plus" /> Show Contents
                             </button>

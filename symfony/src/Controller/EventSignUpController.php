@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Artist;
 use App\Entity\Event;
 use App\Entity\EventArtistInfo;
 use App\Entity\Member;
@@ -201,7 +202,7 @@ class EventSignUpController extends Controller
         $member = $user->getMember();
         $gdpr = false;
         $infos = $event->responsibleMemberNakkis($member);
-        if (0 == count($infos)) {
+        if (0 === count($infos)) {
             $gdpr = true;
             $infos = $event->memberNakkis($member);
         }
@@ -370,8 +371,22 @@ class EventSignUpController extends Controller
         $user = $this->getUser();
         assert($user instanceof User);
         $member = $user->getMember();
-        $artists = $member->getArtist();
-        if (0 == count($artists)) {
+        // Re-attach managed Member and fetch managed Artist choices to avoid detached entities
+        if ($member && $member->getId()) {
+            $managed = $em->getRepository(Member::class)->find($member->getId());
+            if (null !== $managed) {
+                $member = $managed;
+            }
+        }
+        // Load Artist choices via repository so Doctrine manages them for the choice field
+        try {
+            $artistChoices = $em->getRepository(Artist::class)->findBy(['member' => $member]);
+        } catch (\Throwable $e) {
+            @fwrite(STDERR, '[artistSignUp] failed loading artists: '.$e->getMessage()."\n");
+            $artistChoices = [];
+        }
+
+        if (0 === count($artistChoices)) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
 
@@ -386,14 +401,20 @@ class EventSignUpController extends Controller
         }
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
-        $form = $this->createForm(
-            EventArtistInfoType::class,
-            $artisteventinfo,
-            [
-                'artists' => $artists,
-                'ask_time' => $event->getArtistSignUpAskSetLength(),
-            ],
-        );
+        try {
+            $form = $this->createForm(
+                EventArtistInfoType::class,
+                $artisteventinfo,
+                [
+                    'artists' => $artistChoices,
+                    'ask_time' => (bool) $event->getArtistSignUpAskSetLength(),
+                ],
+            );
+        } catch (\Throwable $e) {
+            @fwrite(STDERR, '[artistSignUp] form build failed: '.$e->getMessage()."\n");
+            @fwrite(STDERR, '[artistSignUp] artists.count='.count($artistChoices)."\n");
+            throw $e;
+        }
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();
@@ -401,7 +422,7 @@ class EventSignUpController extends Controller
             $i = 1;
             foreach ($event->getEventArtistInfos() as $eventinfo) {
                 if ($info->getArtist() == $eventinfo->getArtist()) {
-                    if (1 == $i) {
+                    if (1 === $i) {
                         $this->addFlash(
                             'warning',
                             $trans->trans('this_artist_signed_up_already'),

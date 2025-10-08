@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Checkout;
 use App\Repository\CheckoutRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 /**
- * @extends CRUDController<object>
+ * @extends CRUDController<Checkout>
  */
 final class CheckoutAdminController extends CRUDController
 {

@@ -22,7 +22,7 @@
                         <li>
                             <span class="fa-li">
                                 <twig:ux:icon name="arrow-right" />
-                            </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ path('_page_alias_events_' ~ app.request.locale) }}">{{ 'block.future_events.events'|trans }}</a>
+                            </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ app.request.locale == 'fi' ? '/tapahtumat' : '/events' }}">{{ 'block.future_events.events'|trans }}</a>
                         </li>
                     {% endfor %}
                     {% if app.user and unreleased|length > 0 %}

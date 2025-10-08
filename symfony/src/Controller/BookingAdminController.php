@@ -2,11 +2,15 @@
 
 namespace App\Controller;
 
+use App\Entity\Booking;
 use App\Repository\BookingRepository;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @extends CRUDController<Booking>
+ */
 class BookingAdminController extends CRUDController
 {
     public function stuffListAction(BookingRepository $repo): Response

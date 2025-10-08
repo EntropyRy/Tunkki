@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\DataFixtures;
 
+use App\Domain\EventPublicationDecider;
 use App\Entity\Event;
+use App\Time\ClockInterface;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -38,8 +40,16 @@ final class AnnouncementEventFixtures extends Fixture
 {
     public const string REFERENCE_ANNOUNCEMENT = 'fixture_event_announcement';
 
+    public function __construct(
+        private readonly EventPublicationDecider $publicationDecider,
+        private readonly ClockInterface $clock,
+    ) {
+    }
+
     public function load(ObjectManager $manager): void
     {
+        $now = $this->clock->now();
+
         // Avoid creating duplicates if an announcement already exists (same type + slug).
         $existing = $manager->getRepository(Event::class)->findOneBy([
             'type' => 'announcement',
@@ -48,15 +58,15 @@ final class AnnouncementEventFixtures extends Fixture
 
         if ($existing instanceof Event) {
             // Ensure it's published and in the near future so it surfaces.
-            if (!$existing->isPublished()) {
+            if (!$this->publicationDecider->isPublished($existing)) {
                 $existing->setPublished(true);
             }
-            if ($existing->getPublishDate() > new \DateTime()) {
-                $existing->setPublishDate(new \DateTimeImmutable('-10 minutes'));
+            if ($existing->getPublishDate() instanceof \DateTimeInterface && $existing->getPublishDate() > $now) {
+                $existing->setPublishDate($now->modify('-10 minutes'));
             }
             // Keep or adjust event date minimally (only if in the past).
-            if ($existing->getEventDate() < new \DateTime()) {
-                $existing->setEventDate(new \DateTimeImmutable('+7 days'));
+            if ($existing->getEventDate() instanceof \DateTimeInterface && $existing->getEventDate() < $now) {
+                $existing->setEventDate($now->modify('+7 days')->setTime(12, 0));
             }
             $manager->persist($existing);
             $manager->flush();
@@ -71,9 +81,9 @@ final class AnnouncementEventFixtures extends Fixture
         // Critical: lowercase to match current repository query.
         $announcement->setType('announcement');
         $announcement->setPublished(true);
-        $announcement->setPublishDate(new \DateTimeImmutable('-15 minutes'));
+        $announcement->setPublishDate($now->modify('-15 minutes'));
         // Event date a few days ahead so it still appears among future events.
-        $announcement->setEventDate(new \DateTimeImmutable('+5 days')->setTime(12, 0));
+        $announcement->setEventDate($now->modify('+5 days')->setTime(12, 0));
         $announcement->setUrl('announcement');
         $announcement->setTemplate('event.html.twig');
         $announcement->setContent('<p>EN: Fixture announcement content.</p>');

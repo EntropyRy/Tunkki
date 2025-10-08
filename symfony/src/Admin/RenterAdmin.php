@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Renter;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -9,6 +10,12 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Validator\ErrorElement;
 
+/**
+ * @extends AbstractAdmin<Renter>
+ *
+ * TODO: Confirm the correct entity FQCN (e.g. \App\Entity\Renter). If the managed
+ * entity differs, update this annotation accordingly.
+ */
 class RenterAdmin extends AbstractAdmin
 {
     #[\Override]

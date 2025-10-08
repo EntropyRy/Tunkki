@@ -25,6 +25,10 @@ use Doctrine\Persistence\ObjectManager;
  * If you adopt grouping, you can add a getGroups() method (from
  * Doctrine\Bundle\FixturesBundle\FixtureGroupInterface) later. For now this
  * is a plain fixture.
+ *
+ * @deprecated Replaced by CmsBaselineStory (LT1) + SiteFactory. This fixture should be removed
+ *             after confirming all tests rely on the immutable CMS baseline story instead
+ *             of broad fixtures. Do not add new dependencies on this class. Target removal date: +30 days.
  */
 final class SiteFixtures extends Fixture
 {
@@ -38,7 +42,7 @@ final class SiteFixtures extends Fixture
         $fi->setName('FI');
         $fi->setEnabled(true);
         $fi->setHost('localhost');
-        $fi->setRelativePath('/');
+        $fi->setRelativePath('');
         $fi->setLocale('fi');
         $fi->setIsDefault(true);
         $fi->setEnabledFrom(new \DateTimeImmutable('-1 day'));

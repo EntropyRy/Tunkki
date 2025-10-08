@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\NakkiBooking;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -18,6 +19,9 @@ use Sonata\DoctrineORMAdminBundle\Filter\NullFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
+/**
+ * @extends AbstractAdmin<NakkiBooking>
+ */
 final class NakkiBookingAdmin extends AbstractAdmin
 {
     #[\Override]

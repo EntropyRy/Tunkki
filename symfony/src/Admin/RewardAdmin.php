@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Reward;
 use Knp\Menu\ItemInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -14,6 +15,9 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\Form\Type\DateTimePickerType;
 
+/**
+ * @extends AbstractAdmin<Reward>
+ */
 final class RewardAdmin extends AbstractAdmin
 {
     #[\Override]

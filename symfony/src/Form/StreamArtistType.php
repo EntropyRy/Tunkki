@@ -43,9 +43,7 @@ class StreamArtistType extends AbstractType
                     'label' => 'stream.artist.label',
                     'placeholder' => 'stream.artist.select',
                     'constraints' => [
-                        new NotNull([
-                            'message' => 'stream.artist.notnull',
-                        ]),
+                        new NotNull(message: 'stream.artist.notnull'),
                     ],
                 ]);
         }

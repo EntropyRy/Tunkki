@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\File;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -9,6 +10,12 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+/**
+ * @extends AbstractAdmin<File>
+ *
+ * TODO: Confirm the correct entity FQCN (e.g. \App\Entity\File or \App\Entity\Media\FileInfo).
+ * Replace if the managed entity differs.
+ */
 class FileAdmin extends AbstractAdmin
 {
     #[\Override]

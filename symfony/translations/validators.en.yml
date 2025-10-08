@@ -1,8 +1,36 @@
 under_password_limit: "Your password must be at least {{ limit }} characters long"
 passwords_need_to_match: The password fields must match.
+
+password:
+    required: Please enter a password
+    min_length: Your password must be at least {{ limit }} characters long
+    mismatch: The password fields must match.
+
+email:
+    required: Please enter your email
+    invalid: Please enter a valid email
+    unique: This email address is already in use.
+
+username:
+    required: Please enter a username
+    max_length: Username cannot be longer than {{ limit }} characters.
+
 artist:
-  form:
-    error: We use both bios because the site is bilingual. Please translate both.
+    form:
+        error: We use both bios because the site is bilingual. Please translate both.
+
 stream:
-  artist:
-    notnull: You must select an artist
+    artist:
+        notnull: You must select an artist
+
+happening:
+    validation:
+        type_required: Please select a type
+        time_required: Please provide the time
+        name_fi_required: Name in Finnish is required
+        description_fi_required: Description in Finnish is required
+        name_en_required: Name in English is required
+        description_en_required: Description in English is required
+        max_signups_positive_or_zero: Max sign-ups must be zero or a positive number
+        # removed duplicate payment_info_required (use happening.payment_info_required)
+    payment_info_required: Payment information is required

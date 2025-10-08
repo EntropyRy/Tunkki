@@ -1,0 +1,172 @@
+#!/usr/bin/env bash
+#
+# Git pre-commit hook for the Tunkki project
+#
+# Purpose:
+#   Fast, high-signal local quality gate before code reaches CI.
+#   Runs (by default):
+#     1. PHPStan (fast subset)   -> make stan-fast
+#     2. PHPUnit (unit tests)    -> make test-unit
+#     3. Optional style checks   -> php-cs-fixer dry-run (if tool present)
+#
+# Features:
+#   - Auto-detect Docker (fpm service) vs host execution.
+#   - Skippable via environment variables or commit message tokens.
+#   - Only runs on PHP / config changes (unless forced).
+#   - Graceful degradation if tools are missing.
+#
+# Installation:
+#   git config core.hooksPath .githooks
+#   chmod +x .githooks/pre-commit
+#
+# Skipping:
+#   env SKIP_QA=1 git commit -m "message"
+#   OR include [skip qa] or [skip hooks] in the commit message.
+#
+# Forcing full run even on non-PHP changes:
+#   env FORCE_QA=1 git commit -m "..."
+#
+# Future extensions (document when added):
+#   - Mutation testing on touched domain service files (advisory)
+#   - Diff-based PHPStan (stan-delta) fallback if created
+#   - Parallel test shards
+#
+# Exit Codes:
+#   0 success
+#   1 failure (details already printed)
+#
+set -euo pipefail
+
+# --------------- Configuration ---------------
+
+PHP_CHANGED_PATTERN='\.php$|\.neon$|composer\.(json|lock)$|phpunit(\.dist)?\.xml|symfony\.lock'
+STAN_CMD_DEFAULT='make stan-fast'
+UNIT_CMD_DEFAULT='make test-unit'
+STYLE_CMD_DEFAULT='vendor/bin/php-cs-fixer fix --dry-run --diff'
+PHP_BINARY='php'
+DOCKER_FPM_SERVICE='fpm'
+DOCKER_COMPOSE_BIN=${DOCKER_COMPOSE_BIN:-"docker compose"} # allow override
+
+# Colors (fallback to no color if not TTY)
+if [ -t 1 ]; then
+  C_RESET=$'\033[0m'
+  C_RED=$'\033[31m'
+  C_GREEN=$'\033[32m'
+  C_YELLOW=$'\033[33m'
+  C_BLUE=$'\033[34m'
+  C_CYAN=$'\033[36m'
+else
+  C_RESET=""; C_RED=""; C_GREEN=""; C_YELLOW=""; C_BLUE=""; C_CYAN=""
+fi
+
+# --------------- Helpers ---------------
+
+log() { printf "%s[pre-commit]%s %s\n" "$C_BLUE" "$C_RESET" "$*"; }
+warn() { printf "%s[pre-commit][warn]%s %s\n" "$C_YELLOW" "$C_RESET" "$*"; }
+err() { printf "%s[pre-commit][fail]%s %s\n" "$C_RED" "$C_RESET" "$*" >&2; }
+ok()  { printf "%s[pre-commit][ok]%s %s\n" "$C_GREEN" "$C_RESET" "$*"; }
+
+get_commit_msg() {
+  # HEAD commit message not available yet; use prepared commit message file.
+  local msg_file
+  msg_file=$(git rev-parse --git-dir)/COMMIT_EDITMSG
+  [ -f "$msg_file" ] && cat "$msg_file" || echo ""
+}
+
+in_docker() {
+  # crude heuristic: /proc/1/cgroup includes docker / or /.dockerenv present
+  if [ -f /.dockerenv ]; then
+    return 0
+  fi
+  grep -qE '/docker/' /proc/1/cgroup 2>/dev/null || return 1
+}
+
+have() { command -v "$1" >/dev/null 2>&1; }
+
+docker_fpm_available() {
+  $DOCKER_COMPOSE_BIN ps --services 2>/dev/null | grep -q "^${DOCKER_FPM_SERVICE}$" || return 1
+}
+
+run_phpstan() {
+  log "Running PHPStan (fast subset)..."
+  if docker_fpm_available; then
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$STAN_CMD_DEFAULT" || return 1
+  else
+    $STAN_CMD_DEFAULT || return 1
+  fi
+  ok "PHPStan completed"
+}
+
+run_unit_tests() {
+  log "Running PHPUnit (unit tests)..."
+  if docker_fpm_available; then
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$UNIT_CMD_DEFAULT" || return 1
+  else
+    $UNIT_CMD_DEFAULT || return 1
+  fi
+  ok "Unit tests passed"
+}
+
+run_style_check() {
+  if [ ! -f "vendor/bin/php-cs-fixer" ]; then
+    warn "php-cs-fixer not installed (skipping style dry-run)"
+    return 0
+  fi
+  log "Running code style dry-run..."
+  if docker_fpm_available; then
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$STYLE_CMD_DEFAULT" || return 1
+  else
+    $STYLE_CMD_DEFAULT || return 1
+  fi
+  ok "Style check passed"
+}
+
+has_relevant_changes() {
+  # Compare against HEAD index (staged files).
+  local changed
+  changed=$(git diff --cached --name-only || true)
+  if [ -z "$changed" ]; then
+    return 1
+  fi
+  echo "$changed" | grep -E "$PHP_CHANGED_PATTERN" >/dev/null 2>&1
+}
+
+# --------------- Skip Logic ---------------
+
+COMMIT_MSG_CONTENT=$(get_commit_msg || true)
+if [ "${SKIP_QA:-0}" = "1" ] || echo "$COMMIT_MSG_CONTENT" | grep -iqE '\[(skip qa|skip hooks|ci skip)\]'; then
+  warn "Skipping QA hook due to SKIP_QA=1 or commit message token."
+  exit 0
+fi
+
+if ! has_relevant_changes && [ "${FORCE_QA:-0}" != "1" ]; then
+  log "No PHP/config changes detected (set FORCE_QA=1 to override). Skipping QA steps."
+  exit 0
+fi
+
+# --------------- Environment Diagnostics ---------------
+
+if docker_fpm_available; then
+  log "Detected docker compose service '$DOCKER_FPM_SERVICE' – running inside container."
+else
+  if ! have "$PHP_BINARY"; then
+    warn "PHP not found on host and docker 'fpm' service unavailable; skipping QA checks."
+    exit 0
+  fi
+fi
+
+# --------------- Execution ---------------
+
+FAIL=0
+
+run_phpstan || { err "PHPStan failed"; FAIL=1; }
+run_unit_tests || { err "Unit tests failed"; FAIL=1; }
+run_style_check || { err "Style check failed"; FAIL=1; }
+
+if [ $FAIL -ne 0 ]; then
+  err "Pre-commit quality gate failed. Fix issues or skip with SKIP_QA=1 (not recommended)."
+  exit 1
+fi
+
+ok "All pre-commit checks passed."
+exit 0

@@ -24,7 +24,7 @@ class LoginListener implements EventSubscriberInterface
         // get user
         $user = $event->getUser();
         assert($user instanceof User);
-        $user->setLastLogin(new \DateTime());
+        $user->setLastLogin(new \DateTimeImmutable());
         $this->em->persist($user);
         $this->em->flush();
         // set user locale in session

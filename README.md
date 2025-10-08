@@ -34,3 +34,8 @@
 #### console commands
 
 - docker compose exec fpm ./bin/console
+
+### Testing
+
+For all testing setup, execution, coverage and mutation-testing details, see TESTING.md.
+

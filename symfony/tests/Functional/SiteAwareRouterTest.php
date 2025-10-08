@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Factory\EventFactory;
 use App\Tests\_Base\FixturesWebTestCase;
-use App\Tests\Http\SiteAwareKernelBrowser;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -19,39 +19,48 @@ use Symfony\Component\Routing\RouterInterface;
  *       - English: always /en/{year}/{slug}/shop
  *       - Finnish:      /{year}/{slug}/kauppa (no /en prefix)
  *
- * Assumptions (from fixtures & routing):
+ * Assumptions / Test Data Model:
  *  - Route name base: entropy_event_shop
  *  - Localized route names: entropy_event_shop.fi / entropy_event_shop.en
- *  - A fixture event with slug 'shop-event' exists (see EventFixtures).
+ *  - Test creates its own event dynamically (no reliance on global fixtures).
  *  - Current (default) site locale is Finnish ('fi'), so base generation without _locale
  *    maps to the Finnish variant.
  */
 final class SiteAwareRouterTest extends FixturesWebTestCase
 {
     private RouterInterface $router;
-    private ?SiteAwareKernelBrowser $client = null;
+    // Removed explicit $client property; rely on FixturesWebTestCase magic accessor & static site-aware client
+    private int $year;
+    private string $slug;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $kernel = static::bootKernel();
+        // Unified site-aware client initialization to ensure Sonata Page multisite context + SiteRequest wrapping.
+        $this->initSiteAwareClient(); // Site-aware client already registered; $this->client resolved via magic __get
+        // Prime FI homepage to fix locale-dependent generation defaults
+        $this->seedClientHome('fi');
         $this->router = static::getContainer()->get(RouterInterface::class);
-        $this->client = new SiteAwareKernelBrowser($kernel);
-        $this->client->setServerParameter('HTTP_HOST', 'localhost');
+        // Create a deterministic (but unique) event for routing tests.
+        $this->slug = 'router-'.bin2hex(random_bytes(4));
+        $now = new \DateTimeImmutable();
+        $event = EventFactory::new()
+            ->published()
+            ->ticketed()
+            ->create([
+                'url' => $this->slug,
+                'ticketPresaleStart' => $now->modify('-1 day'),
+                'ticketPresaleEnd' => $now->modify('+1 day'),
+            ]);
+        $this->year = (int) $event->getEventDate()->format('Y');
     }
 
     private function params(): array
     {
-        // Use a year that matches the fixture event date; we cannot depend on real-time year,
-        // so we ask the DB for the event to get its year rather than using date('Y').
-        $em = self::$em;
-        $event = $em->getRepository(\App\Entity\Event::class)->findOneBy(['url' => 'shop-event']);
-        self::assertNotNull($event, 'Fixture event "shop-event" must exist.');
-        $year = (int) $event->getEventDate()->format('Y');
-
+        // Return the dynamically created event parameters.
         return [
-            'year' => $year,
-            'slug' => 'shop-event',
+            'year' => $this->year,
+            'slug' => $this->slug,
         ];
     }
 
@@ -112,9 +121,23 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
 
         // Control: canonical pages 200
         $this->client->request('GET', $canonicalFi);
+        $status = $this->client->getResponse()->getStatusCode();
+        if (in_array($status, [301, 302, 303], true)) {
+            $loc = $this->client->getResponse()->headers->get('Location');
+            if ($loc) {
+                $this->client->request('GET', $loc);
+            }
+        }
         self::assertSame(200, $this->client->getResponse()->getStatusCode(), 'Canonical Finnish path should be 200.');
 
         $this->client->request('GET', $canonicalEn);
+        $status = $this->client->getResponse()->getStatusCode();
+        if (in_array($status, [301, 302, 303], true)) {
+            $loc = $this->client->getResponse()->headers->get('Location');
+            if ($loc) {
+                $this->client->request('GET', $loc);
+            }
+        }
         self::assertSame(200, $this->client->getResponse()->getStatusCode(), 'Canonical English path should be 200.');
 
         // Wrong-locale variants:

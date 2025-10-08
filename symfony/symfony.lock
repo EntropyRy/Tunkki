@@ -8,6 +8,18 @@
     "cocur/slugify": {
         "version": "v3.2"
     },
+    "dama/doctrine-test-bundle": {
+        "version": "8.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes-contrib",
+            "branch": "main",
+            "version": "8.3",
+            "ref": "dfc51177476fb39d014ed89944cde53dc3326d23"
+        },
+        "files": [
+            "config/packages/dama_doctrine_test_bundle.yaml"
+        ]
+    },
     "defuse/php-encryption": {
         "version": "v2.2.1"
     },
@@ -812,5 +824,18 @@
             "version": "0.6",
             "ref": "e4da12a48e8138479bd24a675321bcfd84950266"
         }
+    },
+    "zenstruck/foundry": {
+        "version": "2.7",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "main",
+            "version": "2.7",
+            "ref": "fcdc433411c0c9b424996c0a0aac7a2f89fb2611"
+        },
+        "files": [
+            "config/packages/zenstruck_foundry.yaml",
+            "src/Story/AppStory.php"
+        ]
     }
 }

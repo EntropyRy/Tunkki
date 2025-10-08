@@ -38,7 +38,10 @@ class DoorLogRepository extends ServiceEntityRepository
     /**
      * @return DoorLog[] Returns an array of DoorLog objects
      */
-    public function getSince(?\DateTime $since): mixed
+    /**
+     * @return DoorLog[]
+     */
+    public function getSince(?\DateTimeInterface $since): mixed
     {
         return $this->createQueryBuilder('d')
             ->where('d.createdAt >= :since')

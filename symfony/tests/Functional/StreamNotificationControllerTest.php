@@ -6,7 +6,6 @@ namespace App\Tests\Functional;
 
 use App\Entity\Stream;
 use App\Tests\_Base\FixturesWebTestCase;
-use App\Tests\Http\SiteAwareKernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -25,8 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class StreamNotificationControllerTest extends FixturesWebTestCase
 {
     private const TEST_TOKEN = 'test-token-123';
-    private ?SiteAwareKernelBrowser $client = null;
-
+    // (Removed explicit $client property; rely on FixturesWebTestCase magic accessor & static site-aware client)
 
     protected function setUp(): void
     {
@@ -35,12 +33,8 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         $_ENV['STREAM_NOTIFICATION_TOKEN'] = self::TEST_TOKEN;
         $_SERVER['STREAM_NOTIFICATION_TOKEN'] = self::TEST_TOKEN;
 
-        // Boot kernel once and create SiteAwareKernelBrowser to avoid double kernel boot (LogicException).
-        if (null === $this->client) {
-            $kernel = static::bootKernel();
-            $this->client = new SiteAwareKernelBrowser($kernel);
-            $this->client->setServerParameter('HTTP_HOST', 'localhost');
-        }
+        $this->initSiteAwareClient();
+        $this->client = $this->client();
     }
 
     public function testRejectsInvalidEventType(): void
@@ -201,6 +195,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         $this->assertSame('No active stream', $payload['message'] ?? null, 'Expected refined no-active message.');
         $this->assertNull($payload['event_id'], 'No active stream means null event_id in response.');
     }
+
     public function testInvalidJsonPayloadReturnsBadRequest(): void
     {
         $client = $this->client;

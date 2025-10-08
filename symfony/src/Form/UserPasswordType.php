@@ -22,7 +22,7 @@ class UserPasswordType extends AbstractType
             'type' => PasswordType::class,
             'first_options' => [
                 'constraints' => [
-                    new NotBlank(message: 'Please enter a password'),
+                    new NotBlank(message: 'password.required'),
                     new Length(
                         min: 8,
                         max: 4096,

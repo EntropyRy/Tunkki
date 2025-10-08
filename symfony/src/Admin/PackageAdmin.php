@@ -3,6 +3,7 @@
 namespace App\Admin;
 
 use App\Entity\Item;
+use App\Entity\Package;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -12,6 +13,12 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @extends AbstractAdmin<Package>
+ *
+ * TODO: Confirm the correct entity FQCN. If the managed entity differs
+ * (e.g. \App\Entity\RentalPackage), update this annotation accordingly.
+ */
 class PackageAdmin extends AbstractAdmin
 {
     #[\Override]

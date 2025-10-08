@@ -6,7 +6,12 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Events.
+ * StatusEvent.
+ *
+ * Notes:
+ *  - Migrated to DateTimeImmutable for temporal fields (CreatedAt / UpdatedAt).
+ *  - Description column is nullable; property type adjusted to ?string for consistency.
+ *  - Guarded setter/getter signatures updated accordingly.
  */
 #[ORM\Table(name: 'StatusEvent')]
 #[ORM\Entity]
@@ -25,13 +30,13 @@ class StatusEvent implements \Stringable
     private ?Booking $booking = null;
 
     #[ORM\Column(name: 'Description', type: Types::STRING, length: 5000, nullable: true)]
-    private string $description;
+    private ?string $description = null;
 
-    #[ORM\Column(name: 'CreatedAt', type: 'datetime')]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(name: 'CreatedAt', type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name: 'UpdatedAt', type: 'datetime')]
-    private \DateTimeInterface $updatedAt;
+    #[ORM\Column(name: 'UpdatedAt', type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'creator_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
@@ -44,14 +49,15 @@ class StatusEvent implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -59,43 +65,43 @@ class StatusEvent implements \Stringable
         return $this->id;
     }
 
-    public function setDescription(string $description): StatusEvent
+    public function setDescription(?string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): StatusEvent
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): StatusEvent
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setItem(?Item $item = null): StatusEvent
+    public function setItem(?Item $item = null): self
     {
         $this->item = $item;
 
@@ -110,16 +116,17 @@ class StatusEvent implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if (is_object($this->getItem())) {
+        if ($this->getItem() instanceof Item) {
             return 'Event for '.$this->getItem()->getName();
-        } elseif (is_object($this->getBooking())) {
-            return 'Event for '.$this->getBooking()->getName();
-        } else {
-            return 'No associated item';
         }
+        if ($this->getBooking() instanceof Booking) {
+            return 'Event for '.$this->getBooking()->getName();
+        }
+
+        return 'No associated item';
     }
 
-    public function setCreator(?User $creator = null): StatusEvent
+    public function setCreator(?User $creator = null): self
     {
         $this->creator = $creator;
 
@@ -131,7 +138,7 @@ class StatusEvent implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(?User $modifier = null): StatusEvent
+    public function setModifier(?User $modifier = null): self
     {
         $this->modifier = $modifier;
 
@@ -143,7 +150,7 @@ class StatusEvent implements \Stringable
         return $this->modifier;
     }
 
-    public function setBooking(?Booking $booking = null): StatusEvent
+    public function setBooking(?Booking $booking = null): self
     {
         $this->booking = $booking;
 

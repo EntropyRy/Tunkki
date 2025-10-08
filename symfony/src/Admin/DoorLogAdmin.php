@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\DoorLog;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -11,6 +12,12 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
 
+/**
+ * @extends AbstractAdmin<DoorLog>
+ *
+ * TODO: Confirm the managed entity FQCN (DoorLog). If the actual entity class differs,
+ *       update this annotation accordingly.
+ */
 final class DoorLogAdmin extends AbstractAdmin
 {
     #[\Override]

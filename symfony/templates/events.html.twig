@@ -35,18 +35,14 @@
     </div>
     <div id="events">
         {% for event in events %}
-            {% if app.user %}
-                {% set visible = true %}
-            {% else %}
-                {% set visible = app.user is null and event.published %}
-            {% endif %}
+            {# Visibility handled by repository; no per-template gating #}
             {% set year = event.eventdate|date('Y') %}
             {% if year != newyear %}
                 <div class="linetext">
                     <span>{{ year }}</span>
                 </div>
             {% endif %}
-            {% if event is not null and visible %}
+            {% if event is not null %}
                 <div class="post {{ event.type }} collapse {% if event.type != 'meeting' %}show{% endif %}"
                      data-name="{{ event.nameByLang(app.request.locale) }}">{{ block('events') }}</div>
             {% endif %}

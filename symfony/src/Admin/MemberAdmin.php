@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Member;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -17,6 +18,9 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangeType;
 
+/**
+ * @extends AbstractAdmin<Member>
+ */
 final class MemberAdmin extends AbstractAdmin
 {
     #[\Override]

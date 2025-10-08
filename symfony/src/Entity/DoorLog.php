@@ -19,8 +19,8 @@ class DoorLog
     #[ORM\JoinColumn(nullable: false)]
     private ?Member $member = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface|\DateTime|null $createdAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $message = null;
@@ -69,6 +69,6 @@ class DoorLog
     #[ORM\PrePersist]
     public function prePersist(): void
     {
-        $this->createdAt = new \DateTime();
+        $this->createdAt = new \DateTimeImmutable();
     }
 }

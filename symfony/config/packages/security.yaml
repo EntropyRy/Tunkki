@@ -109,15 +109,15 @@ security:
             custom_authenticators:
                 - App\Security\MattermostAuthenticator
     access_control:
-        - { path: ^/oauth$, role: PUBLIC_ACCESS }
-        - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
-        - { path: ^/login$, role: PUBLIC_ACCESS }
-        - { path: ^/profile/new, role: PUBLIC_ACCESS }
+        - { path: ^/(en/)?oauth$, role: PUBLIC_ACCESS }
+        - { path: ^/(en/)?oauth/check.*, role: PUBLIC_ACCESS }
+        - { path: ^/(en/)?login$, role: PUBLIC_ACCESS }
+        - { path: ^/(en/)?profile/new, role: PUBLIC_ACCESS }
         - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
-        - { path: ^/verify/email, role: PUBLIC_ACCESS }
+        - { path: ^/(en/)?verify/email, role: PUBLIC_ACCESS }
         - { path: ^/vahvista/sahkoposti, role: PUBLIC_ACCESS }
         # Resend verification now requires authentication (removed PUBLIC_ACCESS)
-        - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/(en/)?oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         # Door route: allow only from configured IPs; otherwise deny explicitly
         #    - path: "^/(en/kerde/door|kerde/ovi)/?$"
         #      ips:

@@ -2,6 +2,7 @@
 
 namespace App\Admin;
 
+use App\Entity\Item;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\User;
 use App\Service\MattermostNotifierService;
@@ -24,6 +25,9 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
+/**
+ * @extends AbstractAdmin<Item>
+ */
 class ItemAdmin extends AbstractAdmin
 {
     #[\Override]

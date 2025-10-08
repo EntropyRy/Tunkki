@@ -73,11 +73,16 @@ class TicketRepository extends ServiceEntityRepository
 
     public function findPresaleTickets(Event $event): mixed
     {
+        /*
+         * Presale ticket selection:
+         * - Intentionally does NOT filter out reserved / owned tickets so that the presale "window"
+         *   always spans the earliest N tickets for the event (historical behavior relied on by tests).
+         * - Ordering is by id (insert order). If referenceNumber ordering becomes required, switch to
+         *   orderBy('t.referenceNumber','ASC') after confirming the field is always populated.
+         */
         return $this->createQueryBuilder('t')
             ->andWhere('t.event = :event')
-            // ->andWhere('t.status = :status')
             ->setParameter('event', $event)
-            // ->setParameter('status', 'available')
             ->orderBy('t.id', 'ASC')
             ->setMaxResults($event->getTicketPresaleCount())
             ->getQuery()
@@ -101,7 +106,10 @@ class TicketRepository extends ServiceEntityRepository
     {
         $all = $this->findPresaleTickets($event);
         foreach ($all as $ticket) {
-            if ('available' == $ticket->getStatus() && is_null($ticket->getOwner())) {
+            if (
+                'available' == $ticket->getStatus()
+                && is_null($ticket->getOwner())
+            ) {
                 return $ticket;
             }
         }
@@ -109,8 +117,10 @@ class TicketRepository extends ServiceEntityRepository
         return null;
     }
 
-    public function findMemberTicketReferenceForEvent(Member $member, Event $event): ?string
-    {
+    public function findMemberTicketReferenceForEvent(
+        Member $member,
+        Event $event,
+    ): ?int {
         $ticket = $this->createQueryBuilder('t')
             ->select('t.referenceNumber')
             ->andWhere('t.event = :event')
@@ -120,8 +130,9 @@ class TicketRepository extends ServiceEntityRepository
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
-        if ($ticket) {
-            return $ticket['referenceNumber'];
+
+        if ($ticket && isset($ticket['referenceNumber'])) {
+            return (int) $ticket['referenceNumber'];
         }
 
         return null;
@@ -136,16 +147,17 @@ class TicketRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findTicketsByEmailAndEvent(string $email, Event $event): mixed
-    {
-        return $this->createQueryBuilder('t')
-            ->join('t.owner', 'm')
-            ->andWhere('m.email = :email')
-            ->orWhere('t.email = :email')
+    public function findTicketsByEmailAndEvent(
+        string $email,
+        Event $event,
+    ): mixed {
+        $qb = $this->createQueryBuilder('t');
+        $qb->leftJoin('t.owner', 'm')
             ->andWhere('t.event = :event')
-            ->setParameter('email', $email)
+            ->andWhere($qb->expr()->orX('m.email = :email', 't.email = :email'))
             ->setParameter('event', $event)
-            ->getQuery()
-            ->getResult();
+            ->setParameter('email', $email);
+
+        return $qb->getQuery()->getResult();
     }
 }

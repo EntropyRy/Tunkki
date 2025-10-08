@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\AccessGroups;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -12,6 +13,9 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractAdmin<AccessGroups>
+ */
 final class AccessGroupsAdmin extends AbstractAdmin
 {
     #[\Override]

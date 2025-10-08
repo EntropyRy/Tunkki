@@ -25,6 +25,9 @@ use Doctrine\Persistence\ObjectManager;
  *
  * This version purposely removes method_exists guards and assumes the Sonata Page
  * entity (BasePage derivative) provides all used setters / getters.
+ *
+ * @deprecated Replaced by CmsBaselineStory + PageFactory (LT1). Do not introduce new test
+ *             dependencies on this fixture. Target removal date: +30 days after LT1 integration.
  */
 final class PageFixtures extends Fixture implements DependentFixtureInterface
 {

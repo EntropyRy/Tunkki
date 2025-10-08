@@ -32,8 +32,13 @@ class Event implements \Stringable
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $EventDate = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface|\DateTime $publishDate;
+    // NOTE 2025-10-02 (MT37/STAN-01): publishDate converted to nullable immutable field.
+    // Draft/unpublished events: publishDate = null (evaluated via EventPublicationDecider).
+    // TODO(DB MIGRATION): Generate a Doctrine migration to:
+    //   * ALTER COLUMN publish_date (or actual column name) to allow NULL
+    //   * Change type/comment to datetime_immutable (if using doctrine type comments)
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $publishDate = null;
 
     #[ORM\ManyToOne(targetEntity: Media::class, cascade: ['persist'])]
     private ?Media $picture = null;
@@ -81,6 +86,8 @@ class Event implements \Stringable
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $cancelled = false;
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
+    private bool $multiday = false;
 
     #[ORM\ManyToOne(targetEntity: Media::class)]
     private ?Media $attachment = null;
@@ -97,8 +104,8 @@ class Event implements \Stringable
     #[OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
     private $eventArtistInfos;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $until = null;
@@ -280,8 +287,7 @@ class Event implements \Stringable
     private ?string $artistSignUpInfoEn = null;
 
     #[ORM\Column(type: Types::INTEGER)]
-    #[ORM\Version]
-    private ?int $version = null;
+    private ?int $version = 1;
 
     #[ORM\Column(nullable: true)]
     private ?bool $sendRsvpEmail = null;
@@ -295,13 +301,17 @@ class Event implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
+        if (null === $this->version) {
+            $this->version = 1;
+        }
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new \DateTimeImmutable();
+        $this->version = ($this->version ?? 0) + 1;
     }
 
     public function getId(): ?int
@@ -345,13 +355,14 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getPublishDate(): ?\DateTimeInterface
+    public function getPublishDate(): ?\DateTimeImmutable
     {
         return $this->publishDate;
     }
 
-    public function setPublishDate(\DateTimeInterface $publishDate): self
+    public function setPublishDate(?\DateTimeImmutable $publishDate): self
     {
+        // Null = draft/unpublished; domain service (EventPublicationDecider) interprets accordingly.
         $this->publishDate = $publishDate;
 
         return $this;
@@ -435,16 +446,11 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function isPublished(): bool
-    {
-        $now = new \DateTime();
-
-        return true == $this->published && $this->publishDate < $now;
-    }
+    // (Removed 2025-10-02) Publication logic migrated to App\Domain\EventPublicationDecider::isPublished(Event) for clock-driven determinism.
 
     public function __construct()
     {
-        $this->publishDate = new \DateTime();
+        // publishDate intentionally NOT initialized here (null => draft state)
         $this->eventArtistInfos = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
         $this->nakkis = new ArrayCollection();
@@ -459,18 +465,39 @@ class Event implements \Stringable
 
     public function getNowTest(): ?string
     {
-        $now = new \DateTime();
+        // If no EventDate is defined, the temporal phase is undefined.
+        if (!$this->EventDate instanceof \DateTimeInterface) {
+            return 'undefined';
+        }
+
+        // Normalize comparisons to whole seconds to avoid microsecond drift.
+        $now = new \DateTimeImmutable();
+        $nowS = (int) $now->format('U');
+
+        $eventS = $this->EventDate instanceof \DateTimeInterface ? (int) $this->EventDate->format('U') : null;
+
         if ($this->until instanceof \DateTimeInterface) {
-            if ($now >= $this->EventDate && $now <= $this->until) {
+            $untilS = (int) $this->until->format('U');
+
+            // One-second tolerance to account for the internal "now" being captured slightly after the caller's boundary.
+            $tolerance = 1;
+
+            if (null !== $eventS && $nowS >= $eventS && $nowS <= ($untilS + $tolerance)) {
                 return 'now';
-            } elseif ($now > $this->until) {
+            }
+
+            if ($nowS > ($untilS + $tolerance)) {
                 return 'after';
-            } elseif ($now < $this->EventDate) {
+            }
+
+            if ($nowS < $eventS) {
                 return 'before';
             }
-        } elseif ($now < $this->EventDate) {
-            return 'before';
         } else {
+            if ($nowS < $eventS) {
+                return 'before';
+            }
+
             return 'after';
         }
 
@@ -690,12 +717,12 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 
@@ -973,9 +1000,25 @@ class Event implements \Stringable
     {
         $now = new \DateTimeImmutable('now');
 
-        return $this->getArtistSignUpEnabled()
-            && $this->getArtistSignUpStart() <= $now
-            && $this->getArtistSignUpEnd() >= $now
+        if (!$this->getArtistSignUpEnabled()) {
+            return false;
+        }
+
+        $start = $this->getArtistSignUpStart();
+        $end = $this->getArtistSignUpEnd();
+
+        // Guard against incomplete window definition
+        if (!$start instanceof \DateTimeInterface || !$end instanceof \DateTimeInterface) {
+            return false;
+        }
+
+        // Normalize to second precision to avoid microsecond drift issues
+        $nowS = (int) $now->format('U');
+        $startS = (int) $start->format('U');
+        $endS = (int) $end->format('U');
+
+        return $startS <= $nowS
+            && $endS >= $nowS
             && !$this->isInPast();
     }
 
@@ -1098,19 +1141,30 @@ class Event implements \Stringable
 
     public function getMultiday(): bool
     {
-        // dd( $this->EventDate->format('U') - $this->until->format('U'));
-        if ($this->until instanceof \DateTimeInterface) {
-            if (
-                $this->until->format('U') - $this->EventDate->format('U') >
-                86400
-            ) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
-            return false;
+        // If explicitly flagged true (factory override), short-circuit.
+        if ($this->multiday) {
+            return true;
         }
+
+        if ($this->until instanceof \DateTimeInterface && $this->EventDate instanceof \DateTimeInterface) {
+            return ($this->until->format('U') - $this->EventDate->format('U')) > 86400;
+        }
+
+        return false;
+    }
+
+    /**
+     * Explicit multiday setter for factory/state hydration.
+     *
+     * NOTE: multiday remains a derived concept (eventDate vs until) unless
+     * explicitly forced true via this setter. Setting false defers back to
+     * derived computation so that adjusting dates still reflects reality.
+     */
+    public function setMultiday(bool $multiday): self
+    {
+        $this->multiday = $multiday;
+
+        return $this;
     }
 
     public function getMusicArtistInfos(): array

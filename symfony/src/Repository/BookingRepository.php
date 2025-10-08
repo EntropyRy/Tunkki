@@ -15,18 +15,28 @@ class BookingRepository extends ServiceEntityRepository
 
     public function findBookingsAtTheSameTime(int $id, $startAt, $endAt): mixed
     {
-        $queryBuilder = $this->createQueryBuilder('b')
-            ->andWhere('b.retrieval BETWEEN :startAt and :endAt')
-            ->orWhere('b.returning BETWEEN :startAt and :endAt')
-            ->andWhere('b.itemsReturned = false')
-            ->andWhere('b.cancelled = false')
-            ->andWhere('b.id != :id')
+        // Corrected logical grouping:
+        // We want: (retrieval in window OR returning in window) AND itemsReturned = false AND cancelled = false AND b.id != :id
+        $qb = $this->createQueryBuilder('b');
+        $expr = $qb->expr();
+
+        $qb->andWhere(
+            $expr->andX(
+                $expr->orX(
+                    $expr->between('b.retrieval', ':startAt', ':endAt'),
+                    $expr->between('b.returning', ':startAt', ':endAt'),
+                ),
+                'b.itemsReturned = false',
+                'b.cancelled = false',
+                'b.id != :id',
+            ),
+        )
             ->setParameter('startAt', $startAt)
             ->setParameter('endAt', $endAt)
             ->setParameter('id', $id)
             ->orderBy('b.name', 'ASC');
 
-        return $queryBuilder->getQuery()->getResult();
+        return $qb->getQuery()->getResult();
     }
 
     public function countHandled(): int

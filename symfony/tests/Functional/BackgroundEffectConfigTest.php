@@ -52,7 +52,7 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
         self::assertSame(
             $rawJson,
             $reloaded->getBackgroundEffectConfig(),
-            'BackgroundEffectConfig should be stored verbatim (no pretty-print or key sorting).'
+            'BackgroundEffectConfig should be stored verbatim (no pretty-print or key sorting).',
         );
 
         // Now update with a different raw structure (different spacing + added key)
@@ -68,7 +68,7 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
         self::assertSame(
             $updatedJson,
             $reloaded2->getBackgroundEffectConfig(),
-            'Updated raw JSON must remain exactly as provided (no normalization).'
+            'Updated raw JSON must remain exactly as provided (no normalization).',
         );
 
         // Note: Test data cleanup is handled by tearDown() clearing EntityManager state.
@@ -104,12 +104,12 @@ final class BackgroundEffectConfigTest extends FixturesWebTestCase
         self::assertSame(
             'snake',
             $reloaded->getBackgroundEffect(),
-            'Effect should persist even if unsupported at admin UI level.'
+            'Effect should persist even if unsupported at admin UI level.',
         );
         self::assertSame(
             $json,
             $reloaded->getBackgroundEffectConfig(),
-            'Config for unsupported effect should remain (only admin form listener clears it, not entity persistence).'
+            'Config for unsupported effect should remain (only admin form listener clears it, not entity persistence).',
         );
 
         // Note: Test data cleanup is handled by tearDown() clearing EntityManager state.

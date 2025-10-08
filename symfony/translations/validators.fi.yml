@@ -1,8 +1,33 @@
 under_password_limit: "Salasanasi pitää olla vähintään {{ limit }} merkkiä"
 passwords_need_to_match: Salasanojen on oltava samat.
 artist:
-  form:
-    error: Käytämme molempia bio-tekstejä sivuston kaksikielisyyden vuoksi. Ole hyvä ja käännä teksti molemmille kielille.
+    form:
+        error: Käytämme molempia bio-tekstejä sivuston kaksikielisyyden vuoksi. Ole hyvä ja käännä teksti molemmille kielille.
 stream:
-  artist:
-    notnull: Sinun täytyy valita artisti
+    artist:
+        notnull: Sinun täytyy valita artisti
+
+password:
+    required: Anna salasana
+    min_length: Salasanasi pitää olla vähintään {{ limit }} merkkiä
+    mismatch: Salasanojen on oltava samat.
+
+email:
+    required: Anna sähköpostisi
+    invalid: Anna kelvollinen sähköpostiosoite
+    unique: Tämä sähköpostiosoite on jo käytössä.
+
+username:
+    required: Anna käyttäjänimi
+    max_length: Käyttäjänimi ei voi olla pidempi kuin {{ limit }} merkkiä.
+
+happening:
+    validation:
+        type_required: Valitse tyyppi
+        time_required: Anna aika
+        name_fi_required: Nimi suomeksi on pakollinen
+        description_fi_required: Kuvaus suomeksi on pakollinen
+        name_en_required: Nimi englanniksi on pakollinen
+        description_en_required: Kuvaus englanniksi on pakollinen
+        max_signups_positive_or_zero: Maksimimäärän tulee olla nolla tai positiivinen luku
+    payment_info_required: Maksutiedot ovat pakolliset

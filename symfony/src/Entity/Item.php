@@ -105,11 +105,11 @@ class Item implements \Stringable
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?User $modifier = null;
 
-    #[ORM\Column(name: 'createdAt', type: 'datetime')]
-    private \DateTimeInterface|\DateTimeImmutable|null $createdAt = null;
+    #[ORM\Column(name: 'createdAt', type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(name: 'updatedAt', type: 'datetime')]
-    private \DateTimeInterface|\DateTimeImmutable|null $updatedAt = null;
+    #[ORM\Column(name: 'updatedAt', type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int
     {
@@ -212,24 +212,24 @@ class Item implements \Stringable
         return $this->forSale;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
 

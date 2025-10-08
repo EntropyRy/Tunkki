@@ -58,38 +58,46 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'paid_date', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $paid_date = null;
 
+    /**
+     * @var Collection<int, Item>
+     */
     #[ORM\ManyToMany(targetEntity: Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private $items;
+    private Collection $items;
 
+    /**
+     * @var Collection<int, Package>
+     */
     #[ORM\ManyToMany(targetEntity: Package::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
-    private $packages;
+    private Collection $packages;
 
+    /**
+     * @var Collection<int, Accessory>
+     */
     #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
-    private $accessories;
+    private Collection $accessories;
 
-    #[
-        ORM\ManyToOne(
-            targetEntity: WhoCanRentChoice::class,
-            cascade: ['persist'],
-        ),
-    ]
+    #[ORM\ManyToOne(
+        targetEntity: WhoCanRentChoice::class,
+        cascade: ['persist'],
+    )]
     private ?WhoCanRentChoice $rentingPrivileges = null;
 
     #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
     #[Assert\NotBlank]
     private ?Renter $renter = null;
 
-    #[
-        ORM\OneToMany(
-            targetEntity: BillableEvent::class,
-            mappedBy: 'booking',
-            cascade: ['persist'],
-            orphanRemoval: true,
-        ),
-    ]
-    private $billableEvents;
+    /**
+     * @var Collection<int, BillableEvent>
+     */
+    #[ORM\OneToMany(
+        targetEntity: BillableEvent::class,
+        mappedBy: 'booking',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
+    private Collection $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $givenAwayBy = null;
@@ -111,15 +119,16 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'numberOfRentDays', type: Types::INTEGER)]
     private int $numberOfRentDays = 1;
 
-    #[
-        ORM\OneToMany(
-            targetEntity: StatusEvent::class,
-            mappedBy: 'booking',
-            cascade: ['all'],
-            fetch: 'LAZY',
-        ),
-    ]
-    private $statusEvents;
+    /**
+     * @var Collection<int, StatusEvent>
+     */
+    #[ORM\OneToMany(
+        targetEntity: StatusEvent::class,
+        mappedBy: 'booking',
+        cascade: ['all'],
+        fetch: 'LAZY',
+    )]
+    private Collection $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $creator = null;
@@ -137,8 +146,11 @@ class Booking implements \Stringable
     #[Assert\NotBlank]
     private ?\DateTimeImmutable $bookingDate = null;
 
+    /**
+     * @var Collection<int, Reward>
+     */
     #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
-    private $rewards;
+    private Collection $rewards;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $reasonForDiscount = null;
@@ -153,6 +165,16 @@ class Booking implements \Stringable
     #[ORM\Version]
     // @phpstan-ignore-next-line
     private ?int $version = null;
+
+    public function __construct()
+    {
+        $this->items = new ArrayCollection();
+        $this->packages = new ArrayCollection();
+        $this->accessories = new ArrayCollection();
+        $this->billableEvents = new ArrayCollection();
+        $this->statusEvents = new ArrayCollection();
+        $this->rewards = new ArrayCollection();
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -185,7 +207,7 @@ class Booking implements \Stringable
         $this->packages->removeElement($package);
     }
 
-    public function getPackages()
+    public function getPackages(): Collection
     {
         return $this->packages;
     }
@@ -295,16 +317,7 @@ class Booking implements \Stringable
         return $this->actualPrice;
     }
 
-    public function __construct()
-    {
-        $this->items = new ArrayCollection();
-        $this->packages = new ArrayCollection();
-        $this->accessories = new ArrayCollection();
-        $this->billableEvents = new ArrayCollection();
-        $this->statusEvents = new ArrayCollection();
-        $this->rewards = new ArrayCollection();
-    }
-
+    /** duplicate __construct removed (first constructor retained above) */
     public function addItem(Item $item): Booking
     {
         $item->addRentHistory($this);
@@ -319,7 +332,7 @@ class Booking implements \Stringable
         $this->items->removeElement($item);
     }
 
-    public function getItems()
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -349,7 +362,7 @@ class Booking implements \Stringable
         $this->billableEvents->removeElement($billableEvent);
     }
 
-    public function getBillableEvents()
+    public function getBillableEvents(): Collection
     {
         return $this->billableEvents;
     }
@@ -446,7 +459,7 @@ class Booking implements \Stringable
         return $this->statusEvents->removeElement($statusEvent);
     }
 
-    public function getStatusEvents()
+    public function getStatusEvents(): Collection
     {
         return $this->statusEvents;
     }

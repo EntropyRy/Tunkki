@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Notification;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -13,6 +14,11 @@ use Sonata\AdminBundle\Show\ShowMapper;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
+/**
+ * @extends AbstractAdmin<Notification>
+ *
+ * TODO: Confirm the managed entity FQCN (e.g. \App\Entity\Notification). Update if it differs.
+ */
 final class NotificationAdmin extends AbstractAdmin
 {
     #[\Override]

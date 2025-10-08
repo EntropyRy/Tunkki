@@ -12,6 +12,8 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * Unified member form for both creation and editing.
@@ -29,12 +31,19 @@ class MemberType extends AbstractType
             ->add('username', TextType::class)
             ->add('firstname', TextType::class)
             ->add('lastname', TextType::class)
-            ->add('email', EmailType::class)
+            ->add('email', EmailType::class, [
+                'constraints' => [
+                    new NotBlank(message: 'email.required'),
+                    new Email(message: 'email.invalid'),
+                ],
+            ])
             ->add('phone', TextType::class);
 
         if ($options['include_user']) {
             // Only on creation path
-            $builder->add('user', UserPasswordType::class);
+            $builder->add('user', UserPasswordType::class, [
+                'mapped' => false,
+            ]);
         }
 
         $builder

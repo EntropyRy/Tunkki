@@ -27,7 +27,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Length(min: 8)]
     private ?string $password = null;
 
@@ -35,19 +35,20 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     private $plainPassword;
 
     #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', unique: true)]
     private ?Member $member = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $CreatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $CreatedAt = null;
 
-    #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $UpdatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable')]
+    private ?\DateTimeImmutable $UpdatedAt = null;
 
     #[ORM\OneToMany(targetEntity: Reward::class, mappedBy: 'user', orphanRemoval: true)]
     private $rewards;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $LastLogin = null;
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $LastLogin = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $MattermostId = null;
@@ -67,14 +68,15 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->CreatedAt = new \DateTime();
-        $this->UpdatedAt = new \DateTime();
+        $now = new \DateTimeImmutable();
+        $this->CreatedAt = $now;
+        $this->UpdatedAt = $now;
     }
 
     #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
-        $this->UpdatedAt = new \DateTime();
+        $this->UpdatedAt = new \DateTimeImmutable();
     }
 
     public function getId(): ?int
@@ -189,36 +191,36 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->CreatedAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $CreatedAt): self
+    public function setCreatedAt(\DateTimeImmutable $CreatedAt): self
     {
         $this->CreatedAt = $CreatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->UpdatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $UpdatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): self
     {
         $this->UpdatedAt = $UpdatedAt;
 
         return $this;
     }
 
-    public function getLastLogin(): ?\DateTimeInterface
+    public function getLastLogin(): ?\DateTimeImmutable
     {
         return $this->LastLogin;
     }
 
-    public function setLastLogin(?\DateTimeInterface $LastLogin): self
+    public function setLastLogin(?\DateTimeImmutable $LastLogin): self
     {
         $this->LastLogin = $LastLogin;
 

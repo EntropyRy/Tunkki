@@ -9,3 +9,5 @@ dev.sql
 .php-cs-fixer.cache
 .phpactor.yml
 .twig-cs-fixer.cache
+metrics/_archived
+todo.md

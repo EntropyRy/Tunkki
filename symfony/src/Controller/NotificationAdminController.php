@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Notification;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -15,6 +16,9 @@ use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @extends CRUDController<Notification>
+ */
 final class NotificationAdminController extends CRUDController
 {
     public function sendAction(

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Domain\EventPublicationDecider;
 use App\Entity\Cart;
 use App\Entity\Event;
 use App\Entity\Member;
@@ -25,12 +26,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EventController extends Controller
 {
     use TargetPathTrait;
+
+    public function __construct(
+        private readonly EventPublicationDecider $publicationDecider,
+    ) {
+    }
 
     #[Route(
         path: [
@@ -119,6 +126,19 @@ class EventController extends Controller
         TicketRepository $ticketRepo,
         EntityManagerInterface $em,
     ): Response {
+        // DEBUG BLOCK (guarded by TEST_EVENT_DEBUG) — remove once issue resolved
+        if (getenv('TEST_EVENT_DEBUG')) {
+            try {
+                $isPub = $this->publicationDecider->isPublished($event);
+                $userObj = $this->getUser();
+                $who = $userObj instanceof UserInterface ? ('auth:'.$userObj::class) : 'anon';
+                $pubDate = $event->getPublishDate()?->format('c') ?? 'null';
+                $flag = var_export($event->getPublished(), true);
+                @fwrite(STDERR, "[oneSlug] event id={$event->getId()} url={$event->getUrl()} publishedFlag={$flag} publishDate={$pubDate} decider=".($isPub ? 'PUBLISHED' : 'NOT_PUBLISHED')." user={$who}".PHP_EOL);
+            } catch (\Throwable $e) {
+                @fwrite(STDERR, '[oneSlug] debug failed: '.$e->getMessage().PHP_EOL);
+            }
+        }
         $form = null;
         $user = $this->getUser();
         if ($event->getTicketsEnabled() && $user) {
@@ -155,7 +175,10 @@ class EventController extends Controller
                 }
             }
         }
-        if (!$event->isPublished() && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+            if (getenv('TEST_EVENT_DEBUG')) {
+                @fwrite(STDERR, "[oneSlug] denying anonymous (not published)\n");
+            }
             throw $this->createAccessDeniedException('');
         }
         $template = $event->getTemplate();
@@ -189,7 +212,7 @@ class EventController extends Controller
         NakkiBookingRepository $nakkirepo,
         TicketRepository $ticketRepo,
     ): Response {
-        if (false == $event->ticketPresaleEnabled()) {
+        if (false === $event->ticketPresaleEnabled()) {
             throw $this->createAccessDeniedException('');
         }
         $selected = [];
@@ -197,7 +220,7 @@ class EventController extends Controller
         $hasNakki = false;
         $email = null;
         $user = $this->getUser();
-        if ((!$event->isPublished() && is_null($user)) || (is_null($user) && $event->isNakkiRequiredForTicketReservation())) {
+        if ((!$this->publicationDecider->isPublished($event) && is_null($user)) || (is_null($user) && $event->isNakkiRequiredForTicketReservation())) {
             throw $this->createAccessDeniedException('');
         }
         if (null != $user) {
@@ -358,7 +381,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -382,7 +405,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -406,7 +429,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user) || !$event->isLocationPublic()) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user) || !$event->isLocationPublic()) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -430,7 +453,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -454,7 +477,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$event->isPublished() && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
             throw $this->createAccessDeniedException('');
         }
 
