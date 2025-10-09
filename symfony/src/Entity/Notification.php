@@ -18,7 +18,7 @@ class Notification implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $sentAt = null;
@@ -33,7 +33,7 @@ class Notification implements \Stringable
     private ?string $message = null;
 
     #[ORM\Column(length: 8)]
-    private ?string $locale = 'fi';
+    private string $locale = 'fi';
 
     #[ORM\Column]
     private array $options = [];
@@ -49,7 +49,7 @@ class Notification implements \Stringable
         return $this->id;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -116,7 +116,7 @@ class Notification implements \Stringable
         return $this;
     }
 
-    public function getLocale(): ?string
+    public function getLocale(): string
     {
         return $this->locale;
     }
