@@ -6,9 +6,9 @@ namespace App\Controller;
 
 use App\Entity\Notification;
 use App\Message\SendTelegramNotification;
+use App\MessageHandler\SendTelegramNotificationHandler;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
  * @extends CRUDController<Notification>
@@ -16,7 +16,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 final class NotificationAdminController extends CRUDController
 {
     public function sendAction(
-        MessageBusInterface $messageBus,
+        SendTelegramNotificationHandler $handler,
     ): RedirectResponse {
         $notification = $this->admin->getSubject();
 
@@ -27,7 +27,7 @@ final class NotificationAdminController extends CRUDController
         }
 
         try {
-            $messageBus->dispatch(new SendTelegramNotification($notification->getId()));
+            $handler(new SendTelegramNotification($notification->getId()));
             $this->addFlash('success', 'Message sent');
         } catch (\Exception $e) {
             $this->addFlash('warning', 'Message NOT sent: '.$e->getMessage());
