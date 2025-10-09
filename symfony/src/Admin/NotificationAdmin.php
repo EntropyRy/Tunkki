@@ -75,6 +75,7 @@ final class NotificationAdmin extends AbstractAdmin
             ->add('options', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,
+                'required' => false,
                 'choices' => [
                     'Add event picture to the message header (can be added only on first send)' => 'add_event_picture',
                     'Preview link That is in the content (only if there is no header picture)' => 'add_preview_link',
