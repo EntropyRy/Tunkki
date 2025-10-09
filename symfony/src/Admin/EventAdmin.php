@@ -40,7 +40,7 @@ final class EventAdmin extends AbstractAdmin
     protected function generateBaseRoutePattern(
         bool $isChildAdmin = false,
     ): string {
-        return 'event';
+        return "event";
     }
 
     #[\Override]
@@ -50,10 +50,10 @@ final class EventAdmin extends AbstractAdmin
         $sortValues[DatagridInterface::PAGE] = 1;
 
         // reverse order (default = 'ASC')
-        $sortValues[DatagridInterface::SORT_ORDER] = 'DESC';
+        $sortValues[DatagridInterface::SORT_ORDER] = "DESC";
 
         // name of the ordered field (default = the model's id field, if any)
-        $sortValues[DatagridInterface::SORT_BY] = 'EventDate';
+        $sortValues[DatagridInterface::SORT_BY] = "EventDate";
     }
 
     #[\Override]
@@ -62,21 +62,21 @@ final class EventAdmin extends AbstractAdmin
         $action,
         ?AdminInterface $childAdmin = null,
     ): void {
-        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+        if (!$childAdmin && !in_array($action, ["edit", "show"])) {
             return;
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
+        $id = $admin->getRequest()->get("id");
         $event = $admin->getSubject();
-        if ($this->isGranted('EDIT')) {
+        if ($this->isGranted("EDIT")) {
             $menu->addChild(
                 \Event::class,
-                $admin->generateMenuUrl('edit', ['id' => $id]),
+                $admin->generateMenuUrl("edit", ["id" => $id]),
             );
             $menu->addChild(
-                'Artist editor',
-                $admin->generateMenuUrl('admin.event_artist_info.list', [
-                    'id' => $id,
+                "Artist editor",
+                $admin->generateMenuUrl("admin.event_artist_info.list", [
+                    "id" => $id,
                 ]),
             );
             if (
@@ -84,31 +84,31 @@ final class EventAdmin extends AbstractAdmin
                     ? count($admin->getSubject()->getRSVPs())
                     : 0) > 0
             ) {
-                $menu->addChild('RSVP List', [
-                    'uri' => $admin->generateUrl('rsvp', ['id' => $id]),
+                $menu->addChild("RSVP List", [
+                    "uri" => $admin->generateUrl("rsvp", ["id" => $id]),
                 ]);
             }
             if ($event->getNakkikoneEnabled()) {
-                $menu->addChild('Nakkikone', [
-                    'uri' => $admin->generateUrl(
-                        'entropy.admin.event|entropy.admin.nakki.list',
-                        ['id' => $id],
+                $menu->addChild("Nakkikone", [
+                    "uri" => $admin->generateUrl(
+                        "entropy.admin.event|entropy.admin.nakki.list",
+                        ["id" => $id],
                     ),
                 ]);
-                $menu->addChild('Nakit', [
-                    'uri' => $admin->generateUrl(
-                        'entropy.admin.event|entropy.admin.nakki_booking.list',
-                        ['id' => $id],
+                $menu->addChild("Nakit", [
+                    "uri" => $admin->generateUrl(
+                        "entropy.admin.event|entropy.admin.nakki_booking.list",
+                        ["id" => $id],
                     ),
                 ]);
-                $menu->addChild('Printable Nakkilist', [
-                    'uri' => $admin->generateUrl('nakkiList', ['id' => $id]),
+                $menu->addChild("Printable Nakkilist", [
+                    "uri" => $admin->generateUrl("nakkiList", ["id" => $id]),
                 ]);
             }
             if (count($event->getTickets()) > 0) {
-                $menu->addChild('Tickets', [
-                    'uri' => $admin->generateUrl('admin.ticket.list', [
-                        'id' => $id,
+                $menu->addChild("Tickets", [
+                    "uri" => $admin->generateUrl("admin.ticket.list", [
+                        "id" => $id,
                     ]),
                 ]);
                 /*                if ($event->getTicketsEnabled()) {
@@ -135,29 +135,29 @@ final class EventAdmin extends AbstractAdmin
                                     );
                                 }*/
             }
-            $menu->addChild('Happenings', [
-                'uri' => $admin->generateUrl('admin.happening.list', [
-                    'id' => $id,
+            $menu->addChild("Happenings", [
+                "uri" => $admin->generateUrl("admin.happening.list", [
+                    "id" => $id,
                 ]),
             ]);
-            $menu->addChild('Emails', [
-                'uri' => $admin->generateUrl(
-                    'entropy.admin.event|admin.email.list',
-                    ['id' => $id],
+            $menu->addChild("Emails", [
+                "uri" => $admin->generateUrl(
+                    "entropy.admin.event|admin.email.list",
+                    ["id" => $id],
                 ),
             ]);
-            $menu->addChild('Notifications', [
-                'uri' => $admin->generateUrl(
-                    'entropy.admin.event|admin.notification.list',
-                    ['id' => $id],
+            $menu->addChild("Notifications", [
+                "uri" => $admin->generateUrl(
+                    "entropy.admin.event|admin.notification.list",
+                    ["id" => $id],
                 ),
             ]);
-            $menu->addChild('Preview', [
-                'route' => 'entropy_event',
-                'routeParameters' => [
-                    'id' => $id,
+            $menu->addChild("Preview", [
+                "route" => "entropy_event",
+                "routeParameters" => [
+                    "id" => $id,
                 ],
-                'linkAttributes' => ['target' => '_blank'],
+                "linkAttributes" => ["target" => "_blank"],
             ]);
         }
     }
@@ -167,42 +167,42 @@ final class EventAdmin extends AbstractAdmin
         DatagridMapper $datagridMapper,
     ): void {
         $TypeChoices = [
-            'Event' => 'event',
-            'Clubroom Event' => 'clubroom',
-            'Announcement' => 'announcement',
-            'Stream' => 'stream',
-            'Meeting' => 'meeting',
+            "Event" => "event",
+            "Clubroom Event" => "clubroom",
+            "Announcement" => "announcement",
+            "Stream" => "stream",
+            "Meeting" => "meeting",
         ];
         $datagridMapper
-            ->add('Name')
-            ->add('Content')
-            ->add('Nimi')
-            ->add('Sisallys')
-            ->add('type', ChoiceFilter::class, [
-                'field_type' => ChoiceType::class,
-                'field_options' => ['choices' => $TypeChoices],
+            ->add("Name")
+            ->add("Content")
+            ->add("Nimi")
+            ->add("Sisallys")
+            ->add("type", ChoiceFilter::class, [
+                "field_type" => ChoiceType::class,
+                "field_options" => ["choices" => $TypeChoices],
             ])
-            ->add('EventDate')
-            ->add('publishDate')
-            ->add('css')
-            ->add('url')
-            ->add('sticky');
+            ->add("EventDate")
+            ->add("publishDate")
+            ->add("css")
+            ->add("url")
+            ->add("sticky");
     }
 
     #[\Override]
     protected function configureListFields(ListMapper $listMapper): void
     {
         $listMapper
-            ->add('EventDate')
-            ->add('until')
-            ->addIdentifier('Name', null, ['route' => ['name' => 'edit']])
-            ->add('type')
-            ->add('publishDate')
-            ->add('url')
+            ->add("EventDate")
+            ->add("until")
+            ->addIdentifier("Name", null, ["route" => ["name" => "edit"]])
+            ->add("type")
+            ->add("publishDate")
+            ->add("url")
             ->add(ListMapper::NAME_ACTIONS, null, [
-                'actions' => [
-                    'show' => [],
-                    'edit' => [],
+                "actions" => [
+                    "show" => [],
+                    "edit" => [],
                 ],
             ]);
     }
@@ -211,387 +211,412 @@ final class EventAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $TypeChoices = [
-            'Event' => 'event',
-            'Clubroom Event' => 'clubroom',
-            'Announcement' => 'announcement',
-            'Stream' => 'stream',
-            'Meeting' => 'meeting',
+            "Event" => "event",
+            "Clubroom Event" => "clubroom",
+            "Announcement" => "announcement",
+            "Stream" => "stream",
+            "Meeting" => "meeting",
         ];
         $PicChoices = [
-            'Banner' => 'banner',
-            'Right side of the text' => 'right',
-            'After the post' => 'after',
+            "Banner" => "banner",
+            "Right side of the text" => "right",
+            "After the post" => "after",
         ];
         $templates = [
-            'Normal' => 'event.html.twig',
-            'e30v' => 'e30v.html.twig',
+            "Normal" => "event.html.twig",
+            "e30v" => "e30v.html.twig",
         ];
         $event = $this->getSubject();
-        $format = 'richhtml';
-        $help = '';
+        $format = "richhtml";
+        $help = "";
         $forceAbstarct = false;
-        if ('e30v.html.twig' == $event->getTemplate()) {
-            $format = 'raw';
+        if ("e30v.html.twig" == $event->getTemplate()) {
+            $format = "raw";
             $help =
                 'Help: <a href="https://twig.symfony.com/">Twig template language</a>';
         }
-        if ($this->isCurrentRoute('create')) {
+        if ($this->isCurrentRoute("create")) {
             $formMapper
                 // The thumbnail field will only be added when the edited item is created
-                ->with('English', ['class' => 'col-md-6'])
-                ->add('Name')
+                ->with("English", ["class" => "col-md-6"])
+                ->add("Name")
                 ->end()
-                ->with('Finnish', ['class' => 'col-md-6'])
-                ->add('Nimi')
+                ->with("Finnish", ["class" => "col-md-6"])
+                ->add("Nimi")
                 ->end()
-                ->with('Functionality', ['class' => 'col-md-4'])
-                ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
-                ->add('template', ChoiceType::class, [
-                    'choices' => $templates,
-                    'required' => false,
-                    'placeholder' => 'Not needed usually',
+                ->with("Functionality", ["class" => "col-md-4"])
+                ->add("type", ChoiceType::class, ["choices" => $TypeChoices])
+                ->add("template", ChoiceType::class, [
+                    "choices" => $templates,
+                    "required" => false,
+                    "placeholder" => "Not needed usually",
                 ])
-                ->add('EventDate', DateTimePickerType::class, [
-                    'label' => 'Event Date and Time',
+                ->add("EventDate", DateTimePickerType::class, [
+                    "label" => "Event Date and Time",
                 ])
-                ->add('until', DateTimePickerType::class, [
-                    'label' => 'Event stop time',
-                    'required' => false,
+                ->add("until", DateTimePickerType::class, [
+                    "label" => "Event stop time",
+                    "required" => false,
                 ])
-                ->add('published', null, [
-                    'help' => 'The addvert will be available when the publish date has been reached otherwise not',
+                ->add("published", null, [
+                    "help" =>
+                        "The addvert will be available when the publish date has been reached otherwise not",
                 ])
-                ->add('publishDate', DateTimePickerType::class, [
-                    'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
-                    'required' => false,
+                ->add("publishDate", DateTimePickerType::class, [
+                    "help" =>
+                        "Select date and time for this to be published if it is in the future you should have published on.",
+                    "required" => false,
                 ])
                 ->end();
         } else {
             // if($event->getType() == 'announcement'){}
             $formMapper
                 ->tab(\Event::class)
-                ->with('English', ['class' => 'col-md-6'])
-                ->add('Name');
+                ->with("English", ["class" => "col-md-6"])
+                ->add("Name");
             if (false == $event->getexternalUrl()) {
                 $formMapper
-                    ->add('Content', SimpleFormatterType::class, [
-                        'format' => $format,
-                        'required' => true,
-                        'help' => $help ?:
-                            'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
-                        'help_html' => true,
-                        'attr' => ['rows' => 20],
+                    ->add("Content", SimpleFormatterType::class, [
+                        "format" => $format,
+                        "required" => true,
+                        "help" =>
+                            $help ?:
+                            "use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.",
+                        "help_html" => true,
+                        "attr" => ["rows" => 20],
                     ])
-                    ->add('abstractEn', null, [
-                        'help' => 'Defines small text in some link previews. 150 chars.',
-                        'required' => $forceAbstarct,
+                    ->add("abstractEn", null, [
+                        "help" =>
+                            "Defines small text in some link previews. 150 chars.",
+                        "required" => $forceAbstarct,
                     ]);
             }
             $formMapper
                 ->end()
-                ->with('Finnish', ['class' => 'col-md-6'])
-                ->add('Nimi');
+                ->with("Finnish", ["class" => "col-md-6"])
+                ->add("Nimi");
             if (false == $event->getexternalUrl()) {
                 $formMapper
-                    ->add('Sisallys', SimpleFormatterType::class, [
-                        'format' => $format,
-                        'required' => true,
-                        'help' => $help ?:
-                            'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.',
-                        'help_html' => true,
-                        'attr' => ['rows' => 20],
+                    ->add("Sisallys", SimpleFormatterType::class, [
+                        "format" => $format,
+                        "required" => true,
+                        "help" =>
+                            $help ?:
+                            "käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.",
+                        "help_html" => true,
+                        "attr" => ["rows" => 20],
                     ])
-                    ->add('abstractFi', null, [
-                        'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.',
-                        'required' => $forceAbstarct,
+                    ->add("abstractFi", null, [
+                        "help" =>
+                            "150 merkkiä. Someen linkatun tapahtuman pikku teksti.",
+                        "required" => $forceAbstarct,
                     ]);
             }
             $formMapper
                 ->end()
-                ->with('Functionality', ['class' => 'col-md-4'])
-                ->add('type', ChoiceType::class, ['choices' => $TypeChoices])
-                ->add('cancelled', null, ['help' => 'Event has been cancelled'])
-                ->add('EventDate', DateTimePickerType::class, [
-                    'label' => 'Event Date and Time',
+                ->with("Functionality", ["class" => "col-md-4"])
+                ->add("type", ChoiceType::class, ["choices" => $TypeChoices])
+                ->add("cancelled", null, [
+                    "help" => "Event has been cancelled",
+                    "required" => false,
                 ])
-                ->add('until', DateTimePickerType::class, [
-                    'label' => 'Event stop time',
-                    'required' => false,
+                ->add("EventDate", DateTimePickerType::class, [
+                    "label" => "Event Date and Time",
                 ])
-                ->add('published', null, [
-                    'help' => 'The addvert will be available when the publish date has been reached otherwise not',
+                ->add("until", DateTimePickerType::class, [
+                    "label" => "Event stop time",
+                    "required" => false,
                 ])
-                ->add('publishDate', DateTimePickerType::class, [
-                    'help' => 'Select date and time for this to be published if it is in the future you should have published on.',
-                    'required' => false,
+                ->add("published", null, [
+                    "help" =>
+                        "The addvert will be available when the publish date has been reached otherwise not",
                 ])
-                ->add('location', ModelListType::class, [
-                    'required' => false,
-                    'help' => 'Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.',
-                    'btn_delete' => 'Unselect',
+                ->add("publishDate", DateTimePickerType::class, [
+                    "help" =>
+                        "Select date and time for this to be published if it is in the future you should have published on.",
+                    "required" => false,
                 ])
-                ->add('externalUrl', null, [
-                    'label' => 'External Url/No addvert at all if url is empty',
-                    'help' => 'Is the add hosted here?',
+                ->add("location", ModelListType::class, [
+                    "required" => false,
+                    "help" =>
+                        "Added in calendar and as a Reittiopas button to the event info. It is recommended that the button is tested.",
+                    "btn_delete" => "Unselect",
                 ])
-                ->add('url', null, [
-                    'help' => '\'event\' resolves to /(year)/event. In case of external url whole link is needed: https://entropy.fi/rave/bunka1',
+                ->add("externalUrl", null, [
+                    "label" => "External Url/No addvert at all if url is empty",
+                    "help" => "Is the add hosted here?",
+                ])
+                ->add("url", null, [
+                    "help" =>
+                        '\'event\' resolves to /(year)/event. In case of external url whole link is needed: https://entropy.fi/rave/bunka1',
                 ])
                 ->end()
-                ->with('Eye Candy', ['class' => 'col-md-4'])
-                ->add('template', ChoiceType::class, [
-                    'choices' => $templates,
-                    'required' => false,
-                    'placeholder' => 'Not needed usually',
+                ->with("Eye Candy", ["class" => "col-md-4"])
+                ->add("template", ChoiceType::class, [
+                    "choices" => $templates,
+                    "required" => false,
+                    "placeholder" => "Not needed usually",
                 ])
                 ->add(
-                    'picture',
+                    "picture",
                     ModelListType::class,
                     [
-                        'required' => false,
+                        "required" => false,
                     ],
                     [
-                        'link_parameters' => [
-                            'context' => 'event',
+                        "link_parameters" => [
+                            "context" => "event",
                         ],
                     ],
                 )
-                ->add('picturePosition', ChoiceType::class, [
-                    'choices' => $PicChoices,
+                ->add("picturePosition", ChoiceType::class, [
+                    "choices" => $PicChoices,
                 ])
-                ->add('imgFilterColor', ColorType::class)
-                ->add('imgFilterBlendMode', ChoiceFieldMaskType::class, [
-                    'required' => false,
-                    'help' => 'Color does not work if you dont choose here how it should work',
-                    'choices' => [
-                        'luminosity' => 'mix-blend-mode: luminosity',
-                        'multiply' => 'mix-blend-mode: multiply',
-                        'exclusion' => 'mix-blend-mode: exclusion',
-                        'difference' => 'mix-blend-mode: difference',
-                        'screen' => 'mix-blend-mode: screen',
+                ->add("imgFilterColor", ColorType::class)
+                ->add("imgFilterBlendMode", ChoiceFieldMaskType::class, [
+                    "required" => false,
+                    "help" =>
+                        "Color does not work if you dont choose here how it should work",
+                    "choices" => [
+                        "luminosity" => "mix-blend-mode: luminosity",
+                        "multiply" => "mix-blend-mode: multiply",
+                        "exclusion" => "mix-blend-mode: exclusion",
+                        "difference" => "mix-blend-mode: difference",
+                        "screen" => "mix-blend-mode: screen",
                     ],
-                    'map' => [
-                        'mix-blend-mode: luminosity' => ['imgFilterColor'],
-                        'mix-blend-mode: multiply' => ['imgFilterColor'],
-                        'mix-blend-mode: exclusion' => ['imgFilterColor'],
-                        'mix-blend-mode: difference' => ['imgFilterColor'],
-                        'mix-blend-mode: screen' => ['imgFilterColor'],
+                    "map" => [
+                        "mix-blend-mode: luminosity" => ["imgFilterColor"],
+                        "mix-blend-mode: multiply" => ["imgFilterColor"],
+                        "mix-blend-mode: exclusion" => ["imgFilterColor"],
+                        "mix-blend-mode: difference" => ["imgFilterColor"],
+                        "mix-blend-mode: screen" => ["imgFilterColor"],
                     ],
                 ]);
             if (false == $event->getexternalUrl()) {
                 $formMapper
-                    ->add('headerTheme', ChoiceType::class, [
-                        'required' => true,
-                        'choices' => [
-                            'light' => 'light',
-                            'dark' => 'dark',
+                    ->add("headerTheme", ChoiceType::class, [
+                        "required" => true,
+                        "choices" => [
+                            "light" => "light",
+                            "dark" => "dark",
                         ],
                     ])
-                    ->add('backgroundEffect', ChoiceFieldMaskType::class, [
-                        'required' => false,
-                        'choices' => [
-                            'Rain' => 'rain',
-                            'TV white noise' => 'tv',
-                            'VHS static' => 'vhs',
-                            'Snowfall' => 'snow',
-                            'Snowfall with mouse collector (not used, can be changed)' => 'snow_mouse_dodge',
-                            'Starfield' => 'stars',
-                            'Color Grid' => 'grid',
-                            'Wavy Lines' => 'lines',
-                            'Hypermakkara Game' => 'snake',
-                            'Chladni Pattern Generator' => 'chladni',
-                            'Flow Fields' => 'flowfields',
+                    ->add("backgroundEffect", ChoiceFieldMaskType::class, [
+                        "required" => false,
+                        "choices" => [
+                            "Rain" => "rain",
+                            "TV white noise" => "tv",
+                            "VHS static" => "vhs",
+                            "Snowfall" => "snow",
+                            "Snowfall with mouse collector (not used, can be changed)" =>
+                                "snow_mouse_dodge",
+                            "Starfield" => "stars",
+                            "Color Grid" => "grid",
+                            "Wavy Lines" => "lines",
+                            "Hypermakkara Game" => "snake",
+                            "Chladni Pattern Generator" => "chladni",
+                            "Flow Fields" => "flowfields",
 
-                            'Cockroaches' => 'roaches',
+                            "Cockroaches" => "roaches",
                         ],
 
-                        'map' => [
-                            'flowfields' => ['backgroundEffectConfig'],
-                            'chladni' => ['backgroundEffectConfig'],
-                            'roaches' => ['backgroundEffectConfig'],
-                            'grid' => ['backgroundEffectConfig'],
-                            'lines' => ['backgroundEffectConfig'],
-                            'rain' => ['backgroundEffectConfig'],
-                            'snow' => ['backgroundEffectConfig'],
-                            'stars' => ['backgroundEffectConfig'],
-                            'tv' => ['backgroundEffectConfig'],
-                            'vhs' => ['backgroundEffectConfig'],
+                        "map" => [
+                            "flowfields" => ["backgroundEffectConfig"],
+                            "chladni" => ["backgroundEffectConfig"],
+                            "roaches" => ["backgroundEffectConfig"],
+                            "grid" => ["backgroundEffectConfig"],
+                            "lines" => ["backgroundEffectConfig"],
+                            "rain" => ["backgroundEffectConfig"],
+                            "snow" => ["backgroundEffectConfig"],
+                            "stars" => ["backgroundEffectConfig"],
+                            "tv" => ["backgroundEffectConfig"],
+                            "vhs" => ["backgroundEffectConfig"],
                         ],
                     ])
-                    ->add('backgroundEffectConfig', TextareaType::class, [
-                        'required' => false,
-                        'attr' => ['rows' => 12],
-                        'help' => 'Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static.',
-                        'help_html' => true,
+                    ->add("backgroundEffectConfig", TextareaType::class, [
+                        "required" => false,
+                        "attr" => ["rows" => 12],
+                        "help" =>
+                            "Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static.",
+                        "help_html" => true,
                     ])
 
-                    ->add('backgroundEffectPosition', ChoiceType::class, [
-                        'required' => true,
-                        'choices' => [
-                            'Background' => 'z-index:0;',
-                            'In front' => 'z-index:1;',
+                    ->add("backgroundEffectPosition", ChoiceType::class, [
+                        "required" => true,
+                        "choices" => [
+                            "Background" => "z-index:0;",
+                            "In front" => "z-index:1;",
                         ],
                     ])
-                    ->add('backgroundEffectOpacity', RangeType::class, [
-                        'required' => false,
-                        'attr' => [
-                            'min' => 0,
-                            'max' => 100,
+                    ->add("backgroundEffectOpacity", RangeType::class, [
+                        "required" => false,
+                        "attr" => [
+                            "min" => 0,
+                            "max" => 100,
                         ],
-                        'help' => 'left transparent, right solid',
+                        "help" => "left transparent, right solid",
                     ])
-                    ->add('css');
+                    ->add("css");
             }
             $formMapper
                 ->end()
-                ->with('Links', ['class' => 'col-md-4'])
-                ->add('linkToForums', null, [
-                    'help' => 'link to Forums that is shown only to active members',
+                ->with("Links", ["class" => "col-md-4"])
+                ->add("linkToForums", null, [
+                    "help" =>
+                        "link to Forums that is shown only to active members",
                 ])
-                ->add('includeSaferSpaceGuidelines', null, [
-                    'help' => 'add it to the link list',
+                ->add("includeSaferSpaceGuidelines", null, [
+                    "help" => "add it to the link list",
                 ])
-                ->add('webMeetingUrl', null, [
-                    'help' => 'Will be shown as a link 8 hours before and 2 hours after event start time. Added as an location in Calendar',
+                ->add("webMeetingUrl", null, [
+                    "help" =>
+                        "Will be shown as a link 8 hours before and 2 hours after event start time. Added as an location in Calendar",
                 ])
-                ->add('streamPlayerUrl', null, [
-                    'help' => 'use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.',
+                ->add("streamPlayerUrl", null, [
+                    "help" =>
+                        "use {{ streamplayer }} in content. Applies the player in the advert when the event is happening.",
                 ])
-                ->add('links', ImmutableArrayType::class, [
-                    'help_html' => true,
-                    'help' => 'Titles are translated automatically. examples: tickets, fb.event, map.<br>
+                ->add("links", ImmutableArrayType::class, [
+                    "help_html" => true,
+                    "help" => 'Titles are translated automatically. examples: tickets, fb.event, map.<br>
                                 request admin to add more translations!',
-                    'keys' => [
+                    "keys" => [
                         [
-                            'urls',
+                            "urls",
                             CollectionType::class,
                             [
-                                'required' => false,
-                                'allow_add' => true,
-                                'allow_delete' => true,
-                                'prototype' => true,
-                                'by_reference' => false,
-                                'allow_extra_fields' => true,
-                                'entry_type' => UrlsType::class,
+                                "required" => false,
+                                "allow_add" => true,
+                                "allow_delete" => true,
+                                "prototype" => true,
+                                "by_reference" => false,
+                                "allow_extra_fields" => true,
+                                "entry_type" => UrlsType::class,
                             ],
                         ],
                     ],
                 ])
-                ->add('epics', null, ['help' => 'link to ePics pictures'])
-                ->add('wikiPage', null, [
-                    'help' => 'link to Wiki that is shown only to active members',
+                ->add("epics", null, ["help" => "link to ePics pictures"])
+                ->add("wikiPage", null, [
+                    "help" =>
+                        "link to Wiki that is shown only to active members",
                 ])
                 ->add(
-                    'attachment',
+                    "attachment",
                     ModelListType::class,
                     [
-                        'required' => false,
-                        'help' => 'added as downloadable link',
+                        "required" => false,
+                        "help" => "added as downloadable link",
                     ],
                     [
-                        'link_parameters' => [
-                            'context' => 'event',
-                            'provider' => 'sonata.media.provider.file',
+                        "link_parameters" => [
+                            "context" => "event",
+                            "provider" => "sonata.media.provider.file",
                         ],
                     ],
                 )
                 ->end()
                 ->end()
-                ->tab('Artist Sign up config')
-                ->with('Config')
-                ->add('artistSignUpEnabled', null, [
-                    'help' => 'Is the artist signup enabled',
+                ->tab("Artist Sign up config")
+                ->with("Config")
+                ->add("artistSignUpEnabled", null, [
+                    "help" => "Is the artist signup enabled",
                 ])
-                ->add('artistSignUpAskSetLength', null, [
-                    'label' => 'Do we ask set length?',
+                ->add("artistSignUpAskSetLength", null, [
+                    "label" => "Do we ask set length?",
                 ])
-                ->add('showArtistSignUpOnlyForLoggedInMembers', null, [
-                    'help' => 'Do you have to be logged in to see artist sign up link for the event',
+                ->add("showArtistSignUpOnlyForLoggedInMembers", null, [
+                    "help" =>
+                        "Do you have to be logged in to see artist sign up link for the event",
                 ])
-                ->add('artistSignUpStart', DateTimePickerType::class, [
-                    'help' => 'when the artist signup starts',
-                    'input' => 'datetime_immutable',
-                    'required' => false,
+                ->add("artistSignUpStart", DateTimePickerType::class, [
+                    "help" => "when the artist signup starts",
+                    "input" => "datetime_immutable",
+                    "required" => false,
                 ])
-                ->add('artistSignUpEnd', DateTimePickerType::class, [
-                    'help' => 'when the artist signup ends',
-                    'input' => 'datetime_immutable',
-                    'required' => false,
+                ->add("artistSignUpEnd", DateTimePickerType::class, [
+                    "help" => "when the artist signup ends",
+                    "input" => "datetime_immutable",
+                    "required" => false,
                 ])
-                ->add('artistSignUpInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
+                ->add("artistSignUpInfoEn", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
                 ])
-                ->add('artistSignUpInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
-                ])
-                ->end()
-                ->end()
-                ->tab('Nakkikone config')
-                ->with('Config')
-                ->add('NakkikoneEnabled', null, [
-                    'help' => 'Publish nakkikone and allow members to reserve Nakkis',
-                ])
-                ->add('showNakkikoneLinkInEvent', null, [
-                    'help' => 'Publish nakkikone in event',
-                ])
-                ->add('requireNakkiBookingsToBeDifferentTimes', null, [
-                    'help' => 'Make sure member nakki bookings do not overlap',
-                ])
-                ->add('nakkiResponsibleAdmin')
-                ->add('nakkiInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
-                ])
-                ->add('nakkiInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
+                ->add("artistSignUpInfoFi", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
                 ])
                 ->end()
                 ->end()
-                ->tab('Happening Config')
-                ->with('Config')
-                ->add('allowMembersToCreateHappenings', null, [
-                    'help' => 'for logged in members create button is added to {{ happening_list }}',
+                ->tab("Nakkikone config")
+                ->with("Config")
+                ->add("NakkikoneEnabled", null, [
+                    "help" =>
+                        "Publish nakkikone and allow members to reserve Nakkis",
+                ])
+                ->add("showNakkikoneLinkInEvent", null, [
+                    "help" => "Publish nakkikone in event",
+                ])
+                ->add("requireNakkiBookingsToBeDifferentTimes", null, [
+                    "help" => "Make sure member nakki bookings do not overlap",
+                ])
+                ->add("nakkiResponsibleAdmin")
+                ->add("nakkiInfoEn", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
+                ])
+                ->add("nakkiInfoFi", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
                 ])
                 ->end()
                 ->end()
-                ->tab('RSVP')
-                ->with('Config')
-                ->add('rsvpSystemEnabled', null, [
-                    'help' => 'allow RSVP to the event',
-                ])
-                ->add('sendRsvpEmail', null, [
-                    'help' => 'Send the RSVP email when someone does the RSVP but only IF it is defined for this event',
+                ->tab("Happening Config")
+                ->with("Config")
+                ->add("allowMembersToCreateHappenings", null, [
+                    "help" =>
+                        "for logged in members create button is added to {{ happening_list }}",
                 ])
                 ->end()
                 ->end()
-                ->tab('Tickets')
-                ->with('Config', ['class' => 'col-md-6'])
-                ->add('ticketsEnabled', null, [
-                    'help' => 'allow tikets to the event',
+                ->tab("RSVP")
+                ->with("Config")
+                ->add("rsvpSystemEnabled", null, [
+                    "help" => "allow RSVP to the event",
                 ])
-                ->add('nakkiRequiredForTicketReservation', null, [
-                    'help' => 'allow tikets to be reserved only after nakki reservation',
+                ->add("sendRsvpEmail", null, [
+                    "help" =>
+                        "Send the RSVP email when someone does the RSVP but only IF it is defined for this event",
+                ])
+                ->end()
+                ->end()
+                ->tab("Tickets")
+                ->with("Config", ["class" => "col-md-6"])
+                ->add("ticketsEnabled", null, [
+                    "help" => "allow tikets to the event",
+                ])
+                ->add("nakkiRequiredForTicketReservation", null, [
+                    "help" =>
+                        "allow tikets to be reserved only after nakki reservation",
                 ])
                 // ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated and ticket update button is pushed this amount will be created with the price below. 2 prices for tickets? first create low price tickets that are in presales and then the amount of full price tickets'])
                 // ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
                 ->end()
-                ->with('Presales', ['class' => 'col-md-6'])
-                ->add('ticketPresaleStart', DateTimePickerType::class, [
-                    'help' => 'When presale starts',
-                    'input' => 'datetime_immutable',
-                    'required' => false,
+                ->with("Presales", ["class" => "col-md-6"])
+                ->add("ticketPresaleStart", DateTimePickerType::class, [
+                    "help" => "When presale starts",
+                    "input" => "datetime_immutable",
+                    "required" => false,
                 ])
-                ->add('ticketPresaleEnd', DateTimePickerType::class, [
-                    'help' => 'when presale ',
-                    'input' => 'datetime_immutable',
-                    'required' => false,
+                ->add("ticketPresaleEnd", DateTimePickerType::class, [
+                    "help" => "when presale ",
+                    "input" => "datetime_immutable",
+                    "required" => false,
                 ])
                 // ->add(
                 //     'ticketPresaleCount',
@@ -601,16 +626,16 @@ final class EventAdmin extends AbstractAdmin
                 //     ]
                 // )
                 ->end()
-                ->with('Info', ['class' => 'col-md-12'])
-                ->add('ticketInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
+                ->with("Info", ["class" => "col-md-12"])
+                ->add("ticketInfoFi", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
                 ])
-                ->add('ticketInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
+                ->add("ticketInfoEn", SimpleFormatterType::class, [
+                    "format" => "richhtml",
+                    "required" => false,
+                    "ckeditor_context" => "default",
                 ])
                 ->end()
                 ->end();
@@ -650,27 +675,27 @@ final class EventAdmin extends AbstractAdmin
                     return in_array(
                         $effect,
                         [
-                            'flowfields',
-                            'chladni',
-                            'roaches',
-                            'grid',
-                            'lines',
-                            'rain',
-                            'snow',
-                            'stars',
-                            'tv',
-                            'vhs',
+                            "flowfields",
+                            "chladni",
+                            "roaches",
+                            "grid",
+                            "lines",
+                            "rain",
+                            "snow",
+                            "stars",
+                            "tv",
+                            "vhs",
                         ],
                         true,
                     );
                 };
 
-                $newEffect = $submitted['backgroundEffect'] ?? null;
+                $newEffect = $submitted["backgroundEffect"] ?? null;
 
                 // If chosen effect doesn't support config, drop any submitted config
                 // Removed BackgroundEffectConfigProvider normalization block
                 if (!$supports($newEffect)) {
-                    $submitted['backgroundEffectConfig'] = null;
+                    $submitted["backgroundEffectConfig"] = null;
                 }
 
                 // If effect changed, and no explicit config was provided, auto-load defaults for configurable effects
@@ -679,16 +704,17 @@ final class EventAdmin extends AbstractAdmin
                     if ($newEffect !== $oldEffect) {
                         $noConfigProvided =
                             !array_key_exists(
-                                'backgroundEffectConfig',
+                                "backgroundEffectConfig",
                                 $submitted,
-                            )
-                            || '' === trim(
-                                (string) ($submitted[
-                                    'backgroundEffectConfig'
-                                ] ?? ''),
-                            );
+                            ) ||
+                            "" ===
+                                trim(
+                                    (string) ($submitted[
+                                        "backgroundEffectConfig"
+                                    ] ?? ""),
+                                );
                         if ($noConfigProvided && !$supports($newEffect)) {
-                            $submitted['backgroundEffectConfig'] = null;
+                            $submitted["backgroundEffectConfig"] = null;
                         }
                     }
                 }
@@ -702,28 +728,28 @@ final class EventAdmin extends AbstractAdmin
     protected function configureRoutes(
         RouteCollectionInterface $collection,
     ): void {
-        $collection->remove('show');
-        $collection->remove('delete');
-        $collection->add('rsvp', $this->getRouterIdParameter().'/rsvp');
+        $collection->remove("show");
+        $collection->remove("delete");
+        $collection->add("rsvp", $this->getRouterIdParameter() . "/rsvp");
         $collection->add(
-            'nakkiList',
-            $this->getRouterIdParameter().'/nakkilist',
+            "nakkiList",
+            $this->getRouterIdParameter() . "/nakkilist",
         );
     }
 
     #[\Override]
     public function prePersist($event): void
     {
-        if ('clubroom' == $event->getType()) {
-            $kerde = $this->lr->findOneBy(['id' => 1]);
+        if ("clubroom" == $event->getType()) {
+            $kerde = $this->lr->findOneBy(["id" => 1]);
             $event->setLocation($kerde);
         }
-        if ('announcement' != $event->getType()) {
+        if ("announcement" != $event->getType()) {
             $event->setIncludeSaferSpaceGuidelines(true);
         }
-        if ('event' == $event->getType()) {
+        if ("event" == $event->getType()) {
             $event->setWikiPage(
-                'https://wiki.entropy.fi/index.php?title='.
+                "https://wiki.entropy.fi/index.php?title=" .
                     urlencode((string) $event->getNimi()),
             );
         }
@@ -752,34 +778,33 @@ final class EventAdmin extends AbstractAdmin
         protected SluggerInterface $slug,
         protected LocationRepository $lr,
         protected RequestStack $rs,
-    ) {
-    }
+    ) {}
 
     #[\Override]
     public function preValidate(object $object): void
     {
         if (
-            true == $object->getTicketsEnabled()
-            && (is_object($object->getTicketPresaleStart())
-                && is_object($object->getTicketPresaleEnd()))
-            && $object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()
+            true == $object->getTicketsEnabled() &&
+            (is_object($object->getTicketPresaleStart()) &&
+                is_object($object->getTicketPresaleEnd())) &&
+            $object->getTicketPresaleStart() >= $object->getTicketPresaleEnd()
         ) {
             $session = $this->rs->getSession();
             assert($session instanceof Session);
             $session
                 ->getFlashBag()
-                ->add('warning', 'Presale end date must be after start date');
+                ->add("warning", "Presale end date must be after start date");
         }
         if (
-            is_object($object->getEventDate())
-            && is_object($object->getUntil())
-            && $object->getEventDate() >= $object->getUntil()
+            is_object($object->getEventDate()) &&
+            is_object($object->getUntil()) &&
+            $object->getEventDate() >= $object->getUntil()
         ) {
             $session = $this->rs->getSession();
             assert($session instanceof Session);
             $session
                 ->getFlashBag()
-                ->add('warning', 'Event stop time must be after start time');
+                ->add("warning", "Event stop time must be after start time");
         }
     }
 }
