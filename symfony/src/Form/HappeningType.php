@@ -25,8 +25,10 @@ class HappeningType extends AbstractType
     }
 
     #[\Override]
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
+    public function buildForm(
+        FormBuilderInterface $builder,
+        array $options,
+    ): void {
         $builder
             ->add('type', ChoiceType::class, [
                 'choices' => [
@@ -34,13 +36,15 @@ class HappeningType extends AbstractType
                     'Event' => 'event',
                 ],
                 'required' => true,
-                'constraints' => [new NotBlank(message: 'happening.validation.type_required')],
+                'constraints' => [
+                    new NotBlank(message: 'happening.validation.type_required'),
+                ],
             ])
             ->add('time', null, [
                 'help' => 'When is this happening?',
                 // 'format' => 'D, G:i'
             ])
-/*            ->add('time', DateTimeType::class, [
+            /*            ->add('time', DateTimeType::class, [
 
                 'widget' => 'single_text',
                 'html5' => false,
@@ -56,16 +60,30 @@ class HappeningType extends AbstractType
                 'required' => false,
             ])
             ->add('nameFi', null, [
-                'constraints' => [new NotBlank(message: 'happening.validation.name_fi_required')],
+                'constraints' => [
+                    new NotBlank(
+                        message: 'happening.validation.name_fi_required',
+                    ),
+                ],
             ])
             ->add('descriptionFi', null, [
-                'attr' => ['placeholder' => 'happening.description_fi', 'rows' => 3],
+                'attr' => [
+                    'placeholder' => 'happening.description_fi',
+                    'rows' => 3,
+                ],
                 'help' => 'happening.markdown_allowed',
                 'help_html' => true,
-                'constraints' => [new NotBlank(message: 'happening.validation.description_fi_required')],
+                'constraints' => [
+                    new NotBlank(
+                        message: 'happening.validation.description_fi_required',
+                    ),
+                ],
             ])
             ->add('paymentInfoFi', null, [
-                'attr' => ['placeholder' => 'happening.payment_info_fi', 'rows' => 3],
+                'attr' => [
+                    'placeholder' => 'happening.payment_info_fi',
+                    'rows' => 3,
+                ],
                 'help' => 'happening.markdown_allowed',
                 'help_html' => true,
             ])
@@ -73,13 +91,21 @@ class HappeningType extends AbstractType
                 'attr' => ['placeholder' => 'happening.price_fi'],
             ])
             ->add('nameEn', null, [
-                'constraints' => [new NotBlank(message: 'happening.validation.name_en_required')],
+                'constraints' => [
+                    new NotBlank(
+                        message: 'happening.validation.name_en_required',
+                    ),
+                ],
             ])
             ->add('descriptionEn', null, [
                 'attr' => ['rows' => 3],
                 'help' => 'happening.markdown_allowed',
                 'help_html' => true,
-                'constraints' => [new NotBlank(message: 'happening.validation.description_en_required')],
+                'constraints' => [
+                    new NotBlank(
+                        message: 'happening.validation.description_en_required',
+                    ),
+                ],
             ])
             ->add('paymentInfoEn', null, [
                 'attr' => ['rows' => 3],
@@ -97,7 +123,11 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('maxSignUps', null, [
-                'constraints' => [new PositiveOrZero(message: 'happening.validation.max_signups_positive_or_zero')],
+                'constraints' => [
+                    new PositiveOrZero(
+                        message: 'happening.validation.max_signups_positive_or_zero',
+                    ),
+                ],
                 'empty_data' => '0',
             ])
             ->add('signUpsOpenUntil')
@@ -118,7 +148,9 @@ class HappeningType extends AbstractType
 
         // Conditional validation at form-level: when preliminary payment is enabled,
         // require payment info in both languages.
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (
+            FormEvent $event,
+        ): void {
             $data = $event->getData();
             if (!\is_array($data)) {
                 return;
@@ -135,7 +167,9 @@ class HappeningType extends AbstractType
                 }
             }
         });
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event): void {
+        $builder->addEventListener(FormEvents::SUBMIT, function (
+            FormEvent $event,
+        ): void {
             $data = $event->getData();
 
             if (!$data instanceof Happening) {
@@ -143,13 +177,19 @@ class HappeningType extends AbstractType
             }
 
             if (!$data->getSlugFi() && $data->getNameFi()) {
-                $data->setSlugFi($this->slugger->slug($data->getNameFi())->lower());
+                $data->setSlugFi(
+                    (string) $this->slugger->slug($data->getNameFi())->lower(),
+                );
             }
             if (!$data->getSlugEn() && $data->getNameEn()) {
-                $data->setSlugEn($this->slugger->slug($data->getNameEn())->lower());
+                $data->setSlugEn(
+                    (string) $this->slugger->slug($data->getNameEn())->lower(),
+                );
             }
         });
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event): void {
+        $builder->addEventListener(FormEvents::POST_SUBMIT, function (
+            FormEvent $event,
+        ): void {
             $form = $event->getForm();
             $data = $form->getData();
 
@@ -163,12 +203,32 @@ class HappeningType extends AbstractType
                 $fi = $data->getPaymentInfoFi();
                 $en = $data->getPaymentInfoEn();
 
-                if ((null === $fi || '' === trim($fi)) && $form->has('paymentInfoFi')) {
-                    $form->get('paymentInfoFi')->addError(new FormError('', 'happening.payment_info_required'));
+                if (
+                    (null === $fi || '' === trim($fi))
+                    && $form->has('paymentInfoFi')
+                ) {
+                    $form
+                        ->get('paymentInfoFi')
+                        ->addError(
+                            new FormError(
+                                '',
+                                'happening.payment_info_required',
+                            ),
+                        );
                 }
 
-                if ((null === $en || '' === trim($en)) && $form->has('paymentInfoEn')) {
-                    $form->get('paymentInfoEn')->addError(new FormError('', 'happening.payment_info_required'));
+                if (
+                    (null === $en || '' === trim($en))
+                    && $form->has('paymentInfoEn')
+                ) {
+                    $form
+                        ->get('paymentInfoEn')
+                        ->addError(
+                            new FormError(
+                                '',
+                                'happening.payment_info_required',
+                            ),
+                        );
                 }
             }
         });
