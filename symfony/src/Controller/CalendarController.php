@@ -122,7 +122,7 @@ class CalendarController extends AbstractController
         header('Content-Type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="entropy.ics"');
 
-        return new Response($calendarComponent->render());
+        return new Response($calendarComponent->__toString());
     }
 
     protected function addEvent(
