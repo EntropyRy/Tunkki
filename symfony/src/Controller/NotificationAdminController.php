@@ -12,8 +12,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\Button\InlineKeyboardButton;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\InlineKeyboardMarkup;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
-use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
+use Symfony\Component\Notifier\Transport\TransportInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -22,7 +22,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class NotificationAdminController extends CRUDController
 {
     public function sendAction(
-        ChatterInterface $chatter,
+        #[\Symfony\Component\DependencyInjection\Attribute\Autowire(service: 'chatter.transport.telegram')]
+        TransportInterface $telegramTransport,
         Request $request,
         Pool $pool,
         TranslatorInterface $ts,
@@ -140,7 +141,7 @@ final class NotificationAdminController extends CRUDController
             // Add debug log before sending
             // error_log('Sending Telegram message with options: ' . json_encode($telegramOptions->toArray()));
 
-            $return = $chatter->send($message);
+            $return = $telegramTransport->send($message);
             $notification->setMessageId((int) $return->getMessageId());
             $notification->setSentAt(new \DateTimeImmutable('now'));
             $this->admin->update($notification);
