@@ -87,25 +87,12 @@ final class CmsBaselineStory extends Story
             return $site;
         }
 
-        // Normalize attributes on the canonical site
-        if (method_exists($existing, 'setHost')) {
-            $existing->setHost('localhost');
-        }
-        if (method_exists($existing, 'setEnabled')) {
-            $existing->setEnabled(true);
-        }
-        if (method_exists($existing, 'setIsDefault')) {
-            $existing->setIsDefault($isDefault);
-        }
-        if (method_exists($existing, 'setRelativePath')) {
-            $existing->setRelativePath($relativePath);
-        }
-        if (method_exists($existing, 'setEnabledFrom')) {
-            $existing->setEnabledFrom(new \DateTimeImmutable('-1 day'));
-        }
-        if (method_exists($existing, 'setEnabledTo')) {
-            $existing->setEnabledTo(null);
-        }
+        $existing->setHost('localhost');
+        $existing->setEnabled(true);
+        $existing->setIsDefault($isDefault);
+        $existing->setRelativePath($relativePath);
+        $existing->setEnabledFrom(new \DateTimeImmutable('-1 day'));
+        $existing->setEnabledTo(null);
 
         // Remove duplicates for this locale (keep $existing)
         $this->removeOtherSitesOfLocale($locale, $existing);
@@ -195,30 +182,14 @@ final class CmsBaselineStory extends Story
         }
 
         // Normalize existing root
-        if (method_exists($root, 'getUrl') && method_exists($root, 'setUrl') && '/' !== (string) $root->getUrl()) {
-            $root->setUrl('/');
-        }
-        if (method_exists($root, 'getRouteName') && method_exists($root, 'setRouteName') && 'page_slug' !== (string) $root->getRouteName()) {
-            $root->setRouteName('page_slug');
-        }
-        if (method_exists($root, 'getTemplateCode') && method_exists($root, 'setTemplateCode') && 'frontpage' !== (string) $root->getTemplateCode()) {
-            $root->setTemplateCode('frontpage');
-        }
-        if (method_exists($root, 'getType') && method_exists($root, 'setType') && FrontPage::class !== (string) $root->getType()) {
-            $root->setType(FrontPage::class);
-        }
-        if (method_exists($root, 'isEnabled') && method_exists($root, 'setEnabled') && !$root->isEnabled()) {
-            $root->setEnabled(true);
-        }
-        if (method_exists($root, 'getDecorate') && method_exists($root, 'setDecorate') && !$root->getDecorate()) {
-            $root->setDecorate(true);
-        }
-        if (method_exists($root, 'getRequestMethod') && method_exists($root, 'setRequestMethod') && 'GET|POST|HEAD|DELETE|PUT' !== (string) $root->getRequestMethod()) {
-            $root->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-        }
-        if (method_exists($pageRepo, 'flush')) {
-            $pageRepo->flush();
-        }
+        $root->setUrl('/');
+        $root->setRouteName('page_slug');
+        $root->setTemplateCode('frontpage');
+        $root->setType(FrontPage::class);
+        $root->setEnabled(true);
+        $root->setDecorate(true);
+        $root->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+        $pageRepo->flush();
 
         return $root;
     }
@@ -375,52 +346,23 @@ final class CmsBaselineStory extends Story
                 ->create();
         }
 
-        // Normalize existing page
-        if (method_exists($page, 'setParent')) {
-            $page->setParent($root);
-        }
-        if (method_exists($page, 'setPosition')) {
-            $page->setPosition($position);
-        }
-        if (method_exists($page, 'setRouteName')) {
-            $page->setRouteName($routeName);
-        }
-        if (method_exists($page, 'setName')) {
-            $page->setName($name);
-        }
-        if (method_exists($page, 'setTitle')) {
-            $page->setTitle($title);
-        }
-        if (method_exists($page, 'setSlug')) {
-            $page->setSlug($slug);
-        }
-        if (method_exists($page, 'setUrl')) {
-            $page->setUrl($url);
-        }
-        if (method_exists($page, 'setEnabled')) {
-            $page->setEnabled(true);
-        }
-        if (method_exists($page, 'setDecorate')) {
-            $page->setDecorate(true);
-        }
-        if (method_exists($page, 'setType')) {
-            $page->setType($type);
-        }
-        if (method_exists($page, 'setTemplateCode')) {
-            $page->setTemplateCode($templateCode);
-        }
-        if (method_exists($page, 'setRequestMethod')) {
-            $page->setRequestMethod($requestMethod);
-        }
-        if (method_exists($page, 'setPageAlias')) {
-            $page->setPageAlias($alias);
-        }
-        if (null !== $metaDescriptionIfMissing && method_exists($page, 'getMetaDescription') && method_exists($page, 'setMetaDescription') && null === $page->getMetaDescription()) {
+        $page->setParent($root);
+        $page->setPosition($position);
+        $page->setRouteName($routeName);
+        $page->setName($name);
+        $page->setTitle($title);
+        $page->setSlug($slug);
+        $page->setUrl($url);
+        $page->setEnabled(true);
+        $page->setDecorate(true);
+        $page->setType($type);
+        $page->setTemplateCode($templateCode);
+        $page->setRequestMethod($requestMethod);
+        $page->setPageAlias($alias);
+        if (null !== $metaDescriptionIfMissing && null === $page->getMetaDescription()) {
             $page->setMetaDescription($metaDescriptionIfMissing);
         }
-        if (method_exists($pageRepo, 'flush')) {
-            $pageRepo->flush();
-        }
+        $pageRepo->flush();
 
         return $page;
     }
@@ -486,49 +428,20 @@ final class CmsBaselineStory extends Story
                 ->create();
         } else {
             // Normalize attributes
-            if (method_exists($chosen, 'setParent')) {
-                $chosen->setParent($root);
-            }
-            if (method_exists($chosen, 'setPosition')) {
-                $chosen->setPosition($position);
-            }
-            if (method_exists($chosen, 'setRouteName')) {
-                $chosen->setRouteName('page_slug');
-            }
-            if (method_exists($chosen, 'setName')) {
-                $chosen->setName($name);
-            }
-            if (method_exists($chosen, 'setTitle')) {
-                $chosen->setTitle($title);
-            }
-            if (method_exists($chosen, 'setSlug')) {
-                $chosen->setSlug($slug);
-            }
-            if (method_exists($chosen, 'setUrl')) {
-                $chosen->setUrl($url);
-            }
-            if (method_exists($chosen, 'setEnabled')) {
-                $chosen->setEnabled(true);
-            }
-            if (method_exists($chosen, 'setDecorate')) {
-                $chosen->setDecorate(true);
-            }
-            if (method_exists($chosen, 'setType')) {
-                $chosen->setType('entropy.page.announcementspage');
-            }
-            if (method_exists($chosen, 'setTemplateCode')) {
-                $chosen->setTemplateCode('annnouncements');
-            }
-            if (method_exists($chosen, 'setRequestMethod')) {
-                $chosen->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-            }
-            if (method_exists($chosen, 'setPageAlias')) {
-                $chosen->setPageAlias($alias);
-            }
-
-            if (method_exists($pageRepo, 'flush')) {
-                $pageRepo->flush();
-            }
+            $chosen->setParent($root);
+            $chosen->setPosition($position);
+            $chosen->setRouteName('page_slug');
+            $chosen->setName($name);
+            $chosen->setTitle($title);
+            $chosen->setSlug($slug);
+            $chosen->setUrl($url);
+            $chosen->setEnabled(true);
+            $chosen->setDecorate(true);
+            $chosen->setType('entropy.page.announcementspage');
+            $chosen->setTemplateCode('annnouncements');
+            $chosen->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
+            $chosen->setPageAlias($alias);
+            $pageRepo->flush();
         }
     }
 
@@ -580,46 +493,19 @@ final class CmsBaselineStory extends Story
                 ])
                 ->create();
         } else {
-            if (method_exists($chosen, 'setParent')) {
-                $chosen->setParent($root);
-            }
-            if (method_exists($chosen, 'setPosition')) {
-                $chosen->setPosition(2);
-            }
-            if (method_exists($chosen, 'setRouteName')) {
-                $chosen->setRouteName('page_slug');
-            }
-            if (method_exists($chosen, 'setName')) {
-                $chosen->setName('Stream');
-            }
-            if (method_exists($chosen, 'setTitle')) {
-                $chosen->setTitle('Stream');
-            }
-            if (method_exists($chosen, 'setSlug')) {
-                $chosen->setSlug('stream');
-            }
-            if (method_exists($chosen, 'setUrl')) {
-                $chosen->setUrl('/stream');
-            }
-            if (method_exists($chosen, 'setEnabled')) {
-                $chosen->setEnabled(true);
-            }
-            if (method_exists($chosen, 'setDecorate')) {
-                $chosen->setDecorate(true);
-            }
-            if (method_exists($chosen, 'setType')) {
-                $chosen->setType('entropy.page.stream');
-            }
-            if (method_exists($chosen, 'setTemplateCode')) {
-                $chosen->setTemplateCode('stream');
-            }
-            if (method_exists($chosen, 'setRequestMethod')) {
-                $chosen->setRequestMethod('GET|POST|HEAD');
-            }
-
-            if (method_exists($pageRepo, 'flush')) {
-                $pageRepo->flush();
-            }
+            $chosen->setParent($root);
+            $chosen->setPosition(2);
+            $chosen->setRouteName('page_slug');
+            $chosen->setName('Stream');
+            $chosen->setTitle('Stream');
+            $chosen->setSlug('stream');
+            $chosen->setUrl('/stream');
+            $chosen->setEnabled(true);
+            $chosen->setDecorate(true);
+            $chosen->setType('entropy.page.stream');
+            $chosen->setTemplateCode('stream');
+            $chosen->setRequestMethod('GET|POST|HEAD');
+            $pageRepo->flush();
         }
     }
 
@@ -646,12 +532,8 @@ final class CmsBaselineStory extends Story
                 continue;
             }
             // Remove duplicates beyond the first
-            if (method_exists($pageRepo, 'remove')) {
-                $pageRepo->remove($pg, false);
-            }
+            $pageRepo->remove($pg, false);
         }
-        if (method_exists($pageRepo, 'flush')) {
-            $pageRepo->flush();
-        }
+        $pageRepo->flush();
     }
 }

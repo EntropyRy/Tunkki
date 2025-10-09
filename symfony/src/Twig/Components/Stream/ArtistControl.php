@@ -74,14 +74,14 @@ final class ArtistControl extends AbstractController
         $this->member = $user->getMember();
 
         // Only proceed if member has artists
-        if (!$this->member || !$this->member->getArtist()->count()) {
+        if (0 === $this->member->getArtist()->count()) {
             return;
         }
 
         if (!$this->stream instanceof Stream) {
             $this->stream = $this->streamRepository->findOneBy(
                 ['online' => true],
-                ['id' => 'DESC']
+                ['id' => 'DESC'],
             );
         }
 
@@ -90,7 +90,7 @@ final class ArtistControl extends AbstractController
             // Find if any of the member's artists are active in the stream
             $activeStreamArtist = $this->streamArtistRepository->findActiveMemberArtistInStream(
                 $this->member,
-                $this->stream
+                $this->stream,
             );
 
             if ($activeStreamArtist) {
@@ -120,7 +120,7 @@ final class ArtistControl extends AbstractController
                     'member' => $this->member,
                     'stream' => $this->stream,
                     'is_in_stream' => true,
-                ]
+                ],
             );
         }
 
@@ -167,7 +167,7 @@ final class ArtistControl extends AbstractController
 
             // Check if member already has an active artist and deactivate it first
             $existingActiveArtists = $this->streamArtistRepository->findActiveArtistsInStream(
-                $this->stream
+                $this->stream,
             );
 
             foreach ($existingActiveArtists as $activeArtist) {

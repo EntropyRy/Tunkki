@@ -88,17 +88,11 @@ final class PageFactory extends PersistentObjectFactory
     {
         return $this->afterInstantiate(static function (SonataPagePage $page): void {
             // Derive a slug if empty and name exists (defensive).
-            if (method_exists($page, 'getSlug')
-                && method_exists($page, 'setSlug')
-                && method_exists($page, 'getName')
-                && method_exists($page, 'setName')
-            ) {
-                $slug = $page->getSlug();
-                $name = $page->getName();
-                if ((null === $slug || '' === $slug) && $name) {
-                    $normalized = strtolower(preg_replace('#[^a-z0-9]+#', '-', $name) ?? '');
-                    $page->setSlug(trim($normalized ?: 'page', '-'));
-                }
+            $slug = $page->getSlug();
+            $name = $page->getName();
+            if ((null === $slug || '' === $slug) && $name) {
+                $normalized = strtolower(preg_replace('#[^a-z0-9]+#', '-', $name) ?? '');
+                $page->setSlug(trim($normalized ?: 'page', '-'));
             }
         });
     }
@@ -169,7 +163,6 @@ final class PageFactory extends PersistentObjectFactory
         // global references here directly without a guard; so we reflect if Story loaded.
         if (class_exists(StoryManager::class)) {
             try {
-                /** @phpstan-ignore-next-line */
                 $manager = StoryManager::instance();
                 if ($manager->has('cms:site:default')) {
                     /** @var SonataPageSite $defaultSite */
