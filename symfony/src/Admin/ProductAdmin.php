@@ -79,7 +79,10 @@ final class ProductAdmin extends AbstractAdmin
             )
             ->add('descriptionFi')
             ->add('descriptionEn')
-            ->add('serviceFee', null, ['help' => 'One product will be forced to all transactions'])
+            ->add('serviceFee', null, [
+                'help' => 'One product will be forced to all transactions',
+                'required' => false,
+            ])
             ->add('ticket')
             ->add('quantity')
             ->add('howManyOneCanBuyAtOneTime')
