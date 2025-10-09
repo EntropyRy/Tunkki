@@ -20,8 +20,11 @@ class Package implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
+    /**
+     * @var Collection<int, Item>
+     */
     #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
-    private ?Collection $items;
+    private Collection $items;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private string $name = '';
@@ -32,8 +35,11 @@ class Package implements \Stringable
     #[ORM\Column(name: 'needs_fixing', type: Types::BOOLEAN)]
     private bool $needsFixing = false;
 
+    /**
+     * @var Collection<int, WhoCanRentChoice>
+     */
     #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
-    private ?Collection $whoCanRent;
+    private Collection $whoCanRent;
 
     #[ORM\Column(name: 'notes', type: 'text', nullable: true)]
     private ?string $notes = null;
@@ -126,7 +132,7 @@ class Package implements \Stringable
         return $this->name ?: 'n/a';
     }
 
-    public function getItems(): ?Collection
+    public function getItems(): Collection
     {
         return $this->items;
     }
@@ -179,7 +185,7 @@ class Package implements \Stringable
         $this->whoCanRent->removeElement($whoCanRent);
     }
 
-    public function getWhoCanRent(): ?Collection
+    public function getWhoCanRent(): Collection
     {
         return $this->whoCanRent;
     }

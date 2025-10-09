@@ -20,6 +20,9 @@ class Cart
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
+    /**
+     * @var Collection<int, CartItem>
+     */
     #[
         ORM\OneToMany(
             mappedBy: 'cart',
@@ -29,6 +32,9 @@ class Cart
     ]
     private Collection $products;
 
+    /**
+     * @var Collection<int, Checkout>
+     */
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Checkout::class)]
     private Collection $checkouts;
 
@@ -89,9 +95,8 @@ class Cart
     public function setProducts($products): void
     {
         $this->clearProducts();
-        foreach ($products as $cartItem) {
-            $product = $cartItem->getProduct();
-            if ($product && $product->isTicket() && $product->isActive()) {
+        foreach ($products as $product) {
+            if ($product->isTicket() && $product->isActive()) {
                 $item = new CartItem();
                 $item->setProduct($product);
                 $item->setQuantity(0);

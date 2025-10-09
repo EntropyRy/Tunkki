@@ -18,21 +18,21 @@ class NakkiBooking implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Nakki::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Nakki $nakki = null;
+    private Nakki $nakki;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $startAt = null;
+    private \DateTimeImmutable $startAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $endAt = null;
+    private \DateTimeImmutable $endAt;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkiBookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Event $event = null;
+    private Event $event;
 
     #[\Override]
     public function __toString(): string
@@ -50,12 +50,12 @@ class NakkiBooking implements \Stringable
         return $this->id;
     }
 
-    public function getNakki(): ?Nakki
+    public function getNakki(): Nakki
     {
         return $this->nakki;
     }
 
-    public function setNakki(?Nakki $nakki): self
+    public function setNakki(Nakki $nakki): self
     {
         $this->nakki = $nakki;
 
@@ -74,7 +74,7 @@ class NakkiBooking implements \Stringable
         return $this;
     }
 
-    public function getStartAt(): ?\DateTimeImmutable
+    public function getStartAt(): \DateTimeImmutable
     {
         return $this->startAt;
     }
@@ -86,7 +86,7 @@ class NakkiBooking implements \Stringable
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeImmutable
+    public function getEndAt(): \DateTimeImmutable
     {
         return $this->endAt;
     }
@@ -98,12 +98,12 @@ class NakkiBooking implements \Stringable
         return $this;
     }
 
-    public function getEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 

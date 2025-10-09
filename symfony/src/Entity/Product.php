@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
@@ -13,12 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Product implements \Stringable
 {
-    public function __construct()
-    {
-        $now = new \DateTimeImmutable();
-        $this->createdAt = $now;
-        $this->updatedAt = $now;
-    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -31,10 +23,10 @@ class Product implements \Stringable
     private ?string $stripePriceId = null;
 
     #[ORM\Column]
-    private \DateTimeImmutable $createdAt;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
-    private \DateTimeImmutable $updatedAt;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column]
     private ?int $quantity = 0;
@@ -77,24 +69,18 @@ class Product implements \Stringable
         if ($this->event instanceof Event) {
             return $this->event->getTicketTypeCount($this->getStripeId());
         }
-
         return 0;
     }
-
     public function getName($lang): ?string
     {
-        $func = 'name'.ucfirst((string) $lang);
-
+        $func = 'name' . ucfirst((string) $lang);
         return $this->{$func};
     }
-
     public function getDescription($lang): ?string
     {
-        $func = 'description'.ucfirst((string) $lang);
-
+        $func = 'description' . ucfirst((string) $lang);
         return $this->{$func};
     }
-
     public function getMax(?int $inCheckouts): int
     {
         if ($this->event && $this->ticket) {
@@ -103,13 +89,10 @@ class Product implements \Stringable
             if ($left <= $this->howManyOneCanBuyAtOneTime) {
                 return $left;
             }
-
             return $this->howManyOneCanBuyAtOneTime;
         }
-
         return 0;
     }
-
     #[\Override]
     public function __toString(): string
     {
@@ -319,9 +302,8 @@ class Product implements \Stringable
         return $this->howManyOneCanBuyAtOneTime;
     }
 
-    public function setHowManyOneCanBuyAtOneTime(
-        int $howManyOneCanBuyAtOneTime,
-    ): static {
+    public function setHowManyOneCanBuyAtOneTime(int $howManyOneCanBuyAtOneTime): static
+    {
         $this->howManyOneCanBuyAtOneTime = $howManyOneCanBuyAtOneTime;
 
         return $this;

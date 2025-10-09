@@ -108,10 +108,10 @@ class Item implements \Stringable
     private ?User $modifier = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(name: 'updatedAt', type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     public function getId(): ?int
     {
@@ -214,12 +214,12 @@ class Item implements \Stringable
         return $this->forSale;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }

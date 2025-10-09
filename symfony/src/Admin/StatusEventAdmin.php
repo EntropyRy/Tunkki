@@ -197,7 +197,7 @@ class StatusEventAdmin extends AbstractAdmin
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
 
-    private function getMMtext($Event, string $user): string
+    private function getMMtext($Event, ?User $user): string
     {
         $url = $this->generateUrl(
             'show',
@@ -229,7 +229,7 @@ class StatusEventAdmin extends AbstractAdmin
             $text .= 'with comment: '.$Event->getDescription();
         }
 
-        return $text.(' by '.$user);
+        return $text.(' by '.($user ? (string) $user : 'unknown'));
     }
 
     public function __construct(

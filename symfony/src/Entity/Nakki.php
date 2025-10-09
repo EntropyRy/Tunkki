@@ -22,21 +22,24 @@ class Nakki implements \Stringable
     #[ORM\ManyToOne(targetEntity: NakkiDefinition::class)]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private ?NakkiDefinition $definition = null;
+    private NakkiDefinition $definition;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $startAt = null;
+    private \DateTimeImmutable $startAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $endAt = null;
+    private \DateTimeImmutable $endAt;
 
+    /**
+     * @var Collection<int, NakkiBooking>
+     */
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'nakki', orphanRemoval: true)]
-    private $nakkiBookings;
+    private Collection $nakkiBookings;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
     #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank]
-    private ?Event $event = null;
+    private Event $event;
 
     #[ORM\Column(type: 'dateinterval')]
     private \DateInterval $nakkiInterval;
@@ -68,19 +71,19 @@ class Nakki implements \Stringable
         return $this->id;
     }
 
-    public function getDefinition(): ?NakkiDefinition
+    public function getDefinition(): NakkiDefinition
     {
         return $this->definition;
     }
 
-    public function setDefinition(?NakkiDefinition $definition): self
+    public function setDefinition(NakkiDefinition $definition): self
     {
         $this->definition = $definition;
 
         return $this;
     }
 
-    public function getStartAt(): ?\DateTimeImmutable
+    public function getStartAt(): \DateTimeImmutable
     {
         return $this->startAt;
     }
@@ -92,7 +95,7 @@ class Nakki implements \Stringable
         return $this;
     }
 
-    public function getEndAt(): ?\DateTimeImmutable
+    public function getEndAt(): \DateTimeImmutable
     {
         return $this->endAt;
     }
@@ -132,12 +135,12 @@ class Nakki implements \Stringable
         return $this;
     }
 
-    public function getEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 

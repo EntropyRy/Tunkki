@@ -26,13 +26,13 @@ class Event implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $Name = null;
+    private string $Name = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $Nimi = null;
+    private string $Nimi = '';
 
     #[ORM\Column(type: 'datetime')]
-    private ?\DateTimeInterface $EventDate = null;
+    private \DateTimeInterface $EventDate;
 
     // NOTE 2025-10-02 (MT37/STAN-01): publishDate converted to nullable immutable field.
     // Draft/unpublished events: publishDate = null (evaluated via EventPublicationDecider).
@@ -72,7 +72,7 @@ class Event implements \Stringable
     private bool $published = false;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $type = null;
+    private string $type = '';
 
     #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $epics = null;
@@ -111,7 +111,7 @@ class Event implements \Stringable
     private Collection $eventArtistInfos;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $until = null;
@@ -176,7 +176,7 @@ class Event implements \Stringable
     private ?bool $includeSaferSpaceGuidelines = false;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $headerTheme = 'light';
+    private string $headerTheme = 'light';
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $streamPlayerUrl = null;
@@ -270,7 +270,7 @@ class Event implements \Stringable
     private ?string $backgroundEffectConfig = null;
 
     #[ORM\Column]
-    private ?bool $artistSignUpAskSetLength = true;
+    private bool $artistSignUpAskSetLength = true;
 
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
     private Collection $notifications;
@@ -308,7 +308,7 @@ class Event implements \Stringable
     private ?string $artistSignUpInfoEn = null;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $version = 1;
+    private int $version = 1;
 
     #[ORM\Column(nullable: true)]
     private ?bool $sendRsvpEmail = null;
@@ -340,7 +340,7 @@ class Event implements \Stringable
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->Name;
     }
@@ -352,7 +352,7 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getNimi(): ?string
+    public function getNimi(): string
     {
         return $this->Nimi;
     }
@@ -364,7 +364,7 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getEventDate(): ?\DateTimeInterface
+    public function getEventDate(): \DateTimeInterface
     {
         return $this->EventDate;
     }
@@ -452,7 +452,7 @@ class Event implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->getName() ?: 'Happening';
+        return $this->Name ?: 'Happening';
     }
 
     #[\Deprecated(message: 'Use isPublic() instead. Remove getPublished() after test migration.')]
@@ -698,7 +698,7 @@ class Event implements \Stringable
         return 'after' == $this->getNowTest();
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -840,7 +840,7 @@ class Event implements \Stringable
         return str_replace('{{ happening_list }}', '', $abstract);
     }
 
-    public function getNameByLang($lang): ?string
+    public function getNameByLang($lang): string
     {
         if ('fi' == $lang) {
             return $this->Nimi;
@@ -890,7 +890,7 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -1078,12 +1078,12 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getHeaderTheme(): ?string
+    public function getHeaderTheme(): string
     {
         return $this->headerTheme;
     }
 
-    public function setHeaderTheme(?string $headerTheme): self
+    public function setHeaderTheme(string $headerTheme): self
     {
         $this->headerTheme = $headerTheme;
 
@@ -1627,7 +1627,7 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getArtistSignUpAskSetLength(): ?bool
+    public function getArtistSignUpAskSetLength(): bool
     {
         return $this->artistSignUpAskSetLength;
     }

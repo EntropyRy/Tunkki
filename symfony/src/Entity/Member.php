@@ -120,7 +120,7 @@ class Member implements \Stringable
     private ?User $user = null;
 
     #[ORM\Column(type: Types::STRING, length: 8)]
-    private ?string $locale = 'fi';
+    private string $locale = 'fi';
 
     /**
      * @var Collection<int, Artist>
@@ -205,13 +205,13 @@ class Member implements \Stringable
     private ?string $code = null;
 
     #[ORM\Column]
-    private ?bool $emailVerified = false;
+    private bool $emailVerified = false;
 
     #[ORM\Column]
-    private ?bool $allowInfoMails = true;
+    private bool $allowInfoMails = true;
 
     #[ORM\Column]
-    private ?bool $allowActiveMemberMails = true;
+    private bool $allowActiveMemberMails = true;
 
     #[ORM\Column(type: Types::STRING, length: 190, nullable: true)]
     private ?string $epicsUsername = null;
@@ -520,12 +520,12 @@ class Member implements \Stringable
         return $this->isFullMember;
     }
 
-    public function getLocale(): ?string
+    public function getLocale(): string
     {
         return $this->locale;
     }
 
-    public function setLocale(?string $locale): self
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 
@@ -850,7 +850,7 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function isEmailVerified(): ?bool
+    public function isEmailVerified(): bool
     {
         return $this->emailVerified;
     }
@@ -862,7 +862,7 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function isAllowInfoMails(): ?bool
+    public function isAllowInfoMails(): bool
     {
         return $this->allowInfoMails;
     }
@@ -874,7 +874,7 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function isAllowActiveMemberMails(): ?bool
+    public function isAllowActiveMemberMails(): bool
     {
         return $this->allowActiveMemberMails;
     }

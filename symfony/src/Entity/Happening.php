@@ -20,19 +20,19 @@ class Happening implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nameFi = null;
+    private string $nameFi = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $nameEn = null;
+    private string $nameEn = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $descriptionFi = null;
+    private string $descriptionFi = '';
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $descriptionEn = null;
+    private string $descriptionEn = '';
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $time = null;
+    private \DateTimeInterface $time;
 
     #[ORM\Column]
     private bool $needsPreliminarySignUp = false;
@@ -47,8 +47,11 @@ class Happening implements \Stringable
     private ?string $paymentInfoEn = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $type = null;
+    private string $type = '';
 
+    /**
+     * @var Collection<int, HappeningBooking>
+     */
     #[
         ORM\OneToMany(
             mappedBy: 'happening',
@@ -59,6 +62,9 @@ class Happening implements \Stringable
     ]
     private Collection $bookings;
 
+    /**
+     * @var Collection<int, Member>
+     */
     #[
         ORM\ManyToMany(
             targetEntity: Member::class,
@@ -75,13 +81,13 @@ class Happening implements \Stringable
     private ?Event $event = null;
 
     #[ORM\Column]
-    private ?int $maxSignUps = 0;
+    private int $maxSignUps = 0;
 
     #[ORM\Column(length: 255)]
-    private ?string $slugFi = null;
+    private string $slugFi = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $slugEn = null;
+    private string $slugEn = '';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $priceFi = null;
@@ -90,13 +96,13 @@ class Happening implements \Stringable
     private ?string $priceEn = null;
 
     #[ORM\Column]
-    private ?bool $releaseThisHappeningInEvent = false;
+    private bool $releaseThisHappeningInEvent = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $signUpsOpenUntil = null;
 
     #[ORM\Column]
-    private ?bool $allowSignUpComments = true;
+    private bool $allowSignUpComments = true;
 
     public function __construct()
     {
@@ -109,7 +115,7 @@ class Happening implements \Stringable
         return $this->id;
     }
 
-    public function getNameFi(): ?string
+    public function getNameFi(): string
     {
         return $this->nameFi;
     }
@@ -121,7 +127,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getNameEn(): ?string
+    public function getNameEn(): string
     {
         return $this->nameEn;
     }
@@ -133,7 +139,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getDescriptionFi(): ?string
+    public function getDescriptionFi(): string
     {
         return $this->descriptionFi;
     }
@@ -145,7 +151,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getDescriptionEn(): ?string
+    public function getDescriptionEn(): string
     {
         return $this->descriptionEn;
     }
@@ -157,7 +163,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getTime(): ?\DateTimeInterface
+    public function getTime(): \DateTimeInterface
     {
         return $this->time;
     }
@@ -195,7 +201,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }
@@ -286,7 +292,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getMaxSignUps(): ?int
+    public function getMaxSignUps(): int
     {
         return $this->maxSignUps;
     }
@@ -298,21 +304,21 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getName($lang): ?string
+    public function getName($lang): string
     {
         $func = 'name'.ucfirst((string) $lang);
 
         return $this->{$func};
     }
 
-    public function getSlug($lang): ?string
+    public function getSlug($lang): string
     {
         $func = 'slug'.ucfirst((string) $lang);
 
         return $this->{$func};
     }
 
-    public function getDescription($lang): ?string
+    public function getDescription($lang): string
     {
         $func = 'description'.ucfirst((string) $lang);
 
@@ -333,7 +339,7 @@ class Happening implements \Stringable
         return $this->{$func};
     }
 
-    public function getSlugFi(): ?string
+    public function getSlugFi(): string
     {
         return $this->slugFi;
     }
@@ -345,7 +351,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getSlugEn(): ?string
+    public function getSlugEn(): string
     {
         return $this->slugEn;
     }
@@ -405,7 +411,7 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function isReleaseThisHappeningInEvent(): ?bool
+    public function isReleaseThisHappeningInEvent(): bool
     {
         return $this->releaseThisHappeningInEvent;
     }
@@ -447,7 +453,7 @@ class Happening implements \Stringable
         return $this->signUpsOpenUntil > $time;
     }
 
-    public function isAllowSignUpComments(): ?bool
+    public function isAllowSignUpComments(): bool
     {
         return $this->allowSignUpComments;
     }

@@ -24,10 +24,10 @@ class HappeningBooking implements \Stringable
 
     #[ORM\ManyToOne(inversedBy: 'bookings')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Happening $happening = null;
+    private Happening $happening;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     public function __construct()
     {
@@ -63,12 +63,12 @@ class HappeningBooking implements \Stringable
         return $this;
     }
 
-    public function getHappening(): ?Happening
+    public function getHappening(): Happening
     {
         return $this->happening;
     }
 
-    public function setHappening(?Happening $happening): self
+    public function setHappening(Happening $happening): self
     {
         $this->happening = $happening;
 
@@ -81,7 +81,7 @@ class HappeningBooking implements \Stringable
         return $this->createdAt->format('d.m. H:i').' '.$this->member;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

@@ -19,7 +19,7 @@ class DoorLog
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'doorLogs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Member $member = null;
+    private Member $member;
 
     /**
      * Immutable creation timestamp; initialized in constructor.
@@ -40,12 +40,12 @@ class DoorLog
         return $this->id;
     }
 
-    public function getMember(): ?Member
+    public function getMember(): Member
     {
         return $this->member;
     }
 
-    public function setMember(?Member $member): self
+    public function setMember(Member $member): self
     {
         $this->member = $member;
 
@@ -83,9 +83,6 @@ class DoorLog
     #[ORM\PrePersist]
     public function prePersist(): void
     {
-        // Constructor initializes createdAt; retain only defensive guard.
-        if (!isset($this->createdAt)) {
-            $this->createdAt = new \DateTimeImmutable();
-        }
+        // Constructor always initializes createdAt
     }
 }

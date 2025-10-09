@@ -66,7 +66,7 @@ final class CartEntityTest extends TestCase
     {
         $cart = new Cart();
 
-        // Use real Product objects for isTicket/isActive logic
+        // Use real Product objects
         $activeProduct = new \App\Entity\Product();
         $activeProduct->setActive(true);
         $activeProduct->setTicket(true);
@@ -79,16 +79,9 @@ final class CartEntityTest extends TestCase
         $nonTicketProduct->setActive(true);
         $nonTicketProduct->setTicket(false);
 
-        $activeTicket = new CartItem();
-        $activeTicket->setProduct($activeProduct);
+        // setProducts expects Product objects, not CartItem objects
+        $cart->setProducts([$activeProduct, $inactiveProduct, $nonTicketProduct]);
 
-        $inactiveTicket = new CartItem();
-        $inactiveTicket->setProduct($inactiveProduct);
-
-        $nonTicket = new CartItem();
-        $nonTicket->setProduct($nonTicketProduct);
-
-        $cart->setProducts([$activeTicket, $inactiveTicket, $nonTicket]);
         // Only active tickets should be added
         $this->assertCount(1, $cart->getProducts());
     }
