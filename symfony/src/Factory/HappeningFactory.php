@@ -86,7 +86,7 @@ final class HappeningFactory extends PersistentObjectFactory
     {
         return $this->afterInstantiate(function (Happening $happening): void {
             // Ensure maxSignUps non-negative
-            if ((int) $happening->getMaxSignUps() < 0) {
+            if ($happening->getMaxSignUps() < 0) {
                 $happening->setMaxSignUps(0);
             }
 

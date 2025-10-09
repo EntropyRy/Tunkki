@@ -65,7 +65,7 @@ final class AnnouncementEventFixtures extends Fixture
                 $existing->setPublishDate($now->modify('-10 minutes'));
             }
             // Keep or adjust event date minimally (only if in the past).
-            if ($existing->getEventDate() instanceof \DateTimeInterface && $existing->getEventDate() < $now) {
+            if ($existing->getEventDate() < $now) {
                 $existing->setEventDate($now->modify('+7 days')->setTime(12, 0));
             }
             $manager->persist($existing);

@@ -229,7 +229,7 @@ class StatusEventAdmin extends AbstractAdmin
             $text .= 'with comment: '.$Event->getDescription();
         }
 
-        return $text.(' by '.($user ? (string) $user : 'unknown'));
+        return $text.(' by '.($user instanceof User ? (string) $user : 'unknown'));
     }
 
     public function __construct(

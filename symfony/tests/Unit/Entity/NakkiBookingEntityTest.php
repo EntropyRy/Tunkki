@@ -23,8 +23,7 @@ final class NakkiBookingEntityTest extends TestCase
         $booking->setNakki($nakki);
         $this->assertSame($nakki, $booking->getNakki());
 
-        $booking->setNakki(null);
-        $this->assertNull($booking->getNakki());
+        // Removed null setter test for Nakki (non-nullable)
     }
 
     public function testSetAndGetMember(): void
@@ -60,8 +59,7 @@ final class NakkiBookingEntityTest extends TestCase
         $booking->setEvent($event);
         $this->assertSame($event, $booking->getEvent());
 
-        $booking->setEvent(null);
-        $this->assertNull($booking->getEvent());
+        // Removed null setter test for Event (non-nullable)
     }
 
     public function testGetMemberEmailWithMember(): void
@@ -157,15 +155,12 @@ final class NakkiBookingEntityTest extends TestCase
     public function testEdgeCaseSetters(): void
     {
         $booking = new NakkiBooking();
-        $booking->setNakki(null);
+        // Removed null setter tests for Nakki and Event (non-nullable)
         $booking->setMember(null);
         // $booking->setStartAt(null); // Do not pass null to setStartAt, which requires DateTimeImmutable
         // $booking->setEndAt(null); // Do not pass null to setEndAt, which requires DateTimeImmutable
-        $booking->setEvent(null);
 
-        $this->assertNull($booking->getNakki());
         $this->assertNull($booking->getMember());
-        $this->assertNull($booking->getEndAt());
-        $this->assertNull($booking->getEvent());
+        // $this->assertNull($booking->getEndAt()); // Removed: endAt is not initialized and should not be asserted as null
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
@@ -69,18 +71,24 @@ class Product implements \Stringable
         if ($this->event instanceof Event) {
             return $this->event->getTicketTypeCount($this->getStripeId());
         }
+
         return 0;
     }
+
     public function getName($lang): ?string
     {
-        $func = 'name' . ucfirst((string) $lang);
+        $func = 'name'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
+
     public function getDescription($lang): ?string
     {
-        $func = 'description' . ucfirst((string) $lang);
+        $func = 'description'.ucfirst((string) $lang);
+
         return $this->{$func};
     }
+
     public function getMax(?int $inCheckouts): int
     {
         if ($this->event && $this->ticket) {
@@ -89,10 +97,13 @@ class Product implements \Stringable
             if ($left <= $this->howManyOneCanBuyAtOneTime) {
                 return $left;
             }
+
             return $this->howManyOneCanBuyAtOneTime;
         }
+
         return 0;
     }
+
     #[\Override]
     public function __toString(): string
     {

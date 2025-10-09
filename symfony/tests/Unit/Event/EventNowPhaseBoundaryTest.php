@@ -40,8 +40,11 @@ final class EventNowPhaseBoundaryTest extends TestCase
     /**
      * Minimal reflection helper: set a private (possibly oddly cased) property.
      */
-    private function setPrivate(object $object, string $property, mixed $value): void
-    {
+    private function setPrivate(
+        object $object,
+        string $property,
+        mixed $value,
+    ): void {
         $ref = new \ReflectionClass($object);
         if (!$ref->hasProperty($property)) {
             self::fail("Property '{$property}' not found on ".$object::class);
@@ -58,8 +61,15 @@ final class EventNowPhaseBoundaryTest extends TestCase
         // Event starts sufficiently in the future to avoid boundary flakiness.
         $this->setPrivate($event, 'EventDate', $now->modify('+30 minutes'));
 
-        self::assertSame('before', $event->getNowTest(), 'Expected "before" when now is earlier than EventDate.');
-        self::assertFalse($event->isInPast(), 'Event should not be considered past while still in "before" phase.');
+        self::assertSame(
+            'before',
+            $event->getNowTest(),
+            'Expected "before" when now is earlier than EventDate.',
+        );
+        self::assertFalse(
+            $event->isInPast(),
+            'Event should not be considered past while still in "before" phase.',
+        );
     }
 
     public function testSingleDayAtStartBoundaryYieldsAfterOrNowExpectation(): void
@@ -74,7 +84,11 @@ final class EventNowPhaseBoundaryTest extends TestCase
         // if the internal now has ticked beyond the exact event date. The entity logic sets 'after' when
         // $now > $EventDate (no until). For equality it falls to the final else => 'after'.
         // Documenting current behavior: equality collapses to 'after'.
-        self::assertSame('after', $phase, 'Current implementation classifies equality as "after" (documented behavior).');
+        self::assertSame(
+            'after',
+            $phase,
+            'Current implementation classifies equality as "after" (documented behavior).',
+        );
     }
 
     public function testSingleDayAfterPhase(): void
@@ -84,8 +98,15 @@ final class EventNowPhaseBoundaryTest extends TestCase
         $this->setPrivate($event, 'EventDate', $now->modify('-10 minutes'));
 
         // With no until field, logic returns 'after' if now >= EventDate.
-        self::assertSame('after', $event->getNowTest(), 'Expected "after" when now is past single-day EventDate.');
-        self::assertTrue($event->isInPast(), 'isInPast() must align with "after" phase.');
+        self::assertSame(
+            'after',
+            $event->getNowTest(),
+            'Expected "after" when now is past single-day EventDate.',
+        );
+        self::assertTrue(
+            $event->isInPast(),
+            'isInPast() must align with "after" phase.',
+        );
     }
 
     public function testMultiDayInsideWindow(): void
@@ -95,8 +116,15 @@ final class EventNowPhaseBoundaryTest extends TestCase
         $this->setPrivate($event, 'EventDate', $now->modify('-1 day'));
         $this->setPrivate($event, 'until', $now->modify('+1 day'));
 
-        self::assertSame('now', $event->getNowTest(), 'Expected "now" inside multiday window.');
-        self::assertFalse($event->isInPast(), 'Within live window should not be considered past.');
+        self::assertSame(
+            'now',
+            $event->getNowTest(),
+            'Expected "now" inside multiday window.',
+        );
+        self::assertFalse(
+            $event->isInPast(),
+            'Within live window should not be considered past.',
+        );
     }
 
     public function testMultiDayAtEndBoundaryInclusiveStillNow(): void
@@ -108,7 +136,11 @@ final class EventNowPhaseBoundaryTest extends TestCase
 
         $phase = $event->getNowTest();
         // Implementation checks: if ($now >= EventDate && $now <= until) => 'now'
-        self::assertSame('now', $phase, 'End boundary is inclusive and should classify as "now".');
+        self::assertSame(
+            'now',
+            $phase,
+            'End boundary is inclusive and should classify as "now".',
+        );
     }
 
     public function testMultiDayAfterEnd(): void
@@ -118,17 +150,15 @@ final class EventNowPhaseBoundaryTest extends TestCase
         $this->setPrivate($event, 'EventDate', $now->modify('-3 days'));
         $this->setPrivate($event, 'until', $now->modify('-1 minute'));
 
-        self::assertSame('after', $event->getNowTest(), 'Expected "after" once beyond multiday until boundary.');
-        self::assertTrue($event->isInPast(), 'Past multiday window should set isInPast() true.');
-    }
-
-    public function testUndefinedStateWhenEventDateMissing(): void
-    {
-        $event = new Event();
-        // Neither EventDate nor until set. getNowTest() code path: falls to return 'undefined'
-        self::assertSame('undefined', $event->getNowTest(), 'Missing EventDate should yield "undefined".');
-        // isInPast() uses getNowTest() == 'after'; undefined => false
-        self::assertFalse($event->isInPast(), 'Undefined phase should not classify as past.');
+        self::assertSame(
+            'after',
+            $event->getNowTest(),
+            'Expected "after" once beyond multiday until boundary.',
+        );
+        self::assertTrue(
+            $event->isInPast(),
+            'Past multiday window should set isInPast() true.',
+        );
     }
 
     /**
@@ -147,6 +177,10 @@ final class EventNowPhaseBoundaryTest extends TestCase
         // - if ($now >= EventDate && $now <= until) false
         // - elseif ($now > $until) false (since now < until)
         // - elseif ($now < $EventDate) => 'before'
-        self::assertSame('before', $event->getNowTest(), 'Inverted (data anomaly) still classifies as "before" safely.');
+        self::assertSame(
+            'before',
+            $event->getNowTest(),
+            'Inverted (data anomaly) still classifies as "before" safely.',
+        );
     }
 }

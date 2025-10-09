@@ -138,11 +138,9 @@ class CalendarController extends AbstractController
         // Previously the end DateTime was created as floating (second argument true),
         // which could cause macOS Calendar to interpret it differently and shift times.
         $tz = new PhpDateTimeZone('Europe/Helsinki');
-        if ($start instanceof \DateTimeInterface) {
-            $start = \DateTimeImmutable::createFromInterface(
-                $start,
-            )->setTimezone($tz);
-        }
+        $start = \DateTimeImmutable::createFromInterface(
+            $start,
+        )->setTimezone($tz);
         if ($end instanceof \DateTimeInterface) {
             $end = \DateTimeImmutable::createFromInterface($end)->setTimezone(
                 $tz,

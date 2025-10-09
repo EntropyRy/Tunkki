@@ -234,12 +234,7 @@ class Happening implements \Stringable
     public function removeBooking(HappeningBooking $booking): self
     {
         // set the owning side to null (unless already changed)
-        if (
-            $this->bookings->removeElement($booking)
-            && $booking->getHappening() === $this
-        ) {
-            $booking->setHappening(null);
-        }
+        $this->bookings->removeElement($booking);
 
         return $this;
     }
@@ -427,7 +422,7 @@ class Happening implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->nameEn;
+        return $this->nameEn;
     }
 
     public function getSignUpsOpenUntil(): ?\DateTimeInterface

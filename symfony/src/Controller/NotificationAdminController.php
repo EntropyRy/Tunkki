@@ -141,7 +141,7 @@ final class NotificationAdminController extends CRUDController
             // error_log('Sending Telegram message with options: ' . json_encode($telegramOptions->toArray()));
 
             $chatter->send($message);
-            //$notification->setMessageId((int) $return->getMessageId());
+            // $notification->setMessageId((int) $return->getMessageId());
             $notification->setSentAt(new \DateTimeImmutable('now'));
             $this->admin->update($notification);
             $this->addFlash('success', 'Message sent');

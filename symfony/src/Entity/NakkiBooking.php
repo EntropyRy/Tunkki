@@ -37,7 +37,7 @@ class NakkiBooking implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if (\is_object($this->getEvent()) && $this->getEvent()->isNakkiRequiredForTicketReservation()) {
+        if ($this->getEvent()->isNakkiRequiredForTicketReservation()) {
             return $this->event.': '.$this->nakki;
         }
         $aika = \is_object($this->getStartAt()) ? $this->getStartAt()->format('H:i') : '';

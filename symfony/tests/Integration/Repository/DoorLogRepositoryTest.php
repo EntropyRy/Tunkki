@@ -49,6 +49,29 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
         // Assign createdAt via setter or reflection.
         $this->assign($log, 'createdAt', $createdAt);
 
+        // Always assign a Member (required association)
+        $member = new \App\Entity\Member();
+        if (method_exists($member, 'setEmail')) {
+            $member->setEmail(uniqid('doorlog-', true).'@example.test');
+        }
+        if (method_exists($member, 'setFirstname')) {
+            $member->setFirstname('Door');
+        }
+        if (method_exists($member, 'setLastname')) {
+            $member->setLastname('Log');
+        }
+        if (method_exists($member, 'setLocale')) {
+            $member->setLocale('en');
+        }
+        if (method_exists($member, 'setCode')) {
+            $member->setCode('DL-'.substr(md5(uniqid()), 0, 10));
+        }
+        if (method_exists($member, 'setEmailVerified')) {
+            $member->setEmailVerified(true);
+        }
+        $this->em()->persist($member);
+        $this->assign($log, 'member', $member);
+
         // Populate any other required scalar fields (best effort).
         $this->populateRequiredScalars($log);
 

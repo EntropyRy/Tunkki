@@ -105,16 +105,11 @@ final class HappeningEntityTest extends TestCase
     public function testAddAndRemoveBookings(): void
     {
         $happening = new Happening();
-        $booking = $this->createMock(HappeningBooking::class);
-        $booking->expects($this->any())->method('setHappening');
+        $booking = new HappeningBooking();
+        $booking->setHappening($happening);
 
         $happening->addBooking($booking);
         $this->assertTrue($happening->getBookings()->contains($booking));
-
-        $booking
-            ->expects($this->any())
-            ->method('getHappening')
-            ->willReturn($happening);
 
         $happening->removeBooking($booking);
         $this->assertFalse($happening->getBookings()->contains($booking));

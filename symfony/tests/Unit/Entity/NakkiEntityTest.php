@@ -39,8 +39,7 @@ final class NakkiEntityTest extends TestCase
         $nakki->setDefinition($definition);
         $this->assertSame($definition, $nakki->getDefinition());
 
-        $nakki->setDefinition(null);
-        $this->assertNull($nakki->getDefinition());
+        // Removed null setter test for Definition (non-nullable)
     }
 
     public function testSetAndGetStartAtEndAt(): void
@@ -64,8 +63,7 @@ final class NakkiEntityTest extends TestCase
         $nakki->setEvent($event);
         $this->assertSame($event, $nakki->getEvent());
 
-        $nakki->setEvent(null);
-        $this->assertNull($nakki->getEvent());
+        // Removed null setter test for Event (non-nullable)
     }
 
     public function testSetAndGetNakkiInterval(): void
@@ -133,8 +131,9 @@ final class NakkiEntityTest extends TestCase
         $nakki->setDefinition($definition);
         $this->assertSame('TestNakki', (string) $nakki);
 
-        $nakki->setDefinition(null);
-        $this->assertSame('N/A', (string) $nakki);
+        // Removed null setter test for Definition (non-nullable)
+        // $nakki->setDefinition(null);
+        // $this->assertSame("N/A", (string) $nakki);
     }
 
     public function testGetTimesReturnsCorrectIntervals(): void
@@ -186,19 +185,21 @@ final class NakkiEntityTest extends TestCase
     public function testEdgeCaseSetters(): void
     {
         $nakki = new Nakki();
-        $nakki->setDefinition(null);
+        // Removed null setter test for Definition (non-nullable)
+        // $nakki->setDefinition(null);
         // Do not setStartAt(null); setter requires DateTimeImmutable
         // Do not setEndAt(null); setter requires DateTimeImmutable
-        $nakki->setEvent(null);
+        // Removed null setter test for Event (non-nullable)
+        // $nakki->setEvent(null);
         $nakki->setNakkiInterval(new \DateInterval('PT1H'));
         $nakki->setResponsible(null);
         $nakki->setMattermostChannel(null);
         $nakki->setDisableBookings(null);
 
-        $this->assertNull($nakki->getDefinition());
+        // $this->assertNull($nakki->getDefinition());
         // $this->assertNull($nakki->getStartAt()); // skip, since not set to null
         // $this->assertNull($nakki->getEndAt()); // skip, since not set to null
-        $this->assertNull($nakki->getEvent());
+        // $this->assertNull($nakki->getEvent()); // Removed: event is not initialized and should not be asserted as null
         $this->assertNull($nakki->getResponsible());
         $this->assertNull($nakki->getMattermostChannel());
         $this->assertNull($nakki->isDisableBookings());

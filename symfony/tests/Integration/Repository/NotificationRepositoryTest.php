@@ -38,6 +38,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
     public function testSavePersistsNotification(): void
     {
         $notification = $this->makeNotification();
+        $notification->setUpdatedAt(new \DateTimeImmutable());
         $this->subjectRepo()->save($notification, true);
 
         // Assert an ID was assigned (either getId()/id or reflection)
@@ -51,6 +52,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
     public function testRemoveDeletesNotification(): void
     {
         $notification = $this->makeNotification();
+        $notification->setUpdatedAt(new \DateTimeImmutable());
         $this->subjectRepo()->save($notification, true);
         $id = $this->readProperty($notification, 'id');
         self::assertNotNull(
@@ -76,6 +78,9 @@ final class NotificationRepositoryTest extends RepositoryTestCase
 
         // Populate required scalar fields (non-nullable) heuristically.
         $this->populateRequiredScalars($n);
+
+        // Ensure updatedAt is initialized
+        $n->setUpdatedAt(new \DateTimeImmutable());
 
         return $n;
     }

@@ -38,6 +38,11 @@ class Notification implements \Stringable
     #[ORM\Column]
     private array $options = [];
 
+    public function __construct()
+    {
+        $this->updatedAt = new \DateTimeImmutable();
+    }
+
     #[\Override]
     public function __toString(): string
     {

@@ -79,11 +79,6 @@ parameters:
         - src/DataFixtures/StreamPageFixtures.php
         - src/Command/CmsSeedMinimalCommand.php
 
-    # Advisory: we intentionally keep a nullable return type placeholder for future logic.
-    - message: '#Method App\\Domain\\EventPublicationDecider::unpublishAt\\(\\) never returns DateTimeImmutable#'
-      paths:
-        - src/Domain/EventPublicationDecider.php
-
   # Optionally enable bleeding-edge rules once stable:
   # bleedingEdge: true
 

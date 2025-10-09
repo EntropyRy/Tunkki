@@ -99,7 +99,7 @@ class EventSignUpController extends Controller
 
             return $this->redirect($request->headers->get('referer'));
         }
-        if (false == $member->isEmailVerified()) {
+        if (false === $member->isEmailVerified()) {
             $this->addFlash(
                 'danger',
                 'Nakki is not reserved! Please verify your email address and send mail to webmaster@entropy.fi',
@@ -414,7 +414,7 @@ class EventSignUpController extends Controller
                 $artisteventinfo,
                 [
                     'artists' => $artistChoices,
-                    'ask_time' => (bool) $event->getArtistSignUpAskSetLength(),
+                    'ask_time' => $event->getArtistSignUpAskSetLength(),
                 ],
             );
         } catch (\Throwable $e) {
