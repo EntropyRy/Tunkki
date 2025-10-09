@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Artist;
@@ -45,7 +47,7 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if ($booking->getMember() === $member) {
             $booking->setMember(null);
@@ -87,7 +89,7 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if (!$member->getUsername()) {
             $this->addFlash(
@@ -106,7 +108,7 @@ class EventSignUpController extends Controller
             return $this->redirect($request->headers->get('referer'));
         }
         if ($event->getNakkikoneEnabled()) {
-            if (is_null($booking->getMember())) {
+            if (!$booking->getMember() instanceof Member) {
                 if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
                     $sameTime = $NakkiBookingR->findMemberEventBookingsAtSameTime(
                         $member,
@@ -162,7 +164,7 @@ class EventSignUpController extends Controller
         NakkiBookingRepository $repo,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $selected = $repo->findMemberEventBookings($member, $event);
         if (!$event->getNakkikoneEnabled()) {
@@ -198,11 +200,11 @@ class EventSignUpController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $gdpr = false;
         $infos = $event->responsibleMemberNakkis($member);
-        if (0 === count($infos)) {
+        if (0 === \count($infos)) {
             $gdpr = true;
             $infos = $event->memberNakkis($member);
         }
@@ -283,8 +285,8 @@ class EventSignUpController extends Controller
         $nakkis[$name]['bookings'][] = $booking;
         $nakkis[$name]['durations'][$duration] = $duration;
 
-        if (is_null($booking->getMember())) {
-            if (!array_key_exists('not_reserved', $nakkis[$name])) {
+        if (null === $booking->getMember()) {
+            if (!\array_key_exists('not_reserved', $nakkis[$name])) {
                 $nakkis[$name]['not_reserved'] = 1;
             } else {
                 ++$nakkis[$name]['not_reserved'];
@@ -311,12 +313,8 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
-
-        if (!$member instanceof Member) {
-            throw new NotFoundHttpException($trans->trans('event_not_found'));
-        }
 
         $slug = $event->getUrl();
         $year = $request->get('year');
@@ -369,24 +367,33 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         // Re-attach managed Member and fetch managed Artist choices to avoid detached entities
-        if ($member && $member->getId()) {
-            $managed = $em->getRepository(Member::class)->find($member->getId());
+        if (null !== $member->getId()) {
+            $managed = $em
+                ->getRepository(Member::class)
+                ->find($member->getId());
             if (null !== $managed) {
                 $member = $managed;
             }
         }
         // Load Artist choices via repository so Doctrine manages them for the choice field
         try {
-            $artistChoices = $em->getRepository(Artist::class)->findBy(['member' => $member]);
+            $artistChoices = $em
+                ->getRepository(Artist::class)
+                ->findBy(['member' => $member]);
         } catch (\Throwable $e) {
-            @fwrite(STDERR, '[artistSignUp] failed loading artists: '.$e->getMessage()."\n");
+            @fwrite(
+                \STDERR,
+                '[artistSignUp] failed loading artists: '.
+                    $e->getMessage().
+                    "\n",
+            );
             $artistChoices = [];
         }
 
-        if (0 === count($artistChoices)) {
+        if (0 === \count($artistChoices)) {
             $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
 
@@ -411,8 +418,14 @@ class EventSignUpController extends Controller
                 ],
             );
         } catch (\Throwable $e) {
-            @fwrite(STDERR, '[artistSignUp] form build failed: '.$e->getMessage()."\n");
-            @fwrite(STDERR, '[artistSignUp] artists.count='.count($artistChoices)."\n");
+            @fwrite(
+                \STDERR,
+                '[artistSignUp] form build failed: '.$e->getMessage()."\n",
+            );
+            @fwrite(
+                \STDERR,
+                '[artistSignUp] artists.count='.\count($artistChoices)."\n",
+            );
             throw $e;
         }
         $form->handleRequest($request);
@@ -489,7 +502,7 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if ($artisteventinfo->getArtist()->getMember() !== $member) {
             $this->addFlash('warning', $trans->trans('Not allowed!'));
@@ -551,7 +564,7 @@ class EventSignUpController extends Controller
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $event = $artisteventinfo->getEvent();
         if (

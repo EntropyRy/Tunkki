@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia as Media;
@@ -86,6 +88,7 @@ class Event implements \Stringable
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $cancelled = false;
+
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => 0])]
     private bool $multiday = false;
 
@@ -95,6 +98,9 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
+    /**
+     * @var Collection<int, EventArtistInfo>
+     */
     #[
         ORM\OneToMany(
             targetEntity: EventArtistInfo::class,
@@ -102,7 +108,7 @@ class Event implements \Stringable
         ),
     ]
     #[OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
-    private $eventArtistInfos;
+    private Collection $eventArtistInfos;
 
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $updatedAt = null;
@@ -110,6 +116,9 @@ class Event implements \Stringable
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $until = null;
 
+    /**
+     * @var Collection<int, RSVP>
+     */
     #[
         ORM\OneToMany(
             targetEntity: RSVP::class,
@@ -117,11 +126,14 @@ class Event implements \Stringable
             orphanRemoval: true,
         ),
     ]
-    private $RSVPs;
+    private Collection $RSVPs;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
 
+    /**
+     * @var Collection<int, Nakki>
+     */
     #[
         ORM\OneToMany(
             targetEntity: Nakki::class,
@@ -130,8 +142,11 @@ class Event implements \Stringable
         ),
     ]
     #[OrderBy(['startAt' => 'ASC'])]
-    private $nakkis;
+    private Collection $nakkis;
 
+    /**
+     * @var Collection<int, NakkiBooking>
+     */
     #[
         ORM\OneToMany(
             targetEntity: NakkiBooking::class,
@@ -140,7 +155,7 @@ class Event implements \Stringable
         ),
     ]
     #[OrderBy(['startAt' => 'ASC'])]
-    private $nakkiBookings;
+    private Collection $nakkiBookings;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $NakkikoneEnabled = false;
@@ -187,6 +202,9 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $showArtistSignUpOnlyForLoggedInMembers = false;
 
+    /**
+     * @var Collection<int, Ticket>
+     */
     #[
         ORM\OneToMany(
             targetEntity: Ticket::class,
@@ -195,7 +213,7 @@ class Event implements \Stringable
         ),
     ]
     #[OrderBy(['id' => 'DESC'])]
-    private $tickets;
+    private Collection $tickets;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $ticketCount = 0;
@@ -227,8 +245,11 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
 
+    /**
+     * @var Collection<int, Email>
+     */
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'event')]
-    private $emails;
+    private Collection $emails;
 
     #[ORM\Column(nullable: true)]
     private ?bool $rsvpOnlyToActiveMembers = null;
@@ -474,7 +495,10 @@ class Event implements \Stringable
         $now = new \DateTimeImmutable();
         $nowS = (int) $now->format('U');
 
-        $eventS = $this->EventDate instanceof \DateTimeInterface ? (int) $this->EventDate->format('U') : null;
+        $eventS =
+            $this->EventDate instanceof \DateTimeInterface
+                ? (int) $this->EventDate->format('U')
+                : null;
 
         if ($this->until instanceof \DateTimeInterface) {
             $untilS = (int) $this->until->format('U');
@@ -482,11 +506,15 @@ class Event implements \Stringable
             // One-second tolerance to account for the internal "now" being captured slightly after the caller's boundary.
             $tolerance = 1;
 
-            if (null !== $eventS && $nowS >= $eventS && $nowS <= ($untilS + $tolerance)) {
+            if (
+                null !== $eventS
+                && $nowS >= $eventS
+                && $nowS <= $untilS + $tolerance
+            ) {
                 return 'now';
             }
 
-            if ($nowS > ($untilS + $tolerance)) {
+            if ($nowS > $untilS + $tolerance) {
                 return 'after';
             }
 
@@ -1008,7 +1036,10 @@ class Event implements \Stringable
         $end = $this->getArtistSignUpEnd();
 
         // Guard against incomplete window definition
-        if (!$start instanceof \DateTimeInterface || !$end instanceof \DateTimeInterface) {
+        if (
+            !$start instanceof \DateTimeInterface
+            || !$end instanceof \DateTimeInterface
+        ) {
             return false;
         }
 
@@ -1017,9 +1048,7 @@ class Event implements \Stringable
         $startS = (int) $start->format('U');
         $endS = (int) $end->format('U');
 
-        return $startS <= $nowS
-            && $endS >= $nowS
-            && !$this->isInPast();
+        return $startS <= $nowS && $endS >= $nowS && !$this->isInPast();
     }
 
     public function getWebMeetingUrl(): ?string
@@ -1146,8 +1175,12 @@ class Event implements \Stringable
             return true;
         }
 
-        if ($this->until instanceof \DateTimeInterface && $this->EventDate instanceof \DateTimeInterface) {
-            return ($this->until->format('U') - $this->EventDate->format('U')) > 86400;
+        if (
+            $this->until instanceof \DateTimeInterface
+            && $this->EventDate instanceof \DateTimeInterface
+        ) {
+            return $this->until->format('U') - $this->EventDate->format('U') >
+                86400;
         }
 
         return false;
@@ -1172,7 +1205,7 @@ class Event implements \Stringable
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
             if (
-                !is_null($info->getStartTime())
+                null !== $info->getStartTime()
                 && ('DJ' == $info->getArtistClone()->getType()
                     || 'Live' == $info->getArtistClone()->getType())
             ) {
@@ -1188,7 +1221,7 @@ class Event implements \Stringable
         $bystage = [];
         foreach ($this->eventArtistInfos as $info) {
             if (
-                !is_null($info->getStartTime())
+                null !== $info->getStartTime()
                 && $info->getArtistClone()->getType() == $type
             ) {
                 $bystage[$info->getStage()][] = $info;
@@ -1250,12 +1283,12 @@ class Event implements \Stringable
 
     public function ticketPresaleEnabled(): bool
     {
-        $now = new \DateTime('now');
+        $now = new \DateTimeImmutable('now');
 
         return $this->ticketsEnabled
-            && is_object($this->ticketPresaleStart)
+            && \is_object($this->ticketPresaleStart)
             && $this->ticketPresaleStart <= $now
-            && is_object($this->ticketPresaleEnd)
+            && \is_object($this->ticketPresaleEnd)
             && $this->ticketPresaleEnd >= $now;
     }
 
@@ -1303,7 +1336,7 @@ class Event implements \Stringable
         foreach ($this->getNakkis() as $nakki) {
             if (
                 $nakki->getResponsible() == $member
-                || in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())
+                || \in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())
                 || $this->nakkiResponsibleAdmin->contains($member)
             ) {
                 $bookings[

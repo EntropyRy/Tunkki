@@ -81,10 +81,10 @@ trait LoginHelperTrait
             ] + $context;
 
         @fwrite(
-            STDERR,
+            \STDERR,
             '[LoginHelperTrait] '.
-                json_encode($payload, JSON_UNESCAPED_SLASHES).
-                PHP_EOL,
+                json_encode($payload, \JSON_UNESCAPED_SLASHES).
+                \PHP_EOL,
         );
     }
 
@@ -102,7 +102,7 @@ trait LoginHelperTrait
         array $roles,
         ?string $email = null,
     ): User {
-        $email ??= sprintf('user_%s@example.test', bin2hex(random_bytes(4)));
+        $email ??= \sprintf('user_%s@example.test', bin2hex(random_bytes(4)));
         $this->diagCreate('start', $email, $roles);
 
         // Guard: reopen/reset EM if closed
@@ -133,7 +133,7 @@ trait LoginHelperTrait
             // Stale cache entry
             unset(self::$userEmailCache[$cacheKey]);
             if (getenv('TEST_ABORT_ON_DUP_USER')) {
-                throw new \RuntimeException(sprintf('Stale cache entry for email %s (id %s).', $email, (string) (self::$userEmailCache[$cacheKey] ?? 'n/a')));
+                throw new \RuntimeException(\sprintf('Stale cache entry for email %s (id %s).', $email, (string) (self::$userEmailCache[$cacheKey] ?? 'n/a')));
             }
         }
 
@@ -287,7 +287,7 @@ trait LoginHelperTrait
         try {
             // Create User manually (no factory) and link owning side BEFORE flush.
             $user = new User();
-            $user->setPassword(password_hash('password', PASSWORD_BCRYPT));
+            $user->setPassword(password_hash('password', \PASSWORD_BCRYPT));
             $user->setRoles($roles);
             if (method_exists($user, 'setAuthId')) {
                 $user->setAuthId(bin2hex(random_bytes(10)));
@@ -378,7 +378,7 @@ trait LoginHelperTrait
             array_unique(array_merge([$primaryRole], $additionalRoles)),
         );
         $targetEmail =
-            $email ?? sprintf('user_%s@example.test', bin2hex(random_bytes(4)));
+            $email ?? \sprintf('user_%s@example.test', bin2hex(random_bytes(4)));
 
         $user = $this->getOrCreateUser($targetEmail, $roles);
         $client = $this->client;
@@ -407,7 +407,7 @@ trait LoginHelperTrait
             ++$attempts;
             $candidate =
                 $email ??
-                sprintf(
+                \sprintf(
                     'activemember_%s@example.test',
                     bin2hex(random_bytes(4)),
                 );
@@ -490,7 +490,7 @@ trait LoginHelperTrait
 
         // Fallback (should not be reached): ensure active then login with a longer random suffix
         $user = $this->getOrCreateUser(
-            sprintf('activemember_%s@example.test', bin2hex(random_bytes(8))),
+            \sprintf('activemember_%s@example.test', bin2hex(random_bytes(8))),
         );
 
         $member = $user->getMember();
@@ -562,12 +562,12 @@ trait LoginHelperTrait
         $token = $ts->getToken();
         self::assertNotNull($token, 'No security token.');
         $user = $token->getUser();
-        self::assertTrue(is_object($user), 'Token has no user object.');
+        self::assertTrue(\is_object($user), 'Token has no user object.');
         /* @var User $user */
         self::assertContains(
             $role,
             $user->getRoles(),
-            sprintf(
+            \sprintf(
                 'Expected role %s; got [%s]',
                 $role,
                 implode(', ', $user->getRoles()),
@@ -718,10 +718,10 @@ trait LoginHelperTrait
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[LoginHelperTrait] session stabilization failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
     }
@@ -762,7 +762,7 @@ trait LoginHelperTrait
         $crawler = $client->request('GET', $path);
         if ($client->getResponse()->getStatusCode() >= 400) {
             self::fail(
-                sprintf(
+                \sprintf(
                     'Failed to load registration form (%s), HTTP %d',
                     $path,
                     $client->getResponse()->getStatusCode(),
@@ -804,7 +804,7 @@ trait LoginHelperTrait
         // 5. Follow redirect(s) until non-redirect or guard
         $maxRedirects = 5;
         while (
-            in_array(
+            \in_array(
                 $client->getResponse()->getStatusCode(),
                 [301, 302, 303],
                 true,
@@ -840,6 +840,17 @@ trait LoginHelperTrait
         // 8. Programmatic login for test continuity
         $client->loginUser($created);
         $this->stabilizeSessionAfterLogin();
+
+        // Probe one cheap GET to solidify session + SiteRequest context for this locale
+        $probePath = 'fi' === $locale ? '/' : '/en/';
+        $client->request('GET', $probePath);
+        $status = $client->getResponse()->getStatusCode();
+        if (\in_array($status, [301, 302, 303], true)) {
+            $loc = $client->getResponse()->headers->get('Location');
+            if ($loc) {
+                $client->request('GET', $loc);
+            }
+        }
 
         return [$created, $client];
     }
@@ -970,10 +981,10 @@ trait LoginHelperTrait
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[LoginHelperTrait] resetManager encountered an error: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
 
@@ -983,10 +994,10 @@ trait LoginHelperTrait
                 $this->em = $em;
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[LoginHelperTrait] resetManager failed to sync $this->em: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
@@ -1011,7 +1022,7 @@ trait LoginHelperTrait
             && self::$userEmailCache[$key] !== $id
         ) {
             if (getenv('TEST_ABORT_ON_DUP_USER')) {
-                throw new \RuntimeException(sprintf('cacheUser mismatch for %s existingId=%d newId=%d', $email, self::$userEmailCache[$key], $id));
+                throw new \RuntimeException(\sprintf('cacheUser mismatch for %s existingId=%d newId=%d', $email, self::$userEmailCache[$key], $id));
             }
         }
         self::$userEmailCache[$key] = $id;
@@ -1086,10 +1097,10 @@ trait LoginHelperTrait
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[LoginHelperTrait] forceAuthToken failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
     }
@@ -1101,7 +1112,7 @@ trait LoginHelperTrait
     {
         if (!is_subclass_of(static::class, WebTestCase::class)) {
             self::fail(
-                sprintf(
+                \sprintf(
                     'LoginHelperTrait requires consuming class (%s) to extend %s.',
                     static::class,
                     WebTestCase::class,

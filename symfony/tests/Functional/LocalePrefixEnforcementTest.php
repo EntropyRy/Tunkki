@@ -47,17 +47,17 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
 
     private function canonicalEnglishPath(): string
     {
-        return sprintf('/en/%d/%s/shop', $this->shopYear, $this->shopSlug);
+        return \sprintf('/en/%d/%s/shop', $this->shopYear, $this->shopSlug);
     }
 
     private function englishPathWithoutPrefix(): string
     {
-        return sprintf('/%d/%s/shop', $this->shopYear, $this->shopSlug);
+        return \sprintf('/%d/%s/shop', $this->shopYear, $this->shopSlug);
     }
 
     private function finnishPath(): string
     {
-        return sprintf('/%d/%s/kauppa', $this->shopYear, $this->shopSlug);
+        return \sprintf('/%d/%s/kauppa', $this->shopYear, $this->shopSlug);
     }
 
     public function testEnglishCanonicalAndWrongLocaleVariants(): void
@@ -65,7 +65,7 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
         // Canonical English path should be 200
         $this->client->request('GET', $this->canonicalEnglishPath());
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location');
             if ($loc) {
                 $this->client->request('GET', $loc);
@@ -92,7 +92,7 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
         // Canonical Finnish path should be 200
         $this->client->request('GET', $this->finnishPath());
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location');
             if ($loc) {
                 $this->client->request('GET', $loc);
@@ -108,7 +108,7 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
         $this->client->request('GET', '/en'.$this->finnishPath());
         $status = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status, [404, 301, 302, 303], true),
+            \in_array($status, [404, 301, 302, 303], true),
             'Adding /en to Finnish path must 404 or redirect structurally (no silent success).'
         );
     }

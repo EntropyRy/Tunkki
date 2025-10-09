@@ -130,7 +130,7 @@ class EmailVerifier
     /**
      * Small helper to map a User to its Member (if relationship exists).
      */
-    private function resolveMemberFromUser(User $user): ?Member
+    private function resolveMemberFromUser(User $user): Member
     {
         return $user->getMember() ?? null;
     }

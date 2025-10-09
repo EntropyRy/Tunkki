@@ -224,7 +224,7 @@ final class DoctrineInstrumentationExtension implements ExtensionInterface
 
             private function stderr(string $msg): void
             {
-                fwrite(STDERR, $msg.PHP_EOL);
+                fwrite(\STDERR, $msg.\PHP_EOL);
             }
         });
     }

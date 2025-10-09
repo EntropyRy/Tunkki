@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\NakkiBookingRepository;
@@ -35,10 +37,10 @@ class NakkiBooking implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if (is_object($this->getEvent()) && $this->getEvent()->isNakkiRequiredForTicketReservation()) {
+        if (\is_object($this->getEvent()) && $this->getEvent()->isNakkiRequiredForTicketReservation()) {
             return $this->event.': '.$this->nakki;
         }
-        $aika = is_object($this->getStartAt()) ? $this->getStartAt()->format('H:i') : '';
+        $aika = \is_object($this->getStartAt()) ? $this->getStartAt()->format('H:i') : '';
 
         return $this->event.': '.$this->nakki.' at '.$aika;
     }

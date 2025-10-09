@@ -50,8 +50,8 @@ final class EventPageTest extends FixturesWebTestCase
 
         $path =
             'fi' === $locale
-                ? sprintf('/%d/%s', $year, $slug)
-                : sprintf('/en/%d/%s', $year, $slug);
+                ? \sprintf('/%d/%s', $year, $slug)
+                : \sprintf('/en/%d/%s', $year, $slug);
 
         $client->request('GET', $path);
 
@@ -74,7 +74,7 @@ final class EventPageTest extends FixturesWebTestCase
         if ('en' === $expectedLang) {
             $this->assertTrue(
                 str_contains($fullText, $expectedTitle) || str_contains($fullText, 'Testitapahtuma'),
-                sprintf(
+                \sprintf(
                     "Expected title to contain either '%s' or fallback 'Testitapahtuma' when EN template renders FI-oriented title.",
                     $expectedTitle
                 )
@@ -92,7 +92,7 @@ final class EventPageTest extends FixturesWebTestCase
         } else {
             $this->assertGreaterThan(
                 0,
-                $crawler->filter(sprintf('html[lang="%s"]', $expectedLang))->count()
+                $crawler->filter(\sprintf('html[lang="%s"]', $expectedLang))->count()
             );
         }
     }

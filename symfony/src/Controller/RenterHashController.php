@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Contract;
@@ -34,7 +36,7 @@ class RenterHashController extends Controller
         $bookingid = $request->get('bookingid');
         $hash = $request->get('hash');
         $renterid = $request->get('renterid');
-        if (is_null($bookingid) || is_null($hash) || is_null($renterid)) {
+        if (\in_array(null, [$bookingid, $hash, $renterid], true)) {
             throw new NotFoundHttpException();
         }
         $renter = $em->getRepository(Renter::class)->findOneBy(['id' => $renterid]);
@@ -51,7 +53,7 @@ class RenterHashController extends Controller
             $form->handleRequest($request);
             if ($form->isValid() && $form->isSubmitted()) {
                 $booking = $form->getData();
-                if (true == $booking->getRenterConsent() && !is_null($booking->getRenterSignature())) {
+                if (true == $booking->getRenterConsent() && null !== $booking->getRenterSignature()) {
                     $em->persist($booking);
                     $em->flush();
                     $this->addFlash('success', 'contract.signed');

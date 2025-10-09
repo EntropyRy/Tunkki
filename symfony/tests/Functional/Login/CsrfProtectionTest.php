@@ -91,7 +91,7 @@ final class CsrfProtectionTest extends FixturesWebTestCase
             foreach ($paths as $p) {
                 $crawler = $client->request('GET', $p);
                 $status = $client->getResponse()->getStatusCode();
-                if (in_array($status, [301, 302, 303], true)) {
+                if (\in_array($status, [301, 302, 303], true)) {
                     $crawler = $client->followRedirect();
                     $status = $client->getResponse()->getStatusCode();
                 }
@@ -264,9 +264,9 @@ final class CsrfProtectionTest extends FixturesWebTestCase
             return;
         }
         $user = $token->getUser();
-        if (is_object($user)) {
+        if (\is_object($user)) {
             self::fail(
-                $message.' (Token user class: '.get_class($user).')',
+                $message.' (Token user class: '.$user::class.')',
             );
         }
         self::assertTrue(true);
@@ -284,7 +284,7 @@ final class CsrfProtectionTest extends FixturesWebTestCase
         self::assertNotNull($token, $message.' (no token)');
         $user = $token->getUser();
         self::assertTrue(
-            is_object($user),
+            \is_object($user),
             $message.' (no authenticated user object present)',
         );
     }

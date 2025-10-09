@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Stream;
@@ -33,12 +35,12 @@ class StreamNotificationController extends AbstractController
         $raw = $request->getContent();
         $data = json_decode($raw, true);
 
-        if (!is_array($data)) {
+        if (!\is_array($data)) {
             return $this->json(['error' => 'Invalid JSON'], Response::HTTP_BAD_REQUEST);
         }
 
         $event = $data['event'] ?? null;
-        if (!in_array($event, ['stream-start', 'stream-stop'], true)) {
+        if (!\in_array($event, ['stream-start', 'stream-stop'], true)) {
             return $this->json(['error' => 'Invalid event type'], Response::HTTP_BAD_REQUEST);
         }
 
@@ -71,7 +73,7 @@ class StreamNotificationController extends AbstractController
             $message = 'Stream started';
         } else { // stream-stop
             $onlineStreams = $streamRepository->stopAllOnline();
-            if (0 === count($onlineStreams)) {
+            if (0 === \count($onlineStreams)) {
                 $logger->info('Stream stop: no active stream');
                 $message = 'No active stream';
             } else {

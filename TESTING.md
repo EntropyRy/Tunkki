@@ -777,6 +777,14 @@ Dated Entry (Documentation):
 
 ## 13. Mutation & Coverage (Future Work)
 
+NOTE: As of the Admin generics cleanup pass (coverage scope refinement step), the phpunit.dist.xml configuration excludes src/Admin from the <source> instrumentation set. Rationale:
+- Admin classes are largely Sonata configuration/presentation glue (low business value for line coverage).
+- Excluding them reduces noise in mutation & line coverage metrics (avoids false pressure to test UI wiring).
+- Budget is re-focused on domain + security + temporal logic (entities, services, repositories, security voters, value objects).
+- Mutation testing (when enabled) should similarly target behavior-rich layers; keeping Admin code out prevents trivial mutants from skewing MSI.
+
+If a future Admin class embeds non‑trivial domain logic (anti-pattern), refactor that logic into a service and cover it there instead of re‑including Admin in coverage.
+
 Infection quickstart
 - Purpose: establish a baseline MSI and drive tests from survivors.
 - Command (inside container):
@@ -807,6 +815,10 @@ Coverage Gates (task #37):
   - Domain invariants
   - Permission logic
   - URL/event state logic
+- Explicit Exclusions (current phpunit.dist.xml):
+  - src/Admin (Sonata wiring; excluded to keep metrics signal high)
+  - src/DataFixtures (test seeding / scaffolding only)
+  (Re‑evaluate exclusions only if meaningful executable logic migrates into those layers—preferred solution remains refactoring logic outward, not relaxing exclusions.)
 
 
 ## 14. Performance Guidelines
@@ -918,6 +930,15 @@ Until all legacy fixture dependent tests are migrated:
 - Enforces fixture-free policy: tests must not assume preloaded data. If a test still depends on a legacy slug/email, refactor it to create that entity inside the test or a local helper before assertions.
 - Will evolve/retire once factory adoption reaches critical mass and canonical fixtures are minimized to only what is impractical to factory-create (if any).
 
+
+## 16a. Booking Reference Numbers & Renter Hash Policy
+
+- Central service: `App\Service\BookingReferenceService` centralizes reference number assignment for Bookings and exposes a calculator for Tickets. The legacy `ReferenceNumber` helper is removed; new code MUST use this service.
+- Booking flow: Call `assignReferenceAndHash(Booking $booking)` only after the entity has an ID (post-persist) so the algorithm can include the primary key. In admin, this is already invoked in `postPersist` and `preUpdate`. In repositories/tests, do: persist → flush (to get ID) → `assignReferenceAndHash()` → flush.
+- Ticket flow: Generate ticket reference numbers with `calculateReferenceNumber($ticket, 9000, 909)`. Do not attempt to set a renter hash for tickets.
+- Defaults: The service is configured with `referenceAdd=1220` and `referenceStart=303` in `config/services.yaml`. Override via DI if needed for different realms.
+- Idempotent: The service will not overwrite existing `referenceNumber` or `renterHash` values; safe to call multiple times.
+- Testing guidance: For deterministic checks, assert the exact reference number when ID/add/start are known. For renter hash, assert it matches `/^[a-f0-9]{32}$/` rather than an exact value, since the implementation includes `str_shuffle()` which prevents a stable exact hash string. Unit coverage lives in `tests/Unit/Service/BookingReferenceServiceTest.php`.
 
 ## 17. Open Tasks Referenced Here
 

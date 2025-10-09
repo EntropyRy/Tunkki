@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\UserRepository;
@@ -29,23 +31,38 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
      */
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\Length(min: 8)]
-    private ?string $password = null;
+    private string $password = '';
 
     #[Assert\Length(min: 8)]
-    private $plainPassword;
+    private ?string $plainPassword = null;
 
-    #[ORM\OneToOne(targetEntity: Member::class, inversedBy: 'user', cascade: ['persist', 'remove'])]
+    #[
+        ORM\OneToOne(
+            targetEntity: Member::class,
+            inversedBy: 'user',
+            cascade: ['persist', 'remove'],
+        ),
+    ]
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', unique: true)]
-    private ?Member $member = null;
+    private Member $member;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $CreatedAt = null;
+    private \DateTimeImmutable $CreatedAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $UpdatedAt = null;
+    private \DateTimeImmutable $UpdatedAt;
 
-    #[ORM\OneToMany(targetEntity: Reward::class, mappedBy: 'user', orphanRemoval: true)]
-    private $rewards;
+    /**
+     * @var Collection<int, Reward>
+     */
+    #[
+        ORM\OneToMany(
+            targetEntity: Reward::class,
+            mappedBy: 'user',
+            orphanRemoval: true,
+        ),
+    ]
+    private Collection $rewards;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $LastLogin = null;
@@ -53,14 +70,20 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $MattermostId = null;
 
+    /**
+     * @var Collection<int, AccessGroups>
+     */
     #[ORM\ManyToMany(targetEntity: AccessGroups::class, mappedBy: 'users')]
-    private $accessGroups;
+    private Collection $accessGroups;
 
     #[ORM\Column(length: 255)]
-    private ?string $authId = null;
+    private string $authId = '';
 
     public function __construct()
     {
+        $now = new \DateTimeImmutable();
+        $this->CreatedAt = $now;
+        $this->UpdatedAt = $now;
         $this->rewards = new ArrayCollection();
         $this->accessGroups = new ArrayCollection();
     }
@@ -151,7 +174,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[\Override]
     public function getPassword(): string
     {
-        return (string) $this->password;
+        return $this->password;
     }
 
     public function setPassword(string $password): self
@@ -179,19 +202,19 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         $this->plainPassword = null;
     }
 
-    public function getMember(): ?Member
+    public function getMember(): Member
     {
         return $this->member;
     }
 
-    public function setMember(?Member $member): self
+    public function setMember(Member $member): self
     {
         $this->member = $member;
 
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->CreatedAt;
     }
@@ -203,7 +226,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->UpdatedAt;
     }
@@ -228,7 +251,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     }
 
     /**
-     * @return Collection|Reward[]
+     * @return Collection<int, Reward>
      */
     public function getRewards(): Collection
     {
@@ -270,19 +293,19 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         return $this;
     }
 
-    public function getPlainPassword()
+    public function getPlainPassword(): ?string
     {
         return $this->plainPassword;
     }
 
-    public function setPlainPassword($plainPassword): void
+    public function setPlainPassword(?string $plainPassword): void
     {
         $this->plainPassword = $plainPassword;
-        $this->password = null;
+        $this->password = '';
     }
 
     /**
-     * @return Collection|AccessGroups[]
+     * @return Collection<int, AccessGroups>
      */
     public function getAccessGroups(): Collection
     {
@@ -323,7 +346,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
         return $this->member->getLocale();
     }
 
-    public function getAuthId(): ?string
+    public function getAuthId(): string
     {
         return $this->authId;
     }

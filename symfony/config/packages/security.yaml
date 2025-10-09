@@ -109,15 +109,15 @@ security:
             custom_authenticators:
                 - App\Security\MattermostAuthenticator
     access_control:
-        - { path: ^/(en/)?oauth$, role: PUBLIC_ACCESS }
-        - { path: ^/(en/)?oauth/check.*, role: PUBLIC_ACCESS }
+        - { path: ^/oauth$, role: PUBLIC_ACCESS }
+        - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
         - { path: ^/(en/)?login$, role: PUBLIC_ACCESS }
-        - { path: ^/(en/)?profile/new, role: PUBLIC_ACCESS }
+        - { path: ^/en/profile/new, role: PUBLIC_ACCESS }
         - { path: ^/profiili/uusi, role: PUBLIC_ACCESS }
-        - { path: ^/(en/)?verify/email, role: PUBLIC_ACCESS }
+        - { path: ^/verify/email, role: PUBLIC_ACCESS }
         - { path: ^/vahvista/sahkoposti, role: PUBLIC_ACCESS }
         # Resend verification now requires authentication (removed PUBLIC_ACCESS)
-        - { path: ^/(en/)?oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
+        - { path: ^/oauth/authorize, roles: IS_AUTHENTICATED_REMEMBERED }
         # Door route: allow only from configured IPs; otherwise deny explicitly
         #    - path: "^/(en/kerde/door|kerde/ovi)/?$"
         #      ips:
@@ -128,10 +128,10 @@ security:
         #    - { path: "^/(en/kerde/door|kerde/ovi)/?$", roles: ROLE_NO_ACCESS }
         # Other Kerde routes require login
         - { path: ^/(en/)?kerde, roles: ROLE_USER }
-        - { path: ^/(en/)?dashboard, role: ROLE_USER }
-        - { path: ^/(en/)?yleiskatsaus, role: ROLE_USER }
-        - { path: ^/(en/)?profile, role: ROLE_USER }
-        - { path: ^/(en/)?profiili, role: ROLE_USER }
+        - { path: ^/en/dashboard, role: ROLE_USER }
+        - { path: ^/yleiskatsaus, role: ROLE_USER }
+        - { path: ^/en/profile, role: ROLE_USER }
+        - { path: ^/profiili, role: ROLE_USER }
         - { path: ^/logout$, role: PUBLIC_ACCESS }
         - { path: ^/(en/)?admin/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
         - { path: ^/.*, role: PUBLIC_ACCESS }

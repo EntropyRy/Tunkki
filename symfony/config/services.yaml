@@ -20,6 +20,10 @@ parameters:
     stripe_secret_key: "%env(STRIPE_SECRET_KEY)%"
 
 services:
+    App\Service\BookingReferenceService:
+        arguments:
+            $referenceAdd: 1220
+            $referenceStart: 303
     _defaults:
         autowire: true
         autoconfigure: true

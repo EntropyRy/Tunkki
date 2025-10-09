@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\CartItem;
@@ -50,14 +52,14 @@ class CheckoutsController extends AbstractController
                 'slug' => $event->getUrl(),
             ]);
         }
-        $expires = new \DateTime('+30min');
+        $expires = new \DateTimeImmutable('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
         foreach ($products as $cartItem) {
             $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $lineItems[] = $item;
             } else {
                 $this->addFlash('warning', 'product.sold_out');
@@ -69,7 +71,7 @@ class CheckoutsController extends AbstractController
                 $found = array_any(
                     $products->toArray(),
                     fn ($cartItem): bool => $cartItem->getProduct()->getId() ===
-                    $eventServiceFeeProduct->getId(),
+                        $eventServiceFeeProduct->getId(),
                 );
                 if (!$found) {
                     $cartItem = new CartItem();
@@ -140,14 +142,14 @@ class CheckoutsController extends AbstractController
 
             return $this->redirectToRoute('entropy_shop', []);
         }
-        $expires = new \DateTime('+30min');
+        $expires = new \DateTimeImmutable('+30min');
         $products = $cart->getProducts();
         $lineItems = [];
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
         foreach ($products as $cartItem) {
             $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $lineItems[] = $item;
             } else {
                 $this->addFlash('warning', 'product.sold_out');

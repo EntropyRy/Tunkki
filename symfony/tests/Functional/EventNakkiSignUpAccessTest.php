@@ -109,13 +109,27 @@ final class EventNakkiSignUpAccessTest extends FixturesWebTestCase
         }
 
         // Attempt to derive the parent Event and route params.
-        $event = method_exists($booking, 'getEvent') ? $booking->getEvent() : null;
-        $this->assertInstanceOf(Event::class, $event, 'Unable to resolve parent Event from NakkiBooking (getEvent() returned null or unsupported).');
+        $event = method_exists($booking, 'getEvent')
+            ? $booking->getEvent()
+            : null;
+        $this->assertInstanceOf(
+            Event::class,
+            $event,
+            'Unable to resolve parent Event from NakkiBooking (getEvent() returned null or unsupported).',
+        );
 
-        $this->assertTrue(method_exists($event, 'getEventDate') && method_exists($event, 'getUrl'), 'Event entity missing required accessors (getEventDate/getUrl).');
+        $this->assertTrue(
+            method_exists($event, 'getEventDate')
+                && method_exists($event, 'getUrl'),
+            'Event entity missing required accessors (getEventDate/getUrl).',
+        );
 
         $eventDate = $event->getEventDate();
-        $this->assertInstanceOf(\DateTimeInterface::class, $eventDate, 'Event has no eventDate; cannot construct signup route.');
+        $this->assertInstanceOf(
+            \DateTimeInterface::class,
+            $eventDate,
+            'Event has no eventDate; cannot construct signup route.',
+        );
 
         $year = (int) $eventDate->format('Y');
         $slug = $event->getUrl();
@@ -129,59 +143,85 @@ final class EventNakkiSignUpAccessTest extends FixturesWebTestCase
         $member = $user->getMember();
         if ($member && method_exists($member, 'setEmailVerified')) {
             // Ensure username is set so we bypass the "define username" flash gate and reach the email verification check
-            if (method_exists($member, 'setUsername') && !$member->getUsername()) {
-                $member->setUsername('unverified_'.substr(md5($userEmail), 0, 6));
+            if (
+                method_exists($member, 'setUsername')
+                && !$member->getUsername()
+            ) {
+                $member->setUsername(
+                    'unverified_'.substr(md5($userEmail), 0, 6),
+                );
             }
             $member->setEmailVerified(false);
             $em->flush();
         } else {
-            $this->fail('Member or setEmailVerified() not available; cannot force unverified state.');
+            $this->fail(
+                'Member or setEmailVerified() not available; cannot force unverified state.',
+            );
         }
 
         $this->client->loginUser($user);
         $this->stabilizeSessionAfterLogin();
 
         // Construct signup URL per routing pattern: /{year}/{slug}/nakkikone/{id}/signup
-        $signupPath = sprintf('/%d/%s/nakkikone/%d/signup', $year, $slug, $bookingId);
+        $signupPath = \sprintf(
+            '/%d/%s/nakkikone/%d/signup',
+            $year,
+            $slug,
+            $bookingId,
+        );
 
         // Provide a fallback Referer so the controller's redirect($request->headers->get('referer')) has a value.
-        $this->client->setServerParameter('HTTP_REFERER', sprintf('/%d/%s/nakkikone', $year, $slug));
+        $this->client->setServerParameter(
+            'HTTP_REFERER',
+            \sprintf('/%d/%s/nakkikone', $year, $slug),
+        );
 
         $this->client->request('GET', $signupPath);
 
         $status = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status, [302, 303], true),
-            'Expected redirect status (302/303) when unverified member attempts signup; got '.$status
+            \in_array($status, [302, 303], true),
+            'Expected redirect status (302/303) when unverified member attempts signup; got '.
+                $status,
         );
 
-        $redirect = $this->client->getResponse()->headers->get('Location') ?? '';
-        $this->assertNotEmpty($redirect, 'Signup attempt should redirect back (Location header missing).');
+        $redirect =
+            $this->client->getResponse()->headers->get('Location') ?? '';
+        $this->assertNotEmpty(
+            $redirect,
+            'Signup attempt should redirect back (Location header missing).',
+        );
 
         // Follow redirect target (if relative path)
         if (str_starts_with($redirect, '/')) {
             $this->client->request('GET', $redirect);
         } else {
             // If absolute or empty, attempt referer as fallback
-            $this->client->request('GET', sprintf('/%d/%s/nakkikone', $year, $slug));
+            $this->client->request(
+                'GET',
+                \sprintf('/%d/%s/nakkikone', $year, $slug),
+            );
         }
 
         $followStatus = $this->client->getResponse()->getStatusCode();
         $this->assertSame(
             200,
             $followStatus,
-            'Follow-up page after redirect should load (200).'
+            'Follow-up page after redirect should load (200).',
         );
 
         $content = $this->client->getResponse()->getContent() ?? '';
-        $this->assertNotEmpty($content, 'Expected HTML content after redirect.');
+        $this->assertNotEmpty(
+            $content,
+            'Expected HTML content after redirect.',
+        );
 
         // Structural assertion: expect a Bootstrap danger alert (flash) rendered
         $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
         $this->assertGreaterThan(
             0,
             $crawler->filter('.alert.alert-danger')->count(),
-            'Expected a danger flash message after unverified member attempts signup.'
+            'Expected a danger flash message after unverified member attempts signup.',
         );
     }
 }

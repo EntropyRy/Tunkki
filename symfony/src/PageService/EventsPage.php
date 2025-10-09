@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\PageService;
 
 use App\Entity\User;
@@ -35,7 +37,7 @@ class EventsPage implements PageServiceInterface
     public function execute(PageInterface $page, Request $request, array $parameters = [], ?Response $response = null): Response
     {
         $user = $this->security->getUser();
-        if ($user instanceof User && $user->getMember()?->getIsActiveMember()) {
+        if ($user instanceof User && $user->getMember()->getIsActiveMember()) {
             $events = $this->eventRepository->findAllByNotType('announcement');
         } else {
             $events = $this->eventRepository->findPublicEventsByNotType('announcement');

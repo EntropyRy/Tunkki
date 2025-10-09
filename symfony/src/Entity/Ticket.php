@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\TicketRepository;
@@ -32,7 +34,7 @@ class Ticket implements \Stringable
     private ?int $referenceNumber = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\Choice(choices: Ticket::STATUSES)]
+    #[Assert\Choice(choices: self::STATUSES)]
     private string $status = 'available';
 
     #[ORM\Column(type: 'datetime_immutable')]
@@ -147,7 +149,7 @@ class Ticket implements \Stringable
     {
         $event = $this->getEvent();
         $member = $this->getOwner();
-        if (!is_null($event) && !is_null($member)) {
+        if ($event instanceof Event && $member instanceof Member) {
             // find member Nakki only if it is mandatory
             return $event->ticketHolderHasNakki($member);
         }

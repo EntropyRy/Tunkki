@@ -40,14 +40,14 @@ final class HappeningAccessTest extends FixturesWebTestCase
     public function testPublicHappeningAccessibleToOwnerAndAnotherUser(): void
     {
         $owner = $this->getOrCreateUser(
-            sprintf(
+            \sprintf(
                 'happening-owner+%s@example.test',
                 bin2hex(random_bytes(4)),
             ),
             [],
         );
         $other = $this->getOrCreateUser(
-            sprintf(
+            \sprintf(
                 'happening-other+%s@example.test',
                 bin2hex(random_bytes(4)),
             ),
@@ -64,11 +64,10 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $year = $event->getEventDate()->format('Y');
 
         // Owner access
-        $this->client->loginUser($owner);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($owner);
         $this->client->request(
             'GET',
-            sprintf(
+            \sprintf(
                 '/en/%s/%s/happening/%s',
                 $year,
                 $event->getUrl(),
@@ -82,11 +81,10 @@ final class HappeningAccessTest extends FixturesWebTestCase
         );
 
         // Another authenticated user
-        $this->client->loginUser($other);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($other);
         $this->client->request(
             'GET',
-            sprintf(
+            \sprintf(
                 '/en/%s/%s/happening/%s',
                 $year,
                 $event->getUrl(),
@@ -103,11 +101,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
     public function testPrivateHappeningOnlyAccessibleToOwner(): void
     {
         $owner = $this->getOrCreateUser(
-            sprintf('private-owner+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('private-owner+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
         $stranger = $this->getOrCreateUser(
-            sprintf(
+            \sprintf(
                 'private-stranger+%s@example.test',
                 bin2hex(random_bytes(4)),
             ),
@@ -124,11 +122,10 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $year = $event->getEventDate()->format('Y');
 
         // Owner can access
-        $this->client->loginUser($owner);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($owner);
         $this->client->request(
             'GET',
-            sprintf(
+            \sprintf(
                 '/en/%s/%s/happening/%s',
                 $year,
                 $event->getUrl(),
@@ -142,11 +139,10 @@ final class HappeningAccessTest extends FixturesWebTestCase
         );
 
         // Stranger gets 404
-        $this->client->loginUser($stranger);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($stranger);
         $this->client->request(
             'GET',
-            sprintf(
+            \sprintf(
                 '/en/%s/%s/happening/%s',
                 $year,
                 $event->getUrl(),
@@ -163,16 +159,15 @@ final class HappeningAccessTest extends FixturesWebTestCase
     public function testOwnerCanAccessCreateFormAndSubmitMinimalHappening(): void
     {
         $owner = $this->getOrCreateUser(
-            sprintf('creator-owner+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('creator-owner+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
         $event = EventFactory::new()->published()->create();
         $year = $event->getEventDate()->format('Y');
 
-        $this->client->loginUser($owner);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($owner);
 
-        $createUrl = sprintf(
+        $createUrl = \sprintf(
             '/en/%s/%s/happening/create',
             $year,
             $event->getUrl(),
@@ -198,31 +193,47 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $form['happening[descriptionFi]'] = 'Kuvaus FI';
         $form['happening[nameEn]'] = 'Created EN '.$suffix;
         $form['happening[descriptionEn]'] = 'Description EN';
-        $this->setCheckboxState($form, 'happening[releaseThisHappeningInEvent]', true);
+        $this->setCheckboxState(
+            $form,
+            'happening[releaseThisHappeningInEvent]',
+            true,
+        );
         $this->setCheckboxState($form, 'happening[allowSignUpComments]', true);
         $form['happening[maxSignUps]'] = '0';
 
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
         $errorInfo = '';
-        if (!in_array($status, [302, 303], true)) {
-            $crawlerAfter = new \Symfony\Component\DomCrawler\Crawler($this->client->getResponse()->getContent() ?? '');
-            $errs = $crawlerAfter->filter('.invalid-feedback, .form-error-message, form ul li')->each(
-                static fn (\Symfony\Component\DomCrawler\Crawler $n) => trim($n->text())
+        if (!\in_array($status, [302, 303], true)) {
+            $crawlerAfter = new \Symfony\Component\DomCrawler\Crawler(
+                $this->client->getResponse()->getContent() ?? '',
             );
-            $errs = array_values(array_filter($errs, static fn (string $t) => '' !== $t));
+            $errs = $crawlerAfter
+                ->filter('.invalid-feedback, .form-error-message, form ul li')
+                ->each(
+                    static fn (\Symfony\Component\DomCrawler\Crawler $n) => trim(
+                        $n->text(),
+                    ),
+                );
+            $errs = array_values(
+                array_filter($errs, static fn (string $t) => '' !== $t),
+            );
             if (!empty($errs)) {
                 $errorInfo = ' Errors: '.implode(' | ', $errs);
             }
         }
-        $bodySnippet = substr(trim(strip_tags($this->client->getResponse()->getContent() ?? '')), 0, 600);
+        $bodySnippet = substr(
+            trim(strip_tags($this->client->getResponse()->getContent() ?? '')),
+            0,
+            600,
+        );
         $this->assertTrue(
-            in_array($status, [302, 303], true),
-            sprintf(
+            \in_array($status, [302, 303], true),
+            \sprintf(
                 'Creation should redirect. HTTP %d.%s Snippet: %s',
                 $status,
                 $errorInfo,
-                $bodySnippet
+                $bodySnippet,
             ),
         );
 
@@ -239,11 +250,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
     public function testOwnerCanEditOwnHappeningAndNonOwnerCannot(): void
     {
         $owner = $this->getOrCreateUser(
-            sprintf('edit-owner+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('edit-owner+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
         $nonOwner = $this->getOrCreateUser(
-            sprintf('edit-stranger+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('edit-stranger+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
 
@@ -257,9 +268,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $year = $event->getEventDate()->format('Y');
 
         // Owner visits edit path
-        $this->client->loginUser($owner);
-        $this->stabilizeSessionAfterLogin();
-        $editUrl = sprintf(
+        $this->loginClientAs($owner);
+        $editUrl = \sprintf(
             '/en/%s/%s/happening/%s/edit',
             $year,
             $event->getUrl(),
@@ -278,12 +288,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
         );
 
         // Non-owner attempt
-        $this->client->loginUser($nonOwner);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($nonOwner);
         $this->client->request('GET', $editUrl);
         $status = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status, [200, 302, 303], true),
+            \in_array($status, [200, 302, 303], true),
             'Non-owner should not hard error.',
         );
         if (200 === $status) {
@@ -298,11 +307,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
     public function testAnotherUserCanBookPublicHappening(): void
     {
         $owner = $this->getOrCreateUser(
-            sprintf('booking-owner+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('booking-owner+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
         $booker = $this->getOrCreateUser(
-            sprintf('booking-user+%s@example.test', bin2hex(random_bytes(4))),
+            \sprintf('booking-user+%s@example.test', bin2hex(random_bytes(4))),
             [],
         );
 
@@ -317,9 +326,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         $year = $event->getEventDate()->format('Y');
 
-        $this->client->loginUser($booker);
-        $this->stabilizeSessionAfterLogin();
-        $showUrl = sprintf(
+        $this->loginClientAs($booker);
+        $showUrl = \sprintf(
             '/en/%s/%s/happening/%s',
             $year,
             $event->getUrl(),
@@ -350,7 +358,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         $status = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status, [302, 303], true),
+            \in_array($status, [302, 303], true),
             'Booking should redirect.',
         );
     }
@@ -361,10 +369,18 @@ final class HappeningAccessTest extends FixturesWebTestCase
     private function loginExistingClientAs(string $email): \App\Entity\User
     {
         $user = $this->getOrCreateUser($email, []);
-        $this->client->loginUser($user);
-        $this->stabilizeSessionAfterLogin();
+        $this->loginClientAs($user);
 
         return $user;
+    }
+
+    /**
+     * Log in current SiteAwareKernelBrowser client as the given user.
+     */
+    private function loginClientAs(\App\Entity\User $user): void
+    {
+        $this->client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
     }
 
     /**

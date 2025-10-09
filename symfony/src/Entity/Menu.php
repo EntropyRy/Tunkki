@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataPagePage as Page;
@@ -50,7 +52,7 @@ class Menu implements \Stringable
     private ?int $rgt = null;
 
     #[Gedmo\TreeRoot]
-    #[ORM\ManyToOne(targetEntity: Menu::class)]
+    #[ORM\ManyToOne(targetEntity: self::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id', onDelete: 'CASCADE')]
     private ?Menu $root = null;
 
@@ -58,7 +60,7 @@ class Menu implements \Stringable
     private ?int $position = null;
 
     #[Gedmo\TreeParent]
-    #[ORM\ManyToOne(targetEntity: Menu::class, inversedBy: 'children')]
+    #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
     #[
         ORM\JoinColumn(
             name: 'parent_id',
@@ -68,7 +70,7 @@ class Menu implements \Stringable
     ]
     private ?Menu $parent = null;
 
-    #[ORM\OneToMany(targetEntity: Menu::class, mappedBy: 'parent')]
+    #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
     private $children;
 
     public function __construct()
@@ -209,7 +211,7 @@ class Menu implements \Stringable
         return $this->children;
     }
 
-    public function addChild(Menu $child): self
+    public function addChild(self $child): self
     {
         if (!$this->children->contains($child)) {
             $this->children[] = $child;
@@ -221,10 +223,10 @@ class Menu implements \Stringable
 
     public function hasChildren(): bool
     {
-        return count($this->children) > 0;
+        return \count($this->children) > 0;
     }
 
-    public function removeChild(Menu $child): self
+    public function removeChild(self $child): self
     {
         if ($this->children->contains($child)) {
             $this->children->removeElement($child);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\PackagesRepository;
@@ -100,7 +102,7 @@ class Package implements \Stringable
         $this->items->removeElement($item);
     }
 
-    public function setName(string $name): Package
+    public function setName(string $name): self
     {
         $this->name = $name;
 

@@ -85,7 +85,7 @@ final class EventRepositoryTest extends RepositoryTestCase
             $events,
         );
         $sorted = $returnedDates;
-        rsort($sorted, SORT_NUMERIC);
+        rsort($sorted, \SORT_NUMERIC);
         self::assertSame(
             $sorted,
             $returnedDates,
@@ -322,7 +322,7 @@ final class EventRepositoryTest extends RepositoryTestCase
             ->create([
                 'url' => $slug,
                 'eventDate' => new \DateTimeImmutable(
-                    sprintf('%d-05-10 12:00:00', $targetYear),
+                    \sprintf('%d-05-10 12:00:00', $targetYear),
                 ),
             ]);
 

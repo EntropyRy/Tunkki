@@ -47,7 +47,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
                 'HTTP_X-Stream-Auth-Token' => self::TEST_TOKEN,
                 'CONTENT_TYPE' => 'application/json',
             ],
-            content: json_encode(['event' => 'not-a-valid-event'], JSON_THROW_ON_ERROR),
+            content: json_encode(['event' => 'not-a-valid-event'], \JSON_THROW_ON_ERROR),
         );
 
         $this->assertSame(Response::HTTP_BAD_REQUEST, $client->getResponse()->getStatusCode(), 'Invalid event type should return 400.');
@@ -67,7 +67,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
                 'HTTP_X-Stream-Auth-Token' => 'wrong-token',
                 'CONTENT_TYPE' => 'application/json',
             ],
-            content: json_encode(['event' => 'stream-start'], JSON_THROW_ON_ERROR),
+            content: json_encode(['event' => 'stream-start'], \JSON_THROW_ON_ERROR),
         );
 
         $this->assertSame(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode(), 'Invalid token should return 401.');
@@ -98,7 +98,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
                     'recording_file' => $startFile,
                     'timestamp' => time(),
                 ],
-                JSON_THROW_ON_ERROR
+                \JSON_THROW_ON_ERROR
             ),
         );
 
@@ -136,7 +136,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
                     'recording_file' => $startFile,
                     'timestamp' => time() + 60,
                 ],
-                JSON_THROW_ON_ERROR
+                \JSON_THROW_ON_ERROR
             ),
         );
 
@@ -184,7 +184,7 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
                     'recording_file' => 'non-existent',
                     'timestamp' => time(),
                 ],
-                JSON_THROW_ON_ERROR
+                \JSON_THROW_ON_ERROR
             ),
         );
 

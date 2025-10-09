@@ -47,7 +47,7 @@ final class MemberAdmin extends AbstractAdmin
     protected function configureDatagridFilters(
         DatagridMapper $datagridMapper,
     ): void {
-        $now = new \DateTime();
+        $now = new \DateTimeImmutable();
         $datagridMapper
             ->add('artist')
             ->add('username')

@@ -1,5 +1,54 @@
 # Mutation Testing Baseline (Infection)
 
+### 2025-10-08 (Baseline – Per-slice Mutation Metrics)
+Environment: Docker FPM (PHP 8.4.13), PCOV enabled
+Threads: 8
+Flags: --min-msi=0 --min-covered-msi=0
+
+- Slice: src/Security
+  - Command: vendor/bin/infection --threads=8 --filter=src/Security
+  - Mutations: 64 generated; 0 killed; 58 not covered; 0 errors; 0 syntax errors; 0 time outs; 6 required more time
+  - Metrics: MSI 0%; Mutation Code Coverage 0%; Covered Code MSI 0%
+  - Notes: No coverage; prioritize unit tests for EmailVerifier and MattermostAuthenticator.
+
+- Slice: src/Repository (full slice)
+  - Command: vendor/bin/infection --threads=8 --filter=src/Repository
+  - Mutations: 307 generated; 80 killed; 140 not covered; 0 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 87 required more time
+  - Metrics: MSI 36%; Mutation Code Coverage 36%; Covered Code MSI 100%
+
+- Slice: src/Repository (only-covered)
+  - Command: vendor/bin/infection --threads=8 --filter=src/Repository --only-covered --show-mutations
+  - Mutations: 167 generated; 75 killed; 0 not covered; 0 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 92 required more time
+  - Metrics: MSI 100%; Mutation Code Coverage 100%; Covered Code MSI 100%
+
+- Slice: src/Domain (only-covered)
+  - Command: vendor/bin/infection --threads=8 --filter=src/Domain --only-covered --show-mutations
+  - Mutations: 20 generated; 12 killed; 0 not covered; 0 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 8 required more time
+  - Metrics: MSI 100%; Mutation Code Coverage 100%; Covered Code MSI 100%
+
+- Slice: src/PageService (only-covered)
+  - Command: vendor/bin/infection --threads=8 --filter=src/PageService --only-covered --show-mutations
+  - Mutations: 67 generated; 35 killed; 0 not covered; 0 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 32 required more time
+  - Metrics: MSI 100%; Mutation Code Coverage 100%; Covered Code MSI 100%
+
+- Slice: src/Twig (only-covered)
+  - Command: vendor/bin/infection --threads=8 --filter=src/Twig --only-covered --show-mutations
+  - Mutations: 173 generated; 0 killed; 0 not covered; 0 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 173 required more time
+  - Metrics: MSI 0%; Mutation Code Coverage 0%; Covered Code MSI 0%
+  - Notes: Indicates lack of tests over Twig logic; add targeted tests before tuning timeouts.
+
+- Slice: src/Entity (only-covered)
+  - Command: vendor/bin/infection --threads=8 --filter=src/Entity --only-covered --show-mutations
+  - Mutations: 557 generated; 207 killed; 0 not covered; 10 covered survivors; 0 errors; 0 syntax errors; 0 time outs; 340 required more time
+  - Metrics: MSI 95%; Mutation Code Coverage 100%; Covered Code MSI 95%
+  - Notes: Survivors focus around Event time-window boundaries and URL construction; add ±1s boundary tests and fi/en URL behavior tests.
+
+Key implications:
+- Add Security unit tests (EmailVerifier, MattermostAuthenticator).
+- Add a functional test for ArtistController::create to assert member linkage, submitted+valid gate, and Mattermost message content/URLs.
+- Address Twig/service slices’ “required more time” via added coverage before tweaking timeouts.
+
+
 Date: 2025-10-02  
 Commit: (fill with short SHA on commit)  
 Environment: Docker FPM container (PHP 8.x)  
@@ -316,6 +365,8 @@ Notes and immediate implications:
 - Controller escapes observed (ArtistController create flow); plan a functional test to assert member linkage, strict submitted+valid check, and Mattermost message content/URLs.
 - Entity survivors focused in Event time-window boundary logic and URL construction; add focused unit tests for ±1s tolerance and fi/en URL generation.
 - Large “required more time” counts in Twig/Service indicate lack of coverage; address with targeted tests before tuning timeouts.
+
+- Update (2025-10-08): Added unit tests for EmailVerifier and MattermostAuthenticator (tests/Unit/Security). Rerun Infection with --filter=src/Security is expected to raise MSI above 0% and produce non-zero Covered MSI. Refresh metrics in this file after the run.
 
 ### 2025-10-07 (Attempted Baseline – Blockers)
 Status: Baseline still pending. Multiple Infection runs aborted due to the initial test suite not being fully green under Infection’s randomized/default execution.

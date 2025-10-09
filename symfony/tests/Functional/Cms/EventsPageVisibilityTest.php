@@ -21,8 +21,8 @@ use App\Tests\Support\LoginHelperTrait;
  */
 final class EventsPageVisibilityTest extends FixturesWebTestCase
 {
-    use LoginHelperTrait;
     use LocaleDataProviderTrait;
+    use LoginHelperTrait;
 
     protected function setUp(): void
     {

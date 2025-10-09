@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventSubscriber;
 
+use App\Entity\Email;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\Ticket;
 use App\Helper\AppStripeClient;
 use App\Helper\Qr;
-use App\Helper\ReferenceNumber;
 use App\Repository\CheckoutRepository;
 use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
+use App\Service\BookingReferenceService;
 use App\Service\MattermostNotifierService;
 use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
@@ -34,7 +37,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly MemberRepository $memberRepo,
         private readonly TicketRepository $ticketRepo,
         private readonly EmailRepository $emailRepo,
-        private readonly ReferenceNumber $rn,
+        private readonly BookingReferenceService $rn,
         private readonly MailerInterface $mailer,
         private readonly MattermostNotifierService $mm,
         private readonly Qr $qrGenerator,
@@ -59,13 +62,21 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripeEvent = $webhook->getStripeObject();
         $stripeProduct = $stripeEvent->data->object;
         try {
-            $products = $this->productRepo->findBy(['stripeId' => $stripeProduct['id']]);
+            $products = $this->productRepo->findBy([
+                'stripeId' => $stripeProduct['id'],
+            ]);
             foreach ($products as $product) {
-                $product = $this->stripe->updateOurProduct($product, null, $stripeProduct);
+                $product = $this->stripe->updateOurProduct(
+                    $product,
+                    null,
+                    $stripeProduct,
+                );
                 $this->productRepo->save($product, true);
             }
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -76,10 +87,16 @@ class StripeEventSubscriber implements EventSubscriberInterface
 
         try {
             $product = new Product();
-            $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
+            $product = $this->stripe->updateOurProduct(
+                $product,
+                $stripePrice,
+                null,
+            );
             $this->productRepo->save($product, true);
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -88,11 +105,19 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripeEvent = $webhook->getStripeObject();
         $stripePrice = $stripeEvent->data->object;
         try {
-            $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
-            $product = $this->stripe->updateOurProduct($product, $stripePrice, null);
+            $product = $this->productRepo->findOneBy([
+                'stripePriceId' => $stripePrice->id,
+            ]);
+            $product = $this->stripe->updateOurProduct(
+                $product,
+                $stripePrice,
+                null,
+            );
             $this->productRepo->save($product, true);
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -102,11 +127,15 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $stripePrice = $stripeEvent->data->object;
 
         try {
-            $product = $this->productRepo->findOneBy(['stripePriceId' => $stripePrice->id]);
+            $product = $this->productRepo->findOneBy([
+                'stripePriceId' => $stripePrice->id,
+            ]);
             $product->setActive(false);
             $this->productRepo->save($product, true);
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -116,12 +145,18 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $session = $stripeEvent->data->object;
         $this->logger->notice('Session: '.$session['id']);
         try {
-            $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
-            $this->logger->notice('Checkout expired: '.$checkout->getStripeSessionId());
+            $checkout = $this->checkoutRepo->findOneBy([
+                'stripeSessionId' => $session['id'],
+            ]);
+            $this->logger->notice(
+                'Checkout expired: '.$checkout->getStripeSessionId(),
+            );
             $checkout->setStatus(-1);
             $this->checkoutRepo->save($checkout, true);
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -131,8 +166,12 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $session = $stripeEvent->data->object;
         $this->logger->notice('Session: '.$session['id']);
         try {
-            $checkout = $this->checkoutRepo->findOneBy(['stripeSessionId' => $session['id']]);
-            $this->logger->notice('Checkout done: '.$checkout->getStripeSessionId());
+            $checkout = $this->checkoutRepo->findOneBy([
+                'stripeSessionId' => $session['id'],
+            ]);
+            $this->logger->notice(
+                'Checkout done: '.$checkout->getStripeSessionId(),
+            );
             $checkout->setStatus(1);
             $this->checkoutRepo->save($checkout, true);
             if (1 == $checkout->getStatus()) {
@@ -148,14 +187,22 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $event = $product->getEvent();
                     $quantity = $cartItem->getQuantity();
                     if ($product->isTicket()) {
-                        $given = $this->giveEventTicketToEmail($event, $product, $quantity, $email, $locale);
+                        $given = $this->giveEventTicketToEmail(
+                            $event,
+                            $product,
+                            $quantity,
+                            $email,
+                            $locale,
+                        );
                         $tickets = [...$tickets, ...$given];
                     }
                 }
                 $qrGenerator = $this->qrGenerator;
                 foreach ($tickets as $ticket) {
                     $qrs[] = [
-                        'qr' => $qrGenerator->getQr((string) $ticket->getReferenceNumber()),
+                        'qr' => $qrGenerator->getQr(
+                            (string) $ticket->getReferenceNumber(),
+                        ),
                         'name' => $ticket->getName() ?? 'Ticket',
                     ];
                 }
@@ -164,20 +211,37 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $event->getNameByLang($locale),
                     $email,
                     $qrs,
-                    $event->getPicture()
+                    $event->getPicture(),
                 );
                 $checkout->setStatus(2);
                 $this->checkoutRepo->save($checkout, true);
                 foreach ($products as $cartItem) {
                     $product = $cartItem->getProduct();
                     if ($product->isTicket()) {
-                        $sold = $cartItem->getQuantity() > 1 ? 'Sold '.$cartItem->getQuantity().' tickets.' : 'Sold 1 ticket.';
-                        $this->mm->sendToMattermost('['.$product->getNameEn().'] '.$sold.' Total:'.$product->getSold().'/'.$product->getQuantity(), 'yhdistys');
+                        $sold =
+                            $cartItem->getQuantity() > 1
+                                ? 'Sold '.
+                                    $cartItem->getQuantity().
+                                    ' tickets.'
+                                : 'Sold 1 ticket.';
+                        $this->mm->sendToMattermost(
+                            '['.
+                                $product->getNameEn().
+                                '] '.
+                                $sold.
+                                ' Total:'.
+                                $product->getSold().
+                                '/'.
+                                $product->getQuantity(),
+                            'yhdistys',
+                        );
                     }
                 }
             }
         } catch (\Exception $e) {
-            $this->logger->error('Code: '.$e->getCode().' M:'.$e->getMessage());
+            $this->logger->error(
+                'Code: '.$e->getCode().' M:'.$e->getMessage(),
+            );
         }
     }
 
@@ -188,7 +252,10 @@ class StripeEventSubscriber implements EventSubscriberInterface
         $qrs,
         ?SonataMediaMedia $img,
     ): void {
-        $email = $this->emailRepo->findOneBy(['purpose' => 'ticket_qr', 'event' => $event]);
+        $email = $this->emailRepo->findOneBy([
+            'purpose' => 'ticket_qr',
+            'event' => $event,
+        ]);
         $replyTo = 'hallitus@entropy.fi';
         $body = '';
         if (null != $email) {
@@ -196,18 +263,30 @@ class StripeEventSubscriber implements EventSubscriberInterface
             $body = $email->getBody();
         }
         foreach ($qrs as $x => $qr) {
-            $subject = $x > 0 ? '[ENTROPY] '.$qr['name'].' ('.($x + 1).')' : '[ENTROPY] '.$qr['name'];
+            $subject =
+                $x > 0
+                    ? '[ENTROPY] '.$qr['name'].' ('.($x + 1).')'
+                    : '[ENTROPY] '.$qr['name'];
             $mail = new TemplatedEmail()
                 ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
                 ->to($to)
                 ->replyTo($replyTo)
                 ->subject($subject)
-                ->addPart(new DataPart($qr['qr'], 'ticket', 'image/png', 'base64')->asInline())
+                ->addPart(
+                    new DataPart(
+                        $qr['qr'],
+                        'ticket',
+                        'image/png',
+                        'base64',
+                    )->asInline(),
+                )
                 ->htmlTemplate('emails/ticket.html.twig')
                 ->context([
                     'body' => $body,
                     'qr' => $qr,
-                    'links' => $email ? $email->getAddLoginLinksToFooter() : true,
+                    'links' => $email instanceof Email
+                        ? $email->getAddLoginLinksToFooter()
+                        : true,
                     'img' => $img,
                     'user_email' => $to,
                 ]);
@@ -233,11 +312,13 @@ class StripeEventSubscriber implements EventSubscriberInterface
             $ticket->setPrice($product->getAmount());
             $ticket->setStatus('paid');
             $ticket->setEmail($email);
-            if (!is_null($member)) {
+            if (null !== $member) {
                 $ticket->setOwner($member);
             }
             $this->ticketRepo->save($ticket, true);
-            $ticket->setReferenceNumber($this->rn->calculateReferenceNumber($ticket, 9000, 909));
+            $ticket->setReferenceNumber(
+                $this->rn->calculateReferenceNumber($ticket, 9000, 909),
+            );
             $this->ticketRepo->save($ticket, true);
             $tickets[] = $ticket;
         }

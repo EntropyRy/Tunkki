@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
@@ -437,7 +439,7 @@ class Happening implements \Stringable
 
     public function signUpsAreOpen(): bool
     {
-        if (is_null($this->signUpsOpenUntil)) {
+        if (!$this->signUpsOpenUntil instanceof \DateTimeInterface) {
             return true;
         }
         $time = new \DateTime('now');

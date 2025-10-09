@@ -121,7 +121,7 @@ trait LocaleDataProviderTrait
         return match ($locale) {
             'en' => self::EN_EDIT_PATH,
             'fi' => self::FI_EDIT_PATH,
-            default => sprintf('/%s/profile/edit', $locale),
+            default => \sprintf('/%s/profile/edit', $locale),
         };
     }
 

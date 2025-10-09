@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components\Stream;
 
 use App\Entity\Stream;
@@ -16,8 +18,8 @@ use Symfony\UX\TwigComponent\Attribute\PostMount;
 #[AsLiveComponent]
 final class Player
 {
-    use DefaultActionTrait;
     use ComponentToolsTrait;
+    use DefaultActionTrait;
 
     public const string FORMAT_MP3 = 'mp3';
     public const string FORMAT_OPUS = 'opus';
@@ -171,7 +173,7 @@ final class Player
     #[LiveAction]
     public function setStreamFormat(#[LiveArg] string $format): void
     {
-        if (in_array($format, [self::FORMAT_MP3, self::FORMAT_OPUS])) {
+        if (\in_array($format, [self::FORMAT_MP3, self::FORMAT_OPUS])) {
             $oldFormat = $this->streamFormat;
             $this->streamFormat = $format;
             // Emit an event to notify the Howler.js controller that the format changed

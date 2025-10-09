@@ -157,7 +157,7 @@ final class CmsBaselineStory extends Story
                 continue;
             }
             $loc = method_exists($site, 'getLocale') ? (string) $site->getLocale() : null;
-            if (!in_array($loc, ['fi', 'en'], true)) {
+            if (!\in_array($loc, ['fi', 'en'], true)) {
                 $pages = $pageRepo->findBy(['site' => $site]) ?? [];
                 foreach ($pages as $pg) {
                     if (method_exists($pageRepo, 'remove')) {

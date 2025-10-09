@@ -47,9 +47,7 @@ final class StreamPageFixtures extends Fixture implements DependentFixtureInterf
 
     public function getDependencies(): array
     {
-        return [
-            SiteFixtures::class,
-        ];
+        return [SiteFixtures::class];
     }
 
     public function load(ObjectManager $manager): void
@@ -66,10 +64,13 @@ final class StreamPageFixtures extends Fixture implements DependentFixtureInterf
      * public path resolves to /en/stream; for FI (relativePath "/") it resolves
      * to /stream.
      */
-    private function createStreamPageForLocale(ObjectManager $manager, string $locale): void
-    {
+    private function createStreamPageForLocale(
+        ObjectManager $manager,
+        string $locale,
+    ): void {
         /** @var SonataPageSite|null $site */
-        $site = $manager->getRepository(SonataPageSite::class)
+        $site = $manager
+            ->getRepository(SonataPageSite::class)
             ->findOneBy(['locale' => $locale]);
 
         if (!$site instanceof SonataPageSite) {
@@ -80,7 +81,7 @@ final class StreamPageFixtures extends Fixture implements DependentFixtureInterf
 
         /** @var SonataPagePage|null $existing */
         $existing = $repo->findOneBy([
-            'site' => $site->getId(),
+            'site' => $site,
             'url' => self::PAGE_URL,
         ]);
 

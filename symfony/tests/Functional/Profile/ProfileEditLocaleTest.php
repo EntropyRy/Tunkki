@@ -29,8 +29,8 @@ use App\Tests\Support\LoginHelperTrait;
  */
 final class ProfileEditLocaleTest extends FixturesWebTestCase
 {
-    use LoginHelperTrait;
     use LocaleDataProviderTrait;
+    use LoginHelperTrait;
 
     protected function setUp(): void
     {
@@ -46,7 +46,7 @@ final class ProfileEditLocaleTest extends FixturesWebTestCase
         string $expectedProfileFragment,
     ): void {
         // Arrange: register a fresh user via real profile creation form (controller parity) and auto-login
-        $email = sprintf('locale-%s+%s@example.test', $locale, bin2hex(random_bytes(3)));
+        $email = \sprintf('locale-%s+%s@example.test', $locale, bin2hex(random_bytes(3)));
         [$user, $client] = $this->registerUserViaForm(
             $email,
             'Password123!',
@@ -57,10 +57,10 @@ final class ProfileEditLocaleTest extends FixturesWebTestCase
         $client->request('GET', $editPath);
 
         $status = $client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location');
             if ($loc) {
-                $client->request('GET', parse_url($loc, PHP_URL_PATH) ?: $loc);
+                $client->request('GET', parse_url($loc, \PHP_URL_PATH) ?: $loc);
                 $status = $client->getResponse()->getStatusCode();
             }
         }
@@ -75,7 +75,7 @@ final class ProfileEditLocaleTest extends FixturesWebTestCase
         // Assert: page loads successfully
         $this->assertTrue(
             $status >= 200 && $status < 300,
-            sprintf('Edit page for locale "%s" should return 2xx (got %d)', $locale, $status)
+            \sprintf('Edit page for locale "%s" should return 2xx (got %d)', $locale, $status)
         );
 
         // Assert: a form element exists (basic structural guarantee)
@@ -83,12 +83,12 @@ final class ProfileEditLocaleTest extends FixturesWebTestCase
         $this->assertGreaterThan(
             0,
             $crawler->filter('form')->count(),
-            sprintf('Edit form missing for locale "%s"', $locale)
+            \sprintf('Edit form missing for locale "%s"', $locale)
         );
 
         // Optional: verify presence of locale attribute on <html> if application sets it
         // (Non-fatal if absent; only assert when present.)
-        $htmlAttr = $client->getCrawler()->filter(sprintf('html[lang="%s"]', $locale));
+        $htmlAttr = $client->getCrawler()->filter(\sprintf('html[lang="%s"]', $locale));
         if ($htmlAttr->count() > 0) {
             $this->assertGreaterThan(0, $htmlAttr->count(), 'Locale <html> lang attribute present.');
         }

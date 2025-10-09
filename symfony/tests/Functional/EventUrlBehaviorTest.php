@@ -71,8 +71,8 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
         // Build candidate path (current implementation pattern)
         $path =
             'fi' === $locale
-                ? sprintf('/%s/%s', $year, $slug)
-                : sprintf('/en/%s/%s', $year, $slug);
+                ? \sprintf('/%s/%s', $year, $slug)
+                : \sprintf('/en/%s/%s', $year, $slug);
 
         $tried = [];
         $this->client->request('GET', $path);
@@ -83,15 +83,15 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
         if (404 === $this->client->getResponse()->getStatusCode()) {
             $alt =
                 'fi' === $locale
-                    ? sprintf('/tapahtuma/%s/%s', $year, $slug)
-                    : sprintf('/en/event/%s/%s', $year, $slug);
+                    ? \sprintf('/tapahtuma/%s/%s', $year, $slug)
+                    : \sprintf('/en/event/%s/%s', $year, $slug);
             $this->client->request('GET', $alt);
             $tried[] = $alt;
             $usedPath = $alt;
         }
 
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             if ('' !== $loc) {
                 $this->client->request('GET', $loc);
@@ -103,7 +103,7 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
         self::assertSame(
             200,
             $status,
-            sprintf(
+            \sprintf(
                 'Expected 200 for %s localized event path (used: %s; tried: %s), got %d.',
                 $locale,
                 $usedPath,
@@ -117,7 +117,7 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
         $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
         self::assertGreaterThan(
             0,
-            $crawler->filter(sprintf('html[lang="%s"]', $locale))->count(),
+            $crawler->filter(\sprintf('html[lang="%s"]', $locale))->count(),
             'Expected html[lang] to exist for the localized event page.',
         );
 
@@ -169,12 +169,12 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
         // Derive a pseudo "slug" from external domain (defensive)
         $pseudoSlug = 'external-test-destination';
 
-        $fiPath = sprintf('/%s/%s', $year, $pseudoSlug);
+        $fiPath = \sprintf('/%s/%s', $year, $pseudoSlug);
         $this->client->request('GET', $fiPath);
         $fiStatus = $this->client->getResponse()->getStatusCode();
 
         // If it redirects, ensure it's *not* to an internal localized page but to the external target
-        if (in_array($fiStatus, [301, 302, 303], true)) {
+        if (\in_array($fiStatus, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             self::assertSame(
                 $target,
@@ -189,10 +189,10 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
             );
         }
 
-        $enPath = sprintf('/en/%s/%s', $year, $pseudoSlug);
+        $enPath = \sprintf('/en/%s/%s', $year, $pseudoSlug);
         $this->client->request('GET', $enPath);
         $enStatus = $this->client->getResponse()->getStatusCode();
-        if (in_array($enStatus, [301, 302, 303], true)) {
+        if (\in_array($enStatus, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             self::assertSame(
                 $target,

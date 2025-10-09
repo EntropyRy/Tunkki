@@ -23,14 +23,14 @@ final readonly class AuthorizationCodeListener implements EventSubscriberInterfa
     public function onAuthorizationRequestResolve(AuthorizationRequestResolveEvent $event): void
     {
         $user = $event->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         if (null != $user) {
             if ($user->getMember()->getIsActiveMember()) {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_APPROVED);
             } else {
                 $event->resolveAuthorization(AuthorizationRequestResolveEvent::AUTHORIZATION_DENIED);
                 $session = $this->requestStack->getSession();
-                assert($session instanceof Session);
+                \assert($session instanceof Session);
                 $session->getFlashbag()->add('warning', 'profile.only_for_active_members');
 
                 $url = $this->urlGenerator->generate('profile.'.$user->getMember()->getLocale());

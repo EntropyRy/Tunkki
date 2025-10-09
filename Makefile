@@ -415,7 +415,7 @@ clean-test-db:
 	@echo "$(CYAN)==> Resetting test database (drop/create/schema:update)$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:drop --force || true
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:create
-	@$(COMPOSE) exec -T $(PHP_FPM_SERVICE) ./bin/console doctrine:schema:update --force
+	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:schema:update --force
 
 
 

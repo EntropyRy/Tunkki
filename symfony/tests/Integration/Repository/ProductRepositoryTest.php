@@ -231,7 +231,7 @@ final class ProductRepositoryTest extends RepositoryTestCase
             if ('id' === $field) {
                 continue;
             }
-            $nullable = is_array($mapping)
+            $nullable = \is_array($mapping)
                 ? $mapping['nullable'] ?? false
                 : $mapping->nullable ?? false;
             if ($nullable) {
@@ -242,7 +242,7 @@ final class ProductRepositoryTest extends RepositoryTestCase
                 continue;
             }
 
-            $type = is_array($mapping)
+            $type = \is_array($mapping)
                 ? $mapping['type'] ?? 'string'
                 : $mapping->type ?? 'string';
             $value = match ($type) {

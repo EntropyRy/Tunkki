@@ -88,7 +88,7 @@ final class AnnouncementsPageUniquenessTest extends FixturesWebTestCase
             self::assertSame('page_slug', $fiPage->getRouteName(), 'FI announcements page should use routeName=page_slug.');
             self::assertSame('annnouncements', $fiPage->getTemplateCode(), 'FI announcements page should use templateCode=annnouncements.');
             self::assertSame('entropy.page.announcementspage', $fiPage->getType(), 'FI announcements page type mismatch.');
-            if (\method_exists($fiPage, 'getPageAlias')) {
+            if (method_exists($fiPage, 'getPageAlias')) {
                 self::assertSame('_page_alias_announcements_fi', (string) $fiPage->getPageAlias(), 'FI page alias mismatch.');
             }
         }
@@ -97,7 +97,7 @@ final class AnnouncementsPageUniquenessTest extends FixturesWebTestCase
             self::assertSame('page_slug', $enPage->getRouteName(), 'EN announcements page should use routeName=page_slug.');
             self::assertSame('annnouncements', $enPage->getTemplateCode(), 'EN announcements page should use templateCode=annnouncements.');
             self::assertSame('entropy.page.announcementspage', $enPage->getType(), 'EN announcements page type mismatch.');
-            if (\method_exists($enPage, 'getPageAlias')) {
+            if (method_exists($enPage, 'getPageAlias')) {
                 self::assertSame('_page_alias_announcements_en', (string) $enPage->getPageAlias(), 'EN page alias mismatch.');
             }
         }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\BookingRepository;
@@ -9,24 +11,37 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
+/**
+ * Booking aggregate (rental transaction).
+ *
+ * NOTE (PHPStan alignment):
+ *  - Fields mapped non-nullable in Doctrine are now declared non-nullable in PHP.
+ *  - Default sentinel/empty values are assigned for string and DateTimeImmutable
+ *    fields; lifecycle callbacks replace them with domain values at persist time.
+ *  - Removed nullable types that triggered phpstan "type mapping mismatch".
+ *
+ * Be mindful when adding new non-nullable fields: either initialize them here
+ * or ensure they are set prior to first flush (prePersist does that for dates).
+ */
 #[ORM\Table('Booking')]
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Booking implements \Stringable
 {
-    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
+    #[ORM\Column(name: 'id', type: Types::INTEGER)]
     private ?int $id = null;
 
+    /** Human readable name for the booking (non-nullable column). */
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
-    private ?string $name = null;
+    private string $name = '';
 
     #[ORM\Column(name: 'referenceNumber', type: Types::STRING, length: 190)]
-    private int|string $referenceNumber = 0;
+    private string $referenceNumber = '';
 
     #[ORM\Column(name: 'renterHash', type: Types::STRING, length: 199)]
-    private int|string $renterHash = 0;
+    private string $renterHash = '';
 
     #[ORM\Column(name: 'renterConsent', type: Types::BOOLEAN)]
     private bool $renterConsent = false;
@@ -58,45 +73,41 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'paid_date', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $paid_date = null;
 
-    /**
-     * @var Collection<int, Item>
-     */
+    /** @var Collection<int, Item> */
     #[ORM\ManyToMany(targetEntity: Item::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $items;
 
-    /**
-     * @var Collection<int, Package>
-     */
+    /** @var Collection<int, Package> */
     #[ORM\ManyToMany(targetEntity: Package::class)]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $packages;
 
-    /**
-     * @var Collection<int, Accessory>
-     */
+    /** @var Collection<int, Accessory> */
     #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private Collection $accessories;
 
-    #[ORM\ManyToOne(
-        targetEntity: WhoCanRentChoice::class,
-        cascade: ['persist'],
-    )]
+    #[
+        ORM\ManyToOne(
+            targetEntity: WhoCanRentChoice::class,
+            cascade: ['persist'],
+        ),
+    ]
     private ?WhoCanRentChoice $rentingPrivileges = null;
 
     #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
     #[Assert\NotBlank]
     private ?Renter $renter = null;
 
-    /**
-     * @var Collection<int, BillableEvent>
-     */
-    #[ORM\OneToMany(
-        targetEntity: BillableEvent::class,
-        mappedBy: 'booking',
-        cascade: ['persist'],
-        orphanRemoval: true,
-    )]
+    /** @var Collection<int, BillableEvent> */
+    #[
+        ORM\OneToMany(
+            targetEntity: BillableEvent::class,
+            mappedBy: 'booking',
+            cascade: ['persist'],
+            orphanRemoval: true,
+        ),
+    ]
     private Collection $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -105,6 +116,9 @@ class Booking implements \Stringable
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $receivedBy = null;
 
+    /**
+     * Monetary aggregate (decimal). Doctrine returns string for DECIMAL.
+     */
     #[
         ORM\Column(
             name: 'actualPrice',
@@ -114,41 +128,39 @@ class Booking implements \Stringable
             nullable: true,
         ),
     ]
-    private $actualPrice;
+    private ?string $actualPrice = null;
 
     #[ORM\Column(name: 'numberOfRentDays', type: Types::INTEGER)]
     private int $numberOfRentDays = 1;
 
-    /**
-     * @var Collection<int, StatusEvent>
-     */
-    #[ORM\OneToMany(
-        targetEntity: StatusEvent::class,
-        mappedBy: 'booking',
-        cascade: ['all'],
-        fetch: 'LAZY',
-    )]
+    /** @var Collection<int, StatusEvent> */
+    #[
+        ORM\OneToMany(
+            targetEntity: StatusEvent::class,
+            mappedBy: 'booking',
+            cascade: ['all'],
+            fetch: 'LAZY',
+        ),
+    ]
     private Collection $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $creator = null;
 
     #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     private ?User $modifier = null;
 
     #[ORM\Column(name: 'modified_at', type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $modifiedAt = null;
+    private \DateTimeImmutable $modifiedAt;
 
     #[ORM\Column(name: 'booking_date', type: 'date_immutable')]
     #[Assert\NotBlank]
-    private ?\DateTimeImmutable $bookingDate = null;
+    private \DateTimeImmutable $bookingDate;
 
-    /**
-     * @var Collection<int, Reward>
-     */
+    /** @var Collection<int, Reward> */
     #[ORM\ManyToMany(targetEntity: Reward::class, mappedBy: 'bookings')]
     private Collection $rewards;
 
@@ -161,10 +173,12 @@ class Booking implements \Stringable
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
     private ?string $accessoryPrice = null;
 
+    /**
+     * Optimistic lock version. Doctrine manages increments.
+     */
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\Version]
-    // @phpstan-ignore-next-line
-    private ?int $version = null;
+    private int $version = 1;
 
     public function __construct()
     {
@@ -174,13 +188,20 @@ class Booking implements \Stringable
         $this->billableEvents = new ArrayCollection();
         $this->statusEvents = new ArrayCollection();
         $this->rewards = new ArrayCollection();
+
+        // Initialize non-nullable DateTimes to a sentinel; replaced in lifecycle callbacks.
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->modifiedAt = $now;
+        $this->bookingDate = $now;
     }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
-        $this->modifiedAt = new \DateTimeImmutable();
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->modifiedAt = $now;
     }
 
     #[ORM\PreUpdate]
@@ -189,12 +210,30 @@ class Booking implements \Stringable
         $this->modifiedAt = new \DateTimeImmutable();
     }
 
-    public function addPackage(Package $package): Booking
+    #[\Override]
+    public function __toString(): string
+    {
+        return '' !== $this->name
+            ? $this->name.' - '.$this->bookingDate->format('d.m.Y')
+            : 'n/a';
+    }
+
+    /* ------------------------ Mutators / Domain Operations ------------------------ */
+
+    public function setPaid(bool $paid): self
+    {
+        $this->setPaidDate(new \DateTimeImmutable());
+        $this->paid = $paid;
+
+        return $this;
+    }
+
+    public function addPackage(Package $package): self
     {
         foreach ($package->getItems() as $item) {
             $item->addRentHistory($this);
         }
-        $this->packages[] = $package;
+        $this->packages->add($package);
 
         return $this;
     }
@@ -207,25 +246,233 @@ class Booking implements \Stringable
         $this->packages->removeElement($package);
     }
 
-    public function getPackages(): Collection
+    public function addItem(Item $item): self
     {
-        return $this->packages;
-    }
-
-    #[\Override]
-    public function __toString(): string
-    {
-        return $this->name
-            ? $this->name.' - '.date_format($this->bookingDate, 'd.m.Y')
-            : 'n/a';
-    }
-
-    public function setPaid(bool $paid): Booking
-    {
-        $this->setPaidDate(new \DateTimeImmutable());
-        $this->paid = $paid;
+        $item->addRentHistory($this);
+        $this->items->add($item);
 
         return $this;
+    }
+
+    public function removeItem(Item $item): void
+    {
+        $item->removeRentHistory($this);
+        $this->items->removeElement($item);
+    }
+
+    public function addBillableEvent(BillableEvent $billableEvent): self
+    {
+        $billableEvent->setBooking($this);
+        $this->billableEvents->add($billableEvent);
+
+        return $this;
+    }
+
+    public function removeBillableEvent(BillableEvent $billableEvent): void
+    {
+        $this->billableEvents->removeElement($billableEvent);
+    }
+
+    public function addStatusEvent(StatusEvent $statusEvent): self
+    {
+        $this->statusEvents->add($statusEvent);
+
+        return $this;
+    }
+
+    public function removeStatusEvent(StatusEvent $statusEvent): bool
+    {
+        return $this->statusEvents->removeElement($statusEvent);
+    }
+
+    public function addAccessory(Accessory $accessory): self
+    {
+        if (!$this->accessories->contains($accessory)) {
+            $this->accessories->add($accessory);
+        }
+
+        return $this;
+    }
+
+    public function removeAccessory(Accessory $accessory): self
+    {
+        $this->accessories->removeElement($accessory);
+
+        return $this;
+    }
+
+    public function addReward(Reward $reward): self
+    {
+        if (!$this->rewards->contains($reward)) {
+            $this->rewards->add($reward);
+            $reward->addBooking($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReward(Reward $reward): self
+    {
+        if ($this->rewards->removeElement($reward)) {
+            $reward->removeBooking($this);
+        }
+
+        return $this;
+    }
+
+    /* ----------------------------- Calculations / Info ---------------------------- */
+
+    public function getCalculatedTotalPrice(): int
+    {
+        $price = 0;
+        foreach ($this->items as $item) {
+            $price += (int) $item->getRent();
+        }
+        foreach ($this->packages as $package) {
+            $price += (int) $package->getRent();
+        }
+
+        return $price;
+    }
+
+    public function getIsSomethingBroken(): bool
+    {
+        foreach ($this->items as $item) {
+            if ($item->getNeedsFixing()) {
+                return true;
+            }
+        }
+        foreach ($this->packages as $package) {
+            if ($package->getIsSomethingBroken()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function getRentInformation(): string
+    {
+        $return = '';
+        foreach ($this->items as $item) {
+            if ($item->getRentNotice()) {
+                $return .=
+                    $item->getName().
+                    ': '.
+                    $item->getRentNotice().
+                    ' '.
+                    \PHP_EOL;
+            }
+        }
+        foreach ($this->packages as $package) {
+            foreach ($package->getItems() as $item) {
+                $return .=
+                    $item->getName().': '.$item->getRentNotice().' ';
+            }
+        }
+
+        return $return;
+    }
+
+    public function getDataArray(): array
+    {
+        $rent = [
+            'items' => 0,
+            'packages' => 0,
+            'accessories' => 0,
+        ];
+        $compensation = [
+            'items' => 0,
+            'packages' => 0,
+            'accessories' => 0,
+        ];
+        $items = [];
+        $packages = [];
+        $accessories = [];
+
+        foreach ($this->items as $item) {
+            $items[] = $item;
+            $rent['items'] += (int) $item->getRent();
+            $compensation['items'] += (int) $item->getCompensationPrice();
+        }
+        foreach ($this->packages as $package) {
+            $packages[] = $package;
+            $rent['packages'] += (int) $package->getRent();
+            $compensation['packages'] += (int) $package->getCompensationPrice();
+        }
+        foreach ($this->accessories as $item) {
+            $accessories[] = $item;
+            if (\is_int($item->getCount())) {
+                $compensation['accessories'] +=
+                    (int) $item->getName()->getCompensationPrice() *
+                    $item->getCount();
+            }
+        }
+
+        $rent['total'] = $rent['items'] + $rent['packages'];
+
+        return [
+            'actualTotal' => $this->actualPrice,
+            'name' => $this->name,
+            'date' => $this->bookingDate->format('j.n.Y'),
+            'items' => $items,
+            'packages' => $packages,
+            'accessories' => $accessories,
+            'rent' => array_merge($rent, [
+                'actualTotal' => $this->actualPrice,
+                'accessories' => $this->accessoryPrice,
+            ]),
+            'compensation' => $compensation,
+            'renterSignature' => $this->renterSignature,
+        ];
+    }
+
+    /* ----------------------------- Getters / Setters ----------------------------- */
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getReferenceNumber(): string
+    {
+        return $this->referenceNumber;
+    }
+
+    public function setReferenceNumber(string $referenceNumber): self
+    {
+        $this->referenceNumber = $referenceNumber;
+
+        return $this;
+    }
+
+    public function getRenterHash(): string
+    {
+        return $this->renterHash;
+    }
+
+    public function setRenterHash(int|string $renterHash): self
+    {
+        $this->renterHash = (string) $renterHash;
+
+        return $this;
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->paid;
     }
 
     public function getPaid(): bool
@@ -233,7 +480,7 @@ class Booking implements \Stringable
         return $this->paid;
     }
 
-    public function setPaidDate(?\DateTimeImmutable $paidDate): Booking
+    public function setPaidDate(?\DateTimeImmutable $paidDate): self
     {
         $this->paid_date = $paidDate;
 
@@ -245,91 +492,21 @@ class Booking implements \Stringable
         return $this->paid_date;
     }
 
-    public function getCalculatedTotalPrice(): int
-    {
-        $price = 0;
-        foreach ($this->getItems() as $item) {
-            $price += $item->getRent();
-        }
-        if ($this->getPackages()) {
-            foreach ($this->getPackages() as $package) {
-                $price += $package->getRent();
-            }
-        }
-
-        return $price;
-    }
-
-    public function getIsSomethingBroken(): bool
-    {
-        if ($this->getItems()) {
-            foreach ($this->getItems() as $item) {
-                if (true == $item->getNeedsFixing()) {
-                    return true;
-                }
-            }
-        }
-        if ($this->getPackages()) {
-            foreach ($this->getPackages() as $package) {
-                if ($package->getIsSomethingBroken()) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    public function getRentInformation(): string
-    {
-        $return = '';
-        foreach ($this->getItems() as $item) {
-            if ($item->getRentNotice()) {
-                $return .=
-                    $item->getName().
-                    ': '.
-                    $item->getRentNotice().
-                    ' '.
-                    PHP_EOL;
-            }
-        }
-        if ($this->getPackages()) {
-            foreach ($this->getPackages() as $package) {
-                foreach ($package->getItems() as $item) {
-                    $return .=
-                        $item->getName().': '.$item->getRentNotice().' ';
-                }
-            }
-        }
-
-        return $return;
-    }
-
-    public function setActualPrice($actualPrice): Booking
+    public function setActualPrice(?string $actualPrice): self
     {
         $this->actualPrice = $actualPrice;
 
         return $this;
     }
 
-    public function getActualPrice()
+    public function getActualPrice(): ?string
     {
         return $this->actualPrice;
     }
 
-    /** duplicate __construct removed (first constructor retained above) */
-    public function addItem(Item $item): Booking
+    public function getPackages(): Collection
     {
-        $item->addRentHistory($this);
-        $this->items[] = $item;
-
-        return $this;
-    }
-
-    public function removeItem(Item $item): void
-    {
-        $item->removeRentHistory($this);
-        $this->items->removeElement($item);
+        return $this->packages;
     }
 
     public function getItems(): Collection
@@ -337,7 +514,7 @@ class Booking implements \Stringable
         return $this->items;
     }
 
-    public function setNumberOfRentDays(int $numberOfRentDays): Booking
+    public function setNumberOfRentDays(int $numberOfRentDays): self
     {
         $this->numberOfRentDays = $numberOfRentDays;
 
@@ -349,19 +526,6 @@ class Booking implements \Stringable
         return $this->numberOfRentDays;
     }
 
-    public function addBillableEvent(BillableEvent $billableEvent): Booking
-    {
-        $billableEvent->setBooking($this);
-        $this->billableEvents[] = $billableEvent;
-
-        return $this;
-    }
-
-    public function removeBillableEvent(BillableEvent $billableEvent): void
-    {
-        $this->billableEvents->removeElement($billableEvent);
-    }
-
     public function getBillableEvents(): Collection
     {
         return $this->billableEvents;
@@ -369,15 +533,8 @@ class Booking implements \Stringable
 
     public function setRentingPrivileges(
         ?WhoCanRentChoice $rentingPrivileges = null,
-    ): Booking {
+    ): self {
         $this->rentingPrivileges = $rentingPrivileges;
-
-        return $this;
-    }
-
-    public function setRenter(?Renter $renter = null): Booking
-    {
-        $this->renter = $renter;
 
         return $this;
     }
@@ -387,7 +544,14 @@ class Booking implements \Stringable
         return $this->renter;
     }
 
-    public function setInvoiceSent(bool $invoiceSent): Booking
+    public function setRenter(?Renter $renter = null): self
+    {
+        $this->renter = $renter;
+
+        return $this;
+    }
+
+    public function setInvoiceSent(bool $invoiceSent): self
     {
         $this->invoiceSent = $invoiceSent;
 
@@ -399,7 +563,7 @@ class Booking implements \Stringable
         return $this->invoiceSent;
     }
 
-    public function setItemsReturned(bool $itemsReturned): Booking
+    public function setItemsReturned(bool $itemsReturned): self
     {
         $this->itemsReturned = $itemsReturned;
 
@@ -411,19 +575,7 @@ class Booking implements \Stringable
         return $this->itemsReturned;
     }
 
-    public function setRenterHash(int|string $renterHash): Booking
-    {
-        $this->renterHash = $renterHash;
-
-        return $this;
-    }
-
-    public function getRenterHash(): int|string
-    {
-        return $this->renterHash;
-    }
-
-    public function setRenterConsent(bool $renterConsent): Booking
+    public function setRenterConsent(bool $renterConsent): self
     {
         $this->renterConsent = $renterConsent;
 
@@ -435,7 +587,7 @@ class Booking implements \Stringable
         return $this->renterConsent;
     }
 
-    public function setCancelled(bool $cancelled): Booking
+    public function setCancelled(bool $cancelled): self
     {
         $this->cancelled = $cancelled;
 
@@ -445,18 +597,6 @@ class Booking implements \Stringable
     public function getCancelled(): bool
     {
         return $this->cancelled;
-    }
-
-    public function addStatusEvent(StatusEvent $statusEvent): Booking
-    {
-        $this->statusEvents[] = $statusEvent;
-
-        return $this;
-    }
-
-    public function removeStatusEvent(StatusEvent $statusEvent): bool
-    {
-        return $this->statusEvents->removeElement($statusEvent);
     }
 
     public function getStatusEvents(): Collection
@@ -479,29 +619,6 @@ class Booking implements \Stringable
     public function getAccessories(): Collection
     {
         return $this->accessories;
-    }
-
-    public function addAccessory(Accessory $accessory): self
-    {
-        if (!$this->accessories->contains($accessory)) {
-            $this->accessories[] = $accessory;
-        }
-
-        return $this;
-    }
-
-    public function removeAccessory(Accessory $accessory): self
-    {
-        if ($this->accessories->contains($accessory)) {
-            $this->accessories->removeElement($accessory);
-        }
-
-        return $this;
-    }
-
-    public function getRentingPrivileges(): ?WhoCanRentChoice
-    {
-        return $this->rentingPrivileges;
     }
 
     public function getGivenAwayBy(): ?User
@@ -540,35 +657,6 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getReferenceNumber(): ?string
-    {
-        return $this->referenceNumber;
-    }
-
-    public function setReferenceNumber(string $referenceNumber): self
-    {
-        $this->referenceNumber = $referenceNumber;
-
-        return $this;
-    }
-
     public function getRetrieval(): ?\DateTimeImmutable
     {
         return $this->retrieval;
@@ -593,7 +681,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -605,7 +693,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function getModifiedAt(): ?\DateTimeImmutable
+    public function getModifiedAt(): \DateTimeImmutable
     {
         return $this->modifiedAt;
     }
@@ -617,7 +705,7 @@ class Booking implements \Stringable
         return $this;
     }
 
-    public function getBookingDate(): ?\DateTimeImmutable
+    public function getBookingDate(): \DateTimeImmutable
     {
         return $this->bookingDate;
     }
@@ -632,26 +720,6 @@ class Booking implements \Stringable
     public function getRewards(): Collection
     {
         return $this->rewards;
-    }
-
-    public function addReward(Reward $reward): self
-    {
-        if (!$this->rewards->contains($reward)) {
-            $this->rewards[] = $reward;
-            $reward->addBooking($this);
-        }
-
-        return $this;
-    }
-
-    public function removeReward(Reward $reward): self
-    {
-        if ($this->rewards->contains($reward)) {
-            $this->rewards->removeElement($reward);
-            $reward->removeBooking($this);
-        }
-
-        return $this;
     }
 
     public function getReasonForDiscount(): ?string
@@ -683,60 +751,20 @@ class Booking implements \Stringable
         return $this->accessoryPrice;
     }
 
-    public function setAccessoryPrice(?string $accessoryPrice): static
+    public function setAccessoryPrice(?string $accessoryPrice): self
     {
         $this->accessoryPrice = $accessoryPrice;
 
         return $this;
     }
 
-    public function getDataArray(): array
+    public function getRentingPrivileges(): ?WhoCanRentChoice
     {
-        $object = $this;
-        $rent = [];
-        $compensation = [];
-        $data = [];
-        $items = [];
-        $packages = [];
-        $accessories = [];
-        $rent['items'] = 0;
-        $compensation['items'] = 0;
-        $rent['packages'] = 0;
-        $compensation['packages'] = 0;
-        $rent['accessories'] = 0;
-        $compensation['accessories'] = 0;
-        foreach ($object->getItems() as $item) {
-            $items[] = $item;
-            $rent['items'] += $item->getRent();
-            $compensation['items'] += $item->getCompensationPrice();
-        }
-        foreach ($object->getPackages() as $item) {
-            $packages[] = $item;
-            $rent['packages'] += $item->getRent();
-            $compensation['packages'] += $item->getCompensationPrice();
-        }
-        foreach ($object->getAccessories() as $item) {
-            $accessories[] = $item;
-            if (is_int($item->getCount())) {
-                $compensation['accessories'] +=
-                    $item->getName()->getCompensationPrice() *
-                    $item->getCount();
-            }
-        }
-        $rent['total'] = $rent['items'] + $rent['packages']; // + $rent['accessories'];
+        return $this->rentingPrivileges;
+    }
 
-        $data['actualTotal'] = $object->getActualPrice();
-        $rent['actualTotal'] = $object->getActualPrice();
-        $rent['accessories'] = $object->getAccessoryPrice();
-        $data['name'] = $object->getName();
-        $data['date'] = $object->getBookingDate()->format('j.n.Y');
-        $data['items'] = $items;
-        $data['packages'] = $packages;
-        $data['accessories'] = $accessories;
-        $data['rent'] = $rent;
-        $data['compensation'] = $compensation;
-        $data['renterSignature'] = $object->getRenterSignature();
-
-        return $data;
+    public function getVersion(): int
+    {
+        return $this->version;
     }
 }

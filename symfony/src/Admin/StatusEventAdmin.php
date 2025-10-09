@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin;
 
 use App\Entity\StatusEvent;
+use App\Entity\User;
 use App\Service\MattermostNotifierService;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -21,8 +24,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class StatusEventAdmin extends AbstractAdmin
 {
     #[\Override]
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-    {
+    protected function configureDatagridFilters(
+        DatagridMapper $datagridMapper,
+    ): void {
         $datagridMapper
             ->add('item')
             ->add('booking')
@@ -65,17 +69,34 @@ class StatusEventAdmin extends AbstractAdmin
                 ->end();
         }
         if (null != $this->getSubject()->getItem()) {
-            $events = array_reverse($this->getSubject()->getItem()->getFixingHistory()->slice(0, 5));
+            $events = array_reverse(
+                $this->getSubject()->getItem()->getFixingHistory()->slice(0, 5),
+            );
             $help = '';
             foreach ($events as $event) {
-                $help .= '['.$event->getCreatedAt()->format('d.m.y H:i').'] '.$event->getCreator().': '.$event->getDescription().'<br>';
+                $help .=
+                    '['.
+                    $event->getCreatedAt()->format('d.m.y H:i').
+                    '] '.
+                    $event->getCreator().
+                    ': '.
+                    $event->getDescription().
+                    '<br>';
             }
             $formMapper
                 ->with('Status', ['class' => 'col-md-4'])
-                ->add('item.cannotBeRented', CheckboxType::class, ['required' => false])
-                ->add('item.needsFixing', CheckboxType::class, ['required' => false])
-                ->add('item.forSale', CheckboxType::class, ['required' => false])
-                ->add('item.toSpareParts', CheckboxType::class, ['required' => false])
+                ->add('item.cannotBeRented', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('item.needsFixing', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('item.forSale', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('item.toSpareParts', CheckboxType::class, [
+                    'required' => false,
+                ])
                 ->end()
                 ->with('Message', ['class' => 'col-md-8'])
                 ->add('description', TextareaType::class, [
@@ -88,10 +109,19 @@ class StatusEventAdmin extends AbstractAdmin
         if (null != $this->getSubject()->getBooking()) {
             $formMapper
                 ->with('Status', ['class' => 'col-md-4'])
-                ->add('booking.cancelled', CheckboxType::class, ['required' => false])
-                ->add('booking.renterConsent', CheckboxType::class, ['required' => false, 'disabled' => true])
-                ->add('booking.itemsReturned', CheckboxType::class, ['required' => false])
-                ->add('booking.invoiceSent', CheckboxType::class, ['required' => false])
+                ->add('booking.cancelled', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('booking.renterConsent', CheckboxType::class, [
+                    'required' => false,
+                    'disabled' => true,
+                ])
+                ->add('booking.itemsReturned', CheckboxType::class, [
+                    'required' => false,
+                ])
+                ->add('booking.invoiceSent', CheckboxType::class, [
+                    'required' => false,
+                ])
                 ->add('booking.paid', CheckboxType::class, [
                     'required' => false,
                     'help' => 'please make sure booking handler has been selected',
@@ -110,9 +140,13 @@ class StatusEventAdmin extends AbstractAdmin
             $formMapper
                 ->with('Meta')
                 ->add('creator', null, ['disabled' => true])
-                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('createdAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->add('modifier', null, ['disabled' => true])
-                ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('updatedAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->end();
         }
     }
@@ -134,6 +168,7 @@ class StatusEventAdmin extends AbstractAdmin
     public function prePersist($Event): void
     {
         $user = $this->ts->getToken()->getUser();
+        \assert($user instanceof User);
         $Event->setCreator($user);
         $Event->setModifier($user);
     }
@@ -150,6 +185,7 @@ class StatusEventAdmin extends AbstractAdmin
     public function preUpdate($Event): void
     {
         $user = $this->ts->getToken()->getUser();
+        \assert($user instanceof User);
         $Event->setModifier($user);
     }
 
@@ -163,7 +199,11 @@ class StatusEventAdmin extends AbstractAdmin
 
     private function getMMtext($Event, string $user): string
     {
-        $url = $this->generateUrl('show', ['id' => $Event->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
+        $url = $this->generateUrl(
+            'show',
+            ['id' => $Event->getId()],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        );
         $fix = null;
         $rent = null;
         if (!empty($Event->getItem())) {
@@ -192,7 +232,9 @@ class StatusEventAdmin extends AbstractAdmin
         return $text.(' by '.$user);
     }
 
-    public function __construct(protected MattermostNotifierService $mm, protected TokenStorageInterface $ts)
-    {
+    public function __construct(
+        protected MattermostNotifierService $mm,
+        protected TokenStorageInterface $ts,
+    ) {
     }
 }

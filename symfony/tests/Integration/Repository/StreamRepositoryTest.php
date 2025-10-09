@@ -121,7 +121,7 @@ final class StreamRepositoryTest extends RepositoryTestCase
             return;
         }
         // STDERR so it appears in CI logs even if PHPUnit buffers stdout.
-        fwrite(STDERR, '[StreamRepositoryTest] '.$msg."\n");
+        fwrite(\STDERR, '[StreamRepositoryTest] '.$msg."\n");
     }
 
     public function testSaveAllPersistsMultipleStreams(): void
@@ -217,7 +217,7 @@ final class StreamRepositoryTest extends RepositoryTestCase
             $this->em()->flush();
             $this->logDiag(
                 'Pre-cleaned '.
-                    count($preExisting).
+                    \count($preExisting).
                     ' existing online stream(s).',
             );
         }

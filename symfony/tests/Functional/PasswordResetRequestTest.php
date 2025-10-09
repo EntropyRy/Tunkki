@@ -84,17 +84,17 @@ final class PasswordResetRequestTest extends FixturesWebTestCase
         if ($status >= 500) {
             $content = $this->client->getResponse()->getContent() ?? '';
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            @fwrite(STDERR, sprintf('[PasswordResetRequestTest] 5xx on invalid email submission: status=%d location=%s', $status, $loc).PHP_EOL);
+            @fwrite(\STDERR, \sprintf('[PasswordResetRequestTest] 5xx on invalid email submission: status=%d location=%s', $status, $loc).\PHP_EOL);
             $this->fail('Password reset controller returned 5xx for invalid email submission (status '.$status.').');
         }
 
         // Two acceptable outcomes:
         // 1) Controller redirects to "check your email" page even for malformed input (enumeration-safe UX).
         // 2) Controller re-displays the form with inline validation errors (200/422).
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->assertNotEmpty($loc, 'Redirect location header must be present.');
-            $path = parse_url($loc, PHP_URL_PATH) ?: ($loc ?: '/reset-password');
+            $path = parse_url($loc, \PHP_URL_PATH) ?: ($loc ?: '/reset-password');
             $this->assertTrue(
                 str_contains($path, '/reset-password') && (str_contains($path, 'check') || str_contains($path, 'email')),
                 'Redirect target should look like a "check email" endpoint (got: '.$path.').'
@@ -185,7 +185,7 @@ final class PasswordResetRequestTest extends FixturesWebTestCase
         ];
 
         foreach ($candidates as $name) {
-            if ($crawler->filter(sprintf('input[name="%s"]', $name))->count() > 0) {
+            if ($crawler->filter(\sprintf('input[name="%s"]', $name))->count() > 0) {
                 return $name;
             }
         }

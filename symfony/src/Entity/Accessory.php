@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
@@ -23,7 +25,7 @@ class Accessory implements \Stringable
 
     #[ORM\Column(name: 'count', type: Types::STRING, length: 50)]
     #[Assert\NotBlank]
-    private ?string $count = null;
+    private string $count = '';
 
     /**
      * Get id.
@@ -36,7 +38,7 @@ class Accessory implements \Stringable
     /**
      * Set count.
      */
-    public function setCount(?string $count): static
+    public function setCount(string $count): static
     {
         $this->count = $count;
 
@@ -46,7 +48,7 @@ class Accessory implements \Stringable
     /**
      * Get count.
      */
-    public function getCount(): ?string
+    public function getCount(): string
     {
         return $this->count;
     }

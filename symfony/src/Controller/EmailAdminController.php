@@ -52,7 +52,7 @@ final class EmailAdminController extends CRUDController
         $event = $email->getEvent();
         $img = null;
         $qr = null;
-        if (!is_null($event)) {
+        if (null !== $event) {
             $img = $event->getPicture();
             if ('ticket_qr' == $email->getPurpose()) {
                 $qrGenerator = $this->qr;
@@ -93,7 +93,7 @@ final class EmailAdminController extends CRUDController
         if ($subject && $body) {
             if ('rsvp' == $purpose && $event) {
                 $rsvps = $event->getRSVPs();
-                if (count($rsvps) > 0) {
+                if (\count($rsvps) > 0) {
                     foreach ($rsvps as $rsvp) {
                         $emails[] = $rsvp->getAvailableEmail();
                     }
@@ -112,7 +112,7 @@ final class EmailAdminController extends CRUDController
                         if (null == $to) {
                             $to = $ticket->getEmail();
                         }
-                        if (!in_array($to, $emails)) {
+                        if (!\in_array($to, $emails)) {
                             $emails[] = $to;
                         }
                     }
@@ -141,7 +141,7 @@ final class EmailAdminController extends CRUDController
                     } else {
                         $this->addFlash(
                             'sonata_flash_error',
-                            sprintf(
+                            \sprintf(
                                 'Artist %s member not found.',
                                 $signup->getArtistClone()->getName()
                             )
@@ -176,12 +176,12 @@ final class EmailAdminController extends CRUDController
             } else {
                 $this->addFlash(
                     'sonata_flash_error',
-                    sprintf('Purpose %s not supported.', $purpose)
+                    \sprintf('Purpose %s not supported.', $purpose)
                 );
             }
         }
         // Initialize progress
-        $totalEmails = count($emails);
+        $totalEmails = \count($emails);
         $session->set('email_send_progress', [
             'current' => 0,
             'total' => $totalEmails,
@@ -235,12 +235,12 @@ final class EmailAdminController extends CRUDController
             if ($count > 0) {
                 $email->setSentAt(new \DateTimeImmutable('now'));
                 $user = $this->getUser();
-                assert($user instanceof User);
+                \assert($user instanceof User);
                 $email->setSentBy($user->getMember());
                 $this->admin->update($email);
                 $this->addFlash(
                     'sonata_flash_success',
-                    sprintf('%s %s info packages sent.', $count, $purpose)
+                    \sprintf('%s %s info packages sent.', $count, $purpose)
                 );
             }
 

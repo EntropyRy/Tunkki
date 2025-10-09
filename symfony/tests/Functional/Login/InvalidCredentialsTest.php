@@ -185,7 +185,7 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
         $status = $client->getResponse()->getStatusCode();
         if ($status >= 500) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            @fwrite(STDERR, "[InvalidCredentialsTest] 5xx on login submission: status={$status} location={$loc}\n");
+            @fwrite(\STDERR, "[InvalidCredentialsTest] 5xx on login submission: status={$status} location={$loc}\n");
             $this->fail('Login submission returned server error: '.$status);
         }
 
@@ -193,7 +193,7 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
             $this->assertContains($status, [301, 302, 303]);
             $location = $client->getResponse()->headers->get('Location') ?? '';
             // Normalize absolute URLs to path for assertions/requests
-            $path = parse_url($location, PHP_URL_PATH) ?: $location;
+            $path = parse_url($location, \PHP_URL_PATH) ?: $location;
             $this->assertTrue(
                 '/' === $path || str_contains($path, '/login') || 1 === preg_match('#^/(en/)?login#', $path),
                 'Expected redirect to / or a localized login route, got: '.$location
@@ -201,21 +201,21 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
             $crawler = $client->request('GET', $path);
             $status3 = $client->getResponse()->getStatusCode();
             if ($status3 >= 500) {
-                @fwrite(STDERR, "[InvalidCredentialsTest] 5xx on canonical login route: status={$status3}\n");
+                @fwrite(\STDERR, "[InvalidCredentialsTest] 5xx on canonical login route: status={$status3}\n");
                 $this->fail('Canonical login route returned server error: '.$status3);
             }
             $this->assertSame(200, $status3);
             // If we didn't land on a login page (e.g., redirected to "/"), try canonical login to assert form presence
             if (0 === $crawler->filter('form input[name=\"_username\"]')->count()) {
                 $crawler = $client->request('GET', '/login');
-                if (in_array($client->getResponse()->getStatusCode(), [301, 302, 303], true)) {
+                if (\in_array($client->getResponse()->getStatusCode(), [301, 302, 303], true)) {
                     $loc2 = $client->getResponse()->headers->get('Location') ?? '';
-                    $path2 = parse_url($loc2, PHP_URL_PATH) ?: ($loc2 ?: '/en/login');
+                    $path2 = parse_url($loc2, \PHP_URL_PATH) ?: ($loc2 ?: '/en/login');
                     $crawler = $client->request('GET', $path2);
                 }
                 $status2 = $client->getResponse()->getStatusCode();
                 if ($status2 >= 500) {
-                    @fwrite(STDERR, "[InvalidCredentialsTest] 5xx on login redirect target: status={$status2}\n");
+                    @fwrite(\STDERR, "[InvalidCredentialsTest] 5xx on login redirect target: status={$status2}\n");
                     $this->fail('Login redirect target returned server error: '.$status2);
                 }
                 $this->assertSame(200, $status2);
@@ -272,9 +272,9 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
 
         // Some apps may set a token for anonymous contexts - ensure not authenticated user
         $user = $token->getUser();
-        if (is_object($user)) {
+        if (\is_object($user)) {
             // Fail if an actual user object present
-            self::fail($message.' (Token holds '.get_class($user).')');
+            self::fail($message.' (Token holds '.$user::class.')');
         } else {
             self::assertTrue(true);
         }

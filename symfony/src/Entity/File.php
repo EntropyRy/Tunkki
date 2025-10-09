@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia as Media;
@@ -67,8 +69,8 @@ class File implements \Stringable
 
     public function getDownloadLink(): string
     {
-        if (is_object($this->getFile())) {
-            if (is_string($this->getFileinfo())) {
+        if (\is_object($this->getFile())) {
+            if (\is_string($this->getFileinfo())) {
                 return '<a href="/media/download/'.$this->getFile()->getId().'">'.$this->getFileinfo().'</a>';
             } else {
                 return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';

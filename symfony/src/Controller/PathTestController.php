@@ -113,13 +113,13 @@ final class PathTestController extends AbstractController
 
     private function renderHtml(array $data): string
     {
-        $esc = static fn (string $v): string => htmlspecialchars($v, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+        $esc = static fn (string $v): string => htmlspecialchars($v, \ENT_QUOTES | \ENT_SUBSTITUTE, 'UTF-8');
 
         $rows = [];
         foreach (['fi', 'en'] as $loc) {
             foreach (['relative', 'absolute', 'network'] as $kind) {
                 $url = $data['routes'][$loc][$kind];
-                $rows[] = sprintf(
+                $rows[] = \sprintf(
                     '<tr><td>%s</td><td>%s</td><td><code>%s</code></td></tr>',
                     $esc($loc),
                     $esc($kind),
@@ -130,10 +130,10 @@ final class PathTestController extends AbstractController
 
         $expectRows = [];
         foreach ($data['expectations'] as $k => $v) {
-            $expectRows[] = sprintf(
+            $expectRows[] = \sprintf(
                 '<tr><td>%s</td><td><code>%s</code></td></tr>',
                 $esc($k),
-                $esc(is_bool($v) ? ($v ? 'true' : 'false') : (string) $v)
+                $esc(\is_bool($v) ? ($v ? 'true' : 'false') : (string) $v)
             );
         }
 

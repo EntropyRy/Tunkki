@@ -101,7 +101,7 @@ final class MutableClock implements ClockInterface
     {
         $modified = $this->now->modify($modifier);
         if (false === $modified) {
-            throw new \InvalidArgumentException(sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier));
+            throw new \InvalidArgumentException(\sprintf('MutableClock::advance(): Invalid relative time modifier "%s".', $modifier));
         }
         $this->now = $modified;
     }
@@ -115,7 +115,7 @@ final class MutableClock implements ClockInterface
             return;
         }
         $sign = $seconds >= 0 ? '+' : '';
-        $this->advance(sprintf('%s%d seconds', $sign, $seconds));
+        $this->advance(\sprintf('%s%d seconds', $sign, $seconds));
     }
 
     /**
@@ -127,7 +127,7 @@ final class MutableClock implements ClockInterface
             return;
         }
         $sign = $minutes >= 0 ? '+' : '';
-        $this->advance(sprintf('%s%d minutes', $sign, $minutes));
+        $this->advance(\sprintf('%s%d minutes', $sign, $minutes));
     }
 
     /**
@@ -139,7 +139,7 @@ final class MutableClock implements ClockInterface
             return;
         }
         $sign = $hours >= 0 ? '+' : '';
-        $this->advance(sprintf('%s%d hours', $sign, $hours));
+        $this->advance(\sprintf('%s%d hours', $sign, $hours));
     }
 
     /**
@@ -151,7 +151,7 @@ final class MutableClock implements ClockInterface
             return;
         }
         $sign = $days >= 0 ? '+' : '';
-        $this->advance(sprintf('%s%d days', $sign, $days));
+        $this->advance(\sprintf('%s%d days', $sign, $days));
     }
 
     /**
@@ -170,7 +170,7 @@ final class MutableClock implements ClockInterface
         if ($initial instanceof \DateTimeImmutable) {
             return $initial;
         }
-        if (is_string($initial)) {
+        if (\is_string($initial)) {
             return $this->parseStringInstant($initial);
         }
 
@@ -187,7 +187,7 @@ final class MutableClock implements ClockInterface
         try {
             return new \DateTimeImmutable($value);
         } catch (\Exception $e) {
-            throw new \InvalidArgumentException(sprintf('MutableClock: Unable to parse datetime string "%s": %s', $value, $e->getMessage()), $e->getCode(), previous: $e);
+            throw new \InvalidArgumentException(\sprintf('MutableClock: Unable to parse datetime string "%s": %s', $value, $e->getMessage()), $e->getCode(), previous: $e);
         }
     }
 }

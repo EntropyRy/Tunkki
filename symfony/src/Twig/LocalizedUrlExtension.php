@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig;
 
 use App\Entity\Menu;
@@ -74,7 +76,7 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         // If an integer id is provided, resolve the page entity
-        if (is_int($page)) {
+        if (\is_int($page)) {
             $resolved = $this->entityManager
                 ->getRepository(SonataPagePage::class)
                 ->find($page);
@@ -385,7 +387,7 @@ class LocalizedUrlExtension extends AbstractExtension
         string $targetLocale,
         PageInterface|int|null $page = null,
     ): array {
-        $inputWasId = is_int($page);
+        $inputWasId = \is_int($page);
         $resolvedPage = $page;
 
         if ($inputWasId) {

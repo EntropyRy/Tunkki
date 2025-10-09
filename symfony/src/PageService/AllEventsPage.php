@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\PageService;
 
+use App\Entity\Event;
 use App\Repository\EventRepository;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Page\Service\PageServiceInterface;
@@ -29,7 +32,7 @@ class AllEventsPage implements PageServiceInterface
     {
         $events = $this->eventR->findBy(['published' => true, 'sticky' => false]);
         $sticky = $this->eventR->findOneBy(['published' => true, 'sticky' => true]);
-        if ($sticky) {
+        if ($sticky instanceof Event) {
             $events = array_merge([$sticky], $events);
         }
 

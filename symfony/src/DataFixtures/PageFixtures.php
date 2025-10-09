@@ -48,7 +48,7 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
 
         foreach ($sites as $site) {
             $root = $manager->getRepository(SonataPagePage::class)->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'url' => '/',
             ]);
 
@@ -77,8 +77,11 @@ final class PageFixtures extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
-    private function normalizeExisting(SonataPagePage $page, ObjectManager $manager, string $locale): void
-    {
+    private function normalizeExisting(
+        SonataPagePage $page,
+        ObjectManager $manager,
+        string $locale,
+    ): void {
         $changed = false;
 
         // Localize name/title

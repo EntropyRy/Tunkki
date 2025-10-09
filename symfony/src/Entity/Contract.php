@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
@@ -14,23 +16,27 @@ class Contract implements \Stringable
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
+    /**
+     * Primary (Finnish) content is required. Empty string sentinel until explicitly set.
+     */
     #[ORM\Column(type: 'text')]
-    private ?string $ContentFi = null;
+    private string $ContentFi = '';
 
     /**
      * Stored as immutable timestamp. Migration required if DB platform differentiates.
+     * Non-null invariant (set in constructor + lifecycle).
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    private ?string $purpose = null;
+    private string $purpose = '';
 
     /**
-     * Stored as immutable timestamp. Set on persist only.
+     * Stored as immutable timestamp. Set on persist only. Non-null invariant.
      */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $ContentEn = null;
@@ -41,6 +47,13 @@ class Contract implements \Stringable
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $validFrom = null;
 
+    public function __construct()
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -49,6 +62,7 @@ class Contract implements \Stringable
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
+        // Preserve constructor initialization but normalize both to current instant at first persist.
         $now = new \DateTimeImmutable();
         $this->createdAt = $now;
         $this->updatedAt = $now;
@@ -60,7 +74,7 @@ class Contract implements \Stringable
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function getContentFi(): ?string
+    public function getContentFi(): string
     {
         return $this->ContentFi;
     }
@@ -72,7 +86,7 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -84,7 +98,7 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getPurpose(): ?string
+    public function getPurpose(): string
     {
         return $this->purpose;
     }
@@ -96,7 +110,7 @@ class Contract implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -115,7 +129,7 @@ class Contract implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->purpose ?: 'purpose';
+        return '' !== $this->purpose ? $this->purpose : 'purpose';
     }
 
     public function getContentEn(): ?string

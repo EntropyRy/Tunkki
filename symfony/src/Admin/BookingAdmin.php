@@ -1,15 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin;
 
 use App\Entity\Booking;
 use App\Entity\User;
 use App\Form\ItemsType;
 use App\Form\PackagesType;
-use App\Helper\ReferenceNumber;
 use App\Repository\BookingRepository;
 use App\Repository\ItemRepository;
 use App\Repository\PackagesRepository;
+use App\Service\BookingReferenceService;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -43,8 +45,9 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class BookingAdmin extends AbstractAdmin
 {
     #[\Override]
-    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
-    {
+    protected function generateBaseRoutePattern(
+        bool $isChildAdmin = false,
+    ): string {
         return 'booking';
     }
 
@@ -62,18 +65,26 @@ class BookingAdmin extends AbstractAdmin
     }
 
     #[\Override]
-    protected function configureTabMenu(MenuItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
-    {
-        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+    protected function configureTabMenu(
+        MenuItemInterface $menu,
+        $action,
+        ?AdminInterface $childAdmin = null,
+    ): void {
+        if (!$childAdmin && !\in_array($action, ['edit', 'show'])) {
             return;
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
         $id = $admin->getRequest()->get('id');
 
         if ($this->isGranted('EDIT')) {
-            $menu->addChild('Edit Booking', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
+            $menu->addChild('Edit Booking', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id]),
+            ]);
             $menu->addChild('Status', [
-                'uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', ['id' => $id]),
+                'uri' => $admin->generateUrl(
+                    'entropy_tunkki.admin.statusevent.create',
+                    ['id' => $id],
+                ),
             ]);
             $menu->addChild('Stufflist', [
                 'uri' => $admin->generateUrl('stuffList', ['id' => $id]),
@@ -91,18 +102,25 @@ class BookingAdmin extends AbstractAdmin
     }
 
     #[\Override]
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-    {
+    protected function configureDatagridFilters(
+        DatagridMapper $datagridMapper,
+    ): void {
         $datagridMapper
             ->add('name')
-            ->add('bookingDate', DateTimeRangeFilter::class, ['field_type' => DateRangePickerType::class])
+            ->add('bookingDate', DateTimeRangeFilter::class, [
+                'field_type' => DateRangePickerType::class,
+            ])
             ->add('items')
             ->add('packages')
             ->add('renter')
             ->add('renterHash')
-            ->add('retrieval', DateTimeRangeFilter::class, ['field_type' => DateTimeRangePickerType::class])
+            ->add('retrieval', DateTimeRangeFilter::class, [
+                'field_type' => DateTimeRangePickerType::class,
+            ])
             ->add('givenAwayBy')
-            ->add('returning', DateTimeRangeFilter::class, ['field_type' => DateTimeRangePickerType::class])
+            ->add('returning', DateTimeRangeFilter::class, [
+                'field_type' => DateTimeRangePickerType::class,
+            ])
             ->add('receivedBy')
             ->add('itemsReturned')
             ->add('invoiceSent')
@@ -120,11 +138,17 @@ class BookingAdmin extends AbstractAdmin
             ->add('paid')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
-                    'stuffList' => ['template' => 'admin/crud/list__action_stuff.html.twig'],
+                    'status' => [
+                        'template' => 'admin/crud/list__action_status.html.twig',
+                    ],
+                    'stuffList' => [
+                        'template' => 'admin/crud/list__action_stuff.html.twig',
+                    ],
                     'edit' => [],
                     'delete' => [],
-                    'removeSignature' => ['template' => 'admin/crud/list__action_remove_signature.html.twig'],
+                    'removeSignature' => [
+                        'template' => 'admin/crud/list__action_remove_signature.html.twig',
+                    ],
                 ],
             ]);
     }
@@ -138,9 +162,18 @@ class BookingAdmin extends AbstractAdmin
         foreach ($choices as $choice) {
             foreach ($root->getChildren() as $cat) {
                 if ($choice->getCategory() == $cat) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
-                } elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
-                    $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
+                    $cats[$cat->getName()][
+                        $choice->getCategory()->getName()
+                    ] = $choice;
+                } elseif (
+                    \in_array(
+                        $choice->getCategory(),
+                        $cat->getChildren()->toArray(),
+                    )
+                ) {
+                    $cats[$cat->getName()][
+                        $choice->getCategory()->getName()
+                    ] = $choice;
                 }
             }
         }
@@ -158,10 +191,18 @@ class BookingAdmin extends AbstractAdmin
         $packageChoices = null;
         if (!empty($subject->getName())) {
             $forWho = $subject->getRentingPrivileges();
-            $bookings = $this->bookingRepository->findBookingsAtTheSameTime($subject->getId(), $subject->getRetrieval(), $subject->getReturning());
+            $bookings = $this->bookingRepository->findBookingsAtTheSameTime(
+                $subject->getId(),
+                $subject->getRetrieval(),
+                $subject->getReturning(),
+            );
             if (!empty($forWho)) {
-                $packageChoices = $this->packagesRepository->getPackageChoicesWithPrivileges($forWho);
-                $itemChoices = $this->itemRepository->getItemChoicesWithPrivileges($forWho);
+                $packageChoices = $this->packagesRepository->getPackageChoicesWithPrivileges(
+                    $forWho,
+                );
+                $itemChoices = $this->itemRepository->getItemChoicesWithPrivileges(
+                    $forWho,
+                );
                 $itemCats = $this->getCategories($itemChoices);
             }
         }
@@ -172,7 +213,9 @@ class BookingAdmin extends AbstractAdmin
         $formMapper
             ->tab('General')
             ->with('Booking', ['class' => 'col-md-6'])
-            ->add('name', null, ['help' => 'Event name or name we use to talk about this case. Not the renters name!'])
+            ->add('name', null, [
+                'help' => 'Event name or name we use to talk about this case. Not the renters name!',
+            ])
             ->add('bookingDate', DatePickerType::class, [
                 'format' => 'd.M.y',
             ])
@@ -190,9 +233,10 @@ class BookingAdmin extends AbstractAdmin
                 'label' => 'Pickup Time',
                 'help' => 'This time needed to be determine if there is overlapping bookings for the same items.',
             ])
-            ->add('givenAwayBy', null, [ // ModelListType::class, [
+            ->add('givenAwayBy', null, [
+                // ModelListType::class, [
                 /*'btn_add' => false,
-                        'btn_delete' => 'Unassign', */
+                 'btn_delete' => 'Unassign', */
                 'required' => false,
                 'disabled' => $changerewardownner,
             ])
@@ -210,10 +254,11 @@ class BookingAdmin extends AbstractAdmin
                 'label' => 'Return Time',
                 'help' => 'This time is needed to be determine if there is overlapping bookings for the same items.',
             ])
-            ->add('receivedBy', null, [ // ModelListType::class, [
+            ->add('receivedBy', null, [
+                // ModelListType::class, [
                 'required' => false,
                 /*'btn_add' => false,
-                        'btn_delete' => 'Unassign', */
+                 'btn_delete' => 'Unassign', */
                 'disabled' => $changerewardownner,
             ])
             ->end()
@@ -226,7 +271,10 @@ class BookingAdmin extends AbstractAdmin
             ->add('renterHash', null, ['disabled' => true])
             ->end()
             ->end();
-        if (is_object($subject->getRenter()) && 1 == $subject->getRenter()->getId()) {
+        if (
+            \is_object($subject->getRenter())
+            && 1 == $subject->getRenter()->getId()
+        ) {
             $formMapper
                 ->tab('General')
                 ->with('Who is Renting?', ['class' => 'col-md-6'])
@@ -255,7 +303,7 @@ class BookingAdmin extends AbstractAdmin
                         'required' => false,
                         'by_reference' => false,
                     ],
-                    ['edit' => 'inline', 'inline' => 'table']
+                    ['edit' => 'inline', 'inline' => 'table'],
                 )
                 ->end()
                 ->end();
@@ -276,7 +324,7 @@ class BookingAdmin extends AbstractAdmin
                     'accessories',
                     CollectionType::class,
                     ['required' => false, 'by_reference' => false],
-                    ['edit' => 'inline', 'inline' => 'table']
+                    ['edit' => 'inline', 'inline' => 'table'],
                 )
                 ->end()
                 ->end();
@@ -287,7 +335,9 @@ class BookingAdmin extends AbstractAdmin
                 ->tab('Payment')
                 ->with('Payment Information')
                 ->add('referenceNumber', null, ['disabled' => true])
-                ->add('calculatedTotalPrice', MoneyType::class, ['disabled' => true])
+                ->add('calculatedTotalPrice', MoneyType::class, [
+                    'disabled' => true,
+                ])
                 ->add('numberOfRentDays', null, [
                     'help' => 'How many days are actually billed',
                     'disabled' => false,
@@ -299,22 +349,31 @@ class BookingAdmin extends AbstractAdmin
                     'required' => false,
                     'help' => 'If booking does not need to be billed: leave this empty',
                 ])
-                ->add('reasonForDiscount', null, ['help' => 'If the actual price is discounted, let us know why'])
+                ->add('reasonForDiscount', null, [
+                    'help' => 'If the actual price is discounted, let us know why',
+                ])
                 ->end()
                 ->with('Events', ['class' => 'col-md-12'])
                 ->add(
                     'billableEvents',
                     CollectionType::class,
                     ['required' => false, 'by_reference' => false],
-                    ['edit' => 'inline', 'inline' => 'table']
+                    ['edit' => 'inline', 'inline' => 'table'],
                 )
-                ->add('paid_date', DateTimePickerType::class, ['disabled' => false, 'required' => false])
+                ->add('paid_date', DateTimePickerType::class, [
+                    'disabled' => false,
+                    'required' => false,
+                ])
                 ->end()
                 ->end()
                 ->tab('Meta')
-                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('createdAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->add('creator', null, ['disabled' => true])
-                ->add('modifiedAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('modifiedAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->add('modifier', null, ['disabled' => true])
                 ->end();
         }
@@ -344,33 +403,33 @@ class BookingAdmin extends AbstractAdmin
             ->add('modifiedAt');
     }
 
-    protected function calculateOwnerHash($booking): string
-    {
-        $string = str_shuffle((string) $booking->getReferenceNumber()).''.$booking->getName();
-
-        return strtolower(md5($string));
-    }
-
     #[\Override]
     public function prePersist($booking): void
     {
         $user = $this->ts->getToken()->getUser();
+        \assert($user instanceof User);
         $booking->setCreator($user);
     }
 
     #[\Override]
     public function postPersist($booking): void
     {
-        $booking->setReferenceNumber($this->rn->calculateReferenceNumber($booking, 1220, 303));
-        $booking->setRenterHash($this->calculateOwnerHash($booking));
+        $this->bookingRefService->assignReferenceAndHash($booking);
         $user = $this->ts->getToken()->getUser();
-        assert($user instanceof User);
-        $text = '#### BOOKING: ['.$booking->getName().']('.$this->generateUrl(
-            'edit',
-            ['id' => $booking->getId()],
-            UrlGeneratorInterface::ABSOLUTE_URL
-        ).') on '.
-            $booking->getBookingDate()->format('d.m.Y').' created by '.$user;
+        \assert($user instanceof User);
+        $text =
+            '#### BOOKING: ['.
+            $booking->getName().
+            ']('.
+            $this->generateUrl(
+                'edit',
+                ['id' => $booking->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL,
+            ).
+            ') on '.
+            $booking->getBookingDate()->format('d.m.Y').
+            ' created by '.
+            $user;
         $this->mm->sendToMattermost($text, 'vuokraus');
         $this->update($booking);
         // $this->sendNotificationMail($booking);
@@ -379,13 +438,9 @@ class BookingAdmin extends AbstractAdmin
     #[\Override]
     public function preUpdate($booking): void
     {
-        if (null == $booking->getReferenceNumber() || 0 == $booking->getReferenceNumber()) {
-            $booking->setReferenceNumber($this->rn->calculateReferenceNumber($booking, 1220, 303));
-        }
-        if (null == $booking->getRenterHash() || 0 == $booking->getRenterHash()) {
-            $booking->setRenterHash($this->calculateOwnerHash($booking));
-        }
+        $this->bookingRefService->assignReferenceAndHash($booking);
         $user = $this->ts->getToken()->getUser();
+        \assert($user instanceof User);
         $booking->setModifier($user);
     }
 
@@ -396,8 +451,13 @@ class BookingAdmin extends AbstractAdmin
             foreach ($object->getAccessories() as $line) {
                 if (null == $line->getCount() || null == $line->getName()) {
                     $session = $this->rs->getSession();
-                    assert($session instanceof Session);
-                    $session->getFlashBag()->add('warning', 'Dont leave empty lines in accessories');
+                    \assert($session instanceof Session);
+                    $session
+                        ->getFlashBag()
+                        ->add(
+                            'warning',
+                            'Dont leave empty lines in accessories',
+                        );
                 }
             }
         }
@@ -423,8 +483,14 @@ class BookingAdmin extends AbstractAdmin
     #[\Override]
     protected function configureRoutes(RouteCollection $collection): void
     {
-        $collection->add('removeSignature', $this->getRouterIdParameter().'/remove-signature');
-        $collection->add('stuffList', $this->getRouterIdParameter().'/stufflist');
+        $collection->add(
+            'removeSignature',
+            $this->getRouterIdParameter().'/remove-signature',
+        );
+        $collection->add(
+            'stuffList',
+            $this->getRouterIdParameter().'/stufflist',
+        );
         $collection->remove('delete');
     }
 
@@ -437,7 +503,7 @@ class BookingAdmin extends AbstractAdmin
         protected BookingRepository $bookingRepository,
         protected ItemRepository $itemRepository,
         protected PackagesRepository $packagesRepository,
-        protected ReferenceNumber $rn,
+        protected BookingReferenceService $bookingRefService,
     ) {
     }
 }

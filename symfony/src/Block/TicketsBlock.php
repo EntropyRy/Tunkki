@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Block;
 
 use App\Entity\User;
@@ -21,7 +23,7 @@ class TicketsBlock extends BaseBlockService
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $user = $this->security->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $tickets = $this->tRepo->findMemberTickets($member);
 

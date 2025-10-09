@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataClassificationCategory as Category;
@@ -116,7 +118,7 @@ class Item implements \Stringable
         return $this->id;
     }
 
-    public function setName(string $name): Item
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -128,7 +130,7 @@ class Item implements \Stringable
         return $this->name;
     }
 
-    public function setManufacturer(string $manufacturer): Item
+    public function setManufacturer(string $manufacturer): self
     {
         $this->manufacturer = $manufacturer;
 
@@ -140,7 +142,7 @@ class Item implements \Stringable
         return $this->manufacturer;
     }
 
-    public function setModel(string $model): Item
+    public function setModel(string $model): self
     {
         $this->model = $model;
 
@@ -152,7 +154,7 @@ class Item implements \Stringable
         return $this->model;
     }
 
-    public function setDescription(string $description): Item
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
@@ -164,7 +166,7 @@ class Item implements \Stringable
         return $this->description;
     }
 
-    public function setRent($rent): Item
+    public function setRent($rent): self
     {
         $this->rent = $rent;
 
@@ -176,7 +178,7 @@ class Item implements \Stringable
         return $this->rent;
     }
 
-    public function setRentNotice(mixed $rentNotice): Item
+    public function setRentNotice(mixed $rentNotice): self
     {
         $this->rentNotice = $rentNotice;
 
@@ -188,7 +190,7 @@ class Item implements \Stringable
         return $this->rentNotice;
     }
 
-    public function setNeedsFixing(mixed $needsFixing): Item
+    public function setNeedsFixing(mixed $needsFixing): self
     {
         $this->needsFixing = $needsFixing;
 
@@ -200,7 +202,7 @@ class Item implements \Stringable
         return $this->needsFixing;
     }
 
-    public function setForSale(mixed $forSale): Item
+    public function setForSale(mixed $forSale): self
     {
         $this->forSale = $forSale;
 
@@ -256,7 +258,7 @@ class Item implements \Stringable
         $this->packages = new ArrayCollection();
     }
 
-    public function addFixingHistory(StatusEvent $fixingHistory): Item
+    public function addFixingHistory(StatusEvent $fixingHistory): self
     {
         $fixingHistory->setItem($this);
         $this->fixingHistory[] = $fixingHistory;
@@ -277,9 +279,9 @@ class Item implements \Stringable
 
     public function getFixingHistoryMessages(int $count, ?string $endofline = null): ?string
     {
-        $eol = 'html' == $endofline ? '<br>' : PHP_EOL;
+        $eol = 'html' == $endofline ? '<br>' : \PHP_EOL;
         $messages = '';
-        foreach (array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
+        foreach (\array_slice(array_reverse($this->getFixingHistory()->toArray()), 0, $count) as $event) {
             $user = $event->getCreator() ? $event->getCreator()->getUsername() : 'n/a';
             $messages .= '['.$event->getCreatedAt()->format('j.n.Y H:m').'] '.$user.': '.$event->getDescription().''.$eol;
         }
@@ -304,7 +306,7 @@ class Item implements \Stringable
         }
     }
 
-    public function setCommission(mixed $commission): Item
+    public function setCommission(mixed $commission): self
     {
         $this->commission = $commission;
 
@@ -316,7 +318,7 @@ class Item implements \Stringable
         return $this->commission;
     }
 
-    public function setSerialnumber(mixed $serialnumber): Item
+    public function setSerialnumber(mixed $serialnumber): self
     {
         $this->serialnumber = $serialnumber;
 
@@ -328,7 +330,7 @@ class Item implements \Stringable
         return $this->serialnumber;
     }
 
-    public function addFile(File $file): Item
+    public function addFile(File $file): self
     {
         $file->setProduct($this);
         $this->files[] = $file;
@@ -347,7 +349,7 @@ class Item implements \Stringable
         return $this->files;
     }
 
-    public function setPlaceinstorage(mixed $placeinstorage): Item
+    public function setPlaceinstorage(mixed $placeinstorage): self
     {
         $this->placeinstorage = $placeinstorage;
 
@@ -359,7 +361,7 @@ class Item implements \Stringable
         return $this->placeinstorage;
     }
 
-    public function addTag(Tag $tag): Item
+    public function addTag(Tag $tag): self
     {
         $this->tags[] = $tag;
 
@@ -376,7 +378,7 @@ class Item implements \Stringable
         return $this->tags;
     }
 
-    public function setCreator(?User $creator = null): Item
+    public function setCreator(?User $creator = null): self
     {
         $this->creator = $creator;
 
@@ -388,7 +390,7 @@ class Item implements \Stringable
         return $this->creator;
     }
 
-    public function setModifier(?User $modifier = null): Item
+    public function setModifier(?User $modifier = null): self
     {
         $this->modifier = $modifier;
 
@@ -400,7 +402,7 @@ class Item implements \Stringable
         return $this->modifier;
     }
 
-    public function addPackage(Package $package): Item
+    public function addPackage(Package $package): self
     {
         $this->packages[] = $package;
 
@@ -417,7 +419,7 @@ class Item implements \Stringable
         return $this->packages;
     }
 
-    public function setToSpareParts(mixed $toSpareParts): Item
+    public function setToSpareParts(mixed $toSpareParts): self
     {
         $this->toSpareParts = $toSpareParts;
 
@@ -429,14 +431,14 @@ class Item implements \Stringable
         return $this->toSpareParts;
     }
 
-    public function setPackages(?Package $packages = null): Item
+    public function setPackages(?Package $packages = null): self
     {
         $this->packages = $packages;
 
         return $this;
     }
 
-    public function addRentHistory(Booking $rentHistory): Item
+    public function addRentHistory(Booking $rentHistory): self
     {
         $this->rentHistory[] = $rentHistory;
 
@@ -460,7 +462,7 @@ class Item implements \Stringable
         }
     }
 
-    public function setCategory(?Category $category = null): Item
+    public function setCategory(?Category $category = null): self
     {
         $this->category = $category;
 
@@ -472,7 +474,7 @@ class Item implements \Stringable
         return $this->category;
     }
 
-    public function addWhoCanRent(WhoCanRentChoice $whoCanRent): Item
+    public function addWhoCanRent(WhoCanRentChoice $whoCanRent): self
     {
         $this->whoCanRent[] = $whoCanRent;
 
@@ -489,7 +491,7 @@ class Item implements \Stringable
         return $this->whoCanRent;
     }
 
-    public function setUrl(mixed $url = null): Item
+    public function setUrl(mixed $url = null): self
     {
         $this->url = $url;
 
@@ -501,7 +503,7 @@ class Item implements \Stringable
         return $this->url;
     }
 
-    public function setCannotBeRented(mixed $cannotBeRented): Item
+    public function setCannotBeRented(mixed $cannotBeRented): self
     {
         $this->cannotBeRented = $cannotBeRented;
 
@@ -513,7 +515,7 @@ class Item implements \Stringable
         return $this->cannotBeRented;
     }
 
-    public function setCompensationPrice(mixed $compensationPrice = null): Item
+    public function setCompensationPrice(mixed $compensationPrice = null): self
     {
         $this->compensationPrice = $compensationPrice;
 
@@ -525,7 +527,7 @@ class Item implements \Stringable
         return $this->compensationPrice;
     }
 
-    public function setPurchasePrice(mixed $purchasePrice = null): Item
+    public function setPurchasePrice(mixed $purchasePrice = null): self
     {
         $this->purchasePrice = $purchasePrice;
 

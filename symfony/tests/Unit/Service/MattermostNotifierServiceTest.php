@@ -160,7 +160,7 @@ final class MattermostNotifierServiceTest extends TestCase
         $needle = ltrim($channel, '#');
         $it = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($arr));
         foreach ($it as $value) {
-            if (is_string($value) && ltrim($value, '#') === $needle) {
+            if (\is_string($value) && ltrim($value, '#') === $needle) {
                 return true;
             }
         }

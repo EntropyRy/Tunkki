@@ -63,7 +63,7 @@ final class MemberFactory extends PersistentObjectFactory
 
             // Auto-create a minimal user and link both sides BEFORE first flush.
             $user = new User();
-            $user->setPassword(password_hash('password', PASSWORD_BCRYPT));
+            $user->setPassword(password_hash('password', \PASSWORD_BCRYPT));
             $user->setRoles([]);
             if (method_exists($user, 'setAuthId')) {
                 $user->setAuthId(bin2hex(random_bytes(10)));

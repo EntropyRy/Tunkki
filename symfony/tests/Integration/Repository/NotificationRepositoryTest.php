@@ -95,7 +95,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
                 continue;
             }
             // Skip nullable or already set fields (support array or object style mappings)
-            $nullable = is_array($mapping)
+            $nullable = \is_array($mapping)
                 ? $mapping['nullable'] ?? false
                 : $mapping->nullable ?? false;
             if ($nullable) {
@@ -107,7 +107,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
                 continue;
             }
 
-            $type = is_array($mapping)
+            $type = \is_array($mapping)
                 ? $mapping['type'] ?? 'string'
                 : $mapping->type ?? 'string';
             $value = match ($type) {
@@ -128,7 +128,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
         // Detect required associations (joinColumns nullable=false) without array-access deprecations
         foreach ($meta->associationMappings as $assoc => $am) {
             $joinColumns = null;
-            if (is_array($am)) {
+            if (\is_array($am)) {
                 $joinColumns = $am['joinColumns'] ?? null;
             } elseif (isset($am->joinColumns)) {
                 $joinColumns = $am->joinColumns;
@@ -138,10 +138,10 @@ final class NotificationRepositoryTest extends RepositoryTestCase
             if (is_iterable($joinColumns)) {
                 foreach ($joinColumns as $jc) {
                     $jcNullable = true;
-                    if (is_array($jc)) {
+                    if (\is_array($jc)) {
                         $jcNullable = $jc['nullable'] ?? true;
                     } elseif (
-                        is_object($jc)
+                        \is_object($jc)
                         && property_exists($jc, 'nullable')
                     ) {
                         $jcNullable = $jc->nullable ?? true;
@@ -157,7 +157,7 @@ final class NotificationRepositoryTest extends RepositoryTestCase
                 $current = $this->readProperty($entity, $assoc);
                 if (null === $current) {
                     $this->markTestIncomplete(
-                        sprintf(
+                        \sprintf(
                             'Notification has a required association "%s" with no auto-fixture assignment strategy. Extend the test to supply it.',
                             $assoc,
                         ),

@@ -44,11 +44,11 @@ trait MetaAssertionTrait
      */
     protected function assertHtmlLang(Crawler $crawler, string $expected): void
     {
-        $nodes = $crawler->filter(sprintf('html[lang="%s"]', $expected));
+        $nodes = $crawler->filter(\sprintf('html[lang="%s"]', $expected));
         \PHPUnit\Framework\Assert::assertGreaterThan(
             0,
             $nodes->count(),
-            sprintf('Expected <html lang="%s"> to be present.', $expected)
+            \sprintf('Expected <html lang="%s"> to be present.', $expected)
         );
     }
 
@@ -57,12 +57,12 @@ trait MetaAssertionTrait
      */
     protected function assertMetaTagExists(Crawler $crawler, string $attribute, string $value, string $message = ''): void
     {
-        $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+        $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
         $count = $crawler->filter($selector)->count();
         \PHPUnit\Framework\Assert::assertGreaterThan(
             0,
             $count,
-            '' !== $message ? $message : sprintf('Expected meta tag %s (found none).', $selector)
+            '' !== $message ? $message : \sprintf('Expected meta tag %s (found none).', $selector)
         );
     }
 
@@ -72,19 +72,19 @@ trait MetaAssertionTrait
      */
     protected function assertMetaTagContentNotEmpty(Crawler $crawler, string $attribute, string $value): string
     {
-        $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+        $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
         $node = $crawler->filter($selector)->first();
         \PHPUnit\Framework\Assert::assertGreaterThan(
             0,
             $node->count(),
-            sprintf('Expected meta tag %s not found.', $selector)
+            \sprintf('Expected meta tag %s not found.', $selector)
         );
 
         $content = trim((string) $node->attr('content'));
         \PHPUnit\Framework\Assert::assertNotSame(
             '',
             $content,
-            sprintf('Meta tag %s has empty content attribute.', $selector)
+            \sprintf('Meta tag %s has empty content attribute.', $selector)
         );
 
         return $content;
@@ -102,7 +102,7 @@ trait MetaAssertionTrait
         $content = $this->assertMetaTagContentNotEmpty($crawler, $attribute, $value);
         \PHPUnit\Framework\Assert::assertTrue(
             str_contains(mb_strtolower($content), mb_strtolower($expectedSubstring)),
-            sprintf(
+            \sprintf(
                 'Meta %s="%s" content did not contain substring "%s". Actual: "%s"',
                 $attribute,
                 $value,
@@ -117,12 +117,12 @@ trait MetaAssertionTrait
      */
     protected function assertSingleMetaTag(Crawler $crawler, string $attribute, string $value): void
     {
-        $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+        $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
         $count = $crawler->filter($selector)->count();
         \PHPUnit\Framework\Assert::assertSame(
             1,
             $count,
-            sprintf('Expected exactly 1 %s but found %d.', $selector, $count)
+            \sprintf('Expected exactly 1 %s but found %d.', $selector, $count)
         );
     }
 
@@ -149,7 +149,7 @@ trait MetaAssertionTrait
         \PHPUnit\Framework\Assert::assertContains(
             $expectedHref,
             $hrefs,
-            sprintf(
+            \sprintf(
                 'Canonical link mismatch. Expected "%s" among: [%s]',
                 $expectedHref,
                 implode(', ', $hrefs)
@@ -181,12 +181,12 @@ trait MetaAssertionTrait
             \PHPUnit\Framework\Assert::assertArrayHasKey(
                 $lang,
                 $found,
-                sprintf('Missing alternate hreflang="%s" entry.', $lang)
+                \sprintf('Missing alternate hreflang="%s" entry.', $lang)
             );
             \PHPUnit\Framework\Assert::assertSame(
                 $href,
                 $found[$lang],
-                sprintf(
+                \sprintf(
                     'Unexpected href for hreflang="%s". Expected "%s" got "%s".',
                     $lang,
                     $href,
@@ -203,13 +203,13 @@ trait MetaAssertionTrait
     protected function assertNoDuplicateMetaTags(Crawler $crawler, array $attributeValuePairs): void
     {
         foreach ($attributeValuePairs as [$attribute, $value]) {
-            $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+            $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
             $count = $crawler->filter($selector)->count();
 
             \PHPUnit\Framework\Assert::assertLessThan(
                 2,
                 $count,
-                sprintf('Duplicate meta tags detected for selector %s (found %d).', $selector, $count)
+                \sprintf('Duplicate meta tags detected for selector %s (found %d).', $selector, $count)
             );
         }
     }
@@ -223,7 +223,7 @@ trait MetaAssertionTrait
     {
         $found = str_contains(mb_strtolower($haystack), mb_strtolower($needle));
         if (!$found) {
-            throw new AssertionFailedError('' !== $message ? $message : sprintf('Failed asserting that "%s" contains "%s" (case-insensitive).', $haystack, $needle));
+            throw new AssertionFailedError('' !== $message ? $message : \sprintf('Failed asserting that "%s" contains "%s" (case-insensitive).', $haystack, $needle));
         }
         \PHPUnit\Framework\Assert::assertTrue(true); // Mark assertion pass
     }
@@ -242,7 +242,7 @@ trait MetaAssertionTrait
         $needle = mb_strtolower($unexpectedSubstring);
         \PHPUnit\Framework\Assert::assertFalse(
             str_contains($lower, $needle),
-            sprintf(
+            \sprintf(
                 'Meta %s="%s" content unexpectedly contains "%s". Actual: "%s"',
                 $attribute,
                 $value,
@@ -260,7 +260,7 @@ trait MetaAssertionTrait
     protected function assertAnyMetaTagExists(Crawler $crawler, array $candidates, string $message = ''): void
     {
         foreach ($candidates as [$attribute, $value]) {
-            $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+            $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
             if ($crawler->filter($selector)->count() > 0) {
                 \PHPUnit\Framework\Assert::assertTrue(true);
 
@@ -271,13 +271,13 @@ trait MetaAssertionTrait
         $desc = implode(
             ' OR ',
             array_map(
-                static fn (array $pair): string => sprintf('%s="%s"', $pair[0], $pair[1]),
+                static fn (array $pair): string => \sprintf('%s="%s"', $pair[0], $pair[1]),
                 $candidates
             )
         );
 
         \PHPUnit\Framework\Assert::fail(
-            '' !== $message ? $message : sprintf('Expected at least one meta tag of: (%s)', $desc)
+            '' !== $message ? $message : \sprintf('Expected at least one meta tag of: (%s)', $desc)
         );
     }
 
@@ -286,14 +286,14 @@ trait MetaAssertionTrait
      */
     protected function assertMetaTagContentSame(Crawler $crawler, string $attribute, string $value, string $expected): void
     {
-        $selector = sprintf('meta[%s="%s"]', $attribute, $value);
+        $selector = \sprintf('meta[%s="%s"]', $attribute, $value);
         $node = $crawler->filter($selector)->first();
-        \PHPUnit\Framework\Assert::assertGreaterThan(0, $node->count(), sprintf('Meta %s not found.', $selector));
+        \PHPUnit\Framework\Assert::assertGreaterThan(0, $node->count(), \sprintf('Meta %s not found.', $selector));
         $actual = (string) $node->attr('content');
         \PHPUnit\Framework\Assert::assertSame(
             $expected,
             $actual,
-            sprintf('Meta %s content mismatch. Expected "%s" got "%s".', $selector, $expected, $actual)
+            \sprintf('Meta %s content mismatch. Expected "%s" got "%s".', $selector, $expected, $actual)
         );
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -14,7 +16,7 @@ if (method_exists(Dotenv::class, 'bootEnv')) {
 }
 
 if (!isset($_SERVER['APP_ENV']) || 'test' !== $_SERVER['APP_ENV']) {
-    @fwrite(STDERR, "[bootstrap] FATAL: Expected APP_ENV=test; got '".($_SERVER['APP_ENV'] ?? 'undefined')."'. Use 'make test' (Makefile enforces -e APP_ENV=test) or pass -e APP_ENV=test to docker compose exec.\n");
+    @fwrite(\STDERR, "[bootstrap] FATAL: Expected APP_ENV=test; got '".($_SERVER['APP_ENV'] ?? 'undefined')."'. Use 'make test' (Makefile enforces -e APP_ENV=test) or pass -e APP_ENV=test to docker compose exec.\n");
     throw new RuntimeException('Tests must run with APP_ENV=test');
 }
 
@@ -88,10 +90,10 @@ if ($_SERVER['APP_DEBUG']) {
                 }
             }
         } catch (Throwable $ee) {
-            @fwrite(STDERR, '[bootstrap] WARNING: Forcing page__snapshot.enabled=1 failed: '.$ee->getMessage()."\n");
+            @fwrite(\STDERR, '[bootstrap] WARNING: Forcing page__snapshot.enabled=1 failed: '.$ee->getMessage()."\n");
         }
     } catch (Throwable $e) {
-        @fwrite(STDERR, '[bootstrap] WARNING: CMS seed/snapshot step failed: '.$e->getMessage()."\n");
+        @fwrite(\STDERR, '[bootstrap] WARNING: CMS seed/snapshot step failed: '.$e->getMessage()."\n");
     }
 
     // Stop here; skip legacy Foundry Story path entirely.
@@ -108,19 +110,19 @@ if ($_SERVER['APP_DEBUG']) {
             $kernelBooted = true;
         }
     } catch (Throwable $e) {
-        @fwrite(STDERR, '[bootstrap] WARNING: Kernel boot failed before story load: '.$e->getMessage()."\n");
+        @fwrite(\STDERR, '[bootstrap] WARNING: Kernel boot failed before story load: '.$e->getMessage()."\n");
     }
 
     try {
         $manager = StoryManager::instance();
         // If a known reference already exists, assume story loaded (prevents redundant work in edge cases).
         if ($manager->has('cms:site:default')) {
-            @fwrite(STDERR, "[bootstrap] INFO: CmsBaselineStory reference already present (cms:site:default); skipping load.\n");
+            @fwrite(\STDERR, "[bootstrap] INFO: CmsBaselineStory reference already present (cms:site:default); skipping load.\n");
 
             return;
         }
         /* @var class-string $storyClass */
-        @fwrite(STDERR, "[bootstrap] INFO: Loading CmsBaselineStory...\n");
+        @fwrite(\STDERR, "[bootstrap] INFO: Loading CmsBaselineStory...\n");
         $storyClass::load();
 
         // After baseline seeding, generate snapshots per site once to enable front-end resolution.
@@ -141,14 +143,14 @@ if ($_SERVER['APP_DEBUG']) {
                                 try {
                                     $createSnapshot->createBySite($site);
                                 } catch (Throwable $e) {
-                                    @fwrite(STDERR, '[bootstrap] WARNING: Snapshot creation failed for a site: '.$e->getMessage()."\n");
+                                    @fwrite(\STDERR, '[bootstrap] WARNING: Snapshot creation failed for a site: '.$e->getMessage()."\n");
                                 }
                             }
                         }
                     }
                 }
             } catch (Throwable $e) {
-                @fwrite(STDERR, '[bootstrap] WARNING: Snapshot generation skipped: '.$e->getMessage()."\n");
+                @fwrite(\STDERR, '[bootstrap] WARNING: Snapshot generation skipped: '.$e->getMessage()."\n");
             }
         }
 
@@ -171,19 +173,19 @@ if ($_SERVER['APP_DEBUG']) {
                     }
                 }
             } catch (Throwable $e) {
-                @fwrite(STDERR, '[bootstrap] WARNING: Post-story site count check failed: '.$e->getMessage()."\n");
+                @fwrite(\STDERR, '[bootstrap] WARNING: Post-story site count check failed: '.$e->getMessage()."\n");
             }
         }
 
         if (is_int($siteCount)) {
             if (2 !== $siteCount) {
-                @fwrite(STDERR, '[bootstrap] WARNING: After CmsBaselineStory load, site count='.$siteCount.' (expected 2)'."\n");
+                @fwrite(\STDERR, '[bootstrap] WARNING: After CmsBaselineStory load, site count='.$siteCount.' (expected 2)'."\n");
             } else {
-                @fwrite(STDERR, "[bootstrap] INFO: CmsBaselineStory loaded; site count=2\n");
+                @fwrite(\STDERR, "[bootstrap] INFO: CmsBaselineStory loaded; site count=2\n");
             }
         }
     } catch (Throwable $e) {
         // Non-fatal: log to STDERR for visibility without breaking the suite.
-        @fwrite(STDERR, '[bootstrap] WARNING: Failed loading CmsBaselineStory: '.$e->getMessage()."\n");
+        @fwrite(\STDERR, '[bootstrap] WARNING: Failed loading CmsBaselineStory: '.$e->getMessage()."\n");
     }
 })();

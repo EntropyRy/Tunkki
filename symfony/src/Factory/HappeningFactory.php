@@ -55,7 +55,7 @@ final class HappeningFactory extends PersistentObjectFactory
             $time = $now->modify('+2 hours');
 
             $slugBase = static fn (string $prefix): string => self::normalizeSlug(
-                sprintf('%s-%s', $prefix, bin2hex(random_bytes(3)))
+                \sprintf('%s-%s', $prefix, bin2hex(random_bytes(3)))
             );
 
             return [
@@ -213,9 +213,7 @@ final class HappeningFactory extends PersistentObjectFactory
     {
         return $this->afterInstantiate(function (Happening $happening) use ($owner): void {
             $member = $owner instanceof User ? $owner->getMember() : $owner;
-            if ($member instanceof Member) {
-                $happening->addOwner($member);
-            }
+            $happening->addOwner($member);
         });
     }
 

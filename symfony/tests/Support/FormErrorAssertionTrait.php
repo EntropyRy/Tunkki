@@ -107,7 +107,7 @@ trait FormErrorAssertionTrait
             );
             Assert::assertNotEmpty(
                 $matched,
-                sprintf(
+                \sprintf(
                     'No global form error contained expected fragment "%s". Errors: [%s]',
                     $messageContains,
                     implode(' | ', $errors)
@@ -124,7 +124,7 @@ trait FormErrorAssertionTrait
         $errors = $this->extractFormGlobalErrors($crawler);
         Assert::assertEmpty(
             $errors,
-            sprintf(
+            \sprintf(
                 'Expected no global form errors, found: [%s]',
                 implode(' | ', $errors)
             )
@@ -147,7 +147,7 @@ trait FormErrorAssertionTrait
 
         Assert::assertNotEmpty(
             $messages,
-            sprintf('Expected at least one error for field "%s" but none found.', $fieldName)
+            \sprintf('Expected at least one error for field "%s" but none found.', $fieldName)
         );
 
         if (null !== $expectedFragment) {
@@ -158,7 +158,7 @@ trait FormErrorAssertionTrait
             );
             Assert::assertNotEmpty(
                 $matched,
-                sprintf(
+                \sprintf(
                     'Field "%s" error messages did not contain fragment "%s". Messages: [%s]',
                     $fieldName,
                     $expectedFragment,
@@ -176,7 +176,7 @@ trait FormErrorAssertionTrait
         $messages = $this->extractFormFieldErrors($crawler, $fieldName);
         Assert::assertEmpty(
             $messages,
-            sprintf(
+            \sprintf(
                 'Expected no errors for field "%s" but found: [%s]',
                 $fieldName,
                 implode(' | ', $messages)
@@ -197,10 +197,10 @@ trait FormErrorAssertionTrait
         Assert::assertCount(
             $expectedCount,
             $all,
-            sprintf(
+            \sprintf(
                 'Expected %d total form errors, found %d: [%s]',
                 $expectedCount,
-                count($all),
+                \count($all),
                 implode(' | ', $all)
             )
         );
@@ -222,7 +222,7 @@ trait FormErrorAssertionTrait
             if ('' === $msg) {
                 continue;
             }
-            if (!in_array($msg, $merged, true)) {
+            if (!\in_array($msg, $merged, true)) {
                 $merged[] = $msg;
             }
         }
@@ -269,7 +269,7 @@ trait FormErrorAssertionTrait
         $collected = [];
 
         foreach ($this->formFieldErrorSelectorTemplates as $template) {
-            $selector = sprintf($template, $fieldName);
+            $selector = \sprintf($template, $fieldName);
 
             $nodes = $crawler->filter($selector);
             if (0 === $nodes->count()) {
@@ -287,7 +287,7 @@ trait FormErrorAssertionTrait
         // Fallback heuristic: sometimes errors do not incorporate field name; if no messages found,
         // attempt to locate nearest '.invalid-feedback' after the input.
         if (empty($collected)) {
-            $inputNodes = $crawler->filter(sprintf('[name="%s"]', $fieldName));
+            $inputNodes = $crawler->filter(\sprintf('[name="%s"]', $fieldName));
             if ($inputNodes->count() > 0) {
                 $inputNode = $inputNodes->first();
                 // Attempt sibling invalid-feedback (approximation; DomCrawler lacks direct sibling CSS advanced features reliably).
@@ -354,7 +354,7 @@ trait FormErrorAssertionTrait
             if ('' === $norm) {
                 continue;
             }
-            if (!in_array($norm, $out, true)) {
+            if (!\in_array($norm, $out, true)) {
                 $out[] = $norm;
             }
         }

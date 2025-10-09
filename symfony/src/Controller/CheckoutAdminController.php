@@ -26,7 +26,7 @@ final class CheckoutAdminController extends CRUDController
             foreach ($checkouts as $checkout) {
                 $this->cRepo->remove($checkout, true);
             }
-            $removed += count($checkouts);
+            $removed += \count($checkouts);
         }
 
         $this->addFlash('success', 'Removed: '.$removed);

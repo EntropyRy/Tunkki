@@ -47,9 +47,6 @@ final class ArtistFixtures extends Fixture implements DependentFixtureInterface
         }
 
         $member = $user->getMember();
-        if (!$member instanceof Member) {
-            return;
-        }
 
         // Attempt to reuse an existing artist (first one found).
         $existingArtist = null;

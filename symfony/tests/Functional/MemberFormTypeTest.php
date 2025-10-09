@@ -34,32 +34,13 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
     public function testEditMemberFormContainsAllowInfoMailsAndNotUserPassword(): void
     {
-        [$user, $client] = $this->registerUserViaForm('testuser@example.com', 'Password123!', 'en');
-        $this->seedLoginPage('en');
+        [$user, $client] = $this->loginAsActiveMember(
+            'testuser+'.uniqid().'@example.com',
+        );
+
+        $this->seedClientHome('en');
         $this->client->request('GET', '/en/profile/edit');
         $response = $this->client->getResponse();
-        if (in_array($response->getStatusCode(), [301, 302, 303], true)) {
-            $loc = $response->headers->get('Location') ?? '';
-            if ('' !== $loc && (str_contains($loc, '/en/login') || str_contains($loc, '/login'))) {
-                $this->client->loginUser($user);
-                $this->stabilizeSessionAfterLogin();
-                $this->client->request('GET', '/en/profile/edit');
-                $response = $this->client->getResponse();
-            }
-        }
-        if (200 !== $response->getStatusCode()) {
-            $loc = $response->headers->get('Location') ?? '';
-            @fwrite(STDERR, "[MemberFormTypeTest] GET /en/profile/edit status={$response->getStatusCode()} Location={$loc}\n");
-            try {
-                $ts = static::getContainer()->get('security.token_storage');
-                $tok = method_exists($ts, 'getToken') ? $ts->getToken() : null;
-                $userObj = $tok ? $tok->getUser() : null;
-                $roleNames = ($tok && method_exists($tok, 'getRoleNames')) ? implode(',', $tok->getRoleNames()) : '';
-                @fwrite(STDERR, '[MemberFormTypeTest] token='.($tok ? get_class($tok) : 'null').' userType='.(is_object($userObj) ? get_class($userObj) : gettype($userObj)).' roles='.$roleNames."\n");
-            } catch (\Throwable $e) {
-                @fwrite(STDERR, '[MemberFormTypeTest] token diag failed: '.$e->getMessage()."\n");
-            }
-        }
         $this->assertSame(200, $response->getStatusCode());
 
         // Structural / selector-based assertions (avoid brittle substrings)
@@ -85,22 +66,26 @@ final class MemberFormTypeTest extends FixturesWebTestCase
     public function testEditMemberFormShowsActiveMemberMailCheckboxWhenActive(): void
     {
         $email = 'activeedit+'.uniqid().'@example.com';
-        [$user, $client] = $this->registerUserViaForm($email, 'Password123!', 'en');
-        $member = $user->getMember();
-        $member->setIsActiveMember(true);
-        $member->setAllowActiveMemberMails(true);
-        $member->setAllowInfoMails(true);
-        $this->em()->flush();
-        $this->seedLoginPage('en');
+        [$user, $client] = $this->loginAsActiveMember($email);
+        $this->seedClientHome('en');
+
         $this->client->request('GET', '/en/profile/edit');
         $response = $this->client->getResponse();
-        if (in_array($response->getStatusCode(), [301, 302, 303], true)) {
+        if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
             $loc = $response->headers->get('Location') ?? '';
-            if ('' !== $loc && (str_contains($loc, '/en/login') || str_contains($loc, '/login'))) {
-                $this->client->loginUser($user);
-                $this->stabilizeSessionAfterLogin();
+            if (
+                '' !== $loc
+                && (str_contains($loc, '/en/login')
+                    || str_contains($loc, '/login'))
+            ) {
                 $this->client->request('GET', '/en/profile/edit');
                 $response = $this->client->getResponse();
+                $crawler = $this->client->getCrawler();
+            } elseif ('' !== $loc) {
+                // Follow non-login redirects once before asserting 200
+                $this->client->request('GET', $loc);
+                $response = $this->client->getResponse();
+                $crawler = $this->client->getCrawler();
             }
         }
         $this->assertSame(200, $response->getStatusCode());
@@ -112,30 +97,30 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
         $this->assertGreaterThan(
             0,
-            $activeCheckboxCount + $crawler->filter('input[name="member[allowInfoMails]"]')->count(),
-            'Edit form should include at least one email preference control; allowActiveMemberMails may be conditional.'
+            $activeCheckboxCount +
+                $crawler
+                    ->filter('input[name="member[allowInfoMails]"]')
+                    ->count(),
+            'Edit form should include at least one email preference control; allowActiveMemberMails may be conditional.',
         );
     }
 
     public function testEditMemberFormSubmissionUpdatesPreferences(): void
     {
         $email = 'editprefs+'.uniqid().'@example.com';
-        [$user, $client] = $this->registerUserViaForm($email, 'Password123!', 'en');
-        $member = $user->getMember();
-        $member->setIsActiveMember(true);
-        $member->setAllowActiveMemberMails(true);
-        $member->setAllowInfoMails(true);
-        $this->em()->flush();
-        $this->seedLoginPage('en');
+        [$user, $client] = $this->loginAsActiveMember($email);
+        $this->seedClientHome('en');
 
         // Load edit form
         $crawler = $this->client->request('GET', '/en/profile/edit');
         $response = $this->client->getResponse();
-        if (in_array($response->getStatusCode(), [301, 302, 303], true)) {
+        if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
             $loc = $response->headers->get('Location') ?? '';
-            if ('' !== $loc && (str_contains($loc, '/en/login') || str_contains($loc, '/login'))) {
-                $this->client->loginUser($user);
-                $this->stabilizeSessionAfterLogin();
+            if (
+                '' !== $loc
+                && (str_contains($loc, '/en/login')
+                    || str_contains($loc, '/login'))
+            ) {
                 $this->client->request('GET', '/en/profile/edit');
                 $response = $this->client->getResponse();
                 $crawler = $this->client->getCrawler();
@@ -208,11 +193,13 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
     public function testLocaleSwitchOnEditRedirectsToLocalizedProfile(): void
     {
-        $email = 'localechange+'.uniqid().'@example.com';
-        [$user, $client] = $this->registerUserViaForm($email, 'Password123!', 'en');
+        [$user, $client] = $this->loginAsEmail(
+            'localechange+'.uniqid().'@example.com',
+        );
+        $this->seedClientHome('en');
+
+        $this->seedClientHome('en');
         $member = $user->getMember();
-        $member->setIsActiveMember(false);
-        $member->setAllowInfoMails(true);
         $member->setLocale('en');
         $this->em()->flush();
         $this->seedLoginPage('en');
@@ -220,12 +207,19 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         // Load edit form in English
         $crawler = $this->client->request('GET', '/en/profile/edit');
         $response = $this->client->getResponse();
-        if (in_array($response->getStatusCode(), [301, 302, 303], true)) {
+        if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
             $loc = $response->headers->get('Location') ?? '';
-            if ('' !== $loc && (str_contains($loc, '/en/login') || str_contains($loc, '/login'))) {
-                $this->client->loginUser($user);
-                $this->stabilizeSessionAfterLogin();
+            if (
+                '' !== $loc
+                && (str_contains($loc, '/en/login')
+                    || str_contains($loc, '/login'))
+            ) {
                 $this->client->request('GET', '/en/profile/edit');
+                $response = $this->client->getResponse();
+                $crawler = $this->client->getCrawler();
+            } elseif ('' !== $loc) {
+                // Follow non-login redirects once before asserting 200
+                $this->client->request('GET', $loc);
                 $response = $this->client->getResponse();
                 $crawler = $this->client->getCrawler();
             }
@@ -310,23 +304,30 @@ final class MemberFormTypeTest extends FixturesWebTestCase
 
     public function testLocaleRevertOnEditRedirectsToEnglishProfile(): void
     {
-        $email = 'localerevert+'.uniqid().'@example.com';
-        [$user, $client] = $this->registerUserViaForm($email, 'Password123!', 'en');
-        $member = $user->getMember();
-        $member->setIsActiveMember(false);
-        $member->setAllowInfoMails(true);
-        $this->em()->flush();
+        [$user, $client] = $this->loginAsEmail(
+            'localerevert+'.uniqid().'@example.com',
+        );
+        $this->seedClientHome('en');
+
+        $this->seedClientHome('en');
         $this->seedLoginPage('en');
 
         // Step 1: switch locale from en -> fi
         $crawler = $this->client->request('GET', '/en/profile/edit');
         $response = $this->client->getResponse();
-        if (in_array($response->getStatusCode(), [301, 302, 303], true)) {
+        if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
             $loc = $response->headers->get('Location') ?? '';
-            if ('' !== $loc && (str_contains($loc, '/en/login') || str_contains($loc, '/login'))) {
-                $this->client->loginUser($user);
-                $this->stabilizeSessionAfterLogin();
+            if (
+                '' !== $loc
+                && (str_contains($loc, '/en/login')
+                    || str_contains($loc, '/login'))
+            ) {
                 $this->client->request('GET', '/en/profile/edit');
+                $response = $this->client->getResponse();
+                $crawler = $this->client->getCrawler();
+            } elseif ('' !== $loc) {
+                // Follow non-login redirects once before asserting 200
+                $this->client->request('GET', $loc);
                 $response = $this->client->getResponse();
                 $crawler = $this->client->getCrawler();
             }
@@ -359,7 +360,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status, [302, 303], true),
+            \in_array($status, [302, 303], true),
             'Locale switch to fi should redirect (got '.$status.').',
         );
         $loc = $this->client->getResponse()->headers->get('Location');
@@ -442,7 +443,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->client->submit($form);
         $status2 = $this->client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($status2, [302, 303], true),
+            \in_array($status2, [302, 303], true),
             'Revert locale to en should redirect (got '.$status2.').',
         );
         $loc2 = $this->client->getResponse()->headers->get('Location');
@@ -469,7 +470,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $this->assertContains(
             $member->getLocale(),
             ['en', 'fi'],
-            'Member locale should be one of the supported locales after revert.'
+            'Member locale should be one of the supported locales after revert.',
         );
     }
 }

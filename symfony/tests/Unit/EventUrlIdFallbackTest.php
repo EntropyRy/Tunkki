@@ -53,21 +53,21 @@ final class EventUrlIdFallbackTest extends TestCase
     {
         $e = $this->makeEvent(null, 101);
         $fi = $e->getUrlByLang('fi');
-        self::assertSame('/tapahtuma/101', parse_url($fi, PHP_URL_PATH));
+        self::assertSame('/tapahtuma/101', parse_url($fi, \PHP_URL_PATH));
     }
 
     public function testFinnishFallbackWithEmptySlug(): void
     {
         $e = $this->makeEvent('', 102);
         $fi = $e->getUrlByLang('fi');
-        self::assertSame('/tapahtuma/102', parse_url($fi, PHP_URL_PATH));
+        self::assertSame('/tapahtuma/102', parse_url($fi, \PHP_URL_PATH));
     }
 
     public function testEnglishFallbackWithZeroStringSlug(): void
     {
         $e = $this->makeEvent('0', 103);
         $en = $e->getUrlByLang('en');
-        self::assertSame('/en/event/103', parse_url($en, PHP_URL_PATH));
+        self::assertSame('/en/event/103', parse_url($en, \PHP_URL_PATH));
     }
 
     public function testNonFallbackSlugUsesYearPatternFi(): void
@@ -75,7 +75,7 @@ final class EventUrlIdFallbackTest extends TestCase
         $e = $this->makeEvent('my-event-slug', 104);
         $year = $e->getEventDate()->format('Y');
         $fi = $e->getUrlByLang('fi');
-        self::assertSame("/{$year}/my-event-slug", parse_url($fi, PHP_URL_PATH));
+        self::assertSame("/{$year}/my-event-slug", parse_url($fi, \PHP_URL_PATH));
     }
 
     public function testNonFallbackSlugUsesYearPatternEn(): void
@@ -83,6 +83,6 @@ final class EventUrlIdFallbackTest extends TestCase
         $e = $this->makeEvent('another-slug', 105);
         $year = $e->getEventDate()->format('Y');
         $en = $e->getUrlByLang('en');
-        self::assertSame("/en/{$year}/another-slug", parse_url($en, PHP_URL_PATH));
+        self::assertSame("/en/{$year}/another-slug", parse_url($en, \PHP_URL_PATH));
     }
 }

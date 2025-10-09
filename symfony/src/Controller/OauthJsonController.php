@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -18,7 +20,7 @@ class OauthJsonController extends AbstractController
             )
         );
         $user = $security->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $id = $user->getAuthId();
 
         return new JsonResponse(

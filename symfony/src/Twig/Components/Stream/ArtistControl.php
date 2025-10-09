@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Twig\Components\Stream;
 
 use App\Entity\Member;
@@ -25,9 +27,9 @@ use Symfony\UX\LiveComponent\ValidatableComponentTrait;
 #[AsLiveComponent]
 final class ArtistControl extends AbstractController
 {
-    use DefaultActionTrait;
     use ComponentToolsTrait;
     use ComponentWithFormTrait;
+    use DefaultActionTrait;
     use ValidatableComponentTrait;
 
     #[LiveProp(writable: true)]
@@ -68,7 +70,7 @@ final class ArtistControl extends AbstractController
         if (!$user instanceof UserInterface) {
             return;
         }
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $this->member = $user->getMember();
 
         // Only proceed if member has artists

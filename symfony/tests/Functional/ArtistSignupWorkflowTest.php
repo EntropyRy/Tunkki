@@ -10,6 +10,7 @@ use App\Factory\ArtistFactory;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Support\LoginHelperTrait;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -23,6 +24,7 @@ use Symfony\Component\Routing\RouterInterface;
  */
 final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 {
+    use LoginHelperTrait;
     // (Removed explicit $client property; rely on FixturesWebTestCase magic accessor)
     private RouterInterface $router;
 
@@ -43,13 +45,16 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
      */
     private function loginUserWithArtist(): User
     {
-        $userRepo = static::getContainer()->get('doctrine')->getRepository(User::class);
+        $userRepo = static::getContainer()
+            ->get('doctrine')
+            ->getRepository(User::class);
 
         // Try to reuse a previously created user by reloading a managed instance via its ID.
-        if (is_int(self::$cachedUserWithArtistId)) {
+        if (\is_int(self::$cachedUserWithArtistId)) {
             $managed = $userRepo->find(self::$cachedUserWithArtistId);
             if ($managed instanceof User && $managed->getMember()) {
                 $this->client->loginUser($managed);
+                $this->stabilizeSessionAfterLogin();
 
                 return $managed;
             }
@@ -75,7 +80,10 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
                 ])
                 ->create();
             $existingUser = $member->getUser();
-            self::assertNotNull($existingUser, 'Factory did not yield a User for the new Member.');
+            self::assertNotNull(
+                $existingUser,
+                'Factory did not yield a User for the new Member.',
+            );
         }
 
         // Ensure an artist exists for the member (idempotent: only create if none)
@@ -83,21 +91,25 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         self::assertNotNull($member, 'User must have an associated Member.');
         // Member::getArtist() returns a Collection; check count to determine presence
         $hasArtist = false;
-        if (method_exists($member, 'getArtist') && $member->getArtist() instanceof \Doctrine\Common\Collections\Collection) {
+        if (
+            method_exists($member, 'getArtist')
+            && $member->getArtist() instanceof \Doctrine\Common\Collections\Collection
+        ) {
             $hasArtist = $member->getArtist()->count() > 0;
         }
         if (!$hasArtist) {
-            ArtistFactory::new()
-                ->withMember($member)
-                ->dj()
-                ->create();
+            ArtistFactory::new()->withMember($member)->dj()->create();
         }
 
         // Cache only the scalar ID to avoid detached entity reuse across tests.
-        self::assertNotNull($existingUser->getId(), 'Newly created User must have an ID.');
+        self::assertNotNull(
+            $existingUser->getId(),
+            'Newly created User must have an ID.',
+        );
         self::$cachedUserWithArtistId = $existingUser->getId();
 
         $this->client->loginUser($existingUser);
+        $this->stabilizeSessionAfterLogin();
 
         return $existingUser;
     }
@@ -124,31 +136,48 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
                 // Make slug unique per test run to avoid duplicate key collisions
                 'url' => 'artist-signup-event-'.uniqid('', true),
                 'name' => 'Artist Signup Event',
-            ])
-        ;
+            ]);
 
         self::assertTrue($event->getArtistSignUpEnabled());
-        self::assertTrue($event->getArtistSignUpNow(), 'Signup window should be open for enabled state.');
+        self::assertTrue(
+            $event->getArtistSignUpNow(),
+            'Signup window should be open for enabled state.',
+        );
 
         $pathEn = $this->generateSignupPath($event, 'en');
-        self::assertStringStartsWith('/en/', $pathEn, 'English path should start with /en/.');
+        self::assertStringStartsWith(
+            '/en/',
+            $pathEn,
+            'English path should start with /en/.',
+        );
 
-        $this->client->loginUser($user);
         $this->client->request('GET', $pathEn);
         $status = $this->client->getResponse()->getStatusCode();
-        if (302 === $status && str_contains($this->client->getResponse()->headers->get('Location') ?? '', '/login')) {
+        if (
+            302 === $status
+            && str_contains(
+                $this->client->getResponse()->headers->get('Location') ?? '',
+                '/login',
+            )
+        ) {
             // Retry once if unexpected auth redirect (should not happen normally)
-            $this->client->loginUser($user);
             $this->client->request('GET', $pathEn);
             $status = $this->client->getResponse()->getStatusCode();
         }
 
-        self::assertTrue(in_array($status, [200, 302, 303], true), 'English signup page should return 200 or redirect (got '.$status.').');
+        self::assertTrue(
+            \in_array($status, [200, 302, 303], true),
+            'English signup page should return 200 or redirect (got '.
+                $status.
+                ').',
+        );
         $response = $this->client->getResponse();
         if ($response->isRedirect()) {
             $loc = $response->headers->get('Location') ?? '';
             // Accept redirect to artist create page as a valid outcome when no artist profile exists
-            if (preg_match('#(/en/artist/create|/profiili/artisti/uusi)#', $loc)) {
+            if (
+                preg_match('#(/en/artist/create|/profiili/artisti/uusi)#', $loc)
+            ) {
                 // Valid outcome for a user without an Artist profile
                 $this->assertTrue(true);
 
@@ -162,7 +191,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         self::assertStringContainsString(
             'Artist Signup Event',
             $content,
-            'Expected event name to appear in the English signup page response body.'
+            'Expected event name to appear in the English signup page response body.',
         );
     }
 
@@ -175,21 +204,32 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
             ->published()
             ->create([
                 'url' => 'artist-signup-event-'.uniqid('', true),
-            ])
-        ;
+            ]);
 
         $pathFi = $this->generateSignupPath($event, 'fi');
-        self::assertFalse(str_starts_with($pathFi, '/en/'), 'Finnish path must not start with /en/.');
+        self::assertFalse(
+            str_starts_with($pathFi, '/en/'),
+            'Finnish path must not start with /en/.',
+        );
 
         $this->client->request('GET', $pathFi);
         $statusFi = $this->client->getResponse()->getStatusCode();
-        self::assertTrue(in_array($statusFi, [200, 302, 303], true), 'Finnish signup page should return 200 or redirect (got '.$statusFi.').');
+        self::assertTrue(
+            \in_array($statusFi, [200, 302, 303], true),
+            'Finnish signup page should return 200 or redirect (got '.
+                $statusFi.
+                ').',
+        );
 
         // Simulate incorrect English path without prefix should 404
         $pathEn = $this->generateSignupPath($event, 'en');
         $unprefixedEn = preg_replace('#^/en#', '', $pathEn);
         $this->client->request('GET', $unprefixedEn);
-        self::assertSame(404, $this->client->getResponse()->getStatusCode(), 'Unprefixed EN path should 404.');
+        self::assertSame(
+            404,
+            $this->client->getResponse()->getStatusCode(),
+            'Unprefixed EN path should 404.',
+        );
     }
 
     public function testSignupRequiresArtistOrRedirectsToCreate(): void
@@ -198,24 +238,33 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
         $event = EventFactory::new()
             ->signupEnabled()
-            ->create(['url' => 'artist-signup-event-'.uniqid('', true)])
-        ;
+            ->create(['url' => 'artist-signup-event-'.uniqid('', true)]);
 
         $pathEn = $this->generateSignupPath($event, 'en');
-        $this->client->loginUser($user);
         $this->client->request('GET', $pathEn);
 
         $status = $this->client->getResponse()->getStatusCode();
-        if (302 === $status && str_contains($this->client->getResponse()->headers->get('Location') ?? '', '/login')) {
+        if (
+            302 === $status
+            && str_contains(
+                $this->client->getResponse()->headers->get('Location') ?? '',
+                '/login',
+            )
+        ) {
             // Retry once if unexpected auth redirect (should not happen normally)
-            $this->client->loginUser($user);
             $this->client->request('GET', $pathEn);
             $status = $this->client->getResponse()->getStatusCode();
         }
-        self::assertTrue(in_array($status, [200, 302], true), "Expected 200 or 302, got {$status}");
+        self::assertTrue(
+            \in_array($status, [200, 302], true),
+            "Expected 200 or 302, got {$status}",
+        );
         if (302 === $status) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            self::assertMatchesRegularExpression('#(/en/artist/create|/profiili/artisti/uusi)#', $loc);
+            self::assertMatchesRegularExpression(
+                '#(/en/artist/create|/profiili/artisti/uusi)#',
+                $loc,
+            );
         }
     }
 
@@ -225,8 +274,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
         $regularEvent = EventFactory::new()
             ->published() // published but signup disabled by default (artistSignUpEnabled=false)
-            ->create(['url' => 'artist-signup-disabled-'.uniqid('', true)])
-        ;
+            ->create(['url' => 'artist-signup-disabled-'.uniqid('', true)]);
 
         self::assertFalse($regularEvent->getArtistSignUpEnabled());
 
@@ -234,7 +282,10 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $this->client->request('GET', $pathFi);
         $status = $this->client->getResponse()->getStatusCode();
 
-        self::assertTrue(in_array($status, [302, 404], true), "Expected 302 or 404, got {$status}");
+        self::assertTrue(
+            \in_array($status, [302, 404], true),
+            "Expected 302 or 404, got {$status}",
+        );
     }
 
     public function testEnglishAndFinnishPathsDiffer(): void
@@ -242,8 +293,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $this->loginUserWithArtist();
         $event = EventFactory::new()
             ->signupEnabled()
-            ->create(['url' => 'artist-signup-event-'.uniqid('', true)])
-        ;
+            ->create(['url' => 'artist-signup-event-'.uniqid('', true)]);
 
         $en = $this->generateSignupPath($event, 'en');
         $fi = $this->generateSignupPath($event, 'fi');
@@ -259,14 +309,17 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $event = EventFactory::new()
             ->signupEnabled()
             ->signupWindowNotYetOpen()
-            ->create()
-        ;
+            ->create();
 
         $pathEn = $this->generateSignupPath($event, 'en');
         $this->client->request('GET', $pathEn);
 
         $status = $this->client->getResponse()->getStatusCode();
-        self::assertContains($status, [302, 403, 404], "Expected denial codes for not-yet-open window, got {$status}");
+        self::assertContains(
+            $status,
+            [302, 403, 404],
+            "Expected denial codes for not-yet-open window, got {$status}",
+        );
 
         if (302 === $status) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
@@ -277,30 +330,32 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testSignupWindowEndedBlocked(): void
     {
         $this->loginUserWithArtist();
-        $event = EventFactory::new()
-            ->signupWindowEnded()
-            ->create()
-        ;
+        $event = EventFactory::new()->signupWindowEnded()->create();
 
         $pathFi = $this->generateSignupPath($event, 'fi');
         $this->client->request('GET', $pathFi);
 
         $status = $this->client->getResponse()->getStatusCode();
-        self::assertContains($status, [302, 403, 404], "Expected denial codes for ended window, got {$status}");
+        self::assertContains(
+            $status,
+            [302, 403, 404],
+            "Expected denial codes for ended window, got {$status}",
+        );
     }
 
     public function testPastEventSignupWindowOpenStillBlocked(): void
     {
         $this->loginUserWithArtist();
-        $event = EventFactory::new()
-            ->pastEventSignupWindowOpen()
-            ->create()
-        ;
+        $event = EventFactory::new()->pastEventSignupWindowOpen()->create();
 
         $pathEn = $this->generateSignupPath($event, 'en');
         $this->client->request('GET', $pathEn);
 
         $status = $this->client->getResponse()->getStatusCode();
-        self::assertContains($status, [302, 403, 404], "Expected denial codes for past event signup, got {$status}");
+        self::assertContains(
+            $status,
+            [302, 403, 404],
+            "Expected denial codes for past event signup, got {$status}",
+        );
     }
 }

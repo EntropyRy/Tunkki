@@ -41,9 +41,7 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
     public function getDependencies(): array
     {
         // Ensure root/home pages exist first
-        return [
-            PageFixtures::class,
-        ];
+        return [PageFixtures::class];
     }
 
     public function load(ObjectManager $manager): void
@@ -65,7 +63,7 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Locate the root page for this site (url '/')
             $root = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'url' => '/',
             ]);
 
@@ -76,19 +74,21 @@ final class EventsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Try to find existing events page by alias first
             $page = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'pageAlias' => $alias,
             ]);
 
             if (!$page instanceof SonataPagePage) {
                 // Fallback: match by slug (or url) if alias missing
-                $page = $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'slug' => $slug,
-                ]) ?? $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'url' => $url,
-                ]);
+                $page =
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'slug' => $slug,
+                    ]) ??
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'url' => $url,
+                    ]);
             }
 
             $isNew = false;

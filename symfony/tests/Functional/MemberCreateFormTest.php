@@ -60,7 +60,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         for ($i = 0; $i < 3; ++$i) {
             $status = $this->client->getResponse()->getStatusCode();
-            if (!in_array($status, [301, 302, 303], true)) {
+            if (!\in_array($status, [301, 302, 303], true)) {
                 break;
             }
             $location = $this->client->getResponse()->headers->get('Location');
@@ -156,7 +156,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         // Enforce clean unauthenticated session (perform logout request first)
         $this->client->request('GET', '/en/logout');
         if (
-            in_array(
+            \in_array(
                 $this->client->getResponse()->getStatusCode(),
                 [301, 302, 303],
                 true,
@@ -192,7 +192,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $redirectUrl = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->assertNotEmpty(
                 $redirectUrl,
@@ -264,7 +264,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         for ($i = 0; $i < 3; ++$i) {
             $st = $this->client->getResponse()->getStatusCode();
-            if (!in_array($st, [301, 302, 303], true)) {
+            if (!\in_array($st, [301, 302, 303], true)) {
                 break;
             }
             $loc = $this->client->getResponse()->headers->get('Location');
@@ -292,7 +292,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->client->request('GET', $loc ?: '/en/profile/new');
             $this->assertSame(200, $this->client->getResponse()->getStatusCode(), 'Followed redirect should load registration form.');
@@ -312,8 +312,8 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         if ($this->client->getResponse()->getStatusCode() >= 500) {
             $status = $this->client->getResponse()->getStatusCode();
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            $len = strlen((string) ($this->client->getResponse()->getContent() ?? ''));
-            @fwrite(STDERR, "[MemberCreateFormTest] 5xx on mismatched passwords submission: status={$status} location={$loc} body_len={$len}\n");
+            $len = \strlen((string) ($this->client->getResponse()->getContent() ?? ''));
+            @fwrite(\STDERR, "[MemberCreateFormTest] 5xx on mismatched passwords submission: status={$status} location={$loc} body_len={$len}\n");
             $this->fail("Registration controller returned 5xx for mismatched passwords (status {$status}).");
         }
         $errors = $this->extractAllFormErrors($crawler);
@@ -340,7 +340,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         for ($i = 0; $i < 3; ++$i) {
             $st = $this->client->getResponse()->getStatusCode();
-            if (!in_array($st, [301, 302, 303], true)) {
+            if (!\in_array($st, [301, 302, 303], true)) {
                 break;
             }
             $loc = $this->client->getResponse()->headers->get('Location');
@@ -369,7 +369,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->client->request('GET', $loc ?: '/en/profile/new');
             $this->assertSame(200, $this->client->getResponse()->getStatusCode(), 'Followed redirect should load registration form.');
@@ -387,7 +387,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         if ($this->client->getResponse()->getStatusCode() >= 500) {
             $status = $this->client->getResponse()->getStatusCode();
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            @fwrite(STDERR, "[MemberCreateFormTest] 5xx on duplicate email submission: status={$status} location={$loc}\n");
+            @fwrite(\STDERR, "[MemberCreateFormTest] 5xx on duplicate email submission: status={$status} location={$loc}\n");
             $this->fail("Registration controller returned 5xx for duplicate email (status {$status}).");
         }
         $errors = $this->extractAllFormErrors($crawler);
@@ -410,7 +410,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         for ($i = 0; $i < 3; ++$i) {
             $st = $this->client->getResponse()->getStatusCode();
-            if (!in_array($st, [301, 302, 303], true)) {
+            if (!\in_array($st, [301, 302, 303], true)) {
                 break;
             }
             $loc = $this->client->getResponse()->headers->get('Location');
@@ -439,7 +439,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
         // Follow up to 3 redirects if present and then assert final 200/422
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             for ($i = 0; $i < 3 && $loc; ++$i) {
                 $this->client->request('GET', $loc);
@@ -452,7 +452,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         }
         if ($status >= 500) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            @fwrite(STDERR, "[MemberCreateFormTest] 5xx on invalid email submission: status={$status} location={$loc}\n");
+            @fwrite(\STDERR, "[MemberCreateFormTest] 5xx on invalid email submission: status={$status} location={$loc}\n");
             $this->fail("Registration controller returned 5xx for invalid email (status {$status}).");
         }
         $this->assertContains(
@@ -480,7 +480,7 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         $crawler = $this->client->request('GET', '/en/profile/new');
         for ($i = 0; $i < 3; ++$i) {
             $st = $this->client->getResponse()->getStatusCode();
-            if (!in_array($st, [301, 302, 303], true)) {
+            if (!\in_array($st, [301, 302, 303], true)) {
                 break;
             }
             $loc = $this->client->getResponse()->headers->get('Location');
@@ -507,14 +507,14 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 
         $this->client->submit($form);
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
             $this->client->request('GET', $loc ?: '/en/profile/new');
             $this->assertSame(200, $this->client->getResponse()->getStatusCode(), 'Followed redirect should load registration form.');
         } else {
             if ($status >= 500) {
                 $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-                @fwrite(STDERR, "[MemberCreateFormTest] 5xx on too short password submission: status={$status} location={$loc}\n");
+                @fwrite(\STDERR, "[MemberCreateFormTest] 5xx on too short password submission: status={$status} location={$loc}\n");
                 $this->fail("Registration controller returned 5xx for too short password (status {$status}).");
             }
             $this->assertContains(

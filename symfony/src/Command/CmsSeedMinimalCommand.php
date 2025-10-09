@@ -8,27 +8,30 @@ use App\Entity\Sonata\SonataPagePage;
 use App\Entity\Sonata\SonataPageSite;
 use App\PageService\FrontPage;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ObjectRepository;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(
-    name: 'cms:seed:minimal',
-    description: 'Seed the base minimum Sonata CMS sites and pages (FI "", EN "/en"; root + alias pages). Idempotent.'
-)]
+#[
+    AsCommand(
+        name: 'cms:seed:minimal',
+        description: 'Seed the base minimum Sonata CMS sites and pages (FI "", EN "/en"; root + alias pages). Idempotent.',
+    ),
+]
 final class CmsSeedMinimalCommand extends Command
 {
-    public function __construct(
-        private readonly EntityManagerInterface $em,
-    ) {
+    public function __construct(private readonly EntityManagerInterface $em)
+    {
         parent::__construct();
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
+    protected function execute(
+        InputInterface $input,
+        OutputInterface $output,
+    ): int {
         $io = new SymfonyStyle($input, $output);
         $now = new \DateTimeImmutable();
         $siteR = $this->em->getRepository(SonataPageSite::class);
@@ -60,11 +63,11 @@ final class CmsSeedMinimalCommand extends Command
 
         // Ensure only FI is default
         $flip = false;
-        if (method_exists($fiSite, 'setIsDefault') && method_exists($fiSite, 'isDefault') && !$fiSite->isDefault()) {
+        if (!$fiSite->getIsDefault()) {
             $fiSite->setIsDefault(true);
             $flip = true;
         }
-        if (method_exists($enSite, 'setIsDefault') && method_exists($enSite, 'isDefault') && $enSite->isDefault()) {
+        if ($enSite->getIsDefault()) {
             $enSite->setIsDefault(false);
             $flip = true;
         }
@@ -76,11 +79,15 @@ final class CmsSeedMinimalCommand extends Command
         }
 
         // Ensure ROOT page per site
-        [$fiRoot, $fiRootCreated, $fiRootChanged] = $this->getOrCreateRootPage($fiSite);
+        [$fiRoot, $fiRootCreated, $fiRootChanged] = $this->getOrCreateRootPage(
+            $fiSite,
+        );
         $created['page'] += $fiRootCreated ? 1 : 0;
         $updated['page'] += $fiRootChanged ? 1 : 0;
 
-        [$enRoot, $enRootCreated, $enRootChanged] = $this->getOrCreateRootPage($enSite);
+        [$enRoot, $enRootCreated, $enRootChanged] = $this->getOrCreateRootPage(
+            $enSite,
+        );
         $created['page'] += $enRootCreated ? 1 : 0;
         $updated['page'] += $enRootChanged ? 1 : 0;
 
@@ -120,7 +127,7 @@ final class CmsSeedMinimalCommand extends Command
             name: 'Liity',
             type: 'sonata.page.service.default',
             template: 'onecolumn',
-            title: 'Liity Jäseneksi'
+            title: 'Liity Jäseneksi',
         );
         $created['page'] += $c3 ? 1 : 0;
         $updated['page'] += $u3 ? 1 : 0;
@@ -133,7 +140,7 @@ final class CmsSeedMinimalCommand extends Command
             url: '/join-us',
             name: 'Join Us',
             type: 'sonata.page.service.default',
-            template: 'onecolumn'
+            template: 'onecolumn',
         );
         $created['page'] += $c4 ? 1 : 0;
         $updated['page'] += $u4 ? 1 : 0;
@@ -192,30 +199,34 @@ final class CmsSeedMinimalCommand extends Command
         $created['page'] += $c8 ? 1 : 0;
         $updated['page'] += $u8 ? 1 : 0;
 
-        $siteCount = method_exists($siteR, 'count') ? $siteR->count([]) : count($siteR->findAll());
-        $pageCount = method_exists($pageR, 'count') ? $pageR->count([]) : count($pageR->findAll());
+        $siteCount = $siteR->count([]);
+        $pageCount = $pageR->count([]);
 
-        $io->success(sprintf(
-            'CMS minimal seed completed. sites: +%d created, ~%d updated; pages: +%d created, ~%d updated. Totals => sites=%d, pages=%d',
-            $created['site'],
-            $updated['site'],
-            $created['page'],
-            $updated['page'],
-            $siteCount,
-            $pageCount
-        ));
+        $io->success(
+            \sprintf(
+                'CMS minimal seed completed. sites: +%d created, ~%d updated; pages: +%d created, ~%d updated. Totals => sites=%d, pages=%d',
+                $created['site'],
+                $updated['site'],
+                $created['page'],
+                $updated['page'],
+                $siteCount,
+                $pageCount,
+            ),
+        );
 
-        $io->writeln(sprintf(
-            'Root FI: id=%s; Root EN: id=%s; Events Aliases: fi=%s en=%s; Join Aliases: fi=%s en=%s; Stream Aliases: fi=%s en=%s',
-            $fiRoot->getId() ?: 'new',
-            $enRoot->getId() ?: 'new',
-            $fiEvents->getPageAlias(),
-            $enEvents->getPageAlias(),
-            $fiJoin->getPageAlias(),
-            $enJoin->getPageAlias(),
-            $fiStream->getPageAlias(),
-            $enStream->getPageAlias(),
-        ));
+        $io->writeln(
+            \sprintf(
+                'Root FI: id=%s; Root EN: id=%s; Events Aliases: fi=%s en=%s; Join Aliases: fi=%s en=%s; Stream Aliases: fi=%s en=%s',
+                $fiRoot->getId() ?: 'new',
+                $enRoot->getId() ?: 'new',
+                $fiEvents->getPageAlias(),
+                $enEvents->getPageAlias(),
+                $fiJoin->getPageAlias(),
+                $enJoin->getPageAlias(),
+                $fiStream->getPageAlias(),
+                $enStream->getPageAlias(),
+            ),
+        );
 
         return Command::SUCCESS;
     }
@@ -225,9 +236,14 @@ final class CmsSeedMinimalCommand extends Command
      *
      * @return array{0: SonataPageSite, 1: bool, 2: bool} tuple(site, changed, created)
      */
-    private function getOrCreateSite(string $locale, string $relativePath, bool $isDefault, string $host, \DateTimeImmutable $now): array
-    {
-        /** @var ObjectRepository $repo */
+    private function getOrCreateSite(
+        string $locale,
+        string $relativePath,
+        bool $isDefault,
+        string $host,
+        \DateTimeImmutable $now,
+    ): array {
+        /** @var EntityRepository<SonataPageSite> $repo */
         $repo = $this->em->getRepository(SonataPageSite::class);
 
         /** @var ?SonataPageSite $site */
@@ -251,7 +267,14 @@ final class CmsSeedMinimalCommand extends Command
             $created = true;
         } else {
             // Normalize expected props
-            $changed = $this->normalizeSite($site, $locale, $relativePath, $isDefault, $host, $now);
+            $changed = $this->normalizeSite(
+                $site,
+                $locale,
+                $relativePath,
+                $isDefault,
+                $host,
+                $now,
+            );
         }
 
         if ($changed) {
@@ -272,40 +295,39 @@ final class CmsSeedMinimalCommand extends Command
     ): bool {
         $changed = false;
 
-        if (method_exists($site, 'getHost') && $site->getHost() !== $host) {
+        if ($site->getHost() !== $host) {
             $site->setHost($host);
             $changed = true;
         }
-        if (method_exists($site, 'getLocale') && $site->getLocale() !== $locale) {
+
+        if ($site->getLocale() !== $locale) {
             $site->setLocale($locale);
             $changed = true;
         }
-        if (method_exists($site, 'getRelativePath')) {
-            $current = $site->getRelativePath() ?? '';
-            if ($current !== $relativePath) {
-                $site->setRelativePath($relativePath);
-                $changed = true;
-            }
-        }
-        // We let FI win later; here we simply ensure expected default for the target
-        if (method_exists($site, 'isDefault') && method_exists($site, 'setIsDefault') && (bool) $site->isDefault() !== $isDefault) {
-            $site->setIsDefault($isDefault);
-            $changed = true;
-        }
-        if (method_exists($site, 'setEnabled') && method_exists($site, 'isEnabled') && !$site->isEnabled()) {
-            $site->setEnabled(true);
-            $changed = true;
-        }
-        if (method_exists($site, 'setEnabledFrom')) {
-            $site->setEnabledFrom($now->modify('-1 day'));
-            $changed = true;
-        }
-        if (method_exists($site, 'setEnabledTo')) {
-            $site->setEnabledTo(null);
+
+        $current = $site->getRelativePath() ?? '';
+        if ($current !== $relativePath) {
+            $site->setRelativePath($relativePath);
             $changed = true;
         }
 
-        return $changed;
+        // We let FI win later; here we simply ensure expected default for the target
+        if ((bool) $site->getIsDefault() !== $isDefault) {
+            $site->setIsDefault($isDefault);
+            $changed = true;
+        }
+
+        if (!$site->getEnabled()) {
+            $site->setEnabled(true);
+            $changed = true;
+        }
+
+        // Normalize active window explicitly
+        $site->setEnabledFrom($now->modify('-1 day'));
+
+        $site->setEnabledTo(null);
+
+        return true;
     }
 
     /**
@@ -315,7 +337,7 @@ final class CmsSeedMinimalCommand extends Command
      */
     private function getOrCreateRootPage(SonataPageSite $site): array
     {
-        /** @var ObjectRepository $pageRepo */
+        /** @var EntityRepository<SonataPagePage> $pageRepo */
         $pageRepo = $this->em->getRepository(SonataPagePage::class);
 
         /** @var ?SonataPagePage $root */
@@ -351,8 +373,10 @@ final class CmsSeedMinimalCommand extends Command
         return [$root, $created, $changed];
     }
 
-    private function normalizeRootPage(SonataPagePage $page, SonataPageSite $site): bool
-    {
+    private function normalizeRootPage(
+        SonataPagePage $page,
+        SonataPageSite $site,
+    ): bool {
         $changed = false;
 
         $expectedName = 'en' === $site->getLocale() ? 'Home' : 'Etusivu';
@@ -381,11 +405,11 @@ final class CmsSeedMinimalCommand extends Command
             $page->setType(FrontPage::class);
             $changed = true;
         }
-        if (method_exists($page, 'isEnabled') && !$page->isEnabled()) {
+        if (!$page->getEnabled()) {
             $page->setEnabled(true);
             $changed = true;
         }
-        if (method_exists($page, 'getDecorate') && !$page->getDecorate()) {
+        if (!$page->getDecorate()) {
             $page->setDecorate(true);
             $changed = true;
         }
@@ -413,13 +437,14 @@ final class CmsSeedMinimalCommand extends Command
         string $template,
         ?string $title = null,
     ): array {
-        /** @var ObjectRepository $pageRepo */
+        /** @var EntityRepository<SonataPagePage> $pageRepo */
         $pageRepo = $this->em->getRepository(SonataPagePage::class);
 
         /** @var ?SonataPagePage $page */
-        $page = $pageRepo->findOneBy(['site' => $site, 'pageAlias' => $alias])
-            ?? $pageRepo->findOneBy(['site' => $site, 'slug' => $slug])
-            ?? $pageRepo->findOneBy(['site' => $site, 'url' => $url]);
+        $page =
+            $pageRepo->findOneBy(['site' => $site, 'pageAlias' => $alias]) ??
+            ($pageRepo->findOneBy(['site' => $site, 'slug' => $slug]) ??
+                $pageRepo->findOneBy(['site' => $site, 'url' => $url]));
 
         $created = false;
         $changed = false;
@@ -432,7 +457,16 @@ final class CmsSeedMinimalCommand extends Command
             $created = true;
         }
 
-        $changed = $this->normalizeAliasPage($page, $alias, $slug, $url, $name, $type, $template, $title);
+        $changed = $this->normalizeAliasPage(
+            $page,
+            $alias,
+            $slug,
+            $url,
+            $name,
+            $type,
+            $template,
+            $title,
+        );
 
         $this->em->persist($page);
         $this->em->flush();
@@ -477,11 +511,11 @@ final class CmsSeedMinimalCommand extends Command
             $page->setMetaDescription($title);
             $changed = true;
         }
-        if (method_exists($page, 'isEnabled') && !$page->isEnabled()) {
+        if (!$page->getEnabled()) {
             $page->setEnabled(true);
             $changed = true;
         }
-        if (method_exists($page, 'getDecorate') && !$page->getDecorate()) {
+        if (!$page->getDecorate()) {
             $page->setDecorate(true);
             $changed = true;
         }

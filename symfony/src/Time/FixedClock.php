@@ -49,7 +49,7 @@ final class FixedClock implements ClockInterface
     {
         if ($fixed instanceof \DateTimeImmutable) {
             $this->now = $fixed;
-        } elseif (is_string($fixed)) {
+        } elseif (\is_string($fixed)) {
             $dt = new \DateTimeImmutable($fixed);
             $this->now = $dt;
         } else {

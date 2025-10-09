@@ -109,7 +109,7 @@ final class SessionInvalidationTest extends FixturesWebTestCase
 
         $user = $token->getUser();
 
-        return is_object($user);
+        return \is_object($user);
     }
 
     private function currentUserId(): ?int
@@ -133,7 +133,7 @@ final class SessionInvalidationTest extends FixturesWebTestCase
         $this->assertContains(
             $role,
             $roles,
-            sprintf(
+            \sprintf(
                 'Expected authenticated user to have role %s. Roles: [%s]',
                 $role,
                 implode(', ', $roles)
@@ -147,7 +147,7 @@ final class SessionInvalidationTest extends FixturesWebTestCase
         $this->assertNotContains(
             $role,
             $roles,
-            sprintf(
+            \sprintf(
                 'Did not expect authenticated user to have role %s. Roles: [%s]',
                 $role,
                 implode(', ', $roles)

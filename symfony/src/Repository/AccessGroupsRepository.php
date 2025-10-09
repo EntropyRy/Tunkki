@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\AccessGroups;
@@ -7,10 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method AccessGroups|null find($id, $lockMode = null, $lockVersion = null)
- * @method AccessGroups|null findOneBy(array $criteria, array $orderBy = null)
- * @method AccessGroups[]    findAll()
- * @method AccessGroups[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<AccessGroups>
  */
 class AccessGroupsRepository extends ServiceEntityRepository
 {

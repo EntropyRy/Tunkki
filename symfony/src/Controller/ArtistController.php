@@ -31,7 +31,7 @@ class ArtistController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
 
         return $this->render('artist/main.html.twig', [
@@ -53,7 +53,7 @@ class ArtistController extends AbstractController
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $artist = new Artist();
         $artist->setMember($member);
@@ -61,7 +61,7 @@ class ArtistController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $artist = $form->getData();
-            if (!is_null($artist->getPicture())) {
+            if (null !== $artist->getPicture()) {
                 $em->persist($artist);
                 $em->flush();
                 $url_fi = $this->generateUrl('entropy_public_artist.fi', ['name' => $artist->getName(), 'id' => $artist->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -159,7 +159,7 @@ class ArtistController extends AbstractController
         Artist $artist,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         // Check that the member owns the artist
         // If not, redirect to the artist profile

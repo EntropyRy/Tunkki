@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Event;
@@ -44,7 +46,7 @@ class CalendarController extends AbstractController
         UrlGeneratorInterface $urlG,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         if (null == $user) {
             throw new UnauthorizedHttpException('now allowed');
         }
@@ -169,7 +171,7 @@ class CalendarController extends AbstractController
         $physicalLocation = $event->getLocation();
         $onlineUrl = $event->getWebMeetingUrl();
         if ($physicalLocation instanceof \App\Entity\Location && $onlineUrl) {
-            $composite = sprintf(
+            $composite = \sprintf(
                 '%s – %s (Online: %s)',
                 $physicalLocation->getNameByLocale($locale),
                 $physicalLocation->getStreetAddress(),

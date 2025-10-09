@@ -7,7 +7,11 @@ namespace App\Entity\Sonata;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Sonata\MediaBundle\Entity\BaseGallery;
+use Sonata\MediaBundle\Model\GalleryItemInterface;
 
+/**
+ * @extends BaseGallery<GalleryItemInterface>
+ */
 #[ORM\Table(name: 'media__gallery')]
 #[ORM\Entity]
 #[ORM\HasLifecycleCallbacks]

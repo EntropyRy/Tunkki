@@ -70,7 +70,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
 
         foreach ($sites as $site) {
             $locale = $site->getLocale();
-            if (!in_array($locale, ['fi', 'en'], true)) {
+            if (!\in_array($locale, ['fi', 'en'], true)) {
                 continue;
             }
 
@@ -91,7 +91,7 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Root page (url '/')
             $root = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'url' => '/',
             ]);
 
@@ -102,19 +102,21 @@ final class JoinUsPageFixtures extends Fixture implements DependentFixtureInterf
 
             // Find existing by alias
             $page = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'pageAlias' => $alias,
             ]);
 
             if (!$page instanceof SonataPagePage) {
                 // Fallback: match by slug or url if alias missing
-                $page = $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'slug' => $slug,
-                ]) ?? $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'url' => $url,
-                ]);
+                $page =
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'slug' => $slug,
+                    ]) ??
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'url' => $url,
+                    ]);
             }
 
             $isNew = false;

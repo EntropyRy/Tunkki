@@ -104,10 +104,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[SiteAwareKernelBrowser::loginUser] session/token persist failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
 
@@ -132,8 +132,8 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                             $user = $token->getUser();
                             $preTokenInfo = [
                                 'tokenClass' => get_debug_type($token),
-                                'userType' => is_object($user)
-                                    ? get_class($user)
+                                'userType' => \is_object($user)
+                                    ? $user::class
                                     : get_debug_type($user),
                                 'roles' => method_exists($token, 'getRoleNames')
                                     ? $token->getRoleNames()
@@ -149,10 +149,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                 }
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] pre-request diag failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
@@ -203,10 +203,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                 }
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] pre-wrap token persist failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
             $request = $this->wrapAsSiteRequest($request, $container);
@@ -231,7 +231,7 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                         && $session->has($sessionKey)
                     ) {
                         $serialized = $session->get($sessionKey);
-                        if (is_string($serialized) && '' !== $serialized) {
+                        if (\is_string($serialized) && '' !== $serialized) {
                             $un = @unserialize($serialized);
                             if (
                                 $un instanceof \Symfony\Component\Security\Core\Authentication\Token\TokenInterface
@@ -246,10 +246,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[SiteAwareKernelBrowser] token hydration from session failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
 
@@ -267,8 +267,8 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                             $user = $token->getUser();
                             $postTokenInfo = [
                                 'tokenClass' => get_debug_type($token),
-                                'userType' => is_object($user)
-                                    ? get_class($user)
+                                'userType' => \is_object($user)
+                                    ? $user::class
                                     : get_debug_type($user),
                                 'roles' => method_exists($token, 'getRoleNames')
                                     ? $token->getRoleNames()
@@ -316,17 +316,17 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                     ],
                 ];
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] '.
-                        json_encode($payload, JSON_UNESCAPED_SLASHES).
-                        PHP_EOL,
+                        json_encode($payload, \JSON_UNESCAPED_SLASHES).
+                        \PHP_EOL,
                 );
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] post-request diag failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
@@ -382,10 +382,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
                 $siteRequest->setSession($session);
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] session reuse failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         } elseif ($request->hasSession()) {
@@ -394,7 +394,7 @@ final class SiteAwareKernelBrowser extends KernelBrowser
         }
 
         // Set locale based on path prefix ('/en' => 'en', otherwise 'fi') so HostPathByLocaleSiteSelector starts with consistent request locale.
-        $pathForLocale = parse_url($raw, PHP_URL_PATH) ?: '/';
+        $pathForLocale = parse_url($raw, \PHP_URL_PATH) ?: '/';
         if (
             '/en' === $pathForLocale
             || str_starts_with($pathForLocale, '/en/')
@@ -404,10 +404,10 @@ final class SiteAwareKernelBrowser extends KernelBrowser
             $siteRequest->attributes->set('_locale', 'en');
             if (getenv('TEST_USER_CREATION_DEBUG')) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] chosen_locale=en raw='.
                         $raw.
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         } else {
@@ -416,17 +416,17 @@ final class SiteAwareKernelBrowser extends KernelBrowser
             $siteRequest->attributes->set('_locale', 'fi');
             if (getenv('TEST_USER_CREATION_DEBUG')) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[SiteAwareKernelBrowser] chosen_locale=fi raw='.
                         $raw.
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
 
         // Normalize path handling for host-with-path-by-locale:
         // For English, set baseUrl '/en' and strip the '/en' prefix from pathInfo.
-        $path = parse_url($raw, PHP_URL_PATH) ?: '/';
+        $path = parse_url($raw, \PHP_URL_PATH) ?: '/';
 
         // Default to Finnish site (no prefix)
         $baseUrl = '';

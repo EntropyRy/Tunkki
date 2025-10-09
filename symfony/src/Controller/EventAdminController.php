@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Event;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @extends CRUDController<object>
+ * @extends CRUDController<Event>
  */
 final class EventAdminController extends CRUDController
 {

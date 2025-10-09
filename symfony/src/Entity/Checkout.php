@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\CheckoutRepository;
@@ -16,19 +18,26 @@ class Checkout
     private ?int $id = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    private ?string $stripeSessionId = null;
+    private string $stripeSessionId = '';
 
     #[ORM\Column]
-    private ?int $status = 0;
+    private int $status = 0;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(inversedBy: 'checkouts')]
     private ?Cart $cart = null;
+
+    public function __construct()
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
 
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
@@ -48,7 +57,7 @@ class Checkout
         return $this->id;
     }
 
-    public function getStripeSessionId(): ?string
+    public function getStripeSessionId(): string
     {
         return $this->stripeSessionId;
     }
@@ -60,7 +69,7 @@ class Checkout
         return $this;
     }
 
-    public function getStatus(): ?int
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -72,7 +81,7 @@ class Checkout
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -84,7 +93,7 @@ class Checkout
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -112,7 +121,7 @@ class Checkout
     {
         $max = [];
         foreach ($this->cart->getProducts() as $item) {
-            if (!array_key_exists($item->getProduct()->getId(), $max)) {
+            if (!\array_key_exists($item->getProduct()->getId(), $max)) {
                 $max[$item->getProduct()->getId()] = 0;
             }
             $max[$item->getProduct()->getId()] += $item->getQuantity();

@@ -150,7 +150,7 @@ final class EventPublicationBoundaryTest extends TestCase
 
         $result = $this->decider->isPublished($event);
 
-        $context = sprintf(
+        $context = \sprintf(
             '[initial=%s flag=%s publishDate=%s advance=%s]',
             $initialClock,
             $publishedFlag ? 'true' : 'false',

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
@@ -21,7 +23,7 @@ class Artist implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 190)]
-    private ?string $name = null;
+    private string $name = '';
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $genre = null;
@@ -41,6 +43,9 @@ class Artist implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $hardware = null;
 
+    /**
+     * @var Collection<int, EventArtistInfo>
+     */
     #[
         ORM\OneToMany(
             targetEntity: EventArtistInfo::class,
@@ -49,16 +54,13 @@ class Artist implements \Stringable
         ),
     ]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
-    /**
-     * @var Collection<int, EventArtistInfo>
-     */
     private Collection $eventArtistInfos;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'artist')]
     private ?Member $member = null;
@@ -104,7 +106,7 @@ class Artist implements \Stringable
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -165,7 +167,7 @@ class Artist implements \Stringable
     }
 
     /**
-     * @return Collection|EventArtistInfo[]
+     * @return Collection<int, EventArtistInfo>
      */
     public function getEventArtistInfos(): Collection
     {
@@ -201,7 +203,7 @@ class Artist implements \Stringable
         $this->eventArtistInfos->clear();
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -213,7 +215,7 @@ class Artist implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -228,7 +230,7 @@ class Artist implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function getMember(): ?Member
@@ -239,7 +241,7 @@ class Artist implements \Stringable
     public function setMember(?Member $member): self
     {
         $this->member = $member;
-        if (!is_null($member)) {
+        if ($member instanceof Member) {
             $member->addArtist($this);
         }
 

@@ -35,7 +35,7 @@ final class Version20250130201552 extends AbstractMigration
                     'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
-                $this->write(sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
+                $this->write(\sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
                 // Set to null if conversion fails
                 $this->addSql('UPDATE artist SET links = NULL WHERE id = :id', ['id' => $row['id']]);
             }
@@ -53,7 +53,7 @@ final class Version20250130201552 extends AbstractMigration
                     'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
-                $this->write(sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));
+                $this->write(\sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));
                 // Set to null if conversion fails
                 $this->addSql('UPDATE event SET links = NULL WHERE id = :id', ['id' => $row['id']]);
             }
@@ -82,7 +82,7 @@ final class Version20250130201552 extends AbstractMigration
                     'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
-                $this->write(sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
+                $this->write(\sprintf('Could not convert links for artist ID %d: %s', $row['id'], $e->getMessage()));
                 // Set to null if conversion fails
                 $this->addSql('UPDATE artist SET links = NULL WHERE id = :id', ['id' => $row['id']]);
             }
@@ -100,7 +100,7 @@ final class Version20250130201552 extends AbstractMigration
                     'id' => $row['id'],
                 ]);
             } catch (\Exception $e) {
-                $this->write(sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));
+                $this->write(\sprintf('Could not convert links for event ID %d: %s', $row['id'], $e->getMessage()));
                 // Set to null if conversion fails
                 $this->addSql('UPDATE event SET links = NULL WHERE id = :id', ['id' => $row['id']]);
             }

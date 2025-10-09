@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Menu;
@@ -8,10 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Gedmo\Tree\Entity\Repository\NestedTreeRepository;
 
 /**
- * @method Menu|null find($id, $lockMode = null, $lockVersion = null)
- * @method Menu|null findOneBy(array $criteria, array $orderBy = null)
- * @method Menu[]    findAll()
- * @method Menu[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends NestedTreeRepository<Menu>
  */
 class MenuRepository extends NestedTreeRepository implements ServiceEntityRepositoryInterface
 {

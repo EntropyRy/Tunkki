@@ -115,7 +115,7 @@ final class NotificationAdminController extends CRUDController
         }
 
         // Add the photo if available and requested
-        if (null !== $publicUrl && in_array('add_event_picture', $options) && null === $notification->getMessageId()) {
+        if (null !== $publicUrl && \in_array('add_event_picture', $options) && null === $notification->getMessageId()) {
             $telegramOptions->photo($publicUrl);
         }
 

@@ -81,12 +81,12 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
             ->setNameEn('Public Happening')
             ->setDescriptionFi('Kuvaus julkisesta happeninkistä.')
             ->setDescriptionEn('Description for the public happening.')
-            ->setTime(new \DateTime('+6 days'))
+            ->setTime(new \DateTimeImmutable('+6 days'))
             ->setType('event')
             ->setNeedsPreliminarySignUp(true)
             ->setNeedsPreliminaryPayment(false)
             ->setMaxSignUps(5)
-            ->setSignUpsOpenUntil(new \DateTime('+7 days'))
+            ->setSignUpsOpenUntil(new \DateTimeImmutable('+7 days'))
             ->setSlugFi('julkinen-happeninki')
             ->setSlugEn('public-happening')
             ->setReleaseThisHappeningInEvent(true)
@@ -103,7 +103,7 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
             ->setNameEn('Secret Happening')
             ->setDescriptionFi('Tämä ei ole vielä julkaistu.')
             ->setDescriptionEn('This happening is not released yet.')
-            ->setTime(new \DateTime('+11 days'))
+            ->setTime(new \DateTimeImmutable('+11 days'))
             ->setType('event')
             ->setNeedsPreliminarySignUp(false)
             ->setNeedsPreliminaryPayment(false)
@@ -114,7 +114,10 @@ final class HappeningTestFixtures extends Fixture implements DependentFixtureInt
             ->setAllowSignUpComments(false);
 
         $manager->persist($privateHappening);
-        $this->addReference(self::HAPPENING_PRIVATE_REFERENCE, $privateHappening);
+        $this->addReference(
+            self::HAPPENING_PRIVATE_REFERENCE,
+            $privateHappening,
+        );
 
         $manager->flush();
     }

@@ -69,7 +69,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
         $p = $this->params();
         // No _locale parameter — should adopt site (fi) locale alias automatically.
         $generated = $this->router->generate('entropy_event_shop', $p);
-        $expected = sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
+        $expected = \sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
         self::assertSame(
             $expected,
             $generated,
@@ -81,7 +81,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
     {
         $p = $this->params();
         $generated = $this->router->generate('entropy_event_shop', array_merge($p, ['_locale' => 'fi']));
-        $expected = sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
+        $expected = \sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
         self::assertSame(
             $expected,
             $generated,
@@ -93,7 +93,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
     {
         $p = $this->params();
         $generated = $this->router->generate('entropy_event_shop', array_merge($p, ['_locale' => 'en']));
-        $expected = sprintf('/en/%d/%s/shop', $p['year'], $p['slug']);
+        $expected = \sprintf('/en/%d/%s/shop', $p['year'], $p['slug']);
         self::assertSame(
             $expected,
             $generated,
@@ -108,21 +108,21 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
         $fi = $this->router->generate('entropy_event_shop.fi', $p);
         $en = $this->router->generate('entropy_event_shop.en', $p);
 
-        self::assertSame(sprintf('/%d/%s/kauppa', $p['year'], $p['slug']), $fi, 'Explicit fi suffixed name should generate Finnish path.');
-        self::assertSame(sprintf('/en/%d/%s/shop', $p['year'], $p['slug']), $en, 'Explicit en suffixed name should generate English path.');
+        self::assertSame(\sprintf('/%d/%s/kauppa', $p['year'], $p['slug']), $fi, 'Explicit fi suffixed name should generate Finnish path.');
+        self::assertSame(\sprintf('/en/%d/%s/shop', $p['year'], $p['slug']), $en, 'Explicit en suffixed name should generate English path.');
     }
 
     public function testStructural404WrongLocaleVariants(): void
     {
         $p = $this->params();
 
-        $canonicalEn = sprintf('/en/%d/%s/shop', $p['year'], $p['slug']);
-        $canonicalFi = sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
+        $canonicalEn = \sprintf('/en/%d/%s/shop', $p['year'], $p['slug']);
+        $canonicalFi = \sprintf('/%d/%s/kauppa', $p['year'], $p['slug']);
 
         // Control: canonical pages 200
         $this->client->request('GET', $canonicalFi);
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location');
             if ($loc) {
                 $this->client->request('GET', $loc);
@@ -132,7 +132,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
 
         $this->client->request('GET', $canonicalEn);
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $this->client->getResponse()->headers->get('Location');
             if ($loc) {
                 $this->client->request('GET', $loc);
@@ -142,7 +142,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
 
         // Wrong-locale variants:
         // 1. English content without /en prefix -> should 404
-        $wrongEn = sprintf('/%d/%s/shop', $p['year'], $p['slug']);
+        $wrongEn = \sprintf('/%d/%s/shop', $p['year'], $p['slug']);
         $this->client->request('GET', $wrongEn);
         self::assertSame(
             404,
@@ -151,7 +151,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
         );
 
         // 2. Finnish content forcibly prefixed with /en -> should 404
-        $wrongFi = sprintf('/en/%d/%s/kauppa', $p['year'], $p['slug']);
+        $wrongFi = \sprintf('/en/%d/%s/kauppa', $p['year'], $p['slug']);
         $this->client->request('GET', $wrongFi);
         self::assertSame(
             404,
@@ -167,7 +167,7 @@ final class SiteAwareRouterTest extends FixturesWebTestCase
         $input['_locale'] = 'en';
 
         $generated = $this->router->generate('entropy_event_shop', $input);
-        $expected = sprintf('/en/%d/%s/shop', $baseParams['year'], $baseParams['slug']);
+        $expected = \sprintf('/en/%d/%s/shop', $baseParams['year'], $baseParams['slug']);
 
         self::assertSame($expected, $generated, 'Generation with _locale=en must produce English path.');
         // Ensure our original array content (except _locale) is still what we expect.

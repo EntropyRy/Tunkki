@@ -89,34 +89,56 @@ docker_fpm_available() {
 
 run_phpstan() {
   log "Running PHPStan (fast subset)..."
-  if docker_fpm_available; then
-    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$STAN_CMD_DEFAULT" || return 1
-  else
+  if have make; then
     $STAN_CMD_DEFAULT || return 1
+  elif docker_fpm_available; then
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" php vendor/bin/phpstan analyse -c phpstan.neon src --memory-limit=1G --no-progress --level=5 || return 1
+  else
+    if [ -f "symfony/vendor/bin/phpstan" ]; then
+      $PHP_BINARY symfony/vendor/bin/phpstan analyse -c symfony/phpstan.neon symfony/src --memory-limit=1G --no-progress --level=5 || return 1
+    else
+      warn "PHPStan not installed (skipping)"
+      return 0
+    fi
   fi
   ok "PHPStan completed"
 }
 
 run_unit_tests() {
   log "Running PHPUnit (unit tests)..."
-  if docker_fpm_available; then
-    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$UNIT_CMD_DEFAULT" || return 1
-  else
+  if have make; then
     $UNIT_CMD_DEFAULT || return 1
+  elif docker_fpm_available; then
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" php vendor/bin/phpunit -c phpunit.dist.xml --testsuite=Unit || return 1
+  else
+    if [ -f "symfony/vendor/bin/phpunit" ]; then
+      $PHP_BINARY symfony/vendor/bin/phpunit -c symfony/phpunit.dist.xml --testsuite=Unit || return 1
+    else
+      warn "PHPUnit not installed (skipping unit tests)"
+      return 0
+    fi
   fi
   ok "Unit tests passed"
 }
 
 run_style_check() {
-  if [ ! -f "vendor/bin/php-cs-fixer" ]; then
-    warn "php-cs-fixer not installed (skipping style dry-run)"
-    return 0
-  fi
-  log "Running code style dry-run..."
+  local HOST_STYLE_BIN="vendor/bin/php-cs-fixer"
+  [ -f "symfony/vendor/bin/php-cs-fixer" ] && HOST_STYLE_BIN="symfony/vendor/bin/php-cs-fixer"
+
   if docker_fpm_available; then
-    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc "$STYLE_CMD_DEFAULT" || return 1
+    if ! $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" sh -lc 'test -f vendor/bin/php-cs-fixer'; then
+      warn "php-cs-fixer not installed in container (skipping style dry-run)"
+      return 0
+    fi
+    log "Running code style dry-run..."
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" php vendor/bin/php-cs-fixer fix --dry-run --diff || return 1
   else
-    $STYLE_CMD_DEFAULT || return 1
+    if [ ! -f "$HOST_STYLE_BIN" ]; then
+      warn "php-cs-fixer not installed (skipping style dry-run)"
+      return 0
+    fi
+    log "Running code style dry-run..."
+    $PHP_BINARY "$HOST_STYLE_BIN" fix --dry-run --diff || return 1
   fi
   ok "Style check passed"
 }
@@ -147,7 +169,7 @@ fi
 # --------------- Environment Diagnostics ---------------
 
 if docker_fpm_available; then
-  log "Detected docker compose service '$DOCKER_FPM_SERVICE' – running inside container."
+  log "Detected docker compose service '$DOCKER_FPM_SERVICE' – preferring host make; will use container for raw PHP fallback."
 else
   if ! have "$PHP_BINARY"; then
     warn "PHP not found on host and docker 'fpm' service unavailable; skipping QA checks."

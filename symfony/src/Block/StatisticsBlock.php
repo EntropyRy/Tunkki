@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Block;
 
 use App\Entity\User;
@@ -28,7 +30,7 @@ class StatisticsBlock extends BaseBlockService
         $stats['block.stats.bookings'] = $this->bookingR->countHandled();
         $stats['block.stats.events'] = $this->eventR->countDone();
         $user = $this->security->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
 
         return $this->renderResponse(

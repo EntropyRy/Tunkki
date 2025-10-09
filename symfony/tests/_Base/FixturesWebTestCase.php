@@ -104,18 +104,18 @@ abstract class FixturesWebTestCase extends WebTestCase
                 );
                 if ($dupes) {
                     @fwrite(
-                        STDERR,
+                        \STDERR,
                         '[Integrity] Duplicate user.member_id rows: '.
-                            json_encode($dupes, JSON_UNESCAPED_SLASHES).
-                            PHP_EOL,
+                            json_encode($dupes, \JSON_UNESCAPED_SLASHES).
+                            \PHP_EOL,
                     );
                 }
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[Integrity] Diagnostic query failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
@@ -218,10 +218,10 @@ abstract class FixturesWebTestCase extends WebTestCase
         // Best-effort diagnostic
         if ($e instanceof \Throwable) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] recovering EntityManager after exception: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
 
@@ -275,10 +275,10 @@ abstract class FixturesWebTestCase extends WebTestCase
         $entity = $repo->findOneBy($criteria);
         $this->assertNotNull(
             $entity,
-            sprintf(
+            \sprintf(
                 'Expected one %s for criteria %s, got none.',
                 $class,
-                json_encode($criteria, JSON_THROW_ON_ERROR),
+                json_encode($criteria, \JSON_THROW_ON_ERROR),
             ),
         );
 
@@ -298,7 +298,7 @@ abstract class FixturesWebTestCase extends WebTestCase
             // Closed EntityManager detection
             if (method_exists($em, 'isOpen') && !$em->isOpen()) {
                 fwrite(
-                    STDERR,
+                    \STDERR,
                     "[DoctrineCheck] EntityManager CLOSED after {$this->name()}\n",
                 );
                 if (getenv('FAIL_ON_CLOSED_ENTITY_MANAGER')) {
@@ -322,10 +322,10 @@ abstract class FixturesWebTestCase extends WebTestCase
                 if ($uninit) {
                     $unique = array_values(array_unique($uninit));
                     fwrite(
-                        STDERR,
+                        \STDERR,
                         "[DoctrineCheck] Uninitialized proxies after {$this->name()}: ".
                             implode(', ', $unique).
-                            PHP_EOL,
+                            \PHP_EOL,
                     );
                     if (getenv('FAIL_ON_UNINITIALIZED_PROXIES')) {
                         self::fail(
@@ -350,12 +350,12 @@ abstract class FixturesWebTestCase extends WebTestCase
         $repo = $this->em()->getRepository($class);
         $count = method_exists($repo, 'count')
             ? $repo->count([])
-            : count($repo->findAll());
+            : \count($repo->findAll());
 
         $this->assertSame(
             $expected,
             $count,
-            sprintf(
+            \sprintf(
                 'Expected %d %s entities, got %d',
                 $expected,
                 $class,
@@ -389,7 +389,7 @@ abstract class FixturesWebTestCase extends WebTestCase
             : [];
         $siteCount = method_exists($siteRepo, 'count')
             ? $siteRepo->count([])
-            : count($sites);
+            : \count($sites);
         self::assertSame(
             2,
             $siteCount,
@@ -450,7 +450,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $s->object()
                         : $s;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -493,7 +493,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $site->object()
                         : $site;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -508,7 +508,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         && isset($canon['en'])
                         && $siteObj === $canon['en']);
 
-                if (!$isCanonical || !in_array($loc, ['fi', 'en'], true)) {
+                if (!$isCanonical || !\in_array($loc, ['fi', 'en'], true)) {
                     // Remove pages for this site first to avoid FK constraint issues, then remove site
                     try {
                         $pages = $pageRepo->findBy(['site' => $siteObj]);
@@ -551,7 +551,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 \STDERR,
                 '[ensureCmsBaseline] pre-normalize to 2 sites failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -576,7 +576,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                     $fiSite instanceof \Zenstruck\Foundry\Persistence\Proxy
                         ? $fiSite->object()
                         : $fiSite;
-                if (is_object($fi) && method_exists($fi, 'setRelativePath')) {
+                if (\is_object($fi) && method_exists($fi, 'setRelativePath')) {
                     $fi->setRelativePath('');
                     $em->persist($fi);
                 }
@@ -603,7 +603,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                     $enSite instanceof \Zenstruck\Foundry\Persistence\Proxy
                         ? $enSite->object()
                         : $enSite;
-                if (is_object($en) && method_exists($en, 'setRelativePath')) {
+                if (\is_object($en) && method_exists($en, 'setRelativePath')) {
                     $en->setRelativePath('/en');
                     $em->persist($en);
                 }
@@ -946,7 +946,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                     try {
                         if (method_exists($pg2, 'getUrl')) {
                             $url = (string) $pg2->getUrl();
-                            if (!in_array($url, $allowed, true)) {
+                            if (!\in_array($url, $allowed, true)) {
                                 // Prune non-whitelisted pages outright
                                 $this->em()->remove($pg2);
                                 continue;
@@ -991,7 +991,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $s->object()
                         : $s;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -1035,7 +1035,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $site->object()
                         : $site;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -1099,7 +1099,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 \STDERR,
                 '[ensureCmsBaseline] early hard prune to 2 sites failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1127,10 +1127,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] snapshot creation skipped: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1227,10 +1227,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] root page normalization failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1356,10 +1356,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             $em->flush();
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] events/join-us alias seeding skipped: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1382,7 +1382,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $site->object()
                         : $site;
 
-                if (!is_object($resolvedSite)) {
+                if (!\is_object($resolvedSite)) {
                     continue;
                 }
 
@@ -1452,10 +1452,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             $em->flush();
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] stream page seeding skipped: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1479,7 +1479,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $s->object()
                         : $s;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -1541,7 +1541,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 \STDERR,
                 '[ensureCmsBaseline] site dedup skipped: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1554,17 +1554,17 @@ abstract class FixturesWebTestCase extends WebTestCase
                 : [];
             $siteCount = method_exists($siteRepo, 'count')
                 ? $siteRepo->count([])
-                : count($sites);
+                : \count($sites);
             $pageCount = method_exists($pageRepo, 'count')
                 ? $pageRepo->count([])
-                : count($pageRepo->findAll());
+                : \count($pageRepo->findAll());
             @fwrite(
                 \STDERR,
                 '[ensureCmsBaseline] site_count='.
                     $siteCount.
                     ' page_count='.
                     $pageCount.
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             foreach ($sites as $dxSite) {
                 if (null === $dxSite) {
@@ -1574,7 +1574,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                     $dxSite instanceof \Zenstruck\Foundry\Persistence\Proxy
                         ? $dxSite->object()
                         : $dxSite;
-                if (!is_object($s)) {
+                if (!\is_object($s)) {
                     continue;
                 }
                 $locale = method_exists($s, 'getLocale')
@@ -1621,7 +1621,7 @@ abstract class FixturesWebTestCase extends WebTestCase
 
                     @fwrite(
                         \STDERR,
-                        sprintf(
+                        \sprintf(
                             "[ensureCmsBaseline] site{id=%s,locale=%s,rel=%s,default=%s} root{route=%s,template=%s,type=%s,enabled=%s,decorate=%s,method=%s}\n",
                             $siteId,
                             $locale,
@@ -1638,7 +1638,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 } else {
                     @fwrite(
                         \STDERR,
-                        sprintf(
+                        \sprintf(
                             "[ensureCmsBaseline] site{id=%s,locale=%s,rel=%s,default=%s} root{MISSING}\n",
                             $siteId,
                             $locale,
@@ -1653,7 +1653,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 \STDERR,
                 '[ensureCmsBaseline] diagnostics failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1681,7 +1681,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $s->object()
                         : $s;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -1724,7 +1724,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                         ? $site->object()
                         : $site;
                 if (
-                    !is_object($siteObj)
+                    !\is_object($siteObj)
                     || !method_exists($siteObj, 'getLocale')
                 ) {
                     continue;
@@ -1788,7 +1788,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 \STDERR,
                 '[ensureCmsBaseline] hard prune to 2 sites failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1813,7 +1813,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                                 $site instanceof \Zenstruck\Foundry\Persistence\Proxy
                                     ? $site->object()
                                     : $site;
-                            if (is_object($resolved)) {
+                            if (\is_object($resolved)) {
                                 $createSnapshot->createBySite($resolved);
                             }
                         } catch (\Throwable) {
@@ -1824,10 +1824,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[ensureCmsBaseline] final snapshot regeneration skipped: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
             $this->recoverEntityManagerAfterException($e);
         }
@@ -1842,7 +1842,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                 : [];
             $siteCount = method_exists($siteRepo, 'count')
                 ? $siteRepo->count([])
-                : count($sites);
+                : \count($sites);
             self::assertSame(
                 2,
                 $siteCount,
@@ -1934,10 +1934,10 @@ abstract class FixturesWebTestCase extends WebTestCase
             }
         } catch (\Throwable $e) {
             @fwrite(
-                STDERR,
+                \STDERR,
                 '[initSiteAwareClient] cookie transfer failed: '.
                     $e->getMessage().
-                    PHP_EOL,
+                    \PHP_EOL,
             );
         }
 
@@ -1968,10 +1968,10 @@ abstract class FixturesWebTestCase extends WebTestCase
                     ->getManager();
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[initSiteAwareClient] EM reacquire failed: '.
                         $e->getMessage().
-                        PHP_EOL,
+                        \PHP_EOL,
                 );
             }
         }
@@ -2004,12 +2004,12 @@ abstract class FixturesWebTestCase extends WebTestCase
         self::assertGreaterThanOrEqual(
             200,
             $status,
-            $message ?: sprintf('Expected 2xx, got %d.', $status),
+            $message ?: \sprintf('Expected 2xx, got %d.', $status),
         );
         self::assertLessThan(
             300,
             $status,
-            $message ?: sprintf('Expected 2xx, got %d.', $status),
+            $message ?: \sprintf('Expected 2xx, got %d.', $status),
         );
     }
 
@@ -2045,8 +2045,8 @@ abstract class FixturesWebTestCase extends WebTestCase
         }
 
         trigger_error(
-            sprintf('Undefined property %s::$%s', __CLASS__, $name),
-            E_USER_NOTICE,
+            \sprintf('Undefined property %s::$%s', __CLASS__, $name),
+            \E_USER_NOTICE,
         );
 
         return null;
@@ -2067,7 +2067,7 @@ abstract class FixturesWebTestCase extends WebTestCase
         $crawler = $client->request('GET', $path);
         $status = $client->getResponse()->getStatusCode();
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location');
             if ($loc) {
                 $crawler = $client->request('GET', $loc);
@@ -2092,7 +2092,7 @@ abstract class FixturesWebTestCase extends WebTestCase
         $crawler = $client->request('GET', $path);
         $status = $client->getResponse()->getStatusCode();
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location');
             if ($loc) {
                 $crawler = $client->request('GET', $loc);

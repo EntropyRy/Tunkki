@@ -42,7 +42,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
                         return false;
                     }
 
-                    assert($query instanceof QueryBuilder);
+                    \assert($query instanceof QueryBuilder);
                     $query
                         ->groupBy('o.member')
                     ;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -99,7 +101,7 @@ class SSH
             );
         }
 
-        $errorStream = @ssh2_fetch_stream($stream, SSH2_STREAM_STDERR);
+        $errorStream = @ssh2_fetch_stream($stream, \SSH2_STREAM_STDERR);
         if (false === $errorStream) {
             // Still proceed, but note missing stderr stream
             $errorStream = null;
@@ -121,7 +123,7 @@ class SSH
 
         // Retrieve exit status (may be null if not provided and function may not exist)
         $exitStatus = null;
-        if (function_exists('ssh2_get_exit_status')) {
+        if (\function_exists('ssh2_get_exit_status')) {
             $statusRaw = @ssh2_get_exit_status($stream);
             if (null !== $statusRaw && false !== $statusRaw) {
                 $exitStatus = (int) $statusRaw;

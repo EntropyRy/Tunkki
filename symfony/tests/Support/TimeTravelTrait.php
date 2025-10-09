@@ -228,7 +228,7 @@ trait TimeTravelTrait
             );
         } else {
             if ($exp->getTimestamp() !== $actual->getTimestamp()) {
-                throw new \RuntimeException('' !== $message ? $message : sprintf('Time mismatch: expected %s got %s', $exp->format(\DateTimeInterface::ATOM), $actual->format(\DateTimeInterface::ATOM)));
+                throw new \RuntimeException('' !== $message ? $message : \sprintf('Time mismatch: expected %s got %s', $exp->format(\DateTimeInterface::ATOM), $actual->format(\DateTimeInterface::ATOM)));
             }
         }
     }

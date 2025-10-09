@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Happening;
@@ -8,11 +10,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Happening>
- *
- * @method Happening|null find($id, $lockMode = null, $lockVersion = null)
- * @method Happening|null findOneBy(array $criteria, array $orderBy = null)
- * @method Happening[]    findAll()
- * @method Happening[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+/**
+ * @extends ServiceEntityRepository<Happening>
  */
 class HappeningRepository extends ServiceEntityRepository
 {
@@ -52,7 +52,7 @@ class HappeningRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
         $key = array_search($happening, $array);
-        $lenght = count($array);
+        $lenght = \count($array);
         if (0 == $key && $lenght <= 1) {
             return [null, null];
         }
@@ -66,8 +66,10 @@ class HappeningRepository extends ServiceEntityRepository
         return [$array[$key - 1], $array[$key + 1]];
     }
 
-    public function findHappeningByEventSlugAndSlug(string $eventSlug, string $slug): ?Happening
-    {
+    public function findHappeningByEventSlugAndSlug(
+        string $eventSlug,
+        string $slug,
+    ): ?Happening {
         return $this->createQueryBuilder('h')
             ->Where('h.slugFi LIKE :slug')
             ->orWhere('h.slugEn LIKE :slug')

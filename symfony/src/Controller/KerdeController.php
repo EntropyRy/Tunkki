@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\DoorLog;
@@ -22,7 +24,12 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class KerdeController extends AbstractController
 {
-    #[Route(path: ['en' => '/kerde/door', 'fi' => '/kerde/ovi'], name: 'kerde_door')]
+    #[
+        Route(
+            path: ['en' => '/kerde/door', 'fi' => '/kerde/ovi'],
+            name: 'kerde_door',
+        ),
+    ]
     public function door(
         Request $request,
         FormFactoryInterface $formF,
@@ -34,27 +41,39 @@ class KerdeController extends AbstractController
         SSH $ssh,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
 
         $DoorLog = new DoorLog();
         $DoorLog->setMember($member);
-        $since = new \DateTime('now-1day');
+        $since = new \DateTimeImmutable('now-1day');
         if ($request->get('since')) {
             // $datestring = strtotime($request->get('since'));
-            $since = new \DateTime($request->get('since'));
+            $since = new \DateTimeImmutable($request->get('since'));
         }
         $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
-        $now = new \DateTime('now');
+        $now = new \DateTimeImmutable('now');
         $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
-        $status = $zmq->send($env.' init: '.$member->getUsername().' '.$now->getTimestamp());
+        $status = $zmq->send(
+            $env.
+                ' init: '.
+                $member->getUsername().
+                ' '.
+                $now->getTimestamp(),
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $status = $zmq->send($env.' open: '.$member->getUsername().' '.$now->getTimestamp());
+            $status = $zmq->send(
+                $env.
+                    ' open: '.
+                    $member->getUsername().
+                    ' '.
+                    $now->getTimestamp(),
+            );
             // $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
 
@@ -64,7 +83,12 @@ class KerdeController extends AbstractController
                 $text .= ' - '.$doorlog->getMessage();
             } else {
                 foreach ($logs as $log) {
-                    if (!$log->getMessage() && ($now->getTimestamp() - $log->getCreatedAt()->getTimestamp() < 60 * 60 * 4)) {
+                    if (
+                        !$log->getMessage()
+                        && $now->getTimestamp() -
+                            $log->getCreatedAt()->getTimestamp() <
+                            60 * 60 * 4
+                    ) {
                         $send = false;
                         break;
                     }
@@ -96,7 +120,7 @@ class KerdeController extends AbstractController
     public function recordingStart(SSH $ssh): RedirectResponse
     {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('start');
@@ -114,7 +138,7 @@ class KerdeController extends AbstractController
     public function recordingStop(SSH $ssh): RedirectResponse
     {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if ($member->getIsActiveMember()) {
             $err = $ssh->sendCommand('stop');
@@ -133,7 +157,7 @@ class KerdeController extends AbstractController
     {
         $barcodes = [];
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $code = $gen->getBarcodeForCode($member->getCode());
         $barcodes['Your Code'] = $code[1];

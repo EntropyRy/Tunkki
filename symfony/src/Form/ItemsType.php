@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Item;
@@ -41,7 +43,7 @@ class ItemsType extends AbstractType
             foreach ($root->getChildren() as $cat) {
                 if ($choice->getCategory() == $cat) {
                     $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
-                } elseif (in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
+                } elseif (\in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
                     $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 }
             }

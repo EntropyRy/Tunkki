@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\DoorLog;
@@ -7,10 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method DoorLog|null find($id, $lockMode = null, $lockVersion = null)
- * @method DoorLog|null findOneBy(array $criteria, array $orderBy = null)
- * @method DoorLog[]    findAll()
- * @method DoorLog[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<DoorLog>
  */
 class DoorLogRepository extends ServiceEntityRepository
 {
@@ -24,7 +23,7 @@ class DoorLogRepository extends ServiceEntityRepository
      */
     public function getLatest(?int $count): mixed
     {
-        if (is_null($count)) {
+        if (null === $count) {
             $count = 10;
         }
 

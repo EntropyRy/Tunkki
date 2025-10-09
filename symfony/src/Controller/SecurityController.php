@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\User;
@@ -18,7 +20,7 @@ class SecurityController extends AbstractController
     ): Response {
         $user = $this->getUser();
         if (null != $user) {
-            assert($user instanceof User);
+            \assert($user instanceof User);
 
             return $this->redirectToRoute(
                 'dashboard.'.$user->getMember()->getLocale(),

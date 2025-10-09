@@ -110,7 +110,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         $client->request('GET', self::PRIMARY_DASHBOARD_PATH);
         $status = $client->getResponse()->getStatusCode();
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $location = $client->getResponse()->headers->get('Location') ?? '';
             if (str_contains($location, '/login')) {
                 self::assertTrue(true, 'Redirect to login counts as denial.');
@@ -124,7 +124,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         if (200 === $status) {
             $client->request('GET', self::FALLBACK_DASHBOARD_PATH);
             $status = $client->getResponse()->getStatusCode();
-            if (in_array($status, [301, 302, 303], true)) {
+            if (\in_array($status, [301, 302, 303], true)) {
                 $location =
                     $client->getResponse()->headers->get('Location') ?? '';
                 if (str_contains($location, '/login')) {
@@ -140,7 +140,7 @@ final class AdminAccessTest extends FixturesWebTestCase
             }
         }
 
-        if (in_array($status, [401, 403], true)) {
+        if (\in_array($status, [401, 403], true)) {
             self::assertTrue(true, 'Received explicit denial HTTP status.');
 
             return;
@@ -163,7 +163,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         $client->request('GET', self::PRIMARY_DASHBOARD_PATH_EN);
         $status = $client->getResponse()->getStatusCode();
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $location = $client->getResponse()->headers->get('Location') ?? '';
             if (str_contains($location, '/login')) {
                 self::assertTrue(
@@ -180,7 +180,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         if (200 === $status) {
             $client->request('GET', self::FALLBACK_DASHBOARD_PATH_EN);
             $status = $client->getResponse()->getStatusCode();
-            if (in_array($status, [301, 302, 303], true)) {
+            if (\in_array($status, [301, 302, 303], true)) {
                 $location =
                     $client->getResponse()->headers->get('Location') ?? '';
                 if (str_contains($location, '/login')) {
@@ -196,7 +196,7 @@ final class AdminAccessTest extends FixturesWebTestCase
             }
         }
 
-        if (in_array($status, [401, 403], true)) {
+        if (\in_array($status, [401, 403], true)) {
             self::assertTrue(
                 true,
                 'Received explicit denial HTTP status (EN path).',
@@ -255,7 +255,7 @@ final class AdminAccessTest extends FixturesWebTestCase
             $status = $client->getResponse()->getStatusCode();
         }
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $client->followRedirect();
             $status = $client->getResponse()->getStatusCode();
         }
@@ -264,7 +264,7 @@ final class AdminAccessTest extends FixturesWebTestCase
             // Try local fallback
             $client->request('GET', $fallback);
             $status = $client->getResponse()->getStatusCode();
-            if (in_array($status, [301, 302, 303], true)) {
+            if (\in_array($status, [301, 302, 303], true)) {
                 $client->followRedirect();
                 $status = $client->getResponse()->getStatusCode();
             }
@@ -278,7 +278,7 @@ final class AdminAccessTest extends FixturesWebTestCase
 
             $client->request('GET', $altPrimary);
             $status = $client->getResponse()->getStatusCode();
-            if (in_array($status, [301, 302, 303], true)) {
+            if (\in_array($status, [301, 302, 303], true)) {
                 $client->followRedirect();
                 $status = $client->getResponse()->getStatusCode();
             }
@@ -286,7 +286,7 @@ final class AdminAccessTest extends FixturesWebTestCase
             if (200 !== $status) {
                 $client->request('GET', $altFallback);
                 $status = $client->getResponse()->getStatusCode();
-                if (in_array($status, [301, 302, 303], true)) {
+                if (\in_array($status, [301, 302, 303], true)) {
                     $client->followRedirect();
                     $status = $client->getResponse()->getStatusCode();
                 }
@@ -308,7 +308,7 @@ final class AdminAccessTest extends FixturesWebTestCase
                 }
                 $snippet = substr($body, 0, 4000);
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     "[AdminAccessTest][DEBUG] Dashboard reachability failure\n".
                         "Primary: {$primary}\nFallback: {$fallback}\nHTTP Status: {$status}\n".
                         "Snippet (first 4000 chars):\n".
@@ -317,7 +317,7 @@ final class AdminAccessTest extends FixturesWebTestCase
                 );
             } catch (\Throwable $e) {
                 @fwrite(
-                    STDERR,
+                    \STDERR,
                     '[AdminAccessTest][DEBUG] Instrumentation error: '.
                         $e->getMessage().
                         "\n",
@@ -328,7 +328,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         self::assertSame(
             200,
             $status,
-            sprintf(
+            \sprintf(
                 'Privileged user failed to reach admin dashboard (last status: %d). Tried %s then %s.',
                 $status,
                 $primary,

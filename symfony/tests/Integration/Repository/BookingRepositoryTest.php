@@ -6,6 +6,7 @@ namespace App\Tests\Integration\Repository;
 
 use App\Entity\Booking;
 use App\Repository\BookingRepository;
+use App\Service\BookingReferenceService;
 
 /**
  * @covers \App\Repository\BookingRepository
@@ -72,6 +73,8 @@ final class BookingRepositoryTest extends RepositoryTestCase
             $this->assign($b, 'numberOfRentDays', 1);
         }
 
+        // referenceNumber and renterHash assigned via BookingReferenceService after initial persist in tests
+
         return $b;
     }
 
@@ -137,6 +140,13 @@ final class BookingRepositoryTest extends RepositoryTestCase
             cancelled: true,
         );
 
+        $this->assignBookingReferences($b1, $b2, $cancelled);
+        $this->persistAndFlush([$b1, $b2, $cancelled]);
+
+        $svc = new BookingReferenceService();
+        foreach ([$b1, $b2, $cancelled] as $b) {
+            $svc->assignReferenceAndHash($b);
+        }
         $this->persistAndFlush([$b1, $b2, $cancelled]);
 
         $after = $repo->countHandled();
@@ -160,7 +170,13 @@ final class BookingRepositoryTest extends RepositoryTestCase
             $now->modify('+1 hour'),
             $now->modify('+5 hours'),
         );
+        $this->assignBookingReferences($base);
         $this->persistAndFlush($base);
+
+        $svc = new BookingReferenceService();
+        $svc->assignReferenceAndHash($base);
+        $this->persistAndFlush($base);
+
         $baseId = $base->getId();
         self::assertNotNull($baseId, 'Base booking must have an ID.');
 
@@ -206,6 +222,32 @@ final class BookingRepositoryTest extends RepositoryTestCase
             cancelled: true,
         );
 
+        $this->assignBookingReferences(
+            $overlapRetrieval,
+            $overlapReturning,
+            $outside,
+            $itemsReturnedTrue,
+            $cancelled,
+        );
+        $this->persistAndFlush([
+            $overlapRetrieval,
+            $overlapReturning,
+            $outside,
+            $itemsReturnedTrue,
+            $cancelled,
+        ]);
+
+        foreach (
+            [
+                $overlapRetrieval,
+                $overlapReturning,
+                $outside,
+                $itemsReturnedTrue,
+                $cancelled,
+            ] as $b
+        ) {
+            $svc->assignReferenceAndHash($b);
+        }
         $this->persistAndFlush([
             $overlapRetrieval,
             $overlapReturning,
@@ -283,7 +325,13 @@ final class BookingRepositoryTest extends RepositoryTestCase
             $now->modify('+2 hours'),
             $now->modify('+6 hours'),
         );
+        $this->assignBookingReferences($base);
         $this->persistAndFlush($base);
+
+        $svc = new BookingReferenceService();
+        $svc->assignReferenceAndHash($base);
+        $this->persistAndFlush($base);
+
         $baseId = $base->getId();
         self::assertNotNull($baseId);
 
@@ -315,6 +363,26 @@ final class BookingRepositoryTest extends RepositoryTestCase
             cancelled: true,
         );
 
+        $this->assignBookingReferences(
+            $validReturningOnly,
+            $returnedReturningOnly,
+            $cancelledReturningOnly,
+        );
+        $this->persistAndFlush([
+            $validReturningOnly,
+            $returnedReturningOnly,
+            $cancelledReturningOnly,
+        ]);
+
+        foreach (
+            [
+                $validReturningOnly,
+                $returnedReturningOnly,
+                $cancelledReturningOnly,
+            ] as $b
+        ) {
+            $svc->assignReferenceAndHash($b);
+        }
         $this->persistAndFlush([
             $validReturningOnly,
             $returnedReturningOnly,
@@ -360,5 +428,60 @@ final class BookingRepositoryTest extends RepositoryTestCase
             $resultIds,
             'Base booking must be excluded (by id).',
         );
+    }
+
+    private function ensureBookingNameAndRenterHash(Booking $b): void
+    {
+        // Ensure name exists
+        if (!method_exists($b, 'getName') || !method_exists($b, 'setName')) {
+            return;
+        }
+        $name = $b->getName();
+        if (null === $name || '' === $name) {
+            $b->setName('Booking '.bin2hex(random_bytes(3)));
+        }
+
+        // Compute renterHash similar to BookingAdmin::calculateOwnerHash (set unconditionally to avoid null-typed getter)
+        if (method_exists($b, 'setRenterHash')) {
+            $ref = (string) ($b->getReferenceNumber() ?? '');
+            $string = str_shuffle($ref).(string) $b->getName();
+            $b->setRenterHash(strtolower(md5($string)));
+        }
+    }
+
+    /**
+     * Assign temporary non-null referenceNumber and renterHash before first persist
+     * to satisfy DB NOT NULL constraints. Final values will be recalculated by
+     * BookingReferenceService after the entity has an ID.
+     */
+    private function assignBookingReferences(Booking ...$bookings): void
+    {
+        foreach ($bookings as $b) {
+            // Ensure a name exists
+            if (method_exists($b, 'getName') && method_exists($b, 'setName')) {
+                $nm = $b->getName();
+                if (null === $nm || '' === $nm) {
+                    $b->setName('Booking '.bin2hex(random_bytes(3)));
+                }
+            }
+
+            // Temporary referenceNumber if missing
+            if (
+                method_exists($b, 'getReferenceNumber')
+                && method_exists($b, 'setReferenceNumber')
+            ) {
+                $ref = $b->getReferenceNumber();
+                if (null === $ref || '' === (string) $ref) {
+                    $b->setReferenceNumber('TMP'.bin2hex(random_bytes(4)));
+                }
+            }
+
+            // Temporary renterHash (set unconditionally; avoid calling non-null typed getter before set)
+            if (method_exists($b, 'setRenterHash')) {
+                $ref = (string) ($b->getReferenceNumber() ?? '');
+                $string = str_shuffle($ref).(string) $b->getName();
+                $b->setRenterHash(strtolower(md5($string)));
+            }
+        }
     }
 }

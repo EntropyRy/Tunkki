@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Entity\Sonata\SonataMediaMedia;
@@ -11,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Product implements \Stringable
 {
+    public function __construct()
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -23,10 +31,10 @@ class Product implements \Stringable
     private ?string $stripePriceId = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
     private ?int $quantity = 0;
@@ -311,8 +319,9 @@ class Product implements \Stringable
         return $this->howManyOneCanBuyAtOneTime;
     }
 
-    public function setHowManyOneCanBuyAtOneTime(int $howManyOneCanBuyAtOneTime): static
-    {
+    public function setHowManyOneCanBuyAtOneTime(
+        int $howManyOneCanBuyAtOneTime,
+    ): static {
         $this->howManyOneCanBuyAtOneTime = $howManyOneCanBuyAtOneTime;
 
         return $this;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\EmailRepository;
@@ -16,19 +18,19 @@ class Email implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $subject = null;
+    private string $subject = '';
 
     #[ORM\Column(type: 'text')]
-    private ?string $body = null;
+    private string $body = '';
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $purpose = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $addLoginLinksToFooter = true;
@@ -44,6 +46,13 @@ class Email implements \Stringable
 
     #[ORM\ManyToOne]
     private ?Member $sentBy = null;
+
+    public function __construct()
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
 
     public function getId(): ?int
     {
@@ -64,7 +73,7 @@ class Email implements \Stringable
         $this->updatedAt = new \DateTimeImmutable();
     }
 
-    public function getSubject(): ?string
+    public function getSubject(): string
     {
         return $this->subject;
     }
@@ -76,7 +85,7 @@ class Email implements \Stringable
         return $this;
     }
 
-    public function getBody(): ?string
+    public function getBody(): string
     {
         return $this->body;
     }
@@ -100,7 +109,7 @@ class Email implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -112,7 +121,7 @@ class Email implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }

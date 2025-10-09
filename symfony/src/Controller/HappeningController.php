@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Event;
@@ -43,7 +45,7 @@ class HappeningController extends AbstractController
         MattermostNotifierService $mm,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $happening = new Happening();
         $happening->addOwner($member);
@@ -100,7 +102,7 @@ class HappeningController extends AbstractController
         EntityManagerInterface $em,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $event = $happening->getEvent();
         if (false == $happening->getOwners()->contains($member)) {
@@ -152,7 +154,7 @@ class HappeningController extends AbstractController
         TranslatorInterface $trans,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $admin = false;
         $event = $happening->getEvent();
@@ -167,12 +169,12 @@ class HappeningController extends AbstractController
         }
 
         $happeningB = $HBR->findMemberBooking($member, $happening);
-        if (is_null($happeningB)) {
+        if (!$happeningB instanceof HappeningBooking) {
             $happeningB = new HappeningBooking();
             $happeningB->setHappening($happening);
         }
         $ticket_ref = $ticketR->findMemberTicketReferenceForEvent($member, $event);
-        if (is_null($ticket_ref)) {
+        if (null === $ticket_ref) {
             $ticket_ref = $trans->trans('happening.ticket_missing');
         }
         $form = $this->createForm(HappeningBookingType::class, $happeningB, ['comments' => $happening->isAllowSignUpComments()]);
@@ -190,7 +192,7 @@ class HappeningController extends AbstractController
         }
         $converter = new GithubFlavoredMarkdownConverter();
         $payment_info = '';
-        if (!is_null($happening->getPaymentInfo($request->getLocale()))) {
+        if (null !== $happening->getPaymentInfo($request->getLocale())) {
             $payment_info = $converter->convert($happening->getPaymentInfo($request->getLocale()));
         }
 
@@ -221,7 +223,7 @@ class HappeningController extends AbstractController
         HappeningBookingRepository $hbr,
     ): Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $event = $happeningB->getHappening()->getEvent();
         if ($happeningB->getMember() === $member) {

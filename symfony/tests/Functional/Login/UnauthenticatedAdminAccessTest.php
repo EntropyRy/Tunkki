@@ -69,19 +69,19 @@ final class UnauthenticatedAdminAccessTest extends FixturesWebTestCase
         //  - 302/303 redirect to login
         //  - 401/403 direct denial
         self::assertTrue(
-            in_array($status, [301, 302, 303, 401, 403], true),
-            sprintf(
+            \in_array($status, [301, 302, 303, 401, 403], true),
+            \sprintf(
                 'Unexpected status code %d for unauthenticated admin request (%s). Expected redirect (302/303) or denial (401/403).',
                 $status,
                 $adminPath
             )
         );
 
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $location = $client->getResponse()->headers->get('Location') ?? '';
             self::assertNotEmpty(
                 $location,
-                sprintf('Redirect response missing Location header for %s.', $adminPath)
+                \sprintf('Redirect response missing Location header for %s.', $adminPath)
             );
 
             // Normalize relative vs absolute URL
@@ -98,7 +98,7 @@ final class UnauthenticatedAdminAccessTest extends FixturesWebTestCase
 
             self::assertTrue(
                 $matchesLogin,
-                sprintf(
+                \sprintf(
                     'Expected redirect to a login path for %s, got Location="%s". Adjust LOGIN_PATH_CANDIDATES if the project uses a custom login route.',
                     $adminPath,
                     $location

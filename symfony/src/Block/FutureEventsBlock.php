@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Block;
 
 use App\Entity\Event;
@@ -20,7 +22,7 @@ class FutureEventsBlock extends BaseBlockService
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $repo = $this->em->getRepository(Event::class);
-        assert($repo instanceof EventRepository);
+        \assert($repo instanceof EventRepository);
         $events = $repo->getFutureEvents();
         $unreleased = $repo->getUnpublishedFutureEvents();
 

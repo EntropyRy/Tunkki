@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\DoorLogRepository;
@@ -19,11 +21,19 @@ class DoorLog
     #[ORM\JoinColumn(nullable: false)]
     private ?Member $member = null;
 
+    /**
+     * Immutable creation timestamp; initialized in constructor.
+     */
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $message = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -42,12 +52,16 @@ class DoorLog
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /**
+     * Manually override createdAt (fixtures/backfills only).
+     * Prefer not to call this in normal application flow.
+     */
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
     {
         $this->createdAt = $createdAt;
 
@@ -69,6 +83,9 @@ class DoorLog
     #[ORM\PrePersist]
     public function prePersist(): void
     {
-        $this->createdAt = new \DateTimeImmutable();
+        // Constructor initializes createdAt; retain only defensive guard.
+        if (!isset($this->createdAt)) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
     }
 }

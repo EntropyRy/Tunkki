@@ -25,11 +25,11 @@ use Symfony\Component\Dotenv\Dotenv;
     $stderr = fopen('php://stderr', 'w');
     $out = static fn (string $msg) => fwrite(
         $stdout,
-        $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL),
+        $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL),
     );
     $err = static fn (string $msg) => fwrite(
         $stderr,
-        $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL),
+        $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL),
     );
 
     $root = dirname(__DIR__);
@@ -77,7 +77,7 @@ use Symfony\Component\Dotenv\Dotenv;
         '[seed-baseline] Env='.
             $_SERVER['APP_ENV'].
             ' PHP='.
-            PHP_VERSION.
+            \PHP_VERSION.
             ' time='.
             date('c'),
     );
@@ -157,7 +157,7 @@ use Symfony\Component\Dotenv\Dotenv;
     if ($beforeLocales) {
         $out(
             '[seed-baseline] Root page presence (before): '.
-                json_encode($beforeRoots, JSON_UNESCAPED_SLASHES),
+                json_encode($beforeRoots, \JSON_UNESCAPED_SLASHES),
         );
     }
 
@@ -204,7 +204,7 @@ use Symfony\Component\Dotenv\Dotenv;
     if ($afterLocales) {
         $out(
             '[seed-baseline] Root page presence (after): '.
-                json_encode($afterRoots, JSON_UNESCAPED_SLASHES),
+                json_encode($afterRoots, \JSON_UNESCAPED_SLASHES),
         );
     }
 

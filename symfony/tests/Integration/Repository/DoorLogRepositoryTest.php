@@ -70,7 +70,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
                 continue;
             }
             // Skip if nullable or already has a value
-            $nullable = is_array($mapping)
+            $nullable = \is_array($mapping)
                 ? $mapping['nullable'] ?? false
                 : $mapping->nullable ?? false;
             if ($nullable) {
@@ -84,7 +84,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
             }
 
             // Provide a generic default by type
-            $type = is_array($mapping)
+            $type = \is_array($mapping)
                 ? $mapping['type'] ?? 'string'
                 : $mapping->type ?? 'string';
             $value = match ($type) {
@@ -106,7 +106,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
         foreach ($meta->associationMappings as $assoc => $am) {
             // Doctrine 2.17+ may expose mapping objects instead of arrays; normalize joinColumns
             $joinColumns = null;
-            if (is_array($am)) {
+            if (\is_array($am)) {
                 $joinColumns = $am['joinColumns'] ?? null;
             } elseif (isset($am->joinColumns)) {
                 // object style
@@ -116,10 +116,10 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
             if (is_iterable($joinColumns)) {
                 foreach ($joinColumns as $jc) {
                     $jcNullable = true;
-                    if (is_array($jc)) {
+                    if (\is_array($jc)) {
                         $jcNullable = $jc['nullable'] ?? true;
                     } elseif (
-                        is_object($jc)
+                        \is_object($jc)
                         && property_exists($jc, 'nullable')
                     ) {
                         $jcNullable = $jc->nullable ?? true;
@@ -161,7 +161,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
                     }
                     // Fallback for any future required association we have not implemented yet.
                     $this->markTestIncomplete(
-                        sprintf(
+                        \sprintf(
                             'DoorLog has a required association "%s" with no auto-fixture strategy. Extend populateRequiredScalars() to handle it.',
                             $assoc,
                         ),
@@ -228,7 +228,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
         $logs = [];
         for ($i = 0; $i < 5; ++$i) {
             $logs[] = $this->makeDoorLog(
-                $now->modify(sprintf('+%d minutes', $i)),
+                $now->modify(\sprintf('+%d minutes', $i)),
             );
         }
         foreach ($logs as $l) {
@@ -248,7 +248,7 @@ final class DoorLogRepositoryTest extends RepositoryTestCase
             $timestamps[] = $createdAt->getTimestamp();
         }
         $sorted = $timestamps;
-        rsort($sorted, SORT_NUMERIC);
+        rsort($sorted, \SORT_NUMERIC);
         self::assertSame(
             $sorted,
             $timestamps,

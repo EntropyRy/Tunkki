@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helper;
 
 use Psr\Log\LoggerInterface;
@@ -92,7 +94,7 @@ class ePics
                     $response->getContent(),
                     true,
                     512,
-                    JSON_THROW_ON_ERROR,
+                    \JSON_THROW_ON_ERROR,
                 );
 
                 if (!empty($photoData['size_variants'])) {

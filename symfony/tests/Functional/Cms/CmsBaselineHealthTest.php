@@ -53,7 +53,7 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
         $path = 'fi' === $locale ? '/' : '/en/';
 
         $client->request('GET', $path);
-        self::assertResponseIsSuccessful(sprintf('Homepage request failed for locale=%s path=%s', $locale, $path));
+        self::assertResponseIsSuccessful(\sprintf('Homepage request failed for locale=%s path=%s', $locale, $path));
         self::assertSame(
             200,
             $client->getResponse()->getStatusCode(),
@@ -62,7 +62,7 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
 
         // Defensive: confirm exactly two sites (FI + EN) and required pages exist
         $siteRepo = $this->em()->getRepository(SonataPageSite::class);
-        $siteCount = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : count($siteRepo->findAll());
+        $siteCount = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : \count($siteRepo->findAll());
         self::assertSame(2, $siteCount, 'Expected exactly two CMS sites (FI default + EN).');
 
         $sites = method_exists($siteRepo, 'findAll') ? $siteRepo->findAll() : [];
@@ -75,7 +75,7 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
             $root = method_exists($pageRepo, 'findOneBy') ? $pageRepo->findOneBy(['site' => $site, 'url' => '/']) : null;
             self::assertNotNull(
                 $root,
-                sprintf('Root page missing for site locale=%s', method_exists($site, 'getLocale') ? $site->getLocale() : 'n/a')
+                \sprintf('Root page missing for site locale=%s', method_exists($site, 'getLocale') ? $site->getLocale() : 'n/a')
             );
 
             $locale = method_exists($site, 'getLocale') ? (string) $site->getLocale() : 'fi';
@@ -83,10 +83,10 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
             $joinUrl = 'en' === $locale ? '/join-us' : '/liity';
 
             $events = method_exists($pageRepo, 'findOneBy') ? $pageRepo->findOneBy(['site' => $site, 'url' => $eventsUrl]) : null;
-            self::assertNotNull($events, sprintf('Events page (%s) missing for site locale=%s', $eventsUrl, $locale));
+            self::assertNotNull($events, \sprintf('Events page (%s) missing for site locale=%s', $eventsUrl, $locale));
 
             $join = method_exists($pageRepo, 'findOneBy') ? $pageRepo->findOneBy(['site' => $site, 'url' => $joinUrl]) : null;
-            self::assertNotNull($join, sprintf('Join Us page (%s) missing for site locale=%s', $joinUrl, $locale));
+            self::assertNotNull($join, \sprintf('Join Us page (%s) missing for site locale=%s', $joinUrl, $locale));
         }
     }
 
@@ -96,8 +96,8 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
         $siteRepo = $em->getRepository(SonataPageSite::class);
         $pageRepo = $em->getRepository(SonataPagePage::class);
 
-        $initialSites = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : count($siteRepo->findAll());
-        $initialPages = method_exists($pageRepo, 'count') ? $pageRepo->count([]) : count($pageRepo->findAll());
+        $initialSites = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : \count($siteRepo->findAll());
+        $initialPages = method_exists($pageRepo, 'count') ? $pageRepo->count([]) : \count($pageRepo->findAll());
 
         // Trigger additional baseline-related requests
         $this->client()->request('GET', '/');
@@ -105,8 +105,8 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
         $this->client()->request('GET', '/en/');
         self::assertResponseIsSuccessful();
 
-        $afterSites = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : count($siteRepo->findAll());
-        $afterPages = method_exists($pageRepo, 'count') ? $pageRepo->count([]) : count($pageRepo->findAll());
+        $afterSites = method_exists($siteRepo, 'count') ? $siteRepo->count([]) : \count($siteRepo->findAll());
+        $afterPages = method_exists($pageRepo, 'count') ? $pageRepo->count([]) : \count($pageRepo->findAll());
 
         self::assertSame(2, $initialSites, 'Expected exactly two CMS sites initially.');
         self::assertSame(2, $afterSites, 'Expected exactly two CMS sites after homepage requests.');

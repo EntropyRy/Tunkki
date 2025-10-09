@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Entity\Member;
@@ -45,7 +47,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
         $client = $this->clientRegistry->getClient('mattermost');
         $accessToken = $this->fetchAccessToken($client);
         $session = $request->getSession();
-        assert($session instanceof Session);
+        \assert($session instanceof Session);
         $fb = $session->getFlashBag();
 
         return new SelfValidatingPassport(

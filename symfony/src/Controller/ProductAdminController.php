@@ -28,7 +28,7 @@ final class ProductAdminController extends CRUDController
         $updated = 0;
         foreach ($stripePrices as $stripePrice) {
             $product = $this->pRepo->findOneBy(['stripePriceId' => $stripePrice['id']]);
-            if ($product) {
+            if ($product instanceof Product) {
                 ++$updated;
             } else {
                 $product = new Product();

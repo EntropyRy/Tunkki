@@ -44,7 +44,7 @@ final class EventNowPhaseBoundaryTest extends TestCase
     {
         $ref = new \ReflectionClass($object);
         if (!$ref->hasProperty($property)) {
-            self::fail("Property '{$property}' not found on ".get_class($object));
+            self::fail("Property '{$property}' not found on ".$object::class);
         }
         $prop = $ref->getProperty($property);
         $prop->setAccessible(true);

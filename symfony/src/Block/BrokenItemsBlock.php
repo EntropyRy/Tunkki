@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Block;
 
 use App\Entity\Item;
@@ -34,10 +36,10 @@ class BrokenItemsBlock extends BaseBlockService
         $settings = $blockContext->getSettings();
         if ($settings['random']) {
             shuffle($broken);
-            if (count($broken) > 5) {
+            if (\count($broken) > 5) {
                 $l = 3;
             } else {
-                $l = count($broken) ?: 0;
+                $l = \count($broken) ?: 0;
             }
             $broken = array_splice($broken, 0, $l);
         }

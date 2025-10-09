@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Login;
 use App\Factory\MemberFactory;
 use App\Factory\UserFactory;
 use App\Tests\_Base\FixturesWebTestCase;
+use App\Tests\Support\LoginHelperTrait;
 
 /**
  * Successful login scenarios split from the legacy monolithic LoginTest.
@@ -33,6 +34,7 @@ use App\Tests\_Base\FixturesWebTestCase;
  */
 final class SuccessfulLoginTest extends FixturesWebTestCase
 {
+    use LoginHelperTrait;
     // setUp removed: site-aware client now auto-initialized in FixturesWebTestCase::setUp()
 
     /**
@@ -62,16 +64,18 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
         $client = $this->client;
 
         // Create a Member + User pair (MemberFactory auto-creates related User)
-        $member = MemberFactory::new()
-            ->english()
-            ->create();
+        $member = MemberFactory::new()->english()->create();
         $email = $member->getEmail();
         self::assertNotEmpty($email, 'Factory member should have an email.');
 
         // 1. Load login page
         $crawler = $client->request('GET', '/login');
         self::assertResponseIsSuccessful();
-        self::assertGreaterThan(0, $crawler->filter('form')->count(), 'Login page should contain a form.');
+        self::assertGreaterThan(
+            0,
+            $crawler->filter('form')->count(),
+            'Login page should contain a form.',
+        );
 
         // 2. Extract CSRF token if present
         $csrf = null;
@@ -105,7 +109,7 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
             foreach ($paths as $p) {
                 $crawler = $client->request('GET', $p);
                 $status = $client->getResponse()->getStatusCode();
-                if (in_array($status, [301, 302, 303], true)) {
+                if (\in_array($status, [301, 302, 303], true)) {
                     $crawler = $client->followRedirect();
                     $status = $client->getResponse()->getStatusCode();
                 }
@@ -114,14 +118,17 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
                     break;
                 }
             }
-            self::assertTrue($ok, 'Post-login protected page should be accessible.');
+            self::assertTrue(
+                $ok,
+                'Post-login protected page should be accessible.',
+            );
         }
 
         // Authentication validated above by loading a lightweight protected page (profile).
 
         // If we did not land on an expected dashboard/location, try known fallback paths
         $currentPath = $client->getRequest()->getPathInfo();
-        if (!in_array($currentPath, self::EXPECTED_REDIRECT_PATHS, true)) {
+        if (!\in_array($currentPath, self::EXPECTED_REDIRECT_PATHS, true)) {
             foreach (self::EXPECTED_REDIRECT_PATHS as $candidate) {
                 $crawler = $client->request('GET', $candidate);
                 if (200 === $client->getResponse()->getStatusCode()) {
@@ -150,7 +157,10 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
         $ts = static::getContainer()->get('security.token_storage');
         $token = $ts->getToken();
         self::assertNotNull($token, 'No security token after login.');
-        self::assertTrue(is_object($token->getUser()), 'Expected authenticated user after login.');
+        self::assertTrue(
+            \is_object($token->getUser()),
+            'Expected authenticated user after login.',
+        );
     }
 
     /**
@@ -166,14 +176,21 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
         $user = $member->getUser();
         self::assertNotNull($user, 'Factory did not yield an attached User.');
         $client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
 
         // Choose representative protected routes (align with access_control in security.yaml)
-        $candidatePaths = ['/profile', '/en/profile', '/profiili', '/yleiskatsaus', '/en/yleiskatsaus'];
+        $candidatePaths = [
+            '/profile',
+            '/en/profile',
+            '/profiili',
+            '/yleiskatsaus',
+            '/en/yleiskatsaus',
+        ];
         $success = false;
         foreach ($candidatePaths as $path) {
             $client->request('GET', $path);
             $status = $client->getResponse()->getStatusCode();
-            if (in_array($status, [301, 302, 303], true)) {
+            if (\in_array($status, [301, 302, 303], true)) {
                 $client->followRedirect();
                 $status = $client->getResponse()->getStatusCode();
             }
@@ -185,7 +202,7 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
 
         self::assertTrue(
             $success,
-            sprintf(
+            \sprintf(
                 'Authenticated user could not access any expected dashboard path (%s). Adjust paths or test config.',
                 implode(', ', $candidatePaths),
             ),

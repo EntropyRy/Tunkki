@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Happening;
@@ -10,11 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<HappeningBooking>
- *
- * @method HappeningBooking|null find($id, $lockMode = null, $lockVersion = null)
- * @method HappeningBooking|null findOneBy(array $criteria, array $orderBy = null)
- * @method HappeningBooking[]    findAll()
- * @method HappeningBooking[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+/**
+ * @extends ServiceEntityRepository<HappeningBooking>
  */
 class HappeningBookingRepository extends ServiceEntityRepository
 {
@@ -56,8 +56,10 @@ class HappeningBookingRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function findMemberBooking(Member $member, Happening $happening): ?HappeningBooking
-    {
+    public function findMemberBooking(
+        Member $member,
+        Happening $happening,
+    ): ?HappeningBooking {
         return $this->createQueryBuilder('h')
             ->andWhere('h.member = :member')
             ->andWhere('h.happening = :happening')

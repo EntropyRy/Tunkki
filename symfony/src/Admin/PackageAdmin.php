@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin;
 
 use App\Entity\Item;
@@ -52,7 +54,7 @@ class PackageAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $p = $this->getSubject();
-        if (is_null($p->getId())) {
+        if (null === $p->getId()) {
             $query = $this->em->createQueryBuilder()->select('i')
                 ->from(Item::class, 'i')
                 ->andWhere('i.packages is empty')

@@ -140,11 +140,6 @@ class VerifyEmailController extends AbstractController
         }
 
         $member = $user->getMember();
-        if (!$member instanceof Member) {
-            $this->addFlash('danger', 'verify.email.invalid');
-
-            return $this->redirectToRoute('app_login');
-        }
 
         if ($member->isEmailVerified()) {
             $this->addFlash('info', 'verify.email.already');

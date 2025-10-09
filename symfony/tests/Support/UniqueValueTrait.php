@@ -52,7 +52,7 @@ trait UniqueValueTrait
 
         $rand = bin2hex(random_bytes(max(2, $randomBytes)));
 
-        return sprintf('%s-%s', $base, $rand);
+        return \sprintf('%s-%s', $base, $rand);
     }
 
     /**
@@ -71,7 +71,7 @@ trait UniqueValueTrait
 
         $rand = bin2hex(random_bytes(max(2, $randomBytes)));
 
-        return sprintf('%s+%s@example.test', $localPrefix, $rand);
+        return \sprintf('%s+%s@example.test', $localPrefix, $rand);
     }
 
     /**
@@ -98,7 +98,7 @@ trait UniqueValueTrait
         $normalizedBase = preg_replace('#[^a-z0-9-]+#', '-', strtolower(trim($base))) ?: 'slug';
         $normalizedBase = trim(preg_replace('#-+#', '-', $normalizedBase) ?? '', '-');
 
-        $reserved = strlen($suffix) + 1; // hyphen + suffix
+        $reserved = \strlen($suffix) + 1; // hyphen + suffix
         if ($reserved >= $maxLength) {
             // Edge case: fallback to suffix only (trim if still over)
             return substr($suffix, 0, $maxLength);
@@ -106,6 +106,6 @@ trait UniqueValueTrait
 
         $truncated = substr($normalizedBase, 0, $maxLength - $reserved);
 
-        return sprintf('%s-%s', rtrim($truncated, '-'), $suffix);
+        return \sprintf('%s-%s', rtrim($truncated, '-'), $suffix);
     }
 }

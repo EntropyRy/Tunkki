@@ -30,10 +30,10 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
     $stdout = fopen('php://stdout', 'w');
     $stderr = fopen('php://stderr', 'w');
     $out = static function (string $msg) use ($stdout): void {
-        fwrite($stdout, $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL));
+        fwrite($stdout, $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL));
     };
     $err = static function (string $msg) use ($stderr): void {
-        fwrite($stderr, $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL));
+        fwrite($stderr, $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL));
     };
 
     $root = dirname(__DIR__);
@@ -105,7 +105,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
         if (!$router instanceof ChainRouter) {
             $err(
                 '[route-debug] FATAL: Router is not a ChainRouter (got '.
-                    get_class($router).
+                    $router::class.
                     ').',
             );
 
@@ -130,7 +130,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
         ksort($routers);
         foreach ($routers as $prio => $list) {
             foreach ($list as $r) {
-                $chain[] = ['priority' => $prio, 'router' => get_class($r)];
+                $chain[] = ['priority' => $prio, 'router' => $r::class];
             }
         }
     } catch (Throwable $e) {
@@ -145,7 +145,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
         '[route-debug] Env='.
             $_SERVER['APP_ENV'].
             ' PHP='.
-            PHP_VERSION.
+            \PHP_VERSION.
             ' time='.
             date('c'),
     );
@@ -196,7 +196,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
         $req = SiteRequest::create($absolute, 'GET', [], [], [], $server, null);
 
         // Locale based on prefix: default fi, '/en' => en
-        $onlyPath = parse_url($path, PHP_URL_PATH) ?: '/';
+        $onlyPath = parse_url($path, \PHP_URL_PATH) ?: '/';
         if ('/en' === $onlyPath || str_starts_with($onlyPath, '/en/')) {
             $req->setDefaultLocale('en');
             $req->setLocale('en');
@@ -278,7 +278,7 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
                         }
                         // On first success:
                         $result['matched'] = true;
-                        $result['routerClass'] = get_class($inner);
+                        $result['routerClass'] = $inner::class;
                         $result['route'] = $attributes['_route'] ?? null;
                         $result['attributes'] = $attributes;
 
@@ -353,11 +353,11 @@ use Symfony\Component\Routing\Matcher\RequestMatcherInterface;
 
         $out(
             '[route-debug] ChainRouter result: '.
-                json_encode($matchInfo, JSON_UNESCAPED_SLASHES),
+                json_encode($matchInfo, \JSON_UNESCAPED_SLASHES),
         );
         $out(
             '[route-debug] Inner router probe: '.
-                json_encode($inner, JSON_UNESCAPED_SLASHES),
+                json_encode($inner, \JSON_UNESCAPED_SLASHES),
         );
     }
 

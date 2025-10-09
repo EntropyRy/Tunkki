@@ -65,7 +65,6 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
         $user = $member->getUser();
         self::assertNotNull($user, 'Factory did not yield an attached User.');
         $this->client->loginUser($user);
-        $this->forceAuthToken($user);
         $this->stabilizeSessionAfterLogin();
         // Ping a protected route to ensure token is serialized and session cookie set
         $this->client->request(
@@ -73,7 +72,7 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
             'en' === $locale ? '/en/profile' : '/profiili',
         );
         if (
-            in_array(
+            \in_array(
                 $this->client->getResponse()->getStatusCode(),
                 [301, 302, 303],
                 true,
@@ -94,8 +93,8 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
         } catch (\Throwable $e) {
             $path = 'en' === $locale ? '/en/dashboard' : '/yleiskatsaus';
             @fwrite(
-                STDERR,
-                sprintf(
+                \STDERR,
+                \sprintf(
                     "[DashboardTest] Router failed to generate 'dashboard' for locale '%s': %s. Falling back to path '%s'\n",
                     $locale,
                     $e->getMessage(),
@@ -134,10 +133,10 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
                 );
                 $siteCount = method_exists($siteRepo, 'count')
                     ? $siteRepo->count([])
-                    : count($siteRepo->findAll());
+                    : \count($siteRepo->findAll());
                 $pageCount = method_exists($pageRepo, 'count')
                     ? $pageRepo->count([])
-                    : count($pageRepo->findAll());
+                    : \count($pageRepo->findAll());
                 $snapEnabled = null;
                 if (method_exists($snapRepo, 'createQueryBuilder')) {
                     $qb = $snapRepo
@@ -149,8 +148,8 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
                         ->getSingleScalarResult();
                 }
                 @fwrite(
-                    STDERR,
-                    sprintf(
+                    \STDERR,
+                    \sprintf(
                         "[DashboardTest] Non-2xx %d for '%s'. Sites=%d Pages=%d EnabledSnapshots=%s\n",
                         $status,
                         $path,
@@ -161,8 +160,8 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
                 );
             } catch (\Throwable $ee) {
                 @fwrite(
-                    STDERR,
-                    sprintf(
+                    \STDERR,
+                    \sprintf(
                         "[DashboardTest] Diagnostics failed: %s\n",
                         $ee->getMessage(),
                     ),
@@ -174,8 +173,8 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
         $this->assertSame(200, $status, 'Expected 200 for dashboard.');
         $this->assertGreaterThan(
             0,
-            $crawler->filter(sprintf('html[lang="%s"]', $locale))->count(),
-            sprintf('Expected html[lang="%s"] to exist', $locale),
+            $crawler->filter(\sprintf('html[lang="%s"]', $locale))->count(),
+            \sprintf('Expected html[lang="%s"] to exist', $locale),
         );
 
         // Optional structural content check: Title or heading should contain a recognizable dashboard token.

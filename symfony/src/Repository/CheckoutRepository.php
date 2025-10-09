@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Checkout;
@@ -8,11 +10,6 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Checkout>
- *
- * @method Checkout|null find($id, $lockMode = null, $lockVersion = null)
- * @method Checkout|null findOneBy(array $criteria, array $orderBy = null)
- * @method Checkout[]    findAll()
- * @method Checkout[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CheckoutRepository extends ServiceEntityRepository
 {
@@ -65,10 +62,17 @@ class CheckoutRepository extends ServiceEntityRepository
         foreach ($ongoingCheckouts as $checkout) {
             $cart = $checkout->getCart();
             foreach ($cart->getProducts() as $item) {
-                if (!array_key_exists($item->getProduct()->getId(), $itemsInCheckouts)) {
+                if (
+                    !\array_key_exists(
+                        $item->getProduct()->getId(),
+                        $itemsInCheckouts,
+                    )
+                ) {
                     $itemsInCheckouts[$item->getProduct()->getId()] = 0;
                 }
-                $itemsInCheckouts[$item->getProduct()->getId()] += $item->getQuantity();
+                $itemsInCheckouts[
+                    $item->getProduct()->getId()
+                ] += $item->getQuantity();
             }
         }
 

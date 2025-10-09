@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\User;
@@ -11,10 +13,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
 /**
- * @method User|null find($id, $lockMode = null, $lockVersion = null)
- * @method User|null findOneBy(array $criteria, array $orderBy = null)
- * @method User[]    findAll()
- * @method User[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<User>
  */
 class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
@@ -27,10 +26,12 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
      * Used to upgrade (rehash) the user's password automatically over time.
      */
     #[\Override]
-    public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newEncodedPassword): void
-    {
+    public function upgradePassword(
+        PasswordAuthenticatedUserInterface $user,
+        string $newEncodedPassword,
+    ): void {
         if (!$user instanceof User) {
-            throw new UnsupportedUserException(sprintf('Instances of "%s" are not supported.', $user::class));
+            throw new UnsupportedUserException(\sprintf('Instances of "%s" are not supported.', $user::class));
         }
 
         $user->setPassword($newEncodedPassword);
@@ -40,13 +41,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function loadUserByUsername(string $usernameOrEmail): ?User
     {
-        return $this->getEntityManager()->createQuery(
-            'SELECT u
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT u
                 FROM App\Entity\User u
 				INNER JOIN u.member m
                 WHERE m.username = :query
-                OR m.email = :query'
-        )
+                OR m.email = :query',
+            )
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
     }
@@ -54,13 +56,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     #[\Override]
     public function loadUserByIdentifier(string $usernameOrEmail): ?User
     {
-        return $this->getEntityManager()->createQuery(
-            'SELECT u
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT u
                 FROM App\Entity\User u
 				INNER JOIN u.member m
                 WHERE m.username = :query
-                OR m.email = :query'
-        )
+                OR m.email = :query',
+            )
             ->setParameter('query', $usernameOrEmail)
             ->getOneOrNullResult();
     }

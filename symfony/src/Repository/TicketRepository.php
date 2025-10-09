@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Event;
@@ -10,11 +12,9 @@ use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @extends ServiceEntityRepository<Ticket>
- *
- * @method Ticket|null find($id, $lockMode = null, $lockVersion = null)
- * @method Ticket|null findOneBy(array $criteria, array $orderBy = null)
- * @method Ticket[]    findAll()
- * @method Ticket[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ */
+/**
+ * @extends ServiceEntityRepository<Ticket>
  */
 class TicketRepository extends ServiceEntityRepository
 {
@@ -108,7 +108,7 @@ class TicketRepository extends ServiceEntityRepository
         foreach ($all as $ticket) {
             if (
                 'available' == $ticket->getStatus()
-                && is_null($ticket->getOwner())
+                && null === $ticket->getOwner()
             ) {
                 return $ticket;
             }

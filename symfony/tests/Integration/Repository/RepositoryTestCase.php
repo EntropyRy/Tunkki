@@ -110,11 +110,11 @@ abstract class RepositoryTestCase extends FixturesWebTestCase
         self::assertSame(
             $expected,
             $actual,
-            sprintf(
+            \sprintf(
                 'Expected %d %s entities for criteria %s, got %d.',
                 $expected,
                 $entityClass,
-                json_encode($criteria, JSON_THROW_ON_ERROR),
+                json_encode($criteria, \JSON_THROW_ON_ERROR),
                 $actual,
             ),
         );

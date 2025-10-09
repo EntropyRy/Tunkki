@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // src/Twig/Components/ProgressiveImageComponent.php
 
 namespace App\Twig\Components;

@@ -82,7 +82,7 @@ final class ArtistSignupWindowBoundaryTest extends TestCase
     {
         $ref = new \ReflectionClass($object);
         if (!$ref->hasProperty($property)) {
-            $this->fail("Property '{$property}' not found on ".get_class($object));
+            $this->fail("Property '{$property}' not found on ".$object::class);
         }
         $prop = $ref->getProperty($property);
         $prop->setAccessible(true);

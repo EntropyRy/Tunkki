@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Domain\EventPublicationDecider;
@@ -134,28 +136,28 @@ class EventController extends Controller
                 $who = $userObj instanceof UserInterface ? ('auth:'.$userObj::class) : 'anon';
                 $pubDate = $event->getPublishDate()?->format('c') ?? 'null';
                 $flag = var_export($event->getPublished(), true);
-                @fwrite(STDERR, "[oneSlug] event id={$event->getId()} url={$event->getUrl()} publishedFlag={$flag} publishDate={$pubDate} decider=".($isPub ? 'PUBLISHED' : 'NOT_PUBLISHED')." user={$who}".PHP_EOL);
+                @fwrite(\STDERR, "[oneSlug] event id={$event->getId()} url={$event->getUrl()} publishedFlag={$flag} publishDate={$pubDate} decider=".($isPub ? 'PUBLISHED' : 'NOT_PUBLISHED')." user={$who}".\PHP_EOL);
             } catch (\Throwable $e) {
-                @fwrite(STDERR, '[oneSlug] debug failed: '.$e->getMessage().PHP_EOL);
+                @fwrite(\STDERR, '[oneSlug] debug failed: '.$e->getMessage().\PHP_EOL);
             }
         }
         $form = null;
         $user = $this->getUser();
         if ($event->getTicketsEnabled() && $user) {
-            assert($user instanceof User);
+            \assert($user instanceof User);
             $member = $user->getMember();
             $tickets = $ticketRepo->findBy(
                 ['event' => $event, 'owner' => $member]
             ); // own ticket
         }
-        if ($event->getRsvpSystemEnabled() && is_null($user)) {
+        if ($event->getRsvpSystemEnabled() && !$user instanceof UserInterface) {
             $rsvp = new RSVP();
             $form = $this->createForm(RSVPType::class, $rsvp);
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $rsvp = $form->getData();
                 $repo = $em->getRepository(Member::class);
-                assert($repo instanceof MemberRepository);
+                \assert($repo instanceof MemberRepository);
                 $exists = $repo->findByEmailOrName(
                     $rsvp->getEmail(),
                     $rsvp->getFirstName(),
@@ -175,9 +177,9 @@ class EventController extends Controller
                 }
             }
         }
-        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) {
             if (getenv('TEST_EVENT_DEBUG')) {
-                @fwrite(STDERR, "[oneSlug] denying anonymous (not published)\n");
+                @fwrite(\STDERR, "[oneSlug] denying anonymous (not published)\n");
             }
             throw $this->createAccessDeniedException('');
         }
@@ -220,11 +222,11 @@ class EventController extends Controller
         $hasNakki = false;
         $email = null;
         $user = $this->getUser();
-        if ((!$this->publicationDecider->isPublished($event) && is_null($user)) || (is_null($user) && $event->isNakkiRequiredForTicketReservation())) {
+        if ((!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) || (!$user instanceof UserInterface && $event->isNakkiRequiredForTicketReservation())) {
             throw $this->createAccessDeniedException('');
         }
         if (null != $user) {
-            assert($user instanceof User);
+            \assert($user instanceof User);
             $email = $user->getEmail();
             $member = $user->getMember();
             $selected = $nakkirepo->findMemberEventBookings($member, $event);
@@ -249,7 +251,7 @@ class EventController extends Controller
         // if user has the product, remove it from the list
         foreach ($products as $key => $product) {
             // if there can be only one ticket per user, check that user does not have the ticket already
-            $minus = array_key_exists($product->getId(), $max) ? $max[$product->getId()] : 0;
+            $minus = \array_key_exists($product->getId(), $max) ? $max[$product->getId()] : 0;
             if (1 == $product->getHowManyOneCanBuyAtOneTime() && $product->getMax($minus) >= 1 && $product->isTicket()) {
                 foreach ($ticketRepo->findTicketsByEmailAndEvent($email, $event) as $ticket) {
                     if ($ticket->getStripeProductId() == $product->getStripeId()) {
@@ -298,12 +300,12 @@ class EventController extends Controller
                     break;
                 }
             }
-            if (!array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)) {
+            if (!\array_key_exists($nakki->getDefinition()->getName($locale), $nakkis)) {
                 // try to prevent displaying same nakki to 2 different users using the system at the same time
                 $bookings = $nakki->getNakkiBookings()->toArray();
                 shuffle($bookings);
                 foreach ($bookings as $booking) {
-                    if (is_null($booking->getMember())) {
+                    if (null === $booking->getMember()) {
                         $nakkis = $this->addNakkiToArray($nakkis, $booking, $locale);
                         break;
                     }
@@ -381,7 +383,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -405,7 +407,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -429,7 +431,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$this->publicationDecider->isPublished($event) && is_null($user) || !$event->isLocationPublic()) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface || !$event->isLocationPublic()) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -453,7 +455,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('');
         }
 
@@ -477,7 +479,7 @@ class EventController extends Controller
         Event $event,
     ): Response {
         $user = $this->getUser();
-        if (!$this->publicationDecider->isPublished($event) && is_null($user)) {
+        if (!$this->publicationDecider->isPublished($event) && !$user instanceof UserInterface) {
             throw $this->createAccessDeniedException('');
         }
 

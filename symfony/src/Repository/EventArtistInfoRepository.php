@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\EventArtistInfo;
@@ -7,10 +9,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method EventArtistInfo|null find($id, $lockMode = null, $lockVersion = null)
- * @method EventArtistInfo|null findOneBy(array $criteria, array $orderBy = null)
- * @method EventArtistInfo[]    findAll()
- * @method EventArtistInfo[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @extends ServiceEntityRepository<EventArtistInfo>
  */
 class EventArtistInfoRepository extends ServiceEntityRepository
 {
@@ -56,8 +55,7 @@ class EventArtistInfoRepository extends ServiceEntityRepository
             ->andWhere('i.StartTime IS NOT NULL')
             ->setParameter('bool', true)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
         shuffle($infos);
 
         return array_pop($infos);

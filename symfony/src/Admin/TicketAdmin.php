@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Ticket;
-use App\Helper\ReferenceNumber;
+use App\Service\BookingReferenceService;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -21,8 +21,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 final class TicketAdmin extends AbstractAdmin
 {
     #[\Override]
-    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
-    {
+    protected function generateBaseRoutePattern(
+        bool $isChildAdmin = false,
+    ): string {
         return 'ticket';
     }
 
@@ -30,8 +31,7 @@ final class TicketAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         if (!$this->isChild()) {
-            $filter
-                ->add('event');
+            $filter->add('event');
         }
         $filter
             ->add('name')
@@ -59,8 +59,7 @@ final class TicketAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         if (!$this->isChild()) {
-            $list
-                ->add('event');
+            $list->add('event');
         }
         $list
             ->add('ticketHolderHasNakki')
@@ -94,8 +93,7 @@ final class TicketAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $form): void
     {
         if (!$this->isChild()) {
-            $form
-                ->add('event');
+            $form->add('event');
         }
         $form
             ->add('name')
@@ -128,28 +126,41 @@ final class TicketAdmin extends AbstractAdmin
     }
 
     #[\Override]
-    protected function configureRoutes(RouteCollectionInterface $collection): void
-    {
+    protected function configureRoutes(
+        RouteCollectionInterface $collection,
+    ): void {
         $collection->remove('show');
         $collection->add('updateTicketCount', 'countupdate');
         $collection->add('give', $this->getRouterIdParameter().'/give');
         $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
         $collection->add('addBus', $this->getRouterIdParameter().'/bus');
-        $collection->add('changeOwner', $this->getRouterIdParameter().'/change');
-        $collection->add('sendQrCodeEmail', $this->getRouterIdParameter().'/send-qr-code-email');
+        $collection->add(
+            'changeOwner',
+            $this->getRouterIdParameter().'/change',
+        );
+        $collection->add(
+            'sendQrCodeEmail',
+            $this->getRouterIdParameter().'/send-qr-code-email',
+        );
     }
 
     #[\Override]
     public function postPersist($object): void
     {
         if (null == $object->getReferenceNumber()) {
-            $object->setReferenceNumber($this->rn->calculateReferenceNumber($object, 9000, 909));
+            $object->setReferenceNumber(
+                $this->bookingRefService->calculateReferenceNumber(
+                    $object,
+                    9000,
+                    909,
+                ),
+            );
             $this->update($object);
         }
     }
 
     public function __construct(
-        protected ReferenceNumber $rn,
+        protected BookingReferenceService $bookingRefService,
     ) {
     }
 }

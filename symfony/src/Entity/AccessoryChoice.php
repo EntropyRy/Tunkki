@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
@@ -25,7 +27,7 @@ class AccessoryChoice implements \Stringable
         return $this->id;
     }
 
-    public function setName(string $name): AccessoryChoice
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -43,7 +45,7 @@ class AccessoryChoice implements \Stringable
         return $this->name ?: '';
     }
 
-    public function setCompensationPrice(int $compensationPrice): AccessoryChoice
+    public function setCompensationPrice(int $compensationPrice): self
     {
         $this->compensationPrice = $compensationPrice;
 

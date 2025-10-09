@@ -58,12 +58,18 @@ final class EventFactory extends PersistentObjectFactory
         return static function (): array {
             $now = new \DateTimeImmutable();
             $eventDate = $now->modify('+7 days');
-            $slug = strtolower(str_replace([' ', '.'], '-', trim(self::faker()->unique()->words(3, true))));
+            $slug = strtolower(
+                str_replace(
+                    [' ', '.'],
+                    '-',
+                    trim(self::faker()->unique()->words(3, true)),
+                ),
+            );
             $slug = preg_replace('#[^a-z0-9\\-]+#', '-', $slug) ?: 'event-slug';
 
             return [
-                'name' => self::faker()->sentence(3),         // English name
-                'nimi' => self::faker()->sentence(3),         // Finnish name
+                'name' => self::faker()->sentence(3), // English name
+                'nimi' => self::faker()->sentence(3), // Finnish name
                 'type' => 'event',
                 'eventDate' => $eventDate,
                 'publishDate' => new \DateTimeImmutable('-30 days'),
@@ -95,15 +101,29 @@ final class EventFactory extends PersistentObjectFactory
     {
         return $this->afterInstantiate(function (Event $event): void {
             // Normalize publishDate so it never exceeds eventDate for default/generated fixtures.
-            if ($event->getPublishDate() && $event->getEventDate() && $event->getPublishDate() > $event->getEventDate()) {
-                $event->setPublishDate($event->getEventDate()->modify('-30 minutes'));
+            if (
+                $event->getPublishDate()
+                && $event->getEventDate()
+                && $event->getPublishDate() > $event->getEventDate()
+            ) {
+                $eventDate = $event->getEventDate();
+                $immutableEventDate =
+                    $eventDate instanceof \DateTimeImmutable
+                        ? $eventDate
+                        : \DateTimeImmutable::createFromInterface($eventDate);
+                $event->setPublishDate(
+                    $immutableEventDate->modify('-30 minutes'),
+                );
             }
 
             // Derive multiday flag from duration (>24h) or leave as-is if already explicitly forced true by a state (setMultiday called).
-            if (!$event->getMultiday()
+            if (
+                !$event->getMultiday()
                 && $event->getEventDate() instanceof \DateTimeInterface
                 && $event->getUntil() instanceof \DateTimeInterface
-                && ($event->getUntil()->getTimestamp() - $event->getEventDate()->getTimestamp()) > 86400
+                && $event->getUntil()->getTimestamp() -
+                    $event->getEventDate()->getTimestamp() >
+                    86400
             ) {
                 $event->setMultiday(true);
             }
@@ -111,14 +131,21 @@ final class EventFactory extends PersistentObjectFactory
             // If artist signup enabled but window missing, synthesize a reasonable window (ends 3 days before event).
             if (
                 $event->getArtistSignUpEnabled()
-                && (
-                    !$event->getArtistSignUpStart() instanceof \DateTimeImmutable
-                    || !$event->getArtistSignUpEnd() instanceof \DateTimeImmutable
-                )
+                && (!$event->getArtistSignUpStart() instanceof \DateTimeImmutable
+                    || !$event->getArtistSignUpEnd() instanceof \DateTimeImmutable)
             ) {
-                $eventDate = $event->getEventDate() ?? new \DateTimeImmutable('+7 days');
-                $event->setArtistSignUpStart($eventDate->modify('-14 days'));
-                $event->setArtistSignUpEnd($eventDate->modify('-3 days'));
+                $eventDate =
+                    $event->getEventDate() ?? new \DateTimeImmutable('+7 days');
+                $immutableEventDate =
+                    $eventDate instanceof \DateTimeImmutable
+                        ? $eventDate
+                        : \DateTimeImmutable::createFromInterface($eventDate);
+                $event->setArtistSignUpStart(
+                    $immutableEventDate->modify('-14 days'),
+                );
+                $event->setArtistSignUpEnd(
+                    $immutableEventDate->modify('-3 days'),
+                );
             }
         });
     }
@@ -157,7 +184,8 @@ final class EventFactory extends PersistentObjectFactory
     {
         return $this->with([
             'externalUrl' => true,
-            'url' => $destination ?? 'https://example.org/'.self::faker()->unique()->slug(),
+            'url' => $destination ??
+                'https://example.org/'.self::faker()->unique()->slug(),
         ]);
     }
 
@@ -200,10 +228,13 @@ final class EventFactory extends PersistentObjectFactory
             'backgroundEffect' => $effect,
             'backgroundEffectOpacity' => $opacity,
             'backgroundEffectPosition' => $position,
-            'backgroundEffectConfig' => json_encode([
-                'particleCount' => 120,
-                'speed' => 1.0,
-            ], JSON_THROW_ON_ERROR),
+            'backgroundEffectConfig' => json_encode(
+                [
+                    'particleCount' => 120,
+                    'speed' => 1.0,
+                ],
+                \JSON_THROW_ON_ERROR,
+            ),
         ]);
     }
 
@@ -225,7 +256,7 @@ final class EventFactory extends PersistentObjectFactory
     public function multiday(int $days = 2): static
     {
         $start = new \DateTimeImmutable('+5 days');
-        $until = $start->modify(sprintf('+%d days', max(1, $days - 1)));
+        $until = $start->modify(\sprintf('+%d days', max(1, $days - 1)));
 
         return $this->with([
             'eventDate' => $start,
@@ -345,12 +376,10 @@ final class EventFactory extends PersistentObjectFactory
     {
         $past = new \DateTimeImmutable('-1 day');
 
-        return $this
-            ->finished()
-            ->with([
-                'artistSignUpEnabled' => true,
-                'artistSignUpStart' => $past->modify('-14 days'),
-                'artistSignUpEnd' => $past->modify('+2 days'),
-            ]);
+        return $this->finished()->with([
+            'artistSignUpEnabled' => true,
+            'artistSignUpStart' => $past->modify('-14 days'),
+            'artistSignUpEnd' => $past->modify('+2 days'),
+        ]);
     }
 }

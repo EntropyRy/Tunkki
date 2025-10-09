@@ -27,7 +27,7 @@ final class TicketAdminController extends CRUDController
     public function giveAction(TicketRepository $repo): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
-        if (is_null($ticket->getOwner())) {
+        if (null === $ticket->getOwner()) {
             $this->addFlash('warning', 'ticket does not have owner!');
         } else {
             $ticket->setGiven(true);
@@ -40,7 +40,7 @@ final class TicketAdminController extends CRUDController
     public function changeOwnerAction(Request $request, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiRepo): Response
     {
         $ticket = $this->admin->getSubject();
-        if (is_null($ticket->getOwner())) {
+        if (null === $ticket->getOwner()) {
             $this->addFlash('warning', 'ticket does not have owner!');
 
             return $this->redirect($this->admin->generateUrl('list'));
@@ -52,7 +52,7 @@ final class TicketAdminController extends CRUDController
                 $ticket = $form->getData();
                 $new_owner = $ticket->getOwner();
                 $info = '';
-                if (!is_null($nakki)) {
+                if (null !== $nakki) {
                     $nakki->setMember($new_owner);
                     $nakkiRepo->save($nakki, true);
                     $info = 'Nakki and ';

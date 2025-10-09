@@ -39,7 +39,7 @@ final class EventScenariosTest extends FixturesWebTestCase
         $year = (int) $event->getEventDate()->format('Y');
 
         // EN site path with slug route
-        $client->request('GET', sprintf('/en/%d/%s', $year, $event->getUrl()));
+        $client->request('GET', \sprintf('/en/%d/%s', $year, $event->getUrl()));
 
         $this->assertSame(
             302,
@@ -66,18 +66,18 @@ final class EventScenariosTest extends FixturesWebTestCase
             ]);
         $year = (int) $event->getEventDate()->format('Y');
 
-        $client->request('GET', sprintf('/en/%d/%s', $year, $event->getUrl()));
+        $client->request('GET', \sprintf('/en/%d/%s', $year, $event->getUrl()));
         $crawler = $client->getLastCrawler();
 
         // Some environments may issue an initial locale/canonical redirect (302) before the final 200.
         $status = $client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $crawler = $client->followRedirect();
         }
 
         // Final response handling and structural assertions
         $statusFinal = $client->getResponse()->getStatusCode();
-        if (in_array($statusFinal, [301, 302, 303], true)) {
+        if (\in_array($statusFinal, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location') ?? '';
             if (preg_match('#/login#', $loc)) {
                 $this->assertMatchesRegularExpression(
@@ -158,7 +158,7 @@ final class EventScenariosTest extends FixturesWebTestCase
         $this->assertNotNull($id, 'External event must have an ID');
 
         // EN site path + locale-specific route for id
-        $client->request('GET', sprintf('/en/event/%d', $id));
+        $client->request('GET', \sprintf('/en/event/%d', $id));
 
         $this->assertSame(302, $client->getResponse()->getStatusCode());
         $this->assertSame(
@@ -183,7 +183,7 @@ final class EventScenariosTest extends FixturesWebTestCase
 
         $client->request(
             'GET',
-            sprintf('/en/%d/%s/shop', $year, $event->getUrl()),
+            \sprintf('/en/%d/%s/shop', $year, $event->getUrl()),
         );
 
         $this->assertSame(
@@ -216,13 +216,13 @@ final class EventScenariosTest extends FixturesWebTestCase
 
         $client->request(
             'GET',
-            sprintf('/en/%d/%s/shop', $year, $event->getUrl()),
+            \sprintf('/en/%d/%s/shop', $year, $event->getUrl()),
         );
         $crawler = $client->getLastCrawler();
 
         // Allow one redirect hop (e.g., canonical URL normalization). If it goes to login, treat as access control change.
         $status = $client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $location = $client->getResponse()->headers->get('Location') ?? '';
             if (preg_match('#/login#', $location)) {
                 $this->assertMatchesRegularExpression(
@@ -275,17 +275,6 @@ final class EventScenariosTest extends FixturesWebTestCase
             'ROLE_ADMIN',
         ]);
         $this->client->loginUser($user);
-        $this->forceAuthToken($user);
-        $this->stabilizeSessionAfterLogin();
-        // Force-refresh auth context and session cookie before sensitive requests
-        $this->client->request('GET', '/en/profile');
-        $statusPing = $this->client->getResponse()->getStatusCode();
-        if (in_array($statusPing, [301, 302, 303], true)) {
-            $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            if ($loc) {
-                $this->client->request('GET', $loc);
-            }
-        }
         $this->seedClientHome('en');
 
         $event = EventFactory::new()
@@ -299,21 +288,21 @@ final class EventScenariosTest extends FixturesWebTestCase
 
         $this->client->request(
             'GET',
-            sprintf('/en/%d/%s', $year, $event->getUrl()),
+            \sprintf('/en/%d/%s', $year, $event->getUrl()),
         );
 
         $status = $this->client->getResponse()->getStatusCode();
         // If we still get a redirect, allow a single hop to login and skip with context.
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc =
                 $this->client->getResponse()->headers->get('Location') ??
                 '(no Location)';
-            $path = parse_url($loc, PHP_URL_PATH) ?: $loc;
+            $path = parse_url($loc, \PHP_URL_PATH) ?: $loc;
             if (str_contains((string) $path, '/login')) {
                 // Follow single redirect to ensure login page loads, then fail (admin should access unpublished event).
                 $this->client->request('GET', $path);
                 $this->fail(
-                    sprintf(
+                    \sprintf(
                         'Admin user was redirected to login when accessing unpublished event (%d -> %s).',
                         $status,
                         $path,
@@ -321,7 +310,7 @@ final class EventScenariosTest extends FixturesWebTestCase
                 );
             }
             $this->fail(
-                sprintf(
+                \sprintf(
                     'Expected direct access (200) to unpublished event as admin; received %d redirect to %s',
                     $status,
                     $loc,

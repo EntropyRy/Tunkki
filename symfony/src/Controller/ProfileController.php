@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Email;
 use App\Entity\Member;
 use App\Entity\User;
 use App\Form\ActiveMemberType;
@@ -88,9 +89,9 @@ class ProfileController extends AbstractController
             ]);
             $this->announceToMattermost($mm, $member->getName());
 
-            $body = $email_content ? $email_content->getBody() : '';
+            $body = $email_content instanceof Email ? $email_content->getBody() : '';
             $subject =
-                ($email_content
+                ($email_content instanceof Email
                     ? $email_content->getSubject()
                     : $translator->trans('member.welcome.subject')).
                 $translator->trans(
@@ -155,7 +156,7 @@ class ProfileController extends AbstractController
     public function dashboard(Barcode $bc): Response
     {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
 
         // $barcode = $bc->getBarcode($member);
@@ -177,7 +178,7 @@ class ProfileController extends AbstractController
     public function index(): Response
     {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
 
         return $this->render('profile/main.html.twig', [
@@ -199,7 +200,7 @@ class ProfileController extends AbstractController
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $form = $this->createForm(MemberType::class, $member, ['include_user' => false, 'edit' => true]);
         $form->handleRequest($request);
@@ -241,7 +242,7 @@ class ProfileController extends AbstractController
             $plainPassword = $form->get('plainPassword')->getData();
 
             // Extra safeguard: ensure non-empty string before hashing
-            if (!is_string($plainPassword) || '' === $plainPassword) {
+            if (!\is_string($plainPassword) || '' === $plainPassword) {
                 return $this->render('profile/password.html.twig', [
                     'form' => $form,
                 ]);
@@ -277,7 +278,7 @@ class ProfileController extends AbstractController
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         if ($member->getIsActiveMember()) {
             $this->addFlash('success', 'profile.you_are_active_member_already');
@@ -320,7 +321,7 @@ class ProfileController extends AbstractController
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $member = $user->getMember();
         $resolvedUsername =
             $member->getEpicsUsername() ?:

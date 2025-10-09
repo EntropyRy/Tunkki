@@ -16,6 +16,7 @@ final class EventArtistInfoAdminController extends CRUDController
     public function updateAction(): RedirectResponse
     {
         $info = $this->admin->getSubject();
+        \assert($info instanceof EventArtistInfo);
         $artistClone = $info->getArtistClone();
         $artist = $info->getArtist();
         if ($artistClone && $artist) {
@@ -27,13 +28,21 @@ final class EventArtistInfoAdminController extends CRUDController
             $artistClone->setBioEn($artist->getBioEn());
             $artistClone->setPicture($artist->getPicture());
             $artistClone->setLinks($artist->getLinks());
-            $this->admin->update($artistClone);
+            // Persist Artist clone via cascade on EventArtistInfo::$artistClone
             $this->admin->update($info);
-            $this->addFlash('sonata_flash_success', sprintf('%s info updated', $info->getArtist()->getName()));
+            $this->addFlash(
+                'sonata_flash_success',
+                \sprintf('%s info updated', $info->getArtist()->getName()),
+            );
         } else {
             $this->addFlash('warning', 'Nothing to do!');
         }
 
-        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+        return new RedirectResponse(
+            $this->admin->generateUrl(
+                'list',
+                $this->admin->getFilterParameters(),
+            ),
+        );
     }
 }

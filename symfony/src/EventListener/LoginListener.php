@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
 use App\Entity\User;
@@ -23,7 +25,7 @@ class LoginListener implements EventSubscriberInterface
     {
         // get user
         $user = $event->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $user->setLastLogin(new \DateTimeImmutable());
         $this->em->persist($user);
         $this->em->flush();
@@ -52,7 +54,7 @@ class LoginListener implements EventSubscriberInterface
                         '">Resend verification email</a>.';
                 }
                 $session = $request->getSession();
-                assert($session instanceof Session);
+                \assert($session instanceof Session);
                 $session->getFlashBag()->add('warning_html', $message);
             }
         }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Command;
 
 use App\Entity\Member;
@@ -47,7 +49,7 @@ class UserCommand extends Command
         if ($email) {
             $user = null;
             $member = $this->em->getRepository(Member::class)->findOneBy(['email' => $email]);
-            if (is_null($member)) {
+            if (null === $member) {
                 if ($input->getOption('create-user')) {
                     $member = new Member();
                     $member->setEmail($email);
@@ -63,7 +65,7 @@ class UserCommand extends Command
             if ($input->getOption('password')) {
                 $question = new Question('Please enter password for the user ');
                 $helper = $this->getHelper('question');
-                assert($helper instanceof QuestionHelper);
+                \assert($helper instanceof QuestionHelper);
                 $question->setHidden(true);
                 $question->setHiddenFallback(false);
                 $pass = $helper->ask($input, $output, $question);

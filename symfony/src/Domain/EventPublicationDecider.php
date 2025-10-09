@@ -67,7 +67,8 @@ final readonly class EventPublicationDecider
             return false;
         }
 
-        if (true != $event->getPublished()) { // intentionally loose compare retained from legacy semantics
+        if (true != $event->getPublished()) {
+            // intentionally loose compare retained from legacy semantics
             return false;
         }
 
@@ -115,7 +116,7 @@ final readonly class EventPublicationDecider
      * Keeping a hook method aids mutation test planning (you can assert current
      * design explicitly returns null rather than silently guessing).
      */
-    public function unpublishAt(): ?\DateTimeImmutable
+    public function unpublishAt(): null
     {
         // Currently no unpublish rule; return null explicitly.
         return null;

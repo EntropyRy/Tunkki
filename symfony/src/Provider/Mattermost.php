@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Provider;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
@@ -69,7 +71,7 @@ class Mattermost extends AbstractProvider
     {
         if (!empty($data['error'])) {
             $error = $data['error']['message'] ?? '';
-            $code = isset($data['error']['code']) ? intval($data['error']['code']) : 0;
+            $code = isset($data['error']['code']) ? (int) ($data['error']['code']) : 0;
             throw new IdentityProviderException($error, $code, $data);
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
 use App\Entity\Booking;
@@ -53,7 +55,7 @@ class BookingAdminListener implements EventSubscriberInterface
                 $old = $this->em->getUnitOfWork()->getOriginalEntityData($booking);
                 // earlier it was not paid
                 // give reward
-                if (!$old['paid'] && !empty($booking->getActualPrice())) {
+                if (!$old['paid'] && !\in_array($booking->getActualPrice(), ['', '0'], true)) {
                     $amount = (float) $booking->getActualPrice() * 0.10;
                     if ($booking->getGivenAwayBy() === $booking->getReceivedBy()) {
                         $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());

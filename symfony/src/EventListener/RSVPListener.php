@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\EventListener;
 
+use App\Entity\Email;
 use App\Entity\RSVP;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Repository\EmailRepository;
@@ -30,7 +33,7 @@ final readonly class RSVPListener
                 'event' => $event,
                 'purpose' => 'rsvp',
             ]);
-            if ($emailTemplate) {
+            if ($emailTemplate instanceof Email) {
                 $email = $this->generateMail(
                     $userMail,
                     $emailTemplate->getReplyTo() ?: 'hallitus@entropy.fi',
@@ -44,7 +47,7 @@ final readonly class RSVPListener
         }
     }
 
-    private function generateMail(string $to, Address|string $replyto, string $subject, $body, $links, ?SonataMediaMedia $img): TemplatedEmail
+    private function generateMail(string $to, Address|string $replyto, string $subject, string $body, ?bool $links, ?SonataMediaMedia $img): TemplatedEmail
     {
         return new TemplatedEmail()
             ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))

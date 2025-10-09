@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Admin;
 
 use App\Entity\Item;
@@ -31,14 +33,16 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 class ItemAdmin extends AbstractAdmin
 {
     #[\Override]
-    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
-    {
+    protected function generateBaseRoutePattern(
+        bool $isChildAdmin = false,
+    ): string {
         return 'item';
     }
 
     #[\Override]
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
-    {
+    protected function configureDatagridFilters(
+        DatagridMapper $datagridMapper,
+    ): void {
         // $currentContext = $this->cm->getRootCategoriesForContext($context);
         $datagridMapper
             ->add('name')
@@ -74,8 +78,12 @@ class ItemAdmin extends AbstractAdmin
             //            ->add('creator')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'status' => ['template' => 'admin/crud/list__action_status.html.twig'],
-                    'clone' => ['template' => 'admin/crud/list__action_clone.html.twig'],
+                    'status' => [
+                        'template' => 'admin/crud/list__action_status.html.twig',
+                    ],
+                    'clone' => [
+                        'template' => 'admin/crud/list__action_clone.html.twig',
+                    ],
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
@@ -88,7 +96,9 @@ class ItemAdmin extends AbstractAdmin
     {
         $context = 'item';
         $currentContext = $this->cm->find($context);
-        $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode('sonata.classification.admin.category');
+        $categoryAdmin = $this->getConfigurationPool()->getAdminByAdminCode(
+            'sonata.classification.admin.category',
+        );
 
         $formMapper
             ->tab('General')
@@ -99,7 +109,10 @@ class ItemAdmin extends AbstractAdmin
             ->add('serialnumber')
             ->add('placeinstorage')
             ->add('url')
-            ->add('description', TextareaType::class, ['required' => false, 'label' => 'Item description'])
+            ->add('description', TextareaType::class, [
+                'required' => false,
+                'label' => 'Item description',
+            ])
             ->add('commission', DatePickerType::class, [
                 'required' => false,
                 'format' => 'd.M.y',
@@ -128,8 +141,13 @@ class ItemAdmin extends AbstractAdmin
                 'help' => 'Select all fitting groups!',
             ])
             ->add('rent', null, ['label' => 'Rental price (€)'])
-            ->add('rentNotice', TextareaType::class, ['required' => false, 'label' => 'Rental Notice'])
-            ->add('compensationPrice', null, ['label' => 'Compensation price (€)'])
+            ->add('rentNotice', TextareaType::class, [
+                'required' => false,
+                'label' => 'Rental Notice',
+            ])
+            ->add('compensationPrice', null, [
+                'label' => 'Compensation price (€)',
+            ])
             ->end()
             /*            ->with('Condition', array('class' => 'col-md-6'))
                 ->add('forSale')
@@ -145,9 +163,13 @@ class ItemAdmin extends AbstractAdmin
                 ->add('rentHistory', null, ['disabled' => true])
                 ->end()
                 ->with('Meta')
-                ->add('createdAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('createdAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->add('creator', null, ['disabled' => true])
-                ->add('updatedAt', DateTimePickerType::class, ['disabled' => true])
+                ->add('updatedAt', DateTimePickerType::class, [
+                    'disabled' => true,
+                ])
                 ->add('modifier', null, ['disabled' => true])
                 ->end();
         }
@@ -179,9 +201,12 @@ class ItemAdmin extends AbstractAdmin
     }
 
     #[\Override]
-    protected function configureTabMenu(MenuItemInterface $menu, $action, ?AdminInterface $childAdmin = null): void
-    {
-        if (!$childAdmin && !in_array($action, ['edit', 'show'])) {
+    protected function configureTabMenu(
+        MenuItemInterface $menu,
+        $action,
+        ?AdminInterface $childAdmin = null,
+    ): void {
+        if (!$childAdmin && !\in_array($action, ['edit', 'show'])) {
             return;
         }
 
@@ -191,9 +216,20 @@ class ItemAdmin extends AbstractAdmin
         //        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
 
         if ($this->isGranted('EDIT')) {
-            $menu->addChild('Edit Item', ['uri' => $admin->generateUrl('edit', ['id' => $id])]);
-            $menu->addChild('Status', ['uri' => $admin->generateUrl('entropy_tunkki.admin.statusevent.create', ['id' => $id])]);
-            $menu->addChild('Files', ['uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', ['id' => $id])]);
+            $menu->addChild('Edit Item', [
+                'uri' => $admin->generateUrl('edit', ['id' => $id]),
+            ]);
+            $menu->addChild('Status', [
+                'uri' => $admin->generateUrl(
+                    'entropy_tunkki.admin.statusevent.create',
+                    ['id' => $id],
+                ),
+            ]);
+            $menu->addChild('Files', [
+                'uri' => $admin->generateUrl('entropy_tunkki.admin.file.list', [
+                    'id' => $id,
+                ]),
+            ]);
         }
     }
 
@@ -201,6 +237,7 @@ class ItemAdmin extends AbstractAdmin
     public function prePersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
+        \assert($user instanceof User);
         $Item->setModifier($user);
         $Item->setCreator($user);
     }
@@ -209,8 +246,18 @@ class ItemAdmin extends AbstractAdmin
     public function postPersist($Item): void
     {
         $user = $this->ts->getToken()->getUser();
-        assert($user instanceof User);
-        $text = 'ITEM: ['.$Item->getName().']('.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).') created by '.$user;
+        \assert($user instanceof User);
+        $text =
+            'ITEM: ['.
+            $Item->getName().
+            ']('.
+            $this->generateUrl(
+                'show',
+                ['id' => $Item->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL,
+            ).
+            ') created by '.
+            $user;
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
 
@@ -218,10 +265,19 @@ class ItemAdmin extends AbstractAdmin
     public function preUpdate($Item): void
     {
         $user = $this->ts->getToken()->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $Item->setModifier($user);
         $original = $this->em->getUnitOfWork()->getOriginalEntityData($Item);
-        $text = 'ITEM: ['.$Item->getName().']('.$this->generateUrl('show', ['id' => $Item->getId()], UrlGeneratorInterface::ABSOLUTE_URL).'):';
+        $text =
+            'ITEM: ['.
+            $Item->getName().
+            ']('.
+            $this->generateUrl(
+                'show',
+                ['id' => $Item->getId()],
+                UrlGeneratorInterface::ABSOLUTE_URL,
+            ).
+            '):';
         if ($original['name'] != $Item->getName()) {
             $text .= ' renamed from '.$original['name'];
             $text .= ' by '.$user;
@@ -233,14 +289,15 @@ class ItemAdmin extends AbstractAdmin
     public function preRemove($Item): void
     {
         $user = $this->ts->getToken()->getUser();
-        assert($user instanceof User);
+        \assert($user instanceof User);
         $text = '#### ITEM: '.$Item->getName().' deleted by '.$user;
         $this->mm->sendToMattermost($text, 'vuokraus');
     }
 
     #[\Override]
-    protected function configureRoutes(RouteCollectionInterface $collection): void
-    {
+    protected function configureRoutes(
+        RouteCollectionInterface $collection,
+    ): void {
         $collection->add('clone', $this->getRouterIdParameter().'/clone');
     }
 

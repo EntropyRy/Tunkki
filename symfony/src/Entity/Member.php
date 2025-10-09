@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\MemberRepository;
@@ -69,10 +71,10 @@ class Member implements \Stringable
     private ?string $CityOfResidence = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime_immutable', nullable: true)]
-    private ?\DateTimeImmutable $createdAt = null;
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(name: 'updatedAt', type: 'datetime_immutable', nullable: true)]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
@@ -268,19 +270,19 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->createdAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
+    public function setUpdatedAt(\DateTimeImmutable $UpdatedAt): self
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = $UpdatedAt;
 
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
         return $this->updatedAt;
     }

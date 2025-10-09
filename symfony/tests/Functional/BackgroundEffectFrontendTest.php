@@ -52,17 +52,17 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
         $year = (int) $event->getEventDate()->format('Y');
 
         // Request Finnish (default locale) path instead of English-prefixed path
-        $crawler = $this->client->request('GET', sprintf('/%d/%s', $year, $event->getUrl()));
+        $crawler = $this->client->request('GET', \sprintf('/%d/%s', $year, $event->getUrl()));
 
         // Follow a single redirect (e.g. locale/canonical normalization) before asserting success.
         $status = $this->client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303, 307, 308], true)) {
+        if (\in_array($status, [301, 302, 303, 307, 308], true)) {
             $crawler = $this->client->followRedirect();
             $status = $this->client->getResponse()->getStatusCode();
         }
 
-        self::assertGreaterThanOrEqual(200, $status, sprintf('Expected final status >=200 after optional redirect, got %d.', $status));
-        self::assertLessThan(300, $status, sprintf('Expected final 2xx status after optional redirect, got %d.', $status));
+        self::assertGreaterThanOrEqual(200, $status, \sprintf('Expected final status >=200 after optional redirect, got %d.', $status));
+        self::assertLessThan(300, $status, \sprintf('Expected final 2xx status after optional redirect, got %d.', $status));
 
         // Structural: canvas element with correct id
         $canvasCount = $crawler->filter('canvas#flowfields')->count();
@@ -76,7 +76,7 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
                     return;
                 }
                 $map = json_decode($json, true);
-                if (is_array($map) && isset($map['imports']) && is_array($map['imports'])) {
+                if (\is_array($map) && isset($map['imports']) && \is_array($map['imports'])) {
                     foreach ($map['imports'] as $name => $_path) {
                         if (false !== stripos($name, 'flowfields')) {
                             $importReferenced = true;
@@ -94,7 +94,7 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
         $canvas = $crawler->filter('canvas#flowfields')->first();
         $dataConfig = $canvas->attr('data-config');
         $this->assertNotEmpty($dataConfig, 'data-config attribute must be present on canvas.');
-        $configData = json_decode((string) $dataConfig, true, 512, JSON_THROW_ON_ERROR);
+        $configData = json_decode((string) $dataConfig, true, 512, \JSON_THROW_ON_ERROR);
         $this->assertIsArray($configData, 'Decoded data-config should yield an associative array.');
         $this->assertArrayHasKey('particleCount', $configData, 'Config JSON should contain particleCount key.');
         $this->assertIsInt($configData['particleCount'], 'particleCount should be an integer.');
@@ -107,7 +107,7 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
                 return;
             }
             $map = json_decode($json, true);
-            if (is_array($map) && isset($map['imports']) && is_array($map['imports'])) {
+            if (\is_array($map) && isset($map['imports']) && \is_array($map['imports'])) {
                 foreach ($map['imports'] as $name => $_path) {
                     if (false !== stripos($name, 'flowfields')) {
                         $importReferenced = true;

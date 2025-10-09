@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Item;
@@ -57,7 +59,7 @@ class ItemAdminController extends Controller
             return true;
         }
 
-        if (count($selectedIds) < 2) {
+        if (\count($selectedIds) < 2) {
             return 'not enough selected';
         } else {
             return true;

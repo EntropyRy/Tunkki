@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\StreamArtistRepository;
@@ -31,7 +33,7 @@ class StreamArtist implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->artist->getName();
+        return $this->artist->getName();
     }
 
     public function getId(): ?int

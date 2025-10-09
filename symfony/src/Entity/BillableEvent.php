@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use Doctrine\DBAL\Types\Types;
@@ -70,7 +72,7 @@ class BillableEvent implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        if (!in_array($this->getUnitPrice(), ['', '0'], true)) {
+        if (!\in_array($this->getUnitPrice(), ['', '0'], true)) {
             return '' !== $this->description && '0' !== $this->description ? $this->description.': '.$this->getUnitPrice() : '';
         } else {
             return '';

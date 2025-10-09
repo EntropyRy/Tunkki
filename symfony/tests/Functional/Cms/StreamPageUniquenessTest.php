@@ -25,7 +25,7 @@ final class StreamPageUniquenessTest extends FixturesWebTestCase
         // Finnish: /stream
         $client->request('GET', '/stream');
         $status = $client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location');
             if ($loc) {
                 $client->request('GET', $loc);
@@ -36,7 +36,7 @@ final class StreamPageUniquenessTest extends FixturesWebTestCase
         // English: /en/stream
         $client->request('GET', '/en/stream');
         $status = $client->getResponse()->getStatusCode();
-        if (in_array($status, [301, 302, 303], true)) {
+        if (\in_array($status, [301, 302, 303], true)) {
             $loc = $client->getResponse()->headers->get('Location');
             if ($loc) {
                 $client->request('GET', $loc);
@@ -64,12 +64,12 @@ final class StreamPageUniquenessTest extends FixturesWebTestCase
 
         self::assertSame(
             1,
-            count($fiStreamPages),
+            \count($fiStreamPages),
             'Exactly one /stream page must exist for FI site.'
         );
         self::assertSame(
             1,
-            count($enStreamPages),
+            \count($enStreamPages),
             'Exactly one /stream page must exist for EN site.'
         );
     }

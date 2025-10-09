@@ -28,10 +28,10 @@ use Symfony\Component\Dotenv\Dotenv;
     $stdout = fopen('php://stdout', 'w');
     $stderr = fopen('php://stderr', 'w');
     $writeOut = static function (string $msg) use ($stdout): void {
-        fwrite($stdout, $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL));
+        fwrite($stdout, $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL));
     };
     $writeErr = static function (string $msg) use ($stderr): void {
-        fwrite($stderr, $msg.(str_ends_with($msg, PHP_EOL) ? '' : PHP_EOL));
+        fwrite($stderr, $msg.(str_ends_with($msg, \PHP_EOL) ? '' : \PHP_EOL));
     };
 
     $root = dirname(__DIR__);
@@ -211,7 +211,7 @@ use Symfony\Component\Dotenv\Dotenv;
                 $perSiteChecks[] = sprintf(
                     'Site "%s": duplicate URLs detected -> %s',
                     $loc,
-                    json_encode($dupes, JSON_UNESCAPED_SLASHES),
+                    json_encode($dupes, \JSON_UNESCAPED_SLASHES),
                 );
             }
         }
@@ -224,7 +224,7 @@ use Symfony\Component\Dotenv\Dotenv;
             '[debug-baseline] Env='.
                 $_SERVER['APP_ENV'].
                 ' PHP='.
-                PHP_VERSION.
+                \PHP_VERSION.
                 ' time='.
                 date('c'),
         );

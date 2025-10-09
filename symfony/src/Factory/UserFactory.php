@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Factory;
 
 use App\Entity\User;
@@ -45,7 +47,7 @@ final class UserFactory extends PersistentObjectFactory
             // Short, unique, identifier-safe auth id
             'authId' => self::faker()->unique()->lexify('user_????????'),
             // Bcrypt hash for test password "password"
-            'password' => password_hash('password', PASSWORD_BCRYPT),
+            'password' => password_hash('password', \PASSWORD_BCRYPT),
             // No elevated roles by default
             'roles' => [],
         ];

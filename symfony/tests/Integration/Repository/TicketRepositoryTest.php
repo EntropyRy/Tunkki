@@ -297,7 +297,7 @@ final class TicketRepositoryTest extends RepositoryTestCase
             $ticketsByOwnerEmail,
         );
         self::assertTrue(
-            in_array(301, $ownerRefs, true) || in_array(302, $ownerRefs, true),
+            \in_array(301, $ownerRefs, true) || \in_array(302, $ownerRefs, true),
             'Query by owner email should return at least one owned ticket reference.',
         );
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\AccessGroupsRepository;
@@ -18,7 +20,7 @@ class AccessGroups implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $name = null;
+    private string $name = '';
 
     /**
      * @var Collection<int, User>
@@ -40,7 +42,7 @@ class AccessGroups implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->name;
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -48,7 +50,7 @@ class AccessGroups implements \Stringable
         return $this->id;
     }
 
-    public function getName(): ?string
+    public function getName(): string
     {
         return $this->name;
     }

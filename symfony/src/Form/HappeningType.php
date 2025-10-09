@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Happening;
@@ -118,12 +120,12 @@ class HappeningType extends AbstractType
         // require payment info in both languages.
         $builder->addEventListener(FormEvents::PRE_SUBMIT, function (FormEvent $event): void {
             $data = $event->getData();
-            if (!is_array($data)) {
+            if (!\is_array($data)) {
                 return;
             }
-            if (array_key_exists('time', $data)) {
+            if (\array_key_exists('time', $data)) {
                 $value = $data['time'];
-                if (is_string($value)) {
+                if (\is_string($value)) {
                     $value = trim($value);
                 }
                 if ('' === $value || null === $value) {

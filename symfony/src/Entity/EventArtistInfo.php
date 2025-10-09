@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity;
 
 use App\Repository\EventArtistInfoRepository;
@@ -23,7 +25,13 @@ class EventArtistInfo implements \Stringable
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
     private ?Event $Event = null;
 
-    #[ORM\ManyToOne(targetEntity: Artist::class, inversedBy: 'eventArtistInfos', cascade: ['persist'])]
+    #[
+        ORM\ManyToOne(
+            targetEntity: Artist::class,
+            inversedBy: 'eventArtistInfos',
+            cascade: ['persist'],
+        ),
+    ]
     private ?Artist $Artist = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -167,11 +175,12 @@ class EventArtistInfo implements \Stringable
 
     public function getArtistDataHasUpdate(\DateTimeInterface $eventDate): bool
     {
-        if ($eventDate < new \DateTime('now')->modify('-1 day')) {
+        if ($eventDate < new \DateTimeImmutable('now')->modify('-1 day')) {
             return false;
         }
         if ($this->getArtist() instanceof Artist) {
-            return $this->getArtistClone()->getUpdatedAt()->format('U') < $this->getArtist()->getUpdatedAt()->format('U');
+            return $this->getArtistClone()->getUpdatedAt()->format('U') <
+                $this->getArtist()->getUpdatedAt()->format('U');
         }
 
         return false;
@@ -179,7 +188,9 @@ class EventArtistInfo implements \Stringable
 
     public function getArtistName(): string
     {
-        return $this->getArtist() instanceof Artist ? $this->getArtist()->getName() : $this->getArtistClone()->getName();
+        return $this->getArtist() instanceof Artist
+            ? $this->getArtist()->getName()
+            : $this->getArtistClone()->getName();
     }
 
     public function isAgreeOnRecording(): ?bool

@@ -64,7 +64,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
 
         foreach ($sites as $site) {
             $locale = $site->getLocale();
-            if (!in_array($locale, ['fi', 'en'], true)) {
+            if (!\in_array($locale, ['fi', 'en'], true)) {
                 continue;
             }
 
@@ -75,7 +75,7 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
 
             // Find the root (homepage) page (url '/')
             $root = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'url' => '/',
             ]);
 
@@ -86,19 +86,21 @@ final class AnnouncementsPageFixtures extends Fixture implements DependentFixtur
 
             // Locate existing announcements page by alias first
             $page = $pageRepo->findOneBy([
-                'site' => $site->getId(),
+                'site' => $site,
                 'pageAlias' => $alias,
             ]);
 
             if (!$page instanceof SonataPagePage) {
                 // Fallback attempts (slug or url) for previously created but un-aliased pages
-                $page = $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'slug' => $slug,
-                ]) ?? $pageRepo->findOneBy([
-                    'site' => $site->getId(),
-                    'url' => $url,
-                ]);
+                $page =
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'slug' => $slug,
+                    ]) ??
+                    $pageRepo->findOneBy([
+                        'site' => $site,
+                        'url' => $url,
+                    ]);
             }
 
             $isNew = false;
