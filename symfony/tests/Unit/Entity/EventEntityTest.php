@@ -26,12 +26,15 @@ class EventEntityTest extends TestCase
         $this->assertIsString($event->getContent());
         $this->assertIsString($event->getSisallys());
         $this->assertNull($event->getUrl());
-        $this->assertFalse($event->isPublic());
+        $publicationDecider = new \App\Domain\EventPublicationDecider(
+            new \App\Time\AppClock(),
+        );
+        $this->assertFalse($publicationDecider->isPublished($event));
         $this->assertNull($event->getType());
         $this->assertNull($event->getEpics());
         $this->assertFalse($event->isExternalUrl());
         $this->assertFalse($event->isSticky());
-        $this->assertSame('banner', $event->getPicturePosition());
+        $this->assertSame("banner", $event->getPicturePosition());
         $this->assertFalse($event->isCancelled());
         $this->assertFalse($event->isMultiday());
         $this->assertNull($event->getAttachment());
@@ -56,7 +59,7 @@ class EventEntityTest extends TestCase
         $this->assertIsString($event->getNakkiInfoFi());
         $this->assertIsString($event->getNakkiInfoEn());
         $this->assertFalse($event->getIncludeSaferSpaceGuidelines());
-        $this->assertSame('light', $event->getHeaderTheme());
+        $this->assertSame("light", $event->getHeaderTheme());
         $this->assertNull($event->getStreamPlayerUrl());
         $this->assertNull($event->getImgFilterColor());
         $this->assertNull($event->getImgFilterBlendMode());
@@ -104,7 +107,7 @@ class EventEntityTest extends TestCase
         );
         $this->assertTrue($event->isAllowMembersToCreateHappenings());
         $this->assertNull($event->getLocation());
-        $this->assertSame('event.html.twig', $event->getTemplate());
+        $this->assertSame("event.html.twig", $event->getTemplate());
         $this->assertNull($event->getAbstractFi());
         $this->assertNull($event->getAbstractEn());
         $this->assertInstanceOf(
@@ -123,39 +126,42 @@ class EventEntityTest extends TestCase
     {
         $event = new Event();
 
-        $event->setName('Test Event');
-        $this->assertSame('Test Event', $event->getName());
+        $event->setName("Test Event");
+        $this->assertSame("Test Event", $event->getName());
 
-        $event->setNimi('Tapahtuma');
-        $this->assertSame('Tapahtuma', $event->getNimi());
+        $event->setNimi("Tapahtuma");
+        $this->assertSame("Tapahtuma", $event->getNimi());
 
-        $date = new \DateTimeImmutable('2025-10-10 12:00:00');
+        $date = new \DateTimeImmutable("2025-10-10 12:00:00");
         $event->setEventDate($date);
         $this->assertSame($date, $event->getEventDate());
 
         $event->setPublishDate($date);
         $this->assertSame($date, $event->getPublishDate());
 
-        $event->setCss('body { color: red; }');
-        $this->assertSame('body { color: red; }', $event->getCss());
+        $event->setCss("body { color: red; }");
+        $this->assertSame("body { color: red; }", $event->getCss());
 
-        $event->setContent('Content here');
-        $this->assertSame('Content here', $event->getContent());
+        $event->setContent("Content here");
+        $this->assertSame("Content here", $event->getContent());
 
-        $event->setSisallys('Sisältö tässä');
-        $this->assertSame('Sisältö tässä', $event->getSisallys());
+        $event->setSisallys("Sisältö tässä");
+        $this->assertSame("Sisältö tässä", $event->getSisallys());
 
-        $event->setUrl('https://example.com');
-        $this->assertSame('https://example.com', $event->getUrl());
+        $event->setUrl("https://example.com");
+        $this->assertSame("https://example.com", $event->getUrl());
 
         $event->setPublished(true);
-        $this->assertTrue($event->isPublic());
+        $publicationDecider = new \App\Domain\EventPublicationDecider(
+            new \App\Time\AppClock(),
+        );
+        $this->assertTrue($publicationDecider->isPublished($event));
 
-        $event->setType('concert');
-        $this->assertSame('concert', $event->getType());
+        $event->setType("concert");
+        $this->assertSame("concert", $event->getType());
 
-        $event->setEpics('epics123');
-        $this->assertSame('epics123', $event->getEpics());
+        $event->setEpics("epics123");
+        $this->assertSame("epics123", $event->getEpics());
 
         $event->setExternalUrl(true);
         $this->assertTrue($event->isExternalUrl());
@@ -163,8 +169,8 @@ class EventEntityTest extends TestCase
         $event->setSticky(true);
         $this->assertTrue($event->isSticky());
 
-        $event->setPicturePosition('footer');
-        $this->assertSame('footer', $event->getPicturePosition());
+        $event->setPicturePosition("footer");
+        $this->assertSame("footer", $event->getPicturePosition());
 
         $event->setCancelled(true);
         $this->assertTrue($event->isCancelled());
@@ -172,9 +178,9 @@ class EventEntityTest extends TestCase
         $event->setMultiday(true);
         $this->assertTrue($event->isMultiday());
 
-        $event->setLinks([['url' => 'https://a.com', 'title' => 'A']]);
+        $event->setLinks([["url" => "https://a.com", "title" => "A"]]);
         $this->assertIsArray($event->getLinks());
-        $this->assertSame('https://a.com', $event->getLinks()[0]['url']);
+        $this->assertSame("https://a.com", $event->getLinks()[0]["url"]);
     }
 
     public function testLifecycleHooks(): void
@@ -246,7 +252,7 @@ class EventEntityTest extends TestCase
     public function testDomainHelpers(): void
     {
         $event = new Event();
-        $event->setName('Test Event');
-        $this->assertSame('Test Event', (string) $event);
+        $event->setName("Test Event");
+        $this->assertSame("Test Event", (string) $event);
     }
 }
