@@ -1,0 +1,171 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Tests\Unit\Entity;
+
+use App\Entity\Event;
+use App\Entity\Member;
+use App\Entity\Nakki;
+use App\Entity\NakkiBooking;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @covers \App\Entity\NakkiBooking
+ */
+final class NakkiBookingEntityTest extends TestCase
+{
+    public function testSetAndGetNakki(): void
+    {
+        $booking = new NakkiBooking();
+        $nakki = $this->createMock(Nakki::class);
+
+        $booking->setNakki($nakki);
+        $this->assertSame($nakki, $booking->getNakki());
+
+        $booking->setNakki(null);
+        $this->assertNull($booking->getNakki());
+    }
+
+    public function testSetAndGetMember(): void
+    {
+        $booking = new NakkiBooking();
+        $member = $this->createMock(Member::class);
+
+        $booking->setMember($member);
+        $this->assertSame($member, $booking->getMember());
+
+        $booking->setMember(null);
+        $this->assertNull($booking->getMember());
+    }
+
+    public function testSetAndGetStartAtEndAt(): void
+    {
+        $booking = new NakkiBooking();
+        $start = new \DateTimeImmutable('2025-01-01 10:00:00');
+        $end = new \DateTimeImmutable('2025-01-01 12:00:00');
+
+        $booking->setStartAt($start);
+        $booking->setEndAt($end);
+
+        $this->assertSame($start, $booking->getStartAt());
+        $this->assertSame($end, $booking->getEndAt());
+    }
+
+    public function testSetAndGetEvent(): void
+    {
+        $booking = new NakkiBooking();
+        $event = $this->createMock(Event::class);
+
+        $booking->setEvent($event);
+        $this->assertSame($event, $booking->getEvent());
+
+        $booking->setEvent(null);
+        $this->assertNull($booking->getEvent());
+    }
+
+    public function testGetMemberEmailWithMember(): void
+    {
+        $booking = new NakkiBooking();
+        $member = $this->createMock(Member::class);
+        $member->method('getEmail')->willReturn('member@example.com');
+
+        $booking->setMember($member);
+        $this->assertSame('member@example.com', $booking->getMemberEmail());
+    }
+
+    public function testGetMemberEmailWithoutMember(): void
+    {
+        $booking = new NakkiBooking();
+        $booking->setMember(null);
+        $this->assertNull($booking->getMemberEmail());
+    }
+
+    public function testMemberHasEventTicketTrue(): void
+    {
+        $booking = new NakkiBooking();
+        $member = $this->createMock(Member::class);
+        $event = $this->createMock(Event::class);
+
+        $event->method('memberHasTicket')->with($member)->willReturn(true);
+
+        $booking->setMember($member);
+        $booking->setEvent($event);
+
+        $this->assertTrue($booking->memberHasEventTicket());
+    }
+
+    public function testMemberHasEventTicketFalse(): void
+    {
+        $booking = new NakkiBooking();
+        $member = $this->createMock(Member::class);
+        $event = $this->createMock(Event::class);
+
+        $event->method('memberHasTicket')->with($member)->willReturn(false);
+
+        $booking->setMember($member);
+        $booking->setEvent($event);
+
+        $this->assertFalse($booking->memberHasEventTicket());
+    }
+
+    public function testMemberHasEventTicketNoMember(): void
+    {
+        $booking = new NakkiBooking();
+        $event = $this->createMock(Event::class);
+
+        $booking->setMember(null);
+        $booking->setEvent($event);
+
+        $this->assertFalse($booking->memberHasEventTicket());
+    }
+
+    public function testToStringWithNakkiAndEventRequired(): void
+    {
+        $booking = new NakkiBooking();
+        $nakki = $this->createMock(Nakki::class);
+        $event = $this->createMock(Event::class);
+
+        $event->method('isNakkiRequiredForTicketReservation')->willReturn(true);
+        $booking->setNakki($nakki);
+        $booking->setEvent($event);
+
+        $this->assertStringContainsString((string) $event, (string) $booking);
+        $this->assertStringContainsString((string) $nakki, (string) $booking);
+    }
+
+    public function testToStringWithNakkiAndEventNotRequired(): void
+    {
+        $booking = new NakkiBooking();
+        $nakki = $this->createMock(Nakki::class);
+        $event = $this->createMock(Event::class);
+
+        $event
+            ->method('isNakkiRequiredForTicketReservation')
+            ->willReturn(false);
+        $booking->setNakki($nakki);
+        $booking->setEvent($event);
+
+        $booking->setStartAt(new \DateTimeImmutable('2025-01-01 10:00:00'));
+
+        $str = (string) $booking;
+        $this->assertStringContainsString((string) $event, $str);
+        $this->assertStringContainsString((string) $nakki, $str);
+        $this->assertStringContainsString('10:00', $str);
+    }
+
+    public function testEdgeCaseSetters(): void
+    {
+        $booking = new NakkiBooking();
+        $booking->setNakki(null);
+        $booking->setMember(null);
+        // $booking->setStartAt(null); // Do not pass null to setStartAt, which requires DateTimeImmutable
+        // $booking->setEndAt(null); // Do not pass null to setEndAt, which requires DateTimeImmutable
+        $booking->setEvent(null);
+
+        $this->assertNull($booking->getNakki());
+        $this->assertNull($booking->getMember());
+        $this->assertNull($booking->getEndAt());
+        $this->assertNull($booking->getEvent());
+    }
+}

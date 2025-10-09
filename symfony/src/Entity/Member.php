@@ -122,6 +122,9 @@ class Member implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 8)]
     private ?string $locale = 'fi';
 
+    /**
+     * @var Collection<int, Artist>
+     */
     #[
         ORM\OneToMany(
             targetEntity: Artist::class,
@@ -132,6 +135,9 @@ class Member implements \Stringable
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private $artist;
 
+    /**
+     * @var Collection<int, DoorLog>
+     */
     #[
         ORM\OneToMany(
             targetEntity: DoorLog::class,
@@ -144,6 +150,9 @@ class Member implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $theme = null;
 
+    /**
+     * @var Collection<int, RSVP>
+     */
     #[
         ORM\OneToMany(
             targetEntity: RSVP::class,
@@ -153,18 +162,30 @@ class Member implements \Stringable
     ]
     private $RSVPs;
 
+    /**
+     * @var Collection<int, NakkiBooking>
+     */
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'member')]
     private $nakkiBookings;
 
+    /**
+     * @var Collection<int, Ticket>
+     */
     #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'owner')]
     private $tickets;
 
+    /**
+     * @var Collection<int, Nakki>
+     */
     #[ORM\OneToMany(targetEntity: Nakki::class, mappedBy: 'responsible')]
     private $responsibleForNakkis;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $denyKerdeAccess = false;
 
+    /**
+     * @var Collection<int, HappeningBooking>
+     */
     #[
         ORM\OneToMany(
             targetEntity: HappeningBooking::class,
@@ -174,6 +195,9 @@ class Member implements \Stringable
     ]
     private Collection $happeningBooking;
 
+    /**
+     * @var Collection<int, Happening>
+     */
     #[ORM\ManyToMany(targetEntity: Happening::class, mappedBy: 'owners')]
     private Collection $happenings;
 

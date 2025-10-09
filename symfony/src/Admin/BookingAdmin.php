@@ -82,7 +82,7 @@ class BookingAdmin extends AbstractAdmin
             ]);
             $menu->addChild('Status', [
                 'uri' => $admin->generateUrl(
-                    'entropy_tunkki.admin.statusevent.create',
+                    'admin_app_item_statusevent_create',
                     ['id' => $id],
                 ),
             ]);

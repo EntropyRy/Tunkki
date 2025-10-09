@@ -122,7 +122,7 @@ class CalendarController extends AbstractController
         header('Content-Type: text/calendar; charset=utf-8');
         header('Content-Disposition: attachment; filename="entropy.ics"');
 
-        return new Response($calendarComponent);
+        return new Response($calendarComponent->render());
     }
 
     protected function addEvent(
@@ -139,14 +139,18 @@ class CalendarController extends AbstractController
         // which could cause macOS Calendar to interpret it differently and shift times.
         $tz = new PhpDateTimeZone('Europe/Helsinki');
         if ($start instanceof \DateTimeInterface) {
-            $start = \DateTimeImmutable::createFromInterface($start)->setTimezone($tz);
+            $start = \DateTimeImmutable::createFromInterface(
+                $start,
+            )->setTimezone($tz);
         }
         if ($end instanceof \DateTimeInterface) {
-            $end = \DateTimeImmutable::createFromInterface($end)->setTimezone($tz);
+            $end = \DateTimeImmutable::createFromInterface($end)->setTimezone(
+                $tz,
+            );
         }
         $occurance = new TimeSpan(
             new DateTime($start, false), // not floating, includes TZ
-            new DateTime($end, false),   // not floating, includes TZ
+            new DateTime($end, false), // not floating, includes TZ
         );
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = new CalendarEvent($uid)
@@ -178,7 +182,10 @@ class CalendarController extends AbstractController
                 $onlineUrl,
             );
             $e->setLocation(
-                new Location($composite, $physicalLocation->getNameByLocale($locale)),
+                new Location(
+                    $composite,
+                    $physicalLocation->getNameByLocale($locale),
+                ),
             );
         } elseif ($physicalLocation instanceof \App\Entity\Location) {
             $e->setLocation(

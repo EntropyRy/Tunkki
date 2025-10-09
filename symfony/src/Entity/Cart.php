@@ -20,7 +20,13 @@ class Cart
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $email = null;
 
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: CartItem::class, cascade: ['persist', 'remove'])]
+    #[
+        ORM\OneToMany(
+            mappedBy: 'cart',
+            targetEntity: CartItem::class,
+            cascade: ['persist', 'remove'],
+        ),
+    ]
     private Collection $products;
 
     #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Checkout::class)]
@@ -70,7 +76,10 @@ class Cart
     public function removeProduct(CartItem $product): static
     {
         // set the owning side to null (unless already changed)
-        if ($this->products->removeElement($product) && $product->getCart() === $this) {
+        if (
+            $this->products->removeElement($product)
+            && $product->getCart() === $this
+        ) {
             $product->setCart(null);
         }
 
@@ -80,8 +89,9 @@ class Cart
     public function setProducts($products): void
     {
         $this->clearProducts();
-        foreach ($products as $product) {
-            if ($product->isTicket() && $product->isActive()) {
+        foreach ($products as $cartItem) {
+            $product = $cartItem->getProduct();
+            if ($product && $product->isTicket() && $product->isActive()) {
                 $item = new CartItem();
                 $item->setProduct($product);
                 $item->setQuantity(0);
@@ -120,7 +130,10 @@ class Cart
     public function removeCheckout(Checkout $checkout): static
     {
         // set the owning side to null (unless already changed)
-        if ($this->checkouts->removeElement($checkout) && $checkout->getCart() === $this) {
+        if (
+            $this->checkouts->removeElement($checkout)
+            && $checkout->getCart() === $this
+        ) {
             $checkout->setCart(null);
         }
 

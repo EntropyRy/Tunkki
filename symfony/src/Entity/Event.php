@@ -455,6 +455,7 @@ class Event implements \Stringable
         return $this->getName() ?: 'Happening';
     }
 
+    #[\Deprecated(message: 'Use isPublic() instead. Remove getPublished() after test migration.')]
     public function getPublished(): ?bool
     {
         return $this->published;
@@ -467,7 +468,151 @@ class Event implements \Stringable
         return $this;
     }
 
+    /**
+     * Returns true if the event is public (published and not cancelled).
+     */
+    public function isPublic(): bool
+    {
+        return $this->published && !$this->cancelled;
+    }
+
+    /**
+     * Returns true if the event is marked as external.
+     */
+    public function isExternalUrl(): bool
+    {
+        return $this->externalUrl;
+    }
+
     // (Removed 2025-10-02) Publication logic migrated to App\Domain\EventPublicationDecider::isPublished(Event) for clock-driven determinism.
+
+    /**
+     * Returns true if the event is marked as cancelled.
+     */
+    public function isCancelled(): bool
+    {
+        return $this->cancelled;
+    }
+
+    /**
+     * Returns true if the event is marked as sticky.
+     */
+    public function isSticky(): bool
+    {
+        return $this->sticky;
+    }
+
+    /**
+     * Returns true if the event is marked as multiday.
+     */
+    public function isMultiday(): bool
+    {
+        return $this->multiday;
+    }
+
+    /**
+     * Returns true if the event has Nakkikone enabled.
+     */
+    public function isNakkikoneEnabled(): bool
+    {
+        return $this->NakkikoneEnabled;
+    }
+
+    /**
+     * Returns true if artist sign-up is enabled for the event.
+     */
+    public function isArtistSignUpEnabled(): bool
+    {
+        return (bool) $this->artistSignUpEnabled;
+    }
+
+    /**
+     * Returns true if RSVP system is enabled.
+     */
+    public function isRsvpSystemEnabled(): bool
+    {
+        return (bool) $this->rsvpSystemEnabled;
+    }
+
+    /**
+     * Returns true if tickets are enabled.
+     */
+    public function isTicketsEnabled(): bool
+    {
+        return (bool) $this->ticketsEnabled;
+    }
+
+    /**
+     * Returns true if showNakkikoneLinkInEvent is enabled.
+     */
+    public function isShowNakkikoneLinkInEvent(): bool
+    {
+        return (bool) $this->showNakkikoneLinkInEvent;
+    }
+
+    /**
+     * Returns true if requireNakkiBookingsToBeDifferentTimes is enabled.
+     */
+    public function isRequireNakkiBookingsToBeDifferentTimes(): bool
+    {
+        return (bool) $this->requireNakkiBookingsToBeDifferentTimes;
+    }
+
+    /**
+     * Returns true if allowMembersToCreateHappenings is enabled.
+     */
+    public function isAllowMembersToCreateHappenings(): bool
+    {
+        return (bool) $this->allowMembersToCreateHappenings;
+    }
+
+    /**
+     * Returns true if sendRsvpEmail is enabled.
+     */
+    public function isSendRsvpEmail(): bool
+    {
+        return (bool) $this->sendRsvpEmail;
+    }
+
+    /**
+     * Returns true if includeSaferSpaceGuidelines is enabled.
+     */
+    public function isIncludeSaferSpaceGuidelines(): bool
+    {
+        return (bool) $this->includeSaferSpaceGuidelines;
+    }
+
+    /**
+     * Returns true if rsvpOnlyToActiveMembers is enabled.
+     */
+    public function isRsvpOnlyToActiveMembers(): bool
+    {
+        return (bool) $this->rsvpOnlyToActiveMembers;
+    }
+
+    /**
+     * Returns true if nakkiRequiredForTicketReservation is enabled.
+     */
+    public function isNakkiRequiredForTicketReservation(): bool
+    {
+        return (bool) $this->nakkiRequiredForTicketReservation;
+    }
+
+    /**
+     * Returns true if artistSignUpAskSetLength is enabled.
+     */
+    public function isArtistSignUpAskSetLength(): bool
+    {
+        return (bool) $this->artistSignUpAskSetLength;
+    }
+
+    /**
+     * Returns true if artist sign-up is only shown for logged-in members.
+     */
+    public function isShowArtistSignUpOnlyForLoggedInMembers(): bool
+    {
+        return (bool) $this->showArtistSignUpOnlyForLoggedInMembers;
+    }
 
     public function __construct()
     {
@@ -808,11 +953,6 @@ class Event implements \Stringable
         }
 
         return $this;
-    }
-
-    public function isRsvpSystemEnabled(): ?bool
-    {
-        return $this->rsvpSystemEnabled;
     }
 
     public function getRsvpSystemEnabled(): ?bool
@@ -1420,22 +1560,12 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function isRsvpOnlyToActiveMembers(): ?bool
-    {
-        return $this->rsvpOnlyToActiveMembers;
-    }
-
     public function setRsvpOnlyToActiveMembers(
         ?bool $rsvpOnlyToActiveMembers,
     ): self {
         $this->rsvpOnlyToActiveMembers = $rsvpOnlyToActiveMembers;
 
         return $this;
-    }
-
-    public function isNakkiRequiredForTicketReservation(): ?bool
-    {
-        return $this->nakkiRequiredForTicketReservation;
     }
 
     public function setNakkiRequiredForTicketReservation(
@@ -1637,11 +1767,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function isAllowMembersToCreateHappenings(): ?bool
-    {
-        return $this->allowMembersToCreateHappenings;
-    }
-
     public function setAllowMembersToCreateHappenings(
         ?bool $allowMembersToCreateHappenings,
     ): static {
@@ -1789,11 +1914,6 @@ class Event implements \Stringable
         $func = 'artistSignUpInfo'.ucfirst((string) $lang);
 
         return $this->{$func};
-    }
-
-    public function isSendRsvpEmail(): ?bool
-    {
-        return $this->sendRsvpEmail;
     }
 
     public function setSendRsvpEmail(?bool $sendRsvpEmail): static
