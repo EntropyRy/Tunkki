@@ -14,12 +14,13 @@ use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\InlineKeyboardMarkup
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
 use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
+use Symfony\Component\Notifier\Transport\TransportInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class SendTelegramNotificationHandler
 {
     public function __construct(
-        private ChatterInterface $chatter,
+        private TransportInterface $chatter,
         private EntityManagerInterface $entityManager,
         private Pool $mediaPool,
         private RequestStack $requestStack,

@@ -342,6 +342,16 @@ services:
             $email: "%booking_notification_email%"
             $fromEmail: "%mailer_sender_address%"
 
+    # Telegram transport for direct sending (bypasses message_bus to get immediate messageId)
+    telegram.transport:
+        class: Symfony\Component\Notifier\Bridge\Telegram\TelegramTransport
+        arguments:
+            - '%env(TELEGRAM_DSN)%'
+
+    App\MessageHandler\SendTelegramNotificationHandler:
+        arguments:
+            $chatter: '@telegram.transport'
+
     admin.email:
         class: App\Admin\EmailAdmin
         tags:
