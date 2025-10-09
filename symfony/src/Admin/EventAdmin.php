@@ -345,6 +345,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add("externalUrl", null, [
                     "label" => "External Url/No addvert at all if url is empty",
                     "help" => "Is the add hosted here?",
+                    "required" => false,
                 ])
                 ->add("url", null, [
                     "help" =>
@@ -524,6 +525,7 @@ final class EventAdmin extends AbstractAdmin
                 ])
                 ->add("artistSignUpAskSetLength", null, [
                     "label" => "Do we ask set length?",
+                    "required" => false,
                 ])
                 ->add("showArtistSignUpOnlyForLoggedInMembers", null, [
                     "help" =>
@@ -556,6 +558,7 @@ final class EventAdmin extends AbstractAdmin
                 ->add("NakkikoneEnabled", null, [
                     "help" =>
                         "Publish nakkikone and allow members to reserve Nakkis",
+                    "required" => false,
                 ])
                 ->add("showNakkikoneLinkInEvent", null, [
                     "help" => "Publish nakkikone in event",
