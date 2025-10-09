@@ -9,7 +9,6 @@ use App\Message\SendTelegramNotification;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\Button\InlineKeyboardButton;
 use Symfony\Component\Notifier\Bridge\Telegram\Reply\Markup\InlineKeyboardMarkup;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
@@ -17,7 +16,6 @@ use Symfony\Component\Notifier\ChatterInterface;
 use Symfony\Component\Notifier\Message\ChatMessage;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AsMessageHandler]
 final readonly class SendTelegramNotificationHandler
 {
     public function __construct(

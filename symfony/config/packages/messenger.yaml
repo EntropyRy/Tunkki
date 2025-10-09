@@ -14,7 +14,6 @@ framework:
             # 'App\Message\YourMessage': async
             # Route chat messages to sync transport for instant delivery
             'Symfony\Component\Notifier\Message\ChatMessage': sync
-            'App\Message\SendTelegramNotification': sync
 
 # when@test:
 #    framework:
