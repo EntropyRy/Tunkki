@@ -9,7 +9,6 @@ use App\Entity\Sonata\SonataPageSite;
 use App\Factory\PageFactory;
 use App\Factory\SiteFactory;
 use App\PageService\FrontPage;
-use Zenstruck\Foundry\RepositoryProxy;
 use Zenstruck\Foundry\Story;
 
 /**
@@ -62,7 +61,6 @@ final class CmsBaselineStory extends Story
 
     private function ensureSite(string $locale, bool $isDefault, string $relativePath): SonataPageSite
     {
-        /** @var RepositoryProxy $repo */
         $repo = SiteFactory::repository();
 
         /** @var SonataPageSite|null $existing */
@@ -102,9 +100,7 @@ final class CmsBaselineStory extends Story
 
     private function removeOtherSitesOfLocale(string $locale, SonataPageSite $canonical): void
     {
-        /** @var RepositoryProxy $siteRepo */
         $siteRepo = SiteFactory::repository();
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPageSite[] $all */
@@ -131,9 +127,7 @@ final class CmsBaselineStory extends Story
 
     private function pruneNonCanonicalLocales(SonataPageSite $fi, SonataPageSite $en): void
     {
-        /** @var RepositoryProxy $siteRepo */
         $siteRepo = SiteFactory::repository();
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPageSite[] $all */
@@ -167,7 +161,6 @@ final class CmsBaselineStory extends Story
 
     private function ensureRootPage(SonataPageSite $site): SonataPagePage
     {
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPagePage|null $root */
@@ -315,7 +308,6 @@ final class CmsBaselineStory extends Story
         int $position,
         ?string $metaDescriptionIfMissing = null,
     ): SonataPagePage {
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         // Find existing by alias OR slug OR url (prefer alias)
@@ -377,7 +369,6 @@ final class CmsBaselineStory extends Story
         string $alias,
         int $position,
     ): void {
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         $candidates = $pageRepo->findBy(['site' => $site, 'url' => $url]) ?? [];
@@ -447,7 +438,6 @@ final class CmsBaselineStory extends Story
 
     private function ensureStream(SonataPageSite $site, SonataPagePage $root): void
     {
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         $streams = $pageRepo->findBy(['site' => $site, 'url' => '/stream']) ?? [];
@@ -515,7 +505,6 @@ final class CmsBaselineStory extends Story
 
     private function deduplicatePagesByUrl(SonataPageSite $site): void
     {
-        /** @var RepositoryProxy $pageRepo */
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPagePage[] $pages */
