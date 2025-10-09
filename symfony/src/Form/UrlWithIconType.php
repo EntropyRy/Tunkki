@@ -92,6 +92,7 @@ final class UrlWithIconType extends AbstractType
             ])
             ->add('open_in_new_window', CheckboxType::class, [
                 'label' => 'url.form.open_in_new_window',
+                'required' => false,
             ]);
     }
 }

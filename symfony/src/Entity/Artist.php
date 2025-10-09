@@ -85,6 +85,8 @@ class Artist implements \Stringable
     public function __construct()
     {
         $this->eventArtistInfos = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updatedAt = new \DateTimeImmutable();
     }
 
     #[ORM\PrePersist]
