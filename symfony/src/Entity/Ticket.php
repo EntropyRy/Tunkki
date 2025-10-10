@@ -21,14 +21,14 @@ class Ticket implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Event $event = null;
+    private Event $event;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
     private ?Member $owner = null;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $price = null;
+    private int $price;
 
     #[ORM\Column(type: Types::INTEGER, nullable: true)]
     private ?int $referenceNumber = null;
@@ -68,12 +68,12 @@ class Ticket implements \Stringable
         return $this->id;
     }
 
-    public function getEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 
@@ -92,7 +92,7 @@ class Ticket implements \Stringable
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): int
     {
         return $this->price;
     }
@@ -147,11 +147,10 @@ class Ticket implements \Stringable
 
     public function ticketHolderHasNakki(): ?NakkiBooking
     {
-        $event = $this->getEvent();
         $member = $this->getOwner();
-        if ($event instanceof Event && $member instanceof Member) {
+        if ($member instanceof Member) {
             // find member Nakki only if it is mandatory
-            return $event->ticketHolderHasNakki($member);
+            return $this->event->ticketHolderHasNakki($member);
         }
 
         return null;

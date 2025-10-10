@@ -71,10 +71,10 @@ class Member implements \Stringable
     private ?string $CityOfResidence = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime_immutable', nullable: true)]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column(name: 'updatedAt', type: 'datetime_immutable', nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
@@ -294,7 +294,7 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -306,7 +306,7 @@ class Member implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -568,10 +568,6 @@ class Member implements \Stringable
     {
         if ($this->artist->contains($artist)) {
             $this->artist->removeElement($artist);
-            // set the owning side to null (unless already changed)
-            if ($artist->getMember() === $this) {
-                $artist->setMember(null);
-            }
         }
 
         return $this;
@@ -597,13 +593,7 @@ class Member implements \Stringable
 
     public function removeDoorLog(DoorLog $doorLog): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->doorLogs->removeElement($doorLog)
-            && $doorLog->getMember() === $this
-        ) {
-            $doorLog->setMember(null);
-        }
+        $this->doorLogs->removeElement($doorLog);
 
         return $this;
     }
@@ -640,13 +630,7 @@ class Member implements \Stringable
 
     public function removeRSVP(RSVP $rSVP): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->RSVPs->removeElement($rSVP)
-            && $rSVP->getMember() === $this
-        ) {
-            $rSVP->setMember(null);
-        }
+        $this->RSVPs->removeElement($rSVP);
 
         return $this;
     }
@@ -671,13 +655,7 @@ class Member implements \Stringable
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->nakkiBookings->removeElement($nakkiBooking)
-            && $nakkiBooking->getMember() === $this
-        ) {
-            $nakkiBooking->setMember(null);
-        }
+        $this->nakkiBookings->removeElement($nakkiBooking);
 
         return $this;
     }
@@ -702,13 +680,7 @@ class Member implements \Stringable
 
     public function removeTicket(Ticket $ticket): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->tickets->removeElement($ticket)
-            && $ticket->getOwner() === $this
-        ) {
-            $ticket->setOwner(null);
-        }
+        $this->tickets->removeElement($ticket);
 
         return $this;
     }
@@ -747,13 +719,7 @@ class Member implements \Stringable
 
     public function removeResponsibleForNakki(Nakki $responsibleForNakki): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->responsibleForNakkis->removeElement($responsibleForNakki)
-            && $responsibleForNakki->getResponsible() === $this
-        ) {
-            $responsibleForNakki->setResponsible(null);
-        }
+        $this->responsibleForNakkis->removeElement($responsibleForNakki);
 
         return $this;
     }

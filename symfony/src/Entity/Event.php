@@ -267,13 +267,22 @@ class Event implements \Stringable
     #[ORM\Column]
     private bool $artistSignUpAskSetLength = true;
 
+    /**
+     * @var Collection<int, Notification>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
     private Collection $notifications;
 
+    /**
+     * @var Collection<int, Happening>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Happening::class)]
     #[OrderBy(['time' => 'ASC'])]
     private Collection $happenings;
 
+    /**
+     * @var Collection<int, Member>
+     */
     #[ORM\ManyToMany(targetEntity: Member::class)]
     private Collection $nakkiResponsibleAdmin;
 
@@ -292,6 +301,9 @@ class Event implements \Stringable
     #[ORM\Column(length: 200, nullable: true)]
     private ?string $abstractEn = null;
 
+    /**
+     * @var Collection<int, Product>
+     */
     #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
     #[OrderBy(['amount' => 'ASC'])]
     private Collection $products;
@@ -318,9 +330,6 @@ class Event implements \Stringable
     public function setCreatedAtValue(): void
     {
         $this->updatedAt = new \DateTimeImmutable();
-        if (null === $this->version) {
-            $this->version = 1;
-        }
     }
 
     #[ORM\PreUpdate]
@@ -623,10 +632,7 @@ class Event implements \Stringable
         $now = new \DateTimeImmutable();
         $nowS = (int) $now->format('U');
 
-        $eventS =
-            $this->EventDate instanceof \DateTimeInterface
-                ? (int) $this->EventDate->format('U')
-                : null;
+        $eventS = (int) $this->EventDate->format('U');
 
         if ($this->until instanceof \DateTimeInterface) {
             $untilS = (int) $this->until->format('U');
@@ -634,11 +640,7 @@ class Event implements \Stringable
             // One-second tolerance to account for the internal "now" being captured slightly after the caller's boundary.
             $tolerance = 1;
 
-            if (
-                null !== $eventS
-                && $nowS >= $eventS
-                && $nowS <= $untilS + $tolerance
-            ) {
+            if ($nowS >= $eventS && $nowS <= $untilS + $tolerance) {
                 return 'now';
             }
 
@@ -930,10 +932,7 @@ class Event implements \Stringable
 
     public function removeRSVP(RSVP $rSVP): self
     {
-        // set the owning side to null (unless already changed)
-        if ($this->RSVPs->removeElement($rSVP) && $rSVP->getEvent() === $this) {
-            $rSVP->setEvent(null);
-        }
+        $this->RSVPs->removeElement($rSVP);
 
         return $this;
     }
@@ -970,13 +969,7 @@ class Event implements \Stringable
 
     public function removeNakki(Nakki $nakki): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->nakkis->removeElement($nakki)
-            && $nakki->getEvent() === $this
-        ) {
-            $nakki->setEvent(null);
-        }
+        $this->nakkis->removeElement($nakki);
 
         return $this;
     }
@@ -1001,13 +994,7 @@ class Event implements \Stringable
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->nakkiBookings->removeElement($nakkiBooking)
-            && $nakkiBooking->getEvent() === $this
-        ) {
-            $nakkiBooking->setEvent(null);
-        }
+        $this->nakkiBookings->removeElement($nakkiBooking);
 
         return $this;
     }
@@ -1219,13 +1206,7 @@ class Event implements \Stringable
 
     public function removeTicket(Ticket $ticket): self
     {
-        // set the owning side to null (unless already changed)
-        if (
-            $this->tickets->removeElement($ticket)
-            && $ticket->getEvent() === $this
-        ) {
-            $ticket->setEvent(null);
-        }
+        $this->tickets->removeElement($ticket);
 
         return $this;
     }
@@ -1298,10 +1279,7 @@ class Event implements \Stringable
             return true;
         }
 
-        if (
-            $this->until instanceof \DateTimeInterface
-            && $this->EventDate instanceof \DateTimeInterface
-        ) {
+        if ($this->until instanceof \DateTimeInterface) {
             return $this->until->format('U') - $this->EventDate->format('U') >
                 86400;
         }
@@ -1826,10 +1804,8 @@ class Event implements \Stringable
      */
     public function getTicketProducts(): Collection
     {
-        new ArrayCollection();
-
         return $this->products->filter(
-            fn (Product $product): ?bool => $product->isTicket(),
+            fn (Product $product): bool => $product->isTicket(),
         );
     }
 

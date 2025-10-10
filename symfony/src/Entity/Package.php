@@ -162,11 +162,9 @@ class Package implements \Stringable
 
     public function getIsSomethingBroken(): bool
     {
-        if ($this->getItems() instanceof Collection) {
-            foreach ($this->getItems() as $item) {
-                if (true == $item->getNeedsFixing()) {
-                    return true;
-                }
+        foreach ($this->getItems() as $item) {
+            if (true == $item->getNeedsFixing()) {
+                return true;
             }
         }
 

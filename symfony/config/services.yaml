@@ -39,6 +39,7 @@ services:
 
   Twig\Extension\StringLoaderExtension:
 
+  Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface: "@sonata.page.cms_manager_selector"
   Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
 

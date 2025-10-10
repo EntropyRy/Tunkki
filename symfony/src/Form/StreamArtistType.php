@@ -13,6 +13,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotNull;
 
+/**
+ * @extends AbstractType<StreamArtist>
+ */
 class StreamArtistType extends AbstractType
 {
     #[\Override]

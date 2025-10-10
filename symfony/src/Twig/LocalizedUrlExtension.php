@@ -8,7 +8,9 @@ use App\Entity\Menu;
 use App\Entity\Sonata\SonataPagePage;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface;
 use Sonata\PageBundle\Model\PageInterface;
+use Sonata\PageBundle\Model\SiteInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
@@ -35,6 +37,7 @@ class LocalizedUrlExtension extends AbstractExtension
         private readonly RouterInterface $router,
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $entityManager,
+        private readonly CmsManagerSelectorInterface $cmsManagerSelector,
         private readonly ?LoggerInterface $logger = null,
     ) {
     }
@@ -249,41 +252,65 @@ class LocalizedUrlExtension extends AbstractExtension
     }
 
     /**
-     * Finds a Sonata Page by its route name.
+     * Finds a Sonata Page by its route name using CmsManager.
      *
      * @param string $routeName The route name to search for
+     * @param SiteInterface|null $site The site to search in (optional, will use current site if not provided)
      *
      * @return PageInterface|null The found page or null if not found
      */
-    private function findPageByRouteName(string $routeName): ?PageInterface
+    private function findPageByRouteName(string $routeName, ?SiteInterface $site = null): ?PageInterface
     {
-        $repository = $this->entityManager->getRepository(
-            SonataPagePage::class,
-        );
+        try {
+            if (null === $site) {
+                $request = $this->requestStack->getCurrentRequest();
+                if (!$request instanceof Request) {
+                    return null;
+                }
+                // Get site from request attributes (set by Sonata Page Bundle)
+                $site = $request->attributes->get('site');
+                if (!$site instanceof SiteInterface) {
+                    return null;
+                }
+            }
 
-        return $repository->findOneBy([
-            'routeName' => $routeName,
-            'enabled' => true,
-        ]);
+            $cmsManager = $this->cmsManagerSelector->retrieve();
+            return $cmsManager->getPageByRouteName($site, $routeName);
+        } catch (\Throwable) {
+            // Page not found or other error
+            return null;
+        }
     }
 
     /**
-     * Finds a Sonata Page by its technical alias.
+     * Finds a Sonata Page by its technical alias using CmsManager.
      *
      * @param string $alias The technical alias to search for (e.g., '_page_alias_services_fi')
+     * @param SiteInterface|null $site The site to search in (optional, will use current site if not provided)
      *
      * @return PageInterface|null The found page or null if not found
      */
-    private function findPageByAlias(string $alias): ?PageInterface
+    private function findPageByAlias(string $alias, ?SiteInterface $site = null): ?PageInterface
     {
-        $repository = $this->entityManager->getRepository(
-            SonataPagePage::class,
-        );
+        try {
+            if (null === $site) {
+                $request = $this->requestStack->getCurrentRequest();
+                if (!$request instanceof Request) {
+                    return null;
+                }
+                // Get site from request attributes (set by Sonata Page Bundle)
+                $site = $request->attributes->get('site');
+                if (!$site instanceof SiteInterface) {
+                    return null;
+                }
+            }
 
-        return $repository->findOneBy([
-            'pageAlias' => $alias,
-            'enabled' => true,
-        ]);
+            $cmsManager = $this->cmsManagerSelector->retrieve();
+            return $cmsManager->getPageByPageAlias($site, $alias);
+        } catch (\Throwable) {
+            // Page not found or other error
+            return null;
+        }
     }
 
     /**

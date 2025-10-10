@@ -18,17 +18,17 @@ class StreamArtist implements \Stringable
 
     #[ORM\ManyToOne(cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Artist $artist = null;
+    private Artist $artist;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $startedAt = null;
+    private \DateTimeImmutable $startedAt;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $stoppedAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'artists', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Stream $stream = null;
+    private Stream $stream;
 
     #[\Override]
     public function __toString(): string
@@ -47,19 +47,19 @@ class StreamArtist implements \Stringable
         $this->startedAt = new \DateTimeImmutable();
     }
 
-    public function getArtist(): ?Artist
+    public function getArtist(): Artist
     {
         return $this->artist;
     }
 
-    public function setArtist(?Artist $artist): static
+    public function setArtist(Artist $artist): static
     {
         $this->artist = $artist;
 
         return $this;
     }
 
-    public function getStartedAt(): ?\DateTimeImmutable
+    public function getStartedAt(): \DateTimeImmutable
     {
         return $this->startedAt;
     }
@@ -83,12 +83,12 @@ class StreamArtist implements \Stringable
         return $this;
     }
 
-    public function getStream(): ?Stream
+    public function getStream(): Stream
     {
         return $this->stream;
     }
 
-    public function setStream(?Stream $stream): static
+    public function setStream(Stream $stream): static
     {
         $this->stream = $stream;
 

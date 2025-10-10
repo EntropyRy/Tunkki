@@ -198,11 +198,12 @@ final class HappeningFactory extends PersistentObjectFactory
      */
     public function forEvent(Event|EventFactory $event): static
     {
-        /** @var Event $resolved */
-        $resolved = $event instanceof EventFactory ? $event->create()->object() : $event;
+        // Resolve the Event instance outside the closure to satisfy PHPStan's type narrowing
+        $resolvedEvent = $event instanceof EventFactory ? $event->create() : $event;
+        \assert($resolvedEvent instanceof Event);
 
-        return $this->afterInstantiate(function (Happening $happening) use ($resolved): void {
-            $happening->setEvent($resolved);
+        return $this->afterInstantiate(function (Happening $happening) use ($resolvedEvent): void {
+            $happening->setEvent($resolvedEvent);
         });
     }
 

@@ -119,7 +119,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
      */
     public function getUsername(): string
     {
-        if ($this->member instanceof Member && $this->member->getUsername()) {
+        if ($this->member->getUsername()) {
             return $this->member->getUsername();
         }
 
@@ -134,7 +134,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[\Override]
     public function getUserIdentifier(): string
     {
-        if ($this->member instanceof Member && $this->member->getEmail()) {
+        if ($this->member->getEmail()) {
             return $this->member->getEmail();
         }
 
@@ -272,10 +272,6 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     {
         if ($this->rewards->contains($reward)) {
             $this->rewards->removeElement($reward);
-            // set the owning side to null (unless already changed)
-            if ($reward->getUser() === $this) {
-                $reward->setUser(null);
-            }
         }
 
         return $this;
@@ -334,11 +330,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[\Override]
     public function __toString(): string
     {
-        if ($this->member instanceof Member) {
-            return (string) $this->member->getName();
-        } else {
-            return 'user: '.$this->id;
-        }
+        return (string) $this->member->getName();
     }
 
     public function getLocale(): string

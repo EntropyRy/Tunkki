@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,8 +21,11 @@ class Renter implements \Stringable
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     private ?int $id = null;
 
+    /**
+     * @var Collection<int, Booking>
+     */
     #[ORM\OneToMany(targetEntity: Booking::class, mappedBy: 'renter')]
-    private $bookings;
+    private Collection $bookings;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]
     private string $name = '';
@@ -172,10 +176,8 @@ class Renter implements \Stringable
 
     /**
      * Get bookings.
-     *
-     * @return Booking
      */
-    public function getBookings()
+    public function getBookings(): Collection
     {
         return $this->bookings;
     }

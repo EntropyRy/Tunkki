@@ -55,8 +55,12 @@ class CalendarController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $sqid = new Sqids();
-            foreach ($form->getData() as $value) {
-                $array[] = $value ? 1 : 0;
+            $array = [];
+            $formData = $form->getData();
+            if (is_array($formData)) {
+                foreach ($formData as $value) {
+                    $array[] = $value ? 1 : 0;
+                }
             }
             $array[] = $user->getId();
             $id = $sqid->encode($array);

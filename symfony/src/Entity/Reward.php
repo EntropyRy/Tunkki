@@ -20,10 +20,10 @@ class Reward implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'rewards')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?User $user = null;
+    private User $user;
 
     /**
-     * @var Collection&lt;int, Booking&gt;
+     * @var Collection<int, Booking>
      */
     #[ORM\ManyToMany(targetEntity: Booking::class, inversedBy: 'rewards')]
     private Collection $bookings;
@@ -41,7 +41,7 @@ class Reward implements \Stringable
     private ?User $PaymentHandledBy = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column(type: Types::INTEGER)]
     private int $Weight = 0;
@@ -71,12 +71,12 @@ class Reward implements \Stringable
         return $this->id;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 
@@ -145,6 +145,9 @@ class Reward implements \Stringable
 
     public function setPaidDate(?\DateTimeInterface $paidDate): self
     {
+        if ($paidDate instanceof \DateTimeInterface && !$paidDate instanceof \DateTimeImmutable) {
+            $paidDate = \DateTimeImmutable::createFromInterface($paidDate);
+        }
         $this->paidDate = $paidDate;
 
         return $this;
@@ -162,13 +165,16 @@ class Reward implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeInterface
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
 
     public function setUpdatedAt(\DateTimeInterface $updatedAt): self
     {
+        if (!$updatedAt instanceof \DateTimeImmutable) {
+            $updatedAt = \DateTimeImmutable::createFromInterface($updatedAt);
+        }
         $this->updatedAt = $updatedAt;
 
         return $this;

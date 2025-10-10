@@ -19,16 +19,16 @@ class Stream implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
-    private ?int $listeners = 0;
+    private int $listeners = 0;
 
     #[ORM\Column]
-    private ?bool $online = null;
+    private bool $online = false;
 
     /**
      * @var Collection<int, StreamArtist>
@@ -37,7 +37,7 @@ class Stream implements \Stringable
     private Collection $artists;
 
     #[ORM\Column(length: 190)]
-    private ?string $filename = null;
+    private string $filename = '';
 
     public function __construct()
     {
@@ -68,12 +68,12 @@ class Stream implements \Stringable
         return $this->id;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -85,7 +85,7 @@ class Stream implements \Stringable
         return $this;
     }
 
-    public function getListeners(): ?int
+    public function getListeners(): int
     {
         return $this->listeners;
     }
@@ -97,7 +97,7 @@ class Stream implements \Stringable
         return $this;
     }
 
-    public function isOnline(): ?bool
+    public function isOnline(): bool
     {
         return $this->online;
     }
@@ -129,10 +129,7 @@ class Stream implements \Stringable
 
     public function removeArtist(StreamArtist $artist): static
     {
-        // set the owning side to null (unless already changed)
-        if ($this->artists->removeElement($artist) && $artist->getStream() === $this) {
-            $artist->setStream(null);
-        }
+        $this->artists->removeElement($artist);
 
         return $this;
     }
@@ -142,7 +139,7 @@ class Stream implements \Stringable
         return $this->artists->filter(fn (StreamArtist $artist): bool => !$artist->getStoppedAt() instanceof \DateTimeImmutable);
     }
 
-    public function getFilename(): ?string
+    public function getFilename(): string
     {
         return $this->filename;
     }

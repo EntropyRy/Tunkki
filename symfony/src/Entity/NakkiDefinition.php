@@ -17,16 +17,16 @@ class NakkiDefinition implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $nameFi = null;
+    private string $nameFi = '';
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    private ?string $nameEn = null;
+    private string $nameEn = '';
 
     #[ORM\Column(type: 'text')]
-    private ?string $DescriptionFi = null;
+    private string $DescriptionFi = '';
 
     #[ORM\Column(type: 'text')]
-    private ?string $DescriptionEn = null;
+    private string $DescriptionEn = '';
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $onlyForActiveMembers = false;
@@ -56,7 +56,7 @@ class NakkiDefinition implements \Stringable
         return $this->{$func};
     }
 
-    public function getNameFi(): ?string
+    public function getNameFi(): string
     {
         return $this->nameFi;
     }
@@ -68,7 +68,7 @@ class NakkiDefinition implements \Stringable
         return $this;
     }
 
-    public function getNameEn(): ?string
+    public function getNameEn(): string
     {
         return $this->nameEn;
     }
@@ -80,7 +80,7 @@ class NakkiDefinition implements \Stringable
         return $this;
     }
 
-    public function getDescriptionFi(): ?string
+    public function getDescriptionFi(): string
     {
         return $this->DescriptionFi;
     }
@@ -92,7 +92,7 @@ class NakkiDefinition implements \Stringable
         return $this;
     }
 
-    public function getDescriptionEn(): ?string
+    public function getDescriptionEn(): string
     {
         return $this->DescriptionEn;
     }

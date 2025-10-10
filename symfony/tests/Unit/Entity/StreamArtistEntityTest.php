@@ -17,10 +17,7 @@ final class StreamArtistEntityTest extends TestCase
     public function testPrePersistSetsStartedAt(): void
     {
         $entity = new StreamArtist();
-        $this->assertNull(
-            $entity->getStartedAt(),
-            'startedAt should be null before prePersist',
-        );
+        // startedAt is uninitialized before prePersist (cannot access it)
 
         $entity->prePersist();
         $startedAt = $entity->getStartedAt();
@@ -41,9 +38,6 @@ final class StreamArtistEntityTest extends TestCase
 
         $entity->setArtist($artist);
         $this->assertSame($artist, $entity->getArtist());
-
-        $entity->setArtist(null);
-        $this->assertNull($entity->getArtist());
     }
 
     public function testSetAndGetStream(): void
@@ -53,9 +47,6 @@ final class StreamArtistEntityTest extends TestCase
 
         $entity->setStream($stream);
         $this->assertSame($stream, $entity->getStream());
-
-        $entity->setStream(null);
-        $this->assertNull($entity->getStream());
     }
 
     public function testSetAndGetStartedAt(): void
@@ -89,28 +80,13 @@ final class StreamArtistEntityTest extends TestCase
         $this->assertSame('TestArtist', (string) $entity);
     }
 
-    public function testToStringWithNullArtist(): void
-    {
-        $entity = new StreamArtist();
-        // __toString will throw if artist is null; test for error
-        $this->expectException(\Error::class);
-        (string) $entity;
-    }
-
     public function testEdgeCaseSetters(): void
     {
         $entity = new StreamArtist();
 
-        // Setting all associations and fields to null
-        $entity->setArtist(null);
-        $entity->setStream(null);
-        // Do not set startedAt to null, as the setter requires DateTimeImmutable
-        // $entity->setStartedAt(null);
+        // Only stoppedAt is nullable; artist, stream, startedAt are required
         $entity->setStoppedAt(null);
 
-        $this->assertNull($entity->getArtist());
-        $this->assertNull($entity->getStream());
-        $this->assertNull($entity->getStartedAt());
         $this->assertNull($entity->getStoppedAt());
     }
 }

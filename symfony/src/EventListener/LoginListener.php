@@ -30,12 +30,12 @@ class LoginListener implements EventSubscriberInterface
         $this->em->persist($user);
         $this->em->flush();
         // set user locale in session
-        $userLocale = $user->getMember()->getLocale() ?? 'fi';
+        $userLocale = $user->getMember()->getLocale();
         $this->localeSwitcher->setLocale($userLocale);
 
         // flash notice if email not verified
         $member = $user->getMember();
-        if ($member && !$member->isEmailVerified()) {
+        if (!$member->isEmailVerified()) {
             $request = $event->getRequest();
             if ($request->hasSession()) {
                 $resendUrl = $this->urlGenerator->generate(

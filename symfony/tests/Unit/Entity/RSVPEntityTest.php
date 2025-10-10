@@ -17,10 +17,7 @@ final class RSVPEntityTest extends TestCase
     public function testLifecycleCallbackSetsCreatedAt(): void
     {
         $entity = new RSVP();
-        $this->assertNull(
-            $entity->getCreatedAt(),
-            'createdAt should be null before PrePersist',
-        );
+        // createdAt is uninitialized before PrePersist (cannot access it)
 
         $entity->setCreatedAtValue();
         $createdAt = $entity->getCreatedAt();
@@ -41,9 +38,6 @@ final class RSVPEntityTest extends TestCase
 
         $entity->setEvent($event);
         $this->assertSame($event, $entity->getEvent());
-
-        $entity->setEvent(null);
-        $this->assertNull($entity->getEvent());
     }
 
     public function testSetAndGetMember(): void
@@ -61,7 +55,7 @@ final class RSVPEntityTest extends TestCase
     public function testSetAndGetCreatedAt(): void
     {
         $entity = new RSVP();
-        $this->assertNull($entity->getCreatedAt());
+        // createdAt is uninitialized until set
 
         $dt = new \DateTimeImmutable('2025-01-01 12:00:00');
         $entity->setCreatedAt($dt);
@@ -164,16 +158,13 @@ final class RSVPEntityTest extends TestCase
     {
         $entity = new RSVP();
 
-        $entity->setEvent(null);
+        // Event and createdAt are non-nullable, cannot set to null
         $entity->setMember(null);
-        // Do not set createdAt to null, as setter requires DateTimeImmutable
         $entity->setEmail(null);
         $entity->setFirstName(null);
         $entity->setLastName(null);
 
-        $this->assertNull($entity->getEvent());
         $this->assertNull($entity->getMember());
-        $this->assertNull($entity->getCreatedAt());
         $this->assertNull($entity->getEmail());
         $this->assertNull($entity->getFirstName());
         $this->assertNull($entity->getLastName());

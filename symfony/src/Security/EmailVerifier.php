@@ -98,7 +98,7 @@ class EmailVerifier
         );
 
         $member = $this->resolveMemberFromUser($user);
-        if ($member && !$member->isEmailVerified()) {
+        if (!$member->isEmailVerified()) {
             $member->setEmailVerified(true);
             $this->em->flush();
         }
@@ -121,7 +121,7 @@ class EmailVerifier
         );
 
         $member = $this->resolveMemberFromUser($user);
-        if ($member && !$member->isEmailVerified()) {
+        if (!$member->isEmailVerified()) {
             $member->setEmailVerified(true);
             $this->em->flush();
         }
@@ -132,6 +132,6 @@ class EmailVerifier
      */
     private function resolveMemberFromUser(User $user): Member
     {
-        return $user->getMember() ?? null;
+        return $user->getMember();
     }
 }

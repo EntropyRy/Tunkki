@@ -23,6 +23,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  * Options:
  *  - include_user (bool): when true adds embedded UserPasswordType (creation)
  *  - edit (bool): when true adds editable preference fields (info mail, etc.)
+ *
+ * @extends AbstractType<Member>
  */
 class MemberType extends AbstractType
 {

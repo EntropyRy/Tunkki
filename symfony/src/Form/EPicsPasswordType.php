@@ -17,6 +17,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
  *
  * This form is intentionally unmapped; controllers should read the submitted password from
  * the "plainPassword" field and call the Lychee API to create/update the account password.
+ *
+ * @extends AbstractType<null>
  */
 class EPicsPasswordType extends AbstractType
 {

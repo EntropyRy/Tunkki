@@ -22,10 +22,10 @@ class Menu implements \Stringable
     private $id;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $label = null;
+    private string $label;
 
     #[ORM\Column(type: Types::STRING, length: 180)]
-    private ?string $nimi = null;
+    private string $nimi;
 
     #[ORM\Column(type: Types::STRING, length: 180, nullable: true)]
     private ?string $url = null;
@@ -37,19 +37,19 @@ class Menu implements \Stringable
     private ?Page $pageEn = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    private ?bool $enabled = null;
+    private bool $enabled;
 
     #[Gedmo\TreeLeft]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $lft = null;
+    private int $lft;
 
     #[Gedmo\TreeLevel]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $lvl = null;
+    private int $lvl;
 
     #[Gedmo\TreeRight]
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $rgt = null;
+    private int $rgt;
 
     #[Gedmo\TreeRoot]
     #[ORM\ManyToOne(targetEntity: self::class)]
@@ -57,7 +57,7 @@ class Menu implements \Stringable
     private ?Menu $root = null;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private ?int $position = null;
+    private int $position;
 
     #[Gedmo\TreeParent]
     #[ORM\ManyToOne(targetEntity: self::class, inversedBy: 'children')]
@@ -70,8 +70,11 @@ class Menu implements \Stringable
     ]
     private ?Menu $parent = null;
 
+    /**
+     * @var Collection<int, Menu>
+     */
     #[ORM\OneToMany(targetEntity: self::class, mappedBy: 'parent')]
-    private $children;
+    private Collection $children;
 
     public function __construct()
     {
@@ -83,7 +86,7 @@ class Menu implements \Stringable
         return $this->id;
     }
 
-    public function getLabel(): ?string
+    public function getLabel(): string
     {
         return $this->label;
     }
@@ -95,7 +98,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getNimi(): ?string
+    public function getNimi(): string
     {
         return $this->nimi;
     }
@@ -119,7 +122,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getEnabled(): ?bool
+    public function getEnabled(): bool
     {
         return $this->enabled;
     }
@@ -131,7 +134,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getLft(): ?int
+    public function getLft(): int
     {
         return $this->lft;
     }
@@ -143,7 +146,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getLvl(): ?int
+    public function getLvl(): int
     {
         return $this->lvl;
     }
@@ -155,7 +158,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getRgt(): ?int
+    public function getRgt(): int
     {
         return $this->rgt;
     }
@@ -167,7 +170,7 @@ class Menu implements \Stringable
         return $this;
     }
 
-    public function getPosition(): ?int
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -242,7 +245,7 @@ class Menu implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->label ?: 'n/a';
+        return $this->label !== '' ? $this->label : 'n/a';
     }
 
     public function getPageFi(): ?Page

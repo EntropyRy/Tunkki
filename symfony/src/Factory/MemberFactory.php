@@ -65,15 +65,11 @@ final class MemberFactory extends PersistentObjectFactory
             $user = new User();
             $user->setPassword(password_hash('password', \PASSWORD_BCRYPT));
             $user->setRoles([]);
-            if (method_exists($user, 'setAuthId')) {
-                $user->setAuthId(bin2hex(random_bytes(10)));
-            }
+            $user->setAuthId(bin2hex(random_bytes(10)));
 
             // Owning side first, then inverse side.
             $user->setMember($member);
-            if (method_exists($member, 'setUser')) {
-                $member->setUser($user);
-            }
+            $member->setUser($user);
         });
     }
 

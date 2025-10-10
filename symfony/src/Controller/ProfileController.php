@@ -235,10 +235,12 @@ class ProfileController extends AbstractController
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
+        \assert($user instanceof User);
         $form = $this->createForm(UserPasswordType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $user = $form->getData();
+            \assert($user instanceof User);
             $plainPassword = $form->get('plainPassword')->getData();
 
             // Extra safeguard: ensure non-empty string before hashing

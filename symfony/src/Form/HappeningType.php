@@ -18,6 +18,9 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\PositiveOrZero;
 
+/**
+ * @extends AbstractType<Happening>
+ */
 class HappeningType extends AbstractType
 {
     public function __construct(private readonly SluggerInterface $slugger)

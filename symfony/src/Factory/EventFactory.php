@@ -103,7 +103,6 @@ final class EventFactory extends PersistentObjectFactory
             // Normalize publishDate so it never exceeds eventDate for default/generated fixtures.
             if (
                 $event->getPublishDate()
-                && $event->getEventDate()
                 && $event->getPublishDate() > $event->getEventDate()
             ) {
                 $eventDate = $event->getEventDate();
@@ -119,7 +118,6 @@ final class EventFactory extends PersistentObjectFactory
             // Derive multiday flag from duration (>24h) or leave as-is if already explicitly forced true by a state (setMultiday called).
             if (
                 !$event->getMultiday()
-                && $event->getEventDate() instanceof \DateTimeInterface
                 && $event->getUntil() instanceof \DateTimeInterface
                 && $event->getUntil()->getTimestamp() -
                     $event->getEventDate()->getTimestamp() >
@@ -134,8 +132,7 @@ final class EventFactory extends PersistentObjectFactory
                 && (!$event->getArtistSignUpStart() instanceof \DateTimeImmutable
                     || !$event->getArtistSignUpEnd() instanceof \DateTimeImmutable)
             ) {
-                $eventDate =
-                    $event->getEventDate() ?? new \DateTimeImmutable('+7 days');
+                $eventDate = $event->getEventDate();
                 $immutableEventDate =
                     $eventDate instanceof \DateTimeImmutable
                         ? $eventDate

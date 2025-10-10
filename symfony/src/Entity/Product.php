@@ -19,34 +19,34 @@ class Product implements \Stringable
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $stripeId = null;
+    private string $stripeId = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $stripePriceId = null;
+    private string $stripePriceId = '';
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $updatedAt = null;
+    private \DateTimeImmutable $updatedAt;
 
     #[ORM\Column]
-    private ?int $quantity = 0;
+    private int $quantity = 0;
 
     #[ORM\Column]
-    private ?bool $active = true;
+    private bool $active = true;
 
     #[ORM\Column]
-    private ?int $amount = 0;
+    private int $amount = 0;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     private ?Event $event = null;
 
     #[ORM\Column]
-    private ?bool $ticket = false;
+    private bool $ticket = false;
 
     #[ORM\Column]
-    private ?bool $serviceFee = false;
+    private bool $serviceFee = false;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $descriptionFi = null;
@@ -58,13 +58,13 @@ class Product implements \Stringable
     private ?SonataMediaMedia $picture = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $nameEn = null;
+    private string $nameEn = '';
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $nameFi = null;
 
     #[ORM\Column]
-    private ?int $howManyOneCanBuyAtOneTime = 10;
+    private int $howManyOneCanBuyAtOneTime = 10;
 
     public function getSold(): int
     {
@@ -128,7 +128,7 @@ class Product implements \Stringable
         return $this->id;
     }
 
-    public function getStripeId(): ?string
+    public function getStripeId(): string
     {
         return $this->stripeId;
     }
@@ -140,7 +140,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getStripePriceId(): ?string
+    public function getStripePriceId(): string
     {
         return $this->stripePriceId;
     }
@@ -152,7 +152,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }
@@ -164,7 +164,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): \DateTimeImmutable
     {
         return $this->updatedAt;
     }
@@ -176,7 +176,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getQuantity(): ?int
+    public function getQuantity(): int
     {
         return $this->quantity;
     }
@@ -188,7 +188,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function isActive(): ?bool
+    public function isActive(): bool
     {
         return $this->active;
     }
@@ -200,7 +200,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getAmount(): ?int
+    public function getAmount(): int
     {
         return $this->amount;
     }
@@ -224,7 +224,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function isTicket(): ?bool
+    public function isTicket(): bool
     {
         return $this->ticket;
     }
@@ -236,7 +236,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function isServiceFee(): ?bool
+    public function isServiceFee(): bool
     {
         return $this->serviceFee;
     }
@@ -284,7 +284,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getNameEn(): ?string
+    public function getNameEn(): string
     {
         return $this->nameEn;
     }
@@ -308,7 +308,7 @@ class Product implements \Stringable
         return $this;
     }
 
-    public function getHowManyOneCanBuyAtOneTime(): ?int
+    public function getHowManyOneCanBuyAtOneTime(): int
     {
         return $this->howManyOneCanBuyAtOneTime;
     }

@@ -35,9 +35,6 @@ final class TicketEntityTest extends TestCase
 
         $ticket->setEvent($event);
         $this->assertSame($event, $ticket->getEvent());
-
-        $ticket->setEvent(null);
-        $this->assertNull($ticket->getEvent());
     }
 
     public function testSetAndGetOwner(): void
@@ -176,10 +173,8 @@ final class TicketEntityTest extends TestCase
     public function testEdgeCaseSetters(): void
     {
         $ticket = new Ticket();
-        $ticket->setEvent(null);
+        // Event, price, and referenceNumber are non-nullable
         $ticket->setOwner(null);
-        // $ticket->setPrice(null); // Do not pass null to setPrice, which requires int
-        // $ticket->setReferenceNumber(null); // Do not pass null to setReferenceNumber, which requires int
         $ticket->setStatus('available');
         $ticket->setUpdatedAt(new \DateTimeImmutable());
         $ticket->setGiven(null);
@@ -187,10 +182,7 @@ final class TicketEntityTest extends TestCase
         $ticket->setStripeProductId(null);
         $ticket->setName(null);
 
-        $this->assertNull($ticket->getEvent());
         $this->assertNull($ticket->getOwner());
-        $this->assertNull($ticket->getPrice());
-        $this->assertNull($ticket->getReferenceNumber());
         $this->assertSame('available', $ticket->getStatus());
         $this->assertNull($ticket->isGiven());
         $this->assertNull($ticket->getEmail());

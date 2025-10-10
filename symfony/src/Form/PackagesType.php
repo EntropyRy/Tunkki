@@ -12,6 +12,9 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<null>
+ */
 class PackagesType extends AbstractType
 {
     public function __construct(protected EntityManagerInterface $em)

@@ -19,14 +19,14 @@ class RSVP implements \Stringable
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?Event $event = null;
+    private Event $event;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'RSVPs')]
     #[ORM\JoinColumn(nullable: true)]
     private ?Member $member = null;
 
     #[ORM\Column(type: 'datetime_immutable')]
-    private ?\DateTimeImmutable $createdAt = null;
+    private \DateTimeImmutable $createdAt;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true, unique: true)]
     private ?string $email = null;
@@ -48,12 +48,12 @@ class RSVP implements \Stringable
         return $this->id;
     }
 
-    public function getEvent(): ?Event
+    public function getEvent(): Event
     {
         return $this->event;
     }
 
-    public function setEvent(?Event $event): self
+    public function setEvent(Event $event): self
     {
         $this->event = $event;
 
@@ -72,7 +72,7 @@ class RSVP implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;
     }

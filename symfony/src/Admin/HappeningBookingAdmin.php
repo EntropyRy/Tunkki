@@ -112,10 +112,7 @@ final class HappeningBookingAdmin extends AbstractAdmin
             && $this->hasParentFieldDescription()
         ) {
             $parent = $this->getParent()->getSubject();
-            if (
-                $parent instanceof Happening
-                && !$object->getHappening() instanceof Happening
-            ) {
+            if ($parent instanceof Happening) {
                 $object->setHappening($parent);
             }
         }
@@ -130,10 +127,7 @@ final class HappeningBookingAdmin extends AbstractAdmin
             && $this->hasParentFieldDescription()
         ) {
             $parent = $this->getParent()->getSubject();
-            if (
-                $parent instanceof Happening
-                && !$object->getHappening() instanceof Happening
-            ) {
+            if ($parent instanceof Happening) {
                 $object->setHappening($parent);
             }
         }

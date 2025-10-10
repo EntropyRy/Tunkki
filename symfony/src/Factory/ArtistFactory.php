@@ -76,18 +76,16 @@ final class ArtistFactory extends PersistentObjectFactory
         return $this
             ->afterInstantiate(static function (Artist $artist): void {
                 // Normalize type casing defensively
-                if (method_exists($artist, 'getType') && method_exists($artist, 'setType')) {
-                    $type = strtolower((string) $artist->getType());
-                    if ('dj' === $type || 'band' === $type) {
-                        $artist->setType($type);
-                    }
+                $type = strtolower((string) $artist->getType());
+                if ('dj' === $type || 'band' === $type) {
+                    $artist->setType($type);
                 }
 
                 // Synchronize inverse side: ensure Member->addArtist($artist) when a member is present.
-                if (method_exists($artist, 'getMember') && $artist->getMember() instanceof Member) {
+                if ($artist->getMember() instanceof Member) {
                     $member = $artist->getMember();
                     // Avoid duplicate link if already present
-                    if (method_exists($member, 'addArtist') && (!method_exists($member, 'getArtist') || !$member->getArtist()->contains($artist))) {
+                    if (!$member->getArtist()->contains($artist)) {
                         $member->addArtist($artist);
                     }
                 }

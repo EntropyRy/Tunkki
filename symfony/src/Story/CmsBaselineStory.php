@@ -10,6 +10,8 @@ use App\Factory\PageFactory;
 use App\Factory\SiteFactory;
 use App\PageService\FrontPage;
 use Zenstruck\Foundry\Story;
+use function Zenstruck\Foundry\Persistence\delete;
+use function Zenstruck\Foundry\Persistence\flush_after;
 
 /**
  * CmsBaselineStory.
@@ -112,17 +114,11 @@ final class CmsBaselineStory extends Story
             // Remove pages first to avoid FK constraint violations
             $pages = $pageRepo->findBy(['site' => $site]) ?? [];
             foreach ($pages as $pg) {
-                if (method_exists($pageRepo, 'remove')) {
-                    $pageRepo->remove($pg, false);
-                }
+                delete($pg);
             }
-            if (method_exists($siteRepo, 'remove')) {
-                $siteRepo->remove($site, false);
-            }
+            delete($site);
         }
-        if (method_exists($siteRepo, 'flush')) {
-            $siteRepo->flush();
-        }
+        flush_after(static fn () => null);
     }
 
     private function pruneNonCanonicalLocales(SonataPageSite $fi, SonataPageSite $en): void
@@ -141,18 +137,12 @@ final class CmsBaselineStory extends Story
             if (!\in_array($loc, ['fi', 'en'], true)) {
                 $pages = $pageRepo->findBy(['site' => $site]) ?? [];
                 foreach ($pages as $pg) {
-                    if (method_exists($pageRepo, 'remove')) {
-                        $pageRepo->remove($pg, false);
-                    }
+                    delete($pg);
                 }
-                if (method_exists($siteRepo, 'remove')) {
-                    $siteRepo->remove($site, false);
-                }
+                delete($site);
             }
         }
-        if (method_exists($siteRepo, 'flush')) {
-            $siteRepo->flush();
-        }
+        flush_after(static fn () => null);
     }
 
     // ---------------------------------------------------------------------
@@ -182,7 +172,7 @@ final class CmsBaselineStory extends Story
         $root->setEnabled(true);
         $root->setDecorate(true);
         $root->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-        $pageRepo->flush();
+        flush_after(static fn () => null);
 
         return $root;
     }
@@ -354,7 +344,7 @@ final class CmsBaselineStory extends Story
         if (null !== $metaDescriptionIfMissing && null === $page->getMetaDescription()) {
             $page->setMetaDescription($metaDescriptionIfMissing);
         }
-        $pageRepo->flush();
+        flush_after(static fn () => null);
 
         return $page;
     }
@@ -392,8 +382,8 @@ final class CmsBaselineStory extends Story
 
         // Remove duplicates beyond the chosen one
         foreach ($candidates as $dup) {
-            if ($dup !== $chosen && method_exists($pageRepo, 'remove')) {
-                $pageRepo->remove($dup, false);
+            if ($dup !== $chosen) {
+                delete($dup);
             }
         }
 
@@ -432,7 +422,7 @@ final class CmsBaselineStory extends Story
             $chosen->setTemplateCode('annnouncements');
             $chosen->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
             $chosen->setPageAlias($alias);
-            $pageRepo->flush();
+            flush_after(static fn () => null);
         }
     }
 
@@ -459,8 +449,8 @@ final class CmsBaselineStory extends Story
 
         // Remove duplicates beyond the canonical one
         foreach ($streams as $dup) {
-            if ($dup !== $chosen && method_exists($pageRepo, 'remove')) {
-                $pageRepo->remove($dup, false);
+            if ($dup !== $chosen) {
+                delete($dup);
             }
         }
 
@@ -495,7 +485,7 @@ final class CmsBaselineStory extends Story
             $chosen->setType('entropy.page.stream');
             $chosen->setTemplateCode('stream');
             $chosen->setRequestMethod('GET|POST|HEAD');
-            $pageRepo->flush();
+            flush_after(static fn () => null);
         }
     }
 
@@ -521,8 +511,8 @@ final class CmsBaselineStory extends Story
                 continue;
             }
             // Remove duplicates beyond the first
-            $pageRepo->remove($pg, false);
+            delete($pg);
         }
-        $pageRepo->flush();
+        flush_after(static fn () => null);
     }
 }

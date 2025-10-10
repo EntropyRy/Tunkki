@@ -47,18 +47,24 @@ class Item implements \Stringable
     #[ORM\Column(name: 'Description', type: Types::STRING, length: 4000, nullable: true)]
     private ?string $description = null;
 
+    /**
+     * @var Collection<int, WhoCanRentChoice>
+     */
     #[ORM\ManyToMany(targetEntity: WhoCanRentChoice::class, cascade: ['persist'])]
-    private $whoCanRent;
+    private Collection $whoCanRent;
 
     #[ORM\ManyToOne(targetEntity: Category::class, cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?Category $category = null;
 
+    /**
+     * @var Collection<int, Tag>
+     */
     #[ORM\JoinTable(name: 'Item_tags')]
     #[ORM\JoinColumn(name: 'item_id', referencedColumnName: 'id')]
     #[ORM\InverseJoinColumn(name: 'tag_id', referencedColumnName: 'id')]
     #[ORM\ManyToMany(targetEntity: Tag::class, cascade: ['persist'])]
-    private $tags;
+    private Collection $tags;
 
     #[ORM\Column(name: 'Rent', type: 'decimal', precision: 7, scale: 2, nullable: true)]
     private $rent;
@@ -78,20 +84,32 @@ class Item implements \Stringable
     #[ORM\Column(name: 'CannotBeRented', type: Types::BOOLEAN)]
     private bool $cannotBeRented = false;
 
+    /**
+     * @var Collection<int, StatusEvent>
+     */
     #[ORM\OneToMany(targetEntity: StatusEvent::class, mappedBy: 'item', cascade: ['all'], fetch: 'LAZY')]
-    private $fixingHistory;
+    private Collection $fixingHistory;
 
+    /**
+     * @var Collection<int, File>
+     */
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'product', cascade: ['all'])]
-    private $files;
+    private Collection $files;
 
+    /**
+     * @var Collection<int, Booking>
+     */
     #[ORM\ManyToMany(targetEntity: Booking::class, cascade: ['all'])]
-    private $rentHistory;
+    private Collection $rentHistory;
 
     #[ORM\Column(name: 'ForSale', type: Types::BOOLEAN, nullable: true)]
     private ?bool $forSale = false;
 
+    /**
+     * @var Collection<int, Package>
+     */
     #[ORM\ManyToMany(targetEntity: Package::class, inversedBy: 'items')]
-    private $packages;
+    private Collection $packages;
 
     #[ORM\Column(name: 'Commission', type: 'datetime', nullable: true)]
     private ?\DateTime $commission = null;

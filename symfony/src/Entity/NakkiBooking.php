@@ -40,7 +40,8 @@ class NakkiBooking implements \Stringable
         if ($this->getEvent()->isNakkiRequiredForTicketReservation()) {
             return $this->event.': '.$this->nakki;
         }
-        $aika = \is_object($this->getStartAt()) ? $this->getStartAt()->format('H:i') : '';
+        $aika = $this->getStartAt()->format('H:i');
+
 
         return $this->event.': '.$this->nakki.' at '.$aika;
     }

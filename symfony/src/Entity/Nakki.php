@@ -127,10 +127,7 @@ class Nakki implements \Stringable
 
     public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
     {
-        // set the owning side to null (unless already changed)
-        if ($this->nakkiBookings->removeElement($nakkiBooking) && $nakkiBooking->getNakki() === $this) {
-            $nakkiBooking->setNakki(null);
-        }
+        $this->nakkiBookings->removeElement($nakkiBooking);
 
         return $this;
     }
