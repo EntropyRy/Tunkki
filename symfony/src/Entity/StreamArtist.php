@@ -38,6 +38,7 @@ class StreamArtist implements \Stringable
 
     public function __construct()
     {
+        $this->startedAt = new \DateTimeImmutable();
         $this->createdAt = new \DateTimeImmutable();
     }
     public function getId(): ?int
