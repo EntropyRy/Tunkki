@@ -46,8 +46,6 @@ INFECTION_MIN_COVERED ?= 0
 PARATEST_BIN          ?= vendor/bin/paratest
 USE_PARALLEL          ?= 1
 PARA_PROCS            ?=
-EXCLUDE_GROUPS        ?= heavy
-
 
 PHPSTAN_MEMORY        ?= 1G
 PHPSTAN_PATHS_FAST    ?= src
@@ -86,41 +84,6 @@ prepare-test-db:
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:create --if-not-exists >/dev/null 2>&1 || true
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console dbal:run-sql 'SELECT 1' >/dev/null 2>&1 || true
 
-# Create per-process test databases for ParaTest (db suffix: _test<TEST_TOKEN>)
-# Requires DB root password to be available to the db service (see compose.override.yaml).
-.PHONY: prepare-paratest-dbs
-prepare-paratest-dbs:
-	@if [ "$(USE_PARALLEL)" = "1" ]; then \
-		echo "$(CYAN)==> Preparing per-process test databases for ParaTest$(RESET)"; \
-		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		( $(COMPOSE) exec -T db sh -lc '\
-		set -e; \
-		if command -v mysql >/dev/null 2>&1; then \
-		  ROOT_PW="$${MYSQL_ROOT_PASSWORD:-$$MARIADB_ROOT_PASSWORD}"; \
-		  if [ -z "$$ROOT_PW" ]; then echo "Root password not set in db service; skipping per-process DB creation"; exit 0; fi; \
-		  for i in $$(seq 1 $$PROCS); do \
-		    DB="$${MYSQL_DATABASE}_test$$i"; \
-		    echo "Ensuring database $$DB via mysql client"; \
-		      mysql -uroot -p"$$ROOT_PW" -e "CREATE DATABASE IF NOT EXISTS \`$$DB\`; CREATE USER IF NOT EXISTS '\$${MYSQL_USER}'@'%' IDENTIFIED BY '\$${MYSQL_PASSWORD}'; GRANT ALL PRIVILEGES ON \`$$DB\`.* TO '\$${MYSQL_USER}'@'%'; FLUSH PRIVILEGES;"; \
-		  done; \
-		elif command -v mariadb >/dev/null 2>&1; then \
-		  ROOT_PW="$${MYSQL_ROOT_PASSWORD:-$$MARIADB_ROOT_PASSWORD}"; \
-		  if [ -z "$$ROOT_PW" ]; then echo "Root password not set in db service; skipping per-process DB creation"; exit 0; fi; \
-		  for i in $$(seq 1 $$PROCS); do \
-		    DB="$${MYSQL_DATABASE}_test$$i"; \
-		    echo "Ensuring database $$DB via mariadb client"; \
-		      mariadb -uroot -p"$$ROOT_PW" -e "CREATE DATABASE IF NOT EXISTS \`$$DB\`; CREATE USER IF NOT EXISTS '\$${MYSQL_USER}'@'%' IDENTIFIED BY '\$${MYSQL_PASSWORD}'; GRANT ALL PRIVILEGES ON \`$$DB\`.* TO '\$${MYSQL_USER}'@'%'; FLUSH PRIVILEGES;"; \
-		  done; \
-		else \
-		  exit 99; \
-		        fi' ) || ( \
-		          echo "$(YELLOW)db container lacks mysql/mariadb client or root password; skipping per-process DB creation. Using shared _test database (disable test tokens).$(RESET)"; \
-		        ); \
-	else \
-		echo "$(CYAN)==> Skipping per-process DB prep (USE_PARALLEL!=1)$(RESET)"; \
-	fi
-
-
 # ---------------- Help -------------------------------------------------------
 
 .PHONY: help
@@ -132,7 +95,6 @@ help:
 	@echo "  make test-functional      - Run only Functional tests (tests/Functional)"
 	@echo "  make test-ci              - CI-style full suite (fail-fast, shows deprecations/warnings, no coverage)"
 	@echo "  make coverage             - Run suite with coverage (needs Xdebug/PCOV)"
-	@echo "  make test-profile         - Run tests one-by-one and record timings -> metrics/test-times.txt"
 
 	@echo "  make test-one FILE=path   - Run a single test file (serial)"
 	@echo "  make test-one-filter FILE=path METHOD=name - Run a single test method"
@@ -150,7 +112,7 @@ help:
 	@echo ""
 	@echo "$(BOLD)Variables (override)$(RESET)"
 	@echo "  PHP_EXEC=php | FILTER=src/Security | PHPSTAN_LEVEL=5 | GIT_DIFF_BASE=main"
-	@echo "  INFECTION_THREADS=8 | NO_COLOR=1 | USE_PARALLEL=1 | PARA_PROCS=8 | EXCLUDE_GROUPS=heavy"
+	@echo "  INFECTION_THREADS=8 | NO_COLOR=0 | USE_PARALLEL=1 | PARA_PROCS=8"
 	@echo ""
 
 # ---------------- Testing ----------------------------------------------------
@@ -160,48 +122,48 @@ help:
 
 
 .PHONY: test
-test: _ensure-vendor prepare-test-db prepare-paratest-dbs
+test: _ensure-vendor prepare-test-db
 	@echo "$(CYAN)==> Running full test suite$(RESET)"
 
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --exclude-group $(EXCLUDE_GROUPS); \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group $(EXCLUDE_GROUPS); \
+		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG); \
 	fi
 
 .PHONY: test-unit
-test-unit: _ensure-vendor prepare-test-db prepare-paratest-dbs
+test-unit: _ensure-vendor prepare-test-db
 	@echo "$(CYAN)==> Running unit tests$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Unit --exclude-group $(EXCLUDE_GROUPS); \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Unit; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group $(EXCLUDE_GROUPS) --testsuite=Unit; \
+		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Unit; \
 	fi
 
 .PHONY: test-functional
-test-functional: _ensure-vendor prepare-test-db prepare-paratest-dbs
+test-functional: _ensure-vendor prepare-test-db
 	@echo "$(CYAN)==> Running functional tests$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Functional --exclude-group $(EXCLUDE_GROUPS); \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Functional; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group $(EXCLUDE_GROUPS) --testsuite=Functional; \
+		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Functional; \
 	fi
 
 .PHONY: test-ci
-test-ci: _ensure-vendor prepare-test-db prepare-paratest-dbs
+test-ci: _ensure-vendor prepare-test-db
 	@echo "$(CYAN)==> Running CI test suite (fail-fast, no coverage)$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --exclude-group $(EXCLUDE_GROUPS) -- --fail-on-warning --display-deprecations --display-errors=stderr; \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens -- --fail-on-warning --display-deprecations --display-errors=stderr; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --exclude-group $(EXCLUDE_GROUPS) --fail-on-warning --display-deprecations --display-errors=stderr; \
+		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --fail-on-warning --display-deprecations --display-errors=stderr; \
 	fi
 
 .PHONY: coverage
@@ -235,46 +197,7 @@ infection-debug: _ensure-vendor prepare-test-db
 	echo "$(CYAN)==> Executing Infection (debug)$(RESET)"; \
 	$$cmd
 
-# ---------------- Parallel Test Debug ----------------------------------------
-.PHONY: test-parallel-debug
-test-parallel-debug: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> ParaTest parallel debug$(RESET)"
-	@echo "$(BOLD)ParaTest binary$(RESET)"
-	@$(PHP_EXEC) $(PARATEST_BIN) --version || echo "$(YELLOW)ParaTest not found (falling back to phpunit).$(RESET)"
-	@echo ""
-	@echo "$(BOLD)Parallel config$(RESET)"
-	@echo -n "USE_PARALLEL: "; echo "$(USE_PARALLEL)"
-	@echo -n "PARA_PROCS: "; echo "$(PARA_PROCS)"
-	@echo "$(BOLD)CPU detection (inside container)$(RESET)"
-	@echo -n "nproc: "; $(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) sh -lc 'nproc 2>/dev/null || echo "n/a"'
-	@echo -n "getconf _NPROCESSORS_ONLN: "; $(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) sh -lc 'getconf _NPROCESSORS_ONLN 2>/dev/null || echo "n/a"'
-	@PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-	 echo "Computed processes: $$PROCS (USE_PARALLEL=$(USE_PARALLEL), PARA_PROCS=$(PARA_PROCS))"
-	@echo ""
-	@echo "$(BOLD)Sample command$(RESET)"
-	@PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-	 echo "$(YELLOW)$(PHP_EXEC) $(PARATEST_BIN) -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --testsuite=Functional --exclude-group $(EXCLUDE_GROUPS)$(RESET)"
-	@echo ""
 # ---------------- Test Profiling (Single Test Runner) ------------------------
-.PHONY: test-profile
-test-profile: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Profiling tests one-by-one (serial)$(RESET)"
-	@mkdir -p $(METRICS_DIR)
-	@OUT="$(METRICS_DIR)/test-times.txt"; \
-	echo "# Test timings (ms) — $$(date -u +\"%Y-%m-%dT%H:%M:%SZ\")" > $$OUT; \
-	$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) sh -lc '\
-	set -e; \
-	for f in $$(find tests -type f -name "*Test.php" | sort); do \
-		start=$$(date +%s%3N 2>/dev/null || date +%s000); \
-		php vendor/bin/phpunit -c phpunit.dist.xml "$$f" >/dev/null 2>&1 || true; \
-		end=$$(date +%s%3N 2>/dev/null || date +%s000); \
-		dur=$$((end-start)); \
-		printf "%8d ms  %s\n" "$$dur" "$$f" >> $(METRICS_DIR)/test-times.txt; \
-	done; \
-	echo ""; echo "Top 30 slowest tests:"; \
-	sort -nr $(METRICS_DIR)/test-times.txt | head -n 30 \
-	'
-
 .PHONY: test-one
 test-one: _ensure-vendor prepare-test-db
 	@if [ -z "$(FILE)" ]; then echo "$(RED)Usage: make test-one FILE=tests/Path/ToTest.php$(RESET)"; exit 2; fi; \
@@ -284,11 +207,6 @@ test-one: _ensure-vendor prepare-test-db
 test-one-filter: _ensure-vendor prepare-test-db
 	@if [ -z "$(FILE)" ] || [ -z "$(METHOD)" ]; then echo "$(RED)Usage: make test-one-filter FILE=tests/Path/ToTest.php METHOD=testMethodName$(RESET)"; exit 2; fi; \
 	PCOV_ENABLED=0 XDEBUG_MODE=off $(PHP_EXEC) -d memory_limit=1024M $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --no-coverage $(if $(TEAMCITY_VERSION),--teamcity,$(if $(filter 1,$(USE_COMPACT_PRINTER)),--testdox,)) --filter "$(METHOD)" "$(FILE)"
-
-.PHONY: test-slowest
-test-slowest:
-	@echo "$(CYAN)==> Top 30 slowest tests from $(METRICS_DIR)/test-times.txt$(RESET)"
-	@sort -nr $(METRICS_DIR)/test-times.txt | head -n 30 || echo "$(YELLOW)No timings file found. Run: make test-profile$(RESET)"
 
 # ---------------- Static Analysis (PHPStan) ----------------------------------
 
@@ -343,15 +261,15 @@ update-dev:
 # ---------------- Symfony Scripts (Dev Helpers) -------------------------------
 .PHONY: scripts-debug-baseline scripts-route-debug scripts-seed-baseline
 
-scripts-debug-baseline: _ensure-vendor prepare-test-db
+scripts-debug-baseline: _ensure-vendor
 	@echo "$(CYAN)==> Sonata CMS baseline debug (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/debug_baseline.php
 
-scripts-route-debug: _ensure-vendor prepare-test-db
+scripts-route-debug: _ensure-vendor
 	@echo "$(CYAN)==> ChainRouter route debug for '/' and '/en/' (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/route_debug.php
 
-scripts-seed-baseline: _ensure-vendor prepare-test-db
+scripts-seed-baseline: _ensure-vendor
 	@echo "$(CYAN)==> Seeding/normalizing CMS baseline once (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/seed_baseline_once.php
 

@@ -8,7 +8,6 @@ use App\Entity\Event;
 use App\Entity\User;
 use App\Factory\ArtistFactory;
 use App\Factory\EventFactory;
-use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use Symfony\Component\Routing\RouterInterface;
@@ -28,11 +27,6 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     // (Removed explicit $client property; rely on FixturesWebTestCase magic accessor)
     private RouterInterface $router;
 
-    /**
-     * Cached reusable test user (with associated Member + Artist).
-     */
-    private static ?int $cachedUserWithArtistId = null;
-
     protected function setUp(): void
     {
         parent::setUp(); // Base now auto-initializes site-aware client & CMS baseline
@@ -41,57 +35,18 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
     /**
      * Create (once) and log in a user whose Member has an Artist.
-     * Uses scalar ID caching to avoid holding a detached entity across tests.
+     * Uses a consistent email to enable loginAsActiveMember caching.
      */
     private function loginUserWithArtist(): User
     {
-        $userRepo = static::getContainer()
-            ->get('doctrine')
-            ->getRepository(User::class);
+        // Use loginAsActiveMember with a consistent email to enable caching
+        $email = 'artistworkflowtest@example.test';
+        [$user, $client] = $this->loginAsActiveMember($email);
 
-        // Try to reuse a previously created user by reloading a managed instance via its ID.
-        if (\is_int(self::$cachedUserWithArtistId)) {
-            $managed = $userRepo->find(self::$cachedUserWithArtistId);
-            if ($managed instanceof User && $managed->getMember()) {
-                $this->client->loginUser($managed);
-                $this->stabilizeSessionAfterLogin();
-
-                // Force auth token to ensure it persists through SiteAwareKernelBrowser wrapper
-                $this->forceAuthToken($managed);
-
-                return $managed;
-            }
-        }
-
-        // Try to reuse an existing fixture user that already has a member (avoids creating new User/Member pairs
-        // and hitting the unique index on user.member_id under repeated factory creation).
-        $existingUser = null;
-        foreach ($userRepo->findAll() as $candidate) {
-            if ($candidate instanceof User && $candidate->getMember()) {
-                $existingUser = $candidate;
-                break;
-            }
-        }
-
-        if (!$existingUser instanceof User) {
-            // Fallback: create a brand new member+user (unique email to avoid fixture collisions)
-            $member = MemberFactory::new()
-                ->active()
-                ->english()
-                ->with([
-                    'email' => 'artist+'.bin2hex(random_bytes(6)).'@example.test',
-                ])
-                ->create();
-            $existingUser = $member->getUser();
-            self::assertNotNull(
-                $existingUser,
-                'Factory did not yield a User for the new Member.',
-            );
-        }
-
-        // Ensure an artist exists for the member (idempotent: only create if none)
-        $member = $existingUser->getMember();
+        // Ensure the user has an artist
+        $member = $user->getMember();
         self::assertNotNull($member, 'User must have an associated Member.');
+
         // Member::getArtist() returns a Collection; check count to determine presence
         $hasArtist = false;
         if (
@@ -104,20 +59,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
             ArtistFactory::new()->withMember($member)->dj()->create();
         }
 
-        // Cache only the scalar ID to avoid detached entity reuse across tests.
-        self::assertNotNull(
-            $existingUser->getId(),
-            'Newly created User must have an ID.',
-        );
-        self::$cachedUserWithArtistId = $existingUser->getId();
-
-        $this->client->loginUser($existingUser);
-        $this->stabilizeSessionAfterLogin();
-
-        // Force auth token to ensure it persists through SiteAwareKernelBrowser wrapper
-        $this->forceAuthToken($existingUser);
-
-        return $existingUser;
+        return $user;
     }
 
     private function generateSignupPath(Event $event, string $locale): string
@@ -134,6 +76,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testEnglishSignupAccessibleWithArtist(): void
     {
         $user = $this->loginUserWithArtist();
+        $this->seedClientHome('en');
 
         $event = EventFactory::new()
             ->signupEnabled()
@@ -204,6 +147,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testFinnishSignupAccessibleAndEnglishWithoutPrefixFails(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('fi');
 
         $event = EventFactory::new()
             ->signupEnabled()
@@ -241,6 +185,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testSignupRequiresArtistOrRedirectsToCreate(): void
     {
         $user = $this->loginUserWithArtist();
+        $this->seedClientHome('en');
 
         $event = EventFactory::new()
             ->signupEnabled()
@@ -277,6 +222,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testSignupBlockedWhenEventNotEnabled(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('fi');
 
         $regularEvent = EventFactory::new()
             ->published() // published but signup disabled by default (artistSignUpEnabled=false)
@@ -297,6 +243,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testEnglishAndFinnishPathsDiffer(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('en');
+
         $event = EventFactory::new()
             ->signupEnabled()
             ->create(['url' => 'artist-signup-event-'.uniqid('', true)]);
@@ -312,6 +260,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testSignupWindowNotYetOpenBlocked(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('en');
+
         $event = EventFactory::new()
             ->signupEnabled()
             ->signupWindowNotYetOpen()
@@ -336,6 +286,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testSignupWindowEndedBlocked(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('fi');
+
         $event = EventFactory::new()->signupWindowEnded()->create();
 
         $pathFi = $this->generateSignupPath($event, 'fi');
@@ -352,6 +304,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     public function testPastEventSignupWindowOpenStillBlocked(): void
     {
         $this->loginUserWithArtist();
+        $this->seedClientHome('en');
+
         $event = EventFactory::new()->pastEventSignupWindowOpen()->create();
 
         $pathEn = $this->generateSignupPath($event, 'en');
