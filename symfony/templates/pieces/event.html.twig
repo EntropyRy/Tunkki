@@ -40,7 +40,7 @@
                     {% if tickets|length > 0 %}
                         <li class="nav-item">
                             <a class="nav-link"
-                                href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                                href="{{ path('entropy_event_tickets.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                                 {% if event.nakkiRequiredForTicketReservation %}
                                     {{ 'ticket.and_nakki'|trans }}
                                 {% else %}
@@ -131,34 +131,34 @@
 {% endblock %}
 {% block event_path %}
 {% if event.url and not event.externalUrl -%}
-    {{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}
+    {{ path('entropy_event_slug.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}
 {%- else -%}
-    {{ path('entropy_event', {id: event.id}) }}
+    {{ path('entropy_event.' ~ app.request.locale, {id: event.id}) }}
 {%- endif %}
 {% endblock %}
 {% block event_path_shop %}
     {% if event.url and not event.externalUrl %}
-        {{- path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) -}}
+        {{- path('entropy_event_shop.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
 {% endblock %}
 {% block event_path_info %}
     {% if event.url and not event.externalUrl %}
-        {{- path('entropy_event_info', {slug: event.url, year: event.eventdate|date('Y')}) -}}
+        {{- path('entropy_event_info.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
 {% endblock %}
 {% block event_path_safer_space %}
     {% if event.url and not event.externalUrl %}
-        {{- path('entropy_event_safer_space', {slug: event.url, year: event.eventdate|date('Y')}) -}}
+        {{- path('entropy_event_safer_space.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
 {% endblock %}
 {% block event_path_artists -%}
     {% if event.url and not event.externalUrl %}
-        {{- path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) -}}
+        {{- path('entropy_event_artists.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) -}}
     {% endif %}
 {% endblock %}
 {%- block event_path_timetable -%}
     {% if event.url and not event.externalUrl %}
-        {{ path('entropy_event_timetable', {slug: event.url, year: event.eventdate|date('Y')}) }}
+        {{ path('entropy_event_timetable.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}
     {% endif %}
 {%- endblock %}
 {% block published_and_updated -%}
@@ -416,7 +416,7 @@
         {% if event.location %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_location', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                   href="{{ path('entropy_event_location.' app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="location-dot" />
                     {{ 'map'|trans }}
                 </a>
@@ -477,7 +477,7 @@
         {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                   href="{{ path('entropy_event_slug_artist_signup.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="tasks" height="1em" width="1em"/>
                     {{ 'Artist signup'|trans }}
                 </a>
@@ -486,7 +486,7 @@
         {% if not event.isInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                   href="{{ path('entropy_event_slug_nakkikone.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="tasks" height="1em" width="1em"/>
                     Nakkikone
                 </a>
@@ -545,7 +545,7 @@
                                 {% set name = (artist.name|split(' for')).0 %}
                                 <li>
                                     {% if info.StartTime is not empty %}
-                                        <a href="{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+                                        <a href="{{ path('entropy_event_artists.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
                                     {% endif %}
                                 </li>
                             {% endfor %}
