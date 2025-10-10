@@ -56,6 +56,9 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
                 $this->client->loginUser($managed);
                 $this->stabilizeSessionAfterLogin();
 
+                // Force auth token to ensure it persists through SiteAwareKernelBrowser wrapper
+                $this->forceAuthToken($managed);
+
                 return $managed;
             }
         }
@@ -110,6 +113,9 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
         $this->client->loginUser($existingUser);
         $this->stabilizeSessionAfterLogin();
+
+        // Force auth token to ensure it persists through SiteAwareKernelBrowser wrapper
+        $this->forceAuthToken($existingUser);
 
         return $existingUser;
     }
