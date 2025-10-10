@@ -76,21 +76,21 @@
         <div class="d-inline-flex gap-2 flex-wrap">
             {% if event.ticketPresaleEnabled and event.url and not event.isInPast %}
                 <a class="btn btn-primary"
-                    href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    href="{{ path('entropy_event_shop.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="ticket" />
                     {{ 'ticket.to_ticket_shop'|trans }}
                 </a>
             {% endif %}
             {% if event.showNakkikoneLinkInEvent|default(false) and event.url and app.user and not event.isInPast %}
                 <a class="btn btn-primary"
-                    href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                    href="{{ path('entropy_event_slug_nakkikone.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="tasks" />
                     Nakkikone
                 </a>
             {% endif %}
             {% if not event.isInPast and event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
                 <a class="btn btn-primary"
-                   href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                   href="{{ path('entropy_event_slug_artist_signup.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="register" />
                     {{ 'Artist signup'|trans }}
                 </a>
@@ -416,7 +416,7 @@
         {% if event.location %}
             <span>
                 <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_location.' app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                   href="{{ path('entropy_event_location.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
                     <twig:ux:icon name="location-dot" />
                     {{ 'map'|trans }}
                 </a>

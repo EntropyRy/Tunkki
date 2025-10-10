@@ -9,49 +9,49 @@
             {% else %}
                 <div class="col">
                     <h5 class="text-center text-sm-start">{{ 'block.events.future_events'|trans }}</h5>
-                {% endif %}
-                <ul class="fa-ul">
-                    {% for event in events %}
-                        {{ block('event_link') }}
-                    {% else %}
-                        <li>
-                            <span class="fa-li">
-                                <twig:ux:icon name="exclamation" />
-                            </span> {{ 'stay_tuned'|trans }}
-                        </li>
-                        <li>
-                            <span class="fa-li">
-                                <twig:ux:icon name="arrow-right" />
-                            </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ app.request.locale == 'fi' ? '/tapahtumat' : '/events' }}">{{ 'block.future_events.events'|trans }}</a>
-                        </li>
-                    {% endfor %}
-                    {% if app.user and unreleased|length > 0 %}
-                        <li>{{ 'event.only_for_members'|trans }}</li>
-                        {% for event in unreleased %}{{ block('event_link') }}{% endfor %}
-                    {% endif %}
-                        </ul>
-                        {% if settings.box|default(false) %}
-                            {% if is_granted('ROLE_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}
-                                <a class="btn btn-primary" href="{{ path('admin_app_event_list') }}">{{ 'block.events.manage'|trans }}</a>
-                            {% endif %}
-                            <a class="btn btn-primary"
-                               href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
-                        </div>
-                    </div>
-                {% else %}
-                </div>
-            {% endif %}
-        {% endblock %}
-        {% block event_link %}
-            {% if event.externalUrl or (event.url and event.url starts with 'http') %}
-                {% set url = event.url %}
-            {% elseif event.url %}
-                {% set url = path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) %}
+    {% endif %}
+        <ul class="fa-ul">
+            {% for event in events %}
+                {{ block('event_link') }}
             {% else %}
-                {% set url = path('entropy_event', {id: event.id}) %}
+                <li>
+                    <span class="fa-li">
+                        <twig:ux:icon name="exclamation" />
+                    </span> {{ 'stay_tuned'|trans }}
+                </li>
+                <li>
+                    <span class="fa-li">
+                        <twig:ux:icon name="arrow-right" />
+                    </span> {{ 'block.future_events.checkout_old_events'|trans }} <a href="{{ app.request.locale == 'fi' ? '/tapahtumat' : '/events' }}">{{ 'block.future_events.events'|trans }}</a>
+                </li>
+            {% endfor %}
+            {% if app.user and unreleased|length > 0 %}
+                <li>{{ 'event.only_for_members'|trans }}</li>
+                {% for event in unreleased %}{{ block('event_link') }}{% endfor %}
             {% endif %}
-            <li>
-                <span class="fa-li"><twig:ux:icon name="link" /></span>
-                <a href="{{ url }}">{{ event.nameByLang(app.request.locale) }} - {{ event.eventDate|date() }}</a>
-            </li>
-    {% endblock %}
+        </ul>
+        {% if settings.box|default(false) %}
+            {% if is_granted('ROLE_ADMIN_EVENT_EDIT') or is_granted('ROLE_SUPER_ADMIN') %}
+                <a class="btn btn-primary" href="{{ path('admin_app_event_list') }}">{{ 'block.events.manage'|trans }}</a>
+            {% endif %}
+            <a class="btn btn-primary"
+                href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
+            </div>
+        </div>
+        {% else %}
+        </div>
+    {% endif %}
+{% endblock %}
+{% block event_link %}
+    {% if event.externalUrl or (event.url and event.url starts with 'http') %}
+        {% set url = event.url %}
+    {% elseif event.url %}
+        {% set url = path('entropy_event_slug.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) %}
+    {% else %}
+        {% set url = path('entropy_event.' ~ app.request.locale, {id: event.id}) %}
+    {% endif %}
+    <li>
+        <span class="fa-li"><twig:ux:icon name="link" /></span>
+        <a href="{{ url }}">{{ event.nameByLang(app.request.locale) }} - {{ event.eventDate|date() }}</a>
+    </li>
+{% endblock %}
