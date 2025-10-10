@@ -291,10 +291,20 @@ final class ProductRepositoryTest extends RepositoryTestCase
         $getter = 'get'.ucfirst($prop);
         $isser = 'is'.ucfirst($prop);
         if (method_exists($entity, $getter)) {
-            return $entity->{$getter}();
+            try {
+                return $entity->{$getter}();
+            } catch (\Error) {
+                // Property is uninitialized (typed property not set yet)
+                return null;
+            }
         }
         if (method_exists($entity, $isser)) {
-            return $entity->{$isser}();
+            try {
+                return $entity->{$isser}();
+            } catch (\Error) {
+                // Property is uninitialized (typed property not set yet)
+                return null;
+            }
         }
         $ref = new \ReflectionObject($entity);
         while ($ref && !$ref->hasProperty($prop)) {
@@ -306,6 +316,11 @@ final class ProductRepositoryTest extends RepositoryTestCase
         $p = $ref->getProperty($prop);
         $p->setAccessible(true);
 
-        return $p->getValue($entity);
+        try {
+            return $p->getValue($entity);
+        } catch (\Error) {
+            // Property is uninitialized (typed property not set yet)
+            return null;
+        }
     }
 }
