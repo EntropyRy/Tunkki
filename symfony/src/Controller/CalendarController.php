@@ -57,7 +57,7 @@ class CalendarController extends AbstractController
             $sqid = new Sqids();
             $array = [];
             $formData = $form->getData();
-            if (is_array($formData)) {
+            if (\is_array($formData)) {
                 foreach ($formData as $value) {
                     $array[] = $value ? 1 : 0;
                 }

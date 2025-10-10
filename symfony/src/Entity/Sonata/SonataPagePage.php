@@ -10,7 +10,7 @@ use Sonata\PageBundle\Entity\BasePage;
 
 /**
  * @property string|null $routeName
- * @property bool $enabled
+ * @property bool        $enabled
  * @property string|null $pageAlias
  */
 #[ORM\Table(name: 'page__page')]

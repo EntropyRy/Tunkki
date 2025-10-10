@@ -245,7 +245,7 @@ class Menu implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->label !== '' ? $this->label : 'n/a';
+        return '' !== $this->label ? $this->label : 'n/a';
     }
 
     public function getPageFi(): ?Page

@@ -9,9 +9,11 @@ use App\Entity\Sonata\SonataPageSite;
 use App\Factory\PageFactory;
 use App\Factory\SiteFactory;
 use App\PageService\FrontPage;
-use Zenstruck\Foundry\Story;
+
 use function Zenstruck\Foundry\Persistence\delete;
 use function Zenstruck\Foundry\Persistence\flush_after;
+
+use Zenstruck\Foundry\Story;
 
 /**
  * CmsBaselineStory.
@@ -118,7 +120,7 @@ final class CmsBaselineStory extends Story
             }
             delete($site);
         }
-        flush_after(static fn () => null);
+        flush_after(static fn (): null => null);
     }
 
     private function pruneNonCanonicalLocales(SonataPageSite $fi, SonataPageSite $en): void
@@ -142,7 +144,7 @@ final class CmsBaselineStory extends Story
                 delete($site);
             }
         }
-        flush_after(static fn () => null);
+        flush_after(static fn (): null => null);
     }
 
     // ---------------------------------------------------------------------
@@ -172,7 +174,7 @@ final class CmsBaselineStory extends Story
         $root->setEnabled(true);
         $root->setDecorate(true);
         $root->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-        flush_after(static fn () => null);
+        flush_after(static fn (): null => null);
 
         return $root;
     }
@@ -344,7 +346,7 @@ final class CmsBaselineStory extends Story
         if (null !== $metaDescriptionIfMissing && null === $page->getMetaDescription()) {
             $page->setMetaDescription($metaDescriptionIfMissing);
         }
-        flush_after(static fn () => null);
+        flush_after(static fn (): null => null);
 
         return $page;
     }
@@ -422,7 +424,7 @@ final class CmsBaselineStory extends Story
             $chosen->setTemplateCode('annnouncements');
             $chosen->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
             $chosen->setPageAlias($alias);
-            flush_after(static fn () => null);
+            flush_after(static fn (): null => null);
         }
     }
 
@@ -485,7 +487,7 @@ final class CmsBaselineStory extends Story
             $chosen->setType('entropy.page.stream');
             $chosen->setTemplateCode('stream');
             $chosen->setRequestMethod('GET|POST|HEAD');
-            flush_after(static fn () => null);
+            flush_after(static fn (): null => null);
         }
     }
 
@@ -513,6 +515,6 @@ final class CmsBaselineStory extends Story
             // Remove duplicates beyond the first
             delete($pg);
         }
-        flush_after(static fn () => null);
+        flush_after(static fn (): null => null);
     }
 }

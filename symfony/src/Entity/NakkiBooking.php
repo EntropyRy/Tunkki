@@ -42,7 +42,6 @@ class NakkiBooking implements \Stringable
         }
         $aika = $this->getStartAt()->format('H:i');
 
-
         return $this->event.': '.$this->nakki.' at '.$aika;
     }
 

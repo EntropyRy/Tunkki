@@ -290,7 +290,7 @@ class Item implements \Stringable
         $this->fixingHistory->removeElement($fixingHistory);
     }
 
-    public function getFixingHistory()
+    public function getFixingHistory(): Collection
     {
         return $this->fixingHistory;
     }

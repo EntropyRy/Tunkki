@@ -63,7 +63,7 @@ class Nakki implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) ('' !== (string) $this->definition && '0' !== (string) $this->definition ? $this->definition->getNameEn() : 'N/A');
+        return '' !== (string) $this->definition && '0' !== (string) $this->definition ? $this->definition->getNameEn() : 'N/A';
     }
 
     public function getId(): ?int

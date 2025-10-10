@@ -107,7 +107,7 @@ class Product implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->nameEn;
+        return $this->nameEn;
     }
 
     #[ORM\PrePersist]

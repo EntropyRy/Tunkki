@@ -39,7 +39,7 @@ class NakkiDefinition implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return (string) $this->nameEn;
+        return $this->nameEn;
     }
 
     public function getName($lang): ?string

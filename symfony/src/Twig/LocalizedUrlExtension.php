@@ -254,15 +254,15 @@ class LocalizedUrlExtension extends AbstractExtension
     /**
      * Finds a Sonata Page by its route name using CmsManager.
      *
-     * @param string $routeName The route name to search for
-     * @param SiteInterface|null $site The site to search in (optional, will use current site if not provided)
+     * @param string             $routeName The route name to search for
+     * @param SiteInterface|null $site      The site to search in (optional, will use current site if not provided)
      *
      * @return PageInterface|null The found page or null if not found
      */
     private function findPageByRouteName(string $routeName, ?SiteInterface $site = null): ?PageInterface
     {
         try {
-            if (null === $site) {
+            if (!$site instanceof SiteInterface) {
                 $request = $this->requestStack->getCurrentRequest();
                 if (!$request instanceof Request) {
                     return null;
@@ -275,6 +275,7 @@ class LocalizedUrlExtension extends AbstractExtension
             }
 
             $cmsManager = $this->cmsManagerSelector->retrieve();
+
             return $cmsManager->getPageByRouteName($site, $routeName);
         } catch (\Throwable) {
             // Page not found or other error
@@ -285,15 +286,15 @@ class LocalizedUrlExtension extends AbstractExtension
     /**
      * Finds a Sonata Page by its technical alias using CmsManager.
      *
-     * @param string $alias The technical alias to search for (e.g., '_page_alias_services_fi')
-     * @param SiteInterface|null $site The site to search in (optional, will use current site if not provided)
+     * @param string             $alias The technical alias to search for (e.g., '_page_alias_services_fi')
+     * @param SiteInterface|null $site  The site to search in (optional, will use current site if not provided)
      *
      * @return PageInterface|null The found page or null if not found
      */
     private function findPageByAlias(string $alias, ?SiteInterface $site = null): ?PageInterface
     {
         try {
-            if (null === $site) {
+            if (!$site instanceof SiteInterface) {
                 $request = $this->requestStack->getCurrentRequest();
                 if (!$request instanceof Request) {
                     return null;
@@ -306,6 +307,7 @@ class LocalizedUrlExtension extends AbstractExtension
             }
 
             $cmsManager = $this->cmsManagerSelector->retrieve();
+
             return $cmsManager->getPageByPageAlias($site, $alias);
         } catch (\Throwable) {
             // Page not found or other error
