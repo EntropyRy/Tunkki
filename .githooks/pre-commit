@@ -130,15 +130,15 @@ run_style_check() {
       warn "php-cs-fixer not installed in container (skipping style dry-run)"
       return 0
     fi
-    log "Running code style..."
-    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" php vendor/bin/php-cs-fixer fix --diff || return 1
+    log "Running code style dry-run..."
+    $DOCKER_COMPOSE_BIN exec -T "$DOCKER_FPM_SERVICE" php vendor/bin/php-cs-fixer fix --dry-run --diff || return 1
   else
     if [ ! -f "$HOST_STYLE_BIN" ]; then
       warn "php-cs-fixer not installed (skipping style dry-run)"
       return 0
     fi
-    log "Running code style..."
-    $PHP_BINARY "$HOST_STYLE_BIN" fix --diff || return 1
+    log "Running code style dry-run..."
+    $PHP_BINARY "$HOST_STYLE_BIN" fix --dry-run --diff || return 1
   fi
   ok "Style check passed"
 }

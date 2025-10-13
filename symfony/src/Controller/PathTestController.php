@@ -114,7 +114,7 @@ final class PathTestController extends AbstractController
                 //   - Finnish site forcing en: /en/path-test
                 //   - English site: /en/path-test (includes site relativePath)
                 'en.relative_should_be' => '/en/path-test',
-                'en.matches_expected' => $enRelative === '/en/path-test',
+                'en.matches_expected' => '/en/path-test' === $enRelative,
                 'no_double_en_prefix' => !str_contains($enRelative, '/en/en/'),
             ],
         ];
