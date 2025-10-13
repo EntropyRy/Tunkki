@@ -42,7 +42,8 @@ final class PathTestController extends AbstractController
             // (and the locale-aware router decorator) will supply the prefix when appropriate.
             'en' => '/path-test',
         ],
-        name: 'path_test'
+        name: 'path_test',
+        env: 'dev',
     )]
     public function index(
         Request $request,
@@ -71,6 +72,13 @@ final class PathTestController extends AbstractController
         $data = [
             'current_locale' => $currentLocale,
             'current_site_relative_path' => $currentSite?->getRelativePath(),
+            'client_ip' => [
+                'client_ip' => $request->getClientIp(),
+                'server_remote_addr' => $request->server->get('REMOTE_ADDR'),
+                'x_forwarded_for' => $request->server->get('HTTP_X_FORWARDED_FOR'),
+                'x_real_ip' => $request->server->get('HTTP_X_REAL_IP'),
+                'cf_connecting_ip' => $request->server->get('HTTP_CF_CONNECTING_IP'),
+            ],
             'routes' => [
                 'auto' => [
                     'relative' => $autoRelative,
@@ -118,7 +126,7 @@ final class PathTestController extends AbstractController
         $rows = [];
         foreach (['fi', 'en'] as $loc) {
             foreach (['relative', 'absolute', 'network'] as $kind) {
-                $url = $data['routes'][$loc][$kind];
+                $url = $data['routes']['forced'][$loc][$kind];
                 $rows[] = \sprintf(
                     '<tr><td>%s</td><td>%s</td><td><code>%s</code></td></tr>',
                     $esc($loc),
@@ -140,6 +148,16 @@ final class PathTestController extends AbstractController
         $rowsHtml = implode('', $rows);
         $expectHtml = implode('', $expectRows);
 
+        $ipRows = [];
+        foreach ($data['client_ip'] as $k => $v) {
+            $ipRows[] = \sprintf(
+                '<tr><td>%s</td><td><code>%s</code></td></tr>',
+                $esc($k),
+                $esc((string) ($v ?? 'null'))
+            );
+        }
+        $ipHtml = implode('', $ipRows);
+
         return <<<HTML
 <!DOCTYPE html>
 <html lang="{$esc($data['current_locale'])}">
@@ -153,12 +171,25 @@ final class PathTestController extends AbstractController
     th { background: #f5f5f5; }
     code { background: #f0f0f0; padding: 2px 4px; border-radius: 3px; }
     caption { text-align: left; font-weight: bold; padding: .25rem 0 .5rem; }
+    .client-ip { background: #e8f4f8; padding: 1rem; border-radius: 5px; margin-bottom: 2rem; }
   </style>
 </head>
 <body>
   <h1>Path Test Controller</h1>
   <p>Current locale: <strong>{$esc($data['current_locale'])}</strong></p>
   <p>Current site relativePath: <strong>{$esc((string) ($data['current_site_relative_path'] ?? ''))}</strong></p>
+
+  <div class="client-ip">
+    <h2>Client IP Information</h2>
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Value</th></tr>
+      </thead>
+      <tbody>
+        {$ipHtml}
+      </tbody>
+    </table>
+  </div>
 
   <table>
     <caption>Generated URLs</caption>
