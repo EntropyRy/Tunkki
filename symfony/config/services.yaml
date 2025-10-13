@@ -19,6 +19,12 @@ parameters:
   stripe_public_key: "%env(STRIPE_PUBLISHABLE_KEY)%"
   stripe_secret_key: "%env(STRIPE_SECRET_KEY)%"
 
+  mattermost_channels:
+    yhdistys: "us4g1ifbn7df7b3ds373y94uow"
+    vuokraus: "9fmbdfkutpdnfnn8oqupqmw3yy"
+    nakkikone: "ixph3m1jxfny7rmy78yff3en5h"
+    kerde: "kb7j8tb5b3bsfg8tym9jd9ro9r"
+
 services:
   App\Service\BookingReferenceService:
     arguments:

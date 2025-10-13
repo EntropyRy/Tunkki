@@ -22,12 +22,21 @@ final class MattermostNotifierServiceTest extends TestCase
     ): MattermostNotifierService {
         $params = $this->createStub(ParameterBagInterface::class);
         $params
-            ->method('get')
-            ->willReturnCallback(
-                static fn (string $name) => 'kernel.environment' === $name
-                    ? $env
-                    : null,
-            );
+            ->method("get")
+            ->willReturnCallback(static function (string $name) use ($env) {
+                if ($name === "kernel.environment") {
+                    return $env;
+                }
+                if ($name === "mattermost_channels") {
+                    return [
+                        "yhdistys" => "us4g1ifbn7df7b3ds373y94uow",
+                        "vuokraus" => "9fmbdfkutpdnfnn8oqupqmw3yy",
+                        "nakkikone" => "ixph3m1jxfny7rmy78yff3en5h",
+                        "kerde" => "kb7j8tb5b3bsfg8tym9jd9ro9r",
+                    ];
+                }
+                return null;
+            });
 
         return new MattermostNotifierService($chatter, $params);
     }
@@ -39,7 +48,7 @@ final class MattermostNotifierServiceTest extends TestCase
         $chatter = $this->createMock(ChatterInterface::class);
         $chatter
             ->expects(self::once())
-            ->method('send')
+            ->method("send")
             ->with(
                 self::callback(function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
@@ -50,11 +59,11 @@ final class MattermostNotifierServiceTest extends TestCase
             )
             // Throw to avoid dealing with a concrete SentMessage return; service swallows exceptions.
             ->willThrowException(
-                new \RuntimeException('transport failure (expected by test)'),
+                new \RuntimeException("transport failure (expected by test)"),
             );
 
-        $service = $this->makeService('test', $chatter);
-        $service->sendToMattermost('Hello world', '#alerts');
+        $service = $this->makeService("test", $chatter);
+        $service->sendToMattermost("Hello world", "yhdistys");
 
         self::assertInstanceOf(ChatMessage::class, $captured);
         $options = $captured->getOptions();
@@ -63,9 +72,9 @@ final class MattermostNotifierServiceTest extends TestCase
         // MattermostOptions should reflect the chosen channel in its array form.
         // We don't assert on a particular key name; instead, ensure the provided channel is present somewhere.
         self::assertSame(
-            '#alerts',
+            "us4g1ifbn7df7b3ds373y94uow",
             $options->getRecipientId(),
-            'Recipient should be set when channel is provided outside dev.',
+            "Recipient should be set when channel is provided outside dev.",
         );
     }
 
@@ -76,7 +85,7 @@ final class MattermostNotifierServiceTest extends TestCase
         $chatter = $this->createMock(ChatterInterface::class);
         $chatter
             ->expects(self::once())
-            ->method('send')
+            ->method("send")
             ->with(
                 self::callback(function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
@@ -86,11 +95,11 @@ final class MattermostNotifierServiceTest extends TestCase
                 }),
             )
             ->willThrowException(
-                new \RuntimeException('transport failure (expected by test)'),
+                new \RuntimeException("transport failure (expected by test)"),
             );
 
-        $service = $this->makeService('dev', $chatter);
-        $service->sendToMattermost('Hello dev', '#devops');
+        $service = $this->makeService("dev", $chatter);
+        $service->sendToMattermost("Hello dev", "#devops");
 
         self::assertInstanceOf(ChatMessage::class, $captured);
         $options = $captured->getOptions();
@@ -98,7 +107,7 @@ final class MattermostNotifierServiceTest extends TestCase
 
         self::assertNull(
             $options->getRecipientId(),
-            'Recipient must not be overridden in dev.',
+            "Recipient must not be overridden in dev.",
         );
     }
 
@@ -107,18 +116,18 @@ final class MattermostNotifierServiceTest extends TestCase
         $chatter = $this->createMock(ChatterInterface::class);
         $chatter
             ->expects(self::once())
-            ->method('send')
+            ->method("send")
             ->willThrowException(
-                new \RuntimeException('simulated send failure'),
+                new \RuntimeException("simulated send failure"),
             );
 
-        $service = $this->makeService('test', $chatter);
+        $service = $this->makeService("test", $chatter);
 
         // Should not throw despite the transport failure.
-        $service->sendToMattermost('Will not throw');
+        $service->sendToMattermost("Will not throw");
         self::assertTrue(
             true,
-            'No exception bubbled up from sendToMattermost().',
+            "No exception bubbled up from sendToMattermost().",
         );
     }
 
@@ -129,7 +138,7 @@ final class MattermostNotifierServiceTest extends TestCase
         $chatter = $this->createMock(ChatterInterface::class);
         $chatter
             ->expects(self::once())
-            ->method('send')
+            ->method("send")
             ->with(
                 self::callback(function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
@@ -139,11 +148,11 @@ final class MattermostNotifierServiceTest extends TestCase
                 }),
             )
             ->willThrowException(
-                new \RuntimeException('transport failure (expected by test)'),
+                new \RuntimeException("transport failure (expected by test)"),
             );
 
-        $service = $this->makeService('prod', $chatter);
-        $service->sendToMattermost('No channel specified', null);
+        $service = $this->makeService("prod", $chatter);
+        $service->sendToMattermost("No channel specified", null);
 
         self::assertInstanceOf(ChatMessage::class, $captured);
         $options = $captured->getOptions();
@@ -151,16 +160,16 @@ final class MattermostNotifierServiceTest extends TestCase
 
         self::assertNull(
             $options->getRecipientId(),
-            'Recipient should not be set when no channel is provided.',
+            "Recipient should not be set when no channel is provided.",
         );
     }
 
     private function arrayContainsChannel(array $arr, string $channel): bool
     {
-        $needle = ltrim($channel, '#');
+        $needle = ltrim($channel, "#");
         $it = new \RecursiveIteratorIterator(new \RecursiveArrayIterator($arr));
         foreach ($it as $value) {
-            if (\is_string($value) && ltrim($value, '#') === $needle) {
+            if (\is_string($value) && ltrim($value, "#") === $needle) {
                 return true;
             }
         }
