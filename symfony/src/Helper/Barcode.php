@@ -20,7 +20,7 @@ class Barcode
     public function getBarcodeForCode(string $code): array
     {
         $generator = new BarcodeGeneratorHTML();
-        $barcode = $generator->getBarcode($code, $generator::TYPE_CODE_128, 2, 90);
+        $barcode = $generator->getBarcode($code, BarcodeGeneratorHTML::TYPE_CODE_128, 2, 90);
 
         return [$code, $barcode];
     }
