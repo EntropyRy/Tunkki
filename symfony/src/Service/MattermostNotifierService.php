@@ -14,14 +14,15 @@ class MattermostNotifierService
     public function __construct(
         private readonly ChatterInterface $chatter,
         private readonly ParameterBagInterface $params,
-    ) {}
+    ) {
+    }
 
     public function sendToMattermost(
         string $text,
-        ?string $channelKey = "yhdistys",
+        ?string $channelKey = 'yhdistys',
     ): void {
-        $env = (string) $this->params->get("kernel.environment");
-        $channels = $this->params->get("mattermost_channels");
+        $env = (string) $this->params->get('kernel.environment');
+        $channels = $this->params->get('mattermost_channels');
         $channelId =
             $channelKey && isset($channels[$channelKey])
                 ? $channels[$channelKey]
@@ -31,7 +32,7 @@ class MattermostNotifierService
             $message = new ChatMessage($text);
             $options = new MattermostOptions();
 
-            if ($channelId && "dev" !== $env) {
+            if ($channelId && 'dev' !== $env) {
                 $options->recipient($channelId);
             }
 
