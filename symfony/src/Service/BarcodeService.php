@@ -7,12 +7,12 @@ namespace App\Service;
 use Picqer\Barcode\BarcodeGeneratorHTML;
 use Sqids\Sqids;
 
-final class BarcodeService
+final readonly class BarcodeService
 {
-    private readonly Sqids $sqids;
+    private Sqids $sqids;
 
     public function __construct(
-        private readonly int $sqidsMinLength = 9,
+        private int $sqidsMinLength = 9,
     ) {
         $this->sqids = new Sqids('', $this->sqidsMinLength);
     }
