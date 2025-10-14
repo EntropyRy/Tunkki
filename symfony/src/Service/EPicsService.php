@@ -246,9 +246,12 @@ final readonly class EPicsService
 
             $success = $resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300;
             if (!$success) {
+                $errorBody = $resp->getContent(false);
                 $this->log('error', 'Failed to update user password', [
                     'status' => $resp->getStatusCode(),
                     'userId' => $userId,
+                    'username' => $username,
+                    'responseBody' => $errorBody,
                 ]);
             }
 
