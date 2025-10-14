@@ -148,7 +148,7 @@ final readonly class EPicsService
 
             if ($userId) {
                 // User exists - update password via PATCH
-                return $this->updateUserPassword($userId, $password, $headers);
+                return $this->updateUserPassword($userId, $username, $password, $headers);
             }
 
             // User doesn't exist - create new user
@@ -222,10 +222,10 @@ final readonly class EPicsService
     /**
      * Update existing user's password.
      *
-     * Updates password via PATCH endpoint. Username is excluded (immutable).
-     * Includes all required "present" boolean fields.
+     * Updates password via PATCH endpoint using camelCase field names.
+     * Username is required by API even though it's immutable.
      */
-    private function updateUserPassword(int $userId, string $password, array $headers): bool
+    private function updateUserPassword(int $userId, string $username, string $password, array $headers): bool
     {
         try {
             $resp = $this->client->request(
@@ -236,10 +236,10 @@ final readonly class EPicsService
                     'headers' => $headers,
                     'json' => [
                         'id' => (string) $userId,
+                        'username' => $username,
                         'password' => $password,
-                        'may_upload' => true,
-                        'may_edit_own_settings' => true,
-                        'may_administrate' => false,
+                        'mayUpload' => true,
+                        'mayEditOwnSettings' => true,
                     ],
                 ],
             );
