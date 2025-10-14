@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Block;
 
 use App\Entity\User;
-use App\Helper\ZMQHelper;
 use App\Repository\DoorLogRepository;
+use App\Service\ZMQService;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;
@@ -40,11 +40,9 @@ class DoorInfoBlock extends BaseBlockService
         $logs = [];
 
         try {
-            $status = $this->zmq->send(
-                'dev init: '.
-                    $member->getUsername().
-                    ' '.
-                    $now->getTimestamp(),
+            $status = $this->zmq->sendInit(
+                $member->getUsername(),
+                $now->getTimestamp(),
             );
         } catch (\Exception) {
             // ZMQ service might not be available in test environment
@@ -88,7 +86,7 @@ class DoorInfoBlock extends BaseBlockService
         Environment $twig,
         protected Security $security,
         protected DoorLogRepository $doorLogR,
-        protected ZMQHelper $zmq,
+        protected ZMQService $zmq,
     ) {
         parent::__construct($twig);
     }

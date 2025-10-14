@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Helper;
+namespace App\Service;
 
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
- * Hardened SSH helper that:
- * - Validates connection and authentication.
- * - Executes predefined script commands (from parameter bag keys recording.script.<name>).
- * - Can return either legacy (string|false) or structured (array) results.
+ * SSH Service for executing remote commands via SSH2.
+ *
+ * Provides:
+ * - Validated connection and authentication
+ * - Execution of predefined script commands (from parameter bag: recording.script.<name>)
+ * - Both legacy (string|false) and structured (array) result formats
+ * - Connection testing and status checking
  *
  * Backwards compatibility:
- *   sendCommand($name) without the second argument still returns:
- *     - false on (apparent) success (old semantics)
+ *   sendCommand($name) without the second argument returns:
+ *     - false on success (legacy semantics)
  *     - string (stderr or internal error message) on failure
  *
- * New usage:
+ * New structured usage:
  *   $result = $ssh->sendCommand('start', true);
- *   // $result = [
+ *   // Returns: [
  *   //   'success' => bool,
  *   //   'command' => string,
  *   //   'stdout' => string,
@@ -29,46 +32,42 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  *   //   'timing' => ['connect_ms' => int, 'exec_ms' => int],
  *   // ]
  */
-class SSH
+final class SSHService
 {
     private ?array $lastResult = null;
 
-    public function __construct(private readonly ParameterBagInterface $bag)
-    {
+    public function __construct(
+        private readonly ParameterBagInterface $parameterBag,
+    ) {
     }
 
     /**
-     * Execute a predefined command identified by suffix <text> in parameter key: recording.script.<text>.
+     * Execute a predefined command identified by suffix in parameter key: recording.script.<text>.
      *
-     * Legacy mode (structured = false):
-     *   Returns false when command considered successful (no stderr and exit_status == 0 or null),
-     *   or returns a string describing the error (stderr output or internal error).
+     * @param string $commandName Suffix after 'recording.script.' in parameters
+     * @param bool   $structured  Whether to return structured result array
      *
-     * Structured mode (structured = true):
-     *   Returns an array (see class docblock).
-     *
-     * @param string $text       Suffix after 'recording.script.' in parameters
-     * @param bool   $structured Whether to return structured result
+     * @return array|string|false Array if structured=true, false on success (legacy), string error on failure (legacy)
      */
     public function sendCommand(
-        string $text,
+        string $commandName,
         bool $structured = false,
     ): array|string|bool {
-        $paramKey = 'recording.script.'.$text;
+        $paramKey = 'recording.script.'.$commandName;
 
-        if (!$this->bag->has($paramKey)) {
+        if (!$this->parameterBag->has($paramKey)) {
             return $this->finalizeResult(
                 success: false,
                 command: $paramKey,
                 stdout: '',
                 stderr: '',
                 exitStatus: null,
-                error: "Missing parameter '$paramKey'",
+                error: "Missing parameter '{$paramKey}'",
                 structured: $structured,
             );
         }
 
-        $command = (string) $this->bag->get($paramKey);
+        $command = (string) $this->parameterBag->get($paramKey);
 
         $connectStart = microtime(true);
         try {
@@ -95,7 +94,7 @@ class SSH
                 stdout: '',
                 stderr: '',
                 exitStatus: null,
-                error: "Failed to execute SSH command '$command'",
+                error: "Failed to execute SSH command '{$command}'",
                 structured: $structured,
                 connectMs: $connectMs,
             );
@@ -103,7 +102,6 @@ class SSH
 
         $errorStream = @ssh2_fetch_stream($stream, \SSH2_STREAM_STDERR);
         if (false === $errorStream) {
-            // Still proceed, but note missing stderr stream
             $errorStream = null;
         }
 
@@ -121,7 +119,7 @@ class SSH
         }
         fclose($stream);
 
-        // Retrieve exit status (may be null if not provided and function may not exist)
+        // Retrieve exit status (may be null if not provided)
         $exitStatus = null;
         if (\function_exists('ssh2_get_exit_status')) {
             $statusRaw = @ssh2_get_exit_status($stream);
@@ -132,8 +130,7 @@ class SSH
 
         $execMs = (int) round((microtime(true) - $execStart) * 1000);
 
-        $success =
-            '' === $stderr && (null === $exitStatus || 0 === $exitStatus);
+        $success = '' === $stderr && (null === $exitStatus || 0 === $exitStatus);
 
         return $this->finalizeResult(
             success: $success,
@@ -143,9 +140,7 @@ class SSH
             exitStatus: $exitStatus,
             error: $success
                 ? null
-                : ('' !== $stderr
-                    ? trim($stderr)
-                    : 'Command failed'),
+                : ('' !== $stderr ? trim($stderr) : 'Command failed'),
             structured: $structured,
             connectMs: $connectMs,
             execMs: $execMs,
@@ -153,15 +148,17 @@ class SSH
     }
 
     /**
-     * Check status via 'recording.script.check' command expecting "1" for true, anything else false.
+     * Check remote status via 'recording.script.check' command.
+     *
+     * Expects "1" for true, anything else is false.
      */
     public function checkStatus(): bool
     {
         $paramKey = 'recording.script.check';
-        if (!$this->bag->has($paramKey)) {
+        if (!$this->parameterBag->has($paramKey)) {
             return false;
         }
-        $command = (string) $this->bag->get($paramKey);
+        $command = (string) $this->parameterBag->get($paramKey);
 
         try {
             $connection = $this->getConnectionOrFail();
@@ -182,7 +179,7 @@ class SSH
     }
 
     /**
-     * Lightweight connectivity test (does not run a command).
+     * Test SSH connectivity without executing a command.
      */
     public function testConnection(): bool
     {
@@ -196,7 +193,7 @@ class SSH
     }
 
     /**
-     * Retrieve the last structured result (if any) regardless of legacy/structured call style.
+     * Retrieve the last structured result (if any) regardless of call style.
      */
     public function getLastResult(): ?array
     {
@@ -204,18 +201,18 @@ class SSH
     }
 
     /**
-     * Internal: establish SSH connection and authenticate or throw.
+     * Establish SSH connection and authenticate or throw.
      *
-     * @return resource
+     * @return resource SSH connection resource
      *
-     * @throws \RuntimeException
+     * @throws \RuntimeException on connection or authentication failure
      */
-    protected function getConnectionOrFail()
+    private function getConnectionOrFail()
     {
-        $host = (string) $this->bag->get('recording.host');
-        $port = (int) $this->bag->get('recording.port');
-        $user = (string) $this->bag->get('recording.user');
-        $pass = (string) $this->bag->get('recording.pass');
+        $host = (string) $this->parameterBag->get('recording.host');
+        $port = (int) $this->parameterBag->get('recording.port');
+        $user = (string) $this->parameterBag->get('recording.user');
+        $pass = (string) $this->parameterBag->get('recording.pass');
 
         $connection = @ssh2_connect($host, $port);
         if (false === $connection) {
@@ -232,6 +229,8 @@ class SSH
 
     /**
      * Consolidate and store result; return according to requested mode.
+     *
+     * @return array|string|false
      */
     private function finalizeResult(
         bool $success,
@@ -263,12 +262,12 @@ class SSH
             return $result;
         }
 
-        // Legacy behavior: return false on success, string on error.
+        // Legacy behavior: return false on success, string on error
         if ($success) {
             return false;
         }
 
-        // Prefer stderr message; fallback to generic error.
+        // Prefer stderr message; fallback to generic error
         return '' !== $stderr ? trim($stderr) : $error ?? 'Unknown SSH error';
     }
 }

@@ -7,11 +7,11 @@ namespace App\Controller;
 use App\Entity\DoorLog;
 use App\Entity\User;
 use App\Form\OpenDoorType;
-use App\Helper\SSH;
-use App\Helper\ZMQHelper;
 use App\Repository\DoorLogRepository;
 use App\Service\BarcodeService;
 use App\Service\MattermostNotifierService;
+use App\Service\SSHService;
+use App\Service\ZMQService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -34,11 +34,11 @@ class KerdeController extends AbstractController
         Request $request,
         FormFactoryInterface $formF,
         MattermostNotifierService $mm,
-        ZMQHelper $zmq,
+        ZMQService $zmq,
         BarcodeService $barcodeService,
         EntityManagerInterface $em,
         DoorLogRepository $doorlogrepo,
-        SSH $ssh,
+        SSHService $ssh,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         \assert($user instanceof User);
@@ -54,25 +54,18 @@ class KerdeController extends AbstractController
         $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTimeImmutable('now');
-        $env = $this->getParameter('kernel.debug') ? 'dev' : 'prod';
-        $status = $zmq->send(
-            $env.
-                ' init: '.
-                $member->getUsername().
-                ' '.
-                $now->getTimestamp(),
+        $status = $zmq->sendInit(
+            $member->getUsername(),
+            $now->getTimestamp(),
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $status = $zmq->send(
-                $env.
-                    ' open: '.
-                    $member->getUsername().
-                    ' '.
-                    $now->getTimestamp(),
+            $status = $zmq->sendOpen(
+                $member->getUsername(),
+                $now->getTimestamp(),
             );
             // $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
@@ -117,7 +110,7 @@ class KerdeController extends AbstractController
     }
 
     #[Route('/kerde/recording/start', name: 'recording_start')]
-    public function recordingStart(SSH $ssh): RedirectResponse
+    public function recordingStart(SSHService $ssh): RedirectResponse
     {
         $user = $this->getUser();
         \assert($user instanceof User);
@@ -135,7 +128,7 @@ class KerdeController extends AbstractController
     }
 
     #[Route('/kerde/recording/stop', name: 'recording_stop')]
-    public function recordingStop(SSH $ssh): RedirectResponse
+    public function recordingStop(SSHService $ssh): RedirectResponse
     {
         $user = $this->getUser();
         \assert($user instanceof User);

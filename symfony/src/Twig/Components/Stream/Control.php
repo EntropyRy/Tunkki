@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Components\Stream;
 
-use App\Helper\SSH;
+use App\Service\SSHService;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
@@ -13,7 +13,7 @@ final class Control
     private bool $streamStatus = false;
 
     public function __construct(
-        private readonly SSH $ssh,
+        private readonly SSHService $ssh,
     ) {
     }
 

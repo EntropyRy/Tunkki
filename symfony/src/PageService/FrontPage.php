@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\PageService;
 
 use App\Entity\Event;
-use App\Helper\ePics;
 use App\Repository\EventArtistInfoRepository;
 use App\Repository\EventRepository;
 use Sonata\PageBundle\Model\PageInterface;
@@ -22,7 +21,6 @@ class FrontPage implements PageServiceInterface
         private readonly TemplateManagerInterface $templateManager,
         private readonly EventArtistInfoRepository $eventArtistR,
         private readonly EventRepository $eventR,
-        // private readonly ePics $ePics,
         private readonly ?SeoPageInterface $seoPage = null,
     ) {
     }
@@ -53,7 +51,6 @@ class FrontPage implements PageServiceInterface
         } else {
             $events = array_merge($events, [$announcement]);
         }*/
-        // $epic = $this->ePics->getRandomPic();
         $future = array_merge($future, $unpublished);
         $events = $announcement instanceof Event ? array_merge($future, [$announcement]) : $future;
         $this->updateSeoPage($page);
@@ -62,7 +59,6 @@ class FrontPage implements PageServiceInterface
             $page->getTemplateCode(),
             [
                 'events' => $events,
-                // 'epic' => $epic,
                 'info' => $info,
             ],
             $response

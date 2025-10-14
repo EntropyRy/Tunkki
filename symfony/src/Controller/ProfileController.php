@@ -11,11 +11,11 @@ use App\Form\ActiveMemberType;
 use App\Form\EPicsPasswordType;
 use App\Form\MemberType;
 use App\Form\UserPasswordType;
-use App\Helper\ePics;
 use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Security\EmailVerifier;
 use App\Service\BarcodeService;
+use App\Service\EPicsService;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -319,7 +319,7 @@ class ProfileController extends AbstractController
     ]
     public function epicsPassword(
         Request $request,
-        ePics $epics,
+        EPicsService $epics,
         EntityManagerInterface $em,
     ): RedirectResponse|Response {
         $user = $this->getUser();
