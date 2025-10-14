@@ -16,20 +16,27 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * - User account creation and password management
  * - Session and authentication handling
  *
- * Configuration via parameters:
- * - epics_base_url: Base URL for ePics API
- * - epics_admin_user: Admin username for user management
- * - epics_admin_password: Admin password for user management
+ * Configuration via environment variables (optional):
+ * - EPICS_BASE_URL: Base URL for ePics API (default: https://epics.entropy.fi)
+ * - EPICS_ADMIN_USER: Admin username for user management
+ * - EPICS_ADMIN_PASSWORD: Admin password for user management
  */
 final readonly class EPicsService
 {
+    private string $baseUrl;
+    private string $adminUser;
+    private string $adminPassword;
+
     public function __construct(
         private HttpClientInterface $client,
-        private string $baseUrl,
-        private string $adminUser,
-        private string $adminPassword,
         private ?LoggerInterface $logger = null,
     ) {
+        $this->baseUrl = rtrim(
+            $_ENV['EPICS_BASE_URL'] ?? $_SERVER['EPICS_BASE_URL'] ?? 'https://epics.entropy.fi',
+            '/'
+        );
+        $this->adminUser = $_ENV['EPICS_ADMIN_USER'] ?? $_SERVER['EPICS_ADMIN_USER'] ?? '';
+        $this->adminPassword = $_ENV['EPICS_ADMIN_PASSWORD'] ?? $_SERVER['EPICS_ADMIN_PASSWORD'] ?? '';
     }
 
     /**

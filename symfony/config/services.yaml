@@ -35,12 +35,6 @@ services:
     arguments:
       $environment: '%kernel.environment%'
 
-  App\Service\EPicsService:
-    arguments:
-      $baseUrl: '%env(EPICS_BASE_URL)%'
-      $adminUser: '%env(EPICS_ADMIN_USER)%'
-      $adminPassword: '%env(EPICS_ADMIN_PASSWORD)%'
-
   _defaults:
     autowire: true
     autoconfigure: true

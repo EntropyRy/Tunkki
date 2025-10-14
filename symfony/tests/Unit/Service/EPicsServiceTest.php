@@ -18,22 +18,17 @@ final class EPicsServiceTest extends TestCase
     protected function setUp(): void
     {
         $this->client = new MockHttpClient();
-        $this->service = new EPicsService(
-            $this->client,
-            'https://epics.test.local',
-            'admin@test.com',
-            'admin_password',
-        );
+        // Set environment variables for testing
+        $_ENV['EPICS_BASE_URL'] = 'https://epics.test.local';
+        $_ENV['EPICS_ADMIN_USER'] = 'admin@test.com';
+        $_ENV['EPICS_ADMIN_PASSWORD'] = 'admin_password';
+
+        $this->service = new EPicsService($this->client);
     }
 
     public function testServiceConstructsCorrectly(): void
     {
-        $service = new EPicsService(
-            $this->client,
-            'https://test.example.com',
-            'user',
-            'pass',
-        );
+        $service = new EPicsService($this->client);
 
         $this->assertInstanceOf(EPicsService::class, $service);
     }
@@ -41,13 +36,7 @@ final class EPicsServiceTest extends TestCase
     public function testServiceConstructsWithLogger(): void
     {
         $logger = $this->createMock(LoggerInterface::class);
-        $service = new EPicsService(
-            $this->client,
-            'https://test.example.com',
-            'user',
-            'pass',
-            $logger,
-        );
+        $service = new EPicsService($this->client, $logger);
 
         $this->assertInstanceOf(EPicsService::class, $service);
     }
