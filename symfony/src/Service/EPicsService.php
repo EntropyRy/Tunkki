@@ -222,7 +222,7 @@ final readonly class EPicsService
     /**
      * Update existing user's password.
      *
-     * Updates password via PATCH endpoint using camelCase field names.
+     * Updates password via PATCH endpoint using snake_case field names.
      * Username is required by API even though it's immutable.
      */
     private function updateUserPassword(int $userId, string $username, string $password, array $headers): bool
@@ -235,11 +235,11 @@ final readonly class EPicsService
                     'max_duration' => 10,
                     'headers' => $headers,
                     'json' => [
-                        'id' => (string) $userId,
+                        'id' => $userId,
                         'username' => $username,
                         'password' => $password,
-                        'mayUpload' => true,
-                        'mayEditOwnSettings' => true,
+                        'may_upload' => true,
+                        'may_edit_own_settings' => true,
                     ],
                 ],
             );
