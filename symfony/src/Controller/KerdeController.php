@@ -7,10 +7,10 @@ namespace App\Controller;
 use App\Entity\DoorLog;
 use App\Entity\User;
 use App\Form\OpenDoorType;
-use App\Helper\Barcode;
 use App\Helper\SSH;
 use App\Helper\ZMQHelper;
 use App\Repository\DoorLogRepository;
+use App\Service\BarcodeService;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +35,7 @@ class KerdeController extends AbstractController
         FormFactoryInterface $formF,
         MattermostNotifierService $mm,
         ZMQHelper $zmq,
-        Barcode $barcodeGenerator,
+        BarcodeService $barcodeService,
         EntityManagerInterface $em,
         DoorLogRepository $doorlogrepo,
         SSH $ssh,
@@ -101,7 +101,7 @@ class KerdeController extends AbstractController
 
             return $this->redirectToRoute('kerde_door');
         }
-        $barcode = $barcodeGenerator->getBarcodeForCode($member->getCode());
+        $barcode = $barcodeService->getBarcodeForCode($member->getCode());
 
         // $status = $ssh->checkStatus();
         // if ($status == 1) {
@@ -153,18 +153,18 @@ class KerdeController extends AbstractController
     }
 
     #[Route('/kerde/barcodes', name: 'kerde_barcodes')]
-    public function index(Barcode $gen): Response
+    public function index(BarcodeService $barcodeService): Response
     {
         $barcodes = [];
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();
-        $code = $gen->getBarcodeForCode($member->getCode());
+        $code = $barcodeService->getBarcodeForCode($member->getCode());
         $barcodes['Your Code'] = $code[1];
-        $barcodes['10€'] = $gen->getBarcodeForCode('_10e_')[1];
-        $barcodes['20€'] = $gen->getBarcodeForCode('_20e_')[1];
-        $barcodes['Cancel'] = $gen->getBarcodeForCode('_CANCEL_')[1];
-        $barcodes['Manual'] = $gen->getBarcodeForCode('1812271001')[1];
+        $barcodes['10€'] = $barcodeService->getBarcodeForCode('_10e_')[1];
+        $barcodes['20€'] = $barcodeService->getBarcodeForCode('_20e_')[1];
+        $barcodes['Cancel'] = $barcodeService->getBarcodeForCode('_CANCEL_')[1];
+        $barcodes['Manual'] = $barcodeService->getBarcodeForCode('1812271001')[1];
 
         // $barcodes['Statistics'] = $generator->getBarcode('0348030005', $generator::TYPE_CODE_128, 2, 90);
         return $this->render('kerde/barcodes.html.twig', [

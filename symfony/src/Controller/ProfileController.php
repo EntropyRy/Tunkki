@@ -11,8 +11,8 @@ use App\Form\ActiveMemberType;
 use App\Form\EPicsPasswordType;
 use App\Form\MemberType;
 use App\Form\UserPasswordType;
-use App\Helper\Barcode;
 use App\Helper\ePics;
+use App\Service\BarcodeService;
 use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Security\EmailVerifier;
@@ -47,7 +47,7 @@ class ProfileController extends AbstractController
         MattermostNotifierService $mm,
         TranslatorInterface $translator,
         EmailVerifier $emailVerifier,
-        Barcode $bc,
+        BarcodeService $barcodeService,
         EntityManagerInterface $em,
     ): Response {
         $member = new Member();
@@ -62,7 +62,7 @@ class ProfileController extends AbstractController
                 $member->setLocale($request->getLocale());
             }
             if (null === $member->getCode()) {
-                $member->setCode($bc->getCode());
+                $member->setCode($barcodeService->getCode());
             }
 
             // Create a fresh User and attach (password read from unmapped sub-form)
@@ -153,13 +153,13 @@ class ProfileController extends AbstractController
             name: 'dashboard',
         ),
     ]
-    public function dashboard(Barcode $bc): Response
+    public function dashboard(BarcodeService $barcodeService): Response
     {
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();
 
-        // $barcode = $bc->getBarcode($member);
+        // $barcode = $barcodeService->getBarcodeForCode($member->getCode());
         return $this->render('profile/dashboard.html.twig', [
             'member' => $member,
             // 'barcode' => $barcode

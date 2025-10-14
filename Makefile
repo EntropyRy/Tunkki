@@ -108,6 +108,8 @@ help:
 	@echo "  make lint-datetime        - Enforce clock policy (forbidden new DateTime in disallowed layers)"
 	@echo "  make doctor               - Environment / tool diagnostics"
 	@echo "  make clean                - Clear caches (coverage, Infection, PHPStan)"
+	@echo "  make clean-test-db        - Reset test database (drop/create/schema:update)"
+	@echo "  make grant-test-db-privileges - Grant test user privileges on test_* databases"
 	@echo "  make update-dev           - Update dev env (pull/build/up, composer update, importmap, stan, style, rector)"
 	@echo ""
 	@echo "$(BOLD)Variables (override)$(RESET)"
@@ -334,6 +336,22 @@ clean-test-db:
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:drop --force || true
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:create
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:schema:update --force
+
+.PHONY: grant-test-db-privileges
+grant-test-db-privileges:
+	@echo "$(CYAN)==> Granting test user privileges on test_* databases (for parallel test execution)$(RESET)"
+	@if [ ! -f .env ]; then \
+		echo "$(RED)ERROR: .env file not found in project root$(RESET)"; \
+		exit 1; \
+	fi
+	@DB_ROOT_PW=$$(grep '^DB_ROOT_PASSWORD=' .env | cut -d= -f2 | tr -d '"'); \
+	if [ -z "$$DB_ROOT_PW" ]; then \
+		echo "$(RED)ERROR: DB_ROOT_PASSWORD not found in .env$(RESET)"; \
+		exit 1; \
+	fi; \
+	$(COMPOSE) exec -T db mariadb -uroot -p"$$DB_ROOT_PW" \
+		-e "GRANT ALL PRIVILEGES ON \`test_%\`.* TO 'test'@'%'; FLUSH PRIVILEGES;" 2>&1 | grep -v "mariadb: \[Warning\]" || true
+	@echo "$(GREEN)Test user now has privileges on test_* databases$(RESET)"
 
 
 
