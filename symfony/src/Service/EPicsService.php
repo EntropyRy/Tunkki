@@ -32,7 +32,7 @@ final readonly class EPicsService
         private ?LoggerInterface $logger = null,
     ) {
         $this->baseUrl = rtrim(
-            $_ENV['EPICS_BASE_URL'] ?? $_SERVER['EPICS_BASE_URL'] ?? 'https://epics.entropy.fi',
+            (string) ($_ENV['EPICS_BASE_URL'] ?? $_SERVER['EPICS_BASE_URL'] ?? 'https://epics.entropy.fi'),
             '/'
         );
         $this->adminUser = $_ENV['EPICS_ADMIN_USER'] ?? $_SERVER['EPICS_ADMIN_USER'] ?? '';
@@ -147,7 +147,7 @@ final readonly class EPicsService
             $userId = $this->findUserId($username, $headers);
 
             if ($userId) {
-                // User exists - update password using separate password change endpoint
+                // User exists - update password via PATCH
                 return $this->updateUserPassword($userId, $password, $headers);
             }
 
@@ -222,14 +222,12 @@ final readonly class EPicsService
     /**
      * Update existing user's password.
      *
-     * NOTE: The PATCH endpoint might not update passwords properly.
-     * This attempts to use a dedicated password change endpoint if available,
-     * or falls back to PATCH with password field.
+     * Updates password via PATCH endpoint. Username is excluded (immutable).
+     * Includes all required "present" boolean fields.
      */
     private function updateUserPassword(int $userId, string $password, array $headers): bool
     {
         try {
-            // Try PATCH endpoint with new password
             $resp = $this->client->request(
                 'PATCH',
                 $this->baseUrl.'/api/v2/UserManagement',
@@ -241,6 +239,7 @@ final readonly class EPicsService
                         'password' => $password,
                         'may_upload' => true,
                         'may_edit_own_settings' => true,
+                        'may_administrate' => false,
                     ],
                 ],
             );
