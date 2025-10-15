@@ -19,18 +19,19 @@ const defaults = {
     lineColor: "#ffffff",       // Cell boundary color
     lineWidth: 1.5,             // Boundary line width
     cellColors: [],             // Array of hex colors for cells (empty = transparent)
-    cursorInfluence: 120,       // Radius of cursor effect
+    cursorInfluence: 220,       // Radius of cursor effect
     cursorRepel: true,          // Repel from cursor
     noiseScale: 0.002,          // Perlin noise smoothness
     showSeedPoints: false,      // Show seed points
     seedColor: "transparent",   // Color of seed points (default transparent)
+    antiAlias: true,            // Enable anti-aliasing for smoother lines (more CPU intensive)
 
     // CURVED LINES MODE (Weighted Voronoi - global seed weights)
     // NOTE: Cannot be used with pushedPlane effect
     useCurvedLines: false,      // Use curved boundaries (weighted Voronoi)
     seedWeights: [],            // Array of weights for each seed (empty = random)
-    minWeight: 10,              // Minimum bubble weight/radius
-    maxWeight: 50,              // Maximum bubble weight/radius
+    minWeight: 30,              // Minimum bubble weight/radius
+    maxWeight: 150,             // Maximum bubble weight/radius
     weightVariation: true,      // Use varied weights for organic look
 
     // PUSHED PLANE MODE (Invisible balls deforming the plane)
@@ -367,7 +368,13 @@ function draw() {
     const hasCellColors = config.cellColors && config.cellColors.length > 0;
 
     // Use a lower resolution for calculations (performance optimization)
-    const resolution = isMobile ? 4 : 3;
+    // Anti-aliasing reduces resolution divisor for smoother lines
+    let resolution;
+    if (isMobile) {
+        resolution = config.antiAlias ? 2 : 4;
+    } else {
+        resolution = config.antiAlias ? 1.5 : 3;
+    }
     const w = Math.ceil(canvas.width / resolution);
     const h = Math.ceil(canvas.height / resolution);
 
@@ -415,6 +422,12 @@ function draw() {
     ctx.lineWidth = config.lineWidth;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
+
+    // Enable canvas anti-aliasing
+    if (config.antiAlias) {
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+    }
 
     // Find boundaries (pixels where neighbors have different seeds)
     ctx.beginPath();

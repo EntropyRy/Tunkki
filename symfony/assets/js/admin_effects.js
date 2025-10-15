@@ -48,6 +48,7 @@
   "noiseScale": ${obj.noiseScale},
   "showSeedPoints": ${obj.showSeedPoints},
   "seedColor": "${obj.seedColor}",
+  "antiAlias": ${obj.antiAlias},  // Smoother lines (2-4x more CPU intensive)
 
   // CURVED LINES MODE (Weighted Voronoi - global seed weights)
   // NOTE: Cannot be used with pushedPlane effect
@@ -196,16 +197,17 @@
       lineColor: "#ffffff",
       lineWidth: 1.5,
       cellColors: [],
-      cursorInfluence: 120,
+      cursorInfluence: 220,
       cursorRepel: true,
       noiseScale: 0.002,
       showSeedPoints: false,
       seedColor: "transparent",
+      antiAlias: true,
       // Curved lines mode (cannot use with pushedPlane)
       useCurvedLines: false,
       seedWeights: [],
-      minWeight: 10,
-      maxWeight: 50,
+      minWeight: 30,
+      maxWeight: 150,
       weightVariation: true,
       // Pushed plane mode (cannot use with curvedLines)
       usePushedPlane: false,
