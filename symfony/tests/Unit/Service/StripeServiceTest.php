@@ -216,11 +216,4 @@ final class StripeServiceTest extends TestCase
 
         $this->assertFalse($result->isActive(), 'Product should be inactive when both price and product are inactive');
     }
-
-    public function testGetCheckoutSessionReturnsSession(): void
-    {
-        // This test verifies the method signature and return type
-        // In a real scenario, we'd need to mock the Stripe API client
-        $this->markTestSkipped('Requires mocking Stripe API client - integration test territory');
-    }
 }
