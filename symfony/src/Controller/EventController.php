@@ -303,6 +303,7 @@ class EventController extends Controller
                 1 == $product->getHowManyOneCanBuyAtOneTime()
                 && $product->getMax($minus) >= 1
                 && $product->isTicket()
+                && null != $email
             ) {
                 foreach (
                     $ticketRepo->findTicketsByEmailAndEvent($email, $event) as $ticket
