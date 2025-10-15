@@ -162,7 +162,10 @@ final class MemberAdmin extends AbstractAdmin
                 'required' => false,
                 'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list',
             ])
-            ->add('rejectReasonSent')
+            ->add('rejectReasonSent', null, [
+                'required' => false,
+                'help' => 'Whether the reject reason email has been sent',
+            ])
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
