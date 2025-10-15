@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Helper;
+namespace App\Service;
 
 use App\Entity\Event;
 use App\Entity\Product;
@@ -12,11 +12,11 @@ use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-class AppStripeClient
+final readonly class StripeService
 {
     public function __construct(
-        protected readonly ParameterBagInterface $bag,
-        protected readonly UrlGeneratorInterface $urlG,
+        private ParameterBagInterface $bag,
+        private UrlGeneratorInterface $urlG,
     ) {
     }
 

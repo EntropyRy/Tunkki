@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace App\Helper;
+namespace App\Service;
 
 use SimpleSoftwareIO\QrCode\Generator;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 
-class Qr
+final readonly class QrService
 {
     public function __construct(
-        private readonly AssetMapperInterface $assetMapper,
+        private AssetMapperInterface $assetMapper,
         #[Autowire('%kernel.project_dir%')]
-        private readonly string $projectDir,
+        private string $projectDir,
     ) {
     }
 

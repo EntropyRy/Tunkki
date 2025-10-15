@@ -6,9 +6,9 @@ namespace App\Controller;
 
 use App\Entity\Email;
 use App\Entity\User;
-use App\Helper\Qr;
 use App\Repository\ArtistRepository;
 use App\Repository\MemberRepository;
+use App\Service\QrService;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -25,7 +25,7 @@ final class EmailAdminController extends CRUDController
 {
     public function __construct(
         private readonly RequestStack $requestStack,
-        private readonly Qr $qr,
+        private readonly QrService $qr,
     ) {
     }
 

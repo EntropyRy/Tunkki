@@ -8,9 +8,9 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Ticket;
 use App\Entity\User;
-use App\Helper\Qr;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Service\QrService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
@@ -122,7 +122,7 @@ class EventTicketController extends Controller
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
         EntityManagerInterface $em,
-        Qr $qr,
+        QrService $qr,
     ): Response {
         if ($ticket->getEvent() != $event) {
             throw new NotFoundHttpException($trans->trans('event_not_found'));
@@ -165,7 +165,7 @@ class EventTicketController extends Controller
         NakkiBookingRepository $nakkirepo,
         EntityManagerInterface $em,
         TicketRepository $ticketRepo,
-        Qr $qr,
+        QrService $qr,
     ): Response {
         $user = $this->getUser();
         \assert($user instanceof User);

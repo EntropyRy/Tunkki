@@ -9,8 +9,6 @@ use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\Ticket;
-use App\Helper\AppStripeClient;
-use App\Helper\Qr;
 use App\Repository\CheckoutRepository;
 use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
@@ -18,6 +16,8 @@ use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
 use App\Service\BookingReferenceService;
 use App\Service\MattermostNotifierService;
+use App\Service\QrService;
+use App\Service\StripeService;
 use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
 use Psr\Log\LoggerInterface;
@@ -33,14 +33,14 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly CheckoutRepository $checkoutRepo,
         private readonly ProductRepository $productRepo,
         private readonly LoggerInterface $logger,
-        private readonly AppStripeClient $stripe,
+        private readonly StripeService $stripe,
         private readonly MemberRepository $memberRepo,
         private readonly TicketRepository $ticketRepo,
         private readonly EmailRepository $emailRepo,
         private readonly BookingReferenceService $rn,
         private readonly MailerInterface $mailer,
         private readonly MattermostNotifierService $mm,
-        private readonly Qr $qrGenerator,
+        private readonly QrService $qrGenerator,
     ) {
     }
 

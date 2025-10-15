@@ -6,10 +6,10 @@ namespace App\Controller;
 
 use App\Entity\Ticket;
 use App\Form\ChengeTicketOwnerType;
-use App\Helper\Qr;
 use App\Repository\EmailRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Service\QrService;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -71,7 +71,7 @@ final class TicketAdminController extends CRUDController
         ]);
     }
 
-    public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, Qr $qrGenerator): RedirectResponse
+    public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, QrService $qrGenerator): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
         $to = null == $ticket->getOwner() ? $ticket->getEmail() : $ticket->getOwner()->getEmail();

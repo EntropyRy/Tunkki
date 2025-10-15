@@ -7,10 +7,10 @@ namespace App\Controller;
 use App\Entity\CartItem;
 use App\Entity\Checkout;
 use App\Entity\Event;
-use App\Helper\AppStripeClient;
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
 use App\Repository\ProductRepository;
+use App\Service\StripeService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,7 +34,7 @@ class CheckoutsController extends AbstractController
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
         ]
         Event $event,
-        AppStripeClient $stripe,
+        StripeService $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
         ProductRepository $pRepo,
@@ -127,7 +127,7 @@ class CheckoutsController extends AbstractController
     ]
     public function checkout(
         Request $request,
-        AppStripeClient $stripe,
+        StripeService $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
         ProductRepository $pRepo,

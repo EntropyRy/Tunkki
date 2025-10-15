@@ -12,12 +12,12 @@ use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\CartType;
 use App\Form\RSVPType;
-use App\Helper\AppStripeClient;
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\PageBundle\Model\SiteManagerInterface;
 use Sonata\PageBundle\Site\SiteSelectorInterface;
@@ -423,7 +423,7 @@ class EventController extends Controller
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
         ]
         Event $event,
-        AppStripeClient $stripe,
+        StripeService $stripe,
         CheckoutRepository $cRepo,
     ): Response {
         $sessionId = $request->get('session_id');

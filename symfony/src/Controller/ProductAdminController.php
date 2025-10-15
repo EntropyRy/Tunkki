@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Helper\AppStripeClient;
 use App\Repository\ProductRepository;
+use App\Service\StripeService;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -20,7 +20,7 @@ final class ProductAdminController extends CRUDController
     ) {
     }
 
-    public function fetchFromStripeAction(AppStripeClient $stripe): RedirectResponse
+    public function fetchFromStripeAction(StripeService $stripe): RedirectResponse
     {
         $client = $stripe->getClient();
         $stripePrices = $client->prices->all();
