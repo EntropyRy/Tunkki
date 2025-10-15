@@ -407,6 +407,7 @@ final class EventAdmin extends AbstractAdmin
                             'Flow Fields' => 'flowfields',
 
                             'Cockroaches' => 'roaches',
+                            'Voronoi Diagram' => 'voronoi',
                         ],
 
                         'map' => [
@@ -420,12 +421,13 @@ final class EventAdmin extends AbstractAdmin
                             'stars' => ['backgroundEffectConfig'],
                             'tv' => ['backgroundEffectConfig'],
                             'vhs' => ['backgroundEffectConfig'],
+                            'voronoi' => ['backgroundEffectConfig'],
                         ],
                     ])
                     ->add('backgroundEffectConfig', TextareaType::class, [
                         'required' => false,
                         'attr' => ['rows' => 12],
-                        'help' => 'Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static.',
+                        'help' => 'Effect config JSON. Leave empty to use runtime defaults (handled in the front-end). Supported effects: Flowfields, Chladni, Cockroaches, Grid, Wavy Lines, Rain, Snowfall, Starfield, TV white noise, VHS static, Voronoi Diagram.',
                         'help_html' => true,
                     ])
 
@@ -666,6 +668,7 @@ final class EventAdmin extends AbstractAdmin
                             'stars',
                             'tv',
                             'vhs',
+                            'voronoi',
                         ],
                         true,
                     );

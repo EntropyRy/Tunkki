@@ -34,6 +34,43 @@
   }
 
   /**
+   * Format voronoi config with helpful comments
+   */
+  function formatVoronoiWithComments(obj) {
+    return `{
+  "seedCount": ${obj.seedCount},
+  "seedSpeed": ${obj.seedSpeed},
+  "lineColor": "${obj.lineColor}",
+  "lineWidth": ${obj.lineWidth},
+  "cellColors": [],
+  "cursorInfluence": ${obj.cursorInfluence},
+  "cursorRepel": ${obj.cursorRepel},
+  "noiseScale": ${obj.noiseScale},
+  "showSeedPoints": ${obj.showSeedPoints},
+  "seedColor": "${obj.seedColor}",
+
+  // CURVED LINES MODE (Weighted Voronoi - global seed weights)
+  // NOTE: Cannot be used with pushedPlane effect
+  // PERFORMANCE: Lightweight, minimal CPU overhead
+  "useCurvedLines": ${obj.useCurvedLines},
+  "seedWeights": [],
+  "minWeight": ${obj.minWeight},
+  "maxWeight": ${obj.maxWeight},
+  "weightVariation": ${obj.weightVariation},
+
+  // PUSHED PLANE MODE (Invisible balls deforming the plane)
+  // NOTE: Cannot be used with useCurvedLines effect
+  // PERFORMANCE: CPU intensive (4-8x more than curved lines), may impact mobile devices
+  "usePushedPlane": ${obj.usePushedPlane},
+  "ballCount": ${obj.ballCount},
+  "ballRadius": ${obj.ballRadius},  // 0 = auto-calculate from screen size
+  "ballSpeed": ${obj.ballSpeed},
+  "ballPushStrength": ${obj.ballPushStrength},
+  "ballNoiseScale": ${obj.ballNoiseScale}
+}`;
+  }
+
+  /**
    * Try to find the event admin fields using suffix-based selectors
    */
   function findEffectSelect() {
@@ -152,6 +189,33 @@
       scanDurationSec: 15,
     };
   }
+  function voronoiDefaults() {
+    return {
+      seedCount: 15,
+      seedSpeed: 0.3,
+      lineColor: "#ffffff",
+      lineWidth: 1.5,
+      cellColors: [],
+      cursorInfluence: 120,
+      cursorRepel: true,
+      noiseScale: 0.002,
+      showSeedPoints: false,
+      seedColor: "transparent",
+      // Curved lines mode (cannot use with pushedPlane)
+      useCurvedLines: false,
+      seedWeights: [],
+      minWeight: 10,
+      maxWeight: 50,
+      weightVariation: true,
+      // Pushed plane mode (cannot use with curvedLines)
+      usePushedPlane: false,
+      ballCount: 4,
+      ballRadius: 0,
+      ballSpeed: 0.5,
+      ballPushStrength: 0.3,
+      ballNoiseScale: 0.001,
+    };
+  }
 
   /** @type {Record<string, () => Record<string, unknown>>} */
   const DEFAULTS = {
@@ -165,6 +229,7 @@
     stars: starsDefaults,
     tv: tvDefaults,
     vhs: vhsDefaults,
+    voronoi: voronoiDefaults,
   };
 
   /**
@@ -243,7 +308,8 @@
         }
       const d = getDefaults(effect);
       if (d) {
-        configTextarea.value = prettyJson(d);
+        // Use special formatter for voronoi to include comments
+        configTextarea.value = effect === 'voronoi' ? formatVoronoiWithComments(d) : prettyJson(d);
         flash(configTextarea, "Defaults applied.");
       }
     });
@@ -266,7 +332,8 @@
       if (configTextarea.value.trim() === "") {
         const d = getDefaults(newEffect);
         if (d) {
-          configTextarea.value = prettyJson(d);
+          // Use special formatter for voronoi to include comments
+          configTextarea.value = newEffect === 'voronoi' ? formatVoronoiWithComments(d) : prettyJson(d);
           flash(configTextarea, "Defaults loaded for selected effect.");
         }
       }

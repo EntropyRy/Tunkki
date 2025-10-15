@@ -70,6 +70,10 @@ return [
         'path' => './assets/js/roaches.js',
         'entrypoint' => true,
     ],
+    'voronoi' => [
+        'path' => './assets/js/voronoi.js',
+        'entrypoint' => true,
+    ],
     '@symfony/stimulus-bundle' => [
         'path' => './vendor/symfony/stimulus-bundle/assets/dist/loader.js',
     ],

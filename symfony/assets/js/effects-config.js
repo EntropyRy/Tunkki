@@ -49,13 +49,51 @@ export function mergeDeep(a, b) {
 
 /**
  * Parse JSON safely. Returns null on empty/invalid input.
+ * Strips single-line and multi-line comments before parsing.
  * @param {string | null | undefined} s
  * @returns {Record<string, unknown> | null}
  */
 export function parseJsonSafe(s) {
     if (!s) return null;
-    const trimmed = String(s).trim();
+    let trimmed = String(s).trim();
     if (!trimmed) return null;
+
+    // Strip comments before parsing
+    // Split into lines, remove comment lines, rejoin
+    const lines = trimmed.split('\n');
+    const cleaned = [];
+    let inMultiLineComment = false;
+
+    for (let line of lines) {
+        let cleanLine = line;
+
+        // Handle multi-line comment start
+        if (cleanLine.includes('/*')) {
+            inMultiLineComment = true;
+            cleanLine = cleanLine.substring(0, cleanLine.indexOf('/*'));
+        }
+
+        // Handle multi-line comment end
+        if (inMultiLineComment && cleanLine.includes('*/')) {
+            cleanLine = cleanLine.substring(cleanLine.indexOf('*/') + 2);
+            inMultiLineComment = false;
+        }
+
+        // Skip lines inside multi-line comments
+        if (inMultiLineComment) {
+            continue;
+        }
+
+        // Remove single-line comments
+        if (cleanLine.includes('//')) {
+            cleanLine = cleanLine.substring(0, cleanLine.indexOf('//'));
+        }
+
+        cleaned.push(cleanLine);
+    }
+
+    trimmed = cleaned.join('\n');
+
     try {
         const obj = JSON.parse(trimmed);
         return isPlainObject(obj) ? obj : null;
