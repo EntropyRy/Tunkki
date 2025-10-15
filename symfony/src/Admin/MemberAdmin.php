@@ -159,6 +159,7 @@ final class MemberAdmin extends AbstractAdmin
                 'help' => 'doubles as accepted as active member date',
             ])
             ->add('rejectReason', null, [
+                'required' => false,
                 'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list',
             ])
             ->add('rejectReasonSent')
@@ -166,15 +167,19 @@ final class MemberAdmin extends AbstractAdmin
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
             ->add('StudentUnionMember', null, [
+                'required' => false,
                 'help' => 'Everyone who is this is actual member of entropy with voting rights',
             ])
             ->add('isActiveMember', null, [
+                'required' => false,
                 'help' => 'Next: Send the active member mail from the memberlist, add to aktiivit-mailinglist and add to aktiivit group in forums',
             ])
             ->add('denyKerdeAccess', null, [
+                'required' => false,
                 'help' => 'Denies access to Entropy Kerde',
             ])
             ->add('isFullMember', null, [
+                'required' => false,
                 'help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems',
             ])
             ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
@@ -184,9 +189,15 @@ final class MemberAdmin extends AbstractAdmin
             // ->add('user.accessGroups', ChoiceType::class, ['disabled' => true, 'multiple' => true ,'dd'=>''])
             ->end()
             ->with('Email settings', ['class' => 'col-md-4'])
-            ->add('emailVerified', null, ['help' => 'Email verified'])
-            ->add('allowInfoMails')
-            ->add('allowActiveMemberMails')
+            ->add('emailVerified', null, [
+                'required' => false,
+            ])
+            ->add('allowInfoMails', null, [
+                'required' => false,
+            ])
+            ->add('allowActiveMemberMails', null, [
+                'required' => false,
+            ])
             ->end();
     }
 
