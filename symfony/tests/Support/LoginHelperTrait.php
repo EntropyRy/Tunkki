@@ -513,6 +513,135 @@ trait LoginHelperTrait
     }
 
     /**
+     * Log in a regular (non-active) member.
+     *
+     * Similar to loginAsActiveMember() but does NOT set isActiveMember=true.
+     * Useful for testing permission boundaries where active membership status matters
+     * (e.g., events with nakkiRequiredForTicketReservation flag).
+     *
+     * If the user does not exist, it is created; the Member's isActiveMember flag
+     * is explicitly set to FALSE and flushed before login.
+     *
+     * Retries on unique email collisions by regenerating a random email (up to 3 attempts)
+     * when no explicit email is provided by the caller.
+     *
+     * @return array{0:User,1:KernelBrowser}
+     */
+    protected function loginAsMember(?string $email = null): array
+    {
+        $attempts = 0;
+        $lastEx = null;
+
+        do {
+            ++$attempts;
+            $candidate =
+                $email ??
+                \sprintf(
+                    'regularmember_%s@example.test',
+                    bin2hex(random_bytes(4)),
+                );
+            try {
+                // Create or fetch the user without logging in yet
+                $user = $this->getOrCreateUser($candidate);
+
+                // Ensure Member is marked as NON-active BEFORE login so the serialized token reflects it
+                $member = $user->getMember();
+                if (
+                    $member instanceof Member
+                    && $member->getIsActiveMember()
+                ) {
+                    $em = static::getContainer()->get('doctrine')->getManager();
+                    if (method_exists($member, 'setIsActiveMember')) {
+                        $member->setIsActiveMember(false);
+                    }
+                    if (method_exists($em, 'persist')) {
+                        $em->persist($member);
+                    }
+                    $em->flush();
+                }
+
+                // Now log in and stabilize session so token contains updated member state
+                $client = $this->client;
+                $client->loginUser($user);
+                $this->stabilizeSessionAfterLogin();
+
+                // Success path
+                return [$user, $client];
+            } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
+                $lastEx = $e;
+
+                // If the caller provided a fixed email, do not retry with a different one
+                if (null !== $email) {
+                    // Reset EM to avoid closed manager state on rethrow paths
+                    $this->resetManager();
+                    throw $e;
+                }
+
+                // Recover: reset EM and attempt to reuse an existing user with the candidate email
+                $this->resetManager();
+                $recovered = $this->findUserByMemberEmail($candidate);
+                if ($recovered instanceof User) {
+                    // Ensure NON-active flag BEFORE login
+                    $member = $recovered->getMember();
+                    if (
+                        $member instanceof Member
+                        && $member->getIsActiveMember()
+                    ) {
+                        $em = static::getContainer()
+                            ->get('doctrine')
+                            ->getManager();
+                        if (method_exists($member, 'setIsActiveMember')) {
+                            $member->setIsActiveMember(false);
+                        }
+                        if (method_exists($em, 'persist')) {
+                            $em->persist($member);
+                        }
+                        $em->flush();
+                    }
+
+                    // Log in after state is correct and stabilize
+                    $client = $this->client;
+                    $client->loginUser($recovered);
+                    $this->stabilizeSessionAfterLogin();
+
+                    // Success path via recovered existing user
+                    return [$recovered, $client];
+                }
+
+                // Otherwise loop and try again with a newly generated candidate
+            }
+        } while ($attempts < 3);
+
+        if ($lastEx) {
+            // Exhausted retries; rethrow the last exception for visibility
+            throw $lastEx;
+        }
+
+        // Fallback (should not be reached): ensure non-active then login with a longer random suffix
+        $user = $this->getOrCreateUser(
+            \sprintf('regularmember_%s@example.test', bin2hex(random_bytes(8))),
+        );
+
+        $member = $user->getMember();
+        if ($member instanceof Member && $member->getIsActiveMember()) {
+            $em = static::getContainer()->get('doctrine')->getManager();
+            if (method_exists($member, 'setIsActiveMember')) {
+                $member->setIsActiveMember(false);
+            }
+            if (method_exists($em, 'persist')) {
+                $em->persist($member);
+            }
+            $em->flush();
+        }
+
+        $client = $this->client;
+        $client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
+
+        return [$user, $client];
+    }
+
+    /**
      * Get or create a user for an email, merging roles if user exists.
      *
      * @param string[] $rolesIfCreating

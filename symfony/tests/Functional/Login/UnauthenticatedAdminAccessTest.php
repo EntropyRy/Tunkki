@@ -26,6 +26,14 @@ use App\Tests\_Base\FixturesWebTestCase;
  */
 final class UnauthenticatedAdminAccessTest extends FixturesWebTestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->initSiteAwareClient();
+        // Seed with Finnish (default/unprefixed) to allow testing both /admin and /en/admin routes
+        $this->seedClientHome('fi');
+    }
+
     /**
      * Override default client creation to reuse the initialized site-aware client.
      * Prevents a second kernel boot (WebTestCase forbids booting before createClient()).
