@@ -126,7 +126,6 @@ help:
 .PHONY: test
 test: _ensure-vendor prepare-test-db
 	@echo "$(CYAN)==> Running full test suite$(RESET)"
-
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \

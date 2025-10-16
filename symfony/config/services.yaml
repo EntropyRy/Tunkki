@@ -556,6 +556,20 @@ when@test:
   framework:
     mailer:
       dsn: "null://null"
+    messenger:
+      transports:
+        # Force synchronous transport in tests to avoid async worker requirements
+        async: 'sync://'
+    notifier:
+      # Disable external notifications in tests
+      chatter_transports: []
+      texter_transports: []
+      channel_policy:
+        # Route everything to null channel
+        urgent: []
+        high: []
+        medium: []
+        low: []
   parameters:
     test.fixed_datetime: "2025-01-01T12:00:00+00:00"
   services:

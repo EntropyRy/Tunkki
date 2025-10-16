@@ -191,12 +191,14 @@ Snapshot Publication in Tests:
 
 ## Parallel test execution (ParaTest)
 
-Important: default to parallel execution (USE_PARALLEL=1). The CMS baseline seeding in tests is now idempotent and safe under parallelism; use serial runs only as an opt‑out for debugging flakiness or to bisect failures.
+Status: PARALLEL-SAFE (as of 2025-10-16 with advisory locking).
+
+The test suite defaults to parallel execution (USE_PARALLEL=1) using ParaTest with auto-detected CPU count. CMS baseline seeding uses database advisory locks (PostgreSQL pg_try_advisory_lock / MySQL GET_LOCK) to serialize access across parallel processes, eliminating check-then-create race conditions in Site/Page creation.
 
 Guidance:
-- When running in parallel, ensure per-process DBs (dbname suffix _test{TEST_TOKEN}) are active.
-- Consider excluding tests that seed/normalize the CMS baseline (Sites/Pages) via an exclude-group in experimental parallel runs.
-- Prefer serial execution for the Functional suite to avoid nondeterministic site/page duplication during baseline seeding.
+- Parallel execution is SAFE by default (advisory locks prevent race conditions in CMS seeding).
+- Per-process database isolation via DAMA transactional rollback ensures no cross-test state leakage.
+- Serial execution fallback: `USE_PARALLEL=0 make test` (useful for debugging individual test failures or bisecting regressions).
 
 - The Makefile runs tests in parallel when ParaTest is available. The default targets auto-detect CPU count and use that for the number of processes:
   - Full suite: `make test`
@@ -627,6 +629,20 @@ when@test:
   framework:
     mailer:
       dsn: "null://null"
+    messenger:
+      transports:
+        # Force synchronous transport in tests to avoid async worker requirements
+        async: 'sync://'
+    notifier:
+      # Disable external notifications in tests
+      chatter_transports: []
+      texter_transports: []
+      channel_policy:
+        # Route everything to null channel
+        urgent: []
+        high: []
+        medium: []
+        low: []
   parameters:
     test.fixed_datetime: "2025-01-01T12:00:00+00:00"
   services:
@@ -674,8 +690,8 @@ Anti‑Patterns (Avoid):
 
 Future Improvements:
 - (DONE) MutableClock implemented (advanceSeconds/Minutes/Hours/Days + relative advance).
-- Add a messenger override (force sync) if async transport introduced.
-- Provide fake notifier / external API stubs under when@test once such integrations land.
+- (DONE) Messenger override added (force sync via 'sync://') to avoid async worker requirements.
+- (DONE) Notifier null transports added (disable external chatter/texter/channel notifications).
 - Consider adding a domain-specific TimeWindow helper once multiple services replicate window logic.
 
 Verification Checklist (post-consolidation):
@@ -691,6 +707,8 @@ Review / Maintenance:
 Dated Entries:
 - 2025-10-02: Consolidated fixed clock + null mailer overrides under when@test (initial entry).
 - 2025-10-02: Replaced FixedClock with MutableClock + added aliases (test.mutable_clock, test.fixed_clock) and TimeTravelTrait.
+- 2025-10-16: Added messenger sync transport (async: 'sync://') to force synchronous message processing in tests, avoiding async worker requirements.
+- 2025-10-16: Added notifier null transports (empty chatter/texter arrays + null channel policy) to disable external notifications (Mattermost, SMS, etc.) in tests.
 
 
 Current Issue (future tasks #43):

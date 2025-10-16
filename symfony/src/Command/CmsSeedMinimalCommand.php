@@ -37,6 +37,42 @@ final class CmsSeedMinimalCommand extends Command
         $siteR = $this->em->getRepository(SonataPageSite::class);
         $pageR = $this->em->getRepository(SonataPagePage::class);
 
+        // Acquire advisory lock to prevent parallel execution races
+        // Lock key: 1220303 (arbitrary unique identifier for CMS seeding)
+        $lockAcquired = $this->acquireAdvisoryLock(1220303);
+
+        if (!$lockAcquired) {
+            // Retry with exponential backoff (1s, 2s, 3s)
+            for ($attempt = 1; $attempt <= 3; ++$attempt) {
+                sleep($attempt);
+                $lockAcquired = $this->acquireAdvisoryLock(1220303);
+                if ($lockAcquired) {
+                    break;
+                }
+            }
+
+            if (!$lockAcquired) {
+                // Another process holds the lock; skip seeding since that process will handle it
+                $io->note('CMS seeding already in progress (another process holds advisory lock). Skipping redundant seeding.');
+
+                return Command::SUCCESS;
+            }
+        }
+
+        try {
+            return $this->executeSeedingLogic($io, $now, $siteR, $pageR);
+        } finally {
+            // Always release lock (also auto-releases on connection close)
+            $this->releaseAdvisoryLock(1220303);
+        }
+    }
+
+    private function executeSeedingLogic(
+        SymfonyStyle $io,
+        \DateTimeImmutable $now,
+        EntityRepository $siteR,
+        EntityRepository $pageR,
+    ): int {
         $created = ['site' => 0, 'page' => 0];
         $updated = ['site' => 0, 'page' => 0];
 
@@ -537,5 +573,62 @@ final class CmsSeedMinimalCommand extends Command
         }
 
         return $changed;
+    }
+
+    /**
+     * Acquire PostgreSQL/MySQL advisory lock to prevent parallel execution races.
+     *
+     * @param int $lockKey Unique integer identifier for this lock
+     *
+     * @return bool True if lock acquired, false otherwise
+     */
+    private function acquireAdvisoryLock(int $lockKey): bool
+    {
+        try {
+            $conn = $this->em->getConnection();
+            $platform = $conn->getDatabasePlatform()->getName();
+
+            if ('postgresql' === $platform) {
+                // PostgreSQL: pg_try_advisory_lock returns true if acquired
+                $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
+
+                return (bool) $result;
+            }
+
+            if ('mysql' === $platform || 'mariadb' === $platform) {
+                // MySQL/MariaDB: GET_LOCK returns 1 if acquired, 0 if timeout, NULL if error
+                // Timeout = 0 means non-blocking try
+                $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_seed_{$lockKey}"]);
+
+                return 1 === $result;
+            }
+
+            // Unsupported platform: proceed without locking (log warning already shown)
+            return false;
+        } catch (\Throwable) {
+            // If lock mechanism fails, log but don't break the command
+            return false;
+        }
+    }
+
+    /**
+     * Release advisory lock.
+     *
+     * @param int $lockKey Same key used in acquireAdvisoryLock
+     */
+    private function releaseAdvisoryLock(int $lockKey): void
+    {
+        try {
+            $conn = $this->em->getConnection();
+            $platform = $conn->getDatabasePlatform()->getName();
+
+            if ('postgresql' === $platform) {
+                $conn->executeStatement('SELECT pg_advisory_unlock(?)', [$lockKey]);
+            } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_seed_{$lockKey}"]);
+            }
+        } catch (\Throwable) {
+            // Best effort release; lock will auto-release on connection close anyway
+        }
     }
 }

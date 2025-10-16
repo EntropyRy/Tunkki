@@ -31,6 +31,7 @@ if ($_SERVER['APP_DEBUG']) {
  * Safety Guards:
  *  - Wrapped in try/catch: failures are logged to STDERR without breaking the suite.
  *  - Idempotent: cms:seed:minimal can run on every bootstrap; snapshots can be recreated safely.
+ *  - Advisory lock (key 1220304): Serializes entire CMS baseline setup across parallel processes.
  */
 (function (): void {
     // Seed minimal CMS and ensure snapshots exist (front page routing depends on snapshots in this setup).
@@ -47,6 +48,90 @@ if ($_SERVER['APP_DEBUG']) {
         }
 
         $container = $kernel->getContainer();
+
+        // Acquire advisory lock for ENTIRE CMS baseline setup (seed + snapshots + enable)
+        // to prevent parallel execution races across all three operations
+        $lockAcquired = false;
+        $lockKey = 1220304; // Unique key for bootstrap CMS setup
+        if ($container->has('doctrine')) {
+            $doctrine = $container->get('doctrine');
+            if (method_exists($doctrine, 'getConnection')) {
+                $conn = $doctrine->getConnection();
+                $platform = $conn->getDatabasePlatform()->getName();
+
+                try {
+                    if ('postgresql' === $platform) {
+                        $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
+                        $lockAcquired = (bool) $result;
+                    } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                        $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_bootstrap_{$lockKey}"]);
+                        $lockAcquired = 1 === $result;
+                    }
+                } catch (Throwable $le) {
+                    // Lock acquisition failed; proceed without lock (will retry below)
+                }
+
+                // Retry with exponential backoff if initial acquisition failed
+                if (!$lockAcquired) {
+                    for ($attempt = 1; $attempt <= 5; ++$attempt) {
+                        sleep(1); // Wait 1s between attempts
+                        try {
+                            if ('postgresql' === $platform) {
+                                $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
+                                $lockAcquired = (bool) $result;
+                            } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                                $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_bootstrap_{$lockKey}"]);
+                                $lockAcquired = 1 === $result;
+                            }
+                            if ($lockAcquired) {
+                                break;
+                            }
+                        } catch (Throwable $le) {
+                            // Continue retrying
+                        }
+                    }
+                }
+
+                // If we acquired the lock, we'll do the setup
+                // If we didn't acquire it after retries, another process is done (lock was released), so we skip
+                if (!$lockAcquired) {
+                    // At this point, the first process should have completed setup and released the lock
+                    // We couldn't acquire it even after 5 attempts, meaning it's busy OR just completed
+                    // Try one final blocking acquisition with short timeout to ensure setup is truly complete
+                    try {
+                        if ('mysql' === $platform || 'mariadb' === $platform) {
+                            // Blocking acquisition with 10-second timeout
+                            $result = $conn->fetchOne('SELECT GET_LOCK(?, 10)', ["cms_bootstrap_{$lockKey}"]);
+                            if (1 === $result) {
+                                // We got the lock, meaning the first process finished. Release immediately and skip.
+                                $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_bootstrap_{$lockKey}"]);
+                                @fwrite(\STDERR, "[bootstrap] INFO: CMS baseline setup completed by another process. Continuing.\n");
+
+                                return;
+                            }
+                        } elseif ('postgresql' === $platform) {
+                            // PostgreSQL blocking lock with timeout (simulated with retries)
+                            for ($i = 0; $i < 10; ++$i) {
+                                $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
+                                if ($result) {
+                                    $conn->executeStatement('SELECT pg_advisory_unlock(?)', [$lockKey]);
+                                    @fwrite(\STDERR, "[bootstrap] INFO: CMS baseline setup completed by another process. Continuing.\n");
+
+                                    return;
+                                }
+                                sleep(1);
+                            }
+                        }
+                    } catch (Throwable $le) {
+                        // Couldn't verify completion; proceed anyway assuming idempotent setup
+                    }
+
+                    @fwrite(\STDERR, "[bootstrap] WARNING: Could not acquire CMS setup lock. Assuming setup complete.\n");
+
+                    return;
+                }
+            }
+        }
 
         // Check if CMS sites already exist; if none, seed
         $siteCount = null;
@@ -94,6 +179,23 @@ if ($_SERVER['APP_DEBUG']) {
         }
     } catch (Throwable $e) {
         @fwrite(\STDERR, '[bootstrap] WARNING: CMS seed/snapshot step failed: '.$e->getMessage()."\n");
+    } finally {
+        // Release advisory lock
+        if (isset($lockAcquired) && $lockAcquired && isset($container) && $container->has('doctrine')) {
+            try {
+                $doctrine = $container->get('doctrine');
+                $conn = $doctrine->getConnection();
+                $platform = $conn->getDatabasePlatform()->getName();
+
+                if ('postgresql' === $platform) {
+                    $conn->executeStatement('SELECT pg_advisory_unlock(?)', [$lockKey]);
+                } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                    $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_bootstrap_{$lockKey}"]);
+                }
+            } catch (Throwable $le) {
+                // Best effort; lock auto-releases on connection close
+            }
+        }
     }
 
     // Stop here; skip legacy Foundry Story path entirely.

@@ -58,6 +58,13 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
 
     /**
      * Full form-based login (CSRF included if present) to assert end-to-end authentication.
+     *
+     * Proper flow (matches prod behavior):
+     * 1. Try to access protected route (/en/profile for English user)
+     * 2. Get redirected to /login
+     * 3. Submit login form
+     * 4. Get redirected back to original protected route via referer
+     * 5. Assert successful access
      */
     public function testUserCanAuthenticateViaLoginForm(): void
     {
@@ -68,8 +75,18 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
         $email = $member->getEmail();
         self::assertNotEmpty($email, 'Factory member should have an email.');
 
-        // 1. Load login page
-        $crawler = $client->request('GET', '/login');
+        // 1. Try to access a protected route (profile for regular users)
+        $targetRoute = '/en/profile'; // English user -> /en/profile
+        $crawler = $client->request('GET', $targetRoute);
+
+        // 2. Should redirect to login
+        self::assertTrue(
+            $client->getResponse()->isRedirect(),
+            'Accessing protected route should redirect to login'
+        );
+        $crawler = $client->followRedirect();
+
+        // 3. Should be on login page
         self::assertResponseIsSuccessful();
         self::assertGreaterThan(
             0,
@@ -77,14 +94,14 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
             'Login page should contain a form.',
         );
 
-        // 2. Extract CSRF token if present
+        // 4. Extract CSRF token if present
         $csrf = null;
         $csrfNode = $crawler->filter('input[name="_csrf_token"]');
         if ($csrfNode->count() > 0) {
             $csrf = $csrfNode->attr('value');
         }
 
-        // 3. Submit credentials
+        // 5. Submit credentials
         $formNode = $crawler->filter('form')->first();
         $form = $formNode->form([
             '_username' => $email,
@@ -97,63 +114,25 @@ final class SuccessfulLoginTest extends FixturesWebTestCase
 
         $client->submit($form);
 
-        // Expect a redirect on success
-        if ($client->getResponse()->isRedirect()) {
-            $crawler = $client->followRedirect();
-            self::assertResponseIsSuccessful();
-        } else {
-            // Instead of asserting immediate redirect/200 (which may render heavy dashboards),
-            // validate authentication by requesting a lightweight protected page.
-            $paths = ['/profile', '/en/profile', '/profiili'];
-            $ok = false;
-            foreach ($paths as $p) {
-                $crawler = $client->request('GET', $p);
-                $status = $client->getResponse()->getStatusCode();
-                if (\in_array($status, [301, 302, 303], true)) {
-                    $crawler = $client->followRedirect();
-                    $status = $client->getResponse()->getStatusCode();
-                }
-                if (200 === $status) {
-                    $ok = true;
-                    break;
-                }
-            }
-            self::assertTrue(
-                $ok,
-                'Post-login protected page should be accessible.',
-            );
-        }
+        // 6. Should redirect back to original target route (use_referer: true)
+        self::assertTrue(
+            $client->getResponse()->isRedirect(),
+            'Successful login should redirect'
+        );
+        $crawler = $client->followRedirect();
 
-        // Authentication validated above by loading a lightweight protected page (profile).
+        // 7. Should successfully access the protected route
+        self::assertResponseIsSuccessful();
 
-        // If we did not land on an expected dashboard/location, try known fallback paths
+        // 8. Verify we landed on the target route
         $currentPath = $client->getRequest()->getPathInfo();
-        if (!\in_array($currentPath, self::EXPECTED_REDIRECT_PATHS, true)) {
-            foreach (self::EXPECTED_REDIRECT_PATHS as $candidate) {
-                $crawler = $client->request('GET', $candidate);
-                if (200 === $client->getResponse()->getStatusCode()) {
-                    $currentPath = $candidate;
-                    break;
-                }
-            }
-        }
+        self::assertSame(
+            $targetRoute,
+            $currentPath,
+            \sprintf('Expected to land on %s after login, got %s', $targetRoute, $currentPath)
+        );
 
-        self::assertResponseIsSuccessful();
-        // Soft assertion: page should contain a heading or landmark content
-        $content = $client->getResponse()->getContent() ?? '';
-        self::assertNotEmpty($content, 'Post-login page should not be empty.');
-
-        // Prefer a semantic selector if your layout provides one (adjust as needed)
-        // Try a few common dashboard heading patterns without failing test if absent.
-        $possibleSelectors = ['h1', 'main h1', 'header h1'];
-        $foundHeading = false;
-        foreach ($possibleSelectors as $selector) {
-            if ($crawler->filter($selector)->count() > 0) {
-                $foundHeading = true;
-                break;
-            }
-        }
-        self::assertResponseIsSuccessful();
+        // 9. Verify authentication
         $ts = static::getContainer()->get('security.token_storage');
         $token = $ts->getToken();
         self::assertNotNull($token, 'No security token after login.');

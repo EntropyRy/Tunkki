@@ -38,15 +38,31 @@ final class CsrfProtectionTest extends FixturesWebTestCase
     /**
      * Ensure that a valid CSRF token results in successful authentication
      * (when CSRF is enabled).
+     *
+     * Proper flow: Try to access protected route -> redirect to login -> submit form -> redirect back
      */
     public function testValidCsrfAllowsLoginIfCsrfEnabled(): void
     {
-        [$client, $crawler, $hasCsrf] = $this->getLoginPageClient();
-        // Proceed regardless of CSRF presence (token optional).
+        $client = $this->client;
 
         $member = MemberFactory::new()->english()->create();
         $email = $member->getEmail();
         self::assertNotEmpty($email);
+
+        // 1. Try to access protected route to establish referer
+        $targetRoute = '/en/profile';
+        $crawler = $client->request('GET', $targetRoute);
+
+        // 2. Should redirect to login
+        self::assertTrue(
+            $client->getResponse()->isRedirect(),
+            'Accessing protected route should redirect to login'
+        );
+        $crawler = $client->followRedirect();
+
+        // 3. Should be on login page
+        self::assertResponseIsSuccessful();
+        $hasCsrf = $crawler->filter('input[name="_csrf_token"]')->count() > 0;
 
         $csrf = $hasCsrf ? ($crawler->filter('input[name="_csrf_token"]')->attr('value') ?? null) : null;
 
@@ -64,47 +80,19 @@ final class CsrfProtectionTest extends FixturesWebTestCase
             ->form($formData);
         $client->submit($form);
 
-        // Expect a redirect (successful authentication path); should not point back to /login.
-        if ($client->getResponse()->isRedirect()) {
-            $location =
-                (string) ($client->getResponse()->headers->get('Location') ??
-                    '');
-            self::assertNotEmpty(
-                $location,
-                'Redirect Location header must be present after successful login.',
-            );
-            self::assertStringNotContainsString(
-                '/login',
-                $location,
-                'Successful login should not redirect back to /login (indicates failure).',
-            );
-            $crawler = $client->followRedirect();
-            self::assertSame(
-                200,
-                $client->getResponse()->getStatusCode(),
-                'Followed redirect should result in 200 page.',
-            );
-        } else {
-            // Accept non-redirect success path: probe a lightweight protected page to confirm authentication.
-            $paths = ['/profile', '/en/profile', '/profiili'];
-            $ok = false;
-            foreach ($paths as $p) {
-                $crawler = $client->request('GET', $p);
-                $status = $client->getResponse()->getStatusCode();
-                if (\in_array($status, [301, 302, 303], true)) {
-                    $crawler = $client->followRedirect();
-                    $status = $client->getResponse()->getStatusCode();
-                }
-                if (200 === $status) {
-                    $ok = true;
-                    break;
-                }
-            }
-            self::assertTrue(
-                $ok,
-                'Post-login protected page should be accessible.',
-            );
-        }
+        // 4. Should redirect back to original route
+        self::assertTrue(
+            $client->getResponse()->isRedirect(),
+            'Successful login should redirect'
+        );
+        $location = (string) ($client->getResponse()->headers->get('Location') ?? '');
+        self::assertNotEmpty($location, 'Redirect Location header must be present after successful login.');
+        self::assertStringNotContainsString('/login', $location, 'Successful login should not redirect back to /login.');
+
+        $crawler = $client->followRedirect();
+
+        // 5. Should successfully access the protected route
+        self::assertResponseIsSuccessful();
 
         $this->assertAuthenticated(
             'User should be authenticated with valid CSRF token.',

@@ -38,12 +38,14 @@ final class UnauthenticatedAdminAccessTest extends FixturesWebTestCase
     /**
      * Candidate admin entrypoints to probe. Adjust if your routing differs.
      *
+     * Note: /admin/ redirects to /admin/dashboard, so we test the final route directly.
+     *
      * @return iterable<string,array{0:string}>
      */
     public static function provideAdminPaths(): iterable
     {
-        yield 'dashboard_root_slash' => ['/admin/'];
         yield 'dashboard_default' => ['/admin/dashboard'];
+        yield 'dashboard_en' => ['/en/admin/dashboard'];
     }
 
     /**
