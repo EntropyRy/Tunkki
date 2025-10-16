@@ -1,5 +1,5 @@
 // Animated Voronoi Diagram - Soap Bubble Effect
-import { readEffectConfig } from './effects-config.js';
+import { readEffectConfig } from "./effects-config.js";
 
 const canvas = document.getElementById("voronoi");
 const ctx = canvas.getContext("2d", { alpha: true });
@@ -12,43 +12,62 @@ function resizeCanvas() {
 
 resizeCanvas();
 
+let resolution;
+let offscreen = document.createElement("canvas");
+let offCtx = offscreen.getContext("2d");
+
+function resizeOffscreen() {
+    resolution = isMobile
+        ? config.antiAlias
+            ? 2
+            : 4
+        : config.antiAlias
+          ? 1.5
+          : 3;
+    offscreen.width = Math.ceil(canvas.width / resolution);
+    offscreen.height = Math.ceil(canvas.height / resolution);
+    offCtx = offscreen.getContext("2d");
+}
+
 // Configuration with defaults
 const defaults = {
-    seedCount: 15,              // Number of Voronoi seeds
-    seedSpeed: 0.3,             // Base movement speed
-    lineColor: "#ffffff",       // Cell boundary color
-    lineWidth: 1.5,             // Boundary line width
-    cellColors: [],             // Array of hex colors for cells (empty = transparent)
-    cursorInfluence: 220,       // Radius of cursor effect
-    cursorRepel: true,          // Repel from cursor
-    noiseScale: 0.002,          // Perlin noise smoothness
-    showSeedPoints: false,      // Show seed points
-    seedColor: "transparent",   // Color of seed points (default transparent)
-    antiAlias: true,            // Enable anti-aliasing for smoother lines (more CPU intensive)
+    seedCount: 15, // Number of Voronoi seeds
+    seedSpeed: 0.3, // Base movement speed
+    lineColor: "#ffffff", // Cell boundary color
+    lineWidth: 1.5, // Boundary line width
+    cellColors: [], // Array of hex colors for cells (empty = transparent)
+    cursorInfluence: 220, // Radius of cursor effect
+    cursorRepel: true, // Repel from cursor
+    noiseScale: 0.002, // Perlin noise smoothness
+    showSeedPoints: false, // Show seed points
+    seedColor: "transparent", // Color of seed points (default transparent)
+    antiAlias: true, // Enable anti-aliasing for smoother lines (more CPU intensive)
 
     // CURVED LINES MODE (Weighted Voronoi - global seed weights)
     // NOTE: Cannot be used with pushedPlane effect
-    useCurvedLines: false,      // Use curved boundaries (weighted Voronoi)
-    seedWeights: [],            // Array of weights for each seed (empty = random)
-    minWeight: 30,              // Minimum bubble weight/radius
-    maxWeight: 150,             // Maximum bubble weight/radius
-    weightVariation: true,      // Use varied weights for organic look
+    useCurvedLines: false, // Use curved boundaries (weighted Voronoi)
+    seedWeights: [], // Array of weights for each seed (empty = random)
+    minWeight: 30, // Minimum bubble weight/radius
+    maxWeight: 150, // Maximum bubble weight/radius
+    weightVariation: true, // Use varied weights for organic look
 
     // PUSHED PLANE MODE (Invisible balls deforming the plane)
     // NOTE: Cannot be used with useCurvedLines effect
-    usePushedPlane: false,      // Use invisible balls pushing plane from behind
-    ballCount: 4,               // Number of invisible balls (1-8)
-    ballRadius: 0,              // Radius of each invisible ball (0 = auto-calculate from screen size)
-    ballSpeed: 0.5,             // Movement speed of balls
-    ballPushStrength: 0.3,      // How much balls push the plane (0.0-1.0)
-    ballNoiseScale: 0.001,      // Perlin noise smoothness for ball movement
+    usePushedPlane: false, // Use invisible balls pushing plane from behind
+    ballCount: 4, // Number of invisible balls (1-8)
+    ballRadius: 0, // Radius of each invisible ball (0 = auto-calculate from screen size)
+    ballSpeed: 0.5, // Movement speed of balls
+    ballPushStrength: 0.3, // How much balls push the plane (0.0-1.0)
+    ballNoiseScale: 0.001, // Perlin noise smoothness for ball movement
 };
 
-const config = readEffectConfig('voronoi', defaults);
+const config = readEffectConfig("voronoi", defaults);
 
 // Validate mutually exclusive modes
 if (config.useCurvedLines && config.usePushedPlane) {
-    console.warn('Voronoi: useCurvedLines and usePushedPlane cannot be used together. Disabling usePushedPlane.');
+    console.warn(
+        "Voronoi: useCurvedLines and usePushedPlane cannot be used together. Disabling usePushedPlane.",
+    );
     config.usePushedPlane = false;
 }
 
@@ -56,23 +75,32 @@ if (config.useCurvedLines && config.usePushedPlane) {
 class SimpleNoise {
     constructor() {
         this.grad3 = [
-            [1,1,0],[-1,1,0],[1,-1,0],[-1,-1,0],
-            [1,0,1],[-1,0,1],[1,0,-1],[-1,0,-1],
-            [0,1,1],[0,-1,1],[0,1,-1],[0,-1,-1]
+            [1, 1, 0],
+            [-1, 1, 0],
+            [1, -1, 0],
+            [-1, -1, 0],
+            [1, 0, 1],
+            [-1, 0, 1],
+            [1, 0, -1],
+            [-1, 0, -1],
+            [0, 1, 1],
+            [0, -1, 1],
+            [0, 1, -1],
+            [0, -1, -1],
         ];
         this.p = [];
-        for(let i=0; i<256; i++) {
-            this.p[i] = Math.floor(Math.random()*256);
+        for (let i = 0; i < 256; i++) {
+            this.p[i] = Math.floor(Math.random() * 256);
         }
         // Extend permutation
         this.perm = [];
-        for(let i=0; i<512; i++) {
+        for (let i = 0; i < 512; i++) {
             this.perm[i] = this.p[i & 255];
         }
     }
 
     dot(g, x, y) {
-        return g[0]*x + g[1]*y;
+        return g[0] * x + g[1] * y;
     }
 
     noise(x, y) {
@@ -89,10 +117,22 @@ class SimpleNoise {
         Y = Y & 255;
 
         // Calculate noise contributions from each corner
-        let n00 = this.dot(this.grad3[this.perm[X+this.perm[Y]] % 12], x, y);
-        let n01 = this.dot(this.grad3[this.perm[X+this.perm[Y+1]] % 12], x, y-1);
-        let n10 = this.dot(this.grad3[this.perm[X+1+this.perm[Y]] % 12], x-1, y);
-        let n11 = this.dot(this.grad3[this.perm[X+1+this.perm[Y+1]] % 12], x-1, y-1);
+        let n00 = this.dot(this.grad3[this.perm[X + this.perm[Y]] % 12], x, y);
+        let n01 = this.dot(
+            this.grad3[this.perm[X + this.perm[Y + 1]] % 12],
+            x,
+            y - 1,
+        );
+        let n10 = this.dot(
+            this.grad3[this.perm[X + 1 + this.perm[Y]] % 12],
+            x - 1,
+            y,
+        );
+        let n11 = this.dot(
+            this.grad3[this.perm[X + 1 + this.perm[Y + 1]] % 12],
+            x - 1,
+            y - 1,
+        );
 
         // Compute fade curves
         let u = this.fade(x);
@@ -150,7 +190,9 @@ function initSeeds() {
             weight = config.seedWeights[i];
         } else if (config.weightVariation) {
             // Random weight between min and max
-            weight = config.minWeight + Math.random() * (config.maxWeight - config.minWeight);
+            weight =
+                config.minWeight +
+                Math.random() * (config.maxWeight - config.minWeight);
         } else {
             // Uniform weight (average of min and max)
             weight = (config.minWeight + config.maxWeight) / 2;
@@ -224,8 +266,14 @@ function updateSeeds() {
         const seed = seeds[i];
 
         // Use Perlin noise for smooth organic movement
-        const noiseX = noise.noise((seed.noiseOffsetX + time) * config.noiseScale, 0);
-        const noiseY = noise.noise(0, (seed.noiseOffsetY + time) * config.noiseScale);
+        const noiseX = noise.noise(
+            (seed.noiseOffsetX + time) * config.noiseScale,
+            0,
+        );
+        const noiseY = noise.noise(
+            0,
+            (seed.noiseOffsetY + time) * config.noiseScale,
+        );
 
         // Target velocity from noise
         let targetVx = noiseX * config.seedSpeed;
@@ -268,8 +316,14 @@ function updateBalls() {
         const ball = balls[i];
 
         // Use Perlin noise for smooth organic movement
-        const noiseX = noise.noise((ball.noiseOffsetX + time) * config.ballNoiseScale, 0);
-        const noiseY = noise.noise(0, (ball.noiseOffsetY + time) * config.ballNoiseScale);
+        const noiseX = noise.noise(
+            (ball.noiseOffsetX + time) * config.ballNoiseScale,
+            0,
+        );
+        const noiseY = noise.noise(
+            0,
+            (ball.noiseOffsetY + time) * config.ballNoiseScale,
+        );
 
         // Target velocity from noise
         let targetVx = noiseX * config.ballSpeed;
@@ -320,7 +374,10 @@ function getPlaneDisplacement(x, y) {
             // Smooth falloff: closer to center = more displacement
             const normalizedDist = dist / ballRadius;
             // Use cosine for smooth bulge shape
-            const displacement = Math.cos(normalizedDist * Math.PI / 2) * ballRadius * config.ballPushStrength;
+            const displacement =
+                Math.cos((normalizedDist * Math.PI) / 2) *
+                ballRadius *
+                config.ballPushStrength;
             totalDisplacement += displacement;
         }
     }
@@ -343,7 +400,10 @@ function closestSeed(x, y) {
             // Pushed plane mode: displacement modifies effective distance
             const euclideanDist = distance(x, y, seeds[i].x, seeds[i].y);
             const pointDisplacement = getPlaneDisplacement(x, y);
-            const seedDisplacement = getPlaneDisplacement(seeds[i].x, seeds[i].y);
+            const seedDisplacement = getPlaneDisplacement(
+                seeds[i].x,
+                seeds[i].y,
+            );
             // When both point and seed are pushed up, effective distance changes
             dist = euclideanDist - (pointDisplacement - seedDisplacement);
         } else {
@@ -360,76 +420,85 @@ function closestSeed(x, y) {
     return closest;
 }
 
-// Draw Voronoi diagram
+// Draw Voronoi diagram (optimized)
 function draw() {
-    // Clear canvas
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Dynamically set resolution for offscreen canvas
+    resolution = isMobile
+        ? config.antiAlias
+            ? 2
+            : 4
+        : config.antiAlias
+          ? 1.5
+          : 3;
+    resizeOffscreen();
 
+    const w = offscreen.width;
+    const h = offscreen.height;
     const hasCellColors = config.cellColors && config.cellColors.length > 0;
 
-    // Use a lower resolution for calculations (performance optimization)
-    // Anti-aliasing reduces resolution divisor for smoother lines
-    let resolution;
-    if (isMobile) {
-        resolution = config.antiAlias ? 2 : 4;
-    } else {
-        resolution = config.antiAlias ? 1.5 : 3;
-    }
-    const w = Math.ceil(canvas.width / resolution);
-    const h = Math.ceil(canvas.height / resolution);
+    // Typed array for cell ownership
+    const cells =
+        seeds.length > 255 ? new Uint16Array(w * h) : new Uint8Array(w * h);
 
-    // Create an array to store which seed owns each pixel
-    const cells = new Array(w * h);
+    // Bulk pixel buffer
+    const imageData = offCtx.createImageData(w, h);
+    const data = imageData.data;
 
-    // Calculate cell ownership
+    // Calculate cell ownership and color pixels
     for (let y = 0; y < h; y++) {
         for (let x = 0; x < w; x++) {
             const px = x * resolution;
             const py = y * resolution;
-            cells[y * w + x] = closestSeed(px, py);
+            const seedIdx = closestSeed(px, py);
+            cells[y * w + x] = seedIdx;
+
+            // Cell color
+            let color = hasCellColors
+                ? config.cellColors[seedIdx % config.cellColors.length]
+                : "#00000000"; // transparent
+
+            // Convert hex to RGBA
+            let r = 0,
+                g = 0,
+                b = 0,
+                a = 255;
+            if (color.length === 7) {
+                // #RRGGBB
+                r = parseInt(color.slice(1, 3), 16);
+                g = parseInt(color.slice(3, 5), 16);
+                b = parseInt(color.slice(5, 7), 16);
+            } else if (color.length === 9) {
+                // #RRGGBBAA
+                r = parseInt(color.slice(1, 3), 16);
+                g = parseInt(color.slice(3, 5), 16);
+                b = parseInt(color.slice(5, 7), 16);
+                a = parseInt(color.slice(7, 9), 16);
+            }
+
+            const idx = (y * w + x) * 4;
+            data[idx] = r;
+            data[idx + 1] = g;
+            data[idx + 2] = b;
+            data[idx + 3] = a;
         }
     }
 
-    // If we have cell colors, fill the cells first
-    if (hasCellColors) {
-        // Group pixels by seed
-        const cellPixels = {};
-        for (let i = 0; i < seeds.length; i++) {
-            cellPixels[i] = [];
-        }
+    offCtx.putImageData(imageData, 0, 0);
 
-        for (let y = 0; y < h; y++) {
-            for (let x = 0; x < w; x++) {
-                const seedIndex = cells[y * w + x];
-                cellPixels[seedIndex].push({ x: x * resolution, y: y * resolution });
-            }
-        }
+    // Upscale to main canvas, preserving aspect ratio
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
 
-        // Draw filled cells
-        for (let i = 0; i < seeds.length; i++) {
-            const color = config.cellColors[i % config.cellColors.length];
-            ctx.fillStyle = color;
-
-            // Draw each pixel of the cell
-            for (const pixel of cellPixels[i]) {
-                ctx.fillRect(pixel.x, pixel.y, resolution, resolution);
-            }
-        }
-    }
-
-    // Draw cell boundaries
+    // Draw cell boundaries as overlay
+    ctx.save();
     ctx.strokeStyle = config.lineColor;
     ctx.lineWidth = config.lineWidth;
-    ctx.lineCap = 'round';
-    ctx.lineJoin = 'round';
-
-    // Enable canvas anti-aliasing
+    ctx.lineCap = "round";
+    ctx.lineJoin = "round";
     if (config.antiAlias) {
         ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = 'high';
+        ctx.imageSmoothingQuality = "high";
     }
-
-    // Find boundaries (pixels where neighbors have different seeds)
     ctx.beginPath();
     for (let y = 0; y < h - 1; y++) {
         for (let x = 0; x < w - 1; x++) {
@@ -437,10 +506,10 @@ function draw() {
             const right = cells[y * w + (x + 1)];
             const bottom = cells[(y + 1) * w + x];
 
+            // Map back to main canvas coordinates
             const px = x * resolution;
             const py = y * resolution;
 
-            // Draw boundary if neighbor is different
             if (current !== right) {
                 ctx.moveTo(px + resolution, py);
                 ctx.lineTo(px + resolution, py + resolution);
@@ -452,15 +521,18 @@ function draw() {
         }
     }
     ctx.stroke();
+    ctx.restore();
 
     // Optional: Draw seed points (for debugging or visual effect)
     if (config.showSeedPoints && config.seedColor !== "transparent") {
+        ctx.save();
         ctx.fillStyle = config.seedColor;
         for (const seed of seeds) {
             ctx.beginPath();
             ctx.arc(seed.x, seed.y, 3, 0, Math.PI * 2);
             ctx.fill();
         }
+        ctx.restore();
     }
 }
 
@@ -473,20 +545,29 @@ function animate() {
 }
 
 // Mobile detection and optimization
-const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+const isMobile =
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+        navigator.userAgent,
+    );
 if (isMobile) {
     config.seedCount = Math.floor(config.seedCount * 0.6);
     config.lineWidth *= 0.8;
 }
 
-// Handle window resize
+// Debounced window resize handler for performance
+let resizeTimeout;
 window.addEventListener("resize", () => {
-    resizeCanvas();
-    initSeeds();
-    initBalls();
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        resizeCanvas();
+        resizeOffscreen();
+        initSeeds();
+        initBalls();
+    }, 100);
 });
 
 // Start animation
+resizeOffscreen();
 initSeeds();
 initBalls();
 animate();
