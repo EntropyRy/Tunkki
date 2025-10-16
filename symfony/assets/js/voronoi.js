@@ -1,547 +1,31 @@
-// Animated Voronoi Diagram - Soap Bubble Effect
 import { readEffectConfig } from "./effects-config.js";
 
+// WebGL Voronoi Diagram - Soap Bubble Effect
 const canvas = document.getElementById("voronoi");
-const ctx = canvas.getContext("2d", { alpha: true });
-
-// Set canvas to full window size
-function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-}
-
-resizeCanvas();
-
-let resolution;
-let offscreen = document.createElement("canvas");
-let offCtx = offscreen.getContext("2d");
-
-function resizeOffscreen() {
-    resolution = isMobile
-        ? config.antiAlias
-            ? 2
-            : 4
-        : config.antiAlias
-          ? 1.5
-          : 3;
-    offscreen.width = Math.ceil(canvas.width / resolution);
-    offscreen.height = Math.ceil(canvas.height / resolution);
-    offCtx = offscreen.getContext("2d");
-}
+const gl = canvas.getContext("webgl");
+gl.enable(gl.BLEND);
+gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
+gl.clearColor(0, 0, 0, 0);
 
 // Configuration with defaults
 const defaults = {
-    seedCount: 15, // Number of Voronoi seeds
-    seedSpeed: 0.3, // Base movement speed
-    lineColor: "#ffffff", // Cell boundary color
-    lineWidth: 1.5, // Boundary line width
-    cellColors: [], // Array of hex colors for cells (empty = transparent)
-    cursorInfluence: 220, // Radius of cursor effect
-    cursorRepel: true, // Repel from cursor
-    noiseScale: 0.002, // Perlin noise smoothness
-    showSeedPoints: false, // Show seed points
-    seedColor: "transparent", // Color of seed points (default transparent)
-    antiAlias: true, // Enable anti-aliasing for smoother lines (more CPU intensive)
-
-    // CURVED LINES MODE (Weighted Voronoi - global seed weights)
-    // NOTE: Cannot be used with pushedPlane effect
-    useCurvedLines: false, // Use curved boundaries (weighted Voronoi)
-    seedWeights: [], // Array of weights for each seed (empty = random)
-    minWeight: 30, // Minimum bubble weight/radius
-    maxWeight: 150, // Maximum bubble weight/radius
-    weightVariation: true, // Use varied weights for organic look
-
-    // PUSHED PLANE MODE (Invisible balls deforming the plane)
-    // NOTE: Cannot be used with useCurvedLines effect
-    usePushedPlane: false, // Use invisible balls pushing plane from behind
-    ballCount: 4, // Number of invisible balls (1-8)
-    ballRadius: 0, // Radius of each invisible ball (0 = auto-calculate from screen size)
-    ballSpeed: 0.5, // Movement speed of balls
-    ballPushStrength: 0.3, // How much balls push the plane (0.0-1.0)
-    ballNoiseScale: 0.001, // Perlin noise smoothness for ball movement
+    seedCount: 15,
+    seedSpeed: 0.002,
+    cellColors: [],
+    seedWeights: [],
+    lineWidth: 1.5,
+    lineColor: "#ffffff",
+    weightVariation: true,
+    minWeight: 30,
+    maxWeight: 150,
 };
-
 const config = readEffectConfig("voronoi", defaults);
 
-// Validate mutually exclusive modes
 if (config.useCurvedLines && config.usePushedPlane) {
     console.warn(
         "Voronoi: useCurvedLines and usePushedPlane cannot be used together. Disabling usePushedPlane.",
     );
     config.usePushedPlane = false;
-}
-
-// Simple Perlin-like noise generator
-class SimpleNoise {
-    constructor() {
-        this.grad3 = [
-            [1, 1, 0],
-            [-1, 1, 0],
-            [1, -1, 0],
-            [-1, -1, 0],
-            [1, 0, 1],
-            [-1, 0, 1],
-            [1, 0, -1],
-            [-1, 0, -1],
-            [0, 1, 1],
-            [0, -1, 1],
-            [0, 1, -1],
-            [0, -1, -1],
-        ];
-        this.p = [];
-        for (let i = 0; i < 256; i++) {
-            this.p[i] = Math.floor(Math.random() * 256);
-        }
-        // Extend permutation
-        this.perm = [];
-        for (let i = 0; i < 512; i++) {
-            this.perm[i] = this.p[i & 255];
-        }
-    }
-
-    dot(g, x, y) {
-        return g[0] * x + g[1] * y;
-    }
-
-    noise(x, y) {
-        // Find unit grid cell
-        let X = Math.floor(x);
-        let Y = Math.floor(y);
-
-        // Get relative xy coordinates of point within cell
-        x = x - X;
-        y = y - Y;
-
-        // Wrap to 0-255
-        X = X & 255;
-        Y = Y & 255;
-
-        // Calculate noise contributions from each corner
-        let n00 = this.dot(this.grad3[this.perm[X + this.perm[Y]] % 12], x, y);
-        let n01 = this.dot(
-            this.grad3[this.perm[X + this.perm[Y + 1]] % 12],
-            x,
-            y - 1,
-        );
-        let n10 = this.dot(
-            this.grad3[this.perm[X + 1 + this.perm[Y]] % 12],
-            x - 1,
-            y,
-        );
-        let n11 = this.dot(
-            this.grad3[this.perm[X + 1 + this.perm[Y + 1]] % 12],
-            x - 1,
-            y - 1,
-        );
-
-        // Compute fade curves
-        let u = this.fade(x);
-        let v = this.fade(y);
-
-        // Interpolate
-        let nx0 = this.lerp(n00, n10, u);
-        let nx1 = this.lerp(n01, n11, u);
-        return this.lerp(nx0, nx1, v);
-    }
-
-    fade(t) {
-        return t * t * t * (t * (t * 6 - 15) + 10);
-    }
-
-    lerp(a, b, t) {
-        return a + t * (b - a);
-    }
-}
-
-const noise = new SimpleNoise();
-
-// Mouse tracking
-let mouse = {
-    x: undefined,
-    y: undefined,
-    active: false,
-};
-
-window.addEventListener("mousemove", (event) => {
-    mouse.x = event.x;
-    mouse.y = event.y;
-    mouse.active = true;
-});
-
-window.addEventListener("mouseout", () => {
-    mouse.active = false;
-});
-
-// Seed points for Voronoi cells
-let seeds = [];
-let time = 0;
-
-// Invisible balls for pushed plane effect
-let balls = [];
-
-// Initialize seeds
-function initSeeds() {
-    seeds = [];
-    for (let i = 0; i < config.seedCount; i++) {
-        // Determine weight for this seed
-        let weight;
-        if (config.seedWeights && config.seedWeights[i] !== undefined) {
-            // Use provided weight
-            weight = config.seedWeights[i];
-        } else if (config.weightVariation) {
-            // Random weight between min and max
-            weight =
-                config.minWeight +
-                Math.random() * (config.maxWeight - config.minWeight);
-        } else {
-            // Uniform weight (average of min and max)
-            weight = (config.minWeight + config.maxWeight) / 2;
-        }
-
-        seeds.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: 0,
-            vy: 0,
-            weight: weight,
-            // Noise offsets for smooth organic motion
-            noiseOffsetX: Math.random() * 1000,
-            noiseOffsetY: Math.random() * 1000,
-        });
-    }
-}
-
-// Calculate ball radius based on screen size
-function calculateBallRadius() {
-    if (config.ballRadius > 0) {
-        return config.ballRadius;
-    }
-    // Auto-calculate: use smaller dimension divided by 3
-    const minDimension = Math.min(canvas.width, canvas.height);
-    const radius = minDimension / 3;
-    return radius;
-}
-
-// Initialize invisible balls for pushed plane effect
-function initBalls() {
-    balls = [];
-    if (!config.usePushedPlane) {
-        return;
-    }
-
-    const count = Math.max(1, Math.min(8, config.ballCount)); // Clamp 1-8
-    for (let i = 0; i < count; i++) {
-        balls.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            vx: 0,
-            vy: 0,
-            // Noise offsets for smooth organic motion
-            noiseOffsetX: Math.random() * 1000,
-            noiseOffsetY: Math.random() * 1000,
-        });
-    }
-}
-
-// Calculate distance between two points
-function distance(x1, y1, x2, y2) {
-    const dx = x2 - x1;
-    const dy = y2 - y1;
-    return Math.sqrt(dx * dx + dy * dy);
-}
-
-// Calculate weighted distance (for soap bubble effect)
-function weightedDistance(x, y, seed) {
-    const dx = x - seed.x;
-    const dy = y - seed.y;
-    const euclideanDist = Math.sqrt(dx * dx + dy * dy);
-    return euclideanDist - (seed.weight || 0);
-}
-
-// Update seed positions with smooth organic motion
-function updateSeeds() {
-    time += 0.01;
-
-    for (let i = 0; i < seeds.length; i++) {
-        const seed = seeds[i];
-
-        // Use Perlin noise for smooth organic movement
-        const noiseX = noise.noise(
-            (seed.noiseOffsetX + time) * config.noiseScale,
-            0,
-        );
-        const noiseY = noise.noise(
-            0,
-            (seed.noiseOffsetY + time) * config.noiseScale,
-        );
-
-        // Target velocity from noise
-        let targetVx = noiseX * config.seedSpeed;
-        let targetVy = noiseY * config.seedSpeed;
-
-        // Mouse influence (subtle repulsion)
-        if (mouse.active && config.cursorRepel) {
-            const dist = distance(seed.x, seed.y, mouse.x, mouse.y);
-            if (dist < config.cursorInfluence) {
-                const influence = (1 - dist / config.cursorInfluence) * 2;
-                const dx = seed.x - mouse.x;
-                const dy = seed.y - mouse.y;
-                const angle = Math.atan2(dy, dx);
-                targetVx += Math.cos(angle) * influence * config.seedSpeed;
-                targetVy += Math.sin(angle) * influence * config.seedSpeed;
-            }
-        }
-
-        // Smooth acceleration (ease towards target velocity)
-        seed.vx += (targetVx - seed.vx) * 0.1;
-        seed.vy += (targetVy - seed.vy) * 0.1;
-
-        // Update position
-        seed.x += seed.vx;
-        seed.y += seed.vy;
-
-        // Wrap around edges
-        if (seed.x < 0) seed.x = canvas.width;
-        if (seed.x > canvas.width) seed.x = 0;
-        if (seed.y < 0) seed.y = canvas.height;
-        if (seed.y > canvas.height) seed.y = 0;
-    }
-}
-
-// Update invisible ball positions
-function updateBalls() {
-    if (!config.usePushedPlane || balls.length === 0) return;
-
-    for (let i = 0; i < balls.length; i++) {
-        const ball = balls[i];
-
-        // Use Perlin noise for smooth organic movement
-        const noiseX = noise.noise(
-            (ball.noiseOffsetX + time) * config.ballNoiseScale,
-            0,
-        );
-        const noiseY = noise.noise(
-            0,
-            (ball.noiseOffsetY + time) * config.ballNoiseScale,
-        );
-
-        // Target velocity from noise
-        let targetVx = noiseX * config.ballSpeed;
-        let targetVy = noiseY * config.ballSpeed;
-
-        // Mouse influence (cursor repel)
-        if (mouse.active && config.cursorRepel) {
-            const dist = distance(ball.x, ball.y, mouse.x, mouse.y);
-            if (dist < config.cursorInfluence) {
-                const influence = (1 - dist / config.cursorInfluence) * 2;
-                const dx = ball.x - mouse.x;
-                const dy = ball.y - mouse.y;
-                const angle = Math.atan2(dy, dx);
-                targetVx += Math.cos(angle) * influence * config.ballSpeed;
-                targetVy += Math.sin(angle) * influence * config.ballSpeed;
-            }
-        }
-
-        // Smooth acceleration
-        ball.vx += (targetVx - ball.vx) * 0.1;
-        ball.vy += (targetVy - ball.vy) * 0.1;
-
-        // Update position
-        ball.x += ball.vx;
-        ball.y += ball.vy;
-
-        // Wrap around edges
-        if (ball.x < 0) ball.x = canvas.width;
-        if (ball.x > canvas.width) ball.x = 0;
-        if (ball.y < 0) ball.y = canvas.height;
-        if (ball.y > canvas.height) ball.y = 0;
-    }
-}
-
-// Calculate plane displacement at point (x, y) caused by invisible balls
-function getPlaneDisplacement(x, y) {
-    if (!config.usePushedPlane || balls.length === 0) return 0;
-
-    const ballRadius = calculateBallRadius();
-    let totalDisplacement = 0;
-
-    for (let i = 0; i < balls.length; i++) {
-        const ball = balls[i];
-        const dist = distance(x, y, ball.x, ball.y);
-
-        // If within ball's radius, calculate displacement (bulge)
-        if (dist < ballRadius) {
-            // Smooth falloff: closer to center = more displacement
-            const normalizedDist = dist / ballRadius;
-            // Use cosine for smooth bulge shape
-            const displacement =
-                Math.cos((normalizedDist * Math.PI) / 2) *
-                ballRadius *
-                config.ballPushStrength;
-            totalDisplacement += displacement;
-        }
-    }
-
-    return totalDisplacement;
-}
-
-// Find closest seed for a given point
-function closestSeed(x, y) {
-    let minDist = Infinity;
-    let closest = 0;
-
-    for (let i = 0; i < seeds.length; i++) {
-        let dist;
-
-        if (config.useCurvedLines) {
-            // Weighted Voronoi mode
-            dist = weightedDistance(x, y, seeds[i]);
-        } else if (config.usePushedPlane) {
-            // Pushed plane mode: displacement modifies effective distance
-            const euclideanDist = distance(x, y, seeds[i].x, seeds[i].y);
-            const pointDisplacement = getPlaneDisplacement(x, y);
-            const seedDisplacement = getPlaneDisplacement(
-                seeds[i].x,
-                seeds[i].y,
-            );
-            // When both point and seed are pushed up, effective distance changes
-            dist = euclideanDist - (pointDisplacement - seedDisplacement);
-        } else {
-            // Standard Voronoi
-            dist = distance(x, y, seeds[i].x, seeds[i].y);
-        }
-
-        if (dist < minDist) {
-            minDist = dist;
-            closest = i;
-        }
-    }
-
-    return closest;
-}
-
-// Draw Voronoi diagram (optimized)
-function draw() {
-    // Dynamically set resolution for offscreen canvas
-    resolution = isMobile
-        ? config.antiAlias
-            ? 2
-            : 4
-        : config.antiAlias
-          ? 1.5
-          : 3;
-    resizeOffscreen();
-
-    const w = offscreen.width;
-    const h = offscreen.height;
-    const hasCellColors = config.cellColors && config.cellColors.length > 0;
-
-    // Typed array for cell ownership
-    const cells =
-        seeds.length > 255 ? new Uint16Array(w * h) : new Uint8Array(w * h);
-
-    // Bulk pixel buffer
-    const imageData = offCtx.createImageData(w, h);
-    const data = imageData.data;
-
-    // Calculate cell ownership and color pixels
-    for (let y = 0; y < h; y++) {
-        for (let x = 0; x < w; x++) {
-            const px = x * resolution;
-            const py = y * resolution;
-            const seedIdx = closestSeed(px, py);
-            cells[y * w + x] = seedIdx;
-
-            // Cell color
-            let color = hasCellColors
-                ? config.cellColors[seedIdx % config.cellColors.length]
-                : "#00000000"; // transparent
-
-            // Convert hex to RGBA
-            let r = 0,
-                g = 0,
-                b = 0,
-                a = 255;
-            if (color.length === 7) {
-                // #RRGGBB
-                r = parseInt(color.slice(1, 3), 16);
-                g = parseInt(color.slice(3, 5), 16);
-                b = parseInt(color.slice(5, 7), 16);
-            } else if (color.length === 9) {
-                // #RRGGBBAA
-                r = parseInt(color.slice(1, 3), 16);
-                g = parseInt(color.slice(3, 5), 16);
-                b = parseInt(color.slice(5, 7), 16);
-                a = parseInt(color.slice(7, 9), 16);
-            }
-
-            const idx = (y * w + x) * 4;
-            data[idx] = r;
-            data[idx + 1] = g;
-            data[idx + 2] = b;
-            data[idx + 3] = a;
-        }
-    }
-
-    offCtx.putImageData(imageData, 0, 0);
-
-    // Upscale to main canvas, preserving aspect ratio
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(offscreen, 0, 0, canvas.width, canvas.height);
-
-    // Draw cell boundaries as overlay
-    ctx.save();
-    ctx.strokeStyle = config.lineColor;
-    ctx.lineWidth = config.lineWidth;
-    ctx.lineCap = "round";
-    ctx.lineJoin = "round";
-    if (config.antiAlias) {
-        ctx.imageSmoothingEnabled = true;
-        ctx.imageSmoothingQuality = "high";
-    }
-    ctx.beginPath();
-    for (let y = 0; y < h - 1; y++) {
-        for (let x = 0; x < w - 1; x++) {
-            const current = cells[y * w + x];
-            const right = cells[y * w + (x + 1)];
-            const bottom = cells[(y + 1) * w + x];
-
-            // Map back to main canvas coordinates
-            const px = x * resolution;
-            const py = y * resolution;
-
-            if (current !== right) {
-                ctx.moveTo(px + resolution, py);
-                ctx.lineTo(px + resolution, py + resolution);
-            }
-            if (current !== bottom) {
-                ctx.moveTo(px, py + resolution);
-                ctx.lineTo(px + resolution, py + resolution);
-            }
-        }
-    }
-    ctx.stroke();
-    ctx.restore();
-
-    // Optional: Draw seed points (for debugging or visual effect)
-    if (config.showSeedPoints && config.seedColor !== "transparent") {
-        ctx.save();
-        ctx.fillStyle = config.seedColor;
-        for (const seed of seeds) {
-            ctx.beginPath();
-            ctx.arc(seed.x, seed.y, 3, 0, Math.PI * 2);
-            ctx.fill();
-        }
-        ctx.restore();
-    }
-}
-
-// Animation loop
-function animate() {
-    updateSeeds();
-    updateBalls();
-    draw();
-    requestAnimationFrame(animate);
 }
 
 // Mobile detection and optimization
@@ -554,20 +38,255 @@ if (isMobile) {
     config.lineWidth *= 0.8;
 }
 
-// Debounced window resize handler for performance
-let resizeTimeout;
+// Handle canvas resize
+function resizeCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    gl.viewport(0, 0, canvas.width, canvas.height);
+}
+resizeCanvas();
 window.addEventListener("resize", () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        resizeCanvas();
-        resizeOffscreen();
-        initSeeds();
-        initBalls();
-    }, 100);
+    resizeCanvas();
 });
 
-// Start animation
-resizeOffscreen();
+// Vertex shader (fullscreen quad)
+const vertexSrc = `
+attribute vec2 a_position;
+varying vec2 v_uv;
+void main() {
+    v_uv = a_position * 0.5 + 0.5;
+    gl_Position = vec4(a_position, 0, 1);
+}
+`;
+
+// Fragment shader (Voronoi calculation, supports weights)
+const fragmentSrc = `
+precision highp float;
+#define MAX_SEEDS 15
+uniform int u_seedCount;
+uniform vec2 u_seeds[MAX_SEEDS];
+uniform float u_weights[MAX_SEEDS];
+uniform vec3 u_colors[MAX_SEEDS];
+uniform vec3 u_lineColor;
+varying vec2 v_uv;
+
+int findClosest(vec2 p) {
+    float minDist = 1e6;
+    int closest = 0;
+    float d;
+    if (u_seedCount > 0) {
+        d = distance(p, u_seeds[0]) - u_weights[0];
+        minDist = d;
+        closest = 0;
+    }
+    if (u_seedCount > 1) {
+        d = distance(p, u_seeds[1]) - u_weights[1];
+        if (d < minDist) { minDist = d; closest = 1; }
+    }
+    if (u_seedCount > 2) {
+        d = distance(p, u_seeds[2]) - u_weights[2];
+        if (d < minDist) { minDist = d; closest = 2; }
+    }
+    if (u_seedCount > 3) {
+        d = distance(p, u_seeds[3]) - u_weights[3];
+        if (d < minDist) { minDist = d; closest = 3; }
+    }
+    if (u_seedCount > 4) {
+        d = distance(p, u_seeds[4]) - u_weights[4];
+        if (d < minDist) { minDist = d; closest = 4; }
+    }
+    if (u_seedCount > 5) {
+        d = distance(p, u_seeds[5]) - u_weights[5];
+        if (d < minDist) { minDist = d; closest = 5; }
+    }
+    if (u_seedCount > 6) {
+        d = distance(p, u_seeds[6]) - u_weights[6];
+        if (d < minDist) { minDist = d; closest = 6; }
+    }
+    if (u_seedCount > 7) {
+        d = distance(p, u_seeds[7]) - u_weights[7];
+        if (d < minDist) { minDist = d; closest = 7; }
+    }
+    if (u_seedCount > 8) {
+        d = distance(p, u_seeds[8]) - u_weights[8];
+        if (d < minDist) { minDist = d; closest = 8; }
+    }
+    if (u_seedCount > 9) {
+        d = distance(p, u_seeds[9]) - u_weights[9];
+        if (d < minDist) { minDist = d; closest = 9; }
+    }
+    if (u_seedCount > 10) {
+        d = distance(p, u_seeds[10]) - u_weights[10];
+        if (d < minDist) { minDist = d; closest = 10; }
+    }
+    if (u_seedCount > 11) {
+        d = distance(p, u_seeds[11]) - u_weights[11];
+        if (d < minDist) { minDist = d; closest = 11; }
+    }
+    if (u_seedCount > 12) {
+        d = distance(p, u_seeds[12]) - u_weights[12];
+        if (d < minDist) { minDist = d; closest = 12; }
+    }
+    if (u_seedCount > 13) {
+        d = distance(p, u_seeds[13]) - u_weights[13];
+        if (d < minDist) { minDist = d; closest = 13; }
+    }
+    if (u_seedCount > 14) {
+        d = distance(p, u_seeds[14]) - u_weights[14];
+        if (d < minDist) { minDist = d; closest = 14; }
+    }
+    return closest;
+}
+
+void main() {
+    int c = findClosest(v_uv);
+    int cx = findClosest(v_uv + vec2(0.002, 0.0));
+    int cy = findClosest(v_uv + vec2(0.0, 0.002));
+
+    // If neighbor cell is different, draw line
+    if (c != cx || c != cy) {
+        gl_FragColor = vec4(u_lineColor, 1.0);
+    } else {
+        vec3 color = u_colors[0];
+        if (c == 1) color = u_colors[1];
+        if (c == 2) color = u_colors[2];
+        if (c == 3) color = u_colors[3];
+        if (c == 4) color = u_colors[4];
+        if (c == 5) color = u_colors[5];
+        if (c == 6) color = u_colors[6];
+        if (c == 7) color = u_colors[7];
+        if (c == 8) color = u_colors[8];
+        if (c == 9) color = u_colors[9];
+        if (c == 10) color = u_colors[10];
+        if (c == 11) color = u_colors[11];
+        if (c == 12) color = u_colors[12];
+        if (c == 13) color = u_colors[13];
+        if (c == 14) color = u_colors[14];
+        gl_FragColor = vec4(color, 0.0);
+    }
+}
+`;
+
+// Compile shader utility
+function compileShader(type, src) {
+    const shader = gl.createShader(type);
+    gl.shaderSource(shader, src);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error(gl.getShaderInfoLog(shader));
+    }
+    return shader;
+}
+
+// Create program
+const vertShader = compileShader(gl.VERTEX_SHADER, vertexSrc);
+const fragShader = compileShader(gl.FRAGMENT_SHADER, fragmentSrc);
+const program = gl.createProgram();
+gl.attachShader(program, vertShader);
+gl.attachShader(program, fragShader);
+gl.linkProgram(program);
+if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+    throw new Error(gl.getProgramInfoLog(program));
+}
+gl.useProgram(program);
+
+// Fullscreen quad
+const positionBuffer = gl.createBuffer();
+gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+gl.bufferData(
+    gl.ARRAY_BUFFER,
+    new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]),
+    gl.STATIC_DRAW,
+);
+
+const a_position = gl.getAttribLocation(program, "a_position");
+gl.enableVertexAttribArray(a_position);
+gl.vertexAttribPointer(a_position, 2, gl.FLOAT, false, 0, 0);
+
+// Uniform locations
+const u_seedCount = gl.getUniformLocation(program, "u_seedCount");
+const u_seeds = gl.getUniformLocation(program, "u_seeds");
+const u_weights = gl.getUniformLocation(program, "u_weights");
+const u_colors = gl.getUniformLocation(program, "u_colors");
+const u_lineColor = gl.getUniformLocation(program, "u_lineColor");
+
+// Seed and color animation logic (preserved from your original)
+let seeds = [];
+let weights = [];
+let colors = [];
+let seedTargets = [];
+let seedLerp = config.seedSpeed;
+
+function randomColor() {
+    return [Math.random(), Math.random(), Math.random()];
+}
+function initSeeds() {
+    seeds = [];
+    weights = [];
+    colors = [];
+    seedTargets = [];
+    for (let i = 0; i < config.seedCount; i++) {
+        seeds.push([Math.random(), Math.random()]);
+        seedTargets.push([Math.random(), Math.random()]);
+        let weight =
+            config.seedWeights[i] !== undefined
+                ? config.seedWeights[i]
+                : config.weightVariation
+                  ? config.minWeight +
+                    Math.random() * (config.maxWeight - config.minWeight)
+                  : (config.minWeight + config.maxWeight) / 2;
+        weights.push(weight / Math.max(canvas.width, canvas.height)); // normalize for shader
+        colors.push(
+            config.cellColors.length > 0
+                ? hexToRgb(config.cellColors[i % config.cellColors.length])
+                : randomColor(),
+        );
+    }
+}
+function hexToRgb(hex) {
+    // "#RRGGBB" to [r,g,b] in 0..1
+    let r = parseInt(hex.slice(1, 3), 16) / 255;
+    let g = parseInt(hex.slice(3, 5), 16) / 255;
+    let b = parseInt(hex.slice(5, 7), 16) / 255;
+    return [r, g, b];
+}
 initSeeds();
-initBalls();
-animate();
+
+// Animate and draw
+let lastFrameTime = 0;
+const targetFPS = 30;
+const frameDuration = 1000 / targetFPS;
+
+function animate(now) {
+    if (!lastFrameTime || now - lastFrameTime >= frameDuration) {
+        // Animate seeds (smooth interpolation towards random targets)
+        for (let i = 0; i < config.seedCount; i++) {
+            if (
+                Math.abs(seeds[i][0] - seedTargets[i][0]) < 0.01 &&
+                Math.abs(seeds[i][1] - seedTargets[i][1]) < 0.01
+            ) {
+                seedTargets[i][0] = Math.random();
+                seedTargets[i][1] = Math.random();
+            }
+            seeds[i][0] += (seedTargets[i][0] - seeds[i][0]) * seedLerp;
+            seeds[i][1] += (seedTargets[i][1] - seeds[i][1]) * seedLerp;
+            seeds[i][0] = Math.max(0, Math.min(1, seeds[i][0]));
+            seeds[i][1] = Math.max(0, Math.min(1, seeds[i][1]));
+        }
+
+        // Pass uniforms
+        gl.uniform1i(u_seedCount, config.seedCount);
+        gl.uniform2fv(u_seeds, seeds.flat());
+        gl.uniform1fv(u_weights, weights);
+        gl.uniform3fv(u_colors, colors.flat());
+        gl.uniform3fv(u_lineColor, [1.0, 1.0, 1.0]); // white lines
+
+        // Draw
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+
+        lastFrameTime = now;
+    }
+    requestAnimationFrame(animate);
+}
+requestAnimationFrame(animate);
