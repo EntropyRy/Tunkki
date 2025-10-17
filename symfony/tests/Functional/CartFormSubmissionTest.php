@@ -345,10 +345,7 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
         // Should result in HTTP 422 Unprocessable Entity for invalid email
         $statusCode = $this->client->getResponse()->getStatusCode();
-        fwrite(
-            \STDERR,
-            "DEBUG: Invalid email POST returned status code: $statusCode\n",
-        );
+
         $this->assertSame(
             422,
             $statusCode,

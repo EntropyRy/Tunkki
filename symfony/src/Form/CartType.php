@@ -35,12 +35,8 @@ class CartType extends AbstractType
                 'help_html' => true,
                 'label' => 'shop.cart.email.label',
                 'constraints' => [
-                    new NotBlank([
-                        'message' => 'email.required',
-                    ]),
-                    new Email([
-                        'message' => 'email.invalid',
-                    ]),
+                    new NotBlank(message: 'email.required'),
+                    new Email(message: 'email.invalid'),
                 ],
             ])
             ->add('products', CollectionType::class, [
