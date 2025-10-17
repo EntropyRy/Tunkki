@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Cart;
+use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Entity\Product;
+use App\Repository\CheckoutRepository;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final readonly class StripeService
@@ -31,7 +35,7 @@ final readonly class StripeService
             return $this->urlG->generate(
                 'entropy_shop_complete',
                 [],
-                $this->urlG::ABSOLUTE_URL
+                $this->urlG::ABSOLUTE_URL,
             ).'?session_id={CHECKOUT_SESSION_ID}';
         }
 
@@ -41,7 +45,7 @@ final readonly class StripeService
                 'year' => $event->getEventDate()->format('Y'),
                 'slug' => $event->getUrl(),
             ],
-            $this->urlG::ABSOLUTE_URL
+            $this->urlG::ABSOLUTE_URL,
         ).'?session_id={CHECKOUT_SESSION_ID}';
     }
 
@@ -58,7 +62,9 @@ final readonly class StripeService
             return $product;
         }
         if (null == $stripeProduct && null != $stripePrice) {
-            $stripeProduct = $this->getClient()->products->retrieve($stripePrice['product']);
+            $stripeProduct = $this->getClient()->products->retrieve(
+                $stripePrice['product'],
+            );
         }
         $active = true;
         if (0 == $stripeProduct['active'] || 0 == $stripePrice['active']) {
@@ -83,18 +89,18 @@ final readonly class StripeService
     /**
      * Create a Stripe checkout session and persist Checkout entity.
      *
-     * @param Cart $cart The shopping cart
-     * @param Request $request Current HTTP request (for session & locale)
+     * @param Cart               $cart         The shopping cart
+     * @param Request            $request      Current HTTP request (for session & locale)
      * @param CheckoutRepository $checkoutRepo Repository for persisting Checkout
-     * @param ?Event $event Optional event (for return URL generation)
+     * @param ?Event             $event        Optional event (for return URL generation)
      *
-     * @return array{stripeSession: array, checkout: Checkout} Created session and checkout entity
+     * @return array{stripeSession: Session, checkout: Checkout} Created session and checkout entity
      */
     public function createCheckoutSession(
-        \App\Entity\Cart $cart,
-        \Symfony\Component\HttpFoundation\Request $request,
-        \App\Repository\CheckoutRepository $checkoutRepo,
-        ?\App\Entity\Event $event = null
+        Cart $cart,
+        Request $request,
+        CheckoutRepository $checkoutRepo,
+        ?Event $event = null,
     ): array {
         $client = $this->getClient();
         $returnUrl = $this->getReturnUrl($event);
@@ -134,7 +140,7 @@ final readonly class StripeService
         ]);
 
         // Create and persist Checkout entity
-        $checkout = new \App\Entity\Checkout();
+        $checkout = new Checkout();
         $checkout->setStripeSessionId($stripeSession['id']);
         $checkout->setCart($cart);
         $checkoutRepo->add($checkout, true);

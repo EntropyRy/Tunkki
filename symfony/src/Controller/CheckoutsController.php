@@ -63,7 +63,7 @@ class CheckoutsController extends AbstractController
         // Create checkout session via StripeService
         try {
             $result = $stripe->createCheckoutSession($cart, $request, $cRepo, $event);
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
             $this->addFlash('warning', 'cart.empty');
 
             return $this->redirectToRoute('entropy_event_shop', [
@@ -121,7 +121,7 @@ class CheckoutsController extends AbstractController
         // Create checkout session via StripeService (no event for general shop)
         try {
             $result = $stripe->createCheckoutSession($cart, $request, $cRepo, null);
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
             $this->addFlash('warning', 'shop.cart.empty');
 
             return $this->redirectToRoute('entropy_shop', []);

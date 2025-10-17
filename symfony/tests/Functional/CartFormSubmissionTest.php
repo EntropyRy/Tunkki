@@ -35,7 +35,7 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         parent::setUp();
         $this->initSiteAwareClient();
         // Seed an initial request so BrowserKit assertions have a response/crawler
-        $this->seedClientHome("fi");
+        $this->seedClientHome('fi');
     }
 
     /**
@@ -43,12 +43,12 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
      */
     private function assertSelectorExistsOnLastCrawler(
         string $selector,
-        string $message = "",
+        string $message = '',
     ): void {
         $crawler = $this->client->getLastCrawler();
         $this->assertNotNull(
             $crawler,
-            "No crawler available. Did you make a request?",
+            'No crawler available. Did you make a request?',
         );
         $this->assertGreaterThan(
             0,
@@ -61,7 +61,7 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
      * Helper to create dates for event creation.
      * Returns [realNow, testNow] where:
      * - realNow: For Entity methods that use real system time (like ticketPresaleEnabled)
-     * - testNow: For domain services that use ClockInterface (like EventPublicationDecider)
+     * - testNow: For domain services that use ClockInterface (like EventPublicationDecider).
      */
     private function getDates(): array
     {
@@ -77,34 +77,34 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "nakkiRequiredForTicketReservation" => false,
-            "url" => "public-shop-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'nakkiRequiredForTicketReservation' => false,
+            'url' => 'public-shop-'.uniqid('', true),
         ]);
 
         ProductFactory::new()
             ->ticket()
             ->forEvent($event)
-            ->create(["nameFi" => "Test Ticket"]);
+            ->create(['nameFi' => 'Test Ticket']);
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $this->client->request("GET", $shopPath);
+        $this->client->request('GET', $shopPath);
 
         $this->assertResponseIsSuccessful();
         $this->assertSelectorExistsOnLastCrawler(
             'form[name="cart"]',
-            "Cart form should be present",
+            'Cart form should be present',
         );
         $this->assertSelectorExistsOnLastCrawler(
             'input[name="cart[email]"]',
-            "Email field should be visible for anonymous users",
+            'Email field should be visible for anonymous users',
         );
     }
 
@@ -113,32 +113,32 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "nakkiRequiredForTicketReservation" => true, // Restricted to members with nakki
-            "url" => "restricted-shop-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'nakkiRequiredForTicketReservation' => true, // Restricted to members with nakki
+            'url' => 'restricted-shop-'.uniqid('', true),
         ]);
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $this->client->request("GET", $shopPath);
+        $this->client->request('GET', $shopPath);
 
         // Anonymous users get redirected to login (302) when access is denied, not 403
         $response = $this->client->getResponse();
         $this->assertSame(
             302,
             $response->getStatusCode(),
-            "Anonymous users should be redirected when nakki is required",
+            'Anonymous users should be redirected when nakki is required',
         );
         $this->assertSame(
-            "http://localhost/login",
-            $response->headers->get("Location"),
-            "Redirect location should be /login",
+            'http://localhost/login',
+            $response->headers->get('Location'),
+            'Redirect location should be /login',
         );
     }
 
@@ -147,43 +147,43 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "nakkiRequiredForTicketReservation" => false,
-            "url" => "anon-purchase-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'nakkiRequiredForTicketReservation' => false,
+            'url' => 'anon-purchase-'.uniqid('', true),
         ]);
 
         $product = ProductFactory::new()
             ->ticket()
             ->forEvent($event)
             ->create([
-                "nameFi" => "Anonymous Test Ticket",
-                "quantity" => 100,
+                'nameFi' => 'Anonymous Test Ticket',
+                'quantity' => 100,
             ]);
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $crawler = $this->client->request("GET", $shopPath);
+        $crawler = $this->client->request('GET', $shopPath);
         $this->assertResponseIsSuccessful();
 
         // Extract CSRF token
         $form = $crawler->filter('form[name="cart"]')->form();
-        $csrfToken = $form["cart[_token]"]->getValue();
+        $csrfToken = $form['cart[_token]']->getValue();
 
         // Submit form with email and product quantity
-        $this->client->request("POST", $shopPath, [
-            "cart" => [
-                "_token" => $csrfToken,
-                "email" => "anonymous@example.com",
-                "products" => [
+        $this->client->request('POST', $shopPath, [
+            'cart' => [
+                '_token' => $csrfToken,
+                'email' => 'anonymous@example.com',
+                'products' => [
                     0 => [
-                        "quantity" => 2,
-                        "product" => (string) $product->getId(),
+                        'quantity' => 2,
+                        'product' => (string) $product->getId(),
                     ],
                 ],
             ],
@@ -193,30 +193,30 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         $response = $this->client->getResponse();
         $this->assertTrue(
             $response->isRedirect(),
-            "Should redirect to checkout (kassa) route",
+            'Should redirect to checkout (kassa) route',
         );
-        $location = $response->headers->get("Location") ?? "";
+        $location = $response->headers->get('Location') ?? '';
         $this->assertStringContainsString(
-            "/kassa",
+            '/kassa',
             $location,
-            "Should redirect to checkout (kassa) route",
+            'Should redirect to checkout (kassa) route',
         );
 
         // Verify cart was saved
         $cartRepo = static::getContainer()->get(CartRepository::class);
-        $carts = $cartRepo->findBy(["email" => "anonymous@example.com"]);
+        $carts = $cartRepo->findBy(['email' => 'anonymous@example.com']);
         $this->assertCount(
             1,
             $carts,
-            "Cart should be saved for anonymous user",
+            'Cart should be saved for anonymous user',
         );
 
         $cart = $carts[0];
-        $this->assertSame("anonymous@example.com", $cart->getEmail());
+        $this->assertSame('anonymous@example.com', $cart->getEmail());
         $this->assertCount(
             1,
             $cart->getProducts(),
-            "Cart should have 1 product",
+            'Cart should have 1 product',
         );
 
         $cartItem = $cart->getProducts()->first();
@@ -226,58 +226,58 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
     public function testLoggedInMemberCanSubmitCart(): void
     {
-        [$user, $client] = $this->loginAsMember("member@example.com");
-        $this->seedClientHome("fi"); // Ensure the new client is seeded
+        [$user, $client] = $this->loginAsMember('member@example.com');
+        $this->seedClientHome('fi'); // Ensure the new client is seeded
         self::$client = $client; // Set static client for BrowserKit assertions
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "url" => "member-purchase-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'url' => 'member-purchase-'.uniqid('', true),
         ]);
 
         $product1 = ProductFactory::new()
             ->ticket()
             ->forEvent($event)
-            ->create(["nameFi" => "VIP Ticket", "quantity" => 50]);
+            ->create(['nameFi' => 'VIP Ticket', 'quantity' => 50]);
 
         $product2 = ProductFactory::new()
             ->ticket()
             ->forEvent($event)
-            ->create(["nameFi" => "Regular Ticket", "quantity" => 100]);
+            ->create(['nameFi' => 'Regular Ticket', 'quantity' => 100]);
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $crawler = $client->request("GET", $shopPath);
+        $crawler = $client->request('GET', $shopPath);
         $this->assertSame(
             200,
             $client->getResponse()->getStatusCode(),
-            "Shop should be accessible to logged-in member",
+            'Shop should be accessible to logged-in member',
         );
 
         // Email field should be pre-filled (not editable for logged-in users in typical flow)
         $form = $crawler->filter('form[name="cart"]')->form();
-        $csrfToken = $form["cart[_token]"]->getValue();
+        $csrfToken = $form['cart[_token]']->getValue();
 
         // Submit with multiple products
-        $client->request("POST", $shopPath, [
-            "cart" => [
-                "_token" => $csrfToken,
-                "email" => $user->getEmail(), // Pre-filled from user
-                "products" => [
+        $client->request('POST', $shopPath, [
+            'cart' => [
+                '_token' => $csrfToken,
+                'email' => $user->getEmail(), // Pre-filled from user
+                'products' => [
                     0 => [
-                        "quantity" => 1,
-                        "product" => (string) $product1->getId(),
+                        'quantity' => 1,
+                        'product' => (string) $product1->getId(),
                     ],
                     1 => [
-                        "quantity" => 3,
-                        "product" => (string) $product2->getId(),
+                        'quantity' => 3,
+                        'product' => (string) $product2->getId(),
                     ],
                 ],
             ],
@@ -285,16 +285,16 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
         $this->assertTrue(
             $client->getResponse()->isRedirect(),
-            "Should redirect after cart submission",
+            'Should redirect after cart submission',
         );
 
         // Verify cart
         $cartRepo = static::getContainer()->get(CartRepository::class);
-        $carts = $cartRepo->findBy(["email" => $user->getEmail()]);
+        $carts = $cartRepo->findBy(['email' => $user->getEmail()]);
         $this->assertGreaterThanOrEqual(
             1,
-            count($carts),
-            "Cart should be saved",
+            \count($carts),
+            'Cart should be saved',
         );
 
         $cart = $carts[0];
@@ -302,7 +302,7 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         $this->assertGreaterThanOrEqual(
             2,
             $cart->getProducts()->count(),
-            "Cart should have multiple products",
+            'Cart should have multiple products',
         );
     }
 
@@ -311,103 +311,100 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "nakkiRequiredForTicketReservation" => false,
-            "url" => "invalid-email-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'nakkiRequiredForTicketReservation' => false,
+            'url' => 'invalid-email-'.uniqid('', true),
         ]);
 
         $product = ProductFactory::new()->ticket()->forEvent($event)->create();
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $crawler = $this->client->request("GET", $shopPath);
+        $crawler = $this->client->request('GET', $shopPath);
         $form = $crawler->filter('form[name="cart"]')->form();
-        $csrfToken = $form["cart[_token]"]->getValue();
+        $csrfToken = $form['cart[_token]']->getValue();
 
-        $this->client->request("POST", $shopPath, [
-            "cart" => [
-                "_token" => $csrfToken,
-                "email" => "not-an-email", // Invalid email
-                "products" => [
+        $this->client->request('POST', $shopPath, [
+            'cart' => [
+                '_token' => $csrfToken,
+                'email' => 'not-an-email', // Invalid email
+                'products' => [
                     0 => [
-                        "quantity" => 1,
-                        "product" => (string) $product->getId(),
+                        'quantity' => 1,
+                        'product' => (string) $product->getId(),
                     ],
                 ],
             ],
         ]);
 
-        // Should re-display form with validation error (200) or redirect back
+        // Should result in HTTP 422 Unprocessable Entity for invalid email
         $statusCode = $this->client->getResponse()->getStatusCode();
-        $this->assertTrue(
-            in_array($statusCode, [200, 302], true),
-            "Invalid email should either re-display form (200) or redirect (302)",
+        fwrite(
+            \STDERR,
+            "DEBUG: Invalid email POST returned status code: $statusCode\n",
         );
-
-        if (200 === $statusCode) {
-            // Form re-displayed with error
-            $this->assertSelectorExists(
-                'form[name="cart"]',
-                "Form should be re-displayed",
-            );
-        }
+        $this->assertSame(
+            422,
+            $statusCode,
+            'Invalid email should result in HTTP 422 Unprocessable Entity',
+        );
 
         // No cart should be created with invalid email
         $cartRepo = static::getContainer()->get(CartRepository::class);
-        $carts = $cartRepo->findBy(["email" => "not-an-email"]);
+        $carts = $cartRepo->findBy(['email' => 'not-an-email']);
         $this->assertCount(
             0,
             $carts,
-            "No cart should be created with invalid email",
+            'No cart should be created with invalid email',
         );
     }
 
     public function testZeroQuantityProductsFilteredOut(): void
     {
         [$user, $client] = $this->loginAsMember();
-        $this->seedClientHome("fi"); // Ensure the new client is seeded
+        $this->seedClientHome('fi'); // Ensure the new client is seeded
         self::$client = $client; // Set static client for BrowserKit assertions
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "url" => "zero-qty-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'url' => 'zero-qty-'.uniqid('', true),
         ]);
 
         $product1 = ProductFactory::new()->ticket()->forEvent($event)->create();
         $product2 = ProductFactory::new()->ticket()->forEvent($event)->create();
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
-        $crawler = $client->request("GET", $shopPath);
+        $crawler = $client->request('GET', $shopPath);
         $form = $crawler->filter('form[name="cart"]')->form();
-        $csrfToken = $form["cart[_token]"]->getValue();
+        $csrfToken = $form['cart[_token]']->getValue();
 
         // Submit with one product at quantity=0, one at quantity=2
-        $client->request("POST", $shopPath, [
-            "cart" => [
-                "_token" => $csrfToken,
-                "email" => $user->getEmail(),
-                "products" => [
+        $client->request('POST', $shopPath, [
+            'cart' => [
+                '_token' => $csrfToken,
+                'email' => $user->getEmail(),
+                'products' => [
                     0 => [
-                        "quantity" => 0, // Should be filtered out
-                        "product" => (string) $product1->getId(),
+                        'quantity' => 0, // Should be filtered out
+                        'product' => (string) $product1->getId(),
                     ],
                     1 => [
-                        "quantity" => 2,
-                        "product" => (string) $product2->getId(),
+                        'quantity' => 2,
+                        'product' => (string) $product2->getId(),
                     ],
                 ],
             ],
@@ -415,12 +412,12 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
         $this->assertTrue(
             $client->getResponse()->isRedirect(),
-            "Should redirect after cart submission",
+            'Should redirect after cart submission',
         );
 
         // Verify only non-zero quantity product in cart
         $cartRepo = static::getContainer()->get(CartRepository::class);
-        $carts = $cartRepo->findBy(["email" => $user->getEmail()]);
+        $carts = $cartRepo->findBy(['email' => $user->getEmail()]);
         $cart = $carts[0];
 
         // CartType has delete_empty which should remove zero-quantity items
@@ -428,7 +425,7 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             $this->assertGreaterThan(
                 0,
                 $cartItem->getQuantity(),
-                "Cart should only contain items with quantity > 0",
+                'Cart should only contain items with quantity > 0',
             );
         }
     }
@@ -439,36 +436,36 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         [$realNow, $testNow] = $this->getDates();
 
         $event = EventFactory::new()->create([
-            "published" => true,
-            "publishDate" => $testNow->modify("-5 minutes"),
-            "ticketsEnabled" => true,
-            "ticketPresaleStart" => $realNow->modify("-1 day"),
-            "ticketPresaleEnd" => $realNow->modify("+7 days"),
-            "eventDate" => $realNow->modify("+14 days"),
-            "url" => "checkout-test-" . uniqid("", true),
+            'published' => true,
+            'publishDate' => $testNow->modify('-5 minutes'),
+            'ticketsEnabled' => true,
+            'ticketPresaleStart' => $realNow->modify('-1 day'),
+            'ticketPresaleEnd' => $realNow->modify('+7 days'),
+            'eventDate' => $realNow->modify('+14 days'),
+            'url' => 'checkout-test-'.uniqid('', true),
         ]);
 
         $product = ProductFactory::new()
             ->ticket()
             ->forEvent($event)
-            ->create(["quantity" => 100]);
+            ->create(['quantity' => 100]);
 
-        $year = (int) $event->getEventDate()->format("Y");
-        $shopPath = sprintf("/%d/%s/kauppa", $year, $event->getUrl());
+        $year = (int) $event->getEventDate()->format('Y');
+        $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
 
         // Submit cart form
-        $crawler = $client->request("GET", $shopPath);
+        $crawler = $client->request('GET', $shopPath);
         $form = $crawler->filter('form[name="cart"]')->form();
-        $csrfToken = $form["cart[_token]"]->getValue();
+        $csrfToken = $form['cart[_token]']->getValue();
 
-        $client->request("POST", $shopPath, [
-            "cart" => [
-                "_token" => $csrfToken,
-                "email" => $user->getEmail(),
-                "products" => [
+        $client->request('POST', $shopPath, [
+            'cart' => [
+                '_token' => $csrfToken,
+                'email' => $user->getEmail(),
+                'products' => [
                     0 => [
-                        "quantity" => 2,
-                        "product" => (string) $product->getId(),
+                        'quantity' => 2,
+                        'product' => (string) $product->getId(),
                     ],
                 ],
             ],
@@ -476,38 +473,38 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
         $this->assertTrue(
             $client->getResponse()->isRedirect(),
-            "Should redirect after cart submission",
+            'Should redirect after cart submission',
         );
 
         // Follow redirect to checkout route
-        $checkoutPath = sprintf("/%d/%s/kassa", $year, $event->getUrl());
-        $client->request("GET", $checkoutPath);
+        $checkoutPath = \sprintf('/%d/%s/kassa', $year, $event->getUrl());
+        $client->request('GET', $checkoutPath);
 
         // Checkout page should load (may fail if Stripe is not mocked, but let's try)
         // In a real test, we'd mock StripeService, but for now just verify redirect worked
         $statusCode = $client->getResponse()->getStatusCode();
         $this->assertTrue(
-            in_array($statusCode, [200, 302, 500], true),
-            "Checkout route should be accessible (200/302) or fail gracefully if Stripe not configured (500)",
+            \in_array($statusCode, [200, 302, 500], true),
+            'Checkout route should be accessible (200/302) or fail gracefully if Stripe not configured (500)',
         );
 
         // Verify checkout entity was created (if Stripe succeeded)
         $checkoutRepo = static::getContainer()->get(CheckoutRepository::class);
         $cartRepo = static::getContainer()->get(CartRepository::class);
-        $cart = $cartRepo->findOneBy(["email" => $user->getEmail()]);
+        $cart = $cartRepo->findOneBy(['email' => $user->getEmail()]);
 
         if (null !== $cart) {
-            $checkouts = $checkoutRepo->findBy(["cart" => $cart]);
-            if (count($checkouts) > 0) {
+            $checkouts = $checkoutRepo->findBy(['cart' => $cart]);
+            if (\count($checkouts) > 0) {
                 $checkout = $checkouts[0];
                 $this->assertSame(
                     0,
                     $checkout->getStatus(),
-                    "New checkout should have status=0 (pending)",
+                    'New checkout should have status=0 (pending)',
                 );
                 $this->assertNotNull(
                     $checkout->getStripeSessionId(),
-                    "Checkout should have Stripe session ID",
+                    'Checkout should have Stripe session ID',
                 );
                 $this->assertSame(
                     $cart->getId(),
