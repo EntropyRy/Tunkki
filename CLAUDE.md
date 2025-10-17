@@ -235,6 +235,9 @@ Policy:
 
 ## 11. Adding a New Test (Recipe)
 
+**See**: TESTING.md Section 22 for comprehensive step-by-step guide with examples.
+
+Quick checklist:
 1. Decide layer:
    - Pure logic? => Unit (no kernel)
    - HTTP / DB / routing? => Functional (use SiteAwareKernelBrowser)
@@ -247,6 +250,293 @@ Policy:
 5. Negative scenario:
    - At least one invalid input / access denial variant.
 6. No environment variable mutation; prefer service overrides or configuration.
+
+**Additional Resources**:
+- TESTING.md Section 15a: Factory State Catalog (canonical states reference)
+- TESTING.md Section 23: Test Smells & Anti-Patterns
+- TESTING.md Section 22a: Example end-to-end functional test
+
+---
+
+## 11A. Testing Patterns & Best Practices
+
+This section documents established testing patterns from the test suite refactor (2025-10-02 through 2025-10-17).
+
+### Assertion Patterns
+
+**SiteAwareKernelBrowser Assertions** (Added 2025-10-17):
+```php
+// Use client-based assertions for Sonata multisite compatibility
+$this->client->assertSelectorExists('form[name="cart"]');
+$this->client->assertSelectorTextContains('.event-name', 'Test Event');
+
+// NOT: $this->assertSelectorExists() - doesn't work with custom browser
+```
+
+**FixturesWebTestCase Helpers** (Added 2025-10-17):
+```php
+// Authentication state assertions
+$this->assertNotAuthenticated('User should not be authenticated after failed login');
+$this->assertAuthenticated('User should be authenticated after successful login');
+
+// Ensure client ready (seeds a lightweight request if needed)
+$this->ensureClientReady();
+
+// Create fresh client (reuses initialized site-aware client)
+$client = $this->newClient();
+```
+
+**Structural vs Substring**:
+```php
+// GOOD: Structural selector
+$this->client->assertSelectorExists('.ticket-price');
+
+// BAD: Substring scanning
+$this->assertStringContainsString('<div class="ticket-price">', $response->getContent());
+```
+
+### Factory Usage Patterns
+
+**Event + Product Creation**:
+```php
+$event = EventFactory::new()->published()->ticketed()->create([
+    'url' => 'test-event-'.uniqid('', true),
+    'ticketPresaleStart' => $realNow->modify('-1 day'),
+    'ticketPresaleEnd' => $realNow->modify('+7 days'),
+]);
+
+$product = ProductFactory::new()->ticket()->forEvent($event)->create([
+    'nameFi' => 'Tavallinen Lippu',
+    'quantity' => 50,
+    'amount' => 1500, // €15.00 in cents
+]);
+```
+
+**Checkout Lifecycle**:
+```php
+// Create checkout in specific state
+$checkout = CheckoutFactory::new()->open()->forCart($cart)->create();
+$expired = CheckoutFactory::new()->expired()->forCart($cart)->create();
+$completed = CheckoutFactory::new()->completed()->forCart($cart)->create();
+```
+
+**Cart with Items**:
+```php
+$item = CartItemFactory::new()->forProduct($product)->withQuantity(3)->create();
+$cart = CartFactory::new()->withItems([$item])->create(['email' => 'test@example.com']);
+```
+
+### Time Handling Pattern (Dual Clock)
+
+Tests requiring temporal logic use a dual time pattern:
+```php
+private function getDates(): array
+{
+    $realNow = new \DateTimeImmutable(); // For Entity methods using real time
+    $clock = static::getContainer()->get(\App\Time\ClockInterface::class);
+    $testNow = $clock->now(); // For services using ClockInterface
+
+    return [$realNow, $testNow];
+}
+
+// Usage
+[$realNow, $testNow] = $this->getDates();
+$event = EventFactory::new()->create([
+    'publishDate' => $testNow->modify('-5 minutes'), // Uses ClockInterface
+    'ticketPresaleStart' => $realNow->modify('-1 day'), // Uses Entity method
+]);
+```
+
+**Rationale**:
+- `realNow`: For Entity methods like `Event::ticketPresaleEnabled()` that use `new \DateTimeImmutable()`
+- `testNow`: For domain services like `EventPublicationDecider` that inject `ClockInterface`
+- This allows deterministic testing while respecting existing architecture
+
+### Login & Authentication Patterns
+
+**Login Helper Usage**:
+```php
+// Login as specific member
+$member = MemberFactory::new()->active()->create();
+$this->loginAsMember($member);
+
+// Login by email (finds or creates user)
+$this->loginAsEmail('test@example.com');
+
+// After login, seed new client for subsequent requests
+$this->seedClientHome('fi');
+```
+
+**Security Behavior Assertions**:
+```php
+// Anonymous user denied → 302 redirect
+$this->client->request('GET', '/admin/dashboard');
+$response = $this->client->getResponse();
+$this->assertSame(302, $response->getStatusCode());
+$this->assertSame('http://localhost/login', $response->headers->get('Location'));
+
+// Authenticated user denied → 403 Forbidden
+$this->loginAsMember($regularMember);
+$this->client->request('GET', '/admin/dashboard');
+$this->assertResponseStatusCodeSame(403);
+```
+
+### Locale & Bilingual Testing
+
+**Data Provider Pattern**:
+```php
+use PHPUnit\Framework\Attributes\DataProvider;
+
+#[DataProvider('localeProvider')]
+public function testShopAccessibleInBothLocales(string $locale): void
+{
+    $this->seedClientHome($locale);
+    $shopPath = $locale === 'en'
+        ? '/en/2025/test-event/kauppa'
+        : '/2025/test-event/kauppa';
+
+    $this->client->request('GET', $shopPath);
+    $this->assertResponseIsSuccessful();
+}
+
+public static function localeProvider(): array
+{
+    return [['fi'], ['en']];
+}
+```
+
+**Locale Routing Conventions**:
+- Finnish: unprefixed (e.g., `/2025/event-slug/kauppa`)
+- English: `/en/` prefix (e.g., `/en/2025/event-slug/kauppa`)
+- Admin routes: both `/admin/` and `/en/admin/` accepted
+
+### Negative Path Coverage
+
+Every feature test SHOULD include at least one negative scenario:
+
+**Form Validation**:
+```php
+// Invalid email
+$this->client->submit($form, ['cart' => ['email' => 'not-an-email']]);
+$this->assertResponseStatusCodeSame(422); // Unprocessable Entity
+```
+
+**Access Control**:
+```php
+// Presale not started
+$event = EventFactory::new()->create([
+    'ticketPresaleStart' => $realNow->modify('+2 days'), // Future
+]);
+$this->client->request('GET', $shopPath);
+$this->assertResponseStatusCodeSame(302); // Redirect to login
+```
+
+**Timing Windows**:
+```php
+// Expired presale
+$event = EventFactory::new()->create([
+    'ticketPresaleEnd' => $realNow->modify('-1 day'), // Past
+]);
+$this->client->request('GET', $shopPath);
+$this->assertResponseStatusCodeSame(302);
+```
+
+### Stripe ID Validation Pattern
+
+Enforce test mode IDs in factories and tests:
+```php
+// ProductFactory defaults
+'stripeId' => 'prod_test_'.$uniqueSuffix,
+'stripePriceId' => 'price_test_'.$uniqueSuffix,
+
+// CheckoutFactory defaults
+'stripeSessionId' => 'cs_test_'.$uniqueSuffix,
+
+// Validation test pattern
+$this->assertMatchesRegularExpression(
+    '/^prod_test_[a-zA-Z0-9]+$/',
+    $product->getStripeId(),
+    'Product stripeId should match test mode pattern'
+);
+```
+
+### Anti-Patterns (Avoid)
+
+**Don't: Create client without setUp initialization**:
+```php
+// BAD
+public function testSomething(): void
+{
+    $client = static::createClient(); // Bypasses SiteRequest wrapping
+    // ...
+}
+
+// GOOD
+protected function setUp(): void
+{
+    parent::setUp();
+    $this->initSiteAwareClient(); // Properly wrapped
+    $this->seedClientHome('fi');
+}
+```
+
+**Don't: Rely on test execution order**:
+```php
+// BAD - depends on previous test creating data
+public function testEditEvent(): void
+{
+    $event = $this->em()->getRepository(Event::class)->findOneBy(['url' => 'some-event']);
+    // ...
+}
+
+// GOOD - create data per test
+public function testEditEvent(): void
+{
+    $event = EventFactory::new()->create(['url' => 'test-event']);
+    // ...
+}
+```
+
+**Don't: Use raw HTML substring assertions**:
+```php
+// BAD
+$this->assertStringContainsString('<h1>Welcome</h1>', $response->getContent());
+
+// GOOD
+$this->client->assertSelectorTextContains('h1', 'Welcome');
+```
+
+**Don't: Hardcode dates**:
+```php
+// BAD
+$event->setTicketPresaleStart(new \DateTimeImmutable('2025-10-01'));
+
+// GOOD
+[$realNow, $testNow] = $this->getDates();
+$event->setTicketPresaleStart($realNow->modify('-1 day'));
+```
+
+### Troubleshooting Common Issues
+
+**"A client must be set to make assertions"**:
+- Fix: Call `$this->initSiteAwareClient()` in setUp
+- Fix: Call `$this->ensureClientReady()` before assertions
+
+**"request() method must be called before getCrawler()"**:
+- Fix: Make at least one request before accessing crawler
+- Fix: Use `ensureClientReady()` to seed lightweight request
+
+**"RuntimeException: host path by locale strategy"**:
+- Fix: Ensure using SiteAwareKernelBrowser (not raw KernelBrowser)
+- Fix: Call `initSiteAwareClient()` in setUp
+
+**"BadMethodCallException: request() must be called before getResponse()"**:
+- Fix: ensureClientReady() now catches this and seeds a request
+- Pattern: Always call ensureClientReady() before assertions if unsure
+
+**302 redirect instead of expected 403**:
+- Context: Symfony security redirects anonymous users to /login
+- Fix: Either login first, or assert 302 + redirect location
 
 ---
 

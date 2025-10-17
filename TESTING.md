@@ -1,5 +1,23 @@
 # TESTING.md
 
+**Comprehensive Testing Guide for Tunkki (Symfony 7, PHP 8.4+)**
+
+> **Quick Start**: See [CLAUDE.md](CLAUDE.md) for AI assistant conventions and canonical commands.
+> **Patterns Reference**: CLAUDE.md Section 11A documents established testing patterns (2025-10-17).
+
+This document provides detailed guidance for writing, maintaining, and understanding tests in this Symfony application.
+
+## Quick Navigation
+
+- [Test Environment Setup](#14-test-environment--app_envtest-guard) (Section 14)
+- [Factory Usage](#15-factory-usage--patterns-expanded) (Section 15)
+- [Custom Browser](#17-custom-browser-siteawarekernelbrowser--final-decision) (Section 17)
+- [How to Write a New Test](#22-how-to-write-a-new-test-detailed-guide) (Section 22)
+- [Test Smells & Anti-Patterns](#23-test-smells--anti-patterns) (Section 23)
+- [Factory State Catalog](#15a-factory-state-catalog-canonical-states) (Section 15a)
+
+---
+
 ## 14. Test Environment & APP_ENV=test Guard
 
 All PHPUnit executions MUST run with APP_ENV=test. The Makefile enforces this automatically by injecting -e APP_ENV=test into every containerized PHP invocation.
