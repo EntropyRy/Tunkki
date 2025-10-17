@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ 'shop.title'|trans }}{% endblock %}
+
+{% block content %}
+    <h1>{{ 'shop.title'|trans }}</h1>
+    <p>{{ 'shop.description'|trans }}</p>
+
+    {% if form.products|length > 0 %}
+        {{ form_start(form) }}
+        <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
+            <div class="{% if app.user %}d-none{% endif %}">{{ form_row(form.email) }}</div>
+        </div>
+        {% for product_form in form.products %}
+            {% set product = product_form.vars.value.product %}
+            {% if inCheckouts[product.id] is defined %}
+                {% set minus = inCheckouts[product.id] %}
+            {% endif %}
+            <div class="col-12 col-sm-9 col-md-7 col-xl-6 product rounded" {{ stimulus_controller('product', {max: product.max((minus|default(0)))}) }}>
+                <div class="row">
+                    <div class="col-12 pic text-center">
+                        {% if product.picture %}
+                            {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(app.request.locale)}) }}
+                        {% endif %}
+                    </div>
+                    <div class="col-12 price">
+                        <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-uppercase d-flex justify-content-between rounded">
+                            <h3 class="ps-4 pe-2 py-2 d-flex w-100 fw-bold justify-content-between align-items-center">
+                                <span>
+                                    {% if app.request.locale == 'fi' %}
+                                        {% if product.name(app.request.locale) is not null %}
+                                            {{ product.name(app.request.locale) }}
+                                            <br>
+                                            <span class="fs-6 float-start">({{ product.nameEn }})</span>
+                                        {% else %}
+                                            {{ product.nameEn }}
+                                        {% endif %}
+                                    {% else %}
+                                        {{ product.name(app.request.locale) }}
+                                    {% endif %}
+                                </span>
+                                <span>{{ product.amount / 100 }}€</span>
+                            </h3>
+                            <span class="btn fs-4" {{ stimulus_target('product', 'chevron') }}>
+                                <twig:ux:icon class="d-none" name="chevron-up" />
+                                <twig:ux:icon name="chevron-down" />
+                            </span>
+                        </button>
+                    </div>
+                    <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
+                        <div class="px-4">
+                            <p>{{ product.description(app.request.locale) }}</p>
+                        </div>
+                        <div class="text-uppercase text-center fw-bold">{{ 'product.quantity'|trans }}</div>
+                    </div>
+                    <div class="col-12 quantity">
+                        {{ block('quantity') }}
+                    </div>
+                    <div style="height: 0px;overflow: hidden">{{ form_row(product_form) }}</div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
+            <input data-turbo="false"
+                   type="submit"
+                   class="btn btn-lg btn-primary float-end"
+                   value="{{ 'shop.buy'|trans }}" />
+            {{ form_end(form) }}
+        </div>
+    {% else %}
+        <div class="alert alert-info">
+            {{ 'shop.no_products'|trans }}
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block quantity %}
+    <div class="quantity-holder d-flex justify-content-center rounded">
+        {% if product.max(minus|default(0)) <= 0 %}
+            {% set button = 'btn-secondary disabled' %}
+        {% else %}
+            {% set button = 'btn-primary' %}
+        {% endif %}
+        <button {{ stimulus_target('product', 'minus') }} {{ stimulus_action('product', 'minus') }} class="btn {{ button }} fs-4">
+            <twig:ux:icon name="minus" />
+        </button>
+        <span class="number text-center w-100 fs-2 fw-bolder" {{ stimulus_target('product', 'quantity') }}>
+            {% if product.max(minus|default(0)) <= 0 %}
+                {{ 'product.sold_out'|trans }}
+            {% else %}
+                0
+            {% endif %}
+        </span>
+        <button {{ stimulus_target('product', 'plus') }} {{ stimulus_action('product', 'plus') }} class="btn {{ button }} fs-4">
+            <twig:ux:icon name="plus" />
+        </button>
+    </div>
+{% endblock %}

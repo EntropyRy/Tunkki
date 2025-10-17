@@ -10,3 +10,8 @@ when@dev:
   fpt_stripe:
     webhook:
       check_signature: false
+
+when@test:
+  fpt_stripe:
+    webhook:
+      check_signature: false

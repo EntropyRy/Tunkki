@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\CartItem;
-use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
-use App\Repository\ProductRepository;
 use App\Service\StripeService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -37,14 +34,12 @@ class CheckoutsController extends AbstractController
         StripeService $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
-        ProductRepository $pRepo,
     ): Response {
-        $client = $stripe->getClient();
-        $returnUrl = $stripe->getReturnUrl($event);
-        $session = $request->getSession();
-        $cartId = $session->get('cart');
+        // Retrieve cart from session
+        $cartId = $request->getSession()->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
-        if (null == $cart) {
+
+        if (null === $cart) {
             $this->addFlash('warning', 'cart.empty');
 
             return $this->redirectToRoute('entropy_event_shop', [
@@ -52,53 +47,23 @@ class CheckoutsController extends AbstractController
                 'slug' => $event->getUrl(),
             ]);
         }
-        $expires = new \DateTimeImmutable('+30min');
-        $products = $cart->getProducts();
-        $lineItems = [];
+
+        // Check for sold-out products and add flash messages
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
-        foreach ($products as $cartItem) {
-            $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
+        foreach ($cart->getProducts() as $cartItem) {
+            $productId = $cartItem->getProduct()->getId();
+            $minus = $itemsInCheckout[$productId] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
-            if (\is_array($item)) {
-                $lineItems[] = $item;
-            } else {
+
+            if (!\is_array($item)) {
                 $this->addFlash('warning', 'product.sold_out');
             }
         }
-        if ([] !== $lineItems) {
-            $eventServiceFeeProduct = $pRepo->findEventServiceFee($event);
-            if (null != $eventServiceFeeProduct) {
-                $found = array_any(
-                    $products->toArray(),
-                    fn ($cartItem): bool => $cartItem->getProduct()->getId() ===
-                        $eventServiceFeeProduct->getId(),
-                );
-                if (!$found) {
-                    $cartItem = new CartItem();
-                    $cartItem->setProduct($eventServiceFeeProduct);
-                    $cartItem->setQuantity(1);
-                    $cart->addProduct($cartItem);
-                    $lineItems[] = $cartItem->getLineItem(1, null);
-                }
-            }
-            $stripeSession = $client->checkout->sessions->create([
-                'ui_mode' => 'embedded',
-                'line_items' => [$lineItems],
-                'mode' => 'payment',
-                'return_url' => $returnUrl,
-                'automatic_tax' => [
-                    'enabled' => true,
-                ],
-                'customer_email' => $cart->getEmail(),
-                'expires_at' => $expires->getTimestamp(),
-                'locale' => $request->getLocale(),
-            ]);
-            $checkout = new Checkout();
-            $checkout->setStripeSessionId($stripeSession['id']);
-            $checkout->setCart($cart);
-            $cRepo->add($checkout, true);
-            $session->set('StripeSessionId', $stripeSession['id']);
-        } else {
+
+        // Create checkout session via StripeService
+        try {
+            $result = $stripe->createCheckoutSession($cart, $request, $cRepo, $event);
+        } catch (\RuntimeException $e) {
             $this->addFlash('warning', 'cart.empty');
 
             return $this->redirectToRoute('entropy_event_shop', [
@@ -108,10 +73,10 @@ class CheckoutsController extends AbstractController
         }
 
         return $this->render('event/checkouts.html.twig', [
-            'stripeSession' => $stripeSession,
+            'stripeSession' => $result['stripeSession'],
             'event' => $event,
             'publicKey' => $this->getParameter('stripe_public_key'),
-            'time' => $checkout->getUpdatedAt()->format('U'),
+            'time' => $result['checkout']->getUpdatedAt()->format('U'),
             'email' => $cart->getEmail(),
         ]);
     }
@@ -130,59 +95,42 @@ class CheckoutsController extends AbstractController
         StripeService $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
-        ProductRepository $pRepo,
     ): Response {
-        $client = $stripe->getClient();
-        $returnUrl = $stripe->getReturnUrl(null);
-        $session = $request->getSession();
-        $cartId = $session->get('cart');
+        // Retrieve cart from session
+        $cartId = $request->getSession()->get('cart');
         $cart = $cartR->findOneBy(['id' => $cartId]);
-        if (null == $cart) {
+
+        if (null === $cart) {
             $this->addFlash('warning', 'shop.cart.empty');
 
             return $this->redirectToRoute('entropy_shop', []);
         }
-        $expires = new \DateTimeImmutable('+30min');
-        $products = $cart->getProducts();
-        $lineItems = [];
+
+        // Check for sold-out products and add flash messages
         $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
-        foreach ($products as $cartItem) {
-            $minus = $itemsInCheckout[$cartItem->getProduct()->getId()] ?? null;
+        foreach ($cart->getProducts() as $cartItem) {
+            $productId = $cartItem->getProduct()->getId();
+            $minus = $itemsInCheckout[$productId] ?? null;
             $item = $cartItem->getLineItem(null, $minus);
-            if (\is_array($item)) {
-                $lineItems[] = $item;
-            } else {
+
+            if (!\is_array($item)) {
                 $this->addFlash('warning', 'product.sold_out');
             }
         }
-        if ([] !== $lineItems) {
-            $stripeSession = $client->checkout->sessions->create([
-                'ui_mode' => 'embedded',
-                'line_items' => [$lineItems],
-                'mode' => 'payment',
-                'return_url' => $returnUrl,
-                'automatic_tax' => [
-                    'enabled' => true,
-                ],
-                'customer_email' => $cart->getEmail(),
-                'expires_at' => $expires->getTimestamp(),
-                'locale' => $request->getLocale(),
-            ]);
-            $checkout = new Checkout();
-            $checkout->setStripeSessionId($stripeSession['id']);
-            $checkout->setCart($cart);
-            $cRepo->add($checkout, true);
-            $session->set('StripeSessionId', $stripeSession['id']);
-        } else {
+
+        // Create checkout session via StripeService (no event for general shop)
+        try {
+            $result = $stripe->createCheckoutSession($cart, $request, $cRepo, null);
+        } catch (\RuntimeException $e) {
             $this->addFlash('warning', 'shop.cart.empty');
 
             return $this->redirectToRoute('entropy_shop', []);
         }
 
         return $this->render('shop/checkout.html.twig', [
-            'stripeSession' => $stripeSession,
+            'stripeSession' => $result['stripeSession'],
             'publicKey' => $this->getParameter('stripe_public_key'),
-            'time' => $checkout->getUpdatedAt()->format('U'),
+            'time' => $result['checkout']->getUpdatedAt()->format('U'),
         ]);
     }
 }

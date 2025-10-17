@@ -36,6 +36,22 @@ class ProductRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * Find products for the general store (not linked to any event).
+     *
+     * @return Product[]
+     */
+    public function findGeneralStoreProducts(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.event IS NULL')
+            ->andWhere('p.active = true')
+            ->andWhere('p.serviceFee = false') // Service fees are illegal, exclude them
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
     //    /**
     //     * @return Product[] Returns an array of Product objects
     //     */

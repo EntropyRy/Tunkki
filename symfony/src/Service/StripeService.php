@@ -79,4 +79,72 @@ final readonly class StripeService
 
         return $stripe->checkout->sessions->retrieve($sessionId);
     }
+
+    /**
+     * Create a Stripe checkout session and persist Checkout entity.
+     *
+     * @param Cart $cart The shopping cart
+     * @param Request $request Current HTTP request (for session & locale)
+     * @param CheckoutRepository $checkoutRepo Repository for persisting Checkout
+     * @param ?Event $event Optional event (for return URL generation)
+     *
+     * @return array{stripeSession: array, checkout: Checkout} Created session and checkout entity
+     */
+    public function createCheckoutSession(
+        \App\Entity\Cart $cart,
+        \Symfony\Component\HttpFoundation\Request $request,
+        \App\Repository\CheckoutRepository $checkoutRepo,
+        ?\App\Entity\Event $event = null
+    ): array {
+        $client = $this->getClient();
+        $returnUrl = $this->getReturnUrl($event);
+        $expires = new \DateTimeImmutable('+30min');
+
+        // Build line items from cart
+        $lineItems = [];
+        $itemsInCheckout = $checkoutRepo->findProductQuantitiesInOngoingCheckouts();
+
+        foreach ($cart->getProducts() as $cartItem) {
+            $productId = $cartItem->getProduct()->getId();
+            $minus = $itemsInCheckout[$productId] ?? null;
+            $item = $cartItem->getLineItem(null, $minus);
+
+            if (\is_array($item)) {
+                $lineItems[] = $item;
+            }
+            // Note: sold-out handling (flash messages) happens in controller
+        }
+
+        if ([] === $lineItems) {
+            throw new \RuntimeException('No valid line items - cart is empty or all products sold out');
+        }
+
+        // Create Stripe checkout session
+        $stripeSession = $client->checkout->sessions->create([
+            'ui_mode' => 'embedded',
+            'line_items' => [$lineItems],
+            'mode' => 'payment',
+            'return_url' => $returnUrl,
+            'automatic_tax' => [
+                'enabled' => true,
+            ],
+            'customer_email' => $cart->getEmail(),
+            'expires_at' => $expires->getTimestamp(),
+            'locale' => $request->getLocale(),
+        ]);
+
+        // Create and persist Checkout entity
+        $checkout = new \App\Entity\Checkout();
+        $checkout->setStripeSessionId($stripeSession['id']);
+        $checkout->setCart($cart);
+        $checkoutRepo->add($checkout, true);
+
+        // Store session ID in session for later retrieval
+        $request->getSession()->set('StripeSessionId', $stripeSession['id']);
+
+        return [
+            'stripeSession' => $stripeSession,
+            'checkout' => $checkout,
+        ];
+    }
 }
