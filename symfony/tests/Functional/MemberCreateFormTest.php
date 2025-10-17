@@ -24,34 +24,6 @@ final class MemberCreateFormTest extends FixturesWebTestCase
 {
     use FormErrorAssertionTrait;
 
-    // (Removed explicit $client property; rely on FixturesWebTestCase magic accessor & static registered site-aware client)
-
-    /**
-     * Ensure the site-aware client is registered as the active WebTestCase client
-     * and that at least one request has been performed so BrowserKit assertions
-     * (which rely on static::$client->getResponse()) do not fail.
-     */
-    private function ensureClientReady(): void
-    {
-        // Ensure the site-aware client is initialized
-        if (
-            !self::$client instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
-        ) {
-            $this->initSiteAwareClient();
-        }
-
-        // Synchronize static::$client with the instance magic accessor (in case initSiteAwareClient early-returned)
-        if (
-            $this->client instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
-            && self::$client !== $this->client
-        ) {
-            self::$client = $this->client;
-        }
-
-        // Always seed a lightweight GET to ensure a response/crawler exists before any assertions
-        $this->seedLoginPage('en');
-    }
-
     public function testNewMemberFormDisplaysExpectedFields(): void
     {
         $this->ensureClientReady();

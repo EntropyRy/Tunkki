@@ -12,12 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'media__media')]
 #[ORM\Entity]
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'media')]
-#[ORM\HasLifecycleCallbacks]
 class SonataMediaMedia extends BaseMedia
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
@@ -34,22 +30,8 @@ class SonataMediaMedia extends BaseMedia
     protected ?int $size = null;
 
     #[\Override]
-    public function getId(): int|string|null
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    #[ORM\PrePersist]
-    #[\Override]
-    public function prePersist(): void
-    {
-        parent::prePersist();
-    }
-
-    #[ORM\PreUpdate]
-    #[\Override]
-    public function preUpdate(): void
-    {
-        parent::preUpdate();
     }
 }

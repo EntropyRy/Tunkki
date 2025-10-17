@@ -59,6 +59,42 @@ final class SiteAwareKernelBrowser extends KernelBrowser
         return $this->lastCrawler;
     }
 
+    /**
+     * Assert that a selector exists in the last response.
+     * Convenience method for Sonata multisite tests using SiteRequest.
+     */
+    public function assertSelectorExists(string $selector, string $message = ''): void
+    {
+        if (null === $this->lastCrawler) {
+            throw new \LogicException('No crawler available. Did you make a request?');
+        }
+
+        $count = $this->lastCrawler->filter($selector)->count();
+        if (0 === $count) {
+            throw new \PHPUnit\Framework\AssertionFailedError($message ?: "Selector '{$selector}' not found.");
+        }
+    }
+
+    /**
+     * Assert that a selector contains specific text.
+     */
+    public function assertSelectorTextContains(string $selector, string $text, string $message = ''): void
+    {
+        if (null === $this->lastCrawler) {
+            throw new \LogicException('No crawler available. Did you make a request?');
+        }
+
+        $node = $this->lastCrawler->filter($selector);
+        if (0 === $node->count()) {
+            throw new \PHPUnit\Framework\AssertionFailedError("Selector '{$selector}' not found.");
+        }
+
+        $actualText = $node->text();
+        if (!str_contains($actualText, $text)) {
+            throw new \PHPUnit\Framework\AssertionFailedError($message ?: "Text '{$text}' not found in selector '{$selector}'. Actual: '{$actualText}'");
+        }
+    }
+
     public function loginUser(
         object $user,
         string $firewallContext = 'main',

@@ -39,25 +39,6 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
     }
 
     /**
-     * Custom selector assertion using getLastCrawler from SiteAwareKernelBrowser.
-     */
-    private function assertSelectorExistsOnLastCrawler(
-        string $selector,
-        string $message = '',
-    ): void {
-        $crawler = $this->client->getLastCrawler();
-        $this->assertNotNull(
-            $crawler,
-            'No crawler available. Did you make a request?',
-        );
-        $this->assertGreaterThan(
-            0,
-            $crawler->filter($selector)->count(),
-            $message ?: "Selector '$selector' not found.",
-        );
-    }
-
-    /**
      * Helper to create dates for event creation.
      * Returns [realNow, testNow] where:
      * - realNow: For Entity methods that use real system time (like ticketPresaleEnabled)
@@ -98,14 +79,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
         $this->client->request('GET', $shopPath);
 
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorExistsOnLastCrawler(
-            'form[name="cart"]',
-            'Cart form should be present',
-        );
-        $this->assertSelectorExistsOnLastCrawler(
-            'input[name="cart[email]"]',
-            'Email field should be visible for anonymous users',
-        );
+        // Use SiteAwareKernelBrowser's assertion methods
+        $this->client->assertSelectorExists('form[name="cart"]', 'Cart form should be present');
+        $this->client->assertSelectorExists('input[name="cart[email]"]', 'Email field should be visible for anonymous users');
     }
 
     public function testAnonymousUserDeniedFromRestrictedShop(): void

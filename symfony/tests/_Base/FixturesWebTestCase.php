@@ -189,6 +189,112 @@ abstract class FixturesWebTestCase extends WebTestCase
     }
 
     /**
+     * Assert that no authenticated user is present (checks TokenStorage).
+     * Useful for login failure / security tests.
+     */
+    protected function assertNotAuthenticated(string $message): void
+    {
+        $container = static::getContainer();
+        if (!$container->has('security.token_storage')) {
+            self::fail(
+                'Token storage service missing; cannot verify authentication state.',
+            );
+        }
+        /** @var TokenStorageInterface $ts */
+        $ts = $container->get('security.token_storage');
+        $token = $ts->getToken();
+
+        if (null === $token) {
+            self::assertTrue(true); // Explicit clarity: unauthenticated
+
+            return;
+        }
+
+        // Some apps may set a token for anonymous contexts - ensure not authenticated user
+        $user = $token->getUser();
+        if (\is_object($user)) {
+            // Fail if an actual user object present
+            self::fail($message.' (Token holds '.$user::class.')');
+        } else {
+            self::assertTrue(true);
+        }
+    }
+
+    /**
+     * Assert that an authenticated user is present (checks TokenStorage).
+     * Useful for successful login / security tests.
+     */
+    protected function assertAuthenticated(string $message): void
+    {
+        $container = static::getContainer();
+        if (!$container->has('security.token_storage')) {
+            self::fail(
+                'Token storage service missing; cannot assert auth state.',
+            );
+        }
+        /** @var TokenStorageInterface $ts */
+        $ts = $container->get('security.token_storage');
+        $token = $ts->getToken();
+        self::assertNotNull($token, $message.' (no token)');
+        $user = $token->getUser();
+        self::assertTrue(
+            \is_object($user),
+            $message.' (no authenticated user object present)',
+        );
+    }
+
+    /**
+     * Ensure the site-aware client is registered as the active WebTestCase client
+     * and that at least one request has been performed so BrowserKit assertions
+     * do not fail with "A client must be set".
+     *
+     * Seeds a lightweight login page request to ensure response/crawler exists.
+     */
+    protected function ensureClientReady(): void
+    {
+        // Ensure the site-aware client is initialized
+        if (
+            null === $this->siteAwareClient
+            || !self::$client instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
+        ) {
+            $this->initSiteAwareClient();
+        }
+
+        // Synchronize static::$client with the instance
+        if (
+            $this->siteAwareClient instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
+            && self::$client !== $this->siteAwareClient
+        ) {
+            self::$client = $this->siteAwareClient;
+        }
+
+        // Seed a lightweight GET to ensure a response/crawler exists before any assertions
+        // Wrap in try-catch because getResponse() throws if no request was made yet
+        if ($this->siteAwareClient instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser) {
+            try {
+                $response = $this->siteAwareClient->getResponse();
+                if (null === $response) {
+                    $this->seedLoginPage('fi');
+                }
+            } catch (\Symfony\Component\BrowserKit\Exception\BadMethodCallException) {
+                // No request made yet, seed one
+                $this->seedLoginPage('fi');
+            }
+        }
+    }
+
+    /**
+     * Override default client creation to reuse the initialized site-aware client.
+     * Avoids secondary kernel boots (LogicException in WebTestCase).
+     *
+     * Tests that need custom client options should override createClient() directly.
+     */
+    protected function newClient(): \Symfony\Bundle\FrameworkBundle\KernelBrowser
+    {
+        return $this->client();
+    }
+
+    /**
      * Ensure the EntityManager reference is open; if closed (e.g. after a secondary kernel boot
      * or Foundry persistence edge-case) reacquire a fresh manager from Doctrine. This is a
      * defensive measure during the migration away from global fixtures + manual kernel boots.

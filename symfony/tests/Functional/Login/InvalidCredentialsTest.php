@@ -6,7 +6,6 @@ namespace App\Tests\Functional\Login;
 
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * Negative credential & authentication robustness tests.
@@ -26,42 +25,13 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->initSiteAwareClient();
+        // Parent setUp already calls initSiteAwareClient
         // Seed an initial request so BrowserKit assertions have a response/crawler
         $this->seedLoginPage('fi');
     }
 
-    /**
-     * Override default client creation to reuse the initialized site-aware client.
-     * Avoids secondary kernel boots (LogicException in WebTestCase).
-     */
-    protected function newClient(): \Symfony\Bundle\FrameworkBundle\KernelBrowser
-    {
-        return $this->client;
-    }
     private const VALID_PASSWORD = 'password'; // Matches factory bcrypt hash
     private const INVALID_PASSWORD = 'wrongpass!';
-
-    private function ensureClientReady(): void
-    {
-        if (
-            !self::$client instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
-        ) {
-            $this->initSiteAwareClient();
-        }
-
-        if (
-            $this->client instanceof \Symfony\Bundle\FrameworkBundle\KernelBrowser
-            && self::$client !== $this->client
-        ) {
-            self::$client = $this->client;
-        }
-
-        // setUp() already seeds a request; only seed if no response exists to avoid duplicate requests
-        if (null === $this->client->getResponse()) {
-            $this->seedLoginPage('fi');
-        }
-    }
 
     public function testInvalidPasswordDoesNotAuthenticate(): void
     {
@@ -250,33 +220,5 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
         $field = $crawler->filter('input[name="_csrf_token"]');
 
         return $field->count() > 0 ? $field->attr('value') ?? null : null;
-    }
-
-    private function assertNotAuthenticated(string $message): void
-    {
-        $container = static::getContainer();
-        if (!$container->has('security.token_storage')) {
-            self::fail(
-                'Token storage service missing; cannot verify authentication state.',
-            );
-        }
-        /** @var TokenStorageInterface $ts */
-        $ts = $container->get('security.token_storage');
-        $token = $ts->getToken();
-
-        if (null === $token) {
-            self::assertTrue(true); // Explicit clarity: unauthenticated
-
-            return;
-        }
-
-        // Some apps may set a token for anonymous contexts - ensure not authenticated user
-        $user = $token->getUser();
-        if (\is_object($user)) {
-            // Fail if an actual user object present
-            self::fail($message.' (Token holds '.$user::class.')');
-        } else {
-            self::assertTrue(true);
-        }
     }
 }

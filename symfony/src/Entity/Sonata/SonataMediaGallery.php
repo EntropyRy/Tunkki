@@ -14,34 +14,16 @@ use Sonata\MediaBundle\Model\GalleryItemInterface;
  */
 #[ORM\Table(name: 'media__gallery')]
 #[ORM\Entity]
-#[ORM\HasLifecycleCallbacks]
 class SonataMediaGallery extends BaseGallery
 {
-    /**
-     * @var int
-     */
     #[ORM\Id]
     #[ORM\Column(type: Types::INTEGER)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     protected $id;
 
     #[\Override]
-    public function getId(): int|string|null
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    #[ORM\PrePersist]
-    #[\Override]
-    public function prePersist(): void
-    {
-        parent::prePersist();
-    }
-
-    #[ORM\PreUpdate]
-    #[\Override]
-    public function preUpdate(): void
-    {
-        parent::preUpdate();
     }
 }

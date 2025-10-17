@@ -6,7 +6,6 @@ namespace App\Tests\Functional\Login;
 
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
-use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * CSRF protection scenarios for the login form.
@@ -24,15 +23,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 final class CsrfProtectionTest extends FixturesWebTestCase
 {
-    /**
-     * Override default client creation to reuse the initialized site-aware client and avoid
-     * a secondary kernel boot (which WebTestCase forbids after manual booting).
-     */
-    protected function newClient(): \Symfony\Bundle\FrameworkBundle\KernelBrowser
-    {
-        return $this->client;
-    }
-
     private const PLAIN_PASSWORD = 'password';
 
     /**
@@ -235,45 +225,5 @@ final class CsrfProtectionTest extends FixturesWebTestCase
         $hasCsrf = $crawler->filter('input[name="_csrf_token"]')->count() > 0;
 
         return [$client, $crawler, $hasCsrf];
-    }
-
-    private function assertNotAuthenticated(string $message): void
-    {
-        $ts = static::getContainer()->get('security.token_storage');
-        if (!$ts instanceof TokenStorageInterface) {
-            self::fail(
-                'Token storage service missing; cannot assert auth state.',
-            );
-        }
-        $token = $ts->getToken();
-        if (null === $token) {
-            self::assertTrue(true);
-
-            return;
-        }
-        $user = $token->getUser();
-        if (\is_object($user)) {
-            self::fail(
-                $message.' (Token user class: '.$user::class.')',
-            );
-        }
-        self::assertTrue(true);
-    }
-
-    private function assertAuthenticated(string $message): void
-    {
-        $ts = static::getContainer()->get('security.token_storage');
-        if (!$ts instanceof TokenStorageInterface) {
-            self::fail(
-                'Token storage service missing; cannot assert auth state.',
-            );
-        }
-        $token = $ts->getToken();
-        self::assertNotNull($token, $message.' (no token)');
-        $user = $token->getUser();
-        self::assertTrue(
-            \is_object($user),
-            $message.' (no authenticated user object present)',
-        );
     }
 }
