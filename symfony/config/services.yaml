@@ -85,7 +85,7 @@ services:
         audit: true
         label: Items
         model_class: App\Entity\Item
-        controller: App\Controller\ItemAdminController
+        controller: App\Controller\Admin\ItemAdminController
     calls:
       - [
           setTemplate,
@@ -124,7 +124,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Member
-        controller: App\Controller\MemberAdminController
+        controller: App\Controller\Admin\MemberAdminController
         manager_type: orm
         group: admin
         label: Members
@@ -180,7 +180,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Booking
-        controller: App\Controller\BookingAdminController
+        controller: App\Controller\Admin\BookingAdminController
         manager_type: orm
         group: admin
         audit: true
@@ -352,7 +352,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Email
-        controller: App\Controller\EmailAdminController
+        controller: App\Controller\Admin\EmailAdminController
         manager_type: orm
         group: admin
         label: Emails
@@ -362,7 +362,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Reward
-        controller: App\Controller\RewardAdminController
+        controller: App\Controller\Admin\RewardAdminController
         manager_type: orm
         group: admin
         label: Rewards
@@ -381,7 +381,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Event
-        controller: App\Controller\EventAdminController
+        controller: App\Controller\Admin\EventAdminController
         manager_type: orm
         group: admin
         label: Events
@@ -400,7 +400,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\EventArtistInfo
-        controller: App\Controller\EventArtistInfoAdminController
+        controller: App\Controller\Admin\EventArtistInfoAdminController
         manager_type: orm
         group: admin
         label: EventArtistInfo
@@ -416,7 +416,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Menu
-        controller: App\Controller\MenuAdminController
+        controller: App\Controller\Admin\MenuAdminController
         manager_type: orm
         group: admin
         label: Menu
@@ -456,14 +456,13 @@ services:
         group: admin
         label: Nakkis
         model_class: App\Entity\Nakki
-        controller: App\Controller\NakkiAdminController
+        controller: App\Controller\Admin\NakkiAdminController
 
   entropy.admin.nakki_booking:
     class: App\Admin\NakkiBookingAdmin
     tags:
       - name: sonata.admin
         model_class: App\Entity\NakkiBooking
-        controller: App\Controller\NakkiBookingAdminController
         manager_type: orm
         group: admin
         label: Nakki Bookings
@@ -480,7 +479,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Ticket
-        controller: App\Controller\TicketAdminController
+        controller: App\Controller\Admin\TicketAdminController
         manager_type: orm
         group: admin
         label: Tickets
@@ -490,7 +489,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Notification
-        controller: App\Controller\NotificationAdminController
+        controller: App\Controller\Admin\NotificationAdminController
         manager_type: orm
         group: admin
         label: Notification
@@ -500,7 +499,6 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Happening
-        controller: App\Controller\HappeningAdminController
         manager_type: orm
         group: admin
         label: Happening
@@ -521,7 +519,6 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Location
-        controller: App\Controller\LocationAdminController
         manager_type: orm
         group: admin
         label: Location
@@ -531,7 +528,7 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Product
-        controller: App\Controller\ProductAdminController
+        controller: App\Controller\Admin\ProductAdminController
         manager_type: orm
         group: admin
         label: Products
@@ -542,7 +539,7 @@ services:
       - {
           name: sonata.admin,
           model_class: App\Entity\Checkout,
-          controller: App\Controller\CheckoutAdminController,
+          controller: App\Controller\Admin\CheckoutAdminController,
           manager_type: orm,
           group: admin,
           label: Checkouts,

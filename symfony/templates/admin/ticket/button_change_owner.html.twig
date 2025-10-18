@@ -1,6 +1,0 @@
-{% if object.owner %}
-    <a class="btn btn-sm btn-default"
-       href="{{ admin.generateObjectUrl('changeOwner', object) }}">
-        <i class="fa fa-cog"></i> {{ 'Change Owner'|trans({}, 'SonataAdminBundle') }}
-    </a>
-{% endif %}

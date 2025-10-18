@@ -2,19 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Admin;
 
 use App\Entity\Ticket;
-use App\Form\ChengeTicketOwnerType;
 use App\Repository\EmailRepository;
-use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use App\Service\QrService;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Part\DataPart;
@@ -35,40 +31,6 @@ final class TicketAdminController extends CRUDController
         }
 
         return $this->redirect($this->admin->generateUrl('list'));
-    }
-
-    public function changeOwnerAction(Request $request, TicketRepository $ticketRepo, NakkiBookingRepository $nakkiRepo): Response
-    {
-        $ticket = $this->admin->getSubject();
-        if (null === $ticket->getOwner()) {
-            $this->addFlash('warning', 'ticket does not have owner!');
-
-            return $this->redirect($this->admin->generateUrl('list'));
-        } else {
-            $nakki = $ticket->ticketHolderHasNakki();
-            $form = $this->createForm(ChengeTicketOwnerType::class, $ticket, []);
-            $form->handleRequest($request);
-            if ($form->isSubmitted() && $form->isValid()) {
-                $ticket = $form->getData();
-                $new_owner = $ticket->getOwner();
-                $info = '';
-                if (null !== $nakki) {
-                    $nakki->setMember($new_owner);
-                    $nakkiRepo->save($nakki, true);
-                    $info = 'Nakki and ';
-                }
-                $ticketRepo->save($ticket, true);
-                $info .= 'Ticket moved to new member: '.$new_owner;
-                $this->addFlash('success', $info);
-
-                return $this->redirect($this->admin->generateUrl('list'));
-            }
-        }
-
-        return $this->render('admin/ticket/change_owner.html.twig', [
-            'ticket' => $ticket,
-            'form' => $form,
-        ]);
     }
 
     public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, QrService $qrGenerator): RedirectResponse

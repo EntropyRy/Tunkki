@@ -75,9 +75,6 @@ final class TicketAdmin extends AbstractAdmin
             ->add('updatedAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
                 'actions' => [
-                    'changeOwner' => [
-                        'template' => 'admin/ticket/button_change_owner.html.twig',
-                    ],
                     'give' => [
                         'template' => 'admin/ticket/button_give.html.twig',
                     ],
@@ -134,10 +131,6 @@ final class TicketAdmin extends AbstractAdmin
         $collection->add('give', $this->getRouterIdParameter().'/give');
         $collection->add('makePaid', $this->getRouterIdParameter().'/bought');
         $collection->add('addBus', $this->getRouterIdParameter().'/bus');
-        $collection->add(
-            'changeOwner',
-            $this->getRouterIdParameter().'/change',
-        );
         $collection->add(
             'sendQrCodeEmail',
             $this->getRouterIdParameter().'/send-qr-code-email',

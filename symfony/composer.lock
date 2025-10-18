@@ -5377,16 +5377,16 @@
         },
         {
             "name": "sonata-project/entity-audit-bundle",
-            "version": "1.21.0",
+            "version": "1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/EntityAuditBundle.git",
-                "reference": "6472648cd46c9f34c2c454d1bbb32b47665cc45e"
+                "reference": "e6a07310199a5c9d2dfa925a96e44892fb86859f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/6472648cd46c9f34c2c454d1bbb32b47665cc45e",
-                "reference": "6472648cd46c9f34c2c454d1bbb32b47665cc45e",
+                "url": "https://api.github.com/repos/sonata-project/EntityAuditBundle/zipball/e6a07310199a5c9d2dfa925a96e44892fb86859f",
+                "reference": "e6a07310199a5c9d2dfa925a96e44892fb86859f",
                 "shasum": ""
             },
             "require": {
@@ -5453,7 +5453,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/EntityAuditBundle/issues",
-                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/1.21.0"
+                "source": "https://github.com/sonata-project/EntityAuditBundle/tree/1.22.0"
             },
             "funding": [
                 {
@@ -5473,7 +5473,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-12T17:21:09+00:00"
+            "time": "2025-10-18T10:40:30+00:00"
         },
         {
             "name": "sonata-project/exporter",
@@ -5809,16 +5809,16 @@
         },
         {
             "name": "sonata-project/media-bundle",
-            "version": "4.18.0",
+            "version": "4.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "426f0689be5e512e5fb9e9b733cd4db997af1a1b"
+                "reference": "8d24c1ba98640d9ecc9695463eb6a46008b7c672"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/426f0689be5e512e5fb9e9b733cd4db997af1a1b",
-                "reference": "426f0689be5e512e5fb9e9b733cd4db997af1a1b",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/8d24c1ba98640d9ecc9695463eb6a46008b7c672",
+                "reference": "8d24c1ba98640d9ecc9695463eb6a46008b7c672",
                 "shasum": ""
             },
             "require": {
@@ -5949,7 +5949,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataMediaBundle/issues",
-                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.18.0"
+                "source": "https://github.com/sonata-project/SonataMediaBundle/tree/4.19.0"
             },
             "funding": [
                 {
@@ -5969,7 +5969,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-23T09:34:04+00:00"
+            "time": "2025-10-18T10:42:30+00:00"
         },
         {
             "name": "sonata-project/page-bundle",
