@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\EventListener;
+namespace App\EventSubscriber;
 
 use App\Entity\Booking;
 use App\Entity\Reward;
@@ -14,7 +14,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 
-class BookingAdminListener implements EventSubscriberInterface
+class BookingAdminSubscriber implements EventSubscriberInterface
 {
     public function __construct(private readonly string $email, private readonly string $fromEmail, private readonly MailerInterface $mailer, private readonly EntityManagerInterface $em)
     {
@@ -56,16 +56,17 @@ class BookingAdminListener implements EventSubscriberInterface
                 // earlier it was not paid
                 // give reward
                 if (!$old['paid'] && !\in_array($booking->getActualPrice(), ['', '0'], true)) {
-                    $amount = (float) $booking->getActualPrice() * 0.10;
+                    $amount = (string) ((float) $booking->getActualPrice() * 0.10);
                     if ($booking->getGivenAwayBy() === $booking->getReceivedBy()) {
                         $gr = $this->giveRewardToUser($amount, $booking, $booking->getGivenAwayBy());
                         $gr->addWeight(2);
                         $this->em->persist($gr);
                     } else {
-                        $gr = $this->giveRewardToUser($amount / 2, $booking, $booking->getGivenAwayBy());
+                        $halfAmount = (string) ((float) $amount / 2);
+                        $gr = $this->giveRewardToUser($halfAmount, $booking, $booking->getGivenAwayBy());
                         $gr->addWeight(1);
                         $this->em->persist($gr);
-                        $rr = $this->giveRewardToUser($amount / 2, $booking, $booking->getReceivedBy());
+                        $rr = $this->giveRewardToUser($halfAmount, $booking, $booking->getReceivedBy());
                         $rr->addWeight(1);
                         $this->em->persist($rr);
                     }

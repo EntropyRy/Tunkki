@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\EventListener;
+namespace App\EventSubscriber;
 
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 use Symfony\Component\Translation\LocaleSwitcher;
 
-class LoginListener implements EventSubscriberInterface
+class LoginSubscriber implements EventSubscriberInterface
 {
     public function __construct(
         private readonly LocaleSwitcher $localeSwitcher,

@@ -342,7 +342,7 @@ services:
         group: admin
         label: Accessories
 
-  App\EventListener\BookingAdminListener:
+  App\EventSubscriber\BookingAdminSubscriber:
     arguments:
       $email: "%booking_notification_email%"
       $fromEmail: "%mailer_sender_address%"
@@ -466,13 +466,6 @@ services:
         manager_type: orm
         group: admin
         label: Nakki Bookings
-
-  oauth.authcode.listener:
-    class: App\EventListener\AuthorizationCodeListener
-    tags:
-      - name: kernel.event_listener
-        event: league.oauth2_server.event.authorization_request_resolve
-        method: onAuthorizationRequestResolve
 
   admin.ticket:
     class: App\Admin\TicketAdmin
