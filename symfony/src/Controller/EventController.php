@@ -10,10 +10,8 @@ use App\Entity\Member;
 use App\Entity\RSVP;
 use App\Entity\User;
 use App\Form\RSVPType;
-use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\TicketRepository;
-use App\Service\StripeService;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\PageBundle\Model\SiteManagerInterface;
 use Sonata\PageBundle\Site\SiteSelectorInterface;
@@ -219,51 +217,6 @@ class EventController extends Controller
             'event' => $event,
             'rsvpForm' => $form,
             'tickets' => $tickets ?? null,
-        ]);
-    }
-
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/valmis',
-                'en' => '/{year}/{slug}/complete',
-            ],
-            name: 'entropy_event_shop_complete',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
-    public function complete(
-        Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
-        Event $event,
-        StripeService $stripe,
-        CheckoutRepository $cRepo,
-    ): Response {
-        $sessionId = $request->get('session_id');
-        $stripeSession = $stripe->getCheckoutSession($sessionId);
-        if ('open' == $stripeSession->status) {
-            $this->addFlash('warning', 'e30v.checkout.open');
-
-            return $this->redirectToRoute('event_stripe_checkouts', [
-                'year' => $event->getEventDate()->format('Y'),
-                'slug' => $event->getUrl(),
-            ]);
-        }
-        $email = '';
-        if ('complete' == $stripeSession->status) {
-            $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
-            $cart = $checkout->getCart();
-            $email = $cart->getEmail();
-            $request->getSession()->remove('cart');
-        }
-
-        return $this->render('event/shop_complete.html.twig', [
-            'event' => $event,
-            'email' => $email,
         ]);
     }
 

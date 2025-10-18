@@ -1,6 +1,5 @@
 {% extends event.template %}
 {% block title %}{{ event.nameByLang(app.request.locale) }} | Entropy ry{% endblock %}
-{% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
@@ -15,7 +14,12 @@
                 <a href="{{ block('event_path') }}">
                     <h3 class="mt-2">{{ block('event_name') }} ~ {{ block('event_time') }}</h3>
                 </a>
-                {{ block('ticket') }}
+
+                {# Ticket display - Stripe-based (always paid status) #}
+                <h1 class="text-center">{{ event.nameByLang(app.request.locale) }}: {{ ticket.name(app.request.locale) }}</h1>
+                <div class="qr-code text-center">
+                    <img style="max-width: 100%" src="data:image/png;base64,{{ qr }}">
+                </div>
             </div>
         </div>
     {% else %}

@@ -10,6 +10,7 @@ use App\Entity\Ticket;
 use App\Entity\User;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
+use App\Service\NakkiDisplayService;
 use App\Service\QrService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
@@ -26,74 +27,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventTicketController extends Controller
 {
-    #[
-        Route(
-            path: [
-                'en' => '/{year}/{slug}/ticket/presale',
-                'fi' => '/{year}/{slug}/lippu/ennakkomyynti',
-            ],
-            name: 'entropy_event_ticket_presale',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
-    public function presale(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
-        Event $event,
-        TicketRepository $ticketRepo,
-        NakkiBookingRepository $nakkiBookingRepo,
-    ): RedirectResponse {
-        if ($event->ticketPresaleEnabled()) {
-            $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
-            $response = $this->ticketChecks('presale', $event, $ticketRepo);
-            if ($response instanceof RedirectResponse) {
-                return $response;
-            }
-        } else {
-            $this->addFlash('warning', 'ticket.presale.off');
-        }
-
-        return $this->redirectToRoute('entropy_event_slug', [
-            'slug' => $event->getUrl(),
-            'year' => $event->getEventDate()->format('Y'),
-        ]);
-    }
-
-    #[
-        Route(
-            path: [
-                'en' => '/{year}/{slug}/ticket/sale',
-                'fi' => '/{year}/{slug}/lippu/myynti',
-            ],
-            name: 'entropy_event_ticket_sale',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
-    public function sale(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
-        Event $event,
-        TicketRepository $ticketRepo,
-        NakkiBookingRepository $nakkiBookingRepo,
-    ): RedirectResponse {
-        if (!$event->ticketPresaleEnabled()) {
-            $this->freeAvailableTickets($event, $ticketRepo, $nakkiBookingRepo);
-            $response = $this->ticketChecks('sale', $event, $ticketRepo);
-            if ($response instanceof RedirectResponse) {
-                return $response;
-            }
-        }
-
-        return $this->redirectToRoute('entropy_event_slug', [
-            'slug' => $event->getUrl(),
-            'year' => $event->getEventDate()->format('Y'),
-        ]);
+    public function __construct(
+        private readonly NakkiDisplayService $nakkiDisplay,
+    ) {
     }
 
     #[
@@ -201,7 +137,7 @@ class EventTicketController extends Controller
         return $this->render('ticket/multiple.html.twig', [
             'event' => $event,
             'selected' => $selected,
-            'nakkis' => $this->getNakkiFromGroup(
+            'nakkis' => $this->nakkiDisplay->getNakkiFromGroup(
                 $event,
                 $member,
                 $selected,
@@ -299,128 +235,4 @@ class EventTicketController extends Controller
         }
     }
 
-    private function ticketChecks(
-        string $for,
-        Event $event,
-        TicketRepository $ticketRepo,
-    ): ?RedirectResponse {
-        $user = $this->getUser();
-        \assert($user instanceof User);
-        $member = $user->getMember();
-        $ticket = $ticketRepo->findOneBy([
-            'event' => $event,
-            'owner' => $member,
-        ]);
-        if (null === $ticket) {
-            $ticket =
-                'presale' === $for
-                    ? $ticketRepo->findAvailablePresaleTicket($event)
-                    : $ticketRepo->findAvailableTicket($event);
-        }
-        if (null === $ticket) {
-            $this->addFlash('warning', 'ticket.not_available');
-        } else {
-            $ticket->setOwner($member);
-            $ticketRepo->add($ticket, true);
-            $this->addFlash('success', 'ticket.reserved_for_two_hours');
-
-            return $this->redirectToRoute('entropy_event_ticket', [
-                'slug' => $event->getUrl(),
-                'year' => $event->getEventDate()->format('Y'),
-                'reference' => $ticket->getReferenceNumber(),
-            ]);
-        }
-
-        return null;
-    }
-
-    private function freeAvailableTickets(
-        Event $event,
-        TicketRepository $ticketRepo,
-        NakkiBookingRepository $nakkiBookingRepo,
-    ): void {
-        $now = new \DateTimeImmutable('now');
-        foreach ($event->getTickets() as $ticket) {
-            if (
-                'available' == $ticket->getStatus()
-                && null !== $ticket->getOwner()
-                && $now->format('U') - $ticket->getUpdatedAt()->format('U') >=
-                    10800
-            ) {
-                if ($event->isNakkiRequiredForTicketReservation()) {
-                    foreach ($event->getNakkiBookings() as $nakkiB) {
-                        if ($nakkiB->getMember() == $ticket->getOwner()) {
-                            $nakkiB->setMember(null);
-                            $nakkiBookingRepo->save($nakkiB, true);
-                        }
-                    }
-                }
-                $ticket->setOwner(null);
-                $ticketRepo->add($ticket, true);
-            }
-        }
-    }
-
-    protected function getNakkiFromGroup(
-        $event,
-        $member,
-        $selected,
-        $locale,
-    ): array {
-        $nakkis = [];
-        foreach ($event->getNakkis() as $nakki) {
-            if (true == $nakki->isDisableBookings()) {
-                continue;
-            }
-            foreach ($selected as $booking) {
-                if ($booking->getNakki() == $nakki) {
-                    $nakkis = $this->addNakkiToArray(
-                        $nakkis,
-                        $booking,
-                        $locale,
-                    );
-                    break;
-                }
-            }
-            if (
-                !\array_key_exists(
-                    $nakki->getDefinition()->getName($locale),
-                    $nakkis,
-                )
-            ) {
-                // try to prevent displaying same nakki to 2 different users using the system at the same time
-                $bookings = $nakki->getNakkiBookings()->toArray();
-                shuffle($bookings);
-                foreach ($bookings as $booking) {
-                    if (null === $booking->getMember()) {
-                        $nakkis = $this->addNakkiToArray(
-                            $nakkis,
-                            $booking,
-                            $locale,
-                        );
-                        break;
-                    }
-                }
-            }
-        }
-
-        return $nakkis;
-    }
-
-    protected function addNakkiToArray(array $nakkis, $booking, $locale): array
-    {
-        $name = $booking->getNakki()->getDefinition()->getName($locale);
-        $duration = $booking
-            ->getStartAt()
-            ->diff($booking->getEndAt())
-            ->format('%h');
-        $nakkis[$name]['description'] = $booking
-            ->getNakki()
-            ->getDefinition()
-            ->getDescription($locale);
-        $nakkis[$name]['bookings'][] = $booking;
-        $nakkis[$name]['durations'][$duration] = $duration;
-
-        return $nakkis;
-    }
 }

@@ -1,6 +1,5 @@
 {% extends event.template %}
 {% block title %}{{ event.nameByLang(app.request.locale) }} | Entropy ry{% endblock %}
-{% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
@@ -29,7 +28,11 @@
                     <hr>
                 {% endif %}
                 {% for qr in qrs %}
-                    {{ block('multi_ticket') }}
+                    {# Multiple ticket QR codes display #}
+                    <h1 class="text-center">{{ qr.name }}</h1>
+                    <div class="qr-code text-center">
+                        <img style="max-width: 100%" src="data:image/png;base64,{{ qr.qr }}">
+                    </div>
                     <hr>
                 {% endfor %}
                 {{ block('shop_link') }}

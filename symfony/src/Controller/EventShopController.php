@@ -12,8 +12,9 @@ use App\Form\CartType;
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
 use App\Repository\NakkiBookingRepository;
-use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
+use App\Service\NakkiDisplayService;
+use App\Service\StripeService;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,18 +24,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Http\Util\TargetPathTrait;
 
 /**
- * ShopsController - Handles shop routes for both event-specific and general store.
+ * EventShopController - Handles the complete commerce flow for event tickets and products.
  *
- * Consolidates shop logic:
- * - Event shop: Products linked to specific events
- * - General store: Products not linked to events (future use)
+ * Flow: Shop (cart) → Checkout (payment) → Complete (confirmation)
  */
-class ShopsController extends AbstractController
+class EventShopController extends AbstractController
 {
     use TargetPathTrait;
 
     public function __construct(
         private readonly EventPublicationDecider $publicationDecider,
+        private readonly NakkiDisplayService $nakkiDisplay,
     ) {
     }
 
@@ -50,7 +50,7 @@ class ShopsController extends AbstractController
             ],
         ),
     ]
-    public function eventShop(
+    public function shop(
         Request $request,
         #[
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
@@ -82,7 +82,7 @@ class ShopsController extends AbstractController
             $email = $user->getEmail();
             $member = $user->getMember();
             $selected = $nakkirepo->findMemberEventBookings($member, $event);
-            $nakkis = $this->getNakkiFromGroup(
+            $nakkis = $this->nakkiDisplay->getNakkiFromGroup(
                 $event,
                 $member,
                 $selected,
@@ -158,131 +158,110 @@ class ShopsController extends AbstractController
     #[
         Route(
             path: [
-                'fi' => '/kauppa',
-                'en' => '/shop',
+                'fi' => '/{year}/{slug}/kassa',
+                'en' => '/{year}/{slug}/checkout',
             ],
-            name: 'entropy_shop',
+            name: 'event_stripe_checkouts',
         ),
     ]
-    public function shop(
+    public function checkout(
         Request $request,
-        ProductRepository $productRepo,
+        #[
+            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
+        ]
+        Event $event,
+        StripeService $stripe,
+        CheckoutRepository $cRepo,
         CartRepository $cartR,
-        CheckoutRepository $checkoutR,
     ): Response {
-        // General store: products NOT linked to events
-        $user = $this->getUser();
-        $email = null;
+        // Retrieve cart from session
+        $cartId = $request->getSession()->get('cart');
+        $cart = $cartR->findOneBy(['id' => $cartId]);
 
-        if (null != $user) {
-            \assert($user instanceof User);
-            $email = $user->getEmail();
+        if (null === $cart) {
+            $this->addFlash('warning', 'cart.empty');
+
+            return $this->redirectToRoute('entropy_event_shop', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+            ]);
         }
 
-        $session = $request->getSession();
-        $cart = new Cart();
-        $cartId = $session->get('cart');
-        if (null != $cartId) {
-            $cart = $cartR->findOneBy(['id' => $cartId]);
-            if (null == $cart) {
-                $cart = new Cart();
+        // Check for sold-out products and add flash messages
+        $itemsInCheckout = $cRepo->findProductQuantitiesInOngoingCheckouts();
+        foreach ($cart->getProducts() as $cartItem) {
+            $productId = $cartItem->getProduct()->getId();
+            $minus = $itemsInCheckout[$productId] ?? null;
+            $item = $cartItem->getLineItem(null, $minus);
+
+            if (!\is_array($item)) {
+                $this->addFlash('warning', 'product.sold_out');
             }
         }
-        if (null == $cart->getEmail()) {
-            $cart->setEmail($email);
+
+        // Create checkout session via StripeService
+        try {
+            $result = $stripe->createCheckoutSession($cart, $request, $cRepo, $event);
+        } catch (\RuntimeException) {
+            $this->addFlash('warning', 'cart.empty');
+
+            return $this->redirectToRoute('entropy_event_shop', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+            ]);
         }
 
-        // Fetch general store products (not linked to events)
-        $products = $productRepo->findGeneralStoreProducts();
-        $max = $checkoutR->findProductQuantitiesInOngoingCheckouts();
-
-        $cart->setProducts($products);
-        $form = $this->createForm(CartType::class, $cart);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $cart = $form->getData();
-            $cartR->save($cart, true);
-            $session->set('cart', $cart->getId());
-
-            return $this->redirectToRoute('stripe_checkout');
-        }
-
-        // Save target path for login redirect
-        $this->saveTargetPath($session, 'main', $request->getUri());
-
-        return $this->render('shop/index.html.twig', [
-            'form' => $form,
-            'inCheckouts' => $max,
+        return $this->render('event/checkouts.html.twig', [
+            'stripeSession' => $result['stripeSession'],
+            'event' => $event,
+            'publicKey' => $this->getParameter('stripe_public_key'),
+            'time' => $result['checkout']->getUpdatedAt()->format('U'),
+            'email' => $cart->getEmail(),
         ]);
     }
 
-    /**
-     * Get available nakki bookings for a member at an event.
-     */
-    protected function getNakkiFromGroup(
+    #[
+        Route(
+            path: [
+                'fi' => '/{year}/{slug}/valmis',
+                'en' => '/{year}/{slug}/complete',
+            ],
+            name: 'entropy_event_shop_complete',
+            requirements: [
+                'year' => "\d+",
+            ],
+        ),
+    ]
+    public function complete(
+        Request $request,
+        #[
+            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
+        ]
         Event $event,
-        $member,
-        $selected,
-        string $locale,
-    ): array {
-        $nakkis = [];
-        foreach ($event->getNakkis() as $nakki) {
-            if (true == $nakki->isDisableBookings()) {
-                continue;
-            }
-            foreach ($selected as $booking) {
-                if ($booking->getNakki() == $nakki) {
-                    $nakkis = $this->addNakkiToArray(
-                        $nakkis,
-                        $booking,
-                        $locale,
-                    );
-                    break;
-                }
-            }
-            if (
-                !\array_key_exists(
-                    $nakki->getDefinition()->getName($locale),
-                    $nakkis,
-                )
-            ) {
-                // try to prevent displaying same nakki to 2 different users using the system at the same time
-                $bookings = $nakki->getNakkiBookings()->toArray();
-                shuffle($bookings);
-                foreach ($bookings as $booking) {
-                    if (null === $booking->getMember()) {
-                        $nakkis = $this->addNakkiToArray(
-                            $nakkis,
-                            $booking,
-                            $locale,
-                        );
-                        break;
-                    }
-                }
-            }
+        StripeService $stripe,
+        CheckoutRepository $cRepo,
+    ): Response {
+        $sessionId = $request->get('session_id');
+        $stripeSession = $stripe->getCheckoutSession($sessionId);
+        if ('open' == $stripeSession->status) {
+            $this->addFlash('warning', 'e30v.checkout.open');
+
+            return $this->redirectToRoute('event_stripe_checkouts', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+            ]);
+        }
+        $email = '';
+        if ('complete' == $stripeSession->status) {
+            $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
+            $cart = $checkout->getCart();
+            $email = $cart->getEmail();
+            $request->getSession()->remove('cart');
         }
 
-        return $nakkis;
-    }
-
-    /**
-     * Add a nakki booking to the nakkis array.
-     */
-    protected function addNakkiToArray(array $nakkis, $booking, string $locale): array
-    {
-        $name = $booking->getNakki()->getDefinition()->getName($locale);
-        $duration = $booking
-            ->getStartAt()
-            ->diff($booking->getEndAt())
-            ->format('%h');
-        $nakkis[$name]['description'] = $booking
-            ->getNakki()
-            ->getDefinition()
-            ->getDescription($locale);
-        $nakkis[$name]['bookings'][] = $booking;
-        $nakkis[$name]['durations'][$duration] = $duration;
-
-        return $nakkis;
+        return $this->render('event/shop_complete.html.twig', [
+            'event' => $event,
+            'email' => $email,
+        ]);
     }
 }

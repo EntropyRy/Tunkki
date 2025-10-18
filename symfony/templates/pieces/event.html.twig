@@ -227,7 +227,7 @@
         '{{ links }}': block('links'),
         '{{ rsvp }}': block('RSVP'),
         '{{ stripe_ticket }}': block('stripe_ticket'),
-        '{{ ticket }}': block('ticket_for_event_page'),
+        '{{ ticket }}': '',
         '{{ art_artist_list }}': block('art_artist_list'),
         '{{ happening_list }}': block('happening_list'),
         '{{ menu }}': '',
@@ -245,7 +245,7 @@
     '{{ bios }}': '',
     '{{ vj_bios }}': '',
     '{{ links }}': '',
-    '{{ ticket }}': block('ticket_for_frontpage'),
+    '{{ ticket }}': '',
     '{{ rsvp }}': block('RSVP'),
     })|raw }}
     {{ block('links') }}
