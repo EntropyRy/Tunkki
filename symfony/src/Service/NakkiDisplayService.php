@@ -18,10 +18,11 @@ class NakkiDisplayService
     /**
      * Get available nakki bookings for a member at an event.
      *
-     * @param Event $event The event
-     * @param Member $member The member
+     * @param Event               $event    The event
+     * @param Member              $member   The member
      * @param array<NakkiBooking> $selected Already selected bookings
-     * @param string $locale The locale for name/description
+     * @param string              $locale   The locale for name/description
+     *
      * @return array<string, mixed> Array of nakki information grouped by name
      */
     public function getNakkiFromGroup(
@@ -73,9 +74,10 @@ class NakkiDisplayService
     /**
      * Add a nakki booking to the nakkis array.
      *
-     * @param array<string, mixed> $nakkis The nakkis array
-     * @param NakkiBooking $booking The booking to add
-     * @param string $locale The locale for name/description
+     * @param array<string, mixed> $nakkis  The nakkis array
+     * @param NakkiBooking         $booking The booking to add
+     * @param string               $locale  The locale for name/description
+     *
      * @return array<string, mixed> The updated nakkis array
      */
     public function addNakkiToArray(array $nakkis, NakkiBooking $booking, string $locale): array
