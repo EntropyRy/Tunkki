@@ -33,7 +33,7 @@ services:
 
   App\Service\ZMQService:
     arguments:
-      $environment: '%kernel.environment%'
+      $environment: "%kernel.environment%"
 
   _defaults:
     autowire: true
@@ -556,7 +556,7 @@ when@test:
     messenger:
       transports:
         # Force synchronous transport in tests to avoid async worker requirements
-        async: 'sync://'
+        async: "sync://"
     notifier:
       # Disable external notifications in tests
       chatter_transports: []
