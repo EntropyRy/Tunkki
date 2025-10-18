@@ -1,6 +1,10 @@
 <?php
 
-$finder = new PhpCsFixer\Finder()->in(__DIR__)->exclude("var");
+$finder = new PhpCsFixer\Finder()
+    ->in(__DIR__)
+    ->exclude('var')
+    ->notPath('importmap.php')
+;
 
 return new PhpCsFixer\Config()
     ->setRiskyAllowed(true)
