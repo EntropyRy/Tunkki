@@ -281,3 +281,10 @@ a:hover {
 .progress-bar {
   background-color: var(--bs-primary);
 }
+
+/* Inline form checkboxes/radios */
+/* Apply to expanded choice fields with form-check-inline class on container */
+.form-check-inline .form-check {
+  display: inline-block;
+  margin-right: 1rem;
+}

@@ -26,6 +26,9 @@ class ArtistType extends AbstractType
             ->add('name', null, ['label' => 'artist.form.name'])
             ->add('type', ChoiceType::class, [
                 'label' => 'artist.form.type',
+                'attr' => ['class' => 'form-check-inline'],
+                'expanded' => true,
+                'multiple' => false,
                 'choices' => [
                     'DJ' => 'DJ',
                     'Live' => 'Live',

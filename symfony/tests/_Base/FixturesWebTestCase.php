@@ -403,10 +403,6 @@ abstract class FixturesWebTestCase extends WebTestCase
             $em = $this->em;
             // Closed EntityManager detection
             if (method_exists($em, 'isOpen') && !$em->isOpen()) {
-                fwrite(
-                    \STDERR,
-                    "[DoctrineCheck] EntityManager CLOSED after {$this->name()}\n",
-                );
                 if (getenv('FAIL_ON_CLOSED_ENTITY_MANAGER')) {
                     self::fail('EntityManager is closed.');
                 }
