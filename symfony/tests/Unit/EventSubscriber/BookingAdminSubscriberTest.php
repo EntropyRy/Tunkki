@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Tests\Unit\EventSubscriber;
 
 use App\Entity\Booking;
-use App\Entity\Reward;
 use App\Entity\StatusEvent;
 use App\Entity\User;
 use App\EventSubscriber\BookingAdminSubscriber;

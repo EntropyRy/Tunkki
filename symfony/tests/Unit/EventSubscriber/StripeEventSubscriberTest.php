@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\EventSubscriber;
 
-use App\Entity\Cart;
-use App\Entity\CartItem;
-use App\Entity\Checkout;
 use App\Entity\Event;
-use App\Entity\Product;
 use App\EventSubscriber\StripeEventSubscriber;
 use App\Repository\CheckoutRepository;
 use App\Repository\EmailRepository;
@@ -19,9 +15,7 @@ use App\Service\BookingReferenceService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\StripeService;
-use Doctrine\Common\Collections\ArrayCollection;
 use Fpt\StripeBundle\Event\StripeEvents;
-use Fpt\StripeBundle\Event\StripeWebhook;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
