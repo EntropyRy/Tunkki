@@ -2,6 +2,20 @@
 
 {% block title %}{{ 'shop.title'|trans }}{% endblock %}
 
+{% block meta %}
+    <meta name="description" content="{{ 'shop.description'|trans }}">
+    <meta property="og:title" content="{{ 'shop.title'|trans }}">
+    <meta property="og:description" content="{{ 'shop.description'|trans }}">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta property="og:image" content="{{ asset('/images/header-logo-text.svg') }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ 'shop.title'|trans }}">
+    <meta name="twitter:description" content="{{ 'shop.description'|trans }}">
+    <meta name="twitter:image" content="{{ asset('/images/header-logo-text.svg') }}">
+    <meta name="twitter:url" content="{{ app.request.uri }}">
+{% endblock %}
+
 {% block content %}
     <h1>{{ 'shop.title'|trans }}</h1>
     <p>{{ 'shop.description'|trans }}</p>
