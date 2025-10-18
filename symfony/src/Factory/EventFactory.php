@@ -379,4 +379,13 @@ final class EventFactory extends PersistentObjectFactory
             'artistSignUpEnd' => $past->modify('+2 days'),
         ]);
     }
+
+    /**
+     * Enable RSVP system for the event.
+     * Allows anonymous users to RSVP via RSVPType form.
+     */
+    public function withRsvpEnabled(): static
+    {
+        return $this->with(['rsvpSystemEnabled' => true]);
+    }
 }

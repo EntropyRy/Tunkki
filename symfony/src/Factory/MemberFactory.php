@@ -78,6 +78,24 @@ final class MemberFactory extends PersistentObjectFactory
         return $this->with(['isActiveMember' => true]);
     }
 
+    public function inactive(): static
+    {
+        return $this->with([
+            'isActiveMember' => false,
+            'Application' => null,
+            'ApplicationDate' => null,
+        ]);
+    }
+
+    public function applicationPending(): static
+    {
+        return $this->with([
+            'isActiveMember' => false,
+            'Application' => self::faker()->paragraph(),
+            'ApplicationDate' => new \DateTime('-7 days'),
+        ]);
+    }
+
     public function english(): static
     {
         return $this->with(['locale' => 'en']);
