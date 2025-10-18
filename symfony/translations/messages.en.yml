@@ -535,7 +535,10 @@ product:
     quantity: quantity
     sold_out: Sold Out
 shop:
+    title: Shop
+    description: "Our shop is designed for easy pickup from the club room – we only ship items if specifically mentioned in the product info. Welcome to shop and collect your items!"
     buy: Checkout
+    no_products: "No products available at the moment."
     cart:
         email:
             label: Email in which we will send your receipt

@@ -667,7 +667,10 @@ nakkikone:
     during: Tapahtuman aikana
     tear_down: Purku
 shop:
+    title: Kauppa
+    description: Kauppamme tuotteet ovat helposti noudettavissa kerhohuoneelta – postitamme vain erikseen mainitut tuotteet. Tervetuloa tekemään ostoksia ja hakemaan omasi!
     buy: Kassalle
+    no_products: Ei tuotteita saatavilla tällä hetkellä.
     cart:
         empty: Ostoskorisi on tyhjä
         email:
