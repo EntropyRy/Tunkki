@@ -83,7 +83,6 @@
     },
     "require-dev": {
         "dama/doctrine-test-bundle": "*",
-        "doctrine/doctrine-fixtures-bundle": "^4.1",
         "friendsofphp/php-cs-fixer": "^3.88",
         "infection/infection": "^0.29",
         "phpstan/extension-installer": "^1.0",

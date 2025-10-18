@@ -53,7 +53,6 @@
             <directory>src</directory>
         </include>
         <exclude>
-            <directory>src/DataFixtures</directory>
             <!-- Exclude Admin classes from coverage: mostly presentation/config glue;
                  excluding them speeds analysis and focuses mutation & coverage budgets on domain logic. -->
             <directory>src/Admin</directory>

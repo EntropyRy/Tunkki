@@ -853,7 +853,6 @@ Coverage Gates (task #37):
   - URL/event state logic
 - Explicit Exclusions (current phpunit.dist.xml):
   - src/Admin (Sonata wiring; excluded to keep metrics signal high)
-  - src/DataFixtures (test seeding / scaffolding only)
   (Re‑evaluate exclusions only if meaningful executable logic migrates into those layers—preferred solution remains refactoring logic outward, not relaxing exclusions.)
 
 
@@ -861,7 +860,7 @@ Coverage Gates (task #37):
 
 Keep functional tests lean:
 - Only create entities needed for the assertion.
-- Avoid loading large fixture graphs “just in case”.
+- Use factories to create minimal test data per test.
 - Consider grouping extremely slow tests under `@group slow` once identified (task #42).
 
 Parallelization (task #34):
