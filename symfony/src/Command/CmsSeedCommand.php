@@ -6,6 +6,8 @@ namespace App\Command;
 
 use App\Entity\Sonata\SonataPagePage;
 use App\Entity\Sonata\SonataPageSite;
+use App\Factory\PageFactory;
+use App\Factory\SiteFactory;
 use App\Story\CmsBaselineStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -65,8 +67,8 @@ final class CmsSeedCommand extends Command
 
     private function executeSeedingLogic(SymfonyStyle $io): int
     {
-        $siteRepo = $this->em->getRepository(SonataPageSite::class);
-        $pageRepo = $this->em->getRepository(SonataPagePage::class);
+        $siteRepo = SiteFactory::repository();
+        $pageRepo = PageFactory::repository();
 
         // Count before
         $sitesBefore = $siteRepo->count([]);
