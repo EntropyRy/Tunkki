@@ -16,7 +16,7 @@ server {
         fastcgi_param X-Real-IP $realip_remote_addr;
         fastcgi_param X-Forwarded-For $http_x_forwarded_for;
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
-        fastcgi_param HTTPS on;
+        fastcgi_param HTTPS ${HTTPS};
         internal;
     }
     # Epics images are served directly without proxy

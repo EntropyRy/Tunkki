@@ -37,10 +37,12 @@ services:
       args:
         UID: ${USERID}
         GID: ${GROUPID}
+        HTTPS: ${HTTPS:-on}
         ENABLE_MODULES: brotli
     restart: unless-stopped
     environment:
       REAL_IP_MODE: ${REAL_IP_MODE:-xff}
+      HTTPS: "${HTTPS}"
     ports:
       - "${SERVER_PORT:-9090}:80"
     links:
