@@ -1,32 +1,32 @@
 # Tunkki
 
 login:
-    join_us: To log in you must be a member. <a href="/en/join-us">Join us</a>.
-    join_us_plain: To log in you must be a member. Please join us first.
+  join_us: To log in you must be a member. <a href="/en/join-us">Join us</a>.
+  join_us_plain: To log in you must be a member. Please join us first.
 cookie_policy: We only use essential cookies to ensure login (and payments) work.
 resend_verification: Resend verification email
 whisper: psst. <a href="/en/join-us">join us</a>
 
 error:
-    access_denied:
-        title: Access denied
-        description: You don't have permission to view this page. You can check your access or
-    not_found:
-        title: Page not found
-        description: The requested page couldn't be located. Check for any URL misspelling or
-    internal:
-        title: Something went wrong
-        description: The requested page couldn't be loaded due to a server error.
-    return_home: return to the homepage
-    try_again_hint: You can also try again
+  access_denied:
+    title: Access denied
+    description: You don't have permission to view this page. You can check your access or
+  not_found:
+    title: Page not found
+    description: The requested page couldn't be located. Check for any URL misspelling or
+  internal:
+    title: Something went wrong
+    description: The requested page couldn't be loaded due to a server error.
+  return_home: return to the homepage
+  try_again_hint: You can also try again
 
 checkout:
-    email:
-        confirmation: We will use this email for your purchases.
-        change: Change email
-    cart:
-        empty: Your cart is empty.
-    try_again: Try again
+  email:
+    confirmation: We will use this email for your purchases.
+    change: Change email
+  cart:
+    empty: Your cart is empty.
+  try_again: Try again
 
 packages: packages
 items: items
@@ -61,7 +61,7 @@ older_from_archive: Older events can be found in the archive
 register_as_member: Register as a new member
 clubroom_events: Clubroom Events (Keke)
 search:
-    include: Include
+  include: Include
 include_clubroom_events: Clubroom Events (Keke)
 include_meeting_events: Meetings
 include_stream_events: Streams
@@ -78,9 +78,9 @@ videos: Videos
 tickets: Tickets
 fb.event: FB Event
 tg:
-    event: The Event
-    info: Telegram info channel
-    ticket_shop: Ticket Shop
+  event: The Event
+  info: Telegram info channel
+  ticket_shop: Ticket Shop
 entropy.seo.description: Electronic music and culture association
 rss_desc: Upcoming and past events and announcements of Entropy ry
 map: Map
@@ -125,380 +125,380 @@ widget_label_unlink: Unlink
 link_media: Add a photo from your files
 logged_in_as: You are logged in as
 timetable:
-    now: Now
-    gap: "%hours%h gap"
+  now: Now
+  gap: "%hours%h gap"
 stream:
-    page:
-        players: Who is playing now
-    tile:
-        button: Stream Page
-    live:
-        now: Playing live NOW
-    label: Stream
-    labels: Streams
-    no_streams: Artist has not participated in streams
-    loading: loading..
-    artist:
-        not_yours: Not your artist
-        played_at: Artist played at
-        other_artists: Other artists at the same time
-        notnull: You have to select artist
-        your: Your artist
-        remove: Remove from Stream
-        currently_in_stream: is currently in the stream
-        add: Add to Stream
-        note: Note
-        note_text: Only one of your artists can be active in the stream at a time. Adding a new artist will automatically remove any of your currently active artists.
-        management: Stream Artist Management
-        label: Artist
-        select: Please, select an artist
-    download:
-        mp3: Download Mp3
-        flac: Download Flac
-        opus: Download Opus
-    recommended_quality: Recommended quality
-    better_compability: Better compatibility
-    listeners: Listeners
-    command:
-        successful: Stream command OK
-    control:
-        off: Automatic streaming/recording is OFF
-        on: Automatic streaming/recording is ON
-        start: Start
-        stop: Stop
+  page:
+    players: Who is playing now
+  tile:
+    button: Stream Page
+  live:
+    now: Playing live NOW
+  label: Stream
+  labels: Streams
+  no_streams: Artist has not participated in streams
+  loading: loading..
+  artist:
+    not_yours: Not your artist
+    played_at: Artist played at
+    other_artists: Other artists at the same time
+    notnull: You have to select artist
+    your: Your artist
+    remove: Remove from Stream
+    currently_in_stream: is currently in the stream
+    add: Add to Stream
+    note: Note
+    note_text: Only one of your artists can be active in the stream at a time. Adding a new artist will automatically remove any of your currently active artists.
+    management: Stream Artist Management
+    label: Artist
+    select: Please, select an artist
+  download:
+    mp3: Download Mp3
+    flac: Download Flac
+    opus: Download Opus
+  recommended_quality: Recommended quality
+  better_compability: Better compatibility
+  listeners: Listeners
+  command:
+    successful: Stream command OK
+  control:
+    off: Automatic streaming/recording is OFF
+    on: Automatic streaming/recording is ON
+    start: Start
+    stop: Stop
 page:
-    email_unsubscribe:
-        removed: removed
-        title: Email Unsubscribed
-        message: You've now been unsubscribed from Entropy tiedotus mailing list. In order to start receiving emails again, log in and change the email preferences.
-        link: Login to Your profile
-    title:
-        checkout: Checkout
+  email_unsubscribe:
+    removed: removed
+    title: Email Unsubscribed
+    message: You've now been unsubscribed from Entropy tiedotus mailing list. In order to start receiving emails again, log in and change the email preferences.
+    link: Login to Your profile
+  title:
+    checkout: Checkout
 block:
-    tickets:
-        name: Your tickets
-    stats:
-        name: Statistics
-        members: Members
-        active_members: Active Members
-        bookings: Handled rental cases
-        events: Events
-    events:
-        manage: Manage
-        upcoming_events: Upcoming Events
-        future_events: Upcoming Events
-    bookings:
-        manage: Manage
-        no_bookings: No bookings in progress
-        bookings: Bookings in progress
-        help: Come and help us with the bookings?
-    items:
-        title: Broken items
-        help: Come and help us fix things?
-    email_lists:
-        name: Mailing lists
-        tiedotus: News list
-        aktiivit: Active member list
-        vuokra: Renting list
-        control: Control
-    future_events:
-        checkout_old_events: Check out old
-        events: events
+  tickets:
+    name: Your tickets
+  stats:
+    name: Statistics
+    members: Members
+    active_members: Active Members
+    bookings: Handled rental cases
+    events: Events
+  events:
+    manage: Manage
+    upcoming_events: Upcoming Events
+    future_events: Upcoming Events
+  bookings:
+    manage: Manage
+    no_bookings: No bookings in progress
+    bookings: Bookings in progress
+    help: Come and help us with the bookings?
+  items:
+    title: Broken items
+    help: Come and help us fix things?
+  email_lists:
+    name: Mailing lists
+    tiedotus: News list
+    aktiivit: Active member list
+    vuokra: Renting list
+    control: Control
+  future_events:
+    checkout_old_events: Check out old
+    events: events
 menu:
-    logon_to: Log on to
+  logon_to: Log on to
 event:
-    no_artists: Artists have not been selected yet.
-    badge:
-        stream: Internet Stream
-        clubroom: Takes place at our clubroom
-        music: Music
-        meeting: Discussion event
-        announcement: Announcement
-        web: Takes place online
-    location:
-        title: Location
-        description: The street address, map, and links to map services can be found here.
-        not_found: The location is not public
-    stripe:
-        fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
-        complete: Thank you for your purchase!
-        mail_sent: Your purchase(s) have been sent to your email. If there are problems let us know at hallitus@entropy.fi
-    meta:
-        keywords: Entropy, music, association, culture, nonprofit, event
-    edit: Edit
-    not_public: not public
-    only_for_members: Event only shown to members
-    in_future: Upcoming event
-    after: Past event
-    now: Event in progress
-    safer_space: Safer Space
-    ticket:
-        shop: Ticket Shop
-        to_shop: To Ticket Shop
-    player:
-        will_appear_here_when_the_stream_is_on: The player will appear here when the stream is live.
+  no_artists: Artists have not been selected yet.
+  badge:
+    stream: Internet Stream
+    clubroom: Takes place at our clubroom
+    music: Music
+    meeting: Discussion event
+    announcement: Announcement
+    web: Takes place online
+  location:
+    title: Location
+    description: The street address, map, and links to map services can be found here.
+    not_found: The location is not public
+  stripe:
+    fee: To cover payment provider fees, a fee of 1€ will be added to each payment.
+    complete: Thank you for your purchase!
+    mail_sent: Your purchase(s) have been sent to your email. If there are problems let us know at hallitus@entropy.fi
+  meta:
+    keywords: Entropy, music, association, culture, nonprofit, event
+  edit: Edit
+  not_public: not public
+  only_for_members: Event only shown to members
+  in_future: Upcoming event
+  after: Past event
+  now: Event in progress
+  safer_space: Safer Space
+  ticket:
+    shop: Ticket Shop
+    to_shop: To Ticket Shop
+  player:
+    will_appear_here_when_the_stream_is_on: The player will appear here when the stream is live.
 
-    form:
-        sign_up:
-            request_edited: Sign-up request edited
-            request_deleted: Sign-up request deleted
-            artist: Artist
-            why_should_we_choose_you: Why should we choose you?
-            wish_for_playtime: At what time would you like to perform?
-            set_length: Preferred length of the set
-            free_word: Additional notes
-            save: Save
-            delete: Delete
-            new_artist_help_html: If you want to create a new artist you can do so from <a href="/en/profile/artist">your profile page</a>
+  form:
+    sign_up:
+      request_edited: Sign-up request edited
+      request_deleted: Sign-up request deleted
+      artist: Artist
+      why_should_we_choose_you: Why should we choose you?
+      wish_for_playtime: At what time would you like to perform?
+      set_length: Preferred length of the set
+      free_word: Additional notes
+      save: Save
+      delete: Delete
+      new_artist_help_html: If you want to create a new artist you can do so from <a href="/en/profile/artist">your profile page</a>
 
-            ends: Sign-up ends at
-            description: Please make any modifications to your artist profile before signing up.
+      ends: Sign-up ends at
+      description: Please make any modifications to your artist profile before signing up.
 
-            agree_on_recording: Agree that the set is recorded
-            agree_on_recording_help: Performances will be recorded for archival purposes. Recordings are deleted upon request.
+      agree_on_recording: Agree that the set is recorded
+      agree_on_recording_help: Performances will be recorded for archival purposes. Recordings are deleted upon request.
 url:
-    root: /en/
-    events: /en/events
-    join_us: /en/join-us
-    stream: /en/stream
-    artists: /en/artists
-    form:
-        open_in_new_window: Open in a new window
-        title: Title
-        url: Url
-        icon: Icon
-        icon_placeholder: Select an icon..
+  root: /en/
+  events: /en/events
+  join_us: /en/join-us
+  stream: /en/stream
+  artists: /en/artists
+  form:
+    open_in_new_window: Open in a new window
+    title: Title
+    url: Url
+    icon: Icon
+    icon_placeholder: Select an icon..
 profile:
-    edit: Edit Profile
-    email_notifications: Email settings
-    change_password: Change Password
-    member_data_changed: Password or member data changed
-    add_new_artist: Add new artist profile
-    name: profile
-    access_groups: Access groups for this site
-    application_saved: Application saved
-    paid_renting_rewards: Rental compensations
-    no_renting_rewards: No rental compensations yet. If you wish to be involved in rentals, ask us on Mattermost.
+  edit: Edit Profile
+  email_notifications: Email settings
+  change_password: Change Password
+  member_data_changed: Password or member data changed
+  add_new_artist: Add new artist profile
+  name: profile
+  access_groups: Access groups for this site
+  application_saved: Application saved
+  paid_renting_rewards: Rental compensations
+  no_renting_rewards: No rental compensations yet. If you wish to be involved in rentals, ask us on Mattermost.
 
-    next_reward_is_bubling_under: The next reward is bubbling under
-    you_are_active_member_already: You are already an active member
-    application_for_active_member: Your active member application
-    save: Save
-    apply_for_active_member: Apply to become an active member
-    only_for_active_members: This service is only for active members
-    logout: logout
-    epics:
-        title: ePics
-        set_password: Set/override ePics password
-        open: Open ePics
-        password_title: ePics password
-        password_page:
-            description: This will create an account on epics.entropy.fi or update the password if one already exists.
-            username_hint: Your ePics username will be your member username.
-        form:
-            password: Password for ePics
-            password_repeat: Repeat password
-            help: Choose a password for your epics.entropy.fi account. If an account already exists, this will override its password.
-    no_access_groups: No special privileges
-    door:
-        log: Clubroom door log
-        no_message: No message
-        opened: Door opened
-        opener: Clubroom door opener
-        open_the_door: Open
-        open_the_door_page: Open the door page
-        latest: Latest
-        not_active_member: Not allowed. You are not an active member.
-        last: Latest change in the lock
-        connection_problems: Connection problems
-        connection_ok: Connection ok
-        wifi: Requires clubroom Wi‑Fi connection. iPhone issue <a href="https://support.apple.com/en-us/HT212614">details</a>
+  next_reward_is_bubling_under: The next reward is bubbling under
+  you_are_active_member_already: You are already an active member
+  application_for_active_member: Your active member application
+  save: Save
+  apply_for_active_member: Apply to become an active member
+  only_for_active_members: This service is only for active members
+  logout: logout
+  epics:
+    title: ePics
+    set_password: Set/override ePics password
+    open: Open ePics
+    password_title: ePics password
+    password_page:
+      description: This will create an account on epics.entropy.fi or update the password if one already exists.
+      username_hint: Your ePics username will be your member username.
+    form:
+      password: Password for ePics
+      password_repeat: Repeat password
+      help: Choose a password for your epics.entropy.fi account. If an account already exists, this will override its password.
+  no_access_groups: No special privileges
+  door:
+    log: Clubroom door log
+    no_message: No message
+    opened: Door opened
+    opener: Clubroom door opener
+    open_the_door: Open
+    open_the_door_page: Open the door page
+    latest: Latest
+    not_active_member: Not allowed. You are not an active member.
+    last: Latest change in the lock
+    connection_problems: Connection problems
+    connection_ok: Connection ok
+    wifi: Requires clubroom Wi‑Fi connection. iPhone issue <a href="https://support.apple.com/en-us/HT212614">details</a>
 epics:
-    tile:
-        heading: Random photos from
-        heading_events: our events
-        more_button: Pictures
-        events_button: Events
-        title: Random photos from our events
+  tile:
+    heading: Random photos from
+    heading_events: our events
+    more_button: Pictures
+    events_button: Events
+    title: Random photos from our events
+  password_set: ePics password saved.
+  password_set_failed: Could not set ePics password. Please try again or contact support.
+  flash:
     password_set: ePics password saved.
     password_set_failed: Could not set ePics password. Please try again or contact support.
-    flash:
-        password_set: ePics password saved.
-        password_set_failed: Could not set ePics password. Please try again or contact support.
 artist:
-    streams: Streams
-    streams_by: Streams by
-    not_confirmed_yet: Not confirmed (yet)
-    not_selected: Artist not selected
-    explanation:
-        In principle, the artist profile is event-specific. This means that
-        your profile below will appear in the next event you are an artist. If you edit
-        your profile before the event, it will be updated for that event. If you edit
-        your profile after an event, the edited profile will appear in future events,
-        and the previous version will remain visible in the previous event.
-    no_artist_profile: No artist profiles
-    hardware: Hardware you use
-    profiles: Artist Profiles
-    information: Artist information
-    list: Artist list
-    tile:
-        button_event: The event
-        heading: One random artist
-        button_artists: Artists
-    random:
-        preview: One random artist preview
-    form:
-        genre_help: VJs may describe the mood of the visuals. This field is not translated. Do NOT put BPM here.
+  streams: Streams
+  streams_by: Streams by
+  not_confirmed_yet: Not confirmed (yet)
+  not_selected: Artist not selected
+  explanation:
+    In principle, the artist profile is event-specific. This means that
+    your profile below will appear in the next event you are an artist. If you edit
+    your profile before the event, it will be updated for that event. If you edit
+    your profile after an event, the edited profile will appear in future events,
+    and the previous version will remain visible in the previous event.
+  no_artist_profile: No artist profiles
+  hardware: Hardware you use
+  profiles: Artist Profiles
+  information: Artist information
+  list: Artist list
+  tile:
+    button_event: The event
+    heading: One random artist
+    button_artists: Artists
+  random:
+    preview: One random artist preview
+  form:
+    genre_help: VJs may describe the mood of the visuals. This field is not translated. Do NOT put BPM here.
 
-        bio_help: Briefly tell us about yourself as an artist—background, style, influences. Please add links below (not here). This text is public.
+    bio_help: Briefly tell us about yourself as an artist—background, style, influences. Please add links below (not here). This text is public.
 
-        hardware_help: What hardware are you using so we can prepare? (Vinyl, CDJs, controllers, modular, live rigs, VJ gear…)
+    hardware_help: What hardware are you using so we can prepare? (Vinyl, CDJs, controllers, modular, live rigs, VJ gear…)
 
-        name: Artist name
-        pic_missing: Picture is missing!
-        type: Type
-        bio: Bio in Finnish
-        bio_en: Bio in English
-        links: Links to media and other stuff
-        promo_picture: Promo picture (will be scaled to a square of 800px per side; crop before uploading for best results)
+    name: Artist name
+    pic_missing: Picture is missing!
+    type: Type
+    bio: Bio in Finnish
+    bio_en: Bio in English
+    links: Links to media and other stuff
+    promo_picture: Promo picture (will be scaled to a square of 800px per side; crop before uploading for best results)
 
-        genre: Genre(s)
-        information: Basic info
-        hardware: Hardware
+    genre: Genre(s)
+    information: Basic info
+    hardware: Hardware
 member:
-    welcome:
-        subject: "[Entropy] Entropyn Jäsenyys / Entropy Membership"
-        subject_verify_suffix: " - Vahvista sähköpostisi / Please verify your email"
-    allow_info_mails: Info Emails
-    allow_active_member_mails: Emails for active members
-    epics_username: ePics username
-    epics_username.not_set: not set
-    email_unverified: your email is not verified
-    can_vote: Can vote (Student union member or board has accepted as full member)
-    active:
-        application_title: Apply for active membership
-        application: Your motivation letter for active membership
-        apply_help:
-            We hope you will tell us what you have done in Entropy, what you would like to do, and why you are applying for active membership. Your
+  welcome:
+    subject: "[Entropy] Entropyn Jäsenyys / Entropy Membership"
+    subject_verify_suffix: " - Vahvista sähköpostisi / Please verify your email"
+  allow_info_mails: Info Emails
+  allow_active_member_mails: Emails for active members
+  epics_username: ePics username
+  epics_username.not_set: not set
+  email_unverified: your email is not verified
+  can_vote: Can vote (Student union member or board has accepted as full member)
+  active:
+    application_title: Apply for active membership
+    application: Your motivation letter for active membership
+    apply_help:
+      We hope you will tell us what you have done in Entropy, what you would like to do, and why you are applying for active membership. Your
 
-            application is editable until the next board meeting.
-        requirements: General requirements for becoming an active member
-        requirements_help: The board is not restricted by these guidelines.
-        requirements3: The board knows who you are
-        requirements2: How active you have been lately
-        requirements1: You have been organizing at least 3 events in Entropy
-    join:
-        info: This is the email we just sent you. Hope you got it and read it. English below.
+      application is editable until the next board meeting.
+    requirements: General requirements for becoming an active member
+    requirements_help: The board is not restricted by these guidelines.
+    requirements3: The board knows who you are
+    requirements2: How active you have been lately
+    requirements1: You have been organizing at least 3 events in Entropy
+  join:
+    info: This is the email we just sent you. Hope you got it and read it. English below.
 
-        error: There was an error in your request. Please reopen the form and try again.
+    error: There was an error in your request. Please reopen the form and try again.
 
-        added: Your information is now saved in our member registry.
-        update: It looks like you are already a member. Log in to change your membership details.
+    added: Your information is now saved in our member registry.
+    update: It looks like you are already a member. Log in to change your membership details.
 
 dark: Dark
 bright: Bright
 rsvp:
-    email_in_use: You are a member. Please sign in first.
-    receive_info: To receive the location, RSVP here
-    no_user: To RSVP you must be a logged-in member of Entropy.
-    already_rsvpd: You have already RSVPed to this event. We will send you an email before the event.
+  email_in_use: You are a member. Please sign in first.
+  receive_info: To receive the location, RSVP here
+  no_user: To RSVP you must be a logged-in member of Entropy.
+  already_rsvpd: You have already RSVPed to this event. We will send you an email before the event.
 
-    rsvpd_succesfully: RSVP successfully saved! We’ll send you an email before the event.
-    info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
+  rsvpd_succesfully: RSVP successfully saved! We’ll send you an email before the event.
+  info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
 
-    closed: Sign-up closed
+  closed: Sign-up closed
 verify:
-    email:
-        subject: Verify your email address
-        instructions: Please click the button below to verify your email address and activate your account.
-        button: Verify Email
-        ignore: If you did not create an account, you can safely ignore this email.
-        link_plain: If the button does not work, copy and paste this link in your browser
-        sent: Verification email sent. Please check your inbox.
-        resent: Verification email resent. Please check your inbox.
-        success: Your email has been successfully verified. You can now sign in.
-        invalid: The verification link is invalid or has expired.
-        already: Your email address is already verified.
+  email:
+    subject: Verify your email address
+    instructions: Please click the button below to verify your email address and activate your account.
+    button: Verify Email
+    ignore: If you did not create an account, you can safely ignore this email.
+    link_plain: If the button does not work, copy and paste this link in your browser
+    sent: Verification email sent. Please check your inbox.
+    resent: Verification email resent. Please check your inbox.
+    success: Your email has been successfully verified. You can now sign in.
+    invalid: The verification link is invalid or has expired.
+    already: Your email address is already verified.
 ticket:
-    ticket: Ticket
-    check: Ticket Check
-    and_nakki: Nakki/Ticket
-    your_tickets: Your ticket
-    form:
-        reserve: Reserve
-        reserve_and_recommend: Reserve and recommend
-    already_given: Ticket has already been given
-    give: Give Ticket
-    given_out: Ticket has now been given out
-    error: See attached error
-    payment_info: Payment information
-    not_available: No tickets available
-    reserved: The ticket has been reserved for you! Payment details below.
-    reserve_yours: Reserve your ticket here!
-    buy_yours: Buy your ticket here!
-    available: Available
-    details_with_nakki: See your Nakki/Ticket details
-    details: See your ticket details
-    go_to_event_page: Ticket on Event Page
-    paid_with_bus: Ticket and Bus paid
-    presale:
-        off: Presales are not in use
+  ticket: Ticket
+  check: Ticket Check
+  and_nakki: Nakki/Ticket
+  your_tickets: Your ticket
+  form:
+    reserve: Reserve
+    reserve_and_recommend: Reserve and recommend
+  already_given: Ticket has already been given
+  give: Give Ticket
+  given_out: Ticket has now been given out
+  error: See attached error
+  payment_info: Payment information
+  not_available: No tickets available
+  reserved: The ticket has been reserved for you! Payment details below.
+  reserve_yours: Reserve your ticket here!
+  buy_yours: Buy your ticket here!
+  available: Available
+  details_with_nakki: See your Nakki/Ticket details
+  details: See your ticket details
+  go_to_event_page: Ticket on Event Page
+  paid_with_bus: Ticket and Bus paid
+  presale:
+    off: Presales are not in use
 
-    sale_ended: Ticket presales have ended
-    sale_ends: Ticket presales end
-    situation: Your ticket status
-    code: Ticket code
-    paid: paid
-    not_paid: Not paid
-    all_sold: Tickets sold out.
-    to_ticket_shop: Ticket shop
-    sale_starts: Ticket presale starts
-    recipient: Recipient
-    sum: Price
-    reference_number: Reference Number (must be used)
-    reserved_for_two_hours: You now have 2 hours to complete the reservation or the ticket will be released to the next person.
+  sale_ended: Ticket presales have ended
+  sale_ends: Ticket presales end
+  situation: Your ticket status
+  code: Ticket code
+  paid: paid
+  not_paid: Not paid
+  all_sold: Tickets sold out.
+  to_ticket_shop: Ticket shop
+  sale_starts: Ticket presale starts
+  recipient: Recipient
+  sum: Price
+  reference_number: Reference Number (must be used)
+  reserved_for_two_hours: You now have 2 hours to complete the reservation or the ticket will be released to the next person.
 join_us:
-    title: Join us!
-    button: Become a Member
-    mattermost: Join Mattermost
-    1:
-        Entropy ry, founded in 1993, is an electronic music cultural association and one
-        of the AYY (Aalto University Student Union) music associations. We strive to advance
-        and promote the electronic music culture by eg.
-    2: Organizing events
-    3: Instructing event technology
-    4: Renting sound and light equipment
+  title: Join us!
+  button: Become a Member
+  mattermost: Join Mattermost
+  1:
+    Entropy ry, founded in 1993, is an electronic music cultural association and one
+    of the AYY (Aalto University Student Union) music associations. We strive to advance
+    and promote the electronic music culture by eg.
+  2: Organizing events
+  3: Instructing event technology
+  4: Renting sound and light equipment
 barcode.expl: First scan your code, then the others; confirm with your own code.
 button:
-    join_mattermost: Join Mattermost
-    old_announcements: Old Announcements
-    theme-switcher: Theme Switcher
+  join_mattermost: Join Mattermost
+  old_announcements: Old Announcements
+  theme-switcher: Theme Switcher
 happening:
-    heading:
-        edit: Edit Happening
-    create: Create happening / restaurant etc.
-    edit: Edit happening/restaurant etc.
-    paymentInfo: Payment Info
-    bookings_for_admin: (You can see these because you organize this event)
-    no_reservations: No reservations
-    description_fi: Tell about the happening. When does sign-up close? For a restaurant, list options and allergens.
-    price_fi: Text so that you can have many prices. (tapas 10€, tapas + wine 15€)
-    payment_info_fi: Let us know how to pay if needed.
-    show_payment_info: Show payment info to the user
-    sign_ups_have_ended: Sign-ups have ended
-    markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatting</a> allowed
-    you_have_signed_up: You have signed up successfully!
-    reservation_cancelled: Reservation cancelled
-    created: Happening Created!
-    same_name_exists: Happening with the same name already exists. Please change the name.
-    same_name_exits: Happening with the same name already exists. Please change the name.
-    edited: Changes saved successfully!
-    ticket_missing: You need a ticket first.
-    happenings: Happenings
+  heading:
+    edit: Edit Happening
+  create: Create happening / restaurant etc.
+  edit: Edit happening/restaurant etc.
+  paymentInfo: Payment Info
+  bookings_for_admin: (You can see these because you organize this event)
+  no_reservations: No reservations
+  description_fi: Tell about the happening. When does sign-up close? For a restaurant, list options and allergens.
+  price_fi: Text so that you can have many prices. (tapas 10€, tapas + wine 15€)
+  payment_info_fi: Let us know how to pay if needed.
+  show_payment_info: Show payment info to the user
+  sign_ups_have_ended: Sign-ups have ended
+  markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatting</a> allowed
+  you_have_signed_up: You have signed up successfully!
+  reservation_cancelled: Reservation cancelled
+  created: Happening Created!
+  same_name_exists: Happening with the same name already exists. Please change the name.
+  same_name_exits: Happening with the same name already exists. Please change the name.
+  edited: Changes saved successfully!
+  ticket_missing: You need a ticket first.
+  happenings: Happenings
 edited: Changes saved successfully!
 location:
-    location: location
-    former_industrial_complex: former industrial complex
+  location: location
+  former_industrial_complex: former industrial complex
 Name fi: Name in Finnish
 Name en: Name in English
 Description fi: Description in Finnish
@@ -508,113 +508,113 @@ Payment info en: Payment info in English
 Price fi: Price in Finnish
 Price en: Price in English
 contract:
-    accessories:
-        prices: Costs for damaged or misplaced accessories
-    signed: Signed!
-    error: Please sign again and agree to the terms as well
+  accessories:
+    prices: Costs for damaged or misplaced accessories
+  signed: Signed!
+  error: Please sign again and agree to the terms as well
 share:
-    share: Share this page
-    copy: Copy link
-    copied: The URL has been copied to your clipboard
+  share: Share this page
+  copy: Copy link
+  copied: The URL has been copied to your clipboard
 footer:
-    side_title: Electronic music and culture association
+  side_title: Electronic music and culture association
 calendar:
-    heading: Calendar configuration
-    help: You can generate different kinds of calendar links. After adding one, you can change event colors in your calendar. If you add reminders, they will trigger 24h before the event.
-    help2: |-
-        WARNING! For automatic updates, subscribe/import this calendar in your calendar software using this link (copy & paste). Instructions for different platforms:
-    add_events: Add events
-    add_notifications_for_events: Add reminders for events
-    add_clubroom_events: Add clubroom events
-    add_notifications_for_clubroom_events: Add reminders for clubroom events
-    add_meetings: Add meetings
-    add_notifications_for_meetings: Add reminders for meetings
-    generate: Generate the calendar link
-    url_generated: Link generated
+  heading: Calendar configuration
+  help: You can generate different kinds of calendar links. After adding one, you can change event colors in your calendar. If you add reminders, they will trigger 24h before the event.
+  help2: |-
+    WARNING! For automatic updates, subscribe/import this calendar in your calendar software using this link (copy & paste). Instructions for different platforms:
+  add_events: Add events
+  add_notifications_for_events: Add reminders for events
+  add_clubroom_events: Add clubroom events
+  add_notifications_for_clubroom_events: Add reminders for clubroom events
+  add_meetings: Add meetings
+  add_notifications_for_meetings: Add reminders for meetings
+  generate: Generate the calendar link
+  url_generated: Link generated
 product:
-    quantity: quantity
-    sold_out: Sold Out
+  quantity: quantity
+  sold_out: Sold Out
 shop:
-    title: Shop
-    description: "Our shop is designed for easy pickup from the club room – we only ship items if specifically mentioned in the product info. Welcome to shop and collect your items!"
-    buy: Checkout
-    no_products: "No products available at the moment."
-    cart:
-        email:
-            label: Email in which we will send your receipt
-            help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
-        empty: Your cart is empty
+  title: Shop
+  description: "Our shop is designed for easy pickup from the club room – we only ship items if specifically mentioned in the product info. Welcome to shop and collect your items!"
+  buy: Checkout
+  no_products: "No products available at the moment."
+  cart:
+    email:
+      label: Email in which we will send your receipt
+      help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
+    empty: Your cart is empty
 icons:
-    brand_icons_label: Brand Icons
-    common_icons_label: Common Icons
-    brand_icons:
-        bandcamp: Bandcamp
-        behance: Behance
-        discord: Discord
-        facebook: Facebook
-        github: GitHub
-        instagram: Instagram
-        linkedin: LinkedIn
-        linktree: Linktree
-        mastodon: Mastodon
-        mixcloud: Mixcloud
-        pinterest: Pinterest
-        reddit: Reddit
-        ra: Resident Advisor
-        soundcloud: SoundCloud
-        spotify: Spotify
-        telegram: Telegram
-        tiktok: TikTok
-        twitch: Twitch
-        twitter: Twitter
-        whatsapp: WhatsApp
-        youtube: YouTube
-    common_icons:
-        bus: Bus
-        calendar: Calendar
-        coffee: Coffee
-        comments: Comments
-        cubes: Cubes
-        download: Download
-        email: Email
-        heart: Heart
-        home: Home
-        image: Image
-        link: Link
-        location-dot: Location
-        map-pin: Map Pin
-        music: Music
-        pause: Pause
-        phone: Phone
-        play: Play
-        rss: RSS
-        smiley: Smiley
-        star: Star
-        ticket: Ticket
-        upload: Upload
-        user: User
-        video: Video
+  brand_icons_label: Brand Icons
+  common_icons_label: Common Icons
+  brand_icons:
+    bandcamp: Bandcamp
+    behance: Behance
+    discord: Discord
+    facebook: Facebook
+    github: GitHub
+    instagram: Instagram
+    linkedin: LinkedIn
+    linktree: Linktree
+    mastodon: Mastodon
+    mixcloud: Mixcloud
+    pinterest: Pinterest
+    reddit: Reddit
+    ra: Resident Advisor
+    soundcloud: SoundCloud
+    spotify: Spotify
+    telegram: Telegram
+    tiktok: TikTok
+    twitch: Twitch
+    twitter: Twitter
+    whatsapp: WhatsApp
+    youtube: YouTube
+  common_icons:
+    bus: Bus
+    calendar: Calendar
+    coffee: Coffee
+    comments: Comments
+    cubes: Cubes
+    download: Download
+    email: Email
+    heart: Heart
+    home: Home
+    image: Image
+    link: Link
+    location-dot: Location
+    map-pin: Map Pin
+    music: Music
+    pause: Pause
+    phone: Phone
+    play: Play
+    rss: RSS
+    smiley: Smiley
+    star: Star
+    ticket: Ticket
+    upload: Upload
+    user: User
+    video: Video
 nakkikone:
-    build_up: Build up
-    during: During the event
-    tear_down: Tear down
+  build_up: Build up
+  during: During the event
+  tear_down: Tear down
 e30v:
-    sponsors: Sponsors
-    merch_shop: Merchandise Shop
-    gdpr: We only use necessary cookies so that login and the Stripe integration work.
-    fee: To cover payment provider fees, a fee of 0.75€ will be added to each payment.
-    nav:
-        home: entropy 30 years
-        info: info
-        tickets: Tickets
-        artists: Artists
-        timetable: Timetable
-        safer_space: Safer Space
-    years: years
-    buy_tickets: Buy tickets
-    buy: Checkout
-    cart:
-        email:
-            label: Email in which we will send your purchases
-            help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
-        empty: Your cart is empty
+  sponsors: Sponsors
+  merch_shop: Merchandise Shop
+  gdpr: We only use necessary cookies so that login and the Stripe integration work.
+  fee: To cover payment provider fees, a fee of 0.75€ will be added to each payment.
+  nav:
+    home: entropy 30 years
+    info: info
+    tickets: Tickets
+    artists: Artists
+    timetable: Timetable
+    safer_space: Safer Space
+  years: years
+  buy_tickets: Buy tickets
+  buy: Checkout
+  cart:
+    email:
+      label: Email in which we will send your purchases
+      help: We recommend that you <a href="/login">login</a> so that we can connect your account to your purchases.
+    empty: Your cart is empty
