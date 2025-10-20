@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1760897466">
-  <project timestamp="1760897466" name="Clover Coverage">
+<coverage generated="1760910474">
+  <project timestamp="1760910474" name="Clover Coverage">
     <package name="App\Block">
       <file name="/var/www/symfony/src/Block/ArtistInfoBlock.php">
         <class name="App\Block\ArtistInfoBlock" namespace="App\Block">
@@ -11530,9 +11530,9 @@
         <line num="535" type="stmt" count="106"/>
         <line num="536" type="stmt" count="0"/>
         <line num="539" type="stmt" count="106"/>
-        <line num="540" type="stmt" count="51"/>
+        <line num="540" type="stmt" count="52"/>
         <line num="541" type="stmt" count="0"/>
-        <line num="543" type="stmt" count="51"/>
+        <line num="543" type="stmt" count="52"/>
         <line num="544" type="stmt" count="0"/>
         <line num="546" type="stmt" count="66"/>
         <line num="548" type="stmt" count="0"/>
