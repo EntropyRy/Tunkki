@@ -10,7 +10,11 @@
 
 {% block artist_bios_container %}
     {% set groups = artist_bio_groups|default([]) %}
+    {% set artist_bio_type = artist_bio_type|default(null) %}
     {% set artist_bio_config = artist_bio_config|default({}) %}
+    {% if artist_bio_config is empty and artist_bio_type is not null and event is defined %}
+        {% set artist_bio_config = event.getArtistBioConfig(artist_bio_type) %}
+    {% endif %}
     {% if groups|length > 0 %}
         <div id="{{ artist_bio_anchor|default('bios') }}">
             {% for stage, infos in groups %}

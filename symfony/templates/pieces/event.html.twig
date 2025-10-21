@@ -524,7 +524,11 @@
         {% endif %}
     {% endblock %}
     {% block cycle %}
+        {% set type = artist_bio_type|default(artist.type) %}
         {% set bio_config = artist_bio_config|default({}) %}
+        {% if bio_config is empty and event is defined %}
+            {% set bio_config = event.getArtistBioConfig(type) %}
+        {% endif %}
         {% set show_picture = attribute(bio_config, 'show_picture')|default(true) %}
         {% if 'e30v' in event.template|default(null) %}
             {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
@@ -624,7 +628,11 @@
     {% endfor %}
 {% endblock %}
 {% block artist_event_info %}
+    {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
+    {% if bio_config is empty and event is defined %}
+        {% set bio_config = event.getArtistBioConfig(type) %}
+    {% endif %}
     {% set show_time = attribute(bio_config, 'show_time')|default(true) %}
     {% set show_genre = attribute(bio_config, 'show_genre')|default(true) %}
     {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
@@ -662,7 +670,11 @@
     {% endif %}
 {% endblock %}
 {% block artist_pic %}
+    {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
+    {% if bio_config is empty and event is defined %}
+        {% set bio_config = event.getArtistBioConfig(type) %}
+    {% endif %}
     {% if attribute(bio_config, 'show_picture')|default(true) %}
         {% if name is not defined %}
             {% set name = artist.name %}

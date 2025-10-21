@@ -45,7 +45,7 @@
     {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
-    {% set genre = false %}
+    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
     {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
@@ -53,9 +53,9 @@
 
 {% block vj_timetable_to_page %}
     {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set page_links = true %}
-    {% set genre = false %}
     {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
+    {% set page_links = true %}
+    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
     {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
     {% set type = 'VJ' %}
     {{ block('timetable_list') }}
@@ -75,7 +75,7 @@
     {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
-    {% set genre = false %}
+    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
     {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
@@ -93,6 +93,10 @@
 
 {% block timetable_list %}
     {# High-level orchestrator: computes date format & delegates stage rendering #}
+    {% if type is defined %}
+        {% set timetable_show_time = timetable_show_time is defined ? timetable_show_time : event.shouldArtistTimetableShowTime(type) %}
+        {% set genre = genre is defined ? genre : event.shouldArtistTimetableShowGenre(type) %}
+    {% endif %}
     {% set timetable_show_time = timetable_show_time|default(true) %}
     {% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
     {% if bios|length > 0 %}
