@@ -193,6 +193,7 @@ services:
           setTemplate,
           [base_list_field, admin/crud/base_list_flat_field.html.twig],
         ]
+      - [addChild, ["@entropy_tunkki.admin.statusevent", "booking"]]
 
   # Clock abstraction (STAN-03) - production/default
   App\Time\AppClock:

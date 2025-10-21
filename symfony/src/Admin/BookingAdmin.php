@@ -81,7 +81,7 @@ class BookingAdmin extends AbstractAdmin
                 'uri' => $admin->generateUrl('edit', ['id' => $id]),
             ]);
             $menu->addChild('Status', [
-                'route' => 'admin_app_item_statusevent_create',
+                'route' => 'admin_app_booking_statusevent_create',
                 'routeParameters' => [
                     'id' => $id,
                 ],
