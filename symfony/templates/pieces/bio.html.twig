@@ -18,7 +18,8 @@
     {% if groups|length > 0 %}
         <div id="{{ artist_bio_anchor|default('bios') }}">
             {% for stage, infos in groups %}
-                {% if attribute(artist_bio_config, 'show_stage')|default(true) and stage %}
+                {% set show_stage_heading = artist_bio_config.show_stage ?? true %}
+                {% if show_stage_heading and stage %}
                     <h3 class="artists-heading text-center">
                         {{ artist_bio_title_prefix|default('') }}
                         {% if stage %}@ {{ stage }}{% endif %}

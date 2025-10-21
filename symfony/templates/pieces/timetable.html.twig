@@ -24,9 +24,9 @@
 {% block dj_timetable %}
     {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
-    {% set page_links = attribute(timetable_config, 'include_page_links')|default(false) %}
-    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set page_links = timetable_config.include_page_links ?? false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -36,7 +36,7 @@
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
     {% set genre = true %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -45,8 +45,8 @@
     {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
-    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -55,8 +55,8 @@
     {% set bios = event.ArtistInfosByType('VJ') %}
     {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
     {% set page_links = true %}
-    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'VJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -66,7 +66,7 @@
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = true %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -75,8 +75,8 @@
     {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
-    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -84,9 +84,9 @@
 {% block vj_timetable %}
     {% set bios = event.ArtistInfosByType('VJ') %}
     {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
-    {% set page_links = attribute(timetable_config, 'include_page_links')|default(false) %}
-    {% set genre = attribute(timetable_config, 'include_genre')|default(false) %}
-    {% set timetable_show_time = attribute(timetable_config, 'include_time')|default(true) %}
+    {% set page_links = timetable_config.include_page_links ?? false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'VJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
@@ -94,10 +94,25 @@
 {% block timetable_list %}
     {# High-level orchestrator: computes date format & delegates stage rendering #}
     {% if type is defined %}
-        {% set timetable_show_time = timetable_show_time is defined ? timetable_show_time : event.shouldArtistTimetableShowTime(type) %}
-        {% set genre = genre is defined ? genre : event.shouldArtistTimetableShowGenre(type) %}
+        {% if timetable_show_time is not defined %}
+            {% set timetable_show_time = event.shouldArtistTimetableShowTime(type) %}
+        {% endif %}
+        {% if genre is not defined %}
+            {% set genre = event.shouldArtistTimetableShowGenre(type) %}
+        {% endif %}
+        {% if page_links is not defined %}
+            {% set page_links = event.shouldArtistTimetableIncludePageLinks(type) %}
+        {% endif %}
     {% endif %}
-    {% set timetable_show_time = timetable_show_time|default(true) %}
+    {% if timetable_show_time is not defined %}
+        {% set timetable_show_time = true %}
+    {% endif %}
+    {% if genre is not defined %}
+        {% set genre = false %}
+    {% endif %}
+    {% if page_links is not defined %}
+        {% set page_links = false %}
+    {% endif %}
     {% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
     {% if bios|length > 0 %}
         <div id="timetable" class="row g-0">
@@ -204,7 +219,7 @@
 {% endblock %}
 
 {% block timetable_time_cell %}
-    {% if timetable_show_time|default(true) %}
+    {% if timetable_show_time %}
         <td class="time">
             {{ info.StartTime|format_datetime(pattern: datestring) }}
         </td>
@@ -218,11 +233,11 @@
 {% endblock %}
 
 {% block timetable_artist_link %}
-    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
+    <a href="{% if page_links %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
         {{ name }}
     </a>
     {% if artist.type == 'Live' %}(Live){% endif %}
-    {% if genre|default(null) %}
+    {% if genre %}
         <i class="fw-lighter"> ({{ artist.genre }})</i>
     {% endif %}
 {% endblock %}

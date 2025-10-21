@@ -529,7 +529,7 @@
         {% if bio_config is empty and event is defined %}
             {% set bio_config = event.getArtistBioConfig(type) %}
         {% endif %}
-        {% set show_picture = attribute(bio_config, 'show_picture')|default(true) %}
+        {% set show_picture = bio_config.show_picture ?? true %}
         {% if 'e30v' in event.template|default(null) %}
             {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
             <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
@@ -633,8 +633,8 @@
     {% if bio_config is empty and event is defined %}
         {% set bio_config = event.getArtistBioConfig(type) %}
     {% endif %}
-    {% set show_time = attribute(bio_config, 'show_time')|default(true) %}
-    {% set show_genre = attribute(bio_config, 'show_genre')|default(true) %}
+    {% set show_time = bio_config.show_time ?? true %}
+    {% set show_genre = bio_config.show_genre ?? true %}
     {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
         <div class="float-none mx-4 mb-4">
             {% if show_genre %}
@@ -675,7 +675,8 @@
     {% if bio_config is empty and event is defined %}
         {% set bio_config = event.getArtistBioConfig(type) %}
     {% endif %}
-    {% if attribute(bio_config, 'show_picture')|default(true) %}
+    {% set show_picture = bio_config.show_picture ?? true %}
+    {% if show_picture %}
         {% if name is not defined %}
             {% set name = artist.name %}
         {% endif %}
@@ -706,8 +707,12 @@
 {% block artist_preview_info %}
 
     <h3>{{ artist.name }}</h3>
+    {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
-    {% if attribute(bio_config, 'show_genre')|default(true) %}
+    {% if bio_config is empty and event is defined %}
+        {% set bio_config = event.getArtistBioConfig(type) %}
+    {% endif %}
+    {% if bio_config.show_genre ?? true %}
         <small>{{ artist.genre }}</small>
     {% endif %}
     <div>
@@ -734,8 +739,12 @@
 {%- endblock %}
 {% block public_artist_info %}
     {% set name = artist.name %}
+    {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
-    {% set show_picture = attribute(bio_config, 'show_picture')|default(true) %}
+    {% if bio_config is empty and event is defined %}
+        {% set bio_config = event.getArtistBioConfig(type) %}
+    {% endif %}
+    {% set show_picture = bio_config.show_picture ?? true %}
 
     <div id="{{ name|slug }}" class="col-md-12 pt-3">
         <div class="row">
