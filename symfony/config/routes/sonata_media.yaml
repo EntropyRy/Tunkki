@@ -1,3 +1,3 @@
 sonata_media:
-    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
-    prefix: /media
+  resource: "@SonataMediaBundle/Resources/config/routing/media.php"
+  prefix: /media
