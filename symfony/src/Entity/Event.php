@@ -62,6 +62,31 @@ class Event implements \Stringable
         ],
     ];
 
+    private const LEGACY_TAG_MAP = [
+        '{{ timetable_to_page_with_genre }}' => '{{ dj_timetable }}',
+        '{{ timetable_with_genre }}' => '{{ dj_timetable }}',
+        '{{ timetable_to_page }}' => '{{ dj_timetable }}',
+        '{{ timetable }}' => '{{ dj_timetable }}',
+        '{{ bios }}' => '{{ dj_bio }}',
+        '{{ vj_bios }}' => '{{ vj_bio }}',
+        '{{ vj_timetable_to_page }}' => '{{ vj_timetable }}',
+    ];
+
+    private const CONTENT_TWIG_TAGS = [
+        '{{ dj_timetable }}',
+        '{{ vj_timetable }}',
+        '{{ dj_bio }}',
+        '{{ vj_bio }}',
+        '{{ streamplayer }}',
+        '{{ links }}',
+        '{{ rsvp }}',
+        '{{ stripe_ticket }}',
+        '{{ ticket }}',
+        '{{ art_artist_list }}',
+        '{{ happening_list }}',
+        '{{ menu }}',
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
@@ -96,11 +121,11 @@ class Event implements \Stringable
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $Content = 'Use these: <br>
-            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
+            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bio }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $Sisallys = 'Käytä näitä, vaikka monta kertaa: <br>
-            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bios }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
+            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bio }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $url = null;
@@ -826,7 +851,10 @@ class Event implements \Stringable
 
     public function getContentForTwig($lang): ?string
     {
-        return 'fi' == $lang ? $this->Sisallys : $this->Content;
+        $content =
+            'fi' == $lang ? $this->Sisallys : $this->Content;
+
+        return $this->normalizeLegacyTwigTags($content);
     }
 
     public function getContentByLang($lang): string
@@ -854,23 +882,9 @@ class Event implements \Stringable
 
     protected function removeTwigTags($message): string
     {
-        $abstract = str_replace('{{ bios }}', '', (string) $message);
-        $abstract = str_replace('{{ dj_bio }}', '', (string) $abstract);
-        $abstract = str_replace('{{ vj_bio }}', '', (string) $abstract);
-        $abstract = str_replace('{{ menu }}', '', (string) $abstract);
-        $abstract = str_replace('{{ timetable_with_genre }}', '', $abstract);
-        $abstract = str_replace('{{ stripe_ticket }}', '', $abstract);
-        $abstract = str_replace('{{ timetable }}', '', $abstract);
-        $abstract = str_replace('{{ dj_timetable }}', '', $abstract);
-        $abstract = str_replace('{{ timetable_to_page }}', '', $abstract);
-        $abstract = str_replace('{{ vj_bios }}', '', $abstract);
-        $abstract = str_replace('{{ rsvp }}', '', $abstract);
-        $abstract = str_replace('{{ links }}', '', $abstract);
-        $abstract = str_replace('{{ streamplayer }}', '', $abstract);
-        $abstract = str_replace('{{ ticket }}', '', $abstract);
-        $abstract = str_replace('{{ art_artist_list }}', '', $abstract);
+        $normalized = $this->normalizeLegacyTwigTags((string) $message) ?? '';
 
-        return str_replace('{{ happening_list }}', '', $abstract);
+        return str_replace(self::CONTENT_TWIG_TAGS, '', $normalized);
     }
 
     private function normalizeArtistType(string $type): string
@@ -1270,6 +1284,19 @@ class Event implements \Stringable
         }
 
         return (bool) ($fallback ?? false);
+    }
+
+    private function normalizeLegacyTwigTags(?string $content): ?string
+    {
+        if (null === $content) {
+            return null;
+        }
+
+        return str_replace(
+            array_keys(self::LEGACY_TAG_MAP),
+            array_values(self::LEGACY_TAG_MAP),
+            $content,
+        );
     }
 
     public function getNameByLang($lang): string

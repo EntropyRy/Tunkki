@@ -279,7 +279,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => $format,
                         'required' => true,
                         'help' => $help ?:
-                            'Use tags {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
+                            'Use tags {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} as needed.',
                         'help_html' => true,
                         'attr' => ['rows' => 20],
                     ])
@@ -298,7 +298,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => $format,
                         'required' => true,
                         'help' => $help ?:
-                            'Käytä tageja {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} tarpeen mukaan.',
+                            'Käytä tageja {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} tarpeen mukaan.',
                         'help_html' => true,
                         'attr' => ['rows' => 20],
                     ])

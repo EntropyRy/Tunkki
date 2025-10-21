@@ -238,6 +238,18 @@ class EventVolunteerController extends AbstractController
         $slug = $event->getUrl();
         $year = $request->get('year');
 
+        if (!$event->getRsvpSystemEnabled()) {
+            $this->addFlash(
+                'warning',
+                $trans->trans('rsvp.disabled'),
+            );
+
+            return $this->redirectToRoute('entropy_event_slug', [
+                'slug' => $slug,
+                'year' => $year,
+            ]);
+        }
+
         foreach ($member->getRSVPs() as $rsvp) {
             if ($rsvp->getEvent() == $event) {
                 $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
