@@ -2,6 +2,7 @@
 {% use 'pieces/ticket.html.twig' %}
 {% use 'pieces/happening.html.twig' %}
 {% use 'pieces/timetable.html.twig' %}
+{% use 'pieces/bio.html.twig' %}
 {% block menu %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
@@ -98,23 +99,7 @@
         </div>
     </div>
 {% endblock %}
-{% block event %}
-    {% if event.url is null and event.externalUrl %}
-        {{ block('event_head_frontpage') }}
-    {% else %}
-        <a href="{{ block('event_path') }}">{{ block('event_head_frontpage') }}</a>
-    {% endif %}
-    <small>{{ block('published_and_updated') }}</small>
-    {% if event.picture is not null and event.picturePosition == 'right' %}
-        <div class="row">
-            <div class="col-md-8 order-1 order-md-0">{{ block('event_frontpage_content') }}</div>
-            <div class="col-md-4 order-0 order-md-1">{{ block('event_media') }}</div>
-        </div>
-    {% else %}
-        {{ block('event_frontpage_content') }}
-    {% endif %}
-{% endblock %}
-{% block event_head_reverse %}
+{% block event_head %}
     {{ block('event_banner_media') }}
     {% if '{{ menu }}' in event.contentForTwig(app.request.locale) %}
         {{ block('menu') }}
@@ -173,13 +158,6 @@
         </span>
     {%- endif %}
 {%- endblock %}
-{% block event_head_frontpage %}
-    <h3 class="mt-2 event-name">
-        {{ block('event_name') }}
-        {% if event.type != 'announcement' %}~ <span class="event_time">{{ block('event_time') }}</span>{% endif %}
-    </h3>
-    {{ block('event_banner_media') }}
-{% endblock %}
 {%- block event_name -%}
     {{- event.nameByLang(app.request.locale) -}}
     {% if event.cancelled %}*{{ 'cancelled'|trans }}*{% endif %}
@@ -216,12 +194,15 @@
     {% endif %}
     <div class="event-text-content">
         {{ event.contentForTwig(app.request.locale)|replace({
+        '{{ dj_timetable }}': block('dj_timetable'),
         '{{ timetable }}': block('timetable'),
         '{{ vj_timetable }}': block('vj_timetable'),
         '{{ timetable_to_page }}': block('timetable_to_page'),
         '{{ timetable_to_page_with_genre }}': block('timetable_to_page_with_genre'),
         '{{ timetable_with_genre }}': block('timetable_with_genre'),
+        '{{ dj_bio }}': block('dj_bio'),
         '{{ bios }}': block('bios'),
+        '{{ vj_bio }}': block('vj_bio'),
         '{{ streamplayer }}': block('streamplayer'),
         '{{ vj_bios }}': block('vj_bios'),
         '{{ links }}': block('links'),
@@ -236,19 +217,6 @@
             {{ block('links') }}
         {% endif %}
     </div>
-{% endblock -%}
-{%- block event_frontpage_content %}
-    {% set frontpage = true %}
-    {{ event.contentForTwig(app.request.locale)|replace({
-    '{{ timetable }}': block('timetable'),
-    '{{ streamplayer }}': block('streamplayer'),
-    '{{ bios }}': '',
-    '{{ vj_bios }}': '',
-    '{{ links }}': '',
-    '{{ ticket }}': '',
-    '{{ rsvp }}': block('RSVP'),
-    })|raw }}
-    {{ block('links') }}
 {% endblock -%}
 {% block event_badge %}
     <div class="badge-container text-end">
@@ -556,6 +524,8 @@
         {% endif %}
     {% endblock %}
     {% block cycle %}
+        {% set bio_config = artist_bio_config|default({}) %}
+        {% set show_picture = attribute(bio_config, 'show_picture')|default(true) %}
         {% if 'e30v' in event.template|default(null) %}
             {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
             <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
@@ -569,7 +539,9 @@
                         </h3>
                     </div>
                     <div class="col-12">
-                        {{ block('artist_pic') }}
+                        {% if show_picture %}
+                            {{ block('artist_pic') }}
+                        {% endif %}
                         {{ block('artist_event_info') }}
                     </div>
                 </div>
@@ -577,29 +549,29 @@
             {% if not loop.last %}<hr class="d-md-none">{% endif %}
         {% else %}
             {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
-            {% if thecycle == 'even' %}
-                <div id="{{ artist.type|lower }}-{{ name|slug }}"
-                     class="col-md-12 pt-3 pb-3">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">
-                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+            <div id="{{ artist.type|lower }}-{{ name|slug }}"
+                 class="col-md-12 pt-3 pb-3">
+                <div class="row">
+                    {% if thecycle == 'even' %}
+                        <div class="{% if show_picture %}col-6 col-sm-6 col-md-7 col-xl-7{% else %}col-12{% endif %} pt-3 pt-md-0">
+                            {{ block('artist_event_info') }}
                         </div>
+                        {% if show_picture %}
+                            <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
+                        {% endif %}
+                    {% else %}
+                        {% if show_picture %}
+                            <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
+                            <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
+                        {% else %}
+                            <div class="col-12 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
+                        {% endif %}
+                    {% endif %}
+                    <div class="col mt-2 d-block d-sm-none">
+                        {{ artist.getBioByLocale(app.request.locale)|nl2br }}
                     </div>
                 </div>
-            {% else %}
-                <div id="{{ artist.type|lower }}-{{ name|slug }}"
-                     class="col-md-12 pt-3 pb-3">
-                    <div class="row">
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                        <div class="col mt-2 d-block d-sm-none">
-                            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
-                        </div>
-                    </div>
-                </div>
-            {% endif %}
+            </div>
             {% if not loop.last %}
                 {% if backToBack|default(false) %}
                     <div class="linetext">
@@ -611,44 +583,35 @@
             {% endif %}
         {% endif %}
     {% endblock %}
-{%- block vj_bios %}
-    <div id="vj-bios">
-    {% for stage, infos in event.ArtistInfosByType('VJ') %}
-        {% if stage %}
-            <h3 class="artists-heading text-center">
-                VJ {{ 'Artists'|trans }}
-                {% if stage %}@ {{ stage }}{% endif %}
-            </h3>
-        {% endif %}
-        {{ block('infos') }}
-    {% endfor %}
-    </div>
-{% endblock -%}
-{%- block art_bios %}
-    <div id="art-bios">
-    {% for stage, infos in event.ArtistInfosByType('ART') %}
-        {% if stage %}
-            <h3 class="artists-heading text-center">
-                {{ 'Artists'|trans }}
-                {% if stage %}@ {{ stage }}{% endif %}
-            </h3>
-        {% endif %}
-        {{ block('infos') }}
-    {% endfor %}
-    </div>
-{% endblock -%}
 {%- block bios %}
-    <div id="bios">
-    {% for stage, infos in event.MusicArtistInfos %}
-        {% if stage %}
-            <h3 class="artists-heading text-center">
-                DJ {{ 'Artists'|trans }}
-                {% if stage %}@ {{ stage }}{% endif %}
-            </h3>
-        {% endif %}
-        {{ block('infos') }}
-    {% endfor %}
-    </div>
+    {% set artist_bio_config = event.getArtistBioConfig('DJ') %}
+    {% set artist_bio_groups = event.MusicArtistInfos %}
+    {% set artist_bio_anchor = 'bios' %}
+    {% set artist_bio_title_prefix = 'DJ ' ~ 'Artists'|trans %}
+    {% set artist_bio_type = 'DJ' %}
+    {{ block('artist_bios_container') }}
+{% endblock -%}
+{% block dj_bio %}
+    {{ block('bios') }}
+{% endblock %}
+{%- block vj_bios %}
+    {% set artist_bio_config = event.getArtistBioConfig('VJ') %}
+    {% set artist_bio_groups = event.ArtistInfosByType('VJ') %}
+    {% set artist_bio_anchor = 'vj-bios' %}
+    {% set artist_bio_title_prefix = 'VJ ' ~ 'Artists'|trans %}
+    {% set artist_bio_type = 'VJ' %}
+    {{ block('artist_bios_container') }}
+{% endblock -%}
+{% block vj_bio %}
+    {{ block('vj_bios') }}
+{% endblock %}
+{%- block art_bios %}
+    {% set artist_bio_config = event.getArtistBioConfig('ART') %}
+    {% set artist_bio_groups = event.ArtistInfosByType('ART') %}
+    {% set artist_bio_anchor = 'art-bios' %}
+    {% set artist_bio_title_prefix = 'Artists'|trans %}
+    {% set artist_bio_type = 'ART' %}
+    {{ block('artist_bios_container') }}
 {% endblock -%}
 {% block infos %}
 
@@ -661,9 +624,14 @@
     {% endfor %}
 {% endblock %}
 {% block artist_event_info %}
+    {% set bio_config = artist_bio_config|default({}) %}
+    {% set show_time = attribute(bio_config, 'show_time')|default(true) %}
+    {% set show_genre = attribute(bio_config, 'show_genre')|default(true) %}
     {% if 'e30v' in event.template|default(null) and frontpage|default(false) == false %}
         <div class="float-none mx-4 mb-4">
-            <small class="fw-light">{{ artist.genre }}</small>
+            {% if show_genre %}
+                <small class="fw-light">{{ artist.genre }}</small>
+            {% endif %}
             <div>
                 {{ artist.getBioByLocale(app.request.locale)|nl2br }}
             </div>
@@ -678,13 +646,15 @@
         <h3>
             {{ name }}
             {% if artist.type == 'Live' %}(Live){% endif %}
-            {% if artist.type == 'Live' or artist.type == 'DJ' %}
-                {% if info is defined and frontpage|default(false) == false %}
+            {% if (artist.type == 'Live' or artist.type == 'DJ') and show_time %}
+                {% if info is defined and frontpage|default(false) == false and info.StartTime is not empty %}
                     @ {{ info.StartTime|format_datetime(pattern: datestring) }}
                 {% endif %}
             {% endif %}
         </h3>
-        <small>{{ artist.genre }}</small>
+        {% if show_genre %}
+            <small>{{ artist.genre }}</small>
+        {% endif %}
         <div class="d-none d-sm-block">
             {{ artist.getBioByLocale(app.request.locale)|nl2br }}
         </div>
@@ -692,36 +662,42 @@
     {% endif %}
 {% endblock %}
 {% block artist_pic %}
-    {% if name is not defined %}
-        {% set name = artist.name %}
-    {% endif %}
-    <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
-        {% if artist.Picture %}
-            <twig:ProgressiveImage
-                :media="artist.Picture"
-                :sizes="{
-                    'square': '(max-width: 768px)',
-                    'big': '(min-width: 769px)'
-                }"
-                :placeholder="sonata_path(artist.Picture, 'placeholder')"
-                class="aspect-square"
-                :alt="name"
-                :title="name"
-                :lazy="true"
-            />
-        {% else %}
-            <img width="100%"
-                    loading="lazy"
-                    title="{{ name }}"
-                    src="{{ asset('images/thumb_artist_square.jpg') }}">
+    {% set bio_config = artist_bio_config|default({}) %}
+    {% if attribute(bio_config, 'show_picture')|default(true) %}
+        {% if name is not defined %}
+            {% set name = artist.name %}
         {% endif %}
-        <div class="caption d-none d-sm-block">{{ name }}</div>
-    </span>
+        <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
+            {% if artist.Picture %}
+                <twig:ProgressiveImage
+                    :media="artist.Picture"
+                    :sizes="{
+                        'square': '(max-width: 768px)',
+                        'big': '(min-width: 769px)'
+                    }"
+                    :placeholder="sonata_path(artist.Picture, 'placeholder')"
+                    class="aspect-square"
+                    :alt="name"
+                    :title="name"
+                    :lazy="true"
+                />
+            {% else %}
+                <img width="100%"
+                        loading="lazy"
+                        title="{{ name }}"
+                        src="{{ asset('images/thumb_artist_square.jpg') }}">
+            {% endif %}
+            <div class="caption d-none d-sm-block">{{ name }}</div>
+        </span>
+    {% endif %}
 {% endblock %}
 {% block artist_preview_info %}
 
     <h3>{{ artist.name }}</h3>
-    <small>{{ artist.genre }}</small>
+    {% set bio_config = artist_bio_config|default({}) %}
+    {% if attribute(bio_config, 'show_genre')|default(true) %}
+        <small>{{ artist.genre }}</small>
+    {% endif %}
     <div>
         {{ artist.getBioByLocale(app.request.locale)|nl2br }}
     </div>
@@ -746,11 +722,17 @@
 {%- endblock %}
 {% block public_artist_info %}
     {% set name = artist.name %}
+    {% set bio_config = artist_bio_config|default({}) %}
+    {% set show_picture = attribute(bio_config, 'show_picture')|default(true) %}
 
     <div id="{{ name|slug }}" class="col-md-12 pt-3">
         <div class="row">
-            <div class="col-6">{{ block('artist_event_info') }}</div>
-            <div class="col-6">{{ block('artist_pic') }}</div>
+            {% if show_picture %}
+                <div class="col-6">{{ block('artist_event_info') }}</div>
+                <div class="col-6">{{ block('artist_pic') }}</div>
+            {% else %}
+                <div class="col-12">{{ block('artist_event_info') }}</div>
+            {% endif %}
             <div class="col mt-2 d-block d-sm-none">
                 {{ artist.getBioByLocale(app.request.locale)|nl2br }}
             </div>
