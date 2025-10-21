@@ -24,7 +24,7 @@
     {% if event is not null and visible %}
         <div class="row">
             <div id="event-content" class="col overflow-auto">
-                {{ block('event_head_reverse') }}
+                {{ block('event_head') }}
                 {{ block('event_content') }}
             </div>
             {% if event.picture is not null and event.picturePosition == 'after' %}

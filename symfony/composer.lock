@@ -4756,16 +4756,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "4.38.2",
+            "version": "4.39.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "6da6082cb9c7b191726d4f0b0e1aa79a609e224f"
+                "reference": "a60d9769d53b7c8f8c06f67eb22a3a28b39b1e99"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/6da6082cb9c7b191726d4f0b0e1aa79a609e224f",
-                "reference": "6da6082cb9c7b191726d4f0b0e1aa79a609e224f",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/a60d9769d53b7c8f8c06f67eb22a3a28b39b1e99",
+                "reference": "a60d9769d53b7c8f8c06f67eb22a3a28b39b1e99",
                 "shasum": ""
             },
             "require": {
@@ -4814,15 +4814,15 @@
             "require-dev": {
                 "doctrine/persistence": "^3.0",
                 "friendsofphp/php-cs-fixer": "^3.4",
-                "matthiasnoback/symfony-config-test": "^4.2 || ^5.0",
-                "matthiasnoback/symfony-dependency-injection-test": "^4.2 || ^5.0",
+                "matthiasnoback/symfony-config-test": "^6.1",
+                "matthiasnoback/symfony-dependency-injection-test": "^6.1",
                 "phpstan/extension-installer": "^1.0",
                 "phpstan/phpdoc-parser": "^1.0",
                 "phpstan/phpstan": "^1.0 || ^2.0",
                 "phpstan/phpstan-phpunit": "^1.0 || ^2.0",
                 "phpstan/phpstan-strict-rules": "^1.0 || ^2.0",
                 "phpstan/phpstan-symfony": "^1.0 || ^2.0",
-                "phpunit/phpunit": "^9.6",
+                "phpunit/phpunit": "^10.5.54 || ^11.5.38",
                 "psalm/plugin-phpunit": "^0.18 || ^0.19",
                 "psalm/plugin-symfony": "^5.0",
                 "psr/event-dispatcher": "^1.0",
@@ -4831,7 +4831,6 @@
                 "symfony/css-selector": "^6.4 || ^7.1",
                 "symfony/filesystem": "^6.4 || ^7.1",
                 "symfony/maker-bundle": "^1.25",
-                "symfony/phpunit-bridge": "^6.4 || ^7.1",
                 "symfony/yaml": "^6.4 || ^7.1",
                 "vimeo/psalm": "^5.8.0 || ^6.10.0"
             },
@@ -4871,7 +4870,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataAdminBundle/issues",
-                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.38.2"
+                "source": "https://github.com/sonata-project/SonataAdminBundle/tree/4.39.0"
             },
             "funding": [
                 {
@@ -4891,7 +4890,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-10T17:26:52+00:00"
+            "time": "2025-10-21T12:05:03+00:00"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -18682,28 +18681,28 @@
         },
         {
             "name": "webmozart/assert",
-            "version": "1.11.0",
+            "version": "1.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/webmozarts/assert.git",
-                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991"
+                "reference": "541057574806f942c94662b817a50f63f7345360"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/11cb2199493b2f8a3b53e7f19068fc6aac760991",
-                "reference": "11cb2199493b2f8a3b53e7f19068fc6aac760991",
+                "url": "https://api.github.com/repos/webmozarts/assert/zipball/541057574806f942c94662b817a50f63f7345360",
+                "reference": "541057574806f942c94662b817a50f63f7345360",
                 "shasum": ""
             },
             "require": {
                 "ext-ctype": "*",
+                "ext-date": "*",
+                "ext-filter": "*",
                 "php": "^7.2 || ^8.0"
             },
-            "conflict": {
-                "phpstan/phpstan": "<0.12.20",
-                "vimeo/psalm": "<4.6.1 || 4.6.2"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "^8.5.13"
+            "suggest": {
+                "ext-intl": "",
+                "ext-simplexml": "",
+                "ext-spl": ""
             },
             "type": "library",
             "extra": {
@@ -18734,9 +18733,9 @@
             ],
             "support": {
                 "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.11.0"
+                "source": "https://github.com/webmozarts/assert/tree/1.12.0"
             },
-            "time": "2022-06-03T18:03:27+00:00"
+            "time": "2025-10-20T12:43:39+00:00"
         },
         {
             "name": "zenstruck/assert",
@@ -18799,16 +18798,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.7.5",
+            "version": "v2.7.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "bbaa207d397386237a6bad988956132450c9c1ca"
+                "reference": "f0917cc57675169428805fb3d15a022841b88810"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/bbaa207d397386237a6bad988956132450c9c1ca",
-                "reference": "bbaa207d397386237a6bad988956132450c9c1ca",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/f0917cc57675169428805fb3d15a022841b88810",
+                "reference": "f0917cc57675169428805fb3d15a022841b88810",
                 "shasum": ""
             },
             "require": {
@@ -18903,7 +18902,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.7.5"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.7.6"
             },
             "funding": [
                 {
@@ -18915,7 +18914,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-10T11:41:47+00:00"
+            "time": "2025-10-20T16:46:25+00:00"
         }
     ],
     "aliases": [

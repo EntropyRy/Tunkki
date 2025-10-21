@@ -11,6 +11,7 @@
       {{ block('vj_timetable_to_page') }}
 
   Blocks provided:
+    - dj_timetable                  (DJ, configurable via admin)
     - timetable_to_page_with_genre  (DJ, page links, with genre)
     - timetable_to_page             (DJ, page links)
     - vj_timetable_to_page          (VJ, page links)
@@ -20,56 +21,98 @@
     - timetable_list                (core rendering logic)
 #}
 
+{% block dj_timetable %}
+    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set bios = event.MusicArtistInfos %}
+    {% set page_links = timetable_config.include_page_links ?? false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
+    {% set type = 'DJ' %}
+    {{ block('timetable_list') }}
+{% endblock %}
+
 {% block timetable_to_page_with_genre %}
+    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
     {% set genre = true %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block timetable_to_page %}
+    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
-    {% set genre = false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block vj_timetable_to_page %}
     {% set bios = event.ArtistInfosByType('VJ') %}
+    {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
     {% set page_links = true %}
-    {% set genre = false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'VJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block timetable_with_genre %}
+    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = true %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block timetable %}
+    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
-    {% set genre = false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'DJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block vj_timetable %}
     {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set page_links = false %}
-    {% set genre = false %}
+    {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
+    {% set page_links = timetable_config.include_page_links ?? false %}
+    {% set genre = timetable_config.include_genre ?? false %}
+    {% set timetable_show_time = timetable_config.include_time ?? true %}
     {% set type = 'VJ' %}
     {{ block('timetable_list') }}
 {% endblock %}
 
 {% block timetable_list %}
     {# High-level orchestrator: computes date format & delegates stage rendering #}
+    {% if type is defined %}
+        {% if timetable_show_time is not defined %}
+            {% set timetable_show_time = event.shouldArtistTimetableShowTime(type) %}
+        {% endif %}
+        {% if genre is not defined %}
+            {% set genre = event.shouldArtistTimetableShowGenre(type) %}
+        {% endif %}
+        {% if page_links is not defined %}
+            {% set page_links = event.shouldArtistTimetableIncludePageLinks(type) %}
+        {% endif %}
+    {% endif %}
+    {% if timetable_show_time is not defined %}
+        {% set timetable_show_time = true %}
+    {% endif %}
+    {% if genre is not defined %}
+        {% set genre = false %}
+    {% endif %}
+    {% if page_links is not defined %}
+        {% set page_links = false %}
+    {% endif %}
     {% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
     {% if bios|length > 0 %}
         <div id="timetable" class="row g-0">
@@ -176,9 +219,13 @@
 {% endblock %}
 
 {% block timetable_time_cell %}
-    <td class="time">
-        {{ info.StartTime|format_datetime(pattern: datestring) }}
-    </td>
+    {% if timetable_show_time %}
+        <td class="time">
+            {{ info.StartTime|format_datetime(pattern: datestring) }}
+        </td>
+    {% else %}
+        <td class="time time-hidden">&nbsp;</td>
+    {% endif %}
 {% endblock %}
 
 {% block timetable_b2b_separator %}
@@ -186,11 +233,11 @@
 {% endblock %}
 
 {% block timetable_artist_link %}
-    <a href="{% if page_links|default(false) %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
+    <a href="{% if page_links %}{{ path('entropy_event_artists', {slug: event.url, year: event.eventdate|date('Y')}) }}{% endif %}#{{ artist.type|lower }}-{{ name|slug }}">
         {{ name }}
     </a>
     {% if artist.type == 'Live' %}(Live){% endif %}
-    {% if genre|default(null) %}
+    {% if genre %}
         <i class="fw-lighter"> ({{ artist.genre }})</i>
     {% endif %}
 {% endblock %}

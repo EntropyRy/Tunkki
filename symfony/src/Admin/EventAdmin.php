@@ -21,6 +21,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
 use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
@@ -278,7 +279,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => $format,
                         'required' => true,
                         'help' => $help ?:
-                            'use special tags {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} as needed.',
+                            'Use tags {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} as needed.',
                         'help_html' => true,
                         'attr' => ['rows' => 20],
                     ])
@@ -297,7 +298,7 @@ final class EventAdmin extends AbstractAdmin
                         'format' => $format,
                         'required' => true,
                         'help' => $help ?:
-                            'käytä erikoista tagejä {{ streamplayer }}, {{ timetable }}, {{ bios }}, {{ vj_bios }}, {{ rsvp }}, {{ links }}, {{ stripe_ticket }} niinkun on tarve.',
+                            'Käytä tageja {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} tarpeen mukaan.',
                         'help_html' => true,
                         'attr' => ['rows' => 20],
                     ])
@@ -501,6 +502,104 @@ final class EventAdmin extends AbstractAdmin
                         ],
                     ],
                 )
+                ->end()
+                ->end()
+                ->tab('Artist Display')
+                ->with('DJ', ['class' => 'col-md-4'])
+                ->add('djTimetableShowTime', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: show times',
+                    'help' => 'Show the time column when rendering the DJ timetable.',
+                ])
+                ->add('djTimetableIncludePageLinks', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: link artist names',
+                    'help' => 'Link DJ names to the artist info page anchor.',
+                ])
+                ->add('djTimetableShowGenre', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: show genre',
+                    'help' => 'Append the artist genre after the name.',
+                ])
+                ->add('djBioShowStage', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show stage heading',
+                    'help' => 'Display stage headings above DJ bios.',
+                ])
+                ->add('djBioShowPicture', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show artist picture',
+                    'help' => 'Include the artist photo in DJ bios.',
+                ])
+                ->add('djBioShowTime', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show time',
+                    'help' => 'Show the scheduled start time in DJ bios.',
+                ])
+                ->add('djBioShowGenre', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show genre',
+                    'help' => 'Show the artist genre text in DJ bios.',
+                ])
+                ->end()
+                ->with('VJ', ['class' => 'col-md-4'])
+                ->add('vjTimetableShowTime', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: show times',
+                    'help' => 'Show the time column when rendering the VJ timetable.',
+                ])
+                ->add('vjTimetableIncludePageLinks', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: link artist names',
+                    'help' => 'Link VJ names to the artist info page anchor.',
+                ])
+                ->add('vjTimetableShowGenre', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Timetable: show genre',
+                    'help' => 'Append the artist genre after the name.',
+                ])
+                ->add('vjBioShowStage', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show stage heading',
+                    'help' => 'Display stage headings above VJ bios.',
+                ])
+                ->add('vjBioShowPicture', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show artist picture',
+                    'help' => 'Include the artist photo in VJ bios.',
+                ])
+                ->add('vjBioShowTime', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show time',
+                    'help' => 'Show the scheduled start time in VJ bios.',
+                ])
+                ->add('vjBioShowGenre', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show genre',
+                    'help' => 'Show the artist genre text in VJ bios.',
+                ])
+                ->end()
+                ->with('Art', ['class' => 'col-md-4'])
+                ->add('artBioShowStage', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show stage heading',
+                    'help' => 'Display stage headings above art bios.',
+                ])
+                ->add('artBioShowPicture', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show artist picture',
+                    'help' => 'Include the artist photo in art bios.',
+                ])
+                ->add('artBioShowTime', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show time',
+                    'help' => 'Show the scheduled start time in art bios.',
+                ])
+                ->add('artBioShowGenre', CheckboxType::class, [
+                    'required' => false,
+                    'label' => 'Bio: show genre',
+                    'help' => 'Show the artist genre text in art bios.',
+                ])
                 ->end()
                 ->end()
                 ->tab('Artist Sign up config')

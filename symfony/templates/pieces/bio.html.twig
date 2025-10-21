@@ -1,0 +1,33 @@
+{#
+  Shared blocks for rendering artist bios with configurable options.
+  Expect the parent template to set:
+    - artist_bio_groups: iterable grouped by stage
+    - artist_bio_anchor: anchor id for the container
+    - artist_bio_title_prefix: localized label before "Artists"
+    - artist_bio_config: array with keys show_stage/show_picture/show_time/show_genre
+    - artist_bio_type: normalized artist type (DJ, VJ, ART, ...)
+#}
+
+{% block artist_bios_container %}
+    {% set groups = artist_bio_groups|default([]) %}
+    {% set artist_bio_type = artist_bio_type|default(null) %}
+    {% set artist_bio_config = artist_bio_config|default({}) %}
+    {% if artist_bio_config is empty and artist_bio_type is not null and event is defined %}
+        {% set artist_bio_config = event.getArtistBioConfig(artist_bio_type) %}
+    {% endif %}
+    {% if groups|length > 0 %}
+        <div id="{{ artist_bio_anchor|default('bios') }}">
+            {% for stage, infos in groups %}
+                {% set show_stage_heading = artist_bio_config.show_stage ?? true %}
+                {% if show_stage_heading and stage %}
+                    <h3 class="artists-heading text-center">
+                        {{ artist_bio_title_prefix|default('') }}
+                        {% if stage %}@ {{ stage }}{% endif %}
+                    </h3>
+                {% endif %}
+                {% set artist_bio_current_stage = stage %}
+                {{ block('infos') }}
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endblock %}
