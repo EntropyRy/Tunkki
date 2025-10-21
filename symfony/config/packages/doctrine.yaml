@@ -40,6 +40,18 @@ when@test:
             second_level_cache:
                 enabled: false
 
+when@panther:
+    doctrine:
+        dbal:
+            # SQLite in-memory - remove MySQL-specific options
+            charset: ~
+            default_table_options:
+                collate: ~
+        orm:
+            # Disable second-level cache in Panther tests
+            second_level_cache:
+                enabled: false
+
 when@prod:
     doctrine:
         orm:

@@ -82,10 +82,12 @@
         "symfony/symfony": "*"
     },
     "require-dev": {
+        "brianium/paratest": "^7",
         "dama/doctrine-test-bundle": "*",
         "friendsofphp/php-cs-fixer": "^3.88",
         "infection/infection": "^0.29",
         "phpstan/extension-installer": "^1.0",
+        "phpstan/phpdoc-parser": "^2.3",
         "phpstan/phpstan-doctrine": "^2.0",
         "phpstan/phpstan-symfony": "^2.0",
         "phpunit/phpunit": "^12.3",
@@ -94,10 +96,10 @@
         "symfony/css-selector": "^7.3",
         "symfony/debug-bundle": "^7.1",
         "symfony/maker-bundle": "^1",
+        "symfony/panther": "^2.2",
         "symfony/stopwatch": "^7.1",
         "symfony/web-profiler-bundle": "^7.1",
         "vincentlanglet/twig-cs-fixer": "^3.1",
-        "brianium/paratest": "^7",
         "zenstruck/foundry": "^2.7"
     },
     "scripts": {

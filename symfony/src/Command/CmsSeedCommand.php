@@ -127,6 +127,14 @@ final class CmsSeedCommand extends Command
     {
         try {
             $conn = $this->em->getConnection();
+
+            // SQLite doesn't support advisory locks; in test environments (panther, test)
+            // there are no race conditions since tests run in isolated processes
+            $platform = $conn->getDatabasePlatform();
+            if ($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+                return true; // Bypass locking for SQLite
+            }
+
             // MariaDB: GET_LOCK returns 1 if acquired, 0 if timeout, NULL if error
             // Timeout = 0 means non-blocking try
             $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_seed_{$lockKey}"]);
@@ -147,6 +155,13 @@ final class CmsSeedCommand extends Command
     {
         try {
             $conn = $this->em->getConnection();
+
+            // SQLite doesn't use advisory locks
+            $platform = $conn->getDatabasePlatform();
+            if ($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+                return; // No-op for SQLite
+            }
+
             $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_seed_{$lockKey}"]);
         } catch (\Throwable) {
             // Best effort release; lock will auto-release on connection close anyway

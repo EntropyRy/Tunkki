@@ -266,3 +266,8 @@ when@test:
     sonata_page:
         # Force direct publication in tests to avoid frontend snapshot requirement
         direct_publication: true
+
+when@panther:
+    sonata_page:
+        # Force direct publication in Panther tests (same as test env)
+        direct_publication: true

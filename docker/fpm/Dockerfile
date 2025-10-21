@@ -16,6 +16,7 @@ RUN apk upgrade --update \
        git icu icu-data-full libssh2 \
        libev imagemagick \
        brotli \
+       chromium chromium-chromedriver \
     && apk add --virtual build-deps \
        bash grep build-base tar re2c make file \
        zeromq-dev libpng-dev libwebp-dev \
@@ -63,6 +64,8 @@ FROM base AS prod
 USER root
 COPY ./symfony.ini /usr/local/etc/php/php.ini
 ADD symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
-RUN rm /usr/local/bin/install-php-extensions 
+RUN rm /usr/local/bin/install-php-extensions \
+ && apk del chromium-chromedriver chromium \
+ && rm -rf /tmp/* /var/cache/apk/*
 USER symfony
 CMD ["php-fpm", "-F"]
