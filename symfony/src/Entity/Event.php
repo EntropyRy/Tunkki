@@ -20,7 +20,7 @@ use function Symfony\Component\String\u;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
 {
-    private const ARTIST_DISPLAY_DEFAULTS = [
+    private const array ARTIST_DISPLAY_DEFAULTS = [
         'DJ' => [
             'timetable' => [
                 'include_page_links' => false,
@@ -62,7 +62,7 @@ class Event implements \Stringable
         ],
     ];
 
-    private const LEGACY_TAG_MAP = [
+    private const array LEGACY_TAG_MAP = [
         '{{ timetable_to_page_with_genre }}' => '{{ dj_timetable }}',
         '{{ timetable_with_genre }}' => '{{ dj_timetable }}',
         '{{ timetable_to_page }}' => '{{ dj_timetable }}',
@@ -72,7 +72,7 @@ class Event implements \Stringable
         '{{ vj_timetable_to_page }}' => '{{ vj_timetable }}',
     ];
 
-    private const CONTENT_TWIG_TAGS = [
+    private const array CONTENT_TWIG_TAGS = [
         '{{ dj_timetable }}',
         '{{ vj_timetable }}',
         '{{ dj_bio }}',
@@ -1283,7 +1283,7 @@ class Event implements \Stringable
             return (bool) $config[$normalized][$group][$flag];
         }
 
-        return (bool) ($fallback ?? false);
+        return $fallback ?? false;
     }
 
     private function normalizeLegacyTwigTags(?string $content): ?string
