@@ -563,7 +563,15 @@ when@test:
         low: []
   parameters:
     test.fixed_datetime: "2025-01-01T12:00:00+00:00"
+    stripe_public_key: 'pk_test_dummy'
+    stripe_secret_key: 'sk_test_dummy'
   services:
+    App\Service\StripeService:
+      class: App\Tests\Support\Stripe\FakeStripeService
+      arguments:
+        $bag: '@parameter_bag'
+        $urlG: '@router'
+
     # Primary mutable test clock binding (replaces prior FixedClock usage)
     App\Time\ClockInterface:
       class: App\Time\MutableClock

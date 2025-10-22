@@ -36,7 +36,6 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->ensureCmsBaseline();
         $this->initSiteAwareClient();
         $this->seedClientHome('en');
     }

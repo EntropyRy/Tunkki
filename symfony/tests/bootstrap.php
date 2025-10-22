@@ -30,7 +30,7 @@ if ($_SERVER['APP_DEBUG']) {
  *
  * Safety Guards:
  *  - Wrapped in try/catch: failures are logged to STDERR without breaking the suite.
- *  - Idempotent: cms:seed:minimal can run on every bootstrap; snapshots can be recreated safely.
+ *  - Idempotent: entropy:cms:seed can run on every bootstrap; snapshots can be recreated safely.
  *  - Advisory lock (key 1220304): Serializes entire CMS baseline setup across parallel processes.
  */
 (function (): void {
@@ -144,14 +144,16 @@ if ($_SERVER['APP_DEBUG']) {
             }
         }
 
-        $application = new Application($kernel);
-        $application->setAutoExit(false);
+        if (null === $siteCount || 0 === (int) $siteCount) {
+            $application = new Application($kernel);
+            $application->setAutoExit(false);
 
-        // Always seed minimal CMS (idempotent)
-        $application->run(new ArrayInput(['command' => 'cms:seed:minimal', '-q' => true]), new NullOutput());
+            // Seed CMS baseline (idempotent)
+            $application->run(new ArrayInput(['command' => 'entropy:cms:seed', '-q' => true]), new NullOutput());
 
-        // Always ensure snapshots exist for front-end page resolution
-        $application->run(new ArrayInput(['command' => 'sonata:page:create-snapshots', '-q' => true]), new NullOutput());
+            // Ensure snapshots exist for front-end page resolution
+            $application->run(new ArrayInput(['command' => 'sonata:page:create-snapshots', '-q' => true]), new NullOutput());
+        }
 
         // Force-enable all snapshots in tests (direct_publication may not affect routing resolution)
         // This ensures DynamicRouter can resolve pages even if snapshots were created disabled.

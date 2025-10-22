@@ -198,10 +198,19 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         );
         $this->seedClientHome('en');
 
-        $this->seedClientHome('en');
-        $member = $user->getMember();
-        $member->setLocale('en');
-        $this->em()->flush();
+        $doctrine = static::getContainer()->get('doctrine');
+        $memberRepo = $doctrine->getRepository(Member::class);
+        $memberId = $user->getMember()->getId();
+
+        $member = $memberRepo->find($memberId);
+        
+        if ($member instanceof Member) {
+            $member->setLocale('en');
+            $doctrine->getManager()->flush();
+            $doctrine->getManager()->clear();
+            $member = $memberRepo->find($memberId);
+        }
+        $this->seedLoginPage('en');
         $this->seedLoginPage('en');
 
         // Load edit form in English
@@ -230,7 +239,6 @@ final class MemberFormTypeTest extends FixturesWebTestCase
             'Edit form should load (en).',
         );
 
-        $member = $user->getMember();
         $this->assertSame(
             'en',
             $member->getLocale(),
@@ -246,14 +254,14 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $form = $formNode->form();
 
         // Keep existing personal data but change locale + required fields
-        $form['member[firstname]'] = $member->getFirstname();
-        $form['member[lastname]'] = $member->getLastname();
-        $form['member[email]'] = $member->getEmail();
+        $form['member[firstname]'] = $member?->getFirstname() ?? '';
+        $form['member[lastname]'] = $member?->getLastname() ?? '';
+        $form['member[email]'] = $member?->getEmail() ?? $user->getEmail();
         if ($form->has('member[phone]')) {
-            $form['member[phone]'] = $member->getPhone() ?? '';
+            $form['member[phone]'] = $member?->getPhone() ?? '';
         }
         $form['member[CityOfResidence]'] =
-            $member->getCityOfResidence() ?? 'Espoo';
+            $member?->getCityOfResidence() ?? 'Espoo';
         $form['member[theme]'] = 'dark'; // required choice
         $form['member[locale]'] = 'fi'; // switch locale
         if ($form->has('member[StudentUnionMember]')) {

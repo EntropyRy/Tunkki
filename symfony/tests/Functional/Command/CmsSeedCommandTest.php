@@ -10,6 +10,8 @@ use App\Entity\Sonata\SonataPageSite;
 use App\Tests\_Base\FixturesWebTestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
+use DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension;
 
 /**
  * Functional tests for the entropy:cms:seed console command (CmsSeedCommand).
@@ -64,8 +66,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertSame(0, $pageRepo->count([]), 'Pages should be empty before seeding');
 
         // Execute the command
-        $tester = $this->makeCommandTester();
-        $exitCode = $tester->execute([]);
+        [$tester, $exitCode] = $this->runCmsSeed();
 
         // Assert successful exit
         $this->assertSame(0, $exitCode, 'Command should exit successfully');
@@ -130,8 +131,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
     public function testCommandIsIdempotent(): void
     {
         // Run command first time
-        $tester = $this->makeCommandTester();
-        $exitCode1 = $tester->execute([]);
+        [$tester1, $exitCode1] = $this->runCmsSeed();
         $this->assertSame(0, $exitCode1, 'First execution should succeed');
 
         // Count sites and pages after first run
@@ -145,8 +145,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertSame(2, $sitesCount1, 'Should have exactly 2 sites after first run');
 
         // Run command second time
-        $tester2 = $this->makeCommandTester();
-        $exitCode2 = $tester2->execute([]);
+        [$tester2, $exitCode2] = $this->runCmsSeed();
         $this->assertSame(0, $exitCode2, 'Second execution should succeed');
 
         // Count after second run
@@ -164,8 +163,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
 
     public function testCommandOutputIncludesSiteSummary(): void
     {
-        $tester = $this->makeCommandTester();
-        $exitCode = $tester->execute([]);
+        [$tester, $exitCode] = $this->runCmsSeed();
 
         $this->assertSame(0, $exitCode, 'Command should exit successfully');
 
@@ -200,8 +198,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         }
         $em->flush();
 
-        $tester = $this->makeCommandTester();
-        $exitCode = $tester->execute([]);
+        [$tester, $exitCode] = $this->runCmsSeed();
 
         $this->assertSame(0, $exitCode, 'Command should handle empty database successfully');
 
@@ -229,8 +226,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $em->persist($fiSite);
         $em->flush();
 
-        $tester = $this->makeCommandTester();
-        $exitCode = $tester->execute([]);
+        [, $exitCode] = $this->runCmsSeed();
 
         $this->assertSame(0, $exitCode, 'Command should normalize existing sites');
 
@@ -243,5 +239,40 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertTrue($normalizedFi->getIsDefault(), 'FI site should be normalized to default');
         $this->assertTrue($normalizedFi->getEnabled(), 'FI site should be enabled');
         $this->assertSame('', $normalizedFi->getRelativePath(), 'FI site should have empty path');
+    }
+
+    /**
+     * @return array{CommandTester,int}
+     */
+    private function runCmsSeed(array $input = []): array
+    {
+        return $this->runWithoutTransaction(function () use ($input) {
+            $tester = $this->makeCommandTester();
+            $exitCode = $tester->execute($input);
+
+            return [$tester, $exitCode];
+        });
+    }
+
+    private function runWithoutTransaction(callable $callback): mixed
+    {
+        $hadTransaction = PHPUnitExtension::$transactionStarted;
+
+        if ($hadTransaction) {
+            StaticDriver::rollBack();
+            PHPUnitExtension::$transactionStarted = false;
+        }
+
+        StaticDriver::setKeepStaticConnections(false);
+
+        try {
+            return $callback();
+        } finally {
+            StaticDriver::setKeepStaticConnections(true);
+            if ($hadTransaction) {
+                StaticDriver::beginTransaction();
+                PHPUnitExtension::$transactionStarted = true;
+            }
+        }
     }
 }
