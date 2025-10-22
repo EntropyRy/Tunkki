@@ -34,6 +34,7 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
+            ->add('Artist.type')
             ->add('Artist')
             ->add('SetLength')
             ->add('stage')
