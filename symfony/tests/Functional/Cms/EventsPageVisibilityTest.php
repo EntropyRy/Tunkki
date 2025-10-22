@@ -24,15 +24,6 @@ final class EventsPageVisibilityTest extends FixturesWebTestCase
     use LocaleDataProviderTrait;
     use LoginHelperTrait;
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // Ensure Sonata multisite SiteRequest wrapping + deterministic site baseline
-        $this->initSiteAwareClient();
-        $this->ensureCmsBaseline();
-    }
-
     /**
      * Anonymous users should only see events that are publicly published.
      */
@@ -40,7 +31,7 @@ final class EventsPageVisibilityTest extends FixturesWebTestCase
     public function testAnonymousSeesOnlyPublicEvents(string $locale): void
     {
         // Arrange: create events of default type ('event' != 'announcement')
-        $visible = EventFactory::new()->published()->create([
+        EventFactory::new()->published()->create([
             'url' => 'events-page-visible',
         ]);
         EventFactory::new()->published()->create([
@@ -71,7 +62,7 @@ final class EventsPageVisibilityTest extends FixturesWebTestCase
     public function testActiveMemberSeesAllEvents(string $locale): void
     {
         // Arrange
-        $visible = EventFactory::new()->published()->create([
+        EventFactory::new()->published()->create([
             'url' => 'events-page-visible-am',
         ]);
         EventFactory::new()->published()->create([

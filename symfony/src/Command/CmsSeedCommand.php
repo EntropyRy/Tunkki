@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Zenstruck\Foundry\Persistence\Proxy\PersistedObjectsTracker;
 
 #[
     AsCommand(
@@ -75,6 +76,9 @@ final class CmsSeedCommand extends Command
 
         // Load the CmsBaselineStory to seed the CMS
         $io->writeln('Loading CmsBaselineStory to seed CMS baseline...');
+
+        // Initialize Foundry's proxy tracker early so typed static properties are set
+        new PersistedObjectsTracker();
 
         // Instantiate and build the story directly
         $story = new CmsBaselineStory();
