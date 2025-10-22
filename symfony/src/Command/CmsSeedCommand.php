@@ -10,6 +10,7 @@ use App\Factory\SiteFactory;
 use App\Story\CmsBaselineStory;
 use Doctrine\DBAL\Platforms\SqlitePlatform;
 use Doctrine\ORM\EntityManagerInterface;
+use Sonata\PageBundle\Service\Contract\CreateSnapshotBySiteInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -25,7 +26,10 @@ use Zenstruck\Foundry\Persistence\Proxy\PersistedObjectsTracker;
 ]
 final class CmsSeedCommand extends Command
 {
-    public function __construct(private readonly EntityManagerInterface $em)
+    public function __construct(
+        private readonly EntityManagerInterface $em,
+        private readonly CreateSnapshotBySiteInterface $createSnapshotBySite,
+    )
     {
         parent::__construct();
     }
@@ -102,6 +106,8 @@ final class CmsSeedCommand extends Command
             ),
         );
 
+        $this->refreshSnapshots($io);
+
         // Show details about the created sites
         /** @var SonataPageSite[] $sites */
         $sites = $siteRepo->findAll();
@@ -119,6 +125,22 @@ final class CmsSeedCommand extends Command
         }
 
         return Command::SUCCESS;
+    }
+
+    private function refreshSnapshots(SymfonyStyle $io): void
+    {
+        /** @var SonataPageSite[] $sites */
+        $sites = SiteFactory::repository()->findAll();
+        $refreshed = 0;
+
+        foreach ($sites as $site) {
+            $this->createSnapshotBySite->createBySite($site);
+            ++$refreshed;
+        }
+
+        $io->writeln(
+            \sprintf('Snapshots refreshed for %d site(s).', $refreshed),
+        );
     }
 
     /**

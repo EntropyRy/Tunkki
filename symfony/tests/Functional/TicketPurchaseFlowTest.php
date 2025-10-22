@@ -72,9 +72,14 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
 
         $this->client->request('GET', $shopPath);
 
+        $status = $this->client->getResponse()->getStatusCode();
+        if ($status >= 500) {
+            $this->dumpResponseToFile(__METHOD__.'_'.$locale);
+        }
+
         $this->assertSame(
             302,
-            $this->client->getResponse()->getStatusCode(),
+            $status,
             'Anonymous user should be redirected to login'
         );
         $this->assertMatchesRegularExpression(

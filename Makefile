@@ -343,8 +343,6 @@ clean-test-db:
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:schema:update --force
 	@printf "%b\n" "$(CYAN)==> Seeding CMS baseline for tests$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console entropy:cms:seed
-	@printf "%b\n" "$(CYAN)==> Regenerating Sonata snapshots$(RESET)"
-	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console sonata:page:create-snapshots
 
 .PHONY: grant-test-db-privileges
 grant-test-db-privileges:

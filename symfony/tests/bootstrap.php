@@ -148,37 +148,11 @@ if ($_SERVER['APP_DEBUG']) {
             $application = new Application($kernel);
             $application->setAutoExit(false);
 
-            // Seed CMS baseline (idempotent)
+            // Seed CMS baseline (idempotent, snapshots included)
             $application->run(new ArrayInput(['command' => 'entropy:cms:seed', '-q' => true]), new NullOutput());
-
-            // Ensure snapshots exist for front-end page resolution
-            $application->run(new ArrayInput(['command' => 'sonata:page:create-snapshots', '-q' => true]), new NullOutput());
         }
 
-        // Force-enable all snapshots in tests (direct_publication may not affect routing resolution)
-        // This ensures DynamicRouter can resolve pages even if snapshots were created disabled.
-        try {
-            if (isset($container) && $container->has('doctrine')) {
-                $doctrine = $container->get('doctrine');
-
-                $conn = null;
-                if (method_exists($doctrine, 'getConnection')) {
-                    $conn = $doctrine->getConnection();
-                } elseif (method_exists($doctrine, 'getManager')) {
-                    $em = $doctrine->getManager();
-                    if (is_object($em) && method_exists($em, 'getConnection')) {
-                        $conn = $em->getConnection();
-                    }
-                }
-
-                if ($conn) {
-                    // Simple approach for tests: publish all snapshots
-                    $conn->executeStatement('UPDATE page__snapshot SET enabled = 1');
-                }
-            }
-        } catch (Throwable $ee) {
-            @fwrite(\STDERR, '[bootstrap] WARNING: Forcing page__snapshot.enabled=1 failed: '.$ee->getMessage()."\n");
-        }
+        // entropy:cms:seed now refreshes snapshots; no manual toggles required.
     } catch (Throwable $e) {
         @fwrite(\STDERR, '[bootstrap] WARNING: CMS seed/snapshot step failed: '.$e->getMessage()."\n");
     } finally {

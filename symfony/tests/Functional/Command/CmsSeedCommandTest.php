@@ -8,10 +8,11 @@ use App\Command\CmsSeedCommand;
 use App\Entity\Sonata\SonataPagePage;
 use App\Entity\Sonata\SonataPageSite;
 use App\Tests\_Base\FixturesWebTestCase;
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Tester\CommandTester;
 use DAMA\DoctrineTestBundle\Doctrine\DBAL\StaticDriver;
 use DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension;
+use Sonata\PageBundle\Service\Contract\CreateSnapshotBySiteInterface;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Functional tests for the entropy:cms:seed console command (CmsSeedCommand).
@@ -35,8 +36,10 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $kernel = static::bootKernel();
         $application = new Application();
 
+        $container = static::getContainer();
         $command = new CmsSeedCommand(
-            static::getContainer()->get('doctrine.orm.entity_manager')
+            $container->get('doctrine.orm.entity_manager'),
+            $container->get(CreateSnapshotBySiteInterface::class),
         );
 
         $application->add($command);

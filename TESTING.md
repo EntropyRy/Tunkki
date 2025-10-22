@@ -207,6 +207,9 @@ Context:
 Snapshot Publication in Tests:
 - In the test environment, sonata_page.direct_publication: true does not publish or enable snapshots during tests. The test bootstrap creates snapshots and force-enables them (page__snapshot.enabled=1) to satisfy Sonata DynamicRouter resolution.
 
+Console command coverage:
+- Tests that exercise `entropy:cms:seed` (see `CmsSeedCommandTest`) MUST temporarily run outside DAMA Doctrine Test Bundle’s per-test transaction. Wrap the command in a helper that rolls back the static connection, executes the command, and then restores the transaction; otherwise MariaDB will raise `SAVEPOINT DAMA_TEST does not exist` and subsequent tests will see corrupted CMS state.
+
 ## Parallel test execution (ParaTest)
 
 Status: PARALLEL-SAFE (as of 2025-10-16 with advisory locking).
@@ -332,7 +335,7 @@ Always pass `APP_ENV=test`; the default bootstrap enforces this guard.
 
 Environment conventions:
 - The test boots a dedicated `panther` kernel (APP_ENV=panther) and points `DATABASE_URL` to `var/test_panther.db` (SQLite). No shared MariaDB state is touched.
-- CMS seeding and snapshot generation execute inside that Panther kernel on every run (`entropy:cms:seed`, `sonata:page:update-core-routes`, `sonata:page:create-snapshots`). Because the DB is file-backed SQLite, this adds only a few seconds.
+- CMS seeding and snapshot generation execute inside that Panther kernel on every run (`entropy:cms:seed`, `sonata:page:update-core-routes`). The `entropy:cms:seed` command now refreshes snapshots internally, so no separate snapshot command is required. Because the DB is file-backed SQLite, this adds only a few seconds.
 - Sonata `Site` hostnames stay `localhost`. Panther’s internal web server listens on `http://localhost:9080`; keeping the host as `localhost` guarantees routing works both inside Docker and on CI runners. Do **not** switch hosts to container names like `web`.
 
 Artifacts & debugging:

@@ -53,6 +53,7 @@ services:
   Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface: "@sonata.page.cms_manager_selector"
   Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
+  Sonata\PageBundle\Service\Contract\CreateSnapshotBySiteInterface: "@sonata.page.service.create_snapshot"
 
   Symfony\UX\Icons\Registry\LocalSvgIconRegistry:
     arguments:

@@ -27,6 +27,9 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
     private static ?KernelInterface $pantherKernel = null;
     private static bool $driversInstalled = false;
+    private static array $previousEnv = [];
+    private static array $previousServer = [];
+    private static array $previousGetEnv = [];
 
     protected function setUp(): void
     {
@@ -44,6 +47,8 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
     protected function tearDown(): void
     {
+        $this->restoreOriginalEnvironment();
+
         if (null !== self::$pantherKernel) {
             self::$pantherKernel->shutdown();
             self::$pantherKernel = null;
@@ -161,6 +166,19 @@ final class StreamWorkflowPantherTest extends PantherTestCase
             $filesystem->remove($dbPath);
         }
 
+        self::$previousEnv = [
+            'APP_ENV' => $_ENV['APP_ENV'] ?? null,
+            'DATABASE_URL' => $_ENV['DATABASE_URL'] ?? null,
+        ];
+        self::$previousServer = [
+            'APP_ENV' => $_SERVER['APP_ENV'] ?? null,
+            'DATABASE_URL' => $_SERVER['DATABASE_URL'] ?? null,
+        ];
+        self::$previousGetEnv = [
+            'APP_ENV' => false !== getenv('APP_ENV') ? getenv('APP_ENV') : null,
+            'DATABASE_URL' => false !== getenv('DATABASE_URL') ? getenv('DATABASE_URL') : null,
+        ];
+
         $_ENV['APP_ENV'] = 'panther';
         $_SERVER['APP_ENV'] = 'panther';
         putenv('APP_ENV=panther');
@@ -185,9 +203,60 @@ final class StreamWorkflowPantherTest extends PantherTestCase
         foreach ([
             'entropy:cms:seed',
             'sonata:page:update-core-routes',
-            'sonata:page:create-snapshots',
         ] as $command) {
             $application->run(new ArrayInput(['command' => $command]), new NullOutput());
         }
+    }
+
+    private function restoreOriginalEnvironment(): void
+    {
+        if ([] === self::$previousEnv && [] === self::$previousServer && [] === self::$previousGetEnv) {
+            return;
+        }
+
+        if (array_key_exists('APP_ENV', self::$previousEnv)) {
+            $value = self::$previousEnv['APP_ENV'];
+            if (null === $value) {
+                unset($_ENV['APP_ENV']);
+            } else {
+                $_ENV['APP_ENV'] = $value;
+            }
+        }
+        if (array_key_exists('DATABASE_URL', self::$previousEnv)) {
+            $value = self::$previousEnv['DATABASE_URL'];
+            if (null === $value) {
+                unset($_ENV['DATABASE_URL']);
+            } else {
+                $_ENV['DATABASE_URL'] = $value;
+            }
+        }
+
+        if (array_key_exists('APP_ENV', self::$previousServer)) {
+            $value = self::$previousServer['APP_ENV'];
+            if (null === $value) {
+                unset($_SERVER['APP_ENV']);
+            } else {
+                $_SERVER['APP_ENV'] = $value;
+            }
+        }
+        if (array_key_exists('DATABASE_URL', self::$previousServer)) {
+            $value = self::$previousServer['DATABASE_URL'];
+            if (null === $value) {
+                unset($_SERVER['DATABASE_URL']);
+            } else {
+                $_SERVER['DATABASE_URL'] = $value;
+            }
+        }
+
+        if (array_key_exists('APP_ENV', self::$previousGetEnv)) {
+            $value = self::$previousGetEnv['APP_ENV'];
+            putenv(null === $value ? 'APP_ENV' : 'APP_ENV='.$value);
+        }
+        if (array_key_exists('DATABASE_URL', self::$previousGetEnv)) {
+            $value = self::$previousGetEnv['DATABASE_URL'];
+            putenv(null === $value ? 'DATABASE_URL' : 'DATABASE_URL='.$value);
+        }
+
+        self::$previousEnv = self::$previousServer = self::$previousGetEnv = [];
     }
 }
