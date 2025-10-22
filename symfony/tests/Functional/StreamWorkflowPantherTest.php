@@ -34,7 +34,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
         if (!self::$driversInstalled) {
             $process = new Process(['vendor/bin/bdi', 'detect', 'drivers']);
-            $process->setWorkingDirectory(dirname(__DIR__, 2));
+            $process->setWorkingDirectory(\dirname(__DIR__, 2));
             $process->mustRun();
             self::$driversInstalled = true;
         }
@@ -44,7 +44,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
     protected function tearDown(): void
     {
-        if (self::$pantherKernel !== null) {
+        if (null !== self::$pantherKernel) {
             self::$pantherKernel->shutdown();
             self::$pantherKernel = null;
         }
@@ -141,14 +141,14 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
     private function bootstrapPantherEnvironment(): void
     {
-        $projectDir = dirname(__DIR__, 2);
+        $projectDir = \dirname(__DIR__, 2);
         $filesystem = new Filesystem();
         $cachePath = $projectDir.'/var/cache/panther';
         $dbPath = $projectDir.'/var/test_panther.db';
 
         self::ensureKernelShutdown();
 
-        if (self::$pantherKernel !== null) {
+        if (null !== self::$pantherKernel) {
             self::$pantherKernel->shutdown();
             self::$pantherKernel = null;
         }
@@ -174,7 +174,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
         $em = $kernel->getContainer()->get('doctrine')->getManager();
         $metadata = $em->getMetadataFactory()->getAllMetadata();
-        if ($metadata !== []) {
+        if ([] !== $metadata) {
             $schemaTool = new SchemaTool($em);
             $schemaTool->createSchema($metadata);
         }

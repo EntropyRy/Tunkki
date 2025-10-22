@@ -41,13 +41,11 @@ final class StreamArtistFactory extends PersistentObjectFactory
 
     protected function defaults(): callable
     {
-        return static function (): array {
-            return [
-                'artist' => ArtistFactory::new(),
-                'stream' => StreamFactory::new()->online(),
-                'stoppedAt' => null, // Active by default
-            ];
-        };
+        return static fn (): array => [
+            'artist' => ArtistFactory::new(),
+            'stream' => StreamFactory::new()->online(),
+            'stoppedAt' => null, // Active by default
+        ];
     }
 
     /**

@@ -31,13 +31,11 @@ final class StreamFactory extends PersistentObjectFactory
 
     protected function defaults(): callable
     {
-        return static function (): array {
-            return [
-                'online' => false,
-                'listeners' => 0,
-                'filename' => '',
-            ];
-        };
+        return static fn (): array => [
+            'online' => false,
+            'listeners' => 0,
+            'filename' => '',
+        ];
     }
 
     /**
