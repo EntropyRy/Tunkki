@@ -7,6 +7,7 @@
 /bin/*
 /build/
 !bin/console
+/drivers/
 /phpunit.xml
 /node_modules
 /public/build/

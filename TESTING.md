@@ -309,6 +309,40 @@ Common mistakes to avoid:
 - Calling $client->getRequest() or $client->getResponse() before any $client->request()/followRedirect() has been executed.
 - Asserting on the crawler without first performing a request.
 
+### 17A. Panther Browser Tests (Chromedriver + LiveComponent E2E)
+
+Status: **supported** (task 31F). The Panther suite currently contains `tests/Functional/StreamWorkflowPantherTest.php`, which exercises the LiveComponent stream workflow end-to-end with real JavaScript.
+
+Prerequisites (run once per local test DB):
+- Seed the CMS baseline so Sonata pages exist before the browser hits them:
+  ```
+  docker compose exec -T -e APP_ENV=test fpm php bin/console entropy:cms:seed
+  ```
+  This command now initialises Foundry’s proxy tracker internally, so it is safe outside PHPUnit.
+- Ensure Chrome/Chromedriver binaries are available. The test calls `vendor/bin/bdi detect drivers` automatically the first time; run it manually if you need to refresh binaries:
+  ```
+  docker compose exec -T -e APP_ENV=test fpm php vendor/bin/bdi detect drivers
+  ```
+
+Running the Panther test:
+```
+docker compose exec -T -e APP_ENV=test fpm php vendor/bin/phpunit tests/Functional/StreamWorkflowPantherTest.php
+```
+Always pass `APP_ENV=test`; the default bootstrap enforces this guard.
+
+Environment conventions:
+- The test boots a dedicated `panther` kernel (APP_ENV=panther) and points `DATABASE_URL` to `var/test_panther.db` (SQLite). No shared MariaDB state is touched.
+- CMS seeding and snapshot generation execute inside that Panther kernel on every run (`entropy:cms:seed`, `sonata:page:update-core-routes`, `sonata:page:create-snapshots`). Because the DB is file-backed SQLite, this adds only a few seconds.
+- Sonata `Site` hostnames stay `localhost`. Panther’s internal web server listens on `http://localhost:9080`; keeping the host as `localhost` guarantees routing works both inside Docker and on CI runners. Do **not** switch hosts to container names like `web`.
+
+Artifacts & debugging:
+- HTML snapshots for diagnostics are dumped under `var/test_login_page.html` and `var/test_stream_page.html`. Remove them when no longer needed.
+- To run Chrome non-headless, set `PANTHER_NO_HEADLESS=1` before invoking PHPUnit (only for local debugging; revert before committing).
+
+When to add more Panther tests:
+- Reserve Panther for behaviours that truly need a browser (LiveComponent interactions, frontend JS flows, WebRTC, etc.). Prefer BrowserKit functional tests for everything else.
+- Follow the established pattern: bootstrap SQLite, seed CMS, use Foundry factories, rely on structural assertions.
+
 
 ## 18. Form Validation & Negative Path Coverage
 

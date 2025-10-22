@@ -14,6 +14,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Zenstruck\Foundry\Persistence\Proxy\PersistedObjectsTracker;
 
 #[
     AsCommand(
@@ -76,6 +77,9 @@ final class CmsSeedCommand extends Command
         // Load the CmsBaselineStory to seed the CMS
         $io->writeln('Loading CmsBaselineStory to seed CMS baseline...');
 
+        // Initialize Foundry's proxy tracker early so typed static properties are set
+        new PersistedObjectsTracker();
+
         // Instantiate and build the story directly
         $story = new CmsBaselineStory();
         $story->build();
@@ -127,6 +131,14 @@ final class CmsSeedCommand extends Command
     {
         try {
             $conn = $this->em->getConnection();
+
+            // SQLite doesn't support advisory locks; in test environments (panther, test)
+            // there are no race conditions since tests run in isolated processes
+            $platform = $conn->getDatabasePlatform();
+            if ($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+                return true; // Bypass locking for SQLite
+            }
+
             // MariaDB: GET_LOCK returns 1 if acquired, 0 if timeout, NULL if error
             // Timeout = 0 means non-blocking try
             $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_seed_{$lockKey}"]);
@@ -147,6 +159,13 @@ final class CmsSeedCommand extends Command
     {
         try {
             $conn = $this->em->getConnection();
+
+            // SQLite doesn't use advisory locks
+            $platform = $conn->getDatabasePlatform();
+            if ($platform instanceof \Doctrine\DBAL\Platforms\SqlitePlatform) {
+                return; // No-op for SQLite
+            }
+
             $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_seed_{$lockKey}"]);
         } catch (\Throwable) {
             // Best effort release; lock will auto-release on connection close anyway
