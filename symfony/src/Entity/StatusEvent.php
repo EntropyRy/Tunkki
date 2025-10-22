@@ -48,6 +48,13 @@ class StatusEvent implements \Stringable
     #[ORM\JoinColumn(name: 'modifier_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?User $modifier = null;
 
+    public function __construct()
+    {
+        $now = new \DateTimeImmutable();
+        $this->createdAt = $now;
+        $this->updatedAt = $now;
+    }
+
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
