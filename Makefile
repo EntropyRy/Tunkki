@@ -80,9 +80,14 @@ _ensure-vendor:
 
 .PHONY: prepare-test-db
 prepare-test-db:
-	@echo "$(CYAN)==> Ensuring test database (APP_ENV=test)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Ensuring test database (APP_ENV=test)$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:create --if-not-exists >/dev/null 2>&1 || true
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console dbal:run-sql 'SELECT 1' >/dev/null 2>&1 || true
+
+.PHONY: panther-setup
+panther-setup:
+	@printf "%b\n" "$(CYAN)==> Ensuring Panther WebDriver binaries (bdi detect)$(RESET)"
+	@$(PHP_EXEC) vendor/bin/bdi detect drivers >/dev/null
 
 # ---------------- Help -------------------------------------------------------
 
@@ -95,6 +100,7 @@ help:
 	@echo "  make test-functional      - Run only Functional tests (tests/Functional)"
 	@echo "  make test-ci              - CI-style full suite (fail-fast, shows deprecations/warnings, no coverage)"
 	@echo "  make coverage             - Run suite with coverage (needs Xdebug/PCOV)"
+	@echo "  make panther-setup        - Install/update Panther WebDriver binaries"
 
 	@echo "  make test-one FILE=path   - Run a single test file (serial)"
 	@echo "  make test-one-filter FILE=path METHOD=name - Run a single test method"
@@ -124,8 +130,8 @@ help:
 
 
 .PHONY: test
-test: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Running full test suite$(RESET)"
+test: _ensure-vendor prepare-test-db panther-setup
+	@printf "%b\n" "$(CYAN)==> Running full test suite$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
@@ -136,7 +142,7 @@ test: _ensure-vendor prepare-test-db
 
 .PHONY: test-unit
 test-unit: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Running unit tests$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Running unit tests$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
@@ -147,7 +153,7 @@ test-unit: _ensure-vendor prepare-test-db
 
 .PHONY: test-functional
 test-functional: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Running functional tests$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Running functional tests$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
@@ -158,7 +164,7 @@ test-functional: _ensure-vendor prepare-test-db
 
 .PHONY: test-ci
 test-ci: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Running CI test suite (fail-fast, no coverage)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Running CI test suite (fail-fast, no coverage)$(RESET)"
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
@@ -169,33 +175,33 @@ test-ci: _ensure-vendor prepare-test-db
 
 .PHONY: coverage
 coverage: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Running tests with coverage (ensure Xdebug/PCOV enabled)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Running tests with coverage (ensure Xdebug/PCOV enabled)$(RESET)"
 	@$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --coverage-text --coverage-clover coverage.xml
 
 # ---------------- Mutation Testing (Infection) --------------------------------
 
 .PHONY: infection
 infection: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Infection run (filter='$(FILTER)')$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Infection run (filter='$(FILTER)')$(RESET)"
 	@cmd="$(PHP_EXEC) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED)"; \
 	if [ -n "$(FILTER)" ]; then cmd="$$cmd --filter=$(FILTER)"; fi; \
-	echo "$(YELLOW)$$cmd$(RESET)"; \
+	printf "%b\n" "$(YELLOW)$$cmd$(RESET)"; \
 	$$cmd
 
 .PHONY: infection-baseline
 infection-baseline: infection
-	@echo "$(CYAN)==> (Manual) Append results to metrics/mutation-baseline.md$(RESET)"
+	@printf "%b\n" "$(CYAN)==> (Manual) Append results to metrics/mutation-baseline.md$(RESET)"
 
 # Debug helper: prints the exact Infection command and a hex dump of characters
 # Useful for diagnosing Unicode dash issues (e.g. en-dash vs ASCII hyphen)
 .PHONY: infection-debug
 infection-debug: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Infection DEBUG (show raw command & hex)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Infection DEBUG (show raw command & hex)$(RESET)"
 	@cmd="$(PHP_EXEC) $(INFECTION_BIN) --threads=$(INFECTION_THREADS) --min-msi=$(INFECTION_MIN_MSI) --min-covered-msi=$(INFECTION_MIN_COVERED)"; \
 	if [ -n "$(FILTER)" ]; then cmd="$$cmd --filter=$(FILTER)"; fi; \
-	echo "RAW CMD: $(YELLOW)$$cmd$(RESET)"; \
+	printf "%b\n" "RAW CMD: $(YELLOW)$$cmd$(RESET)"; \
 	printf '%s\n' "$$cmd" | od -An -tx1 | sed 's/^/HEX: /'; \
-	echo "$(CYAN)==> Executing Infection (debug)$(RESET)"; \
+	printf "%b\n" "$(CYAN)==> Executing Infection (debug)$(RESET)"; \
 	$$cmd
 
 # ---------------- Test Profiling (Single Test Runner) ------------------------
@@ -213,40 +219,40 @@ test-one-filter: _ensure-vendor prepare-test-db
 
 .PHONY: stan
 stan: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> PHPStan (full) level=$(PHPSTAN_LEVEL)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> PHPStan (full) level=$(PHPSTAN_LEVEL)$(RESET)"
 	@$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_FLAGS_BASE)
 
 .PHONY: stan-fast
 stan-fast: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> PHPStan (fast) paths=$(PHPSTAN_PATHS_FAST) level=$(PHPSTAN_LEVEL)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> PHPStan (fast) paths=$(PHPSTAN_PATHS_FAST) level=$(PHPSTAN_LEVEL)$(RESET)"
 	@$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_PATHS_FAST) $(PHPSTAN_FLAGS_BASE)
 
 .PHONY: stan-delta
 stan-delta: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> PHPStan (delta) base=$(GIT_DIFF_BASE) level=$(PHPSTAN_LEVEL)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> PHPStan (delta) base=$(GIT_DIFF_BASE) level=$(PHPSTAN_LEVEL)$(RESET)"
 	@files=$$(git diff --name-only $(GIT_DIFF_BASE) -- 'src' | grep '\.php$$' || true); \
 	if [ -z "$$files" ]; then \
-		echo "$(YELLOW)No changed PHP files under src/ relative to $(GIT_DIFF_BASE).$(RESET)"; \
+		printf "%b\n" "$(YELLOW)No changed PHP files under src/ relative to $(GIT_DIFF_BASE).$(RESET)"; \
 	else \
-		echo "$(CYAN)Analyzing changed files:$(RESET) $$files"; \
+		printf "%b\n" "$(CYAN)Analyzing changed files:$(RESET) $$files"; \
 		$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_FLAGS_BASE) $$files; \
 	fi
 
 .PHONY: stan-json
 stan-json: _ensure-vendor prepare-test-db
 	@mkdir -p $(METRICS_DIR)
-	@echo "$(CYAN)==> PHPStan JSON report -> $(METRICS_DIR)/phpstan-report.json$(RESET)"
+	@printf "%b\n" "$(CYAN)==> PHPStan JSON report -> $(METRICS_DIR)/phpstan-report.json$(RESET)"
 	@$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_FLAGS_BASE) --error-format=json > $(METRICS_DIR)/phpstan-report.json || true
-	@echo "$(YELLOW)Non-zero exit tolerated for JSON export. Review the file.$(RESET)"
+	@printf "%b\n" "$(YELLOW)Non-zero exit tolerated for JSON export. Review the file.$(RESET)"
 
 .PHONY: lint-datetime
 lint-datetime: _ensure-vendor prepare-test-db
-	@echo "$(CYAN)==> Lint (clock policy) scanning for forbidden new DateTime instantiations$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Lint (clock policy) scanning for forbidden new DateTime instantiations$(RESET)"
 	@bash ci/check_datetime.sh
 
 .PHONY: update-dev
 update-dev:
-	@echo "$(CYAN)==> Updating local dev environment (pull, build, up, deps, code style, rector)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Updating local dev environment (pull, build, up, deps, code style, rector)$(RESET)"
 	@$(COMPOSE) pull
 	@$(COMPOSE) build --pull
 	@$(COMPOSE) up -d
@@ -263,15 +269,15 @@ update-dev:
 .PHONY: scripts-debug-baseline scripts-route-debug scripts-seed-baseline
 
 scripts-debug-baseline: _ensure-vendor
-	@echo "$(CYAN)==> Sonata CMS baseline debug (APP_ENV=test)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Sonata CMS baseline debug (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/debug_baseline.php
 
 scripts-route-debug: _ensure-vendor
-	@echo "$(CYAN)==> ChainRouter route debug for '/' and '/en/' (APP_ENV=test)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> ChainRouter route debug for '/' and '/en/' (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/route_debug.php
 
 scripts-seed-baseline: _ensure-vendor
-	@echo "$(CYAN)==> Seeding/normalizing CMS baseline once (APP_ENV=test)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Seeding/normalizing CMS baseline once (APP_ENV=test)$(RESET)"
 	@$(PHP_EXEC) scripts/seed_baseline_once.php
 
 # ---------------- Metrics / Scaffolding --------------------------------------
@@ -280,25 +286,25 @@ scripts-seed-baseline: _ensure-vendor
 metrics-snapshot:
 	@mkdir -p $(METRICS_DIR)
 	@f="$(METRICS_DIR)/$(NOW)-snapshot.md"; \
-	if [ -f "$$f" ]; then echo "$(RED)Refusing to overwrite existing $$f$(RESET)"; exit 1; fi; \
-	echo "# Metrics Snapshot ($(NOW))\n\n(Describe changes, runtime, coverage deltas, structural shifts.)\n" > "$$f"; \
-	echo "$(GREEN)Created $$f$(RESET)"
+	if [ -f "$$f" ]; then printf "%b\n" "$(RED)Refusing to overwrite existing $$f$(RESET)"; exit 1; fi; \
+	printf '# Metrics Snapshot (%s)\n\n(Describe changes, runtime, coverage deltas, structural shifts.)\n' "$(NOW)" > "$$f"; \
+	printf "%b\n" "$(GREEN)Created $$f$(RESET)"
 
 # ---------------- Environment Diagnostics ------------------------------------
 
 .PHONY: doctor
 doctor:
-	@echo "$(CYAN)==> Environment diagnostics$(RESET)"
-	@echo "$(BOLD)Docker Compose Services$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Environment diagnostics$(RESET)"
+	@printf "%b\n" "$(BOLD)Docker Compose Services$(RESET)"
 	@$(COMPOSE) ps --status=running || true
 	@echo ""
-	@echo "$(BOLD)PHP Version (container)$(RESET)"
+	@printf "%b\n" "$(BOLD)PHP Version (container)$(RESET)"
 	@$(PHP_EXEC) -v | head -n1 || true
 	@echo ""
-	@echo "$(BOLD)Composer Dependencies (excerpt)$(RESET)"
+	@printf "%b\n" "$(BOLD)Composer Dependencies (excerpt)$(RESET)"
 	@$(COMPOSER_EXEC) show --no-interaction | head -n20 || true
 	@echo ""
-	@echo "$(BOLD)Key Tool Presence$(RESET)"
+	@printf "%b\n" "$(BOLD)Key Tool Presence$(RESET)"
 	@for bin in $(PHPUNIT_BIN) $(INFECTION_BIN) $(PHPSTAN_BIN); do \
 		if $(PHP_EXEC) $$bin --version >/dev/null 2>&1; then \
 			echo "  [OK] $$bin"; \
@@ -311,38 +317,38 @@ doctor:
 
 .PHONY: clean-coverage
 clean-coverage:
-	@echo "$(CYAN)==> Removing coverage artifacts$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Removing coverage artifacts$(RESET)"
 	@rm -f coverage.xml
 	@find . -type d -name coverage -prune -exec rm -rf {} \; 2>/dev/null || true
 
 .PHONY: clean-mutation-cache
 clean-mutation-cache:
-	@echo "$(CYAN)==> Removing Infection cache$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Removing Infection cache$(RESET)"
 	@rm -rf .infection-cache
 
 .PHONY: clean-phpstan-cache
 clean-phpstan-cache:
-	@echo "$(CYAN)==> Removing PHPStan cache$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Removing PHPStan cache$(RESET)"
 	@rm -rf var/phpstan
 
 .PHONY: clean
 clean: clean-coverage clean-mutation-cache clean-phpstan-cache
-	@echo "$(GREEN)All caches cleared$(RESET)"
+	@printf "%b\n" "$(GREEN)All caches cleared$(RESET)"
 
 .PHONY: clean-test-db
 clean-test-db:
-	@echo "$(CYAN)==> Resetting test database (drop/create/schema:update)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Resetting test database (drop/create/schema:update)$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:drop --force || true
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:database:create
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console doctrine:schema:update --force
-	@echo "$(CYAN)==> Seeding CMS baseline for tests$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Seeding CMS baseline for tests$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console entropy:cms:seed
-	@echo "$(CYAN)==> Regenerating Sonata snapshots$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Regenerating Sonata snapshots$(RESET)"
 	@$(COMPOSE) exec -T -e APP_ENV=test $(PHP_FPM_SERVICE) ./bin/console sonata:page:create-snapshots
 
 .PHONY: grant-test-db-privileges
 grant-test-db-privileges:
-	@echo "$(CYAN)==> Granting test user privileges on test_* databases (for parallel test execution)$(RESET)"
+	@printf "%b\n" "$(CYAN)==> Granting test user privileges on test_* databases (for parallel test execution)$(RESET)"
 	@if [ ! -f .env ]; then \
 		echo "$(RED)ERROR: .env file not found in project root$(RESET)"; \
 		exit 1; \
@@ -354,7 +360,7 @@ grant-test-db-privileges:
 	fi; \
 	$(COMPOSE) exec -T db mariadb -uroot -p"$$DB_ROOT_PW" \
 		-e "GRANT ALL PRIVILEGES ON \`test_%\`.* TO 'test'@'%'; FLUSH PRIVILEGES;" 2>&1 | grep -v "mariadb: \[Warning\]" || true
-	@echo "$(GREEN)Test user now has privileges on test_* databases$(RESET)"
+	@printf "%b\n" "$(GREEN)Test user now has privileges on test_* databases$(RESET)"
 
 
 
