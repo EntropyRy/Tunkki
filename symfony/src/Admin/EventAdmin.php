@@ -686,6 +686,10 @@ final class EventAdmin extends AbstractAdmin
                 ->add('nakkiRequiredForTicketReservation', null, [
                     'help' => 'allow tikets to be reserved only after nakki reservation',
                 ])
+                ->add('ticketTotalAmount', null, [
+                    'help' => 'Total number of tickets available for this event (all products combined). When set, the shop will display "X / Y available".',
+                    'required' => false,
+                ])
                 // ->add('ticketCount', null, ['help' => 'How many tickets there are? When event is updated and ticket update button is pushed this amount will be created with the price below. 2 prices for tickets? first create low price tickets that are in presales and then the amount of full price tickets'])
                 // ->add('ticketPrice', null, ['help' => 'What is price for a one ticket'])
                 ->end()

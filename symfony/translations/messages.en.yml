@@ -232,6 +232,9 @@ event:
   after: Past event
   now: Event in progress
   safer_space: Safer Space
+  tickets:
+    available: available
+    total_amount: Total amount
   ticket:
     shop: Ticket Shop
     to_shop: To Ticket Shop

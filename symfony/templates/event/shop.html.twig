@@ -35,6 +35,14 @@
             {{ block('product_block') }}
         {% endfor %}
         <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
+            {% if event.ticketTotalAmount %}
+                {% set available = event.ticketTotalAmount - totalSold %}
+                <p class="text-center mb-4">
+                    {{ 'event.tickets.available'|trans }}
+                    <strong>{{ available }} / {{ event.ticketTotalAmount }}</strong> 
+                    {{ 'event.tickets.total_amount'|trans }}
+                </p>
+            {% endif %}
             <input data-turbo="false"
                     type="submit"
                     class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-primary float-end"

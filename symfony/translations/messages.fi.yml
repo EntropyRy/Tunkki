@@ -325,6 +325,9 @@ event:
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
   safer_space: Turvallisempi tila
+  tickets:
+    available: saatavilla
+    total_amount: yhteensä
   ticket:
     shop: Lippukauppa
     to_shop: Lippukauppaan

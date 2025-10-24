@@ -144,6 +144,14 @@ class EventShopController extends AbstractController
         // if use clicks on the login button then redirect them back to this page
         $this->saveTargetPath($session, 'main', $request->getUri());
 
+        // Calculate total sold tickets (count all tickets for this event)
+        $totalSold = 0;
+        foreach ($event->getTickets() as $ticket) {
+            if ('paid' === $ticket->getStatus()) {
+                ++$totalSold;
+            }
+        }
+
         return $this->render('event/shop.html.twig', [
             'selected' => $selected,
             'nakkis' => $nakkis,
@@ -152,6 +160,7 @@ class EventShopController extends AbstractController
             'event' => $event,
             'form' => $form,
             'inCheckouts' => $max,
+            'totalSold' => $totalSold,
         ]);
     }
 
