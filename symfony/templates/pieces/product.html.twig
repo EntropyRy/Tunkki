@@ -13,23 +13,23 @@
         <div class="row">
             <div class="col-12 pic text-center">
                 {% if product.picture %}
-                    {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(locale)}) }}
+                    {{ sonata_media(product.picture, 'big', {class: 'img-fluid w-100', title: product.name(app.request.locale)}) }}
                 {% endif %}
             </div>
             <div class="col-12 price">
                 <button {{ stimulus_action('product', 'callopse') }} class="p-0 text-uppercase d-flex justify-content-between rounded">
                     <h3 class="ps-4 pe-2 py-2 d-flex w-100 fw-bold justify-content-between align-items-center">
                         <span>
-                            {% if locale == 'fi' %}
-                                {% if product.name(locale) is not null %}
-                                    {{ product.name(locale) }}
+                            {% if app.request.locale == 'fi' %}
+                                {% if product.name(app.request.locale) is not null %}
+                                    {{ product.name(app.request.locale) }}
                                     <br>
                                     <span class="fs-6 float-start">({{ product.nameEn }})</span>
                                 {% else %}
                                     {{ product.nameEn }}
                                 {% endif %}
                             {% else %}
-                                {{ product.name(locale) }}
+                                {{ product.name(app.request.locale) }}
                             {% endif %}
                         </span>
                         <span>{{ product.amount / 100 }}€</span>
@@ -42,7 +42,7 @@
             </div>
             <div class="col-12 info" {{ stimulus_target('product', 'callopse') }}>
                 <div class="px-4">
-                    <p class="mt-3">{{ product.description(locale) }}</p>
+                    <p class="mt-3">{{ product.description(app.request.locale) }}</p>
                     {% if show_available %}
                         <p>
                             {{ 'shop.product.available'|trans }}: {{ product.max(minus|default(0)) }}
