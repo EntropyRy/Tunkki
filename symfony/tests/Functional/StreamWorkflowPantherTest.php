@@ -214,7 +214,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
             return;
         }
 
-        if (array_key_exists('APP_ENV', self::$previousEnv)) {
+        if (\array_key_exists('APP_ENV', self::$previousEnv)) {
             $value = self::$previousEnv['APP_ENV'];
             if (null === $value) {
                 unset($_ENV['APP_ENV']);
@@ -222,7 +222,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
                 $_ENV['APP_ENV'] = $value;
             }
         }
-        if (array_key_exists('DATABASE_URL', self::$previousEnv)) {
+        if (\array_key_exists('DATABASE_URL', self::$previousEnv)) {
             $value = self::$previousEnv['DATABASE_URL'];
             if (null === $value) {
                 unset($_ENV['DATABASE_URL']);
@@ -231,7 +231,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
             }
         }
 
-        if (array_key_exists('APP_ENV', self::$previousServer)) {
+        if (\array_key_exists('APP_ENV', self::$previousServer)) {
             $value = self::$previousServer['APP_ENV'];
             if (null === $value) {
                 unset($_SERVER['APP_ENV']);
@@ -239,7 +239,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
                 $_SERVER['APP_ENV'] = $value;
             }
         }
-        if (array_key_exists('DATABASE_URL', self::$previousServer)) {
+        if (\array_key_exists('DATABASE_URL', self::$previousServer)) {
             $value = self::$previousServer['DATABASE_URL'];
             if (null === $value) {
                 unset($_SERVER['DATABASE_URL']);
@@ -248,11 +248,11 @@ final class StreamWorkflowPantherTest extends PantherTestCase
             }
         }
 
-        if (array_key_exists('APP_ENV', self::$previousGetEnv)) {
+        if (\array_key_exists('APP_ENV', self::$previousGetEnv)) {
             $value = self::$previousGetEnv['APP_ENV'];
             putenv(null === $value ? 'APP_ENV' : 'APP_ENV='.$value);
         }
-        if (array_key_exists('DATABASE_URL', self::$previousGetEnv)) {
+        if (\array_key_exists('DATABASE_URL', self::$previousGetEnv)) {
             $value = self::$previousGetEnv['DATABASE_URL'];
             putenv(null === $value ? 'DATABASE_URL' : 'DATABASE_URL='.$value);
         }

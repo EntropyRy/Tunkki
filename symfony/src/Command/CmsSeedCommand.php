@@ -29,8 +29,7 @@ final class CmsSeedCommand extends Command
     public function __construct(
         private readonly EntityManagerInterface $em,
         private readonly CreateSnapshotBySiteInterface $createSnapshotBySite,
-    )
-    {
+    ) {
         parent::__construct();
     }
 

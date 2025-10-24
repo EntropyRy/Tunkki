@@ -76,10 +76,6 @@
   transition: max-height 0.25s ease-in;
 }
 
-.product .info p {
-  padding-top: 1rem;
-}
-
 .product .quantity .quantity-holder {
   min-height: calc(var(--border-radius, 0.375rem) * 2);
   outline: var(--outline) solid var(--outline-color);

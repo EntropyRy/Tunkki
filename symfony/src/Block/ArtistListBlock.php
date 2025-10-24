@@ -30,7 +30,7 @@ class ArtistListBlock extends BaseBlockService
         return $this->renderResponse($blockContext->getTemplate(), [
             'block' => $blockContext->getBlock(),
             'artists' => $artists,
-            'count' => array_sum(array_map('count', $artists)),
+            'count' => array_sum(array_map(count(...), $artists)),
             'settings' => $blockContext->getSettings(),
         ], $response);
     }

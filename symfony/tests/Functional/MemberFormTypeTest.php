@@ -203,7 +203,7 @@ final class MemberFormTypeTest extends FixturesWebTestCase
         $memberId = $user->getMember()->getId();
 
         $member = $memberRepo->find($memberId);
-        
+
         if ($member instanceof Member) {
             $member->setLocale('en');
             $doctrine->getManager()->flush();
