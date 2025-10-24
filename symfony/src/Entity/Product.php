@@ -75,6 +75,11 @@ class Product implements \Stringable
         return 0;
     }
 
+    public function getTotalAvailable(): int
+    {
+        return $this->quantity - $this->getSold();
+    }
+
     public function getName($lang): ?string
     {
         $func = 'name'.ucfirst((string) $lang);
@@ -313,8 +318,9 @@ class Product implements \Stringable
         return $this->howManyOneCanBuyAtOneTime;
     }
 
-    public function setHowManyOneCanBuyAtOneTime(int $howManyOneCanBuyAtOneTime): static
-    {
+    public function setHowManyOneCanBuyAtOneTime(
+        int $howManyOneCanBuyAtOneTime,
+    ): static {
         $this->howManyOneCanBuyAtOneTime = $howManyOneCanBuyAtOneTime;
 
         return $this;

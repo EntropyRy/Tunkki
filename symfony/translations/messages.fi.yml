@@ -672,6 +672,7 @@ shop:
     available: Saatavilla
     quantity: määrä
     sold_out: Loppuunmyyty
+    total_available: yhteensä saatavilla
   cart:
     empty: Ostoskorisi on tyhjä
     email:

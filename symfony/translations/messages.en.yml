@@ -540,6 +540,7 @@ shop:
     available: Available
     quantity: quantity
     sold_out: Sold Out
+    total_available: Total available
   cart:
     email:
       label: Email in which we will send your receipt
