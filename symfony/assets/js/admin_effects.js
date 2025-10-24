@@ -38,25 +38,25 @@
      */
     function formatVoronoiWithComments(obj) {
         return `{
-  // Number of Voronoi seeds
+  // Number of Voronoi seeds (1-100, mobile uses 60% of this value)
   "seedCount": ${obj.seedCount},
-  // Movement speed of seeds
+  // Movement speed of seeds (0.001-0.01 recommended)
   "seedSpeed": ${obj.seedSpeed},
-  // Array of hex colors for cells (empty = transparent)
+  // Array of hex colors for cells (empty = transparent, e.g. ["#ff0000", "#00ff00"])
   "cellColors": [],
-  // Array of weights for each seed (empty = random)
+  // Array of weights for each seed (empty = auto-varied based on min/max)
   "seedWeights": [],
-  // Line width for cell boundaries
+  // Line width for cell boundaries (0.5-3.0 recommended)
   "lineWidth": ${obj.lineWidth},
-  // Line color for cell boundaries
+  // Line color for cell boundaries (hex color)
   "lineColor": "${obj.lineColor}",
-  // Use varied weights for organic look
+  // Use varied weights for organic bubble look
   "weightVariation": ${obj.weightVariation},
-  // Minimum bubble weight/radius
+  // Minimum bubble weight/radius (pixels)
   "minWeight": ${obj.minWeight},
-  // Maximum bubble weight/radius
+  // Maximum bubble weight/radius (pixels)
   "maxWeight": ${obj.maxWeight}
-  }`;
+}`;
     }
 
     /**

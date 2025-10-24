@@ -21,13 +21,6 @@ const defaults = {
 };
 const config = readEffectConfig("voronoi", defaults);
 
-if (config.useCurvedLines && config.usePushedPlane) {
-    console.warn(
-        "Voronoi: useCurvedLines and usePushedPlane cannot be used together. Disabling usePushedPlane.",
-    );
-    config.usePushedPlane = false;
-}
-
 // Mobile detection and optimization
 const isMobile =
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
@@ -37,6 +30,9 @@ if (isMobile) {
     config.seedCount = Math.floor(config.seedCount * 0.6);
     config.lineWidth *= 0.8;
 }
+
+// Clamp seedCount to reasonable limits
+config.seedCount = Math.max(1, Math.min(100, config.seedCount));
 
 // Handle canvas resize
 function resizeCanvas() {
@@ -59,113 +55,54 @@ void main() {
 }
 `;
 
-// Fragment shader (Voronoi calculation, supports weights)
-const fragmentSrc = `
+// Generate fragment shader dynamically based on seedCount
+function generateFragmentShader(maxSeeds) {
+    // Generate color selection if-chain (WebGL 1.0 doesn't support dynamic array indexing)
+    let colorSelection = 'vec3 color = u_colors[0];';
+    for (let i = 1; i < maxSeeds; i++) {
+        colorSelection += `\n        if (c == ${i}) color = u_colors[${i}];`;
+    }
+
+    return `
 precision highp float;
-#define MAX_SEEDS 15
+#define MAX_SEEDS ${maxSeeds}
 uniform int u_seedCount;
 uniform vec2 u_seeds[MAX_SEEDS];
 uniform float u_weights[MAX_SEEDS];
 uniform vec3 u_colors[MAX_SEEDS];
 uniform vec3 u_lineColor;
+uniform float u_lineThreshold;
 varying vec2 v_uv;
 
 int findClosest(vec2 p) {
     float minDist = 1e6;
     int closest = 0;
-    float d;
-    if (u_seedCount > 0) {
-        d = distance(p, u_seeds[0]) - u_weights[0];
-        minDist = d;
-        closest = 0;
-    }
-    if (u_seedCount > 1) {
-        d = distance(p, u_seeds[1]) - u_weights[1];
-        if (d < minDist) { minDist = d; closest = 1; }
-    }
-    if (u_seedCount > 2) {
-        d = distance(p, u_seeds[2]) - u_weights[2];
-        if (d < minDist) { minDist = d; closest = 2; }
-    }
-    if (u_seedCount > 3) {
-        d = distance(p, u_seeds[3]) - u_weights[3];
-        if (d < minDist) { minDist = d; closest = 3; }
-    }
-    if (u_seedCount > 4) {
-        d = distance(p, u_seeds[4]) - u_weights[4];
-        if (d < minDist) { minDist = d; closest = 4; }
-    }
-    if (u_seedCount > 5) {
-        d = distance(p, u_seeds[5]) - u_weights[5];
-        if (d < minDist) { minDist = d; closest = 5; }
-    }
-    if (u_seedCount > 6) {
-        d = distance(p, u_seeds[6]) - u_weights[6];
-        if (d < minDist) { minDist = d; closest = 6; }
-    }
-    if (u_seedCount > 7) {
-        d = distance(p, u_seeds[7]) - u_weights[7];
-        if (d < minDist) { minDist = d; closest = 7; }
-    }
-    if (u_seedCount > 8) {
-        d = distance(p, u_seeds[8]) - u_weights[8];
-        if (d < minDist) { minDist = d; closest = 8; }
-    }
-    if (u_seedCount > 9) {
-        d = distance(p, u_seeds[9]) - u_weights[9];
-        if (d < minDist) { minDist = d; closest = 9; }
-    }
-    if (u_seedCount > 10) {
-        d = distance(p, u_seeds[10]) - u_weights[10];
-        if (d < minDist) { minDist = d; closest = 10; }
-    }
-    if (u_seedCount > 11) {
-        d = distance(p, u_seeds[11]) - u_weights[11];
-        if (d < minDist) { minDist = d; closest = 11; }
-    }
-    if (u_seedCount > 12) {
-        d = distance(p, u_seeds[12]) - u_weights[12];
-        if (d < minDist) { minDist = d; closest = 12; }
-    }
-    if (u_seedCount > 13) {
-        d = distance(p, u_seeds[13]) - u_weights[13];
-        if (d < minDist) { minDist = d; closest = 13; }
-    }
-    if (u_seedCount > 14) {
-        d = distance(p, u_seeds[14]) - u_weights[14];
-        if (d < minDist) { minDist = d; closest = 14; }
+    for (int i = 0; i < MAX_SEEDS; i++) {
+        if (i >= u_seedCount) break;
+        float d = distance(p, u_seeds[i]) - u_weights[i];
+        if (i == 0 || d < minDist) {
+            minDist = d;
+            closest = i;
+        }
     }
     return closest;
 }
 
 void main() {
     int c = findClosest(v_uv);
-    int cx = findClosest(v_uv + vec2(0.002, 0.0));
-    int cy = findClosest(v_uv + vec2(0.0, 0.002));
+    int cx = findClosest(v_uv + vec2(u_lineThreshold, 0.0));
+    int cy = findClosest(v_uv + vec2(0.0, u_lineThreshold));
 
     // If neighbor cell is different, draw line
     if (c != cx || c != cy) {
         gl_FragColor = vec4(u_lineColor, 1.0);
     } else {
-        vec3 color = u_colors[0];
-        if (c == 1) color = u_colors[1];
-        if (c == 2) color = u_colors[2];
-        if (c == 3) color = u_colors[3];
-        if (c == 4) color = u_colors[4];
-        if (c == 5) color = u_colors[5];
-        if (c == 6) color = u_colors[6];
-        if (c == 7) color = u_colors[7];
-        if (c == 8) color = u_colors[8];
-        if (c == 9) color = u_colors[9];
-        if (c == 10) color = u_colors[10];
-        if (c == 11) color = u_colors[11];
-        if (c == 12) color = u_colors[12];
-        if (c == 13) color = u_colors[13];
-        if (c == 14) color = u_colors[14];
+        ${colorSelection}
         gl_FragColor = vec4(color, 0.0);
     }
 }
 `;
+}
 
 // Compile shader utility
 function compileShader(type, src) {
@@ -178,7 +115,8 @@ function compileShader(type, src) {
     return shader;
 }
 
-// Create program
+// Create program with dynamic shader
+const fragmentSrc = generateFragmentShader(config.seedCount);
 const vertShader = compileShader(gl.VERTEX_SHADER, vertexSrc);
 const fragShader = compileShader(gl.FRAGMENT_SHADER, fragmentSrc);
 const program = gl.createProgram();
@@ -209,6 +147,7 @@ const u_seeds = gl.getUniformLocation(program, "u_seeds");
 const u_weights = gl.getUniformLocation(program, "u_weights");
 const u_colors = gl.getUniformLocation(program, "u_colors");
 const u_lineColor = gl.getUniformLocation(program, "u_lineColor");
+const u_lineThreshold = gl.getUniformLocation(program, "u_lineThreshold");
 
 // Seed and color animation logic (preserved from your original)
 let seeds = [];
@@ -279,7 +218,14 @@ function animate(now) {
         gl.uniform2fv(u_seeds, seeds.flat());
         gl.uniform1fv(u_weights, weights);
         gl.uniform3fv(u_colors, colors.flat());
-        gl.uniform3fv(u_lineColor, [1.0, 1.0, 1.0]); // white lines
+
+        // Convert lineColor hex to RGB and pass to shader
+        const lineColorRgb = hexToRgb(config.lineColor);
+        gl.uniform3fv(u_lineColor, lineColorRgb);
+
+        // Convert lineWidth to threshold (normalized screen space)
+        const lineThreshold = (config.lineWidth / 1000);
+        gl.uniform1f(u_lineThreshold, lineThreshold);
 
         // Draw
         gl.clear(gl.COLOR_BUFFER_BIT);
