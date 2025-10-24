@@ -183,13 +183,35 @@ function initSeeds() {
     }
 }
 function hexToRgb(hex) {
-    // "#RRGGBB" to [r,g,b] in 0..1
-    let r = parseInt(hex.slice(1, 3), 16) / 255;
-    let g = parseInt(hex.slice(3, 5), 16) / 255;
-    let b = parseInt(hex.slice(5, 7), 16) / 255;
+    // Handle various hex formats: "#RRGGBB", "RRGGBB", "#RGB", "RGB"
+    if (!hex) return [1, 1, 1]; // default to white
+
+    // Remove # if present
+    hex = hex.replace(/^#/, '');
+
+    // Expand shorthand format (e.g., "03F" -> "0033FF")
+    if (hex.length === 3) {
+        hex = hex.split('').map(char => char + char).join('');
+    }
+
+    // Validate hex format
+    if (!/^[0-9A-Fa-f]{6}$/.test(hex)) {
+        console.warn(`Invalid hex color: ${hex}, using white`);
+        return [1, 1, 1];
+    }
+
+    // Convert to RGB (0-1 range)
+    const r = parseInt(hex.slice(0, 2), 16) / 255;
+    const g = parseInt(hex.slice(2, 4), 16) / 255;
+    const b = parseInt(hex.slice(4, 6), 16) / 255;
+
     return [r, g, b];
 }
 initSeeds();
+
+// Pre-convert line color once (doesn't change during animation)
+const lineColorRgb = hexToRgb(config.lineColor);
+const lineThreshold = config.lineWidth / 1000;
 
 // Animate and draw
 let lastFrameTime = 0;
@@ -218,13 +240,7 @@ function animate(now) {
         gl.uniform2fv(u_seeds, seeds.flat());
         gl.uniform1fv(u_weights, weights);
         gl.uniform3fv(u_colors, colors.flat());
-
-        // Convert lineColor hex to RGB and pass to shader
-        const lineColorRgb = hexToRgb(config.lineColor);
         gl.uniform3fv(u_lineColor, lineColorRgb);
-
-        // Convert lineWidth to threshold (normalized screen space)
-        const lineThreshold = (config.lineWidth / 1000);
         gl.uniform1f(u_lineThreshold, lineThreshold);
 
         // Draw
