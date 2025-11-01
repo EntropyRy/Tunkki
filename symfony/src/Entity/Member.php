@@ -771,7 +771,7 @@ class Member implements \Stringable
         HappeningBooking $happeningBooking,
     ): self {
         if ($this->happeningBooking->removeElement($happeningBooking)) {
-            $happeningBooking->setMember(null);
+            $happeningBooking->setMember();
         }
 
         return $this;

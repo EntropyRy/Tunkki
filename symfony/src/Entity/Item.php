@@ -286,7 +286,7 @@ class Item implements \Stringable
 
     public function removeFixingHistory(StatusEvent $fixingHistory): void
     {
-        $fixingHistory->setItem(null);
+        $fixingHistory->setItem();
         $this->fixingHistory->removeElement($fixingHistory);
     }
 
@@ -358,7 +358,7 @@ class Item implements \Stringable
 
     public function removeFile(File $file): void
     {
-        $file->setProduct(null);
+        $file->setProduct();
         $this->files->removeElement($file);
     }
 

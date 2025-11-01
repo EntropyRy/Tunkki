@@ -57,7 +57,7 @@ class CheckoutsController extends AbstractController
 
         // Create checkout session via StripeService (no event for general shop)
         try {
-            $result = $stripe->createCheckoutSession($cart, $request, $cRepo, null);
+            $result = $stripe->createCheckoutSession($cart, $request, $cRepo);
         } catch (\RuntimeException) {
             $this->addFlash('warning', 'shop.cart.empty');
 

@@ -227,7 +227,7 @@ class HappeningController extends AbstractController
         $member = $user->getMember();
         $event = $happeningB->getHappening()->getEvent();
         if ($happeningB->getMember() === $member) {
-            $happeningB->setMember(null);
+            $happeningB->setMember();
             $hbr->remove($happeningB, true);
             $this->addFlash('success', 'happening.reservation_cancelled');
         }
