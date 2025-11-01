@@ -148,7 +148,7 @@ stream:
     currently_in_stream: is currently in the stream
     add: Add to Stream
     note: Note
-    note_text: Only one of your artists can be active in the stream at a time. Adding a new artist will automatically remove any of your currently active artists.
+    note_text: Only one of your artists can be active in the stream at a time.
     management: Stream Artist Management
     label: Artist
     select: Please, select an artist

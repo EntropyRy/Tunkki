@@ -237,7 +237,7 @@ stream:
     currently_in_stream: on tällä hetkellä streamissa
     add: Lisää streamiin
     note: Huomaa
-    note_text: Vain yksi sinun artisteista voi olla yhtäaikaa aktiivinen streamissa. Jos lisäät toisen artisteistasi niin edellinen otetaan pois streamista.
+    note_text: Vain yksi sinun artisteista voi olla yhtäaikaa aktiivinen streamissa.
     management: Stream artisti muokkaus
     label: Artisti
     select: Valitse artisti
