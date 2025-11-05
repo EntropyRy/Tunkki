@@ -1,7 +1,7 @@
 {% set nakki = this.nakkiView %}
 {% set attrs = attributes.defaults({class: 'nakki-column card shadow-sm border-0 h-100'}) %}
 <div{{ attrs }}>
-    <div class="card-header bg-light">
+    <div class="card-header">
         <div class="d-flex justify-content-between align-items-start">
             <div>
                 <h3 class="h6 mb-1">{{ nakki.definition.getName(app.request.locale) }}</h3>
