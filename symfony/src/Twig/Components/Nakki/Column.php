@@ -7,7 +7,6 @@ namespace App\Twig\Components\Nakki;
 use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
-use App\Entity\NakkiDefinition;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\NakkiRepository;
 use Doctrine\ORM\EntityManagerInterface;

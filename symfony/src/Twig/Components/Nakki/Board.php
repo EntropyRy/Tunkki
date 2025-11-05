@@ -100,9 +100,11 @@ final class Board
         $responsible = $data['responsible'] ?? null;
         $mattermostChannel = $this->normaliseString((string) ($data['mattermostChannel'] ?? ''));
 
+        // Check if a nakki already exists for this definition
         foreach ($this->event->getNakkis() as $existing) {
             $existingDefinition = $existing->getDefinition();
             if ($existingDefinition instanceof NakkiDefinition && $existingDefinition->getId() === $definitionId) {
+                // Update existing nakki metadata
                 $existing->setResponsible($responsible);
                 $existing->setMattermostChannel($mattermostChannel);
                 $this->entityManager->flush();
@@ -117,7 +119,28 @@ final class Board
             }
         }
 
-        $this->error = $this->translator->trans('nakkikone.board.definition_not_persisted');
+        // No existing nakki found - create a new one
+        $nakki = new Nakki();
+        $nakki->setEvent($this->event);
+        $nakki->setDefinition($definition);
+        $nakki->setResponsible($responsible);
+        $nakki->setMattermostChannel($mattermostChannel);
+
+        // Set default time range (use event date/time, extend by 8 hours)
+        $start = \DateTimeImmutable::createFromInterface($this->event->getEventDate());
+        $end = $start->modify('+8 hours');
+        $nakki->setStartAt($start);
+        $nakki->setEndAt($end);
+        $nakki->setNakkiInterval(new \DateInterval('PT1H')); // 1 hour intervals
+
+        $this->entityManager->persist($nakki);
+        $this->entityManager->flush();
+        $this->refreshEvent();
+
+        $this->message = $this->translator->trans('nakkikone.board.column_added');
+
+        // Reload the form with updated values
+        $this->loadExistingNakkiData();
     }
 
     /**
@@ -267,14 +290,9 @@ final class Board
             return;
         }
 
-        $managed = $this->entityManager
-            ->getRepository(Event::class)
-            ->find($id);
-
-        if ($managed instanceof Event) {
-            $this->event = $managed;
-            $this->columnIds = $this->deriveColumnIds();
-        }
+        // Use refresh() to force reload from database, including collections
+        $this->entityManager->refresh($this->event);
+        $this->columnIds = $this->deriveColumnIds();
     }
 
     private function syncSelectedDefinition(): void

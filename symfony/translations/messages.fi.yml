@@ -681,6 +681,7 @@ nakkikone:
     definition_not_persisted: Tallenna nakkityyppi ennen käyttöä.
     duplicate_definition: Tälle nakkityypille on jo sarake.
     column_meta_updated: Sarakkeen tiedot päivitetty.
+    column_added: Sarake lisätty onnistuneesti.
     column_created: "{0} Varausta ei luotu.|{1} Luotiin yksi varaus.|[2,Inf] Luotiin %count% varausta."
     column_removed: Sarake poistettu.
     no_columns: Nakkeja ei ole vielä määritelty.

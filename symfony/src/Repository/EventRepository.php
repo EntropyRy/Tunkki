@@ -99,11 +99,17 @@ class EventRepository extends ServiceEntityRepository
 
     public function findEventBySlugAndYear(string $slug, int $year): mixed
     {
+        // Use BETWEEN instead of YEAR() for SQLite compatibility (Panther tests)
+        $yearStart = new \DateTime("{$year}-01-01 00:00:00");
+        $yearEnd = new \DateTime(($year + 1).'-01-01 00:00:00');
+
         return $this->createQueryBuilder('r')
             ->andWhere('r.url = :val')
-            ->andWhere('YEAR(r.EventDate) = :year')
+            ->andWhere('r.EventDate >= :yearStart')
+            ->andWhere('r.EventDate < :yearEnd')
             ->setParameter('val', $slug)
-            ->setParameter('year', $year)
+            ->setParameter('yearStart', $yearStart)
+            ->setParameter('yearEnd', $yearEnd)
             ->orderBy('r.EventDate', 'DESC')
             ->setMaxResults(1)
             ->getQuery()

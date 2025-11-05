@@ -619,6 +619,7 @@ nakkikone:
     definition_not_persisted: Save the definition before using it.
     duplicate_definition: A column for this definition already exists.
     column_meta_updated: Column details updated.
+    column_added: Column added successfully.
     column_created: "{0} No bookings were created.|{1} Created one booking.|[2,Inf] Created %count% bookings."
     column_removed: Column removed.
     no_columns: No Nakkis configured yet.
