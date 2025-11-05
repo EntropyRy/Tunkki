@@ -1,5 +1,7 @@
 # Tunkki
 
+cancel: Cancel
+
 login:
   join_us: To log in you must be a member. <a href="/en/join-us">Join us</a>.
   join_us_plain: To log in you must be a member. Please join us first.
@@ -603,6 +605,68 @@ nakkikone:
   build_up: Build up
   during: During the event
   tear_down: Tear down
+  feedback:
+    fix_errors: Please fix the highlighted errors.
+    definition_saved: Definition saved.
+  board:
+    title: Nakkikone planner
+    definition_field: Definition
+    select_definition: Select definition
+    choose_responsible: Choose responsible
+    add_column: Add column
+    update_column: Update column
+    definition_required: Select a definition before adding a column.
+    definition_not_persisted: Save the definition before using it.
+    duplicate_definition: A column for this definition already exists.
+    column_meta_updated: Column details updated.
+    column_created: "{0} No bookings were created.|{1} Created one booking.|[2,Inf] Created %count% bookings."
+    column_removed: Column removed.
+    no_columns: No Nakkis configured yet.
+    in_use_suffix: (in use)
+    definition_in_use_hint: This definition already has a column; updates will adjust the responsible and Mattermost fields.
+    select_definition_prompt: Select a definition to configure its column.
+  definition:
+    add_new: Add new definition
+    section_fi: Finnish description
+    section_en: English description
+    only_active: Only for active members
+    used_previously: Used previously:
+    not_used: Definition not used yet.
+    edit: Edit definition
+    create: Create definition
+    update: Update definition
+    name_fi: Name FI
+    name_en: Name EN
+    description_fi: Description FI
+    description_en: Description EN
+  column:
+    responsible: Responsible
+    mattermost: Mattermost
+    disable: Disable bookings
+    add_slots_title: Add bookings
+    start_time: Start time
+    end_time: End time
+    interval_hours: Interval (h)
+    slots_field: Slots
+    add_button: Add
+    bookings_title: Bookings
+    no_bookings: No bookings generated yet.
+    reserved: Reserved
+    available: Available
+    remove_booking: Remove booking
+    edit_column: Edit
+    remove_column: Remove column
+    slots_badge: "{1} %count% slot|[2,Inf] %count% slots"
+    added_slots: "{1} Added one booking.|[2,Inf] Added %count% bookings."
+    booking_not_found: Booking not found.
+    remove_reserved_denied: Cannot remove a booking that already has a member.
+    disabled: Bookings disabled.
+    enabled: Bookings enabled.
+    booking_removed: Booking removed.
+    delete_reserved_denied: Cannot remove a column that has reserved bookings.
+    create: Create Nakki
+  common:
+    none: None
 e30v:
   sponsors: Sponsors
   merch_shop: Merchandise Shop

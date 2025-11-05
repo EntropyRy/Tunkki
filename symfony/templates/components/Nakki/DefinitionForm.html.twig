@@ -1,0 +1,46 @@
+{% if active %}
+{% set attrs = attributes.defaults({ class: 'nakki-definition-editor card border-0 shadow-sm' }) %}
+<div{{ attrs }}>
+    <div class="card-body">
+        {% if notice %}
+            <div class="alert alert-success">{{ notice }}</div>
+        {% endif %}
+        {% if error %}
+            <div class="alert alert-warning">{{ error }}</div>
+        {% endif %}
+
+        {{ form_start(form, {
+            attr: {
+                class: 'row g-3',
+                'data-action': 'live#action:prevent',
+                'data-live-action-param': 'save'
+            }
+        }) }}
+            <div class="col-md-6">
+                {{ form_row(form.nameFi) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.nameEn) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.descriptionFi) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.descriptionEn) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(form.onlyForActiveMembers) }}
+            </div>
+            <div class="col-md-6 d-flex justify-content-md-end align-items-center">
+                <button type="submit" class="btn btn-primary mt-3 mt-md-0">
+                    {% if definitionId %}
+                        {{ 'nakkikone.definition.update'|trans }}
+                    {% else %}
+                        {{ 'nakkikone.definition.create'|trans }}
+                    {% endif %}
+                </button>
+            </div>
+        {{ form_end(form, { render_rest: false }) }}
+    </div>
+</div>
+{% endif %}

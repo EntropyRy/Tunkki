@@ -1,0 +1,101 @@
+{% set attrs = attributes.defaults({ class: 'nakki-definition-manager mb-4' }) %}
+<div{{ attrs }}>
+    <div class="row g-3 align-items-end">
+        <div class="col-md-8">
+            <label class="form-label fw-semibold" for="nakki-definition-select">
+                {{ 'nakkikone.board.definition_field'|trans }}
+            </label>
+            <select id="nakki-definition-select"
+                    class="form-select"
+                    data-model="selectedDefinitionId">
+                <option value="">
+                    {{ 'nakkikone.board.select_definition'|trans }}
+                </option>
+                {% for entry in this.getDefinitions() %}
+                    {% set definition = entry.definition %}
+                    <option value="{{ definition.id }}"
+                            {% if selectedDefinitionId == definition.id %}selected{% endif %}>
+                        {{ definition.getName(app.request.locale) }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-4 text-md-end">
+            {% if showForm %}
+                <button type="button"
+                        class="btn btn-outline-secondary me-2"
+                        data-action="live#action"
+                        data-live-action-param="closeForm">
+                    {{ 'cancel'|trans }}
+                </button>
+            {% endif %}
+            {% if not selectedDefinition %}
+                <button type="button"
+                        class="btn btn-primary"
+                        data-action="live#action"
+                        data-live-action-param="createDefinition">
+                    {{ 'nakkikone.definition.add_new'|trans }}
+                </button>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if selectedDefinition %}
+        <div class="accordion mt-4" id="nakki-definition-accordion">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="nakki-definition-heading">
+                    <button class="accordion-button" type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#nakki-definition-body"
+                            aria-expanded="true"
+                            aria-controls="nakki-definition-body">
+                        {{ selectedDefinition.getName('fi') }} / {{ selectedDefinition.getName('en') }}
+                    </button>
+                </h2>
+                <div id="nakki-definition-body" class="accordion-collapse collapse show" aria-labelledby="nakki-definition-heading">
+                    <div class="accordion-body">
+                        <div class="mb-3">
+                            <h6 class="fw-semibold">{{ 'nakkikone.definition.section_fi'|trans }}</h6>
+                            <div>{{ selectedDefinition.getDescriptionFi()|raw }}</div>
+                        </div>
+                        <div class="mb-3">
+                            <h6 class="fw-semibold">{{ 'nakkikone.definition.section_en'|trans }}</h6>
+                            <div>{{ selectedDefinition.getDescriptionEn()|raw }}</div>
+                        </div>
+                        {% if selectedDefinition.getOnlyForActiveMembers() %}
+                            <span class="badge bg-warning text-dark mb-3">{{ 'nakkikone.definition.only_active'|trans }}</span>
+                        {% endif %}
+                        <div class="mb-3">
+                            <h6 class="fw-semibold">{{ 'nakkikone.definition.used_previously'|trans }}</h6>
+                            {% set usageExamples = this.getUsageExamples(selectedDefinition, app.request.locale) %}
+                            {% if usageExamples %}
+                                <ul class="ps-3 mb-0 small">
+                                    {% for name in usageExamples %}
+                                        <li>{{ name }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <span class="text-muted small">{{ 'nakkikone.definition.not_used'|trans }}</span>
+                            {% endif %}
+                        </div>
+                        <button type="button"
+                                class="btn btn-outline-secondary btn-sm"
+                                data-action="live#action"
+                                data-live-action-param="editDefinition"
+                                data-live-definition-id-param="{{ selectedDefinition.id }}">
+                            {{ 'nakkikone.definition.edit'|trans }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% if showForm %}
+        <div class="card border-0 shadow-sm mt-3" data-controller="transition">
+            <div class="card-body">
+                <twig:Nakki:DefinitionForm :definitionId="formDefinitionId" :active="true" />
+            </div>
+        </div>
+    {% endif %}
+</div>

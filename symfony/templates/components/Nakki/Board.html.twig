@@ -1,0 +1,64 @@
+{% set attrs = attributes.defaults({
+    class: 'nakki-board',
+    'data-controller': 'scroll-planner'
+}) %}
+<div{{ attrs }}>
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center" id="nakkikone-planner">
+            <h2 class="h5 mb-0">{{ 'nakkikone.board.title'|trans }}</h2>
+        </div>
+        <div class="card-body">
+            {% if this.error %}
+                <div class="alert alert-warning" role="alert">{{ this.error }}</div>
+            {% endif %}
+            {% if this.message %}
+                <div class="alert alert-success" role="status">{{ this.message }}</div>
+            {% endif %}
+
+            <twig:Nakki:Definition :event="event" />
+
+            {{ form_start(form, {
+                attr: {
+                    class: 'row g-3 align-items-end',
+                    'data-action': 'live#action:prevent',
+                    'data-live-action-param': 'addColumn',
+                    autocomplete: 'off'
+                }
+            }) }}
+                <div class="d-none">
+                    {{ form_widget(form.definition) }}
+                </div>
+
+                <div class="col-12 col-lg-6">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            {{ form_row(form.responsible) }}
+                        </div>
+                        <div class="col-6">
+                            {{ form_row(form.mattermostChannel) }}
+                        </div>
+                        <div class="col-12 col-lg-8 text-lg-end">
+                            <button type="submit"
+                                    class="btn btn-primary w-100"
+                                    {% if not this.selectedDefinition %}disabled{% endif %}>
+                                {{ this.isDefinitionInUse() ? 'nakkikone.board.update_column'|trans : 'nakkikone.board.add_column'|trans }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {{ form_end(form, { render_rest: false }) }}
+        </div>
+    </div>
+
+    <div class="row row-cols-1 row-cols-lg-2 g-3 mt-3">
+        {% for nakki in this.columns %}
+            <div class="col">
+                <twig:Nakki:Column :nakkiId="nakki.id" key="{{ nakki.id }}" />
+            </div>
+        {% else %}
+            <div class="col">
+                <div class="alert alert-info mb-0">{{ 'nakkikone.board.no_columns'|trans }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>

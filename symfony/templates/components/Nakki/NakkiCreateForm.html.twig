@@ -1,0 +1,67 @@
+<div class="nakki-create-form">
+    {% if notice %}
+        <div class="alert alert-success">{{ notice }}</div>
+    {% endif %}
+    {% if error %}
+        <div class="alert alert-warning">{{ error }}</div>
+    {% endif %}
+
+    <form class="row g-3" data-action="live#action:prevent" data-live-action-param="save">
+        <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ 'nakkikone.board.definition_field'|trans }}</label>
+            <select class="form-select"
+                    data-model="definitionId"
+                    required
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete', {
+                        tomSelectOptions: {
+                            plugins: ['clear_button']
+                        }
+                    }) }}>
+                <option value="">{{ 'nakkikone.board.select_definition'|trans }}</option>
+                {% for definition in this.getDefinitions() %}
+                    <option value="{{ definition.id }}"
+                            {% if definitionId == definition.id %}selected{% endif %}>
+                        {{ definition.getName(app.request.locale) }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-3">
+        <label class="form-label fw-semibold">{{ 'nakkikone.column.start_time'|trans }}</label>
+            <input type="datetime-local" class="form-control" data-model="startAt" value="{{ startAt }}" required>
+        </div>
+        <div class="col-md-3">
+        <label class="form-label fw-semibold">{{ 'nakkikone.column.end_time'|trans }}</label>
+            <input type="datetime-local" class="form-control" data-model="endAt" value="{{ endAt }}" required>
+        </div>
+        <div class="col-md-3">
+        <label class="form-label fw-semibold">{{ 'nakkikone.column.interval_hours'|trans }}</label>
+            <input type="number" min="1" class="form-control" data-model="intervalHours" value="{{ intervalHours }}">
+        </div>
+        <div class="col-md-3">
+        <label class="form-label fw-semibold">{{ 'nakkikone.column.responsible'|trans }}</label>
+            <select class="form-select"
+                    data-model="responsibleId"
+                    {{ stimulus_controller('symfony/ux-autocomplete/autocomplete', {
+                        tomSelectOptions: {
+                            plugins: ['clear_button']
+                        }
+                    }) }}>
+                <option value="">{{ 'nakkikone.common.none'|trans }}</option>
+                {% for member in this.getMembers() %}
+                    <option value="{{ member.id }}"
+                            {% if responsibleId == member.id %}selected{% endif %}>
+                        {{ member.name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+        <label class="form-label fw-semibold">{{ 'nakkikone.column.mattermost'|trans }}</label>
+            <input type="text" class="form-control" data-model="mattermostChannel" value="{{ mattermostChannel }}">
+        </div>
+        <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary">{{ 'nakkikone.column.create'|trans }}</button>
+        </div>
+    </form>
+</div>

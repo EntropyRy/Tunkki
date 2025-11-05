@@ -11,6 +11,7 @@ use App\Entity\RSVP;
 use App\Entity\User;
 use App\Repository\NakkiBookingRepository;
 use App\Service\MattermostNotifierService;
+use App\Security\Voter\EventNakkiAdminVoter;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -143,6 +144,26 @@ class EventVolunteerController extends AbstractController
         }
 
         return $this->redirect($request->headers->get('referer'));
+    }
+
+    #[
+        Route(
+            path: [
+                'fi' => '/{year}/{slug}/nakkikone/hallinta',
+                'en' => '/{year}/{slug}/nakkikone/admin',
+            ],
+            name: 'entropy_event_nakki_admin',
+            requirements: ['year' => "\d+"],
+        ),
+    ]
+    #[IsGranted(EventNakkiAdminVoter::ATTRIBUTE, 'event')]
+    public function nakkiAdmin(
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
+        Event $event,
+    ): Response {
+        return $this->render('event/nakkikone_admin.html.twig', [
+            'event' => $event,
+        ]);
     }
 
     #[

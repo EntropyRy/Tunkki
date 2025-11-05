@@ -1,5 +1,6 @@
 /.env.*.local
 /public/coverage/
+docs/
 logs/
 .env
 docker/data

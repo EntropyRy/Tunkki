@@ -1,0 +1,153 @@
+{% set nakki = this.nakkiView %}
+{% set attrs = attributes.defaults({ class: 'nakki-column card shadow-sm border-0 h-100' }) %}
+<div{{ attrs }}>
+    <div class="card-header bg-light">
+        <div class="d-flex justify-content-between align-items-start">
+            <div>
+                <h3 class="h6 mb-1">{{ nakki.definition.getName(app.request.locale) }}</h3>
+                {% set description = nakki.definition.getDescription(app.request.locale) %}
+                {% if description %}
+                    <div class="text-muted small">{{ description|raw }}</div>
+                {% endif %}
+                <div class="text-muted small">
+                    {{ nakki.startAt|date('d.M H:i') }} – {{ nakki.endAt|date('H:i') }} · {{ this.displayIntervalHours }}h
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-end gap-2 ms-3">
+            {% if nakki.responsible %}
+                <div class="text-end small">
+                    <span class="fw-semibold">{{ 'nakkikone.column.responsible'|trans }}:</span><br>
+                    {{ nakki.responsible.name }}
+                    {% if nakki.responsible.email %}
+                        <br><span class="text-muted">{{ nakki.responsible.email }}</span>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if nakki.mattermostChannel %}
+                <div class="text-end small">
+                    <span class="fw-semibold">{{ 'nakkikone.column.mattermost'|trans }}:</span>
+                    <a href="{{ nakki.mattermostChannel }}" target="_blank" rel="noopener" class="ms-1">
+                        {{ nakki.mattermostChannel }}
+                    </a>
+                </div>
+            {% endif %}
+                <div class="d-flex gap-1">
+                    <button type="button"
+                            class="btn btn-sm btn-outline-primary"
+                            data-action="live#action"
+                            data-live-action-param="editColumn">
+                        {{ 'nakkikone.column.edit_column'|trans }}
+                    </button>
+                    <button type="button"
+                            class="btn btn-sm btn-outline-danger"
+                            data-action="live#action"
+                            data-live-action-param="deleteColumn">
+                        {{ 'nakkikone.column.remove_column'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <form class="form-check form-switch mb-3 d-flex align-items-center gap-2"
+              data-action="change->live#action"
+              data-live-action-param="saveDisable">
+            <input class="form-check-input"
+                type="checkbox"
+                id="column-disable-{{ nakki.id }}"
+                data-model="disableBookings"
+                {% if this.disableBookings %}checked{% endif %}>
+            <label class="form-check-label" for="column-disable-{{ nakki.id }}">
+                {{ 'nakkikone.column.disable'|trans }}
+            </label>
+        </form>
+    </div>
+    <div class="card-body">
+
+        {% if this.error %}
+            <div class="alert alert-warning" role="alert">{{ this.error }}</div>
+        {% endif %}
+        {% if this.notice %}
+            <div class="alert alert-success" role="status">{{ this.notice }}</div>
+        {% endif %}
+
+        <div class="mb-4">
+            <h4 class="h6 fw-semibold mb-3">{{ 'nakkikone.column.add_slots_title'|trans }}</h4>
+            <form class="row g-3 align-items-end"
+                  data-action="live#action:prevent"
+                  data-live-action-param="addSlots">
+                <div class="col-12">
+                    <label class="form-label fw-semibold">{{ 'nakkikone.column.start_time'|trans }}</label>
+                    <input type="datetime-local"
+                           class="form-control"
+                           data-model="newSlotStart"
+                           value="{{ this.newSlotStart }}">
+                </div>
+                <div class="col-6 col-lg-4">
+                    <label class="form-label fw-semibold">{{ 'nakkikone.column.interval_hours'|trans }}</label>
+                    <input type="number"
+                           min="1"
+                           class="form-control"
+                           data-model="newSlotIntervalHours"
+                           value="{{ this.newSlotIntervalHours }}">
+                </div>
+                <div class="col-6 col-lg-4">
+                    <label class="form-label fw-semibold">{{ 'nakkikone.column.slots_field'|trans }}</label>
+                    <input type="number"
+                           min="1"
+                           class="form-control"
+                           data-model="newSlotCount"
+                           value="{{ this.newSlotCount }}">
+                </div>
+                <div class="col-12 col-lg-4 text-lg-end">
+                    <button type="submit" class="btn btn-outline-primary w-100">{{ 'nakkikone.column.add_button'|trans }}</button>
+                </div>
+            </form>
+        </div>
+
+        <h4 class="h6 fw-semibold mb-3">{{ 'nakkikone.column.bookings_title'|trans }}</h4>
+
+        {% set groups = this.bookingGroups %}
+        {% if groups is empty %}
+            <div class="alert alert-info">{{ 'nakkikone.column.no_bookings'|trans }}</div>
+        {% else %}
+            <div class="d-flex flex-column gap-3">
+                {% for group in groups %}
+                    <div class="border rounded p-3">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="fw-semibold">
+                                {{ group.start|date('d.M Y H:i') }} – {{ group.end|date('H:i') }}
+                            </div>
+                            <span class="badge bg-secondary">{{ 'nakkikone.column.slots_badge'|trans({'%count%': group.bookings|length, 'count': group.bookings|length}) }}</span>
+                        </div>
+                        <div class="mt-3 d-flex flex-wrap gap-2">
+                            {% for booking in group.bookings %}
+                                {% if booking.member %}
+                                    <div class="d-inline-flex align-items-center gap-2">
+                                        <span class="badge bg-primary">{{ 'nakkikone.column.reserved'|trans }}</span>
+                                        <span class="small text-muted">
+                                            {{ booking.member.name }}
+                                            {% if booking.member.email %}
+                                                · {{ booking.member.email }}
+                                            {% endif %}
+                                        </span>
+                                    </div>
+                                {% else %}
+                                    <div class="d-inline-flex align-items-center gap-2">
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">{{ 'nakkikone.column.available'|trans }}</span>
+                                        <button type="button"
+                                                class="btn btn-sm btn-outline-danger"
+                                                aria-label="{{ 'nakkikone.column.remove_booking'|trans }}"
+                                                data-action="live#action"
+                                                data-live-action-param="removeSlot"
+                                                data-live-booking-id-param="{{ booking.id }}">
+                                            &minus;
+                                        </button>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

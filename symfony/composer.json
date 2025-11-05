@@ -61,6 +61,7 @@
         "symfony/notifier": "^7.1",
         "symfony/stimulus-bundle": "^2.19",
         "symfony/telegram-notifier": "^7.1",
+        "symfony/ux-autocomplete": "^2.31",
         "symfony/ux-icons": "^2.22",
         "symfony/ux-leaflet-map": "^2.27",
         "symfony/ux-live-component": "^2.30",
