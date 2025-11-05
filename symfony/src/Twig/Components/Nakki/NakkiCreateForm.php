@@ -18,7 +18,6 @@ use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveListener;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
-use Symfony\UX\LiveComponent\Attribute\PostMount;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
@@ -61,8 +60,7 @@ final class NakkiCreateForm
     ) {
     }
 
-    #[PostMount]
-    public function init(): void
+    public function mount(): void
     {
         $event = $this->eventRepository->find($this->eventId);
         if (!$event instanceof Event) {
@@ -71,9 +69,8 @@ final class NakkiCreateForm
             return;
         }
 
-        $start = $event->getEventDate() ?? new \DateTimeImmutable();
-        $end = clone $start;
-        $end = $end->modify('+1 hour');
+        $start = \DateTimeImmutable::createFromInterface($event->getEventDate());
+        $end = $start->modify('+1 hour');
 
         $this->startAt = $start->format('Y-m-d\TH:i');
         $this->endAt = $end->format('Y-m-d\TH:i');
@@ -158,9 +155,6 @@ final class NakkiCreateForm
         $this->resetForm($nakki);
     }
 
-    /**
-     * @return list<NakkiDefinition>
-     */
     #[LiveListener('definition:created')]
     public function onDefinitionCreated(#[LiveArg('definitionId')] ?int $definitionId = null): void
     {
@@ -186,7 +180,7 @@ final class NakkiCreateForm
     {
         $event = $nakki->getEvent();
         $this->definitionId = $nakki->getDefinition()->getId();
-        $start = $event->getEventDate() ?? new \DateTimeImmutable();
+        $start = \DateTimeImmutable::createFromInterface($event->getEventDate());
         $end = $start->add(new \DateInterval('PT1H'));
         $this->startAt = $start->format('Y-m-d\TH:i');
         $this->endAt = $end->format('Y-m-d\TH:i');

@@ -7,6 +7,7 @@ namespace App\Twig\Components\Nakki;
 use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
+use App\Entity\NakkiDefinition;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\NakkiRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -15,7 +16,6 @@ use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
 use Symfony\UX\LiveComponent\Attribute\LiveProp;
-use Symfony\UX\LiveComponent\Attribute\PostMount;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
 
@@ -55,9 +55,9 @@ final class Column
     ) {
     }
 
-    #[PostMount]
-    public function initialise(): void
+    public function mount(int $nakkiId): void
     {
+        $this->nakkiId = $nakkiId;
         $this->loadFromEntity();
     }
 
@@ -175,10 +175,11 @@ final class Column
     {
         $nakki = $this->getNakki();
         $definition = $nakki->getDefinition();
+        $definitionId = $definition->getId();
 
-        if ($definition) {
+        if (null !== $definitionId) {
             $this->emitUp('nakki:edit', [
-                'definitionId' => $definition->getId(),
+                'definitionId' => $definitionId,
             ]);
         }
     }

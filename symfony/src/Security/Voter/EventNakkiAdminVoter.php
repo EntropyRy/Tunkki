@@ -10,6 +10,9 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, Event>
+ */
 final class EventNakkiAdminVoter extends Voter
 {
     public const string ATTRIBUTE = 'event_nakki_admin';

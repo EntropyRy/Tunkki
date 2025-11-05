@@ -10,7 +10,6 @@ use App\Entity\Nakki;
 use App\Entity\NakkiDefinition;
 use App\Form\NakkiBoardCreateType;
 use App\Repository\NakkiDefinitionRepository;
-use App\Service\NakkiScheduler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -46,7 +45,6 @@ final class Board
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly NakkiScheduler $scheduler,
         private readonly NakkiDefinitionRepository $definitionRepository,
         private readonly FormFactoryInterface $formFactory,
         private readonly TranslatorInterface $translator,
