@@ -100,7 +100,7 @@ final class Definition
     #[LiveAction]
     public function createDefinition(): void
     {
-        if ($this->showForm && null === $this->formDefinition) {
+        if ($this->showForm && !$this->formDefinition instanceof NakkiDefinition) {
             $this->showForm = false;
 
             return;
@@ -115,7 +115,7 @@ final class Definition
     public function editDefinition(#[LiveArg('definitionId')] int $definitionId): void
     {
         $definition = $this->hydrateDefinition($definitionId);
-        if (null === $definition) {
+        if (!$definition instanceof NakkiDefinition) {
             return;
         }
 
@@ -195,10 +195,8 @@ final class Definition
                 }
             }
 
-            $events = \array_values($eventsById);
-            \usort($events, static function (Event $a, Event $b): int {
-                return $b->getEventDate() <=> $a->getEventDate();
-            });
+            $events = array_values($eventsById);
+            usort($events, static fn (Event $a, Event $b): int => $b->getEventDate() <=> $a->getEventDate());
 
             $names = [];
             foreach (\array_slice($events, 0, 3) as $event) {

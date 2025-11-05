@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Member;
@@ -27,6 +29,7 @@ class MemberAutocompleteField extends AbstractType
         ]);
     }
 
+    #[\Override]
     public function getParent(): string
     {
         return BaseEntityAutocompleteType::class;

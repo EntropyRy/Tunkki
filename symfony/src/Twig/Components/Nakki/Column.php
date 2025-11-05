@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Twig\Components\Nakki;
 
+use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\NakkiRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
 use Symfony\UX\LiveComponent\Attribute\LiveArg;
@@ -16,7 +18,6 @@ use Symfony\UX\LiveComponent\Attribute\LiveProp;
 use Symfony\UX\LiveComponent\Attribute\PostMount;
 use Symfony\UX\LiveComponent\ComponentToolsTrait;
 use Symfony\UX\LiveComponent\DefaultActionTrait;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsLiveComponent]
 final class Column
@@ -77,14 +78,14 @@ final class Column
         $this->notice = null;
         $this->error = null;
 
-        $count = \max(1, $this->newSlotCount);
-        $intervalHours = \max(1, $this->newSlotIntervalHours);
-        $interval = new \DateInterval(sprintf('PT%dH', $intervalHours));
+        $count = max(1, $this->newSlotCount);
+        $intervalHours = max(1, $this->newSlotIntervalHours);
+        $interval = new \DateInterval(\sprintf('PT%dH', $intervalHours));
 
         $start = $this->parseDateTime($this->newSlotStart);
-        if (null === $start) {
+        if (!$start instanceof \DateTimeImmutable) {
             $bookings = $this->getBookings();
-            if ($bookings) {
+            if ([] !== $bookings) {
                 $last = end($bookings);
                 $start = $last->getEndAt();
             } else {
@@ -141,7 +142,7 @@ final class Column
             return;
         }
 
-        if (null !== $booking->getMember()) {
+        if ($booking->getMember() instanceof Member) {
             $this->error = $this->translator->trans('nakkikone.column.remove_reserved_denied');
 
             return;
@@ -212,7 +213,7 @@ final class Column
     public function getBookings(): array
     {
         $bookings = $this->getNakki()->getNakkiBookings()->toArray();
-        \usort(
+        usort(
             $bookings,
             static fn (NakkiBooking $a, NakkiBooking $b): int => $a->getStartAt() <=> $b->getStartAt(),
         );
@@ -239,7 +240,7 @@ final class Column
             $groups[$key]['bookings'][] = $booking;
         }
 
-        return \array_values($groups);
+        return array_values($groups);
     }
 
     private function loadFromEntity(): void
@@ -248,17 +249,17 @@ final class Column
         $this->disableBookings = (bool) $nakki->isDisableBookings();
         $this->displayIntervalHours = $this->intervalToHours($nakki->getNakkiInterval());
         $bookings = $this->getBookings();
-        $nextStart = $bookings ? end($bookings)->getEndAt() : $nakki->getStartAt();
+        $nextStart = [] !== $bookings ? end($bookings)->getEndAt() : $nakki->getStartAt();
         $this->newSlotStart = $nextStart instanceof \DateTimeInterface
             ? \DateTimeImmutable::createFromInterface($nextStart)->format('Y-m-d\TH:i')
-            : (new \DateTimeImmutable())->format('Y-m-d\TH:i');
-        $this->newSlotIntervalHours = \max(1, $this->intervalToHours($nakki->getNakkiInterval()));
+            : new \DateTimeImmutable()->format('Y-m-d\TH:i');
+        $this->newSlotIntervalHours = max(1, $this->intervalToHours($nakki->getNakkiInterval()));
         $this->newSlotCount = 1;
     }
 
     private function getNakki(): Nakki
     {
-        if (null === $this->nakki) {
+        if (!$this->nakki instanceof Nakki) {
             $nakki = $this->nakkiRepository->find($this->nakkiId);
             if (!$nakki instanceof Nakki) {
                 throw new \RuntimeException('Nakki not found.');
@@ -276,7 +277,7 @@ final class Column
 
     private function parseDateTime(string $value): ?\DateTimeImmutable
     {
-        if ('' === \trim($value)) {
+        if ('' === trim($value)) {
             return null;
         }
 
@@ -292,7 +293,7 @@ final class Column
             return;
         }
 
-        \usort(
+        usort(
             $bookings,
             static fn (NakkiBooking $a, NakkiBooking $b): int => $a->getStartAt() <=> $b->getStartAt(),
         );
@@ -306,6 +307,6 @@ final class Column
         $hours = (int) $interval->format('%h');
         $days = (int) $interval->format('%d');
 
-        return \max(1, $hours + ($days * 24));
+        return max(1, $hours + ($days * 24));
     }
 }

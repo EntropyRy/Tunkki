@@ -11,7 +11,7 @@ use App\Entity\NakkiBooking;
  *
  * @immutable
  */
-final class NakkiSchedulerResult
+final readonly class NakkiSchedulerResult
 {
     /**
      * @param list<NakkiBooking> $created
@@ -20,11 +20,11 @@ final class NakkiSchedulerResult
      * @param list<NakkiBooking> $conflicts
      */
     public function __construct(
-        public readonly array $created = [],
-        public readonly array $removed = [],
-        public readonly array $preserved = [],
-        public readonly array $conflicts = [],
-        public readonly ?string $warning = null,
+        public array $created = [],
+        public array $removed = [],
+        public array $preserved = [],
+        public array $conflicts = [],
+        public ?string $warning = null,
     ) {
     }
 

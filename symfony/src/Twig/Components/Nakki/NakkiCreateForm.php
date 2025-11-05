@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Twig\Components\Nakki;
 
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\Nakki;
+use App\Entity\NakkiDefinition;
 use App\Repository\EventRepository;
 use App\Repository\MemberRepository;
 use App\Repository\NakkiDefinitionRepository;
@@ -46,7 +49,6 @@ final class NakkiCreateForm
     #[LiveProp(writable: true)]
     public string $mattermostChannel = '';
 
-
     public ?string $notice = null;
     public ?string $error = null;
 
@@ -63,7 +65,7 @@ final class NakkiCreateForm
     public function init(): void
     {
         $event = $this->eventRepository->find($this->eventId);
-        if (!$event) {
+        if (!$event instanceof Event) {
             $this->error = 'Event not found.';
 
             return;
@@ -89,7 +91,7 @@ final class NakkiCreateForm
         $this->error = null;
 
         $event = $this->eventRepository->find($this->eventId);
-        if (!$event) {
+        if (!$event instanceof Event) {
             $this->error = 'Event not found.';
 
             return;
@@ -102,7 +104,7 @@ final class NakkiCreateForm
         }
 
         $definition = $this->definitionRepository->find($this->definitionId);
-        if (!$definition) {
+        if (!$definition instanceof NakkiDefinition) {
             $this->error = 'Definition not found.';
 
             return;
@@ -110,7 +112,7 @@ final class NakkiCreateForm
 
         $start = $this->parseDateTime($this->startAt);
         $end = $this->parseDateTime($this->endAt);
-        if (null === $start || null === $end) {
+        if (!$start instanceof \DateTimeImmutable || !$end instanceof \DateTimeImmutable) {
             $this->error = 'Start and end times are required.';
 
             return;
@@ -128,7 +130,7 @@ final class NakkiCreateForm
             return;
         }
 
-        $interval = new \DateInterval(sprintf('PT%dH', $this->intervalHours));
+        $interval = new \DateInterval(\sprintf('PT%dH', $this->intervalHours));
 
         $nakki = new Nakki();
         $nakki->setEvent($event);
@@ -140,7 +142,7 @@ final class NakkiCreateForm
 
         if (null !== $this->responsibleId) {
             $responsible = $this->memberRepository->find($this->responsibleId);
-            if ($responsible) {
+            if ($responsible instanceof Member) {
                 $nakki->setResponsible($responsible);
             }
         }
@@ -151,13 +153,13 @@ final class NakkiCreateForm
 
         $this->emit('nakki:created', ['nakkiId' => $nakki->getId()]);
 
-        $this->notice = sprintf('Created %d booking(s).', count($result->created));
+        $this->notice = \sprintf('Created %d booking(s).', \count($result->created));
 
         $this->resetForm($nakki);
     }
 
     /**
-     * @return list<\App\Entity\NakkiDefinition>
+     * @return list<NakkiDefinition>
      */
     #[LiveListener('definition:created')]
     public function onDefinitionCreated(#[LiveArg('definitionId')] ?int $definitionId = null): void
@@ -173,7 +175,7 @@ final class NakkiCreateForm
     }
 
     /**
-     * @return list<\App\Entity\Member>
+     * @return list<Member>
      */
     public function getMembers(): array
     {
@@ -183,7 +185,7 @@ final class NakkiCreateForm
     private function resetForm(Nakki $nakki): void
     {
         $event = $nakki->getEvent();
-        $this->definitionId = $nakki->getDefinition()?->getId();
+        $this->definitionId = $nakki->getDefinition()->getId();
         $start = $event->getEventDate() ?? new \DateTimeImmutable();
         $end = $start->add(new \DateInterval('PT1H'));
         $this->startAt = $start->format('Y-m-d\TH:i');

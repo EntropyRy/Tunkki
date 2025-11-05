@@ -1,5 +1,5 @@
 {% if active %}
-{% set attrs = attributes.defaults({ class: 'nakki-definition-editor card border-0 shadow-sm' }) %}
+{% set attrs = attributes.defaults({class: 'nakki-definition-editor card border-0 shadow-sm'}) %}
 <div{{ attrs }}>
     <div class="card-body">
         {% if notice %}
@@ -13,8 +13,8 @@
             attr: {
                 class: 'row g-3',
                 'data-action': 'live#action:prevent',
-                'data-live-action-param': 'save'
-            }
+                'data-live-action-param': 'save',
+            },
         }) }}
             <div class="col-md-6">
                 {{ form_row(form.nameFi) }}
@@ -40,7 +40,7 @@
                     {% endif %}
                 </button>
             </div>
-        {{ form_end(form, { render_rest: false }) }}
+        {{ form_end(form, {render_rest: false}) }}
     </div>
 </div>
 {% endif %}

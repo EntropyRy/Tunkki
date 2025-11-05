@@ -14,7 +14,6 @@ use App\Service\NakkiScheduler;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -30,8 +29,8 @@ use Symfony\UX\TwigComponent\Attribute\ExposeInTemplate;
 final class Board
 {
     use ComponentToolsTrait;
-    use DefaultActionTrait;
     use ComponentWithFormTrait;
+    use DefaultActionTrait;
 
     #[LiveProp(updateFromParent: true)]
     public Event $event;
@@ -78,7 +77,7 @@ final class Board
             foreach ($form->getErrors(true) as $error) {
                 $errors[] = $error->getMessage();
             }
-            $this->error = $this->translator->trans('nakkikone.feedback.fix_errors') . ': ' . implode(', ', $errors);
+            $this->error = $this->translator->trans('nakkikone.feedback.fix_errors').': '.implode(', ', $errors);
 
             return;
         }
@@ -175,7 +174,8 @@ final class Board
         }
 
         $definitionsInUse = $this->deriveDefinitionsInUse();
-        return in_array((string) $definitionId, $definitionsInUse, true);
+
+        return \in_array((string) $definitionId, $definitionsInUse, true);
     }
 
     #[LiveListener('definition:selected')]
@@ -219,7 +219,7 @@ final class Board
     public function onColumnRemoved(#[LiveArg('id')] int $id): void
     {
         $this->refreshEvent();
-        $this->columnIds = \array_values(\array_filter(
+        $this->columnIds = array_values(array_filter(
             $this->columnIds,
             static fn (int $columnId): bool => $columnId !== $id,
         ));
@@ -257,7 +257,7 @@ final class Board
 
     private function normaliseString(string $value): ?string
     {
-        $trimmed = \trim($value);
+        $trimmed = trim($value);
 
         return '' === $trimmed ? null : $trimmed;
     }
@@ -285,7 +285,7 @@ final class Board
         $form->get('definition')->setData($this->selectedDefinition);
 
         $formName = $form->getName();
-        $this->formValues[$formName] = $this->formValues[$formName] ?? [];
+        $this->formValues[$formName] ??= [];
         $this->formValues[$formName]['definition'] = $this->selectedDefinition?->getId();
     }
 
@@ -302,7 +302,7 @@ final class Board
                     $nakkiDefinition = $nakki->getDefinition();
                     if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
                         $formName = $this->getForm()->getName();
-                        $this->formValues[$formName] = $this->formValues[$formName] ?? [];
+                        $this->formValues[$formName] ??= [];
                         $this->formValues[$formName]['mattermostChannel'] = $nakki->getMattermostChannel();
                         // Note: responsible field uses data-live-ignore, so we don't set it in formValues
 
@@ -319,14 +319,14 @@ final class Board
     private function deriveColumnIds(): array
     {
         $nakkis = $this->event->getNakkis()->toArray();
-        \usort(
+        usort(
             $nakkis,
             static fn (Nakki $a, Nakki $b): int => $a->getStartAt() <=> $b->getStartAt(),
         );
 
-        return \array_values(
-            \array_filter(
-                \array_map(
+        return array_values(
+            array_filter(
+                array_map(
                     static fn (Nakki $nakki): ?int => $nakki->getId(),
                     $nakkis,
                 ),
@@ -361,6 +361,6 @@ final class Board
             }
         }
 
-        return \array_values(\array_unique($ids));
+        return array_values(array_unique($ids));
     }
 }

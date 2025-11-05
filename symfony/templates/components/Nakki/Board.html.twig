@@ -1,6 +1,6 @@
 {% set attrs = attributes.defaults({
     class: 'nakki-board',
-    'data-controller': 'scroll-planner'
+    'data-controller': 'scroll-planner',
 }) %}
 <div{{ attrs }}>
     <div class="card shadow-sm border-0">
@@ -22,8 +22,8 @@
                     class: 'row g-3 align-items-end',
                     'data-action': 'live#action:prevent',
                     'data-live-action-param': 'addColumn',
-                    autocomplete: 'off'
-                }
+                    autocomplete: 'off',
+                },
             }) }}
                 <div class="d-none">
                     {{ form_widget(form.definition) }}
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                 </div>
-            {{ form_end(form, { render_rest: false }) }}
+            {{ form_end(form, {render_rest: false}) }}
         </div>
     </div>
 

@@ -24,8 +24,8 @@ use Symfony\UX\LiveComponent\DefaultActionTrait;
 final class DefinitionForm
 {
     use ComponentToolsTrait;
-    use DefaultActionTrait;
     use ComponentWithFormTrait;
+    use DefaultActionTrait;
 
     #[LiveProp(writable: true, onUpdated: 'definitionIdUpdated')]
     public ?int $definitionId = null;
@@ -84,7 +84,7 @@ final class DefinitionForm
 
         try {
             $this->submitForm();
-        } catch (UnprocessableEntityHttpException $exception) {
+        } catch (UnprocessableEntityHttpException) {
             $this->error = $this->translator->trans('nakkikone.feedback.fix_errors');
 
             return;
@@ -109,7 +109,7 @@ final class DefinitionForm
 
     private function resolveDefinition(): NakkiDefinition
     {
-        if (null !== $this->definition) {
+        if ($this->definition instanceof NakkiDefinition) {
             return $this->definition;
         }
 

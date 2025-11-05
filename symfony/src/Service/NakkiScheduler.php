@@ -15,9 +15,9 @@ use Doctrine\ORM\EntityManagerInterface;
  * Replaces the legacy Sonata admin hooks with a reusable service that can be
  * invoked from Twig Live Components or other orchestration layers.
  */
-final class NakkiScheduler
+final readonly class NakkiScheduler
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 
@@ -192,7 +192,7 @@ final class NakkiScheduler
         $count = \count($conflicts);
         $definition = $nakki->getDefinition()->getNameEn();
 
-        return sprintf(
+        return \sprintf(
             '%d booking(s) with assigned members were left untouched for "%s". Adjust them manually.',
             $count,
             $definition,

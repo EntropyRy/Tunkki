@@ -14,8 +14,8 @@
                     required
                     {{ stimulus_controller('symfony/ux-autocomplete/autocomplete', {
                         tomSelectOptions: {
-                            plugins: ['clear_button']
-                        }
+                            plugins: ['clear_button'],
+                        },
                     }) }}>
                 <option value="">{{ 'nakkikone.board.select_definition'|trans }}</option>
                 {% for definition in this.getDefinitions() %}
@@ -44,8 +44,8 @@
                     data-model="responsibleId"
                     {{ stimulus_controller('symfony/ux-autocomplete/autocomplete', {
                         tomSelectOptions: {
-                            plugins: ['clear_button']
-                        }
+                            plugins: ['clear_button'],
+                        },
                     }) }}>
                 <option value="">{{ 'nakkikone.common.none'|trans }}</option>
                 {% for member in this.getMembers() %}
