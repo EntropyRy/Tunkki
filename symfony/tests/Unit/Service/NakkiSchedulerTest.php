@@ -239,8 +239,8 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         self::assertNull($result->warning);
         self::assertTrue($result->hasChanges());
 
-        self::assertTrue(in_array($booking1, $result->removed, true));
-        self::assertTrue(in_array($booking2, $result->removed, true));
+        self::assertTrue(\in_array($booking1, $result->removed, true));
+        self::assertTrue(\in_array($booking2, $result->removed, true));
     }
 
     public function testForceRegenerateRemovesEvenAssignedBookings(): void
@@ -349,7 +349,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
 
         $result = $this->scheduler->initialise($nakki);
 
-        self::assertLessThanOrEqual(1000, count($result->created), 'Iteration guard should prevent excessive slots');
+        self::assertLessThanOrEqual(1000, \count($result->created), 'Iteration guard should prevent excessive slots');
     }
 
     /* -----------------------------------------------------------------
@@ -418,7 +418,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         string $start,
         string $end,
         string $interval,
-        bool $invert = false
+        bool $invert = false,
     ): Nakki {
         $event = new Event();
         $event->setName('Test Event');
