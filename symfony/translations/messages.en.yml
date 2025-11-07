@@ -613,19 +613,19 @@ nakkikone:
     definition_field: Definition
     select_definition: Select definition
     choose_responsible: Choose responsible
-    add_column: Add column
-    update_column: Update column
-    definition_required: Select a definition before adding a column.
+    add_column: Add Nakki to this event
+    update_column: Update Nakki
+    definition_required: Select a definition before adding a Nakki.
     definition_not_persisted: Save the definition before using it.
-    duplicate_definition: A column for this definition already exists.
-    column_meta_updated: Column details updated.
-    column_added: Column added successfully.
-    column_created: "{0} No bookings were created.|{1} Created one booking.|[2,Inf] Created %count% bookings."
-    column_removed: Column removed.
+    duplicate_definition: A Nakki for this definition already exists.
+    column_meta_updated: Nakki details updated.
+    column_added: Nakki added successfully.
+    column_created: "{0} No slots were created.|{1} Created one slot.|[2,Inf] Created %count% slots."
+    column_removed: Nakki removed.
     no_columns: No Nakkis configured yet.
     in_use_suffix: (in use)
-    definition_in_use_hint: This definition already has a column; updates will adjust the responsible and Mattermost fields.
-    select_definition_prompt: Select a definition to configure its column.
+    definition_in_use_hint: This definition already has a Nakki; updates will adjust the responsible and Mattermost fields.
+    select_definition_prompt: Select a definition to configure the Nakki.
   definition:
     add_new: Add new definition
     section_fi: Finnish description
@@ -643,28 +643,38 @@ nakkikone:
   column:
     responsible: Responsible
     mattermost: Mattermost
-    disable: Disable bookings
-    add_slots_title: Add bookings
+    disable: Disable slots
+    add_multiple_slots: Add multiple slots
+    add_slots_title: Add slots
     start_time: Start time
     end_time: End time
     interval_hours: Interval (h)
     slots_field: Slots
     add_button: Add
-    bookings_title: Bookings
-    no_bookings: No bookings generated yet.
+    bookings_title: Slots
+    no_bookings: No slots created yet.
+    add_first_slot: Add first slot
     reserved: Reserved
     available: Available
-    remove_booking: Remove booking
-    edit_column: Edit
-    remove_column: Remove column
+    remove_booking: Remove slot
+    edit_column: Edit Nakki
+    remove_column: Remove Nakki
     slots_badge: "{1} %count% slot|[2,Inf] %count% slots"
-    added_slots: "{1} Added one booking.|[2,Inf] Added %count% bookings."
-    booking_not_found: Booking not found.
-    remove_reserved_denied: Cannot remove a booking that already has a member.
-    disabled: Bookings disabled.
-    enabled: Bookings enabled.
-    booking_removed: Booking removed.
-    delete_reserved_denied: Cannot remove a column that has reserved bookings.
+    added_slots: "{1} Added one slot.|[2,Inf] Added %count% slots."
+    booking_not_found: Slot not found.
+    remove_reserved_denied: Cannot remove a slot that already has a member.
+    disabled: Slots disabled.
+    enabled: Slots enabled.
+    booking_removed: Slot removed.
+    delete_reserved_denied: Cannot remove a Nakki that has reserved slots.
+    add_slot_before: Add slot before the first one
+    add_slot_after: Add slot after the last one
+    add_slot_at_time: Add slot at this time
+    slot_added_before: Slot added before the first one.
+    slot_added_after: Slot added after the last one.
+    slot_added_at_time: Slot added at the selected time.
+    first_slot_added: First slot added at the start time of the event.
+    no_bookings_to_add_before: No slots to add before.
     create: Create Nakki
   common:
     none: None

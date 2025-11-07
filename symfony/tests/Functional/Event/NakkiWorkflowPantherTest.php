@@ -162,7 +162,7 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
         );
 
         // Verify success message
-        $this->assertSelectorTextContains('.alert-success', 'Sarake lisätty onnistuneesti');
+        $this->assertSelectorTextContains('.alert-success', 'Nakki lisätty onnistuneesti');
 
         // Verify column appears in the columns list
         $client->wait(10)->until(

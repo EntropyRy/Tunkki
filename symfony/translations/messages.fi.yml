@@ -675,19 +675,19 @@ nakkikone:
     definition_field: Nakkityyppi
     select_definition: Valitse nakkityyppi
     choose_responsible: Valitse vastuuhenkilö
-    add_column: Lisää sarake
-    update_column: Päivitä sarake
-    definition_required: Valitse nakkityyppi ennen sarakkeen lisäämistä.
+    add_column: Lisää nakki tähän tapahtumaan
+    update_column: Päivitä nakki
+    definition_required: Valitse nakkityyppi ennen nakin lisäämistä.
     definition_not_persisted: Tallenna nakkityyppi ennen käyttöä.
-    duplicate_definition: Tälle nakkityypille on jo sarake.
-    column_meta_updated: Sarakkeen tiedot päivitetty.
-    column_added: Sarake lisätty onnistuneesti.
-    column_created: "{0} Varausta ei luotu.|{1} Luotiin yksi varaus.|[2,Inf] Luotiin %count% varausta."
-    column_removed: Sarake poistettu.
+    duplicate_definition: Tälle nakkityypille on jo nakki.
+    column_meta_updated: Nakin tiedot päivitetty.
+    column_added: Nakki lisätty onnistuneesti.
+    column_created: "{0} Paikkaa ei luotu.|{1} Luotiin yksi paikka.|[2,Inf] Luotiin %count% paikkaa."
+    column_removed: Nakki poistettu.
     no_columns: Nakkeja ei ole vielä määritelty.
     in_use_suffix: (käytössä)
-    definition_in_use_hint: Tälle nakkityypille on jo sarake; päivitys muokkaa vastuuhenkilöä ja Mattermost-linkkiä.
-    select_definition_prompt: Valitse nakkityyppi jatkaaksesi sarakkeen määritystä.
+    definition_in_use_hint: Tälle nakkityypille on jo nakki; päivitys muokkaa vastuuhenkilöä ja Mattermost-linkkiä.
+    select_definition_prompt: Valitse nakkityyppi jatkaaksesi nakin määritystä.
   definition:
     add_new: Luo uusi nakkityyppi
     section_fi: Kuvaus suomeksi
@@ -705,28 +705,38 @@ nakkikone:
   column:
     responsible: Vastuuhenkilö
     mattermost: Mattermost
-    disable: Sulje varaukset
-    add_slots_title: Lisää varauksia
+    disable: Sulje paikat
+    add_multiple_slots: Lisää useita paikkoja
+    add_slots_title: Lisää paikkoja
     start_time: Alkuaika
     end_time: Loppuaika
     interval_hours: Väli (h)
     slots_field: Paikkoja
     add_button: Lisää
-    bookings_title: Varaukset
-    no_bookings: Varauksia ei ole vielä luotu.
+    bookings_title: Paikat
+    no_bookings: Paikkoja ei ole vielä luotu.
+    add_first_slot: Lisää ensimmäinen paikka
     reserved: Varattu
     available: Vapaa
-    remove_booking: Poista varaus
-    edit_column: Muokkaa
-    remove_column: Poista sarake
+    remove_booking: Poista paikka
+    edit_column: Muokkaa nakkia
+    remove_column: Poista nakki
     slots_badge: "{1} %count% paikka|[2,Inf] %count% paikkaa"
-    added_slots: "{1} Lisättiin yksi varaus.|[2,Inf] Lisättiin %count% varausta."
-    booking_not_found: Varausta ei löytynyt.
-    remove_reserved_denied: Varattua aikaa ei voi poistaa.
-    disabled: Varaukset poistettiin käytöstä.
-    enabled: Varaukset otettiin käyttöön.
-    booking_removed: Varaus poistettu.
-    delete_reserved_denied: Sarake sisältää varattuja aikoja, joten sitä ei voi poistaa.
+    added_slots: "{1} Lisättiin yksi paikka.|[2,Inf] Lisättiin %count% paikkaa."
+    booking_not_found: Paikkaa ei löytynyt.
+    remove_reserved_denied: Varattua paikkaa ei voi poistaa.
+    disabled: Paikat poistettiin käytöstä.
+    enabled: Paikat otettiin käyttöön.
+    booking_removed: Paikka poistettu.
+    delete_reserved_denied: Nakki sisältää varattuja paikkoja, joten sitä ei voi poistaa.
+    add_slot_before: Lisää paikka ennen ensimmäistä
+    add_slot_after: Lisää paikka viimeisen jälkeen
+    add_slot_at_time: Lisää paikka tähän aikaan
+    slot_added_before: Paikka lisätty ennen ensimmäistä.
+    slot_added_after: Paikka lisätty viimeisen jälkeen.
+    slot_added_at_time: Paikka lisätty valittuun aikaan.
+    first_slot_added: Ensimmäinen paikka lisätty tapahtuman alkuaikaan.
+    no_bookings_to_add_before: Ei paikkoja, joiden eteen lisätä.
     create: Luo nakki
   common:
     none: Ei vastuuhenkilöä

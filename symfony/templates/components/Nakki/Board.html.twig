@@ -17,36 +17,36 @@
 
             <twig:Nakki:Definition :event="event" />
 
-            {{ form_start(form, {
-                attr: {
-                    class: 'row g-3 align-items-end',
-                    'data-action': 'live#action:prevent',
-                    'data-live-action-param': 'addColumn',
-                    autocomplete: 'off',
-                },
-            }) }}
-                <div class="d-none">
-                    {{ form_widget(form.definition) }}
-                </div>
+            {% if this.selectedDefinition %}
+                {{ form_start(form, {
+                    attr: {
+                        class: 'row g-3 align-items-end',
+                        'data-action': 'live#action:prevent',
+                        'data-live-action-param': 'addColumn',
+                        autocomplete: 'off',
+                    },
+                }) }}
+                    <div class="d-none">
+                        {{ form_widget(form.definition) }}
+                    </div>
 
-                <div class="col-12">
-                    <div class="row g-3">
-                        <div class="col-6">
-                            {{ form_row(form.responsible) }}
-                        </div>
-                        <div class="col-6">
-                            {{ form_row(form.mattermostChannel) }}
-                        </div>
-                        <div class="col-12 col-lg-8 text-lg-end">
-                            <button type="submit"
-                                    class="btn btn-primary w-100"
-                                    {% if not this.selectedDefinition %}disabled{% endif %}>
-                                {{ this.isDefinitionInUse() ? 'nakkikone.board.update_column'|trans : 'nakkikone.board.add_column'|trans }}
-                            </button>
+                    <div class="col-12">
+                        <div class="row g-3">
+                            <div class="col-6">
+                                {{ form_row(form.responsible) }}
+                            </div>
+                            <div class="col-6">
+                                {{ form_row(form.mattermostChannel) }}
+                            </div>
+                            <div class="col-12 col-lg-8 text-lg-end">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    {{ this.isDefinitionInUse() ? 'nakkikone.board.update_column'|trans : 'nakkikone.board.add_column'|trans }}
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {{ form_end(form, {render_rest: false}) }}
+                {{ form_end(form, {render_rest: false}) }}
+            {% endif %}
         </div>
     </div>
 

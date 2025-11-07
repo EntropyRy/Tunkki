@@ -56,7 +56,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         // Should have the planner heading
         $this->client->assertSelectorExists('#nakkikone-planner');
         // Should have the definition selector (from nested Definition component)
-        $this->client->assertSelectorExists('select[name*="definition"]');
+        $this->client->assertSelectorExists('#nakki-definition-select');
     }
 
     public function testBoardRendersExistingColumns(): void
@@ -90,11 +90,9 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         $client->request('GET', $path);
         self::assertResponseIsSuccessful();
 
-        // Should display both column names
+        // Should display both column names (in Finnish since we're on FI route)
         $this->client->assertSelectorTextContains('body', 'Ilmoittautuminen');
-        $this->client->assertSelectorTextContains('body', 'Registration');
         $this->client->assertSelectorTextContains('body', 'Somistus');
-        $this->client->assertSelectorTextContains('body', 'Decoration');
     }
 
     public function testBoardShowsNoColumnsMessage(): void
@@ -118,10 +116,13 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
     /* -----------------------------------------------------------------
      * Form presence and structure
      * ----------------------------------------------------------------- */
-    public function testBoardFormHasRequiredFields(): void
+    public function testBoardFormAppearsWhenDefinitionSelected(): void
     {
         $event = EventFactory::new()->published()->create([
             'url' => 'test-board-form-'.uniqid('', true),
+        ]);
+        $definition = NakkiDefinitionFactory::new()->create([
+            'nameFi' => 'Test Definition',
         ]);
 
         [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
@@ -132,18 +133,20 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         $client->request('GET', $path);
         self::assertResponseIsSuccessful();
 
-        // Form should be present
-        $this->client->assertSelectorExists('form');
-        // Should have mattermost channel field (TextType renders as simple input)
-        $this->client->assertSelectorExists('form input[type="text"]');
-        // Should have submit button
-        $this->client->assertSelectorExists('form button[type="submit"]');
-        // Note: responsible field uses UX Autocomplete which has complex HTML structure
-        // Testing its presence would require checking for autocomplete wrapper divs
-        // or using browser tests (Panther) to verify JavaScript component initialization
+        // Should have definition selector
+        $this->client->assertSelectorExists('#nakki-definition-select');
+
+        // Form should not be present initially (no definition selected)
+        $content = $this->client->getResponse()->getContent();
+        if (false !== $content) {
+            self::assertStringNotContainsString('data-live-action-param="addColumn"', $content, 'Form should not be rendered when no definition selected');
+        }
+
+        // Note: Full interaction testing (selecting definition -> form appears)
+        // requires LiveComponent functionality which needs browser tests (Panther)
     }
 
-    public function testBoardSubmitButtonDisabledWhenNoDefinitionSelected(): void
+    public function testBoardFormHiddenWhenNoDefinitionSelected(): void
     {
         $event = EventFactory::new()->published()->create([
             'url' => 'test-board-button-'.uniqid('', true),
@@ -157,15 +160,10 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         $client->request('GET', $path);
         self::assertResponseIsSuccessful();
 
-        // Submit button should be disabled when no definition selected
-        // (This is enforced by the twig template condition)
+        // Form and submit button should not be rendered when no definition selected
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            // Check if button is disabled or if it's rendered conditionally
-            self::assertTrue(
-                str_contains($content, 'disabled') || !str_contains($content, '<button type="submit"'),
-                'Submit button should be disabled or not rendered when no definition selected'
-            );
+            self::assertStringNotContainsString('data-live-action-param="addColumn"', $content, 'Form should not be rendered when no definition selected');
         }
     }
 

@@ -160,6 +160,112 @@ final class Column
     }
 
     #[LiveAction]
+    public function addSlotBefore(): void
+    {
+        $this->notice = null;
+        $this->error = null;
+
+        $bookings = $this->getBookings();
+        if ([] === $bookings) {
+            $this->error = $this->translator->trans('nakkikone.column.no_bookings_to_add_before');
+
+            return;
+        }
+
+        $nakki = $this->getNakki();
+        $firstBooking = $bookings[0];
+        $interval = $nakki->getNakkiInterval();
+
+        $end = $firstBooking->getStartAt();
+        $start = $end->sub($interval);
+
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setEvent($nakki->getEvent());
+        $booking->setStartAt($start);
+        $booking->setEndAt($end);
+
+        $this->entityManager->persist($booking);
+        $nakki->addNakkiBooking($booking);
+        $this->recalculateBounds($nakki);
+        $this->entityManager->flush();
+
+        $this->notice = $this->translator->trans('nakkikone.column.slot_added_before');
+
+        $this->resetCache();
+        $this->loadFromEntity();
+    }
+
+    #[LiveAction]
+    public function addSlotAfter(): void
+    {
+        $this->notice = null;
+        $this->error = null;
+
+        $bookings = $this->getBookings();
+        $nakki = $this->getNakki();
+        $interval = $nakki->getNakkiInterval();
+
+        $isFirstSlot = [] === $bookings;
+
+        if ($isFirstSlot) {
+            // If no bookings, create one starting at nakki start time
+            $start = $nakki->getStartAt();
+        } else {
+            $lastBooking = end($bookings);
+            $start = $lastBooking->getEndAt();
+        }
+
+        $end = $start->add($interval);
+
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setEvent($nakki->getEvent());
+        $booking->setStartAt($start);
+        $booking->setEndAt($end);
+
+        $this->entityManager->persist($booking);
+        $nakki->addNakkiBooking($booking);
+        $this->recalculateBounds($nakki);
+        $this->entityManager->flush();
+
+        $this->notice = $this->translator->trans(
+            $isFirstSlot ? 'nakkikone.column.first_slot_added' : 'nakkikone.column.slot_added_after'
+        );
+
+        $this->resetCache();
+        $this->loadFromEntity();
+    }
+
+    #[LiveAction]
+    public function addSlotAtTime(#[LiveArg] string $startTime): void
+    {
+        $this->notice = null;
+        $this->error = null;
+
+        $start = new \DateTimeImmutable($startTime);
+        $nakki = $this->getNakki();
+        $interval = $nakki->getNakkiInterval();
+        $end = $start->add($interval);
+
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setEvent($nakki->getEvent());
+        $booking->setStartAt($start);
+        $booking->setEndAt($end);
+
+        $this->entityManager->persist($booking);
+        $nakki->addNakkiBooking($booking);
+        $this->recalculateBounds($nakki);
+        $this->entityManager->flush();
+
+        $this->notice = $this->translator->trans('nakkikone.column.slot_added_at_time');
+
+        $this->resetCache();
+        $this->loadFromEntity();
+    }
+
+    #[LiveAction]
     public function saveDisable(): void
     {
         $nakki = $this->getNakki();
