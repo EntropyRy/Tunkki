@@ -15,14 +15,21 @@ use Symfony\Component\Process\Process;
 use Zenstruck\Foundry\Test\Factories;
 
 /**
- * Base class for Panther (browser) tests with proper SQLite cleanup.
+ * Base class for Panther (browser) tests with temporary database support.
  *
  * Handles:
- * - SQLite database cleanup between tests
+ * - SQLite database in system temp directory for isolated tests
+ * - Automatic database cleanup between tests
  * - Schema creation/recreation
- * - File permission issues
- * - Environment isolation
+ * - Environment isolation (APP_ENV=panther)
  * - CMS baseline seeding
+ *
+ * Database Strategy:
+ * - Uses sys_get_temp_dir() for database file (typically /tmp or /dev/shm)
+ * - Each test process gets a unique database (PID-based naming)
+ * - File-based (not pure :memory:) because Panther's web server runs in separate process
+ * - Eliminates var/ directory permission issues
+ * - Automatic cleanup in tearDown()
  */
 abstract class PantherTestCase extends BasePantherTestCase
 {
@@ -33,6 +40,7 @@ abstract class PantherTestCase extends BasePantherTestCase
     protected static array $previousEnv = [];
     protected static array $previousServer = [];
     protected static array $previousGetEnv = [];
+    protected static ?string $pantherDbPath = null;
 
     protected function setUp(): void
     {
@@ -52,6 +60,23 @@ abstract class PantherTestCase extends BasePantherTestCase
         if (null !== self::$pantherKernel) {
             self::$pantherKernel->shutdown();
             self::$pantherKernel = null;
+        }
+
+        // Clean up shared memory database file
+        if (null !== self::$pantherDbPath && file_exists(self::$pantherDbPath)) {
+            $filesystem = new Filesystem();
+            try {
+                // Remove database and its WAL files
+                $filesystem->remove([
+                    self::$pantherDbPath,
+                    self::$pantherDbPath.'-shm',
+                    self::$pantherDbPath.'-wal',
+                    self::$pantherDbPath.'-journal',
+                ]);
+            } catch (\Throwable $e) {
+                // Ignore cleanup errors
+            }
+            self::$pantherDbPath = null;
         }
 
         parent::tearDown();
@@ -76,7 +101,11 @@ abstract class PantherTestCase extends BasePantherTestCase
         $projectDir = $this->getProjectDir();
         $filesystem = new Filesystem();
         $cachePath = $projectDir.'/var/cache/panther';
-        $dbPath = $projectDir.'/var/test_panther.db';
+
+        // Use /tmp for database (writable by both test process and Panther's web server)
+        // Unique per-process to allow parallel test execution
+        $dbPath = sys_get_temp_dir().'/test_panther_'.getmypid().'.db';
+        self::$pantherDbPath = $dbPath;
 
         // Ensure kernel shutdown
         self::ensureKernelShutdown();
