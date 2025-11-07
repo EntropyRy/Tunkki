@@ -15,7 +15,6 @@ use PHPUnit\Framework\Attributes\Test;
 
 final class StreamWorkflowPantherTest extends PantherTestCase
 {
-
     #[Test]
     public function userCanAddAndRemoveArtistFromStream(): void
     {
