@@ -286,7 +286,7 @@ final class Column
     #[LiveAction]
     public function toggleViewMode(): void
     {
-        $this->viewMode = $this->viewMode === 'edit' ? 'schedule' : 'edit';
+        $this->viewMode = 'edit' === $this->viewMode ? 'schedule' : 'edit';
     }
 
     #[LiveAction]
@@ -410,7 +410,7 @@ final class Column
         // Round to hour boundaries
         $startHour = new \DateTimeImmutable($earliestStart->format('Y-m-d H:00:00'));
         $endHour = new \DateTimeImmutable($latestEnd->format('Y-m-d H:00:00'));
-        if ($latestEnd->format('i:s') !== '00:00') {
+        if ('00:00' !== $latestEnd->format('i:s')) {
             $endHour = $endHour->modify('+1 hour');
         }
 
