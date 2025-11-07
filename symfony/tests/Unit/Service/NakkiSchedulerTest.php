@@ -195,7 +195,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         self::assertSame($assignedBooking, $result->conflicts[0]);
     }
 
-    public function testSynchroniseUpdatesEndTimeForPreservedBookings(): void
+    public function testSynchroniseReplacesBookingsWithWrongInterval(): void
     {
         $nakki = $this->createNakki(
             start: '2025-01-15 10:00:00',
@@ -203,17 +203,49 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
             interval: 'PT1H'
         );
 
-        $booking = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 10:45:00'); // Wrong end time
-        $originalEnd = $booking->getEndAt();
+        // Create booking with wrong interval (45 minutes instead of 1 hour)
+        $booking = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 10:45:00');
 
         $result = $this->scheduler->synchronise($nakki);
 
-        self::assertCount(1, $result->preserved);
-        self::assertSame($booking, $result->preserved[0]);
+        // Since the interval doesn't match, the booking is removed and recreated
+        self::assertCount(2, $result->created, 'Should create 2 new bookings with correct interval');
+        self::assertCount(1, $result->removed, 'Should remove booking with wrong interval');
+        self::assertCount(0, $result->preserved, 'No bookings preserved as interval differs');
+        self::assertSame($booking, $result->removed[0]);
 
-        // End time should be corrected to match interval
-        self::assertNotSame($originalEnd, $booking->getEndAt());
-        self::assertSame('2025-01-15 11:00:00', $booking->getEndAt()->format('Y-m-d H:i:s'));
+        // Verify new bookings have correct times
+        self::assertSame('2025-01-15 10:00:00', $result->created[0]->getStartAt()->format('Y-m-d H:i:s'));
+        self::assertSame('2025-01-15 11:00:00', $result->created[0]->getEndAt()->format('Y-m-d H:i:s'));
+        self::assertSame('2025-01-15 11:00:00', $result->created[1]->getStartAt()->format('Y-m-d H:i:s'));
+        self::assertSame('2025-01-15 12:00:00', $result->created[1]->getEndAt()->format('Y-m-d H:i:s'));
+    }
+
+    public function testSynchroniseAllowsMixedIntervalsAtSameStartTime(): void
+    {
+        $nakki = $this->createNakki(
+            start: '2025-01-15 10:00:00',
+            end: '2025-01-15 14:00:00',
+            interval: 'PT1H'
+        );
+
+        // Create bookings with different intervals at the same start time
+        // This simulates manually added slots with different durations
+        $booking1h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 11:00:00'); // 1 hour
+        $booking3h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 13:00:00'); // 3 hours
+
+        $result = $this->scheduler->synchronise($nakki);
+
+        // Both bookings should be preserved as they have valid (start, end) pairs
+        // even though they share the same start time
+        self::assertCount(2, $result->preserved, 'Both bookings with different intervals should be preserved');
+        self::assertTrue(
+            \in_array($booking1h, $result->preserved, true) && \in_array($booking3h, $result->preserved, true),
+            'Both mixed interval bookings should be in preserved list'
+        );
+
+        // Additional slots should be created for the remaining time
+        self::assertGreaterThanOrEqual(1, \count($result->created), 'Should create additional slots for remaining time');
     }
 
     /* -----------------------------------------------------------------

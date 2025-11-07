@@ -6,8 +6,20 @@
             <div>
                 <h3 class="h6 mb-1">
                     {{ nakki.definition.getName(app.request.locale) }}
-                    <span class="text-muted fw-normal small">· {{ nakki.startAt|date('d.M H:i') }} – {{ nakki.endAt|date('H:i') }} · {{ this.displayIntervalHours }}h</span>
+                    <span class="badge bg-primary ms-2">
+                        {{ this.displayIntervalHours }}h {{ 'slots'|trans }}
+                    </span>
+                    <button type="button"
+                            class="btn btn-sm btn-link p-0 ms-1"
+                            data-bs-toggle="modal"
+                            data-bs-target="#interval-modal-{{ nakki.id }}"
+                            title="{{ 'Edit interval'|trans }}">
+                        ✏️
+                    </button>
                 </h3>
+                <div class="text-muted small">
+                    {{ nakki.startAt|date('d.M H:i') }} – {{ nakki.endAt|date('H:i') }}
+                </div>
                 {% set description = nakki.definition.getDescription(app.request.locale) %}
                 {% if description %}
                     <div class="text-muted small">{{ description|raw }}</div>
@@ -34,18 +46,30 @@
             </div>
         </div>
         <div class="d-flex justify-content-between align-items-center border-top pt-3">
-            <form class="form-check form-switch mb-0 d-flex align-items-center gap-2"
-                  data-action="change->live#action"
-                  data-live-action-param="saveDisable">
-                <input class="form-check-input"
-                    type="checkbox"
-                    id="column-disable-{{ nakki.id }}"
-                    data-model="disableBookings"
-                    {% if this.disableBookings %}checked{% endif %}>
-                <label class="form-check-label" for="column-disable-{{ nakki.id }}">
-                    {{ 'nakkikone.column.disable'|trans }}
-                </label>
-            </form>
+            <div class="d-flex align-items-center gap-3">
+                <form class="form-check form-switch mb-0 d-flex align-items-center gap-2"
+                      data-action="change->live#action"
+                      data-live-action-param="saveDisable">
+                    <input class="form-check-input"
+                        type="checkbox"
+                        id="column-disable-{{ nakki.id }}"
+                        data-model="disableBookings"
+                        {% if this.disableBookings %}checked{% endif %}>
+                    <label class="form-check-label" for="column-disable-{{ nakki.id }}">
+                        {{ 'nakkikone.column.disable'|trans }}
+                    </label>
+                </form>
+                <button type="button"
+                        class="btn btn-sm {{ this.viewMode == 'schedule' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                        data-action="live#action"
+                        data-live-action-param="toggleViewMode">
+                    {% if this.viewMode == 'schedule' %}
+                        ✏️ Edit
+                    {% else %}
+                        📅 Schedule
+                    {% endif %}
+                </button>
+            </div>
             <div class="d-flex gap-2">
                 <button type="button"
                         class="btn btn-sm btn-outline-primary"
@@ -71,7 +95,80 @@
             <div class="alert alert-success" role="status">{{ this.notice }}</div>
         {% endif %}
 
-        <div class="accordion mb-4" id="accordion-add-slots-{{ nakki.id }}">
+        {% if this.viewMode == 'schedule' %}
+            {# Schedule View - Timetable Grid #}
+            <h4 class="h6 fw-semibold mb-3">📅 {{ 'Schedule View'|trans }}</h4>
+
+            {% set grid = this.scheduleGrid %}
+            {% if grid.timeSlots is empty %}
+                <div class="text-center text-muted py-4">
+                    <p>{{ 'No bookings scheduled'|trans }}</p>
+                </div>
+            {% else %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm border-dark">
+                        <thead class="table-light">
+                            <tr>
+                                <th style="width: 100px; border-right: 2px solid #dee2e6;">{{ 'Time'|trans }}</th>
+                                {% for i in 1..grid.maxColumns %}
+                                    <th style="min-width: 150px;">{{ 'Slot'|trans }} {{ i }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for slot in grid.timeSlots %}
+                                {% set rowIndex = loop.index0 %}
+                                <tr class="{{ rowIndex is even ? 'table-light' : '' }}">
+                                    <td class="fw-semibold align-middle" style="border-right: 2px solid #dee2e6;">
+                                        {{ slot.time|date('H:i') }}
+                                    </td>
+
+                                    {# Build column map for this row #}
+                                    {% set columnMap = {} %}
+                                    {% for bookingData in slot.bookings %}
+                                        {% set columnMap = columnMap|merge({(bookingData.column): bookingData}) %}
+                                    {% endfor %}
+
+                                    {# Render columns in order #}
+                                    {% for col in 0..(grid.maxColumns - 1) %}
+                                        {% if columnMap[col] is defined %}
+                                            {% set bookingData = columnMap[col] %}
+                                            {% if bookingData.booking is not null %}
+                                                {% set booking = bookingData.booking %}
+                                                <td rowspan="{{ bookingData.rowspan }}"
+                                                    class="{{ booking.member ? 'table-success' : 'table-secondary' }} align-middle border-end"
+                                                    style="border-right-width: 2px !important;">
+                                                    {% if booking.member %}
+                                                        <span class="badge bg-success mb-1">{{ 'Reserved'|trans }}</span><br>
+                                                        <strong>{{ booking.member.name }}</strong>
+                                                        {% if booking.member.email %}
+                                                            <br><small class="text-muted">{{ booking.member.email }}</small>
+                                                        {% endif %}
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">{{ 'Available'|trans }}</span>
+                                                    {% endif %}
+                                                    <br>
+                                                    <small class="text-muted">
+                                                        {{ booking.startAt|date('H:i') }}–{{ booking.endAt|date('H:i') }}
+                                                        ({{ bookingData.rowspan }}h)
+                                                    </small>
+                                                </td>
+                                            {% endif %}
+                                            {# If booking is null, it's a placeholder - cell is covered by rowspan, skip rendering #}
+                                        {% else %}
+                                            {# Column not occupied - empty cell #}
+                                            <td class="border-end" style="border-right-width: 2px !important; background-color: #f8f9fa;"></td>
+                                        {% endif %}
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        {% else %}
+            {# Edit View - Current view #}
+            <div class="accordion mb-4" id="accordion-add-slots-{{ nakki.id }}">
             <div class="accordion-item">
                 <h4 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-add-slots-{{ nakki.id }}" aria-expanded="false" aria-controls="collapse-add-slots-{{ nakki.id }}">
@@ -80,9 +177,7 @@
                 </h4>
                 <div id="collapse-add-slots-{{ nakki.id }}" class="accordion-collapse collapse" data-bs-parent="#accordion-add-slots-{{ nakki.id }}">
                     <div class="accordion-body">
-                        <form class="row g-3 align-items-end"
-                              data-action="live#action:prevent"
-                              data-live-action-param="addSlots">
+                        <div class="row g-3 align-items-end">
                             <div class="col-12">
                                 <label class="form-label fw-semibold">{{ 'nakkikone.column.start_time'|trans }}</label>
                                 <input type="datetime-local"
@@ -93,23 +188,31 @@
                             <div class="col-6 col-lg-4">
                                 <label class="form-label fw-semibold">{{ 'nakkikone.column.interval_hours'|trans }}</label>
                                 <input type="number"
+                                       id="interval-hours-input-{{ nakki.id }}"
                                        min="1"
                                        class="form-control"
-                                       data-model="newSlotIntervalHours"
                                        value="{{ this.newSlotIntervalHours }}">
                             </div>
                             <div class="col-6 col-lg-4">
                                 <label class="form-label fw-semibold">{{ 'nakkikone.column.slots_field'|trans }}</label>
                                 <input type="number"
+                                       id="slot-count-input-{{ nakki.id }}"
                                        min="1"
                                        class="form-control"
-                                       data-model="newSlotCount"
                                        value="{{ this.newSlotCount }}">
                             </div>
                             <div class="col-12 col-lg-4 text-lg-end">
-                                <button type="submit" class="btn btn-outline-primary w-100">{{ 'nakkikone.column.add_button'|trans }}</button>
+                                <button type="button"
+                                        class="btn btn-outline-primary w-100"
+                                        onclick="this.setAttribute('data-live-interval-hours-param', document.getElementById('interval-hours-input-{{ nakki.id }}').value); this.setAttribute('data-live-slot-count-param', document.getElementById('slot-count-input-{{ nakki.id }}').value);"
+                                        data-action="live#action"
+                                        data-live-action-param="addSlots"
+                                        data-live-interval-hours-param="{{ this.newSlotIntervalHours }}"
+                                        data-live-slot-count-param="{{ this.newSlotCount }}">
+                                    {{ 'nakkikone.column.add_button'|trans }}
+                                </button>
                             </div>
-                        </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -117,8 +220,8 @@
 
         <h4 class="h6 fw-semibold mb-3">{{ 'nakkikone.column.bookings_title'|trans }}</h4>
 
-        {% set groups = this.bookingGroups %}
-        {% if groups is empty %}
+        {% set nestedGroups = this.nestedBookingGroups %}
+        {% if nestedGroups is empty %}
             <div class="text-center my-2">
                 <button type="button"
                         class="btn btn-link text-muted text-decoration-none p-0"
@@ -139,54 +242,78 @@
                 </button>
             </div>
             <div class="d-flex flex-column gap-3">
-                {% for group in groups %}
-                    <div class="border rounded p-3">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <div class="fw-semibold">
-                                {{ group.start|date('d.M Y H:i') }} – {{ group.end|date('H:i') }}
+                {% for timeGroup in nestedGroups %}
+                    {# Show start time header if there are multiple interval groups #}
+                    {% if timeGroup.intervalGroups|length > 1 %}
+                        <div class="fw-semibold text-muted small mb-2">
+                            <span class="badge bg-light text-dark border">{{ timeGroup.startTime|date('d.M Y H:i') }}</span>
+                        </div>
+                    {% endif %}
+
+                    {# Wrap interval groups in a container with left border if mixed intervals #}
+                    <div class="{{ timeGroup.intervalGroups|length > 1 ? 'border-start border-warning ms-2 ps-2' : '' }}"
+                         style="{{ timeGroup.intervalGroups|length > 1 ? 'border-left-width: 4px !important;' : '' }}">
+                        {# Show each interval group #}
+                        {% for group in timeGroup.intervalGroups %}
+                            <div class="border rounded p-3 {{ timeGroup.intervalGroups|length > 1 ? 'ms-2' : '' }}">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="fw-semibold">
+                                    {% if timeGroup.intervalGroups|length > 1 %}
+                                        {# Only show end time when grouped under shared start time #}
+                                        {{ group.start|date('H:i') }} – {{ group.end|date('H:i') }}
+                                    {% else %}
+                                        {# Show full datetime when standalone #}
+                                        {{ group.start|date('d.M Y H:i') }} – {{ group.end|date('H:i') }}
+                                    {% endif %}
+                                </div>
+                                <span class="badge bg-secondary">
+                                    {% set duration = ((group.end.timestamp - group.start.timestamp) / 3600)|round %}
+                                    {{ 'nakkikone.column.slots_badge'|trans({'%count%': group.bookings|length, count: group.bookings|length}) }}
+                                    · {{ duration }}h
+                                </span>
                             </div>
-                            <span class="badge bg-secondary">
-                                {{ 'nakkikone.column.slots_badge'|trans({'%count%': group.bookings|length, count: group.bookings|length}) }}
-                                · {{ this.displayIntervalHours }}h
-                            </span>
-                        </div>
-                        <div class="d-flex flex-column gap-2">
-                            {% for booking in group.bookings %}
-                                {% if booking.member %}
-                                    <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
-                                        <div class="d-flex align-items-center gap-2">
-                                            <span class="badge bg-primary">{{ 'nakkikone.column.reserved'|trans }}</span>
-                                            <span class="small">
-                                                <strong>{{ booking.member.name }}</strong>
-                                                {% if booking.member.email %}
-                                                    <span class="text-muted">· {{ booking.member.email }}</span>
-                                                {% endif %}
-                                            </span>
+                            <div class="d-flex flex-column gap-2">
+                                {% for booking in group.bookings %}
+                                    {% if booking.member %}
+                                        <div class="d-flex align-items-center justify-content-between p-2 bg-light rounded">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="badge bg-primary">{{ 'nakkikone.column.reserved'|trans }}</span>
+                                                <span class="small">
+                                                    <strong>{{ booking.member.name }}</strong>
+                                                    {% if booking.member.email %}
+                                                        <span class="text-muted">· {{ booking.member.email }}</span>
+                                                    {% endif %}
+                                                </span>
+                                            </div>
                                         </div>
-                                    </div>
-                                {% else %}
-                                    <div class="d-flex align-items-center justify-content-between p-2 border rounded">
-                                        <span class="badge bg-light text-secondary border">{{ 'nakkikone.column.available'|trans }}</span>
-                                        <button type="button"
-                                                class="btn btn-sm btn-outline-danger"
-                                                aria-label="{{ 'nakkikone.column.remove_booking'|trans }}"
-                                                data-action="live#action"
-                                                data-live-action-param="removeSlot"
-                                                data-live-booking-id-param="{{ booking.id }}">
-                                            &minus;
-                                        </button>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                            <button type="button"
-                                    class="btn btn-sm btn-outline-secondary w-100"
-                                    data-action="live#action"
-                                    data-live-action-param="addSlotAtTime"
-                                    data-live-start-time-param="{{ group.start|date('c') }}">
-                                &plus; {{ 'nakkikone.column.add_slot_at_time'|trans }}
-                            </button>
+                                    {% else %}
+                                        <div class="d-flex align-items-center justify-content-between p-2 border rounded">
+                                            <span class="badge bg-light text-secondary border">{{ 'nakkikone.column.available'|trans }}</span>
+                                            <button type="button"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    aria-label="{{ 'nakkikone.column.remove_booking'|trans }}"
+                                                    data-action="live#action"
+                                                    data-live-action-param="removeSlot"
+                                                    data-live-booking-id-param="{{ booking.id }}">
+                                                &minus;
+                                            </button>
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                {# Each group has same interval, so always show add button #}
+                                {% set duration = ((group.end.timestamp - group.start.timestamp) / 3600)|round %}
+                                <button type="button"
+                                        class="btn btn-sm btn-outline-secondary w-100"
+                                        data-action="live#action"
+                                        data-live-action-param="addSlotAtTime"
+                                        data-live-start-time-param="{{ group.start|date('c') }}"
+                                        data-live-interval-hours-param="{{ duration }}">
+                                    &plus; {{ 'nakkikone.column.add_slot_at_time'|trans }}
+                                </button>
+                            </div>
                         </div>
-                    </div>
+                    {% endfor %}
+                    </div> {# Close wrapper for interval groups #}
                 {% endfor %}
             </div>
             <div class="text-center my-2">
@@ -199,5 +326,41 @@
                 </button>
             </div>
         {% endif %}
+        {% endif %} {# End edit view mode #}
+    </div>
+
+    {# Modal for editing interval #}
+    <div class="modal fade" id="interval-modal-{{ nakki.id }}" tabindex="-1" aria-labelledby="interval-modal-label-{{ nakki.id }}" aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="interval-modal-label-{{ nakki.id }}">{{ 'Edit Default Interval'|trans }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ 'Close'|trans }}"></button>
+                </div>
+                <div class="modal-body">
+                    <label class="form-label">{{ 'Interval (hours)'|trans }}</label>
+                    <input type="number"
+                           id="interval-input-{{ nakki.id }}"
+                           class="form-control"
+                           min="1"
+                           value="{{ this.displayIntervalHours }}">
+                    <div class="form-text">
+                        {{ 'This will be used for quick-add buttons (➕)'|trans }}
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ 'Cancel'|trans }}</button>
+                    <button type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                            onclick="this.setAttribute('data-live-interval-hours-param', document.getElementById('interval-input-{{ nakki.id }}').value);"
+                            data-action="live#action"
+                            data-live-action-param="updateInterval"
+                            data-live-interval-hours-param="{{ this.displayIntervalHours }}">
+                        {{ 'Save'|trans }}
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

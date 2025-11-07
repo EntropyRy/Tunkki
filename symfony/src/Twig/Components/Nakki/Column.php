@@ -39,6 +39,9 @@ final class Column
     #[LiveProp(writable: true)]
     public bool $disableBookings = false;
 
+    #[LiveProp(writable: true)]
+    public string $viewMode = 'edit'; // 'edit' or 'schedule'
+
     public int $displayIntervalHours = 1;
 
     public ?string $notice = null;
@@ -72,13 +75,14 @@ final class Column
     }
 
     #[LiveAction]
-    public function addSlots(): void
+    public function addSlots(#[LiveArg] string|int|null $intervalHours = null, #[LiveArg] string|int|null $slotCount = null): void
     {
         $this->notice = null;
         $this->error = null;
 
-        $count = max(1, $this->newSlotCount);
-        $intervalHours = max(1, $this->newSlotIntervalHours);
+        // Cast to int as they come as strings from the button attributes
+        $count = max(1, (int) ($slotCount ?? $this->newSlotCount));
+        $intervalHours = max(1, (int) ($intervalHours ?? $this->newSlotIntervalHours));
         $interval = new \DateInterval(\sprintf('PT%dH', $intervalHours));
 
         $start = $this->parseDateTime($this->newSlotStart);
@@ -174,6 +178,7 @@ final class Column
 
         $nakki = $this->getNakki();
         $firstBooking = $bookings[0];
+        // Use the nakki's default interval
         $interval = $nakki->getNakkiInterval();
 
         $end = $firstBooking->getStartAt();
@@ -204,6 +209,7 @@ final class Column
 
         $bookings = $this->getBookings();
         $nakki = $this->getNakki();
+        // Use the nakki's default interval
         $interval = $nakki->getNakkiInterval();
 
         $isFirstSlot = [] === $bookings;
@@ -238,14 +244,16 @@ final class Column
     }
 
     #[LiveAction]
-    public function addSlotAtTime(#[LiveArg] string $startTime): void
+    public function addSlotAtTime(#[LiveArg] string $startTime, #[LiveArg] int $intervalHours): void
     {
         $this->notice = null;
         $this->error = null;
 
         $start = new \DateTimeImmutable($startTime);
         $nakki = $this->getNakki();
-        $interval = $nakki->getNakkiInterval();
+
+        // Use the provided interval hours (from existing slot at this time)
+        $interval = new \DateInterval(\sprintf('PT%dH', max(1, $intervalHours)));
         $end = $start->add($interval);
 
         $booking = new NakkiBooking();
@@ -273,6 +281,29 @@ final class Column
         $this->entityManager->flush();
 
         $this->notice = $this->translator->trans($this->disableBookings ? 'nakkikone.column.disabled' : 'nakkikone.column.enabled');
+    }
+
+    #[LiveAction]
+    public function toggleViewMode(): void
+    {
+        $this->viewMode = $this->viewMode === 'edit' ? 'schedule' : 'edit';
+    }
+
+    #[LiveAction]
+    public function updateInterval(#[LiveArg] string|int $intervalHours): void
+    {
+        $this->notice = null;
+        $this->error = null;
+
+        $hours = max(1, (int) $intervalHours);
+        $nakki = $this->getNakki();
+        $nakki->setNakkiInterval(new \DateInterval(\sprintf('PT%dH', $hours)));
+        $this->entityManager->flush();
+
+        $this->notice = $this->translator->trans('Interval updated to {hours}h', ['hours' => $hours]);
+
+        $this->resetCache();
+        $this->loadFromEntity();
     }
 
     #[LiveAction]
@@ -334,7 +365,8 @@ final class Column
     {
         $groups = [];
         foreach ($this->getBookings() as $booking) {
-            $key = $booking->getStartAt()->format('c');
+            // Group by both start AND end time to separate different intervals
+            $key = $booking->getStartAt()->format('c').'|'.$booking->getEndAt()->format('c');
             if (!isset($groups[$key])) {
                 $groups[$key] = [
                     'start' => $booking->getStartAt(),
@@ -347,6 +379,169 @@ final class Column
         }
 
         return array_values($groups);
+    }
+
+    /**
+     * Get schedule grid for timetable view.
+     * Returns hourly time slots with bookings that span multiple rows.
+     *
+     * @return array{timeSlots: list<array{time: \DateTimeImmutable, bookings: list<array{booking: NakkiBooking, rowspan: int, column: int}>}>, maxColumns: int}
+     */
+    public function getScheduleGrid(): array
+    {
+        $bookings = $this->getBookings();
+        if ([] === $bookings) {
+            return ['timeSlots' => [], 'maxColumns' => 1];
+        }
+
+        // Find time range (earliest to latest)
+        $earliestStart = $bookings[0]->getStartAt();
+        $latestEnd = $bookings[0]->getEndAt();
+
+        foreach ($bookings as $booking) {
+            if ($booking->getStartAt() < $earliestStart) {
+                $earliestStart = $booking->getStartAt();
+            }
+            if ($booking->getEndAt() > $latestEnd) {
+                $latestEnd = $booking->getEndAt();
+            }
+        }
+
+        // Round to hour boundaries
+        $startHour = new \DateTimeImmutable($earliestStart->format('Y-m-d H:00:00'));
+        $endHour = new \DateTimeImmutable($latestEnd->format('Y-m-d H:00:00'));
+        if ($latestEnd->format('i:s') !== '00:00') {
+            $endHour = $endHour->modify('+1 hour');
+        }
+
+        // Create hourly slots
+        $timeSlots = [];
+        $current = $startHour;
+        while ($current < $endHour) {
+            $timeSlots[] = [
+                'time' => $current,
+                'bookings' => [],
+            ];
+            $current = $current->modify('+1 hour');
+        }
+
+        // Assign bookings to slots and calculate layout
+        $maxColumns = 1;
+        foreach ($bookings as $booking) {
+            $bookingStart = $booking->getStartAt();
+            $bookingEnd = $booking->getEndAt();
+
+            // Calculate duration in hours (rounded)
+            $durationSeconds = $bookingEnd->getTimestamp() - $bookingStart->getTimestamp();
+            $durationHours = max(1, (int) round($durationSeconds / 3600));
+
+            // Find which slot this booking starts in
+            $slotIndex = null;
+            foreach ($timeSlots as $idx => $slot) {
+                $slotTime = $slot['time'];
+                $nextSlotTime = $slotTime->modify('+1 hour');
+
+                // Booking starts in this hour slot if it starts at or after slot time and before next slot
+                if ($bookingStart >= $slotTime && $bookingStart < $nextSlotTime) {
+                    $slotIndex = $idx;
+                    break;
+                }
+            }
+
+            if (null === $slotIndex) {
+                continue; // Shouldn't happen, but safety check
+            }
+
+            // Determine column (find first available column in this time range)
+            $column = 0;
+            $columnUsed = false;
+            do {
+                $columnUsed = false;
+                // Check if this column is used in any of the hours this booking spans
+                for ($i = 0; $i < $durationHours; ++$i) {
+                    $checkSlotIdx = $slotIndex + $i;
+                    if (!isset($timeSlots[$checkSlotIdx])) {
+                        break;
+                    }
+
+                    foreach ($timeSlots[$checkSlotIdx]['bookings'] as $existingBooking) {
+                        if ($existingBooking['column'] === $column) {
+                            $columnUsed = true;
+                            break 2;
+                        }
+                    }
+                }
+
+                if ($columnUsed) {
+                    ++$column;
+                }
+            } while ($columnUsed);
+
+            $maxColumns = max($maxColumns, $column + 1);
+
+            // Add booking to the first slot it appears in (with rowspan)
+            $timeSlots[$slotIndex]['bookings'][] = [
+                'booking' => $booking,
+                'rowspan' => $durationHours,
+                'column' => $column,
+            ];
+
+            // Mark the column as occupied in subsequent hours (for layout calculation)
+            for ($i = 1; $i < $durationHours; ++$i) {
+                $occupiedSlotIdx = $slotIndex + $i;
+                if (isset($timeSlots[$occupiedSlotIdx])) {
+                    // Add placeholder to mark column as occupied
+                    $timeSlots[$occupiedSlotIdx]['bookings'][] = [
+                        'booking' => null,
+                        'rowspan' => 0,
+                        'column' => $column,
+                    ];
+                }
+            }
+        }
+
+        return ['timeSlots' => $timeSlots, 'maxColumns' => $maxColumns];
+    }
+
+    /**
+     * Get bookings grouped by start time, then by interval.
+     *
+     * @return list<array{startTime: \DateTimeImmutable, intervalGroups: list<array{start: \DateTimeImmutable, end: \DateTimeImmutable, bookings: list<NakkiBooking>}>}>
+     */
+    public function getNestedBookingGroups(): array
+    {
+        // First group by start time only
+        $byStartTime = [];
+        foreach ($this->getBookings() as $booking) {
+            $startKey = $booking->getStartAt()->format('c');
+            if (!isset($byStartTime[$startKey])) {
+                $byStartTime[$startKey] = [
+                    'startTime' => $booking->getStartAt(),
+                    'intervalGroups' => [],
+                ];
+            }
+
+            // Within each start time, group by end time (interval)
+            $intervalKey = $booking->getEndAt()->format('c');
+            if (!isset($byStartTime[$startKey]['intervalGroups'][$intervalKey])) {
+                $byStartTime[$startKey]['intervalGroups'][$intervalKey] = [
+                    'start' => $booking->getStartAt(),
+                    'end' => $booking->getEndAt(),
+                    'bookings' => [],
+                ];
+            }
+
+            $byStartTime[$startKey]['intervalGroups'][$intervalKey]['bookings'][] = $booking;
+        }
+
+        // Convert to indexed arrays
+        $result = [];
+        foreach ($byStartTime as $group) {
+            $group['intervalGroups'] = array_values($group['intervalGroups']);
+            $result[] = $group;
+        }
+
+        return $result;
     }
 
     private function loadFromEntity(): void

@@ -24,10 +24,13 @@ final readonly class NakkiScheduler
     /**
      * Rebuild bookings for the provided nakki.
      *
-     * Existing bookings that match the requested start time are kept (end time
-     * is refreshed). Unassigned bookings that no longer fit the schedule are
-     * removed. Bookings with assigned members that no longer match are reported
-     * as conflicts and left untouched so the caller can decide the next step.
+     * Existing bookings that match the requested start and end time are kept.
+     * Unassigned bookings that no longer fit the schedule are removed.
+     * Bookings with assigned members that no longer match are reported as
+     * conflicts and left untouched so the caller can decide the next step.
+     *
+     * Note: Multiple bookings with different intervals can exist at the same
+     * start time (e.g., a 1h slot and a 3h slot both starting at 14:00).
      */
     public function synchronise(Nakki $nakki): NakkiSchedulerResult
     {
@@ -38,12 +41,11 @@ final readonly class NakkiScheduler
         $conflicts = [];
 
         foreach ($nakki->getNakkiBookings() as $booking) {
-            $startKey = $this->buildSlotKey($booking->getStartAt());
-            if (isset($desiredSlots[$startKey])) {
-                $desired = $desiredSlots[$startKey];
-                $booking->setEndAt($desired['end']);
+            $slotKey = $this->buildSlotKey($booking->getStartAt(), $booking->getEndAt());
+            if (isset($desiredSlots[$slotKey])) {
+                // Booking matches a desired slot, preserve it
                 $preserved[] = $booking;
-                unset($desiredSlots[$startKey]);
+                unset($desiredSlots[$slotKey]);
 
                 continue;
             }
@@ -139,7 +141,7 @@ final readonly class NakkiScheduler
                 break;
             }
 
-            $slots[$this->buildSlotKey($cursor)] = [
+            $slots[$this->buildSlotKey($cursor, $next)] = [
                 'start' => $cursor,
                 'end' => $next,
             ];
@@ -164,9 +166,15 @@ final readonly class NakkiScheduler
         return $booking;
     }
 
-    private function buildSlotKey(\DateTimeImmutable $start): string
+    /**
+     * Build a unique key for a slot based on start and end time.
+     *
+     * This allows multiple bookings with different intervals to coexist
+     * at the same start time (e.g., 1h and 3h slots both at 14:00).
+     */
+    private function buildSlotKey(\DateTimeImmutable $start, \DateTimeImmutable $end): string
     {
-        return $start->format('c');
+        return $start->format('c').'|'.$end->format('c');
     }
 
     private function intervalToSeconds(\DateInterval $interval): int
