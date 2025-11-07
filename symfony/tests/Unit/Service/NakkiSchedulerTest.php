@@ -230,22 +230,53 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         );
 
         // Create bookings with different intervals at the same start time
-        // This simulates manually added slots with different durations
-        $booking1h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 11:00:00'); // 1 hour
-        $booking3h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 13:00:00'); // 3 hours
+        // The 1h booking matches the nakki interval, the 3h booking does not
+        $booking1h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 11:00:00'); // 1 hour - matches
+        $booking3h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 13:00:00'); // 3 hours - doesn't match
 
         $result = $this->scheduler->synchronise($nakki);
 
-        // Both bookings should be preserved as they have valid (start, end) pairs
-        // even though they share the same start time
-        self::assertCount(2, $result->preserved, 'Both bookings with different intervals should be preserved');
-        self::assertTrue(
-            \in_array($booking1h, $result->preserved, true) && \in_array($booking3h, $result->preserved, true),
-            'Both mixed interval bookings should be in preserved list'
+        // Only the 1h booking should be preserved (matches nakki interval)
+        // The 3h booking should be removed (doesn't match interval, no assigned member)
+        self::assertCount(1, $result->preserved, 'Only booking matching nakki interval should be preserved');
+        self::assertSame($booking1h, $result->preserved[0], 'The 1h booking should be preserved');
+
+        self::assertCount(1, $result->removed, 'The 3h booking should be removed');
+        self::assertSame($booking3h, $result->removed[0], 'The 3h booking should be removed');
+
+        // Additional slots should be created for remaining time (11:00-12:00, 12:00-13:00, 13:00-14:00)
+        self::assertCount(3, $result->created, 'Should create 3 additional 1h slots');
+    }
+
+    public function testSynchroniseAllowsMixedIntervalsWithAssignedMembers(): void
+    {
+        $nakki = $this->createNakki(
+            start: '2025-01-15 10:00:00',
+            end: '2025-01-15 14:00:00',
+            interval: 'PT1H'
         );
 
-        // Additional slots should be created for the remaining time
-        self::assertGreaterThanOrEqual(1, \count($result->created), 'Should create additional slots for remaining time');
+        // Create bookings with different intervals at the same start time
+        // Both have assigned members, so they should be preserved as conflicts
+        $booking1h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 11:00:00');
+        $booking1h->setMember($this->createMember('test1@example.com'));
+
+        $booking3h = $this->createBooking($nakki, '2025-01-15 10:00:00', '2025-01-15 13:00:00');
+        $booking3h->setMember($this->createMember('test2@example.com'));
+
+        $result = $this->scheduler->synchronise($nakki);
+
+        // The 1h booking matches interval → preserved
+        // The 3h booking doesn't match but has member → conflict
+        self::assertCount(1, $result->preserved, 'Booking matching interval should be preserved');
+        self::assertSame($booking1h, $result->preserved[0]);
+
+        self::assertCount(1, $result->conflicts, 'Booking with member but wrong interval should be conflict');
+        self::assertSame($booking3h, $result->conflicts[0]);
+
+        // This demonstrates mixed intervals CAN coexist at the same start time
+        // because the slot key uses both start AND end time
+        self::assertNotNull($result->warning, 'Should have warning about conflicts');
     }
 
     /* -----------------------------------------------------------------
@@ -498,5 +529,18 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         $this->em()->flush();
 
         return $booking;
+    }
+
+    private function createMember(string $email): Member
+    {
+        $member = new Member();
+        $member->setEmail($email);
+        $member->setFirstname('Test');
+        $member->setLastname('User');
+
+        $this->em()->persist($member);
+        $this->em()->flush();
+
+        return $member;
     }
 }
