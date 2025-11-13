@@ -171,6 +171,186 @@ final class ArtistDisplayConfiguration
         $this->setFlag($type, 'bio', 'show_genre', $value);
     }
 
+    public function getDjTimetableIncludePageLinks(): bool
+    {
+        return $this->shouldTimetableIncludePageLinks('DJ');
+    }
+
+    public function setDjTimetableIncludePageLinks(bool $value): void
+    {
+        $this->setTimetableIncludePageLinks('DJ', $value);
+    }
+
+    public function getDjTimetableShowGenre(): bool
+    {
+        return $this->shouldTimetableShowGenre('DJ');
+    }
+
+    public function setDjTimetableShowGenre(bool $value): void
+    {
+        $this->setTimetableShowGenre('DJ', $value);
+    }
+
+    public function getDjTimetableShowTime(): bool
+    {
+        return $this->shouldTimetableShowTime('DJ');
+    }
+
+    public function setDjTimetableShowTime(bool $value): void
+    {
+        $this->setTimetableShowTime('DJ', $value);
+    }
+
+    public function getDjBioShowStage(): bool
+    {
+        return $this->shouldBioShowStage('DJ');
+    }
+
+    public function setDjBioShowStage(bool $value): void
+    {
+        $this->setBioShowStage('DJ', $value);
+    }
+
+    public function getDjBioShowPicture(): bool
+    {
+        return $this->shouldBioShowPicture('DJ');
+    }
+
+    public function setDjBioShowPicture(bool $value): void
+    {
+        $this->setBioShowPicture('DJ', $value);
+    }
+
+    public function getDjBioShowTime(): bool
+    {
+        return $this->shouldBioShowTime('DJ');
+    }
+
+    public function setDjBioShowTime(bool $value): void
+    {
+        $this->setBioShowTime('DJ', $value);
+    }
+
+    public function getDjBioShowGenre(): bool
+    {
+        return $this->shouldBioShowGenre('DJ');
+    }
+
+    public function setDjBioShowGenre(bool $value): void
+    {
+        $this->setBioShowGenre('DJ', $value);
+    }
+
+    public function getVjTimetableIncludePageLinks(): bool
+    {
+        return $this->shouldTimetableIncludePageLinks('VJ');
+    }
+
+    public function setVjTimetableIncludePageLinks(bool $value): void
+    {
+        $this->setTimetableIncludePageLinks('VJ', $value);
+    }
+
+    public function getVjTimetableShowGenre(): bool
+    {
+        return $this->shouldTimetableShowGenre('VJ');
+    }
+
+    public function setVjTimetableShowGenre(bool $value): void
+    {
+        $this->setTimetableShowGenre('VJ', $value);
+    }
+
+    public function getVjTimetableShowTime(): bool
+    {
+        return $this->shouldTimetableShowTime('VJ');
+    }
+
+    public function setVjTimetableShowTime(bool $value): void
+    {
+        $this->setTimetableShowTime('VJ', $value);
+    }
+
+    public function getVjBioShowStage(): bool
+    {
+        return $this->shouldBioShowStage('VJ');
+    }
+
+    public function setVjBioShowStage(bool $value): void
+    {
+        $this->setBioShowStage('VJ', $value);
+    }
+
+    public function getVjBioShowPicture(): bool
+    {
+        return $this->shouldBioShowPicture('VJ');
+    }
+
+    public function setVjBioShowPicture(bool $value): void
+    {
+        $this->setBioShowPicture('VJ', $value);
+    }
+
+    public function getVjBioShowTime(): bool
+    {
+        return $this->shouldBioShowTime('VJ');
+    }
+
+    public function setVjBioShowTime(bool $value): void
+    {
+        $this->setBioShowTime('VJ', $value);
+    }
+
+    public function getVjBioShowGenre(): bool
+    {
+        return $this->shouldBioShowGenre('VJ');
+    }
+
+    public function setVjBioShowGenre(bool $value): void
+    {
+        $this->setBioShowGenre('VJ', $value);
+    }
+
+    public function getArtBioShowStage(): bool
+    {
+        return $this->shouldBioShowStage('ART');
+    }
+
+    public function setArtBioShowStage(bool $value): void
+    {
+        $this->setBioShowStage('ART', $value);
+    }
+
+    public function getArtBioShowPicture(): bool
+    {
+        return $this->shouldBioShowPicture('ART');
+    }
+
+    public function setArtBioShowPicture(bool $value): void
+    {
+        $this->setBioShowPicture('ART', $value);
+    }
+
+    public function getArtBioShowTime(): bool
+    {
+        return $this->shouldBioShowTime('ART');
+    }
+
+    public function setArtBioShowTime(bool $value): void
+    {
+        $this->setBioShowTime('ART', $value);
+    }
+
+    public function getArtBioShowGenre(): bool
+    {
+        return $this->shouldBioShowGenre('ART');
+    }
+
+    public function setArtBioShowGenre(bool $value): void
+    {
+        $this->setBioShowGenre('ART', $value);
+    }
+
     private function mergeConfig(?array $config): array
     {
         return array_replace_recursive(
