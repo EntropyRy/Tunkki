@@ -1492,16 +1492,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.5.3",
+            "version": "3.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "1220edf9535303feb6dbfcf171beeef842fc9e1c"
+                "reference": "f18de9d569f00ed6eb9dac4b33c7844d705d17da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/1220edf9535303feb6dbfcf171beeef842fc9e1c",
-                "reference": "1220edf9535303feb6dbfcf171beeef842fc9e1c",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/f18de9d569f00ed6eb9dac4b33c7844d705d17da",
+                "reference": "f18de9d569f00ed6eb9dac4b33c7844d705d17da",
                 "shasum": ""
             },
             "require": {
@@ -1525,7 +1525,7 @@
                 "phpbench/phpbench": "^1.0",
                 "phpdocumentor/guides-cli": "^1.4",
                 "phpstan/extension-installer": "^1.4",
-                "phpstan/phpstan": "2.1.22",
+                "phpstan/phpstan": "2.1.23",
                 "phpstan/phpstan-deprecation-rules": "^2",
                 "phpunit/phpunit": "^10.5.0 || ^11.5",
                 "psr/log": "^1 || ^2 || ^3",
@@ -1575,9 +1575,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.5.3"
+                "source": "https://github.com/doctrine/orm/tree/3.5.7"
             },
-            "time": "2025-10-27T22:06:52+00:00"
+            "time": "2025-11-11T18:27:40+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -5587,20 +5587,21 @@
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "2.5.2",
+            "version": "2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "43a5df5b7d8853046bf6a1374263ebc80ac02053"
+                "reference": "dea8b3128eb52e8102a790556d8f01aca752bca3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/43a5df5b7d8853046bf6a1374263ebc80ac02053",
-                "reference": "43a5df5b7d8853046bf6a1374263ebc80ac02053",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/dea8b3128eb52e8102a790556d8f01aca752bca3",
+                "reference": "dea8b3128eb52e8102a790556d8f01aca752bca3",
                 "shasum": ""
             },
             "require": {
                 "php": "^8.1",
+                "symfony/deprecation-contracts": "^3.6",
                 "symfony/event-dispatcher": "^6.4 || ^7.1",
                 "symfony/form": "^6.4 || ^7.1",
                 "symfony/options-resolver": "^6.4 || ^7.1",
@@ -5663,7 +5664,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/form-extensions/issues",
-                "source": "https://github.com/sonata-project/form-extensions/tree/2.5.2"
+                "source": "https://github.com/sonata-project/form-extensions/tree/2.6.0"
             },
             "funding": [
                 {
@@ -5683,7 +5684,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-09-28T21:01:44+00:00"
+            "time": "2025-11-11T09:44:54+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
@@ -8517,16 +8518,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v7.3.6",
+            "version": "v7.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "6379e490d6ecfc5c4224ff3a754b90495ecd135c"
+                "reference": "db488a62f98f7a81d5746f05eea63a74e55bb7c4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/6379e490d6ecfc5c4224ff3a754b90495ecd135c",
-                "reference": "6379e490d6ecfc5c4224ff3a754b90495ecd135c",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/db488a62f98f7a81d5746f05eea63a74e55bb7c4",
+                "reference": "db488a62f98f7a81d5746f05eea63a74e55bb7c4",
                 "shasum": ""
             },
             "require": {
@@ -8576,7 +8577,7 @@
             "description": "Defines an object-oriented layer for the HTTP specification",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-foundation/tree/v7.3.6"
+                "source": "https://github.com/symfony/http-foundation/tree/v7.3.7"
             },
             "funding": [
                 {
@@ -8596,20 +8597,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-06T11:05:57+00:00"
+            "time": "2025-11-08T16:41:12+00:00"
         },
         {
             "name": "symfony/http-kernel",
-            "version": "v7.3.6",
+            "version": "v7.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-kernel.git",
-                "reference": "f9a34dc0196677250e3609c2fac9de9e1551a262"
+                "reference": "10b8e9b748ea95fa4539c208e2487c435d3c87ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/f9a34dc0196677250e3609c2fac9de9e1551a262",
-                "reference": "f9a34dc0196677250e3609c2fac9de9e1551a262",
+                "url": "https://api.github.com/repos/symfony/http-kernel/zipball/10b8e9b748ea95fa4539c208e2487c435d3c87ce",
+                "reference": "10b8e9b748ea95fa4539c208e2487c435d3c87ce",
                 "shasum": ""
             },
             "require": {
@@ -8694,7 +8695,7 @@
             "description": "Provides a structured process for converting a Request into a Response",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/http-kernel/tree/v7.3.6"
+                "source": "https://github.com/symfony/http-kernel/tree/v7.3.7"
             },
             "funding": [
                 {
@@ -8714,7 +8715,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-06T20:58:12+00:00"
+            "time": "2025-11-12T11:38:40+00:00"
         },
         {
             "name": "symfony/intl",
@@ -12811,16 +12812,16 @@
         },
         {
             "name": "symfony/validator",
-            "version": "v7.3.6",
+            "version": "v7.3.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/validator.git",
-                "reference": "5a2904dc351c7bd1fb402dfc4faccccd6f55ce01"
+                "reference": "8290a095497c3fe5046db21888d1f75b54ddf39d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/validator/zipball/5a2904dc351c7bd1fb402dfc4faccccd6f55ce01",
-                "reference": "5a2904dc351c7bd1fb402dfc4faccccd6f55ce01",
+                "url": "https://api.github.com/repos/symfony/validator/zipball/8290a095497c3fe5046db21888d1f75b54ddf39d",
+                "reference": "8290a095497c3fe5046db21888d1f75b54ddf39d",
                 "shasum": ""
             },
             "require": {
@@ -12889,7 +12890,7 @@
             "description": "Provides tools to validate values",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/validator/tree/v7.3.6"
+                "source": "https://github.com/symfony/validator/tree/v7.3.7"
             },
             "funding": [
                 {
@@ -12909,7 +12910,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-29T13:09:25+00:00"
+            "time": "2025-11-08T16:29:29+00:00"
         },
         {
             "name": "symfony/var-dumper",
@@ -15630,11 +15631,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.31",
+            "version": "2.1.32",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/ead89849d879fe203ce9292c6ef5e7e76f867b96",
-                "reference": "ead89849d879fe203ce9292c6ef5e7e76f867b96",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/e126cad1e30a99b137b8ed75a85a676450ebb227",
+                "reference": "e126cad1e30a99b137b8ed75a85a676450ebb227",
                 "shasum": ""
             },
             "require": {
@@ -15679,7 +15680,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-10T14:14:11+00:00"
+            "time": "2025-11-11T15:18:17+00:00"
         },
         {
             "name": "phpstan/phpstan-doctrine",
@@ -16161,16 +16162,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.4.2",
+            "version": "12.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "a94ea4d26d865875803b23aaf78c3c2c670ea2ea"
+                "reference": "d8f644d8d9bb904867f7a0aeb1bd306e0d966949"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/a94ea4d26d865875803b23aaf78c3c2c670ea2ea",
-                "reference": "a94ea4d26d865875803b23aaf78c3c2c670ea2ea",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/d8f644d8d9bb904867f7a0aeb1bd306e0d966949",
+                "reference": "d8f644d8d9bb904867f7a0aeb1bd306e0d966949",
                 "shasum": ""
             },
             "require": {
@@ -16238,7 +16239,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.4.2"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.4.3"
             },
             "funding": [
                 {
@@ -16262,7 +16263,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-10-30T08:41:39+00:00"
+            "time": "2025-11-13T07:20:26+00:00"
         },
         {
             "name": "react/cache",
@@ -16792,21 +16793,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.2.7",
+            "version": "2.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef"
+                "reference": "303aa811649ccd1d32e51e62d5c85949d01b5f1b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/022038537838bc8a4e526af86c2d6e38eaeff7ef",
-                "reference": "022038537838bc8a4e526af86c2d6e38eaeff7ef",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/303aa811649ccd1d32e51e62d5c85949d01b5f1b",
+                "reference": "303aa811649ccd1d32e51e62d5c85949d01b5f1b",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.26"
+                "phpstan/phpstan": "^2.1.32"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -16840,7 +16841,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.7"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.8"
             },
             "funding": [
                 {
@@ -16848,7 +16849,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-29T15:46:12+00:00"
+            "time": "2025-11-12T18:38:00+00:00"
         },
         {
             "name": "sanmai/later",
@@ -18958,16 +18959,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.7.9",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "11973cebbb97d5c9f3f27ffd602833bff26bf760"
+                "reference": "62a1c63a000c4886f1d7222ab8bec32a502828b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/11973cebbb97d5c9f3f27ffd602833bff26bf760",
-                "reference": "11973cebbb97d5c9f3f27ffd602833bff26bf760",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/62a1c63a000c4886f1d7222ab8bec32a502828b2",
+                "reference": "62a1c63a000c4886f1d7222ab8bec32a502828b2",
                 "shasum": ""
             },
             "require": {
@@ -18982,6 +18983,7 @@
             },
             "conflict": {
                 "doctrine/persistence": "<2.0",
+                "symfony/event-dispatcher": "<6.4",
                 "symfony/framework-bundle": "<6.4"
             },
             "require-dev": {
@@ -18999,6 +19001,7 @@
                 "symfony/browser-kit": "^6.4|^7.0|^8.0",
                 "symfony/console": "^6.4|^7.0|^8.0",
                 "symfony/dotenv": "^6.4|^7.0|^8.0",
+                "symfony/event-dispatcher": "^6.4|^7.0",
                 "symfony/framework-bundle": "^6.4|^7.0|^8.0",
                 "symfony/maker-bundle": "^1.55",
                 "symfony/phpunit-bridge": "^6.4|^7.0|^8.0",
@@ -19060,7 +19063,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.7.9"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.8.0"
             },
             "funding": [
                 {
@@ -19072,7 +19075,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-07T08:38:56+00:00"
+            "time": "2025-11-09T13:01:31+00:00"
         }
     ],
     "aliases": [

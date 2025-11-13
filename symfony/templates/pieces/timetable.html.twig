@@ -22,7 +22,8 @@
 #}
 
 {% block dj_timetable %}
-    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = timetable_config.include_page_links ?? false %}
     {% set genre = timetable_config.include_genre ?? false %}
@@ -32,7 +33,8 @@
 {% endblock %}
 
 {% block timetable_to_page_with_genre %}
-    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
     {% set genre = true %}
@@ -42,7 +44,8 @@
 {% endblock %}
 
 {% block timetable_to_page %}
-    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = true %}
     {% set genre = timetable_config.include_genre ?? false %}
@@ -52,8 +55,9 @@
 {% endblock %}
 
 {% block vj_timetable_to_page %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
+    {% set timetable_config = artist_display.getTimetableConfig('VJ') %}
     {% set page_links = true %}
     {% set genre = timetable_config.include_genre ?? false %}
     {% set timetable_show_time = timetable_config.include_time ?? true %}
@@ -62,7 +66,8 @@
 {% endblock %}
 
 {% block timetable_with_genre %}
-    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = true %}
@@ -72,7 +77,8 @@
 {% endblock %}
 
 {% block timetable %}
-    {% set timetable_config = event.getArtistTimetableConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
     {% set bios = event.MusicArtistInfos %}
     {% set page_links = false %}
     {% set genre = timetable_config.include_genre ?? false %}
@@ -82,8 +88,9 @@
 {% endblock %}
 
 {% block vj_timetable %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set timetable_config = event.getArtistTimetableConfig('VJ') %}
+    {% set timetable_config = artist_display.getTimetableConfig('VJ') %}
     {% set page_links = timetable_config.include_page_links ?? false %}
     {% set genre = timetable_config.include_genre ?? false %}
     {% set timetable_show_time = timetable_config.include_time ?? true %}
@@ -92,16 +99,17 @@
 {% endblock %}
 
 {% block timetable_list %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {# High-level orchestrator: computes date format & delegates stage rendering #}
     {% if type is defined %}
         {% if timetable_show_time is not defined %}
-            {% set timetable_show_time = event.shouldArtistTimetableShowTime(type) %}
+            {% set timetable_show_time = artist_display.shouldTimetableShowTime(type) %}
         {% endif %}
         {% if genre is not defined %}
-            {% set genre = event.shouldArtistTimetableShowGenre(type) %}
+            {% set genre = artist_display.shouldTimetableShowGenre(type) %}
         {% endif %}
         {% if page_links is not defined %}
-            {% set page_links = event.shouldArtistTimetableIncludePageLinks(type) %}
+            {% set page_links = artist_display.shouldTimetableIncludePageLinks(type) %}
         {% endif %}
     {% endif %}
     {% if timetable_show_time is not defined %}

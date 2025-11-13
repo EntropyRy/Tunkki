@@ -3,6 +3,7 @@
 {% use 'pieces/happening.html.twig' %}
 {% use 'pieces/timetable.html.twig' %}
 {% use 'pieces/bio.html.twig' %}
+
 {% block menu %}
     {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
     <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
@@ -525,10 +526,11 @@
         {% endif %}
     {% endblock %}
     {% block cycle %}
+        {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
         {% set type = artist_bio_type|default(artist.type) %}
         {% set bio_config = artist_bio_config|default({}) %}
         {% if bio_config is empty and event is defined %}
-            {% set bio_config = event.getArtistBioConfig(type) %}
+            {% set bio_config = artist_display.getBioConfig(type) %}
         {% endif %}
         {% set show_picture = bio_config.show_picture ?? true %}
         {% if 'e30v' in event.template|default(null) %}
@@ -589,7 +591,8 @@
         {% endif %}
     {% endblock %}
 {%- block bios %}
-    {% set artist_bio_config = event.getArtistBioConfig('DJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set artist_bio_config = artist_display.getBioConfig('DJ') %}
     {% set artist_bio_groups = event.MusicArtistInfos %}
     {% set artist_bio_anchor = 'bios' %}
     {% set artist_bio_title_prefix = 'DJ ' ~ 'Artists'|trans %}
@@ -600,7 +603,8 @@
     {{ block('bios') }}
 {% endblock %}
 {%- block vj_bios %}
-    {% set artist_bio_config = event.getArtistBioConfig('VJ') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set artist_bio_config = artist_display.getBioConfig('VJ') %}
     {% set artist_bio_groups = event.ArtistInfosByType('VJ') %}
     {% set artist_bio_anchor = 'vj-bios' %}
     {% set artist_bio_title_prefix = 'VJ ' ~ 'Artists'|trans %}
@@ -611,7 +615,8 @@
     {{ block('vj_bios') }}
 {% endblock %}
 {%- block art_bios %}
-    {% set artist_bio_config = event.getArtistBioConfig('ART') %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+    {% set artist_bio_config = artist_display.getBioConfig('ART') %}
     {% set artist_bio_groups = event.ArtistInfosByType('ART') %}
     {% set artist_bio_anchor = 'art-bios' %}
     {% set artist_bio_title_prefix = 'Artists'|trans %}
@@ -629,10 +634,11 @@
     {% endfor %}
 {% endblock %}
 {% block artist_event_info %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
     {% if bio_config is empty and event is defined %}
-        {% set bio_config = event.getArtistBioConfig(type) %}
+        {% set bio_config = artist_display.getBioConfig(type) %}
     {% endif %}
     {% set show_time = bio_config.show_time ?? true %}
     {% set show_genre = bio_config.show_genre ?? true %}
@@ -671,10 +677,11 @@
     {% endif %}
 {% endblock %}
 {% block artist_pic %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
     {% if bio_config is empty and event is defined %}
-        {% set bio_config = event.getArtistBioConfig(type) %}
+        {% set bio_config = artist_display.getBioConfig(type) %}
     {% endif %}
     {% set show_picture = bio_config.show_picture ?? true %}
     {% if show_picture %}
@@ -706,12 +713,13 @@
     {% endif %}
 {% endblock %}
 {% block artist_preview_info %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
 
     <h3>{{ artist.name }}</h3>
     {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
     {% if bio_config is empty and event is defined %}
-        {% set bio_config = event.getArtistBioConfig(type) %}
+        {% set bio_config = artist_display.getBioConfig(type) %}
     {% endif %}
     {% if bio_config.show_genre ?? true %}
         <small>{{ artist.genre }}</small>
@@ -739,11 +747,12 @@
 {%- endif -%}
 {%- endblock %}
 {% block public_artist_info %}
+    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
     {% set name = artist.name %}
     {% set type = artist_bio_type|default(artist.type) %}
     {% set bio_config = artist_bio_config|default({}) %}
     {% if bio_config is empty and event is defined %}
-        {% set bio_config = event.getArtistBioConfig(type) %}
+        {% set bio_config = artist_display.getBioConfig(type) %}
     {% endif %}
     {% set show_picture = bio_config.show_picture ?? true %}
 

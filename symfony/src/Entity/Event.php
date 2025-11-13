@@ -20,48 +20,6 @@ use function Symfony\Component\String\u;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
 {
-    private const array ARTIST_DISPLAY_DEFAULTS = [
-        'DJ' => [
-            'timetable' => [
-                'include_page_links' => false,
-                'include_genre' => true,
-                'include_time' => true,
-            ],
-            'bio' => [
-                'show_stage' => true,
-                'show_picture' => true,
-                'show_time' => true,
-                'show_genre' => true,
-            ],
-        ],
-        'VJ' => [
-            'timetable' => [
-                'include_page_links' => false,
-                'include_genre' => true,
-                'include_time' => true,
-            ],
-            'bio' => [
-                'show_stage' => true,
-                'show_picture' => true,
-                'show_time' => true,
-                'show_genre' => true,
-            ],
-        ],
-        'ART' => [
-            'timetable' => [
-                'include_page_links' => false,
-                'include_genre' => true,
-                'include_time' => true,
-            ],
-            'bio' => [
-                'show_stage' => true,
-                'show_picture' => true,
-                'show_time' => false,
-                'show_genre' => true,
-            ],
-        ],
-    ];
-
     private const array LEGACY_TAG_MAP = [
         '{{ timetable_to_page_with_genre }}' => '{{ dj_timetable }}',
         '{{ timetable_with_genre }}' => '{{ dj_timetable }}',
@@ -160,8 +118,8 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $artistDisplayConfig = null;
+    #[ORM\Embedded(class: ArtistDisplayConfiguration::class, columnPrefix: false)]
+    private ArtistDisplayConfiguration $artistDisplayConfiguration;
 
     /**
      * @var Collection<int, EventArtistInfo>
@@ -697,6 +655,7 @@ class Event implements \Stringable
         $this->happenings = new ArrayCollection();
         $this->nakkiResponsibleAdmin = new ArrayCollection();
         $this->products = new ArrayCollection();
+        $this->artistDisplayConfiguration = new ArtistDisplayConfiguration();
     }
 
     public function getNowTest(): ?string
@@ -888,405 +847,6 @@ class Event implements \Stringable
         $normalized = $this->normalizeLegacyTwigTags((string) $message) ?? '';
 
         return str_replace(self::CONTENT_TWIG_TAGS, '', $normalized);
-    }
-
-    private function normalizeArtistType(string $type): string
-    {
-        $normalized = strtoupper($type);
-
-        $normalized = match ($normalized) {
-            'LIVE' => 'DJ',
-            default => $normalized,
-        };
-
-        if (!\array_key_exists($normalized, self::ARTIST_DISPLAY_DEFAULTS)) {
-            return 'DJ';
-        }
-
-        return $normalized;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getArtistDisplayConfig(): array
-    {
-        return $this->mergeArtistDisplayConfig($this->artistDisplayConfig);
-    }
-
-    /**
-     * @param array<string, mixed>|null $artistDisplayConfig
-     */
-    public function setArtistDisplayConfig(?array $artistDisplayConfig): self
-    {
-        $this->artistDisplayConfig = $artistDisplayConfig;
-
-        return $this;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getArtistBioConfig(string $type): array
-    {
-        $normalized = $this->normalizeArtistType($type);
-        $config = $this->getArtistDisplayConfig();
-
-        return $config[$normalized]['bio'] ??
-            self::ARTIST_DISPLAY_DEFAULTS[$normalized]['bio'];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    public function getArtistTimetableConfig(string $type): array
-    {
-        $normalized = $this->normalizeArtistType($type);
-        $config = $this->getArtistDisplayConfig();
-
-        return $config[$normalized]['timetable'] ??
-            self::ARTIST_DISPLAY_DEFAULTS[$normalized]['timetable'];
-    }
-
-    public function shouldArtistTimetableIncludePageLinks(string $type): bool
-    {
-        return $this->getArtistDisplayFlag(
-            $type,
-            'timetable',
-            'include_page_links',
-        );
-    }
-
-    public function shouldArtistTimetableShowGenre(string $type): bool
-    {
-        return $this->getArtistDisplayFlag($type, 'timetable', 'include_genre');
-    }
-
-    public function shouldArtistTimetableShowTime(string $type): bool
-    {
-        return $this->getArtistDisplayFlag(
-            $type,
-            'timetable',
-            'include_time',
-        );
-    }
-
-    public function shouldArtistBioShowStage(string $type): bool
-    {
-        return $this->getArtistDisplayFlag($type, 'bio', 'show_stage');
-    }
-
-    public function shouldArtistBioShowPicture(string $type): bool
-    {
-        return $this->getArtistDisplayFlag($type, 'bio', 'show_picture');
-    }
-
-    public function shouldArtistBioShowTime(string $type): bool
-    {
-        return $this->getArtistDisplayFlag($type, 'bio', 'show_time');
-    }
-
-    public function shouldArtistBioShowGenre(string $type): bool
-    {
-        return $this->getArtistDisplayFlag($type, 'bio', 'show_genre');
-    }
-
-    public function setDjTimetableIncludePageLinks(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'timetable',
-            'include_page_links',
-            $enabled,
-        );
-    }
-
-    public function getDjTimetableIncludePageLinks(): bool
-    {
-        return $this->shouldArtistTimetableIncludePageLinks('DJ');
-    }
-
-    public function setDjTimetableShowGenre(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'timetable',
-            'include_genre',
-            $enabled,
-        );
-    }
-
-    public function getDjTimetableShowGenre(): bool
-    {
-        return $this->shouldArtistTimetableShowGenre('DJ');
-    }
-
-    public function setDjTimetableShowTime(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'timetable',
-            'include_time',
-            $enabled,
-        );
-    }
-
-    public function getDjTimetableShowTime(): bool
-    {
-        return $this->shouldArtistTimetableShowTime('DJ');
-    }
-
-    public function setVjTimetableIncludePageLinks(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'timetable',
-            'include_page_links',
-            $enabled,
-        );
-    }
-
-    public function getVjTimetableIncludePageLinks(): bool
-    {
-        return $this->shouldArtistTimetableIncludePageLinks('VJ');
-    }
-
-    public function setVjTimetableShowGenre(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'timetable',
-            'include_genre',
-            $enabled,
-        );
-    }
-
-    public function getVjTimetableShowGenre(): bool
-    {
-        return $this->shouldArtistTimetableShowGenre('VJ');
-    }
-
-    public function setVjTimetableShowTime(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'timetable',
-            'include_time',
-            $enabled,
-        );
-    }
-
-    public function getVjTimetableShowTime(): bool
-    {
-        return $this->shouldArtistTimetableShowTime('VJ');
-    }
-
-    public function setDjBioShowStage(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'bio',
-            'show_stage',
-            $enabled,
-        );
-    }
-
-    public function getDjBioShowStage(): bool
-    {
-        return $this->shouldArtistBioShowStage('DJ');
-    }
-
-    public function setDjBioShowPicture(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'bio',
-            'show_picture',
-            $enabled,
-        );
-    }
-
-    public function getDjBioShowPicture(): bool
-    {
-        return $this->shouldArtistBioShowPicture('DJ');
-    }
-
-    public function setDjBioShowTime(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag('DJ', 'bio', 'show_time', $enabled);
-    }
-
-    public function getDjBioShowTime(): bool
-    {
-        return $this->shouldArtistBioShowTime('DJ');
-    }
-
-    public function setDjBioShowGenre(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'DJ',
-            'bio',
-            'show_genre',
-            $enabled,
-        );
-    }
-
-    public function getDjBioShowGenre(): bool
-    {
-        return $this->shouldArtistBioShowGenre('DJ');
-    }
-
-    public function setVjBioShowStage(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'bio',
-            'show_stage',
-            $enabled,
-        );
-    }
-
-    public function getVjBioShowStage(): bool
-    {
-        return $this->shouldArtistBioShowStage('VJ');
-    }
-
-    public function setVjBioShowPicture(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'bio',
-            'show_picture',
-            $enabled,
-        );
-    }
-
-    public function getVjBioShowPicture(): bool
-    {
-        return $this->shouldArtistBioShowPicture('VJ');
-    }
-
-    public function setVjBioShowGenre(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'VJ',
-            'bio',
-            'show_genre',
-            $enabled,
-        );
-    }
-
-    public function getVjBioShowGenre(): bool
-    {
-        return $this->shouldArtistBioShowGenre('VJ');
-    }
-
-    public function setVjBioShowTime(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag('VJ', 'bio', 'show_time', $enabled);
-    }
-
-    public function getVjBioShowTime(): bool
-    {
-        return $this->shouldArtistBioShowTime('VJ');
-    }
-
-    public function setArtBioShowStage(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'ART',
-            'bio',
-            'show_stage',
-            $enabled,
-        );
-    }
-
-    public function getArtBioShowStage(): bool
-    {
-        return $this->shouldArtistBioShowStage('ART');
-    }
-
-    public function setArtBioShowPicture(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'ART',
-            'bio',
-            'show_picture',
-            $enabled,
-        );
-    }
-
-    public function getArtBioShowPicture(): bool
-    {
-        return $this->shouldArtistBioShowPicture('ART');
-    }
-
-    public function setArtBioShowTime(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag('ART', 'bio', 'show_time', $enabled);
-    }
-
-    public function getArtBioShowTime(): bool
-    {
-        return $this->shouldArtistBioShowTime('ART');
-    }
-
-    public function setArtBioShowGenre(bool $enabled): self
-    {
-        return $this->setArtistDisplayFlag(
-            'ART',
-            'bio',
-            'show_genre',
-            $enabled,
-        );
-    }
-
-    public function getArtBioShowGenre(): bool
-    {
-        return $this->shouldArtistBioShowGenre('ART');
-    }
-
-    private function mergeArtistDisplayConfig(?array $config): array
-    {
-        return array_replace_recursive(
-            self::ARTIST_DISPLAY_DEFAULTS,
-            $config ?? [],
-        );
-    }
-
-    private function setArtistDisplayFlag(
-        string $type,
-        string $group,
-        string $flag,
-        bool $value,
-    ): self {
-        $normalized = $this->normalizeArtistType($type);
-        $config = $this->artistDisplayConfig ?? [];
-        $config[$normalized][$group][$flag] = $value;
-
-        $this->artistDisplayConfig = $config;
-
-        return $this;
-    }
-
-    private function getArtistDisplayFlag(
-        string $type,
-        string $group,
-        string $flag,
-        ?bool $fallback = null,
-    ): bool {
-        $normalized = $this->normalizeArtistType($type);
-        $config = $this->getArtistDisplayConfig();
-
-        if (
-            \array_key_exists($normalized, $config)
-            && \array_key_exists($group, $config[$normalized])
-            && \array_key_exists($flag, $config[$normalized][$group])
-        ) {
-            return (bool) $config[$normalized][$group][$flag];
-        }
-
-        return $fallback ?? false;
     }
 
     private function normalizeLegacyTwigTags(?string $content): ?string
@@ -2398,5 +1958,313 @@ class Event implements \Stringable
         $this->ticketTotalAmount = $ticketTotalAmount;
 
         return $this;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getArtistDisplayConfig(): array
+    {
+        return $this->artistDisplayConfiguration->getConfig();
+    }
+
+    /**
+     * @param array<string, mixed>|null $artistDisplayConfig
+     */
+    public function setArtistDisplayConfig(?array $artistDisplayConfig): self
+    {
+        $this->artistDisplayConfiguration->replace($artistDisplayConfig);
+
+        return $this;
+    }
+
+    public function getArtistDisplayConfiguration(): ArtistDisplayConfiguration
+    {
+        return $this->artistDisplayConfiguration;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getArtistBioConfig(string $type): array
+    {
+        return $this->artistDisplayConfiguration->getBioConfig($type);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getArtistTimetableConfig(string $type): array
+    {
+        return $this->artistDisplayConfiguration->getTimetableConfig($type);
+    }
+
+    public function shouldArtistTimetableIncludePageLinks(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldTimetableIncludePageLinks(
+            $type,
+        );
+    }
+
+    public function shouldArtistTimetableShowGenre(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldTimetableShowGenre(
+            $type,
+        );
+    }
+
+    public function shouldArtistTimetableShowTime(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldTimetableShowTime(
+            $type,
+        );
+    }
+
+    public function shouldArtistBioShowStage(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldBioShowStage($type);
+    }
+
+    public function shouldArtistBioShowPicture(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldBioShowPicture($type);
+    }
+
+    public function shouldArtistBioShowTime(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldBioShowTime($type);
+    }
+
+    public function shouldArtistBioShowGenre(string $type): bool
+    {
+        return $this->artistDisplayConfiguration->shouldBioShowGenre($type);
+    }
+
+    public function setDjTimetableIncludePageLinks(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableIncludePageLinks(
+            'DJ',
+            $enabled,
+        );
+
+        return $this;
+    }
+
+    public function getDjTimetableIncludePageLinks(): bool
+    {
+        return $this->shouldArtistTimetableIncludePageLinks('DJ');
+    }
+
+    public function setDjTimetableShowGenre(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableShowGenre(
+            'DJ',
+            $enabled,
+        );
+
+        return $this;
+    }
+
+    public function getDjTimetableShowGenre(): bool
+    {
+        return $this->shouldArtistTimetableShowGenre('DJ');
+    }
+
+    public function setDjTimetableShowTime(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableShowTime('DJ', $enabled);
+
+        return $this;
+    }
+
+    public function getDjTimetableShowTime(): bool
+    {
+        return $this->shouldArtistTimetableShowTime('DJ');
+    }
+
+    public function setVjTimetableIncludePageLinks(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableIncludePageLinks(
+            'VJ',
+            $enabled,
+        );
+
+        return $this;
+    }
+
+    public function getVjTimetableIncludePageLinks(): bool
+    {
+        return $this->shouldArtistTimetableIncludePageLinks('VJ');
+    }
+
+    public function setVjTimetableShowGenre(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableShowGenre(
+            'VJ',
+            $enabled,
+        );
+
+        return $this;
+    }
+
+    public function getVjTimetableShowGenre(): bool
+    {
+        return $this->shouldArtistTimetableShowGenre('VJ');
+    }
+
+    public function setVjTimetableShowTime(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setTimetableShowTime('VJ', $enabled);
+
+        return $this;
+    }
+
+    public function getVjTimetableShowTime(): bool
+    {
+        return $this->shouldArtistTimetableShowTime('VJ');
+    }
+
+    public function setDjBioShowStage(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowStage('DJ', $enabled);
+
+        return $this;
+    }
+
+    public function getDjBioShowStage(): bool
+    {
+        return $this->shouldArtistBioShowStage('DJ');
+    }
+
+    public function setDjBioShowPicture(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowPicture('DJ', $enabled);
+
+        return $this;
+    }
+
+    public function getDjBioShowPicture(): bool
+    {
+        return $this->shouldArtistBioShowPicture('DJ');
+    }
+
+    public function setDjBioShowTime(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowTime('DJ', $enabled);
+
+        return $this;
+    }
+
+    public function getDjBioShowTime(): bool
+    {
+        return $this->shouldArtistBioShowTime('DJ');
+    }
+
+    public function setDjBioShowGenre(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowGenre('DJ', $enabled);
+
+        return $this;
+    }
+
+    public function getDjBioShowGenre(): bool
+    {
+        return $this->shouldArtistBioShowGenre('DJ');
+    }
+
+    public function setVjBioShowStage(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowStage('VJ', $enabled);
+
+        return $this;
+    }
+
+    public function getVjBioShowStage(): bool
+    {
+        return $this->shouldArtistBioShowStage('VJ');
+    }
+
+    public function setVjBioShowPicture(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowPicture('VJ', $enabled);
+
+        return $this;
+    }
+
+    public function getVjBioShowPicture(): bool
+    {
+        return $this->shouldArtistBioShowPicture('VJ');
+    }
+
+    public function setVjBioShowGenre(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowGenre('VJ', $enabled);
+
+        return $this;
+    }
+
+    public function getVjBioShowGenre(): bool
+    {
+        return $this->shouldArtistBioShowGenre('VJ');
+    }
+
+    public function setVjBioShowTime(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowTime('VJ', $enabled);
+
+        return $this;
+    }
+
+    public function getVjBioShowTime(): bool
+    {
+        return $this->shouldArtistBioShowTime('VJ');
+    }
+
+    public function setArtBioShowStage(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowStage('ART', $enabled);
+
+        return $this;
+    }
+
+    public function getArtBioShowStage(): bool
+    {
+        return $this->shouldArtistBioShowStage('ART');
+    }
+
+    public function setArtBioShowPicture(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowPicture('ART', $enabled);
+
+        return $this;
+    }
+
+    public function getArtBioShowPicture(): bool
+    {
+        return $this->shouldArtistBioShowPicture('ART');
+    }
+
+    public function setArtBioShowTime(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowTime('ART', $enabled);
+
+        return $this;
+    }
+
+    public function getArtBioShowTime(): bool
+    {
+        return $this->shouldArtistBioShowTime('ART');
+    }
+
+    public function setArtBioShowGenre(bool $enabled): self
+    {
+        $this->artistDisplayConfiguration->setBioShowGenre('ART', $enabled);
+
+        return $this;
+    }
+
+    public function getArtBioShowGenre(): bool
+    {
+        return $this->shouldArtistBioShowGenre('ART');
     }
 }
