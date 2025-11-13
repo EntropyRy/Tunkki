@@ -540,10 +540,6 @@ services:
           label: Checkouts,
         }
 
-twig:
-  globals:
-    publicationDecider: '@App\Domain\EventPublicationDecider'
-
 when@test:
   framework:
     mailer:
@@ -563,7 +559,7 @@ when@test:
         medium: []
         low: []
   parameters:
-    test.fixed_datetime: "2025-01-01T12:00:00+00:00"
+    test.fixed_datetime: "2025-01-01T12:00:00+02:00"
     stripe_public_key: "pk_test_dummy"
     stripe_secret_key: "sk_test_dummy"
   services:

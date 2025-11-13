@@ -15,6 +15,7 @@ use App\Factory\EventFactory;
 use App\Factory\ProductFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
+use App\Time\ClockInterface;
 
 /**
  * Functional tests for the ticket purchase flow.
@@ -33,11 +34,14 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
 {
     use LoginHelperTrait;
 
+    private ClockInterface $clock;
+
     protected function setUp(): void
     {
         parent::setUp();
         $this->initSiteAwareClient();
         $this->seedClientHome('en');
+        $this->clock = static::getContainer()->get(ClockInterface::class);
     }
 
     /* -----------------------------------------------------------------
@@ -51,10 +55,10 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('localeProvider')]
-    public function testUnauthenticatedUserRedirectedToLogin(string $locale): void
+    public function testUnauthenticatedUserCanAccessShop(string $locale): void
     {
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -73,20 +77,17 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->client->request('GET', $shopPath);
 
         $status = $this->client->getResponse()->getStatusCode();
-        if ($status >= 500) {
-            $this->dumpResponseToFile(__METHOD__.'_'.$locale);
+        if (\in_array($status, [301, 302, 303], true)) {
+            $location = $this->client->getResponse()->headers->get('Location') ?? '';
+            $this->assertStringNotContainsString(
+                '/login',
+                $location,
+                'Anonymous users should not be forced to log in to view the shop.',
+            );
+            $this->client->followRedirect();
         }
 
-        $this->assertSame(
-            302,
-            $status,
-            'Anonymous user should be redirected to login'
-        );
-        $this->assertMatchesRegularExpression(
-            '#/login#',
-            $this->client->getResponse()->headers->get('Location') ?? '',
-            'Redirect location should contain /login'
-        );
+        $this->assertResponseIsSuccessful();
     }
 
     #[\PHPUnit\Framework\Attributes\DataProvider('localeProvider')]
@@ -96,7 +97,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->seedClientHome($locale);
 
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -140,7 +141,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->seedClientHome($locale);
 
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -189,7 +190,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->seedClientHome('en');
 
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -320,7 +321,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->seedClientHome('en');
 
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -426,7 +427,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->seedClientHome('en');
 
         // Create event with ticket presale window currently open
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $event = EventFactory::new()
             ->published()
             ->create([

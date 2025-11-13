@@ -9,6 +9,8 @@ use App\Entity\Sonata\SonataPageSite;
 use App\Factory\PageFactory;
 use App\Factory\SiteFactory;
 use App\Tests\Http\SiteAwareKernelBrowser;
+use App\Time\ClockInterface;
+use App\Time\MutableClock;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
@@ -74,6 +76,7 @@ abstract class FixturesWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        $this->resetTestClock();
 
         // Initialize the multisite-aware client first so WebTestCase registers an active browser
         $this->initSiteAwareClient();
@@ -185,6 +188,31 @@ abstract class FixturesWebTestCase extends WebTestCase
                 // invalidate clears data + regenerates id
                 $session->invalidate();
             }
+        }
+    }
+
+    /**
+     * Rewind the mutable test clock (if bound) to the canonical instant defined by test.fixed_datetime.
+     * Ensures randomized test execution cannot leak time-travelled state between cases.
+     */
+    private function resetTestClock(): void
+    {
+        $container = static::getContainer();
+        if (!$container->has(ClockInterface::class)) {
+            return;
+        }
+
+        $clock = $container->get(ClockInterface::class);
+        if (!$clock instanceof MutableClock) {
+            return;
+        }
+
+        $defaultInstant = $container->hasParameter('test.fixed_datetime')
+            ? $container->getParameter('test.fixed_datetime')
+            : null;
+
+        if (\is_string($defaultInstant) && '' !== $defaultInstant) {
+            $clock->setNow(new \DateTimeImmutable($defaultInstant));
         }
     }
 

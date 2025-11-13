@@ -418,7 +418,7 @@ class Event implements \Stringable
 
     public function setPublishDate(?\DateTimeImmutable $publishDate): self
     {
-        // Null = draft/unpublished; domain service (EventPublicationDecider) interprets accordingly.
+        // Null = draft/unpublished; domain service (EventTemporalStateService) interprets accordingly.
         $this->publishDate = $publishDate;
 
         return $this;
@@ -510,7 +510,7 @@ class Event implements \Stringable
         return $this->externalUrl;
     }
 
-    // (Removed 2025-10-02) Publication logic migrated to App\Domain\EventPublicationDecider::isPublished(Event) for clock-driven determinism.
+    // (Removed 2025-10-02) Publication logic migrated to App\Domain\EventTemporalStateService::isPublished(Event) for clock-driven determinism.
 
     /**
      * Returns true if the event is marked as cancelled.
@@ -656,63 +656,6 @@ class Event implements \Stringable
         $this->nakkiResponsibleAdmin = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->artistDisplayConfiguration = new ArtistDisplayConfiguration();
-    }
-
-    public function getNowTest(): ?string
-    {
-        // Normalize comparisons to whole seconds to avoid microsecond drift.
-        $now = new \DateTimeImmutable();
-        $nowS = (int) $now->format('U');
-
-        $eventS = (int) $this->EventDate->format('U');
-
-        if ($this->until instanceof \DateTimeInterface) {
-            $untilS = (int) $this->until->format('U');
-
-            // One-second tolerance to account for the internal "now" being captured slightly after the caller's boundary.
-            $tolerance = 1;
-
-            if ($nowS >= $eventS && $nowS <= $untilS + $tolerance) {
-                return 'now';
-            }
-
-            if ($nowS > $untilS + $tolerance) {
-                return 'after';
-            }
-
-            if ($nowS < $eventS) {
-                return 'before';
-            }
-        } else {
-            if ($nowS < $eventS) {
-                return 'before';
-            }
-
-            return 'after';
-        }
-
-        return 'undefined';
-    }
-
-    public function getBadgeText(): string
-    {
-        if ('announcement' === $this->type) {
-            return 'Announcement';
-        } else {
-            if ('now' == $this->getNowTest()) {
-                return 'event.now';
-            }
-            if ('after' == $this->getNowTest()) {
-                return 'event.after';
-            }
-
-            return 'event.in_future';
-        }
-    }
-
-    public function isInPast(): bool
-    {
-        return 'after' == $this->getNowTest();
     }
 
     public function getType(): string
@@ -940,6 +883,11 @@ class Event implements \Stringable
 
             return $newDateTime->add(new \DateInterval('PT8H'));
         }
+    }
+
+    public function getExplicitUntil(): ?\DateTimeInterface
+    {
+        return $this->until;
     }
 
     public function setUntil(?\DateTimeInterface $until): self
@@ -1171,33 +1119,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getArtistSignUpNow(): bool
-    {
-        $now = new \DateTimeImmutable('now');
-
-        if (!$this->getArtistSignUpEnabled()) {
-            return false;
-        }
-
-        $start = $this->getArtistSignUpStart();
-        $end = $this->getArtistSignUpEnd();
-
-        // Guard against incomplete window definition
-        if (
-            !$start instanceof \DateTimeInterface
-            || !$end instanceof \DateTimeInterface
-        ) {
-            return false;
-        }
-
-        // Normalize to second precision to avoid microsecond drift issues
-        $nowS = (int) $now->format('U');
-        $startS = (int) $start->format('U');
-        $endS = (int) $end->format('U');
-
-        return $startS <= $nowS && $endS >= $nowS && !$this->isInPast();
-    }
-
     public function getWebMeetingUrl(): ?string
     {
         return $this->webMeetingUrl;
@@ -1417,17 +1338,6 @@ class Event implements \Stringable
         $this->ticketPresaleEnd = $ticketPresaleEnd;
 
         return $this;
-    }
-
-    public function ticketPresaleEnabled(): bool
-    {
-        $now = new \DateTimeImmutable('now');
-
-        return $this->ticketsEnabled
-            && \is_object($this->ticketPresaleStart)
-            && $this->ticketPresaleStart <= $now
-            && \is_object($this->ticketPresaleEnd)
-            && $this->ticketPresaleEnd >= $now;
     }
 
     public function getTicketPresaleCount(): ?int

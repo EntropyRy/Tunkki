@@ -7,6 +7,7 @@ namespace App\Tests\Integration\Repository;
 use App\Entity\Event;
 use App\Factory\EventFactory;
 use App\Repository\EventRepository;
+use App\Time\ClockInterface;
 
 /**
  * @covers \App\Repository\EventRepository
@@ -31,6 +32,19 @@ final class EventRepositoryTest extends RepositoryTestCase
         $r = $this->em()->getRepository(Event::class);
 
         return $r;
+    }
+
+    private function clock(): ClockInterface
+    {
+        /** @var ClockInterface $clock */
+        $clock = static::getContainer()->get(ClockInterface::class);
+
+        return $clock;
+    }
+
+    private function futureEventLowerBound(): \DateTimeImmutable
+    {
+        return $this->clock()->now()->modify('-30 hours');
     }
 
     /* ---------------------------------------------------------------------
@@ -191,7 +205,7 @@ final class EventRepositoryTest extends RepositoryTestCase
         );
 
         // Invariant checks for each returned event
-        $threshold = new \DateTimeImmutable('-30 hours');
+        $threshold = $this->futureEventLowerBound();
         foreach ($future as $evt) {
             self::assertTrue(
                 $evt->getPublished(),
@@ -258,7 +272,7 @@ final class EventRepositoryTest extends RepositoryTestCase
                 'All returned events must be unpublished.',
             );
             self::assertTrue(
-                $evt->getEventDate() > new \DateTimeImmutable('-30 hours'),
+                $evt->getEventDate() > $this->futureEventLowerBound(),
                 'Returned unpublished future event must still be future per repository rule.',
             );
         }

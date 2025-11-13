@@ -46,7 +46,7 @@
                             <div class="pt-2">{{ 'events'|trans|capitalize }}:</div>
                             <ul>
                                 {% for info in artist.eventArtistInfos %}
-                                    {% if info.event.nowTest != 'after' or info.StartTime %}
+                                    {% if not eventTemporalState.isInPast(info.event) or info.StartTime %}
                                         <li>
                                             <a href="{{ path('entropy_event_slug', {year: info.event.eventDate|date('Y'), slug: info.event.url}) }}">{{ info.event }}</a>
                                             {% if info.StartTime %}

@@ -37,6 +37,9 @@ final class StreamWorkflowPantherTest extends PantherTestCase
             ],
             [
                 'environment' => 'panther',
+            ],
+            [
+                'webServerPort' => $this->getPantherWebServerPort(),
             ]
         );
 

@@ -37,14 +37,14 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
     /**
      * Helper to create dates for event creation.
      * Returns [realNow, testNow] where:
-     * - realNow: For Entity methods that use real system time (like ticketPresaleEnabled)
-     * - testNow: For domain services that use ClockInterface (like EventPublicationDecider).
+     * - realNow: For entity fields persisted relative to actual system time (start/end columns)
+     * - testNow: For domain services that use ClockInterface (EventTemporalStateService).
      */
     private function getDates(): array
     {
-        $realNow = new \DateTimeImmutable();
         $clock = static::getContainer()->get(\App\Time\ClockInterface::class);
-        $testNow = $clock->now();
+        $realNow = $clock->now();
+        $testNow = $realNow;
 
         return [$realNow, $testNow];
     }
@@ -191,7 +191,17 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
 
         $this->client->request('GET', $shopPath);
 
-        // Should succeed during valid presale window
+        $response = $this->client->getResponse();
+        if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
+            $location = $response->headers->get('Location') ?? '';
+            $this->assertStringNotContainsString(
+                '/login',
+                $location,
+                'Valid presale window should not redirect to login.',
+            );
+            $this->client->followRedirect();
+        }
+
         $this->assertResponseIsSuccessful();
         $this->client->assertSelectorExists(
             'form[name="cart"]',

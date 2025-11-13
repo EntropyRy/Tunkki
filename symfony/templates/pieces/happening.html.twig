@@ -53,6 +53,7 @@
     {% endif %}
 {% endblock %}
 {% block happening_info %}
+    {% set eventInPast = eventTemporalState.isInPast(event) %}
     {% set name = happening.name(app.request.locale) %}
     {% set space_left = happening.maxSignUps - happening.bookings|length %}
     {% if event.happenings|length > 1 %}
@@ -65,7 +66,7 @@
             <h1>
                 <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
                 {{ happening.type|capitalize|trans }}
-                {% if admin and not event.isInPast %}
+                {% if admin and not eventInPast %}
                     ~ <a class="btn btn-lg btn-success"
     href="{{ path('entropy_event_happening_edit', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
                 {% endif %}
@@ -86,7 +87,7 @@
                     {{ name }} <small>{{ happening.time|format_datetime(pattern: 'E, HH:mm') }}</small>
                 </h3>
                 <p>{{ description|raw }}</p>
-                {% if happening.needsPreliminaryPayment and not event.isInPast %}
+                {% if happening.needsPreliminaryPayment and not eventInPast %}
                     <hr>
                     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
                     <p>
@@ -98,7 +99,7 @@
                     <p>{{ happening.price(app.request.locale) }}</p>
                 {% endif %}
             </div>
-            {% if not event.isInPast %}
+            {% if not eventInPast %}
                 <div class="col-12 mt-4">
                     {% if happening.needsPreliminarySignUp %}
                         {% if happening.signUpsAreOpen %}

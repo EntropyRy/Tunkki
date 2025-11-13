@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\EventTemporalStateService;
 use App\Entity\Artist;
 use App\Entity\Event;
 use App\Entity\EventArtistInfo;
@@ -26,6 +27,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventArtistController extends AbstractController
 {
+    public function __construct(
+        private readonly EventTemporalStateService $eventTemporalState,
+    ) {
+    }
+
     #[
         Route(
             path: [
@@ -80,7 +86,12 @@ class EventArtistController extends AbstractController
                 $this->generateUrl('entropy_artist_create'),
             );
         }
-        if (!$event->getArtistSignUpNow()) {
+        $canShow = $this->eventTemporalState->canShowSignupLink(
+            $event,
+            $member,
+        );
+
+        if (!$canShow) {
             $this->addFlash('warning', $trans->trans('Not allowed'));
 
             return new RedirectResponse($this->generateUrl('profile'));
@@ -247,7 +258,7 @@ class EventArtistController extends AbstractController
         $event = $artisteventinfo->getEvent();
         if (
             $artisteventinfo->getArtist()->getMember() !== $member
-            || $event->isInPast()
+            || $this->eventTemporalState->isInPast($event)
         ) {
             $this->addFlash('warning', $trans->trans('Not allowed!'));
 

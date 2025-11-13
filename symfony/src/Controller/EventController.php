@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Domain\EventPublicationDecider;
+use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\RSVP;
@@ -31,7 +31,7 @@ class EventController extends Controller
     use TargetPathTrait;
 
     public function __construct(
-        private readonly EventPublicationDecider $publicationDecider,
+        private readonly EventTemporalStateService $eventTemporalState,
     ) {
     }
 
@@ -128,7 +128,7 @@ class EventController extends Controller
         // DEBUG BLOCK (guarded by TEST_EVENT_DEBUG) — remove once issue resolved
         if (getenv('TEST_EVENT_DEBUG')) {
             try {
-                $isPub = $this->publicationDecider->isPublished($event);
+                $isPub = $this->eventTemporalState->isPublished($event);
                 $userObj = $this->getUser();
                 $who =
                     $userObj instanceof UserInterface
@@ -136,7 +136,7 @@ class EventController extends Controller
                         : 'anon';
                 $pubDate = $event->getPublishDate()?->format('c') ?? 'null';
                 $flag = var_export(
-                    $this->publicationDecider->isPublished($event),
+                    $this->eventTemporalState->isPublished($event),
                     true,
                 );
                 @fwrite(
@@ -200,7 +200,7 @@ class EventController extends Controller
             }
         }
         if (
-            !$this->publicationDecider->isPublished($event)
+            !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
             if (getenv('TEST_EVENT_DEBUG')) {
@@ -240,7 +240,7 @@ class EventController extends Controller
     ): Response {
         $user = $this->getUser();
         if (
-            !$this->publicationDecider->isPublished($event)
+            !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
             throw $this->createAccessDeniedException('');
@@ -271,7 +271,7 @@ class EventController extends Controller
     ): Response {
         $user = $this->getUser();
         if (
-            !$this->publicationDecider->isPublished($event)
+            !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
             throw $this->createAccessDeniedException('');
@@ -302,7 +302,7 @@ class EventController extends Controller
     ): Response {
         $user = $this->getUser();
         if (
-            (!$this->publicationDecider->isPublished($event)
+            (!$this->eventTemporalState->isPublished($event)
                 && !$user instanceof UserInterface)
             || !$event->isLocationPublic()
         ) {
@@ -334,7 +334,7 @@ class EventController extends Controller
     ): Response {
         $user = $this->getUser();
         if (
-            !$this->publicationDecider->isPublished($event)
+            !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
             throw $this->createAccessDeniedException('');
@@ -365,7 +365,7 @@ class EventController extends Controller
     ): Response {
         $user = $this->getUser();
         if (
-            !$this->publicationDecider->isPublished($event)
+            !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
             throw $this->createAccessDeniedException('');

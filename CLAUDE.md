@@ -348,8 +348,8 @@ $event = EventFactory::new()->create([
 ```
 
 **Rationale**:
-- `realNow`: For Entity methods like `Event::ticketPresaleEnabled()` that use `new \DateTimeImmutable()`
-- `testNow`: For domain services like `EventPublicationDecider` that inject `ClockInterface`
+- `realNow`: For raw entity fields or legacy helpers that still rely on direct `new \DateTimeImmutable()` instantiations.
+- `testNow`: For domain services like `EventTemporalStateService` that inject `ClockInterface`
 - This allows deterministic testing while respecting existing architecture
 
 ### Login & Authentication Patterns

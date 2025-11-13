@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Event;
+use App\Time\ClockInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,14 +14,16 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class EventRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly ClockInterface $clock,
+    ) {
         parent::__construct($registry, Event::class);
     }
 
     public function getSitemapEvents(): mixed
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
@@ -36,7 +39,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function getRSSEvents(): mixed
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
@@ -50,8 +53,8 @@ class EventRepository extends ServiceEntityRepository
 
     public function getFutureEvents(): mixed
     {
-        $now = new \DateTimeImmutable();
-        $end = new \DateTimeImmutable();
+        $now = $this->clock->now();
+        $end = $now;
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
@@ -69,8 +72,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function getUnpublishedFutureEvents(): mixed
     {
-        new \DateTimeImmutable();
-        $end = new \DateTimeImmutable();
+        $end = $this->clock->now();
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.EventDate > :date')
@@ -118,11 +120,11 @@ class EventRepository extends ServiceEntityRepository
 
     /**
      * Public events by type: requires published flag and publishDate reached.
-     * Mirrors EventPublicationDecider semantics for list queries.
+     * Mirrors EventTemporalStateService semantics for list queries.
      */
     public function findPublicEventsByType(string $type): mixed
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
 
         return $this->createQueryBuilder('r')
             ->andWhere('LOWER(r.type) = :val')
@@ -138,7 +140,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function findCalendarEvents(): mixed
     {
-        $yearAgo = new \DateTimeImmutable('-1 year');
+        $yearAgo = $this->clock->now()->modify('-1 year');
 
         return $this->createQueryBuilder('e')
             ->andWhere('e.externalUrl = :ext')
@@ -154,7 +156,7 @@ class EventRepository extends ServiceEntityRepository
 
     public function findPublicEventsByNotType(string $type): mixed
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
 
         return $this->createQueryBuilder('r')
             ->andWhere('LOWER(r.type) != :val')

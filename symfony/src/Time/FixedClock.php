@@ -113,7 +113,7 @@ Migration Guidance
 2. Override App\Time\ClockInterface with FixedClock in tests (when@test).
 3. Refactor services (NOT raw entities) to depend on ClockInterface.
 4. Move temporal business logic out of entities into dedicated domain services
-   that inject the clock (e.g. EventPublicationDecider).
+   that inject the clock (e.g. EventTemporalStateService).
 5. Add mutation tests for boundary conditions using FixedClock->advanced()
    or by constructing new FixedClock instances.
 

@@ -7,8 +7,8 @@
     {% if app.user %}
         {% set visible = true %}
     {% else %}
-        {# Replaced deprecated event.isPublished() usage with domain service (EventPublicationDecider) #}
-        {% set visible = app.user is null and publicationDecider.isPublished(event) %}
+        {# Replaced deprecated event.isPublished() usage with EventTemporalStateService #}
+        {% set visible = app.user is null and eventTemporalState.isPublished(event) %}
     {% endif %}
     {% if event is not null and visible %}
         {% set frontpage = false %}

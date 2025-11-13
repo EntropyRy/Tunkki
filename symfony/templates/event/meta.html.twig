@@ -1,7 +1,7 @@
 {% block meta %}
     {# ei näytetä dataa linkki previewissä ellei tapahtuma ole julkaistu #}
     {# Replaced deprecated event.isPublished with domain service call #}
-    {% if publicationDecider.isPublished(event) %}
+    {% if eventTemporalState.isPublished(event) %}
         {% set abstract = event.abstract(app.request.locale) %}
         {% if abstract is empty %}
             {% set abstract = event.abstractFromContent(app.request.locale) %}

@@ -12,7 +12,7 @@
                         {% endif %}
                     </a>
                 {%- else -%}
-                    {%- if event.ticketPresaleEnabled -%}
+                    {%- if eventTemporalState.isPresaleOpen(event) -%}
                         <a class="btn btn-primary w-100"
                             href="{{- path('entropy_event_shop', {slug: event.url, year: event.eventdate|date('Y')}) -}}"
                         >

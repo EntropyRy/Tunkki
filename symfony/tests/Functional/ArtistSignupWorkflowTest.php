@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
 use App\Entity\User;
 use App\Factory\ArtistFactory;
 use App\Factory\EventFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
+use App\Time\ClockInterface;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -26,11 +28,17 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     use LoginHelperTrait;
     // (Removed explicit $client property; rely on FixturesWebTestCase magic accessor)
     private RouterInterface $router;
+    private EventTemporalStateService $temporalState;
+    private ClockInterface $clock;
 
     protected function setUp(): void
     {
         parent::setUp(); // Base now auto-initializes site-aware client & CMS baseline
         $this->router = static::getContainer()->get(RouterInterface::class);
+        $this->temporalState = static::getContainer()->get(
+            EventTemporalStateService::class,
+        );
+        $this->clock = static::getContainer()->get(ClockInterface::class);
     }
 
     /**
@@ -87,9 +95,8 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
                 'name' => 'Artist Signup Event',
             ]);
 
-        self::assertTrue($event->getArtistSignUpEnabled());
         self::assertTrue(
-            $event->getArtistSignUpNow(),
+            $this->temporalState->isSignupOpen($event),
             'Signup window should be open for enabled state.',
         );
 
@@ -262,10 +269,16 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $this->loginUserWithArtist();
         $this->seedClientHome('en');
 
-        $event = EventFactory::new()
-            ->signupEnabled()
-            ->signupWindowNotYetOpen()
-            ->create();
+        $now = $this->clock->now();
+        $event = $this->createEventWithSignupWindow(
+            $now->modify('+10 minutes'),
+            $now->modify('+2 days'),
+        );
+
+        self::assertFalse(
+            $this->temporalState->isSignupOpen($event),
+            'Precondition failed: signup window should not be open yet.',
+        );
 
         $pathEn = $this->generateSignupPath($event, 'en');
         $this->client->request('GET', $pathEn);
@@ -288,7 +301,11 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $this->loginUserWithArtist();
         $this->seedClientHome('fi');
 
-        $event = EventFactory::new()->signupWindowEnded()->create();
+        $now = $this->clock->now();
+        $event = $this->createEventWithSignupWindow(
+            $now->modify('-3 days'),
+            $now->modify('-10 minutes'),
+        );
 
         $pathFi = $this->generateSignupPath($event, 'fi');
         $this->client->request('GET', $pathFi);
@@ -306,7 +323,15 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $this->loginUserWithArtist();
         $this->seedClientHome('en');
 
-        $event = EventFactory::new()->pastEventSignupWindowOpen()->create();
+        $now = $this->clock->now();
+        $event = $this->createEventWithSignupWindow(
+            $now->modify('-14 days'),
+            $now->modify('+2 days'),
+            [
+                'eventDate' => $now->modify('-1 day'),
+                'publishDate' => $now->modify('-30 days'),
+            ],
+        );
 
         $pathEn = $this->generateSignupPath($event, 'en');
         $this->client->request('GET', $pathEn);
@@ -316,6 +341,29 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
             $status,
             [302, 403, 404],
             "Expected denial codes for past event signup, got {$status}",
+        );
+    }
+
+    private function createEventWithSignupWindow(
+        \DateTimeImmutable $start,
+        \DateTimeImmutable $end,
+        array $overrides = [],
+    ): Event {
+        $baseNow = $this->clock->now();
+
+        return EventFactory::new()->create(
+            array_merge(
+                [
+                    'published' => true,
+                    'publishDate' => $baseNow->modify('-5 minutes'),
+                    'artistSignUpEnabled' => true,
+                    'artistSignUpStart' => $start,
+                    'artistSignUpEnd' => $end,
+                    'eventDate' => $baseNow->modify('+14 days'),
+                    'url' => 'artist-signup-event-'.uniqid('', true),
+                ],
+                $overrides,
+            ),
         );
     }
 }

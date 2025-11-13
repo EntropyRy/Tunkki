@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Domain;
 
-use App\Domain\EventPublicationDecider;
+use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
 use App\Time\MutableClock;
 use PHPUnit\Framework\TestCase;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * EventPublicationBoundaryTest.
  *
- * Temporal mutation harness for EventPublicationDecider boundary logic.
+ * Temporal mutation harness for EventTemporalStateService boundary logic.
  *
  * Goals:
  *  - Assert correct classification around publishDate boundaries (just before, exactly at, just after).
@@ -27,13 +27,13 @@ use PHPUnit\Framework\TestCase;
 final class EventPublicationBoundaryTest extends TestCase
 {
     private MutableClock $clock;
-    private EventPublicationDecider $decider;
+    private EventTemporalStateService $decider;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->clock = new MutableClock('2025-01-01T12:00:00+00:00');
-        $this->decider = new EventPublicationDecider($this->clock);
+        $this->decider = new EventTemporalStateService($this->clock);
     }
 
     public function testDraftWhenUnpublishedAndNullPublishDate(): void

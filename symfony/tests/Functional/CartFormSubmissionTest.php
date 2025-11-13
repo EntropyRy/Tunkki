@@ -41,8 +41,8 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
     /**
      * Helper to create dates for event creation.
      * Returns [realNow, testNow] where:
-     * - realNow: For Entity methods that use real system time (like ticketPresaleEnabled)
-     * - testNow: For domain services that use ClockInterface (like EventPublicationDecider).
+     * - realNow: For entity fields persisted relative to actual system time (start/end columns)
+     * - testNow: For domain services that use ClockInterface (EventTemporalStateService).
      */
     private function getDates(): array
     {
@@ -61,9 +61,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'nakkiRequiredForTicketReservation' => false,
             'url' => 'public-shop-'.uniqid('', true),
         ]);
@@ -92,9 +92,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'nakkiRequiredForTicketReservation' => true, // Restricted to members with nakki
             'url' => 'restricted-shop-'.uniqid('', true),
         ]);
@@ -126,9 +126,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'nakkiRequiredForTicketReservation' => false,
             'url' => 'anon-purchase-'.uniqid('', true),
         ]);
@@ -211,9 +211,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'url' => 'member-purchase-'.uniqid('', true),
         ]);
 
@@ -290,9 +290,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'nakkiRequiredForTicketReservation' => false,
             'url' => 'invalid-email-'.uniqid('', true),
         ]);
@@ -349,9 +349,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'url' => 'zero-qty-'.uniqid('', true),
         ]);
 
@@ -412,9 +412,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => $testNow->modify('-5 minutes'),
             'ticketsEnabled' => true,
-            'ticketPresaleStart' => $realNow->modify('-1 day'),
-            'ticketPresaleEnd' => $realNow->modify('+7 days'),
-            'eventDate' => $realNow->modify('+14 days'),
+            'ticketPresaleStart' => $testNow->modify('-1 day'),
+            'ticketPresaleEnd' => $testNow->modify('+7 days'),
+            'eventDate' => $testNow->modify('+14 days'),
             'url' => 'checkout-test-'.uniqid('', true),
         ]);
 

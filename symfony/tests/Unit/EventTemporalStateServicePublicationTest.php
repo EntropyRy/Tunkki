@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit;
 
-use App\Domain\EventPublicationDecider;
+use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
 use App\Time\ClockInterface;
 use App\Time\FixedClock;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \App\Domain\EventPublicationDecider
+ * @covers \App\Domain\EventTemporalStateService
  *
  * This test suite validates publication logic extracted from the Event entity
- * into the EventPublicationDecider domain service. It ensures deterministic
+ * into the EventTemporalStateService domain service. It ensures deterministic
  * evaluation of time-based rules via a fixed clock.
  *
  * Publication Rules (current implementation):
@@ -28,10 +28,10 @@ use PHPUnit\Framework\TestCase;
  *  - live       : published flag true  AND publishDate &lt;= now
  *  - unknown    : published flag true  AND publishDate null
  */
-final class EventPublicationDeciderTest extends TestCase
+final class EventTemporalStateServicePublicationTest extends TestCase
 {
     private ClockInterface $clock;
-    private EventPublicationDecider $decider;
+    private EventTemporalStateService $decider;
     private \DateTimeImmutable $now;
 
     protected function setUp(): void
@@ -39,7 +39,7 @@ final class EventPublicationDeciderTest extends TestCase
         // Fixed reference instant for all tests; adjust if boundary assertions need a different epoch.
         $this->now = new \DateTimeImmutable('2025-02-15T12:00:00+00:00');
         $this->clock = new FixedClock($this->now);
-        $this->decider = new EventPublicationDecider($this->clock);
+        $this->decider = new EventTemporalStateService($this->clock);
     }
 
     public function testDraftState(): void

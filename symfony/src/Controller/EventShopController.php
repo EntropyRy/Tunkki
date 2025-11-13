@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Domain\EventPublicationDecider;
+use App\Domain\EventTemporalStateService;
 use App\Entity\Cart;
 use App\Entity\Event;
 use App\Entity\User;
@@ -33,7 +33,7 @@ class EventShopController extends AbstractController
     use TargetPathTrait;
 
     public function __construct(
-        private readonly EventPublicationDecider $publicationDecider,
+        private readonly EventTemporalStateService $eventTemporalState,
         private readonly NakkiDisplayService $nakkiDisplay,
     ) {
     }
@@ -61,7 +61,7 @@ class EventShopController extends AbstractController
         NakkiBookingRepository $nakkirepo,
         TicketRepository $ticketRepo,
     ): Response {
-        if (false === $event->ticketPresaleEnabled()) {
+        if (!$this->eventTemporalState->isPresaleOpen($event)) {
             throw $this->createAccessDeniedException('');
         }
         $selected = [];
@@ -70,7 +70,7 @@ class EventShopController extends AbstractController
         $email = null;
         $user = $this->getUser();
         if (
-            (!$this->publicationDecider->isPublished($event)
+            (!$this->eventTemporalState->isPublished($event)
                 && !$user instanceof UserInterface)
             || (!$user instanceof UserInterface
                 && $event->isNakkiRequiredForTicketReservation())

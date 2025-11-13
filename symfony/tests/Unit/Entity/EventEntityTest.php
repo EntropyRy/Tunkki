@@ -29,7 +29,7 @@ class EventEntityTest extends TestCase
         $this->assertIsString($event->getContent());
         $this->assertIsString($event->getSisallys());
         $this->assertNull($event->getUrl());
-        $publicationDecider = new \App\Domain\EventPublicationDecider(
+        $publicationDecider = new \App\Domain\EventTemporalStateService(
             new \App\Time\AppClock(),
         );
         $this->assertFalse($publicationDecider->isPublished($event));
@@ -156,7 +156,7 @@ class EventEntityTest extends TestCase
 
         $event->setPublished(true);
         $event->setPublishDate(new \DateTimeImmutable('now'));
-        $publicationDecider = new \App\Domain\EventPublicationDecider(
+        $publicationDecider = new \App\Domain\EventTemporalStateService(
             new \App\Time\AppClock(),
         );
         $this->assertTrue($publicationDecider->isPublished($event));

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Event;
+use App\Time\ClockInterface;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
@@ -40,6 +41,10 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class EventFactory extends PersistentObjectFactory
 {
+    public function __construct(private ClockInterface $clock)
+    {
+    }
+
     public static function class(): string
     {
         return Event::class;
@@ -55,8 +60,10 @@ final class EventFactory extends PersistentObjectFactory
      */
     protected function defaults(): callable
     {
-        return static function (): array {
-            $now = new \DateTimeImmutable();
+        $clock = $this->clock;
+
+        return static function () use ($clock): array {
+            $now = $clock->now();
             $eventDate = $now->modify('+7 days');
             $slug = strtolower(
                 str_replace(
@@ -72,7 +79,7 @@ final class EventFactory extends PersistentObjectFactory
                 'nimi' => self::faker()->sentence(3), // Finnish name
                 'type' => 'event',
                 'eventDate' => $eventDate,
-                'publishDate' => new \DateTimeImmutable('-30 days'),
+                'publishDate' => $now->modify('-30 days'),
                 'url' => $slug,
                 'template' => 'event.html.twig',
                 'published' => true,
@@ -156,10 +163,12 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function unpublished(): static
     {
+        $now = $this->now();
+
         return $this->with([
             'published' => false,
             // If unpublished but publishDate exists in past, adjust forward to avoid confusion
-            'publishDate' => new \DateTimeImmutable('+1 day'),
+            'publishDate' => $now->modify('+1 day'),
         ]);
     }
 
@@ -168,9 +177,11 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function published(): static
     {
+        $now = $this->now();
+
         return $this->with([
             'published' => true,
-            'publishDate' => new \DateTimeImmutable('-5 minutes'),
+            'publishDate' => $now->modify('-5 minutes'),
         ]);
     }
 
@@ -191,7 +202,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function signupEnabled(): static
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->now();
 
         return $this->with([
             'artistSignUpEnabled' => true,
@@ -205,11 +216,11 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function finished(): static
     {
-        $past = new \DateTimeImmutable('-5 days');
+        $past = $this->now()->modify('-5 days');
 
         return $this->with([
             'eventDate' => $past,
-            'publishDate' => new \DateTimeImmutable('-60 days'),
+            'publishDate' => $this->now()->modify('-60 days'),
         ]);
     }
 
@@ -252,7 +263,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function multiday(int $days = 2): static
     {
-        $start = new \DateTimeImmutable('+5 days');
+        $start = $this->now()->modify('+5 days');
         $until = $start->modify(\sprintf('+%d days', max(1, $days - 1)));
 
         return $this->with([
@@ -313,7 +324,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function signupWindowNotYetOpen(): static
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->now();
 
         return $this->with([
             'artistSignUpEnabled' => true,
@@ -327,7 +338,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function signupWindowJustOpened(): static
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->now();
 
         return $this->with([
             'artistSignUpEnabled' => true,
@@ -341,7 +352,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function signupWindowClosingSoon(): static
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->now();
 
         return $this->with([
             'artistSignUpEnabled' => true,
@@ -352,11 +363,11 @@ final class EventFactory extends PersistentObjectFactory
 
     /**
      * Signup window already ended (enabled flag true but end in past).
-     * Ensures getArtistSignUpNow() => false.
+     * Ensures EventTemporalStateService::isSignupOpen() => false.
      */
     public function signupWindowEnded(): static
     {
-        $now = new \DateTimeImmutable();
+        $now = $this->now();
 
         return $this->with([
             'artistSignUpEnabled' => true,
@@ -371,7 +382,7 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function pastEventSignupWindowOpen(): static
     {
-        $past = new \DateTimeImmutable('-1 day');
+        $past = $this->now()->modify('-1 day');
 
         return $this->finished()->with([
             'artistSignUpEnabled' => true,
@@ -387,5 +398,10 @@ final class EventFactory extends PersistentObjectFactory
     public function withRsvpEnabled(): static
     {
         return $this->with(['rsvpSystemEnabled' => true]);
+    }
+
+    private function now(): \DateTimeImmutable
+    {
+        return $this->clock->now();
     }
 }

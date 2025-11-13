@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Repository;
 
 use App\Repository\EventRepository;
+use App\Time\MutableClock;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,6 +23,7 @@ final class EventRepositoryQueryBuilderTest extends TestCase
     private EntityManagerInterface $em;
     private ?RecordingQueryBuilder $lastQB = null;
     private EventRepository $repo;
+    private MutableClock $clock;
 
     protected function setUp(): void
     {
@@ -56,7 +58,8 @@ final class EventRepositoryQueryBuilderTest extends TestCase
         $registry = $this->createStub(ManagerRegistry::class);
         $registry->method('getManagerForClass')->willReturn($this->em);
 
-        $this->repo = new EventRepository($registry);
+        $this->clock = new MutableClock('2025-01-01T12:00:00+00:00');
+        $this->repo = new EventRepository($registry, $this->clock);
     }
 
     public function testGetSitemapEventsBuildsExpectedQuery(): void

@@ -1,5 +1,8 @@
 {% extends 'base_layout.html.twig' %}
 {% use 'event/meta.html.twig' %}
+{% set eventInPast = eventTemporalState.isInPast(event) %}
+{% set currentMember = app.user ? app.user.member : null %}
+{% set signupLinkVisible = eventTemporalState.canShowSignupLink(event, currentMember) %}
 {% block title %}{{ event.nameAndDateByLang(app.request.locale) }} | Entropy ry{% endblock %}
 {% block preload_icons %}
     <link rel="icon" href="{{ asset('/images/e30v/logo-only.svg') }}" sizes="any" type="image/svg+xml">
@@ -240,7 +243,7 @@
                     {% endif %}
                 </span>
             {% endif %}
-            {% if event.artistSignUpNow and event.url and (event.showArtistSignUpOnlyForLoggedInMembers|default(false) == false or (event.showArtistSignUpOnlyForLoggedInMembers and app.user)) %}
+            {% if signupLinkVisible and event.url %}
                 <span>
                     <a class="btn btn-outline-info"
                        href="{{ path('entropy_event_slug_artist_signup', {slug: event.url, year: event.eventdate|date('Y')}) }}">
@@ -249,7 +252,7 @@
                     </a>
                 </span>
             {% endif %}
-            {% if not event.isInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
+            {% if not eventInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
                 <span>
                     <a class="btn btn-outline-info"
                        href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">

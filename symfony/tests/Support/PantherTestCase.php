@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Panther\Client as PantherClient;
 use Symfony\Component\Panther\PantherTestCase as BasePantherTestCase;
 use Symfony\Component\Process\Process;
 use Zenstruck\Foundry\Test\Factories;
@@ -41,6 +42,8 @@ abstract class PantherTestCase extends BasePantherTestCase
     protected static array $previousServer = [];
     protected static array $previousGetEnv = [];
     protected static ?string $pantherDbPath = null;
+    private static ?int $webServerPort = null;
+    private static ?int $chromeDriverPort = null;
 
     protected function setUp(): void
     {
@@ -82,6 +85,19 @@ abstract class PantherTestCase extends BasePantherTestCase
         parent::tearDown();
     }
 
+    protected function getPantherWebServerPort(): int
+    {
+        return self::$webServerPort ??= self::determinePort(9080);
+    }
+
+    protected static function createPantherClient(array $options = [], array $kernelOptions = [], array $managerOptions = []): PantherClient
+    {
+        $options['port'] ??= self::$webServerPort ??= self::determinePort(9080);
+        $managerOptions['port'] ??= self::$chromeDriverPort ??= self::determinePort(9515);
+
+        return parent::createPantherClient($options, $kernelOptions, $managerOptions);
+    }
+
     protected function getProjectDir(): string
     {
         // Override in subclass if needed (e.g., different nesting level)
@@ -100,7 +116,16 @@ abstract class PantherTestCase extends BasePantherTestCase
     {
         $projectDir = $this->getProjectDir();
         $filesystem = new Filesystem();
-        $cachePath = $projectDir.'/var/cache/panther';
+        $cacheSuffix = self::cacheKey();
+        $cachePath = $projectDir.'/var/cache/panther_'.$cacheSuffix;
+        $_SERVER['PANTHER_CACHE_DIR'] = $cachePath;
+        putenv('PANTHER_CACHE_DIR='.$cachePath);
+        $_SERVER['PANTHER_LOG_DIR'] = $projectDir.'/var/log/panther_'.$cacheSuffix;
+        putenv('PANTHER_LOG_DIR='.$_SERVER['PANTHER_LOG_DIR']);
+        self::$webServerPort ??= self::determinePort(9080);
+        self::$chromeDriverPort ??= self::determinePort(9515);
+        $_SERVER['PANTHER_WEB_SERVER_PORT'] = (string) self::$webServerPort;
+        putenv('PANTHER_WEB_SERVER_PORT='.(string) self::$webServerPort);
 
         // Use /tmp for database (writable by both test process and Panther's web server)
         // Unique per-process to allow parallel test execution
@@ -157,14 +182,23 @@ abstract class PantherTestCase extends BasePantherTestCase
         self::$previousEnv = [
             'APP_ENV' => $_ENV['APP_ENV'] ?? null,
             'DATABASE_URL' => $_ENV['DATABASE_URL'] ?? null,
+            'PANTHER_CACHE_DIR' => $_ENV['PANTHER_CACHE_DIR'] ?? null,
+            'PANTHER_LOG_DIR' => $_ENV['PANTHER_LOG_DIR'] ?? null,
+            'PANTHER_WEB_SERVER_PORT' => $_ENV['PANTHER_WEB_SERVER_PORT'] ?? null,
         ];
         self::$previousServer = [
             'APP_ENV' => $_SERVER['APP_ENV'] ?? null,
             'DATABASE_URL' => $_SERVER['DATABASE_URL'] ?? null,
+            'PANTHER_CACHE_DIR' => $_SERVER['PANTHER_CACHE_DIR'] ?? null,
+            'PANTHER_LOG_DIR' => $_SERVER['PANTHER_LOG_DIR'] ?? null,
+            'PANTHER_WEB_SERVER_PORT' => $_SERVER['PANTHER_WEB_SERVER_PORT'] ?? null,
         ];
         self::$previousGetEnv = [
             'APP_ENV' => false !== getenv('APP_ENV') ? getenv('APP_ENV') : null,
             'DATABASE_URL' => false !== getenv('DATABASE_URL') ? getenv('DATABASE_URL') : null,
+            'PANTHER_CACHE_DIR' => false !== getenv('PANTHER_CACHE_DIR') ? getenv('PANTHER_CACHE_DIR') : null,
+            'PANTHER_LOG_DIR' => false !== getenv('PANTHER_LOG_DIR') ? getenv('PANTHER_LOG_DIR') : null,
+            'PANTHER_WEB_SERVER_PORT' => false !== getenv('PANTHER_WEB_SERVER_PORT') ? getenv('PANTHER_WEB_SERVER_PORT') : null,
         ];
 
         $_ENV['APP_ENV'] = 'panther';
@@ -280,12 +314,14 @@ abstract class PantherTestCase extends BasePantherTestCase
                 $_SERVER['APP_ENV'] = $value;
             }
         }
-        if (\array_key_exists('DATABASE_URL', self::$previousServer)) {
-            $value = self::$previousServer['DATABASE_URL'];
-            if (null === $value) {
-                unset($_SERVER['DATABASE_URL']);
-            } else {
-                $_SERVER['DATABASE_URL'] = $value;
+        foreach (['DATABASE_URL', 'PANTHER_CACHE_DIR', 'PANTHER_LOG_DIR', 'PANTHER_WEB_SERVER_PORT'] as $key) {
+            if (\array_key_exists($key, self::$previousServer)) {
+                $value = self::$previousServer[$key];
+                if (null === $value) {
+                    unset($_SERVER[$key]);
+                } else {
+                    $_SERVER[$key] = $value;
+                }
             }
         }
 
@@ -294,12 +330,16 @@ abstract class PantherTestCase extends BasePantherTestCase
             $value = self::$previousGetEnv['APP_ENV'];
             putenv(null === $value ? 'APP_ENV' : 'APP_ENV='.$value);
         }
-        if (\array_key_exists('DATABASE_URL', self::$previousGetEnv)) {
-            $value = self::$previousGetEnv['DATABASE_URL'];
-            putenv(null === $value ? 'DATABASE_URL' : 'DATABASE_URL='.$value);
+        foreach (['DATABASE_URL', 'PANTHER_CACHE_DIR', 'PANTHER_LOG_DIR', 'PANTHER_WEB_SERVER_PORT'] as $key) {
+            if (\array_key_exists($key, self::$previousGetEnv)) {
+                $value = self::$previousGetEnv[$key];
+                putenv(null === $value ? $key : $key.'='.$value);
+            }
         }
 
         self::$previousEnv = self::$previousServer = self::$previousGetEnv = [];
+        self::$webServerPort = null;
+        self::$chromeDriverPort = null;
     }
 
     /**
@@ -308,5 +348,78 @@ abstract class PantherTestCase extends BasePantherTestCase
     protected function getPantherKernel(): ?KernelInterface
     {
         return self::$pantherKernel;
+    }
+
+    private static function findAvailablePort(int $preferred, int $attempts = 50): int
+    {
+        for ($i = 0; $i < $attempts; ++$i) {
+            $candidate = $preferred + $i;
+            if (self::isPortFree($candidate)) {
+                return $candidate;
+            }
+        }
+
+        $socket = @stream_socket_server('tcp://127.0.0.1:0', $errno, $errstr);
+        if (false === $socket) {
+            throw new \RuntimeException(\sprintf('Unable to allocate a free TCP port (error %d: %s).', $errno, $errstr));
+        }
+        $name = stream_socket_get_name($socket, false) ?: '';
+        @fclose($socket);
+
+        if (false === ($pos = strrpos($name, ':'))) {
+            throw new \RuntimeException('Unable to parse dynamically allocated port name: '.$name);
+        }
+
+        return (int) substr($name, $pos + 1);
+    }
+
+    private static function isPortFree(int $port): bool
+    {
+        $socket = @stream_socket_server('tcp://127.0.0.1:'.$port, $errno, $errstr);
+        if (false === $socket) {
+            return false;
+        }
+
+        fclose($socket);
+
+        return true;
+    }
+
+    private static function determinePort(int $base): int
+    {
+        $candidates = [];
+        if ($token = self::paratestToken()) {
+            $candidates[] = $base + self::tokenOffset($token);
+        }
+        $candidates[] = $base + (getmypid() % 1000);
+
+        foreach ($candidates as $candidate) {
+            if (self::isPortFree($candidate)) {
+                return $candidate;
+            }
+        }
+
+        return self::findAvailablePort($base);
+    }
+
+    private static function tokenOffset(string $token): int
+    {
+        if (ctype_digit($token)) {
+            return (int) $token;
+        }
+
+        return hexdec(substr(md5($token), 0, 4)) % 500;
+    }
+
+    private static function paratestToken(): ?string
+    {
+        $token = getenv('TEST_TOKEN') ?: getenv('PARATEST_TEST_TOKEN');
+
+        return \is_string($token) && '' !== $token ? $token : null;
+    }
+
+    private static function cacheKey(): string
+    {
+        return self::paratestToken() ?? (string) getmypid();
     }
 }

@@ -47,7 +47,7 @@
     {% endif %}
 {% endblock %}
 {% block shop_link %}
-    {% if showShop and event.ticketPresaleEnabled %}
+    {% if showShop and eventTemporalState.isPresaleOpen(event) %}
         <a href="{{ path('entropy_event_shop', {slug: event.url, year: event.eventDate|date('Y')}) }}"
            class="btn btn-primary btn-lg text-center text-uppercase w-100">{{ 'event.ticket.to_shop'|trans }}</a>
         <hr>
