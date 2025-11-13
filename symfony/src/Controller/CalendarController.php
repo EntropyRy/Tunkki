@@ -123,10 +123,14 @@ class CalendarController extends AbstractController
         $componentFactory = new CalendarFactory();
         $calendarComponent = $componentFactory->createCalendar($calendar);
 
-        header('Content-Type: text/calendar; charset=utf-8');
-        header('Content-Disposition: attachment; filename="entropy.ics"');
+        $response = new Response($calendarComponent->__toString());
+        $response->headers->set('Content-Type', 'text/calendar; charset=utf-8');
+        $response->headers->set(
+            'Content-Disposition',
+            'attachment; filename="entropy.ics"',
+        );
 
-        return new Response($calendarComponent->__toString());
+        return $response;
     }
 
     protected function addEvent(
