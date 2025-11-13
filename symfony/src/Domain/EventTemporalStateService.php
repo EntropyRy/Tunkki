@@ -162,7 +162,7 @@ final readonly class EventTemporalStateService
             (bool) $event->getArtistSignUpEnabled(),
             $event->getArtistSignUpStart(),
             $event->getArtistSignUpEnd(),
-            (bool) $event->isShowArtistSignUpOnlyForLoggedInMembers(),
+            $event->isShowArtistSignUpOnlyForLoggedInMembers(),
             $event->getArtistSignUpInfoFi(),
             $event->getArtistSignUpInfoEn(),
         );

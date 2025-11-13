@@ -1892,5 +1892,4 @@ class Event implements \Stringable
     {
         return $this->artistDisplayConfiguration;
     }
-
 }

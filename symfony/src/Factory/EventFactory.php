@@ -41,7 +41,7 @@ use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
  */
 final class EventFactory extends PersistentObjectFactory
 {
-    public function __construct(private ClockInterface $clock)
+    public function __construct(private readonly ClockInterface $clock)
     {
     }
 

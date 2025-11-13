@@ -11,6 +11,7 @@ class Kernel extends BaseKernel
 {
     use MicroKernelTrait;
 
+    #[\Override]
     public function getCacheDir(): string
     {
         if (
@@ -23,6 +24,7 @@ class Kernel extends BaseKernel
         return parent::getCacheDir();
     }
 
+    #[\Override]
     public function getLogDir(): string
     {
         if (

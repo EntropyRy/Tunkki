@@ -67,7 +67,7 @@ final readonly class ArtistSignupWindow
             return true;
         }
 
-        return null !== $member;
+        return $member instanceof Member;
     }
 
     public function getInfoByLocale(string $locale): ?string
