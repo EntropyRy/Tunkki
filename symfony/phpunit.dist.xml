@@ -32,6 +32,9 @@
         <testsuite name="Functional">
             <directory>tests/Functional</directory>
         </testsuite>
+        <testsuite name="LiveComponents">
+            <directory>tests/Twig</directory>
+        </testsuite>
     </testsuites>
 
     <!-- Removed invalid attribute 'processUncoveredFiles'. PHPUnit 12 requires different config;

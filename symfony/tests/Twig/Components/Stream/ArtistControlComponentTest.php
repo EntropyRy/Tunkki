@@ -65,6 +65,74 @@ final class ArtistControlComponentTest extends LiveComponentTestCase
         self::assertNotNull($reloaded?->getStoppedAt());
     }
 
+    public function testSaveAddsArtistToStream(): void
+    {
+        $stream = StreamFactory::new()->online()->create();
+        $member = MemberFactory::new()->english()->create();
+        ArtistFactory::new()->withMember($member)->dj()->create();
+
+        $component = $this->mountComponent(ArtistControl::class);
+        $component->actingAs($member->getUser());
+        $component->render();
+
+        $component->submitForm([
+            'stream_artist' => [
+                'artist' => $member->getArtist()->first()->getId(),
+            ],
+        ], 'save');
+        /** @var ArtistControl $state */
+        $state = $component->component();
+
+        self::assertTrue($state->isInStream);
+        self::assertNotNull($state->existingStreamArtist);
+    }
+
+    public function testSaveRemovesExistingArtistViaSaveAction(): void
+    {
+        $stream = StreamFactory::new()->online()->create();
+        $member = MemberFactory::new()->english()->create();
+        $artist = ArtistFactory::new()->withMember($member)->dj()->create();
+
+        $existing = StreamArtistFactory::new()
+            ->forArtist($artist)
+            ->inStream($stream)
+            ->active()
+            ->create();
+
+        $component = $this->mountComponent(ArtistControl::class);
+        $component->actingAs($member->getUser());
+        $component->render();
+
+        $component->call('save');
+        /** @var ArtistControl $state */
+        $state = $component->component();
+        self::assertFalse($state->isInStream);
+
+        /** @var StreamArtistRepository $repository */
+        $repository = self::getContainer()->get(StreamArtistRepository::class);
+        $reloaded = $repository->find($existing->getId());
+        self::assertNotNull($reloaded?->getStoppedAt());
+    }
+
+    public function testStreamEventsResetComponentState(): void
+    {
+        $stream = StreamFactory::new()->online()->create();
+        $member = MemberFactory::new()->english()->create();
+        ArtistFactory::new()->withMember($member)->dj()->create();
+
+        $component = $this->mountComponent(ArtistControl::class);
+        $component->actingAs($member->getUser());
+        $component->render();
+
+        /** @var ArtistControl $state */
+        $state = $component->component();
+        $state->onStreamStarted();
+        $state->onStreamStopped();
+
+        self::assertFalse($state->isOnline);
+        self::assertFalse($state->isInStream);
+    }
+
     private function resetStreams(): void
     {
         $repo = self::getContainer()->get(\App\Repository\StreamRepository::class);

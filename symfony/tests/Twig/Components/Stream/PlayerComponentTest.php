@@ -74,6 +74,19 @@ final class PlayerComponentTest extends LiveComponentTestCase
         self::assertSame(Player::FORMAT_OPUS, $component->component()->streamFormat);
     }
 
+    public function testSetStreamFormatIgnoresInvalidValues(): void
+    {
+        $component = $this->mountComponent(Player::class);
+        $component->render();
+
+        $component->call('setStreamFormat', ['format' => 'flac']);
+        $this->assertComponentNotDispatchBrowserEvent($component, 'stream:format-changed');
+
+        /** @var Player $player */
+        $player = $component->component();
+        self::assertSame(Player::FORMAT_MP3, $player->streamFormat);
+    }
+
     private function resetStreams(): void
     {
         /** @var StreamRepository $repository */

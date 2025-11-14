@@ -7,6 +7,7 @@ namespace App\Tests\Twig\Components\Nakki;
 use App\Factory\EventFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Repository\EventRepository;
 use App\Tests\Twig\Components\LiveComponentTestCase;
 use App\Twig\Components\Nakki\Board;
 
@@ -45,5 +46,36 @@ final class BoardComponentTest extends LiveComponentTestCase
 
         self::assertSame($definition->getId(), $board->selectedDefinition?->getId());
         self::assertNotNull($board->message);
+    }
+
+    public function testAddColumnCreatesNakkiViaForm(): void
+    {
+        $event = EventFactory::new()->create();
+        $definition = NakkiDefinitionFactory::new()->create();
+
+        $component = $this->mountComponent(Board::class, ['event' => $event]);
+        $component->render();
+
+        $component->submitForm([
+            'nakki_board_create' => [
+                'definition' => $definition->getId(),
+                'responsible' => null,
+                'mattermostChannel' => '#crew',
+            ],
+        ], 'addColumn');
+
+        $reloaded = $this->reloadEvent($event->getId());
+        self::assertGreaterThan(0, $reloaded->getNakkis()->count());
+    }
+
+    private function reloadEvent(int $id)
+    {
+        /** @var EventRepository $repository */
+        $repository = self::getContainer()->get(EventRepository::class);
+
+        $event = $repository->find($id);
+        self::assertNotNull($event);
+
+        return $event;
     }
 }

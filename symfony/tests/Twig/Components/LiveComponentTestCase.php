@@ -43,11 +43,17 @@ abstract class LiveComponentTestCase extends FixturesWebTestCase
     private function primeRequestStackSession(): void
     {
         $container = self::getContainer();
-        if (!$container->has('request_stack') || !$container->has('session')) {
+        if (!$container->has('request_stack')) {
             return;
         }
 
-        $session = $container->get('session');
+        $session = null;
+        if ($container->has('session')) {
+            $session = $container->get('session');
+        } elseif ($container->has('session.factory')) {
+            $session = $container->get('session.factory')->createSession();
+        }
+
         if ($session instanceof SessionInterface && !$session->isStarted()) {
             $session->start();
         }
