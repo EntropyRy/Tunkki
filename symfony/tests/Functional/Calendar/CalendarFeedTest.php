@@ -64,7 +64,7 @@ final class CalendarFeedTest extends FixturesWebTestCase
             ->create();
 
         $hash = $this->encodeHash([1, 0, 0, 0, 1, 0]);
-        $path = sprintf($pathPattern, $hash);
+        $path = \sprintf($pathPattern, $hash);
 
         $this->seedClientHome($locale);
         $this->client->request('GET', $path);
@@ -127,7 +127,7 @@ final class CalendarFeedTest extends FixturesWebTestCase
         $this->em()->flush();
 
         $hash = $this->encodeHash([1, 1, 0, 0, 0, 0]);
-        $path = sprintf('/%s/kalenteri.ics', $hash);
+        $path = \sprintf('/%s/kalenteri.ics', $hash);
 
         $this->seedClientHome('fi');
         $this->client->request('GET', $path);

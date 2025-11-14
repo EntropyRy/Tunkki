@@ -5587,16 +5587,16 @@
         },
         {
             "name": "sonata-project/form-extensions",
-            "version": "2.6.0",
+            "version": "2.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/form-extensions.git",
-                "reference": "dea8b3128eb52e8102a790556d8f01aca752bca3"
+                "reference": "87c5e691471cc95d059257be1d8075f13578df73"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/dea8b3128eb52e8102a790556d8f01aca752bca3",
-                "reference": "dea8b3128eb52e8102a790556d8f01aca752bca3",
+                "url": "https://api.github.com/repos/sonata-project/form-extensions/zipball/87c5e691471cc95d059257be1d8075f13578df73",
+                "reference": "87c5e691471cc95d059257be1d8075f13578df73",
                 "shasum": ""
             },
             "require": {
@@ -5664,7 +5664,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/form-extensions/issues",
-                "source": "https://github.com/sonata-project/form-extensions/tree/2.6.0"
+                "source": "https://github.com/sonata-project/form-extensions/tree/2.6.1"
             },
             "funding": [
                 {
@@ -5684,7 +5684,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-11T09:44:54+00:00"
+            "time": "2025-11-13T22:04:41+00:00"
         },
         {
             "name": "sonata-project/formatter-bundle",
@@ -18711,16 +18711,16 @@
         },
         {
             "name": "theseer/tokenizer",
-            "version": "1.2.3",
+            "version": "1.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/theseer/tokenizer.git",
-                "reference": "737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2"
+                "reference": "d74205c497bfbca49f34d4bc4c19c17e22db4ebb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2",
-                "reference": "737eda637ed5e28c3413cb1ebe8bb52cbf1ca7a2",
+                "url": "https://api.github.com/repos/theseer/tokenizer/zipball/d74205c497bfbca49f34d4bc4c19c17e22db4ebb",
+                "reference": "d74205c497bfbca49f34d4bc4c19c17e22db4ebb",
                 "shasum": ""
             },
             "require": {
@@ -18749,7 +18749,7 @@
             "description": "A small library for converting tokenized PHP source code into XML and potentially other formats",
             "support": {
                 "issues": "https://github.com/theseer/tokenizer/issues",
-                "source": "https://github.com/theseer/tokenizer/tree/1.2.3"
+                "source": "https://github.com/theseer/tokenizer/tree/1.3.0"
             },
             "funding": [
                 {
@@ -18757,7 +18757,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-03-03T12:36:25+00:00"
+            "time": "2025-11-13T13:44:09+00:00"
         },
         {
             "name": "vincentlanglet/twig-cs-fixer",
@@ -19096,5 +19096,5 @@
         "php": "^8.4"
     },
     "platform-dev": {},
-    "plugin-api-version": "2.9.0"
+    "plugin-api-version": "2.6.0"
 }
