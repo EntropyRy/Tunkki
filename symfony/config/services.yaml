@@ -576,11 +576,6 @@ when@test:
         - "%test.fixed_datetime%"
       public: true
 
-    security.csrf.token_storage:
-      class: App\Tests\Support\Csrf\RequestStackFallbackTokenStorage
-      arguments:
-        - "@request_stack"
-        - '@=service("session.factory").createSession()'
 
     # Explicit alias to retrieve the mutable clock directly if desired
     test.mutable_clock:
