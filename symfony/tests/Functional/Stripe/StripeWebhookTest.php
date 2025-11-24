@@ -492,6 +492,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     {
         // Stripe sends many event types; unhandled ones should return 204
         $payload = json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'customer.created',
             'data' => [
                 'object' => [
@@ -527,6 +529,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     private function createCheckoutSessionCompletedPayload(string $sessionId): string
     {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'checkout.session.completed',
             'data' => [
                 'object' => [
@@ -543,6 +547,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     private function createCheckoutSessionExpiredPayload(string $sessionId): string
     {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'checkout.session.expired',
             'data' => [
                 'object' => [
@@ -561,6 +567,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
         string $productName
     ): string {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'price.created',
             'data' => [
                 'object' => [
@@ -581,6 +589,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     private function createPriceUpdatedPayload(string $priceId, string $productId, int $unitAmount): string
     {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'price.updated',
             'data' => [
                 'object' => [
@@ -598,6 +608,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     private function createPriceDeletedPayload(string $priceId): string
     {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'price.deleted',
             'data' => [
                 'object' => [
@@ -612,6 +624,8 @@ final class StripeWebhookTest extends FixturesWebTestCase
     private function createProductUpdatedPayload(string $productId, string $name): string
     {
         return json_encode([
+            'id' => 'evt_test_'.uniqid('', true),
+            'object' => 'event',
             'type' => 'product.updated',
             'data' => [
                 'object' => [
