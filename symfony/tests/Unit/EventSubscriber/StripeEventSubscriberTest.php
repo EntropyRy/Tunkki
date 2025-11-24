@@ -26,7 +26,6 @@ use Fpt\StripeBundle\Event\StripeWebhook;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stripe\Event as StripeEvent;
-use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -350,7 +349,7 @@ final class StripeEventSubscriberTest extends TestCase
                     'object' => 'checkout.session',
                     'status' => $status,
                     'locale' => 'fi',
-                    'payment_status' => $status === 'complete' ? 'paid' : 'unpaid',
+                    'payment_status' => 'complete' === $status ? 'paid' : 'unpaid',
                 ],
             ],
         ]);
@@ -368,7 +367,7 @@ final class StripeEventSubscriberTest extends TestCase
                 'object' => [
                     'id' => $priceId,
                     'object' => 'price',
-                    'deleted' => $action === 'deleted',
+                    'deleted' => 'deleted' === $action,
                 ],
             ],
         ]);

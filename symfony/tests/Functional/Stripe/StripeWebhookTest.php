@@ -482,7 +482,7 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'object' => 'customer',
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
 
         $this->client->request(
             'POST',
@@ -522,7 +522,7 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'status' => 'complete',
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 
     private function createCheckoutSessionExpiredPayload(string $sessionId): string
@@ -538,14 +538,14 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'status' => 'expired',
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 
     private function createPriceCreatedPayload(
         string $priceId,
         string $productId,
         int $unitAmount,
-        string $productName
+        string $productName,
     ): string {
         return json_encode([
             'id' => 'evt_test_'.uniqid('', true),
@@ -564,7 +564,7 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     ],
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 
     private function createPriceUpdatedPayload(string $priceId, string $productId, int $unitAmount): string
@@ -583,7 +583,7 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'active' => true,
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 
     private function createPriceDeletedPayload(string $priceId): string
@@ -599,7 +599,7 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'deleted' => true,
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 
     private function createProductUpdatedPayload(string $productId, string $name): string
@@ -617,6 +617,6 @@ final class StripeWebhookTest extends FixturesWebTestCase
                     'metadata' => [],
                 ],
             ],
-        ], JSON_THROW_ON_ERROR);
+        ], \JSON_THROW_ON_ERROR);
     }
 }
