@@ -172,9 +172,9 @@ class EventController extends Controller
                 $repo = $em->getRepository(Member::class);
                 \assert($repo instanceof MemberRepository);
                 $exists = $repo->findByEmailOrName(
-                    $rsvp->getEmail(),
-                    $rsvp->getFirstName(),
-                    $rsvp->getLastName(),
+                    $rsvp->getEmail() ?? '',
+                    $rsvp->getFirstName() ?? '',
+                    $rsvp->getLastName() ?? '',
                 );
                 if ($exists) {
                     $this->addFlash(
