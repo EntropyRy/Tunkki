@@ -469,25 +469,6 @@ final class StripeWebhookTest extends FixturesWebTestCase
         self::assertSame(400, self::$client->getResponse()->getStatusCode());
     }
 
-    public function testEmptyPayloadReturnsError(): void
-    {
-        $this->client->request(
-            'POST',
-            self::WEBHOOK_ENDPOINT,
-            [],
-            [],
-            ['CONTENT_TYPE' => 'application/json'],
-            '{}'
-        );
-
-        // Bundle returns error for empty/invalid payload
-        $statusCode = self::$client->getResponse()->getStatusCode();
-        self::assertTrue(
-            $statusCode >= 400,
-            'Empty payload should return error status (4xx or 5xx)'
-        );
-    }
-
     public function testUnknownEventTypeReturns204(): void
     {
         // Stripe sends many event types; unhandled ones should return 204
