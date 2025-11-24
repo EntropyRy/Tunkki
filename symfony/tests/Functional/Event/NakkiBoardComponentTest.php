@@ -43,7 +43,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'url' => 'test-board-render-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -82,7 +82,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'definition' => $definition2,
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -101,7 +101,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'url' => 'test-board-empty-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -125,7 +125,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'nameFi' => 'Test Definition',
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -152,7 +152,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'url' => 'test-board-button-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -190,7 +190,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'mattermostChannel' => 'test-channel',
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -213,7 +213,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'url' => 'test-board-en-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/en/{$year}/{$event->getUrl()}/nakkikone/admin";
@@ -235,7 +235,7 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'url' => 'test-board-scroll-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";

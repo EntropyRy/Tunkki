@@ -108,13 +108,13 @@ final class CmsBaselineStory extends Story
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPageSite[] $all */
-        $all = $siteRepo->findBy(['locale' => $locale]) ?? [];
+        $all = $siteRepo->findBy(['locale' => $locale]);
         foreach ($all as $site) {
             if ($site === $canonical) {
                 continue;
             }
             // Remove pages first to avoid FK constraint violations
-            $pages = $pageRepo->findBy(['site' => $site]) ?? [];
+            $pages = $pageRepo->findBy(['site' => $site]);
             foreach ($pages as $pg) {
                 delete($pg);
             }
@@ -129,15 +129,15 @@ final class CmsBaselineStory extends Story
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPageSite[] $all */
-        $all = $siteRepo->findAll() ?? [];
+        $all = $siteRepo->findAll();
 
         foreach ($all as $site) {
             if ($site === $fi || $site === $en) {
                 continue;
             }
-            $loc = method_exists($site, 'getLocale') ? (string) $site->getLocale() : null;
+            $loc = (string) $site->getLocale();
             if (!\in_array($loc, ['fi', 'en'], true)) {
-                $pages = $pageRepo->findBy(['site' => $site]) ?? [];
+                $pages = $pageRepo->findBy(['site' => $site]);
                 foreach ($pages as $pg) {
                     delete($pg);
                 }
@@ -363,21 +363,9 @@ final class CmsBaselineStory extends Story
     ): void {
         $pageRepo = PageFactory::repository();
 
-        $candidates = $pageRepo->findBy(['site' => $site, 'url' => $url]) ?? [];
-
-        // Prefer a page already configured with the correct template/type
-        $chosen = null;
-        foreach ($candidates as $candidate) {
-            if (
-                method_exists($candidate, 'getTemplateCode')
-                && method_exists($candidate, 'getType')
-                && 'annnouncements' === (string) $candidate->getTemplateCode()
-                && 'entropy.page.announcementspage' === (string) $candidate->getType()
-            ) {
-                $chosen = $candidate;
-                break;
-            }
-        }
+        $candidates = $pageRepo->findBy(['site' => $site, 'url' => $url]);
+        $chosen = array_find($candidates, fn (SonataPagePage $candidate): bool => 'annnouncements' === (string) $candidate->getTemplateCode()
+            && 'entropy.page.announcementspage' === (string) $candidate->getType());
         if (null === $chosen) {
             $chosen = $candidates[0] ?? null;
         }
@@ -432,19 +420,9 @@ final class CmsBaselineStory extends Story
     {
         $pageRepo = PageFactory::repository();
 
-        $streams = $pageRepo->findBy(['site' => $site, 'url' => '/stream']) ?? [];
-        $chosen = null;
-        foreach ($streams as $candidate) {
-            if (
-                method_exists($candidate, 'getTemplateCode')
-                && method_exists($candidate, 'getType')
-                && 'stream' === (string) $candidate->getTemplateCode()
-                && 'entropy.page.stream' === (string) $candidate->getType()
-            ) {
-                $chosen = $candidate;
-                break;
-            }
-        }
+        $streams = $pageRepo->findBy(['site' => $site, 'url' => '/stream']);
+        $chosen = array_find($streams, fn (SonataPagePage $candidate): bool => 'stream' === (string) $candidate->getTemplateCode()
+            && 'entropy.page.stream' === (string) $candidate->getType());
         if (null === $chosen) {
             $chosen = $streams[0] ?? null;
         }
@@ -500,7 +478,7 @@ final class CmsBaselineStory extends Story
         $pageRepo = PageFactory::repository();
 
         /** @var SonataPagePage[] $pages */
-        $pages = $pageRepo->findBy(['site' => $site]) ?? [];
+        $pages = $pageRepo->findBy(['site' => $site]);
 
         $seen = [];
         foreach ($pages as $pg) {
