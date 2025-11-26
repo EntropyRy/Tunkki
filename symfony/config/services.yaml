@@ -389,7 +389,6 @@ services:
         label: Events
     calls:
       - [addChild, ["@admin.event_artist_info", "Event"]]
-      - [addChild, ["@entropy.admin.nakki", "event"]]
       - [addChild, ["@entropy.admin.nakki_booking", "event"]]
       - [addChild, ["@entropy.admin.rsvp", "event"]]
       - [addChild, ["@admin.ticket", "event"]]
@@ -456,7 +455,7 @@ services:
       - name: sonata.admin
         manager_type: orm
         group: admin
-        label: Nakkis
+        label: Old Nakkikone
         model_class: App\Entity\Nakki
         controller: App\Controller\Admin\NakkiAdminController
 

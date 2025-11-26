@@ -56,9 +56,6 @@ final class NakkiBoardCreateType extends AbstractType
                 'label' => 'nakkikone.column.responsible',
                 'translation_domain' => 'messages',
                 'placeholder' => 'nakkikone.board.choose_responsible',
-                'attr' => [
-                    'data-live-ignore' => '',
-                ],
             ])
             ->add('mattermostChannel', TextType::class, [
                 'required' => false,

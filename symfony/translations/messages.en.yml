@@ -610,6 +610,7 @@ nakkikone:
     definition_saved: Definition saved.
   board:
     title: Nakkikone planner
+    planner_title: Add / Edit Nakkis
     definition_field: Definition
     select_definition: Select definition
     choose_responsible: Choose responsible
@@ -678,6 +679,16 @@ nakkikone:
     create: Create Nakki
   common:
     none: None
+  admin:
+    title: Nakkikone Administration
+    view_public_page: Public Signup Page
+    responsible_page: Responsible View
+    printable_list: Printable List
+    event_settings: Event Settings
+    public_short: Public
+    responsible_short: Responsible
+    print_short: Print
+    settings_short: Settings
 e30v:
   sponsors: Sponsors
   merch_shop: Merchandise Shop

@@ -90,12 +90,17 @@ final class EventAdmin extends AbstractAdmin
                 ]);
             }
             if ($event->getNakkikoneEnabled()) {
-                $menu->addChild('Nakkikone', [
-                    'uri' => $admin->generateUrl(
-                        'entropy.admin.event|entropy.admin.nakki.list',
-                        ['id' => $id],
-                    ),
-                ]);
+                $year = $event->getEventDate()?->format('Y');
+                $slug = $event->getUrl();
+                if ($year && $slug) {
+                    $menu->addChild('Nakkikone', [
+                        'route' => 'entropy_event_nakki_admin',
+                        'routeParameters' => [
+                            'year' => $year,
+                            'slug' => $slug,
+                        ],
+                    ]);
+                }
                 $menu->addChild('Nakit', [
                     'uri' => $admin->generateUrl(
                         'entropy.admin.event|entropy.admin.nakki_booking.list',

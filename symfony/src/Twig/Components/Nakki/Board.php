@@ -320,7 +320,10 @@ final class Board
                         $formName = $this->getForm()->getName();
                         $this->formValues[$formName] ??= [];
                         $this->formValues[$formName]['mattermostChannel'] = $nakki->getMattermostChannel();
-                        // Note: responsible field uses data-live-ignore, so we don't set it in formValues
+                        $responsible = $nakki->getResponsible();
+                        if ($responsible instanceof Member) {
+                            $this->formValues[$formName]['responsible'] = $responsible->getId();
+                        }
 
                         return;
                     }

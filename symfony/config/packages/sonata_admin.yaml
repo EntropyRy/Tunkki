@@ -101,6 +101,7 @@ sonata_admin:
                     - entropy.admin.contract
                     - sonata.classification.admin.category
                     - entropy.admin.nakki_definition
+                    - entropy.admin.nakki
                     - entropy.admin.nakki_booking
                     #            sonata.admin.group.classification:
                     #                label:           Classification

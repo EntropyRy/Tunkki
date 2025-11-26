@@ -672,6 +672,7 @@ nakkikone:
     definition_saved: Nakkityyppi tallennettu.
   board:
     title: Nakkikoneen hallinta
+    planner_title: Lisää / muokkaa nakkeja
     definition_field: Nakkityyppi
     select_definition: Valitse nakkityyppi
     choose_responsible: Valitse vastuuhenkilö
@@ -740,6 +741,16 @@ nakkikone:
     create: Luo nakki
   common:
     none: Ei vastuuhenkilöä
+  admin:
+    title: Nakkikoneen hallinta
+    view_public_page: Julkinen varaussivu
+    responsible_page: Vastuuhenkilönäkymä
+    printable_list: Tulostettava lista
+    event_settings: Tapahtuman asetukset
+    public_short: Julkinen
+    responsible_short: Vastuuhenkilö
+    print_short: Tulosta
+    settings_short: Asetukset
 shop:
   title: Kauppa
   description: Kauppamme tuotteet ovat helposti noudettavissa kerhohuoneelta – postitamme vain erikseen mainitut tuotteet. Tervetuloa tekemään ostoksia ja hakemaan omasi!
