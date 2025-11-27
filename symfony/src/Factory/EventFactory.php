@@ -112,13 +112,8 @@ final class EventFactory extends PersistentObjectFactory
                 $event->getPublishDate()
                 && $event->getPublishDate() > $event->getEventDate()
             ) {
-                $eventDate = $event->getEventDate();
-                $immutableEventDate =
-                    $eventDate instanceof \DateTimeImmutable
-                        ? $eventDate
-                        : \DateTimeImmutable::createFromInterface($eventDate);
                 $event->setPublishDate(
-                    $immutableEventDate->modify('-30 minutes'),
+                    $event->getEventDate()->modify('-30 minutes'),
                 );
             }
 
@@ -139,16 +134,11 @@ final class EventFactory extends PersistentObjectFactory
                 && (!$event->getArtistSignUpStart() instanceof \DateTimeImmutable
                     || !$event->getArtistSignUpEnd() instanceof \DateTimeImmutable)
             ) {
-                $eventDate = $event->getEventDate();
-                $immutableEventDate =
-                    $eventDate instanceof \DateTimeImmutable
-                        ? $eventDate
-                        : \DateTimeImmutable::createFromInterface($eventDate);
                 $event->setArtistSignUpStart(
-                    $immutableEventDate->modify('-14 days'),
+                    $event->getEventDate()->modify('-14 days'),
                 );
                 $event->setArtistSignUpEnd(
-                    $immutableEventDate->modify('-3 days'),
+                    $event->getEventDate()->modify('-3 days'),
                 );
             }
         });

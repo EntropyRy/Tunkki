@@ -8,7 +8,7 @@ use App\Entity\Sonata\SonataPageSite;
 use App\Factory\PageFactory;
 use App\Factory\SiteFactory;
 use App\Story\CmsBaselineStory;
-use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SQLitePlatform;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\PageBundle\Service\Contract\CreateSnapshotBySiteInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -157,7 +157,7 @@ final class CmsSeedCommand extends Command
             // SQLite doesn't support advisory locks; in test environments (panther, test)
             // there are no race conditions since tests run in isolated processes
             $platform = $conn->getDatabasePlatform();
-            if ($platform instanceof SqlitePlatform) {
+            if ($platform instanceof SQLitePlatform) {
                 return true; // Bypass locking for SQLite
             }
 
@@ -184,7 +184,7 @@ final class CmsSeedCommand extends Command
 
             // SQLite doesn't use advisory locks
             $platform = $conn->getDatabasePlatform();
-            if ($platform instanceof SqlitePlatform) {
+            if ($platform instanceof SQLitePlatform) {
                 return; // No-op for SQLite
             }
 
