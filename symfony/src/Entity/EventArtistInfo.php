@@ -75,7 +75,7 @@ class EventArtistInfo implements \Stringable
     {
         $this->StartTime = $StartTime instanceof \DateTimeImmutable
             ? $StartTime
-            : (null !== $StartTime ? \DateTimeImmutable::createFromInterface($StartTime) : null);
+            : ($StartTime instanceof \DateTime ? \DateTimeImmutable::createFromInterface($StartTime) : null);
 
         return $this;
     }

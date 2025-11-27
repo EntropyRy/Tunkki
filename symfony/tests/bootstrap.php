@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use App\Kernel;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Dotenv\Dotenv;
-use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
-use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 
 // Autoload vendor (Foundry, Symfony, etc.)
 require dirname(__DIR__).'/vendor/autoload.php';

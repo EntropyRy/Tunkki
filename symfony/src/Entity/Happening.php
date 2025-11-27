@@ -437,7 +437,7 @@ class Happening implements \Stringable
     ): static {
         $this->signUpsOpenUntil = $signUpsOpenUntil instanceof \DateTimeImmutable
             ? $signUpsOpenUntil
-            : (null !== $signUpsOpenUntil
+            : ($signUpsOpenUntil instanceof \DateTime
                 ? \DateTimeImmutable::createFromInterface($signUpsOpenUntil)
                 : null);
 

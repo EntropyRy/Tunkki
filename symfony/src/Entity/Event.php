@@ -875,10 +875,6 @@ class Event implements \Stringable
             return $this->until;
         }
 
-        if (null === $this->EventDate) {
-            return null;
-        }
-
         $interval = 'meeting' === $this->type ? 'PT2H' : 'PT8H';
 
         return $this->EventDate->add(new \DateInterval($interval));
@@ -893,7 +889,7 @@ class Event implements \Stringable
     {
         $this->until = $until instanceof \DateTimeImmutable
             ? $until
-            : (null !== $until ? \DateTimeImmutable::createFromInterface($until) : null);
+            : ($until instanceof \DateTime ? \DateTimeImmutable::createFromInterface($until) : null);
 
         return $this;
     }

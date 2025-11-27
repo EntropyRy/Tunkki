@@ -461,7 +461,7 @@ class Member implements \Stringable
     ): self {
         $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember instanceof \DateTimeImmutable
             ? $AcceptedAsHonoraryMember
-            : (null !== $AcceptedAsHonoraryMember
+            : ($AcceptedAsHonoraryMember instanceof \DateTime
                 ? \DateTimeImmutable::createFromInterface($AcceptedAsHonoraryMember)
                 : null);
 
