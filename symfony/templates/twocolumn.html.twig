@@ -2,9 +2,9 @@
 {% block sonata_page_container %}
     <div class="container e-container">
         {{ include('header.html.twig') }}
-        <div class="row mx-md-1">
+        <main role="main" class="row mx-md-1">
             {{ include('flashmessages.html.twig') }}
-            <div class="col-12 col-md-8" data-turbo-frame="page">
+            <div class="col-12 col-md-8">
                 {% block page_content %}
                     {% if content is defined %}
                         {{ content|raw }}
@@ -23,7 +23,7 @@
                     {{ sonata_page_render_container('rcontent', page) }}
                 {% endif %}
             </div>
-        </div>
+        </main>
         {{ include('footer.html.twig') }}
     </div>
 {% endblock %}

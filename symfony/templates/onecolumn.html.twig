@@ -4,7 +4,7 @@
         {{ include('header.html.twig') }}
         <div class="row mx-md-1">
             {{ include('flashmessages.html.twig') }}
-            <div class="col-12" data-turbo-frame="page">
+            <main role="main" class="col-12">
                 {% block page_content %}
                     {% if content is defined %}
                         {{ content|raw }}
@@ -15,7 +15,7 @@
                         {% if page is defined %}{{ sonata_page_render_container('acontent', page) }}{% endif %}
                     {% endif %}
                 {% endblock %}
-            </div>
+            </main>
         </div>
         {{ include('footer.html.twig') }}
     </div>
