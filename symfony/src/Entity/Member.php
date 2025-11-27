@@ -103,8 +103,8 @@ class Member implements \Stringable
     ]
     private ?\DateTime $ApplicationHandledDate = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $AcceptedAsHonoraryMember = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $AcceptedAsHonoraryMember = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFullMember = false;
@@ -451,7 +451,7 @@ class Member implements \Stringable
         return $this->username;
     }
 
-    public function getAcceptedAsHonoraryMember(): ?\DateTimeInterface
+    public function getAcceptedAsHonoraryMember(): ?\DateTimeImmutable
     {
         return $this->AcceptedAsHonoraryMember;
     }
@@ -459,7 +459,11 @@ class Member implements \Stringable
     public function setAcceptedAsHonoraryMember(
         ?\DateTimeInterface $AcceptedAsHonoraryMember,
     ): self {
-        $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember;
+        $this->AcceptedAsHonoraryMember = $AcceptedAsHonoraryMember instanceof \DateTimeImmutable
+            ? $AcceptedAsHonoraryMember
+            : (null !== $AcceptedAsHonoraryMember
+                ? \DateTimeImmutable::createFromInterface($AcceptedAsHonoraryMember)
+                : null);
 
         return $this;
     }

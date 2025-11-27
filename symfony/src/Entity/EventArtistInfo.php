@@ -19,8 +19,8 @@ class EventArtistInfo implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $SetLength = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $StartTime = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $StartTime = null;
 
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
     private ?Event $Event = null;
@@ -66,14 +66,16 @@ class EventArtistInfo implements \Stringable
         return $this;
     }
 
-    public function getStartTime(): ?\DateTimeInterface
+    public function getStartTime(): ?\DateTimeImmutable
     {
         return $this->StartTime;
     }
 
     public function setStartTime(?\DateTimeInterface $StartTime): self
     {
-        $this->StartTime = $StartTime;
+        $this->StartTime = $StartTime instanceof \DateTimeImmutable
+            ? $StartTime
+            : (null !== $StartTime ? \DateTimeImmutable::createFromInterface($StartTime) : null);
 
         return $this;
     }

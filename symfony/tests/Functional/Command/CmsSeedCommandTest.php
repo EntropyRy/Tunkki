@@ -225,7 +225,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $fiSite->setIsDefault(false); // Wrong - should be true
         $fiSite->setEnabled(false); // Wrong - should be true
         $fiSite->setRelativePath('/wrong'); // Wrong - should be empty
-        $fiSite->setEnabledFrom(new \DateTimeImmutable());
+        $fiSite->setEnabledFrom(new \DateTime());
         $em->persist($fiSite);
         $em->flush();
 

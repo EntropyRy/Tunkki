@@ -7,6 +7,8 @@ use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Dotenv\Dotenv;
+use Doctrine\DBAL\Platforms\AbstractMySQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 
 // Autoload vendor (Foundry, Symfony, etc.)
 require dirname(__DIR__).'/vendor/autoload.php';
@@ -57,13 +59,13 @@ if ($_SERVER['APP_DEBUG']) {
             $doctrine = $container->get('doctrine');
             if (method_exists($doctrine, 'getConnection')) {
                 $conn = $doctrine->getConnection();
-                $platform = $conn->getDatabasePlatform()->getName();
+                $platform = $conn->getDatabasePlatform();
 
                 try {
-                    if ('postgresql' === $platform) {
+                    if ($platform instanceof PostgreSQLPlatform) {
                         $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
                         $lockAcquired = (bool) $result;
-                    } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                    } elseif ($platform instanceof AbstractMySQLPlatform) {
                         $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_bootstrap_{$lockKey}"]);
                         $lockAcquired = 1 === $result;
                     }
@@ -76,10 +78,10 @@ if ($_SERVER['APP_DEBUG']) {
                     for ($attempt = 1; $attempt <= 5; ++$attempt) {
                         sleep(1); // Wait 1s between attempts
                         try {
-                            if ('postgresql' === $platform) {
+                            if ($platform instanceof PostgreSQLPlatform) {
                                 $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
                                 $lockAcquired = (bool) $result;
-                            } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                            } elseif ($platform instanceof AbstractMySQLPlatform) {
                                 $result = $conn->fetchOne('SELECT GET_LOCK(?, 0)', ["cms_bootstrap_{$lockKey}"]);
                                 $lockAcquired = 1 === $result;
                             }
@@ -99,7 +101,7 @@ if ($_SERVER['APP_DEBUG']) {
                     // We couldn't acquire it even after 5 attempts, meaning it's busy OR just completed
                     // Try one final blocking acquisition with short timeout to ensure setup is truly complete
                     try {
-                        if ('mysql' === $platform || 'mariadb' === $platform) {
+                        if ($platform instanceof AbstractMySQLPlatform) {
                             // Blocking acquisition with 10-second timeout
                             $result = $conn->fetchOne('SELECT GET_LOCK(?, 10)', ["cms_bootstrap_{$lockKey}"]);
                             if (1 === $result) {
@@ -109,7 +111,7 @@ if ($_SERVER['APP_DEBUG']) {
 
                                 return;
                             }
-                        } elseif ('postgresql' === $platform) {
+                        } elseif ($platform instanceof PostgreSQLPlatform) {
                             // PostgreSQL blocking lock with timeout (simulated with retries)
                             for ($i = 0; $i < 10; ++$i) {
                                 $result = $conn->fetchOne('SELECT pg_try_advisory_lock(?)', [$lockKey]);
@@ -161,11 +163,11 @@ if ($_SERVER['APP_DEBUG']) {
             try {
                 $doctrine = $container->get('doctrine');
                 $conn = $doctrine->getConnection();
-                $platform = $conn->getDatabasePlatform()->getName();
+                $platform = $conn->getDatabasePlatform();
 
-                if ('postgresql' === $platform) {
+                if ($platform instanceof PostgreSQLPlatform) {
                     $conn->executeStatement('SELECT pg_advisory_unlock(?)', [$lockKey]);
-                } elseif ('mysql' === $platform || 'mariadb' === $platform) {
+                } elseif ($platform instanceof AbstractMySQLPlatform) {
                     $conn->executeStatement('SELECT RELEASE_LOCK(?)', ["cms_bootstrap_{$lockKey}"]);
                 }
             } catch (Throwable $le) {

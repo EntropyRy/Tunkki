@@ -79,7 +79,7 @@ final class CmsBaselineStory extends Story
                 'isDefault' => $isDefault,
                 'enabled' => true,
                 'relativePath' => $relativePath,
-                'enabledFrom' => new \DateTimeImmutable('-1 day'),
+                'enabledFrom' => new \DateTime('-1 day'),
                 'enabledTo' => null,
             ])->create();
 
@@ -93,7 +93,7 @@ final class CmsBaselineStory extends Story
         $existing->setEnabled(true);
         $existing->setIsDefault($isDefault);
         $existing->setRelativePath($relativePath);
-        $existing->setEnabledFrom(new \DateTimeImmutable('-1 day'));
+        $existing->setEnabledFrom(new \DateTime('-1 day'));
         $existing->setEnabledTo(null);
 
         // Remove duplicates for this locale (keep $existing)

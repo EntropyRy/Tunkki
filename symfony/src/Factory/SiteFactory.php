@@ -53,7 +53,7 @@ final class SiteFactory extends PersistentObjectFactory
      */
     protected function defaults(): array
     {
-        $now = new \DateTimeImmutable(); // if timestamps exist & are auto-managed, this is harmless
+        $now = new \DateTime(); // if timestamps exist & are auto-managed, this is harmless
 
         return [
             // Common BaseSite fields (adjust if actual setters differ):

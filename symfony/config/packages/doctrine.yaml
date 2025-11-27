@@ -1,73 +1,69 @@
 doctrine:
-    dbal:
-        url: "%env(resolve:DATABASE_URL)%"
-        charset: utf8mb4
-        use_savepoints: true
-        default_table_options:
-            collate: utf8mb4_unicode_ci
-    orm:
-        auto_generate_proxy_classes: true
-        naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-        auto_mapping: true
-        validate_xml_mapping: true
-        enable_lazy_ghost_objects: true
-        enable_native_lazy_objects: true
-        report_fields_where_declared: true
-        second_level_cache:
-            enabled: true
-            region_cache_driver:
-                type: pool
-                pool: doctrine.acpu_cache_pool
-        controller_resolver:
-            auto_mapping: false
-        mappings:
-            App:
-                is_bundle: false
-                dir: "%kernel.project_dir%/src/Entity"
-                prefix: 'App\Entity'
-                alias: App
-        dql:
-            string_functions:
-                YEAR: DoctrineExtensions\Query\Mysql\Year
+  dbal:
+    url: "%env(resolve:DATABASE_URL)%"
+    charset: utf8mb4
+    default_table_options:
+      collate: utf8mb4_unicode_ci
+  orm:
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+    auto_mapping: true
+    validate_xml_mapping: true
+    enable_native_lazy_objects: true
+    second_level_cache:
+      enabled: true
+      region_cache_driver:
+        type: pool
+        pool: doctrine.acpu_cache_pool
+    controller_resolver:
+      auto_mapping: false
+    mappings:
+      App:
+        is_bundle: false
+        dir: "%kernel.project_dir%/src/Entity"
+        prefix: 'App\Entity'
+        alias: App
+    dql:
+      string_functions:
+        YEAR: DoctrineExtensions\Query\Mysql\Year
 
 when@test:
-    doctrine:
-        dbal:
-            # "TEST_TOKEN" is typically set by ParaTest
-            dbname_suffix: "_test%env(default::TEST_TOKEN)%"
-        orm:
-            # Disable second-level cache in tests to reduce overhead
-            second_level_cache:
-                enabled: false
+  doctrine:
+    dbal:
+      # "TEST_TOKEN" is typically set by ParaTest
+      dbname_suffix: "_test%env(default::TEST_TOKEN)%"
+    orm:
+      # Disable second-level cache in tests to reduce overhead
+      second_level_cache:
+        enabled: false
 
 when@panther:
-    doctrine:
-        dbal:
-            # SQLite in-memory - remove MySQL-specific options
-            charset: ~
-            default_table_options:
-                collate: ~
-        orm:
-            # Disable second-level cache in Panther tests
-            second_level_cache:
-                enabled: false
+  doctrine:
+    dbal:
+      # SQLite in-memory - remove MySQL-specific options
+      charset: ~
+      default_table_options:
+        collate: ~
+    orm:
+      # Disable second-level cache in Panther tests
+      second_level_cache:
+        enabled: false
 
 when@prod:
-    doctrine:
-        orm:
-            auto_generate_proxy_classes: false
-            proxy_dir: "%kernel.build_dir%/doctrine/orm/Proxies"
-            query_cache_driver:
-                type: pool
-                pool: doctrine.system_cache_pool
-            result_cache_driver:
-                type: pool
-                pool: doctrine.result_cache_pool
+  doctrine:
+    orm:
+      auto_generate_proxy_classes: false
+      proxy_dir: "%kernel.build_dir%/doctrine/orm/Proxies"
+      query_cache_driver:
+        type: pool
+        pool: doctrine.system_cache_pool
+      result_cache_driver:
+        type: pool
+        pool: doctrine.result_cache_pool
 
-    framework:
-        cache:
-            pools:
-                doctrine.result_cache_pool:
-                    adapter: cache.app
-                doctrine.system_cache_pool:
-                    adapter: cache.system
+  framework:
+    cache:
+      pools:
+        doctrine.result_cache_pool:
+          adapter: cache.app
+        doctrine.system_cache_pool:
+          adapter: cache.system

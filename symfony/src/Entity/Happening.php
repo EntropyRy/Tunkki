@@ -31,8 +31,8 @@ class Happening implements \Stringable
     #[ORM\Column(type: Types::TEXT)]
     private string $descriptionEn = '';
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private \DateTimeInterface $time;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private \DateTimeImmutable $time;
 
     #[ORM\Column]
     private bool $needsPreliminarySignUp = false;
@@ -98,8 +98,8 @@ class Happening implements \Stringable
     #[ORM\Column]
     private bool $releaseThisHappeningInEvent = false;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $signUpsOpenUntil = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $signUpsOpenUntil = null;
 
     #[ORM\Column]
     private bool $allowSignUpComments = true;
@@ -163,14 +163,16 @@ class Happening implements \Stringable
         return $this;
     }
 
-    public function getTime(): \DateTimeInterface
+    public function getTime(): \DateTimeImmutable
     {
         return $this->time;
     }
 
     public function setTime(\DateTimeInterface $time): self
     {
-        $this->time = $time;
+        $this->time = $time instanceof \DateTimeImmutable
+            ? $time
+            : \DateTimeImmutable::createFromInterface($time);
 
         return $this;
     }
@@ -425,7 +427,7 @@ class Happening implements \Stringable
         return $this->nameEn;
     }
 
-    public function getSignUpsOpenUntil(): ?\DateTimeInterface
+    public function getSignUpsOpenUntil(): ?\DateTimeImmutable
     {
         return $this->signUpsOpenUntil;
     }
@@ -433,7 +435,11 @@ class Happening implements \Stringable
     public function setSignUpsOpenUntil(
         ?\DateTimeInterface $signUpsOpenUntil,
     ): static {
-        $this->signUpsOpenUntil = $signUpsOpenUntil;
+        $this->signUpsOpenUntil = $signUpsOpenUntil instanceof \DateTimeImmutable
+            ? $signUpsOpenUntil
+            : (null !== $signUpsOpenUntil
+                ? \DateTimeImmutable::createFromInterface($signUpsOpenUntil)
+                : null);
 
         return $this;
     }
@@ -443,7 +449,7 @@ class Happening implements \Stringable
         if (!$this->signUpsOpenUntil instanceof \DateTimeInterface) {
             return true;
         }
-        $time = new \DateTime('now');
+        $time = new \DateTimeImmutable('now');
 
         return $this->signUpsOpenUntil > $time;
     }

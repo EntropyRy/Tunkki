@@ -56,8 +56,8 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255)]
     private string $Nimi = '';
 
-    #[ORM\Column(type: 'datetime')]
-    private \DateTimeInterface $EventDate;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private \DateTimeImmutable $EventDate;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $publishDate = null;
@@ -136,8 +136,8 @@ class Event implements \Stringable
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $updatedAt;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $until = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $until = null;
 
     /**
      * @var Collection<int, RSVP>
@@ -399,14 +399,16 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getEventDate(): \DateTimeInterface
+    public function getEventDate(): \DateTimeImmutable
     {
         return $this->EventDate;
     }
 
     public function setEventDate(\DateTimeInterface $EventDate): self
     {
-        $this->EventDate = $EventDate;
+        $this->EventDate = $EventDate instanceof \DateTimeImmutable
+            ? $EventDate
+            : \DateTimeImmutable::createFromInterface($EventDate);
 
         return $this;
     }
@@ -867,32 +869,31 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getUntil(): ?\DateTimeInterface
+    public function getUntil(): ?\DateTimeImmutable
     {
-        if ($this->until instanceof \DateTimeInterface) {
+        if ($this->until instanceof \DateTimeImmutable) {
             return $this->until;
-        } else {
-            if (null == $this->EventDate) {
-                return null;
-            }
-            // add 8 hours to the event date for created event
-            $newDateTime = \DateTime::createFromInterface($this->EventDate);
-            if ('meeting' === $this->type) {
-                return $newDateTime->add(new \DateInterval('PT2H'));
-            }
-
-            return $newDateTime->add(new \DateInterval('PT8H'));
         }
+
+        if (null === $this->EventDate) {
+            return null;
+        }
+
+        $interval = 'meeting' === $this->type ? 'PT2H' : 'PT8H';
+
+        return $this->EventDate->add(new \DateInterval($interval));
     }
 
-    public function getExplicitUntil(): ?\DateTimeInterface
+    public function getExplicitUntil(): ?\DateTimeImmutable
     {
         return $this->until;
     }
 
     public function setUntil(?\DateTimeInterface $until): self
     {
-        $this->until = $until;
+        $this->until = $until instanceof \DateTimeImmutable
+            ? $until
+            : (null !== $until ? \DateTimeImmutable::createFromInterface($until) : null);
 
         return $this;
     }
