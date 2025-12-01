@@ -298,13 +298,13 @@ class Event implements \Stringable
     /**
      * @var Collection<int, Notification>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Notification::class)]
+    #[ORM\OneToMany(targetEntity: Notification::class, mappedBy: 'event')]
     private Collection $notifications;
 
     /**
      * @var Collection<int, Happening>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Happening::class)]
+    #[ORM\OneToMany(targetEntity: Happening::class, mappedBy: 'event')]
     #[OrderBy(['time' => 'ASC'])]
     private Collection $happenings;
 
@@ -332,7 +332,7 @@ class Event implements \Stringable
     /**
      * @var Collection<int, Product>
      */
-    #[ORM\OneToMany(mappedBy: 'event', targetEntity: Product::class)]
+    #[ORM\OneToMany(targetEntity: Product::class, mappedBy: 'event')]
     #[OrderBy(['amount' => 'ASC'])]
     private Collection $products;
 

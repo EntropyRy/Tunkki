@@ -45,7 +45,7 @@ class Nakki implements \Stringable
     private \DateInterval $nakkiInterval;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'responsibleForNakkis')]
-    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Member $responsible = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]

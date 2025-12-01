@@ -4,6 +4,7 @@ $finder = new PhpCsFixer\Finder()
     ->in(__DIR__)
     ->exclude('var')
     ->notPath('importmap.php')
+    ->notPath('config/reference.php')
 ;
 
 return new PhpCsFixer\Config()

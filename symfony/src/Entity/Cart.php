@@ -24,18 +24,14 @@ class Cart
      * @var Collection<int, CartItem>
      */
     #[
-        ORM\OneToMany(
-            mappedBy: 'cart',
-            targetEntity: CartItem::class,
-            cascade: ['persist', 'remove'],
-        ),
+        ORM\OneToMany(targetEntity: CartItem::class, mappedBy: 'cart', cascade: ['persist', 'remove']),
     ]
     private Collection $products;
 
     /**
      * @var Collection<int, Checkout>
      */
-    #[ORM\OneToMany(mappedBy: 'cart', targetEntity: Checkout::class)]
+    #[ORM\OneToMany(targetEntity: Checkout::class, mappedBy: 'cart')]
     private Collection $checkouts;
 
     public function __construct()

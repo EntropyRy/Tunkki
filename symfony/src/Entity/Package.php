@@ -23,7 +23,7 @@ class Package implements \Stringable
     /**
      * @var Collection<int, Item>
      */
-    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', orphanRemoval: false, fetch: 'EAGER')]
+    #[ORM\ManyToMany(targetEntity: Item::class, mappedBy: 'packages', fetch: 'EAGER', orphanRemoval: false)]
     private Collection $items;
 
     #[ORM\Column(name: 'name', type: Types::STRING, length: 190)]

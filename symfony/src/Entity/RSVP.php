@@ -28,7 +28,7 @@ class RSVP implements \Stringable
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 255, unique: true, nullable: true)]
     private ?string $email = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]

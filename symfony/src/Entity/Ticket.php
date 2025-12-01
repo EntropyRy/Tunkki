@@ -24,7 +24,7 @@ class Ticket implements \Stringable
     private Event $event;
 
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
-    #[ORM\JoinColumn(onDelete: 'SET NULL', nullable: true)]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Member $owner = null;
 
     #[ORM\Column(type: Types::INTEGER)]

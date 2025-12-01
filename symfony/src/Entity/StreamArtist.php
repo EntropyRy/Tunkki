@@ -26,7 +26,7 @@ class StreamArtist implements \Stringable
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $stoppedAt = null;
 
-    #[ORM\ManyToOne(inversedBy: 'artists', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'artists')]
     #[ORM\JoinColumn(nullable: false)]
     private Stream $stream;
 

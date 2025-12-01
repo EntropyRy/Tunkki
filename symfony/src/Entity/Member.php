@@ -47,7 +47,7 @@ class Member implements \Stringable
         ),
     ]
     #[Assert\Length(max: 190, maxMessage: 'username.max_length')]
-    #[Assert\NotBlank(allowNull: true, message: 'username.required')]
+    #[Assert\NotBlank(message: 'username.required', allowNull: true)]
     private ?string $username = null;
 
     #[

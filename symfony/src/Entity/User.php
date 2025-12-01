@@ -43,7 +43,7 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
             cascade: ['persist', 'remove'],
         ),
     ]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE', unique: true)]
+    #[ORM\JoinColumn(unique: true, nullable: false, onDelete: 'CASCADE')]
     private Member $member;
 
     #[ORM\Column(type: 'datetime_immutable')]

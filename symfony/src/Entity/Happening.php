@@ -53,12 +53,7 @@ class Happening implements \Stringable
      * @var Collection<int, HappeningBooking>
      */
     #[
-        ORM\OneToMany(
-            mappedBy: 'happening',
-            targetEntity: HappeningBooking::class,
-            cascade: ['persist', 'remove'],
-            orphanRemoval: true,
-        ),
+        ORM\OneToMany(targetEntity: HappeningBooking::class, mappedBy: 'happening', cascade: ['persist', 'remove'], orphanRemoval: true),
     ]
     private Collection $bookings;
 
