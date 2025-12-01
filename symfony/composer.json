@@ -47,6 +47,7 @@
         "stof/doctrine-extensions-bundle": "^1.3",
         "symfony/asset-mapper": "^7.1",
         "symfony/console": "^7.1",
+        "symfony/dom-crawler": "^7.4",
         "symfony/dotenv": "^7.1",
         "symfony/flex": "^2.0",
         "symfony/framework-bundle": "^7.1",
@@ -67,6 +68,7 @@
         "symfony/ux-turbo": "^2.4",
         "symfony/ux-twig-component": "^2.22",
         "symfony/validator": "^7.1",
+        "symfony/var-exporter": "^7.4",
         "symfony/web-link": "^7.1",
         "symfony/yaml": "^7.1",
         "symfonycasts/reset-password-bundle": "^1.16",
@@ -100,7 +102,7 @@
         "symfony/stopwatch": "^7.1",
         "symfony/web-profiler-bundle": "^7.1",
         "vincentlanglet/twig-cs-fixer": "^3.1",
-        "zenstruck/foundry": "^2.7"
+        "zenstruck/foundry": "2.x-dev"
     },
     "scripts": {
         "post-root-package-install": [
@@ -137,7 +139,8 @@
             "class": "Sonata\\PageBundle\\Runtime\\SonataPagePathRuntime"
         },
         "symfony": {
-            "allow-contrib": true
+            "allow-contrib": true,
+            "require": "7.4.*"
         }
     }
 }
