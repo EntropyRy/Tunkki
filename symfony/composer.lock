@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c8cb8221f7898def39b960c58ae5ccd8",
+    "content-hash": "b4855679baee416a739af3b456d3165a",
     "packages": [
         {
             "name": "arkounay/ux-collection",
@@ -18324,16 +18324,16 @@
         },
         {
             "name": "symfony/maker-bundle",
-            "version": "v1.65.0",
+            "version": "v1.65.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/maker-bundle.git",
-                "reference": "9a0276d7486b29cae641b4a0a85d5e5cc149bff2"
+                "reference": "eba30452d212769c9a5bcf0716959fd8ba1e54e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/9a0276d7486b29cae641b4a0a85d5e5cc149bff2",
-                "reference": "9a0276d7486b29cae641b4a0a85d5e5cc149bff2",
+                "url": "https://api.github.com/repos/symfony/maker-bundle/zipball/eba30452d212769c9a5bcf0716959fd8ba1e54e3",
+                "reference": "eba30452d212769c9a5bcf0716959fd8ba1e54e3",
                 "shasum": ""
             },
             "require": {
@@ -18398,7 +18398,7 @@
             ],
             "support": {
                 "issues": "https://github.com/symfony/maker-bundle/issues",
-                "source": "https://github.com/symfony/maker-bundle/tree/v1.65.0"
+                "source": "https://github.com/symfony/maker-bundle/tree/v1.65.1"
             },
             "funding": [
                 {
@@ -18418,7 +18418,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-24T15:41:51+00:00"
+            "time": "2025-12-02T07:14:37+00:00"
         },
         {
             "name": "symfony/panther",
@@ -19068,7 +19068,7 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "2.x-dev",
+            "version": "v2.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
@@ -19122,7 +19122,6 @@
                 "symfony/yaml": "^6.4|^7.0|^8.0",
                 "webmozart/assert": "^1.11"
             },
-            "default-branch": true,
             "type": "library",
             "extra": {
                 "psalm": {
@@ -19198,8 +19197,7 @@
     ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "sonata-project/page-bundle": 20,
-        "zenstruck/foundry": 20
+        "sonata-project/page-bundle": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

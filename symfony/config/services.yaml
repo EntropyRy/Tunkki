@@ -47,6 +47,9 @@ services:
       - "../src/Kernel.php"
       - "../src/Tests/"
       - "../src/Site/"
+      - "../src/Factory/"
+      - "../src/Story/"
+      - "../src/Command/CmsSeedCommand.php"
 
   Twig\Extension\StringLoaderExtension:
 
@@ -539,6 +542,21 @@ services:
           label: Checkouts,
         }
 
+when@dev:
+  services:
+    # Register Factory and Story classes for dev environment
+    App\Factory\:
+      resource: "../src/Factory/"
+      autowire: true
+      autoconfigure: true
+    App\Story\:
+      resource: "../src/Story/"
+      autowire: true
+      autoconfigure: true
+    App\Command\CmsSeedCommand:
+      autowire: true
+      autoconfigure: true
+
 when@test:
   framework:
     mailer:
@@ -562,6 +580,18 @@ when@test:
     stripe_public_key: "pk_test_dummy"
     stripe_secret_key: "sk_test_dummy"
   services:
+    # Register Factory and Story classes for test environment
+    App\Factory\:
+      resource: "../src/Factory/"
+      autowire: true
+      autoconfigure: true
+    App\Story\:
+      resource: "../src/Story/"
+      autowire: true
+      autoconfigure: true
+    App\Command\CmsSeedCommand:
+      autowire: true
+      autoconfigure: true
     App\Service\StripeService:
       class: App\Tests\Support\Stripe\FakeStripeService
       arguments:
@@ -587,3 +617,18 @@ when@test:
       public: true
 
     # (Removed SingleSiteSelector test stub & aliases – relying on real Sonata site selection for tests)
+
+when@panther:
+  services:
+    # Register Factory and Story classes for panther test environment
+    App\Factory\:
+      resource: "../src/Factory/"
+      autowire: true
+      autoconfigure: true
+    App\Story\:
+      resource: "../src/Story/"
+      autowire: true
+      autoconfigure: true
+    App\Command\CmsSeedCommand:
+      autowire: true
+      autoconfigure: true
