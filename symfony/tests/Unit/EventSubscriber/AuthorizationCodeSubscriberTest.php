@@ -29,7 +29,7 @@ final class AuthorizationCodeSubscriberTest extends TestCase
     protected function setUp(): void
     {
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->requestStack = $this->createMock(RequestStack::class);
+        $this->requestStack = $this->createStub(RequestStack::class);
 
         $this->subscriber = new AuthorizationCodeSubscriber(
             $this->urlGenerator,
@@ -53,8 +53,8 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $user = $this->createMock(User::class);
         $user->method('getMember')->willReturn($member);
 
-        $authRequest = $this->createMock(AuthorizationRequestInterface::class);
-        $client = $this->createMock(ClientInterface::class);
+        $authRequest = $this->createStub(AuthorizationRequestInterface::class);
+        $client = $this->createStub(ClientInterface::class);
 
         $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
 

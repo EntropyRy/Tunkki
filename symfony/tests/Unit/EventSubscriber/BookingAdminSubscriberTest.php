@@ -45,8 +45,8 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
-        $admin = $this->createMock(AdminInterface::class);
+        $booking = $this->createStub(Booking::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
         $this->mailer->expects($this->never())->method('send');
@@ -58,8 +58,8 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('0', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
-        $admin = $this->createMock(AdminInterface::class);
+        $booking = $this->createStub(Booking::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
         $this->mailer->expects($this->never())->method('send');
@@ -71,7 +71,7 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, new \stdClass(), PersistenceEvent::TYPE_POST_PERSIST);
 
         $this->mailer->expects($this->never())->method('send');
@@ -83,10 +83,10 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getBookingDate')->willReturn(new \DateTimeImmutable('2025-10-18'));
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
         $this->mailer->expects($this->once())->method('send');
@@ -98,7 +98,7 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, new \stdClass(), PersistenceEvent::TYPE_PRE_PERSIST);
 
         $this->em->expects($this->never())->method('persist');
@@ -111,10 +111,10 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn(null);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
         $this->em->expects($this->never())->method('persist');
@@ -127,13 +127,13 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(false);
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn($booking);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
         $this->em->expects($this->never())->method('persist');
@@ -146,14 +146,14 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
         $booking->method('getActualPrice')->willReturn('0');
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn($booking);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
         $this->em->expects($this->never())->method('persist');
@@ -166,17 +166,17 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
         $booking->method('getActualPrice')->willReturn('100');
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn($booking);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => true]); // Was already paid
 
         $this->em->method('getUnitOfWork')->willReturn($unitOfWork);
@@ -190,22 +190,22 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getRewards')->willReturn(new ArrayCollection());
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
         $booking->method('getActualPrice')->willReturn('100');
         $booking->method('getGivenAwayBy')->willReturn($user);
         $booking->method('getReceivedBy')->willReturn($user);
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn($booking);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => false]); // Newly paid
 
         $this->em->method('getUnitOfWork')->willReturn($unitOfWork);
@@ -219,25 +219,25 @@ final class BookingAdminSubscriberTest extends TestCase
     {
         $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
 
-        $givenAwayBy = $this->createMock(User::class);
+        $givenAwayBy = $this->createStub(User::class);
         $givenAwayBy->method('getRewards')->willReturn(new ArrayCollection());
 
-        $receivedBy = $this->createMock(User::class);
+        $receivedBy = $this->createStub(User::class);
         $receivedBy->method('getRewards')->willReturn(new ArrayCollection());
 
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
         $booking->method('getActualPrice')->willReturn('100');
         $booking->method('getGivenAwayBy')->willReturn($givenAwayBy);
         $booking->method('getReceivedBy')->willReturn($receivedBy);
 
-        $statusEvent = $this->createMock(StatusEvent::class);
+        $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn($booking);
 
-        $admin = $this->createMock(AdminInterface::class);
+        $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $unitOfWork = $this->createMock(UnitOfWork::class);
+        $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => false]); // Newly paid
 
         $this->em->method('getUnitOfWork')->willReturn($unitOfWork);

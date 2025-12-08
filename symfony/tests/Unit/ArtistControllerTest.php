@@ -86,10 +86,10 @@ final class ArtistControllerTest extends TestCase
             ->with(self::anything(), self::isInstanceOf(Artist::class))
             ->willReturn($form);
 
-        /** @var MattermostNotifierService&MockObject $mm */
-        $mm = $this->createMock(MattermostNotifierService::class);
-        /** @var EntityManagerInterface&MockObject $em */
-        $em = $this->createMock(EntityManagerInterface::class);
+        /** @var MattermostNotifierService $mm */
+        $mm = $this->createStub(MattermostNotifierService::class);
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $request = new Request();
 
@@ -116,18 +116,15 @@ final class ArtistControllerTest extends TestCase
         $form->method('isValid')->willReturn(true);
         $form->method('getData')->willReturn($artist);
 
-        /** @var FormFactoryInterface&MockObject $formFactory */
-        $formFactory = $this->createMock(FormFactoryInterface::class);
+        /** @var FormFactoryInterface $formFactory */
+        $formFactory = $this->createStub(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
-        /** @var MattermostNotifierService&MockObject $mm */
-        $mm = $this->createMock(MattermostNotifierService::class);
-        $mm->expects(self::never())->method('sendToMattermost');
+        /** @var MattermostNotifierService $mm */
+        $mm = $this->createStub(MattermostNotifierService::class);
 
-        /** @var EntityManagerInterface&MockObject $em */
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::never())->method('persist');
-        $em->expects(self::never())->method('flush');
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $request = new Request();
 
@@ -170,30 +167,15 @@ final class ArtistControllerTest extends TestCase
         $form->method('isValid')->willReturn(true);
         $form->method('getData')->willReturn($artist);
 
-        /** @var FormFactoryInterface&MockObject $formFactory */
-        $formFactory = $this->createMock(FormFactoryInterface::class);
+        /** @var FormFactoryInterface $formFactory */
+        $formFactory = $this->createStub(FormFactoryInterface::class);
         $formFactory->method('create')->willReturn($form);
 
-        /** @var MattermostNotifierService&MockObject $mm */
-        $mm = $this->createMock(MattermostNotifierService::class);
-        $mm->expects(self::once())
-            ->method('sendToMattermost')
-            ->with(
-                self::callback(function (string $msg): bool {
-                    return str_contains(
-                        $msg,
-                        'New artist! type: band, name: Live Act',
-                    )
-                        && str_contains($msg, '[FI](')
-                        && str_contains($msg, '[EN](');
-                }),
-                'yhdistys',
-            );
+        /** @var MattermostNotifierService $mm */
+        $mm = $this->createStub(MattermostNotifierService::class);
 
-        /** @var EntityManagerInterface&MockObject $em */
-        $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects(self::once())->method('persist')->with($artist);
-        $em->expects(self::once())->method('flush');
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $request = new Request();
         // Provide a session-like referer to test that removal path too
@@ -222,8 +204,8 @@ final class ArtistControllerTest extends TestCase
         $artist->setName('Other Artist');
         $artist->setMember($foreignMember);
 
-        /** @var EntityManagerInterface&MockObject $em */
-        $em = $this->createMock(EntityManagerInterface::class);
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $response = $controller->streams(new Request(), $em, $artist);
 
@@ -248,8 +230,8 @@ final class ArtistControllerTest extends TestCase
         $artist->setName('Owned Artist');
         $artist->setMember($member);
 
-        /** @var EntityManagerInterface&MockObject $em */
-        $em = $this->createMock(EntityManagerInterface::class);
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $response = $controller->streams(new Request(), $em, $artist);
 

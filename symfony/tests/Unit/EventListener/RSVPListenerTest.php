@@ -24,7 +24,7 @@ final class RSVPListenerTest extends TestCase
     protected function setUp(): void
     {
         $this->mailer = $this->createMock(MailerInterface::class);
-        $this->emailRepository = $this->createMock(EmailRepository::class);
+        $this->emailRepository = $this->createStub(EmailRepository::class);
 
         $this->listener = new RSVPListener(
             $this->mailer,
@@ -34,10 +34,10 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerWithRsvpSystemDisabled(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(false);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
 
@@ -48,11 +48,11 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerWithSendEmailDisabled(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(false);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
 
@@ -63,11 +63,11 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerWithNoUserEmail(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn(''); // Empty string, not null
 
@@ -78,11 +78,11 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerWithNoEmailTemplate(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
 
@@ -95,16 +95,17 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerSuccess(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
         $event->method('getPicture')->willReturn(null);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('user@example.com');
 
-        $emailTemplate = $this->createMock(Email::class);
+        $emailTemplate = $this->createStub(Email::class);
+        $this->emailRepository->method('findOneBy')->willReturn($emailTemplate);
         $emailTemplate->method('getReplyTo')->willReturn('organizer@example.com');
         $emailTemplate->method('getSubject')->willReturn('RSVP Confirmation');
         $emailTemplate->method('getBody')->willReturn('Thank you for your RSVP!');
@@ -122,16 +123,16 @@ final class RSVPListenerTest extends TestCase
 
     public function testSendRSVPMailListenerWithDefaultReplyTo(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
         $event->method('getPicture')->willReturn(null);
 
-        $rsvp = $this->createMock(RSVP::class);
+        $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('user@example.com');
 
-        $emailTemplate = $this->createMock(Email::class);
+        $emailTemplate = $this->createStub(Email::class);
         $emailTemplate->method('getReplyTo')->willReturn(null); // No custom reply-to
         $emailTemplate->method('getSubject')->willReturn('RSVP Confirmation');
         $emailTemplate->method('getBody')->willReturn('Thank you!');

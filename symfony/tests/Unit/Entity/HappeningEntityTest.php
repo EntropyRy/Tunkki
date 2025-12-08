@@ -118,7 +118,7 @@ final class HappeningEntityTest extends TestCase
     public function testAddAndRemoveOwners(): void
     {
         $happening = new Happening();
-        $owner = $this->createMock(Member::class);
+        $owner = $this->createStub(Member::class);
 
         $happening->addOwner($owner);
         $this->assertTrue($happening->getOwners()->contains($owner));
@@ -130,7 +130,7 @@ final class HappeningEntityTest extends TestCase
     public function testSetAndGetPicture(): void
     {
         $happening = new Happening();
-        $picture = $this->createMock(SonataMediaMedia::class);
+        $picture = $this->createStub(SonataMediaMedia::class);
 
         $happening->setPicture($picture);
         $this->assertSame($picture, $happening->getPicture());
@@ -142,7 +142,7 @@ final class HappeningEntityTest extends TestCase
     public function testSetAndGetEvent(): void
     {
         $happening = new Happening();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $happening->setEvent($event);
         $this->assertSame($event, $happening->getEvent());

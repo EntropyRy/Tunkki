@@ -90,7 +90,7 @@ final class MattermostAuthenticatorTest extends TestCase
 
         $response = $auth->onAuthenticationSuccess(
             $request,
-            $this->createMock(TokenInterface::class),
+            $this->createStub(TokenInterface::class),
             'main',
         );
 
@@ -116,13 +116,9 @@ final class MattermostAuthenticatorTest extends TestCase
     private function makeAuthenticator(
         ?UrlGeneratorInterface $urlG = null,
     ): MattermostAuthenticator {
-        $clientRegistry = $this->createMock(ClientRegistry::class);
-        $em = $this->createMock(EntityManagerInterface::class);
-        $urlG = $urlG ?? $this->createMock(UrlGeneratorInterface::class);
-        if ($urlG instanceof UrlGeneratorInterface) {
-            // Provide a default for other calls if any (not expected in these tests)
-            $urlG->method('generate')->willReturn('/login');
-        }
+        $clientRegistry = $this->createStub(ClientRegistry::class);
+        $em = $this->createStub(EntityManagerInterface::class);
+        $urlG = $urlG ?? $this->createStub(UrlGeneratorInterface::class);
 
         return new MattermostAuthenticator($clientRegistry, $em, $urlG);
     }

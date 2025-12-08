@@ -37,9 +37,7 @@ final class CartEntityTest extends TestCase
     public function testAddAndRemoveProduct(): void
     {
         $cart = new Cart();
-        $item = $this->createMock(CartItem::class);
-        $item->expects($this->any())->method('setCart');
-        $item->expects($this->any())->method('getCart')->willReturn($cart);
+        $item = $this->createStub(CartItem::class);
 
         $cart->addProduct($item);
         $this->assertTrue($cart->getProducts()->contains($item));
@@ -51,8 +49,8 @@ final class CartEntityTest extends TestCase
     public function testClearProducts(): void
     {
         $cart = new Cart();
-        $item1 = $this->createMock(CartItem::class);
-        $item2 = $this->createMock(CartItem::class);
+        $item1 = $this->createStub(CartItem::class);
+        $item2 = $this->createStub(CartItem::class);
 
         $cart->addProduct($item1);
         $cart->addProduct($item2);
@@ -89,9 +87,7 @@ final class CartEntityTest extends TestCase
     public function testAddAndRemoveCheckout(): void
     {
         $cart = new Cart();
-        $checkout = $this->createMock(Checkout::class);
-        $checkout->expects($this->any())->method('setCart');
-        $checkout->expects($this->any())->method('getCart')->willReturn($cart);
+        $checkout = $this->createStub(Checkout::class);
 
         $cart->addCheckout($checkout);
         $this->assertTrue($cart->getCheckouts()->contains($checkout));

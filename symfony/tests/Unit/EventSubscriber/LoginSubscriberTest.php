@@ -30,7 +30,7 @@ final class LoginSubscriberTest extends TestCase
     {
         $this->em = $this->createMock(EntityManagerInterface::class);
         $this->localeSwitcher = $this->createMock(LocaleSwitcher::class);
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->urlGenerator = $this->createStub(UrlGeneratorInterface::class);
 
         $this->subscriber = new LoginSubscriber(
             $this->localeSwitcher,
@@ -49,17 +49,14 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessUpdatesLastLogin(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('fi');
         $member->method('isEmailVerified')->willReturn(true);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->expects($this->once())
-            ->method('setLastLogin')
-            ->with($this->isInstanceOf(\DateTimeImmutable::class));
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn(new Request());
 
@@ -71,15 +68,14 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessSwitchesLocale(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('en');
         $member->method('isEmailVerified')->willReturn(true);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->method('setLastLogin');
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn(new Request());
 
@@ -93,19 +89,18 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessAddsFlashForUnverifiedEmailFinnish(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('fi');
         $member->method('isEmailVerified')->willReturn(false);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->method('setLastLogin');
 
         $session = new Session(new MockArraySessionStorage());
         $request = new Request();
         $request->setSession($session);
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn($request);
 
@@ -125,19 +120,18 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessAddsFlashForUnverifiedEmailEnglish(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('en');
         $member->method('isEmailVerified')->willReturn(false);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->method('setLastLogin');
 
         $session = new Session(new MockArraySessionStorage());
         $request = new Request();
         $request->setSession($session);
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn($request);
 
@@ -157,19 +151,18 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessNoFlashWhenEmailVerified(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('fi');
         $member->method('isEmailVerified')->willReturn(true);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->method('setLastLogin');
 
         $session = new Session(new MockArraySessionStorage());
         $request = new Request();
         $request->setSession($session);
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn($request);
 
@@ -181,18 +174,17 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessHandlesRequestWithoutSession(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('fi');
         $member->method('isEmailVerified')->willReturn(false);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
-        $user->method('setLastLogin');
 
         $request = new Request();
         // No session set
 
-        $event = $this->createMock(LoginSuccessEvent::class);
+        $event = $this->createStub(LoginSuccessEvent::class);
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn($request);
 

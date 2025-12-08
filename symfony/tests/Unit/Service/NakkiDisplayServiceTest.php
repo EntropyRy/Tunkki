@@ -112,10 +112,10 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupReturnsEmptyArrayForNoNakkis(): void
     {
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection());
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [], 'fi');
 
@@ -124,13 +124,13 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupSkipsDisabledBookings(): void
     {
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(true);
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [], 'fi');
 
@@ -139,24 +139,24 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupIncludesSelectedBookings(): void
     {
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
         $definition->method('getName')->with('fi')->willReturn('Security');
         $definition->method('getDescription')->with('fi')->willReturn('Security work');
 
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(false);
         $nakki->method('getDefinition')->willReturn($definition);
         $nakki->method('getNakkiBookings')->willReturn(new ArrayCollection());
 
-        $booking = $this->createMock(NakkiBooking::class);
+        $booking = $this->createStub(NakkiBooking::class);
         $booking->method('getNakki')->willReturn($nakki);
         $booking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 10:00'));
         $booking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 12:00'));
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [$booking], 'fi');
 
@@ -166,16 +166,16 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupIncludesUnreservedBookings(): void
     {
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
         $definition->method('getName')->with('fi')->willReturn('Bar');
         $definition->method('getDescription')->with('fi')->willReturn('Bar service');
 
-        $unreservedBooking = $this->createMock(NakkiBooking::class);
+        $unreservedBooking = $this->createStub(NakkiBooking::class);
         $unreservedBooking->method('getMember')->willReturn(null); // Not reserved
         $unreservedBooking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 14:00'));
         $unreservedBooking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 16:00'));
 
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(false);
         $nakki->method('getDefinition')->willReturn($definition);
         $nakki->method('getNakkiBookings')->willReturn(new ArrayCollection([$unreservedBooking]));
@@ -183,10 +183,10 @@ final class NakkiDisplayServiceTest extends TestCase
         // Set up the unreservedBooking to return this nakki
         $unreservedBooking->method('getNakki')->willReturn($nakki);
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [], 'fi');
 
@@ -196,27 +196,27 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupSkipsReservedBookingsWhenNotSelected(): void
     {
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
         $definition->method('getName')->with('fi')->willReturn('Cleanup');
         $definition->method('getDescription')->with('fi')->willReturn('Cleanup work');
 
-        $reservedBooking = $this->createMock(NakkiBooking::class);
-        $otherMember = $this->createMock(Member::class);
+        $reservedBooking = $this->createStub(NakkiBooking::class);
+        $otherMember = $this->createStub(Member::class);
         $reservedBooking->method('getMember')->willReturn($otherMember); // Already reserved by someone
         $reservedBooking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 18:00'));
         $reservedBooking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 20:00'));
 
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(false);
         $nakki->method('getDefinition')->willReturn($definition);
         $nakki->method('getNakkiBookings')->willReturn(new ArrayCollection([$reservedBooking]));
 
         $reservedBooking->method('getNakki')->willReturn($nakki);
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [], 'fi');
 
@@ -226,20 +226,20 @@ final class NakkiDisplayServiceTest extends TestCase
 
     public function testGetNakkiFromGroupPrioritizesSelectedOverUnreserved(): void
     {
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
         $definition->method('getName')->with('en')->willReturn('Setup');
         $definition->method('getDescription')->with('en')->willReturn('Setup work');
 
-        $selectedBooking = $this->createMock(NakkiBooking::class);
+        $selectedBooking = $this->createStub(NakkiBooking::class);
         $selectedBooking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 08:00'));
         $selectedBooking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 10:00'));
 
-        $unreservedBooking = $this->createMock(NakkiBooking::class);
+        $unreservedBooking = $this->createStub(NakkiBooking::class);
         $unreservedBooking->method('getMember')->willReturn(null);
         $unreservedBooking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 10:00'));
         $unreservedBooking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 12:00'));
 
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(false);
         $nakki->method('getDefinition')->willReturn($definition);
         $nakki->method('getNakkiBookings')->willReturn(new ArrayCollection([$unreservedBooking]));
@@ -247,10 +247,10 @@ final class NakkiDisplayServiceTest extends TestCase
         $selectedBooking->method('getNakki')->willReturn($nakki);
         $unreservedBooking->method('getNakki')->willReturn($nakki);
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
 
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $result = $this->service->getNakkiFromGroup($event, $member, [$selectedBooking], 'en');
 
@@ -269,14 +269,14 @@ final class NakkiDisplayServiceTest extends TestCase
         string $startTime,
         string $endTime,
     ): NakkiBooking {
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
         $definition->method('getName')->willReturn($name);
         $definition->method('getDescription')->willReturn($description);
 
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
         $nakki->method('getDefinition')->willReturn($definition);
 
-        $booking = $this->createMock(NakkiBooking::class);
+        $booking = $this->createStub(NakkiBooking::class);
         $booking->method('getNakki')->willReturn($nakki);
         $booking->method('getStartAt')->willReturn(new \DateTimeImmutable($startTime));
         $booking->method('getEndAt')->willReturn(new \DateTimeImmutable($endTime));

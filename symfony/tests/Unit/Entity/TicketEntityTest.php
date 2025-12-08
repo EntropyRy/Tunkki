@@ -31,7 +31,7 @@ final class TicketEntityTest extends TestCase
     public function testSetAndGetEvent(): void
     {
         $ticket = new Ticket();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $ticket->setEvent($event);
         $this->assertSame($event, $ticket->getEvent());
@@ -40,7 +40,7 @@ final class TicketEntityTest extends TestCase
     public function testSetAndGetOwner(): void
     {
         $ticket = new Ticket();
-        $owner = $this->createMock(Member::class);
+        $owner = $this->createStub(Member::class);
 
         $ticket->setOwner($owner);
         $this->assertSame($owner, $ticket->getOwner());
@@ -124,10 +124,10 @@ final class TicketEntityTest extends TestCase
     public function testGetOwnerEmailWithOwner(): void
     {
         $ticket = new Ticket();
-        $owner = $this->createMock(Member::class);
+        $owner = $this->createStub(Member::class);
         $owner->method('getEmail')->willReturn('owner@example.com');
-        $ticket->setOwner($owner);
 
+        $ticket->setOwner($owner);
         $this->assertSame('owner@example.com', $ticket->getOwnerEmail());
     }
 
@@ -148,8 +148,8 @@ final class TicketEntityTest extends TestCase
     {
         $ticket = new Ticket();
         $event = $this->createMock(Event::class);
-        $owner = $this->createMock(Member::class);
-        $nakkiBooking = $this->createMock(NakkiBooking::class);
+        $owner = $this->createStub(Member::class);
+        $nakkiBooking = $this->createStub(NakkiBooking::class);
 
         $event
             ->expects($this->once())

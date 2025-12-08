@@ -54,7 +54,7 @@ final class StatusEventEntityTest extends TestCase
     public function testToStringWithItem(): void
     {
         $event = new StatusEvent();
-        $item = $this->createMock(Item::class);
+        $item = $this->createStub(Item::class);
         $item->method('getName')->willReturn('TestItem');
         $event->setItem($item);
 
@@ -67,7 +67,7 @@ final class StatusEventEntityTest extends TestCase
     public function testToStringWithBooking(): void
     {
         $event = new StatusEvent();
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
         $booking->method('getName')->willReturn('TestBooking');
         $event->setBooking($booking);
 
@@ -86,8 +86,8 @@ final class StatusEventEntityTest extends TestCase
     public function testCreatorAndModifierSettersAndGetters(): void
     {
         $event = new StatusEvent();
-        $creator = $this->createMock(User::class);
-        $modifier = $this->createMock(User::class);
+        $creator = $this->createStub(User::class);
+        $modifier = $this->createStub(User::class);
 
         $event->setCreator($creator);
         $event->setModifier($modifier);

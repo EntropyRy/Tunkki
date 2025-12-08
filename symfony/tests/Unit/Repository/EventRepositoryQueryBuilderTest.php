@@ -29,7 +29,7 @@ final class EventRepositoryQueryBuilderTest extends TestCase
     {
         parent::setUp();
 
-        $this->em = $this->createMock(EntityManagerInterface::class);
+        $this->em = $this->createStub(EntityManagerInterface::class);
 
         // Provide dependencies needed by QueryBuilder and ServiceEntityRepository internals
         $this->em

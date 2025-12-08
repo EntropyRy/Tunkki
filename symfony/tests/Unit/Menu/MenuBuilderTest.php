@@ -38,13 +38,13 @@ final class MenuBuilderTest extends TestCase
         $root->addChild($firstChild);
         $root->addChild($secondChild);
 
-        /** @var MenuRepository&MockObject $repo */
-        $repo = $this->createMock(MenuRepository::class);
-        $repo
+        /** @var MenuRepository $menuRepository */
+        $menuRepository = $this->createStub(MenuRepository::class);
+        $menuRepository
             ->method('getRootNodes')
             ->willReturn([$root]);
 
-        $builder = new MenuBuilder(new MenuFactory(), $repo);
+        $builder = new MenuBuilder(new MenuFactory(), $menuRepository);
 
         $fiMenu = $builder->createMainMenu(['locale' => 'fi']);
         $this->assertSame(
@@ -106,8 +106,9 @@ final class MenuBuilderTest extends TestCase
         $dropdown->addChild($enabledChild);
         $root->addChild($dropdown);
 
-        /** @var MenuRepository&MockObject $repo */
-        $repo = $this->createMock(MenuRepository::class);
+        /** @var MenuRepository $repo */
+        /** @var MenuRepository $repo */
+        $repo = $this->createStub(MenuRepository::class);
         $repo
             ->method('getRootNodes')
             ->willReturn([$root]);

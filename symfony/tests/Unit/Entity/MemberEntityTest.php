@@ -118,7 +118,7 @@ class MemberEntityTest extends TestCase
 
         // Artist collection
         $this->assertCount(0, $member->getArtist());
-        $mockArtist = $this->createMock(\App\Entity\Artist::class);
+        $mockArtist = $this->createStub(\App\Entity\Artist::class);
         $mockArtist->method('getId')->willReturn(1);
         $member->addArtist($mockArtist);
         $this->assertCount(1, $member->getArtist());
@@ -128,7 +128,7 @@ class MemberEntityTest extends TestCase
 
         // DoorLogs
         $this->assertCount(0, $member->getDoorLogs());
-        $mockDoorLog = $this->createMock(\App\Entity\DoorLog::class);
+        $mockDoorLog = $this->createStub(\App\Entity\DoorLog::class);
         $member->addDoorLog($mockDoorLog);
         $this->assertCount(1, $member->getDoorLogs());
         $member->removeDoorLog($mockDoorLog);
@@ -136,7 +136,7 @@ class MemberEntityTest extends TestCase
 
         // RSVPs
         $this->assertCount(0, $member->getRSVPs());
-        $mockRSVP = $this->createMock(\App\Entity\RSVP::class);
+        $mockRSVP = $this->createStub(\App\Entity\RSVP::class);
         $member->addRSVP($mockRSVP);
         $this->assertCount(1, $member->getRSVPs());
         $member->removeRSVP($mockRSVP);
@@ -144,7 +144,7 @@ class MemberEntityTest extends TestCase
 
         // NakkiBookings
         $this->assertCount(0, $member->getNakkiBookings());
-        $mockNakkiBooking = $this->createMock(\App\Entity\NakkiBooking::class);
+        $mockNakkiBooking = $this->createStub(\App\Entity\NakkiBooking::class);
         $member->addNakkiBooking($mockNakkiBooking);
         $this->assertCount(1, $member->getNakkiBookings());
         $member->removeNakkiBooking($mockNakkiBooking);
@@ -152,7 +152,7 @@ class MemberEntityTest extends TestCase
 
         // Tickets
         $this->assertCount(0, $member->getTickets());
-        $mockTicket = $this->createMock(\App\Entity\Ticket::class);
+        $mockTicket = $this->createStub(\App\Entity\Ticket::class);
         $member->addTicket($mockTicket);
         $this->assertCount(1, $member->getTickets());
         $member->removeTicket($mockTicket);
@@ -160,7 +160,7 @@ class MemberEntityTest extends TestCase
 
         // ResponsibleForNakkis
         $this->assertCount(0, $member->getResponsibleForNakkis());
-        $mockNakki = $this->createMock(\App\Entity\Nakki::class);
+        $mockNakki = $this->createStub(\App\Entity\Nakki::class);
         $member->addResponsibleForNakki($mockNakki);
         $this->assertCount(1, $member->getResponsibleForNakkis());
         $member->removeResponsibleForNakki($mockNakki);
@@ -168,7 +168,7 @@ class MemberEntityTest extends TestCase
 
         // HappeningBooking
         $this->assertCount(0, $member->getHappeningBooking());
-        $mockHappeningBooking = $this->createMock(
+        $mockHappeningBooking = $this->createStub(
             \App\Entity\HappeningBooking::class,
         );
         $member->addHappeningBooking($mockHappeningBooking);
@@ -178,7 +178,7 @@ class MemberEntityTest extends TestCase
 
         // Happenings
         $this->assertCount(0, $member->getHappenings());
-        $mockHappening = $this->createMock(\App\Entity\Happening::class);
+        $mockHappening = $this->createStub(\App\Entity\Happening::class);
         $member->addHappening($mockHappening);
         $this->assertCount(1, $member->getHappenings());
         $member->removeHappening($mockHappening);

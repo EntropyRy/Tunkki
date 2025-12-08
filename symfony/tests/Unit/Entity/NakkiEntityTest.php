@@ -34,7 +34,7 @@ final class NakkiEntityTest extends TestCase
     public function testSetAndGetDefinition(): void
     {
         $nakki = new Nakki();
-        $definition = $this->createMock(NakkiDefinition::class);
+        $definition = $this->createStub(NakkiDefinition::class);
 
         $nakki->setDefinition($definition);
         $this->assertSame($definition, $nakki->getDefinition());
@@ -58,7 +58,7 @@ final class NakkiEntityTest extends TestCase
     public function testSetAndGetEvent(): void
     {
         $nakki = new Nakki();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $nakki->setEvent($event);
         $this->assertSame($event, $nakki->getEvent());
@@ -78,7 +78,7 @@ final class NakkiEntityTest extends TestCase
     public function testAddAndRemoveNakkiBooking(): void
     {
         $nakki = new Nakki();
-        $booking = $this->createMock(NakkiBooking::class);
+        $booking = $this->createStub(NakkiBooking::class);
 
         $nakki->addNakkiBooking($booking);
         $this->assertTrue($nakki->getNakkiBookings()->contains($booking));
@@ -90,7 +90,7 @@ final class NakkiEntityTest extends TestCase
     public function testSetAndGetResponsible(): void
     {
         $nakki = new Nakki();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $nakki->setResponsible($member);
         $this->assertSame($member, $nakki->getResponsible());
@@ -163,8 +163,8 @@ final class NakkiEntityTest extends TestCase
     public function testGetMemberByTimeReturnsCorrectMember(): void
     {
         $nakki = new Nakki();
-        $member = $this->createMock(Member::class);
-        $booking = $this->createMock(NakkiBooking::class);
+        $member = $this->createStub(Member::class);
+        $booking = $this->createStub(NakkiBooking::class);
 
         $date = new \DateTimeImmutable('2025-01-01 10:00:00');
         $booking->method('getStartAt')->willReturn($date);

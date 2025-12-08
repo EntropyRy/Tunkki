@@ -34,7 +34,7 @@ final class RSVPEntityTest extends TestCase
     public function testSetAndGetEvent(): void
     {
         $entity = new RSVP();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $entity->setEvent($event);
         $this->assertSame($event, $entity->getEvent());
@@ -43,7 +43,7 @@ final class RSVPEntityTest extends TestCase
     public function testSetAndGetMember(): void
     {
         $entity = new RSVP();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $entity->setMember($member);
         $this->assertSame($member, $entity->getMember());
@@ -107,7 +107,7 @@ final class RSVPEntityTest extends TestCase
     public function testGetAvailableLastNameWithMember(): void
     {
         $entity = new RSVP();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getLastname')->willReturn('MemberLast');
 
         $entity->setMember($member);
@@ -127,7 +127,7 @@ final class RSVPEntityTest extends TestCase
     public function testGetAvailableEmailWithMember(): void
     {
         $entity = new RSVP();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getEmail')->willReturn('member@example.com');
 
         $entity->setMember($member);

@@ -86,7 +86,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemoveTags(): void
     {
         $item = new Item();
-        $tag = $this->createMock(Tag::class);
+        $tag = $this->createStub(Tag::class);
 
         $item->addTag($tag);
         $this->assertTrue($item->getTags()->contains($tag));
@@ -98,7 +98,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemoveWhoCanRent(): void
     {
         $item = new Item();
-        $who = $this->createMock(WhoCanRentChoice::class);
+        $who = $this->createStub(WhoCanRentChoice::class);
 
         $item->addWhoCanRent($who);
         $this->assertTrue($item->getWhoCanRent()->contains($who));
@@ -110,8 +110,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemoveFiles(): void
     {
         $item = new Item();
-        $file = $this->createMock(File::class);
-        $file->expects($this->any())->method('setProduct');
+        $file = $this->createStub(File::class);
 
         $item->addFile($file);
         $this->assertTrue($item->getFiles()->contains($file));
@@ -123,7 +122,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemovePackages(): void
     {
         $item = new Item();
-        $package = $this->createMock(Package::class);
+        $package = $this->createStub(Package::class);
 
         $item->addPackage($package);
         $this->assertTrue($item->getPackages()->contains($package));
@@ -135,7 +134,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemoveRentHistory(): void
     {
         $item = new Item();
-        $booking = $this->createMock(Booking::class);
+        $booking = $this->createStub(Booking::class);
 
         $item->addRentHistory($booking);
         $this->assertTrue($item->getRentHistory()->contains($booking));
@@ -147,8 +146,7 @@ final class ItemEntityTest extends TestCase
     public function testAddAndRemoveFixingHistory(): void
     {
         $item = new Item();
-        $event = $this->createMock(StatusEvent::class);
-        $event->expects($this->any())->method('setItem');
+        $event = $this->createStub(StatusEvent::class);
 
         $item->addFixingHistory($event);
         $this->assertTrue($item->getFixingHistory()->contains($event));
@@ -160,7 +158,7 @@ final class ItemEntityTest extends TestCase
     public function testSetAndGetCategory(): void
     {
         $item = new Item();
-        $category = $this->createMock(Category::class);
+        $category = $this->createStub(Category::class);
 
         $item->setCategory($category);
         $this->assertSame($category, $item->getCategory());
@@ -172,8 +170,8 @@ final class ItemEntityTest extends TestCase
     public function testSetAndGetCreatorModifier(): void
     {
         $item = new Item();
-        $creator = $this->createMock(User::class);
-        $modifier = $this->createMock(User::class);
+        $creator = $this->createStub(User::class);
+        $modifier = $this->createStub(User::class);
 
         $item->setCreator($creator);
         $item->setModifier($modifier);

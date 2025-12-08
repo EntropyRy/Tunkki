@@ -143,10 +143,10 @@ final class SitemapControllerTest extends TestCase
 
     public function testMultipleEventsDoNotCrossPollinateAltData(): void
     {
-        /** @var EventRepository&MockObject $eventRepo */
-        $eventRepo = $this->createMock(EventRepository::class);
-        /** @var MenuRepository&MockObject $menuRepo */
-        $menuRepo = $this->createMock(MenuRepository::class);
+        /** @var EventRepository $eventRepo */
+        $eventRepo = $this->createStub(EventRepository::class);
+        /** @var MenuRepository $menuRepo */
+        $menuRepo = $this->createStub(MenuRepository::class);
 
         $eventA = $this->makeStubEvent(
             'https://entropy.fi/2025/a-fi',

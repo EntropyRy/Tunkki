@@ -100,13 +100,9 @@ class ArtistEntityTest extends TestCase
         $artist = new Artist();
         $this->assertCount(0, $artist->getEventArtistInfos());
 
-        $mockEventArtistInfo = $this->createMock(
+        $mockEventArtistInfo = $this->createStub(
             \App\Entity\EventArtistInfo::class,
         );
-        $mockEventArtistInfo
-            ->expects($this->any())
-            ->method('setArtist')
-            ->with($artist);
 
         $artist->addEventArtistInfo($mockEventArtistInfo);
         $this->assertCount(1, $artist->getEventArtistInfos());
@@ -143,7 +139,7 @@ class ArtistEntityTest extends TestCase
     public function testPictureSetterGetter(): void
     {
         $artist = new Artist();
-        $mockPicture = $this->createMock(
+        $mockPicture = $this->createStub(
             \App\Entity\Sonata\SonataMediaMedia::class,
         );
         $artist->setPicture($mockPicture);

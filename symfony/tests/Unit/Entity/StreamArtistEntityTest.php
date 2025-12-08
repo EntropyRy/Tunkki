@@ -34,7 +34,7 @@ final class StreamArtistEntityTest extends TestCase
     public function testSetAndGetArtist(): void
     {
         $entity = new StreamArtist();
-        $artist = $this->createMock(Artist::class);
+        $artist = $this->createStub(Artist::class);
 
         $entity->setArtist($artist);
         $this->assertSame($artist, $entity->getArtist());
@@ -43,7 +43,7 @@ final class StreamArtistEntityTest extends TestCase
     public function testSetAndGetStream(): void
     {
         $entity = new StreamArtist();
-        $stream = $this->createMock(Stream::class);
+        $stream = $this->createStub(Stream::class);
 
         $entity->setStream($stream);
         $this->assertSame($stream, $entity->getStream());
@@ -73,11 +73,11 @@ final class StreamArtistEntityTest extends TestCase
     public function testToStringReturnsArtistName(): void
     {
         $entity = new StreamArtist();
-        $artist = $this->createMock(Artist::class);
-        $artist->method('getName')->willReturn('TestArtist');
-
+        $artist = $this->createStub(Artist::class);
+        $artist->method('getName')->willReturn('Test Artist');
         $entity->setArtist($artist);
-        $this->assertSame('TestArtist', (string) $entity);
+
+        $this->assertSame('Test Artist', (string) $entity);
     }
 
     public function testEdgeCaseSetters(): void

@@ -23,7 +23,7 @@ final class EmailVerifierTest extends TestCase
             VerifyEmailHelperInterface::class,
         );
         $mailer = $this->createMock(MailerInterface::class);
-        $em = $this->createMock(EntityManagerInterface::class);
+        $em = $this->createStub(EntityManagerInterface::class);
 
         $member = new Member()
             ->setFirstname('Alice')
@@ -141,7 +141,7 @@ final class EmailVerifierTest extends TestCase
                 // no-op (treated as successful validation)
             }
         };
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = $this->createStub(MailerInterface::class);
         $em = $this->createMock(EntityManagerInterface::class);
 
         $member = new Member()
@@ -196,7 +196,7 @@ final class EmailVerifierTest extends TestCase
                 // no-op (treated as successful validation)
             }
         };
-        $mailer = $this->createMock(MailerInterface::class);
+        $mailer = $this->createStub(MailerInterface::class);
         $em = $this->createMock(EntityManagerInterface::class);
 
         $member = new Member()

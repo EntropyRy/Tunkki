@@ -18,7 +18,7 @@ final class NakkiBookingEntityTest extends TestCase
     public function testSetAndGetNakki(): void
     {
         $booking = new NakkiBooking();
-        $nakki = $this->createMock(Nakki::class);
+        $nakki = $this->createStub(Nakki::class);
 
         $booking->setNakki($nakki);
         $this->assertSame($nakki, $booking->getNakki());
@@ -29,7 +29,7 @@ final class NakkiBookingEntityTest extends TestCase
     public function testSetAndGetMember(): void
     {
         $booking = new NakkiBooking();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
 
         $booking->setMember($member);
         $this->assertSame($member, $booking->getMember());
@@ -54,7 +54,7 @@ final class NakkiBookingEntityTest extends TestCase
     public function testSetAndGetEvent(): void
     {
         $booking = new NakkiBooking();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $booking->setEvent($event);
         $this->assertSame($event, $booking->getEvent());
@@ -65,7 +65,7 @@ final class NakkiBookingEntityTest extends TestCase
     public function testGetMemberEmailWithMember(): void
     {
         $booking = new NakkiBooking();
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getEmail')->willReturn('member@example.com');
 
         $booking->setMember($member);
@@ -82,8 +82,8 @@ final class NakkiBookingEntityTest extends TestCase
     public function testMemberHasEventTicketTrue(): void
     {
         $booking = new NakkiBooking();
-        $member = $this->createMock(Member::class);
-        $event = $this->createMock(Event::class);
+        $member = $this->createStub(Member::class);
+        $event = $this->createStub(Event::class);
 
         $event->method('memberHasTicket')->with($member)->willReturn(true);
 
@@ -96,8 +96,8 @@ final class NakkiBookingEntityTest extends TestCase
     public function testMemberHasEventTicketFalse(): void
     {
         $booking = new NakkiBooking();
-        $member = $this->createMock(Member::class);
-        $event = $this->createMock(Event::class);
+        $member = $this->createStub(Member::class);
+        $event = $this->createStub(Event::class);
 
         $event->method('memberHasTicket')->with($member)->willReturn(false);
 
@@ -110,7 +110,7 @@ final class NakkiBookingEntityTest extends TestCase
     public function testMemberHasEventTicketNoMember(): void
     {
         $booking = new NakkiBooking();
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
 
         $booking->setMember(null);
         $booking->setEvent($event);
@@ -121,8 +121,8 @@ final class NakkiBookingEntityTest extends TestCase
     public function testToStringWithNakkiAndEventRequired(): void
     {
         $booking = new NakkiBooking();
-        $nakki = $this->createMock(Nakki::class);
-        $event = $this->createMock(Event::class);
+        $nakki = $this->createStub(Nakki::class);
+        $event = $this->createStub(Event::class);
 
         $event->method('isNakkiRequiredForTicketReservation')->willReturn(true);
         $booking->setNakki($nakki);
@@ -135,8 +135,8 @@ final class NakkiBookingEntityTest extends TestCase
     public function testToStringWithNakkiAndEventNotRequired(): void
     {
         $booking = new NakkiBooking();
-        $nakki = $this->createMock(Nakki::class);
-        $event = $this->createMock(Event::class);
+        $nakki = $this->createStub(Nakki::class);
+        $event = $this->createStub(Event::class);
 
         $event
             ->method('isNakkiRequiredForTicketReservation')

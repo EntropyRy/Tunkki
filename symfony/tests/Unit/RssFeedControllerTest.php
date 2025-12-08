@@ -107,8 +107,8 @@ final class RssFeedControllerTest extends TestCase
 
     public function testIndexWithFinnishLocale(): void
     {
-        /** @var EventRepository&MockObject $repo */
-        $repo = $this->createMock(EventRepository::class);
+        /** @var EventRepository $repo */
+        $repo = $this->createStub(EventRepository::class);
 
         $event = $this->makeEventStub('fi1');
         $repo->method('getRSSEvents')->willReturn([$event]);
