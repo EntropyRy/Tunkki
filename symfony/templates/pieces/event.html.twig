@@ -198,7 +198,7 @@
         <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
     <div class="event-text-content">
-        {{ render_tokens(event.contentForTwig(app.request.locale))|raw }}
+        {{ render_tokens(event.contentForTwig(app.request.locale))|markdown_to_html|raw }}
         {% if '{{ links }}' not in event.contentForTwig(app.request.locale) %}
             {{ block('links') }}
         {% endif %}
