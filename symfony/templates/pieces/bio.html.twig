@@ -9,30 +9,30 @@
 #}
 
 {%- block artist_bios_container -%}
-    {% set groups = artist_bio_groups|default([]) %}
-    {% set artist_bio_type = artist_bio_type|default(null) %}
-    {% set artist_bio_config = artist_bio_config|default({}) %}
-    {% if artist_bio_config is empty and artist_bio_type is not null and event is defined %}
-        {% set artist_bio_config = event.artistDisplayConfiguration.getBioConfig(artist_bio_type) %}
-    {% endif %}
-    {% if groups|length > 0 %}
-        <div id="{{ artist_bio_anchor|default('bios') }}">
-            {% for stage, infos in groups %}
-                {% set show_stage_heading = artist_bio_config.show_stage ?? true %}
-                {% if show_stage_heading and stage %}
-                    <h3 class="artists-heading text-center">
-                        {{ artist_bio_title_prefix|default('') }}
-                        {% if stage %}@ {{ stage }}{% endif %}
-                    </h3>
-                {% endif %}
-                {% set artist_bio_current_stage = stage %}
-                {{ block('infos') }}
-            {% endfor %}
-        </div>
-    {% endif %}
-{%- endblock %}
+{% set groups = artist_bio_groups|default([]) %}
+{% set artist_bio_type = artist_bio_type|default(null) %}
+{% set artist_bio_config = artist_bio_config|default({}) %}
+{% if artist_bio_config is empty and artist_bio_type is not null and event is defined %}
+    {% set artist_bio_config = event.artistDisplayConfiguration.getBioConfig(artist_bio_type) %}
+{% endif %}
+{% if groups|length > 0 %}
+<div id="{{ artist_bio_anchor|default('bios') }}">
+    {% for stage, infos in groups %}
+        {% set show_stage_heading = artist_bio_config.show_stage ?? true %}
+        {% if show_stage_heading and stage %}
+        <h3 class="artists-heading text-center">
+            {{ artist_bio_title_prefix|default('') }}
+            {% if stage %}@ {{ stage }}{% endif %}
+        </h3>
+        {% endif %}
+        {% set artist_bio_current_stage = stage %}
+        {{ block('infos') }}
+    {% endfor %}
+</div>
+{% endif %}
+{%- endblock -%}
 
 {# Delegate to the event template's infos block so bios render even if this trait is rendered directly. #}
 {%- block infos -%}
-    {{- block('infos', 'pieces/event.html.twig') -}}
+{{- block('infos', 'pieces/event.html.twig') -}}
 {%- endblock -%}

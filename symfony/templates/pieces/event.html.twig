@@ -509,85 +509,84 @@
 </div>
 {%- endif -%}
 {%- endblock -%}
-{% block cycle %}
-    {% set current_event = event is defined ? event : null %}
-    {% set artist_display = artist_display is defined
-        ? artist_display
-        : (current_event ? current_event.artistDisplayConfiguration : null)
-    %}
-    {% set type = artist_bio_type|default(artist.type) %}
-    {% set bio_config = artist_bio_config|default({}) %}
-    {% if bio_config is empty %}
-        {% if artist_display %}
-            {% set bio_config = artist_display.getBioConfig(type) %}
-        {% else %}
-            {% set bio_config = {
-                show_stage: true,
-                show_picture: true,
-                show_time: true,
-                show_genre: true,
-            } %}
-        {% endif %}
-    {% endif %}
-    {% set show_picture = bio_config.show_picture ?? true %}
-    {% set template_name = current_event ? current_event.template : '' %}
-    {% if 'e30v' in template_name|default('') %}
-        {% set anchor = artist.type|lower ~ '-' ~ name|slug %}
-        <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
-            <div class="row">
-                <div class="col-12">
-                    <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {title: name, anchor: anchor}) }}>
-                        {{ name }}
-                        <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }}>
-                            <twig:ux:icon name="share" />
-                        </button>
-                    </h3>
-                </div>
-                <div class="col-12">
-                    {% if show_picture %}
-                        {{ block('artist_pic') }}
-                    {% endif %}
-                    {{ block('artist_event_info') }}
-                </div>
+{%- block cycle -%}
+{%- set current_event = event is defined ? event : null -%}
+{%- set artist_display = artist_display is defined
+    ? artist_display
+    : (current_event ? current_event.artistDisplayConfiguration : null)
+-%}
+{%- set type = artist_bio_type|default(artist.type) -%}
+{%- set bio_config = artist_bio_config|default({}) -%}
+{%- if bio_config is empty -%}
+    {%- if artist_display -%}
+        {%- set bio_config = artist_display.getBioConfig(type) -%}
+    {%- else -%}
+        {%- set bio_config = {
+            show_stage: true,
+            show_picture: true,
+            show_time: true,
+            show_genre: true,
+        } -%}
+    {% endif -%}
+{%- endif -%}
+{%- set show_picture = bio_config.show_picture ?? true -%}
+{%- set template_name = current_event ? current_event.template : '' -%}
+{%- if 'e30v' in template_name|default('') %}
+    {%- set anchor = artist.type|lower ~ '-' ~ name|slug -%}
+    <div id="{{ anchor }}" class="col-12 mt-3 mb-3 content">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="mb-0 text-dark px-4 mb-4 text-uppercase fw-bolder" {{ stimulus_controller('share', {title: name, anchor: anchor}) }}>
+                    {{ name }}
+                    <button class="btn float-end text-dark"{{ stimulus_action('share', 'shareUrl') }}>
+                        <twig:ux:icon name="share" />
+                    </button>
+                </h3>
+            </div>
+            <div class="col-12">
+                {%- if show_picture -%}
+                    {{- block('artist_pic') -}}
+                {%- endif -%}
+                {{- block('artist_event_info') -}}
             </div>
         </div>
-        {% if not loop.last %}<hr class="d-md-none">{% endif %}
-    {% else %}
-        {% set thecycle = loop.index0 is odd ? 'odd' : 'even' %}
-        <div id="{{ artist.type|lower }}-{{ name|slug }}"
-                class="col-md-12 pt-3 pb-3">
-            <div class="row">
-                {% if thecycle == 'even' %}
-                    <div class="{% if show_picture %}col-6 col-sm-6 col-md-7 col-xl-7{% else %}col-12{% endif %} pt-3 pt-md-0">
-                        {{ block('artist_event_info') }}
-                    </div>
-                    {% if show_picture %}
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                    {% endif %}
-                {% else %}
-                    {% if show_picture %}
-                        <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{ block('artist_pic') }}</div>
-                        <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                    {% else %}
-                        <div class="col-12 pt-3 pt-md-0">{{ block('artist_event_info') }}</div>
-                    {% endif %}
-                {% endif %}
-                <div class="col mt-2 d-block d-sm-none">
-                    {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+    </div>
+    {%- if not loop.last %}<hr class="d-md-none">{% endif -%}
+{%- else -%}
+    {%- set thecycle = loop.index0 is odd ? 'odd' : 'even' -%}
+    <div id="{{- artist.type|lower }}-{{ name|slug -}}" class="col-md-12 pt-3 pb-3">
+        <div class="row">
+            {%- if thecycle == 'even' -%}
+                <div class="{% if show_picture %}col-6 col-sm-6 col-md-7 col-xl-7{% else %}col-12{% endif %} pt-3 pt-md-0">
+                    {{- block('artist_event_info') -}}
                 </div>
+                {%- if show_picture -%}
+                    <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{- block('artist_pic') -}}</div>
+                {%- endif -%}
+            {%- else -%}
+                {%- if show_picture -%}
+                    <div class="col-6 col-sm-6 col-md-5 col-xl-5">{{- block('artist_pic') -}}</div>
+                    <div class="col-6 col-sm-6 col-md-7 col-xl-7 pt-3 pt-md-0">{{- block('artist_event_info') -}}</div>
+                {%- else -%}
+                    <div class="col-12 pt-3 pt-md-0">{{- block('artist_event_info') -}}</div>
+                {%- endif -%}
+            {%- endif -%}
+            <div class="col mt-2 d-block d-sm-none">
+                {{- artist.getBioByLocale(app.request.locale)|nl2br -}}
             </div>
         </div>
-        {% if not loop.last %}
-            {% if backToBack|default(false) %}
-                <div class="linetext">
-                    <span>B2B</span>
-                </div>
-            {% else %}
-                <hr class="d-md-none">
-            {% endif %}
-        {% endif %}
-    {% endif %}
-{% endblock %}
+    </div>
+    {%- if not loop.last -%}
+        {%- if backToBack|default(false) -%}
+            <div class="linetext">
+                <span>B2B</span>
+            </div>
+        {%- else -%}
+            <hr class="d-md-none">
+        {%- endif -%}
+    {%- endif -%}
+{%- endif -%}
+{%- endblock -%}
 {%- block bios -%}
 {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
 {% set artist_bio_config = artist_display.getBioConfig('DJ') %}
@@ -595,10 +594,10 @@
 {% set artist_bio_anchor = 'bios' %}
 {% set artist_bio_title_prefix = 'DJ ' ~ 'Artists'|trans %}
 {% set artist_bio_type = 'DJ' %}
-{{ block('artist_bios_container') }}
+    {{- block('artist_bios_container') -}}
 {%- endblock -%}
 {%- block dj_bio -%}
-{{ block('bios') }}
+    {{- block('bios') -}}
 {%- endblock -%}
 {%- block vj_bios -%}
 {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
@@ -607,10 +606,10 @@
 {% set artist_bio_anchor = 'vj-bios' %}
 {% set artist_bio_title_prefix = 'VJ ' ~ 'Artists'|trans %}
 {% set artist_bio_type = 'VJ' %}
-{{ block('artist_bios_container') }}
+    {{- block('artist_bios_container') -}}
 {%- endblock -%}
 {%- block vj_bio -%}
-{{ block('vj_bios') }}
+    {{- block('vj_bios') -}}
 {%- endblock -%}
 {%- block art_bios -%}
 {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
@@ -619,19 +618,18 @@
 {% set artist_bio_anchor = 'art-bios' %}
 {% set artist_bio_title_prefix = 'Artists'|trans %}
 {% set artist_bio_type = 'ART' %}
-{{ block('artist_bios_container') }}
+    {{- block('artist_bios_container') -}}
 {%- endblock -%}
-{% block infos %}
-
-    {% for info in infos %}
-        {% if info.StartTime is not empty %}
-            {% set artist = info.artistClone %}
-            {% set name = (artist.name|split(' for')).0 %}
-            {{ block('cycle') }}
-        {% endif %}
-    {% endfor %}
-{% endblock %}
-{% block artist_event_info %}
+{%- block infos -%}
+{%- for info in infos -%}
+    {% if info.StartTime is not empty %}
+        {%- set artist = info.artistClone -%}
+        {%- set name = (artist.name|split(' for')).0 -%}
+        {{- block('cycle') -}}
+    {%- endif -%}
+{%- endfor -%}
+{%- endblock -%}
+{%- block artist_event_info -%}
     {% set current_event = event is defined ? event : null %}
     {% set artist_display = artist_display is defined
         ? artist_display
@@ -654,58 +652,58 @@
     {% set show_time = bio_config.show_time ?? true %}
     {% set show_genre = bio_config.show_genre ?? true %}
     {% set template_name = current_event ? current_event.template : '' %}
-    {% if 'e30v' in template_name|default('') and frontpage|default(false) == false %}
+    {%- if 'e30v' in template_name|default('') and frontpage|default(false) == false -%}
         <div class="float-none mx-4 mb-4">
-            {% if show_genre %}
+            {%- if show_genre -%}
                 <small class="fw-light">{{ artist.genre }}</small>
-            {% endif %}
+            {%- endif -%}
             <div>
-                {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+                {{- artist.getBioByLocale(app.request.locale)|nl2br -}}
             </div>
-            {{ block('artist_links') }}
+            {{- block('artist_links') -}}
         </div>
-    {% else %}
-        {% set is_multiday = current_event and current_event.multiday %}
-        {% if is_multiday %}
+    {%- else -%}
+        {%- set is_multiday = current_event and current_event.multiday -%}
+        {%- if is_multiday -%}
             {% set datestring = 'E, HH:mm' %}
-        {% else %}
+        {%- else -%}
             {% set datestring = 'HH:mm' %}
-        {% endif %}
+        {%- endif -%}
         <h3>
             {{ name }}
-            {% if artist.type == 'Live' %}(Live){% endif %}
-            {% if (artist.type == 'Live' or artist.type == 'DJ') and show_time %}
+            {%- if artist.type == 'Live' %}(Live){% endif -%}
+            {%- if (artist.type == 'Live' or artist.type == 'DJ') and show_time -%}
                 {% if info is defined and frontpage|default(false) == false and info.StartTime is not empty %}
                     @ {{ info.StartTime|format_datetime(pattern: datestring) }}
-                {% endif %}
-            {% endif %}
+                {%- endif -%}
+            {%- endif -%}
         </h3>
-        {% if show_genre %}
-            <small>{{ artist.genre }}</small>
-        {% endif %}
+        {%- if show_genre -%}
+            <small>{{- artist.genre -}}</small>
+        {%- endif -%}
         <div class="d-none d-sm-block">
-            {{ artist.getBioByLocale(app.request.locale)|nl2br }}
+            {{- artist.getBioByLocale(app.request.locale)|nl2br -}}
         </div>
-        {{ block('artist_links') }}
-    {% endif %}
-{% endblock %}
-{% block artist_pic %}
-    {% set artist_display = artist_display is defined
+        {{- block('artist_links') -}}
+    {%- endif -%}
+{%- endblock -%}
+{%- block artist_pic -%}
+    {%- set artist_display = artist_display is defined
         ? artist_display
         : (event is defined ? event.artistDisplayConfiguration : null)
-    %}
-    {% set type = artist_bio_type|default(artist.type) %}
-    {% set bio_config = artist_bio_config|default({}) %}
-    {% if bio_config is empty and artist_display %}
-        {% set bio_config = artist_display.getBioConfig(type) %}
-    {% endif %}
-    {% set show_picture = bio_config.show_picture ?? true %}
-    {% if show_picture %}
-        {% if name is not defined %}
-            {% set name = artist.name %}
-        {% endif %}
-        <span class="{% if frontpage|default(false) %}rect-img{% else %}polaroid{% endif %}">
-            {% if artist.Picture %}
+    -%}
+    {%- set type = artist_bio_type|default(artist.type) -%}
+    {%- set bio_config = artist_bio_config|default({}) -%}
+    {%- if bio_config is empty and artist_display -%}
+        {%- set bio_config = artist_display.getBioConfig(type) -%}
+    {%- endif -%}
+    {%- set show_picture = bio_config.show_picture ?? true -%}
+    {%- if show_picture -%}
+        {%- if name is not defined -%}
+            {%- set name = artist.name -%}
+        {%- endif -%}
+        <span class="{%- if frontpage|default(false) %}rect-img{% else %}polaroid{% endif -%}">
+            {%- if artist.Picture -%}
                 <twig:ProgressiveImage
                     :media="artist.Picture"
                     :sizes="{
@@ -718,21 +716,21 @@
                     :title="name"
                     :lazy="true"
                 />
-            {% else %}
+            {%- else -%}
                 <img width="100%"
                         loading="lazy"
                         title="{{ name }}"
                         src="{{ asset('images/thumb_artist_square.jpg') }}">
-            {% endif %}
+            {%- endif -%}
             <div class="caption d-none d-sm-block">{{ name }}</div>
         </span>
-    {% endif %}
-{% endblock %}
-{% block artist_preview_info %}
-    {% set artist_display = artist_display is defined
+    {%- endif -%}
+{%- endblock -%}
+{%- block artist_preview_info -%}
+    {%- set artist_display = artist_display is defined
         ? artist_display
         : (event is defined ? event.artistDisplayConfiguration : null)
-    %}
+    -%}
 
     <h3>{{ artist.name }}</h3>
     {% set type = artist_bio_type|default(artist.type) %}
@@ -747,8 +745,8 @@
         {{ artist.getBioByLocale(app.request.locale)|nl2br }}
     </div>
     {{ block('artist_links') }}
-{% endblock %}
-{% block artist_links -%}
+{%- endblock -%}
+{%- block artist_links -%}
     {%- if artist.links is not empty -%}
         <hr>
         {%- for link in artist.links -%}
@@ -803,20 +801,20 @@
     </div>
 {% endblock %}
 {%- block streamplayer -%}
-{% set phase = eventTemporalState.getPhase(event) %}
-{% if event.streamPlayerUrl and phase == 'now' %}
+{%- set phase = eventTemporalState.getPhase(event) -%}
+{%- if event.streamPlayerUrl and phase == 'now' -%}
 <div class="ckeditor-html5-audio" style="text-align: center;">
     <audio controls="controls"
            controlslist="nodownload"
-           src="{{ event.streamPlayerUrl }}">&nbsp;</audio>
+           src="{{- event.streamPlayerUrl -}}">&nbsp;</audio>
 </div>
-{% elseif event.streamPlayerUrl and phase == 'before' %}
+{%- elseif event.streamPlayerUrl and phase == 'before' -%}
 <div class="ckeditor-html5-audio"
      style="text-align: center;
             border: #aaa solid;
             margin: 0 auto;
             width: 60%">
-    {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
+    {{- 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
 </div>
-{% endif %}
+{%- endif -%}
 {%- endblock -%}

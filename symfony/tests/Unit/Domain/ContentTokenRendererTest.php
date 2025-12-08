@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Domain;
 
 use App\Domain\Content\ContentTokenRenderer;
+use League\CommonMark\GithubFlavoredMarkdownConverter;
 use PHPUnit\Framework\TestCase;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
@@ -47,6 +48,38 @@ TWIG);
         $rendered = $this->renderer->render($content, $template, []);
 
         self::assertSame('HelloWorld', $rendered);
+    }
+
+    public function testRenderBiosBlockDoesNotIndent(): void
+    {
+        $template = $this->loadTemplate(<<<'TWIG'
+{% block dj_bio -%}
+<div class="bio">DJ Bio</div>
+{%- endblock %}
+TWIG);
+
+        $rendered = $this->renderer->render("Hi\n{{ dj_bio }}\nBye", $template, []);
+
+        self::assertStringNotContainsString("\n    <", $rendered);
+        self::assertSame("Hi\n<div class=\"bio\">DJ Bio</div>\nBye", $rendered);
+    }
+
+    public function testMarkdownRenderingDoesNotProduceCodeBlock(): void
+    {
+        $template = $this->loadTemplate(<<<'TWIG'
+{% block dj_bio -%}
+<div class="bio">DJ Bio Content</div>
+{%- endblock %}
+TWIG);
+
+        $content = "Intro\n\n{{ dj_bio }}\n\nOutro";
+        $rendered = $this->renderer->render($content, $template, []);
+
+        $converter = new GithubFlavoredMarkdownConverter();
+        $html = (string) $converter->convert($rendered);
+
+        self::assertStringNotContainsString('<pre><code>', $html, 'Bios should not be treated as code blocks by markdown');
+        self::assertStringContainsString('<div class="bio">DJ Bio Content</div>', $html);
     }
 
     public function testNormalizeLegacyContentRewritesDeprecatedTokens(): void
