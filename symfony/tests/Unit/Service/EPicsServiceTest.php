@@ -35,7 +35,7 @@ final class EPicsServiceTest extends TestCase
 
     public function testServiceConstructsWithLogger(): void
     {
-        $logger = $this->createStub(\Psr\Log\LoggerInterface::class);
+        $logger = $this->createStub(LoggerInterface::class);
         $service = new EPicsService($this->client, $logger);
 
         $this->assertInstanceOf(EPicsService::class, $service);

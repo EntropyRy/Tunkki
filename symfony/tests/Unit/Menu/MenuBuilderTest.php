@@ -8,7 +8,6 @@ use App\Entity\Menu;
 use App\Menu\MenuBuilder;
 use App\Repository\MenuRepository;
 use Knp\Menu\MenuFactory;
-use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 final class MenuBuilderTest extends TestCase
