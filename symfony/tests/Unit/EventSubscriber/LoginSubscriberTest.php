@@ -28,15 +28,29 @@ final class LoginSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->em = $this->createMock(EntityManagerInterface::class);
-        $this->localeSwitcher = $this->createMock(LocaleSwitcher::class);
+        $this->em = $this->createStub(EntityManagerInterface::class);
+        $this->localeSwitcher = $this->createStub(LocaleSwitcher::class);
         $this->urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+
+        $this->createSubscriber();
+    }
+
+    private function createSubscriber(
+        ?LocaleSwitcher $localeSwitcher = null,
+        ?EntityManagerInterface $em = null,
+        ?UrlGeneratorInterface $urlGenerator = null,
+    ): LoginSubscriber {
+        $this->localeSwitcher = $localeSwitcher ?? $this->localeSwitcher;
+        $this->em = $em ?? $this->em;
+        $this->urlGenerator = $urlGenerator ?? $this->urlGenerator;
 
         $this->subscriber = new LoginSubscriber(
             $this->localeSwitcher,
             $this->em,
             $this->urlGenerator,
         );
+
+        return $this->subscriber;
     }
 
     public function testGetSubscribedEvents(): void
@@ -49,6 +63,9 @@ final class LoginSubscriberTest extends TestCase
 
     public function testOnLoginSuccessUpdatesLastLogin(): void
     {
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->createSubscriber(em: $em);
+
         $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('fi');
         $member->method('isEmailVerified')->willReturn(true);
@@ -60,14 +77,17 @@ final class LoginSubscriberTest extends TestCase
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn(new Request());
 
-        $this->em->expects($this->once())->method('persist')->with($user);
-        $this->em->expects($this->once())->method('flush');
+        $em->expects($this->once())->method('persist')->with($user);
+        $em->expects($this->once())->method('flush');
 
         $this->subscriber->onLoginSuccess($event);
     }
 
     public function testOnLoginSuccessSwitchesLocale(): void
     {
+        $localeSwitcher = $this->createMock(LocaleSwitcher::class);
+        $this->createSubscriber(localeSwitcher: $localeSwitcher);
+
         $member = $this->createStub(Member::class);
         $member->method('getLocale')->willReturn('en');
         $member->method('isEmailVerified')->willReturn(true);
@@ -79,7 +99,7 @@ final class LoginSubscriberTest extends TestCase
         $event->method('getUser')->willReturn($user);
         $event->method('getRequest')->willReturn(new Request());
 
-        $this->localeSwitcher
+        $localeSwitcher
             ->expects($this->once())
             ->method('setLocale')
             ->with('en');

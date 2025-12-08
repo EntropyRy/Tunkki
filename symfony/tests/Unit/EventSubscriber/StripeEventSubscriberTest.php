@@ -26,6 +26,7 @@ use Fpt\StripeBundle\Event\StripeWebhook;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Stripe\Event as StripeEvent;
+use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -54,29 +55,36 @@ final class StripeEventSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->checkoutRepo = $this->createMock(CheckoutRepository::class);
-        $this->productRepo = $this->createMock(ProductRepository::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->rn = new BookingReferenceService(); // final readonly class with default params
+    }
 
-        // Create real StripeService instance (final class) with mocked dependencies
-        $parameterBag = $this->createMock(ParameterBagInterface::class);
+    private function bootSubscriber(
+        ?CheckoutRepository $checkoutRepo = null,
+        ?ProductRepository $productRepo = null,
+        ?LoggerInterface $logger = null,
+        ?MemberRepository $memberRepo = null,
+        ?TicketRepository $ticketRepo = null,
+        ?EmailRepository $emailRepo = null,
+        ?MailerInterface $mailer = null,
+        ?MattermostNotifierService $mm = null,
+    ): void {
+        $this->checkoutRepo = $checkoutRepo ?? $this->createStub(CheckoutRepository::class);
+        $this->productRepo = $productRepo ?? $this->createStub(ProductRepository::class);
+        $this->logger = $logger ?? $this->createStub(LoggerInterface::class);
+        $this->memberRepo = $memberRepo ?? $this->createStub(MemberRepository::class);
+        $this->ticketRepo = $ticketRepo ?? $this->createStub(TicketRepository::class);
+        $this->emailRepo = $emailRepo ?? $this->createStub(EmailRepository::class);
+        $this->mailer = $mailer ?? $this->createStub(MailerInterface::class);
+        $this->mm = $mm ?? $this->createStub(MattermostNotifierService::class);
+
+        $parameterBag = $this->createStub(ParameterBagInterface::class);
         $parameterBag->method('get')->willReturn('sk_test_fake');
-        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
         $this->stripe = new StripeService($parameterBag, $urlGenerator);
 
-        $this->memberRepo = $this->createMock(MemberRepository::class);
-        $this->ticketRepo = $this->createMock(TicketRepository::class);
-        $this->emailRepo = $this->createMock(EmailRepository::class);
-        $this->rn = new BookingReferenceService(); // final readonly class with default params
-        $this->mailer = $this->createMock(MailerInterface::class);
-
-        // Create real QrService instance (final class can't be mocked/extended)
-        // Tests requiring QR generation will be skipped since they need the actual logo file
-        $assetMapper = $this->createMock(\Symfony\Component\AssetMapper\AssetMapperInterface::class);
+        $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper->method('getPublicPath')->willReturn('/images/golden-logo.png');
         $this->qrGenerator = new QrService($assetMapper, '/tmp');
-
-        $this->mm = $this->createMock(MattermostNotifierService::class);
 
         $this->subscriber = new StripeEventSubscriber(
             $this->checkoutRepo,
@@ -95,6 +103,8 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testGetSubscribedEvents(): void
     {
+        $this->bootSubscriber();
+
         $events = StripeEventSubscriber::getSubscribedEvents();
 
         $this->assertArrayHasKey(StripeEvents::PRICE_CREATED, $events);
@@ -118,22 +128,26 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnCheckoutExpiredSetsStatusToMinusOne(): void
     {
+        $checkoutRepo = $this->createMock(CheckoutRepository::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->bootSubscriber(checkoutRepo: $checkoutRepo, logger: $logger);
+
         $sessionId = 'cs_test_expired_123';
 
         $checkout = new Checkout();
         $checkout->setStripeSessionId($sessionId);
         $checkout->setStatus(0); // Open
 
-        $this->checkoutRepo->expects($this->once())
+        $checkoutRepo->expects($this->once())
             ->method('findOneBy')
             ->with(['stripeSessionId' => $sessionId])
             ->willReturn($checkout);
 
-        $this->checkoutRepo->expects($this->once())
+        $checkoutRepo->expects($this->once())
             ->method('save')
             ->with($checkout, true);
 
-        $this->logger->expects($this->exactly(2))
+        $logger->expects($this->exactly(2))
             ->method('notice');
 
         $webhook = $this->createCheckoutSessionWebhook($sessionId, 'expired');
@@ -145,14 +159,18 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnCheckoutExpiredThrowsWhenCheckoutNotFound(): void
     {
+        $checkoutRepo = $this->createMock(CheckoutRepository::class);
+        $logger = $this->createMock(LoggerInterface::class);
+        $this->bootSubscriber(checkoutRepo: $checkoutRepo, logger: $logger);
+
         $sessionId = 'cs_test_unknown_456';
 
-        $this->checkoutRepo->expects($this->once())
+        $checkoutRepo->expects($this->once())
             ->method('findOneBy')
             ->with(['stripeSessionId' => $sessionId])
             ->willReturn(null);
 
-        $this->logger->expects($this->once())
+        $logger->expects($this->once())
             ->method('notice');
 
         $webhook = $this->createCheckoutSessionWebhook($sessionId, 'expired');
@@ -168,18 +186,21 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnPriceDeletedDeactivatesProduct(): void
     {
+        $productRepo = $this->createMock(ProductRepository::class);
+        $this->bootSubscriber(productRepo: $productRepo);
+
         $priceId = 'price_test_delete_789';
 
         $product = new Product();
         $product->setStripePriceId($priceId);
         $product->setActive(true);
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('findOneBy')
             ->with(['stripePriceId' => $priceId])
             ->willReturn($product);
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('save')
             ->with($product, true);
 
@@ -192,9 +213,12 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnPriceDeletedThrowsWhenProductNotFound(): void
     {
+        $productRepo = $this->createMock(ProductRepository::class);
+        $this->bootSubscriber(productRepo: $productRepo);
+
         $priceId = 'price_test_unknown_999';
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('findOneBy')
             ->with(['stripePriceId' => $priceId])
             ->willReturn(null);
@@ -212,6 +236,9 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnProductUpdatedUpdatesMatchingProducts(): void
     {
+        $productRepo = $this->createMock(ProductRepository::class);
+        $this->bootSubscriber(productRepo: $productRepo);
+
         $stripeProductId = 'prod_test_update_abc';
 
         $product1 = new Product();
@@ -222,12 +249,12 @@ final class StripeEventSubscriberTest extends TestCase
         $product2->setStripeId($stripeProductId);
         $product2->setNameEn('Old Name 2');
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('findBy')
             ->with(['stripeId' => $stripeProductId])
             ->willReturn([$product1, $product2]);
 
-        $this->productRepo->expects($this->exactly(2))
+        $productRepo->expects($this->exactly(2))
             ->method('save');
 
         $webhook = $this->createProductWebhook($stripeProductId, 'Updated Product Name', true);
@@ -241,18 +268,21 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnProductUpdatedSetsInactiveWhenStripeProductInactive(): void
     {
+        $productRepo = $this->createMock(ProductRepository::class);
+        $this->bootSubscriber(productRepo: $productRepo);
+
         $stripeProductId = 'prod_test_inactive_def';
 
         $product = new Product();
         $product->setStripeId($stripeProductId);
         $product->setActive(true);
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('findBy')
             ->with(['stripeId' => $stripeProductId])
             ->willReturn([$product]);
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('save')
             ->with($product, true);
 
@@ -265,9 +295,12 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnProductUpdatedLogsErrorWhenNoProductsFound(): void
     {
+        $productRepo = $this->createMock(ProductRepository::class);
+        $this->bootSubscriber(productRepo: $productRepo);
+
         $stripeProductId = 'prod_test_notfound_ghi';
 
-        $this->productRepo->expects($this->once())
+        $productRepo->expects($this->once())
             ->method('findBy')
             ->with(['stripeId' => $stripeProductId])
             ->willReturn([]);
@@ -287,9 +320,22 @@ final class StripeEventSubscriberTest extends TestCase
 
     public function testOnCheckoutCompletedSkipsNonTicketProducts(): void
     {
+        $checkoutRepo = $this->createMock(CheckoutRepository::class);
+        $productRepo = $this->createStub(ProductRepository::class);
+        $ticketRepo = $this->createMock(TicketRepository::class);
+        $mailer = $this->createMock(MailerInterface::class);
+        $mm = $this->createMock(MattermostNotifierService::class);
+        $this->bootSubscriber(
+            checkoutRepo: $checkoutRepo,
+            productRepo: $productRepo,
+            ticketRepo: $ticketRepo,
+            mailer: $mailer,
+            mm: $mm,
+        );
+
         $sessionId = 'cs_test_service_fee';
 
-        $event = $this->createMock(Event::class);
+        $event = $this->createStub(Event::class);
         $event->method('getNameByLang')->willReturn('Service Fee Event');
         $event->method('getPicture')->willReturn(null);
 
@@ -301,11 +347,11 @@ final class StripeEventSubscriberTest extends TestCase
         $serviceFee->setServiceFee(true);
         $serviceFee->setEvent($event);
 
-        $cartItem = $this->createMock(CartItem::class);
+        $cartItem = $this->createStub(CartItem::class);
         $cartItem->method('getProduct')->willReturn($serviceFee);
         $cartItem->method('getQuantity')->willReturn(1);
 
-        $cart = $this->createMock(Cart::class);
+        $cart = $this->createStub(Cart::class);
         $cart->method('getEmail')->willReturn('fee@example.com');
         $cart->method('getProducts')->willReturn(new ArrayCollection([$cartItem]));
 
@@ -314,19 +360,19 @@ final class StripeEventSubscriberTest extends TestCase
         $checkout->setStatus(0);
         $checkout->setCart($cart);
 
-        $this->checkoutRepo->method('findOneBy')->willReturn($checkout);
-        $this->checkoutRepo->expects($this->exactly(2))->method('save');
+        $checkoutRepo->method('findOneBy')->willReturn($checkout);
+        $checkoutRepo->expects($this->exactly(2))->method('save');
 
         // No tickets should be created
-        $this->ticketRepo->expects($this->never())
+        $ticketRepo->expects($this->never())
             ->method('save');
 
         // No emails should be sent (no tickets)
-        $this->mailer->expects($this->never())
+        $mailer->expects($this->never())
             ->method('send');
 
         // No mattermost notification (no tickets sold)
-        $this->mm->expects($this->never())
+        $mm->expects($this->never())
             ->method('sendToMattermost');
 
         $webhook = $this->createCheckoutSessionWebhook($sessionId, 'complete');
@@ -354,7 +400,7 @@ final class StripeEventSubscriberTest extends TestCase
             ],
         ]);
 
-        $webhook = $this->createMock(StripeWebhook::class);
+        $webhook = $this->createStub(StripeWebhook::class);
         $webhook->method('getStripeObject')->willReturn($stripeEventData);
 
         return $webhook;
@@ -372,7 +418,7 @@ final class StripeEventSubscriberTest extends TestCase
             ],
         ]);
 
-        $webhook = $this->createMock(StripeWebhook::class);
+        $webhook = $this->createStub(StripeWebhook::class);
         $webhook->method('getStripeObject')->willReturn($stripeEventData);
 
         return $webhook;
@@ -391,7 +437,7 @@ final class StripeEventSubscriberTest extends TestCase
             ],
         ]);
 
-        $webhook = $this->createMock(StripeWebhook::class);
+        $webhook = $this->createStub(StripeWebhook::class);
         $webhook->method('getStripeObject')->willReturn($stripeEventData);
 
         return $webhook;

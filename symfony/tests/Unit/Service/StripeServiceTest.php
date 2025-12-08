@@ -25,7 +25,7 @@ final class StripeServiceTest extends TestCase
             'stripe_secret_key' => 'sk_test_fake_key_for_testing',
         ]);
 
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->urlGenerator = $this->createStub(UrlGeneratorInterface::class);
         $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
     }
 
@@ -46,6 +46,9 @@ final class StripeServiceTest extends TestCase
 
     public function testGetReturnUrlForEventGeneratesCorrectUrl(): void
     {
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
+
         $event = $this->createMock(Event::class);
         $eventDate = new \DateTimeImmutable('2025-06-15');
 
@@ -79,6 +82,9 @@ final class StripeServiceTest extends TestCase
 
     public function testGetReturnUrlForNullEventGeneratesShopUrl(): void
     {
+        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
+
         $this->urlGenerator->expects($this->once())
             ->method('generate')
             ->with(

@@ -27,8 +27,20 @@ final class BookingAdminSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mailer = $this->createMock(MailerInterface::class);
-        $this->em = $this->createMock(EntityManagerInterface::class);
+        $this->mailer = $this->createStub(MailerInterface::class);
+        $this->em = $this->createStub(EntityManagerInterface::class);
+    }
+
+    private function createSubscriber(
+        string $adminEmail = 'admin@example.com',
+        string $fromEmail = 'from@example.com',
+        ?MailerInterface $mailer = null,
+        ?EntityManagerInterface $em = null,
+    ): BookingAdminSubscriber {
+        $this->mailer = $mailer ?? $this->mailer;
+        $this->em = $em ?? $this->em;
+
+        return new BookingAdminSubscriber($adminEmail, $fromEmail, $this->mailer, $this->em);
     }
 
     public function testGetSubscribedEvents(): void
@@ -43,45 +55,53 @@ final class BookingAdminSubscriberTest extends TestCase
 
     public function testSendEmailNotificationWithEmptyEmail(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createMock(MailerInterface::class);
+        $em = $this->createStub(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
-        $this->mailer->expects($this->never())->method('send');
+        $mailer->expects($this->never())->method('send');
 
         $this->subscriber->sendEmailNotification($event);
     }
 
     public function testSendEmailNotificationWithZeroEmail(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('0', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createMock(MailerInterface::class);
+        $em = $this->createStub(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('0', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
-        $this->mailer->expects($this->never())->method('send');
+        $mailer->expects($this->never())->method('send');
 
         $this->subscriber->sendEmailNotification($event);
     }
 
     public function testSendEmailNotificationWithNonBookingObject(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createMock(MailerInterface::class);
+        $em = $this->createStub(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, new \stdClass(), PersistenceEvent::TYPE_POST_PERSIST);
 
-        $this->mailer->expects($this->never())->method('send');
+        $mailer->expects($this->never())->method('send');
 
         $this->subscriber->sendEmailNotification($event);
     }
 
     public function testSendEmailNotificationWithValidBooking(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createMock(MailerInterface::class);
+        $em = $this->createStub(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $booking->method('getBookingDate')->willReturn(new \DateTimeImmutable('2025-10-18'));
@@ -89,27 +109,31 @@ final class BookingAdminSubscriberTest extends TestCase
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $booking, PersistenceEvent::TYPE_POST_PERSIST);
 
-        $this->mailer->expects($this->once())->method('send');
+        $mailer->expects($this->once())->method('send');
 
         $this->subscriber->sendEmailNotification($event);
     }
 
     public function testUpdateRewardsWithNonStatusEventObject(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, new \stdClass(), PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $this->em->expects($this->never())->method('persist');
-        $this->em->expects($this->never())->method('flush');
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithStatusEventWithoutBooking(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $statusEvent = $this->createStub(StatusEvent::class);
         $statusEvent->method('getBooking')->willReturn(null);
@@ -117,15 +141,17 @@ final class BookingAdminSubscriberTest extends TestCase
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $this->em->expects($this->never())->method('persist');
-        $this->em->expects($this->never())->method('flush');
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithUnpaidBooking(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(false);
@@ -136,15 +162,17 @@ final class BookingAdminSubscriberTest extends TestCase
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $this->em->expects($this->never())->method('persist');
-        $this->em->expects($this->never())->method('flush');
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithPaidBookingZeroPrice(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
@@ -156,15 +184,17 @@ final class BookingAdminSubscriberTest extends TestCase
         $admin = $this->createStub(AdminInterface::class);
         $event = new PersistenceEvent($admin, $statusEvent, PersistenceEvent::TYPE_PRE_PERSIST);
 
-        $this->em->expects($this->never())->method('persist');
-        $this->em->expects($this->never())->method('flush');
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithAlreadyPaidBooking(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $booking = $this->createStub(Booking::class);
         $booking->method('getPaid')->willReturn(true);
@@ -179,16 +209,18 @@ final class BookingAdminSubscriberTest extends TestCase
         $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => true]); // Was already paid
 
-        $this->em->method('getUnitOfWork')->willReturn($unitOfWork);
-        $this->em->expects($this->never())->method('persist');
-        $this->em->expects($this->never())->method('flush');
+        $em->method('getUnitOfWork')->willReturn($unitOfWork);
+        $em->expects($this->never())->method('persist');
+        $em->expects($this->never())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithNewlyPaidBookingSameGiverReceiver(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $user = $this->createStub(User::class);
         $user->method('getRewards')->willReturn(new ArrayCollection());
@@ -208,16 +240,18 @@ final class BookingAdminSubscriberTest extends TestCase
         $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => false]); // Newly paid
 
-        $this->em->method('getUnitOfWork')->willReturn($unitOfWork);
-        $this->em->expects($this->once())->method('persist');
-        $this->em->expects($this->once())->method('flush');
+        $em->method('getUnitOfWork')->willReturn($unitOfWork);
+        $em->expects($this->once())->method('persist');
+        $em->expects($this->once())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }
 
     public function testUpdateRewardsWithNewlyPaidBookingDifferentGiverReceiver(): void
     {
-        $this->subscriber = new BookingAdminSubscriber('admin@example.com', 'from@example.com', $this->mailer, $this->em);
+        $mailer = $this->createStub(MailerInterface::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->subscriber = $this->createSubscriber('admin@example.com', 'from@example.com', $mailer, $em);
 
         $givenAwayBy = $this->createStub(User::class);
         $givenAwayBy->method('getRewards')->willReturn(new ArrayCollection());
@@ -240,9 +274,9 @@ final class BookingAdminSubscriberTest extends TestCase
         $unitOfWork = $this->createStub(UnitOfWork::class);
         $unitOfWork->method('getOriginalEntityData')->willReturn(['paid' => false]); // Newly paid
 
-        $this->em->method('getUnitOfWork')->willReturn($unitOfWork);
-        $this->em->expects($this->exactly(2))->method('persist'); // Two rewards
-        $this->em->expects($this->once())->method('flush');
+        $em->method('getUnitOfWork')->willReturn($unitOfWork);
+        $em->expects($this->exactly(2))->method('persist'); // Two rewards
+        $em->expects($this->once())->method('flush');
 
         $this->subscriber->updateRewards($event);
     }

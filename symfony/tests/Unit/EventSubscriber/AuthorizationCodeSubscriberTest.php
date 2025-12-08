@@ -28,8 +28,14 @@ final class AuthorizationCodeSubscriberTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
         $this->requestStack = $this->createStub(RequestStack::class);
+
+        $this->createSubscriber();
+    }
+
+    private function createSubscriber(?UrlGeneratorInterface $urlGenerator = null): void
+    {
+        $this->urlGenerator = $urlGenerator ?? $this->createStub(UrlGeneratorInterface::class);
 
         $this->subscriber = new AuthorizationCodeSubscriber(
             $this->urlGenerator,
@@ -47,10 +53,10 @@ final class AuthorizationCodeSubscriberTest extends TestCase
 
     public function testOnAuthorizationRequestResolveApprovesActiveMember(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getIsActiveMember')->willReturn(true);
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
 
         $authRequest = $this->createStub(AuthorizationRequestInterface::class);
@@ -65,24 +71,26 @@ final class AuthorizationCodeSubscriberTest extends TestCase
 
     public function testOnAuthorizationRequestResolveDeniesInactiveMember(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getIsActiveMember')->willReturn(false);
         $member->method('getLocale')->willReturn('fi');
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
 
         $session = new Session(new MockArraySessionStorage());
         $this->requestStack->method('getSession')->willReturn($session);
 
-        $this->urlGenerator
-            ->expects($this->once())
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->expects($this->once())
             ->method('generate')
             ->with('profile.fi')
             ->willReturn('/profile');
 
-        $authRequest = $this->createMock(AuthorizationRequestInterface::class);
-        $client = $this->createMock(ClientInterface::class);
+        $this->createSubscriber($urlGenerator);
+
+        $authRequest = $this->createStub(AuthorizationRequestInterface::class);
+        $client = $this->createStub(ClientInterface::class);
 
         $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
 
@@ -99,24 +107,26 @@ final class AuthorizationCodeSubscriberTest extends TestCase
 
     public function testOnAuthorizationRequestResolveDeniesInactiveMemberEnglishLocale(): void
     {
-        $member = $this->createMock(Member::class);
+        $member = $this->createStub(Member::class);
         $member->method('getIsActiveMember')->willReturn(false);
         $member->method('getLocale')->willReturn('en');
 
-        $user = $this->createMock(User::class);
+        $user = $this->createStub(User::class);
         $user->method('getMember')->willReturn($member);
 
         $session = new Session(new MockArraySessionStorage());
         $this->requestStack->method('getSession')->willReturn($session);
 
-        $this->urlGenerator
-            ->expects($this->once())
+        $urlGenerator = $this->createMock(UrlGeneratorInterface::class);
+        $urlGenerator->expects($this->once())
             ->method('generate')
             ->with('profile.en')
             ->willReturn('/en/profile');
 
-        $authRequest = $this->createMock(AuthorizationRequestInterface::class);
-        $client = $this->createMock(ClientInterface::class);
+        $this->createSubscriber($urlGenerator);
+
+        $authRequest = $this->createStub(AuthorizationRequestInterface::class);
+        $client = $this->createStub(ClientInterface::class);
 
         $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
 
