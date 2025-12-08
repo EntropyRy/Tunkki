@@ -1,0 +1,7 @@
+# Vendor deprecations we cannot fix (waiting for upstream updates)
+# Symfony 7.4 → 8.0 migration deprecations from third-party bundles
+
+# Sonata PageBundle / Symfony HttpFoundation - Request::get() deprecated in Symfony 7.4
+# This is used internally by Sonata's multisite request handling
+# Waiting for: https://github.com/sonata-project/SonataPageBundle/issues (tracking Symfony 8.0 compatibility)
+%Request::get() is deprecated, use properties ->attributes, query or request directly instead%

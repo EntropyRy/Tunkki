@@ -42,7 +42,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
             $container->get(CreateSnapshotBySiteInterface::class),
         );
 
-        $application->add($command);
+        $application->addCommand($command);
         $cmd = $application->find('entropy:cms:seed');
 
         return new CommandTester($cmd);

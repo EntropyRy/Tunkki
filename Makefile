@@ -50,6 +50,7 @@ PARA_PROCS            ?=
 PHPSTAN_MEMORY        ?= 1G
 PHPSTAN_PATHS_FAST    ?= src
 PHPSTAN_LEVEL         ?= 5
+PHPUNIT_MEMORY        ?= 1024M
 PHPSTAN_FLAGS_BASE    ?= -c phpstan.neon --memory-limit=$(PHPSTAN_MEMORY) --no-progress --level=$(PHPSTAN_LEVEL)
 GIT_DIFF_BASE         ?= origin/main
 
@@ -137,7 +138,7 @@ test: _ensure-vendor prepare-test-db panther-setup
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
 		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG); \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG); \
 	fi
 
 .PHONY: test-unit
@@ -148,7 +149,7 @@ test-unit: _ensure-vendor prepare-test-db
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
 		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Unit; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Unit; \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Unit; \
 	fi
 
 .PHONY: test-functional
@@ -159,7 +160,7 @@ test-functional: _ensure-vendor prepare-test-db
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
 		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Functional; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Functional; \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Functional; \
 	fi
 
 .PHONY: test-ci
@@ -174,9 +175,15 @@ test-ci: _ensure-vendor prepare-test-db
 	fi
 
 .PHONY: coverage
-coverage: _ensure-vendor prepare-test-db
-	@printf "%b\n" "$(CYAN)==> Running tests with coverage (ensure Xdebug/PCOV enabled)$(RESET)"
-	@$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --coverage-text --coverage-clover coverage.xml
+coverage: _ensure-vendor prepare-test-db panther-setup
+	@printf "%b\n" "$(CYAN)==> Running tests with coverage (ensure PCOV enabled)$(RESET)"
+	@PARA_BIN="$(PARATEST_BIN)"; \
+	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
+		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --coverage-text --coverage-clover coverage.xml --no-test-tokens; \
+	else \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --coverage-text --coverage-clover coverage.xml; \
+	fi
 
 # ---------------- Mutation Testing (Infection) --------------------------------
 

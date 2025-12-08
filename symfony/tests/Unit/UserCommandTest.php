@@ -41,7 +41,7 @@ final class UserCommandTest extends TestCase
     private function makeTester(UserCommand $command): CommandTester
     {
         $app = new Application();
-        $app->add($command);
+        $app->addCommand($command);
         $cmd = $app->find('entropy:member');
 
         return new CommandTester($cmd);

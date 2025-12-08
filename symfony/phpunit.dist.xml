@@ -20,6 +20,8 @@
         <!-- Enable pcov if installed; fall back to xdebug if user runs with XDEBUG_MODE=coverage -->
         <env name="PCOV_ENABLED" value="1" />
         <env name="XDEBUG_MODE" value="coverage" />
+        <!-- Ignore vendor deprecations we cannot fix (Symfony 7.4+ → 8.0 migration in progress in vendor packages) -->
+        <env name="SYMFONY_DEPRECATIONS_HELPER" value="max[self]=0&amp;ignoreFile=./tests/allowed-deprecations.txt" />
     </php>
 
     <testsuites>
