@@ -14,6 +14,8 @@ use Twig\Environment;
 
 /**
  * Wraps a textarea with the Toast UI markdown Stimulus controller.
+ *
+ * @extends AbstractType<array<mixed>>
  */
 final class MarkdownEditorType extends AbstractType
 {
