@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Domain\Content\ContentTokenRenderer;
 use App\Entity\Sonata\SonataMediaMedia as Media;
 use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,31 +21,6 @@ use function Symfony\Component\String\u;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
 {
-    private const array LEGACY_TAG_MAP = [
-        '{{ timetable_to_page_with_genre }}' => '{{ dj_timetable }}',
-        '{{ timetable_with_genre }}' => '{{ dj_timetable }}',
-        '{{ timetable_to_page }}' => '{{ dj_timetable }}',
-        '{{ timetable }}' => '{{ dj_timetable }}',
-        '{{ bios }}' => '{{ dj_bio }}',
-        '{{ vj_bios }}' => '{{ vj_bio }}',
-        '{{ vj_timetable_to_page }}' => '{{ vj_timetable }}',
-    ];
-
-    private const array CONTENT_TWIG_TAGS = [
-        '{{ dj_timetable }}',
-        '{{ vj_timetable }}',
-        '{{ dj_bio }}',
-        '{{ vj_bio }}',
-        '{{ streamplayer }}',
-        '{{ links }}',
-        '{{ rsvp }}',
-        '{{ stripe_ticket }}',
-        '{{ ticket }}',
-        '{{ art_artist_list }}',
-        '{{ happening_list }}',
-        '{{ menu }}',
-    ];
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
@@ -75,15 +51,37 @@ class Event implements \Stringable
     background: #220101;
     color: red;
 }
+.btn-primary {
+    --btn-primary: #1f5d7a;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--btn-primary);
+    --bs-btn-border-color: var(--btn-primary);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--btn-primary) 85%, black);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--btn-primary) 80%, black);
+    --bs-btn-active-bg: color-mix(in srgb, var(--btn-primary) 75%, black);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--btn-primary) 70%, black);
+    --bs-btn-disabled-bg: var(--btn-primary);
+    --bs-btn-disabled-border-color: var(--btn-primary);
+}
+.btn-secondary {
+    --btn-secondary: #495057;
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--btn-secondary);
+    --bs-btn-border-color: var(--btn-secondary);
+    --bs-btn-hover-bg: color-mix(in srgb, var(--btn-secondary) 85%, black);
+    --bs-btn-hover-border-color: color-mix(in srgb, var(--btn-secondary) 80%, black);
+    --bs-btn-active-bg: color-mix(in srgb, var(--btn-secondary) 75%, black);
+    --bs-btn-active-border-color: color-mix(in srgb, var(--btn-secondary) 70%, black);
+    --bs-btn-disabled-bg: var(--btn-secondary);
+    --bs-btn-disabled-border-color: var(--btn-secondary);
+}
 */';
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $Content = 'Use these: <br>
-            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bio }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
+    private ?string $Content = "Use these:\n\n{{ dj_timetable }}\n\n{{ vj_timetable }}\n\n{{ dj_bio }}\n\n{{ vj_bio }}\n\n{{ rsvp }}\n\n{{ links }}\n\n{{ happening_list }}";
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $Sisallys = 'Käytä näitä, vaikka monta kertaa: <br>
-            {{ dj_timetable }} <br> {{ vj_timetable }} <br> {{ dj_bio }} <br> {{ vj_bio }} <br> {{ rsvp }} <br> {{ links }} <br> {{ happening_list }}';
+    private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa:\n\n{{ dj_timetable }}\n\n{{ vj_timetable }}\n\n{{ dj_bio }}\n\n{{ vj_bio }}\n\n{{ rsvp }}\n\n{{ links }}\n\n{{ happening_list }}";
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $url = null;
@@ -761,49 +759,18 @@ class Event implements \Stringable
         $content =
             'fi' == $lang ? $this->Sisallys : $this->Content;
 
-        return $this->normalizeLegacyTwigTags($content);
-    }
-
-    public function getContentByLang($lang): string
-    {
-        $abstract =
-            'fi' == $lang
-                ? $this->removeTwigTags($this->Sisallys)
-                : $this->removeTwigTags($this->Content);
-
-        return html_entity_decode(strip_tags($abstract));
+        return ContentTokenRenderer::normalizeLegacyContent($content);
     }
 
     public function getAbstractFromContent($lang): AbstractString
     {
-        $abstract =
-            'fi' == $lang
-                ? $this->removeTwigTags($this->Sisallys)
-                : $this->removeTwigTags($this->Content);
+        $abstract = 'fi' == $lang
+            ? ContentTokenRenderer::stripTokens($this->Sisallys)
+            : ContentTokenRenderer::stripTokens($this->Content);
 
         return u(html_entity_decode(strip_tags($abstract)))->truncate(
             200,
             '..',
-        );
-    }
-
-    protected function removeTwigTags($message): string
-    {
-        $normalized = $this->normalizeLegacyTwigTags((string) $message) ?? '';
-
-        return str_replace(self::CONTENT_TWIG_TAGS, '', $normalized);
-    }
-
-    private function normalizeLegacyTwigTags(?string $content): ?string
-    {
-        if (null === $content) {
-            return null;
-        }
-
-        return str_replace(
-            array_keys(self::LEGACY_TAG_MAP),
-            array_values(self::LEGACY_TAG_MAP),
-            $content,
         );
     }
 

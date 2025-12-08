@@ -198,6 +198,17 @@
   --bs-btn-disabled-border-color: var(--bs-primary);
 }
 
+/* Navigation tweaks */
+nav {
+  border-top: 1px solid #afafaf;
+  border-bottom: 1px solid #afafaf;
+  font-weight: 800;
+}
+
+nav.navbar-light .nav-item a.nav-link {
+  color: #102c3a;
+}
+
 /* Links */
 a {
   color: var(--bs-link-color);

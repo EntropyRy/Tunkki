@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Admin\Form\ArtistDisplayConfigurationAdminType;
+use App\Form\MarkdownEditorType;
 use App\Form\UrlsType;
 use App\Repository\LocationRepository;
 use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -280,13 +281,10 @@ final class EventAdmin extends AbstractAdmin
                 ->add('Name');
             if (false == $event->getexternalUrl()) {
                 $formMapper
-                    ->add('Content', SimpleFormatterType::class, [
-                        'format' => $format,
+                    ->add('Content', MarkdownEditorType::class, [
                         'required' => true,
-                        'help' => $help ?:
-                            'Use tags {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} as needed.',
+                        'help' => $help ?: 'Use the {{ }} button to insert content blocks.',
                         'help_html' => true,
-                        'attr' => ['rows' => 20],
                     ])
                     ->add('abstractEn', null, [
                         'help' => 'Defines small text in some link previews. 150 chars.',
@@ -299,13 +297,11 @@ final class EventAdmin extends AbstractAdmin
                 ->add('Nimi');
             if (false == $event->getexternalUrl()) {
                 $formMapper
-                    ->add('Sisallys', SimpleFormatterType::class, [
-                        'format' => $format,
+                    ->add('Sisallys', MarkdownEditorType::class, [
                         'required' => true,
                         'help' => $help ?:
-                            'Käytä tageja {{ streamplayer }}, {{ dj_timetable }}, {{ vj_timetable }}, {{ dj_bio }}, {{ vj_bio }}, {{ links }}, {{ rsvp }}, {{ stripe_ticket }}, {{ art_artist_list }}, {{ happening_list }} tarpeen mukaan.',
+                            'Käytä {{ }} -painiketta ja lisää sisältölohkot.',
                         'help_html' => true,
-                        'attr' => ['rows' => 20],
                     ])
                     ->add('abstractFi', null, [
                         'help' => '150 merkkiä. Someen linkatun tapahtuman pikku teksti.',

@@ -1,6 +1,7 @@
 {% extends '@SonataAdmin/standard_layout.html.twig' %}
 {% block javascripts %}
     {{ parent() }}
+    {{ importmap('admin') }}
     {{ importmap('admin_effects') }}
 {% endblock %}
 {%- block logo %}

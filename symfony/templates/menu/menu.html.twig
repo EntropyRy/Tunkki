@@ -1,13 +1,6 @@
 {% use 'pieces/event.html.twig' %}
 {%- block menu %}
-    {% if app.user and event is not defined %}
-        {% set theme = app.user.member.theme %}
-    {% elseif event is defined %}
-        {% set theme = event.headerTheme %}
-    {% else %}
-        {% set theme = 'light' %}
-    {% endif %}
-    <nav id="main-nav" class="navbar navbar-expand-lg g-4{% if app.user or event is defined %} {{ theme == 'dark' ? 'navbar-dark' : 'navbar-light' }}{% endif %}">
+    <nav id="main-nav" class="navbar navbar-expand-lg g-4">
 
         <div class="container-fluid">
             <a class="navbar-brand d-lg-none d-inline-block"

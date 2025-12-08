@@ -9,7 +9,6 @@
 import "@fontsource-variable/space-grotesk/index.css";
 // import "@fortawesome/fontawesome-free/css/all.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/components/bootstrap-override.css";
 // start the Stimulus application
 import "./bootstrap.js";
 import "./js/bs.js";
@@ -22,3 +21,5 @@ import "./styles/components/qr.css";
 import "./styles/components/polaroid.css";
 import "./styles/components/icon-list.css";
 import "./styles/components/footer.css";
+// Load overrides last so they can trump component styles.
+import "./styles/components/bootstrap-override.css";

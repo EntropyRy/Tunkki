@@ -161,7 +161,7 @@ class CalendarController extends AbstractController
         $timestamp = new Timestamp($event->getUpdatedAt());
         $e = new CalendarEvent($uid)
             ->setSummary($event->getNameByLang($locale))
-            ->setDescription($event->getContentByLang($locale))
+            ->setDescription(html_entity_decode(strip_tags((string) $event->getContentForTwig($locale))))
             ->setOccurrence($occurance)
             ->setUrl($url);
         if (1 == $notification) {

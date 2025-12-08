@@ -198,27 +198,7 @@
         <div class="ms-md-4 mb-md-4 float-end col-12 col-md-6">{{ block('event_media') }}</div>
     {% endif %}
     <div class="event-text-content">
-        {{ event.contentForTwig(app.request.locale)|replace({
-        '{{ dj_timetable }}': block('dj_timetable'),
-        '{{ timetable }}': block('timetable'),
-        '{{ timetable_to_page }}': block('timetable_to_page'),
-        '{{ timetable_to_page_with_genre }}': block('timetable_to_page_with_genre'),
-        '{{ timetable_with_genre }}': block('timetable_with_genre'),
-        '{{ vj_timetable }}': block('vj_timetable'),
-        '{{ vj_timetable_to_page }}': block('vj_timetable_to_page'),
-        '{{ dj_bio }}': block('dj_bio'),
-        '{{ bios }}': block('bios'),
-        '{{ vj_bio }}': block('vj_bio'),
-        '{{ vj_bios }}': block('vj_bios'),
-        '{{ streamplayer }}': block('streamplayer'),
-        '{{ links }}': block('links'),
-        '{{ rsvp }}': block('RSVP'),
-        '{{ stripe_ticket }}': block('stripe_ticket'),
-        '{{ ticket }}': '',
-        '{{ art_artist_list }}': block('art_artist_list'),
-        '{{ happening_list }}': block('happening_list'),
-        '{{ menu }}': '',
-        })|raw }}
+        {{ render_tokens(event.contentForTwig(app.request.locale))|raw }}
         {% if '{{ links }}' not in event.contentForTwig(app.request.locale) %}
             {{ block('links') }}
         {% endif %}
@@ -823,13 +803,14 @@
     </div>
 {% endblock %}
 {% block streamplayer %}
-    {% if event.streamPlayerUrl and event.NowTest == 'now' %}
+    {% set phase = eventTemporalState.getPhase(event) %}
+    {% if event.streamPlayerUrl and phase == 'now' %}
         <div class="ckeditor-html5-audio" style="text-align: center;">
             <audio controls="controls"
                    controlslist="nodownload"
                    src="{{ event.streamPlayerUrl }}">&nbsp;</audio>
         </div>
-    {% elseif event.streamPlayerUrl and event.NowTest == 'before' %}
+    {% elseif event.streamPlayerUrl and phase == 'before' %}
         <div class="ckeditor-html5-audio"
              style="text-align: center;
                     border: #aaa solid;
@@ -837,6 +818,5 @@
                     width: 60%">
             {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
         </div>
-    {% elseif event.streamPlayerUrl and event.NowTest == 'after' %}
     {% endif %}
 {% endblock %}

@@ -16,6 +16,10 @@ return [
         'path' => './assets/app.js',
         'entrypoint' => true,
     ],
+    'admin' => [
+        'path' => './assets/admin.js',
+        'entrypoint' => true,
+    ],
     'admin_effects' => [
         'path' => './assets/js/admin_effects.js',
         'entrypoint' => true,
@@ -101,17 +105,41 @@ return [
         'type' => 'css',
     ],
     'signature_pad' => [
-        'version' => '5.1.2',
+        'version' => '5.1.3',
     ],
     'moment/min/moment-with-locales.min.js' => [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.6.2',
+        'version' => '2.7.0',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.8',
         'type' => 'css',
+    ],
+    'prosemirror-model' => [
+        'version' => '1.25.4',
+    ],
+    'prosemirror-view' => [
+        'version' => '1.41.4',
+    ],
+    'prosemirror-transform' => [
+        'version' => '1.10.5',
+    ],
+    'prosemirror-state' => [
+        'version' => '1.4.4',
+    ],
+    'prosemirror-keymap' => [
+        'version' => '1.2.3',
+    ],
+    'prosemirror-commands' => [
+        'version' => '1.7.1',
+    ],
+    'prosemirror-inputrules' => [
+        'version' => '1.5.1',
+    ],
+    'prosemirror-history' => [
+        'version' => '1.5.0',
     ],
     'sortablejs' => [
         'version' => '1.15.6',
@@ -149,6 +177,29 @@ return [
     ],
     'tom-select/dist/css/tom-select.bootstrap5.css' => [
         'version' => '2.4.3',
+        'type' => 'css',
+    ],
+    '@toast-ui/editor' => [
+        'version' => '3.2.2',
+    ],
+    '@toast-ui/editor/dist/toastui-editor.css' => [
+        'version' => '3.2.2',
+        'type' => 'css',
+    ],
+    'typo-js' => [
+        'version' => '1.3.1',
+    ],
+    'orderedmap' => [
+        'version' => '2.1.1',
+    ],
+    'w3c-keyname' => [
+        'version' => '2.2.8',
+    ],
+    'rope-sequence' => [
+        'version' => '1.3.4',
+    ],
+    'prosemirror-view/style/prosemirror.min.css' => [
+        'version' => '1.41.4',
         'type' => 'css',
     ],
 ];

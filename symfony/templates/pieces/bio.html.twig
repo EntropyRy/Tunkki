@@ -8,7 +8,7 @@
     - artist_bio_type: normalized artist type (DJ, VJ, ART, ...)
 #}
 
-{% block artist_bios_container %}
+{%- block artist_bios_container -%}
     {% set groups = artist_bio_groups|default([]) %}
     {% set artist_bio_type = artist_bio_type|default(null) %}
     {% set artist_bio_config = artist_bio_config|default({}) %}
@@ -30,4 +30,9 @@
             {% endfor %}
         </div>
     {% endif %}
-{% endblock %}
+{%- endblock %}
+
+{# Delegate to the event template's infos block so bios render even if this trait is rendered directly. #}
+{%- block infos -%}
+    {{- block('infos', 'pieces/event.html.twig') -}}
+{%- endblock -%}

@@ -1,19 +1,5 @@
 /* Main app styles */
 
-/* Bootstrap colors and variables */
-:root {
-    --primary: #2b7093;
-    --secondary: #6c757d;
-    --success: #28a745;
-    --danger: #ff4136;
-    --warning: #ffc107;
-    --dark: #343a40;
-    --info: #17a2b8;
-    --border-radius: 0.375rem;
-    --border-width: 1px;
-    --outline: 2px;
-}
-
 /* General styles */
 .navbar-nav .current,
 .navbar-nav .current_ancestor.dropdown .nav-link {
@@ -180,16 +166,6 @@ h1 {
     box-shadow: 0 0 20px 0px;
     position: relative;
     border-radius: var(--border-radius);
-}
-
-/* Navigation styles */
-nav {
-    border-top: 1px solid #afafaf;
-    border-bottom: 1px solid #afafaf;
-    font-weight: 800;
-}
-nav.navbar-light .nav-item a.nav-link {
-    color: #102c3a;
 }
 
 /* Form styles */

@@ -1,0 +1,132 @@
+.markdown-editor--hidden {
+  display: none !important;
+}
+
+.toastui-editor-defaultUI {
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #212529;
+}
+
+.toastui-editor-defaultUI-toolbar {
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.toastui-editor-defaultUI .toastui-editor-contents {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.toastui-editor-defaultUI-toolbar .markdown-token-button::before {
+  content: "{{}}";
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.markdown-token-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.5rem;
+  margin: 0.1rem;
+  font-size: 0.85rem;
+  border-radius: 999px;
+  background: #e7f1ff;
+  color: #0d6efd;
+  border: 1px dashed #9ec5fe;
+}
+
+.markdown-token-badge[data-token="streamplayer"],
+.markdown-token-badge[data-token="stripe_ticket"] {
+  background: #e8f7ec;
+  color: #0c7c3f;
+  border-color: #86d39e;
+}
+
+.markdown-token-badge[data-token="dj_timetable"],
+.markdown-token-badge[data-token="vj_timetable"] {
+  background: #fff5e6;
+  color: #b26b00;
+  border-color: #f3c98b;
+}
+
+.markdown-token-badge--unknown {
+  background: #fff0f0;
+  color: #c1121f;
+  border-color: #f3a6ad;
+}
+
+.markdown-token-button {
+  background: none !important;
+}
+
+.markdown-token-button::before {
+  content: none !important;
+}
+
+.token-preview {
+  display: block;
+  padding: 0.6rem 0.75rem;
+  margin: 0.35rem 0;
+  border-radius: 6px;
+  background: #e7f1ff;
+  color: #0d6efd;
+  border: 1px dashed #9ec5fe;
+  pointer-events: none;
+}
+
+.token-preview strong {
+  display: block;
+  margin-bottom: 0.15rem;
+}
+
+.token-preview ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.token-preview--unknown {
+  background: #fff0f0;
+  color: #c1121f;
+  border-color: #f3a6ad;
+}
+
+.token-picker-dialog {
+  border: none;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+}
+
+.token-picker {
+  min-width: 260px;
+}
+
+[data-bs-theme="dark"] .toastui-editor-defaultUI {
+  background-color: #121212;
+  border-color: #333;
+  color: #f8f9fa;
+}
+
+[data-bs-theme="dark"] .toastui-editor-defaultUI-toolbar {
+  background: #1d1d1d;
+  border-color: #333;
+}
+
+[data-bs-theme="dark"] .toastui-editor-defaultUI .toastui-editor-contents {
+  color: #e9ecef;
+}
+
+[data-bs-theme="dark"] .markdown-token-badge {
+  background: #1f2a3d;
+  color: #9ec5fe;
+  border-color: #2f4a74;
+}
+
+[data-bs-theme="dark"] .markdown-token-badge--unknown {
+  background: #30101a;
+  color: #ffb3c1;
+  border-color: #803447;
+}
