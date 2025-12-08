@@ -4,68 +4,68 @@
 {% use 'pieces/timetable.html.twig' %}
 {% use 'pieces/bio.html.twig' %}
 
-{% block menu %}
-    {% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-    <nav class="navbar navbar-expand-lg navbar-{{ theme }}">
-        <div class="container">
-            <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
-            <button class="navbar-toggler"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target="#eventContent"
-                    aria-controls="eventContent"
-                    aria-expanded="false"
-                    aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="eventContent">
-                <ul class="navbar-nav w-100 d-flex justify-content-between">
+{%- block menu -%}
+{% set theme = event.headerTheme ? event.headerTheme : 'light' %}
+<nav class="navbar navbar-expand-lg navbar-{{ theme }}">
+    <div class="container">
+        <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#eventContent"
+                aria-controls="eventContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="eventContent">
+            <ul class="navbar-nav w-100 d-flex justify-content-between">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ block('event_path') }}">{{ 'Home'|trans }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
+                </li>
+                {% if event.ArtistInfosByType('DJ')|length > 0 %}
+                <li class="nav-item">
+                    <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
+                </li>
+                {% endif %}
+                {% if event.allowMembersToCreateHappenings %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ block('event_path') }}">{{ 'Home'|trans }}</a>
+                        <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
                     </li>
+                {% endif %}
+                {% if tickets|length > 0 %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#venue">{{ 'Venue'|trans|capitalize }}</a>
+                        <a class="nav-link"
+                            href="{{ path('entropy_event_tickets.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                            {% if event.nakkiRequiredForTicketReservation %}
+                                {{ 'ticket.and_nakki'|trans }}
+                            {% else %}
+                                {{ 'ticket.your_tickets'|trans }}
+                            {% endif %}
+                        </a>
                     </li>
-                    {% if event.ArtistInfosByType('DJ')|length > 0 %}
+                {% endif %}
+                {% if event.includeSaferSpaceGuidelines %}
+                    {% if app.request.locale == 'fi' %}
+                        {% set url = '/turvallisemman-tilan-periaatteet' %}
+                    {% else %}
+                        {% set url = '/en/safer-space-guidelines' %}
+                    {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="#timetable">{{ 'Timetable'|trans|capitalize }}</a>
+                        <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ block('event_path_artists') }}">{{ 'Artists'|trans|capitalize }}</a>
-                    </li>
-                    {% endif %}
-                    {% if event.allowMembersToCreateHappenings %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="#happening_list">{{ 'happening.happenings'|trans|capitalize }}</a>
-                        </li>
-                    {% endif %}
-                    {% if tickets|length > 0 %}
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                href="{{ path('entropy_event_tickets.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                                {% if event.nakkiRequiredForTicketReservation %}
-                                    {{ 'ticket.and_nakki'|trans }}
-                                {% else %}
-                                    {{ 'ticket.your_tickets'|trans }}
-                                {% endif %}
-                            </a>
-                        </li>
-                    {% endif %}
-                    {% if event.includeSaferSpaceGuidelines %}
-                        {% if app.request.locale == 'fi' %}
-                            {% set url = '/turvallisemman-tilan-periaatteet' %}
-                        {% else %}
-                            {% set url = '/en/safer-space-guidelines' %}
-                        {% endif %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ url }}">{{ 'event.safer_space'|trans|capitalize }}</a>
-                        </li>
-                    {% endif %}
-                </ul>
-            </div>
+                {% endif %}
+            </ul>
         </div>
-    </nav>
-{% endblock %}
+    </div>
+</nav>
+{%- endblock -%}
 {% block event_tile %}
     {% set currentMember = app.user ? app.user.member : null %}
     {% set eventInPast = eventTemporalState.isInPast(event) %}
@@ -358,156 +358,156 @@
     </picture>
 
 {% endblock %}
-{%- block links %}
-    {% if event.attachment %}
-        <div class="mb-2">
-            <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
-                <twig:ux:icon name="link" />{{ event.attachment.name }}
-            </a>
-        </div>
-        <hr>
+{%- block links -%}
+{% if event.attachment %}
+<div class="mb-2">
+    <a href="{{ path('sonata_media_download', {id: event.attachment.id}) }}">
+        <twig:ux:icon name="link" />{{ event.attachment.name }}
+    </a>
+</div>
+<hr>
+{% endif %}
+<div class="d-flex flex-wrap justify-content-between event-link-list"
+     style="gap: 0.5rem 0">
+    {% if event.location %}
+    <span>
+        <a class="btn btn-outline-info"
+           href="{{ path('entropy_event_location.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
+            <twig:ux:icon name="location-dot" />
+            {{ 'map'|trans }}
+        </a>
+    </span>
     {% endif %}
-    <div class="d-flex flex-wrap justify-content-between event-link-list"
-         style="gap: 0.5rem 0">
-        {% if event.location %}
-            <span>
-                <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_location.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="location-dot" />
-                    {{ 'map'|trans }}
-                </a>
-            </span>
-        {% endif %}
-        {% for keys in event.links %}
-            {% for url in keys %}
-                <span>
-                    <a class="btn btn-outline-info"
-                       {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %}
-                       href="{{ url.url }}">
-                        <twig:ux:icon name="{{ url.icon|default('link') }}" />
-                        {{ url.title|trans }}
-                    </a>
-                </span>
-            {% endfor %}
+    {% for keys in event.links %}
+        {% for url in keys %}
+        <span>
+            <a class="btn btn-outline-info"
+               {% if url.open_in_new_window|default(false) %}target="_blank"{% endif %}
+               href="{{ url.url }}">
+                <twig:ux:icon name="{{ url.icon|default('link') }}" />
+                {{ url.title|trans }}
+            </a>
+        </span>
         {% endfor %}
-        {% if event.epics %}
-            <span>
-                <a class="btn btn-outline-info" href="{{ event.epics }}">
-                    <twig:ux:icon name="images" height="1em" width="1em" />
-                    Epics
-                </a>
-            </span>
+    {% endfor %}
+    {% if event.epics %}
+    <span>
+        <a class="btn btn-outline-info" href="{{ event.epics }}">
+            <twig:ux:icon name="images" height="1em" width="1em" />
+            Epics
+        </a>
+    </span>
+    {% endif %}
+    {% if event.webMeetingUrl %}
+        {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
+        <span>
+            <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
+                <twig:ux:icon name="laptop" />
+                {{ 'Join remotely'|trans }}
+            </a>
+        </span>
+        {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
+        <span>
+            <a class="btn btn-outline-info">
+                <twig:ux:icon name="laptop" />
+                {{ 'Join remotely'|trans }}
+            </a>
+        </span>
         {% endif %}
-        {% if event.webMeetingUrl %}
-            {% if event.EventDate|date_modify('-8hours')|date('U') < 'now'|date('U') and event.EventDate|date_modify('+2hours')|date('U') > 'now'|date('U') %}
-                <span>
-                    <a class="btn btn-outline-info" href="{{ event.webMeetingUrl }}">
-                        <twig:ux:icon name="laptop" />
-                        {{ 'Join remotely'|trans }}
-                    </a>
-                </span>
-            {% elseif event.EventDate|date_modify('-8hours') > date('now') %}
-                <span>
-                    <a class="btn btn-outline-info">
-                        <twig:ux:icon name="laptop" />
-                        {{ 'Join remotely'|trans }}
-                    </a>
-                </span>
-            {% endif %}
+    {% endif %}
+    {% if event.includeSaferSpaceGuidelines %}
+    <span>
+        {% if app.request.locale == 'fi' %}
+            <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
+                <twig:ux:icon name="hand-holding-heart" />
+                Turvallisemman tilan periaatteet
+            </a>
+        {% else %}
+            <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
+                <twig:ux:icon name="hand-holding-heart" />
+                Safer space guidelines
+            </a>
         {% endif %}
-        {% if event.includeSaferSpaceGuidelines %}
-            <span>
-                {% if app.request.locale == 'fi' %}
-                    <a class="btn btn-outline-info" href="/turvallisemman-tilan-periaatteet">
-                        <twig:ux:icon name="hand-holding-heart" />
-                        Turvallisemman tilan periaatteet
-                    </a>
-                {% else %}
-                    <a class="btn btn-outline-info" href="/en/safer-space-guidelines">
-                        <twig:ux:icon name="hand-holding-heart" />
-                        Safer space guidelines
-                    </a>
-                {% endif %}
-            </span>
+    </span>
+    {% endif %}
+    {% set currentMember = app.user ? app.user.member : null %}
+    {% set signupLinkVisible = eventTemporalState.canShowSignupLink(event, currentMember) %}
+    {% set eventInPast = eventTemporalState.isInPast(event) %}
+    {% if signupLinkVisible and event.url %}
+    <span>
+        <a class="btn btn-outline-info"
+           href="{{ path('entropy_event_slug_artist_signup.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
+            <twig:ux:icon name="tasks" height="1em" width="1em"/>
+            {{ 'Artist signup'|trans }}
+        </a>
+    </span>
+    {% endif %}
+    {% if not eventInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
+    <span>
+        <a class="btn btn-outline-info"
+           href="{{ path('entropy_event_slug_nakkikone.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
+            <twig:ux:icon name="tasks" height="1em" width="1em"/>
+            Nakkikone
+        </a>
+    </span>
+    {% endif %}
+    {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
+    <span>
+        <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
+            <twig:ux:icon name="forum" height="1em" width="1em"/>
+            Forums
+        </a>
+    </span>
+    {% endif %}
+    {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
+    <span>
+        <a class="btn btn-outline-info" href="{{ event.wikiPage }}">
+            <twig:ux:icon name="wiki" height="1em" width="1em"/>
+            Wiki
+        </a>
+    </span>
+    {% endif %}
+    {% if event.type == 'announcement' %}
+        {% if app.request.locale == 'fi' %}
+            {% set url = '/tiedotukset' %}
+        {% else %}
+            {% set url = '/en/announcements' %}
         {% endif %}
-        {% set currentMember = app.user ? app.user.member : null %}
-        {% set signupLinkVisible = eventTemporalState.canShowSignupLink(event, currentMember) %}
-        {% set eventInPast = eventTemporalState.isInPast(event) %}
-        {% if signupLinkVisible and event.url %}
-            <span>
-                <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_artist_signup.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
-                    {{ 'Artist signup'|trans }}
-                </a>
-            </span>
-        {% endif %}
-        {% if not eventInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
-            <span>
-                <a class="btn btn-outline-info"
-                   href="{{ path('entropy_event_slug_nakkikone.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
-                    Nakkikone
-                </a>
-            </span>
-        {% endif %}
-        {% if event.linkToForums and app.user and app.user.member.isActiveMember %}
-            <span>
-                <a class="btn btn-outline-info" href="{{ event.linkToForums }}">
-                    <twig:ux:icon name="forum" height="1em" width="1em"/>
-                    Forums
-                </a>
-            </span>
-        {% endif %}
-        {% if event.wikiPage and app.user and app.user.member.isActiveMember %}
-            <span>
-                <a class="btn btn-outline-info" href="{{ event.wikiPage }}">
-                    <twig:ux:icon name="wiki" height="1em" width="1em"/>
-                    Wiki
-                </a>
-            </span>
-        {% endif %}
-        {% if event.type == 'announcement' %}
-            {% if app.request.locale == 'fi' %}
-                {% set url = '/tiedotukset' %}
-            {% else %}
-                {% set url = '/en/announcements' %}
-            {% endif %}
-            <span>
-                <a class="btn btn-outline-info"
-                   href="{{ url }}">
-                    <twig:ux:icon name="tasks" height="1em" width="1em"/>
-                    {{ 'button.old_announcements'|trans }}
-                </a>
-            </span>
-        {% endif %}
-    </div>
-{% endblock -%}
+    <span>
+        <a class="btn btn-outline-info"
+           href="{{ url }}">
+            <twig:ux:icon name="tasks" height="1em" width="1em"/>
+            {{ 'button.old_announcements'|trans }}
+        </a>
+    </span>
+    {% endif %}
+</div>
+{%- endblock -%}
 {%- block art_artist_list -%}
-    {%- set bios = event.ArtistInfosByType('ART') -%}
-    {%- if bios|length > 0 -%}
-        <div class="row">
-            {%- for stage, infos in bios -%}
-                <div class="{%- if bios|length > 1 %}col-md-6{% else %}col-12{% endif -%}">
-                    <h4 class="artists-heading">
-                        {{ 'Artists'|trans }}
-                        {%- if stage %}@ {{ stage }}{% endif -%}
-                    </h4>
-                    <ul>
-                        {%- for info in infos -%}
-                            {% set artist = info.artistClone %}
-                            {% set name = (artist.name|split(' for')).0 %}
-                            <li>
-                                {%- if info.StartTime is not empty -%}
-                                    <a href="{{ path('entropy_event_artists.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
-                                {%- endif -%}
-                            </li>
-                        {%- endfor -%}
-                    </ul>
-                </div>
-            {% endfor %}
-        </div>
-    {%- endif -%}
+{%- set bios = event.ArtistInfosByType('ART') -%}
+{%- if bios|length > 0 -%}
+<div class="row">
+    {%- for stage, infos in bios -%}
+    <div class="{%- if bios|length > 1 %}col-md-6{% else %}col-12{% endif -%}">
+        <h4 class="artists-heading">
+            {{ 'Artists'|trans }}
+            {%- if stage %}@ {{ stage }}{% endif -%}
+        </h4>
+        <ul>
+            {%- for info in infos -%}
+                {% set artist = info.artistClone %}
+                {% set name = (artist.name|split(' for')).0 %}
+                <li>
+                    {%- if info.StartTime is not empty -%}
+                        <a href="{{ path('entropy_event_artists.' ~ app.request.locale, {slug: event.url, year: event.eventdate|date('Y')}) }}#{{ artist.type|lower }}-{{ name|slug }}">{{ name }}</a>
+                    {%- endif -%}
+                </li>
+            {%- endfor -%}
+        </ul>
+    </div>
+    {% endfor %}
+</div>
+{%- endif -%}
 {%- endblock -%}
 {% block cycle %}
     {% set current_event = event is defined ? event : null %}
@@ -588,39 +588,39 @@
         {% endif %}
     {% endif %}
 {% endblock %}
-{%- block bios %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set artist_bio_config = artist_display.getBioConfig('DJ') %}
-    {% set artist_bio_groups = event.MusicArtistInfos %}
-    {% set artist_bio_anchor = 'bios' %}
-    {% set artist_bio_title_prefix = 'DJ ' ~ 'Artists'|trans %}
-    {% set artist_bio_type = 'DJ' %}
-    {{ block('artist_bios_container') }}
-{% endblock -%}
-{% block dj_bio %}
-    {{ block('bios') }}
-{% endblock %}
-{%- block vj_bios %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set artist_bio_config = artist_display.getBioConfig('VJ') %}
-    {% set artist_bio_groups = event.ArtistInfosByType('VJ') %}
-    {% set artist_bio_anchor = 'vj-bios' %}
-    {% set artist_bio_title_prefix = 'VJ ' ~ 'Artists'|trans %}
-    {% set artist_bio_type = 'VJ' %}
-    {{ block('artist_bios_container') }}
-{% endblock -%}
-{% block vj_bio %}
-    {{ block('vj_bios') }}
-{% endblock %}
-{%- block art_bios %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set artist_bio_config = artist_display.getBioConfig('ART') %}
-    {% set artist_bio_groups = event.ArtistInfosByType('ART') %}
-    {% set artist_bio_anchor = 'art-bios' %}
-    {% set artist_bio_title_prefix = 'Artists'|trans %}
-    {% set artist_bio_type = 'ART' %}
-    {{ block('artist_bios_container') }}
-{% endblock -%}
+{%- block bios -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set artist_bio_config = artist_display.getBioConfig('DJ') %}
+{% set artist_bio_groups = event.MusicArtistInfos %}
+{% set artist_bio_anchor = 'bios' %}
+{% set artist_bio_title_prefix = 'DJ ' ~ 'Artists'|trans %}
+{% set artist_bio_type = 'DJ' %}
+{{ block('artist_bios_container') }}
+{%- endblock -%}
+{%- block dj_bio -%}
+{{ block('bios') }}
+{%- endblock -%}
+{%- block vj_bios -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set artist_bio_config = artist_display.getBioConfig('VJ') %}
+{% set artist_bio_groups = event.ArtistInfosByType('VJ') %}
+{% set artist_bio_anchor = 'vj-bios' %}
+{% set artist_bio_title_prefix = 'VJ ' ~ 'Artists'|trans %}
+{% set artist_bio_type = 'VJ' %}
+{{ block('artist_bios_container') }}
+{%- endblock -%}
+{%- block vj_bio -%}
+{{ block('vj_bios') }}
+{%- endblock -%}
+{%- block art_bios -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set artist_bio_config = artist_display.getBioConfig('ART') %}
+{% set artist_bio_groups = event.ArtistInfosByType('ART') %}
+{% set artist_bio_anchor = 'art-bios' %}
+{% set artist_bio_title_prefix = 'Artists'|trans %}
+{% set artist_bio_type = 'ART' %}
+{{ block('artist_bios_container') }}
+{%- endblock -%}
 {% block infos %}
 
     {% for info in infos %}
@@ -802,21 +802,21 @@
         </div>
     </div>
 {% endblock %}
-{% block streamplayer %}
-    {% set phase = eventTemporalState.getPhase(event) %}
-    {% if event.streamPlayerUrl and phase == 'now' %}
-        <div class="ckeditor-html5-audio" style="text-align: center;">
-            <audio controls="controls"
-                   controlslist="nodownload"
-                   src="{{ event.streamPlayerUrl }}">&nbsp;</audio>
-        </div>
-    {% elseif event.streamPlayerUrl and phase == 'before' %}
-        <div class="ckeditor-html5-audio"
-             style="text-align: center;
-                    border: #aaa solid;
-                    margin: 0 auto;
-                    width: 60%">
-            {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
-        </div>
-    {% endif %}
-{% endblock %}
+{%- block streamplayer -%}
+{% set phase = eventTemporalState.getPhase(event) %}
+{% if event.streamPlayerUrl and phase == 'now' %}
+<div class="ckeditor-html5-audio" style="text-align: center;">
+    <audio controls="controls"
+           controlslist="nodownload"
+           src="{{ event.streamPlayerUrl }}">&nbsp;</audio>
+</div>
+{% elseif event.streamPlayerUrl and phase == 'before' %}
+<div class="ckeditor-html5-audio"
+     style="text-align: center;
+            border: #aaa solid;
+            margin: 0 auto;
+            width: 60%">
+    {{ 'event.player.will_appear_here_when_the_stream_is_on'|trans }}: {{ event.eventDate|date }}
+</div>
+{% endif %}
+{%- endblock -%}

@@ -21,174 +21,174 @@
     - timetable_list                (core rendering logic)
 #}
 
-{% block dj_timetable %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = timetable_config.include_page_links ?? false %}
-    {% set genre = timetable_config.include_genre ?? false %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block dj_timetable -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set timetable_config = artist_display.getTimetableConfig('DJ') %}
+{% set bios = event.MusicArtistInfos %}
+{% set page_links = timetable_config.include_page_links ?? false %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'DJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block timetable_to_page_with_genre %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = true %}
-    {% set genre = true %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block timetable_to_page_with_genre -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set timetable_config = artist_display.getTimetableConfig('DJ') %}
+{% set bios = event.MusicArtistInfos %}
+{% set page_links = true %}
+{% set genre = true %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'DJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block timetable_to_page %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = true %}
-    {% set genre = timetable_config.include_genre ?? false %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block timetable_to_page -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set timetable_config = artist_display.getTimetableConfig('DJ') %}
+{% set bios = event.MusicArtistInfos %}
+{% set page_links = true %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'DJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block vj_timetable_to_page %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set timetable_config = artist_display.getTimetableConfig('VJ') %}
-    {% set page_links = true %}
-    {% set genre = timetable_config.include_genre ?? false %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'VJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block vj_timetable_to_page -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set bios = event.ArtistInfosByType('VJ') %}
+{% set timetable_config = artist_display.getTimetableConfig('VJ') %}
+{% set page_links = true %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'VJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block timetable_with_genre %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = false %}
-    {% set genre = true %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block timetable_with_genre -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set timetable_config = artist_display.getTimetableConfig('DJ') %}
+{% set bios = event.MusicArtistInfos %}
+{% set page_links = false %}
+{% set genre = true %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'DJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block timetable %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set timetable_config = artist_display.getTimetableConfig('DJ') %}
-    {% set bios = event.MusicArtistInfos %}
-    {% set page_links = false %}
-    {% set genre = timetable_config.include_genre ?? false %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'DJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block timetable -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set timetable_config = artist_display.getTimetableConfig('DJ') %}
+{% set bios = event.MusicArtistInfos %}
+{% set page_links = false %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'DJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block vj_timetable %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {% set bios = event.ArtistInfosByType('VJ') %}
-    {% set timetable_config = artist_display.getTimetableConfig('VJ') %}
-    {% set page_links = timetable_config.include_page_links ?? false %}
-    {% set genre = timetable_config.include_genre ?? false %}
-    {% set timetable_show_time = timetable_config.include_time ?? true %}
-    {% set type = 'VJ' %}
-    {{ block('timetable_list') }}
-{% endblock %}
+{%- block vj_timetable -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{% set bios = event.ArtistInfosByType('VJ') %}
+{% set timetable_config = artist_display.getTimetableConfig('VJ') %}
+{% set page_links = timetable_config.include_page_links ?? false %}
+{% set genre = timetable_config.include_genre ?? false %}
+{% set timetable_show_time = timetable_config.include_time ?? true %}
+{% set type = 'VJ' %}
+{{ block('timetable_list') }}
+{%- endblock -%}
 
-{% block timetable_list %}
-    {% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
-    {# High-level orchestrator: computes date format & delegates stage rendering #}
-    {% if type is defined %}
-        {% if timetable_show_time is not defined %}
-            {% set timetable_show_time = artist_display.shouldTimetableShowTime(type) %}
-        {% endif %}
-        {% if genre is not defined %}
-            {% set genre = artist_display.shouldTimetableShowGenre(type) %}
-        {% endif %}
-        {% if page_links is not defined %}
-            {% set page_links = artist_display.shouldTimetableIncludePageLinks(type) %}
-        {% endif %}
-    {% endif %}
+{%- block timetable_list -%}
+{% set artist_display = artist_display is defined ? artist_display : event.artistDisplayConfiguration %}
+{# High-level orchestrator: computes date format & delegates stage rendering #}
+{% if type is defined %}
     {% if timetable_show_time is not defined %}
-        {% set timetable_show_time = true %}
+        {% set timetable_show_time = artist_display.shouldTimetableShowTime(type) %}
     {% endif %}
     {% if genre is not defined %}
-        {% set genre = false %}
+        {% set genre = artist_display.shouldTimetableShowGenre(type) %}
     {% endif %}
     {% if page_links is not defined %}
-        {% set page_links = false %}
+        {% set page_links = artist_display.shouldTimetableIncludePageLinks(type) %}
     {% endif %}
-    {% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
-    {% if bios|length > 0 %}
-        <div id="timetable" class="row g-0">
-            {% for stage, infos in bios %}
-                {% set now = 'now'|date('U') %}
-                {% set event_until = event.until|date('U') %}
-                {% set unix_times = [] %}
-                {% for i in infos %}
-                    {% set unix_times = unix_times|merge([i.StartTime|date('U')]) %}
-                {% endfor %}
-                {% set first_start_unix = (infos|first).StartTime|date('U') %}
-                {% set show_indicator = now >= first_start_unix and now <= event_until %}
-                {# Render a single stage via its own block for clarity #}
-                {{ block('timetable_stage_table') }}
-            {% endfor %}
-        </div>
-    {% endif %}
-{% endblock %}
+{% endif %}
+{% if timetable_show_time is not defined %}
+    {% set timetable_show_time = true %}
+{% endif %}
+{% if genre is not defined %}
+    {% set genre = false %}
+{% endif %}
+{% if page_links is not defined %}
+    {% set page_links = false %}
+{% endif %}
+{% set datestring = event.multiday == true ? 'E, HH:mm' : 'HH:mm' %}
+{% if bios|length > 0 %}
+<div id="timetable" class="row g-0">
+    {% for stage, infos in bios %}
+        {% set now = 'now'|date('U') %}
+        {% set event_until = event.until|date('U') %}
+        {% set unix_times = [] %}
+        {% for i in infos %}
+            {% set unix_times = unix_times|merge([i.StartTime|date('U')]) %}
+        {% endfor %}
+        {% set first_start_unix = (infos|first).StartTime|date('U') %}
+        {% set show_indicator = now >= first_start_unix and now <= event_until %}
+        {# Render a single stage via its own block for clarity #}
+        {{ block('timetable_stage_table') }}
+    {% endfor %}
+</div>
+{% endif %}
+{%- endblock -%}
 
-{% block timetable_stage_table %}
-    <div class="col-12{% if bios|length > 1 %} col-md-6{% endif %}">
-        {{ block('timetable_stage_header') }}
-        <table class="timetable"
-            {% if show_indicator %}
-                {{ stimulus_controller('time-indicator', {
-                    'server-time': 'now'|date('c'),
-                    'event-start': (infos|first).StartTime|date('c'),
-                    'event-end': event.until|date('c'),
-                    'slot-times': unix_times|join(','),
-                }) }}
-            {% endif %}
-        >
-            <tbody>
-                {% set last_start_time = null %}
-                {% set prev_info = null %}
-                {% set indicator_added = false %}
-                {% for info in infos %}
-                    {% set artist = info.artistClone %}
-                    {% set name = (artist.name|split(' for')).0 %}
-                    {% set is_last_slot = loop.last and now <= event_until %}
-                    {% set next_start_time = infos[loop.index]|default(null) is not null and infos[loop.index].StartTime is not null
-                        ? infos[loop.index].StartTime|date('U')
-                        : null %}
-                    {% set is_current = info.StartTime|date('U') <= now and (next_start_time > now or is_last_slot) %}
+{%- block timetable_stage_table -%}
+<div class="col-12{% if bios|length > 1 %} col-md-6{% endif %}">
+    {{ block('timetable_stage_header') }}
+    <table class="timetable"
+        {% if show_indicator %}
+            {{ stimulus_controller('time-indicator', {
+                'server-time': 'now'|date('c'),
+                'event-start': (infos|first).StartTime|date('c'),
+                'event-end': event.until|date('c'),
+                'slot-times': unix_times|join(','),
+            }) }}
+        {% endif %}
+    >
+        <tbody>
+            {% set last_start_time = null %}
+            {% set prev_info = null %}
+            {% set indicator_added = false %}
+            {% for info in infos %}
+                {% set artist = info.artistClone %}
+                {% set name = (artist.name|split(' for')).0 %}
+                {% set is_last_slot = loop.last and now <= event_until %}
+                {% set next_start_time = infos[loop.index]|default(null) is not null and infos[loop.index].StartTime is not null
+                    ? infos[loop.index].StartTime|date('U')
+                    : null %}
+                {% set is_current = info.StartTime|date('U') <= now and (next_start_time > now or is_last_slot) %}
 
-                    {% if last_start_time != info.StartTime %}
-                        {{ block('timetable_close_previous_slot') }}
-                        <tr>
-                            {% set will_add_indicator_target = show_indicator and (not indicator_added) %}
-                            {{ block('timetable_indicator_cell') }}{% if will_add_indicator_target %}{% set indicator_added = true %}{% endif %}
-                            {{ block('timetable_time_cell') }}
-                            <td class="artist-info">
-                    {% else %}
-                        {{ block('timetable_b2b_separator') }}
-                    {% endif %}
-
-                    {{ block('timetable_artist_link') }}
-
-                    {% set last_start_time = info.StartTime %}
-                    {% set prev_info = info %}
-                {% endfor %}
-                {% if last_start_time is not null %}
-                    </td></tr>
+                {% if last_start_time != info.StartTime %}
+                    {{ block('timetable_close_previous_slot') }}
+                    <tr>
+                        {% set will_add_indicator_target = show_indicator and (not indicator_added) %}
+                        {{ block('timetable_indicator_cell') }}{% if will_add_indicator_target %}{% set indicator_added = true %}{% endif %}
+                        {{ block('timetable_time_cell') }}
+                        <td class="artist-info">
+                {% else %}
+                    {{ block('timetable_b2b_separator') }}
                 {% endif %}
-            </tbody>
-        </table>
-    </div>
-{% endblock %}
+
+                {{ block('timetable_artist_link') }}
+
+                {% set last_start_time = info.StartTime %}
+                {% set prev_info = info %}
+            {% endfor %}
+            {% if last_start_time is not null %}
+                </td></tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+{%- endblock -%}
 
 {% block timetable_stage_header %}
     <h4 class="artists-heading">

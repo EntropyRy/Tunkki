@@ -1,26 +1,25 @@
-{% block RSVP %}
-    {% if event.rsvpSystemEnabled and not eventTemporalState.isInPast(event) %}
-        <div class="pt-2 pb-2" id="RSVP">
-            {% if not app.user %}<p>{{ 'rsvp.info'|trans|raw }}</p>{% endif %}
-            <div class="clearfix">
-                {% if app.user %}
-                    <a class="btn btn-primary w-100" data-turbo="false"
-                       href="{{ path('entropy_event_rsvp', {slug: event.url, year: event.eventdate|date('Y')}) }}">RSVP
-                        {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){% endif %}
-                    </a>
-                {% else %}
-                    {% if frontpage %}
-                        <a class="btn btn-primary w-100"
-                           href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}#RSVP">RSVP</a>
-                    {% else %}
-                        {{ form_start(rsvpForm, {attr: {'data-turbo': 'false'}}) }}
-                            {{ form_widget(rsvpForm) }}
-                            <input class="btn btn-primary" type="submit" value="{{ 'Submit'|trans }}">
-                        {{ form_end(rsvpForm) }}
-                        {# {{'rsvp.no_user'|trans}} {% if app.request.locale == 'fi' %}<a href="/liity">Liity!</a>{% else %}<a href="/en/join-us">Join us!</a>{% endif %} #}
-                    {% endif %}
-                {% endif %}
-            </div>
-        </div>
-    {% endif %}
-{% endblock %}
+{%- block RSVP -%}
+{% if event.rsvpSystemEnabled and not eventTemporalState.isInPast(event) %}
+<div class="pt-2 pb-2" id="RSVP">
+    {% if not app.user %}<p>{{ 'rsvp.info'|trans|raw }}</p>{% endif %}
+    <div class="clearfix">
+        {% if app.user %}
+        <a class="btn btn-primary w-100" data-turbo="false"
+           href="{{ path('entropy_event_rsvp', {slug: event.url, year: event.eventdate|date('Y')}) }}">RSVP
+            {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){% endif %}
+        </a>
+        {% else %}
+            {% if frontpage %}
+            <a class="btn btn-primary w-100"
+               href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}#RSVP">RSVP</a>
+            {% else %}
+            {{ form_start(rsvpForm, {attr: {'data-turbo': 'false'}}) }}
+                {{ form_widget(rsvpForm) }}
+                <input class="btn btn-primary" type="submit" value="{{ 'Submit'|trans }}">
+            {{ form_end(rsvpForm) }}
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+{%- endblock -%}
