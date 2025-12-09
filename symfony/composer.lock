@@ -16895,16 +16895,16 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.2.13",
+            "version": "2.2.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "4674fb4989168f009016849a0078349a532c42b8"
+                "reference": "6d56bb0e94d4df4f57a78610550ac76ab403657d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/4674fb4989168f009016849a0078349a532c42b8",
-                "reference": "4674fb4989168f009016849a0078349a532c42b8",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/6d56bb0e94d4df4f57a78610550ac76ab403657d",
+                "reference": "6d56bb0e94d4df4f57a78610550ac76ab403657d",
                 "shasum": ""
             },
             "require": {
@@ -16943,7 +16943,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.2.13"
+                "source": "https://github.com/rectorphp/rector/tree/2.2.14"
             },
             "funding": [
                 {
@@ -16951,7 +16951,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-09T07:45:59+00:00"
+            "time": "2025-12-09T10:57:55+00:00"
         },
         {
             "name": "sanmai/later",
@@ -19069,16 +19069,16 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.8.1",
+            "version": "v2.8.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "4ab260d252716c316b20e7a66bd55b12d165dedb"
+                "reference": "c61be3a18d9970f3e1f4679ca3b21b7578ac0d8f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/4ab260d252716c316b20e7a66bd55b12d165dedb",
-                "reference": "4ab260d252716c316b20e7a66bd55b12d165dedb",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/c61be3a18d9970f3e1f4679ca3b21b7578ac0d8f",
+                "reference": "c61be3a18d9970f3e1f4679ca3b21b7578ac0d8f",
                 "shasum": ""
             },
             "require": {
@@ -19173,7 +19173,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.8.1"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.8.2"
             },
             "funding": [
                 {
@@ -19185,7 +19185,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-02T17:18:46+00:00"
+            "time": "2025-12-09T14:26:25+00:00"
         }
     ],
     "aliases": [

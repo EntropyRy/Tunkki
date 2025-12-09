@@ -6,7 +6,6 @@ namespace App\Tests\Unit\Domain;
 
 use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
-use App\Entity\Member;
 use App\Time\FixedClock;
 use PHPUnit\Framework\TestCase;
 
