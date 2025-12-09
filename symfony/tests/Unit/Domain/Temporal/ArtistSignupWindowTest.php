@@ -94,6 +94,78 @@ final class ArtistSignupWindowTest extends TestCase
         );
     }
 
+    public function testIsEnabledReturnsTrueWhenEnabled(): void
+    {
+        $window = $this->window(enabled: true);
+
+        self::assertTrue($window->isEnabled());
+    }
+
+    public function testIsEnabledReturnsFalseWhenDisabled(): void
+    {
+        $window = $this->window(enabled: false);
+
+        self::assertFalse($window->isEnabled());
+    }
+
+    public function testRequiresAuthenticationReturnsTrueWhenMembersOnly(): void
+    {
+        $window = $this->window(membersOnly: true);
+
+        self::assertTrue($window->requiresAuthentication());
+    }
+
+    public function testRequiresAuthenticationReturnsFalseWhenNotMembersOnly(): void
+    {
+        $window = $this->window(membersOnly: false);
+
+        self::assertFalse($window->requiresAuthentication());
+    }
+
+    public function testCanMemberAccessReturnsFalseWhenDisabled(): void
+    {
+        $window = $this->window(enabled: false, membersOnly: false);
+
+        self::assertFalse($window->canMemberAccess(null));
+        self::assertFalse($window->canMemberAccess(new Member()));
+    }
+
+    public function testCanMemberAccessReturnsTrueWhenNotMembersOnly(): void
+    {
+        $window = $this->window(enabled: true, membersOnly: false);
+
+        self::assertTrue($window->canMemberAccess(null));
+        self::assertTrue($window->canMemberAccess(new Member()));
+    }
+
+    public function testWindowClosedWhenEndIsNull(): void
+    {
+        $window = new ArtistSignupWindow(
+            true,
+            $this->now->modify('-1 day'),
+            null,
+            false,
+            null,
+            null,
+        );
+
+        self::assertFalse(
+            $window->isOpen($this->clock),
+            'Missing end should short-circuit to false.',
+        );
+    }
+
+    public function testWindowClosedBeforeStart(): void
+    {
+        $window = $this->window(
+            enabled: true,
+            start: $this->now->modify('+1 hour'),
+            end: $this->now->modify('+2 hours'),
+        );
+
+        self::assertFalse($window->isOpen($this->clock));
+    }
+
     private function window(
         bool $enabled = true,
         ?\DateTimeImmutable $start = null,

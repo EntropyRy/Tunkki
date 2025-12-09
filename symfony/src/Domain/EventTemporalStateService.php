@@ -82,11 +82,8 @@ final readonly class EventTemporalStateService
                 return 'after';
             }
 
-            if ($nowS < $eventS) {
-                return 'before';
-            }
-
-            return 'undefined';
+            // Only remaining case: nowS < eventS
+            return 'before';
         }
 
         if ($nowS < $eventS) {

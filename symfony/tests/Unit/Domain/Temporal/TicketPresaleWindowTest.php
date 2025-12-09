@@ -61,6 +61,74 @@ final class TicketPresaleWindowTest extends TestCase
         self::assertSame('Sale EN', $window->getInfoByLocale('en'));
     }
 
+    public function testIsEnabledReturnsFalseWhenDisabled(): void
+    {
+        $window = $this->window(enabled: false);
+
+        self::assertFalse($window->isEnabled());
+    }
+
+    public function testIsEnabledReturnsTrueWhenEnabled(): void
+    {
+        $window = $this->window(enabled: true);
+
+        self::assertTrue($window->isEnabled());
+    }
+
+    public function testWindowClosedAfterEnd(): void
+    {
+        $window = $this->window(
+            start: $this->now->modify('-3 hours'),
+            end: $this->now->modify('-1 hour'),
+        );
+
+        self::assertFalse($window->isOpen($this->clock));
+    }
+
+    public function testWindowClosedWhenStartIsNull(): void
+    {
+        $window = new TicketPresaleWindow(
+            true,
+            null,
+            $this->now->modify('+2 hours'),
+            null,
+            null,
+            false,
+        );
+
+        self::assertFalse($window->isOpen($this->clock));
+    }
+
+    public function testWindowClosedWhenEndIsNull(): void
+    {
+        $window = new TicketPresaleWindow(
+            true,
+            $this->now->modify('-2 hours'),
+            null,
+            null,
+            null,
+            false,
+        );
+
+        self::assertFalse($window->isOpen($this->clock));
+    }
+
+    public function testCanMemberAccessReturnsTrueWhenNotMembersOnly(): void
+    {
+        $window = $this->window(membersOnly: false);
+
+        self::assertTrue($window->canMemberAccess(null));
+        self::assertTrue($window->canMemberAccess(new Member()));
+    }
+
+    public function testCanMemberAccessReturnsFalseWhenDisabled(): void
+    {
+        $window = $this->window(enabled: false, membersOnly: false);
+
+        self::assertFalse($window->canMemberAccess(null));
+        self::assertFalse($window->canMemberAccess(new Member()));
+    }
+
     private function window(
         bool $enabled = true,
         ?\DateTimeImmutable $start = null,

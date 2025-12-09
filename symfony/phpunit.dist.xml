@@ -61,6 +61,14 @@
             <!-- Exclude Admin classes from coverage: mostly presentation/config glue;
                  excluding them speeds analysis and focuses mutation & coverage budgets on domain logic. -->
             <directory>src/Admin</directory>
+            <!-- Exclude test infrastructure (Factories, Stories) from coverage: these are test helpers,
+                 not production code. Including them dilutes meaningful coverage metrics. -->
+            <directory>src/Factory</directory>
+            <directory>src/Story</directory>
+            <!-- Exclude test-only clock implementations: FixedClock and MutableClock are only used
+                 in test environment (when@test service override). AppClock is production code and remains covered. -->
+            <file>src/Time/FixedClock.php</file>
+            <file>src/Time/MutableClock.php</file>
         </exclude>
 
         <deprecationTrigger>

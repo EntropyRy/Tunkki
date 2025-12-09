@@ -92,6 +92,74 @@ TWIG);
         );
     }
 
+    public function testNormalizeLegacyContentReturnsNullForNull(): void
+    {
+        self::assertNull(ContentTokenRenderer::normalizeLegacyContent(null));
+    }
+
+    public function testStripTokensRemovesAllKnownTokens(): void
+    {
+        $content = 'Start {{ dj_timetable }} Middle {{ links }} {{ stripe_ticket }} End';
+
+        $stripped = ContentTokenRenderer::stripTokens($content);
+
+        self::assertSame('Start  Middle   End', $stripped);
+    }
+
+    public function testStripTokensHandlesNullInput(): void
+    {
+        self::assertSame('', ContentTokenRenderer::stripTokens(null));
+    }
+
+    public function testStripTokensNormalizesLegacyBeforeStripping(): void
+    {
+        $content = 'Content {{ timetable }} more {{ bios }}';
+
+        $stripped = ContentTokenRenderer::stripTokens($content);
+
+        // Legacy tokens {{ timetable }} and {{ bios }} should be normalized then stripped
+        self::assertSame('Content  more ', $stripped);
+    }
+
+    public function testRenderMapReturnsEmptyForNullBlocks(): void
+    {
+        $template = $this->loadTemplate('{% block infos %}info{% endblock %}');
+
+        $map = $this->renderer->renderMap($template, []);
+
+        // Null blocks (ticket, menu) should not appear in map
+        self::assertArrayNotHasKey('{{ ticket }}', $map);
+        self::assertArrayNotHasKey('{{ menu }}', $map);
+    }
+
+    public function testRenderMapIncludesOnlyExistingBlocks(): void
+    {
+        $template = $this->loadTemplate(<<<'TWIG'
+{% block links %}<a>Link</a>{% endblock %}
+{% block dj_bio %}<div>Bio</div>{% endblock %}
+TWIG);
+
+        $map = $this->renderer->renderMap($template, []);
+
+        self::assertArrayHasKey('{{ links }}', $map);
+        self::assertArrayHasKey('{{ dj_bio }}', $map);
+        self::assertSame('<a>Link</a>', $map['{{ links }}']);
+        self::assertSame('<div>Bio</div>', $map['{{ dj_bio }}']);
+    }
+
+    public function testRenderWithContentHavingNoNullTokens(): void
+    {
+        $template = $this->loadTemplate('{% block links %}<a>Link</a>{% endblock %}');
+
+        // Content with only non-null tokens (no {{ ticket }} or {{ menu }})
+        $content = 'Start {{ links }} End';
+
+        $rendered = $this->renderer->render($content, $template, []);
+
+        // This hits line 102 in stripNullTokens() because $remove is empty
+        self::assertSame('Start <a>Link</a> End', $rendered);
+    }
+
     private function loadTemplate(string $source): TemplateWrapper
     {
         $this->twig->setLoader(new ArrayLoader(['test.html.twig' => $source]));

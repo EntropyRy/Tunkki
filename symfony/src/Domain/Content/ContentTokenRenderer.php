@@ -98,10 +98,6 @@ final class ContentTokenRenderer
             }
         }
 
-        if ([] === $remove) {
-            return $content;
-        }
-
         return str_replace($remove, '', $content);
     }
 
