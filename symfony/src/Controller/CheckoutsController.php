@@ -70,4 +70,40 @@ class CheckoutsController extends AbstractController
             'time' => $result['checkout']->getUpdatedAt()->format('U'),
         ]);
     }
+
+    #[
+        Route(
+            path: [
+                'fi' => '/kauppa/valmis',
+                'en' => '/shop/complete',
+            ],
+            name: 'entropy_shop_complete',
+        ),
+    ]
+    public function complete(
+        Request $request,
+        StripeService $stripe,
+        CheckoutRepository $cRepo,
+    ): Response {
+        $sessionId = $request->get('session_id');
+        $stripeSession = $stripe->getCheckoutSession($sessionId);
+
+        if ('open' == $stripeSession->status) {
+            $this->addFlash('warning', 'checkout.still_open');
+
+            return $this->redirectToRoute('stripe_checkout');
+        }
+
+        $email = '';
+        if ('complete' == $stripeSession->status) {
+            $checkout = $cRepo->findOneBy(['stripeSessionId' => $sessionId]);
+            $cart = $checkout->getCart();
+            $email = $cart->getEmail();
+            $request->getSession()->remove('cart');
+        }
+
+        return $this->render('shop/complete.html.twig', [
+            'email' => $email,
+        ]);
+    }
 }

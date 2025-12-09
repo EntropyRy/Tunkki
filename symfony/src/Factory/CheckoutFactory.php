@@ -81,7 +81,10 @@ final class CheckoutFactory extends PersistentObjectFactory
      */
     public function completed(): static
     {
-        return $this->with(['status' => 1]);
+        return $this->with([
+            'stripeSessionId' => 'cs_test_completed_'.bin2hex(random_bytes(8)),
+            'status' => 1,
+        ]);
     }
 
     /**
@@ -90,7 +93,10 @@ final class CheckoutFactory extends PersistentObjectFactory
      */
     public function expired(): static
     {
-        return $this->with(['status' => -1]);
+        return $this->with([
+            'stripeSessionId' => 'cs_test_expired_'.bin2hex(random_bytes(8)),
+            'status' => -1,
+        ]);
     }
 
     /**
@@ -109,7 +115,10 @@ final class CheckoutFactory extends PersistentObjectFactory
      */
     public function open(): static
     {
-        return $this->with(['status' => 0]);
+        return $this->with([
+            'stripeSessionId' => 'cs_test_open_'.bin2hex(random_bytes(8)),
+            'status' => 0,
+        ]);
     }
 
     /**

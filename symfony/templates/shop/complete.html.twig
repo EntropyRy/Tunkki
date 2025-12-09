@@ -1,0 +1,31 @@
+{% extends 'onecolumn.html.twig' %}
+
+{% block title %}{{ 'shop.complete.title'|trans }} | Entropy ry{% endblock %}
+
+{% block meta %}
+    <meta name="robots" content="index, follow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ 'shop.complete.title'|trans }}">
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="text-center mb-4">
+            <twig:ux:icon name="check-circle" class="text-success" style="width: 64px; height: 64px;" />
+        </div>
+
+        <h1>{{ 'shop.complete.heading'|trans }}</h1>
+
+        <p>{{ 'shop.complete.confirmation'|trans }}</p>
+
+        {% if email %}
+            <div class="alert alert-info">
+                <p>{{ 'shop.complete.email_sent'|trans({'%email%': email}) }}</p>
+            </div>
+        {% endif %}
+
+        <a href="{{ path('entropy_shop') }}" class="btn btn-primary btn-lg">
+            {{ 'shop.complete.back_to_shop'|trans }}
+        </a>
+    </div>
+{% endblock %}

@@ -132,6 +132,21 @@ final class ProductFactory extends PersistentObjectFactory
     }
 
     /**
+     * Create a general store product (not linked to any event).
+     * General store products are shown in /kauppa (shop) route.
+     * General store products are NOT tickets - they're merchandise/other items.
+     */
+    public function generalStore(): static
+    {
+        return $this->with([
+            'event' => null,
+            'active' => true,
+            'serviceFee' => false,
+            'ticket' => false, // General store sells non-ticket products
+        ]);
+    }
+
+    /**
      * Set specific quantity available.
      */
     public function withQuantity(int $quantity): static

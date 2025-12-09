@@ -1,5 +1,13 @@
 {% extends 'onecolumn.html.twig' %}
+
 {% block title %}{{ 'page.title.checkout'|trans }} | Entropy ry{% endblock %}
+
+{% block meta %}
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ 'page.title.checkout'|trans }}">
+{% endblock %}
+
 {% block javascripts %}
     <script src="https://js.stripe.com/v3/"
             data-turbo-track="reload"

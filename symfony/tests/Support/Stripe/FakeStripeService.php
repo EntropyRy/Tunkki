@@ -79,10 +79,23 @@ readonly class FakeStripeService extends StripeService
 
     public function getCheckoutSession($sessionId): Session
     {
+        // Parse session ID pattern to determine status
+        // cs_test_completed_* → 'complete'
+        // cs_test_open_* → 'open'
+        // cs_test_expired_* → 'expired'
+
+        $status = 'complete'; // default
+        if (str_contains($sessionId, '_open_')) {
+            $status = 'open';
+        } elseif (str_contains($sessionId, '_expired_')) {
+            $status = 'expired';
+        }
+
         return Session::constructFrom([
             'id' => $sessionId,
-            'payment_status' => 'paid',
-            'status' => 'complete',
+            'payment_status' => 'complete' === $status ? 'paid' : 'unpaid',
+            'status' => $status,
+            'customer_email' => 'test@example.com',
         ]);
     }
 

@@ -466,7 +466,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $this->assertFalse($inactiveProduct->isActive(), 'Inactive product should not be active.');
     }
 
-    public function testNonTicketProductsNotShownInShop(): void
+    public function testNonTicketProductsNotShownInEventShop(): void
     {
         $event = EventFactory::new()
             ->ticketed()
@@ -482,7 +482,7 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
             ->forEvent($event)
             ->create(['ticket' => false, 'nameEn' => 'Merchandise']);
 
-        // Cart::setProducts() filters to products where ticket=true
+        // Event shop Cart::setProducts() adds all active products (tickets and non-tickets)
         $this->assertTrue($ticketProduct->isTicket(), 'Ticket product should have ticket=true.');
         $this->assertFalse($nonTicketProduct->isTicket(), 'Non-ticket product should have ticket=false.');
     }

@@ -92,7 +92,9 @@ class Cart
     {
         $this->clearProducts();
         foreach ($products as $product) {
-            if ($product->isTicket() && $product->isActive()) {
+            // Add active products (tickets for events, or general store products)
+            // Service fees are excluded at repository level
+            if ($product->isActive()) {
                 $item = new CartItem();
                 $item->setProduct($product);
                 $item->setQuantity(0);

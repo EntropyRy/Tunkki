@@ -61,6 +61,7 @@ ux_icons:
     remove: fa6-solid:xmark
     close: fa6-solid:xmark
     check: fa6-solid:check
+    check-circle: fa6-solid:circle-check
     plus: fa6-solid:plus
     minus: fa6-solid:minus
     arrow-right: fa6-solid:arrow-right
