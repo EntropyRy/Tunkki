@@ -9,6 +9,7 @@ use App\Entity\User;
 use App\EventSubscriber\AuthorizationCodeSubscriber;
 use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
 use League\Bundle\OAuth2ServerBundle\Model\ClientInterface;
+use League\Bundle\OAuth2ServerBundle\ValueObject\Scope;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -62,14 +63,14 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $authRequest = $this->createStub(AuthorizationRequestInterface::class);
         $client = $this->createStub(ClientInterface::class);
 
-        $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
+        $event = new AuthorizationRequestResolveEvent($authRequest, [new Scope('wiki')], $client, $user);
 
         $this->subscriber->onAuthorizationRequestResolve($event);
 
         $this->assertTrue($event->getAuthorizationResolution());
     }
 
-    public function testOnAuthorizationRequestResolveDeniesInactiveMember(): void
+    public function testOnAuthorizationRequestResolveDeniesNonActiveMemberForWikiScope(): void
     {
         $member = $this->createStub(Member::class);
         $member->method('getIsActiveMember')->willReturn(false);
@@ -92,7 +93,7 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $authRequest = $this->createStub(AuthorizationRequestInterface::class);
         $client = $this->createStub(ClientInterface::class);
 
-        $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
+        $event = new AuthorizationRequestResolveEvent($authRequest, [new Scope('wiki')], $client, $user);
 
         $this->subscriber->onAuthorizationRequestResolve($event);
 
@@ -105,7 +106,7 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $this->assertSame('profile.only_for_active_members', $flashes[0]);
     }
 
-    public function testOnAuthorizationRequestResolveDeniesInactiveMemberEnglishLocale(): void
+    public function testOnAuthorizationRequestResolveDeniesNonActiveMemberEnglishLocale(): void
     {
         $member = $this->createStub(Member::class);
         $member->method('getIsActiveMember')->willReturn(false);
@@ -128,7 +129,7 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $authRequest = $this->createStub(AuthorizationRequestInterface::class);
         $client = $this->createStub(ClientInterface::class);
 
-        $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
+        $event = new AuthorizationRequestResolveEvent($authRequest, [new Scope('wiki')], $client, $user);
 
         $this->subscriber->onAuthorizationRequestResolve($event);
 
@@ -139,6 +140,25 @@ final class AuthorizationCodeSubscriberTest extends TestCase
         $flashes = $session->getFlashBag()->get('warning');
         $this->assertCount(1, $flashes);
         $this->assertSame('profile.only_for_active_members', $flashes[0]);
+    }
+
+    public function testOnAuthorizationRequestResolveAllowsNonActiveMemberForForumScope(): void
+    {
+        $member = $this->createStub(Member::class);
+        $member->method('getIsActiveMember')->willReturn(false);
+
+        $user = $this->createStub(User::class);
+        $user->method('getMember')->willReturn($member);
+
+        $authRequest = $this->createStub(AuthorizationRequestInterface::class);
+        $client = $this->createStub(ClientInterface::class);
+
+        $event = new AuthorizationRequestResolveEvent($authRequest, [new Scope('forum')], $client, $user);
+
+        $this->subscriber->onAuthorizationRequestResolve($event);
+
+        $this->assertTrue($event->getAuthorizationResolution());
+        $this->assertNull($event->getResponse());
     }
 
     /*
