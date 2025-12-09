@@ -12,3 +12,12 @@ league_oauth2_server:
         default: [wiki, forum]
     persistence:
         doctrine: null
+
+when@test:
+    league_oauth2_server:
+        authorization_server:
+            private_key: '%kernel.project_dir%/config/secrets/test/oauth/private.key'
+            private_key_passphrase: null
+            encryption_key: 'test_encryption_key_minimum_32_chars'
+        resource_server:
+            public_key: '%kernel.project_dir%/config/secrets/test/oauth/public.key'

@@ -2230,6 +2230,7 @@ abstract class FixturesWebTestCase extends WebTestCase
 
         // Ensure BrowserKitAssertionsTrait uses the same instance that performed requests
         self::$client = $this->siteAwareClient;
+        self::getClient($this->siteAwareClient);
 
         return $this->siteAwareClient;
     }

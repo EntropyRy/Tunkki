@@ -37,7 +37,7 @@ final class MemberFactory extends PersistentObjectFactory
             'lastname' => self::faker()->lastName(),
             'locale' => self::faker()->randomElement(['fi', 'en']),
             'theme' => self::faker()->randomElement(['dark', 'light']),
-            'code' => strtoupper(self::faker()->bothify('MBR####')),
+            'code' => 'MBR'.bin2hex(random_bytes(4)),
             'emailVerified' => true,
             'allowInfoMails' => true,
             'allowActiveMemberMails' => self::faker()->boolean(70),
@@ -112,5 +112,57 @@ final class MemberFactory extends PersistentObjectFactory
     public function withLinkedUser(User $user): static
     {
         return $this->with(['user' => $user]);
+    }
+
+    /**
+     * Attach an OAuth wiki-capable user to the member.
+     */
+    public function withOAuthWikiAccess(): static
+    {
+        return $this->afterInstantiate(function (Member $member): void {
+            $user = $member->getUser();
+            if (!$user instanceof User) {
+                $user = new User();
+                $user->setPassword(password_hash('password', \PASSWORD_BCRYPT));
+                $user->setRoles([]);
+                $user->setAuthId(bin2hex(random_bytes(10)));
+                $user->setMember($member);
+                $member->setUser($user);
+            }
+
+            $user->setRoles(
+                array_values(
+                    array_unique(
+                        array_merge($user->getRoles(), ['ROLE_OAUTH2_WIKI']),
+                    ),
+                ),
+            );
+        });
+    }
+
+    /**
+     * Attach an OAuth forum-capable user to the member.
+     */
+    public function withOAuthForumAccess(): static
+    {
+        return $this->afterInstantiate(function (Member $member): void {
+            $user = $member->getUser();
+            if (!$user instanceof User) {
+                $user = new User();
+                $user->setPassword(password_hash('password', \PASSWORD_BCRYPT));
+                $user->setRoles([]);
+                $user->setAuthId(bin2hex(random_bytes(10)));
+                $user->setMember($member);
+                $member->setUser($user);
+            }
+
+            $user->setRoles(
+                array_values(
+                    array_unique(
+                        array_merge($user->getRoles(), ['ROLE_OAUTH2_FORUM']),
+                    ),
+                ),
+            );
+        });
     }
 }

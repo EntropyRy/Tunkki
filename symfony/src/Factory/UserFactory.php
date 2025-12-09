@@ -63,4 +63,14 @@ final class UserFactory extends PersistentObjectFactory
             // ->afterInstantiate(function(User $user): void {})
         ;
     }
+
+    /**
+     * Override roles for the created user (ROLE_USER is added by User::getRoles()).
+     *
+     * @param string[] $roles
+     */
+    public function withRoles(array $roles): static
+    {
+        return $this->with(['roles' => $roles]);
+    }
 }

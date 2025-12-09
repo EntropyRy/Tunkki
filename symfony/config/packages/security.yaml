@@ -110,6 +110,7 @@ security:
                 - App\Security\MattermostAuthenticator
     access_control:
         - { path: ^/oauth$, role: PUBLIC_ACCESS }
+        - { path: ^/oauth/token$, role: PUBLIC_ACCESS }
         - { path: ^/oauth/check.*, role: PUBLIC_ACCESS }
         - { path: ^/(en/)?login$, role: PUBLIC_ACCESS }
         - { path: ^/en/profile/new, role: PUBLIC_ACCESS }
@@ -148,7 +149,3 @@ when@test:
                 cost: 4 # Lowest possible value for bcrypt
                 time_cost: 3 # Lowest possible value for argon
                 memory_cost: 10 # Lowest possible value for argon
-        firewalls:
-            main:
-                form_login:
-                    enable_csrf: true
