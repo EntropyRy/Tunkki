@@ -96,7 +96,7 @@ trait OAuthTestHelper
         );
         $accessTokenManager->save($accessTokenModel);
 
-        $privateKeyPath = sprintf('%s/config/secrets/test/oauth/private.key', static::getContainer()->getParameter('kernel.project_dir'));
+        $privateKeyPath = \sprintf('%s/config/secrets/test/oauth/private.key', static::getContainer()->getParameter('kernel.project_dir'));
         $accessTokenEntity = new AccessTokenEntity();
         $accessTokenEntity->setIdentifier($identifier);
         $accessTokenEntity->setExpiryDateTime(\DateTimeImmutable::createFromInterface($expiry));
