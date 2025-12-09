@@ -60,28 +60,28 @@ final class CartEntityTest extends TestCase
         $this->assertCount(0, $cart->getProducts());
     }
 
-    public function testSetProductsOnlyAddsActiveTickets(): void
+    public function testSetProductsOnlyAddsActiveProducts(): void
     {
         $cart = new Cart();
 
         // Use real Product objects
-        $activeProduct = new \App\Entity\Product();
-        $activeProduct->setActive(true);
-        $activeProduct->setTicket(true);
+        $activeTicket = new \App\Entity\Product();
+        $activeTicket->setActive(true);
+        $activeTicket->setTicket(true);
 
         $inactiveProduct = new \App\Entity\Product();
         $inactiveProduct->setActive(false);
         $inactiveProduct->setTicket(true);
 
-        $nonTicketProduct = new \App\Entity\Product();
-        $nonTicketProduct->setActive(true);
-        $nonTicketProduct->setTicket(false);
+        $activeGeneralProduct = new \App\Entity\Product();
+        $activeGeneralProduct->setActive(true);
+        $activeGeneralProduct->setTicket(false);
 
         // setProducts expects Product objects, not CartItem objects
-        $cart->setProducts([$activeProduct, $inactiveProduct, $nonTicketProduct]);
+        $cart->setProducts([$activeTicket, $inactiveProduct, $activeGeneralProduct]);
 
-        // Only active tickets should be added
-        $this->assertCount(1, $cart->getProducts());
+        // Only active products should be added (both tickets and general store items)
+        $this->assertCount(2, $cart->getProducts());
     }
 
     public function testAddAndRemoveCheckout(): void
