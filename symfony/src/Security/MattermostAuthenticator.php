@@ -57,10 +57,18 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 $fb,
             ) {
                 $mmUser = $client->fetchUserFromToken($accessToken);
-                $mmUserA = $mmUser->toArray();
-                $email = $mmUserA['email'];
-                $username = $mmUserA['username'];
-                $id = $mmUserA['id'];
+                $userData = $mmUser->toArray();
+
+                // Validate required fields exist
+                if (!isset($userData['email']) || !isset($userData['id'])) {
+                    throw new AuthenticationException(
+                        'Invalid Mattermost response: missing required fields',
+                    );
+                }
+
+                $email = $userData['email'];
+                $username = $userData['username'] ?? '';
+                $id = $userData['id'];
 
                 // 1) have they logged in with Mattermost before? Easy!
                 $existingUser = $this->em
@@ -68,12 +76,17 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     ->findOneBy(['MattermostId' => $id]);
 
                 if (null !== $existingUser) {
+                    $member = $existingUser->getMember();
+                    if (null === $member) {
+                        throw new AuthenticationException(
+                            'User account corrupted: no member record',
+                        );
+                    }
+
                     if (
-                        strtolower(
-                            (string) $existingUser->getMember()->getUsername(),
-                        ) != $username
+                        strtolower((string) $member->getUsername()) != $username
                     ) {
-                        $existingUser->getMember()->setUsername($username);
+                        $member->setUsername($username);
                         $this->em->persist($existingUser);
                         $this->em->flush();
                         $fb->add(
@@ -102,6 +115,11 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                         );
                     }
                     $user = $member->getUser();
+                    if (null === $user) {
+                        throw new AuthenticationException(
+                            'Member account corrupted: no user record',
+                        );
+                    }
                     $user->setMattermostId($id);
                     $this->em->persist($user);
                     $this->em->flush();
