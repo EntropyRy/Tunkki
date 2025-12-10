@@ -61,9 +61,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
 
                 // Validate required fields exist
                 if (!isset($userData['email']) || !isset($userData['id'])) {
-                    throw new AuthenticationException(
-                        'Invalid Mattermost response: missing required fields',
-                    );
+                    throw new AuthenticationException('Invalid Mattermost response: missing required fields');
                 }
 
                 $email = $userData['email'];
@@ -78,9 +76,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                 if (null !== $existingUser) {
                     $member = $existingUser->getMember();
                     if (null === $member) {
-                        throw new AuthenticationException(
-                            'User account corrupted: no member record',
-                        );
+                        throw new AuthenticationException('User account corrupted: no member record');
                     }
 
                     if (
@@ -116,9 +112,7 @@ class MattermostAuthenticator extends OAuth2Authenticator implements Authenticat
                     }
                     $user = $member->getUser();
                     if (null === $user) {
-                        throw new AuthenticationException(
-                            'Member account corrupted: no user record',
-                        );
+                        throw new AuthenticationException('Member account corrupted: no user record');
                     }
                     $user->setMattermostId($id);
                     $this->em->persist($user);

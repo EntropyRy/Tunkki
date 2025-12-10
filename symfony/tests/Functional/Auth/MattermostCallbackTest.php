@@ -7,9 +7,9 @@ namespace App\Tests\Functional\Auth;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use GuzzleHttp\ClientInterface;
+use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\StreamInterface;
-use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
 use Symfony\Component\BrowserKit\Cookie;
 
 /**
@@ -236,7 +236,7 @@ final class MattermostCallbackTest extends FixturesWebTestCase
         // Mock access token response body
         $tokenBody = $this->createStub(StreamInterface::class);
         $tokenBody->method('__toString')->willReturn(json_encode([
-            'access_token' => 'mock_token_' . bin2hex(random_bytes(8)),
+            'access_token' => 'mock_token_'.bin2hex(random_bytes(8)),
             'token_type' => 'Bearer',
             'expires_in' => 3600,
         ], \JSON_THROW_ON_ERROR));

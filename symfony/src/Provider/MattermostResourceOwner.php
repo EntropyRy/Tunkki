@@ -39,5 +39,4 @@ class MattermostResourceOwner implements ResourceOwnerInterface
     {
         return $this->response['id'] ?: null;
     }
-
 }
