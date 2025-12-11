@@ -245,11 +245,6 @@ services:
     tags:
       - { name: sonata.block, alias: bookingblock }
 
-  entropy.block.artist_list:
-    class: App\Block\ArtistListBlock
-    tags:
-      - { name: sonata.block, alias: artistlistblock }
-
   entropy.block.tickets:
     class: App\Block\TicketsBlock
     tags:

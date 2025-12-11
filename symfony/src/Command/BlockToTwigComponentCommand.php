@@ -20,20 +20,18 @@ use Symfony\Component\Filesystem\Filesystem;
 )]
 class BlockToTwigComponentCommand extends Command
 {
-    private const BLOCK_DIR = '/src/Block/';
-    private const COMPONENT_DIR = '/src/Twig/Components/';
-    private const BLOCK_TEMPLATE_DIR = '/templates/block/';
-    private const COMPONENT_TEMPLATE_DIR = '/templates/components/';
+    private const string BLOCK_DIR = '/src/Block/';
+    private const string COMPONENT_DIR = '/src/Twig/Components/';
+    private const string BLOCK_TEMPLATE_DIR = '/templates/block/';
+    private const string COMPONENT_TEMPLATE_DIR = '/templates/components/';
 
-    private Filesystem $filesystem;
-    private string $projectDir;
+    private readonly Filesystem $filesystem;
 
     public function __construct(
         #[Autowire('%kernel.project_dir%')]
-        string $projectDir
+        private readonly string $projectDir,
     ) {
         parent::__construct();
-        $this->projectDir = $projectDir;
         $this->filesystem = new Filesystem();
     }
 
@@ -56,62 +54,66 @@ class BlockToTwigComponentCommand extends Command
         $keepBlock = $input->getOption('keep-block');
 
         $io->title('Block to TwigComponent Converter');
-        $io->info(sprintf('Converting: %s → %s', $blockName, $componentName));
+        $io->info(\sprintf('Converting: %s → %s', $blockName, $componentName));
 
         // Validate block exists
-        $blockPath = $this->projectDir . self::BLOCK_DIR . $blockName . '.php';
+        $blockPath = $this->projectDir.self::BLOCK_DIR.$blockName.'.php';
         if (!file_exists($blockPath)) {
-            $io->error(sprintf('Block file not found: %s', $blockPath));
+            $io->error(\sprintf('Block file not found: %s', $blockPath));
+
             return Command::FAILURE;
         }
 
         // Read and parse block file
         $blockContent = file_get_contents($blockPath);
-        if ($blockContent === false) {
+        if (false === $blockContent) {
             $io->error('Failed to read block file');
+
             return Command::FAILURE;
         }
 
         $io->section('Analyzing Block Structure');
-        $blockInfo = $this->parseBlockClass($blockContent, $blockName);
+        $blockInfo = $this->parseBlockClass($blockContent);
 
-        if ($blockInfo === null) {
+        if (null === $blockInfo) {
             $io->error('Failed to parse block structure');
+
             return Command::FAILURE;
         }
 
         $io->listing([
-            sprintf('Dependencies: %d found', count($blockInfo['dependencies'])),
-            sprintf('Template: %s', $blockInfo['template'] ?? 'default'),
-            sprintf('Methods: %d found', count($blockInfo['methods'])),
+            \sprintf('Dependencies: %d found', \count($blockInfo['dependencies'])),
+            \sprintf('Template: %s', $blockInfo['template'] ?? 'default'),
+            \sprintf('Settings: %d found', \count($blockInfo['settings'])),
+            \sprintf('Methods: %d found', \count($blockInfo['methods'])),
         ]);
 
         // Generate component class
         $io->section('Generating TwigComponent');
         $componentClassContent = $this->generateComponentClass($componentName, $blockInfo);
-        $componentPath = $this->projectDir . self::COMPONENT_DIR . $componentName . '.php';
+        $componentPath = $this->projectDir.self::COMPONENT_DIR.$componentName.'.php';
 
         // Find and convert template
         $templateConverted = false;
         if ($blockInfo['template']) {
-            $blockTemplatePath = $this->projectDir . self::BLOCK_TEMPLATE_DIR . basename($blockInfo['template']);
+            $blockTemplatePath = $this->projectDir.self::BLOCK_TEMPLATE_DIR.basename($blockInfo['template']);
             if (file_exists($blockTemplatePath)) {
                 $io->section('Converting Template');
                 $templateContent = file_get_contents($blockTemplatePath);
-                if ($templateContent !== false) {
-                    $componentTemplateContent = $this->convertTemplate($templateContent, $blockInfo);
-                    $componentTemplatePath = $this->projectDir . self::COMPONENT_TEMPLATE_DIR . $this->getTemplateFileName($componentName);
+                if (false !== $templateContent) {
+                    $componentTemplateContent = $this->convertTemplate($templateContent);
+                    $componentTemplatePath = $this->projectDir.self::COMPONENT_TEMPLATE_DIR.$this->getTemplateFileName($componentName);
 
                     if ($dryRun) {
-                        $io->writeln('<comment>[DRY RUN]</comment> Would create template: ' . $componentTemplatePath);
+                        $io->writeln('<comment>[DRY RUN]</comment> Would create template: '.$componentTemplatePath);
                     } else {
                         $this->filesystem->dumpFile($componentTemplatePath, $componentTemplateContent);
-                        $io->success('Template created: ' . $componentTemplatePath);
+                        $io->success('Template created: '.$componentTemplatePath);
                     }
                     $templateConverted = true;
                 }
             } else {
-                $io->warning(sprintf('Block template not found: %s', $blockTemplatePath));
+                $io->warning(\sprintf('Block template not found: %s', $blockTemplatePath));
             }
         }
 
@@ -120,25 +122,25 @@ class BlockToTwigComponentCommand extends Command
             $io->section('Preview: Component Class');
             $io->writeln($componentClassContent);
             $io->writeln('');
-            $io->writeln('<comment>[DRY RUN]</comment> Would create: ' . $componentPath);
+            $io->writeln('<comment>[DRY RUN]</comment> Would create: '.$componentPath);
         } else {
             $this->filesystem->dumpFile($componentPath, $componentClassContent);
-            $io->success('Component created: ' . $componentPath);
+            $io->success('Component created: '.$componentPath);
         }
 
         // Next steps
         $io->section('Next Steps');
         $io->listing([
             'Review and test the generated component',
-            'Update the template in ' . self::COMPONENT_TEMPLATE_DIR,
-            'Replace block usage with: <twig:' . $componentName . ' />',
-            !$keepBlock ? 'Remove block service registration from config/services.yaml' : 'Original block kept (use --keep-block to remove)',
-            'Remove old block template from ' . self::BLOCK_TEMPLATE_DIR . ' if no longer needed',
+            'Update the template in '.self::COMPONENT_TEMPLATE_DIR,
+            'Replace block usage with: <twig:'.$componentName.' />',
+            $keepBlock ? 'Original block kept (use --keep-block to remove)' : 'Remove block service registration from config/services.yaml',
+            'Remove old block template from '.self::BLOCK_TEMPLATE_DIR.' if no longer needed',
         ]);
 
         if (!$keepBlock && !$dryRun) {
             $io->warning('Remember to remove block registration from config/services.yaml');
-            $io->note(sprintf('Search for: %s or %s', $blockName, strtolower(str_replace('Block', '', $blockName))));
+            $io->note(\sprintf('Search for: %s or %s', $blockName, strtolower(str_replace('Block', '', $blockName))));
         }
 
         return Command::SUCCESS;
@@ -152,17 +154,16 @@ class BlockToTwigComponentCommand extends Command
 
     private function getTemplateFileName(string $componentName): string
     {
-        // Convert PascalCase to snake_case for template filename
-        $snakeCase = strtolower((string) preg_replace('/(?<!^)[A-Z]/', '_$0', $componentName));
-        return $snakeCase . '.html.twig';
+        // Template name matches component class name (PascalCase)
+        return $componentName.'.html.twig';
     }
 
     /**
-     * Parse block class to extract relevant information
+     * Parse block class to extract relevant information.
      *
-     * @return array{dependencies: array<string, string>, template: string|null, methods: array<string, string>, namespace: string, uses: array<string>}|null
+     * @return array<'dependencies'|'methods'|'template'|'settings', string[]|string|null>
      */
-    private function parseBlockClass(string $content, string $blockName): ?array
+    private function parseBlockClass(string $content): array
     {
         $info = [
             'dependencies' => [],
@@ -170,6 +171,7 @@ class BlockToTwigComponentCommand extends Command
             'methods' => [],
             'namespace' => 'App\\Block',
             'uses' => [],
+            'settings' => [],
         ];
 
         // Extract namespace
@@ -185,22 +187,42 @@ class BlockToTwigComponentCommand extends Command
         if (preg_match('/public function __construct\([^)]*\)/', $content, $constructorMatch)) {
             preg_match_all('/(?:protected|private|public)\s+(?:readonly\s+)?([^\s]+)\s+\$([^,)]+)/', $constructorMatch[0], $paramMatches);
 
-            if (!empty($paramMatches[1])) {
-                for ($i = 0; $i < count($paramMatches[1]); $i++) {
+            if (isset($paramMatches[1]) && $paramMatches[1] !== []) {
+                $counter = \count($paramMatches[1]);
+                for ($i = 0; $i < $counter; ++$i) {
                     $type = $paramMatches[1][$i];
                     $name = $paramMatches[2][$i];
 
                     // Skip Twig environment as it's not needed in TwigComponent
-                    if ($type !== 'Environment' && $name !== 'twig') {
+                    if ('Environment' !== $type && 'twig' !== $name) {
                         $info['dependencies'][$name] = $type;
                     }
                 }
             }
         }
 
-        // Extract template from configureSettings
-        if (preg_match('/[\'"]template[\'"]\s*=>\s*[\'"]([^\'\"]+)[\'"]/', $content, $templateMatch)) {
-            $info['template'] = $templateMatch[1];
+        // Extract settings from configureSettings
+        if (preg_match('/function configureSettings[^{]*{([^}]+)}/', $content, $settingsMatch)) {
+            // Extract all setDefaults array
+            if (preg_match('/setDefaults\(\s*\[([^\]]+)\]/', $settingsMatch[1], $defaultsMatch)) {
+                // Parse key-value pairs
+                preg_match_all('/[\'"]([^\'\"]+)[\'"]\s*=>\s*([^,\]]+)/', $defaultsMatch[1], $settingMatches);
+
+                if (!empty($settingMatches[1])) {
+                    for ($i = 0; $i < count($settingMatches[1]); $i++) {
+                        $key = $settingMatches[1][$i];
+                        $value = trim($settingMatches[2][$i]);
+
+                        if ($key === 'template') {
+                            // Extract template value without quotes
+                            $info['template'] = trim($value, '\'"');
+                        } else {
+                            // Store other settings
+                            $info['settings'][$key] = $value;
+                        }
+                    }
+                }
+            }
         }
 
         // Extract execute method logic (this will be moved to mount or helper methods)
@@ -209,15 +231,11 @@ class BlockToTwigComponentCommand extends Command
         }
 
         // Extract helper methods (any method that's not execute, construct, configure*, getName, build*, validate*)
-        preg_match_all('/(?:public|protected|private)\s+function\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\([^)]*\)[^{]*{/', $content, $methodMatches);
-        if (!empty($methodMatches[1])) {
-            foreach ($methodMatches[1] as $methodName) {
-                if (!in_array($methodName, ['__construct', 'execute', 'configureSettings', 'getName', 'getBlockMetadata', 'buildCreateForm', 'buildEditForm', 'validateBlock'])) {
-                    // Try to extract the full method
-                    if (preg_match('/(?:public|protected|private)\s+function\s+' . preg_quote($methodName, '/') . '\s*\([^)]*\)[^{]*{([^}]+(?:{[^}]*}[^}]*)*)}/', $content, $methodContentMatch)) {
-                        $info['methods'][$methodName] = $methodContentMatch[0];
-                    }
-                }
+        preg_match_all('/(?:public|protected|private)\s+function\s+([a-zA-Z_]\w*)\s*\([^)]*\)[^{]*{/', $content, $methodMatches);
+        foreach ($methodMatches[1] as $methodName) {
+            // Try to extract the full method
+            if (!\in_array($methodName, ['__construct', 'execute', 'configureSettings', 'getName', 'getBlockMetadata', 'buildCreateForm', 'buildEditForm', 'validateBlock']) && preg_match('/(?:public|protected|private)\s+function\s+'.preg_quote($methodName, '/').'\s*\([^)]*\)[^{]*{([^}]+(?:{[^}]*}[^}]*)*)}/', $content, $methodContentMatch)) {
+                $info['methods'][$methodName] = $methodContentMatch[0];
             }
         }
 
@@ -225,34 +243,56 @@ class BlockToTwigComponentCommand extends Command
     }
 
     /**
-     * Generate TwigComponent class content
+     * Generate TwigComponent class content.
      *
-     * @param array{dependencies: array<string, string>, template: string|null, methods: array<string, string>, namespace: string, uses: array<string>} $blockInfo
+     * @param array{dependencies: array<string, string>, template: string|null, methods: array<string, string>, namespace: string, uses: array<string>, settings: array<string, string>} $blockInfo
      */
     private function generateComponentClass(string $componentName, array $blockInfo): string
     {
         $uses = [];
         $constructorParams = [];
-        $constructorAssignments = [];
-        $properties = [];
+        $publicProperties = [];
+        $mountParams = [];
+        $mountAssignments = [];
 
         // Add TwigComponent attribute use
         $uses[] = 'use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;';
 
         // Process dependencies
         foreach ($blockInfo['dependencies'] as $varName => $type) {
-            $constructorParams[] = sprintf('private readonly %s $%s', $type, $varName);
+            $constructorParams[] = \sprintf('private readonly %s $%s', $type, $varName);
 
             // Add use statement for the type if it's not a built-in
             $fullType = $this->findFullTypeFromUses($type, $blockInfo['uses']);
-            if ($fullType && !in_array('use ' . $fullType . ';', $uses)) {
-                $uses[] = 'use ' . $fullType . ';';
+            if ($fullType && !\in_array('use '.$fullType.';', $uses)) {
+                $uses[] = 'use '.$fullType.';';
             }
+        }
+
+        // Process settings (block defaults become component properties and mount params)
+        foreach ($blockInfo['settings'] as $settingName => $settingValue) {
+            $phpType = $this->inferPhpType($settingValue);
+            $defaultValue = $this->formatDefaultValue($settingValue, $phpType);
+
+            // Add public property
+            $publicProperties[] = \sprintf('public %s $%s = %s;', $phpType, $settingName, $defaultValue);
+
+            // Add mount parameter
+            $mountParams[] = \sprintf('%s $%s = %s', $phpType, $settingName, $defaultValue);
+
+            // Add mount assignment
+            $mountAssignments[] = \sprintf('$this->%s = $%s;', $settingName, $settingName);
+        }
+
+        // Build public properties block
+        $propertiesBlock = '';
+        if ($publicProperties !== []) {
+            $propertiesBlock = "\n    " . implode("\n    ", $publicProperties) . "\n";
         }
 
         // Build constructor
         $constructor = '';
-        if (!empty($constructorParams)) {
+        if ($constructorParams !== []) {
             $constructor = <<<PHP
 
     public function __construct(
@@ -263,12 +303,26 @@ PHP;
 
         // Build mount method from execute logic if available
         $mountMethod = '';
+        $mountSignature = $mountParams !== [] ? implode(', ', $mountParams) : '';
+
         if (!empty($blockInfo['methods']['execute'])) {
             $executeBody = $this->convertExecuteToMount($blockInfo['methods']['execute']);
+            $assignmentsBlock = $mountAssignments !== [] ? "\n        " . implode("\n        ", $mountAssignments) . "\n" : '';
+
             $mountMethod = <<<PHP
 
-    public function mount(): void
-    {{$this->indent($executeBody, 2)}
+    public function mount({$mountSignature}): void
+    {{$assignmentsBlock}{$this->indent($executeBody, 2)}
+    }
+PHP;
+        } elseif ($mountParams !== []) {
+            // If no execute method but we have settings, create a simple mount
+            $assignmentsBlock = implode("\n        ", $mountAssignments);
+            $mountMethod = <<<PHP
+
+    public function mount({$mountSignature}): void
+    {
+        {$assignmentsBlock}
     }
 PHP;
         }
@@ -276,8 +330,8 @@ PHP;
         // Add helper methods
         $helperMethods = '';
         foreach ($blockInfo['methods'] as $methodName => $methodContent) {
-            if ($methodName !== 'execute') {
-                $helperMethods .= "\n\n" . $this->indent($methodContent, 1);
+            if ('execute' !== $methodName) {
+                $helperMethods .= "\n\n".$this->indent($methodContent, 1);
             }
         }
 
@@ -295,19 +349,66 @@ namespace App\Twig\Components;
 
 #[AsTwigComponent]
 final class {$componentName}
-{{$constructor}{$mountMethod}{$helperMethods}
+{{$propertiesBlock}{$constructor}{$mountMethod}{$helperMethods}
 }
 
 PHP;
     }
 
+    private function inferPhpType(string $value): string
+    {
+        $trimmed = trim($value);
+
+        // Boolean values
+        if ($trimmed === 'true' || $trimmed === 'false') {
+            return 'bool';
+        }
+
+        // Numeric values
+        if (is_numeric($trimmed)) {
+            return str_contains($trimmed, '.') ? 'float' : 'int';
+        }
+
+        // Array values
+        if (str_starts_with($trimmed, '[')) {
+            return 'array';
+        }
+
+        // Default to string
+        return 'string';
+    }
+
+    private function formatDefaultValue(string $value, string $phpType): string
+    {
+        $trimmed = trim($value);
+
+        // Already a PHP literal
+        if ($phpType === 'bool' || $phpType === 'int' || $phpType === 'float') {
+            return $trimmed;
+        }
+
+        // Array
+        if ($phpType === 'array') {
+            return $trimmed;
+        }
+
+        // String - ensure it's properly quoted
+        if (str_starts_with($trimmed, "'") || str_starts_with($trimmed, '"')) {
+            return $trimmed;
+        }
+
+        // Wrap in quotes
+        return "'{$trimmed}'";
+    }
+
     private function findFullTypeFromUses(string $shortType, array $uses): ?string
     {
         foreach ($uses as $use) {
-            if (str_ends_with($use, '\\' . $shortType)) {
+            if (str_ends_with((string) $use, '\\'.$shortType)) {
                 return $use;
             }
         }
+
         return null;
     }
 
@@ -319,44 +420,43 @@ PHP;
         // Convert $this->em to $this->em (should work as-is if em is injected)
         // Remove block context references
         $cleaned = preg_replace('/\$blockContext->getBlock\(\)/', '// TODO: Remove block context usage', (string) $cleaned);
-        $cleaned = preg_replace('/\$blockContext->getTemplate\(\)/', '// TODO: Remove template reference', $cleaned);
+        $cleaned = preg_replace('/\$blockContext->getTemplate\(\)/', '// TODO: Remove template reference', (string) $cleaned);
 
         // Add TODO comment for data storage
-        $cleaned = (string) $cleaned . "\n        // TODO: Store data in public properties for template access\n        // Example: \$this->bookings = \$bookings;";
+        $cleaned .= "\n        // TODO: Store data in public properties for template access\n        // Example: \$this->bookings = \$bookings;";
 
-        return "\n" . trim((string) $cleaned) . "\n    ";
+        return "\n".trim($cleaned)."\n    ";
     }
 
     /**
-     * Convert block template to component template
-     *
-     * @param array{dependencies: array<string, string>, template: string|null, methods: array<string, string>, namespace: string, uses: array<string>} $blockInfo
+     * Convert block template to component template.
      */
-    private function convertTemplate(string $content, array $blockInfo): string
+    private function convertTemplate(string $content): string
     {
         // Remove sonata block base extension
         $converted = preg_replace('/{%\s*extends\s+sonata_block\.templates\.block_base\s*%}/', '', $content);
 
         // Remove {% block block %} wrapper and {% endblock %}
         $converted = preg_replace('/{%\s*block\s+block\s*%}/', '', (string) $converted);
-        $converted = preg_replace('/{%\s*endblock\s*%}/', '', $converted);
+        $converted = preg_replace('/{%\s*endblock\s*%}/', '', (string) $converted);
 
         // Convert variable references
         // Block templates use variables directly, components use 'this.'
         // This is a simple heuristic - may need manual adjustment
-        $converted = preg_replace('/\{\{\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\}\}/', '{{ this.$1 }}', (string) $converted);
-        $converted = preg_replace('/{%\s*for\s+([a-zA-Z_][a-zA-Z0-9_]*)\s+in\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*%}/', '{% for $1 in this.$2 %}', $converted);
+        $converted = preg_replace('/\{\{\s*([a-zA-Z_]\w*)\s*\}\}/', '{{ this.$1 }}', (string) $converted);
+        $converted = preg_replace('/{%\s*for\s+([a-zA-Z_]\w*)\s+in\s+([a-zA-Z_]\w*)\s*%}/', '{% for $1 in this.$2 %}', (string) $converted);
 
         // Fix double 'this.this.' cases
-        $converted = preg_replace('/this\.this\./', 'this.', $converted);
+        $converted = preg_replace('/this\.this\./', 'this.', (string) $converted);
 
-        return trim($converted) . "\n";
+        return trim((string) $converted)."\n";
     }
 
     private function indent(string $content, int $level = 1): string
     {
         $indent = str_repeat('    ', $level);
         $lines = explode("\n", $content);
-        return implode("\n" . $indent, $lines);
+
+        return implode("\n".$indent, $lines);
     }
 }

@@ -3328,16 +3328,16 @@
         },
         {
             "name": "league/oauth2-server-bundle",
-            "version": "v1.0.0",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/oauth2-server-bundle.git",
-                "reference": "7d890a6fc353abe37298147d3fe497a61dd553c4"
+                "reference": "c7c936af22d1f3c6ed245070810e12dbd70f56f8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/oauth2-server-bundle/zipball/7d890a6fc353abe37298147d3fe497a61dd553c4",
-                "reference": "7d890a6fc353abe37298147d3fe497a61dd553c4",
+                "url": "https://api.github.com/repos/thephpleague/oauth2-server-bundle/zipball/c7c936af22d1f3c6ed245070810e12dbd70f56f8",
+                "reference": "c7c936af22d1f3c6ed245070810e12dbd70f56f8",
                 "shasum": ""
             },
             "require": {
@@ -3347,23 +3347,26 @@
                 "php": "^8.1",
                 "psr/http-factory": "^1.0",
                 "symfony/deprecation-contracts": "^3",
-                "symfony/event-dispatcher": "^6.4|^7.0",
-                "symfony/filesystem": "^6.4|^7.0",
-                "symfony/framework-bundle": "^6.4|^7.0",
-                "symfony/psr-http-message-bridge": "^6.4|^7",
-                "symfony/security-bundle": "^6.4|^7.0"
+                "symfony/event-dispatcher": "^6.4|^7.0|^8.0",
+                "symfony/filesystem": "^6.4|^7.0|^8.0",
+                "symfony/framework-bundle": "^6.4|^7.0|^8.0",
+                "symfony/psr-http-message-bridge": "^6.4|^7.0|^8.0",
+                "symfony/security-bundle": "^6.4|^7.0|^8.0"
             },
             "conflict": {
                 "doctrine/doctrine-bundle": "<2.8.0",
                 "doctrine/orm": "<2.14"
             },
             "require-dev": {
-                "doctrine/doctrine-bundle": "^2.8.0",
+                "doctrine/doctrine-bundle": "^2.8|^3.0",
                 "doctrine/orm": "^2.14|^3.0",
                 "ext-pdo": "*",
                 "ext-pdo_sqlite": "*",
-                "symfony/browser-kit": "^6.4|^7.0",
-                "symfony/phpunit-bridge": "^7.2"
+                "php-cs-fixer/shim": "^3.38",
+                "phpstan/phpstan": "^2.1",
+                "phpstan/phpstan-symfony": "^2.0",
+                "symfony/browser-kit": "^6.4|^7.0|^8.0",
+                "symfony/phpunit-bridge": "^7.3"
             },
             "suggest": {
                 "doctrine/doctrine-bundle": "Allow usage of doctrine as persistence layer",
@@ -3405,9 +3408,9 @@
             ],
             "support": {
                 "issues": "https://github.com/thephpleague/oauth2-server-bundle/issues",
-                "source": "https://github.com/thephpleague/oauth2-server-bundle/tree/v1.0.0"
+                "source": "https://github.com/thephpleague/oauth2-server-bundle/tree/v1.1.0"
             },
-            "time": "2025-04-27T15:12:28+00:00"
+            "time": "2025-12-11T19:43:20+00:00"
         },
         {
             "name": "league/uri",

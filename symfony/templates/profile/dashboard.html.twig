@@ -16,7 +16,7 @@
             {% endif %}
             {{ sonata_block_render({type: 'entropy.block.future_events'}, {box: true}) }}
             {{ sonata_block_render({type: 'entropy.block.random_artist'}, {box: true}) }}
-            {{ sonata_block_render({type: 'entropy.block.artist_list'}, {box: true}) }}
+            <twig:ArtistList :box="true" />
         </div>
         <div class="col-md-6">
             {{ sonata_block_render({type: 'entropy.block.statistics'}) }}
