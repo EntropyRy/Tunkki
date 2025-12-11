@@ -55,12 +55,10 @@ If you see platform or version mismatch errors (e.g. “requires PHP >= 8.4”),
 | Functional only       | `make test-functional`               | DB + HTTP kernel |
 | Coverage              | `make coverage`                       | Requires Xdebug/PCOV enabled in container |
 | Mutation (exploratory)| `make infection FILTER=src/Security`  | Start narrow, see §8 |
-| Mutation (baseline)   | `make infection-baseline`             | Append metrics manually |
+| Mutation (baseline)   | `make infection-baseline`             | Baseline run |
 | Static analysis full  | `make stan`                           | Uses level=5 unless overridden |
 | Static analysis fast  | `make stan-fast`                      | Analyzes `src/` only |
-| Static analysis JSON  | `make stan-json`                      | Outputs `metrics/phpstan-report.json` |
 | Clean caches          | `make clean`                          | Coverage + Infection + PHPStan caches |
-| Metrics snapshot stub | `make metrics-snapshot`               | Creates timestamped scaffold |
 | Doctor (env sanity)   | `make doctor`                         | Lists services & tool presence |
 
 Override example:
@@ -124,10 +122,6 @@ Level stepping:
 - Initial triage: level=5 (if noise too high at max).
 - After generics & nullability fixes: raise to `max`.
 
-Metrics:
-- Record counts in: `metrics/phpstan-initial.md`
-- Post-fix snapshot: `metrics/phpstan-triage.md`
-
 Ignore policy:
 - Each ignore must include rationale + expiration review date.
 - No wildcard ignores on entire directories.
@@ -146,10 +140,6 @@ Baseline:
 ```
 make infection-baseline
 ```
-Record results in `metrics/mutation-baseline.md`:
-- Mutants generated / killed / escaped
-- MSI / Covered MSI
-- High-value survivors (security/domain invariants)
 
 Do not raise MSI thresholds until:
 1. High-value survivors addressed.
@@ -217,23 +207,7 @@ Policy:
 
 ---
 
-## 10. Metrics & Historical Logging
-
-Directory: `metrics/`
-Files:
-- `2025-10-02-baseline.md`
-- `2025-10-02-post-isolation.md`
-- `mutation-baseline.md`
-- `phpstan-initial.md`
-- `phpstan-triage.md`
-
-Policy:
-- Append-only (never rewrite historical snapshots).
-- Each snapshot includes: date, commit, tests, runtime, coverage, notable structural changes, next focus.
-
----
-
-## 11. Adding a New Test (Recipe)
+## 10. Adding a New Test (Recipe)
 
 **See**: TESTING.md Section 22 for comprehensive step-by-step guide with examples.
 
@@ -258,7 +232,7 @@ Quick checklist:
 
 ---
 
-## 11A. Testing Patterns & Best Practices
+## 10A. Testing Patterns & Best Practices
 
 This section documents established testing patterns from the test suite refactor (2025-10-02 through 2025-10-17).
 
@@ -540,7 +514,7 @@ $event->setTicketPresaleStart($realNow->modify('-1 day'));
 
 ---
 
-## 12. Service Overrides (Test Performance & Determinism)
+## 11. Service Overrides (Test Performance & Determinism)
 
 Implemented:
 - Lower password hashing cost (test env)
@@ -575,7 +549,7 @@ Documentation:
 
 ---
 
-## 13. Static Analysis Generics Task (31D / 31E)
+## 12. Static Analysis Generics Task (31D / 31E)
 
 Status Tracking:
 - All Sonata Admin subclasses must specify their entity type via `@extends`.
@@ -591,7 +565,7 @@ Replace `object` with concrete entity ASAP.
 
 ---
 
-## 14. Mutation + Static Analysis Synergy
+## 13. Mutation + Static Analysis Synergy
 
 Use mutation survivors to inform missing unit tests:
 - Escaped conditional mutants => Add focused unit test on branch logic.
@@ -602,7 +576,7 @@ Static analysis hints for mutation:
 
 ---
 
-## 15. Decision Log Integration
+## 14. Decision Log Integration
 
 When making structural decisions (e.g., locale canonicalization for OAuth), append a dated entry in `todo.md` “Decision Log” and (optionally) mirror a short summary here.
 
@@ -617,7 +591,7 @@ Example:
 
 ---
 
-## 16. Common Pitfalls (Avoid)
+## 15. Common Pitfalls (Avoid)
 
 | Pitfall                          | Replace With |
 |----------------------------------|--------------|
@@ -630,7 +604,7 @@ Example:
 
 ---
 
-## 17. Quick Command Cheatsheet (Copy/Paste)
+## 16. Quick Command Cheatsheet (Copy/Paste)
 
 Initial PHPStan (triage phase):
 ```
@@ -670,7 +644,7 @@ docker compose exec -T fpm php vendor/bin/phpunit tests/Functional/EventUrlBehav
 
 ---
 
-## 18. Extending This Document
+## 17. Extending This Document
 
 If adding a new tooling layer:
 1. Add section with purpose + canonical commands.
@@ -679,7 +653,7 @@ If adding a new tooling layer:
 
 ---
 
-## 19. Assistance Behavior Summary (For AI Agent)
+## 18. Assistance Behavior Summary (For AI Agent)
 
 When asked to:
 - “Add test”: propose factory-driven, locale-aware, structural assertions.
@@ -688,14 +662,13 @@ When asked to:
 - “Handle static analysis noise”: group by category, resolve in priority order, avoid knee-jerk ignores.
 
 Never:
-- Delete history in metrics.
 - Introduce broad `ignoreErrors` blocks.
 - Replace structural assertions with loose substrings for convenience.
 - Hardcode secrets or environment credentials.
 
 ---
 
-### 21.1 Site-Aware Client Requirement (Sonata Page Multisite)
+### 18.1 Site-Aware Client Requirement (Sonata Page Multisite)
 
 Context:
 The project uses Sonata PageBundle with the "host path by locale" multisite strategy (`HostPathByLocaleSiteSelector`). Functional tests that hit any CMS / page-managed or localized route MUST wrap HTTP requests in a `SiteRequest`. Failing to do so leads to runtime exceptions:
@@ -742,7 +715,7 @@ Documentation Touchpoints:
 
 ---
 
-## 20. Open TODO Interlocks (Select Highlights)
+## 19. Open TODO Interlocks (Select Highlights)
 
 | Task ID | Dependency / Precondition |
 |---------|---------------------------|
@@ -754,7 +727,7 @@ Documentation Touchpoints:
 
 ---
 
-## 21. Contact Points (Conceptual)
+## 20. Contact Points (Conceptual)
 
 If an entity type is unknown for a new Admin class:
 - Temporarily use `<object>` generic but raise a task to replace it.
