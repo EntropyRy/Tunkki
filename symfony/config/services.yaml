@@ -290,11 +290,6 @@ services:
     tags:
       - { name: sonata.block, alias: artistblock }
 
-  entropy.block.email_lists:
-    class: App\Block\EmailLists
-    tags:
-      - { name: sonata.block, alias: emaillistsblock }
-
   entropy.block.door_info:
     class: App\Block\DoorInfoBlock
     tags:
@@ -604,7 +599,6 @@ when@test:
       arguments:
         - "%test.fixed_datetime%"
       public: true
-
 
     # Explicit alias to retrieve the mutable clock directly if desired
     test.mutable_clock:

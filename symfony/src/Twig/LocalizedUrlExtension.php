@@ -47,10 +47,6 @@ class LocalizedUrlExtension extends AbstractExtension
     {
         return [
             new TwigFunction('localized_url', $this->getLocalizedUrl(...)),
-            new TwigFunction(
-                'localized_url_debug',
-                $this->getLocalizedUrlWithDebug(...),
-            ),
             new TwigFunction('localized_route', $this->getLocalizedRoute(...)),
         ];
     }
@@ -401,112 +397,6 @@ class LocalizedUrlExtension extends AbstractExtension
         }
 
         return null;
-    }
-
-    /**
-     * Debug version of getLocalizedUrl that returns both URL and strategy information.
-     * Useful for debugging which strategy was used to generate the URL.
-     *
-     * @param string             $targetLocale The target locale ('fi' or 'en')
-     * @param PageInterface|null $page         Optional page object
-     *
-     * @return array{url: string, strategy: string, debug_info: array} URL and debug information
-     */
-    public function getLocalizedUrlWithDebug(
-        string $targetLocale,
-        PageInterface|int|null $page = null,
-    ): array {
-        $inputWasId = \is_int($page);
-        $resolvedPage = $page;
-
-        if ($inputWasId) {
-            $resolvedPage = $this->entityManager
-                ->getRepository(SonataPagePage::class)
-                ->find($page);
-        }
-
-        $debugInfo = [
-            'target_locale' => $targetLocale,
-            'input_was_id' => $inputWasId,
-            'has_page_object' => $resolvedPage instanceof PageInterface,
-            'strategies_tried' => [],
-        ];
-
-        if ($resolvedPage instanceof PageInterface) {
-            $pageAlias = $resolvedPage->getPageAlias();
-            $debugInfo['page_alias'] = $pageAlias;
-            $debugInfo['source_page_id'] = $this->getPageIdSafely(
-                $resolvedPage,
-            );
-
-            // Try menu lookup first (primary method)
-            $debugInfo['strategies_tried'][] = 'menu_lookup';
-            $targetPage = $this->findPageThroughMenu(
-                $resolvedPage,
-                $targetLocale,
-            );
-            if (
-                $targetPage
-                && $targetPage->getEnabled()
-                && $targetPage->getUrl()
-            ) {
-                $url = $this->formatUrlForLocale(
-                    $targetPage->getUrl(),
-                    $targetLocale,
-                );
-
-                return [
-                    'url' => $url,
-                    'strategy' => 'menu_lookup',
-                    'debug_info' => array_merge($debugInfo, [
-                        'target_page_id' => $this->getPageIdSafely($targetPage),
-                    ]),
-                ];
-            }
-
-            // Try technical alias as fallback
-            if (
-                $pageAlias
-                && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
-            ) {
-                $debugInfo['strategies_tried'][] = 'technical_alias';
-                $baseAlias = $matches[1];
-                $targetAlias = $baseAlias.'_'.$targetLocale;
-                $targetPage = $this->findPageByAlias($targetAlias);
-
-                if (
-                    $targetPage
-                    && $targetPage->getEnabled()
-                    && $targetPage->getUrl()
-                ) {
-                    $url = $this->formatUrlForLocale(
-                        $targetPage->getUrl(),
-                        $targetLocale,
-                    );
-
-                    return [
-                        'url' => $url,
-                        'strategy' => 'technical_alias',
-                        'debug_info' => array_merge($debugInfo, [
-                            'target_alias' => $targetAlias,
-                            'target_page_id' => $this->getPageIdSafely(
-                                $targetPage,
-                            ),
-                        ]),
-                    ];
-                }
-            }
-        }
-
-        // Fallback to regular URL generation (will resolve id again but cheap)
-        $debugInfo['strategies_tried'][] = 'fallback';
-        $url = $this->getLocalizedUrl($targetLocale, $resolvedPage);
-
-        return [
-            'url' => $url,
-            'strategy' => 'fallback',
-            'debug_info' => $debugInfo,
-        ];
     }
 
     /**
