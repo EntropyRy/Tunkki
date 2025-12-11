@@ -12,3 +12,10 @@ dev.sql
 .twig-cs-fixer.cache
 metrics/_archived
 todo.md
+
+# Exclude full metrics directory
+metrics/
+
+# Exclude old debug scripts directories
+scripts/
+symfony/scripts/

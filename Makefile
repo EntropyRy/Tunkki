@@ -54,7 +54,7 @@ PHPUNIT_MEMORY        ?= 1024M
 PHPSTAN_FLAGS_BASE    ?= -c phpstan.neon --memory-limit=$(PHPSTAN_MEMORY) --no-progress --level=$(PHPSTAN_LEVEL)
 GIT_DIFF_BASE         ?= origin/main
 
-METRICS_DIR           ?= metrics
+
 
 ifndef NO_COLOR
 GREEN  := \033[32m
@@ -110,8 +110,8 @@ help:
 	@echo "  make stan                 - Full PHPStan (level=$(PHPSTAN_LEVEL))"
 	@echo "  make stan-fast            - PHPStan on $(PHPSTAN_PATHS_FAST)/"
 	@echo "  make stan-delta           - PHPStan on changed src/ files vs $(GIT_DIFF_BASE)"
-	@echo "  make stan-json            - PHPStan JSON -> $(METRICS_DIR)/phpstan-report.json"
-	@echo "  make metrics-snapshot     - Create timestamped metrics stub"
+
+
 	@echo "  make lint-datetime        - Enforce clock policy (forbidden new DateTime in disallowed layers)"
 	@echo "  make doctor               - Environment / tool diagnostics"
 	@echo "  make clean                - Clear caches (coverage, Infection, PHPStan)"
@@ -184,6 +184,9 @@ coverage: _ensure-vendor prepare-test-db panther-setup
 	else \
 		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --coverage-text --coverage-clover coverage.xml; \
 	fi
+	@printf "%b\n" "$(CYAN)==> Generating shields.io coverage JSON (symfony/coverage.json)$(RESET)"
+	@$(PHP_EXEC) coverage_to_shields.php --in=coverage.xml --out=coverage.json || { printf "%b\n" "$(RED)Failed to generate coverage.json$(RESET)"; exit 1; }
+	@printf "%b\n" "$(GREEN)Wrote coverage.json$(RESET)"
 
 # ---------------- Mutation Testing (Infection) --------------------------------
 
@@ -195,9 +198,7 @@ infection: _ensure-vendor prepare-test-db
 	printf "%b\n" "$(YELLOW)$$cmd$(RESET)"; \
 	$$cmd
 
-.PHONY: infection-baseline
-infection-baseline: infection
-	@printf "%b\n" "$(CYAN)==> (Manual) Append results to metrics/mutation-baseline.md$(RESET)"
+
 
 # Debug helper: prints the exact Infection command and a hex dump of characters
 # Useful for diagnosing Unicode dash issues (e.g. en-dash vs ASCII hyphen)
@@ -245,12 +246,7 @@ stan-delta: _ensure-vendor prepare-test-db
 		$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_FLAGS_BASE) $$files; \
 	fi
 
-.PHONY: stan-json
-stan-json: _ensure-vendor prepare-test-db
-	@mkdir -p $(METRICS_DIR)
-	@printf "%b\n" "$(CYAN)==> PHPStan JSON report -> $(METRICS_DIR)/phpstan-report.json$(RESET)"
-	@$(PHP_EXEC) $(PHPSTAN_BIN) analyse $(PHPSTAN_FLAGS_BASE) --error-format=json > $(METRICS_DIR)/phpstan-report.json || true
-	@printf "%b\n" "$(YELLOW)Non-zero exit tolerated for JSON export. Review the file.$(RESET)"
+
 
 .PHONY: lint-datetime
 lint-datetime: _ensure-vendor prepare-test-db
@@ -272,30 +268,9 @@ update-dev:
 	@$(PHP_EXEC_DEV) vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.dist.php --using-cache=no
 	@$(PHP_EXEC_DEV) vendor/bin/rector process src
 
-# ---------------- Symfony Scripts (Dev Helpers) -------------------------------
-.PHONY: scripts-debug-baseline scripts-route-debug scripts-seed-baseline
 
-scripts-debug-baseline: _ensure-vendor
-	@printf "%b\n" "$(CYAN)==> Sonata CMS baseline debug (APP_ENV=test)$(RESET)"
-	@$(PHP_EXEC) scripts/debug_baseline.php
 
-scripts-route-debug: _ensure-vendor
-	@printf "%b\n" "$(CYAN)==> ChainRouter route debug for '/' and '/en/' (APP_ENV=test)$(RESET)"
-	@$(PHP_EXEC) scripts/route_debug.php
 
-scripts-seed-baseline: _ensure-vendor
-	@printf "%b\n" "$(CYAN)==> Seeding/normalizing CMS baseline once (APP_ENV=test)$(RESET)"
-	@$(PHP_EXEC) scripts/seed_baseline_once.php
-
-# ---------------- Metrics / Scaffolding --------------------------------------
-
-.PHONY: metrics-snapshot
-metrics-snapshot:
-	@mkdir -p $(METRICS_DIR)
-	@f="$(METRICS_DIR)/$(NOW)-snapshot.md"; \
-	if [ -f "$$f" ]; then printf "%b\n" "$(RED)Refusing to overwrite existing $$f$(RESET)"; exit 1; fi; \
-	printf '# Metrics Snapshot (%s)\n\n(Describe changes, runtime, coverage deltas, structural shifts.)\n' "$(NOW)" > "$$f"; \
-	printf "%b\n" "$(GREEN)Created $$f$(RESET)"
 
 # ---------------- Environment Diagnostics ------------------------------------
 

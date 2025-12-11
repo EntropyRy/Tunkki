@@ -1,3 +1,4 @@
+![coverage](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/EntropyRy/Tunkki/main/symfony/coverage.json)
 # Entropy Tunkki
 
 ### initialize environment
