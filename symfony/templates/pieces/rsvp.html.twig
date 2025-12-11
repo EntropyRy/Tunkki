@@ -4,10 +4,16 @@
     {% if not app.user %}<p>{{ 'rsvp.info'|trans|raw }}</p>{% endif %}
     <div class="clearfix">
         {% if app.user %}
+        {% if hasRsvpd %}
+        <a class="btn btn-primary w-100 disabled" aria-disabled="true" data-turbo="false">
+            ✓ {{ 'rsvp.already_rsvpd'|trans }}
+        </a>
+        {% else %}
         <a class="btn btn-primary w-100" data-turbo="false"
            href="{{ path('entropy_event_rsvp', {slug: event.url, year: event.eventdate|date('Y')}) }}">RSVP
             {% if app.user.member.isActiveMember %}({{ event.RSVPs|length }}){% endif %}
         </a>
+        {% endif %}
         {% else %}
             {% if frontpage %}
             <a class="btn btn-primary w-100"

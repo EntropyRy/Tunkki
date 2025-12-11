@@ -125,34 +125,6 @@ class EventController extends Controller
         TicketRepository $ticketRepo,
         EntityManagerInterface $em,
     ): Response {
-        // DEBUG BLOCK (guarded by TEST_EVENT_DEBUG) — remove once issue resolved
-        if (getenv('TEST_EVENT_DEBUG')) {
-            try {
-                $isPub = $this->eventTemporalState->isPublished($event);
-                $userObj = $this->getUser();
-                $who =
-                    $userObj instanceof UserInterface
-                        ? 'auth:'.$userObj::class
-                        : 'anon';
-                $pubDate = $event->getPublishDate()?->format('c') ?? 'null';
-                $flag = var_export(
-                    $this->eventTemporalState->isPublished($event),
-                    true,
-                );
-                @fwrite(
-                    \STDERR,
-                    "[oneSlug] event id={$event->getId()} url={$event->getUrl()} publishedFlag={$flag} publishDate={$pubDate} decider=".
-                        ($isPub ? 'PUBLISHED' : 'NOT_PUBLISHED').
-                        " user={$who}".
-                        \PHP_EOL,
-                );
-            } catch (\Throwable $e) {
-                @fwrite(
-                    \STDERR,
-                    '[oneSlug] debug failed: '.$e->getMessage().\PHP_EOL,
-                );
-            }
-        }
         $form = null;
         $user = $this->getUser();
         if ($event->getTicketsEnabled() && $user) {
@@ -203,13 +175,18 @@ class EventController extends Controller
             !$this->eventTemporalState->isPublished($event)
             && !$user instanceof UserInterface
         ) {
-            if (getenv('TEST_EVENT_DEBUG')) {
-                @fwrite(
-                    \STDERR,
-                    "[oneSlug] denying anonymous (not published)\n",
-                );
-            }
             throw $this->createAccessDeniedException('');
+        }
+        // Determine if logged-in member has already RSVP'd to this event
+        $hasRsvpd = false;
+        if ($event->getRsvpSystemEnabled() && $user instanceof User) {
+            $member = $user->getMember();
+            foreach ($member->getRSVPs() as $memberRsvp) {
+                if ($memberRsvp->getEvent() === $event) {
+                    $hasRsvpd = true;
+                    break;
+                }
+            }
         }
         $template = $event->getTemplate();
 
@@ -217,6 +194,7 @@ class EventController extends Controller
             'event' => $event,
             'rsvpForm' => $form,
             'tickets' => $tickets ?? null,
+            'hasRsvpd' => $hasRsvpd,
         ]);
     }
 

@@ -82,7 +82,7 @@ make stan PHP_EXEC="docker compose exec -T fpm php" PHPSTAN_LEVEL=5
 | Assertions           | Prefer `assertResponseIsSuccessful`, `assertSelectorExists`, structural DOM queries. |
 | Negative coverage    | Include invalid form submissions, missing/expired windows, unauthorized access. |
 | Security boundaries  | Explicit tests for role denial, session invalidation, CSRF, unverified flows. |
-| Substring purge      | Avoid raw HTML substrings except when asserting a micro invariant not exposed structurally (document such cases). |
+| Substring assertions | Do not use raw HTML substrings. If a micro invariant isn’t exposed structurally, add a semantic selector in the template (classes/ids) and assert via selectors. |
 
 ---
 
@@ -211,9 +211,9 @@ grep -R "assertStringContainsString" tests/
 grep -R "strpos(" tests/
 grep -R "assertTrue(.*!empty" tests/
 ```
-Remaining acceptable substrings must be:
-- Documented with reason (no structural selector available).
-- Short-term until `data-test` attributes added.
+Policy:
+- Do not use substring assertions in tests.
+- If a page lacks stable selectors to assert on, update templates/components to provide semantic, stable selectors (classes/ids) and assert structurally.
 
 ---
 
@@ -246,7 +246,7 @@ Quick checklist:
 4. Assertions:
    - Use `assertResponseIsSuccessful()`
    - Use `assertSelectorExists()` or `assertSelectorTextContains()`
-   - Avoid raw HTML scanning; add `data-test` hooks if needed.
+   - Do not use raw HTML scanning. If selectors are missing, add semantic classes/ids to templates and assert structurally.
 5. Negative scenario:
    - At least one invalid input / access denial variant.
 6. No environment variable mutation; prefer service overrides or configuration.
@@ -621,7 +621,7 @@ Example:
 
 | Pitfall                          | Replace With |
 |----------------------------------|--------------|
-| Broad substring HTML checks      | Selector or `data-test` attributes |
+| Broad substring HTML checks      | Add semantic selectors (classes/ids) and use structural assertions |
 | Reusing cross-test DB state      | Factory creation per test |
 | Silent new ignore in phpstan.neon| Document + add expiration |
 | Adding new global fixtures       | Factory or targeted minimal fixture |
