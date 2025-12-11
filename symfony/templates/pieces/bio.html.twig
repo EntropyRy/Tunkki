@@ -26,13 +26,19 @@
         </h3>
         {% endif %}
         {% set artist_bio_current_stage = stage %}
-        {{ block('infos') }}
+        {{ block('artist_info_items') }}
     {% endfor %}
 </div>
 {% endif %}
 {%- endblock -%}
 
-{# Delegate to the event template's infos block so bios render even if this trait is rendered directly. #}
-{%- block infos -%}
-{{- block('infos', 'pieces/event.html.twig') -}}
+{# Render individual artist info items from the infos collection #}
+{%- block artist_info_items -%}
+{%- for info in infos -%}
+    {% if info.StartTime is not empty %}
+        {%- set artist = info.artistClone -%}
+        {%- set name = (artist.name|split(' for')).0 -%}
+        {{- block('cycle', 'pieces/event.html.twig') -}}
+    {%- endif -%}
+{%- endfor -%}
 {%- endblock -%}

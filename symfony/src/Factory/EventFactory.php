@@ -387,7 +387,11 @@ final class EventFactory extends PersistentObjectFactory
      */
     public function withRsvpEnabled(): static
     {
-        return $this->with(['rsvpSystemEnabled' => true]);
+        return $this->with([
+            'rsvpSystemEnabled' => true,
+            'Content' => '{{ rsvp }}', // English content with RSVP token
+            'Sisallys' => '{{ rsvp }}', // Finnish content with RSVP token
+        ]);
     }
 
     private function now(): \DateTimeImmutable

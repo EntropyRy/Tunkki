@@ -620,15 +620,6 @@
 {% set artist_bio_type = 'ART' %}
     {{- block('artist_bios_container') -}}
 {%- endblock -%}
-{%- block infos -%}
-{%- for info in infos -%}
-    {% if info.StartTime is not empty %}
-        {%- set artist = info.artistClone -%}
-        {%- set name = (artist.name|split(' for')).0 -%}
-        {{- block('cycle') -}}
-    {%- endif -%}
-{%- endfor -%}
-{%- endblock -%}
 {%- block artist_event_info -%}
     {% set current_event = event is defined ? event : null %}
     {% set artist_display = artist_display is defined

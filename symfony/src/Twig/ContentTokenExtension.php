@@ -7,7 +7,6 @@ namespace App\Twig;
 use App\Domain\Content\ContentTokenRenderer;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
-use Twig\TemplateWrapper;
 use Twig\TwigFunction;
 
 final class ContentTokenExtension extends AbstractExtension
@@ -35,56 +34,14 @@ final class ContentTokenExtension extends AbstractExtension
     /**
      * @param array<string, mixed> $context
      */
-    public function renderTokens(Environment $env, array $context, string $content, mixed $template = null): string
+    public function renderTokens(Environment $env, array $context, string $content): string
     {
-        $template = $this->resolveTemplate($env, $template ?? ($context['_self'] ?? null));
-
-        if (!$template instanceof TemplateWrapper || !$template->hasBlock('infos')) {
-            $template = $this->fallbackTemplate($env);
-        }
-
-        if (!$template instanceof TemplateWrapper) {
+        try {
+            $template = $env->load('pieces/event.html.twig');
+        } catch (\Throwable) {
             return $content;
         }
 
         return $this->renderer->render($content, $template, $context);
-    }
-
-    private function resolveTemplate(Environment $env, mixed $self): ?TemplateWrapper
-    {
-        if (null === $self) {
-            return null;
-        }
-
-        try {
-            if ($self instanceof TemplateWrapper) {
-                return $self;
-            }
-
-            if (\is_object($self) && method_exists($self, 'getTemplateName')) {
-                return $env->resolveTemplate($self->getTemplateName());
-            }
-
-            if (\is_string($self) && '' !== $self) {
-                return $env->resolveTemplate($self);
-            }
-        } catch (\Throwable) {
-            return null;
-        }
-
-        return null;
-    }
-
-    private function fallbackTemplate(Environment $env): ?TemplateWrapper
-    {
-        try {
-            return $env->resolveTemplate('event.html.twig');
-        } catch (\Throwable) {
-            try {
-                return $env->resolveTemplate('pieces/event.html.twig');
-            } catch (\Throwable) {
-                return null;
-            }
-        }
     }
 }

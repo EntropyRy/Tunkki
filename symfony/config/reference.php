@@ -2025,6 +2025,9 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *         uploadable?: scalar|null, // Default: "Gedmo\\Uploadable\\UploadableListener"
  *         reference_integrity?: scalar|null, // Default: "Gedmo\\ReferenceIntegrity\\ReferenceIntegrityListener"
  *     },
+ *     softdeleteable?: array{
+ *         handle_post_flush_event?: bool, // Default: false
+ *     },
  *     uploadable?: array{
  *         default_file_path?: scalar|null, // Default: null
  *         mime_type_guesser_class?: scalar|null, // Default: "Stof\\DoctrineExtensionsBundle\\Uploadable\\MimeTypeGuesserAdapter"
