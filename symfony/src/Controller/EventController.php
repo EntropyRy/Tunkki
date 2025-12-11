@@ -188,7 +188,7 @@ class EventController extends Controller
                         $em->flush();
                         $this->addFlash(
                             'success',
-                            $trans->trans('rsvp.rsvpd_succesfully'),
+                            $trans->trans('rsvp.rsvpd_successfully'),
                         );
                     } catch (\Exception) {
                         $this->addFlash(

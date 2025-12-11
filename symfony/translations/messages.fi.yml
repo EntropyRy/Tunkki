@@ -22,15 +22,16 @@ Responsibles: Vastaavat
 error:
   access_denied:
     title: Pääsy estetty
-    description: Sinulla ei ole oikeutta nähdä tätä sivua. Voit tarkistaa käyttöoikeutesi tai
+    description: Sinulla ei ole oikeutta nähdä tätä sivua.
   not_found:
     title: Sivua ei löytynyt
-    description: Pyydettyä sivua ei löydy. Tarkista mahdolliset kirjoitusvirheet tai
+    description: Pyydettyä sivua ei löydy. Tarkista mahdolliset kirjoitusvirheet URL-osoitteessa.
   internal:
     title: Jokin meni pieleen
     description: Sivua ei voitu ladata palvelinvirheen vuoksi.
   return_home: palaa etusivulle
   try_again_hint: Voit myös yrittää uudelleen
+  try_again: Yritä uudelleen
 
 checkout:
   email:
@@ -179,7 +180,7 @@ sign_in: Kirjaudu sisään
 membership_information: Jäsentiedot
 membership_status: Jäsentilanne
 used_in_other_services: Käytetään meidän muissa palveluissa
-you_can_change_your_member_information_by_loging_in:
+you_can_change_your_member_information_by_logging_in:
   Voit vaihtaa jäsentietojasi kirjautumalla
   sisään. Ongelma tilanteessa ota yhteyttä hallitukseen.
 edit: muokkaa
@@ -200,11 +201,11 @@ no_linked_media: Ei linkitettyä mediaa
 Add: Lisää
 delete: poista
 Are you sure you want to delete?: Oletko varma että haluat poistaa tämän?
-no_artsit_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
+no_artist_create_one: Et ollut vielä luonut artistiprofiilia. Tästä se onnistuu.
 # bio_attribute removed (was: Bio)
-succesfully_signed_up_for_the_party: Onnistuneesti ilmoittauduttu tapahtumaan esiintymään!
+successfully_signed_up_for_the_party: Onnistuneesti ilmoittauduttu tapahtumaan esiintymään!
 all_artists_signed_up_create_one:
-  Kaikki artistisi on jo ilmoitettu tähän tapahtumaa.
+  Kaikki artistisi on jo ilmoitettu tähän tapahtumaan.
   Haluatko luoda uuden?
 this_artist_signed_up_already: Tämä artisti on jo ilmoitettu tapahtumaan.
 duplicate_artist_found: Saman niminen artisti löytyy jo!
@@ -226,7 +227,7 @@ stream:
     now: Livenä tällä hetkellä
   label: Streami
   labels: Streamit
-  no_streams: Artisti ei ole osallistunut yhtään streamiin
+  no_streams: Artisti ei ole osallistunut yhteenkään streamiin
   loading: ladataan..
   artist:
     not_yours: Ei sinun artistisi
@@ -247,7 +248,7 @@ stream:
     flac: Lataa Flac
     opus: Lataa Opus
   recommended_quality: Paras laatu
-  better_compability: Parempi yhteensopivuus
+  better_compatibility: Parempi yhteensopivuus
   listeners: kuuntelijoita
   command:
     successful: Stream käsky OK
@@ -299,9 +300,9 @@ page:
   fixing:
     icon:
       wrench: Tarkoittaa että tarvitsee korjausta
-      puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isopaa korjausta
+      puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isompaa korjausta
 event:
-  no_artists: Aristeja ei ole vielä valittu
+  no_artists: Artisteja ei ole vielä valittu
   badge:
     stream: Internet lähetys
     clubroom: Tapahtuu kerhohuoneella
@@ -338,12 +339,12 @@ event:
       sivulta. Tähän ilmestyy soitin sivulatauksella, kun streamaus alkaa
   form:
     sign_up:
-      request_edited: Ilmottautumista muokattu
-      request_deleted: Ilmottautuminen poistettu
+      request_edited: Ilmoittautumista muokattu
+      request_deleted: Ilmoittautuminen poistettu
       artist: Artisti
       description:
         Teethän muokkaukset artistiprofiiliisi ennen ilmoittautumista,
-        koska profilli on aina tapahtumakohtainen
+        koska profiili on aina tapahtumakohtainen
       why_should_we_choose_you: Miksi valitsisimme sinut?
       wish_for_playtime: Toive ajankohdasta
       set_length: Toive setin pituudesta
@@ -380,11 +381,11 @@ profile:
   no_renting_rewards:
     Et ole osallistunut vuokraustoimintaan. Kysele vaikka Mattermostissa,
     miten voit osallistua.
-  next_reward_is_bubling_under: Seuraava on tulossa..
+  next_reward_is_bubbling_under: Seuraava on tulossa...
   you_are_active_member_already: Olet jo aktiivijäsen
   application_for_active_member: Aktiivijäsen hakemuksesi
   save: tallenna
-  only_for_active_members: Palvelu on pääsy vain aktiivijäsenillä
+  only_for_active_members: Palveluun on pääsy vain aktiivijäsenillä
   logout: Uloskirjautuminen
   epics:
     title: ePics
@@ -499,7 +500,7 @@ member:
       Jos se ei onnistu ota yhteyttä ylläpitäjiin tai Entropyn hallitukseen.
 You have already requested a reset password email. Please check your email or try again soon.:
   Olet
-  jo pyytänyt salsanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin
+  jo pyytänyt salasanan nollaus sähköpostin. Tarkista sähköpostisi tai yritä myöhemmin
   uudelleen.
 The reset password link is invalid. Please try to reset your password again.:
   Linkki
@@ -520,7 +521,7 @@ rsvp:
   already_rsvpd:
     Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
     tapahtumaa.
-  rsvpd_succesfully:
+  rsvpd_successfully:
     Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
     tapahtumaa.
   info:
@@ -562,7 +563,7 @@ ticket:
   given_out: Lippu on nyt annettu
   give: Anna lippu
   go_to_event_page: Lippu tapahtuma sivulta
-  reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaa eteenpäin.
+  reserved_for_two_hours: Sinulla on nyt 2 tuntia aikaa viedä varaus loppuun tai lippu annetaan eteenpäin.
   presale:
     off: Ennakkomyynti ei ole käytössä
 join_us:
@@ -575,12 +576,12 @@ join_us:
   2: Tapahtumien järjestäminen
   3: Tapahtumatekniikan koulutus
   4: Tekniikan vuokraus
-barcode.expl: Ensin oma koodi ja sitte voit käyttää muita koodeja ja hyväksyminen omalla koodilla
+barcode.expl: Ensin oma koodi ja sitten voit käyttää muita koodeja ja hyväksyminen omalla koodilla
 Random photos from our events: Satunnaisia kuvia meidän tapahtumista
 button:
   join_mattermost: Liity Mattermostiin
   old_announcements: Vanhat tiedotteet
-  theme-swithcer: Teeman vaihtaja
+  theme-switcher: Teeman vaihtaja
 happening:
   heading:
     edit: Muokkaa tapahtumaa
@@ -588,17 +589,16 @@ happening:
   paymentInfo: Maksutiedot
   bookings_for_admin: (Näet nämä koska olet tapahtuman järjestäjä)
   no_reservations: Ei varauksia
-  description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmottautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
+  description_fi: Kerro tapahtumasta. Milloin mahdollinen ennakko ilmoittautuminen? Ravintolan tapauksessa ruokavaihtoehdot ja allergeenit.
   price_fi: Vaihtoehtoisten hintojen takia tekstikenttä. (tapas 10€, tapas + wine 15€)
   payment_info_fi: Jos tapahtuma maksaa jotain niin kerro miten maksu suoritetaan
   show_payment_info: Näytä maksutiedot tapahtumassa
-  sign_ups_have_ended: Ilmottautuminen suljettu
+  sign_ups_have_ended: Ilmoittautuminen suljettu
   markdown_allowed: Markdown <a href="https://www.markdownguide.org/cheat-sheet/">formatointi</a> sallittu
   you_have_signed_up: Ilmoittauduttu onnistuneesti!
-  reservation_cancelled: Ilmottautuminen poistettu!
+  reservation_cancelled: Ilmoittautuminen poistettu!
   created: Tapahtuma luotu
   same_name_exists: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
-  same_name_exits: Saman niminen tapahtuma on jo olemassa. Vaihda nimi
   edited: Muokkaukset tallennettu onnistuneesti.
   ticket_missing: Tarvitset lipun ensin.
   happenings: Tapahtumat
@@ -642,7 +642,7 @@ Back to: Takaisin
 contract:
   accessories:
     prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
-  signed: Allerkirjoitettu!
+  signed: Allekirjoitettu!
   error: Allekirjoita uudestaan ja hyväksy ehdot
 pcs: kpl
 Previous: Edellinen
@@ -650,11 +650,11 @@ Next: Seuraava
 share:
   share: Jaa tämä sivu
   copied: Linkki kopioitu leikepöydälle
-  copy: Kopio linkki
+  copy: Kopioi linkki
 calendar:
   heading: Kalenterin konfigurointi
   help: Voit luoda itsellesi erilaisia kalenterilinkkejä. Kun lisäät kalenteriisi vaikka vain tapahtuma sisältävän kalenterin voit vaihtaa omasta kalenteristasi näiden tapahtumien väriä. Jos lisäät muistutukset niin ne tapahtuvat 24h tapahtumaa ennen.
-  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri softaan käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri softilla
+  help2: HUOM! Jos haluat että kalenteri päivittyy automaattisesti niin sinun pitää lisätä se kalenteri sovellukseen käyttäen kyseistä linkkiä. Tässä ohjeet sen tekemiseen eri kalenteri sovelluksilla
   add_events: Lisää tapahtumat
   add_notifications_for_events: Lisää muistutukset tapahtumille
   add_clubroom_events: Lisää kerhohuone tapahtumat

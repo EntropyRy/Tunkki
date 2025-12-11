@@ -12,15 +12,16 @@ whisper: psst. <a href="/en/join-us">join us</a>
 error:
   access_denied:
     title: Access denied
-    description: You don't have permission to view this page. You can check your access or
+    description: You don't have permission to view this page.
   not_found:
     title: Page not found
-    description: The requested page couldn't be located. Check for any URL misspelling or
+    description: The requested page couldn't be located. Check for any typos in the URL.
   internal:
     title: Something went wrong
     description: The requested page couldn't be loaded due to a server error.
   return_home: return to the homepage
   try_again_hint: You can also try again
+  try_again: Try again
 
 checkout:
   email:
@@ -109,15 +110,15 @@ updated_at: Updated at
 membership_information: Membership information
 membership_status: Membership status
 used_in_other_services: Used in our other services
-you_can_change_your_member_information_by_loging_in: You can change your member information by logging in. If you have a problem you can contact the board.
+you_can_change_your_member_information_by_logging_in: You can change your member information by logging in. If you have a problem you can contact the board.
 
 edit: edit
 preview: Preview
 Picture: Picture
 no_linked_media: No linked media
-no_artsit_create_one: You don't have an artist profile yet. Create one!
+no_artist_create_one: You don't have an artist profile yet. Create one!
 # bio_attribute removed (was: BioEn)
-succesfully_signed_up_for_the_party: Successfully signed up for the party!
+successfully_signed_up_for_the_party: Successfully signed up for the party!
 all_artists_signed_up_create_one: All of your artists have already been signed up for this event. Create a new one?
 
 this_artist_signed_up_already: This artist has already been signed up.
@@ -144,7 +145,7 @@ stream:
     not_yours: Not your artist
     played_at: Artist played at
     other_artists: Other artists at the same time
-    notnull: You have to select artist
+    notnull: You have to select an artist
     your: Your artist
     remove: Remove from Stream
     currently_in_stream: is currently in the stream
@@ -159,7 +160,7 @@ stream:
     flac: Download Flac
     opus: Download Opus
   recommended_quality: Recommended quality
-  better_compability: Better compatibility
+  better_compatibility: Better compatibility
   listeners: Listeners
   command:
     successful: Stream command OK
@@ -285,7 +286,7 @@ profile:
   paid_renting_rewards: Rental compensations
   no_renting_rewards: No rental compensations yet. If you wish to be involved in rentals, ask us on Mattermost.
 
-  next_reward_is_bubling_under: The next reward is bubbling under
+  next_reward_is_bubbling_under: The next reward is bubbling under
   you_are_active_member_already: You are already an active member
   application_for_active_member: Your active member application
   save: Save
@@ -408,7 +409,7 @@ rsvp:
   no_user: To RSVP you must be a logged-in member of Entropy.
   already_rsvpd: You have already RSVPed to this event. We will send you an email before the event.
 
-  rsvpd_succesfully: RSVP successfully saved! We’ll send you an email before the event.
+  rsvpd_successfully: RSVP successfully saved! We'll send you an email before the event.
   info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
 
   closed: Sign-up closed
@@ -496,7 +497,6 @@ happening:
   reservation_cancelled: Reservation cancelled
   created: Happening Created!
   same_name_exists: Happening with the same name already exists. Please change the name.
-  same_name_exits: Happening with the same name already exists. Please change the name.
   edited: Changes saved successfully!
   ticket_missing: You need a ticket first.
   happenings: Happenings

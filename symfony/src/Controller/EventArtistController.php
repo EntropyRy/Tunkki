@@ -79,7 +79,7 @@ class EventArtistController extends AbstractController
         }
 
         if (0 === \count($artistChoices)) {
-            $this->addFlash('warning', $trans->trans('no_artsit_create_one'));
+            $this->addFlash('warning', $trans->trans('no_artist_create_one'));
             $request->getSession()->set('referer', $request->getPathInfo());
 
             return new RedirectResponse(
@@ -151,7 +151,7 @@ class EventArtistController extends AbstractController
                 $em->flush();
                 $this->addFlash(
                     'success',
-                    $trans->trans('succesfully_signed_up_for_the_party'),
+                    $trans->trans('successfully_signed_up_for_the_party'),
                 );
 
                 return new RedirectResponse(

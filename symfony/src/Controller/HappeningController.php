@@ -58,7 +58,7 @@ class HappeningController extends AbstractController
                 $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugFi())
                 || $hr->findHappeningByEventSlugAndSlug($event->getUrl(), $happening->getSlugEn())
             ) {
-                $this->addFlash('warning', 'happening.same_name_exits');
+                $this->addFlash('warning', 'happening.same_name_exists');
 
                 return $this->redirectToRoute('entropy_event_happening_edit', [
                     'slug' => $event->getUrl(),

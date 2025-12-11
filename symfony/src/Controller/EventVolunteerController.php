@@ -286,7 +286,7 @@ class EventVolunteerController extends AbstractController
         $rsvp->setMember($member);
         $em->persist($rsvp);
         $em->flush();
-        $this->addFlash('success', $trans->trans('rsvp.rsvpd_succesfully'));
+        $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
 
         return $this->redirectToRoute('entropy_event_slug', [
             'slug' => $slug,

@@ -9,6 +9,6 @@
         {{ 'error.try_again_hint'|trans }}
     </p>
     <p>
-        <a href="{{ app.request.attributes.get('_route') ? path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|default({}))|merge(app.request.query.all)) : app.request.uri }}" class="btn">{{ 'error.try_again'|trans }}</a>
+        <a href="{{ app.request.attributes.get('_route') ? path(app.request.attributes.get('_route'), (app.request.attributes.get('_route_params')|default({}))|merge(app.request.query.all)) : app.request.uri }}" class="btn btn-info">{{ 'error.try_again'|trans }}</a>
     </p>
 {% endblock %}
