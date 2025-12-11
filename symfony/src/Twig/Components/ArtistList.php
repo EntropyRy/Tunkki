@@ -16,7 +16,8 @@ final class ArtistList
 
     public function __construct(
         private readonly ArtistRepository $artistRepository,
-    ) {}
+    ) {
+    }
 
     public function mount(bool $box = false): void
     {
