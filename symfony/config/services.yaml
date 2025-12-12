@@ -280,11 +280,6 @@ services:
     tags:
       - { name: sonata.block, alias: memberblock }
 
-  entropy.block.artist_info:
-    class: App\Block\ArtistInfoBlock
-    tags:
-      - { name: sonata.block, alias: artistblock }
-
   entropy.block.door_info:
     class: App\Block\DoorInfoBlock
     tags:

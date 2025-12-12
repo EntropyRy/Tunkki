@@ -1,0 +1,90 @@
+{% use 'pieces/event.html.twig' %}
+<h2 class="col-md-12 pb-2 pt-2">
+    {{ 'artist.profiles'|trans }}
+    <a class="btn btn-primary" href="{{ path('entropy_artist_create') }}">{{ 'profile.add_new_artist'|trans|capitalize }} <twig:ux:icon name="plus" /></a>
+</h2>
+{% for artist in app.user.member.artist %}
+    <div class="col-12">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="box">
+                    <div class="box-header">
+                        <h5 class="box-title">{{ 'artist.information'|trans }}</h5>
+                    </div>
+                    <div class="box-body">
+                        <ul class="fa-ul">
+                            <li>
+                                <span class="fa-li"><twig:ux:icon name="user" /></span>
+                                {{ artist.type }}: {{ artist.name }}
+                            </li>
+                            <li>
+                                <span class="fa-li"><twig:ux:icon name="question" /></span>
+                                {{ 'artist.form.genre'|trans }}: {{ artist.genre }}
+                                <br>
+                                {{ 'artist.form.hardware'|trans }}: {{ artist.hardware }}
+                                <br>
+                                {{ 'created_at'|trans }}: {{ artist.createdAt|date('d.m.Y') }}
+                                <br>
+                                {{ 'updated_at'|trans }}: {{ artist.updatedAt|date('d.m.Y') }}
+                            </li>
+                        </ul>
+                        <div class="d-flex justify-content-between">
+                            <a class="btn btn-primary btn-large"
+                                href="{{ path('entropy_artist_edit', {id: artist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                            <a class="btn btn-warning btn-large" data-turbo="false"
+                                onclick="return ConfirmDelete();"
+                                href="{{ path('entropy_artist_delete', {id: artist.id}) }}">{{ 'delete'|trans|capitalize }}</a>
+                        </div>
+                        <script>
+        function ConfirmDelete()
+        {
+        return confirm("{{ 'Are you sure you want to delete?'|trans }}");
+        }
+                        </script>
+                        <div class="pt-2">{{ 'events'|trans|capitalize }}:</div>
+                        <ul>
+                            {% for info in artist.eventArtistInfos %}
+                                {% if not eventTemporalState.isInPast(info.event) or info.StartTime %}
+                                    <li>
+                                        <a href="{{ path('entropy_event_slug', {year: info.event.eventDate|date('Y'), slug: info.event.url}) }}">{{ info.event }}</a>
+                                        {% if info.StartTime %}
+                                            @ {{ info.StartTime|date('H:i') }}
+                                        {% else %}
+                                            {% if info.event.eventDate|date('U') <= 'now'|date('U') %}
+                                                : {{ 'artist.not_selected'|trans }}
+                                            {% else %}
+                                                : {{ 'artist.not_confirmed_yet'|trans }},
+                                                <a href="{{ path('entropy_event_slug_artist_signup_edit', {year: info.event.eventDate|date('Y'), slug: info.event.url, id: info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                                            {% endif %}
+                                        {% endif %}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                        <a class="btn btn-primary w-100"
+                            href="{{ path('entropy_artist_streams', {id: artist.id}) }}">{{ 'artist.streams'|trans|capitalize }}</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="box">
+                    <div class="box-header">
+                        <h5 class="box-title">
+                            {{ 'Quick preview'|trans }}
+                            <span class="float-end">{{ 'Full'|trans }}:
+                                <a href="{{ path('entropy_public_artist', {_locale: 'fi', name: artist.name, id: artist.id}) }}">FI</a> |
+                                <a href="{{ path('entropy_public_artist', {_locale: 'en', name: artist.name, id: artist.id}) }}">EN</a>
+                            </span>
+                        </h5>
+                    </div>
+                    <div class="box-body row">
+                        <div class="col-sm-6">{{ block('artist_preview_info') }}</div>
+                        <div class="col-sm-6">{{ block('artist_pic') }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="col-md-12">{{ 'artist.no_artist_profile'|trans }}</div>
+{% endfor %}
