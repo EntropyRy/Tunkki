@@ -98,11 +98,7 @@ class LocalizedUrlExtension extends AbstractExtension
 
         // For regular Symfony routes, swap the locale suffix
         $currentRoute = $request->attributes->get('_route');
-        if ($currentRoute) {
-            if ('page_slug' == $currentRoute) {
-                // Special handling for 'page_slug' route if needed
-                return 'en' === $targetLocale ? '/en'.$request->getPathInfo() : $request->getPathInfo();
-            }
+        if ($currentRoute && 'page_slug' !== $currentRoute) {
             $routeParams = $request->attributes->get('_route_params', []);
 
             return $this->router->generate($currentRoute.'.'.$targetLocale, $routeParams);
