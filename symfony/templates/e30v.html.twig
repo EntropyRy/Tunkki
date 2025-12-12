@@ -283,9 +283,9 @@
     {%- block mobile_locale %}
         {% if app.request.locale == 'fi' %}
             <span>FI</span> |
-            <a href="{{ localized_url('en') }}">EN</a>
+            <a href="{{ localized_url('en', page.id|default(null)) }}">EN</a>
         {% else %}
-            <a href="{{ localized_url('fi') }}">FI</a> |
+            <a href="{{ localized_url('fi', page.id|default(null)) }}">FI</a> |
             <span>EN</span>
         {% endif %}
     {% endblock -%}

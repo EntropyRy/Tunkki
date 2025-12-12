@@ -27,9 +27,9 @@ use Twig\TwigFunction;
  * - Menu entities can link pages in different locales together
  *
  * The extension uses multiple strategies to find localized pages (in priority order):
- * 1. Menu-based lookup (primary method) - Uses Menu entity relationships
- * 2. Technical alias transformation (fallback method) - Pattern-based alias matching
- * 3. Basic URL path transformation (final fallback) - Simple URL manipulation
+ * 1. Technical alias transformation (primary method) - Fast pattern-based alias matching
+ * 2. Menu-based lookup (fallback method) - Uses Menu entity relationships
+ * 3. Router generation for Symfony routes - Swaps locale suffix in route name
  */
 class LocalizedUrlExtension extends AbstractExtension
 {
@@ -47,21 +47,24 @@ class LocalizedUrlExtension extends AbstractExtension
     {
         return [
             new TwigFunction('localized_url', $this->getLocalizedUrl(...)),
-            new TwigFunction('localized_route', $this->getLocalizedRoute(...)),
         ];
     }
 
     /**
      * Generates a localized URL for the current page or a specific page.
      *
-     * This method uses multiple strategies to find the localized version:
-     * 1. If a page object is provided, uses Menu-based lookup first
-     * 2. Falls back to technical alias transformation if Menu method fails
-     * 3. For regular routes, uses route name transformation
-     * 4. Final fallback uses URL path manipulation
+     * Usage in templates:
+     * - For Sonata pages: {{ localized_url('en', page.id|default(null)) }}
+     * - For Symfony routes: {{ localized_url('en') }} (router handles locale automatically)
      *
-     * @param string             $targetLocale The target locale ('fi' or 'en')
-     * @param PageInterface|null $page         Optional page object. If provided, will find the localized version of this page.
+     * This method uses multiple strategies to find the localized version:
+     * 1. If a page object/ID is provided, uses technical alias lookup first (simpler)
+     * 2. Falls back to Menu-based lookup (always works)
+     * 3. For regular Symfony routes, lets the router handle locale prefixing
+     * 4. Final fallback returns root path with appropriate locale prefix
+     *
+     * @param string                 $targetLocale The target locale ('fi' or 'en')
+     * @param PageInterface|int|null $page         Page object or ID. Required for Sonata CMS pages.
      *
      * @return string The localized URL
      */
@@ -87,92 +90,34 @@ class LocalizedUrlExtension extends AbstractExtension
             return $this->getLocalizedUrlFromPage($page, $targetLocale);
         }
 
-        $currentPath = $request->getPathInfo();
-        $currentRoute = $request->attributes->get('_route');
-
         // Handle root path
+        $currentPath = $request->getPathInfo();
         if ('/' === $currentPath || '/en' === $currentPath) {
             return 'en' === $targetLocale ? '/en' : '/';
         }
 
-        // Check if current route is a Sonata Page route (they start with 'page_')
-        if ($currentRoute && str_starts_with((string) $currentRoute, 'page_')) {
-            // Try to find the current page by route name and get its localized version
-            $currentPage = $this->findPageByRouteName($currentRoute);
-            if ($currentPage instanceof PageInterface) {
-                return $this->getLocalizedUrlFromPage(
-                    $currentPage,
-                    $targetLocale,
-                );
-            }
-
-            // Fallback for Sonata pages
-            return 'en' === $targetLocale ? '/en' : '/';
-        }
-
-        // If we have a route, try to get its localized version
+        // For regular Symfony routes, swap the locale suffix
+        $currentRoute = $request->attributes->get('_route');
         if ($currentRoute) {
-            // Strip locale suffix if present
-            $baseRoute = preg_replace(
-                '/\.(en|fi)$/',
-                '',
-                (string) $currentRoute,
-            );
-            $targetRoute = $baseRoute.'.'.$targetLocale;
-
-            // Get route parameters from the current request
+            if ('page_slug' == $currentRoute) {
+                // Special handling for 'page_slug' route if needed
+                return 'en' === $targetLocale ? '/en'.$request->getPathInfo() : $request->getPathInfo();
+            }
             $routeParams = $request->attributes->get('_route_params', []);
 
-            try {
-                // Prefer structural base route + _locale generation; fall back to suffixed targetRoute.
-                $baseRoute ??= preg_replace('/\.(en|fi)$/', '', (string) $currentRoute);
-                $generated = null;
-
-                // 1. Attempt base route + _locale (works with SiteAwareRouter alias logic).
-                try {
-                    $generated = $this->router->generate(
-                        $baseRoute,
-                        array_merge($routeParams, ['_locale' => $targetLocale])
-                    );
-                } catch (\Throwable) {
-                    // ignore and try suffixed variant
-                }
-
-                // 2. If base attempt failed, try explicit suffixed route name.
-                if (null === $generated) {
-                    $generated = $this->router->generate($targetRoute, $routeParams);
-                }
-
-                return $this->formatUrlForLocale($generated, $targetLocale);
-            } catch (\Throwable) {
-                // Fallback: structural transformation of current path
-                $pathWithoutPrefix = str_starts_with($currentPath, '/en')
-                    ? substr($currentPath, 3)
-                    : $currentPath;
-
-                return $this->formatUrlForLocale($pathWithoutPrefix, $targetLocale);
-            }
+            return $this->router->generate($currentRoute.'.'.$targetLocale, $routeParams);
         }
 
-        // Fallback to default handling
-        $pathWithoutPrefix = str_starts_with($currentPath, '/en')
-            ? substr($currentPath, 3)
-            : $currentPath;
-
-        return 'en' === $targetLocale
-            ? '/en'.$pathWithoutPrefix
-            : $pathWithoutPrefix;
+        // Final fallback for unknown routes
+        return 'en' === $targetLocale ? '/en' : '/';
     }
 
     /**
      * Generates a localized URL from a specific Sonata Page object.
      *
-     * This method uses a two-step approach:
-     * 1. First searches through Menu entities to find linked pages in different locales
-     * 2. If that fails, tries technical alias transformation (e.g., _page_alias_services_fi -> _page_alias_services_en)
-     *
-     * The Menu-based lookup is the primary method as it's more reliable and leverages
-     * the existing Menu structure that properly links pages across locales.
+     * Strategy (optimized for simplicity):
+     * 1. Try technical alias first (simpler, faster when available)
+     * 2. Fallback to Menu lookup (always works, but more complex)
      *
      * @param PageInterface $page         The source page object
      * @param string        $targetLocale The target locale ('fi' or 'en')
@@ -183,11 +128,48 @@ class LocalizedUrlExtension extends AbstractExtension
         PageInterface $page,
         string $targetLocale,
     ): string {
-        // First try the Menu-based approach (primary method)
+        // First try technical alias (simpler when available)
+        $pageAlias = $page->getPageAlias();
+        $site = $page->getSite();
+
+        // Use the site's locale to build target alias (no regex needed!)
+        if ($pageAlias && $site) {
+            $sourceLocale = $site->getLocale();
+            $localeSuffix = '_'.$sourceLocale;
+
+            // Check if alias ends with locale suffix (e.g., _page_alias_services_fi)
+            if (str_ends_with($pageAlias, $localeSuffix)) {
+                $baseAlias = substr($pageAlias, 0, -\strlen($localeSuffix));
+                $targetAlias = $baseAlias.'_'.$targetLocale;
+                $targetPage = $this->findPageByAlias($targetAlias);
+
+                if ($targetPage && $targetPage->getEnabled()) {
+                    $url = $targetPage->getUrl();
+                    $site = $targetPage->getSite();
+                    if ($url && $site) {
+                        $this->logger?->debug(
+                            'LocalizedUrlExtension: Found page via technical alias',
+                            [
+                                'source_alias' => $pageAlias,
+                                'target_alias' => $targetAlias,
+                                'target_locale' => $targetLocale,
+                                'strategy' => 'technical_alias',
+                            ],
+                        );
+
+                        // Site's relativePath already contains the locale prefix (/en or '')
+                        return ($site->getRelativePath() ?? '').$url;
+                    }
+                }
+            }
+        }
+
+        // Fallback to Menu-based lookup (always works)
         $targetPage = $this->findPageThroughMenu($page, $targetLocale);
         if ($targetPage && $targetPage->getEnabled()) {
             $url = $targetPage->getUrl();
-            if ($url) {
+            $site = $targetPage->getSite();
+            if ($url && $site) {
                 $this->logger?->debug(
                     'LocalizedUrlExtension: Found page via Menu lookup',
                     [
@@ -198,45 +180,14 @@ class LocalizedUrlExtension extends AbstractExtension
                     ],
                 );
 
-                // Handle the URL based on locale and prefix requirements
-                return $this->formatUrlForLocale($url, $targetLocale);
+                // Site's relativePath already contains the locale prefix (/en or '')
+                return ($site->getRelativePath() ?? '').$url;
             }
         }
 
-        // If Menu approach fails, try the technical alias approach as fallback
-        $pageAlias = $page->getPageAlias();
-        // Extract the base alias and current locale from technical alias
-        // Expected format: _page_alias_services_fi or _page_alias_services_en
-        if (
-            $pageAlias
-            && preg_match('/^(.+)_(fi|en)$/', $pageAlias, $matches)
-        ) {
-            $baseAlias = $matches[1];
-            $targetAlias = $baseAlias.'_'.$targetLocale;
-            // Find the page with the target alias
-            $targetPage = $this->findPageByAlias($targetAlias);
-            if ($targetPage && $targetPage->getEnabled()) {
-                $url = $targetPage->getUrl();
-                if ($url) {
-                    $this->logger?->debug(
-                        'LocalizedUrlExtension: Found page via technical alias',
-                        [
-                            'source_alias' => $pageAlias,
-                            'target_alias' => $targetAlias,
-                            'target_locale' => $targetLocale,
-                            'strategy' => 'technical_alias',
-                        ],
-                    );
-
-                    // Handle the URL based on locale and prefix requirements
-                    return $this->formatUrlForLocale($url, $targetLocale);
-                }
-            }
-        }
-
-        // Fallback if we can't find the localized page
+        // Final fallback
         $this->logger?->debug(
-            'LocalizedUrlExtension: Using fallback URL generation',
+            'LocalizedUrlExtension: Using fallback URL',
             [
                 'source_page_id' => $this->getPageIdSafely($page),
                 'target_locale' => $targetLocale,
@@ -248,58 +199,23 @@ class LocalizedUrlExtension extends AbstractExtension
     }
 
     /**
-     * Finds a Sonata Page by its route name using CmsManager.
-     *
-     * @param string             $routeName The route name to search for
-     * @param SiteInterface|null $site      The site to search in (optional, will use current site if not provided)
-     *
-     * @return PageInterface|null The found page or null if not found
-     */
-    private function findPageByRouteName(string $routeName, ?SiteInterface $site = null): ?PageInterface
-    {
-        try {
-            if (!$site instanceof SiteInterface) {
-                $request = $this->requestStack->getCurrentRequest();
-                if (!$request instanceof Request) {
-                    return null;
-                }
-                // Get site from request attributes (set by Sonata Page Bundle)
-                $site = $request->attributes->get('site');
-                if (!$site instanceof SiteInterface) {
-                    return null;
-                }
-            }
-
-            $cmsManager = $this->cmsManagerSelector->retrieve();
-
-            return $cmsManager->getPageByRouteName($site, $routeName);
-        } catch (\Throwable) {
-            // Page not found or other error
-            return null;
-        }
-    }
-
-    /**
      * Finds a Sonata Page by its technical alias using CmsManager.
      *
-     * @param string             $alias The technical alias to search for (e.g., '_page_alias_services_fi')
-     * @param SiteInterface|null $site  The site to search in (optional, will use current site if not provided)
+     * @param string $alias The technical alias to search for (e.g., '_page_alias_services_fi')
      *
      * @return PageInterface|null The found page or null if not found
      */
-    private function findPageByAlias(string $alias, ?SiteInterface $site = null): ?PageInterface
+    private function findPageByAlias(string $alias): ?PageInterface
     {
         try {
+            $request = $this->requestStack->getCurrentRequest();
+            if (!$request instanceof Request) {
+                return null;
+            }
+
+            $site = $request->attributes->get('site');
             if (!$site instanceof SiteInterface) {
-                $request = $this->requestStack->getCurrentRequest();
-                if (!$request instanceof Request) {
-                    return null;
-                }
-                // Get site from request attributes (set by Sonata Page Bundle)
-                $site = $request->attributes->get('site');
-                if (!$site instanceof SiteInterface) {
-                    return null;
-                }
+                return null;
             }
 
             $cmsManager = $this->cmsManagerSelector->retrieve();
@@ -400,54 +316,6 @@ class LocalizedUrlExtension extends AbstractExtension
     }
 
     /**
-     * Formats a URL according to locale prefix requirements.
-     *
-     * @param string $url          The base URL
-     * @param string $targetLocale The target locale
-     *
-     * @return string The formatted URL
-     */
-    private function formatUrlForLocale(
-        string $url,
-        string $targetLocale,
-    ): string {
-        // Absolute URL guard: if already fully qualified (http/https),
-        // skip locale prefix manipulation (only normalize trailing slash).
-        if (1 === preg_match('#^https?://#i', $url)) {
-            if ('/' !== $url && str_ends_with($url, '/')) {
-                $url = rtrim($url, '/');
-            }
-
-            return $url;
-        }
-
-        // Normalize trailing slash (except for root)
-        if ('/' !== $url && str_ends_with($url, '/')) {
-            $url = rtrim($url, '/');
-        }
-
-        if ('en' === $targetLocale) {
-            if ('/' === $url) {
-                return '/en';
-            }
-            if (!str_starts_with($url, '/en')) {
-                $url = '/en'.$url;
-            }
-        } elseif ('/en' === $url) {
-            // fi
-            $url = '/';
-        } elseif (str_starts_with($url, '/en/')) {
-            $url = substr($url, 3) ?: '/';
-        }
-
-        if ('' === $url) {
-            $url = '/';
-        }
-
-        return $url;
-    }
-
-    /**
      * Safely gets the page ID as a string, handling proxy objects that may not have getId().
      *
      * @param PageInterface $page The page object
@@ -456,52 +324,8 @@ class LocalizedUrlExtension extends AbstractExtension
      */
     private function getPageIdSafely(PageInterface $page): string
     {
-        try {
-            $id = $page->getId();
+        $id = $page->getId();
 
-            return null !== $id ? (string) $id : 'unknown';
-        } catch (\Throwable) {
-            return 'unknown';
-        }
-    }
-
-    /**
-     * Generate a localized URL based on a specified route and parameters.
-     *
-     * @param string $route        The route name without locale suffix
-     * @param string $targetLocale The target locale (e.g., 'en', 'fi')
-     * @param array  $parameters   The route parameters
-     *
-     * @return string The generated URL
-     */
-    public function getLocalizedRoute(
-        string $route,
-        string $targetLocale,
-        array $parameters = [],
-    ): string {
-        // Strip any existing locale suffix if present
-        $baseRoute = preg_replace('/\.(en|fi)$/', '', $route);
-        $targetRoute = $baseRoute.'.'.$targetLocale;
-
-        try {
-            // Prefer base route + forced _locale first
-            $generated = null;
-            try {
-                $generated = $this->router->generate(
-                    $baseRoute,
-                    array_merge($parameters, ['_locale' => $targetLocale])
-                );
-            } catch (\Throwable) {
-                // ignore and try suffixed
-            }
-
-            if (null === $generated) {
-                $generated = $this->router->generate($targetRoute, $parameters);
-            }
-
-            return $this->formatUrlForLocale($generated, $targetLocale);
-        } catch (\Throwable) {
-            return $this->formatUrlForLocale('/', $targetLocale);
-        }
+        return null !== $id ? (string) $id : 'unknown';
     }
 }

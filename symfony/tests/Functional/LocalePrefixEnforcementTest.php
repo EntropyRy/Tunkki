@@ -130,7 +130,7 @@ final class LocalePrefixEnforcementTest extends FixturesWebTestCase
         // Simulate Finnish request context so localized_url('en') transforms it properly
         $fiPath = $this->finnishPath();
         $req = Request::create($fiPath, 'GET');
-        $req->attributes->set('_route', 'entropy_event_shop.fi');
+        $req->attributes->set('_route', 'entropy_event_shop');
         $req->attributes->set('_route_params', [
             'year' => $year,
             'slug' => $slug,

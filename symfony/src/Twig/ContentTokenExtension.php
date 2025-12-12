@@ -36,11 +36,7 @@ final class ContentTokenExtension extends AbstractExtension
      */
     public function renderTokens(Environment $env, array $context, string $content): string
     {
-        try {
-            $template = $env->load('pieces/event.html.twig');
-        } catch (\Throwable) {
-            return $content;
-        }
+        $template = $env->load('pieces/event.html.twig');
 
         return $this->renderer->render($content, $template, $context);
     }
