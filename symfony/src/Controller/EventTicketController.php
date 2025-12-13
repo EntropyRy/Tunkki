@@ -224,13 +224,9 @@ class EventTicketController extends Controller
         Ticket $ticket,
         TicketRepository $ticketR,
     ): JsonResponse {
-        try {
-            $ticket->setGiven(true);
-            $ticketR->save($ticket, true);
+        $ticket->setGiven(true);
+        $ticketR->save($ticket, true);
 
-            return new JsonResponse(json_encode(['ok' => 'TICKET_GIVEN_OUT']));
-        } catch (\Exception $e) {
-            return new JsonResponse(json_encode(['error' => $e->getMessage()]));
-        }
+        return new JsonResponse(json_encode(['ok' => 'TICKET_GIVEN_OUT']));
     }
 }

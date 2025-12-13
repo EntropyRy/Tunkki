@@ -64,19 +64,9 @@ class EventArtistController extends AbstractController
             }
         }
         // Load Artist choices via repository so Doctrine manages them for the choice field
-        try {
-            $artistChoices = $em
-                ->getRepository(Artist::class)
-                ->findBy(['member' => $member]);
-        } catch (\Throwable $e) {
-            @fwrite(
-                \STDERR,
-                '[artistSignUp] failed loading artists: '.
-                    $e->getMessage().
-                    "\n",
-            );
-            $artistChoices = [];
-        }
+        $artistChoices = $em
+            ->getRepository(Artist::class)
+            ->findBy(['member' => $member]);
 
         if (0 === \count($artistChoices)) {
             $this->addFlash('warning', $trans->trans('no_artist_create_one'));
@@ -98,26 +88,14 @@ class EventArtistController extends AbstractController
         }
         $artisteventinfo = new EventArtistInfo();
         $artisteventinfo->setEvent($event);
-        try {
-            $form = $this->createForm(
-                EventArtistInfoType::class,
-                $artisteventinfo,
-                [
-                    'artists' => $artistChoices,
-                    'ask_time' => $event->getArtistSignUpAskSetLength(),
-                ],
-            );
-        } catch (\Throwable $e) {
-            @fwrite(
-                \STDERR,
-                '[artistSignUp] form build failed: '.$e->getMessage()."\n",
-            );
-            @fwrite(
-                \STDERR,
-                '[artistSignUp] artists.count='.\count($artistChoices)."\n",
-            );
-            throw $e;
-        }
+        $form = $this->createForm(
+            EventArtistInfoType::class,
+            $artisteventinfo,
+            [
+                'artists' => $artistChoices,
+                'ask_time' => $event->getArtistSignUpAskSetLength(),
+            ],
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();
@@ -147,22 +125,15 @@ class EventArtistController extends AbstractController
             $info->setArtistClone($artistClone);
             $em->persist($artistClone);
             $em->persist($info);
-            try {
-                $em->flush();
-                $this->addFlash(
-                    'success',
-                    $trans->trans('successfully_signed_up_for_the_party'),
-                );
+            $em->flush();
+            $this->addFlash(
+                'success',
+                $trans->trans('successfully_signed_up_for_the_party'),
+            );
 
-                return new RedirectResponse(
-                    $this->generateUrl('entropy_artist_profile'),
-                );
-            } catch (\Exception) {
-                $this->addFlash(
-                    'warning',
-                    $trans->trans('this_artist_signed_up_already'),
-                );
-            }
+            return new RedirectResponse(
+                $this->generateUrl('entropy_artist_profile'),
+            );
         }
 
         return $this->render('artist/signup.html.twig', [
@@ -213,22 +184,15 @@ class EventArtistController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $info = $form->getData();
             $em->persist($info);
-            try {
-                $em->flush();
-                $this->addFlash(
-                    'success',
-                    $trans->trans('event.form.sign_up.request_edited'),
-                );
+            $em->flush();
+            $this->addFlash(
+                'success',
+                $trans->trans('event.form.sign_up.request_edited'),
+            );
 
-                return new RedirectResponse(
-                    $this->generateUrl('entropy_artist_profile'),
-                );
-            } catch (\Exception) {
-                $this->addFlash(
-                    'warning',
-                    $trans->trans('Something went wrong!'),
-                );
-            }
+            return new RedirectResponse(
+                $this->generateUrl('entropy_artist_profile'),
+            );
         }
 
         return $this->render('artist/signup.html.twig', [
@@ -269,15 +233,11 @@ class EventArtistController extends AbstractController
         $artistClone = $artisteventinfo->getArtistClone();
         $em->remove($artistClone);
         $em->remove($artisteventinfo);
-        try {
-            $em->flush();
-            $this->addFlash(
-                'success',
-                $trans->trans('event.form.sign_up.request_deleted'),
-            );
-        } catch (\Exception) {
-            $this->addFlash('warning', $trans->trans('Something went wrong!'));
-        }
+        $em->flush();
+        $this->addFlash(
+            'success',
+            $trans->trans('event.form.sign_up.request_deleted'),
+        );
 
         return new RedirectResponse(
             $this->generateUrl('entropy_artist_profile'),
