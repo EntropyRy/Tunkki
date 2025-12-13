@@ -245,11 +245,6 @@ services:
     tags:
       - { name: sonata.block, alias: bookingblock }
 
-  entropy.block.tickets:
-    class: App\Block\TicketsBlock
-    tags:
-      - { name: sonata.block, alias: ticketsblock }
-
   entropy.block.compensations:
     class: App\Block\Compensations
     tags:
@@ -264,11 +259,6 @@ services:
     class: App\Block\JoinUsBlock
     tags:
       - { name: sonata.block, alias: joinusblock }
-
-  entropy.block.statistics:
-    class: App\Block\StatisticsBlock
-    tags:
-      - { name: sonata.block, alias: statisticsblock }
 
   entropy.block.random_artist:
     class: App\Block\RandomArtistBlock
