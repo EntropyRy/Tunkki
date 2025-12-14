@@ -250,11 +250,6 @@ services:
     tags:
       - { name: sonata.block, alias: compensationsblock }
 
-  entropy.block.member.situation:
-    class: App\Block\MemberSituation
-    tags:
-      - { name: sonata.block, alias: membersituationblock }
-
   entropy.block.joinus:
     class: App\Block\JoinUsBlock
     tags:
@@ -265,25 +260,10 @@ services:
     tags:
       - { name: sonata.block, alias: randomartistblock }
 
-  entropy.block.member.info:
-    class: App\Block\MemberInfoBlock
-    tags:
-      - { name: sonata.block, alias: memberblock }
-
-  entropy.block.door_info:
-    class: App\Block\DoorInfoBlock
-    tags:
-      - { name: sonata.block, alias: doorblock }
-
   entropy_tunkki.block.linklist:
     class: App\Block\LinkListBlock
     tags:
       - { name: sonata.block, alias: linklistblock }
-
-  entropy.block.brokenitems:
-    class: App\Block\BrokenItemsBlock
-    tags:
-      - { name: sonata.block, alias: brokenitemsblock }
 
   entropy.block.future_events:
     class: App\Block\FutureEventsBlock

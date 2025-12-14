@@ -1,0 +1,91 @@
+{% set member = app.user.member %}
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{ 'membership_status'|trans }}</h5>
+    </div>
+    <div class="box-body">
+        <ul class="fa-ul">
+            <li>
+                <span class="fa-li"><twig:ux:icon name="star" /></span>
+                <div class="progress" style="height: 25px;">
+                    <div class="progress-bar progress-bar-striped progress-bar-animated"
+                            role="progressbar"
+                            style="width: {{ member.ProgressP }}%"
+                            aria-valuenow="{{ member.ProgressP }}"
+                            aria-valuemin="0"
+                            aria-valuemax="100">
+                        {% if member.acceptedAsHonoraryMember %}
+                            {{ 'HC member'|trans }}
+                        {% elseif member.isActiveMember %}
+                            {{ 'Active member'|trans }}
+                        {% else %}
+                            {{ 'Member'|trans }}
+                        {% endif %}
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="row offset-1 pb-2">
+            <div class="col-md-4">
+                {% if member %}
+                    <twig:ux:icon name="check-square" height="1.2em" />
+                {% else %}
+                    <twig:ux:icon name="square" height="1.2em"/>
+                {% endif %}
+                {{ 'Member account created'|trans }}:
+                {{ member.createdAt|date('d.m.Y') }}
+            </div>
+            <div class="col-md-4">
+                <span>
+                    {% if member.isActiveMember %}
+                        <twig:ux:icon name="check-square" height="1.2em"/>
+                    {% else %}
+                        <twig:ux:icon name="square" height="1.2em"/>
+                    {% endif %}
+                    {{ 'Active member'|trans }}
+                    {% if member.ApplicationHandledDate %}{{ 'since'|trans }} {{ member.ApplicationHandledDate|date('d.m.Y') }}{% endif %}
+                    {% if not member.isActiveMember %}
+                        <a class="btn btn-primary btn-sm"
+                            href="{{ path('apply_for_active_member') }}">{{ 'profile.apply_for_active_member'|trans|capitalize }}</a>
+                    {% endif %}
+                </span>
+            </div>
+            <div class="col-md-4">
+                <span>
+                    {% if member.AcceptedAsHonoraryMember %}
+                        <twig:ux:icon name="check-square" height="1.2em"/>
+                    {% else %}
+                        <twig:ux:icon name="square" height="1.2em"/>
+                    {% endif %}
+                    {{ 'HC member'|trans }}
+                    {% if member.AcceptedAsHonoraryMember %}
+                        {{ 'since'|trans }} {{ member.AcceptedAsHonoraryMember|date('d.m.Y') }}
+                    {% endif %}
+                </span>
+            </div>
+            <div class="col-md-11 justify-content-end">
+                {% if member.canVote %}
+                    <twig:ux:icon name="check-square" height="1.2em"/>
+                {% else %}
+                    <twig:ux:icon name="square" height="1.2em"/>
+                {% endif %}
+                {{ 'member.can_vote'|trans }}
+            </div>
+        </div>
+        <hr>
+        <ul class="fa-ul">
+            <li>
+                <span class="fa-li"><twig:ux:icon name="users-gear" /></span>
+                {{ 'profile.access_groups'|trans }}:
+                {% for group in member.user.AccessGroups %}
+                    {% if group.active %}
+                        {{ this.group }}
+                        {% if not loop.last %},{% endif %}
+                    {% endif %}
+                {% else %}
+                    {{ 'profile.no_access_groups'|trans }}
+                {% endfor %}
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,87 @@
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">{{ 'membership_information'|trans }}</h5>
+    </div>
+    <div class="box-body">
+        <ul class="fa-ul">
+            <li>
+                <span class="fa-li"><twig:ux:icon name="user" /></span>
+                {{ member.name }}, {{ member.username }}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="image" /></span>
+                <span>{{ 'member.epics_username'|trans }}:</span>
+                {% if member.epicsUsername %}
+                    {{ member.epicsUsername }}
+                {% else %}
+                    <em>{{ 'member.epics_username.not_set'|trans }}</em>
+                {% endif %}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="envelope" /></span>
+                {% if not member.emailVerified %}
+                    <p class="text-danger">{{ member.email }} - {{ 'member.email_unverified'|trans }}</p>
+                    <a href="{{ path('profile_resend_verification') }}" class="btn btn-primary btn-sm" data-turbo="false">{{ 'resend_verification'|trans }}</a>
+                {% else %}
+                    {{ member.email }}
+                {% endif %}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="lock" /></span>
+                ********
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="phone" /></span>
+                {{ member.phone }}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="city" /></span>
+                {{ member.CityOfResidence }}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="language" /></span>
+                {{ member.locale|trans }}&nbsp;
+            </li>
+            <li>
+                <span class="fa-li">
+                    {% if member.StudentUnionMember %}
+                        <twig:ux:icon name="check-square" />
+                    {% else %}
+                        <twig:ux:icon name="square" />
+                    {% endif %}
+                </span>
+                {{ 'Student union member'|trans }}
+            </li>
+            <li>
+                <span class="fa-li"><twig:ux:icon name="palette" /></span>
+                {{ member.theme|default('bright')|trans }}&nbsp;
+            </li>
+            <li>
+                <span class="fa-li">
+                    {% if member.allowInfoMails %}
+                        <twig:ux:icon name="check-square" />
+                    {% else %}
+                        <twig:ux:icon name="square" />
+                    {% endif %}
+                </span>
+                {{ 'member.allow_info_mails'|trans }}
+            </li>
+            {% if member.allowActiveMemberMails %}
+            <li>
+                <span class="fa-li">
+                    {% if member.allowActiveMemberMails %}
+                        <twig:ux:icon name="check-square" />
+                    {% else %}
+                        <twig:ux:icon name="square" />
+                    {% endif %}
+                </span>
+                {{ 'member.allow_active_member_mails'|trans }}
+            </li>
+            {% endif %}
+        </ul>
+        <div class="d-grid gap-2">
+            <a class="btn btn-primary btn-large" href="{{ path('profile_edit') }}">{{ 'edit'|trans|capitalize }}</a>
+            <a class="btn btn-primary" href="{{ path('entropy_event_calendar_config') }}">{{ 'calendar.heading'|trans }}</a>
+        </div>
+    </div>
+</div>

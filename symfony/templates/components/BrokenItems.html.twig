@@ -1,0 +1,26 @@
+<div class="box">
+    <div class="box-header">
+        <h5 class="box-title">
+            {{ 'block.items.title'|trans }} <a href="/korjattavat" class="float-right">{{ 'Full list'|trans }}</a>
+        </h5>
+    </div>
+    <div class="box-body">
+        {% for item in this.broken %}
+            <div>
+                <span class="font-weight-bold">
+                    {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL') or is_granted('ROLE_SUPER_ADMIN') %}
+                        <a href="{{ path('admin_app_item_edit', {id: item.id}) }}">{{ item }}</a>
+                    {% else %}
+                        {{ item }}
+                    {% endif %}
+                </span>
+                {% if item.fixingHistory is not empty %}: {{ item.getFixingHistoryMessages(1, 'html')|raw }}{% endif %}
+            </div>
+        {% endfor %}
+        {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL') or is_granted('ROLE_SUPER_ADMIN') %}
+            <a class="mt-2 btn btn-primary" href="{{ path('admin_app_item_list') }}">{{ 'block.bookings.manage'|trans }}</a>
+        {% else %}
+            <div class="mt-2">{{ 'block.items.help'|trans }}</div>
+        {% endif %}
+    </div>
+</div>

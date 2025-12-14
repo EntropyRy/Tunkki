@@ -5,14 +5,14 @@
         <div class="col-md-6">
             {% if member.isActiveMember %}
                 {% if barcode is defined %}
-                    <div class="{% if app.user.member.theme == 'dark' %}bg-white{% endif %}">
+                    <div class="{% if member.theme == 'dark' %}bg-white{% endif %}">
                         <div class="mx-auto barcode" style="width:246px;">
                             {{ barcode.1|raw }}
                             <p class="text-center">Code: {{ barcode.0 }}</p>
                         </div>
                     </div>
                 {% endif %}
-                {{ sonata_block_render({type: 'entropy.block.door_info'}) }}
+                <twig:DoorInfo :member="member" />
             {% endif %}
             {{ sonata_block_render({type: 'entropy.block.future_events'}, {box: true}) }}
             {{ sonata_block_render({type: 'entropy.block.random_artist'}, {box: true}) }}
@@ -21,7 +21,7 @@
         <div class="col-md-6">
             <twig:Statistics />
             <twig:BookingsInProgress :box="true" />
-            {{ sonata_block_render({type: 'entropy.block.brokenitems'}, {bs3: false, random: true}) }}
+            <twig:BrokenItems :random="true" />
         </div>
     </div>
 {% endblock %}

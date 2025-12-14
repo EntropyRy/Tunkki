@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-4">
-            {{ sonata_block_render({type: 'entropy.block.member.info'}) }}
+            <twig:MemberInfo :member="app.user.member" />
             {{ sonata_block_render({type: 'entropy.block.compensations'}) }}
             <div class="box mt-3">
                 <div class="box-header">
@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="col-sm-8">
-            {{ sonata_block_render({type: 'entropy.block.member.situation'}) }}
+            <twig:MemberSituation />
             <twig:Tickets :member="app.user.member" />
         </div>
     </div>
