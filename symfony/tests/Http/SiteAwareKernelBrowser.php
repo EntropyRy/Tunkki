@@ -95,6 +95,21 @@ final class SiteAwareKernelBrowser extends KernelBrowser
         }
     }
 
+    /**
+     * Assert that a selector does not exist in the last response.
+     */
+    public function assertSelectorNotExists(string $selector, string $message = ''): void
+    {
+        if (null === $this->lastCrawler) {
+            throw new \LogicException('No crawler available. Did you make a request?');
+        }
+
+        $count = $this->lastCrawler->filter($selector)->count();
+        if ($count > 0) {
+            throw new \PHPUnit\Framework\AssertionFailedError($message ?: "Selector '{$selector}' was found {$count} time(s).");
+        }
+    }
+
     public function loginUser(
         object $user,
         string $firewallContext = 'main',

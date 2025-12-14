@@ -35,16 +35,16 @@ final readonly class ZMQService
      *
      * @param string $command The command string to send
      *
-     * @return string|\ZMQSocketException Response from the door system or 'broken' on timeout, or exception on error
+     * @return string Response from the door system or 'broken' on timeout, or exception message on error
      */
-    public function send(string $command): string|\ZMQSocketException
+    public function send(string $command): string
     {
         try {
             $socket = $this->connect();
             $socket->send($command);
             $response = $socket->recv();
         } catch (\ZMQSocketException $e) {
-            return $e;
+            return $e->getMessage();
         }
 
         if (empty($response)) {
@@ -60,9 +60,9 @@ final readonly class ZMQService
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string|\ZMQSocketException Response from the door system
+     * @return string Response from the door system
      */
-    public function sendInit(string $username, int $timestamp): string|\ZMQSocketException
+    public function sendInit(string $username, int $timestamp): string
     {
         $command = $this->buildCommand($this->environment, 'init', $username, $timestamp);
 
@@ -75,9 +75,9 @@ final readonly class ZMQService
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string|\ZMQSocketException Response from the door system
+     * @return string Response from the door system
      */
-    public function sendOpen(string $username, int $timestamp): string|\ZMQSocketException
+    public function sendOpen(string $username, int $timestamp): string
     {
         $command = $this->buildCommand($this->environment, 'open', $username, $timestamp);
 

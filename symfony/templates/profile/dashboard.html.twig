@@ -15,7 +15,7 @@
                 <twig:DoorInfo :member="member" />
             {% endif %}
             {{ sonata_block_render({type: 'entropy.block.future_events'}, {box: true}) }}
-            {{ sonata_block_render({type: 'entropy.block.random_artist'}, {box: true}) }}
+            <twig:RandomArtist />
             <twig:ArtistList :box="true" />
         </div>
         <div class="col-md-6">

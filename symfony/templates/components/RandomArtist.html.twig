@@ -1,0 +1,16 @@
+{% use 'pieces/event.html.twig' %}
+<div class="box random-artist">
+    <div class="box-header">
+        <h5 class="box-title">{{ 'artist.random.preview'|trans }}</h5>
+    </div>
+    {% if artist %}
+        <div class="box-body random-artist-content row">
+            <div class="col-sm-6">{{ block('artist_preview_info') }}</div>
+            <div class="col-sm-6">{{ block('artist_pic') }}</div>
+        </div>
+    {% else %}
+        <div class="box-body random-artist-empty">
+            <p class="text-muted">{{ 'artist.random.none'|trans|default('No artist available') }}</p>
+        </div>
+    {% endif %}
+</div>

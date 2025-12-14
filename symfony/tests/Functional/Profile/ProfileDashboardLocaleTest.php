@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Profile;
 
+use App\Factory\ArtistFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
@@ -184,5 +185,59 @@ final class ProfileDashboardLocaleTest extends FixturesWebTestCase
             $crawler->filter('body')->count(),
             'Dashboard body should render.',
         );
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('dashboardLocaleProvider')]
+    public function testRandomArtistDisplaysWhenArtistsExist(string $locale): void
+    {
+        // Create single artist - we can predict it will be shown
+        $artist = ArtistFactory::new()->create([
+            'name' => 'Test Artist Name',
+            'copyForArchive' => false,
+            'type' => 'band',
+        ]);
+
+        $this->seedClientHome($locale);
+        $member = MemberFactory::new()->active()->create([
+            'locale' => $locale,
+            'username' => 'dashboard-'.$locale,
+        ]);
+        $user = $member->getUser();
+        $this->client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
+
+        $path = $this->router->generate('dashboard', [
+            '_locale' => $locale,
+        ]);
+        $this->client->request('GET', $path);
+
+        $this->assertResponseIsSuccessful();
+        // Artist preview content renders (component uses dedicated selectors to avoid collisions)
+        $this->client->assertSelectorExists('.random-artist .random-artist-content');
+        // Verify empty state message does NOT exist
+        $this->client->assertSelectorNotExists('.random-artist .random-artist-empty');
+        // Verify the artist name appears in the polaroid caption
+        $this->client->assertSelectorTextContains('.random-artist .polaroid .caption', 'Test Artist Name');
+    }
+
+    public function testRandomArtistShowsEmptyStateWhenNoArtists(): void
+    {
+        $this->seedClientHome('fi');
+        $member = MemberFactory::new()->active()->create([
+            'locale' => 'fi',
+            'username' => 'dashboard-fi',
+        ]);
+        $user = $member->getUser();
+        $this->client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
+
+        $path = $this->router->generate('dashboard', ['_locale' => 'fi']);
+        $this->client->request('GET', $path);
+
+        $this->assertResponseIsSuccessful();
+        // Empty state: dedicated empty container with muted text
+        $this->client->assertSelectorExists('.random-artist .random-artist-empty p.text-muted');
+        // Verify artist content does NOT exist
+        $this->client->assertSelectorNotExists('.random-artist .random-artist-content');
     }
 }

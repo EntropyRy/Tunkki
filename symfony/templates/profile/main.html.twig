@@ -4,7 +4,7 @@
     <div class="row">
         <div class="col-sm-4">
             <twig:MemberInfo :member="app.user.member" />
-            {{ sonata_block_render({type: 'entropy.block.compensations'}) }}
+            <twig:Compensations />
             <div class="box mt-3">
                 <div class="box-header">
                     <h5 class="box-title">{{ 'profile.epics.title'|trans }}</h5>
