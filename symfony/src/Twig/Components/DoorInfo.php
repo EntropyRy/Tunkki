@@ -23,11 +23,8 @@ final class DoorInfo
 
     public function mount(Member $member): void
     {
-        if (null === $member) {
-            return;
-        }
-        $timestamp = (new \DateTimeImmutable())->getTimestamp();
-        $this->status = $this->zmq->sendInit($member, $timestamp);
+        $timestamp = new \DateTimeImmutable()->getTimestamp();
+        $this->status = $this->zmq->sendInit($member->getUsername(), $timestamp);
         $this->logs = $this->doorLogR->getLatest(3);
     }
 }

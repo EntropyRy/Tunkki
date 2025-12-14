@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Twig\Components;
 
+use App\Entity\Booking;
 use App\Repository\BookingRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
 final class BookingsInProgress
 {
+    /**
+     * @var Booking[]
+     */
+    public array $bookings;
     public bool $box = false;
 
     public function __construct(

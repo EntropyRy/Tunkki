@@ -10,6 +10,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 #[AsTwigComponent]
 final class BrokenItems
 {
+    public array $broken = [];
     public bool $random = false;
 
     public function __construct(

@@ -5,7 +5,7 @@
         </h5>
     </div>
     <div class="box-body">
-        {% for item in this.broken %}
+        {% for item in this.broken|slice(0, 5) %}
             <div>
                 <span class="font-weight-bold">
                     {% if is_granted('ROLE_ENTROPY_TUNKKI_ADMIN_ITEM_ALL') or is_granted('ROLE_SUPER_ADMIN') %}

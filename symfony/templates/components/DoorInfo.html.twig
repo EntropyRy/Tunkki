@@ -1,40 +1,40 @@
-{% if this.member is defined %}
-    <div class="box">
-        <div class="box-header">
-            <h5>
-                {{ 'profile.door.log'|trans|capitalize }},
-                status:
-                {% if status == 'broken' %}
-                    <span class="text-danger">{{ 'profile.door.connection_problems'|trans }}!</span>
-                {% else %}
-                    <span class="text-success">{{ 'profile.door.connection_ok'|trans }}!</span>
-                {% endif %}
-            </h5>
-        </div>
-        <div class="box-body">
-            {% if member.isActiveMember %}
-                <ul class="fa-ul">
-                    {% for log in logs|reverse %}
-                        {% if loop.last %}
-                        </ul>
-                        <div class="linetext">
-                            <span style="font-size: 1em">{{ 'profile.door.latest'|trans }}</span>
-                        </div>
-                        <ul class="fa-ul">
-                        {% endif %}
-                        <li>
-                            <span class="fa-li"><twig:ux:icon name="key" /></span>
-                            {{ log.createdAt|date }} {{ log.member }}
-                            {% if log.message is not empty %}: {{ log.message|default('profile.door.no_message')|trans }}{% endif %}
-                        </li>
-                    {% endfor %}
-                </ul>
-                <a class="btn w-100 btn-primary"
-                    href="{{ path('kerde_door.' ~ app.request.locale) }}">{{ 'profile.door.open_the_door_page'|trans }}</a>
-                <p>{{ 'profile.door.wifi'|trans|raw }}</p>
+{% if member is defined %}
+<div class="box">
+    <div class="box-header">
+        <h5>
+            {{ 'profile.door.log'|trans|capitalize }},
+            status:
+            {% if status == 'broken' %}
+                <span class="text-danger">{{ 'profile.door.connection_problems'|trans }}!</span>
             {% else %}
-                <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
+                <span class="text-success">{{ 'profile.door.connection_ok'|trans }}!</span>
             {% endif %}
-        </div>
+        </h5>
     </div>
+    <div class="box-body">
+        {% if member.isActiveMember %}
+            <ul class="fa-ul">
+                {% for log in logs|reverse %}
+                    {% if loop.last %}
+                    </ul>
+                    <div class="linetext">
+                        <span style="font-size: 1em">{{ 'profile.door.latest'|trans }}</span>
+                    </div>
+                    <ul class="fa-ul">
+                    {% endif %}
+                    <li>
+                        <span class="fa-li"><twig:ux:icon name="key" /></span>
+                        {{ log.createdAt|date }} {{ log.member }}
+                        {% if log.message is not empty %}: {{ log.message|default('profile.door.no_message')|trans }}{% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <a class="btn w-100 btn-primary"
+                href="{{ path('kerde_door.' ~ app.request.locale) }}">{{ 'profile.door.open_the_door_page'|trans }}</a>
+            <p>{{ 'profile.door.wifi'|trans|raw }}</p>
+        {% else %}
+            <h4>{{ 'profile.door.not_active_member'|trans }}</h4>
+        {% endif %}
+    </div>
+</div>
 {% endif %}
