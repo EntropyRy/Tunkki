@@ -86,10 +86,10 @@ $percentage = 0.0;
 if ($statements > 0) {
     $percentage = ($coveredStatements / $statements) * 100.0;
 }
-$rounded = (int) round($percentage);
+$rounded = (float) round($percentage, 2);
 
 // -------- Color ramp ---------------------------------------------------------
-$color = (function (int $p): string {
+$color = (function (float $p): string {
     if ($p >= 90) {
         return 'brightgreen';
     }

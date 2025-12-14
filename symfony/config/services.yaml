@@ -290,11 +290,6 @@ services:
     tags:
       - { name: sonata.block, alias: futureeventsblock }
 
-  entropy.block.bookings_in_progress:
-    class: App\Block\BookingsInProgressBlock
-    tags:
-      - { name: sonata.block, alias: bookingsinprogressblock }
-
   entropy_tunkki.admin.who_can_rent_choice:
     class: App\Admin\WhoCanRentChoiceAdmin
     tags:

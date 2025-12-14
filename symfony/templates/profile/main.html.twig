@@ -1,7 +1,6 @@
 {% extends 'fullcolumn.html.twig' %}
 {% block title %}{{ member.name }} | Entropy ry{% endblock %}
 {% block content %}
-    {% if not member.isActiveMember %}{# { sonata_block_render({'type':'entropy.block.door'}) } #}{% endif %}
     <div class="row">
         <div class="col-sm-4">
             {{ sonata_block_render({type: 'entropy.block.member.info'}) }}
