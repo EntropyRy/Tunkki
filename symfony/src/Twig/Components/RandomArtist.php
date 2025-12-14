@@ -21,7 +21,7 @@ final class RandomArtist
     public function mount(): void
     {
         $artists = $this->artistRepository->findBy(['copyForArchive' => false]);
-        if ($artists !== []) {
+        if ([] !== $artists) {
             shuffle($artists);
             $this->artist = array_pop($artists);
         }
