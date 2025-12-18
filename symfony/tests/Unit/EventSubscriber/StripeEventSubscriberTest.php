@@ -12,11 +12,11 @@ use App\Entity\Product;
 use App\Entity\Ticket;
 use App\EventSubscriber\StripeEventSubscriber;
 use App\Repository\CheckoutRepository;
-use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
 use App\Service\BookingReferenceService;
+use App\Service\Email\EmailService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\StripeService;
@@ -28,7 +28,6 @@ use Psr\Log\LoggerInterface;
 use Stripe\Event as StripeEvent;
 use Symfony\Component\AssetMapper\AssetMapperInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
@@ -47,9 +46,8 @@ final class StripeEventSubscriberTest extends TestCase
     private StripeService $stripe;
     private MemberRepository $memberRepo;
     private TicketRepository $ticketRepo;
-    private EmailRepository $emailRepo;
+    private EmailService $emailService;
     private BookingReferenceService $rn;
-    private MailerInterface $mailer;
     private MattermostNotifierService $mm;
     private QrService|\PHPUnit\Framework\MockObject\MockObject $qrGenerator;
 
@@ -64,8 +62,7 @@ final class StripeEventSubscriberTest extends TestCase
         ?LoggerInterface $logger = null,
         ?MemberRepository $memberRepo = null,
         ?TicketRepository $ticketRepo = null,
-        ?EmailRepository $emailRepo = null,
-        ?MailerInterface $mailer = null,
+        ?EmailService $emailService = null,
         ?MattermostNotifierService $mm = null,
     ): void {
         $this->checkoutRepo = $checkoutRepo ?? $this->createStub(CheckoutRepository::class);
@@ -73,8 +70,7 @@ final class StripeEventSubscriberTest extends TestCase
         $this->logger = $logger ?? $this->createStub(LoggerInterface::class);
         $this->memberRepo = $memberRepo ?? $this->createStub(MemberRepository::class);
         $this->ticketRepo = $ticketRepo ?? $this->createStub(TicketRepository::class);
-        $this->emailRepo = $emailRepo ?? $this->createStub(EmailRepository::class);
-        $this->mailer = $mailer ?? $this->createStub(MailerInterface::class);
+        $this->emailService = $emailService ?? $this->createStub(EmailService::class);
         $this->mm = $mm ?? $this->createStub(MattermostNotifierService::class);
 
         $parameterBag = $this->createStub(ParameterBagInterface::class);
@@ -93,9 +89,8 @@ final class StripeEventSubscriberTest extends TestCase
             $this->stripe,
             $this->memberRepo,
             $this->ticketRepo,
-            $this->emailRepo,
+            $this->emailService,
             $this->rn,
-            $this->mailer,
             $this->mm,
             $this->qrGenerator,
         );
@@ -323,13 +318,13 @@ final class StripeEventSubscriberTest extends TestCase
         $checkoutRepo = $this->createMock(CheckoutRepository::class);
         $productRepo = $this->createStub(ProductRepository::class);
         $ticketRepo = $this->createMock(TicketRepository::class);
-        $mailer = $this->createMock(MailerInterface::class);
+        $emailService = $this->createMock(EmailService::class);
         $mm = $this->createMock(MattermostNotifierService::class);
         $this->bootSubscriber(
             checkoutRepo: $checkoutRepo,
             productRepo: $productRepo,
             ticketRepo: $ticketRepo,
-            mailer: $mailer,
+            emailService: $emailService,
             mm: $mm,
         );
 
@@ -368,8 +363,8 @@ final class StripeEventSubscriberTest extends TestCase
             ->method('save');
 
         // No emails should be sent (no tickets)
-        $mailer->expects($this->never())
-            ->method('send');
+        $emailService->expects($this->never())
+            ->method('sendTicketQrEmails');
 
         // No mattermost notification (no tickets sold)
         $mm->expects($this->never())

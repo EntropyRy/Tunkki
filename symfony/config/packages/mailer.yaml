@@ -1,3 +1,7 @@
 framework:
     mailer:
         dsn: '%env(MAILER_DSN)%'
+        envelope:
+            sender: 'webmaster@entropy.fi'
+        headers:
+            From: 'Entropy ry <webmaster@entropy.fi>'

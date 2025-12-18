@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Enum\EmailPurpose;
 use App\Repository\EmailRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -23,8 +24,14 @@ class Email implements \Stringable
     #[ORM\Column(type: 'text')]
     private string $body = '';
 
-    #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
-    private ?string $purpose = null;
+    #[ORM\Column(type: Types::STRING, length: 255, nullable: true, enumType: EmailPurpose::class)]
+    private ?EmailPurpose $purpose = null;
+
+    /**
+     * @var array<EmailPurpose|string> Doctrine JSON column returns strings, converted to enums in getter
+     */
+    #[ORM\Column(type: Types::JSON)]
+    private array $recipientGroups = [];
 
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
@@ -97,14 +104,40 @@ class Email implements \Stringable
         return $this;
     }
 
-    public function getPurpose(): ?string
+    public function getPurpose(): ?EmailPurpose
     {
         return $this->purpose;
     }
 
-    public function setPurpose(?string $purpose): self
+    public function setPurpose(?EmailPurpose $purpose): self
     {
         $this->purpose = $purpose;
+
+        return $this;
+    }
+
+    /**
+     * @return array<EmailPurpose>
+     */
+    public function getRecipientGroups(): array
+    {
+        // Convert strings to enum instances if needed (from JSON deserialization)
+        return array_map(
+            fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value : EmailPurpose::from($value),
+            $this->recipientGroups
+        );
+    }
+
+    /**
+     * @param array<EmailPurpose|string> $recipientGroups
+     */
+    public function setRecipientGroups(array $recipientGroups): self
+    {
+        // Store as string values for JSON serialization
+        $this->recipientGroups = array_map(
+            fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value->value : $value,
+            $recipientGroups
+        );
 
         return $this;
     }
@@ -148,7 +181,7 @@ class Email implements \Stringable
     #[\Override]
     public function __toString(): string
     {
-        return $this->purpose ?: 'Email for '.$this->event;
+        return $this->purpose?->label() ?? 'Email for '.$this->event;
     }
 
     public function getEvent(): ?Event

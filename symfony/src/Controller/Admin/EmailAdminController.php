@@ -5,18 +5,17 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Email;
+use App\Entity\Event;
 use App\Entity\User;
-use App\Repository\ArtistRepository;
-use App\Repository\MemberRepository;
+use App\Enum\EmailPurpose;
+use App\Service\Email\EmailService;
 use App\Service\QrService;
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
 
 /**
  * @extends CRUDController<Email>
@@ -27,6 +26,30 @@ final class EmailAdminController extends CRUDController
         private readonly RequestStack $requestStack,
         private readonly QrService $qr,
     ) {
+    }
+
+    #[\Override]
+    public function editAction(Request $request): Response
+    {
+        // If editing from standalone admin and email has an event, redirect to child admin
+        if (!$this->admin->isChild()) {
+            $email = $this->admin->getSubject();
+            \assert($email instanceof Email);
+
+            if ($email->getEvent() instanceof Event) {
+                // Redirect to the event child admin edit route
+                $eventId = $email->getEvent()->getId();
+                $emailId = $email->getId();
+
+                return $this->redirectToRoute('admin_app_event_email_edit', [
+                    'id' => $eventId,
+                    'childId' => $emailId,
+                ]);
+            }
+        }
+
+        // Otherwise, proceed with normal edit action
+        return parent::editAction($request);
     }
 
     public function sendProgressAction(): JsonResponse
@@ -54,7 +77,7 @@ final class EmailAdminController extends CRUDController
         $qr = null;
         if (null !== $event) {
             $img = $event->getPicture();
-            if ('ticket_qr' == $email->getPurpose()) {
+            if (EmailPurpose::TICKET_QR === $email->getPurpose()) {
                 $qrGenerator = $this->qr;
                 $qr = $qrGenerator->getQrBase64('test');
             }
@@ -71,187 +94,92 @@ final class EmailAdminController extends CRUDController
     }
 
     public function sendAction(
-        MailerInterface $mailer,
-        ArtistRepository $aRepo,
-        MemberRepository $memberRepository,
+        EmailService $emailService,
     ): RedirectResponse|JsonResponse {
         $session = $this->requestStack->getSession();
         $email = $this->admin->getSubject();
-        $links = $email->getAddLoginLinksToFooter();
         $purpose = $email->getPurpose();
-        $subject = $email->getSubject();
-        $event = $email->getEvent();
-        $emails = [];
-        $locales = [];
-        $img = null;
-        if ($event) {
-            $img = $event->getPicture();
+
+        if (!$purpose) {
+            $this->addFlash('sonata_flash_error', 'Email purpose not set.');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl(
+                    'list',
+                    $this->admin->getFilterParameters()
+                )
+            );
         }
-        $body = $email->getBody();
-        $count = 0;
-        $replyto = $email->getReplyTo() ?: 'hallitus@entropy.fi';
-        if ($subject && $body) {
-            if ('rsvp' == $purpose && $event) {
-                $rsvps = $event->getRSVPs();
-                if (\count($rsvps) > 0) {
-                    foreach ($rsvps as $rsvp) {
-                        $emails[] = $rsvp->getAvailableEmail();
-                    }
-                }
-            } elseif ('ticket' == $purpose && $event) {
-                $tickets = $event->getTickets();
-                foreach ($tickets as $ticket) {
-                    if (
-                        str_starts_with(
-                            (string) $ticket->getStatus(),
-                            'paid'
-                        )
-                        || 'reserved' == $ticket->getStatus()
-                    ) {
-                        $to = $ticket->getOwnerEmail();
-                        if (null == $to) {
-                            $to = $ticket->getEmail();
-                        }
-                        if (!\in_array($to, $emails)) {
-                            $emails[] = $to;
-                        }
-                    }
-                }
-            } elseif ('nakkikone' == $purpose && $event) {
-                $nakkis = $event->getNakkiBookings();
-                foreach ($nakkis as $nakki) {
-                    $member = $nakki->getMember();
-                    if ($member) {
-                        $emails[$member->getId()] = $member->getEmail();
-                        $locales[$member->getId()] =
-                            $member->getLocale() ?? 'fi';
-                    }
-                }
-            } elseif ('artist' == $purpose && $event) {
-                $signups = $event->getEventArtistInfos();
-                foreach ($signups as $signup) {
-                    $artist = $signup->getArtist();
-                    if ($artist) {
-                        $member = $signup->getArtist()->getMember();
-                        if ($member) {
-                            $emails[$member->getId()] = $member->getEmail();
-                            $locales[$member->getId()] =
-                                $member->getLocale() ?? 'fi';
-                        }
-                    } else {
-                        $this->addFlash(
-                            'sonata_flash_error',
-                            \sprintf(
-                                'Artist %s member not found.',
-                                $signup->getArtistClone()->getName()
-                            )
-                        );
-                    }
-                }
-            } elseif ('aktiivit' == $purpose) {
-                foreach (
-                    $memberRepository->findBy([
-                        'isActiveMember' => true,
-                        'emailVerified' => true,
-                        'allowActiveMemberMails' => true,
-                    ]) as $member
-                ) {
-                    $emails[$member->getId()] = $member->getEmail();
-                    $locales[$member->getId()] = $member->getLocale() ?? 'fi';
-                }
-            } elseif ('tiedotus' == $purpose) {
-                foreach (
-                    $memberRepository->findBy([
-                        'emailVerified' => true,
-                        'allowInfoMails' => true,
-                    ]) as $member
-                ) {
-                    $emails[$member->getId()] = $member->getEmail();
-                    $locales[$member->getId()] = $member->getLocale() ?? 'fi';
-                }
-            } elseif ('vj_roster' == $purpose) {
-                $emails = $this->getRoster('VJ', $aRepo);
-            } elseif ('dj_roster' == $purpose) {
-                $emails = $this->getRoster('DJ', $aRepo);
-            } else {
-                $this->addFlash(
-                    'sonata_flash_error',
-                    \sprintf('Purpose %s not supported.', $purpose)
-                );
-            }
-        }
+
         // Initialize progress
-        $totalEmails = \count($emails);
         $session->set('email_send_progress', [
             'current' => 0,
-            'total' => $totalEmails,
+            'total' => 0,
             'completed' => false,
         ]);
 
         if ($this->requestStack->getCurrentRequest()->isXmlHttpRequest()) {
-            // Update session at the beginning to indicate process has started
-            $session->set('email_send_progress', [
-                'current' => 0,
-                'total' => $totalEmails,
-                'completed' => false,
-            ]);
-
-            $count = 0;
-            foreach ($emails as $id => $to) {
-                if ($to) {
-                    $locale = $locales[$id] ?? 'fi';
-                    $message = $this->generateMail(
-                        $to,
-                        $replyto,
-                        $subject,
-                        $body,
-                        $links,
-                        $img,
-                        $locale
-                    );
-                    $mailer->send($message);
-                    ++$count;
-
-                    // Update progress after each email is sent
-                    $session->set('email_send_progress', [
-                        'current' => $count,
-                        'total' => $totalEmails,
-                        'completed' => $count >= $totalEmails,
-                        'redirectUrl' => $this->admin->generateUrl(
-                            'list',
-                            $this->admin->getFilterParameters()
-                        ),
-                    ]);
-
-                    // Force session write
-                    $session->save();
-
-                    // Add a small delay to prevent overwhelming the server
-                    usleep(100000); // 0.1 seconds
-                }
-            }
-
-            // Update email entity
-            if ($count > 0) {
-                $email->setSentAt(new \DateTimeImmutable('now'));
+            try {
                 $user = $this->getUser();
                 \assert($user instanceof User);
-                $email->setSentBy($user->getMember());
-                $this->admin->update($email);
+
+                $result = $emailService->send(
+                    $email,
+                    function (int $current, int $total) use ($session): void {
+                        $session->set('email_send_progress', [
+                            'current' => $current,
+                            'total' => $total,
+                            'completed' => $current >= $total,
+                            'redirectUrl' => $this->admin->generateUrl(
+                                'list',
+                                $this->admin->getFilterParameters()
+                            ),
+                        ]);
+                        $session->save();
+                        usleep(100000); // 0.1 seconds
+                    },
+                    $user->getMember()
+                );
+
                 $this->addFlash(
                     'sonata_flash_success',
-                    \sprintf('%s %s info packages sent.', $count, $purpose)
+                    \sprintf(
+                        '%d emails sent for purpose "%s".',
+                        $result->totalSent,
+                        $purpose->value
+                    )
                 );
-            }
 
-            return new JsonResponse([
-                'success' => true,
-                'count' => $count,
-                'redirectUrl' => $this->admin->generateUrl(
-                    'list',
-                    $this->admin->getFilterParameters()
-                ),
-            ]);
+                if ($result->getFailureCount() > 0) {
+                    $this->addFlash(
+                        'sonata_flash_warning',
+                        \sprintf('%d emails failed to send.', $result->getFailureCount())
+                    );
+                }
+
+                return new JsonResponse([
+                    'success' => true,
+                    'count' => $result->totalSent,
+                    'redirectUrl' => $this->admin->generateUrl(
+                        'list',
+                        $this->admin->getFilterParameters()
+                    ),
+                ]);
+            } catch (\Exception $e) {
+                $this->addFlash(
+                    'sonata_flash_error',
+                    \sprintf('Error: %s', $e->getMessage())
+                );
+
+                return new JsonResponse([
+                    'success' => false,
+                    'error' => $e->getMessage(),
+                    'redirectUrl' => $this->admin->generateUrl(
+                        'list',
+                        $this->admin->getFilterParameters()
+                    ),
+                ]);
+            }
         }
 
         return new RedirectResponse(
@@ -260,48 +188,5 @@ final class EmailAdminController extends CRUDController
                 $this->admin->getFilterParameters()
             )
         );
-    }
-
-    private function generateMail(
-        Address|string $to,
-        Address|string $replyto,
-        string $subject,
-        $body,
-        $links,
-        $img,
-        $locale = 'fi',
-    ): TemplatedEmail {
-        return new TemplatedEmail()
-            ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
-            ->to($to)
-            ->replyTo($replyto)
-            ->subject('[Entropy] '.$subject)
-            ->htmlTemplate('emails/email.html.twig')
-            ->context([
-                'body' => $body,
-                'links' => $links,
-                'img' => $img,
-                'locale' => $locale,
-            ]);
-    }
-
-    private function getRoster(
-        string $type,
-        ArtistRepository $artistRepository,
-    ): array {
-        $emails = [];
-        $artists = $artistRepository->findBy([
-            'type' => $type,
-            'copyForArchive' => false,
-        ]);
-        foreach ($artists as $artist) {
-            if ($artist->getMember()) {
-                $emails[$artist->getMember()->getId()] = $artist
-                    ->getMember()
-                    ->getEmail();
-            }
-        }
-
-        return $emails;
     }
 }

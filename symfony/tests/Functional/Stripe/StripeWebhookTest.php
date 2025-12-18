@@ -10,6 +10,7 @@ use App\Entity\Ticket;
 use App\Factory\CartFactory;
 use App\Factory\CartItemFactory;
 use App\Factory\CheckoutFactory;
+use App\Factory\EmailFactory;
 use App\Factory\EventFactory;
 use App\Factory\ProductFactory;
 use App\Tests\_Base\FixturesWebTestCase;
@@ -54,6 +55,12 @@ final class StripeWebhookTest extends FixturesWebTestCase
         $event = EventFactory::new()->published()->create([
             'url' => 'test-webhook-event-'.uniqid('', true),
             'name' => 'Webhook Test Event',
+        ]);
+
+        // Create email template for TICKET_QR so emails can be sent
+        EmailFactory::new()->ticketQr()->forEvent($event)->create([
+            'subject' => 'Your Ticket',
+            'body' => '<p>Here is your ticket QR code.</p>',
         ]);
 
         $product = ProductFactory::new()->ticket()->forEvent($event)->create([

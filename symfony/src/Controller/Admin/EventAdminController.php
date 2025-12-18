@@ -13,17 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
  */
 final class EventAdminController extends CRUDController
 {
-    public function artistListAction(): Response
-    {
-        $event = $this->admin->getSubject();
-        $infos = $event->getEventArtistInfos();
-
-        return $this->render('admin/event/artist_list.html.twig', [
-            'event' => $event,
-            'infos' => $infos,
-        ]);
-    }
-
     public function nakkiListAction(): Response
     {
         $event = $this->admin->getSubject();

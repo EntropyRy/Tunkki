@@ -4,28 +4,23 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
-use App\Entity\Email;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Entity\Ticket;
 use App\Repository\CheckoutRepository;
-use App\Repository\EmailRepository;
 use App\Repository\MemberRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
 use App\Service\BookingReferenceService;
+use App\Service\Email\EmailService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\StripeService;
 use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Part\DataPart;
 
 class StripeEventSubscriber implements EventSubscriberInterface
 {
@@ -36,9 +31,8 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly StripeService $stripe,
         private readonly MemberRepository $memberRepo,
         private readonly TicketRepository $ticketRepo,
-        private readonly EmailRepository $emailRepo,
+        private readonly EmailService $emailService,
         private readonly BookingReferenceService $rn,
-        private readonly MailerInterface $mailer,
         private readonly MattermostNotifierService $mm,
         private readonly QrService $qrGenerator,
     ) {
@@ -197,22 +191,24 @@ class StripeEventSubscriber implements EventSubscriberInterface
                         $tickets = [...$tickets, ...$given];
                     }
                 }
-                $qrGenerator = $this->qrGenerator;
-                foreach ($tickets as $ticket) {
-                    $qrs[] = [
-                        'qr' => $qrGenerator->getQr(
-                            (string) $ticket->getReferenceNumber(),
-                        ),
-                        'name' => $ticket->getName() ?? 'Ticket',
-                    ];
+                if ([] !== $tickets && $event) {
+                    $qrGenerator = $this->qrGenerator;
+                    foreach ($tickets as $ticket) {
+                        $qrs[] = [
+                            'qr' => $qrGenerator->getQr(
+                                (string) $ticket->getReferenceNumber(),
+                            ),
+                            'name' => $ticket->getName() ?? 'Ticket',
+                        ];
+                    }
+                    $this->sendTicketQrEmail(
+                        $event,
+                        $event->getNameByLang($locale),
+                        $email,
+                        $qrs,
+                        $event->getPicture(),
+                    );
                 }
-                $this->sendTicketQrEmail(
-                    $event,
-                    $event->getNameByLang($locale),
-                    $email,
-                    $qrs,
-                    $event->getPicture(),
-                );
                 $checkout->setStatus(2);
                 $this->checkoutRepo->save($checkout, true);
                 foreach ($products as $cartItem) {
@@ -249,49 +245,10 @@ class StripeEventSubscriber implements EventSubscriberInterface
         Event $event,
         string $eventName,
         string $to,
-        $qrs,
+        array $qrs,
         ?SonataMediaMedia $img,
     ): void {
-        $email = $this->emailRepo->findOneBy([
-            'purpose' => 'ticket_qr',
-            'event' => $event,
-        ]);
-        $replyTo = 'hallitus@entropy.fi';
-        $body = '';
-        if (null != $email) {
-            $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
-            $body = $email->getBody();
-        }
-        foreach ($qrs as $x => $qr) {
-            $subject =
-                $x > 0
-                    ? '[ENTROPY] '.$qr['name'].' ('.($x + 1).')'
-                    : '[ENTROPY] '.$qr['name'];
-            $mail = new TemplatedEmail()
-                ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
-                ->to($to)
-                ->replyTo($replyTo)
-                ->subject($subject)
-                ->addPart(
-                    new DataPart(
-                        $qr['qr'],
-                        'ticket',
-                        'image/png',
-                        'base64',
-                    )->asInline(),
-                )
-                ->htmlTemplate('emails/ticket.html.twig')
-                ->context([
-                    'body' => $body,
-                    'qr' => $qr,
-                    'links' => $email instanceof Email
-                        ? $email->getAddLoginLinksToFooter()
-                        : true,
-                    'img' => $img,
-                    'user_email' => $to,
-                ]);
-            $this->mailer->send($mail);
-        }
+        $this->emailService->sendTicketQrEmails($event, $to, $qrs, $img);
     }
 
     protected function giveEventTicketToEmail(

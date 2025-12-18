@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\EventListener;
 
-use App\Entity\Email;
 use App\Entity\Event;
 use App\Entity\RSVP;
+use App\Enum\EmailPurpose;
 use App\EventListener\RSVPListener;
-use App\Repository\EmailRepository;
+use App\Service\Email\EmailService;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Mailer\MailerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @covers \App\EventListener\RSVPListener
@@ -18,22 +18,26 @@ use Symfony\Component\Mailer\MailerInterface;
 final class RSVPListenerTest extends TestCase
 {
     private RSVPListener $listener;
-    private MailerInterface $mailer;
-    private EmailRepository $emailRepository;
+    private EmailService $emailService;
+    private LoggerInterface $logger;
 
     protected function setUp(): void
     {
-        $this->mailer = $this->createMock(MailerInterface::class);
-        $this->emailRepository = $this->createStub(EmailRepository::class);
+        $this->emailService = $this->createStub(EmailService::class);
+        $this->logger = $this->createStub(LoggerInterface::class);
 
         $this->listener = new RSVPListener(
-            $this->mailer,
-            $this->emailRepository,
+            $this->emailService,
+            $this->logger,
         );
     }
 
     public function testSendRSVPMailListenerWithRsvpSystemDisabled(): void
     {
+        // Override emailService with mock for this test
+        $mockEmailService = $this->createMock(EmailService::class);
+        $listener = new RSVPListener($mockEmailService, $this->logger);
+
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(false);
 
@@ -41,13 +45,17 @@ final class RSVPListenerTest extends TestCase
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
 
-        $this->mailer->expects($this->never())->method('send');
+        $mockEmailService->expects($this->never())->method('sendToRecipient');
 
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 
     public function testSendRSVPMailListenerWithSendEmailDisabled(): void
     {
+        // Override emailService with mock for this test
+        $mockEmailService = $this->createMock(EmailService::class);
+        $listener = new RSVPListener($mockEmailService, $this->logger);
+
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(false);
@@ -56,13 +64,17 @@ final class RSVPListenerTest extends TestCase
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
 
-        $this->mailer->expects($this->never())->method('send');
+        $mockEmailService->expects($this->never())->method('sendToRecipient');
 
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 
     public function testSendRSVPMailListenerWithNoUserEmail(): void
     {
+        // Override emailService with mock for this test
+        $mockEmailService = $this->createMock(EmailService::class);
+        $listener = new RSVPListener($mockEmailService, $this->logger);
+
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
@@ -71,77 +83,78 @@ final class RSVPListenerTest extends TestCase
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn(''); // Empty string, not null
 
-        $this->mailer->expects($this->never())->method('send');
+        $mockEmailService->expects($this->never())->method('sendToRecipient');
 
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 
     public function testSendRSVPMailListenerWithNoEmailTemplate(): void
     {
+        // Override logger with mock for this test only
+        $mockLogger = $this->createMock(LoggerInterface::class);
+        $listener = new RSVPListener($this->emailService, $mockLogger);
+
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
+        $event->method('getId')->willReturn(1);
 
         $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('test@example.com');
+        $rsvp->method('getId')->willReturn(1);
 
-        $this->emailRepository->method('findOneBy')->willReturn(null);
+        // EmailService will throw an exception when template not found
+        $this->emailService->method('sendToRecipient')
+            ->willThrowException(new \RuntimeException('Email template not found'));
 
-        $this->mailer->expects($this->never())->method('send');
+        // Logger should be called with error
+        $mockLogger->expects($this->once())->method('error');
 
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 
     public function testSendRSVPMailListenerSuccess(): void
     {
+        // Override emailService with mock for this test
+        $mockEmailService = $this->createMock(EmailService::class);
+        $listener = new RSVPListener($mockEmailService, $this->logger);
+
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
-        $event->method('getPicture')->willReturn(null);
 
         $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('user@example.com');
 
-        $emailTemplate = $this->createStub(Email::class);
-        $this->emailRepository->method('findOneBy')->willReturn($emailTemplate);
-        $emailTemplate->method('getReplyTo')->willReturn('organizer@example.com');
-        $emailTemplate->method('getSubject')->willReturn('RSVP Confirmation');
-        $emailTemplate->method('getBody')->willReturn('Thank you for your RSVP!');
-        $emailTemplate->method('getAddLoginLinksToFooter')->willReturn(true);
+        $mockEmailService->expects($this->once())
+            ->method('sendToRecipient')
+            ->with(EmailPurpose::RSVP, 'user@example.com', $event);
 
-        $this->emailRepository->method('findOneBy')->with([
-            'event' => $event,
-            'purpose' => 'rsvp',
-        ])->willReturn($emailTemplate);
-
-        $this->mailer->expects($this->once())->method('send');
-
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 
     public function testSendRSVPMailListenerWithDefaultReplyTo(): void
     {
+        // Override emailService with mock for this test
+        $mockEmailService = $this->createMock(EmailService::class);
+        $listener = new RSVPListener($mockEmailService, $this->logger);
+
+        // This test is no longer relevant as EmailService handles reply-to internally
+        // Testing that EmailService is called is sufficient
         $event = $this->createStub(Event::class);
         $event->method('getRsvpSystemEnabled')->willReturn(true);
         $event->method('isSendRsvpEmail')->willReturn(true);
-        $event->method('getPicture')->willReturn(null);
 
         $rsvp = $this->createStub(RSVP::class);
         $rsvp->method('getEvent')->willReturn($event);
         $rsvp->method('getAvailableEmail')->willReturn('user@example.com');
 
-        $emailTemplate = $this->createStub(Email::class);
-        $emailTemplate->method('getReplyTo')->willReturn(null); // No custom reply-to
-        $emailTemplate->method('getSubject')->willReturn('RSVP Confirmation');
-        $emailTemplate->method('getBody')->willReturn('Thank you!');
-        $emailTemplate->method('getAddLoginLinksToFooter')->willReturn(false);
+        $mockEmailService->expects($this->once())
+            ->method('sendToRecipient')
+            ->with(EmailPurpose::RSVP, 'user@example.com', $event);
 
-        $this->emailRepository->method('findOneBy')->willReturn($emailTemplate);
-
-        $this->mailer->expects($this->once())->method('send');
-
-        $this->listener->sendRSVPMailListener($rsvp);
+        $listener->sendRSVPMailListener($rsvp);
     }
 }

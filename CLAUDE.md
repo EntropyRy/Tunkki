@@ -13,7 +13,7 @@ This document defines how an automated assistant (and humans) should interact wi
 3. Avoid introducing broad suppressions (static analysis, mutation, linters). Always document exceptions.
 4. Maintain isolation: no cross‑test state leakage, no global fixture dependencies.
 5. Use structural or semantic assertions (selectors, domain invariants) rather than brittle substrings.
-6. Locale strategy: Finnish has no prefix; English uses `/en`. Admin area AND public routes follow this rule (except OAuth endpoints, which should remain canonical `/oauth*` — see §7.4).
+6. Locale strategy: Finnish has no prefix; English uses `/en`. Admin area AND public routes follow this rule (except OAuth endpoints, which should remain canonical `/oauth*` — see §8.4).
 7. All quality tooling (PHPStan, Infection) runs inside the Docker FPM container (PHP 8.4).
 
 ---
@@ -46,15 +46,39 @@ If you see platform or version mismatch errors (e.g. “requires PHP >= 8.4”),
 
 ---
 
-## 3. Makefile Targets (Preferred Interface)
+## 3. CRITICAL: Test Execution Rules
+
+**NEVER** run tests using direct `docker compose exec -T fpm php vendor/bin/phpunit` commands.
+
+**ALWAYS** use Makefile targets:
+
+| ❌ WRONG | ✅ CORRECT |
+|---------|-----------|
+| `docker compose exec -T fpm php vendor/bin/phpunit` | `make test` |
+| `docker compose exec -T fpm php vendor/bin/phpunit tests/Unit/` | `make test-unit` |
+| `docker compose exec -T fpm php vendor/bin/phpunit tests/Functional/` | `make test-functional` |
+| `docker compose exec -T fpm php vendor/bin/phpunit tests/Unit/SomeTest.php` | `make test-one FILE=tests/Unit/SomeTest.php` |
+
+**Rationale:**
+- Makefile targets ensure correct database setup (test DB creation, migrations)
+- They use ParaTest for parallel execution (faster)
+- They handle environment variables correctly (APP_ENV=test)
+- They provide consistent behavior across development and CI
+
+**IMPORTANT:** If you are instructed to run a specific test file or directory, ask the user which make target to use, or use `make test-one FILE=path/to/test.php` for individual files.
+
+---
+
+## 4. Makefile Targets (Preferred Interface)
 
 | Purpose               | Command                              | Notes |
 |-----------------------|---------------------------------------|-------|
 | Full test suite       | `make test`                           | Functional + unit |
 | Unit tests only       | `make test-unit`                      | Fast check pre-commit |
 | Functional only       | `make test-functional`               | DB + HTTP kernel |
+| Single test file      | `make test-one FILE=tests/Unit/SomeTest.php` | Run one specific test file |
 | Coverage              | `make coverage`                       | Requires Xdebug/PCOV enabled in container |
-| Mutation (exploratory)| `make infection FILTER=src/Security`  | Start narrow, see §8 |
+| Mutation (exploratory)| `make infection FILTER=src/Security`  | Start narrow, see §7 |
 | Mutation (baseline)   | `make infection-baseline`             | Baseline run |
 | Static analysis full  | `make stan`                           | Uses level=5 unless overridden |
 | Static analysis fast  | `make stan-fast`                      | Analyzes `src/` only |
@@ -68,7 +92,7 @@ make stan PHP_EXEC="docker compose exec -T fpm php" PHPSTAN_LEVEL=5
 
 ---
 
-## 4. Test Suite Conventions
+## 5. Test Suite Conventions
 
 | Aspect               | Rule |
 |----------------------|------|
@@ -84,7 +108,7 @@ make stan PHP_EXEC="docker compose exec -T fpm php" PHPSTAN_LEVEL=5
 
 ---
 
-## 5. Static Analysis (PHPStan)
+## 6. Static Analysis (PHPStan)
 
 Current configuration file: `symfony/phpstan.neon`
 Baseline policy: *No broad baseline*. Fix high-signal issues first.
@@ -128,7 +152,7 @@ Ignore policy:
 
 ---
 
-## 6. Mutation Testing (Infection)
+## 7. Mutation Testing (Infection)
 
 Config: `symfony/infection.json.dist`
 Initial scope: `src/Repository`, `src/Security` (fast feedback).
@@ -154,17 +178,17 @@ Threshold introduction stages (example):
 
 ---
 
-## 7. Routing & Locale Policies
+## 8. Routing & Locale Policies
 
-### 7.1 Public Locale Strategy
+### 8.1 Public Locale Strategy
 - Finnish (default): no prefix
 - English: `/en/` prefix
 
-### 7.2 Admin Bilingual
+### 8.2 Admin Bilingual
 - Accept `/admin/...` and `/en/admin/...` (security unified via `^/(en/)?admin/`).
 - Tests must cover both positive and negative (privileged / unprivileged) paths.
 
-### 7.3 Event URLs
+### 8.3 Event URLs
 Internal events:
 - FI: `/{year}/{slug}`
 - EN: `/en/{year}/{slug}`
@@ -172,14 +196,14 @@ External events:
 - `externalUrl=true` => `getUrlByLang()` returns raw external URL (passthrough)
 - No expectation of internal localized pages resolving
 
-### 7.4 OAuth Endpoints (Canonical)
+### 8.4 OAuth Endpoints (Canonical)
 - SHOULD remain unprefixed: `/oauth`, `/oauth/authorize`, `/oauth/check_*`
 - If prefixed variants appear (`/en/oauth/...`), prefer to 301 redirect or 404 (avoid dual valid surfaces).
 - Consent page locale determined via user preference or Accept-Language, **not** path prefix.
 
 ---
 
-## 8. Negative Path Coverage (Checklist)
+## 9. Negative Path Coverage (Checklist)
 
 | Domain Area     | Examples Implemented / Needed |
 |-----------------|--------------------------------|
@@ -193,7 +217,7 @@ External events:
 
 ---
 
-## 9. Substring Assertion Purge
+## 10. Substring Assertion Purge
 
 Audit patterns:
 ```
@@ -207,7 +231,7 @@ Policy:
 
 ---
 
-## 10. Adding a New Test (Recipe)
+## 11. Adding a New Test (Recipe)
 
 **See**: TESTING.md Section 22 for comprehensive step-by-step guide with examples.
 
@@ -232,7 +256,7 @@ Quick checklist:
 
 ---
 
-## 10A. Testing Patterns & Best Practices
+## 11A. Testing Patterns & Best Practices
 
 This section documents established testing patterns from the test suite refactor (2025-10-02 through 2025-10-17).
 
@@ -514,7 +538,7 @@ $event->setTicketPresaleStart($realNow->modify('-1 day'));
 
 ---
 
-## 11. Service Overrides (Test Performance & Determinism)
+## 12. Service Overrides (Test Performance & Determinism)
 
 Implemented:
 - Lower password hashing cost (test env)
@@ -549,7 +573,7 @@ Documentation:
 
 ---
 
-## 12. Static Analysis Generics Task (31D / 31E)
+## 13. Static Analysis Generics Task (31D / 31E)
 
 Status Tracking:
 - All Sonata Admin subclasses must specify their entity type via `@extends`.
@@ -565,7 +589,7 @@ Replace `object` with concrete entity ASAP.
 
 ---
 
-## 13. Mutation + Static Analysis Synergy
+## 14. Mutation + Static Analysis Synergy
 
 Use mutation survivors to inform missing unit tests:
 - Escaped conditional mutants => Add focused unit test on branch logic.
@@ -576,7 +600,7 @@ Static analysis hints for mutation:
 
 ---
 
-## 14. Decision Log Integration
+## 15. Decision Log Integration
 
 When making structural decisions (e.g., locale canonicalization for OAuth), append a dated entry in `todo.md` “Decision Log” and (optionally) mirror a short summary here.
 
@@ -591,7 +615,7 @@ Example:
 
 ---
 
-## 15. Common Pitfalls (Avoid)
+## 16. Common Pitfalls (Avoid)
 
 | Pitfall                          | Replace With |
 |----------------------------------|--------------|
@@ -604,7 +628,7 @@ Example:
 
 ---
 
-## 16. Quick Command Cheatsheet (Copy/Paste)
+## 17. Quick Command Cheatsheet (Copy/Paste)
 
 Initial PHPStan (triage phase):
 ```
@@ -644,7 +668,7 @@ docker compose exec -T fpm php vendor/bin/phpunit tests/Functional/EventUrlBehav
 
 ---
 
-## 17. Extending This Document
+## 18. Extending This Document
 
 If adding a new tooling layer:
 1. Add section with purpose + canonical commands.
@@ -653,7 +677,7 @@ If adding a new tooling layer:
 
 ---
 
-## 18. Assistance Behavior Summary (For AI Agent)
+## 19. Assistance Behavior Summary (For AI Agent)
 
 When asked to:
 - “Add test”: propose factory-driven, locale-aware, structural assertions.
@@ -715,7 +739,7 @@ Documentation Touchpoints:
 
 ---
 
-## 19. Open TODO Interlocks (Select Highlights)
+## 20. Open TODO Interlocks (Select Highlights)
 
 | Task ID | Dependency / Precondition |
 |---------|---------------------------|
@@ -727,7 +751,7 @@ Documentation Touchpoints:
 
 ---
 
-## 20. Contact Points (Conceptual)
+## 21. Contact Points (Conceptual)
 
 If an entity type is unknown for a new Admin class:
 - Temporarily use `<object>` generic but raise a task to replace it.

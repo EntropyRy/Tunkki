@@ -119,9 +119,6 @@ final class MemberAdmin extends AbstractAdmin
                     'activememberinfo' => [
                         'template' => 'admin/crud/list__action_email_active_member_info.html.twig',
                     ],
-                    'resendverification' => [
-                        'template' => 'admin/crud/list__action_resend_verification.html.twig',
-                    ],
                 ],
             ]);
     }
@@ -160,12 +157,12 @@ final class MemberAdmin extends AbstractAdmin
             ])
             ->add('rejectReason', null, [
                 'required' => false,
-                'help' => 'This field is an email to the member in which we explain why they were rejected. After this has been added the email can be sent from the member list',
+                'help' => 'This field is which we explain why they were rejected.',
             ])
-            ->add('rejectReasonSent', null, [
-                'required' => false,
-                'help' => 'Whether the reject reason email has been sent',
-            ])
+            /* ->add('rejectReasonSent', null, [ */
+            /*     'required' => false, */
+            /*     'help' => 'Whether the reject reason email has been sent', */
+            /* ]) */
             ->add('user', null, ['help' => 'Tunkki User', 'disabled' => true])
             ->end()
             ->with('Membership status', ['class' => 'col-md-4'])
@@ -177,13 +174,13 @@ final class MemberAdmin extends AbstractAdmin
                 'required' => false,
                 'help' => 'Next: Send the active member mail from the memberlist, add to aktiivit-mailinglist and add to aktiivit group in forums',
             ])
-            ->add('denyKerdeAccess', null, [
-                'required' => false,
-                'help' => 'Denies access to Entropy Kerde',
-            ])
             ->add('isFullMember', null, [
                 'required' => false,
                 'help' => 'Regardless of Student union membership this grants voting rights and access to Entropy systems',
+            ])
+            ->add('denyKerdeAccess', null, [
+                'required' => false,
+                'help' => 'Denies access to Entropy Kerde',
             ])
             ->add('AcceptedAsHonoraryMember', DatePickerType::class, [
                 'required' => false,
@@ -239,10 +236,6 @@ final class MemberAdmin extends AbstractAdmin
         $collection->add(
             'activememberinfo',
             $this->getRouterIdParameter().'/activememberinfo',
-        );
-        $collection->add(
-            'resendverification',
-            $this->getRouterIdParameter().'/resend-verification-email',
         );
     }
 

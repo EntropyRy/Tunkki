@@ -6086,30 +6086,30 @@
         },
         {
             "name": "sonata-project/seo-bundle",
-            "version": "3.8.2",
+            "version": "3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataSeoBundle.git",
-                "reference": "291436fcd823ea275509244f24b6674f79c9639a"
+                "reference": "013ecd3213c15125c7216300f0981c9bf94dc2de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/291436fcd823ea275509244f24b6674f79c9639a",
-                "reference": "291436fcd823ea275509244f24b6674f79c9639a",
+                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/013ecd3213c15125c7216300f0981c9bf94dc2de",
+                "reference": "013ecd3213c15125c7216300f0981c9bf94dc2de",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^8.1",
-                "sonata-project/block-bundle": "^4.18 || ^5.0",
-                "sonata-project/exporter": "^2.0 || ^3.0",
-                "symfony/config": "^6.4 || ^7.1",
-                "symfony/dependency-injection": "^6.4 || ^7.1",
-                "symfony/form": "^6.4 || ^7.1",
-                "symfony/framework-bundle": "^6.4 || ^7.1",
-                "symfony/http-foundation": "^6.4 || ^7.1",
-                "symfony/http-kernel": "^6.4 || ^7.1",
-                "symfony/options-resolver": "^6.4 || ^7.1",
+                "php": "^8.2",
+                "sonata-project/block-bundle": "^5.0",
+                "sonata-project/exporter": "^3.0",
+                "symfony/config": "^6.4 || ^7.3 || ^8.0",
+                "symfony/dependency-injection": "^6.4 || ^7.3 || ^8.0",
+                "symfony/form": "^6.4 || ^7.3 || ^8.0",
+                "symfony/framework-bundle": "^6.4 || ^7.3 || ^8.0",
+                "symfony/http-foundation": "^6.4 || ^7.3 || ^8.0",
+                "symfony/http-kernel": "^6.4 || ^7.3 || ^8.0",
+                "symfony/options-resolver": "^6.4 || ^7.3 || ^8.0",
                 "twig/twig": "^3.0"
             },
             "require-dev": {
@@ -6122,14 +6122,12 @@
                 "phpstan/phpstan-phpunit": "^1.0 || ^2.0",
                 "phpstan/phpstan-strict-rules": "^1.0 || ^2.0",
                 "phpstan/phpstan-symfony": "^1.0 || ^2.0",
-                "phpunit/phpunit": "^10.5.54 || ^11.5.38 || ^12.3.10",
-                "psalm/plugin-phpunit": "^0.18 || ^0.19",
+                "phpunit/phpunit": "^11.5.38 || ^12.3.10",
                 "rector/rector": "^1.1 || ^2.0",
-                "symfony/console": "^6.4 || ^7.1",
-                "symfony/filesystem": "^6.4 || ^7.1",
-                "symfony/finder": "^6.4 || ^7.1",
-                "symfony/yaml": "^6.4 || ^7.1",
-                "vimeo/psalm": "^5.0 || ^6.10"
+                "symfony/console": "^6.4 || ^7.3 || ^8.0",
+                "symfony/filesystem": "^6.4 || ^7.3 || ^8.0",
+                "symfony/finder": "^6.4 || ^7.3 || ^8.0",
+                "symfony/yaml": "^6.4 || ^7.3 || ^8.0"
             },
             "type": "symfony-bundle",
             "autoload": {
@@ -6160,7 +6158,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sonata-project/SonataSeoBundle/issues",
-                "source": "https://github.com/sonata-project/SonataSeoBundle/tree/3.8.2"
+                "source": "https://github.com/sonata-project/SonataSeoBundle/tree/3.9.0"
             },
             "funding": [
                 {
@@ -6180,7 +6178,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-26T11:11:16+00:00"
+            "time": "2025-12-16T16:56:46+00:00"
         },
         {
             "name": "sonata-project/twig-extensions",
@@ -6413,16 +6411,16 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v19.0.0",
+            "version": "v19.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "8f868a7825d2680e917f89839e4b67851dad96e2"
+                "reference": "4e3de7211645699b1f5b5f1f1b45bd9faf369426"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/8f868a7825d2680e917f89839e4b67851dad96e2",
-                "reference": "8f868a7825d2680e917f89839e4b67851dad96e2",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/4e3de7211645699b1f5b5f1f1b45bd9faf369426",
+                "reference": "4e3de7211645699b1f5b5f1f1b45bd9faf369426",
                 "shasum": ""
             },
             "require": {
@@ -6466,9 +6464,9 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v19.0.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v19.1.0"
             },
-            "time": "2025-11-18T18:50:16+00:00"
+            "time": "2025-12-16T19:48:17+00:00"
         },
         {
             "name": "symfony-cmf/routing",
@@ -13767,16 +13765,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.22.1",
+            "version": "v3.22.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "1de2ec1fc43ab58a4b7e80b214b96bfc895750f3"
+                "reference": "946ddeafa3c9f4ce279d1f34051af041db0e16f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/1de2ec1fc43ab58a4b7e80b214b96bfc895750f3",
-                "reference": "1de2ec1fc43ab58a4b7e80b214b96bfc895750f3",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/946ddeafa3c9f4ce279d1f34051af041db0e16f2",
+                "reference": "946ddeafa3c9f4ce279d1f34051af041db0e16f2",
                 "shasum": ""
             },
             "require": {
@@ -13830,7 +13828,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.22.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.22.2"
             },
             "funding": [
                 {
@@ -13842,7 +13840,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-11-16T16:01:12+00:00"
+            "time": "2025-12-14T11:28:47+00:00"
         }
     ],
     "packages-dev": [
@@ -14527,16 +14525,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.92.0",
+            "version": "v3.92.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "5646c2cd99b7cb4b658ff681fe27069ba86c7280"
+                "reference": "2ba8f5a60f6f42fb65758cfb3768434fa2d1c7e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/5646c2cd99b7cb4b658ff681fe27069ba86c7280",
-                "reference": "5646c2cd99b7cb4b658ff681fe27069ba86c7280",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/2ba8f5a60f6f42fb65758cfb3768434fa2d1c7e8",
+                "reference": "2ba8f5a60f6f42fb65758cfb3768434fa2d1c7e8",
                 "shasum": ""
             },
             "require": {
@@ -14576,6 +14574,7 @@
                 "php-cs-fixer/phpunit-constraint-isidenticalstring": "^1.6",
                 "php-cs-fixer/phpunit-constraint-xmlmatchesxsd": "^1.6",
                 "phpunit/phpunit": "^9.6.25 || ^10.5.53 || ^11.5.34",
+                "symfony/polyfill-php85": "^1.33",
                 "symfony/var-dumper": "^5.4.48 || ^6.4.24 || ^7.3.2 || ^8.0",
                 "symfony/yaml": "^5.4.45 || ^6.4.24 || ^7.3.2 || ^8.0"
             },
@@ -14618,7 +14617,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.92.0"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.92.3"
             },
             "funding": [
                 {
@@ -14626,7 +14625,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-12T10:29:19+00:00"
+            "time": "2025-12-18T10:45:02+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",
@@ -16269,16 +16268,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "12.5.3",
+            "version": "12.5.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "6dc2e076d09960efbb0c1272aa9bc156fc80955e"
+                "reference": "4ba0e923f9d3fc655de22f9547c01d15a41fc93a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/6dc2e076d09960efbb0c1272aa9bc156fc80955e",
-                "reference": "6dc2e076d09960efbb0c1272aa9bc156fc80955e",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/4ba0e923f9d3fc655de22f9547c01d15a41fc93a",
+                "reference": "4ba0e923f9d3fc655de22f9547c01d15a41fc93a",
                 "shasum": ""
             },
             "require": {
@@ -16346,7 +16345,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.3"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/12.5.4"
             },
             "funding": [
                 {
@@ -16370,7 +16369,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2025-12-11T08:52:59+00:00"
+            "time": "2025-12-15T06:05:34+00:00"
         },
         {
             "name": "react/cache",
