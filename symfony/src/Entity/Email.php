@@ -121,10 +121,12 @@ class Email implements \Stringable
      */
     public function getRecipientGroups(): array
     {
+        $recipientGroups = $this->recipientGroups ?? [];
+
         // Convert strings to enum instances if needed (from JSON deserialization)
         return array_map(
             fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value : EmailPurpose::from($value),
-            $this->recipientGroups
+            $recipientGroups
         );
     }
 
