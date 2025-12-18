@@ -59,7 +59,6 @@ class EventController extends Controller
             }
             $acceptLang = $request->getPreferredLanguage();
             $locale = 'fi' == $acceptLang ? 'fi' : 'en';
-
             // If we're switching languages, we need to find the correct site first
             $currentSite = $siteSelector->retrieve();
             if ($currentSite->getLocale() !== $locale) {
@@ -98,6 +97,9 @@ class EventController extends Controller
                 'year' => $event->getEventDate()->format('Y'),
                 'slug' => $event->getUrl(),
             ]);
+        } elseif ($event->getExternalUrl()) {
+            // if there is no advert for the event redirect to events listing
+            return new RedirectResponse($this->generateUrl('_page_alias_events_'.$request->getLocale()));
         }
         $template = $event->getTemplate();
 
