@@ -326,6 +326,19 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
             )
         );
 
+        // On slower hardware, the success flash can render before Doctrine flush is visible in this test process.
+        // Poll the database until the update is observed (or timeout) to avoid flaky assertions.
+        $client->wait(10)->until(function () use ($em, $nakkiId): bool {
+            $em->clear();
+
+            $updatedNakki = $em->getRepository(\App\Entity\Nakki::class)->find($nakkiId);
+            if (null === $updatedNakki) {
+                return false;
+            }
+
+            return 'updated-channel' === $updatedNakki->getMattermostChannel();
+        });
+
         // Verify database was updated (not duplicated)
         $em->clear();
         $nakkiRepo = $em->getRepository(\App\Entity\Nakki::class);
