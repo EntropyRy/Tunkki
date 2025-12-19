@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**
@@ -91,7 +90,7 @@ final readonly class EPicsService
             }
 
             return null;
-        } catch (TransportExceptionInterface|\Throwable) {
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -133,7 +132,7 @@ final readonly class EPicsService
 
             // User doesn't exist - create new user
             return $this->createUser($username, $password, $headers);
-        } catch (TransportExceptionInterface|\Throwable) {
+        } catch (\Throwable) {
             return false;
         }
     }
