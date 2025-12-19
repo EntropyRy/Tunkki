@@ -407,6 +407,7 @@ rsvp:
   email_in_use: You are a member. Please sign in first.
   receive_info: To receive the location, RSVP here
   no_user: To RSVP you must be a logged-in member of Entropy.
+  disabled: RSVP is not enabled for this event.
   already_rsvpd: You have already RSVPed to this event.
   total_shown_only_to_active_members: "Total shown only to active members: %count%"
 
@@ -633,7 +634,7 @@ nakkikone:
     section_fi: Finnish description
     section_en: English description
     only_active: Only for active members
-    used_previously: Used previously:
+    used_previously: "Used previously:"
     not_used: Definition not used yet.
     edit: Edit definition
     create: Create definition

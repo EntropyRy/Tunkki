@@ -518,6 +518,7 @@ rsvp:
   email_in_use: Oletko jäsen? kirjaudu ensin.
   receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
   no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
+  disabled: Ilmoittautuminen ei ole käytössä tässä tapahtumassa.
   already_rsvpd:
     Olet jo ilmoittautunut tähän tapahtumaan.
   total_shown_only_to_active_members: "Yhteensä (vain aktiivijäsenille): %count%"
@@ -695,7 +696,7 @@ nakkikone:
     section_fi: Kuvaus suomeksi
     section_en: Kuvaus englanniksi
     only_active: Vain aktiivisille jäsenille
-    used_previously: Käytetty aiemmin:
+    used_previously: "Käytetty aiemmin:"
     not_used: Nakkityyppiä ei ole vielä käytetty.
     edit: Muokkaa nakkityyppiä
     create: Luo nakkityyppi

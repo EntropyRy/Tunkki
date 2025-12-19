@@ -404,12 +404,14 @@ final class SiteAwareKernelBrowser extends KernelBrowser
             $server['SERVER_PORT'] = 80;
         }
         $server['REQUEST_URI'] = $raw;
+        // Ensure routing matches the correct HTTP method (avoid leaking previous request context).
+        $server['REQUEST_METHOD'] = strtoupper($request->getMethod());
 
         $absolute = 'http://localhost'.$raw;
 
         $siteRequest = SiteRequest::create(
             $absolute,
-            $request->getMethod(),
+            strtoupper($request->getMethod()),
             $request->request->all(),
             $request->cookies->all(),
             $request->files->all(),

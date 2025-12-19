@@ -9,8 +9,6 @@ use App\Entity\Member;
 use App\Entity\NakkiBooking;
 use App\Entity\RSVP;
 use App\Entity\User;
-use App\Form\RSVPType;
-use App\Repository\MemberRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\RSVPRepository;
 use App\Security\Voter\EventNakkiAdminVoter;
@@ -247,6 +245,7 @@ class EventVolunteerController extends AbstractController
     #[
         Route(path: '/{year}/{slug}/rsvp', name: 'entropy_event_rsvp', requirements: ['year' => "\d+"], methods: ['POST']),
     ]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function rsvp(
         Request $request,
         #[
@@ -259,109 +258,40 @@ class EventVolunteerController extends AbstractController
     ): Response {
         $slug = $event->getUrl();
         $year = $request->attributes->getInt('year');
+        $eventParams = [
+            'slug' => $slug,
+            'year' => $year,
+        ];
 
         if (!$event->getRsvpSystemEnabled()) {
             $this->addFlash('warning', $trans->trans('rsvp.disabled'));
 
-            return $this->redirectToRoute('entropy_event_slug', [
-                'slug' => $slug,
-                'year' => $year,
-            ]);
+            return $this->redirectToRoute('entropy_event_slug', $eventParams);
         }
 
         $user = $this->getUser();
+        \assert($user instanceof User);
+        $member = $user->getMember();
 
-        if ($user instanceof User) {
-            $member = $user->getMember();
+        if ($rsvpRepository->existsForMemberAndEvent($member, $event)) {
+            $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
 
-            if ($rsvpRepository->existsForMemberAndEvent($member, $event)) {
-                $this->addFlash(
-                    'warning',
-                    $trans->trans('rsvp.already_rsvpd'),
-                );
-
-                return $this->redirectToRoute('entropy_event_slug', [
-                    'slug' => $slug,
-                    'year' => $year,
-                ]);
-            }
-
-            $rsvp = new RSVP();
-            $rsvp->setEvent($event);
-            $rsvp->setMember($member);
-
-            try {
-                $em->persist($rsvp);
-                $em->flush();
-            } catch (UniqueConstraintViolationException) {
-                $this->addFlash(
-                    'warning',
-                    $trans->trans('rsvp.already_rsvpd'),
-                );
-
-                return $this->redirectToRoute('entropy_event_slug', [
-                    'slug' => $slug,
-                    'year' => $year,
-                ]);
-            }
-
-            $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
-
-            return $this->redirectToRoute('entropy_event_slug', [
-                'slug' => $slug,
-                'year' => $year,
-            ]);
+            return $this->redirectToRoute('entropy_event_slug', $eventParams);
         }
 
-        $rsvp = new RSVP();
-        $form = $this->createForm(RSVPType::class, $rsvp);
-        $form->handleRequest($request);
-
-        if (!$form->isSubmitted() || !$form->isValid()) {
-            return new Response('', 422);
-        }
-
-        $repo = $em->getRepository(Member::class);
-        \assert($repo instanceof MemberRepository);
-
-        $exists = $repo->findByEmailOrName(
-            $rsvp->getEmail() ?? '',
-            $rsvp->getFirstName() ?? '',
-            $rsvp->getLastName() ?? '',
-        );
-
-        if ($exists) {
-            $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
-
-            return $this->redirectToRoute('entropy_event_slug', [
-                'slug' => $slug,
-                'year' => $year,
-            ]);
-        }
-
-        $rsvp->setEvent($event);
+        $rsvp = (new RSVP())
+            ->setEvent($event)
+            ->setMember($member);
 
         try {
             $em->persist($rsvp);
             $em->flush();
+            $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
         } catch (UniqueConstraintViolationException) {
-            $this->addFlash(
-                'warning',
-                $trans->trans('rsvp.already_rsvpd'),
-            );
-
-            return $this->redirectToRoute('entropy_event_slug', [
-                'slug' => $slug,
-                'year' => $year,
-            ]);
+            $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
         }
 
-        $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
-
-        return $this->redirectToRoute('entropy_event_slug', [
-            'slug' => $slug,
-            'year' => $year,
-        ]);
+        return $this->redirectToRoute('entropy_event_slug', $eventParams);
     }
 
     /**
