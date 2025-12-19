@@ -71,7 +71,11 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $this->assertSame(302, $response->getStatusCode());
 
         $location = $response->headers->get('Location');
-        $this->assertStringContainsString("/admin/event/{$event->getId()}/email/{$email->getId()}/edit", $location ?? '');
+        $this->assertNotNull($location);
+        $this->assertSame(
+            "/admin/event/{$event->getId()}/email/{$email->getId()}/edit",
+            parse_url($location, \PHP_URL_PATH),
+        );
     }
 
     public function testEditActionChildAdminDoesNotRedirect(): void
@@ -97,7 +101,9 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $location = $response->headers->get('Location');
+        $this->assertNotNull($location);
+        $this->assertSame('/login', parse_url($location, \PHP_URL_PATH));
     }
 
     public function testSendActionDeniesNonAdminUser(): void
@@ -113,7 +119,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
     public function testAdminUserCanAccessSendAction(): void
     {
         $email = EmailFactory::new()->aktiivit()->create();
-        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], 'admin@example.com');
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
 
         // Non-AJAX GET should redirect (fallback behavior)
         $this->client->request('GET', "/admin/email/{$email->getId()}/send");
@@ -190,8 +196,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
 
         // Verify no-cache headers are set
         $response = $this->client->getResponse();
-        $cacheControl = $response->headers->get('Cache-Control');
-        $this->assertStringContainsString('no-cache', $cacheControl ?? '');
+        $this->assertTrue($response->headers->hasCacheControlDirective('no-cache'));
 
         $data = json_decode($response->getContent(), true);
         $this->assertSame(0, $data['current']);
@@ -247,7 +252,9 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $this->assertTrue($this->client->getResponse()->isRedirect());
 
         // Verify redirect happened (flash messages checked after redirect in real usage)
-        $this->assertStringContainsString('/admin/email/list', $this->client->getResponse()->headers->get('Location') ?? '');
+        $location = $this->client->getResponse()->headers->get('Location');
+        $this->assertNotNull($location);
+        $this->assertSame('/admin/email/list', parse_url($location, \PHP_URL_PATH));
     }
 
     // =========================================================================
@@ -268,7 +275,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
             'allowActiveMemberMails' => true,
         ]);
 
-        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], 'admin@example.com');
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
 
         $this->client->xmlHttpRequest('POST', "/admin/email/{$email->getId()}/send");
 
@@ -292,7 +299,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
             'allowActiveMemberMails' => true,
         ]);
 
-        [$admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], 'admin@example.com');
+        [$admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
         $adminMember = $admin->getMember();
         $adminMemberId = $adminMember->getId();
 
@@ -349,7 +356,7 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $this->assertSame(EmailPurpose::TIEDOTUS, $recipientGroups[0], 'Should be TIEDOTUS purpose');
 
         // Login as admin FIRST (this creates an admin member)
-        [$admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], 'admin-no-emails@example.com');
+        [$admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
 
         // Disable email preferences for admin so they don't get counted
         $adminMember = $admin->getMember();

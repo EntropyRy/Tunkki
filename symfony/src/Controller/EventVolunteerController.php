@@ -9,9 +9,13 @@ use App\Entity\Member;
 use App\Entity\NakkiBooking;
 use App\Entity\RSVP;
 use App\Entity\User;
+use App\Form\RSVPType;
+use App\Repository\MemberRepository;
 use App\Repository\NakkiBookingRepository;
+use App\Repository\RSVPRepository;
 use App\Security\Voter\EventNakkiAdminVoter;
 use App\Service\MattermostNotifierService;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,7 +28,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * EventVolunteerController - Handles volunteer (nakki) signups and member RSVPs.
  */
-#[IsGranted('IS_AUTHENTICATED_FULLY')]
 class EventVolunteerController extends AbstractController
 {
     #[
@@ -34,6 +37,7 @@ class EventVolunteerController extends AbstractController
             requirements: ['year' => "\d+", 'id' => "\d+"],
         ),
     ]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiCancel(
         Request $request,
         #[
@@ -75,6 +79,7 @@ class EventVolunteerController extends AbstractController
             requirements: ['year' => "\d+", 'id' => "\d+"],
         ),
     ]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiSignUp(
         Request $request,
         #[
@@ -157,6 +162,7 @@ class EventVolunteerController extends AbstractController
         ),
     ]
     #[IsGranted(EventNakkiAdminVoter::ATTRIBUTE, 'event')]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiAdmin(
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
@@ -173,6 +179,7 @@ class EventVolunteerController extends AbstractController
             requirements: ['year' => "\d+"],
         ),
     ]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkikone(
         Request $request,
         #[
@@ -210,6 +217,7 @@ class EventVolunteerController extends AbstractController
             requirements: ['year' => "\d+"],
         ),
     ]
+    #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function responsible(
         Request $request,
         #[
@@ -237,11 +245,7 @@ class EventVolunteerController extends AbstractController
     }
 
     #[
-        Route(
-            path: '/{year}/{slug}/rsvp',
-            name: 'entropy_event_rsvp',
-            requirements: ['year' => "\d+"],
-        ),
+        Route(path: '/{year}/{slug}/rsvp', name: 'entropy_event_rsvp', requirements: ['year' => "\d+"], methods: ['POST']),
     ]
     public function rsvp(
         Request $request,
@@ -249,20 +253,101 @@ class EventVolunteerController extends AbstractController
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
         ]
         Event $event,
+        RSVPRepository $rsvpRepository,
         TranslatorInterface $trans,
         EntityManagerInterface $em,
     ): Response {
-        $user = $this->getUser();
-        \assert($user instanceof User);
-        $member = $user->getMember();
-
         $slug = $event->getUrl();
-        $year = $request->get('year');
+        $year = $request->attributes->getInt('year');
 
         if (!$event->getRsvpSystemEnabled()) {
+            $this->addFlash('warning', $trans->trans('rsvp.disabled'));
+
+            return $this->redirectToRoute('entropy_event_slug', [
+                'slug' => $slug,
+                'year' => $year,
+            ]);
+        }
+
+        $user = $this->getUser();
+
+        if ($user instanceof User) {
+            $member = $user->getMember();
+
+            if ($rsvpRepository->existsForMemberAndEvent($member, $event)) {
+                $this->addFlash(
+                    'warning',
+                    $trans->trans('rsvp.already_rsvpd'),
+                );
+
+                return $this->redirectToRoute('entropy_event_slug', [
+                    'slug' => $slug,
+                    'year' => $year,
+                ]);
+            }
+
+            $rsvp = new RSVP();
+            $rsvp->setEvent($event);
+            $rsvp->setMember($member);
+
+            try {
+                $em->persist($rsvp);
+                $em->flush();
+            } catch (UniqueConstraintViolationException) {
+                $this->addFlash(
+                    'warning',
+                    $trans->trans('rsvp.already_rsvpd'),
+                );
+
+                return $this->redirectToRoute('entropy_event_slug', [
+                    'slug' => $slug,
+                    'year' => $year,
+                ]);
+            }
+
+            $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
+
+            return $this->redirectToRoute('entropy_event_slug', [
+                'slug' => $slug,
+                'year' => $year,
+            ]);
+        }
+
+        $rsvp = new RSVP();
+        $form = $this->createForm(RSVPType::class, $rsvp);
+        $form->handleRequest($request);
+
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return new Response('', 422);
+        }
+
+        $repo = $em->getRepository(Member::class);
+        \assert($repo instanceof MemberRepository);
+
+        $exists = $repo->findByEmailOrName(
+            $rsvp->getEmail() ?? '',
+            $rsvp->getFirstName() ?? '',
+            $rsvp->getLastName() ?? '',
+        );
+
+        if ($exists) {
+            $this->addFlash('warning', $trans->trans('rsvp.email_in_use'));
+
+            return $this->redirectToRoute('entropy_event_slug', [
+                'slug' => $slug,
+                'year' => $year,
+            ]);
+        }
+
+        $rsvp->setEvent($event);
+
+        try {
+            $em->persist($rsvp);
+            $em->flush();
+        } catch (UniqueConstraintViolationException) {
             $this->addFlash(
                 'warning',
-                $trans->trans('rsvp.disabled'),
+                $trans->trans('rsvp.already_rsvpd'),
             );
 
             return $this->redirectToRoute('entropy_event_slug', [
@@ -271,21 +356,6 @@ class EventVolunteerController extends AbstractController
             ]);
         }
 
-        foreach ($member->getRSVPs() as $rsvp) {
-            if ($rsvp->getEvent() == $event) {
-                $this->addFlash('warning', $trans->trans('rsvp.already_rsvpd'));
-
-                return $this->redirectToRoute('entropy_event_slug', [
-                    'slug' => $slug,
-                    'year' => $year,
-                ]);
-            }
-        }
-        $rsvp = new RSVP();
-        $rsvp->setEvent($event);
-        $rsvp->setMember($member);
-        $em->persist($rsvp);
-        $em->flush();
         $this->addFlash('success', $trans->trans('rsvp.rsvpd_successfully'));
 
         return $this->redirectToRoute('entropy_event_slug', [

@@ -1,0 +1,66 @@
+{%- if this.isVisible() -%}
+<div {{ attributes.defaults({class: 'pt-2 pb-2'}) }}>
+    {%- if this.notice -%}
+        <div class="alert alert-success" role="status">{{ this.notice }}</div>
+    {%- endif -%}
+    {%- if this.error -%}
+        <div class="alert alert-warning" role="alert">{{ this.error }}</div>
+    {%- endif -%}
+
+    <div class="clearfix">
+            {%- if app.user -%}
+            {%- if this.hasRsvpd() -%}
+                <button class="btn btn-primary w-100 disabled" aria-disabled="true" disabled data-turbo="false">✓ {{ 'rsvp.already_rsvpd'|trans }}{% if app.user.member.isActiveMember %} {{ 'rsvp.total_shown_only_to_active_members'|trans({'%count%': this.event.RSVPs|length}) }}{% endif %}</button>
+            {%- else -%}
+                <form method="post"
+                      action="{{ path('entropy_event_rsvp', {year: this.event.eventdate|date('Y'), slug: this.event.url}) }}"
+                      data-action="live#action:prevent"
+                      data-live-action-param="rsvpAsMember">
+                    <button type="submit" class="btn btn-primary w-100" data-turbo="false">RSVP{% if app.user.member.isActiveMember %} ({{ this.event.RSVPs|length }}){% endif %}</button>
+                </form>
+            {%- endif -%}
+        {%- else -%}
+            {%- if not this.formOpen -%}
+                <button type="button"
+                        class="btn btn-primary w-100"
+                        data-action="live#action"
+                        data-live-action-param="openForm">RSVP</button>
+            {%- else -%}
+                <p>{{ 'rsvp.info'|trans|raw }}</p>
+                {{- form_start(form, {
+                    action: path('entropy_event_rsvp', {year: this.event.eventdate|date('Y'), slug: this.event.url}),
+                    attr: {
+                        class: 'rsvp-form',
+                        'data-action': 'live#action:prevent',
+                        'data-live-action-param': 'saveAnonymous',
+                        'data-turbo': 'false',
+                    },
+                }) -}}
+                    {{- form_row(form.firstName) -}}
+                    {{- form_row(form.lastName) -}}
+                    {%- set emailAttr = (form.email.vars.attr ?? {})|merge({
+                        'data-model': 'on(change)|rsvp.email',
+                    }) -%}
+                    {%- if form.email.vars.errors|length > 0 -%}
+                        {%- set emailAttr = emailAttr|merge({
+                            class: ((emailAttr.class ?? '') ~ ' is-invalid')|trim,
+                        }) -%}
+                    {%- endif -%}
+                    <div class="mb-3">
+                        {{- form_label(form.email) -}}
+                        {{- form_widget(form.email, {attr: emailAttr}) -}}
+                        {{- form_errors(form.email) -}}
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">{{ 'Submit'|trans }}</button>
+                        <button type="button"
+                                class="btn btn-secondary"
+                                data-action="live#action"
+                                data-live-action-param="closeForm">{{ 'Cancel'|trans }}</button>
+                    </div>
+                {{- form_end(form) -}}
+            {%- endif -%}
+        {%- endif -%}
+    </div>
+</div>
+{%- endif -%}

@@ -22,6 +22,12 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 final class NotificationAdmin extends AbstractAdmin
 {
     #[\Override]
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'notification';
+    }
+
+    #[\Override]
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
@@ -80,6 +86,7 @@ final class NotificationAdmin extends AbstractAdmin
                     'Add event picture to the message header (can be added only on first send)' => 'add_event_picture',
                     'Preview link That is in the content (only if there is no header picture)' => 'add_preview_link',
                     'Send Notification Sound to everybody in the info channel (only works on first send)' => 'send_notification',
+                    'Buttons: put each button on its own row' => 'buttons_one_per_row',
                     'Add Event Button' => 'add_event_button',
                     'Add Nakkikone Button' => 'add_nakkikone_button',
                     'Add Buy Ticket Button' => 'add_shop_button',

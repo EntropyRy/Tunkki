@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Entity\Ticket;
-use App\Repository\EmailRepository;
 use App\Repository\TicketRepository;
+use App\Service\Email\EmailService;
 use App\Service\QrService;
 use Sonata\AdminBundle\Controller\CRUDController;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Address;
-use Symfony\Component\Mime\Part\DataPart;
 
 /**
  * @extends CRUDController<Ticket>
@@ -33,36 +29,22 @@ final class TicketAdminController extends CRUDController
         return $this->redirect($this->admin->generateUrl('list'));
     }
 
-    public function sendQrCodeEmailAction(EmailRepository $emailRepo, MailerInterface $mailer, QrService $qrGenerator): RedirectResponse
+    public function sendQrCodeEmailAction(EmailService $emailService, QrService $qrGenerator): RedirectResponse
     {
         $ticket = $this->admin->getSubject();
-        $to = null == $ticket->getOwner() ? $ticket->getEmail() : $ticket->getOwner()->getEmail();
-        $email = $emailRepo->findOneBy(['purpose' => 'ticket_qr', 'event' => $ticket->getEvent()]);
-        $replyTo = 'hallitus@entropy.fi';
-        $body = '';
-        if (null != $email) {
-            $replyTo = $email->getReplyTo() ?? 'hallitus@entropy.fi';
-            $body = $email->getBody();
-        }
-        $qr = [
+        $to = null === $ticket->getOwner() ? $ticket->getEmail() : $ticket->getOwner()->getEmail();
+
+        $qrs = [[
             'qr' => $qrGenerator->getQr((string) $ticket->getReferenceNumber()),
-            'name' => $ticket->getName(),
-        ];
-        $mail = new TemplatedEmail()
-            ->from(new Address('webmaster@entropy.fi', 'Entropy ry'))
-            ->to($to)
-            ->replyTo($replyTo)
-            ->subject('['.$ticket->getEvent()->getName().'] Your ticket / Lippusi')
-            ->addPart(new DataPart($qr['qr'], 'ticket', 'image/png', 'base64')->asInline())
-            ->htmlTemplate('emails/ticket.html.twig')
-            ->context([
-                'body' => $body,
-                'qr' => $qr,
-                'links' => $email->getAddLoginLinksToFooter() ?: false,
-                'img' => $ticket->getEvent()->getPicture(),
-                'user_email' => $to,
-            ]);
-        $mailer->send($mail);
+            'name' => $ticket->getName() ?? 'Ticket',
+        ]];
+
+        $emailService->sendTicketQrEmails(
+            $ticket->getEvent(),
+            (string) $to,
+            $qrs,
+            $ticket->getEvent()->getPicture(),
+        );
         $this->addFlash('success', 'QR-code email sent!');
 
         return $this->redirect($this->admin->generateUrl('list'));

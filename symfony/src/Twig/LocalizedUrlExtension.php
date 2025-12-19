@@ -7,7 +7,6 @@ namespace App\Twig;
 use App\Entity\Menu;
 use App\Entity\Sonata\SonataPagePage;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface;
 use Sonata\PageBundle\Model\PageInterface;
 use Sonata\PageBundle\Model\SiteInterface;
@@ -38,7 +37,6 @@ class LocalizedUrlExtension extends AbstractExtension
         private readonly RequestStack $requestStack,
         private readonly EntityManagerInterface $entityManager,
         private readonly CmsManagerSelectorInterface $cmsManagerSelector,
-        private readonly ?LoggerInterface $logger = null,
     ) {
     }
 
@@ -143,16 +141,6 @@ class LocalizedUrlExtension extends AbstractExtension
                     $url = $targetPage->getUrl();
                     $site = $targetPage->getSite();
                     if ($url && $site) {
-                        $this->logger?->debug(
-                            'LocalizedUrlExtension: Found page via technical alias',
-                            [
-                                'source_alias' => $pageAlias,
-                                'target_alias' => $targetAlias,
-                                'target_locale' => $targetLocale,
-                                'strategy' => 'technical_alias',
-                            ],
-                        );
-
                         // Site's relativePath already contains the locale prefix (/en or '')
                         return ($site->getRelativePath() ?? '').$url;
                     }
@@ -166,31 +154,12 @@ class LocalizedUrlExtension extends AbstractExtension
             $url = $targetPage->getUrl();
             $site = $targetPage->getSite();
             if ($url && $site) {
-                $this->logger?->debug(
-                    'LocalizedUrlExtension: Found page via Menu lookup',
-                    [
-                        'source_page_id' => $this->getPageIdSafely($page),
-                        'target_locale' => $targetLocale,
-                        'target_page_id' => $this->getPageIdSafely($targetPage),
-                        'strategy' => 'menu_lookup',
-                    ],
-                );
-
                 // Site's relativePath already contains the locale prefix (/en or '')
                 return ($site->getRelativePath() ?? '').$url;
             }
         }
 
         // Final fallback
-        $this->logger?->debug(
-            'LocalizedUrlExtension: Using fallback URL',
-            [
-                'source_page_id' => $this->getPageIdSafely($page),
-                'target_locale' => $targetLocale,
-                'strategy' => 'fallback',
-            ],
-        );
-
         return 'en' === $targetLocale ? '/en' : '/';
     }
 
@@ -258,14 +227,8 @@ class LocalizedUrlExtension extends AbstractExtension
             if (null !== $menuItem) {
                 return $menuItem->getPageByLang($targetLocale);
             }
-        } catch (\Throwable $e) {
+        } catch (\Throwable) {
             // Ignore and fallback to ID-based resolution
-            $this->logger?->debug(
-                'LocalizedUrlExtension: direct menu lookup failed, falling back to ID-based lookup',
-                [
-                    'exception' => $e::class,
-                ],
-            );
         }
 
         // 2. Fallback: resolve by numeric ID (handles SnapshotPageProxy which cannot be compared directly)
@@ -283,29 +246,10 @@ class LocalizedUrlExtension extends AbstractExtension
 
                 $menuItem = $qb->getQuery()->getOneOrNullResult();
                 if (null !== $menuItem) {
-                    $this->logger?->debug(
-                        'LocalizedUrlExtension: menu item found via ID-based lookup',
-                        [
-                            'page_id' => $pid,
-                            'target_locale' => $targetLocale,
-                        ],
-                    );
-
                     return $menuItem->getPageByLang($targetLocale);
                 }
-            } catch (\Throwable $e) {
-                $this->logger?->debug(
-                    'LocalizedUrlExtension: ID-based menu lookup failed',
-                    [
-                        'page_id' => $pageIdString,
-                        'exception' => $e::class,
-                    ],
-                );
+            } catch (\Throwable) {
             }
-        } else {
-            $this->logger?->debug(
-                'LocalizedUrlExtension: cannot perform ID-based lookup, unknown page id',
-            );
         }
 
         return null;

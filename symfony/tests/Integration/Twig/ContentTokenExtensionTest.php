@@ -9,6 +9,8 @@ use App\Entity\Artist;
 use App\Entity\Event;
 use App\Entity\EventArtistInfo;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
 /**
@@ -30,6 +32,7 @@ final class ContentTokenExtensionTest extends KernelTestCase
         // Use the full Symfony Twig environment (includes all extensions)
         $this->twig = $container->get(Environment::class);
         $this->temporalState = $container->get(EventTemporalStateService::class);
+        $this->primeRequestStackSession();
     }
 
     public function testRenderTokensFunctionExists(): void
@@ -98,6 +101,7 @@ final class ContentTokenExtensionTest extends KernelTestCase
         $now = new \DateTimeImmutable('2025-12-01T18:00:00+02:00');
 
         $event = new Event();
+        $this->forceEventId($event, 123);
         $event
             ->setName('Test Event EN')
             ->setNimi('Testitapahtuma')
@@ -123,6 +127,41 @@ final class ContentTokenExtensionTest extends KernelTestCase
         $event->addEventArtistInfo($info);
 
         return $event;
+    }
+
+    private function forceEventId(Event $event, int $id): void
+    {
+        $ref = new \ReflectionProperty(Event::class, 'id');
+        $ref->setValue($event, $id);
+    }
+
+    private function primeRequestStackSession(): void
+    {
+        $container = static::getContainer();
+        if (!$container->has('request_stack')) {
+            return;
+        }
+
+        $session = null;
+        if ($container->has('session')) {
+            $session = $container->get('session');
+        } elseif ($container->has('session.factory')) {
+            $session = $container->get('session.factory')->createSession();
+        }
+
+        if ($session instanceof SessionInterface && !$session->isStarted()) {
+            $session->start();
+        }
+
+        $request = Request::create('/');
+        $request->setLocale('fi');
+        if ($request->hasSession()) {
+            $request->getSession()->start();
+        } elseif ($session instanceof SessionInterface) {
+            $request->setSession($session);
+        }
+
+        $container->get('request_stack')->push($request);
     }
 
     private function createMockApp(): object

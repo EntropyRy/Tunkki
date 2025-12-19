@@ -407,10 +407,11 @@ rsvp:
   email_in_use: You are a member. Please sign in first.
   receive_info: To receive the location, RSVP here
   no_user: To RSVP you must be a logged-in member of Entropy.
-  already_rsvpd: You have already RSVPed to this event. We will send you an email before the event.
+  already_rsvpd: You have already RSVPed to this event.
+  total_shown_only_to_active_members: "Total shown only to active members: %count%"
 
   rsvpd_successfully: RSVP successfully saved! We'll send you an email before the event.
-  info: You must be a member to log in. You can become a member <a href="/en/join-us">here</a>.
+  info: If you are a member, please log in first (members get event updates by email). Not a member? You can become a member <a href="/en/join-us">here</a>. You can also RSVP by leaving your contact details in the form below. Read our privacy notice <a href="/rsvp-rekisteriseloste">here</a>.
 
   closed: Sign-up closed
 verify:

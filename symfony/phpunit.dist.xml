@@ -69,6 +69,10 @@
                  in test environment (when@test service override). AppClock is production code and remains covered. -->
             <file>src/Time/FixedClock.php</file>
             <file>src/Time/MutableClock.php</file>
+            <!-- Exclude seed command -->
+            <file>src/Command/CmsSeedCommand.php</file>
+            <!-- Exclude test controller -->
+            <file>src/Controller/PathTestController.php</file>
             <!-- Exclude one-time conversion utility: BlockToTwigComponentCommand is a migration tool
                  for converting Sonata Blocks to TwigComponents, not production code. -->
             <file>src/Command/BlockToTwigComponentCommand.php</file>

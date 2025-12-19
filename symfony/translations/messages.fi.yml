@@ -519,15 +519,16 @@ rsvp:
   receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
   no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
   already_rsvpd:
-    Olet jo ilmoittautunut tähän tapahtumaan. Lähetämme sähköpostia lähempänä
-    tapahtumaa.
+    Olet jo ilmoittautunut tähän tapahtumaan.
+  total_shown_only_to_active_members: "Yhteensä (vain aktiivijäsenille): %count%"
   rsvpd_successfully:
     Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
     tapahtumaa.
   info:
-    Kirjautuaksesi sisään sinun tulee olla jäsen. Voit liittyä jäseneksi <a href="/liity">täällä</a>.
-    Mikäli et halua liittyä jäseneksi, voit ilmoittautua tapahtumaan jättämällä yhteystietosi
-    alla. Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
+    Jos olet jäsen, kirjaudu ensin sisään (jäsenille voidaan lähettää tapahtumapäivityksiä sähköpostilla).
+    Etkö ole jäsen? Voit liittyä jäseneksi <a href="/liity">täällä</a>.
+    Voit myös ilmoittautua tapahtumaan jättämällä yhteystietosi lomakkeelle.
+    Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
   closed: Ilmoittautuminen suljettu
 ticket:
   ticket: Lippu

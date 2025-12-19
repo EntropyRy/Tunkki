@@ -41,7 +41,7 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
             'url' => 'test-event-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -58,7 +58,7 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
             'url' => 'test-event-en-'.uniqid('', true),
         ]);
 
-        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN', [], 'admin.en@example.com');
+        [$_admin, $client] = $this->loginAsRole('ROLE_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/en/{$year}/{$event->getUrl()}/nakkikone/admin";
@@ -77,7 +77,7 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
             'url' => 'test-event-super-'.uniqid('', true),
         ]);
 
-        [$_super, $client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], 'superadmin@example.com');
+        [$_super, $client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";

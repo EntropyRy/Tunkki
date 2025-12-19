@@ -13,6 +13,7 @@ use App\Entity\Happening;
 use League\CommonMark\GithubFlavoredMarkdownConverter;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Twig\Environment;
 
 final class ContentTokenRendererIntegrationTest extends KernelTestCase
@@ -26,6 +27,7 @@ final class ContentTokenRendererIntegrationTest extends KernelTestCase
         $container = static::getContainer();
         $this->twig = $container->get(Environment::class);
         $this->temporalState = $container->get(EventTemporalStateService::class);
+        $this->primeRequestStackSession();
     }
 
     public function testTokensRenderWithoutMarkdownCodeBlocks(): void
@@ -68,6 +70,7 @@ MD;
         $now = new \DateTimeImmutable('2025-12-01T18:00:00+02:00');
 
         $event = new Event();
+        $this->forceEventId($event, 123);
         $event
             ->setName('Test Event EN')
             ->setNimi('Testitapahtuma')
@@ -111,6 +114,41 @@ MD;
         $event->addHappening($happening);
 
         return $event;
+    }
+
+    private function forceEventId(Event $event, int $id): void
+    {
+        $ref = new \ReflectionProperty(Event::class, 'id');
+        $ref->setValue($event, $id);
+    }
+
+    private function primeRequestStackSession(): void
+    {
+        $container = static::getContainer();
+        if (!$container->has('request_stack')) {
+            return;
+        }
+
+        $session = null;
+        if ($container->has('session')) {
+            $session = $container->get('session');
+        } elseif ($container->has('session.factory')) {
+            $session = $container->get('session.factory')->createSession();
+        }
+
+        if ($session instanceof SessionInterface && !$session->isStarted()) {
+            $session->start();
+        }
+
+        $request = Request::create('/');
+        $request->setLocale('fi');
+        if ($request->hasSession()) {
+            $request->getSession()->start();
+        } elseif ($session instanceof SessionInterface) {
+            $request->setSession($session);
+        }
+
+        $container->get('request_stack')->push($request);
     }
 
     /**

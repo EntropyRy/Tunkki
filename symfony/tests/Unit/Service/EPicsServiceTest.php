@@ -6,7 +6,6 @@ namespace App\Tests\Unit\Service;
 
 use App\Service\EPicsService;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 
@@ -29,14 +28,6 @@ final class EPicsServiceTest extends TestCase
     public function testServiceConstructsCorrectly(): void
     {
         $service = new EPicsService($this->client);
-
-        $this->assertInstanceOf(EPicsService::class, $service);
-    }
-
-    public function testServiceConstructsWithLogger(): void
-    {
-        $logger = $this->createStub(LoggerInterface::class);
-        $service = new EPicsService($this->client, $logger);
 
         $this->assertInstanceOf(EPicsService::class, $service);
     }

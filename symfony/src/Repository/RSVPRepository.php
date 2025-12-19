@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\RSVP;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,6 +18,21 @@ class RSVPRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RSVP::class);
+    }
+
+    public function existsForMemberAndEvent(
+        Member $member,
+        Event $event,
+    ): bool {
+        return (bool) $this->createQueryBuilder('r')
+            ->select('1')
+            ->andWhere('r.member = :member')
+            ->andWhere('r.event = :event')
+            ->setParameter('member', $member)
+            ->setParameter('event', $event)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     // /**

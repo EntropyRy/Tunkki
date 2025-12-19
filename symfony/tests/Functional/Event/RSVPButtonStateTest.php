@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Event;
 
+use App\Domain\EventTemporalStateService;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Factory\RSVPFactory;
@@ -36,6 +37,8 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => new \DateTimeImmutable('2024-12-01'),
         ]);
+        self::assertTrue((bool) $event->getRsvpSystemEnabled());
+        self::assertFalse(static::getContainer()->get(EventTemporalStateService::class)->isInPast($event));
 
         // Login as an inactive member to avoid extra counters/visibility constraints
         $member = MemberFactory::new()->inactive()->create();
@@ -46,27 +49,26 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
         $slug = $event->getUrl();
 
         // Visit event page
-        $this->client->request('GET', "/{$year}/{$slug}");
+        $this->client->request('GET', "/en/{$year}/{$slug}");
         $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('h1.event-name');
 
-        // Assert the RSVP button exists and is enabled with correct href to RSVP route
-        $this->client->assertSelectorExists('#RSVP a.btn.btn-primary.w-100');
-        $crawler = $this->client->getCrawler()->filter('#RSVP a.btn.btn-primary.w-100');
+        $this->client->assertSelectorExists('#RSVP');
+
+        // Assert the RSVP button exists and is enabled (rendered as a POST form for no-JS support)
+        $this->client->assertSelectorExists('#RSVP form button.btn.btn-primary.w-100');
+        $crawler = $this->client->getCrawler()->filter('#RSVP form button.btn.btn-primary.w-100');
         $this->assertSame(
             1,
             $crawler->count(),
             'Expected one RSVP button for logged-in user without RSVP'
         );
 
-        // Should have href to the RSVP route
-        $href = $crawler->attr('href');
-        $this->assertNotNull($href, 'RSVP button should have an href');
-        $this->assertStringContainsString('/rsvp', $href, 'RSVP button should link to RSVP route');
-
         // Should not have disabled class nor aria-disabled attribute
         $class = $crawler->attr('class') ?? '';
         $this->assertStringNotContainsString('disabled', $class, 'RSVP button should not be disabled');
         $this->assertNull($crawler->attr('aria-disabled'), 'RSVP button should not have aria-disabled attribute');
+        $this->assertNull($crawler->attr('disabled'), 'RSVP button should not have disabled attribute');
 
         // Should contain label "RSVP" (base text)
         $this->assertStringContainsString('RSVP', $crawler->text(), 'Enabled RSVP button should contain "RSVP" label');
@@ -79,6 +81,8 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
             'published' => true,
             'publishDate' => new \DateTimeImmutable('2024-12-01'),
         ]);
+        self::assertTrue((bool) $event->getRsvpSystemEnabled());
+        self::assertFalse(static::getContainer()->get(EventTemporalStateService::class)->isInPast($event));
 
         // Login as a member and create their RSVP for this event
         $member = MemberFactory::new()->inactive()->create();
@@ -93,25 +97,26 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
         $slug = $event->getUrl();
 
         // Visit event page
-        $this->client->request('GET', "/{$year}/{$slug}");
+        $this->client->request('GET', "/en/{$year}/{$slug}");
         $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('h1.event-name');
 
-        // Assert the RSVP button exists and is disabled (no href, disabled class, aria-disabled)
-        $this->client->assertSelectorExists('#RSVP a.btn.btn-primary.w-100.disabled');
-        $crawler = $this->client->getCrawler()->filter('#RSVP a.btn.btn-primary.w-100.disabled');
+        $this->client->assertSelectorExists('#RSVP');
+
+        // Assert the RSVP button exists and is disabled
+        $this->client->assertSelectorExists('#RSVP button.btn.btn-primary.w-100.disabled');
+        $crawler = $this->client->getCrawler()->filter('#RSVP button.btn.btn-primary.w-100.disabled');
         $this->assertSame(
             1,
             $crawler->count(),
             'Expected one disabled RSVP button for logged-in user with RSVP'
         );
 
-        // Disabled button should not have href attribute to avoid accidental navigation
-        $this->assertNull($crawler->attr('href'), 'Disabled RSVP button should not have an href');
-
         // Disabled state attributes/classes
         $class = $crawler->attr('class') ?? '';
         $this->assertStringContainsString('disabled', $class, 'RSVP button should be visually disabled');
         $this->assertSame('true', $crawler->attr('aria-disabled'), 'RSVP button should indicate aria-disabled');
+        $this->assertNotNull($crawler->attr('disabled'), 'RSVP button should have disabled attribute');
 
         // Should include a checkmark and translated "already RSVP'd" message
         $text = $crawler->text();
@@ -120,6 +125,6 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
         // We cannot assert exact translation string content, but ensure "RSVP" is not present as the primary label
         // and that there is non-empty text (translation rendered).
         $this->assertNotEmpty(trim($text), 'Disabled RSVP button should have user-facing text');
-        $this->assertStringNotContainsString('RSVP', $text, 'Disabled RSVP button should not show the plain "RSVP" label');
+        $this->assertStringContainsString('already', strtolower($text), 'Disabled RSVP button should indicate the already RSVPed state');
     }
 }

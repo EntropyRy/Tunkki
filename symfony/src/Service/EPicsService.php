@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use Psr\Log\LoggerInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
@@ -29,7 +28,6 @@ final readonly class EPicsService
 
     public function __construct(
         private HttpClientInterface $client,
-        private ?LoggerInterface $logger = null,
     ) {
         $this->baseUrl = rtrim(
             (string) ($_ENV['EPICS_BASE_URL'] ?? $_SERVER['EPICS_BASE_URL'] ?? 'https://epics.entropy.fi'),
@@ -63,10 +61,6 @@ final readonly class EPicsService
             );
 
             if (200 !== $response->getStatusCode()) {
-                $this->log('warning', 'Random photo request failed', [
-                    'status' => $response->getStatusCode(),
-                ]);
-
                 return null;
             }
 
@@ -97,17 +91,7 @@ final readonly class EPicsService
             }
 
             return null;
-        } catch (TransportExceptionInterface $e) {
-            $this->log('error', 'Transport exception fetching random photo', [
-                'exception' => $e->getMessage(),
-            ]);
-
-            return null;
-        } catch (\Throwable $e) {
-            $this->log('error', 'Unhandled exception fetching random photo', [
-                'exception' => $e->getMessage(),
-            ]);
-
+        } catch (TransportExceptionInterface|\Throwable) {
             return null;
         }
     }
@@ -127,16 +111,12 @@ final readonly class EPicsService
         try {
             $tokens = $this->establishSession();
             if (null === $tokens) {
-                $this->log('error', 'Failed to establish session for user management');
-
                 return false;
             }
             [$sessionToken, $xsrfToken] = $tokens;
 
             $tokensAfterLogin = $this->login($this->adminUser, $this->adminPassword, $sessionToken, $xsrfToken);
             if (null === $tokensAfterLogin) {
-                $this->log('error', 'Admin login failed', ['adminUser' => $this->adminUser]);
-
                 return false;
             }
             [$sessionToken, $xsrfToken] = $tokensAfterLogin;
@@ -153,19 +133,7 @@ final readonly class EPicsService
 
             // User doesn't exist - create new user
             return $this->createUser($username, $password, $headers);
-        } catch (TransportExceptionInterface $e) {
-            $this->log('error', 'Transport exception managing user', [
-                'exception' => $e->getMessage(),
-                'username' => $username,
-            ]);
-
-            return false;
-        } catch (\Throwable $e) {
-            $this->log('error', 'Unhandled exception managing user', [
-                'exception' => $e->getMessage(),
-                'username' => $username,
-            ]);
-
+        } catch (TransportExceptionInterface|\Throwable) {
             return false;
         }
     }
@@ -186,19 +154,11 @@ final readonly class EPicsService
             );
 
             if (200 !== $listResp->getStatusCode()) {
-                $this->log('error', 'Failed to list users', [
-                    'status' => $listResp->getStatusCode(),
-                ]);
-
                 return null;
             }
 
             $users = json_decode($listResp->getContent(false), true) ?? [];
             if (!\is_array($users)) {
-                $this->log('warning', 'Unexpected user list response', [
-                    'type' => get_debug_type($users),
-                ]);
-
                 return null;
             }
 
@@ -209,12 +169,7 @@ final readonly class EPicsService
             }
 
             return null;
-        } catch (\Throwable $e) {
-            $this->log('error', 'Exception finding user', [
-                'exception' => $e->getMessage(),
-                'username' => $username,
-            ]);
-
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -244,24 +199,8 @@ final readonly class EPicsService
                 ],
             );
 
-            $success = $resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300;
-            if (!$success) {
-                $errorBody = $resp->getContent(false);
-                $this->log('error', 'Failed to update user password', [
-                    'status' => $resp->getStatusCode(),
-                    'userId' => $userId,
-                    'username' => $username,
-                    'responseBody' => $errorBody,
-                ]);
-            }
-
-            return $success;
-        } catch (\Throwable $e) {
-            $this->log('error', 'Exception updating user password', [
-                'exception' => $e->getMessage(),
-                'userId' => $userId,
-            ]);
-
+            return $resp->getStatusCode() >= 200 && $resp->getStatusCode() < 300;
+        } catch (\Throwable) {
             return false;
         }
     }
@@ -287,21 +226,8 @@ final readonly class EPicsService
                 ],
             );
 
-            $success = $create->getStatusCode() >= 200 && $create->getStatusCode() < 300;
-            if (!$success) {
-                $this->log('error', 'Failed to create user', [
-                    'status' => $create->getStatusCode(),
-                    'username' => $username,
-                ]);
-            }
-
-            return $success;
-        } catch (\Throwable $e) {
-            $this->log('error', 'Exception creating user', [
-                'exception' => $e->getMessage(),
-                'username' => $username,
-            ]);
-
+            return $create->getStatusCode() >= 200 && $create->getStatusCode() < 300;
+        } catch (\Throwable) {
             return false;
         }
     }
@@ -323,20 +249,11 @@ final readonly class EPicsService
             $xsrfToken = $this->extractCookie($headers, 'XSRF-TOKEN');
 
             if (!$sessionToken || !$xsrfToken) {
-                $this->log('error', 'Missing session or XSRF token', [
-                    'session' => (bool) $sessionToken,
-                    'xsrf' => (bool) $xsrfToken,
-                ]);
-
                 return null;
             }
 
             return [$sessionToken, $xsrfToken];
-        } catch (\Throwable $e) {
-            $this->log('error', 'Exception establishing session', [
-                'exception' => $e->getMessage(),
-            ]);
-
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -367,11 +284,6 @@ final readonly class EPicsService
             );
 
             if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
-                $this->log('error', 'Login failed', [
-                    'status' => $response->getStatusCode(),
-                    'username' => $username,
-                ]);
-
                 return null;
             }
 
@@ -380,12 +292,7 @@ final readonly class EPicsService
             $newXsrf = $this->extractCookie($headers, 'XSRF-TOKEN') ?? $xsrfToken;
 
             return [$newSession, $newXsrf];
-        } catch (\Throwable $e) {
-            $this->log('error', 'Exception during login', [
-                'exception' => $e->getMessage(),
-                'username' => $username,
-            ]);
-
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -428,13 +335,5 @@ final readonly class EPicsService
             'Referer' => $this->baseUrl.'/',
             'Origin' => $this->baseUrl,
         ];
-    }
-
-    /**
-     * Log a message if logger is available.
-     */
-    private function log(string $level, string $message, array $context = []): void
-    {
-        $this->logger?->log($level, '[ePics] '.$message, $context);
     }
 }

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Entity\Event;
+use App\Entity\Location;
 use App\Entity\Notification;
+use App\Entity\Sonata\SonataMediaMedia;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -30,55 +33,52 @@ final class NotificationAdminController extends CRUDController
         $notification = $this->admin->getSubject();
         $locale = $notification->getLocale();
         $event = $notification->getEvent();
+        if (!$event instanceof Event) {
+            return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+        }
         $picture = $event->getPicture();
-
+        $baseUrl = $request->getSchemeAndHttpHost();
         // Prepare picture URL
         $publicUrl = null;
-        if (null !== $picture) {
-            // Get base URL from request
-            $scheme = $request->isSecure() ? 'https' : 'http';
-            $host = $request->getHost();
-            $baseUrl = $scheme.'://'.$host;
-
+        if ($picture instanceof SonataMediaMedia) {
             $provider = $pool->getProvider($picture->getProviderName());
             $format = $provider->getFormatName($picture, 'reference');
-            $publicUrl = 'https://entropy.fi'.$provider->generatePublicUrl($picture, $format);
+            $publicUrl = $baseUrl.$provider->generatePublicUrl($picture, $format);
         }
 
-        if ('dev' == $_ENV['APP_ENV']) {
+        if (($_ENV['APP_ENV'] ?? null) === 'dev') {
             $publicUrl = 'https://entropy.fi/upload/media/event/0001/01/c9ae350d6d50efeadd95eab3270604a78719fb1b.jpg';
         }
         // Prepare event URLs
         $path = '/'.$event->getEventDate()->format('Y').'/'.$event->getUrl();
-        $host = 'https://'.$request->headers->get('host');
-        if ('fi' == $notification->getLocale()) {
-            $nakkikone = $host.$path.'/nakkikone?source=tg';
-            $shop = $host.$path.'/kauppa?source=tg';
+        if ('fi' === $locale) {
+            $nakkikone = $baseUrl.$path.'/nakkikone?source=tg';
+            $shop = $baseUrl.$path.'/kauppa?source=tg';
+            $eventUrl = $baseUrl.'/tapahtuma/'.$event->getId().'?source=tg';
         } else {
-            $nakkikone = $host.'/en'.$path.'/nakkikone?source=tg';
-            $shop = $host.'/en'.$path.'/shop?source=tg';
+            $nakkikone = $baseUrl.'/en'.$path.'/nakkikone?source=tg';
+            $shop = $baseUrl.'/en'.$path.'/shop?source=tg';
+            $eventUrl = $baseUrl.'/en/event/'.$event->getId().'?source=tg';
         }
 
-        $url = $host.'/tapahtuma/'.$event->getId().'?source=tg';
-        $msg = html_entity_decode(strip_tags((string) $notification->getMessage(), '<a><b><strong><u><code><em><a>'));
+        $rawMessage = $notification->getMessage() ?? '';
+        $msg = html_entity_decode(strip_tags($rawMessage, '<a><b><strong><u><code><em>'));
 
         // Prepare buttons with each button on its own row
-        $buttonRows = [];
         $options = $notification->getOptions();
+        $buttonsOnePerRow = \in_array('buttons_one_per_row', $options, true);
+        $buttons = [];
 
         foreach ($options as $option) {
             switch ($option) {
                 case 'add_event_button':
-                    $buttonRows[] = new InlineKeyboardButton('Tapahtuma / The Event')
-                        ->url($url);
+                    $buttons[] = new InlineKeyboardButton('Tapahtuma / The Event')->url($eventUrl);
                     break;
                 case 'add_shop_button':
-                    $buttonRows[] = new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale))
-                        ->url($shop);
+                    $buttons[] = new InlineKeyboardButton($ts->trans('tg.ticket_shop', locale: $locale))->url($shop);
                     break;
                 case 'add_nakkikone_button':
-                    $buttonRows[] = new InlineKeyboardButton($ts->trans('Nakkikone'))
-                        ->url($nakkikone);
+                    $buttons[] = new InlineKeyboardButton($ts->trans('Nakkikone', locale: $locale))->url($nakkikone);
                     break;
                 default:
                     break;
@@ -102,6 +102,11 @@ final class NotificationAdminController extends CRUDController
                     break;
                 case 'add_venue':
                     $venue = $event->getLocation();
+                    if (!$venue instanceof Location) {
+                        $this->addFlash('warning', 'Cannot add venue: event has no location.');
+
+                        return new RedirectResponse($this->admin->generateUrl('list', $this->admin->getFilterParameters()));
+                    }
                     $telegramOptions->venue((float) $venue->getLatitude(), (float) $venue->getLongitude(), $event->getName().' @ '.$venue->getNameByLocale($locale), $venue->getStreetAddress());
                     break;
                 default:
@@ -109,27 +114,23 @@ final class NotificationAdminController extends CRUDController
             }
         }
 
-        // Handle editing existing messages
-        if ($notification->getMessageId()) {
-            $telegramOptions->edit($notification->getMessageId());
-        }
-
         // Add the photo if available and requested
-        if (null !== $publicUrl && \in_array('add_event_picture', $options) && null === $notification->getMessageId()) {
+        if (null !== $publicUrl && \in_array('add_event_picture', $options, true) && null === $notification->getMessageId()) {
             $telegramOptions->photo($publicUrl);
         }
 
         // Add reply markup with buttons if any exist
-        if ([] !== $buttonRows) {
-            $telegramOptions
-                ->replyMarkup(
-                    new InlineKeyboardMarkup()
-                        ->inlineKeyboard($buttonRows)
-                );
-            // $markup = new InlineKeyboardMarkup();
-            // // Each button gets its own row in the keyboard
-            // $markup->inlineKeyboard($buttonRows);
-            // $telegramOptions->replyMarkup($markup);
+        if ([] !== $buttons) {
+            $markup = new InlineKeyboardMarkup();
+            if ($buttonsOnePerRow) {
+                foreach ($buttons as $button) {
+                    $markup->inlineKeyboard([$button]);
+                }
+            } else {
+                $markup->inlineKeyboard($buttons);
+            }
+
+            $telegramOptions->replyMarkup($markup);
         }
 
         // Create message
