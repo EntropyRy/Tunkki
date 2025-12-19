@@ -5,21 +5,35 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Menu;
 
 use App\Entity\Menu;
+use App\Entity\Sonata\SonataPagePage;
 use App\Menu\MenuBuilder;
 use App\Repository\MenuRepository;
+use Knp\Menu\Integration\Symfony\RoutingExtension;
 use Knp\Menu\MenuFactory;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 final class MenuBuilderTest extends TestCase
 {
     public function testCreateMainMenuUsesLocaleLabelsAndSortsByPosition(): void
     {
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+        $urlGenerator
+            ->method('generate')
+            ->willReturnCallback(static fn (string $route, array $params = []): string => $route.'?'.http_build_query($params));
+
+        $factory = new MenuFactory();
+        $factory->addExtension(new RoutingExtension($urlGenerator));
+
         $root = $this->createMenu(
             label: 'Events',
             nimi: 'Tapahtumat',
-            url: '/events',
+            url: '/wrong-root-url',
             position: 5,
         );
+        $root
+            ->setPageFi($this->createPage('/tapahtumat'))
+            ->setPageEn($this->createPage('/events'));
 
         $firstChild = $this->createMenu(
             label: 'Tickets',
@@ -27,6 +41,8 @@ final class MenuBuilderTest extends TestCase
             url: '/tickets',
             position: 2,
         );
+        // FI uses the configured page URL; EN falls back to Menu::$url.
+        $firstChild->setPageFi($this->createPage('/liput'));
         $secondChild = $this->createMenu(
             label: 'About',
             nimi: 'Tietoa',
@@ -43,7 +59,7 @@ final class MenuBuilderTest extends TestCase
             ->method('getRootNodes')
             ->willReturn([$root]);
 
-        $builder = new MenuBuilder(new MenuFactory(), $menuRepository);
+        $builder = new MenuBuilder($factory, $menuRepository);
 
         $fiMenu = $builder->createMainMenu(['locale' => 'fi']);
         $this->assertSame(
@@ -61,10 +77,39 @@ final class MenuBuilderTest extends TestCase
 
         $rootItem = $fiMenu->getChild('Tapahtumat');
         $this->assertSame('level-1', $rootItem->getLinkAttribute('class'));
+        $this->assertSame(
+            [['route' => 'page_slug', 'parameters' => ['path' => '/tapahtumat']]],
+            $rootItem->getExtra('routes'),
+            'Finnish root item should use the configured page URL.',
+        );
+
+        // Note: MenuBuilder adds top-level items as siblings (not nested under the root item).
+        $ticketsFi = $fiMenu->getChild('Liput');
+        $this->assertSame(
+            [['route' => 'page_slug', 'parameters' => ['path' => '/liput']]],
+            $ticketsFi->getExtra('routes'),
+            'Finnish ticket item should use the configured page URL.',
+        );
+
+        $rootItemEn = $enMenu->getChild('Events');
+        $ticketsEn = $enMenu->getChild('Tickets');
+        $this->assertSame(
+            [['route' => 'page_slug', 'parameters' => ['path' => '/tickets']]],
+            $ticketsEn->getExtra('routes'),
+            'English ticket item should fall back to Menu::$url when no EN page is set.',
+        );
     }
 
     public function testDropdownSkipsDisabledChildrenAndAssignsLevelClasses(): void
     {
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+        $urlGenerator
+            ->method('generate')
+            ->willReturnCallback(static fn (string $route, array $params = []): string => $route.'?'.http_build_query($params));
+
+        $factory = new MenuFactory();
+        $factory->addExtension(new RoutingExtension($urlGenerator));
+
         $root = $this->createMenu(
             label: 'Navigation',
             nimi: 'Navigaatio',
@@ -85,6 +130,7 @@ final class MenuBuilderTest extends TestCase
             url: '/workshops',
             position: 5,
         );
+        $enabledChild->setPageEn($this->createPage('/program/workshops'));
         $enabledGrandChild = $this->createMenu(
             label: 'Afterparty',
             nimi: 'Jatkot',
@@ -112,7 +158,7 @@ final class MenuBuilderTest extends TestCase
             ->method('getRootNodes')
             ->willReturn([$root]);
 
-        $builder = new MenuBuilder(new MenuFactory(), $repo);
+        $builder = new MenuBuilder($factory, $repo);
         $menu = $builder->createMainMenu(['locale' => 'en']);
 
         $dropdownItem = $menu->getChild('Programs');
@@ -124,6 +170,11 @@ final class MenuBuilderTest extends TestCase
 
         $workshopsItem = $dropdownChildren['Workshops'];
         $this->assertSame('level-2', $workshopsItem->getLinkAttribute('class'));
+        $this->assertSame(
+            [['route' => 'page_slug', 'parameters' => ['path' => '/program/workshops']]],
+            $workshopsItem->getExtra('routes'),
+            'If a page is configured, the item should use the page URL.',
+        );
 
         $this->assertArrayHasKey('Afterparty', $dropdownChildren);
         $grandChildItem = $dropdownChildren['Afterparty'];
@@ -149,5 +200,13 @@ final class MenuBuilderTest extends TestCase
             ->setLvl(0);
 
         return $menu;
+    }
+
+    private function createPage(string $url): SonataPagePage
+    {
+        $page = new SonataPagePage();
+        $page->setUrl($url);
+
+        return $page;
     }
 }

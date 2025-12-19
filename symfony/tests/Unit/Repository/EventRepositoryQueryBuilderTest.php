@@ -82,14 +82,15 @@ final class EventRepositoryQueryBuilderTest extends TestCase
         // Assert where clauses and parameters
         self::assertContains('e.publishDate <= :now', $qb->conditions);
         self::assertContains('e.published = :pub', $qb->conditions);
-        self::assertContains('e.externalUrl = :ext', $qb->conditions);
+        self::assertContains(
+            '(e.externalUrl = false OR (e.externalUrl = true AND e.url IS NOT NULL AND e.url <> \'\'))',
+            $qb->conditions,
+        );
 
         self::assertArrayHasKey('now', $qb->parameters);
         self::assertArrayHasKey('pub', $qb->parameters);
-        self::assertArrayHasKey('ext', $qb->parameters);
 
         self::assertTrue($qb->parameters['pub']);
-        self::assertFalse($qb->parameters['ext']);
 
         // Assert ordering
         self::assertSame([['e.EventDate', 'DESC']], $qb->orderBy);

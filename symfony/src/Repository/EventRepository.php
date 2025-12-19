@@ -28,10 +28,10 @@ class EventRepository extends ServiceEntityRepository
         return $this->createQueryBuilder('e')
             ->andWhere('e.publishDate <= :now')
             ->andWhere('e.published = :pub')
-            ->andWhere('e.externalUrl = :ext')
             ->setParameter('now', $now)
             ->setParameter('pub', true)
-            ->setParameter('ext', false)
+            // Include external events only if they have a non-empty destination URL.
+            ->andWhere('(e.externalUrl = false OR (e.externalUrl = true AND e.url IS NOT NULL AND e.url <> \'\'))')
             ->orderBy('e.EventDate', 'DESC')
             ->getQuery()
             ->getResult();

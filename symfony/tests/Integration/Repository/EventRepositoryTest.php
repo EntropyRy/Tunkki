@@ -51,7 +51,7 @@ final class EventRepositoryTest extends RepositoryTestCase
      * Tests
      * --------------------------------------------------------------------- */
 
-    public function testGetSitemapEventsExcludesUnpublishedAndExternal(): void
+    public function testGetSitemapEventsExcludesUnpublishedAndSkipsExternalWithoutDestinationUrl(): void
     {
         // Arrange (controlled dataset)
         $published = EventFactory::new()
@@ -66,9 +66,13 @@ final class EventRepositoryTest extends RepositoryTestCase
                 'url' => 'sitemap-draft',
             ]);
 
-        $external = EventFactory::new()
+        $externalWithUrl = EventFactory::new()
             ->external('https://example.com/sitemap-external')
             ->create();
+        $externalMissingUrl = EventFactory::new()->published()->create([
+            'externalUrl' => true,
+            'url' => '',
+        ]);
 
         // Act
         $events = $this->subjectRepo()->getSitemapEvents();
@@ -87,10 +91,15 @@ final class EventRepositoryTest extends RepositoryTestCase
             $ids,
             'Unpublished event must be excluded from sitemap results.',
         );
-        self::assertNotContains(
-            $external->getId(),
+        self::assertContains(
+            $externalWithUrl->getId(),
             $ids,
-            'External event must be excluded from sitemap results.',
+            'External event with destination URL should appear in sitemap results.',
+        );
+        self::assertNotContains(
+            $externalMissingUrl->getId(),
+            $ids,
+            'External event without destination URL must be excluded from sitemap results.',
         );
 
         // Order check: descending by EventDate

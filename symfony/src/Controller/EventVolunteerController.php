@@ -279,7 +279,7 @@ class EventVolunteerController extends AbstractController
             return $this->redirectToRoute('entropy_event_slug', $eventParams);
         }
 
-        $rsvp = (new RSVP())
+        $rsvp = new RSVP()
             ->setEvent($event)
             ->setMember($member);
 
