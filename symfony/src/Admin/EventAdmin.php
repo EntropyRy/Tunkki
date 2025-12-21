@@ -24,12 +24,10 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -720,7 +718,7 @@ final class EventAdmin extends AbstractAdmin
     {
         if (
             $event instanceof \App\Entity\Event
-            && null === $event->getNakkikone()
+            && !$event->getNakkikone() instanceof Nakkikone
         ) {
             $event->setNakkikone(new Nakkikone($event));
         }

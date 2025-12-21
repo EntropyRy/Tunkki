@@ -65,9 +65,7 @@ final class Version20251221143551 extends AbstractMigration
         ');
 
         if ($nullNakki > 0) {
-            throw new \RuntimeException(
-                "Migration incomplete: Found {$nullNakki} Nakki records without nakkikone_id."
-            );
+            throw new \RuntimeException("Migration incomplete: Found {$nullNakki} Nakki records without nakkikone_id.");
         }
 
         // Verify all NakkiBooking records have nakkikone_id populated
@@ -78,9 +76,7 @@ final class Version20251221143551 extends AbstractMigration
         ');
 
         if ($nullBooking > 0) {
-            throw new \RuntimeException(
-                "Migration incomplete: Found {$nullBooking} NakkiBooking records without nakkikone_id."
-            );
+            throw new \RuntimeException("Migration incomplete: Found {$nullBooking} NakkiBooking records without nakkikone_id.");
         }
     }
 

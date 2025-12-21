@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
 use App\Repository\EventRepository;
 use App\Repository\MemberRepository;
 use App\Repository\NakkiDefinitionRepository;
@@ -131,8 +132,8 @@ final class NakkiCreateForm
 
         // Ensure event has nakkikone
         $nakkikone = $event->getNakkikone();
-        if (!$nakkikone) {
-            $nakkikone = new \App\Entity\Nakkikone($event);
+        if (!$nakkikone instanceof Nakkikone) {
+            $nakkikone = new Nakkikone($event);
             $event->setNakkikone($nakkikone);
             $this->entityManager->persist($nakkikone);
         }

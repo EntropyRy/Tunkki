@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Admin;
 
+use App\Entity\Nakkikone;
+use App\Form\MarkdownEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use App\Form\MarkdownEditorType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 
 /**
- * @extends AbstractAdmin<\App\Entity\Nakkikone>
+ * @extends AbstractAdmin<Nakkikone>
  */
 final class NakkikoneAdmin extends AbstractAdmin
 {

@@ -6,6 +6,7 @@ namespace App\Service\Email;
 
 use App\DTO\EmailRecipient;
 use App\Entity\Event;
+use App\Entity\Nakkikone;
 use App\Enum\EmailPurpose;
 use App\Repository\ArtistRepository;
 use App\Repository\MemberRepository;
@@ -123,7 +124,7 @@ class RecipientResolver
         $recipients = [];
         $nakkikone = $event->getNakkikone();
 
-        if ($nakkikone) {
+        if ($nakkikone instanceof Nakkikone) {
             foreach ($nakkikone->getBookings() as $booking) {
                 $member = $booking->getMember();
                 if ($member) {

@@ -7,6 +7,7 @@ namespace App\Twig\Components\Nakki;
 use App\Entity\Event;
 use App\Entity\Nakki;
 use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
 use App\Repository\NakkiDefinitionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
@@ -212,7 +213,7 @@ final class Definition
     private function collectEventDefinitionIds(): array
     {
         $nakkikone = $this->event->getNakkikone();
-        if (!$nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return [];
         }
 

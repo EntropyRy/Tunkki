@@ -1918,7 +1918,7 @@ namespace Symfony\Component\DependencyInjection\Loader\Configurator;
  *     },
  *     messenger?: bool|array{
  *         enabled?: bool, // Default: false
- *         generate_thumbnails_bus: scalar|null, // Default: "messenger.default_bus"
+ *         generate_thumbnails_bus?: scalar|null, // Default: "messenger.default_bus"
  *     },
  * }
  * @psalm-type SonataSeoConfig = array{

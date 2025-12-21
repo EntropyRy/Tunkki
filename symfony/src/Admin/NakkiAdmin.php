@@ -188,13 +188,16 @@ final class NakkiAdmin extends AbstractAdmin
 
     protected function createBooking(?Nakki $nakki, $i): void
     {
+        if (!$nakki instanceof Nakki) {
+            return;
+        }
         $b = new NakkiBooking();
         $b->setNakki($nakki);
         $start = $i * $nakki->getNakkiInterval()->format('%h');
         $b->setStartAt($nakki->getStartAt()->modify($start.' hour'));
         $end = $start + $nakki->getNakkiInterval()->format('%h');
         $b->setEndAt($nakki->getStartAt()->modify($end.' hour'));
-        $b->setEvent($nakki->getEvent());
+        $b->setNakkikone($nakki->getNakkikone());
         $this->em->persist($b);
     }
 

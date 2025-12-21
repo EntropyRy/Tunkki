@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
 use App\Form\NakkiBoardCreateType;
 use App\Repository\NakkiDefinitionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -102,8 +103,8 @@ final class Board
 
         // Ensure event has nakkikone
         $nakkikone = $this->event->getNakkikone();
-        if (!$nakkikone) {
-            $nakkikone = new \App\Entity\Nakkikone($this->event);
+        if (!$nakkikone instanceof Nakkikone) {
+            $nakkikone = new Nakkikone($this->event);
             $this->entityManager->persist($nakkikone);
         }
 
@@ -264,7 +265,7 @@ final class Board
             $definitionId = $this->selectedDefinition->getId();
             if (null !== $definitionId) {
                 $nakkikone = $this->event->getNakkikone();
-                if ($nakkikone) {
+                if ($nakkikone instanceof Nakkikone) {
                     foreach ($nakkikone->getNakkis() as $nakki) {
                         $nakkiDefinition = $nakki->getDefinition();
                         if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
@@ -325,7 +326,7 @@ final class Board
             $definitionId = $this->selectedDefinition->getId();
             if (null !== $definitionId) {
                 $nakkikone = $this->event->getNakkikone();
-                if ($nakkikone) {
+                if ($nakkikone instanceof Nakkikone) {
                     foreach ($nakkikone->getNakkis() as $nakki) {
                         $nakkiDefinition = $nakki->getDefinition();
                         if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
@@ -351,7 +352,7 @@ final class Board
     private function deriveColumnIds(): array
     {
         $nakkikone = $this->event->getNakkikone();
-        if (!$nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return [];
         }
 
@@ -375,7 +376,7 @@ final class Board
     private function findNakki(int $id): ?Nakki
     {
         $nakkikone = $this->event->getNakkikone();
-        if ($nakkikone) {
+        if ($nakkikone instanceof Nakkikone) {
             foreach ($nakkikone->getNakkis() as $nakki) {
                 if ($id === $nakki->getId()) {
                     return $nakki;
@@ -394,7 +395,7 @@ final class Board
     private function deriveDefinitionsInUse(): array
     {
         $nakkikone = $this->event->getNakkikone();
-        if (!$nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return [];
         }
 

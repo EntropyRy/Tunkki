@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Security\Voter;
 
 use App\Entity\Event;
+use App\Entity\Nakkikone;
 use App\Entity\User;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -53,7 +54,7 @@ final class EventNakkiAdminVoter extends Voter
         $member = $user->getMember();
 
         $nakkikone = $subject->getNakkikone();
-        if (null === $nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return false;
         }
 

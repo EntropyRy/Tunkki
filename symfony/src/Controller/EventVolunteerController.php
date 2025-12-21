@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\NakkiBooking;
+use App\Entity\Nakkikone;
 use App\Entity\RSVP;
 use App\Entity\User;
 use App\Repository\NakkiBookingRepository;
@@ -306,7 +307,7 @@ class EventVolunteerController extends AbstractController
     protected function getNakkis(Event $event, Member $member, string $locale): array
     {
         $nakkikone = $event->getNakkikone();
-        if (!$nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return [];
         }
 

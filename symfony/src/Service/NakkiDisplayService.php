@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\NakkiBooking;
+use App\Entity\Nakkikone;
 
 /**
  * NakkiDisplayService - Handles display logic for volunteer nakki bookings.
@@ -32,7 +33,7 @@ class NakkiDisplayService
         string $locale,
     ): array {
         $nakkikone = $event->getNakkikone();
-        if (!$nakkikone) {
+        if (!$nakkikone instanceof Nakkikone) {
             return [];
         }
 

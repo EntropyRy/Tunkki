@@ -35,7 +35,7 @@ final class NakkikoneFactory extends PersistentProxyObjectFactory
     {
         return $this->afterInstantiate(function (Nakkikone $nakkikone): void {
             $event = $nakkikone->getEvent();
-            if (null === $event->getNakkikone()) {
+            if (!$event->getNakkikone() instanceof Nakkikone) {
                 $event->setNakkikone($nakkikone);
             }
         });

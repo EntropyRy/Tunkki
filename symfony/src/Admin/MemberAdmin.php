@@ -7,7 +7,6 @@ namespace App\Admin;
 use App\Entity\Member;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -72,17 +71,11 @@ final class MemberAdmin extends AbstractAdmin
                         return false;
                     }
 
-                    if (method_exists($query, 'getQueryBuilder')) {
-                        $query = $query->getQueryBuilder();
-                    }
-
-                    if (!$query instanceof QueryBuilder) {
-                        return false;
-                    }
+                    $query = $query->getQueryBuilder();
 
                     $query
                         ->andWhere(
-                            sprintf(
+                            \sprintf(
                                 'LOWER(%s.firstname) LIKE :name OR LOWER(%s.lastname) LIKE :name',
                                 $alias,
                                 $alias,

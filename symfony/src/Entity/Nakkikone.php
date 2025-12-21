@@ -27,11 +27,6 @@ class Nakkikone
     #[ORM\Column(type: Types::INTEGER)]
     private ?int $id = null;
 
-    // === Owning Side of OneToOne with Event ===
-    #[ORM\OneToOne(targetEntity: Event::class, inversedBy: 'nakkikone')]
-    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-    private Event $event;
-
     // === Configuration Fields (inline, not embeddable) ===
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -85,9 +80,10 @@ class Nakkikone
 
     // === Constructor ===
 
-    public function __construct(Event $event)
+    public function __construct(#[ORM\OneToOne(targetEntity: Event::class, inversedBy: 'nakkikone')]
+        #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+        private Event $event)
     {
-        $this->event = $event;
         $this->initCollections();
     }
 
@@ -382,7 +378,7 @@ class Nakkikone
             return null;
         }
 
-        if (null === $member) {
+        if (!$member instanceof Member) {
             return null;
         }
 
@@ -405,5 +401,16 @@ class Nakkikone
         }
 
         return $this->getMemberBooking($member);
+    }
+
+    private function getMemberBooking(Member $member): ?NakkiBooking
+    {
+        foreach ($this->bookings as $booking) {
+            if ($booking->getMember() === $member) {
+                return $booking;
+            }
+        }
+
+        return null;
     }
 }
