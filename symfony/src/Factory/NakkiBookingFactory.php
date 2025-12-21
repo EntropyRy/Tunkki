@@ -25,11 +25,22 @@ final class NakkiBookingFactory extends PersistentProxyObjectFactory
 
         return [
             'nakki' => NakkiFactory::new(),
-            'event' => EventFactory::new(),
+            'nakkikone' => NakkikoneFactory::new(),
             'startAt' => $start,
             'endAt' => $end,
             'member' => null,
         ];
+    }
+
+    #[\Override]
+    protected function initialize(): static
+    {
+        return $this->afterInstantiate(function (NakkiBooking $booking): void {
+            $nakki = $booking->getNakki();
+            if ($nakki->getNakkikone() !== $booking->getNakkikone()) {
+                $booking->setNakkikone($nakki->getNakkikone());
+            }
+        });
     }
 
     /**

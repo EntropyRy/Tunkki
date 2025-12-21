@@ -143,7 +143,7 @@ class EventTicketController extends Controller
                 $request->getLocale(),
             ),
             'hasNakki' => [] !== (array) $selected,
-            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
+            'nakkiRequired' => $event->getNakkikone()?->isRequiredForTicketReservation() ?? false,
             'tickets' => $tickets,
             'showShop' => $showShop,
             'qrs' => $qrs,

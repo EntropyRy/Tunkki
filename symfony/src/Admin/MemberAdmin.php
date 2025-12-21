@@ -7,16 +7,21 @@ namespace App\Admin;
 use App\Entity\Member;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\Form\Type\DatePickerType;
 use Sonata\Form\Type\DateRangeType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * @extends AbstractAdmin<Member>
@@ -51,6 +56,47 @@ final class MemberAdmin extends AbstractAdmin
         $datagridMapper
             ->add('artist')
             ->add('username')
+            ->add('name', CallbackFilter::class, [
+                'callback' => static function (
+                    ProxyQueryInterface $query,
+                    string $alias,
+                    string $field,
+                    FilterData $data,
+                ): bool {
+                    if (!$data->hasValue()) {
+                        return false;
+                    }
+
+                    $value = trim((string) $data->getValue());
+                    if ('' === $value) {
+                        return false;
+                    }
+
+                    if (method_exists($query, 'getQueryBuilder')) {
+                        $query = $query->getQueryBuilder();
+                    }
+
+                    if (!$query instanceof QueryBuilder) {
+                        return false;
+                    }
+
+                    $query
+                        ->andWhere(
+                            sprintf(
+                                'LOWER(%s.firstname) LIKE :name OR LOWER(%s.lastname) LIKE :name',
+                                $alias,
+                                $alias,
+                            ),
+                        )
+                        ->setParameter('name', '%'.mb_strtolower($value, 'UTF-8').'%');
+
+                    return true;
+                },
+                'field_type' => TextType::class,
+                'field_options' => [
+                    'required' => false,
+                ],
+            ])
             ->add('firstname')
             ->add('lastname')
             ->add('email')

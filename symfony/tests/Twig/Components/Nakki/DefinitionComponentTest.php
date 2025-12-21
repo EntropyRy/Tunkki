@@ -7,6 +7,7 @@ namespace App\Tests\Twig\Components\Nakki;
 use App\Factory\EventFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\Twig\Components\LiveComponentTestCase;
 use App\Twig\Components\Nakki\Definition;
 
@@ -66,9 +67,10 @@ final class DefinitionComponentTest extends LiveComponentTestCase
     {
         $event = EventFactory::new()->create();
         $definitionEntity = NakkiDefinitionFactory::new()->create();
+        $nakkikone = NakkikoneFactory::new()->with(['event' => $event])->create();
         NakkiFactory::new()
             ->with([
-                'event' => $event,
+                'nakkikone' => $nakkikone,
                 'definition' => $definitionEntity,
             ])
             ->create();

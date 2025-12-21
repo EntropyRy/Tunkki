@@ -8,8 +8,11 @@
             {{ block('event_name') }} ~ {{ block('event_time') }}
         </a>
     </h1>
-    {{ event.ticketInfo(app.request.locale)|default('<p>&nbsp;</p>')|raw }}
-    {% if event.nakkiRequiredforTicketReservation and event.nakkikoneEnabled and event.requireNakkiBookingsToBeDifferentTimes == false %}
+    {% set ticket_info = event.ticketInfo(app.request.locale) %}
+    {% if ticket_info %}
+        {{ ticket_info|markdown_to_html|raw }}
+    {% endif %}
+    {% if event.nakkikone and event.nakkikone.requiredForTicketReservation and event.nakkikone.enabled and event.nakkikone.requiresDifferentTimes == false %}
         {{ event.nakkiInfo(app.request.locale)|raw }}
         {% set show = true %}
         {% set hide_time = true %}
@@ -30,7 +33,7 @@
         {% for product_form in form.products %}
             {% set product = product_form.vars.value.product %}
             {% set minus = inCheckouts[product.id]|default(0) %}
-            {% set show_quantity = (not nakkiRequired) or (event.nakkiRequiredforTicketReservation and hasNakki) %}
+            {% set show_quantity = (not nakkiRequired) or (event.nakkikone and event.nakkikone.requiredForTicketReservation and hasNakki) %}
             {% set show_available = false %}
             {{ block('product_block') }}
         {% endfor %}
@@ -45,7 +48,7 @@
             {% endif %}
             <input data-turbo="false"
                     type="submit"
-                    class="{% if event.nakkiRequiredforTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-primary float-end"
+                    class="{% if event.nakkikone and event.nakkikone.requiredForTicketReservation and not hasNakki %}disabled{% endif %} btn btn-lg btn-primary float-end"
                     value="{{ 'shop.buy'|trans }}" />
             {{ form_end(form) }}
         </div>

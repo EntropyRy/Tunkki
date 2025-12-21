@@ -10,6 +10,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\OptionsResolver\Options;
 use Twig\Environment;
 
 /**
@@ -48,14 +49,37 @@ final class MarkdownEditorType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'attr' => [
+            'simple' => false,
+            'heading_levels' => [2, 3, 4, 5, 6],
+            'attr' => [],
+        ]);
+        $resolver->setAllowedTypes('simple', 'bool');
+        $resolver->setAllowedTypes('heading_levels', 'array');
+        $resolver->setNormalizer('attr', function (
+            Options $options,
+            array $value,
+        ): array {
+            $base = [
                 'data-controller' => 'markdown-editor',
                 'data-markdown-editor-target' => 'textarea',
-                'data-markdown-editor-tokens-value' => json_encode(array_keys(self::TOKEN_LABELS), \JSON_THROW_ON_ERROR),
-                'data-markdown-editor-token-map-value' => json_encode($this->buildTokenMap(), \JSON_THROW_ON_ERROR),
                 'rows' => 20,
-            ],
-        ]);
+                'data-markdown-editor-heading-levels-value' => json_encode(
+                    $options['heading_levels'],
+                    \JSON_THROW_ON_ERROR,
+                ),
+            ];
+
+            if ($options['simple']) {
+                $base['data-markdown-editor-simple-value'] = 'true';
+                $base['data-markdown-editor-tokens-value'] = json_encode([], \JSON_THROW_ON_ERROR);
+                $base['data-markdown-editor-token-map-value'] = json_encode([], \JSON_THROW_ON_ERROR);
+            } else {
+                $base['data-markdown-editor-tokens-value'] = json_encode(array_keys(self::TOKEN_LABELS), \JSON_THROW_ON_ERROR);
+                $base['data-markdown-editor-token-map-value'] = json_encode($this->buildTokenMap(), \JSON_THROW_ON_ERROR);
+            }
+
+            return array_merge($base, $value);
+        });
     }
 
     #[\Override]

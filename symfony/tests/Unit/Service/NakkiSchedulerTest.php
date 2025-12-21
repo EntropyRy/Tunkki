@@ -491,6 +491,9 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         $event->setPublished(true);
         $this->em()->persist($event);
 
+        $nakkikone = new \App\Entity\Nakkikone($event);
+        $this->em()->persist($nakkikone);
+
         $definition = new NakkiDefinition();
         $definition->setNameFi('Test Definition');
         $definition->setNameEn('Test Definition EN');
@@ -499,7 +502,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         $this->em()->persist($definition);
 
         $nakki = new Nakki();
-        $nakki->setEvent($event);
+        $nakki->setNakkikone($nakkikone);
         $nakki->setDefinition($definition);
         $nakki->setStartAt(new \DateTimeImmutable($start));
         $nakki->setEndAt(new \DateTimeImmutable($end));
@@ -520,7 +523,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
     {
         $booking = new NakkiBooking();
         $booking->setNakki($nakki);
-        $booking->setEvent($nakki->getEvent());
+        $booking->setNakkikone($nakki->getNakkikone());
         $booking->setStartAt(new \DateTimeImmutable($start));
         $booking->setEndAt(new \DateTimeImmutable($end));
 

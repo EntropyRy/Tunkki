@@ -32,7 +32,7 @@ final class ColumnComponentTest extends LiveComponentTestCase
         $booking = NakkiBookingFactory::new()
             ->with([
                 'nakki' => $nakki,
-                'event' => $nakki->getEvent(),
+                'nakkikone' => $nakki->getNakkikone(),
                 'startAt' => $nakki->getStartAt(),
                 'endAt' => $nakki->getStartAt()->modify('+1 hour'),
             ])
@@ -58,7 +58,7 @@ final class ColumnComponentTest extends LiveComponentTestCase
         $booking = NakkiBookingFactory::new()
             ->with([
                 'nakki' => $nakki,
-                'event' => $nakki->getEvent(),
+                'nakkikone' => $nakki->getNakkikone(),
             ])
             ->booked()
             ->create();
@@ -114,6 +114,43 @@ final class ColumnComponentTest extends LiveComponentTestCase
         self::assertGreaterThanOrEqual(1, $reloaded->getNakkiBookings()->count());
     }
 
+    public function testAddSlotsUsesLastBookingEndWhenStartEmpty(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-01 10:00:00');
+        $end = $start->modify('+1 hour');
+
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $end->modify('+4 hours'),
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        $component->set('newSlotStart', '');
+        $component->call('addSlots', ['intervalHours' => 2, 'slotCount' => 1]);
+
+        $reloaded = $this->reloadNakki($nakki->getId());
+        $bookings = $reloaded->getNakkiBookings()->toArray();
+        usort(
+            $bookings,
+            static fn ($a, $b) => $a->getStartAt() <=> $b->getStartAt(),
+        );
+
+        $last = end($bookings);
+        self::assertInstanceOf(\DateTimeImmutable::class, $last->getStartAt());
+        self::assertSame($end->format('Y-m-d H:i:s'), $last->getStartAt()->format('Y-m-d H:i:s'));
+    }
+
     public function testSaveDisableTogglesFlag(): void
     {
         $nakki = NakkiFactory::new()->create();
@@ -144,13 +181,103 @@ final class ColumnComponentTest extends LiveComponentTestCase
         self::assertSame(3, $hours);
     }
 
+    public function testAddSlotBeforeCreatesSlotWhenBookingsExist(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-01 12:00:00');
+        $end = $start->modify('+1 hour');
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $end->modify('+2 hours'),
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        $component->call('addSlotBefore');
+
+        $reloaded = $this->reloadNakki($nakki->getId());
+        $bookings = $reloaded->getNakkiBookings()->toArray();
+        usort(
+            $bookings,
+            static fn ($a, $b) => $a->getStartAt() <=> $b->getStartAt(),
+        );
+        $first = $bookings[0];
+        self::assertSame(
+            $start->modify('-1 hour')->format('Y-m-d H:i:s'),
+            $first->getStartAt()->format('Y-m-d H:i:s'),
+        );
+    }
+
+    public function testAddSlotAfterUsesLastBookingEnd(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-01 09:00:00');
+        $end = $start->modify('+1 hour');
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $end->modify('+2 hours'),
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        $component->call('addSlotAfter');
+
+        $reloaded = $this->reloadNakki($nakki->getId());
+        $bookings = $reloaded->getNakkiBookings()->toArray();
+        usort(
+            $bookings,
+            static fn ($a, $b) => $a->getStartAt() <=> $b->getStartAt(),
+        );
+        $last = end($bookings);
+        self::assertSame($end->format('Y-m-d H:i:s'), $last->getStartAt()->format('Y-m-d H:i:s'));
+    }
+
+    public function testRemoveSlotRejectsBookingFromDifferentNakki(): void
+    {
+        $nakki = NakkiFactory::new()->create();
+        $otherNakki = NakkiFactory::new()->create();
+        $booking = NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $otherNakki,
+                'nakkikone' => $otherNakki->getNakkikone(),
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        $component->call('removeSlot', ['bookingId' => $booking->getId()]);
+
+        $reloaded = $this->reloadNakki($otherNakki->getId());
+        self::assertCount(1, $reloaded->getNakkiBookings());
+    }
+
     public function testDeleteColumnPreventsWhenReserved(): void
     {
         $nakki = NakkiFactory::new()->create();
         NakkiBookingFactory::new()
             ->with([
                 'nakki' => $nakki,
-                'event' => $nakki->getEvent(),
+                'nakkikone' => $nakki->getNakkikone(),
             ])
             ->booked()
             ->create();
@@ -169,7 +296,7 @@ final class ColumnComponentTest extends LiveComponentTestCase
         NakkiBookingFactory::new()
             ->with([
                 'nakki' => $nakki,
-                'event' => $nakki->getEvent(),
+                'nakkikone' => $nakki->getNakkikone(),
             ])
             ->free()
             ->create();
@@ -181,6 +308,138 @@ final class ColumnComponentTest extends LiveComponentTestCase
 
         $repository = self::getContainer()->get(NakkiRepository::class);
         self::assertNull($repository->find($nakki->getId()));
+    }
+
+    public function testGetBookingGroupsGroupsByInterval(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-02 10:00:00');
+        $end = $start->modify('+1 hour');
+        $endLong = $start->modify('+2 hours');
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $endLong,
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $endLong,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        /** @var Column $state */
+        $state = $component->component();
+        $groups = $state->getBookingGroups();
+
+        self::assertCount(2, $groups);
+        $counts = array_map(static fn (array $group): int => \count($group['bookings']), $groups);
+        sort($counts);
+        self::assertSame([1, 2], $counts);
+    }
+
+    public function testGetScheduleGridCalculatesOverlaps(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-03 08:00:00');
+        $end = $start->modify('+2 hours');
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $end,
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        /** @var Column $state */
+        $state = $component->component();
+        $grid = $state->getScheduleGrid();
+
+        self::assertSame(2, $grid['maxColumns']);
+        self::assertNotEmpty($grid['timeSlots']);
+        $firstBookings = array_filter(
+            $grid['timeSlots'][0]['bookings'],
+            static fn (array $entry): bool => null !== $entry['booking'],
+        );
+        self::assertCount(2, $firstBookings);
+    }
+
+    public function testGetNestedBookingGroupsSeparatesIntervals(): void
+    {
+        $start = new \DateTimeImmutable('2025-01-04 18:00:00');
+        $end = $start->modify('+1 hour');
+        $endLong = $start->modify('+3 hours');
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $start,
+            'endAt' => $endLong,
+        ]);
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $end,
+            ])
+            ->free()
+            ->create();
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $start,
+                'endAt' => $endLong,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        /** @var Column $state */
+        $state = $component->component();
+        $groups = $state->getNestedBookingGroups();
+
+        self::assertCount(1, $groups);
+        self::assertCount(2, $groups[0]['intervalGroups']);
     }
 
     private function reloadNakki(int $id): Nakki

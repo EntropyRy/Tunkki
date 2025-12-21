@@ -7,6 +7,7 @@ namespace App\Tests\Unit\Entity;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\NakkiBooking;
+use App\Entity\Nakkikone;
 use App\Entity\Ticket;
 use PHPUnit\Framework\TestCase;
 
@@ -144,14 +145,20 @@ final class TicketEntityTest extends TestCase
         $this->assertNull($ticket->ticketHolderHasNakki());
     }
 
-    public function testTicketHolderHasNakkiDelegatesToEvent(): void
+    public function testTicketHolderHasNakkiDelegatesToNakkikone(): void
     {
         $ticket = new Ticket();
         $event = $this->createMock(Event::class);
         $owner = $this->createStub(Member::class);
         $nakkiBooking = $this->createStub(NakkiBooking::class);
+        $nakkikone = $this->createMock(Nakkikone::class);
 
         $event
+            ->expects($this->once())
+            ->method('getNakkikone')
+            ->willReturn($nakkikone);
+
+        $nakkikone
             ->expects($this->once())
             ->method('ticketHolderHasNakki')
             ->with($owner)

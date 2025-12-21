@@ -46,7 +46,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
         Event $event,
     ): ?array {
         return $this->createQueryBuilder('n')
-            ->andWhere('n.event = :event')
+            ->innerJoin('n.nakkikone', 'nk')
+            ->andWhere('nk.event = :event')
             ->andWhere('n.member = :member')
             ->setParameter('event', $event)
             ->setParameter('member', $member)
@@ -71,7 +72,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
             ->orWhere(
                 'n.startAt BETWEEN :startMod and :endMod OR n.endAt BETWEEN :startMod and :endMod',
             )
-            ->andWhere('n.event = :event')
+            ->innerJoin('n.nakkikone', 'nk')
+            ->andWhere('nk.event = :event')
             ->andWhere('n.member = :member')
             ->setParameter('event', $event)
             ->setParameter('member', $member)
@@ -99,7 +101,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
         $total = $this->createQueryBuilder('b')
             ->select('count(b.id)')
             ->leftJoin('b.nakki', 'n')
-            ->andWhere('b.event = :event')
+            ->innerJoin('b.nakkikone', 'nk')
+            ->andWhere('nk.event = :event')
             ->andWhere('n.definition = :definition')
             ->setParameter('event', $event)
             ->setParameter('definition', $definition)
@@ -108,7 +111,8 @@ class NakkiBookingRepository extends ServiceEntityRepository
         $reserved = $this->createQueryBuilder('b')
             ->select('count(b.id)')
             ->leftJoin('b.nakki', 'n')
-            ->andWhere('b.event = :event')
+            ->innerJoin('b.nakkikone', 'nk')
+            ->andWhere('nk.event = :event')
             ->andWhere('b.member IS NULL')
             ->andWhere('n.definition = :definition')
             ->setParameter('event', $event)

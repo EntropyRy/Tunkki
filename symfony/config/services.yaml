@@ -233,13 +233,6 @@ services:
         group: admin
         label: Billable Events
 
-  # ------------------------------------------------------------------
-  # Test environment overrides
-  # Provides a simplified Site Selector to avoid Sonata page
-  # "Host path by locale" runtime requirements in functional tests.
-  # ------------------------------------------------------------------
-  # (Removed duplicate when@test block; merged into existing when@test further below)
-
   entropy_tunkki.block.bookings:
     class: App\Block\BookingsBlock
     tags:
@@ -391,6 +384,15 @@ services:
         manager_type: orm
         group: admin
         label: Nakki Definitions
+
+  entropy.admin.nakkikone:
+    class: App\Admin\NakkikoneAdmin
+    tags:
+      - name: sonata.admin
+        model_class: App\Entity\Nakkikone
+        manager_type: orm
+        group: admin
+        label: Nakkikone
 
   entropy.admin.nakki:
     class: App\Admin\NakkiAdmin

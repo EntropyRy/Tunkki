@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Event;
 use App\Factory\EventFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -119,8 +120,9 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
         ]);
 
         // Create nakki with the used definition
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $usedDef,
         ]);
 
@@ -195,9 +197,12 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
             'name' => 'Example Event 3',
         ]);
 
-        NakkiFactory::new()->create(['event' => $event1, 'definition' => $definition]);
-        NakkiFactory::new()->create(['event' => $event2, 'definition' => $definition]);
-        NakkiFactory::new()->create(['event' => $event3, 'definition' => $definition]);
+        $nakkikone1 = NakkikoneFactory::new()->create(['event' => $event1]);
+        $nakkikone2 = NakkikoneFactory::new()->create(['event' => $event2]);
+        $nakkikone3 = NakkikoneFactory::new()->create(['event' => $event3]);
+        NakkiFactory::new()->create(['nakkikone' => $nakkikone1, 'definition' => $definition]);
+        NakkiFactory::new()->create(['nakkikone' => $nakkikone2, 'definition' => $definition]);
+        NakkiFactory::new()->create(['nakkikone' => $nakkikone3, 'definition' => $definition]);
 
         // Now visit a new event to see usage examples
         $currentEvent = EventFactory::new()->published()->create([
@@ -280,8 +285,9 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
         ]);
 
         // Create nakki so definition appears as "in use"
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 

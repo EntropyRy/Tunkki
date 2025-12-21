@@ -108,9 +108,10 @@ class EventVolunteerController extends AbstractController
 
             return $this->redirect($request->headers->get('referer'));
         }
-        if ($event->getNakkikoneEnabled()) {
+        $nakkikone = $event->getNakkikone();
+        if ($nakkikone?->isEnabled()) {
             if (!$booking->getMember() instanceof Member) {
-                if ($event->getRequireNakkiBookingsToBeDifferentTimes()) {
+                if ($nakkikone->requiresDifferentTimes()) {
                     $sameTime = $NakkiBookingR->findMemberEventBookingsAtSameTime(
                         $member,
                         $event,
@@ -190,7 +191,8 @@ class EventVolunteerController extends AbstractController
         \assert($user instanceof User);
         $member = $user->getMember();
         $selected = $repo->findMemberEventBookings($member, $event);
-        if (!$event->getNakkikoneEnabled()) {
+        $nakkikone = $event->getNakkikone();
+        if (!$nakkikone?->isEnabled()) {
             $this->addFlash('warning', 'Nakkikone is not enabled');
         }
 
@@ -226,13 +228,14 @@ class EventVolunteerController extends AbstractController
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();
+        $nakkikone = $event->getNakkikone();
         $gdpr = false;
-        $infos = $event->responsibleMemberNakkis($member);
+        $infos = $nakkikone?->getResponsibleMemberNakkis($member) ?? [];
         if (0 === \count($infos)) {
             $gdpr = true;
-            $infos = $event->memberNakkis($member);
+            $infos = $nakkikone?->getMemberNakkis($member) ?? [];
         }
-        $responsibles = $event->getAllNakkiResponsibles($request->getLocale());
+        $responsibles = $nakkikone?->getAllResponsibles($request->getLocale()) ?? [];
 
         return $this->render('list_nakki_info_for_responsible.html.twig', [
             'gdpr' => $gdpr,
@@ -302,8 +305,13 @@ class EventVolunteerController extends AbstractController
      */
     protected function getNakkis(Event $event, Member $member, string $locale): array
     {
+        $nakkikone = $event->getNakkikone();
+        if (!$nakkikone) {
+            return [];
+        }
+
         $nakkis = [];
-        foreach ($event->getNakkiBookings() as $booking) {
+        foreach ($nakkikone->getBookings() as $booking) {
             $name = $booking->getNakki()->getDefinition()->getName($locale);
             $duration = $booking
                 ->getStartAt()

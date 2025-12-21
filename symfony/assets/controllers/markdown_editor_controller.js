@@ -23,6 +23,8 @@ export default class extends Controller {
   static values = {
     tokens: Array,
     tokenMap: Object,
+    simple: Boolean,
+    headingLevels: Array,
   };
 
   async connect() {
@@ -32,6 +34,8 @@ export default class extends Controller {
         : this.element.querySelector("textarea");
     this.syncing = false;
     this.tokenButtonAdded = false;
+    this.headingCleanupScheduled = false;
+    this.onToolbarClick = () => this.scheduleHeadingCleanup();
 
     if (!this.textarea) {
       return;
@@ -70,8 +74,14 @@ export default class extends Controller {
         },
       });
 
-      requestAnimationFrame(() => this.renderPreview());
-      this.injectTokenButton();
+      requestAnimationFrame(() => {
+        this.renderPreview();
+        this.scheduleHeadingCleanup();
+      });
+      if (!this.isSimple) {
+        this.injectTokenButton();
+      }
+      this.container.addEventListener("click", this.onToolbarClick);
     } catch (error) {
       console.error("Failed to initialize Toast UI Editor", error);
       this.teardown();
@@ -83,6 +93,14 @@ export default class extends Controller {
   }
 
   toolbarItems() {
+    if (this.isSimple) {
+      return [
+        ["heading", "bold", "italic", "strike"],
+        ["quote", "link", "hr"],
+        ["ul", "ol"],
+      ];
+    }
+
     return [
       ["heading", "bold", "italic", "strike"],
       ["quote", "link", "code", "codeblock"],
@@ -185,6 +203,10 @@ export default class extends Controller {
   decorateTokens(html) {
     const map = this.tokenMap;
 
+    if (!Object.keys(map).length) {
+      return html;
+    }
+
     return html.replace(/\{\{\s*([a-z0-9_]+)\s*\}\}/gi, (match, rawToken) => {
       const token = rawToken.toLowerCase();
       if (map[token]) {
@@ -224,6 +246,7 @@ export default class extends Controller {
     });
   }
 
+
   renderPreview() {
     if (!this.editor || !this.container) return;
 
@@ -236,12 +259,43 @@ export default class extends Controller {
     }
   }
 
+  scheduleHeadingCleanup() {
+    if (this.headingCleanupScheduled) {
+      return;
+    }
+
+    this.headingCleanupScheduled = true;
+    requestAnimationFrame(() => {
+      this.headingCleanupScheduled = false;
+      this.removeDisallowedHeadings();
+    });
+  }
+
+  removeDisallowedHeadings() {
+    if (!this.container) return;
+
+    const allowed = this.allowedHeadingLevels;
+    const items = this.container.querySelectorAll(
+      "li[data-type='Heading'][data-level]",
+    );
+
+    items.forEach((item) => {
+      const level = Number(item.getAttribute("data-level"));
+      if (!allowed.includes(level)) {
+        item.remove();
+      }
+    });
+  }
+
   teardown() {
     if (this.editor && typeof this.editor.destroy === "function") {
       this.editor.destroy();
       this.editor = null;
     }
     if (this.container) {
+      if (this.onToolbarClick) {
+        this.container.removeEventListener("click", this.onToolbarClick);
+      }
       this.container.remove();
       this.container = null;
     }
@@ -251,15 +305,37 @@ export default class extends Controller {
   }
 
   get tokens() {
+    if (this.isSimple) {
+      return [];
+    }
+
     return this.hasTokensValue && Array.isArray(this.tokensValue) && this.tokensValue.length
       ? this.tokensValue
       : DEFAULT_TOKENS;
   }
 
   get tokenMap() {
+    if (this.isSimple) {
+      return {};
+    }
+
     return {
       ...DEFAULT_TOKEN_MAP,
       ...(this.hasTokenMapValue ? this.tokenMapValue : {}),
     };
+  }
+
+  get isSimple() {
+    return this.hasSimpleValue && this.simpleValue === true;
+  }
+
+  get allowedHeadingLevels() {
+    if (this.hasHeadingLevelsValue && Array.isArray(this.headingLevelsValue)) {
+      return this.headingLevelsValue
+        .map((level) => Number(level))
+        .filter((level) => Number.isInteger(level));
+    }
+
+    return [2, 3, 4, 5, 6];
   }
 }

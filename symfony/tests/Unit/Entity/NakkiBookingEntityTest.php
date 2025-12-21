@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
+use App\Entity\Nakkikone;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -51,15 +52,16 @@ final class NakkiBookingEntityTest extends TestCase
         $this->assertSame($end, $booking->getEndAt());
     }
 
-    public function testSetAndGetEvent(): void
+    public function testSetAndGetNakkikone(): void
     {
         $booking = new NakkiBooking();
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getEvent')->willReturn($event);
 
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
+        $this->assertSame($nakkikone, $booking->getNakkikone());
         $this->assertSame($event, $booking->getEvent());
-
-        // Removed null setter test for Event (non-nullable)
     }
 
     public function testGetMemberEmailWithMember(): void
@@ -84,11 +86,13 @@ final class NakkiBookingEntityTest extends TestCase
         $booking = new NakkiBooking();
         $member = $this->createStub(Member::class);
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
 
         $event->method('memberHasTicket')->with($member)->willReturn(true);
+        $nakkikone->method('getEvent')->willReturn($event);
 
         $booking->setMember($member);
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
 
         $this->assertTrue($booking->memberHasEventTicket());
     }
@@ -98,11 +102,13 @@ final class NakkiBookingEntityTest extends TestCase
         $booking = new NakkiBooking();
         $member = $this->createStub(Member::class);
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
 
         $event->method('memberHasTicket')->with($member)->willReturn(false);
+        $nakkikone->method('getEvent')->willReturn($event);
 
         $booking->setMember($member);
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
 
         $this->assertFalse($booking->memberHasEventTicket());
     }
@@ -111,9 +117,12 @@ final class NakkiBookingEntityTest extends TestCase
     {
         $booking = new NakkiBooking();
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
+
+        $nakkikone->method('getEvent')->willReturn($event);
 
         $booking->setMember(null);
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
 
         $this->assertFalse($booking->memberHasEventTicket());
     }
@@ -123,10 +132,12 @@ final class NakkiBookingEntityTest extends TestCase
         $booking = new NakkiBooking();
         $nakki = $this->createStub(Nakki::class);
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
 
-        $event->method('isNakkiRequiredForTicketReservation')->willReturn(true);
+        $nakkikone->method('isRequiredForTicketReservation')->willReturn(true);
+        $nakkikone->method('getEvent')->willReturn($event);
         $booking->setNakki($nakki);
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
 
         $this->assertStringContainsString((string) $event, (string) $booking);
         $this->assertStringContainsString((string) $nakki, (string) $booking);
@@ -137,12 +148,12 @@ final class NakkiBookingEntityTest extends TestCase
         $booking = new NakkiBooking();
         $nakki = $this->createStub(Nakki::class);
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
 
-        $event
-            ->method('isNakkiRequiredForTicketReservation')
-            ->willReturn(false);
+        $nakkikone->method('isRequiredForTicketReservation')->willReturn(false);
+        $nakkikone->method('getEvent')->willReturn($event);
         $booking->setNakki($nakki);
-        $booking->setEvent($event);
+        $booking->setNakkikone($nakkikone);
 
         $booking->setStartAt(new \DateTimeImmutable('2025-01-01 10:00:00'));
 

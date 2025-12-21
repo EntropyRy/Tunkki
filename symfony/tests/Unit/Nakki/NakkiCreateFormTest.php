@@ -50,7 +50,13 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
 
         /** @var NakkiRepository $repository */
         $repository = $this->container->get(NakkiRepository::class);
-        self::assertNotEmpty($repository->findBy(['event' => $event]));
+
+        // Refresh event from database to see changes made by component
+        $this->container->get(EntityManagerInterface::class)->refresh($event);
+
+        $nakkikone = $event->getNakkikone();
+        self::assertNotNull($nakkikone, 'Event should have nakkikone created');
+        self::assertNotEmpty($repository->findBy(['nakkikone' => $nakkikone]));
     }
 
     public function testSaveValidatesIntervals(): void
@@ -68,6 +74,86 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
         $component->save();
 
         self::assertSame('End time must be after start time.', $component->error);
+    }
+
+    public function testSaveRequiresEvent(): void
+    {
+        $component = $this->component();
+        $component->eventId = \PHP_INT_MAX;
+        $component->definitionId = 123;
+        $component->startAt = '2025-01-01T10:00';
+        $component->endAt = '2025-01-01T12:00';
+        $component->intervalHours = 1;
+
+        $component->save();
+
+        self::assertSame('Event not found.', $component->error);
+    }
+
+    public function testSaveRequiresDefinition(): void
+    {
+        $component = $this->component();
+        $event = EventFactory::new()->create();
+
+        $component->eventId = $event->getId();
+        $component->definitionId = null;
+        $component->startAt = $event->getEventDate()->format('Y-m-d\TH:i');
+        $component->endAt = $event->getEventDate()->modify('+2 hours')->format('Y-m-d\TH:i');
+        $component->intervalHours = 1;
+
+        $component->save();
+
+        self::assertSame('Definition is required.', $component->error);
+    }
+
+    public function testSaveValidatesDefinitionExists(): void
+    {
+        $component = $this->component();
+        $event = EventFactory::new()->create();
+
+        $component->eventId = $event->getId();
+        $component->definitionId = \PHP_INT_MAX;
+        $component->startAt = $event->getEventDate()->format('Y-m-d\TH:i');
+        $component->endAt = $event->getEventDate()->modify('+2 hours')->format('Y-m-d\TH:i');
+        $component->intervalHours = 1;
+
+        $component->save();
+
+        self::assertSame('Definition not found.', $component->error);
+    }
+
+    public function testSaveRequiresStartAndEndTimes(): void
+    {
+        $component = $this->component();
+        $event = EventFactory::new()->create();
+        $definition = NakkiDefinitionFactory::new()->create();
+
+        $component->eventId = $event->getId();
+        $component->definitionId = $definition->getId();
+        $component->startAt = '';
+        $component->endAt = '';
+        $component->intervalHours = 1;
+
+        $component->save();
+
+        self::assertSame('Start and end times are required.', $component->error);
+    }
+
+    public function testSaveValidatesIntervalHours(): void
+    {
+        $component = $this->component();
+        $event = EventFactory::new()->create();
+        $definition = NakkiDefinitionFactory::new()->create();
+
+        $component->eventId = $event->getId();
+        $component->definitionId = $definition->getId();
+        $component->startAt = $event->getEventDate()->format('Y-m-d\TH:i');
+        $component->endAt = $event->getEventDate()->modify('+2 hours')->format('Y-m-d\TH:i');
+        $component->intervalHours = 0;
+
+        $component->save();
+
+        self::assertSame('Interval must be at least one hour.', $component->error);
     }
 
     private function component(): NakkiCreateForm

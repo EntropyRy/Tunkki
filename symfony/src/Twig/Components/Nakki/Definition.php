@@ -211,8 +211,13 @@ final class Definition
 
     private function collectEventDefinitionIds(): array
     {
+        $nakkikone = $this->event->getNakkikone();
+        if (!$nakkikone) {
+            return [];
+        }
+
         $ids = [];
-        foreach ($this->event->getNakkis() as $nakki) {
+        foreach ($nakkikone->getNakkis() as $nakki) {
             $definition = $nakki->getDefinition();
             if (null === $definition) {
                 continue;

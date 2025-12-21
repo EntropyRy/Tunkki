@@ -7,6 +7,8 @@ namespace App\Tests\Functional\Controller\Admin;
 use App\Entity\Event;
 use App\Factory\EventFactory;
 use App\Factory\NakkiBookingFactory;
+use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Factory\RSVPFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
@@ -154,12 +156,15 @@ final class EventAdminControllerTest extends FixturesWebTestCase
             'url' => 'event-nakki-list-'.uniqid('', true),
             'name' => 'Event Nakki List EN',
             'nimi' => 'Event Nakki List FI',
-            'nakkikoneEnabled' => true,
+        ]);
+        $nakkikone = NakkikoneFactory::new()->enabled()->create([
+            'event' => $event,
         ]);
 
         // Create one booked booking to ensure emails + table render.
         $booking = NakkiBookingFactory::new()->booked()->create([
-            'event' => $event,
+            'nakki' => NakkiFactory::new()->with(['nakkikone' => $nakkikone]),
+            'nakkikone' => $nakkikone,
         ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');

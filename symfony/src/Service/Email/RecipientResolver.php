@@ -121,15 +121,18 @@ class RecipientResolver
     private function resolveNakkiRecipients(Event $event): array
     {
         $recipients = [];
+        $nakkikone = $event->getNakkikone();
 
-        foreach ($event->getNakkiBookings() as $booking) {
-            $member = $booking->getMember();
-            if ($member) {
-                $recipients[] = new EmailRecipient(
-                    $member->getEmail(),
-                    $member->getLocale() ?? 'fi',
-                    $member->getId()
-                );
+        if ($nakkikone) {
+            foreach ($nakkikone->getBookings() as $booking) {
+                $member = $booking->getMember();
+                if ($member) {
+                    $recipients[] = new EmailRecipient(
+                        $member->getEmail(),
+                        $member->getLocale() ?? 'fi',
+                        $member->getId()
+                    );
+                }
             }
         }
 

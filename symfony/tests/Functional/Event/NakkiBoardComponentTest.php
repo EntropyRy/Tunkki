@@ -8,6 +8,7 @@ use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -73,12 +74,13 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'nameEn' => 'Decoration',
         ]);
 
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition1,
         ]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition2,
         ]);
 
@@ -183,8 +185,9 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
             'nameFi' => 'Metadata Test',
         ]);
 
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'responsible' => $member,
             'mattermostChannel' => 'test-channel',

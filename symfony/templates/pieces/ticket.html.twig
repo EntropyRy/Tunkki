@@ -5,7 +5,7 @@
         {%- if tickets|length > 0 -%}
         <a class="btn btn-primary w-100"
             href="{{ path('entropy_event_tickets', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-            {% if event.nakkiRequiredForTicketReservation %}
+            {% if event.nakkikone and event.nakkikone.requiredForTicketReservation %}
                 {{ 'ticket.details_with_nakki'|trans }}
             {% else %}
                 {{ 'ticket.details'|trans }}

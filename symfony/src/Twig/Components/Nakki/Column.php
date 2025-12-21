@@ -109,7 +109,7 @@ final class Column
 
             $booking = new NakkiBooking();
             $booking->setNakki($nakki);
-            $booking->setEvent($nakki->getEvent());
+            $booking->setNakkikone($nakki->getNakkikone());
             $booking->setStartAt($cursor);
             $booking->setEndAt($end);
             $this->entityManager->persist($booking);
@@ -186,7 +186,7 @@ final class Column
 
         $booking = new NakkiBooking();
         $booking->setNakki($nakki);
-        $booking->setEvent($nakki->getEvent());
+        $booking->setNakkikone($nakki->getNakkikone());
         $booking->setStartAt($start);
         $booking->setEndAt($end);
 
@@ -226,7 +226,7 @@ final class Column
 
         $booking = new NakkiBooking();
         $booking->setNakki($nakki);
-        $booking->setEvent($nakki->getEvent());
+        $booking->setNakkikone($nakki->getNakkikone());
         $booking->setStartAt($start);
         $booking->setEndAt($end);
 
@@ -258,7 +258,7 @@ final class Column
 
         $booking = new NakkiBooking();
         $booking->setNakki($nakki);
-        $booking->setEvent($nakki->getEvent());
+        $booking->setNakkikone($nakki->getNakkikone());
         $booking->setStartAt($start);
         $booking->setEndAt($end);
 

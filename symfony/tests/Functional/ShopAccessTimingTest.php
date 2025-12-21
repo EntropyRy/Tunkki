@@ -60,7 +60,6 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
             'ticketPresaleStart' => $realNow->modify('+2 days'), // Presale starts in future
             'ticketPresaleEnd' => $realNow->modify('+7 days'),
             'eventDate' => $realNow->modify('+14 days'),
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'presale-not-started-'.uniqid('', true),
         ]);
 
@@ -99,7 +98,6 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
             'ticketPresaleStart' => $realNow->modify('-7 days'),
             'ticketPresaleEnd' => $realNow->modify('-1 day'), // Presale ended yesterday
             'eventDate' => $realNow->modify('+7 days'), // Event still in future
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'presale-ended-'.uniqid('', true),
         ]);
 
@@ -138,7 +136,6 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
             'ticketPresaleStart' => $realNow->modify('-20 days'),
             'ticketPresaleEnd' => $realNow->modify('-10 days'),
             'eventDate' => $realNow->modify('-5 days'), // Event already happened
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'past-event-'.uniqid('', true),
         ]);
 
@@ -177,7 +174,6 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
             'ticketPresaleStart' => $realNow->modify('-1 day'), // Started yesterday
             'ticketPresaleEnd' => $realNow->modify('+7 days'), // Ends in a week
             'eventDate' => $realNow->modify('+14 days'), // Event in 2 weeks
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'valid-presale-'.uniqid('', true),
         ]);
 

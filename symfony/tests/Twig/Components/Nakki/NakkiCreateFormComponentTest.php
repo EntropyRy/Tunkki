@@ -32,7 +32,9 @@ final class NakkiCreateFormComponentTest extends LiveComponentTestCase
 
         /** @var NakkiRepository $nakkiRepository */
         $nakkiRepository = self::getContainer()->get(NakkiRepository::class);
-        $nakkis = $nakkiRepository->findBy(['event' => $event]);
+        $nakkikone = $event->getNakkikone();
+        self::assertNotNull($nakkikone, 'Expected nakkikone to be created for the event.');
+        $nakkis = $nakkiRepository->findBy(['nakkikone' => $nakkikone]);
         self::assertNotEmpty($nakkis, 'Expected newly created nakki for the event.');
     }
 }

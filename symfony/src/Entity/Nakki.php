@@ -36,10 +36,10 @@ class Nakki implements \Stringable
     #[ORM\OneToMany(targetEntity: NakkiBooking::class, mappedBy: 'nakki', orphanRemoval: true)]
     private Collection $nakkiBookings;
 
-    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkis')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Nakkikone::class, inversedBy: 'nakkis')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     #[Assert\NotBlank]
-    private Event $event;
+    private Nakkikone $nakkikone;
 
     #[ORM\Column(type: 'dateinterval')]
     private \DateInterval $nakkiInterval;
@@ -134,12 +134,17 @@ class Nakki implements \Stringable
 
     public function getEvent(): Event
     {
-        return $this->event;
+        return $this->nakkikone->getEvent();
     }
 
-    public function setEvent(Event $event): self
+    public function getNakkikone(): Nakkikone
     {
-        $this->event = $event;
+        return $this->nakkikone;
+    }
+
+    public function setNakkikone(Nakkikone $nakkikone): self
+    {
+        $this->nakkikone = $nakkikone;
 
         return $this;
     }

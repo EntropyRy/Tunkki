@@ -9,6 +9,7 @@ use App\Factory\MemberFactory;
 use App\Factory\NakkiBookingFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -49,8 +50,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'nameFi' => 'Test Nakki',
             'nameEn' => 'Test Nakki EN',
         ]);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -76,8 +78,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-resp-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Responsible Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'responsible' => $member,
         ]);
@@ -101,8 +104,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-mattermost-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Mattermost Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'mattermostChannel' => 'test-nakki-channel',
         ]);
@@ -128,8 +132,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-bookings-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Bookings Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -137,13 +142,13 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
         $now = new \DateTimeImmutable();
         NakkiBookingFactory::new()->create([
             'nakki' => $nakki,
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'startAt' => $now,
             'endAt' => $now->modify('+1 hour'),
         ]);
         NakkiBookingFactory::new()->create([
             'nakki' => $nakki,
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'startAt' => $now->modify('+1 hour'),
             'endAt' => $now->modify('+2 hours'),
         ]);
@@ -171,15 +176,16 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-booked-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Booked Slots Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
         $now = new \DateTimeImmutable();
         NakkiBookingFactory::new()->create([
             'nakki' => $nakki,
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'startAt' => $now,
             'endAt' => $now->modify('+1 hour'),
             'member' => $member,
@@ -207,8 +213,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-edit-btn-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Edit Button Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -233,8 +240,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-delete-btn-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Delete Button Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -262,8 +270,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-add-slots-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Add Slots Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -291,8 +300,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-disabled-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Disabled Test']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'disableBookings' => true,
         ]);
@@ -321,8 +331,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'nameFi' => 'Testi',
             'nameEn' => 'English Column Test',
         ]);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -347,8 +358,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-no-bookings-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'Empty Column']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
         ]);
 
@@ -370,8 +382,9 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
             'url' => 'test-column-no-resp-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'No Responsible']);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'responsible' => null,
         ]);

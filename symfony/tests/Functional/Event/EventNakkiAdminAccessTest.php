@@ -8,6 +8,7 @@ use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -95,7 +96,8 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
         $event = EventFactory::new()->published()->create([
             'url' => 'test-event-resp-admin-'.uniqid('', true),
         ]);
-        $event->addNakkiResponsibleAdmin($member);
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
+        $nakkikone->addResponsibleAdmin($member);
         $this->em()->flush();
 
         // Login using the member's user email
@@ -121,8 +123,9 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
         ]);
         $definition = NakkiDefinitionFactory::new()->create();
 
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'responsible' => $member,
         ]);

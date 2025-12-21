@@ -10,6 +10,7 @@ use App\Entity\Event;
 use App\Entity\EventArtistInfo;
 use App\Entity\Member;
 use App\Entity\NakkiBooking;
+use App\Entity\Nakkikone;
 use App\Entity\RSVP;
 use App\Entity\Ticket;
 use App\Enum\EmailPurpose;
@@ -188,8 +189,11 @@ final class RecipientResolverTest extends TestCase
         $booking = $this->createStub(NakkiBooking::class);
         $booking->method('getMember')->willReturn($member);
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getBookings')->willReturn(new ArrayCollection([$booking]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkiBookings')->willReturn(new ArrayCollection([$booking]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $recipients = $this->resolver->resolve(EmailPurpose::NAKKIKONE, $event);
 

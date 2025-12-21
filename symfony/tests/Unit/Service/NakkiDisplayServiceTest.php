@@ -9,6 +9,7 @@ use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
 use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
 use App\Service\NakkiDisplayService;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
@@ -113,7 +114,7 @@ final class NakkiDisplayServiceTest extends TestCase
     public function testGetNakkiFromGroupReturnsEmptyArrayForNoNakkis(): void
     {
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection());
+        $event->method('getNakkikone')->willReturn(null);
 
         $member = $this->createStub(Member::class);
 
@@ -127,8 +128,11 @@ final class NakkiDisplayServiceTest extends TestCase
         $nakki = $this->createStub(Nakki::class);
         $nakki->method('isDisableBookings')->willReturn(true);
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $member = $this->createStub(Member::class);
 
@@ -153,8 +157,11 @@ final class NakkiDisplayServiceTest extends TestCase
         $booking->method('getStartAt')->willReturn(new \DateTimeImmutable('2025-01-01 10:00'));
         $booking->method('getEndAt')->willReturn(new \DateTimeImmutable('2025-01-01 12:00'));
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $member = $this->createStub(Member::class);
 
@@ -183,8 +190,11 @@ final class NakkiDisplayServiceTest extends TestCase
         // Set up the unreservedBooking to return this nakki
         $unreservedBooking->method('getNakki')->willReturn($nakki);
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $member = $this->createStub(Member::class);
 
@@ -213,8 +223,11 @@ final class NakkiDisplayServiceTest extends TestCase
 
         $reservedBooking->method('getNakki')->willReturn($nakki);
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $member = $this->createStub(Member::class);
 
@@ -247,8 +260,11 @@ final class NakkiDisplayServiceTest extends TestCase
         $selectedBooking->method('getNakki')->willReturn($nakki);
         $unreservedBooking->method('getNakki')->willReturn($nakki);
 
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+
         $event = $this->createStub(Event::class);
-        $event->method('getNakkis')->willReturn(new ArrayCollection([$nakki]));
+        $event->method('getNakkikone')->willReturn($nakkikone);
 
         $member = $this->createStub(Member::class);
 

@@ -9,6 +9,7 @@ use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
 use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
@@ -55,15 +56,16 @@ final class NakkiEntityTest extends TestCase
         $this->assertSame($end, $nakki->getEndAt());
     }
 
-    public function testSetAndGetEvent(): void
+    public function testSetAndGetNakkikone(): void
     {
         $nakki = new Nakki();
         $event = $this->createStub(Event::class);
+        $nakkikone = $this->createStub(Nakkikone::class);
+        $nakkikone->method('getEvent')->willReturn($event);
 
-        $nakki->setEvent($event);
+        $nakki->setNakkikone($nakkikone);
+        $this->assertSame($nakkikone, $nakki->getNakkikone());
         $this->assertSame($event, $nakki->getEvent());
-
-        // Removed null setter test for Event (non-nullable)
     }
 
     public function testSetAndGetNakkiInterval(): void

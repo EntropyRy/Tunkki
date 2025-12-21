@@ -119,6 +119,14 @@ class Event implements \Stringable
     #[ORM\Embedded(class: ArtistDisplayConfiguration::class, columnPrefix: false)]
     private ArtistDisplayConfiguration $artistDisplayConfiguration;
 
+    #[ORM\OneToOne(
+        targetEntity: Nakkikone::class,
+        mappedBy: 'event',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
+    private ?Nakkikone $nakkikone = null;
+
     /**
      * @var Collection<int, EventArtistInfo>
      */
@@ -151,47 +159,6 @@ class Event implements \Stringable
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $rsvpSystemEnabled = false;
-
-    /**
-     * @var Collection<int, Nakki>
-     */
-    #[
-        ORM\OneToMany(
-            targetEntity: Nakki::class,
-            mappedBy: 'event',
-            orphanRemoval: true,
-        ),
-    ]
-    #[OrderBy(['startAt' => 'ASC'])]
-    private Collection $nakkis;
-
-    /**
-     * @var Collection<int, NakkiBooking>
-     */
-    #[
-        ORM\OneToMany(
-            targetEntity: NakkiBooking::class,
-            mappedBy: 'event',
-            orphanRemoval: true,
-        ),
-    ]
-    #[OrderBy(['startAt' => 'ASC'])]
-    private Collection $nakkiBookings;
-
-    #[ORM\Column(type: Types::BOOLEAN)]
-    private bool $NakkikoneEnabled = false;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $nakkiInfoFi = '
-        <p>Valitse vähintään 2 tunnin Nakkia sekä purku tai roudaus</p>
-        <h6>Saat ilmaisen sisäänpääsyn</h6>
-        ';
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $nakkiInfoEn = '
-        <p>Choose at least two (2) Nakkis that are 1 hour length and build up or take down</p>
-        <h6>You\'ll get free entry to the party</h6>
-        ';
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $includeSaferSpaceGuidelines = false;
@@ -260,12 +227,6 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::INTEGER)]
     private int $ticketPresaleCount = 0;
 
-    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
-    private ?bool $showNakkikoneLinkInEvent = false;
-
-    #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
-    private ?bool $requireNakkiBookingsToBeDifferentTimes = true;
-
     /**
      * @var Collection<int, Email>
      */
@@ -274,9 +235,6 @@ class Event implements \Stringable
 
     #[ORM\Column(nullable: true)]
     private ?bool $rsvpOnlyToActiveMembers = null;
-
-    #[ORM\Column(nullable: true)]
-    private ?bool $nakkiRequiredForTicketReservation = false;
 
     #[ORM\Column(length: 30, nullable: true)]
     private ?string $backgroundEffect = null;
@@ -305,12 +263,6 @@ class Event implements \Stringable
     #[ORM\OneToMany(targetEntity: Happening::class, mappedBy: 'event')]
     #[OrderBy(['time' => 'ASC'])]
     private Collection $happenings;
-
-    /**
-     * @var Collection<int, Member>
-     */
-    #[ORM\ManyToMany(targetEntity: Member::class)]
-    private Collection $nakkiResponsibleAdmin;
 
     #[ORM\Column(nullable: true)]
     private ?bool $allowMembersToCreateHappenings = true;
@@ -537,14 +489,6 @@ class Event implements \Stringable
     }
 
     /**
-     * Returns true if the event has Nakkikone enabled.
-     */
-    public function isNakkikoneEnabled(): bool
-    {
-        return $this->NakkikoneEnabled;
-    }
-
-    /**
      * Returns true if artist sign-up is enabled for the event.
      */
     public function isArtistSignUpEnabled(): bool
@@ -566,22 +510,6 @@ class Event implements \Stringable
     public function isTicketsEnabled(): bool
     {
         return (bool) $this->ticketsEnabled;
-    }
-
-    /**
-     * Returns true if showNakkikoneLinkInEvent is enabled.
-     */
-    public function isShowNakkikoneLinkInEvent(): bool
-    {
-        return (bool) $this->showNakkikoneLinkInEvent;
-    }
-
-    /**
-     * Returns true if requireNakkiBookingsToBeDifferentTimes is enabled.
-     */
-    public function isRequireNakkiBookingsToBeDifferentTimes(): bool
-    {
-        return (bool) $this->requireNakkiBookingsToBeDifferentTimes;
     }
 
     /**
@@ -617,14 +545,6 @@ class Event implements \Stringable
     }
 
     /**
-     * Returns true if nakkiRequiredForTicketReservation is enabled.
-     */
-    public function isNakkiRequiredForTicketReservation(): bool
-    {
-        return (bool) $this->nakkiRequiredForTicketReservation;
-    }
-
-    /**
      * Returns true if artistSignUpAskSetLength is enabled.
      */
     public function isArtistSignUpAskSetLength(): bool
@@ -647,13 +567,10 @@ class Event implements \Stringable
         $this->EventDate = new \DateTimeImmutable('+2weeks');
         $this->eventArtistInfos = new ArrayCollection();
         $this->RSVPs = new ArrayCollection();
-        $this->nakkis = new ArrayCollection();
-        $this->nakkiBookings = new ArrayCollection();
         $this->tickets = new ArrayCollection();
         $this->emails = new ArrayCollection();
         $this->notifications = new ArrayCollection();
         $this->happenings = new ArrayCollection();
-        $this->nakkiResponsibleAdmin = new ArrayCollection();
         $this->products = new ArrayCollection();
         $this->artistDisplayConfiguration = new ArtistDisplayConfiguration();
     }
@@ -898,92 +815,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection|Nakki[]
-     */
-    public function getNakkis(): Collection
-    {
-        return $this->nakkis;
-    }
-
-    public function addNakki(Nakki $nakki): self
-    {
-        if (!$this->nakkis->contains($nakki)) {
-            $this->nakkis[] = $nakki;
-            $nakki->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNakki(Nakki $nakki): self
-    {
-        $this->nakkis->removeElement($nakki);
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|NakkiBooking[]
-     */
-    public function getNakkiBookings(): Collection
-    {
-        return $this->nakkiBookings;
-    }
-
-    public function addNakkiBooking(NakkiBooking $nakkiBooking): self
-    {
-        if (!$this->nakkiBookings->contains($nakkiBooking)) {
-            $this->nakkiBookings[] = $nakkiBooking;
-            $nakkiBooking->setEvent($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNakkiBooking(NakkiBooking $nakkiBooking): self
-    {
-        $this->nakkiBookings->removeElement($nakkiBooking);
-
-        return $this;
-    }
-
-    public function getNakkikoneEnabled(): ?bool
-    {
-        return $this->NakkikoneEnabled;
-    }
-
-    public function setNakkikoneEnabled(bool $NakkikoneEnabled): self
-    {
-        $this->NakkikoneEnabled = $NakkikoneEnabled;
-
-        return $this;
-    }
-
-    public function getNakkiInfoFi(): ?string
-    {
-        return $this->nakkiInfoFi;
-    }
-
-    public function setNakkiInfoFi(?string $nakkiInfoFi): self
-    {
-        $this->nakkiInfoFi = $nakkiInfoFi;
-
-        return $this;
-    }
-
-    public function getNakkiInfoEn(): ?string
-    {
-        return $this->nakkiInfoEn;
-    }
-
-    public function setNakkiInfoEn(?string $nakkiInfoEn): self
-    {
-        $this->nakkiInfoEn = $nakkiInfoEn;
-
-        return $this;
-    }
-
     public function getIncludeSaferSpaceGuidelines(): ?bool
     {
         return $this->includeSaferSpaceGuidelines;
@@ -1175,13 +1006,6 @@ class Event implements \Stringable
         return $this->{$func};
     }
 
-    public function getNakkiInfo($lang): ?string
-    {
-        $func = 'nakkiInfo'.ucfirst((string) $lang);
-
-        return $this->{$func};
-    }
-
     public function getTicketPrice(): ?int
     {
         return $this->ticketPrice;
@@ -1316,91 +1140,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getShowNakkikoneLinkInEvent(): ?bool
-    {
-        return $this->showNakkikoneLinkInEvent;
-    }
-
-    public function setShowNakkikoneLinkInEvent(
-        ?bool $showNakkikoneLinkInEvent,
-    ): self {
-        $this->showNakkikoneLinkInEvent = $showNakkikoneLinkInEvent;
-
-        return $this;
-    }
-
-    public function getRequireNakkiBookingsToBeDifferentTimes(): ?bool
-    {
-        return $this->requireNakkiBookingsToBeDifferentTimes;
-    }
-
-    public function setRequireNakkiBookingsToBeDifferentTimes(
-        ?bool $requireNakkiBookingsToBeDifferentTimes,
-    ): self {
-        $this->requireNakkiBookingsToBeDifferentTimes = $requireNakkiBookingsToBeDifferentTimes;
-
-        return $this;
-    }
-
-    public function responsibleMemberNakkis(Member $member): array
-    {
-        $bookings = [];
-        foreach ($this->getNakkis() as $nakki) {
-            if (
-                $nakki->getResponsible() == $member
-                || \in_array('ROLE_SUPER_ADMIN', $member->getUser()->getRoles())
-                || $this->nakkiResponsibleAdmin->contains($member)
-            ) {
-                $bookings[
-                    $nakki->getDefinition()->getName($member->getLocale())
-                ]['b'][] = $nakki->getNakkiBookings();
-                $bookings[
-                    $nakki->getDefinition()->getName($member->getLocale())
-                ]['mattermost'] = $nakki->getMattermostChannel();
-                $bookings[
-                    $nakki->getDefinition()->getName($member->getLocale())
-                ]['responsible'] = $nakki->getResponsible();
-            }
-        }
-
-        return $bookings;
-    }
-
-    public function memberNakkis(Member $member): array
-    {
-        $bookings = [];
-        $booking = $member->getEventNakkiBooking($this);
-        if ($booking instanceof NakkiBooking) {
-            $nakki = $booking->getNakki();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
-                'b'
-            ][] = $nakki->getNakkiBookings();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
-                'mattermost'
-            ] = $nakki->getMattermostChannel();
-            $bookings[$nakki->getDefinition()->getName($member->getLocale())][
-                'responsible'
-            ] = $nakki->getResponsible();
-        }
-
-        return $bookings;
-    }
-
-    public function getAllNakkiResponsibles(string $locale): array
-    {
-        $responsibles = [];
-        foreach ($this->getNakkis() as $nakki) {
-            $responsibles[$nakki->getDefinition()->getName($locale)][
-                'mattermost'
-            ] = $nakki->getMattermostChannel();
-            $responsibles[$nakki->getDefinition()->getName($locale)][
-                'responsible'
-            ] = $nakki->getResponsible();
-        }
-
-        return $responsibles;
-    }
-
     /**
      * @return Collection<int, Email>
      */
@@ -1436,14 +1175,6 @@ class Event implements \Stringable
         ?bool $rsvpOnlyToActiveMembers,
     ): self {
         $this->rsvpOnlyToActiveMembers = $rsvpOnlyToActiveMembers;
-
-        return $this;
-    }
-
-    public function setNakkiRequiredForTicketReservation(
-        ?bool $nakkiRequiredForTicketReservation,
-    ): self {
-        $this->nakkiRequiredForTicketReservation = $nakkiRequiredForTicketReservation;
 
         return $this;
     }
@@ -1596,45 +1327,6 @@ class Event implements \Stringable
         ) {
             $happening->setEvent(null);
         }
-
-        return $this;
-    }
-
-    public function ticketHolderHasNakki($member): ?NakkiBooking
-    {
-        if ($this->isNakkiRequiredForTicketReservation()) {
-            foreach ($this->getNakkiBookings() as $booking) {
-                if ($booking->getMember() == $member) {
-                    return $booking;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @return Collection<int, Member>
-     */
-    public function getNakkiResponsibleAdmin(): Collection
-    {
-        return $this->nakkiResponsibleAdmin;
-    }
-
-    public function addNakkiResponsibleAdmin(
-        Member $nakkiResponsibleAdmin,
-    ): static {
-        if (!$this->nakkiResponsibleAdmin->contains($nakkiResponsibleAdmin)) {
-            $this->nakkiResponsibleAdmin->add($nakkiResponsibleAdmin);
-        }
-
-        return $this;
-    }
-
-    public function removeNakkiResponsibleAdmin(
-        Member $nakkiResponsibleAdmin,
-    ): static {
-        $this->nakkiResponsibleAdmin->removeElement($nakkiResponsibleAdmin);
 
         return $this;
     }
@@ -1855,5 +1547,17 @@ class Event implements \Stringable
     public function getArtistDisplayConfiguration(): ArtistDisplayConfiguration
     {
         return $this->artistDisplayConfiguration;
+    }
+
+    public function getNakkikone(): ?Nakkikone
+    {
+        return $this->nakkikone;
+    }
+
+    public function setNakkikone(?Nakkikone $nakkikone): self
+    {
+        $this->nakkikone = $nakkikone;
+
+        return $this;
     }
 }

@@ -50,17 +50,8 @@ class EventEntityTest extends TestCase
             \Doctrine\Common\Collections\Collection::class,
             $event->getRSVPs(),
         );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkis(),
-        );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkiBookings(),
-        );
-        $this->assertFalse($event->isNakkikoneEnabled());
-        $this->assertIsString($event->getNakkiInfoFi());
-        $this->assertIsString($event->getNakkiInfoEn());
+        // Nakki-related methods moved to Nakkikone entity
+        $this->assertNull($event->getNakkikone()); // No nakkikone by default
         $this->assertFalse($event->getIncludeSaferSpaceGuidelines());
         $this->assertSame('light', $event->getHeaderTheme());
         $this->assertNull($event->getStreamPlayerUrl());
@@ -83,14 +74,12 @@ class EventEntityTest extends TestCase
         $this->assertNull($event->getTicketPresaleStart());
         $this->assertNull($event->getTicketPresaleEnd());
         $this->assertSame(0, $event->getTicketPresaleCount());
-        $this->assertFalse($event->isShowNakkikoneLinkInEvent());
-        $this->assertTrue($event->isRequireNakkiBookingsToBeDifferentTimes());
+        // Nakki-related methods moved to Nakkikone entity
         $this->assertInstanceOf(
             \Doctrine\Common\Collections\Collection::class,
             $event->getEmails(),
         );
         $this->assertFalse($event->isRsvpOnlyToActiveMembers());
-        $this->assertFalse($event->isNakkiRequiredForTicketReservation());
         $this->assertNull($event->getBackgroundEffect());
         $this->assertNull($event->getBackgroundEffectOpacity());
         $this->assertNull($event->getBackgroundEffectPosition());
@@ -104,10 +93,7 @@ class EventEntityTest extends TestCase
             \Doctrine\Common\Collections\Collection::class,
             $event->getHappenings(),
         );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkiResponsibleAdmin(),
-        );
+        // Nakki-related methods moved to Nakkikone entity
         $this->assertTrue($event->isAllowMembersToCreateHappenings());
         $this->assertNull($event->getLocation());
         $this->assertSame('event.html.twig', $event->getTemplate());
@@ -223,14 +209,7 @@ class EventEntityTest extends TestCase
             \Doctrine\Common\Collections\Collection::class,
             $event->getRSVPs(),
         );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkis(),
-        );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkiBookings(),
-        );
+        // Nakki-related methods moved to Nakkikone entity
         $this->assertInstanceOf(
             \Doctrine\Common\Collections\Collection::class,
             $event->getTickets(),
@@ -247,10 +226,7 @@ class EventEntityTest extends TestCase
             \Doctrine\Common\Collections\Collection::class,
             $event->getHappenings(),
         );
-        $this->assertInstanceOf(
-            \Doctrine\Common\Collections\Collection::class,
-            $event->getNakkiResponsibleAdmin(),
-        );
+        // Nakki-related methods moved to Nakkikone entity
         $this->assertInstanceOf(
             \Doctrine\Common\Collections\Collection::class,
             $event->getProducts(),

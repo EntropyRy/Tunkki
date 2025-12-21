@@ -63,7 +63,7 @@
                             <small class="no-print">Click to hide table and reload the page to get it back</small>
                         </h3>
                     </div>
-                    {% for nakki in event.nakkis %}
+                    {% for nakki in event.nakkikone ? event.nakkikone.nakkis : [] %}
                         <div class="col-xs-4" onClick="$(this).hide()">
                             <table class="table table-striped">
                                 <thead>

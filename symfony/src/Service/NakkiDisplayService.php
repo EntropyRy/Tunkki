@@ -31,8 +31,13 @@ class NakkiDisplayService
         array $selected,
         string $locale,
     ): array {
+        $nakkikone = $event->getNakkikone();
+        if (!$nakkikone) {
+            return [];
+        }
+
         $nakkis = [];
-        foreach ($event->getNakkis() as $nakki) {
+        foreach ($nakkikone->getNakkis() as $nakki) {
             if (true == $nakki->isDisableBookings()) {
                 continue;
             }

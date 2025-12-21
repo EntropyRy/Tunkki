@@ -16,7 +16,8 @@ final class EventAdminController extends CRUDController
     public function nakkiListAction(): Response
     {
         $event = $this->admin->getSubject();
-        $nakkis = $event->getNakkiBookings();
+        $nakkikone = $event->getNakkikone();
+        $nakkis = $nakkikone?->getBookings() ?? [];
         $emails = [];
         foreach ($nakkis as $nakki) {
             $member = $nakki->getMember();

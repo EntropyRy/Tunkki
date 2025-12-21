@@ -73,7 +73,7 @@ class EventShopController extends AbstractController
             (!$this->eventTemporalState->isPublished($event)
                 && !$user instanceof UserInterface)
             || (!$user instanceof UserInterface
-                && $event->isNakkiRequiredForTicketReservation())
+                && ($event->getNakkikone()?->isRequiredForTicketReservation() ?? false))
         ) {
             throw $this->createAccessDeniedException('');
         }
@@ -156,7 +156,7 @@ class EventShopController extends AbstractController
             'selected' => $selected,
             'nakkis' => $nakkis,
             'hasNakki' => $hasNakki,
-            'nakkiRequired' => $event->isNakkiRequiredForTicketReservation(),
+            'nakkiRequired' => $event->getNakkikone()?->isRequiredForTicketReservation() ?? false,
             'event' => $event,
             'form' => $form,
             'inCheckouts' => $max,

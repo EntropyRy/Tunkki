@@ -88,20 +88,24 @@ final class EventNakkiSignUpAccessTest extends FixturesWebTestCase
             $def->setDescriptionEn('Desc EN');
             $def->setOnlyForActiveMembers(false);
 
+            $nakkikone = new \App\Entity\Nakkikone($event);
+            $event->setNakkikone($nakkikone);
+
             $nakki = new \App\Entity\Nakki();
             $nakki->setDefinition($def);
-            $nakki->setEvent($event);
+            $nakki->setNakkikone($nakkikone);
             $nakki->setStartAt($start);
             $nakki->setEndAt($end);
 
             $booking = new NakkiBooking();
             $booking->setNakki($nakki);
-            $booking->setEvent($event);
+            $booking->setNakkikone($nakkikone);
             $booking->setStartAt($start);
             $booking->setEndAt($end);
 
             // Ensure Event is managed when assigning from NakkiBooking/Nakki
             $em->persist($event);
+            $em->persist($nakkikone);
             $em->persist($def);
             $em->persist($nakki);
             $em->persist($booking);

@@ -30,19 +30,20 @@ class NakkiBooking implements \Stringable
     #[ORM\Column(type: 'datetime_immutable')]
     private \DateTimeImmutable $endAt;
 
-    #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'nakkiBookings')]
-    #[ORM\JoinColumn(nullable: false)]
-    private Event $event;
+    #[ORM\ManyToOne(targetEntity: Nakkikone::class, inversedBy: 'bookings')]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
+    private Nakkikone $nakkikone;
 
     #[\Override]
     public function __toString(): string
     {
-        if ($this->getEvent()->isNakkiRequiredForTicketReservation()) {
-            return $this->event.': '.$this->nakki;
+        $event = $this->getEvent();
+        if ($this->nakkikone->isRequiredForTicketReservation()) {
+            return $event.': '.$this->nakki;
         }
         $aika = $this->getStartAt()->format('H:i');
 
-        return $this->event.': '.$this->nakki.' at '.$aika;
+        return $event.': '.$this->nakki.' at '.$aika;
     }
 
     public function getId(): ?int
@@ -100,12 +101,17 @@ class NakkiBooking implements \Stringable
 
     public function getEvent(): Event
     {
-        return $this->event;
+        return $this->nakkikone->getEvent();
     }
 
-    public function setEvent(Event $event): self
+    public function getNakkikone(): Nakkikone
     {
-        $this->event = $event;
+        return $this->nakkikone;
+    }
+
+    public function setNakkikone(Nakkikone $nakkikone): self
+    {
+        $this->nakkikone = $nakkikone;
 
         return $this;
     }
@@ -117,6 +123,6 @@ class NakkiBooking implements \Stringable
 
     public function memberHasEventTicket(): bool
     {
-        return $this->member && $this->event->memberHasTicket($this->member);
+        return $this->member && $this->getEvent()->memberHasTicket($this->member);
     }
 }

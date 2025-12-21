@@ -252,7 +252,7 @@
                     </a>
                 </span>
             {% endif %}
-            {% if not eventInPast and event.showNakkikoneLinkInEvent|default(false) and event.url %}
+            {% if not eventInPast and event.nakkikone and event.nakkikone.showLinkInEvent|default(false) and event.url %}
                 <span>
                     <a class="btn btn-outline-info"
                        href="{{ path('entropy_event_slug_nakkikone', {slug: event.url, year: event.eventdate|date('Y')}) }}">

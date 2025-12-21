@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Admin\Form\ArtistDisplayConfigurationAdminType;
+use App\Entity\Nakkikone;
 use App\Form\MarkdownEditorType;
 use App\Form\UrlsType;
 use App\Repository\LocationRepository;
@@ -15,6 +16,7 @@ use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\AdminType;
 use Sonata\AdminBundle\Form\Type\ChoiceFieldMaskType;
 use Sonata\AdminBundle\Form\Type\CollectionType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
@@ -22,11 +24,12 @@ use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\Form\Type\DateTimePickerType;
 use Sonata\Form\Type\ImmutableArrayType;
-use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\RangeType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -90,7 +93,8 @@ final class EventAdmin extends AbstractAdmin
                     'uri' => $admin->generateUrl('rsvp', ['id' => $id]),
                 ]);
             }
-            if ($event->getNakkikoneEnabled()) {
+            $nakkikone = $event->getNakkikone();
+            if ($nakkikone && $nakkikone->isEnabled()) {
                 $year = $event->getEventDate()?->format('Y');
                 $slug = $event->getUrl();
                 if ($year && $slug) {
@@ -534,40 +538,22 @@ final class EventAdmin extends AbstractAdmin
                     'input' => 'datetime_immutable',
                     'required' => false,
                 ])
-                ->add('artistSignUpInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
+                ->add('artistSignUpInfoEn', MarkdownEditorType::class, [
                     'required' => false,
-                    'ckeditor_context' => 'default',
+                    'simple' => true,
                 ])
-                ->add('artistSignUpInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
+                ->add('artistSignUpInfoFi', MarkdownEditorType::class, [
                     'required' => false,
-                    'ckeditor_context' => 'default',
+                    'simple' => true,
                 ])
                 ->end()
                 ->end()
                 ->tab('Nakkikone config')
                 ->with('Config')
-                ->add('NakkikoneEnabled', null, [
-                    'help' => 'Publish nakkikone and allow members to reserve Nakkis',
+                ->add('nakkikone', AdminType::class, [
+                    'label' => false,
                     'required' => false,
-                ])
-                ->add('showNakkikoneLinkInEvent', null, [
-                    'help' => 'Publish nakkikone in event',
-                ])
-                ->add('requireNakkiBookingsToBeDifferentTimes', null, [
-                    'help' => 'Make sure member nakki bookings do not overlap',
-                ])
-                ->add('nakkiResponsibleAdmin')
-                ->add('nakkiInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
-                ])
-                ->add('nakkiInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
-                    'required' => false,
-                    'ckeditor_context' => 'default',
+                    'by_reference' => true,
                 ])
                 ->end()
                 ->end()
@@ -592,9 +578,6 @@ final class EventAdmin extends AbstractAdmin
                 ->with('Config', ['class' => 'col-md-6'])
                 ->add('ticketsEnabled', null, [
                     'help' => 'allow tikets to the event',
-                ])
-                ->add('nakkiRequiredForTicketReservation', null, [
-                    'help' => 'allow tikets to be reserved only after nakki reservation',
                 ])
                 ->add('ticketTotalAmount', null, [
                     'help' => 'Total number of tickets available for this event (all products combined). When set, the shop will display "X / Y available".',
@@ -623,15 +606,13 @@ final class EventAdmin extends AbstractAdmin
                 // )
                 ->end()
                 ->with('Info', ['class' => 'col-md-12'])
-                ->add('ticketInfoFi', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
+                ->add('ticketInfoFi', MarkdownEditorType::class, [
                     'required' => false,
-                    'ckeditor_context' => 'default',
+                    'simple' => true,
                 ])
-                ->add('ticketInfoEn', SimpleFormatterType::class, [
-                    'format' => 'richhtml',
+                ->add('ticketInfoEn', MarkdownEditorType::class, [
                     'required' => false,
-                    'ckeditor_context' => 'default',
+                    'simple' => true,
                 ])
                 ->end()
                 ->end();
@@ -737,6 +718,12 @@ final class EventAdmin extends AbstractAdmin
     #[\Override]
     public function prePersist($event): void
     {
+        if (
+            $event instanceof \App\Entity\Event
+            && null === $event->getNakkikone()
+        ) {
+            $event->setNakkikone(new Nakkikone($event));
+        }
         if ('clubroom' == $event->getType()) {
             $kerde = $this->lr->findOneBy(['id' => 1]);
             $event->setLocation($kerde);

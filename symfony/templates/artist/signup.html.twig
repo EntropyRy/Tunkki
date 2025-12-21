@@ -8,7 +8,10 @@
             </h3>
             <h5>{{ 'event.form.sign_up.ends'|trans }}: {{ event.artistSignUpEnd|date }}</h5>
             <p>{{ 'event.form.sign_up.description'|trans }}.</p>
-            {{ event.artistSignUpInfo(app.request.locale)|raw }}
+            {% set signup_info = event.artistSignUpInfo(app.request.locale) %}
+            {% if signup_info %}
+                {{ signup_info|markdown_to_html|raw }}
+            {% endif %}
             <hr>
             {{ form_start(form) }}
                 {{ form_widget(form) }}

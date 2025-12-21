@@ -276,48 +276,7 @@ abstract class FixturesWebTestCase extends WebTestCase
      */
     protected function dumpResponseToFile(string $label): void
     {
-        $response = $this->client()?->getResponse();
-        if (null === $response) {
-            return;
-        }
-
-        $projectDir = self::$kernel?->getProjectDir();
-        if (!$projectDir) {
-            try {
-                $projectDir = static::getContainer()->getParameter(
-                    'kernel.project_dir',
-                );
-            } catch (\Throwable) {
-                $projectDir = null;
-            }
-        }
-
-        if (!$projectDir) {
-            return;
-        }
-
-        $targetDir = $projectDir.'/var/test-failures';
-        if (!is_dir($targetDir)) {
-            @mkdir($targetDir, 0777, true);
-        }
-
-        $filename = \sprintf(
-            '%s/%s-%s.html',
-            $targetDir,
-            new \DateTimeImmutable()->format('Ymd_His'),
-            preg_replace("/[^A-Za-z0-9_\-]/", '_', $label),
-        );
-
-        @file_put_contents($filename, (string) $response->getContent());
-        @fwrite(
-            \STDERR,
-            \sprintf(
-                "[TestDebug] Dumped response for %s (status %d) to %s\n",
-                $label,
-                $response->getStatusCode(),
-                $filename,
-            ),
-        );
+        unset($label);
     }
 
     /**
@@ -2172,39 +2131,6 @@ abstract class FixturesWebTestCase extends WebTestCase
             );
         }
         $status = $response->getStatusCode();
-        if ($status < 200 || $status >= 300) {
-            $projectDir = self::$kernel?->getProjectDir();
-            if (!$projectDir) {
-                try {
-                    $projectDir = static::getContainer()->getParameter(
-                        'kernel.project_dir',
-                    );
-                } catch (\Throwable) {
-                    $projectDir = null;
-                }
-            }
-            if ($projectDir) {
-                $targetDir = $projectDir.'/var/test-failures';
-                if (!is_dir($targetDir)) {
-                    @mkdir($targetDir, 0777, true);
-                }
-                $filename = \sprintf(
-                    '%s/%s-%s.html',
-                    $targetDir,
-                    new \DateTimeImmutable()->format('Ymd_His'),
-                    uniqid('response-', true),
-                );
-                @file_put_contents($filename, (string) $response->getContent());
-                @fwrite(
-                    \STDERR,
-                    \sprintf(
-                        "[TestDebug] Stored failing response (status %d) at %s\n",
-                        $status,
-                        $filename,
-                    ),
-                );
-            }
-        }
         self::assertGreaterThanOrEqual(
             200,
             $status,

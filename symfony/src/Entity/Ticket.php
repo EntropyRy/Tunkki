@@ -150,7 +150,9 @@ class Ticket implements \Stringable
         $member = $this->getOwner();
         if ($member instanceof Member) {
             // find member Nakki only if it is mandatory
-            return $this->event->ticketHolderHasNakki($member);
+            $nakkikone = $this->event->getNakkikone();
+
+            return $nakkikone?->ticketHolderHasNakki($member);
         }
 
         return null;

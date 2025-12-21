@@ -129,8 +129,16 @@ final class NakkiCreateForm
 
         $interval = new \DateInterval(\sprintf('PT%dH', $this->intervalHours));
 
+        // Ensure event has nakkikone
+        $nakkikone = $event->getNakkikone();
+        if (!$nakkikone) {
+            $nakkikone = new \App\Entity\Nakkikone($event);
+            $event->setNakkikone($nakkikone);
+            $this->entityManager->persist($nakkikone);
+        }
+
         $nakki = new Nakki();
-        $nakki->setEvent($event);
+        $nakki->setNakkikone($nakkikone);
         $nakki->setDefinition($definition);
         $nakki->setStartAt($start);
         $nakki->setEndAt($end);
@@ -178,7 +186,7 @@ final class NakkiCreateForm
 
     private function resetForm(Nakki $nakki): void
     {
-        $event = $nakki->getEvent();
+        $event = $nakki->getNakkikone()->getEvent();
         $this->definitionId = $nakki->getDefinition()->getId();
         $start = \DateTimeImmutable::createFromInterface($event->getEventDate());
         $end = $start->add(new \DateInterval('PT1H'));

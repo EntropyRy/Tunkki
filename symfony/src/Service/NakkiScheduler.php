@@ -156,7 +156,7 @@ final readonly class NakkiScheduler
     {
         $booking = new NakkiBooking();
         $booking->setNakki($nakki);
-        $booking->setEvent($nakki->getEvent());
+        $booking->setNakkikone($nakki->getNakkikone());
         $booking->setStartAt($start);
         $booking->setEndAt($end);
 

@@ -24,7 +24,7 @@ final class NakkiFactory extends PersistentProxyObjectFactory
         $end = $start->modify('+8 hours');
 
         return [
-            'event' => EventFactory::new(),
+            'nakkikone' => NakkikoneFactory::new(),
             'definition' => NakkiDefinitionFactory::new(),
             'startAt' => $start,
             'endAt' => $end,

@@ -8,6 +8,7 @@ use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Factory\NakkiDefinitionFactory;
 use App\Factory\NakkiFactory;
+use App\Factory\NakkikoneFactory;
 use App\Tests\Support\PantherTestCase;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
@@ -177,8 +178,11 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
         $eventEntity = $em->find(\App\Entity\Event::class, $eventId);
         $definitionEntity = $em->find(\App\Entity\NakkiDefinition::class, $definitionId);
 
+        $nakkikoneEntity = $eventEntity->getNakkikone();
+        self::assertNotNull($nakkikoneEntity, 'Event should have a nakkikone');
+
         $nakki = $nakkiRepo->findOneBy([
-            'event' => $eventEntity,
+            'nakkikone' => $nakkikoneEntity,
             'definition' => $definitionEntity,
         ]);
 
@@ -211,8 +215,9 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
             'lastname' => 'Responsible',
         ]);
 
+        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
         $nakki = NakkiFactory::new()->create([
-            'event' => $event,
+            'nakkikone' => $nakkikone,
             'definition' => $definition,
             'responsible' => $responsible,
             'mattermostChannel' => 'original-channel',
@@ -349,7 +354,9 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
 
         // Verify no duplicate was created
         $eventEntity = $em->find(\App\Entity\Event::class, $event->getId());
-        $nakkisForEvent = $nakkiRepo->findBy(['event' => $eventEntity]);
+        $nakkikoneEntity = $eventEntity->getNakkikone();
+        self::assertNotNull($nakkikoneEntity, 'Event should have a nakkikone');
+        $nakkisForEvent = $nakkiRepo->findBy(['nakkikone' => $nakkikoneEntity]);
         self::assertCount(1, $nakkisForEvent, 'Should only have one nakki, not duplicate');
     }
 }

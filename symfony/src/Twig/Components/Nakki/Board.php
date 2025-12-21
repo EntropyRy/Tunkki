@@ -100,8 +100,15 @@ final class Board
         $responsible = $data['responsible'] ?? null;
         $mattermostChannel = $this->normaliseString((string) ($data['mattermostChannel'] ?? ''));
 
+        // Ensure event has nakkikone
+        $nakkikone = $this->event->getNakkikone();
+        if (!$nakkikone) {
+            $nakkikone = new \App\Entity\Nakkikone($this->event);
+            $this->entityManager->persist($nakkikone);
+        }
+
         // Check if a nakki already exists for this definition
-        foreach ($this->event->getNakkis() as $existing) {
+        foreach ($nakkikone->getNakkis() as $existing) {
             $existingDefinition = $existing->getDefinition();
             if ($existingDefinition instanceof NakkiDefinition && $existingDefinition->getId() === $definitionId) {
                 // Update existing nakki metadata
@@ -121,7 +128,7 @@ final class Board
 
         // No existing nakki found - create a new one
         $nakki = new Nakki();
-        $nakki->setEvent($this->event);
+        $nakki->setNakkikone($nakkikone);
         $nakki->setDefinition($definition);
         $nakki->setResponsible($responsible);
         $nakki->setMattermostChannel($mattermostChannel);
@@ -256,12 +263,15 @@ final class Board
         if ($this->selectedDefinition instanceof NakkiDefinition) {
             $definitionId = $this->selectedDefinition->getId();
             if (null !== $definitionId) {
-                foreach ($this->event->getNakkis() as $nakki) {
-                    $nakkiDefinition = $nakki->getDefinition();
-                    if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
-                        $responsible = $nakki->getResponsible();
-                        $mattermostChannel = $nakki->getMattermostChannel();
-                        break;
+                $nakkikone = $this->event->getNakkikone();
+                if ($nakkikone) {
+                    foreach ($nakkikone->getNakkis() as $nakki) {
+                        $nakkiDefinition = $nakki->getDefinition();
+                        if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
+                            $responsible = $nakki->getResponsible();
+                            $mattermostChannel = $nakki->getMattermostChannel();
+                            break;
+                        }
                     }
                 }
             }
@@ -314,18 +324,21 @@ final class Board
         if ($this->selectedDefinition instanceof NakkiDefinition) {
             $definitionId = $this->selectedDefinition->getId();
             if (null !== $definitionId) {
-                foreach ($this->event->getNakkis() as $nakki) {
-                    $nakkiDefinition = $nakki->getDefinition();
-                    if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
-                        $formName = $this->getForm()->getName();
-                        $this->formValues[$formName] ??= [];
-                        $this->formValues[$formName]['mattermostChannel'] = $nakki->getMattermostChannel();
-                        $responsible = $nakki->getResponsible();
-                        if ($responsible instanceof Member) {
-                            $this->formValues[$formName]['responsible'] = $responsible->getId();
-                        }
+                $nakkikone = $this->event->getNakkikone();
+                if ($nakkikone) {
+                    foreach ($nakkikone->getNakkis() as $nakki) {
+                        $nakkiDefinition = $nakki->getDefinition();
+                        if ($nakkiDefinition instanceof NakkiDefinition && $nakkiDefinition->getId() === $definitionId) {
+                            $formName = $this->getForm()->getName();
+                            $this->formValues[$formName] ??= [];
+                            $this->formValues[$formName]['mattermostChannel'] = $nakki->getMattermostChannel();
+                            $responsible = $nakki->getResponsible();
+                            if ($responsible instanceof Member) {
+                                $this->formValues[$formName]['responsible'] = $responsible->getId();
+                            }
 
-                        return;
+                            return;
+                        }
                     }
                 }
             }
@@ -337,7 +350,12 @@ final class Board
      */
     private function deriveColumnIds(): array
     {
-        $nakkis = $this->event->getNakkis()->toArray();
+        $nakkikone = $this->event->getNakkikone();
+        if (!$nakkikone) {
+            return [];
+        }
+
+        $nakkis = $nakkikone->getNakkis()->toArray();
         usort(
             $nakkis,
             static fn (Nakki $a, Nakki $b): int => $a->getStartAt() <=> $b->getStartAt(),
@@ -356,9 +374,12 @@ final class Board
 
     private function findNakki(int $id): ?Nakki
     {
-        foreach ($this->event->getNakkis() as $nakki) {
-            if ($id === $nakki->getId()) {
-                return $nakki;
+        $nakkikone = $this->event->getNakkikone();
+        if ($nakkikone) {
+            foreach ($nakkikone->getNakkis() as $nakki) {
+                if ($id === $nakki->getId()) {
+                    return $nakki;
+                }
             }
         }
 
@@ -372,8 +393,13 @@ final class Board
      */
     private function deriveDefinitionsInUse(): array
     {
+        $nakkikone = $this->event->getNakkikone();
+        if (!$nakkikone) {
+            return [];
+        }
+
         $ids = [];
-        foreach ($this->event->getNakkis() as $nakki) {
+        foreach ($nakkikone->getNakkis() as $nakki) {
             $definition = $nakki->getDefinition();
             if ($definition instanceof NakkiDefinition && null !== $definition->getId()) {
                 $ids[] = (string) $definition->getId();

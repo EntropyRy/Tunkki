@@ -2,14 +2,17 @@
 {% use 'pieces/event.html.twig' %}
 {% use 'pieces/nakkikone.html.twig' %}
 {% block content %}
-    {% if event.requireNakkiBookingsToBeDifferentTimes == false %}
+    {% if event.nakkikone and event.nakkikone.requiresDifferentTimes == false %}
         {% set hide_time = true %}
     {% endif %}
     {% set l = app.request.locale %}
     <div class="col-12" {{ stimulus_controller('nakkikone') }}>
         <h1>Nakkikone: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
         {{ block('your_nakkis') }}
-        {{ attribute(event, 'nakkiInfo' ~ l|capitalize)|raw }}
+        {% set nakki_info = event.nakkikone ? event.nakkikone.getInfoByLocale(l) : null %}
+        {% if nakki_info %}
+            {{ nakki_info|markdown_to_html|raw }}
+        {% endif %}
         <hr>
         <h3>{{ 'Select Nakki'|trans }}</h3>
         <div class="row">
@@ -27,7 +30,7 @@
                            role="tab"
                            aria-controls="{{ name }}">
                             {{ name }}
-                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and not event.multiday %}
+                            {% if event.nakkikone and event.nakkikone.requiresDifferentTimes == false and not event.multiday %}
                                 ({{ nakki.durations|join('h, ') }}h)
                             {% endif %}
                             <span class="badge bg-secondary rounded-pill float-end">{{ nakki.not_reserved|default(0) }}</span>
@@ -54,7 +57,7 @@
                              role="tabpanel"
                              aria-labelledby="list-{{ name }}-list">
                             <p>{{ nakki['description']|raw }}</p>
-                            {% if event.requireNakkiBookingsToBeDifferentTimes == false and event.multiday %}
+                            {% if event.nakkikone and event.nakkikone.requiresDifferentTimes == false and event.multiday %}
                                 <p>{{ 'Responsible'|trans }}: {{ nakki.responsible|default('') }}</p>
                             {% endif %}
                         </div>

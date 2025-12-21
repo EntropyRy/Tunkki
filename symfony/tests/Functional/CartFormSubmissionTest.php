@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Functional;
 
 use App\Factory\EventFactory;
+use App\Factory\NakkikoneFactory;
 use App\Factory\ProductFactory;
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
@@ -64,7 +65,6 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'ticketPresaleStart' => $testNow->modify('-1 day'),
             'ticketPresaleEnd' => $testNow->modify('+7 days'),
             'eventDate' => $testNow->modify('+14 days'),
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'public-shop-'.uniqid('', true),
         ]);
 
@@ -95,9 +95,9 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'ticketPresaleStart' => $testNow->modify('-1 day'),
             'ticketPresaleEnd' => $testNow->modify('+7 days'),
             'eventDate' => $testNow->modify('+14 days'),
-            'nakkiRequiredForTicketReservation' => true, // Restricted to members with nakki
             'url' => 'restricted-shop-'.uniqid('', true),
         ]);
+        NakkikoneFactory::new()->requiredForTickets()->create(['event' => $event]);
 
         $year = (int) $event->getEventDate()->format('Y');
         $shopPath = \sprintf('/%d/%s/kauppa', $year, $event->getUrl());
@@ -129,7 +129,6 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'ticketPresaleStart' => $testNow->modify('-1 day'),
             'ticketPresaleEnd' => $testNow->modify('+7 days'),
             'eventDate' => $testNow->modify('+14 days'),
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'anon-purchase-'.uniqid('', true),
         ]);
 
@@ -293,7 +292,6 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'ticketPresaleStart' => $testNow->modify('-1 day'),
             'ticketPresaleEnd' => $testNow->modify('+7 days'),
             'eventDate' => $testNow->modify('+14 days'),
-            'nakkiRequiredForTicketReservation' => false,
             'url' => 'invalid-email-'.uniqid('', true),
         ]);
 
