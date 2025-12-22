@@ -13,6 +13,7 @@ use Symfony\Component\Form\Forms;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\UX\LiveComponent\LiveResponder;
 
 final class DefinitionFormTest extends FixturesWebTestCase
 {
@@ -42,16 +43,68 @@ final class DefinitionFormTest extends FixturesWebTestCase
         $component->definitionIdUpdated();
     }
 
+    public function testSavePersistsDefinition(): void
+    {
+        $component = $this->component();
+        $component->formValues = [
+            'nameFi' => 'Test FI',
+            'nameEn' => 'Test EN',
+            'descriptionFi' => 'FI desc',
+            'descriptionEn' => 'EN desc',
+            'onlyForActiveMembers' => false,
+        ];
+
+        $component->save();
+
+        self::assertNotNull($component->definitionId);
+        self::assertNotNull($component->notice);
+
+        $repository = self::getContainer()->get(NakkiDefinitionRepository::class);
+        self::assertNotNull($repository->find($component->definitionId));
+    }
+
+    public function testResolveDefinitionBranches(): void
+    {
+        $component = $this->component();
+
+        $method = new \ReflectionMethod(DefinitionForm::class, 'resolveDefinition');
+        $method->setAccessible(true);
+
+        $component->definitionId = null;
+        $newDefinition = $method->invoke($component);
+        self::assertInstanceOf(\App\Entity\NakkiDefinition::class, $newDefinition);
+
+        $property = new \ReflectionProperty(DefinitionForm::class, 'definition');
+        $property->setAccessible(true);
+        $property->setValue($component, null);
+
+        $missingId = 999999;
+        $component->definitionId = $missingId;
+        $resolvedMissing = $method->invoke($component);
+        self::assertInstanceOf(\App\Entity\NakkiDefinition::class, $resolvedMissing);
+        self::assertNull($component->definitionId);
+
+        $cached = new \App\Entity\NakkiDefinition();
+        $property->setValue($component, $cached);
+
+        $resolvedCached = $method->invoke($component);
+        self::assertSame($cached, $resolvedCached);
+    }
+
     private function component(): DefinitionForm
     {
         $container = self::getContainer();
 
-        return new DefinitionForm(
+        $component = new DefinitionForm(
             Forms::createFormFactoryBuilder()->getFormFactory(),
             $container->get(EntityManagerInterface::class),
             $container->get(NakkiDefinitionRepository::class),
             $container->get(TranslatorInterface::class),
         );
+
+        $component->setLiveResponder(new LiveResponder());
+
+        return $component;
     }
 
     private function primeSession(): void

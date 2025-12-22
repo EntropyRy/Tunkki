@@ -10,7 +10,6 @@ use App\Repository\NakkiDefinitionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\LiveComponent\Attribute\AsLiveComponent;
 use Symfony\UX\LiveComponent\Attribute\LiveAction;
@@ -82,13 +81,7 @@ final class DefinitionForm
         $this->error = null;
         $this->notice = null;
 
-        try {
-            $this->submitForm();
-        } catch (UnprocessableEntityHttpException) {
-            $this->error = $this->translator->trans('nakkikone.feedback.fix_errors');
-
-            return;
-        }
+        $this->submitForm();
 
         $definition = $this->resolveDefinition();
         $this->entityManager->persist($definition);

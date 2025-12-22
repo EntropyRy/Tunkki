@@ -96,10 +96,6 @@ final class Column
             }
         }
 
-        if (!$start instanceof \DateTimeImmutable) {
-            $start = \DateTimeImmutable::createFromInterface($start);
-        }
-
         $nakki = $this->getNakki();
         $created = [];
         $cursor = $start;
@@ -399,9 +395,6 @@ final class Column
         $latestEnd = $bookings[0]->getEndAt();
 
         foreach ($bookings as $booking) {
-            if ($booking->getStartAt() < $earliestStart) {
-                $earliestStart = $booking->getStartAt();
-            }
             if ($booking->getEndAt() > $latestEnd) {
                 $latestEnd = $booking->getEndAt();
             }
@@ -448,10 +441,6 @@ final class Column
                 }
             }
 
-            if (null === $slotIndex) {
-                continue; // Shouldn't happen, but safety check
-            }
-
             // Determine column (find first available column in this time range)
             $column = 0;
             $columnUsed = false;
@@ -460,10 +449,6 @@ final class Column
                 // Check if this column is used in any of the hours this booking spans
                 for ($i = 0; $i < $durationHours; ++$i) {
                     $checkSlotIdx = $slotIndex + $i;
-                    if (!isset($timeSlots[$checkSlotIdx])) {
-                        break;
-                    }
-
                     foreach ($timeSlots[$checkSlotIdx]['bookings'] as $existingBooking) {
                         if ($existingBooking['column'] === $column) {
                             $columnUsed = true;
@@ -551,9 +536,7 @@ final class Column
         $this->displayIntervalHours = $this->intervalToHours($nakki->getNakkiInterval());
         $bookings = $this->getBookings();
         $nextStart = [] !== $bookings ? end($bookings)->getEndAt() : $nakki->getStartAt();
-        $this->newSlotStart = $nextStart instanceof \DateTimeInterface
-            ? \DateTimeImmutable::createFromInterface($nextStart)->format('Y-m-d\TH:i')
-            : new \DateTimeImmutable()->format('Y-m-d\TH:i');
+        $this->newSlotStart = \DateTimeImmutable::createFromInterface($nextStart)->format('Y-m-d\TH:i');
         $this->newSlotIntervalHours = max(1, $this->intervalToHours($nakki->getNakkiInterval()));
         $this->newSlotCount = 1;
     }

@@ -7,6 +7,7 @@ namespace App\Twig\Components\Nakki;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\Nakki;
+use App\Entity\NakkiBooking;
 use App\Entity\NakkiDefinition;
 use App\Entity\Nakkikone;
 use App\Form\NakkiBoardCreateType;
@@ -34,6 +35,9 @@ final class Board
 
     #[LiveProp(updateFromParent: true)]
     public Event $event;
+
+    #[LiveProp(writable: true)]
+    public bool $scheduleOnly = false;
 
     public ?string $message = null;
     public ?string $error = null;
@@ -71,32 +75,16 @@ final class Board
             $this->submitForm();
         }
 
-        if (!$form->isValid()) {
-            $errors = [];
-            foreach ($form->getErrors(true) as $error) {
-                $errors[] = $error->getMessage();
-            }
-            $this->error = $this->translator->trans('nakkikone.feedback.fix_errors').': '.implode(', ', $errors);
-
-            return;
-        }
-
         /** @var array{definition: ?NakkiDefinition, responsible: ?Member, mattermostChannel: ?string} $data */
         $data = $this->getForm()->getData();
 
-        $definition = $this->selectedDefinition ?? $data['definition'];
+        $definition = $data['definition'] ?? $this->selectedDefinition;
         if (!$definition instanceof NakkiDefinition) {
             $this->error = $this->translator->trans('nakkikone.board.definition_required');
 
             return;
         }
-
         $definitionId = $definition->getId();
-        if (null === $definitionId) {
-            $this->error = $this->translator->trans('nakkikone.board.definition_not_persisted');
-
-            return;
-        }
 
         $responsible = $data['responsible'] ?? null;
         $mattermostChannel = $this->normaliseString((string) ($data['mattermostChannel'] ?? ''));
@@ -189,6 +177,124 @@ final class Board
     public function exposeDefinitionsInUse(): array
     {
         return $this->deriveDefinitionsInUse();
+    }
+
+    #[LiveAction]
+    public function toggleSchedule(): void
+    {
+        $this->scheduleOnly = !$this->scheduleOnly;
+    }
+
+    /**
+     * @return array{timeSlots: list<array{time: \DateTimeImmutable, bookings: list<array{booking: ?NakkiBooking, rowspan: int, column: int}>}>, maxColumns: int}
+     */
+    public function getScheduleGrid(): array
+    {
+        $nakkikone = $this->event->getNakkikone();
+        if (!$nakkikone instanceof Nakkikone) {
+            return ['timeSlots' => [], 'maxColumns' => 1];
+        }
+
+        $bookings = [];
+        foreach ($nakkikone->getNakkis() as $nakki) {
+            foreach ($nakki->getNakkiBookings() as $booking) {
+                $bookings[] = $booking;
+            }
+        }
+
+        if ([] === $bookings) {
+            return ['timeSlots' => [], 'maxColumns' => 1];
+        }
+
+        usort(
+            $bookings,
+            static fn (NakkiBooking $a, NakkiBooking $b): int => $a->getStartAt() <=> $b->getStartAt(),
+        );
+
+        $earliestStart = $bookings[0]->getStartAt();
+        $latestEnd = $bookings[0]->getEndAt();
+
+        foreach ($bookings as $booking) {
+            if ($booking->getEndAt() > $latestEnd) {
+                $latestEnd = $booking->getEndAt();
+            }
+        }
+
+        $startHour = new \DateTimeImmutable($earliestStart->format('Y-m-d H:00:00'));
+        $endHour = new \DateTimeImmutable($latestEnd->format('Y-m-d H:00:00'));
+        if ('00:00' !== $latestEnd->format('i:s')) {
+            $endHour = $endHour->modify('+1 hour');
+        }
+
+        $timeSlots = [];
+        $current = $startHour;
+        while ($current < $endHour) {
+            $timeSlots[] = [
+                'time' => $current,
+                'bookings' => [],
+            ];
+            $current = $current->modify('+1 hour');
+        }
+
+        $maxColumns = 1;
+        foreach ($bookings as $booking) {
+            $bookingStart = $booking->getStartAt();
+            $bookingEnd = $booking->getEndAt();
+
+            $durationSeconds = $bookingEnd->getTimestamp() - $bookingStart->getTimestamp();
+            $durationHours = max(1, (int) round($durationSeconds / 3600));
+
+            $slotIndex = null;
+            foreach ($timeSlots as $idx => $slot) {
+                $slotTime = $slot['time'];
+                $nextSlotTime = $slotTime->modify('+1 hour');
+
+                if ($bookingStart >= $slotTime && $bookingStart < $nextSlotTime) {
+                    $slotIndex = $idx;
+                    break;
+                }
+            }
+
+            $column = 0;
+            $columnUsed = false;
+            do {
+                $columnUsed = false;
+                for ($i = 0; $i < $durationHours; ++$i) {
+                    $checkSlotIdx = $slotIndex + $i;
+                    foreach ($timeSlots[$checkSlotIdx]['bookings'] as $existingBooking) {
+                        if ($existingBooking['column'] === $column) {
+                            $columnUsed = true;
+                            break 2;
+                        }
+                    }
+                }
+
+                if ($columnUsed) {
+                    ++$column;
+                }
+            } while ($columnUsed);
+
+            $maxColumns = max($maxColumns, $column + 1);
+
+            $timeSlots[$slotIndex]['bookings'][] = [
+                'booking' => $booking,
+                'rowspan' => $durationHours,
+                'column' => $column,
+            ];
+
+            for ($i = 1; $i < $durationHours; ++$i) {
+                $occupiedSlotIdx = $slotIndex + $i;
+                if (isset($timeSlots[$occupiedSlotIdx])) {
+                    $timeSlots[$occupiedSlotIdx]['bookings'][] = [
+                        'booking' => null,
+                        'rowspan' => 0,
+                        'column' => $column,
+                    ];
+                }
+            }
+        }
+
+        return ['timeSlots' => $timeSlots, 'maxColumns' => $maxColumns];
     }
 
     public function isDefinitionInUse(): bool

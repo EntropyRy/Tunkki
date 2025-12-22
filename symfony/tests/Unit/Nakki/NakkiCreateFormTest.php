@@ -156,6 +156,74 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
         self::assertSame('Interval must be at least one hour.', $component->error);
     }
 
+    public function testMountSeedsDefaultTimesAndDefinition(): void
+    {
+        $event = EventFactory::new()->create();
+        $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'AAA']);
+        NakkiDefinitionFactory::new()->create(['nameFi' => 'ZZZ']);
+
+        $component = $this->component();
+        $component->eventId = $event->getId();
+        $component->definitionId = null;
+
+        $component->mount();
+
+        self::assertSame($event->getEventDate()->format('Y-m-d\\TH:i'), $component->startAt);
+        self::assertSame($event->getEventDate()->modify('+1 hour')->format('Y-m-d\\TH:i'), $component->endAt);
+        self::assertSame($definition->getId(), $component->definitionId);
+    }
+
+    public function testMountShowsErrorWhenEventMissing(): void
+    {
+        $component = $this->component();
+        $component->eventId = \PHP_INT_MAX;
+
+        $component->mount();
+
+        self::assertSame('Event not found.', $component->error);
+    }
+
+    public function testOnDefinitionCreatedUpdatesDefinitionId(): void
+    {
+        $component = $this->component();
+
+        $component->onDefinitionCreated(123);
+
+        self::assertSame(123, $component->definitionId);
+    }
+
+    public function testGetDefinitionsReturnsOrderedDefinitions(): void
+    {
+        $definition = NakkiDefinitionFactory::new()->create(['nameFi' => 'AAA']);
+        NakkiDefinitionFactory::new()->create(['nameFi' => 'ZZZ']);
+
+        $component = $this->component();
+        $definitions = $component->getDefinitions();
+
+        self::assertSame($definition->getId(), $definitions[0]->getId());
+    }
+
+    public function testGetMembersReturnsOrderedMembers(): void
+    {
+        $member = MemberFactory::new()->create(['lastname' => 'Aaa', 'firstname' => 'Bbb']);
+        MemberFactory::new()->create(['lastname' => 'Zzz', 'firstname' => 'Aaa']);
+
+        $component = $this->component();
+        $members = $component->getMembers();
+
+        self::assertSame($member->getId(), $members[0]->getId());
+    }
+
+    public function testNormaliseStringReturnsNullForBlank(): void
+    {
+        $component = $this->component();
+        $method = new \ReflectionMethod(NakkiCreateForm::class, 'normaliseString');
+        $method->setAccessible(true);
+
+        self::assertNull($method->invoke($component, null));
+        self::assertNull($method->invoke($component, '   '));
+    }
+
     private function component(): NakkiCreateForm
     {
         $component = new NakkiCreateForm(

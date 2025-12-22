@@ -220,9 +220,6 @@ final class Definition
         $ids = [];
         foreach ($nakkikone->getNakkis() as $nakki) {
             $definition = $nakki->getDefinition();
-            if (null === $definition) {
-                continue;
-            }
             $id = $definition->getId();
             if (null !== $id) {
                 $ids[$id] = true;

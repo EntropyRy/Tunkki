@@ -675,6 +675,10 @@ nakkikone:
   board:
     title: Nakkikoneen hallinta
     planner_title: Lisää / muokkaa nakkeja
+    schedule_title: Aikataulu
+    schedule_no_bookings: Ei varauksia aikataulussa.
+    schedule_time: Aika
+    schedule_slot: Paikka
     definition_field: Nakkityyppi
     select_definition: Valitse nakkityyppi
     choose_responsible: Valitse vastuuhenkilö

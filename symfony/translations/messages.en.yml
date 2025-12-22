@@ -613,6 +613,10 @@ nakkikone:
   board:
     title: Nakkikone planner
     planner_title: Add / Edit Nakkis
+    schedule_title: Schedule
+    schedule_no_bookings: No bookings scheduled.
+    schedule_time: Time
+    schedule_slot: Slot
     definition_field: Definition
     select_definition: Select definition
     choose_responsible: Choose responsible
