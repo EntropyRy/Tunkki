@@ -78,10 +78,10 @@ class Event implements \Stringable
 */';
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $Content = "Use these:\n\n{{ dj_timetable }}\n\n{{ vj_timetable }}\n\n{{ dj_bio }}\n\n{{ vj_bio }}\n\n{{ rsvp }}\n\n{{ links }}\n\n{{ happening_list }}";
+    private ?string $Content = "Use these:\n{{ dj_timetable }}\n{{ vj_timetable }}\n{{ dj_bio }}\n{{ vj_bio }}\n{{ rsvp }}\n{{ links }}\n{{ happening_list }}";
 
     #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa:\n\n{{ dj_timetable }}\n\n{{ vj_timetable }}\n\n{{ dj_bio }}\n\n{{ vj_bio }}\n\n{{ rsvp }}\n\n{{ links }}\n\n{{ happening_list }}";
+    private ?string $Sisallys = "Käytä näitä, vaikka monta kertaa:\n{{ dj_timetable }}\n{{ vj_timetable }}\n{{ dj_bio }}\n{{ vj_bio }}\n{{ rsvp }}\n{{ links }}\n{{ happening_list }}";
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $url = null;
