@@ -1,5 +1,7 @@
 {% extends 'fullcolumn.html.twig' %}
 
+{% block title %}Nakkikone - {{ event.nameByLang(app.request.locale) }}{% endblock %}
+
 {% block content %}
     <div class="container-fluid my-4">
         <twig:Nakki:Board :event="event" />
