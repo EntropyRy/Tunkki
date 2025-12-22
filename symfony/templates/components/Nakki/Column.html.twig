@@ -60,13 +60,16 @@
                     </label>
                 </form>
                 <button type="button"
-                        class="btn btn-sm {{ this.viewMode == 'schedule' ? 'btn-primary' : 'btn-outline-secondary' }}"
+                        class="btn btn-sm {{ this.viewMode == 'schedule' ? 'btn-primary' : 'btn-outline-primary' }}"
                         data-action="live#action"
-                        data-live-action-param="toggleViewMode">
+                        data-live-action-param="toggleViewMode"
+                        title="{{ this.viewMode == 'schedule' ? 'Edit'|trans : 'nakkikone.board.schedule_title'|trans }}">
                     {% if this.viewMode == 'schedule' %}
-                        ✏️ Edit
+                        {{ ux_icon('nakki-edit', {class: 'icon-sm'}) }}
+                        <span class="d-none d-lg-inline ms-1">{{ 'Edit'|trans }}</span>
                     {% else %}
-                        📅 Schedule
+                        {{ ux_icon('nakki-calendar', {class: 'icon-sm'}) }}
+                        <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.board.schedule_title'|trans }}</span>
                     {% endif %}
                 </button>
             </div>

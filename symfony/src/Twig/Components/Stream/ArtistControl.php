@@ -55,11 +55,17 @@ final class ArtistControl extends AbstractController
         private readonly StreamArtistRepository $streamArtistRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
-        $this->stream = $this->streamRepository->findOneBy(['online' => true]);
     }
 
     public function mount(): void
     {
+        if (!$this->stream instanceof Stream) {
+            $this->stream = $this->streamRepository->findOneBy(
+                ['online' => true],
+                ['id' => 'DESC'],
+            );
+        }
+
         $this->init();
     }
 
@@ -78,15 +84,8 @@ final class ArtistControl extends AbstractController
             return;
         }
 
-        if (!$this->stream instanceof Stream) {
-            $this->stream = $this->streamRepository->findOneBy(
-                ['online' => true],
-                ['id' => 'DESC'],
-            );
-        }
-
         // Check if member already has an active artist in the stream
-        if (null !== $this->stream) {
+        if ($this->stream instanceof Stream) {
             // Find if any of the member's artists are active in the stream
             $activeStreamArtist = $this->streamArtistRepository->findActiveMemberArtistInStream(
                 $this->member,
@@ -146,10 +145,9 @@ final class ArtistControl extends AbstractController
             return;
         }
 
-        $this->validate();
-
         // Submit the form
         $this->submitForm();
+        $this->validate();
         $form = $this->getForm();
 
         if ($this->isInStream && $this->existingStreamArtist) {

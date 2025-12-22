@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Twig\Components;
+namespace App\Twig\Components\Dashboard;
 
 use App\Entity\Artist;
 use App\Repository\ArtistRepository;

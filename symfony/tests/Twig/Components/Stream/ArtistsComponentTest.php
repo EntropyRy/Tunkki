@@ -53,6 +53,25 @@ final class ArtistsComponentTest extends LiveComponentTestCase
         self::assertNull($refreshed->stream);
     }
 
+    public function testListenerUpdatesHashWhenStreamRemainsOnline(): void
+    {
+        $stream = StreamFactory::new()
+            ->online()
+            ->withListeners(5)
+            ->create();
+
+        $component = $this->mountComponent(Artists::class);
+        $component->render();
+
+        $component->emit('stream:updated');
+
+        /** @var Artists $artists */
+        $artists = $component->component();
+        self::assertTrue($artists->isOnline);
+        self::assertSame($stream->getUpdatedAt()->format('U'), $artists->hash);
+        self::assertNotNull($artists->stream);
+    }
+
     private function resetStreams(): void
     {
         /** @var StreamRepository $repository */

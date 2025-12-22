@@ -3,8 +3,8 @@
 {% block content %}
     <div class="row">
         <div class="col-sm-4">
-            <twig:MemberInfo :member="app.user.member" />
-            <twig:Compensations />
+            <twig:Profile:MemberInfo :member="app.user.member" />
+            <twig:Profile:Compensations />
             <div class="box mt-3">
                 <div class="box-header">
                     <h5 class="box-title">{{ 'profile.epics.title'|trans }}</h5>
@@ -25,8 +25,8 @@
             </div>
         </div>
         <div class="col-sm-8">
-            <twig:MemberSituation />
-            <twig:Tickets :member="app.user.member" />
+            <twig:Profile:MemberSituation />
+            <twig:Profile:Tickets :member="app.user.member" />
         </div>
     </div>
 {% endblock %}

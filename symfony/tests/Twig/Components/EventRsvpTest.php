@@ -139,6 +139,20 @@ final class EventRsvpTest extends LiveComponentTestCase
         self::assertSame(0, $crawler->filter('.alert')->count());
     }
 
+    public function testHasRsvpdReturnsFalseForAnonymous(): void
+    {
+        $event = EventFactory::new()->withRsvpEnabled()->create();
+
+        $component = $this->mountComponent(EventRsvp::class, [
+            'event' => $event,
+            'member' => null,
+        ], 'en');
+
+        /** @var EventRsvp $state */
+        $state = $component->component();
+        self::assertFalse($state->hasRsvpd());
+    }
+
     public function testAnonymousSaveShowsEmailInUseAndDoesNotPersistWhenMemberExists(): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
@@ -175,8 +189,6 @@ final class EventRsvpTest extends LiveComponentTestCase
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
         $member = MemberFactory::new()->inactive()->english()->create();
-        $user = $member->getUser();
-        self::assertNotNull($user);
 
         $existing = new RSVP();
         $existing->setEvent($event);
@@ -186,8 +198,8 @@ final class EventRsvpTest extends LiveComponentTestCase
 
         $component = $this->mountComponent(EventRsvp::class, [
             'event' => $event,
+            'member' => $member,
         ], 'en');
-        $component->actingAs($user);
 
         $component->call('rsvpAsMember');
 
@@ -219,17 +231,32 @@ final class EventRsvpTest extends LiveComponentTestCase
         self::assertCount(0, $rsvps);
     }
 
+    public function testOpenFormDoesNothingWhenMemberProvided(): void
+    {
+        $event = EventFactory::new()->withRsvpEnabled()->create();
+        $member = MemberFactory::new()->inactive()->english()->create();
+
+        $component = $this->mountComponent(EventRsvp::class, [
+            'event' => $event,
+            'member' => $member,
+        ], 'en');
+
+        $component->call('openForm');
+
+        /** @var EventRsvp $state */
+        $state = $component->component();
+        self::assertFalse($state->formOpen);
+    }
+
     public function testActiveMemberRsvpShowsCountAndPreventsDuplicate(): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
         $member = MemberFactory::new()->active()->english()->create();
-        $user = $member->getUser();
-        self::assertNotNull($user);
 
         $component = $this->mountComponent(EventRsvp::class, [
             'event' => $event,
+            'member' => $member,
         ], 'en');
-        $component->actingAs($user);
 
         $crawler = $component->render()->crawler();
         $button = $crawler->filter('form[data-live-action-param="rsvpAsMember"] button[type="submit"]');

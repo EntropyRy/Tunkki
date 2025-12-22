@@ -77,7 +77,7 @@
             {{ block('event_frontpage_media') }}
             {% set badge = true %}
             <h5 class="my-2">{{ block('event_time_small') }}</h5>
-            <h4>{{ block('event_name') }}</h4>
+            <h2 class="h4">{{ block('event_name') }}</h2>
         </a>
         <div class="d-inline-flex gap-2 flex-wrap">
             {% if presaleOpen and event.url and not eventInPast %}

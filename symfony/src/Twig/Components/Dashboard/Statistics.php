@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Twig\Components;
+namespace App\Twig\Components\Dashboard;
 
 use App\Repository\BookingRepository;
 use App\Repository\EventRepository;

@@ -8,15 +8,15 @@
     {%- endif -%}
 
     <div class="clearfix">
-            {%- if app.user -%}
+            {%- if this.member -%}
             {%- if this.hasRsvpd() -%}
-                <button class="btn btn-primary w-100 disabled" aria-disabled="true" disabled data-turbo="false">✓ {{ 'rsvp.already_rsvpd'|trans }}{% if app.user.member.isActiveMember %} {{ 'rsvp.total_shown_only_to_active_members'|trans({'%count%': this.event.RSVPs|length}) }}{% endif %}</button>
+                <button class="btn btn-primary w-100 disabled" aria-disabled="true" disabled data-turbo="false">✓ {{ 'rsvp.already_rsvpd'|trans }}{% if this.member.isActiveMember %} {{ 'rsvp.total_shown_only_to_active_members'|trans({'%count%': this.event.RSVPs|length}) }}{% endif %}</button>
             {%- else -%}
                 <form method="post"
                       action="{{ path('entropy_event_rsvp', {year: this.event.eventdate|date('Y'), slug: this.event.url}) }}"
                       data-action="live#action:prevent"
                       data-live-action-param="rsvpAsMember">
-                    <button type="submit" class="btn btn-primary w-100" data-turbo="false">RSVP{% if app.user.member.isActiveMember %} ({{ this.event.RSVPs|length }}){% endif %}</button>
+                    <button type="submit" class="btn btn-primary w-100" data-turbo="false">RSVP{% if this.member.isActiveMember %} ({{ this.event.RSVPs|length }}){% endif %}</button>
                 </form>
             {%- endif -%}
         {%- else -%}

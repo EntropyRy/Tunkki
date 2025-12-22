@@ -3,7 +3,7 @@
     <div class="g-0 mb-4">
         <div class="header-img text-center d-none d-lg-block">
             <a href="/{% if app.request.locale == 'en' %}en{% endif %}">
-                <img src="{{ asset('/images/header-logo-text.svg') }}" width="50%" height="auto" z-index="0" alt="ENTROPY">
+                <img style="max-height: 20vh" src="{{ asset('/images/header-logo-text.svg') }}" width="50%" height="auto" z-index="0" alt="ENTROPY">
             </a>
             {% if event is not defined %}
                 {% if app.user %}

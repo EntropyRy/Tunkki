@@ -8,13 +8,10 @@ use App\Domain\EventTemporalStateService;
 use App\Entity\Event;
 use App\Entity\Member;
 use App\Entity\RSVP;
-use App\Entity\User;
 use App\Form\RSVPType;
 use App\Repository\MemberRepository;
 use App\Repository\RSVPRepository;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -33,6 +30,9 @@ final class EventRsvp
     #[LiveProp(updateFromParent: true)]
     public Event $event;
 
+    #[LiveProp(updateFromParent: true)]
+    public ?Member $member = null;
+
     #[LiveProp(writable: true)]
     public bool $formOpen = false;
 
@@ -49,7 +49,6 @@ final class EventRsvp
         private readonly TranslatorInterface $translator,
         private readonly EventTemporalStateService $eventTemporalState,
         private readonly FormFactoryInterface $formFactory,
-        private readonly Security $security,
     ) {
     }
 
@@ -58,20 +57,14 @@ final class EventRsvp
         $this->event = $event;
     }
 
-    public function isLoggedIn(): bool
-    {
-        return $this->getMember() instanceof Member;
-    }
-
     public function hasRsvpd(): bool
     {
-        $member = $this->getMember();
-        if (!$member instanceof Member) {
+        if (!$this->member instanceof Member) {
             return false;
         }
 
         return $this->rsvpRepository->existsForMemberAndEvent(
-            $member,
+            $this->member,
             $this->event,
         );
     }
@@ -85,7 +78,7 @@ final class EventRsvp
     #[LiveAction]
     public function openForm(): void
     {
-        if ($this->isLoggedIn()) {
+        if ($this->member instanceof Member) {
             return;
         }
 
@@ -127,14 +120,8 @@ final class EventRsvp
 
         $rsvp->setEvent($this->event);
 
-        try {
-            $this->entityManager->persist($rsvp);
-            $this->entityManager->flush();
-        } catch (UniqueConstraintViolationException) {
-            $this->error = $this->translator->trans('rsvp.already_rsvpd');
-
-            return;
-        }
+        $this->entityManager->persist($rsvp);
+        $this->entityManager->flush();
 
         $this->notice = $this->translator->trans('rsvp.rsvpd_successfully');
         $this->formOpen = false;
@@ -146,43 +133,26 @@ final class EventRsvp
     {
         $this->error = null;
         $this->notice = null;
-        $member = $this->getMember();
-        if (!$member instanceof Member) {
+        if (!$this->member instanceof Member) {
             $this->error = $this->translator->trans('rsvp.no_user');
 
             return;
         }
-        if ($this->rsvpRepository->existsForMemberAndEvent($member, $this->event)) {
+        if ($this->rsvpRepository->existsForMemberAndEvent($this->member, $this->event)) {
             $this->error = $this->translator->trans('rsvp.already_rsvpd');
 
             return;
         }
         $rsvp = new RSVP();
         $rsvp->setEvent($this->event);
-        $rsvp->setMember($member);
-        try {
-            $this->entityManager->persist($rsvp);
-            $this->entityManager->flush();
-        } catch (UniqueConstraintViolationException) {
-            $this->error = $this->translator->trans('rsvp.already_rsvpd');
-
-            return;
-        }
+        $rsvp->setMember($this->member);
+        $this->entityManager->persist($rsvp);
+        $this->entityManager->flush();
         $this->notice = $this->translator->trans('rsvp.rsvpd_successfully');
     }
 
     protected function instantiateForm(): FormInterface
     {
         return $this->formFactory->create(RSVPType::class, new RSVP());
-    }
-
-    private function getMember(): ?Member
-    {
-        $user = $this->security->getUser();
-        if (!$user instanceof User) {
-            return null;
-        }
-
-        return $user->getMember();
     }
 }

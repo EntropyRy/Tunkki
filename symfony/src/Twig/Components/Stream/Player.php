@@ -82,17 +82,6 @@ final class Player
         } else {
             $this->setOnlineState();
         }
-        // In test environment, avoid external HTTP to Icecast to reduce flakiness/timeouts.
-        $appEnv = (string) ($_SERVER['APP_ENV'] ?? getenv('APP_ENV') ?: '');
-        if ('test' === $appEnv) {
-            $this->listeners = $this->stream?->getListeners() ?? 0;
-            $this->badgeText = $this->isOnline ? 'ONLINE: '.$this->listeners : 'OFFLINE';
-            $this->showPlayer = $this->isOnline;
-
-            // Skip external HTTP call in tests.
-            return;
-        }
-
         try {
             // Get the main page which contains information about both streams
             $response = $this->httpClient->request('GET', $this->url, [
@@ -120,9 +109,7 @@ final class Player
                     $this->showPlayer = true;
                 }
             }
-        } catch (\Exception $e) {
-            // Log the error but don't break the component
-            error_log('StreamPlayer listener update error: '.$e->getMessage());
+        } catch (\Exception) {
             /* dd($e->getMessage()); */
             /* $this->setOfflineState(); */
         }

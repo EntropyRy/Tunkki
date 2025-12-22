@@ -1,5 +1,5 @@
 {%- block RSVP -%}
 <div id="RSVP">
-    <twig:EventRsvp :event="event" />
+    <twig:EventRsvp :event="event" :member="app.user ? app.user.member : null" />
 </div>
 {%- endblock -%}

@@ -126,6 +126,14 @@ ux_icons:
     chevron-down: fa6-solid:chevron-down
     exclamation: fa-solid:exclamation-circle
 
+    # Nakki UI (Heroicons aliases)
+    nakki-calendar: heroicons:calendar-days
+    nakki-edit: heroicons:pencil-square
+    nakki-users: heroicons:users
+    nakki-id: heroicons:identification
+    nakki-print: heroicons:printer
+    nakki-settings: heroicons:cog
+
     # Navigation and layout
     menu: fa6-solid:bars
     bars: fa6-solid:bars

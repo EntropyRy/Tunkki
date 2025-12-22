@@ -29,6 +29,8 @@ final class ProgressiveImageTest extends TestCase
         self::assertStringContainsString('Loading...', base64_decode(str_replace('data:image/svg+xml;base64,', '', $placeholder)));
 
         self::assertSame('progressive-media-container', $component->getContainerClasses());
+        self::assertSame('progressive-placeholder', $component->getPlaceholderClasses());
+        self::assertSame('progressive-picture', $component->getPictureClasses());
         self::assertSame('progressive-image', $component->getImageClasses());
     }
 
@@ -63,6 +65,10 @@ final class ProgressiveImageTest extends TestCase
         $containerClasses = $component->getContainerClasses();
         self::assertStringContainsString('progressive-media-container', $containerClasses);
         self::assertStringContainsString('wrapper', $containerClasses);
+        self::assertStringContainsString('progressive-placeholder', $component->getPlaceholderClasses());
+        self::assertStringContainsString('blurred', $component->getPlaceholderClasses());
+        self::assertStringContainsString('progressive-picture', $component->getPictureClasses());
+        self::assertStringContainsString('picture-frame', $component->getPictureClasses());
         self::assertStringContainsString('full-width', $component->getImageClasses());
         self::assertSame(['xl' => '(min-width: 1200px)'], $component->sizes);
         self::assertSame(['data-test' => 'picture'], $component->pictureAttributes);

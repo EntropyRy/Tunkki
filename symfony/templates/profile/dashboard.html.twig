@@ -12,16 +12,16 @@
                         </div>
                     </div>
                 {% endif %}
-                <twig:DoorInfo :member="member" />
+                <twig:Dashboard:DoorInfo :member="member" />
             {% endif %}
             {{ sonata_block_render({type: 'entropy.block.future_events'}, {box: true}) }}
-            <twig:RandomArtist />
-            <twig:ArtistList :box="true" />
+            <twig:Dashboard:RandomArtist />
+            <twig:Dashboard:ArtistList :box="true" />
         </div>
         <div class="col-md-6">
-            <twig:Statistics />
-            <twig:BookingsInProgress :box="true" />
-            <twig:BrokenItems :random="true" />
+            <twig:Dashboard:Statistics />
+            <twig:Dashboard:BookingsInProgress :box="true" />
+            <twig:Dashboard:BrokenItems :random="true" />
         </div>
     </div>
 {% endblock %}

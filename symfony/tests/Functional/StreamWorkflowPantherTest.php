@@ -54,10 +54,10 @@ final class StreamWorkflowPantherTest extends PantherTestCase
         $client->request('GET', '/stream');
         $client->wait(15)->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                WebDriverBy::xpath('//*[@data-live-name-value="Stream:ArtistControl"]')
+                WebDriverBy::cssSelector('.stream-artist-control')
             )
         );
-        $this->assertSelectorExists('[data-live-name-value="Stream:ArtistControl"]');
+        $this->assertSelectorExists('.stream-artist-control');
 
         $client->wait(5)->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
@@ -69,7 +69,7 @@ final class StreamWorkflowPantherTest extends PantherTestCase
         ]);
         $client->wait(10)->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                WebDriverBy::cssSelector('button[data-live-action-param="cancel"]')
+                WebDriverBy::cssSelector('.stream-artist-control .btn-danger')
             )
         );
 
@@ -90,10 +90,10 @@ final class StreamWorkflowPantherTest extends PantherTestCase
         self::assertNull($activeStreamArtist->getStoppedAt(), 'Stream artist should not have stoppedAt');
         self::assertSame($artistId, $activeStreamArtist->getArtist()->getId());
 
-        $client->findElement(WebDriverBy::cssSelector('button[data-live-action-param="cancel"]'))->click();
+        $client->findElement(WebDriverBy::cssSelector('.stream-artist-control .btn-danger'))->click();
         $client->wait(10)->until(
             WebDriverExpectedCondition::presenceOfElementLocated(
-                WebDriverBy::cssSelector('.send-artist-form button[type="submit"]')
+                WebDriverBy::cssSelector('.send-artist-form .btn-primary')
             )
         );
 

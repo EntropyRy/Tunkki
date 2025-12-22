@@ -13,7 +13,7 @@
                class="btn btn-sm btn-outline-primary"
                target="_blank"
                title="{{ 'nakkikone.admin.view_public_page'|trans }}">
-                {{ ux_icon('heroicons:users', {class: 'icon-sm'}) }}
+                {{ ux_icon('nakki-users', {class: 'icon-sm'}) }}
                 <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.admin.public_short'|trans }}</span>
             </a>
             <button type="button"
@@ -21,27 +21,27 @@
                     data-action="live#action"
                     data-live-action-param="toggleSchedule"
                     title="{{ 'nakkikone.board.schedule_title'|trans }}">
-                {{ ux_icon('heroicons:calendar-days', {class: 'icon-sm'}) }}
+                {{ ux_icon('nakki-calendar', {class: 'icon-sm'}) }}
                 <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.board.schedule_title'|trans }}</span>
             </button>
             <a href="{{ path('entropy_event_responsible', {year: event.eventDate.format('Y'), slug: event.url}) }}"
                class="btn btn-sm btn-outline-info"
                target="_blank"
                title="{{ 'nakkikone.admin.responsible_page'|trans }}">
-                {{ ux_icon('heroicons:identification', {class: 'icon-sm'}) }}
+                {{ ux_icon('nakki-id', {class: 'icon-sm'}) }}
                 <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.admin.responsible_short'|trans }}</span>
             </a>
             <a href="{{ path('admin_app_event_nakkiList', {id: event.id}) }}"
                class="btn btn-sm btn-outline-secondary"
                target="_blank"
                title="{{ 'nakkikone.admin.printable_list'|trans }}">
-                {{ ux_icon('heroicons:printer', {class: 'icon-sm'}) }}
+                {{ ux_icon('nakki-print', {class: 'icon-sm'}) }}
                 <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.admin.print_short'|trans }}</span>
             </a>
             <a href="{{ path('admin_app_event_edit', {id: event.id}) }}"
                class="btn btn-sm btn-outline-secondary"
                title="{{ 'nakkikone.admin.event_settings'|trans }}">
-                {{ ux_icon('heroicons:cog', {class: 'icon-sm'}) }}
+                {{ ux_icon('nakki-settings', {class: 'icon-sm'}) }}
                 <span class="d-none d-lg-inline ms-1">{{ 'nakkikone.admin.settings_short'|trans }}</span>
             </a>
         </div>
