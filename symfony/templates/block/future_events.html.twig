@@ -3,12 +3,12 @@
     {% if settings.box|default(false) %}
         <div class="box">
             <div class="box-header">
-                <h5>{{ 'block.events.upcoming_events'|trans }}</h5>
+                <div class="h5">{{ 'block.events.upcoming_events'|trans }}</div>
             </div>
             <div class="box-body">
             {% else %}
                 <div class="col">
-                    <h5 class="text-center text-sm-start">{{ 'block.events.future_events'|trans }}</h5>
+                    <div class="h5 text-center text-sm-start">{{ 'block.events.future_events'|trans }}</div>
     {% endif %}
         <ul class="fa-ul">
             {% for event in events %}
