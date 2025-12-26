@@ -519,8 +519,7 @@ rsvp:
   receive_info: Saadaksesi sijaintitiedot ilmoittaudu tästä
   no_user: Ilmoittautuaksesi sinun tulee olla Entropyn jäsen ja kirjautuneena sisään.
   disabled: Ilmoittautuminen ei ole käytössä tässä tapahtumassa.
-  already_rsvpd:
-    Olet jo ilmoittautunut tähän tapahtumaan.
+  already_rsvpd: Olet jo ilmoittautunut tähän tapahtumaan.
   total_shown_only_to_active_members: "Yhteensä (vain aktiivijäsenille): %count%"
   rsvpd_successfully:
     Ilmoittauduit onnistuneesti. Lähetämme sähköpostia lähempänä
@@ -712,7 +711,7 @@ nakkikone:
   column:
     responsible: Vastuuhenkilö
     mattermost: Mattermost
-    disable: Sulje paikat
+    disable: Estä nakkien ottaminen
     add_multiple_slots: Lisää useita paikkoja
     add_slots_title: Lisää paikkoja
     start_time: Alkuaika
