@@ -32,12 +32,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  *   //   'timing' => ['connect_ms' => int, 'exec_ms' => int],
  *   // ]
  */
-final class SSHService
+final readonly class SSHService
 {
-    private ?array $lastResult = null;
-
     public function __construct(
-        private readonly ParameterBagInterface $parameterBag,
+        private ParameterBagInterface $parameterBag,
     ) {
     }
 
@@ -179,28 +177,6 @@ final class SSHService
     }
 
     /**
-     * Test SSH connectivity without executing a command.
-     */
-    public function testConnection(): bool
-    {
-        try {
-            $this->getConnectionOrFail();
-
-            return true;
-        } catch (\Throwable) {
-            return false;
-        }
-    }
-
-    /**
-     * Retrieve the last structured result (if any) regardless of call style.
-     */
-    public function getLastResult(): ?array
-    {
-        return $this->lastResult;
-    }
-
-    /**
      * Establish SSH connection and authenticate or throw.
      *
      * @return resource SSH connection resource
@@ -228,7 +204,7 @@ final class SSHService
     }
 
     /**
-     * Consolidate and store result; return according to requested mode.
+     * Build result and return according to requested mode.
      *
      * @return array|string|false
      */
@@ -255,8 +231,6 @@ final class SSHService
                 'exec_ms' => $execMs,
             ],
         ];
-
-        $this->lastResult = $result;
 
         if ($structured) {
             return $result;

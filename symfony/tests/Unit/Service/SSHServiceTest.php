@@ -66,30 +66,6 @@ final class SSHServiceTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testGetLastResultReturnsNullInitially(): void
-    {
-        $result = $this->service->getLastResult();
-
-        $this->assertNull($result);
-    }
-
-    public function testGetLastResultAfterCommandExecution(): void
-    {
-        // Execute a command (will fail due to no SSH2, but should store result)
-        $this->service->sendCommand('start', structured: true);
-
-        $lastResult = $this->service->getLastResult();
-
-        $this->assertIsArray($lastResult);
-        $this->assertArrayHasKey('success', $lastResult);
-        $this->assertArrayHasKey('command', $lastResult);
-        $this->assertArrayHasKey('stdout', $lastResult);
-        $this->assertArrayHasKey('stderr', $lastResult);
-        $this->assertArrayHasKey('exit_status', $lastResult);
-        $this->assertArrayHasKey('error', $lastResult);
-        $this->assertArrayHasKey('timing', $lastResult);
-    }
-
     public function testStructuredResultFormat(): void
     {
         $result = $this->service->sendCommand('start', structured: true);
@@ -142,19 +118,5 @@ final class SSHServiceTest extends TestCase
         $this->assertSame('start_stream.sh', $startResult['command']);
         $this->assertSame('stop_stream.sh', $stopResult['command']);
         $this->assertSame('recording.script.missing', $checkMissing['command']);
-    }
-
-    /**
-     * Test that testConnection returns false when SSH2 is not available or connection fails.
-     *
-     * Note: In real environment with SSH2, this would attempt actual connection.
-     * In test environment without SSH2 extension, it will safely return false.
-     */
-    public function testTestConnectionHandlesConnectionFailureGracefully(): void
-    {
-        $result = $this->service->testConnection();
-
-        // Without real SSH2 connection or with invalid credentials, should return false
-        $this->assertIsBool($result);
     }
 }

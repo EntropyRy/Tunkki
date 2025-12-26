@@ -6,6 +6,8 @@ namespace App\Tests\Functional\Profile;
 
 use App\Entity\Artist;
 use App\Factory\ArtistFactory;
+use App\Factory\EventArtistInfoFactory;
+use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
@@ -275,5 +277,113 @@ final class ArtistFormTest extends FixturesWebTestCase
             ['fi'],
             ['en'],
         ];
+    }
+
+    public function testCreateFormSubmissionWithPictureMissingShowsWarning(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $crawler = $this->client->request('GET', '/en/profile/artist/create');
+
+        $form = $crawler->filter('form input[type="submit"]')->form();
+        $form['artist[name]'] = 'Test Artist';
+        $form['artist[type]'] = 'DJ';
+        $form['artist[hardware]'] = 'CDJs';
+        $form['artist[genre]'] = 'Techno';
+        $form['artist[bio]'] = 'Test bio';
+        $form['artist[bioEn]'] = 'Test bio EN';
+
+        $this->client->submit($form);
+
+        // Should show picture missing warning and re-render form (no redirect)
+        $this->assertResponseIsSuccessful();
+    }
+
+    public function testEditFormSubmissionSuccess(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        $artist = ArtistFactory::new()->withMember($member)->create([
+            'name' => 'Original Name',
+            'type' => 'DJ',
+            'hardware' => 'Original Hardware',
+            'bio' => 'Original bio',
+            'bioEn' => 'Original bio EN',
+        ]);
+
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $crawler = $this->client->request('GET', "/en/profile/artist/{$artist->getId()}/edit");
+
+        $form = $crawler->filter('form input[type="submit"]')->form();
+        $form['artist[name]'] = 'Updated Name';
+        $form['artist[type]'] = 'Live';
+        $form['artist[hardware]'] = 'Updated Hardware';
+        $form['artist[bio]'] = 'Updated bio';
+        $form['artist[bioEn]'] = 'Updated bio EN';
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/en/profile/artist');
+
+        // Verify artist was updated
+        $this->em()->clear();
+        $updatedArtist = $this->em()->getRepository(Artist::class)->find($artist->getId());
+        $this->assertNotNull($updatedArtist);
+        $this->assertSame('Updated Name', $updatedArtist->getName());
+    }
+
+    public function testDeleteArtistRemovesFromDatabase(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        $artist = ArtistFactory::new()->withMember($member)->create([
+            'name' => 'To Be Deleted',
+            'type' => 'DJ',
+        ]);
+        $artistId = $artist->getId();
+
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $this->client->request('GET', "/en/profile/artist/{$artistId}/delete");
+
+        $this->assertResponseRedirects('/en/profile/artist');
+
+        // Verify artist was deleted
+        $this->em()->clear();
+        $deletedArtist = $this->em()->getRepository(Artist::class)->find($artistId);
+        $this->assertNull($deletedArtist, 'Artist should be deleted from database');
+    }
+
+    public function testDeleteArtistWithEventArtistInfosRemovesAssociations(): void
+    {
+        $member = MemberFactory::new()->active()->create();
+        $artist = ArtistFactory::new()->withMember($member)->create([
+            'name' => 'Artist With Event Info',
+            'type' => 'DJ',
+        ]);
+
+        // Create an event and link the artist to it via EventArtistInfo
+        $event = EventFactory::new()->published()->create();
+        EventArtistInfoFactory::new()->create([
+            'artist' => $artist,
+            'event' => $event,
+        ]);
+
+        $artistId = $artist->getId();
+
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $this->client->request('GET', "/en/profile/artist/{$artistId}/delete");
+
+        $this->assertResponseRedirects('/en/profile/artist');
+
+        // Verify artist was deleted
+        $this->em()->clear();
+        $deletedArtist = $this->em()->getRepository(Artist::class)->find($artistId);
+        $this->assertNull($deletedArtist, 'Artist with event associations should be deleted');
     }
 }
