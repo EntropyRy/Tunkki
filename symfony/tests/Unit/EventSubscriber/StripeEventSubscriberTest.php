@@ -76,7 +76,9 @@ final class StripeEventSubscriberTest extends TestCase
         $parameterBag = $this->createStub(ParameterBagInterface::class);
         $parameterBag->method('get')->willReturn('sk_test_fake');
         $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
-        $this->stripe = new StripeService($parameterBag, $urlGenerator);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $this->stripe = new StripeService($parameterBag, $urlGenerator, $clock);
 
         $assetMapper = $this->createStub(AssetMapperInterface::class);
         $assetMapper->method('getPublicPath')->willReturn('/images/golden-logo.png');

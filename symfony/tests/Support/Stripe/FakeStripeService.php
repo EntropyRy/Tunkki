@@ -32,7 +32,7 @@ readonly class FakeStripeService extends StripeService
         ?Event $event = null,
     ): array {
         $returnUrl = $this->getReturnUrl($event);
-        $expires = new \DateTimeImmutable('+30min');
+        $expires = $this->clock->now()->modify('+30 minutes');
 
         // Replicate line item validation from the real service
         $lineItems = [];

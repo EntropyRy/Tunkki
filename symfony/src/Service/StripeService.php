@@ -9,6 +9,7 @@ use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Repository\CheckoutRepository;
+use App\Time\ClockInterface;
 use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\StripeObject;
@@ -21,6 +22,7 @@ readonly class StripeService
     public function __construct(
         private ParameterBagInterface $bag,
         private UrlGeneratorInterface $urlG,
+        private ClockInterface $clock,
     ) {
     }
 
@@ -104,7 +106,7 @@ readonly class StripeService
     ): array {
         $client = $this->getClient();
         $returnUrl = $this->getReturnUrl($event);
-        $expires = new \DateTimeImmutable('+30min');
+        $expires = $this->clock->now()->modify('+30 minutes');
 
         // Build line items from cart
         $lineItems = [];

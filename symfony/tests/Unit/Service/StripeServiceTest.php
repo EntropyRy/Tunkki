@@ -26,7 +26,10 @@ final class StripeServiceTest extends TestCase
         ]);
 
         $this->urlGenerator = $this->createStub(UrlGeneratorInterface::class);
-        $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+
+        $this->service = new StripeService($this->parameterBag, $this->urlGenerator, $clock);
     }
 
     public function testGetClientReturnsStripeClient(): void
@@ -47,7 +50,9 @@ final class StripeServiceTest extends TestCase
     public function testGetReturnUrlForEventGeneratesCorrectUrl(): void
     {
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $this->service = new StripeService($this->parameterBag, $this->urlGenerator, $clock);
 
         $event = $this->createMock(Event::class);
         $eventDate = new \DateTimeImmutable('2025-06-15');
@@ -83,7 +88,9 @@ final class StripeServiceTest extends TestCase
     public function testGetReturnUrlForNullEventGeneratesShopUrl(): void
     {
         $this->urlGenerator = $this->createMock(UrlGeneratorInterface::class);
-        $this->service = new StripeService($this->parameterBag, $this->urlGenerator);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $this->service = new StripeService($this->parameterBag, $this->urlGenerator, $clock);
 
         $this->urlGenerator->expects($this->once())
             ->method('generate')

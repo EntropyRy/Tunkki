@@ -539,6 +539,7 @@ when@test:
       arguments:
         $bag: "@parameter_bag"
         $urlG: "@router"
+        $clock: "@App\\Time\\ClockInterface"
 
     # Primary mutable test clock binding (replaces prior FixedClock usage)
     App\Time\ClockInterface:

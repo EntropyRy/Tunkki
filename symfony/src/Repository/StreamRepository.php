@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Stream;
+use App\Time\ClockInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -13,8 +14,10 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class StreamRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
-    {
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly ClockInterface $clock,
+    ) {
         parent::__construct($registry, Stream::class);
     }
 
@@ -64,7 +67,7 @@ class StreamRepository extends ServiceEntityRepository
             return [];
         }
 
-        $now = new \DateTimeImmutable();
+        $now = $this->clock->now();
         $em = $this->getEntityManager();
 
         foreach ($online as $stream) {

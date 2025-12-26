@@ -33,12 +33,15 @@ final class EmailServiceTest extends TestCase
         $this->resolver = $this->createStub(RecipientResolver::class);
         $this->mailer = $this->createStub(MailerInterface::class);
         $this->em = $this->createStub(EntityManagerInterface::class);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
 
         $this->service = new EmailService(
             $this->emailRepo,
             $this->resolver,
             $this->mailer,
-            $this->em
+            $this->em,
+            $clock
         );
     }
 
@@ -57,7 +60,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock for this test
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $email = $this->createStub(Email::class);
         $email->method('getPurpose')->willReturn(EmailPurpose::AKTIIVIT);
@@ -89,7 +94,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock for this test
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $email = $this->createStub(Email::class);
         $email->method('getPurpose')->willReturn(EmailPurpose::RSVP);
@@ -122,7 +129,9 @@ final class EmailServiceTest extends TestCase
         // Override EM and mailer with mocks for this test
         $mockEm = $this->createMock(EntityManagerInterface::class);
         $mockMailer = $this->createStub(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $mockEm);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $mockEm, $clock);
 
         $email = $this->createMock(Email::class);
         $email->method('getPurpose')->willReturn(EmailPurpose::TIEDOTUS);
@@ -168,7 +177,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock for this test
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $event = $this->createStub(Event::class);
         $event->method('getPicture')->willReturn(null);
@@ -196,7 +207,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock for this test
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $email = $this->createStub(Email::class);
         $email->method('getPurpose')->willReturn(EmailPurpose::AKTIIVIT);
@@ -238,7 +251,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock to capture the sent message
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $event = $this->createStub(Event::class);
         $event->method('getPicture')->willReturn(null);
@@ -308,7 +323,9 @@ final class EmailServiceTest extends TestCase
     {
         // Override mailer with mock to capture the sent message
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $event = $this->createStub(Event::class);
         $event->method('getPicture')->willReturn(null);
@@ -361,7 +378,9 @@ final class EmailServiceTest extends TestCase
     {
         // Verify backwards compatibility - extraContext is optional
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $event = $this->createStub(Event::class);
         $event->method('getPicture')->willReturn(null);
@@ -408,7 +427,9 @@ final class EmailServiceTest extends TestCase
     public function testSendToRecipientSetsFromForActiveMemberInfoPackageFinnish(): void
     {
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $emailTemplate = $this->createStub(Email::class);
         $emailTemplate->method('getPurpose')->willReturn(EmailPurpose::ACTIVE_MEMBER_INFO_PACKAGE);
@@ -446,7 +467,9 @@ final class EmailServiceTest extends TestCase
     public function testSendToRecipientSetsFromForActiveMemberInfoPackageEnglish(): void
     {
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $emailTemplate = $this->createStub(Email::class);
         $emailTemplate->method('getPurpose')->willReturn(EmailPurpose::ACTIVE_MEMBER_INFO_PACKAGE);
@@ -482,7 +505,9 @@ final class EmailServiceTest extends TestCase
     public function testSendToRecipientUsesGlobalConfigForOtherPurposes(): void
     {
         $mockMailer = $this->createMock(MailerInterface::class);
-        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em);
+        $clock = $this->createStub(\App\Time\ClockInterface::class);
+        $clock->method('now')->willReturn(new \DateTimeImmutable('2025-01-01 12:00:00'));
+        $service = new EmailService($this->emailRepo, $this->resolver, $mockMailer, $this->em, $clock);
 
         $emailTemplate = $this->createStub(Email::class);
         $emailTemplate->method('getPurpose')->willReturn(EmailPurpose::RSVP);

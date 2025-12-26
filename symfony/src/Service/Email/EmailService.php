@@ -12,6 +12,7 @@ use App\Entity\Member;
 use App\Entity\Sonata\SonataMediaMedia;
 use App\Enum\EmailPurpose;
 use App\Repository\EmailRepository;
+use App\Time\ClockInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
@@ -41,6 +42,7 @@ class EmailService
         private readonly RecipientResolver $recipientResolver,
         private readonly MailerInterface $mailer,
         private readonly EntityManagerInterface $entityManager,
+        private readonly ClockInterface $clock,
     ) {
     }
 
@@ -91,8 +93,9 @@ class EmailService
         }
 
         // Update email template metadata if sent by someone
+        $now = $this->clock->now();
         if ($sentBy && $sentCount > 0) {
-            $email->setSentAt(new \DateTimeImmutable());
+            $email->setSentAt($now);
             $email->setSentBy($sentBy);
             $this->entityManager->flush();
         }
@@ -102,7 +105,7 @@ class EmailService
             totalRecipients: $totalRecipients,
             purposes: $allPurposes,
             failedRecipients: $failedRecipients,
-            sentAt: new \DateTimeImmutable(),
+            sentAt: $now,
         );
     }
 
