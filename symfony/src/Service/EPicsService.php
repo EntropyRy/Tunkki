@@ -19,7 +19,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
  * - EPICS_ADMIN_USER: Admin username for user management
  * - EPICS_ADMIN_PASSWORD: Admin password for user management
  */
-final readonly class EPicsService
+final readonly class EPicsService implements EPicsServiceInterface
 {
     private string $baseUrl;
     private string $adminUser;

@@ -1,0 +1,34 @@
+<div {{ attributes.defaults({
+    class: 'rect-img-container epics-container',
+    'data-poll': 'delay(' ~ this.refreshInterval ~ ')|refresh',
+    'data-loading': 'addClass(loading)',
+    style: '--epics-duration: ' ~ (this.refreshInterval / 1000) ~ 's',
+}) }}>
+    <img
+        src="{{ this.imageUrl }}"
+        class="rect-img{{ not this.hasPhoto ? ' shimmer' : '' }}"
+        title="{{ 'epics.tile.title'|trans }}"
+        alt="{{ 'epics.tile.title'|trans }}"
+        loading="lazy"
+    >
+    <div class="badge-container">
+        <span class="badge bg-secondary">
+            {%- if this.takenAt -%}
+                {{ this.takenAt|date('j.n.Y, H:i') }}
+            {%- else -%}
+                {{ 'loading'|trans }}..
+            {%- endif -%}
+        </span>
+    </div>
+    <div
+        class="progress rounded-top rounded-bottom-0"
+        aria-label="{{ 'epics.tile.title'|trans }}"
+        role="progressbar"
+        style="opacity: 0.7; height: 10px; background: transparent"
+    >
+        <div
+            class="progress-bar bg-white"
+            style="animation: epics-countdown-{{ this.renderKey % 2 }} var(--epics-duration) linear forwards"
+        ></div>
+    </div>
+</div>

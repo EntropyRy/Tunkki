@@ -19,17 +19,7 @@
 {% endblock %}
 {% block epic_tile %}
     <div class="tile col-12 p-2">
-        <turbo-frame {{ stimulus_controller('epics') }} data-epics-url-value="/api/epics/random" data-epics-refresh-interval-value="8000">
-        <div class="rect-img-container">
-            <img data-epics-target="pic" src="{{ asset('/images/header-logo.svg') }}" class="rect-img shimmer" title="{{ 'epics.tile.title'|trans }}">
-            <div class="badge-container">
-                <span data-epics-target="badge" class="badge bg-secondary">{{ 'loading'|trans }}..</span>
-            </div>
-            <div class="progress rounded-top rounded-bottom-0" aria-label="{{ 'epics.tile.title'|trans }}" role="progressbar" style="opacity: 0.7; height: 10px; background: transparent">
-                <div class="progress-bar bg-white" {{ stimulus_target('epics', 'progress') }}></div>
-            </div>
-        </div>
-        </turbo-frame>
+        <twig:EPicsRandom defaultImage="{{ asset('/images/header-logo.svg') }}" refreshInterval="8000" />
         <h2 class="h4">{{ 'epics.tile.heading'|trans }} {{ 'epics.tile.heading_events'|trans }}.</h2>
         <div class="justify-content-between d-flex">
             <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>

@@ -41,8 +41,6 @@ final class StripeWebhookTest extends FixturesWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // Seed client with a request to initialize Sonata routing
-        $this->seedClientHome('fi');
     }
 
     /* -----------------------------------------------------------------

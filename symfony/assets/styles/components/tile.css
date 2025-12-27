@@ -91,3 +91,29 @@
 .fill {
   object-fit: fill;
 }
+
+/* EPics Live Component loading animations */
+.epics-container {
+  position: relative;
+  --epics-duration: 8s; /* default, overridden by component */
+}
+
+.epics-container img {
+  transition: opacity 0.5s ease-in-out;
+}
+
+/* Fade effect during Live Component refresh - .loading class added by data-loading directive */
+.epics-container.loading img {
+  opacity: 0.3;
+}
+
+/* Progress bar animation - alternating names to force restart on re-render */
+@keyframes epics-countdown-0 {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+@keyframes epics-countdown-1 {
+  from { width: 100%; }
+  to { width: 0%; }
+}

@@ -53,6 +53,9 @@ services:
 
   Twig\Extension\StringLoaderExtension:
 
+  # EPics service interface binding
+  App\Service\EPicsServiceInterface: '@App\Service\EPicsService'
+
   Sonata\PageBundle\CmsManager\CmsManagerSelectorInterface: "@sonata.page.cms_manager_selector"
   Sonata\PageBundle\CmsManager\CmsManagerSelector: "@sonata.page.cms_manager_selector"
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
@@ -559,6 +562,19 @@ when@test:
       public: true
 
     # (Removed SingleSiteSelector test stub & aliases – relying on real Sonata site selection for tests)
+
+    # Fake EPics service for testing
+    App\Tests\Support\EPics\FakeEPicsService:
+      public: true
+    App\Service\EPicsServiceInterface:
+      alias: App\Tests\Support\EPics\FakeEPicsService
+      public: true
+
+    App\Tests\Support\Notifier\TestChatter:
+      public: true
+    Symfony\Component\Notifier\ChatterInterface:
+      alias: App\Tests\Support\Notifier\TestChatter
+      public: true
 
 when@panther:
   services:

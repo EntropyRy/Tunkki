@@ -11,6 +11,7 @@ use App\Entity\Sonata\SonataMediaMedia;
 use App\Factory\EventFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
+use App\Tests\Support\Notifier\TestChatter;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\Attributes\Group;
 use Sonata\MediaBundle\Provider\MediaProviderInterface;
@@ -18,9 +19,6 @@ use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Notifier\Bridge\Telegram\TelegramOptions;
 use Symfony\Component\Notifier\ChatterInterface;
-use Symfony\Component\Notifier\Message\ChatMessage;
-use Symfony\Component\Notifier\Message\MessageInterface;
-use Symfony\Component\Notifier\Message\SentMessage;
 use Zenstruck\Foundry\Persistence\Proxy;
 use Zenstruck\Foundry\Test\Factories;
 
@@ -38,11 +36,20 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         return 'admin-'.uniqid('', true).'@example.com';
     }
 
+    private function getTestChatter(): TestChatter
+    {
+        $chatter = static::getContainer()->get(ChatterInterface::class);
+        $this->assertInstanceOf(TestChatter::class, $chatter);
+        $chatter->reset();
+
+        return $chatter;
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
-        $this->initSiteAwareClient();
-        $this->seedClientHome('fi');
+        $this->ensureClientReady();
+        $this->client->request('GET', '/admin/dashboard');
         $this->entityManager = $this->em();
     }
 
@@ -78,8 +85,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_nakkikone_button',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -121,8 +127,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_shop_button',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -150,8 +155,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_nakkikone_button',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
         $this->seedClientHome('en');
@@ -183,8 +187,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'send_notification',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -206,8 +209,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         $event = EventFactory::new()->published()->create(['url' => 'test-event-'.uniqid('', true)]);
         $notification = $this->createNotification($event, 'fi', null, []);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -230,8 +232,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
                 'add_event_picture',
             ]);
 
-            $fakeChatter = new FakeChatter();
-            static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+            $fakeChatter = $this->getTestChatter();
 
             [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -265,8 +266,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         $notification->setMessageId(123);
         $this->entityManager->flush();
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -292,8 +292,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_venue',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -323,8 +322,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_venue',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -361,8 +359,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             'add_event_picture',
         ]);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -381,8 +378,7 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
     {
         $notification = $this->createNotification(null, 'fi', 'Hello', []);
 
-        $fakeChatter = new FakeChatter();
-        static::getContainer()->set(ChatterInterface::class, $fakeChatter);
+        $fakeChatter = $this->getTestChatter();
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -401,8 +397,8 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         $event = EventFactory::new()->published()->create(['url' => 'test-event-'.uniqid('', true)]);
         $notification = $this->createNotification($event, 'fi', 'Hello', []);
 
-        $throwingChatter = new ThrowingChatter();
-        static::getContainer()->set(ChatterInterface::class, $throwingChatter);
+        $throwingChatter = $this->getTestChatter();
+        $throwingChatter->setShouldThrow(true);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN', [], $this->uniqueAdminEmail());
 
@@ -469,48 +465,5 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         $this->assertNotNull($media->getId());
 
         return $media;
-    }
-}
-
-final class FakeChatter implements ChatterInterface
-{
-    /** @var list<ChatMessage> */
-    public array $messages = [];
-
-    public function __toString(): string
-    {
-        return 'fake://chatter';
-    }
-
-    public function send(MessageInterface $message): ?SentMessage
-    {
-        if ($message instanceof ChatMessage) {
-            $this->messages[] = $message;
-        }
-
-        return null;
-    }
-
-    public function supports(MessageInterface $message): bool
-    {
-        return $message instanceof ChatMessage;
-    }
-}
-
-final class ThrowingChatter implements ChatterInterface
-{
-    public function __toString(): string
-    {
-        return 'fake://throwing-chatter';
-    }
-
-    public function send(MessageInterface $message): ?SentMessage
-    {
-        throw new \RuntimeException('boom');
-    }
-
-    public function supports(MessageInterface $message): bool
-    {
-        return true;
     }
 }
