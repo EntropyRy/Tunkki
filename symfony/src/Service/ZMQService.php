@@ -23,10 +23,10 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class ZMQService
 {
     public function __construct(
-        private ParameterBagInterface $parameterBag,
-        private string $environment = 'prod',
-        private int $receiveTimeout = 1000,
-        private int $lingerTimeout = 2000,
+        private readonly ParameterBagInterface $parameterBag,
+        private readonly string $environment = 'prod',
+        private readonly int $receiveTimeout = 1000,
+        private readonly int $lingerTimeout = 2000,
     ) {
     }
 

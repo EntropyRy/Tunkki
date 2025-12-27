@@ -26,7 +26,7 @@ final class DoorLogFactory extends PersistentObjectFactory
      */
     protected function defaults(): callable
     {
-        return static fn(): array => [
+        return static fn (): array => [
             'member' => MemberFactory::new()->active(),
             'message' => self::faker()->optional()->sentence(),
             'createdAt' => new \DateTimeImmutable(),

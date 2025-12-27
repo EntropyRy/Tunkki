@@ -35,7 +35,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 class SSHService
 {
     public function __construct(
-        private ParameterBagInterface $parameterBag,
+        private readonly ParameterBagInterface $parameterBag,
     ) {
     }
 
