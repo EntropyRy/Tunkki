@@ -32,7 +32,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  *   //   'timing' => ['connect_ms' => int, 'exec_ms' => int],
  *   // ]
  */
-final readonly class SSHService
+class SSHService
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,

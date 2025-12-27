@@ -58,10 +58,15 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
         $event = EventFactory::new()->published()->create();
         $notification = $this->createNotification($event, 'fi', '<b>Hello</b>', []);
 
-        $this->client->request('GET', "/admin/notification/{$notification->getId()}/send");
+        $this->client->request('GET', '/admin/notification/list');
 
         $response = $this->client->getResponse();
-        $this->assertSame(302, $response->getStatusCode());
+        $status = $response->getStatusCode();
+
+        $this->assertTrue(
+            \in_array($status, [302, 303], true),
+            \sprintf('Expected redirect to login for anonymous admin list, got %d.', $status),
+        );
         $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
     }
 

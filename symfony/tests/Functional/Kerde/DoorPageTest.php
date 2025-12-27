@@ -37,6 +37,7 @@ final class DoorPageTest extends FixturesWebTestCase
         $this->assertNotEmpty($memberCode, 'Member should have a non-empty code');
 
         // Without allowed IP, door route returns 403 (IP restriction working)
+        $client->setServerParameter('REMOTE_ADDR', '10.0.0.1');
         $crawler = $client->request('GET', '/en/kerde/door');
 
         $response = $client->getResponse();
@@ -48,6 +49,7 @@ final class DoorPageTest extends FixturesWebTestCase
         [$user, $client] = $this->loginAsActiveMember();
 
         // Finnish route should also be IP-restricted
+        $client->setServerParameter('REMOTE_ADDR', '10.0.0.1');
         $crawler = $client->request('GET', '/kerde/ovi');
 
         $response = $client->getResponse();

@@ -576,6 +576,18 @@ when@test:
       alias: App\Tests\Support\Notifier\TestChatter
       public: true
 
+    App\Tests\Support\Kerde\FakeSSHService:
+      public: true
+    App\Service\SSHService:
+      alias: App\Tests\Support\Kerde\FakeSSHService
+      public: true
+
+    App\Tests\Support\Kerde\FakeZMQService:
+      public: true
+    App\Service\ZMQService:
+      alias: App\Tests\Support\Kerde\FakeZMQService
+      public: true
+
 when@panther:
   services:
     # Register Factory and Story classes for panther test environment

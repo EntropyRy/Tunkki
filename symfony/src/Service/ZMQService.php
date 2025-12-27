@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
  *   - "dev init: john_doe 1697654321"
  *   - "prod open: jane_smith 1697654322"
  */
-final readonly class ZMQService
+class ZMQService
 {
     public function __construct(
         private ParameterBagInterface $parameterBag,
