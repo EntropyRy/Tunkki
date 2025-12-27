@@ -4,5 +4,6 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "prosemirror-view/style/prosemirror.min.css";
 import "./styles/admin/markdown-editor.css";
 import MarkdownEditorController from "./controllers/markdown_editor_controller.js";
+import "./js/admin_effects.js";
 
 app.register("markdown-editor", MarkdownEditorController);

@@ -20,10 +20,6 @@ return [
         'path' => './assets/admin.js',
         'entrypoint' => true,
     ],
-    'admin_effects' => [
-        'path' => './assets/js/admin_effects.js',
-        'entrypoint' => true,
-    ],
     'rain' => [
         'path' => './assets/js/rain.js',
         'entrypoint' => true,

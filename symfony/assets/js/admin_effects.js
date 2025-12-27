@@ -4,7 +4,7 @@
  * - Auto-fills defaults when switching to a configurable effect and config is empty
  * - Clears config when switching to a non-configurable effect
  *
- * This file is loaded as an importmap entrypoint (admin_effects) via EventAdmin::configureAssets().
+ * Imported by admin.js entrypoint.
  *
  * Assumptions:
  * - The Event admin form fields end with IDs:
