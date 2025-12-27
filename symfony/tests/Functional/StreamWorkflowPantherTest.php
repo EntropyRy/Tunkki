@@ -11,8 +11,10 @@ use App\Factory\StreamFactory;
 use App\Tests\Support\PantherTestCase;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
+#[Group('panther')]
 final class StreamWorkflowPantherTest extends PantherTestCase
 {
     #[Test]

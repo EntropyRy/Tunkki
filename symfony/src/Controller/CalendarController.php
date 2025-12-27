@@ -93,7 +93,7 @@ class CalendarController extends AbstractController
     ): Response {
         $sqid = new Sqids();
         $locale = $request->getLocale();
-        $config = $sqid->decode($request->get('hash'));
+        $config = $sqid->decode($request->attributes->getString('hash'));
         $cEvents = [];
         $events = $eventR->findCalendarEvents();
         foreach ($events as $event) {

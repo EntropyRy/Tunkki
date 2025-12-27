@@ -85,7 +85,7 @@ class CheckoutsController extends AbstractController
         StripeService $stripe,
         CheckoutRepository $cRepo,
     ): Response {
-        $sessionId = $request->get('session_id');
+        $sessionId = $request->query->getString('session_id');
         $stripeSession = $stripe->getCheckoutSession($sessionId);
 
         if ('open' == $stripeSession->status) {

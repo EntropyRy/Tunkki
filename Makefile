@@ -39,7 +39,7 @@ INFECTION_BIN         ?= vendor/bin/infection
 PHPSTAN_BIN           ?= vendor/bin/phpstan
 
 FILTER                ?=
-INFECTION_THREADS     ?= 4
+INFECTION_THREADS     ?= $(shell nproc 2>/dev/null || echo 8)
 INFECTION_MIN_MSI     ?= 0
 INFECTION_MIN_COVERED ?= 0
 # Parallel test runner (ParaTest) defaults

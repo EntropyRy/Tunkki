@@ -13,6 +13,7 @@ use App\Tests\Support\PantherTestCase;
 use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Facebook\WebDriver\WebDriverSelect;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
 /**
@@ -34,6 +35,7 @@ use PHPUnit\Framework\Attributes\Test;
  * - Select by value rather than text for reliability
  * - Verify database state after LiveComponent updates
  */
+#[Group('panther')]
 final class NakkiWorkflowPantherTest extends PantherTestCase
 {
     protected function getProjectDir(): string

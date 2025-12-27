@@ -47,9 +47,9 @@ class KerdeController extends AbstractController
         $DoorLog = new DoorLog();
         $DoorLog->setMember($member);
         $since = new \DateTimeImmutable('now-1day');
-        if ($request->get('since')) {
-            // $datestring = strtotime($request->get('since'));
-            $since = new \DateTimeImmutable($request->get('since'));
+        if ($request->query->has('since')) {
+            // $datestring = strtotime($request->query->get('since'));
+            $since = new \DateTimeImmutable($request->query->getString('since'));
         }
         $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
