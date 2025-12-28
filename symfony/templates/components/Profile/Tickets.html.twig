@@ -7,8 +7,16 @@
             <div class="row">
                 {% for ticket in this.tickets %}
                     {% if ticket.referenceNumber %}
-                        <a href="{{ path('entropy_event_ticket', {year: ticket.event.eventDate|date('Y'), slug: ticket.event.url, reference: ticket.referenceNumber}) }}"
-                            class="col-10 mx-auto mb-2 btn btn-primary">{{ ticket.event.name(app.request.locale) }}</a>
+                        <div class="col-10 mx-auto mb-2 d-flex gap-2">
+                            <a href="{{ path('entropy_event_ticket', {year: ticket.event.eventDate|date('Y'), slug: ticket.event.url, reference: ticket.referenceNumber}) }}"
+                                class="btn btn-primary flex-grow-1">{{ ticket.event.name(app.request.locale) }}</a>
+                            {% if ticket.checkout and ticket.checkout.receiptUrl %}
+                                <a href="{{ ticket.checkout.receiptUrl }}"
+                                    class="btn btn-outline-secondary"
+                                    target="_blank"
+                                    rel="noopener">{{ 'ticket.receipt'|trans }}</a>
+                            {% endif %}
+                        </div>
                     {% endif %}
                 {% endfor %}
             </div>

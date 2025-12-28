@@ -219,6 +219,13 @@ final class RenterHashControllerTest extends FixturesWebTestCase
         $this->entityManager->flush();
 
         $this->assertNotNull($renter->getId());
+        if (1 === $renter->getId()) {
+            $renter = new Renter();
+            $renter->setName($name.' #2');
+            $this->entityManager->persist($renter);
+            $this->entityManager->flush();
+            $this->assertNotNull($renter->getId());
+        }
 
         return $renter;
     }

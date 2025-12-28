@@ -57,6 +57,13 @@ interface StripeServiceInterface
     public function getCheckoutSession($sessionId): Session;
 
     /**
+     * Retrieve a receipt URL for a completed Stripe checkout session.
+     *
+     * @param string $sessionId The Stripe session ID
+     */
+    public function getReceiptUrlForSessionId(string $sessionId): ?string;
+
+    /**
      * Create a Stripe checkout session and persist Checkout entity.
      *
      * @param Cart               $cart         The shopping cart

@@ -548,6 +548,7 @@ ticket:
   details_with_nakki: Katso nakkisi/lippusi tiedot
   payment_info: Maksutiedot
   reference_number: Viite (pitää käyttää)
+  receipt: Kuitti
   code: Lippukoodi
   paid: maksettu
   not_paid: Ei maksettu

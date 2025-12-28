@@ -23,6 +23,10 @@ class Ticket implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private Event $event;
 
+    #[ORM\ManyToOne(inversedBy: 'tickets')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Checkout $checkout = null;
+
     #[ORM\ManyToOne(targetEntity: Member::class, inversedBy: 'tickets')]
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Member $owner = null;
@@ -76,6 +80,18 @@ class Ticket implements \Stringable
     public function setEvent(Event $event): self
     {
         $this->event = $event;
+
+        return $this;
+    }
+
+    public function getCheckout(): ?Checkout
+    {
+        return $this->checkout;
+    }
+
+    public function setCheckout(?Checkout $checkout): self
+    {
+        $this->checkout = $checkout;
 
         return $this;
     }

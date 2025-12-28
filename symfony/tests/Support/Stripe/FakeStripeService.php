@@ -120,6 +120,11 @@ final readonly class FakeStripeService implements StripeServiceInterface
         ]);
     }
 
+    public function getReceiptUrlForSessionId(string $sessionId): ?string
+    {
+        return 'https://stripe.test/receipt/'.$sessionId;
+    }
+
     /**
      * @return array{stripeSession: Session, checkout: Checkout}
      */

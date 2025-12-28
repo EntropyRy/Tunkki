@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\CheckoutRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -29,14 +31,24 @@ class Checkout
     #[ORM\Column]
     private \DateTimeImmutable $updatedAt;
 
+    #[ORM\Column(length: 2048, nullable: true)]
+    private ?string $receiptUrl = null;
+
     #[ORM\ManyToOne(inversedBy: 'checkouts')]
     private ?Cart $cart = null;
+
+    /**
+     * @var Collection<int, Ticket>
+     */
+    #[ORM\OneToMany(targetEntity: Ticket::class, mappedBy: 'checkout')]
+    private Collection $tickets;
 
     public function __construct()
     {
         $now = new \DateTimeImmutable();
         $this->createdAt = $now;
         $this->updatedAt = $now;
+        $this->tickets = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -105,6 +117,18 @@ class Checkout
         return $this;
     }
 
+    public function getReceiptUrl(): ?string
+    {
+        return $this->receiptUrl;
+    }
+
+    public function setReceiptUrl(?string $receiptUrl): static
+    {
+        $this->receiptUrl = $receiptUrl;
+
+        return $this;
+    }
+
     public function getCart(): ?Cart
     {
         return $this->cart;
@@ -113,6 +137,35 @@ class Checkout
     public function setCart(?Cart $cart): static
     {
         $this->cart = $cart;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ticket>
+     */
+    public function getTickets(): Collection
+    {
+        return $this->tickets;
+    }
+
+    public function addTicket(Ticket $ticket): static
+    {
+        if (!$this->tickets->contains($ticket)) {
+            $this->tickets->add($ticket);
+            $ticket->setCheckout($this);
+        }
+
+        return $this;
+    }
+
+    public function removeTicket(Ticket $ticket): static
+    {
+        if ($this->tickets->removeElement($ticket)) {
+            if ($ticket->getCheckout() === $this) {
+                $ticket->setCheckout(null);
+            }
+        }
 
         return $this;
     }

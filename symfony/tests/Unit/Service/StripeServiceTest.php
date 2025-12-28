@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Product;
 use App\Service\StripeService;
 use PHPUnit\Framework\TestCase;
+use Stripe\Checkout\Session;
 use Stripe\StripeClient;
 use Stripe\StripeObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -228,5 +229,204 @@ final class StripeServiceTest extends TestCase
         $result = $this->service->updateOurProduct($product, $stripePrice, $stripeProduct);
 
         $this->assertFalse($result->isActive(), 'Product should be inactive when both price and product are inactive');
+    }
+
+    public function testGetReceiptUrlReturnsNullWhenPaymentIntentMissing(): void
+    {
+        $service = new readonly class($this->parameterBag, $this->urlGenerator) extends StripeService {
+            public function __construct(
+                ParameterBag $bag,
+                UrlGeneratorInterface $urlG,
+            ) {
+                $clock = new class() implements \App\Time\ClockInterface {
+                    public function now(): \DateTimeImmutable
+                    {
+                        return new \DateTimeImmutable('2025-01-01 12:00:00');
+                    }
+                };
+                parent::__construct($bag, $urlG, $clock);
+            }
+
+            public function getCheckoutSession($sessionId): Session
+            {
+                return Session::constructFrom([
+                    'id' => $sessionId,
+                    'payment_intent' => null,
+                ]);
+            }
+        };
+
+        $this->assertNull($service->getReceiptUrlForSessionId('cs_test_no_pi'));
+    }
+
+    public function testGetReceiptUrlUsesExpandedCharges(): void
+    {
+        $paymentIntent = new \stdClass();
+        $paymentIntent->charges = new \stdClass();
+        $paymentIntent->charges->data = [
+            (object) ['receipt_url' => 'https://stripe.test/receipt/expanded'],
+        ];
+        $paymentIntent->latest_charge = null;
+
+        $fakePaymentIntents = new class($paymentIntent) {
+            public function __construct(private object $paymentIntent)
+            {
+            }
+
+            public function retrieve(string $id, array $options = []): object
+            {
+                return $this->paymentIntent;
+            }
+        };
+
+        $fakeCharges = new class() {
+            public function retrieve(string $id): object
+            {
+                return (object) ['receipt_url' => null];
+            }
+        };
+
+        $fakeClient = new class($fakePaymentIntents, $fakeCharges) extends StripeClient {
+            public object $paymentIntents;
+            public object $charges;
+
+            public function __construct(object $paymentIntents, object $charges)
+            {
+                parent::__construct('sk_test_fake');
+                $this->paymentIntents = $paymentIntents;
+                $this->charges = $charges;
+            }
+        };
+
+        $service = new readonly class($this->parameterBag, $this->urlGenerator, $fakeClient) extends StripeService {
+            public function __construct(
+                ParameterBag $bag,
+                UrlGeneratorInterface $urlG,
+                private readonly StripeClient $client,
+            ) {
+                $clock = new class() implements \App\Time\ClockInterface {
+                    public function now(): \DateTimeImmutable
+                    {
+                        return new \DateTimeImmutable('2025-01-01 12:00:00');
+                    }
+                };
+                parent::__construct($bag, $urlG, $clock);
+            }
+
+            public function getClient(): StripeClient
+            {
+                return $this->client;
+            }
+
+            public function getCheckoutSession($sessionId): Session
+            {
+                return Session::constructFrom([
+                    'id' => $sessionId,
+                    'payment_intent' => 'pi_test_123',
+                ]);
+            }
+        };
+
+        $this->assertSame(
+            'https://stripe.test/receipt/expanded',
+            $service->getReceiptUrlForSessionId('cs_test_receipt'),
+        );
+    }
+
+    public function testGetReceiptUrlFallsBackToLatestCharge(): void
+    {
+        $paymentIntent = new \stdClass();
+        $paymentIntent->charges = new \stdClass();
+        $paymentIntent->charges->data = [];
+        $paymentIntent->latest_charge = 'ch_test_123';
+
+        $fakePaymentIntents = new class($paymentIntent) {
+            public function __construct(private object $paymentIntent)
+            {
+            }
+
+            public function retrieve(string $id, array $options = []): object
+            {
+                return $this->paymentIntent;
+            }
+        };
+
+        $fakeCharges = new class() {
+            public function retrieve(string $id): object
+            {
+                return (object) ['receipt_url' => 'https://stripe.test/receipt/latest'];
+            }
+        };
+
+        $fakeClient = new class($fakePaymentIntents, $fakeCharges) extends StripeClient {
+            public object $paymentIntents;
+            public object $charges;
+
+            public function __construct(object $paymentIntents, object $charges)
+            {
+                parent::__construct('sk_test_fake');
+                $this->paymentIntents = $paymentIntents;
+                $this->charges = $charges;
+            }
+        };
+
+        $service = new readonly class($this->parameterBag, $this->urlGenerator, $fakeClient) extends StripeService {
+            public function __construct(
+                ParameterBag $bag,
+                UrlGeneratorInterface $urlG,
+                private readonly StripeClient $client,
+            ) {
+                $clock = new class() implements \App\Time\ClockInterface {
+                    public function now(): \DateTimeImmutable
+                    {
+                        return new \DateTimeImmutable('2025-01-01 12:00:00');
+                    }
+                };
+                parent::__construct($bag, $urlG, $clock);
+            }
+
+            public function getClient(): StripeClient
+            {
+                return $this->client;
+            }
+
+            public function getCheckoutSession($sessionId): Session
+            {
+                return Session::constructFrom([
+                    'id' => $sessionId,
+                    'payment_intent' => 'pi_test_456',
+                ]);
+            }
+        };
+
+        $this->assertSame(
+            'https://stripe.test/receipt/latest',
+            $service->getReceiptUrlForSessionId('cs_test_receipt_latest'),
+        );
+    }
+
+    public function testGetReceiptUrlReturnsNullOnError(): void
+    {
+        $service = new readonly class($this->parameterBag, $this->urlGenerator) extends StripeService {
+            public function __construct(
+                ParameterBag $bag,
+                UrlGeneratorInterface $urlG,
+            ) {
+                $clock = new class() implements \App\Time\ClockInterface {
+                    public function now(): \DateTimeImmutable
+                    {
+                        return new \DateTimeImmutable('2025-01-01 12:00:00');
+                    }
+                };
+                parent::__construct($bag, $urlG, $clock);
+            }
+
+            public function getCheckoutSession($sessionId): Session
+            {
+                throw new \RuntimeException('Stripe failure');
+            }
+        };
+
+        $this->assertNull($service->getReceiptUrlForSessionId('cs_test_error'));
     }
 }

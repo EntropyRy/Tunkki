@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\EventSubscriber;
 
+use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Entity\Sonata\SonataMediaMedia;
@@ -167,6 +168,11 @@ class StripeEventSubscriber implements EventSubscriberInterface
                 'Checkout done: '.$checkout->getStripeSessionId(),
             );
             $checkout->setStatus(1);
+            if (null === $checkout->getReceiptUrl()) {
+                $checkout->setReceiptUrl(
+                    $this->stripe->getReceiptUrlForSessionId($session['id']),
+                );
+            }
             $this->checkoutRepo->save($checkout, true);
             if (1 == $checkout->getStatus()) {
                 $cart = $checkout->getCart();
@@ -182,6 +188,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
                     $quantity = $cartItem->getQuantity();
                     if ($product->isTicket()) {
                         $given = $this->giveEventTicketToEmail(
+                            $checkout,
                             $event,
                             $product,
                             $quantity,
@@ -252,6 +259,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
     }
 
     protected function giveEventTicketToEmail(
+        Checkout $checkout,
         Event $event,
         Product $product,
         int $quantity,
@@ -265,6 +273,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
             $ticket = new Ticket();
             $ticket->setName($product->getName($locale) ?? 'Ticket');
             $ticket->setEvent($event);
+            $ticket->setCheckout($checkout);
             $ticket->setStripeProductId($product->getStripeId());
             $ticket->setPrice($product->getAmount());
             $ticket->setStatus('paid');

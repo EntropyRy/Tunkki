@@ -464,6 +464,7 @@ ticket:
   recipient: Recipient
   sum: Price
   reference_number: Reference Number (must be used)
+  receipt: Receipt
   reserved_for_two_hours: You now have 2 hours to complete the reservation or the ticket will be released to the next person.
 join_us:
   title: Join us!

@@ -88,6 +88,40 @@ readonly class StripeService implements StripeServiceInterface
         return $stripe->checkout->sessions->retrieve($sessionId);
     }
 
+    public function getReceiptUrlForSessionId(string $sessionId): ?string
+    {
+        try {
+            $stripe = $this->getClient();
+            $session = $this->getCheckoutSession($sessionId);
+            $paymentIntentId = $session->payment_intent ?? null;
+            if (!\is_string($paymentIntentId) || '' === $paymentIntentId) {
+                return null;
+            }
+
+            $paymentIntent = $stripe->paymentIntents->retrieve(
+                $paymentIntentId,
+                ['expand' => ['charges.data']],
+            );
+            $charges = $paymentIntent->charges?->data ?? [];
+
+            if ([] !== $charges && isset($charges[0]->receipt_url)) {
+                return (string) $charges[0]->receipt_url;
+            }
+
+            $latestChargeId = $paymentIntent->latest_charge ?? null;
+            if (\is_string($latestChargeId) && '' !== $latestChargeId) {
+                $charge = $stripe->charges->retrieve($latestChargeId);
+                if (isset($charge->receipt_url)) {
+                    return (string) $charge->receipt_url;
+                }
+            }
+        } catch (\Throwable) {
+            return null;
+        }
+
+        return null;
+    }
+
     /**
      * Create a Stripe checkout session and persist Checkout entity.
      *
