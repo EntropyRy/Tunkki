@@ -7,9 +7,9 @@ namespace App\Tests\Functional;
 use App\Factory\EventFactory;
 use App\Factory\ProductFactory;
 use App\Tests\_Base\FixturesWebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
 use App\Tests\Support\LocaleDataProviderTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\BrowserKit\Cookie;
 
 /**
  * GeneralShopAccessTest.
@@ -205,7 +205,7 @@ final class GeneralShopAccessTest extends FixturesWebTestCase
         $session->save();
 
         // Set session cookie
-        $this->client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie(
+        $this->client->getCookieJar()->set(new Cookie(
             $session->getName(),
             $session->getId(),
         ));

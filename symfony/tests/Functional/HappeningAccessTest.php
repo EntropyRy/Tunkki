@@ -492,7 +492,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $form = $crawler->filter('form')->first()->form();
 
         // Modify something
-        $newName = 'Updated Name ' . bin2hex(random_bytes(3));
+        $newName = 'Updated Name '.bin2hex(random_bytes(3));
         $form['happening[nameEn]'] = $newName;
 
         $this->client->submit($form);

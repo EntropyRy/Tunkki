@@ -595,7 +595,7 @@ final class EPicsServiceTest extends TestCase
                 'response_headers' => [
                     'set-cookie' => [
                         'lychee_session=test_session',
-                        'XSRF-TOKEN=' . rawurlencode('token+with+special=chars'),
+                        'XSRF-TOKEN='.rawurlencode('token+with+special=chars'),
                     ],
                 ],
             ]),
@@ -635,10 +635,10 @@ final class EPicsServiceTest extends TestCase
         $this->assertInstanceOf(EPicsService::class, $service);
 
         // Restore
-        if ($origEnv !== null) {
+        if (null !== $origEnv) {
             $_ENV['EPICS_BASE_URL'] = $origEnv;
         }
-        if ($origServer !== null) {
+        if (null !== $origServer) {
             $_SERVER['EPICS_BASE_URL'] = $origServer;
         }
     }
@@ -856,5 +856,4 @@ final class EPicsServiceTest extends TestCase
         // Should return null because lychee_session and XSRF-TOKEN are not found
         $this->assertNull($result);
     }
-
 }

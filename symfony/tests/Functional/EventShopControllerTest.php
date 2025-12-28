@@ -9,7 +9,6 @@ use App\Factory\CartFactory;
 use App\Factory\CartItemFactory;
 use App\Factory\CheckoutFactory;
 use App\Factory\EventFactory;
-use App\Factory\MemberFactory;
 use App\Factory\ProductFactory;
 use App\Factory\TicketFactory;
 use App\Tests\_Base\FixturesWebTestCase;
