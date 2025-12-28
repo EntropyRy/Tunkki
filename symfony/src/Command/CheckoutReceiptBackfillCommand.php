@@ -49,6 +49,12 @@ final class CheckoutReceiptBackfillCommand extends Command
                 'Fetch missing receipt URLs from Stripe (network required).',
             )
             ->addOption(
+                'show-ambiguous',
+                null,
+                InputOption::VALUE_NONE,
+                'List ambiguous matches (ticket + checkout identifiers).',
+            )
+            ->addOption(
                 'limit',
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -64,6 +70,7 @@ final class CheckoutReceiptBackfillCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $dryRun = (bool) $input->getOption('dry-run');
         $fetchReceipts = (bool) $input->getOption('fetch-receipts');
+        $showAmbiguous = (bool) $input->getOption('show-ambiguous');
         $limitOption = $input->getOption('limit');
         $limit = null !== $limitOption ? (int) $limitOption : null;
 
@@ -90,6 +97,7 @@ final class CheckoutReceiptBackfillCommand extends Command
             'ambiguous' => 0,
             'receipt_missing' => 0,
         ];
+        $ambiguousRows = [];
 
         foreach ($tickets as $ticket) {
             $email = $ticket->getEmail() ?? $ticket->getOwnerEmail();
@@ -118,6 +126,28 @@ final class CheckoutReceiptBackfillCommand extends Command
 
             if (\count($matches) > 1) {
                 ++$problems['ambiguous'];
+                if ($showAmbiguous) {
+                    $ambiguousRows[] = [
+                        'ticket_id' => (string) $ticket->getId(),
+                        'ticket_email' => $email,
+                        'event_id' => (string) $event->getId(),
+                        'stripe_product_id' => $stripeProductId,
+                        'checkout_ids' => implode(
+                            ',',
+                            array_map(
+                                static fn ($checkout): string => (string) $checkout->getId(),
+                                $matches,
+                            ),
+                        ),
+                        'checkout_sessions' => implode(
+                            ',',
+                            array_map(
+                                static fn ($checkout): string => $checkout->getStripeSessionId(),
+                                $matches,
+                            ),
+                        ),
+                    ];
+                }
                 continue;
             }
 
@@ -172,6 +202,14 @@ final class CheckoutReceiptBackfillCommand extends Command
             $io->table(['type', 'count'], $problemRows);
         } else {
             $io->note('No problems detected.');
+        }
+
+        if ($showAmbiguous && [] !== $ambiguousRows) {
+            $io->warning('Ambiguous matches (manual review needed):');
+            $io->table(
+                ['ticket_id', 'ticket_email', 'event_id', 'stripe_product_id', 'checkout_ids', 'checkout_sessions'],
+                $ambiguousRows,
+            );
         }
 
         if ($fetchReceipts) {
