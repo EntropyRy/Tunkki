@@ -48,8 +48,8 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->ensureClientReady();
-        $this->client->request('GET', '/admin/dashboard');
+        $this->initSiteAwareClient();
+        $this->seedClientHome('fi');
         $this->entityManager = $this->em();
     }
 
@@ -67,7 +67,9 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
             \in_array($status, [302, 303], true),
             \sprintf('Expected redirect to login for anonymous admin list, got %d.', $status),
         );
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $location = $response->headers->get('Location');
+        $this->assertNotNull($location);
+        $this->assertSame('/login', parse_url($location, \PHP_URL_PATH));
     }
 
     public function testSendActionDeniesNonAdminUser(): void

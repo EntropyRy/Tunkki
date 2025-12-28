@@ -107,34 +107,30 @@ final readonly class EPicsService implements EPicsServiceInterface
      */
     public function createOrUpdateUserPassword(string $username, string $password): bool
     {
-        try {
-            $tokens = $this->establishSession();
-            if (null === $tokens) {
-                return false;
-            }
-            [$sessionToken, $xsrfToken] = $tokens;
-
-            $tokensAfterLogin = $this->login($this->adminUser, $this->adminPassword, $sessionToken, $xsrfToken);
-            if (null === $tokensAfterLogin) {
-                return false;
-            }
-            [$sessionToken, $xsrfToken] = $tokensAfterLogin;
-
-            $headers = $this->buildHeaders($sessionToken, $xsrfToken);
-
-            // Check if user exists
-            $userId = $this->findUserId($username, $headers);
-
-            if ($userId) {
-                // User exists - update password via PATCH
-                return $this->updateUserPassword($userId, $username, $password, $headers);
-            }
-
-            // User doesn't exist - create new user
-            return $this->createUser($username, $password, $headers);
-        } catch (\Throwable) {
+        $tokens = $this->establishSession();
+        if (null === $tokens) {
             return false;
         }
+        [$sessionToken, $xsrfToken] = $tokens;
+
+        $tokensAfterLogin = $this->login($this->adminUser, $this->adminPassword, $sessionToken, $xsrfToken);
+        if (null === $tokensAfterLogin) {
+            return false;
+        }
+        [$sessionToken, $xsrfToken] = $tokensAfterLogin;
+
+        $headers = $this->buildHeaders($sessionToken, $xsrfToken);
+
+        // Check if user exists
+        $userId = $this->findUserId($username, $headers);
+
+        if ($userId) {
+            // User exists - update password via PATCH
+            return $this->updateUserPassword($userId, $username, $password, $headers);
+        }
+
+        // User doesn't exist - create new user
+        return $this->createUser($username, $password, $headers);
     }
 
     /**

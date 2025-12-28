@@ -17,7 +17,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
-readonly class StripeService
+readonly class StripeService implements StripeServiceInterface
 {
     public function __construct(
         private ParameterBagInterface $bag,

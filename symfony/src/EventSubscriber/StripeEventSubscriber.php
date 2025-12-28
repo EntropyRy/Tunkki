@@ -16,7 +16,7 @@ use App\Service\BookingReferenceService;
 use App\Service\Email\EmailService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;
-use App\Service\StripeService;
+use App\Service\StripeServiceInterface;
 use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
 use Psr\Log\LoggerInterface;
@@ -28,7 +28,7 @@ class StripeEventSubscriber implements EventSubscriberInterface
         private readonly CheckoutRepository $checkoutRepo,
         private readonly ProductRepository $productRepo,
         private readonly LoggerInterface $logger,
-        private readonly StripeService $stripe,
+        private readonly StripeServiceInterface $stripe,
         private readonly MemberRepository $memberRepo,
         private readonly TicketRepository $ticketRepo,
         private readonly EmailService $emailService,

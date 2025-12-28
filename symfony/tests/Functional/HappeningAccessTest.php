@@ -401,4 +401,226 @@ final class HappeningAccessTest extends FixturesWebTestCase
             $checked ? $field->tick() : $field->untick();
         }
     }
+
+    /**
+     * Test that creating a happening with duplicate slug shows warning.
+     * Covers lines 61-67.
+     */
+    public function testCreateHappeningWithDuplicateSlugShowsWarning(): void
+    {
+        $owner = $this->getOrCreateUser(
+            \sprintf('dup-slug-owner+%s@example.test', bin2hex(random_bytes(4))),
+            [],
+        );
+
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        // Create first happening - the slug will be generated from the name
+        $existingHappening = HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->withOwner($owner)
+            ->create([
+                'nameFi' => 'Duplikaatti Tapahtuma',
+                'nameEn' => 'Duplicate Happening',
+                'slugFi' => 'duplikaatti-tapahtuma',
+                'slugEn' => 'duplicate-happening',
+            ]);
+
+        $this->loginClientAs($owner);
+
+        // Try to create another happening with the same NAME (which generates the same slug)
+        $createUrl = \sprintf(
+            '/en/%s/%s/happening/create',
+            $year,
+            $event->getUrl(),
+        );
+        $crawler = $this->client->request('GET', $createUrl);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->filter('form')->first()->form();
+        $form['happening[type]'] = 'event';
+        // Use the same names - the form will generate the same slugs
+        $form['happening[nameFi]'] = 'Duplikaatti Tapahtuma';
+        $form['happening[descriptionFi]'] = 'Kuvaus FI';
+        $form['happening[nameEn]'] = 'Duplicate Happening';
+        $form['happening[descriptionEn]'] = 'Description EN';
+        $this->setCheckboxState($form, 'happening[releaseThisHappeningInEvent]', true);
+        $form['happening[maxSignUps]'] = '0';
+
+        $this->client->submit($form);
+
+        // Should redirect with warning flash (to edit page for the duplicate)
+        $this->assertTrue(
+            \in_array($this->client->getResponse()->getStatusCode(), [302, 303], true),
+            'Should redirect after duplicate slug detection.',
+        );
+    }
+
+    /**
+     * Test that owner can successfully submit edit form.
+     * Covers lines 119-127.
+     */
+    public function testOwnerCanSubmitEditFormSuccessfully(): void
+    {
+        $owner = $this->getOrCreateUser(
+            \sprintf('edit-submit-owner+%s@example.test', bin2hex(random_bytes(4))),
+            [],
+        );
+
+        $event = EventFactory::new()->published()->create();
+        $happening = HappeningFactory::new()
+            ->released()
+            ->forEvent($event)
+            ->withOwner($owner)
+            ->create();
+
+        $year = $event->getEventDate()->format('Y');
+
+        $this->loginClientAs($owner);
+
+        $editUrl = \sprintf(
+            '/en/%s/%s/happening/%s/edit',
+            $year,
+            $event->getUrl(),
+            $happening->getSlugEn(),
+        );
+        $crawler = $this->client->request('GET', $editUrl);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        $form = $crawler->filter('form')->first()->form();
+
+        // Modify something
+        $newName = 'Updated Name ' . bin2hex(random_bytes(3));
+        $form['happening[nameEn]'] = $newName;
+
+        $this->client->submit($form);
+
+        // Should redirect after successful edit
+        $status = $this->client->getResponse()->getStatusCode();
+        $this->assertTrue(
+            \in_array($status, [302, 303], true),
+            \sprintf('Edit should redirect. Got HTTP %d.', $status),
+        );
+
+        // Follow redirect and verify we're on show page
+        $this->client->followRedirect();
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+    }
+
+    /**
+     * Test that payment info is rendered as markdown.
+     * Covers line 196.
+     */
+    public function testHappeningShowRendersPaymentInfoAsMarkdown(): void
+    {
+        $owner = $this->getOrCreateUser(
+            \sprintf('payment-info-owner+%s@example.test', bin2hex(random_bytes(4))),
+            [],
+        );
+
+        // Event must be in the future for payment info to show
+        $event = EventFactory::new()->published()->create([
+            'EventDate' => new \DateTimeImmutable('+7 days'),
+        ]);
+        $happening = HappeningFactory::new()
+            ->released()
+            ->needsPayment()  // This sets needsPreliminaryPayment = true
+            ->forEvent($event)
+            ->withOwner($owner)
+            ->create([
+                'paymentInfoEn' => '**Bold payment info** with [link](https://example.com)',
+                'paymentInfoFi' => '**Maksutiedot** lihavoituna',
+            ]);
+
+        $year = $event->getEventDate()->format('Y');
+
+        $this->loginClientAs($owner);
+
+        $showUrl = \sprintf(
+            '/en/%s/%s/happening/%s',
+            $year,
+            $event->getUrl(),
+            $happening->getSlugEn(),
+        );
+        $this->client->request('GET', $showUrl);
+
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+        // The markdown should be converted - check for the strong tag
+        $this->assertStringContainsString(
+            '<strong>Bold payment info</strong>',
+            $this->client->getResponse()->getContent(),
+        );
+    }
+
+    /**
+     * Test that user can remove their own booking.
+     * Covers lines 225-238.
+     */
+    public function testUserCanRemoveOwnBooking(): void
+    {
+        $owner = $this->getOrCreateUser(
+            \sprintf('remove-booking-owner+%s@example.test', bin2hex(random_bytes(4))),
+            [],
+        );
+        $booker = $this->getOrCreateUser(
+            \sprintf('remove-booking-user+%s@example.test', bin2hex(random_bytes(4))),
+            [],
+        );
+
+        $event = EventFactory::new()->published()->create();
+        $happening = HappeningFactory::new()
+            ->released()
+            ->needsSignUp()
+            ->signUpsOpenWindow()
+            ->forEvent($event)
+            ->withOwner($owner)
+            ->create();
+
+        $year = $event->getEventDate()->format('Y');
+
+        // First, create a booking
+        $this->loginClientAs($booker);
+        $showUrl = \sprintf(
+            '/en/%s/%s/happening/%s',
+            $year,
+            $event->getUrl(),
+            $happening->getSlugEn(),
+        );
+        $crawler = $this->client->request('GET', $showUrl);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        $formNode = $crawler->filter('form[name="happening_booking"]');
+        if (0 === $formNode->count()) {
+            $formNode = $crawler->filter('form')->first();
+        }
+        $form = $formNode->form();
+        $this->client->submit($form);
+
+        // Now get the booking ID from the database
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $happeningBookingRepo = $em->getRepository(\App\Entity\HappeningBooking::class);
+        $booking = $happeningBookingRepo->findOneBy([
+            'member' => $booker->getMember(),
+            'happening' => $happening,
+        ]);
+        $this->assertNotNull($booking, 'Booking should exist.');
+
+        // Now remove the booking
+        $removeUrl = \sprintf('/happening/%d/remove', $booking->getId());
+        $this->client->request('GET', $removeUrl);
+
+        // Should redirect after removal
+        $status = $this->client->getResponse()->getStatusCode();
+        $this->assertTrue(
+            \in_array($status, [302, 303], true),
+            \sprintf('Remove should redirect. Got HTTP %d.', $status),
+        );
+
+        // Verify booking is removed
+        $em->clear();
+        $deletedBooking = $happeningBookingRepo->find($booking->getId());
+        $this->assertNull($deletedBooking, 'Booking should be deleted.');
+    }
 }

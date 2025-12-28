@@ -10,8 +10,8 @@ use App\Form\OpenDoorType;
 use App\Repository\DoorLogRepository;
 use App\Service\BarcodeService;
 use App\Service\MattermostNotifierService;
-use App\Service\SSHService;
-use App\Service\ZMQService;
+use App\Service\SSHServiceInterface;
+use App\Service\ZMQServiceInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -34,11 +34,11 @@ class KerdeController extends AbstractController
         Request $request,
         FormFactoryInterface $formF,
         MattermostNotifierService $mm,
-        ZMQService $zmq,
+        ZMQServiceInterface $zmq,
         BarcodeService $barcodeService,
         EntityManagerInterface $em,
         DoorLogRepository $doorlogrepo,
-        SSHService $ssh,
+        SSHServiceInterface $ssh,
     ): RedirectResponse|Response {
         $user = $this->getUser();
         \assert($user instanceof User);
@@ -55,7 +55,7 @@ class KerdeController extends AbstractController
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTimeImmutable('now');
         $status = $zmq->sendInit(
-            $member->getUsername(),
+            $member->getUsername() ?? '',
             $now->getTimestamp(),
         );
         $form->handleRequest($request);
@@ -64,7 +64,7 @@ class KerdeController extends AbstractController
             $em->persist($doorlog);
             $em->flush();
             $status = $zmq->sendOpen(
-                $member->getUsername(),
+                $member->getUsername() ?? '',
                 $now->getTimestamp(),
             );
             // $this->addFlash('success', 'profile.door.opened');
@@ -110,7 +110,7 @@ class KerdeController extends AbstractController
     }
 
     #[Route('/kerde/recording/start', name: 'recording_start')]
-    public function recordingStart(SSHService $ssh): RedirectResponse
+    public function recordingStart(SSHServiceInterface $ssh): RedirectResponse
     {
         $user = $this->getUser();
         \assert($user instanceof User);
@@ -128,7 +128,7 @@ class KerdeController extends AbstractController
     }
 
     #[Route('/kerde/recording/stop', name: 'recording_stop')]
-    public function recordingStop(SSHService $ssh): RedirectResponse
+    public function recordingStop(SSHServiceInterface $ssh): RedirectResponse
     {
         $user = $this->getUser();
         \assert($user instanceof User);

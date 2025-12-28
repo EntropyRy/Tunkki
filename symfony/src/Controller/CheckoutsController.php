@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Repository\CartRepository;
 use App\Repository\CheckoutRepository;
-use App\Service\StripeService;
+use App\Service\StripeServiceInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -29,7 +29,7 @@ class CheckoutsController extends AbstractController
     ]
     public function checkout(
         Request $request,
-        StripeService $stripe,
+        StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
     ): Response {
@@ -82,7 +82,7 @@ class CheckoutsController extends AbstractController
     ]
     public function complete(
         Request $request,
-        StripeService $stripe,
+        StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,
     ): Response {
         $sessionId = $request->query->getString('session_id');

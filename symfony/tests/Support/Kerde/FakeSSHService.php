@@ -4,30 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Kerde;
 
-use App\Service\SSHService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use App\Service\SSHServiceInterface;
 
 /**
  * Fake SSH Service for testing.
  *
- * Extends SSHService to satisfy type hints but overrides methods
- * to return configurable responses without real SSH connections.
+ * Implements SSHServiceInterface to provide configurable responses
+ * without real SSH connections.
  */
-final class FakeSSHService extends SSHService
+final class FakeSSHService implements SSHServiceInterface
 {
     private bool $shouldSucceed = true;
     private string $errorMessage = '';
-
-    public function __construct()
-    {
-        // Pass a minimal parameter bag to parent
-        parent::__construct(new ParameterBag([
-            'recording.host' => 'localhost',
-            'recording.port' => 22,
-            'recording.user' => 'test',
-            'recording.pass' => 'test',
-        ]));
-    }
+    private string $stdout = 'ok';
 
     public function setSuccess(bool $success): void
     {
@@ -39,14 +28,18 @@ final class FakeSSHService extends SSHService
         $this->errorMessage = $message;
     }
 
-    #[\Override]
+    public function setStdout(string $stdout): void
+    {
+        $this->stdout = $stdout;
+    }
+
     public function sendCommand(string $commandName, bool $structured = false): array|string|bool
     {
         if ($structured) {
             return [
                 'success' => $this->shouldSucceed,
-                'command' => 'fake_command',
-                'stdout' => $this->shouldSucceed ? 'ok' : '',
+                'command' => 'fake_command_'.$commandName,
+                'stdout' => $this->shouldSucceed ? $this->stdout : '',
                 'stderr' => $this->shouldSucceed ? '' : $this->errorMessage,
                 'exit_status' => $this->shouldSucceed ? 0 : 1,
                 'error' => $this->shouldSucceed ? null : $this->errorMessage,
@@ -62,7 +55,6 @@ final class FakeSSHService extends SSHService
         return $this->errorMessage ?: 'SSH error';
     }
 
-    #[\Override]
     public function checkStatus(): bool
     {
         return $this->shouldSucceed;

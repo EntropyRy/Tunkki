@@ -4,26 +4,23 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Kerde;
 
-use App\Service\ZMQService;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use App\Service\ZMQServiceInterface;
 
 /**
  * Fake ZMQ Service for testing.
  *
- * Extends ZMQService to satisfy type hints but overrides methods
- * to return configurable responses without real ZMQ connections.
+ * Implements ZMQServiceInterface to provide configurable responses
+ * without real ZMQ connections.
  */
-final class FakeZMQService extends ZMQService
+final class FakeZMQService implements ZMQServiceInterface
 {
+    private string $sendResponse = 'ok';
     private string $initResponse = 'connected';
     private string $openResponse = 'door opened';
 
-    public function __construct()
+    public function setSendResponse(string $response): void
     {
-        // Pass a minimal parameter bag to parent
-        parent::__construct(new ParameterBag([
-            'door_socket' => 'tcp://localhost:5555',
-        ]));
+        $this->sendResponse = $response;
     }
 
     public function setInitResponse(string $response): void
@@ -36,21 +33,23 @@ final class FakeZMQService extends ZMQService
         $this->openResponse = $response;
     }
 
-    #[\Override]
     public function send(string $command): string
     {
-        return 'ok';
+        return $this->sendResponse;
     }
 
-    #[\Override]
-    public function sendInit(?string $username, int $timestamp): string
+    public function sendInit(string $username, int $timestamp): string
     {
         return $this->initResponse;
     }
 
-    #[\Override]
-    public function sendOpen(?string $username, int $timestamp): string
+    public function sendOpen(string $username, int $timestamp): string
     {
         return $this->openResponse;
+    }
+
+    public function buildCommand(string $environment, string $action, string $username, int $timestamp): string
+    {
+        return \sprintf('%s %s: %s %d', $environment, $action, $username, $timestamp);
     }
 }

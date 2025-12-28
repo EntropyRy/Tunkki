@@ -14,7 +14,7 @@ use App\Repository\CheckoutRepository;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\TicketRepository;
 use App\Service\NakkiDisplayService;
-use App\Service\StripeService;
+use App\Service\StripeServiceInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -179,7 +179,7 @@ class EventShopController extends AbstractController
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
         ]
         Event $event,
-        StripeService $stripe,
+        StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,
         CartRepository $cartR,
     ): Response {
@@ -247,7 +247,7 @@ class EventShopController extends AbstractController
             MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
         ]
         Event $event,
-        StripeService $stripe,
+        StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,
     ): Response {
         $sessionId = $request->query->getString('session_id');

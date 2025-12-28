@@ -6,7 +6,7 @@ namespace App\Twig\Components\Dashboard;
 
 use App\Entity\Member;
 use App\Repository\DoorLogRepository;
-use App\Service\ZMQService;
+use App\Service\ZMQServiceInterface;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]
@@ -17,14 +17,14 @@ final class DoorInfo
 
     public function __construct(
         private readonly DoorLogRepository $doorLogR,
-        private readonly ZMQService $zmq,
+        private readonly ZMQServiceInterface $zmq,
     ) {
     }
 
     public function mount(Member $member): void
     {
         $timestamp = new \DateTimeImmutable()->getTimestamp();
-        $this->status = $this->zmq->sendInit($member->getUsername(), $timestamp);
+        $this->status = $this->zmq->sendInit($member->getUsername() ?? '', $timestamp);
         $this->logs = $this->doorLogR->getLatest(3);
     }
 }

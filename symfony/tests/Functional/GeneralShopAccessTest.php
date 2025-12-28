@@ -7,6 +7,7 @@ namespace App\Tests\Functional;
 use App\Factory\EventFactory;
 use App\Factory\ProductFactory;
 use App\Tests\_Base\FixturesWebTestCase;
+use Symfony\Component\BrowserKit\Cookie;
 use App\Tests\Support\LocaleDataProviderTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -188,5 +189,31 @@ final class GeneralShopAccessTest extends FixturesWebTestCase
 
         // Email field should be visible for anonymous users (shop/index.html.twig line 31)
         $this->client->assertSelectorExists('input[name="cart[email]"]', 'Email field should be present for anonymous users');
+    }
+
+    /**
+     * Test that invalid cart ID in session creates a new cart.
+     * Covers ShopController lines 54-56.
+     */
+    public function testShopCreatesNewCartWhenSessionCartNotFound(): void
+    {
+        ProductFactory::new()->generalStore()->create(['quantity' => 10]);
+
+        // Set an invalid cart ID in session
+        $session = $this->client->getContainer()->get('session.factory')->createSession();
+        $session->set('cart', 999999);
+        $session->save();
+
+        // Set session cookie
+        $this->client->getCookieJar()->set(new \Symfony\Component\BrowserKit\Cookie(
+            $session->getName(),
+            $session->getId(),
+        ));
+
+        $this->client->request('GET', '/kauppa');
+
+        // Should still be successful with a new cart
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('form[name="cart"]');
     }
 }

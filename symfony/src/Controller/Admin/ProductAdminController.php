@@ -6,7 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Entity\Product;
 use App\Repository\ProductRepository;
-use App\Service\StripeService;
+use App\Service\StripeServiceInterface;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -20,7 +20,7 @@ final class ProductAdminController extends CRUDController
     ) {
     }
 
-    public function fetchFromStripeAction(StripeService $stripe): RedirectResponse
+    public function fetchFromStripeAction(StripeServiceInterface $stripe): RedirectResponse
     {
         $client = $stripe->getClient();
         $stripePrices = $client->prices->all();

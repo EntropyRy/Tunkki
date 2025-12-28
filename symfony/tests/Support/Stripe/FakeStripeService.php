@@ -9,19 +9,117 @@ use App\Entity\Checkout;
 use App\Entity\Event;
 use App\Entity\Product;
 use App\Repository\CheckoutRepository;
-use App\Service\StripeService;
+use App\Service\StripeServiceInterface;
+use App\Time\ClockInterface;
 use Stripe\Checkout\Session;
+use Stripe\StripeClient;
 use Stripe\StripeObject;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**
  * Test-only Stripe service that avoids real API calls.
  *
- * Mimics the behaviour of the production service while returning synthetic
+ * Implements StripeServiceInterface while returning synthetic
  * Stripe objects so functional tests can execute without network access.
  */
-readonly class FakeStripeService extends StripeService
+final readonly class FakeStripeService implements StripeServiceInterface
 {
+    public function __construct(
+        private UrlGeneratorInterface $urlG,
+        private ClockInterface $clock,
+    ) {
+    }
+
+    public function getClient(): StripeClient
+    {
+        // Return a client with test key - won't make real calls in tests
+        return new StripeClient('sk_test_fake');
+    }
+
+    public function getReturnUrl(?Event $event): string
+    {
+        if (null === $event) {
+            return $this->urlG->generate(
+                'entropy_shop_complete',
+                [],
+                UrlGeneratorInterface::ABSOLUTE_URL,
+            ).'?session_id={CHECKOUT_SESSION_ID}';
+        }
+
+        return $this->urlG->generate(
+            'entropy_event_shop_complete',
+            [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+            ],
+            UrlGeneratorInterface::ABSOLUTE_URL,
+        ).'?session_id={CHECKOUT_SESSION_ID}';
+    }
+
+    public function updateOurProduct(
+        Product $product,
+        ?StripeObject $stripePrice,
+        ?StripeObject $stripeProduct,
+    ): Product {
+        // If only product provided (no price)
+        if (null !== $stripeProduct && null === $stripePrice) {
+            $product->setActive(1 == $stripeProduct['active']);
+            $product->setNameEn($stripeProduct['name']);
+            $product->setStripeId($stripeProduct['id']);
+
+            return $product;
+        }
+
+        // Create synthetic objects if needed
+        $stripeProduct ??= StripeObject::constructFrom([
+            'id' => $product->getStripeId() ?? 'prod_test_'.bin2hex(random_bytes(5)),
+            'name' => $product->getNameEn() ?: 'Test product',
+            'active' => true,
+        ]);
+
+        $stripePrice ??= StripeObject::constructFrom([
+            'id' => $product->getStripePriceId() ?? 'price_test_'.bin2hex(random_bytes(5)),
+            'product' => $stripeProduct['id'],
+            'unit_amount' => $product->getAmount() ?? 0,
+            'active' => true,
+        ]);
+
+        $active = true;
+        if (0 == $stripeProduct['active'] || 0 == $stripePrice['active']) {
+            $active = false;
+        }
+        $product->setAmount($stripePrice['unit_amount']);
+        $product->setActive($active);
+        $product->setNameEn($stripeProduct['name']);
+        $product->setStripeId($stripeProduct['id']);
+        $product->setStripePriceId($stripePrice['id']);
+
+        return $product;
+    }
+
+    public function getCheckoutSession($sessionId): Session
+    {
+        // Parse session ID pattern to determine status
+        // cs_test_completed_* → 'complete'
+        // cs_test_open_* → 'open'
+        // cs_test_expired_* → 'expired'
+
+        $status = 'complete'; // default
+        if (str_contains($sessionId, '_open_')) {
+            $status = 'open';
+        } elseif (str_contains($sessionId, '_expired_')) {
+            $status = 'expired';
+        }
+
+        return Session::constructFrom([
+            'id' => $sessionId,
+            'payment_status' => 'complete' === $status ? 'paid' : 'unpaid',
+            'status' => $status,
+            'customer_email' => 'test@example.com',
+        ]);
+    }
+
     /**
      * @return array{stripeSession: Session, checkout: Checkout}
      */
@@ -75,48 +173,5 @@ readonly class FakeStripeService extends StripeService
             'stripeSession' => $stripeSession,
             'checkout' => $checkout,
         ];
-    }
-
-    public function getCheckoutSession($sessionId): Session
-    {
-        // Parse session ID pattern to determine status
-        // cs_test_completed_* → 'complete'
-        // cs_test_open_* → 'open'
-        // cs_test_expired_* → 'expired'
-
-        $status = 'complete'; // default
-        if (str_contains($sessionId, '_open_')) {
-            $status = 'open';
-        } elseif (str_contains($sessionId, '_expired_')) {
-            $status = 'expired';
-        }
-
-        return Session::constructFrom([
-            'id' => $sessionId,
-            'payment_status' => 'complete' === $status ? 'paid' : 'unpaid',
-            'status' => $status,
-            'customer_email' => 'test@example.com',
-        ]);
-    }
-
-    public function updateOurProduct(
-        Product $product,
-        ?StripeObject $stripePrice,
-        ?StripeObject $stripeProduct,
-    ): Product {
-        $stripeProduct ??= StripeObject::constructFrom([
-            'id' => $product->getStripeId() ?? 'prod_test_'.bin2hex(random_bytes(5)),
-            'name' => $product->getNameEn() ?: 'Test product',
-            'active' => true,
-        ]);
-
-        $stripePrice ??= StripeObject::constructFrom([
-            'id' => $product->getStripePriceId() ?? 'price_test_'.bin2hex(random_bytes(5)),
-            'product' => $stripeProduct['id'],
-            'unit_amount' => $product->getAmount() ?? 0,
-            'active' => true,
-        ]);
-
-        return parent::updateOurProduct($product, $stripePrice, $stripeProduct);
     }
 }
