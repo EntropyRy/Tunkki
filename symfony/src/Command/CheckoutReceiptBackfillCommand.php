@@ -55,6 +55,12 @@ final class CheckoutReceiptBackfillCommand extends Command
                 'List ambiguous matches (ticket + checkout identifiers).',
             )
             ->addOption(
+                'resolve-ambiguous',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Resolve ambiguous matches by checkout id (lowest-checkout|highest-checkout).',
+            )
+            ->addOption(
                 'limit',
                 null,
                 InputOption::VALUE_OPTIONAL,
@@ -71,8 +77,19 @@ final class CheckoutReceiptBackfillCommand extends Command
         $dryRun = (bool) $input->getOption('dry-run');
         $fetchReceipts = (bool) $input->getOption('fetch-receipts');
         $showAmbiguous = (bool) $input->getOption('show-ambiguous');
+        $resolveAmbiguous = $input->getOption('resolve-ambiguous');
         $limitOption = $input->getOption('limit');
         $limit = null !== $limitOption ? (int) $limitOption : null;
+
+        $resolveMode = null;
+        if (\is_string($resolveAmbiguous) && '' !== $resolveAmbiguous) {
+            $resolveMode = $resolveAmbiguous;
+        }
+        if (null !== $resolveMode && !\in_array($resolveMode, ['lowest-checkout', 'highest-checkout'], true)) {
+            $io->error('Invalid --resolve-ambiguous value. Use lowest-checkout or highest-checkout.');
+
+            return Command::INVALID;
+        }
 
         $qb = $this->ticketRepo->createQueryBuilder('t')
             ->leftJoin('t.checkout', 'c')
@@ -97,6 +114,7 @@ final class CheckoutReceiptBackfillCommand extends Command
             'ambiguous' => 0,
             'receipt_missing' => 0,
         ];
+        $ambiguousResolved = 0;
         $ambiguousRows = [];
 
         foreach ($tickets as $ticket) {
@@ -125,30 +143,36 @@ final class CheckoutReceiptBackfillCommand extends Command
             }
 
             if (\count($matches) > 1) {
-                ++$problems['ambiguous'];
-                if ($showAmbiguous) {
-                    $ambiguousRows[] = [
-                        'ticket_id' => (string) $ticket->getId(),
-                        'ticket_email' => $email,
-                        'event_id' => (string) $event->getId(),
-                        'stripe_product_id' => $stripeProductId,
-                        'checkout_ids' => implode(
-                            ',',
-                            array_map(
-                                static fn ($checkout): string => (string) $checkout->getId(),
-                                $matches,
+                if (null === $resolveMode) {
+                    ++$problems['ambiguous'];
+                    if ($showAmbiguous) {
+                        $ambiguousRows[] = [
+                            'ticket_id' => (string) $ticket->getId(),
+                            'ticket_email' => $email,
+                            'event_id' => (string) $event->getId(),
+                            'stripe_product_id' => $stripeProductId,
+                            'checkout_ids' => implode(
+                                ',',
+                                array_map(
+                                    static fn ($checkout): string => (string) $checkout->getId(),
+                                    $matches,
+                                ),
                             ),
-                        ),
-                        'checkout_sessions' => implode(
-                            ',',
-                            array_map(
-                                static fn ($checkout): string => $checkout->getStripeSessionId(),
-                                $matches,
+                            'checkout_sessions' => implode(
+                                ',',
+                                array_map(
+                                    static fn ($checkout): string => $checkout->getStripeSessionId(),
+                                    $matches,
+                                ),
                             ),
-                        ),
-                    ];
+                        ];
+                    }
+                    continue;
                 }
-                continue;
+
+                $checkout = $this->resolveAmbiguousCheckout($matches, $resolveMode);
+                ++$ambiguousResolved;
+                $matches = [$checkout];
             }
 
             $checkout = $matches[0];
@@ -204,6 +228,10 @@ final class CheckoutReceiptBackfillCommand extends Command
             $io->note('No problems detected.');
         }
 
+        if ($ambiguousResolved > 0) {
+            $io->note(\sprintf('Ambiguous matches resolved by rule: %s (%d).', $resolveMode, $ambiguousResolved));
+        }
+
         if ($showAmbiguous && [] !== $ambiguousRows) {
             $io->warning('Ambiguous matches (manual review needed):');
             $io->table(
@@ -241,5 +269,22 @@ final class CheckoutReceiptBackfillCommand extends Command
             ->setParameter('minStatus', 1)
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * @param array<int, \App\Entity\Checkout> $matches
+     */
+    private function resolveAmbiguousCheckout(array $matches, string $mode): \App\Entity\Checkout
+    {
+        usort(
+            $matches,
+            static fn ($a, $b): int => $a->getId() <=> $b->getId(),
+        );
+
+        if ('highest-checkout' === $mode) {
+            return $matches[\count($matches) - 1];
+        }
+
+        return $matches[0];
     }
 }
