@@ -161,10 +161,8 @@ class Checkout
 
     public function removeTicket(Ticket $ticket): static
     {
-        if ($this->tickets->removeElement($ticket)) {
-            if ($ticket->getCheckout() === $this) {
-                $ticket->setCheckout(null);
-            }
+        if ($this->tickets->removeElement($ticket) && $ticket->getCheckout() === $this) {
+            $ticket->setCheckout(null);
         }
 
         return $this;

@@ -238,7 +238,7 @@ final class StripeServiceTest extends TestCase
                 ParameterBag $bag,
                 UrlGeneratorInterface $urlG,
             ) {
-                $clock = new class() implements \App\Time\ClockInterface {
+                $clock = new class implements \App\Time\ClockInterface {
                     public function now(): \DateTimeImmutable
                     {
                         return new \DateTimeImmutable('2025-01-01 12:00:00');
@@ -279,7 +279,7 @@ final class StripeServiceTest extends TestCase
             }
         };
 
-        $fakeCharges = new class() {
+        $fakeCharges = new class {
             public function retrieve(string $id): object
             {
                 return (object) ['receipt_url' => null];
@@ -304,7 +304,7 @@ final class StripeServiceTest extends TestCase
                 UrlGeneratorInterface $urlG,
                 private readonly StripeClient $client,
             ) {
-                $clock = new class() implements \App\Time\ClockInterface {
+                $clock = new class implements \App\Time\ClockInterface {
                     public function now(): \DateTimeImmutable
                     {
                         return new \DateTimeImmutable('2025-01-01 12:00:00');
@@ -351,7 +351,7 @@ final class StripeServiceTest extends TestCase
             }
         };
 
-        $fakeCharges = new class() {
+        $fakeCharges = new class {
             public function retrieve(string $id): object
             {
                 return (object) ['receipt_url' => 'https://stripe.test/receipt/latest'];
@@ -376,7 +376,7 @@ final class StripeServiceTest extends TestCase
                 UrlGeneratorInterface $urlG,
                 private readonly StripeClient $client,
             ) {
-                $clock = new class() implements \App\Time\ClockInterface {
+                $clock = new class implements \App\Time\ClockInterface {
                     public function now(): \DateTimeImmutable
                     {
                         return new \DateTimeImmutable('2025-01-01 12:00:00');
@@ -412,7 +412,7 @@ final class StripeServiceTest extends TestCase
                 ParameterBag $bag,
                 UrlGeneratorInterface $urlG,
             ) {
-                $clock = new class() implements \App\Time\ClockInterface {
+                $clock = new class implements \App\Time\ClockInterface {
                     public function now(): \DateTimeImmutable
                     {
                         return new \DateTimeImmutable('2025-01-01 12:00:00');

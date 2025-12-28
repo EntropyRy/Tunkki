@@ -164,9 +164,17 @@ class HappeningType extends AbstractType
                     $value = trim($value);
                 }
                 if ('' === $value || null === $value) {
-                    // Keep the original entity value set earlier (e.g., event date) by unsetting empty submission
-                    unset($data['time']);
-                    $event->setData($data);
+                    // Keep the original entity value when time field is empty
+                    $entity = $event->getForm()->getData();
+                    if ($entity instanceof Happening && null !== $entity->getId()) {
+                        // For existing entities, preserve the original time
+                        $data['time'] = $entity->getTime()->format('Y-m-d H:i:s');
+                        $event->setData($data);
+                    } else {
+                        // For new entities, unset to let validation handle it
+                        unset($data['time']);
+                        $event->setData($data);
+                    }
                 }
             }
         });

@@ -57,10 +57,7 @@ class ProfileController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $member = $form->getData();
 
-            // Ensure locale and code are populated before persistence
-            if (null === $member->getLocale()) {
-                $member->setLocale($request->getLocale());
-            }
+            // Ensure code is populated before persistence
             if (null === $member->getCode()) {
                 $member->setCode($barcodeService->getCode());
             }

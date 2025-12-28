@@ -102,7 +102,7 @@ readonly class StripeService implements StripeServiceInterface
                 $paymentIntentId,
                 ['expand' => ['charges.data']],
             );
-            $charges = $paymentIntent->charges?->data ?? [];
+            $charges = $paymentIntent->charges->data ?? [];
 
             if ([] !== $charges && isset($charges[0]->receipt_url)) {
                 return (string) $charges[0]->receipt_url;
