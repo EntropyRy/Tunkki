@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
+use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
 final class ResetPasswordControllerTest extends FixturesWebTestCase
 {
@@ -45,5 +47,106 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
             '/reset-password',
             parse_url($location, \PHP_URL_PATH),
         );
+    }
+
+    public function testValidTokenDisplaysChangePasswordForm(): void
+    {
+        $member = MemberFactory::createOne();
+        $user = $member->getUser();
+
+        /** @var ResetPasswordHelperInterface $resetHelper */
+        $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
+        $resetToken = $resetHelper->generateResetToken($user);
+
+        // First request stores token in session and redirects
+        $this->client->request('GET', '/reset-password/reset/'.$resetToken->getToken());
+        $this->assertResponseRedirects('/reset-password/reset');
+
+        // Follow redirect to see the form
+        $this->client->followRedirect();
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('form[name="change_password_form"]');
+        $this->client->assertSelectorExists('input[name="change_password_form[plainPassword][first]"]');
+        $this->client->assertSelectorExists('input[name="change_password_form[plainPassword][second]"]');
+    }
+
+    public function testValidTokenFormSubmissionChangesPassword(): void
+    {
+        $member = MemberFactory::createOne();
+        $user = $member->getUser();
+        $userId = $user->getId();
+        $originalPasswordHash = $user->getPassword();
+
+        /** @var ResetPasswordHelperInterface $resetHelper */
+        $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
+        $resetToken = $resetHelper->generateResetToken($user);
+
+        // Store token in session
+        $this->client->request('GET', '/reset-password/reset/'.$resetToken->getToken());
+        $this->client->followRedirect();
+
+        // Submit the form with new password
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[name="change_password_form"]')->form([
+            'change_password_form[plainPassword][first]' => 'newSecurePassword123',
+            'change_password_form[plainPassword][second]' => 'newSecurePassword123',
+        ]);
+
+        $this->client->submit($form);
+        $this->assertResponseRedirects('/login');
+
+        // Verify password was changed by fetching fresh from DB
+        $this->em()->clear();
+        $freshUser = $this->em()->find(\App\Entity\User::class, $userId);
+        $this->assertNotNull($freshUser);
+        $this->assertNotSame($originalPasswordHash, $freshUser->getPassword());
+    }
+
+    public function testFormValidationRejectsShortPassword(): void
+    {
+        $member = MemberFactory::createOne();
+        $user = $member->getUser();
+
+        /** @var ResetPasswordHelperInterface $resetHelper */
+        $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
+        $resetToken = $resetHelper->generateResetToken($user);
+
+        // Store token in session
+        $this->client->request('GET', '/reset-password/reset/'.$resetToken->getToken());
+        $this->client->followRedirect();
+
+        // Submit form with too short password
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[name="change_password_form"]')->form([
+            'change_password_form[plainPassword][first]' => 'short',
+            'change_password_form[plainPassword][second]' => 'short',
+        ]);
+
+        $this->client->submit($form);
+        $this->assertResponseIsUnprocessable();
+    }
+
+    public function testFormValidationRejectsMismatchedPasswords(): void
+    {
+        $member = MemberFactory::createOne();
+        $user = $member->getUser();
+
+        /** @var ResetPasswordHelperInterface $resetHelper */
+        $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
+        $resetToken = $resetHelper->generateResetToken($user);
+
+        // Store token in session
+        $this->client->request('GET', '/reset-password/reset/'.$resetToken->getToken());
+        $this->client->followRedirect();
+
+        // Submit form with mismatched passwords
+        $crawler = $this->client->getCrawler();
+        $form = $crawler->filter('form[name="change_password_form"]')->form([
+            'change_password_form[plainPassword][first]' => 'passwordOne123',
+            'change_password_form[plainPassword][second]' => 'passwordTwo456',
+        ]);
+
+        $this->client->submit($form);
+        $this->assertResponseIsUnprocessable();
     }
 }

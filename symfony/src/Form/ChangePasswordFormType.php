@@ -25,15 +25,12 @@ class ChangePasswordFormType extends AbstractType
                 'type' => PasswordType::class,
                 'first_options' => [
                     'constraints' => [
-                        new NotBlank([
-                            'message' => 'password.required',
-                        ]),
-                        new Length([
-                            'min' => 8,
-                            'minMessage' => 'under_password_limit',
-                            // max length allowed by Symfony for security reasons
-                            'max' => 4096,
-                        ]),
+                        new NotBlank(message: 'password.required'),
+                        new Length(
+                            min: 8,
+                            max: 4096, // max length allowed by Symfony for security reasons
+                            minMessage: 'under_password_limit',
+                        ),
                     ],
                     'label' => 'New password',
                 ],
