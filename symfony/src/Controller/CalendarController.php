@@ -206,7 +206,7 @@ class CalendarController extends AbstractController
         $timeSpan = $this->createTimeSpan($event);
         $timestamp = new Timestamp($event->getUpdatedAt());
 
-        $calendarEvent = (new CalendarEvent($uid))
+        $calendarEvent = new CalendarEvent($uid)
             ->setSummary($event->getNameByLang($locale))
             ->setDescription($this->sanitizeEventDescription($event->getContentForTwig($locale)))
             ->setOccurrence($timeSpan)
