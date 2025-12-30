@@ -74,10 +74,15 @@ class SitemapController extends AbstractController
      */
     private function buildEventAlternates(Event $event): array
     {
-        // External events: same destination for both languages.
+        // External events: only include if pointing to entropy.fi
         if ($event->getExternalUrl()) {
             $url = trim((string) $event->getUrl());
             if ('' === $url) {
+                return [];
+            }
+
+            // Exclude external URLs that don't point to entropy.fi
+            if (!str_starts_with($url, 'https://entropy.fi')) {
                 return [];
             }
 

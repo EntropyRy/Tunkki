@@ -631,6 +631,7 @@ final class EventAdmin extends AbstractAdmin
 
             // On submit, clear config when switching to a non-configurable effect.
             // If effect changed and no explicit config is provided, clear stale config by default.
+            // Only process if the form has the backgroundEffectConfig field (not present when externalUrl=true)
             $builder->addEventListener(FormEvents::PRE_SUBMIT, function (
                 FormEvent $event,
             ): void {
@@ -639,6 +640,18 @@ final class EventAdmin extends AbstractAdmin
                 $original = $form->getData();
 
                 if (!\is_array($submitted)) {
+                    return;
+                }
+
+                // Skip backgroundEffectConfig handling if the form doesn't have this field
+                // (e.g., when externalUrl is true, the field is not added to the form)
+                if (!$form->has('backgroundEffectConfig')) {
+                    // Remove any stray backgroundEffectConfig from submission to avoid "extra fields" error
+                    if (\array_key_exists('backgroundEffectConfig', $submitted)) {
+                        unset($submitted['backgroundEffectConfig']);
+                        $event->setData($submitted);
+                    }
+
                     return;
                 }
 

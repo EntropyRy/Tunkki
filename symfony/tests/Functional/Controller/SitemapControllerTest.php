@@ -90,7 +90,14 @@ final class SitemapControllerTest extends FixturesWebTestCase
             'url' => '',
         ]);
 
-        $externalUrl = 'https://example.com/sitemap-external-'.uniqid('', true);
+        // External event pointing to non-entropy.fi domain should not be included.
+        EventFactory::new()->published()->create([
+            'externalUrl' => true,
+            'url' => 'https://example.com/excluded-external-'.uniqid('', true),
+        ]);
+
+        // External event pointing to entropy.fi should be included.
+        $externalUrl = 'https://entropy.fi/rave/sitemap-external-'.uniqid('', true);
         EventFactory::new()->published()->create([
             'externalUrl' => true,
             'url' => $externalUrl,

@@ -177,7 +177,37 @@ final class SitemapControllerTest extends TestCase
         self::assertSame("https://example.test/en/{$expectedYear}/fi-event-slug", $entry['alts']['en']);
     }
 
-    public function testExternalEventWithDestinationUsesSameUrlForBothLocales(): void
+    public function testExternalEventWithEntropyFiUrlIsIncludedInSitemap(): void
+    {
+        /** @var EventRepository $eventRepo */
+        $eventRepo = $this->createStub(EventRepository::class);
+        /** @var MenuRepository $menuRepo */
+        $menuRepo = $this->createStub(MenuRepository::class);
+        /** @var UrlGeneratorInterface $urlGenerator */
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+
+        $event = $this->makeEvent(
+            id: 10,
+            url: 'https://entropy.fi/rave/special-event',
+            externalUrl: true,
+            eventDate: new \DateTimeImmutable('2025-05-20'),
+            updatedAt: new \DateTimeImmutable('2025-01-02'),
+        );
+
+        $eventRepo->method('getSitemapEvents')->willReturn([$event]);
+        $menuRepo->method('getRootNodes')->willReturn([]);
+
+        $captured = [];
+        $controller = $this->makeController($eventRepo, $menuRepo, $urlGenerator, $captured);
+        $controller->index();
+
+        self::assertCount(1, $captured);
+        self::assertSame('https://entropy.fi/rave/special-event', $captured[0]['loc']);
+        self::assertSame('https://entropy.fi/rave/special-event', $captured[0]['alts']['fi']);
+        self::assertArrayNotHasKey('en', $captured[0]['alts']);
+    }
+
+    public function testExternalEventWithNonEntropyUrlIsExcludedFromSitemap(): void
     {
         /** @var EventRepository $eventRepo */
         $eventRepo = $this->createStub(EventRepository::class);
@@ -201,10 +231,34 @@ final class SitemapControllerTest extends TestCase
         $controller = $this->makeController($eventRepo, $menuRepo, $urlGenerator, $captured);
         $controller->index();
 
-        self::assertCount(1, $captured);
-        self::assertSame('https://example.com/external', $captured[0]['loc']);
-        self::assertSame('https://example.com/external', $captured[0]['alts']['fi']);
-        self::assertArrayNotHasKey('en', $captured[0]['alts']);
+        self::assertSame([], $captured, 'External events pointing to non-entropy.fi URLs should be excluded from sitemap');
+    }
+
+    public function testExternalEventWithFacebookUrlIsExcludedFromSitemap(): void
+    {
+        /** @var EventRepository $eventRepo */
+        $eventRepo = $this->createStub(EventRepository::class);
+        /** @var MenuRepository $menuRepo */
+        $menuRepo = $this->createStub(MenuRepository::class);
+        /** @var UrlGeneratorInterface $urlGenerator */
+        $urlGenerator = $this->createStub(UrlGeneratorInterface::class);
+
+        $event = $this->makeEvent(
+            id: 11,
+            url: 'https://www.facebook.com/events/123456789',
+            externalUrl: true,
+            eventDate: new \DateTimeImmutable('2025-05-20'),
+            updatedAt: new \DateTimeImmutable('2025-01-02'),
+        );
+
+        $eventRepo->method('getSitemapEvents')->willReturn([$event]);
+        $menuRepo->method('getRootNodes')->willReturn([]);
+
+        $captured = [];
+        $controller = $this->makeController($eventRepo, $menuRepo, $urlGenerator, $captured);
+        $controller->index();
+
+        self::assertSame([], $captured, 'External Facebook events should be excluded from sitemap');
     }
 
     public function testExternalEventWithoutDestinationIsSkipped(): void

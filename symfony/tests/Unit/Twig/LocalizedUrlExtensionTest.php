@@ -343,6 +343,7 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('findOneBy')
             ->willReturnCallback(function (array $criteria) use (&$callCount, $menu) {
                 ++$callCount;
+
                 // First call is pageFi, returns null
                 // Second call is pageEn, returns menu
                 return 2 === $callCount ? $menu : null;

@@ -217,4 +217,88 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getLastName());
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getFirstName());
     }
+
+    /**
+     * Test that external URL events can be updated without "extra fields" validation error.
+     *
+     * When externalUrl=true, the form excludes backgroundEffectConfig and related fields.
+     * Previously, the PRE_SUBMIT handler would still manipulate backgroundEffectConfig,
+     * causing a "This form should not contain extra fields" validation error.
+     */
+    public function testExternalUrlEventCanBeUpdatedWithoutExtraFieldsError(): void
+    {
+        // Create an external URL event (simulates old events with externalUrl=true)
+        $event = EventFactory::new()->published()->create([
+            'url' => 'https://www.facebook.com/events/123456789',
+            'externalUrl' => true,
+            'name' => 'External Event EN',
+            'nimi' => 'External Event FI',
+        ]);
+
+        [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // Load the edit form
+        $crawler = $this->client->request('GET', "/admin/event/{$event->getId()}/edit");
+        $this->assertResponseIsSuccessful();
+
+        // Find the main edit form
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('input[name*="[Name]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+
+        self::assertNotNull($formNode, 'Expected to find the Sonata edit form');
+
+        $form = $formNode->form();
+        $values = $form->getPhpValues();
+
+        // Detect the Sonata root form name
+        $html = $crawler->html() ?? '';
+        $root = null;
+        if (1 === preg_match('/name="([^"]+)\[Name\]"/', $html, $m)) {
+            $root = $m[1];
+        }
+
+        self::assertNotNull($root, 'Could not detect Sonata form root name');
+
+        // Update a simple field to trigger form submission
+        $values[$root]['Name'] = 'Updated External Event EN';
+
+        $this->client->request($form->getMethod(), $form->getUri(), $values);
+
+        // Should succeed without "extra fields" validation error
+        $status = $this->client->getResponse()->getStatusCode();
+        self::assertContains($status, [200, 302], 'Expected successful update response (200 or 302)');
+
+        if (302 === $status) {
+            $this->client->followRedirect();
+            $this->assertResponseIsSuccessful();
+        } else {
+            // On 200 responses, ensure no form errors
+            $content = $this->client->getResponse()->getContent() ?? '';
+            self::assertStringNotContainsString(
+                'ylimääräisiä kenttiä',
+                $content,
+                'Form should not have "extra fields" error (Finnish)'
+            );
+            self::assertStringNotContainsString(
+                'extra fields',
+                $content,
+                'Form should not have "extra fields" error (English)'
+            );
+            self::assertStringNotContainsString('has-error', $content, 'Form validation errors detected');
+        }
+
+        // Verify the update was persisted
+        $em = $this->em();
+        $em->clear();
+
+        $reloaded = $em->getRepository(Event::class)->find($event->getId());
+        self::assertNotNull($reloaded);
+        self::assertSame('Updated External Event EN', $reloaded->getName());
+        self::assertTrue($reloaded->getExternalUrl());
+    }
 }
