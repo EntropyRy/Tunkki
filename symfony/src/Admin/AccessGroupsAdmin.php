@@ -12,6 +12,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Security\Core\Role\RoleHierarchyInterface;
 
 /**
  * @extends AbstractAdmin<AccessGroups>
@@ -48,8 +49,7 @@ final class AccessGroupsAdmin extends AbstractAdmin
     #[\Override]
     protected function configureFormFields(FormMapper $formMapper): void
     {
-        $roles = $this->bag->get('security.role_hierarchy.roles');
-        $rolesChoices = self::flattenRoles($roles);
+        $rolesChoices = $this->getRoleChoices();
         $formMapper
             ->add('name')
             ->add('active')
@@ -73,26 +73,31 @@ final class AccessGroupsAdmin extends AbstractAdmin
         ;
     }
 
-    public function __construct(protected ParameterBagInterface $bag)
-    {
+    public function __construct(
+        protected ParameterBagInterface $bag,
+        protected RoleHierarchyInterface $roleHierarchy,
+    ) {
     }
 
     /**
-     * Turns the role's array keys into string <ROLES_NAME> keys.
+     * @return array<string, string>
      */
-    protected static function flattenRoles($rolesHierarchy): array
+    private function getRoleChoices(): array
     {
-        $flatRoles = [];
-        foreach ($rolesHierarchy as $key => $roles) {
-            if (empty($roles)) {
+        $rolesHierarchy = $this->bag->get('security.role_hierarchy.roles');
+        $rootRoles = array_keys($rolesHierarchy);
+        $reachableRoles = $this->roleHierarchy->getReachableRoleNames($rootRoles);
+
+        $choices = [];
+        foreach ($reachableRoles as $role) {
+            if ('ROLE_ADMIN' === $role || 'ROLE_SUPER_ADMIN' === $role) {
                 continue;
             }
-            if ('ROLE_ADMIN' == $key || 'ROLE_SUPER_ADMIN' == $key) {
-                continue;
-            }
-            $flatRoles[$key] = $key;
+            $choices[$role] = $role;
         }
 
-        return $flatRoles;
+        ksort($choices);
+
+        return $choices;
     }
 }

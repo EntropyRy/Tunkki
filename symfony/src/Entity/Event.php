@@ -21,6 +21,30 @@ use function Symfony\Component\String\u;
 #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'event')]
 class Event implements \Stringable
 {
+    public const TYPE_EVENT = 'event';
+    public const TYPE_CLUBROOM = 'clubroom';
+    public const TYPE_ANNOUNCEMENT = 'announcement';
+    public const TYPE_STREAM = 'stream';
+    public const TYPE_MEETING = 'meeting';
+
+    public const TYPE_CHOICES = [
+        'Event' => self::TYPE_EVENT,
+        'Clubroom Event' => self::TYPE_CLUBROOM,
+        'Announcement' => self::TYPE_ANNOUNCEMENT,
+        'Stream' => self::TYPE_STREAM,
+        'Meeting' => self::TYPE_MEETING,
+    ];
+
+    public const PICTURE_POSITION_BANNER = 'banner';
+    public const PICTURE_POSITION_RIGHT = 'right';
+    public const PICTURE_POSITION_AFTER = 'after';
+
+    public const PICTURE_POSITION_CHOICES = [
+        'Banner' => self::PICTURE_POSITION_BANNER,
+        'Right side of the text' => self::PICTURE_POSITION_RIGHT,
+        'After the post' => self::PICTURE_POSITION_AFTER,
+    ];
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]

@@ -74,7 +74,8 @@ class BookingAdmin extends AbstractAdmin
             return;
         }
         $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
+        $request = $admin->getRequest();
+        $id = $request->attributes->get('id');
 
         if ($this->isGranted('EDIT')) {
             $menu->addChild('Edit Booking', [

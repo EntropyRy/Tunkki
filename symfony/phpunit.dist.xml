@@ -58,9 +58,26 @@
             <directory>src</directory>
         </include>
         <exclude>
-            <!-- Exclude Admin classes from coverage: mostly presentation/config glue;
-                 excluding them speeds analysis and focuses mutation & coverage budgets on domain logic. -->
-            <directory>src/Admin</directory>
+            <!-- Admin classes include functional logic (form handlers, lifecycle hooks, routes);
+                 keep them in coverage and only exclude specific files with no custom controller behavior. -->
+            <file>src/Admin/AccessoryAdmin.php</file>
+            <file>src/Admin/AccessoryChoiceAdmin.php</file>
+            <file>src/Admin/BillableEventAdmin.php</file>
+            <file>src/Admin/ContractAdmin.php</file>
+            <file>src/Admin/CheckoutAdmin.php</file>
+            <file>src/Admin/DoorLogAdmin.php</file>
+            <file>src/Admin/FileAdmin.php</file>
+            <file>src/Admin/HappeningAdmin.php</file>
+            <file>src/Admin/HappeningBookingAdmin.php</file>
+            <file>src/Admin/LocationAdmin.php</file>
+            <file>src/Admin/NakkiDefinitionAdmin.php</file>
+            <file>src/Admin/RSVPAdmin.php</file>
+            <file>src/Admin/RenterAdmin.php</file>
+            <file>src/Admin/RewardAdmin.php</file>
+            <file>src/Admin/TicketAdmin.php</file>
+            <file>src/Admin/WhoCanRentChoiceAdmin.php</file>
+            <file>src/Admin/MenuAdmin.php</file>
+            <file>src/Admin/AccessGroupsAdmin.php</file>
             <!-- Exclude test infrastructure (Factories, Stories) from coverage: these are test helpers,
                  not production code. Including them dilutes meaningful coverage metrics. -->
             <directory>src/Factory</directory>

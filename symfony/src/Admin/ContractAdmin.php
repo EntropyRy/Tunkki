@@ -17,8 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @extends AbstractAdmin<Contract>
- *
- * TODO: Verify the actual Contract entity FQCN (e.g. \App\Entity\Contract). Update if different.
  */
 final class ContractAdmin extends AbstractAdmin
 {

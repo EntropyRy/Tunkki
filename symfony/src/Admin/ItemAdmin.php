@@ -211,7 +211,8 @@ class ItemAdmin extends AbstractAdmin
         }
 
         $admin = $this->isChild() ? $this->getParent() : $this;
-        $id = $admin->getRequest()->get('id');
+        $request = $admin->getRequest();
+        $id = $request->attributes->get('id');
 
         //        $menu->addChild('View Item', array('uri' => $admin->generateUrl('show', array('id' => $id))));
 
