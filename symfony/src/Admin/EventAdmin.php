@@ -760,7 +760,12 @@ final class EventAdmin extends AbstractAdmin
     #[\Override]
     public function preUpdate($event): void
     {
-        if (null === $event->getUrl()) {
+        $url = $event->getUrl();
+        $isEmpty = null === $url || '' === trim($url);
+
+        // Only auto-generate URL for internal events (not external URL events)
+        // External URL events can have an empty URL (meaning no link/not in sitemap)
+        if ($isEmpty && !$event->getExternalUrl()) {
             $event->setUrl(
                 $this->slug->slug($event->getNimi())->lower()->toString(),
             );
