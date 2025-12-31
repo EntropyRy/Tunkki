@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\DTO\ZmqResponse;
+
 /**
  * Interface for ZMQ door control service.
  *
@@ -19,9 +21,9 @@ interface ZMQServiceInterface
      *
      * @param string $command The command string to send
      *
-     * @return \App\DTO\ZmqResponse Response from the door system with status and message
+     * @return ZmqResponse Response from the door system with status and message
      */
-    public function send(string $command): \App\DTO\ZmqResponse;
+    public function send(string $command): ZmqResponse;
 
     /**
      * Send an "init" command (initial connection check).
@@ -29,9 +31,9 @@ interface ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return \App\DTO\ZmqResponse Response from the door system
+     * @return ZmqResponse Response from the door system
      */
-    public function sendInit(string $username, int $timestamp): \App\DTO\ZmqResponse;
+    public function sendInit(string $username, int $timestamp): ZmqResponse;
 
     /**
      * Send an "open" command to open the door.
@@ -39,9 +41,9 @@ interface ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return \App\DTO\ZmqResponse Response from the door system
+     * @return ZmqResponse Response from the door system
      */
-    public function sendOpen(string $username, int $timestamp): \App\DTO\ZmqResponse;
+    public function sendOpen(string $username, int $timestamp): ZmqResponse;
 
     /**
      * Build a command string in the expected format.

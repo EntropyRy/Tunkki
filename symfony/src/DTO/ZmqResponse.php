@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\DTO;
 
-final class ZmqResponse
+final readonly class ZmqResponse
 {
     public function __construct(
-        public readonly ZmqStatus $status,
-        public readonly string $message,
+        public ZmqStatus $status,
+        public string $message,
     ) {
     }
 

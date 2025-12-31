@@ -55,7 +55,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
 
         $this->client->request(
             'GET',
-            sprintf(
+            \sprintf(
                 '/en/%s/%s/happening/%s',
                 $year,
                 $event->getUrl(),
@@ -65,21 +65,21 @@ final class HappeningControllerTest extends FixturesWebTestCase
 
         $this->assertResponseIsSuccessful();
 
-        $prevHref = sprintf(
+        $prevHref = \sprintf(
             '/en/%s/%s/happening/%s',
             $year,
             $event->getUrl(),
             $firstEntity->getSlugEn(),
         );
-        $nextHref = sprintf(
+        $nextHref = \sprintf(
             '/en/%s/%s/happening/%s',
             $year,
             $event->getUrl(),
             $lastEntity->getSlugEn(),
         );
 
-        $this->client->assertSelectorExists(sprintf('a[href="%s"]', $prevHref));
-        $this->client->assertSelectorExists(sprintf('a[href="%s"]', $nextHref));
+        $this->client->assertSelectorExists(\sprintf('a[href="%s"]', $prevHref));
+        $this->client->assertSelectorExists(\sprintf('a[href="%s"]', $nextHref));
     }
 
     public function testRemoveDeletesBookingForMember(): void
@@ -96,7 +96,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
 
         $booking = $this->createBooking($member, $happeningEntity);
 
-        $this->client->request('GET', sprintf('/happening/%d/remove', $booking->getId()));
+        $this->client->request('GET', \sprintf('/happening/%d/remove', $booking->getId()));
         $this->assertResponseStatusCodeSame(302);
 
         $this->em()->clear();
@@ -121,7 +121,7 @@ final class HappeningControllerTest extends FixturesWebTestCase
         [$otherUser, $_clientTwo] = $this->loginAsMember();
         $this->client->loginUser($otherUser);
 
-        $this->client->request('GET', sprintf('/happening/%d/remove', $booking->getId()));
+        $this->client->request('GET', \sprintf('/happening/%d/remove', $booking->getId()));
         $this->assertResponseStatusCodeSame(302);
 
         $this->em()->clear();

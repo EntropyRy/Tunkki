@@ -14,7 +14,6 @@ use App\Tests\Support\LoginHelperTrait;
 use PHPUnit\Framework\Attributes\Group;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Zenstruck\Foundry\Persistence\Proxy;
 
 #[Group('admin')]

@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
+use App\Controller\VerifyEmailController;
 use App\Entity\Member;
 use App\Entity\User;
 use App\Factory\MemberFactory;
+use App\Security\EmailVerifier;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
-use PHPUnit\Framework\Attributes\Group;
-use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
-use Zenstruck\Foundry\Persistence\Proxy;
-use App\Controller\VerifyEmailController;
-use App\Security\EmailVerifier;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\Group;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Zenstruck\Foundry\Persistence\Proxy;
 
 #[Group('verify-email')]
 final class VerifyEmailControllerTest extends FixturesWebTestCase
