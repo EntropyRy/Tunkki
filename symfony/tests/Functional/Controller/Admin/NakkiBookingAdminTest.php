@@ -6,7 +6,11 @@ namespace App\Tests\Functional\Controller\Admin;
 
 use App\Admin\NakkiBookingAdmin;
 use App\Entity\NakkiBooking;
+use App\Factory\EventFactory;
+use App\Factory\MemberFactory;
 use App\Factory\NakkiBookingFactory;
+use App\Factory\NakkikoneFactory;
+use App\Factory\TicketFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use PHPUnit\Framework\Attributes\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -132,6 +136,59 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         self::assertTrue($show->has('member'));
         self::assertTrue($show->has('startAt'));
         self::assertTrue($show->has('endAt'));
+    }
+
+    public function testMemberEmailAndHasEventTicket(): void
+    {
+        $member = MemberFactory::new()->create([
+            'email' => 'nakki.member@example.test',
+        ]);
+        $event = EventFactory::new()->published()->create();
+        $nakkikone = NakkikoneFactory::new()->create([
+            'event' => $event,
+        ]);
+        $nakki = \App\Factory\NakkiFactory::new()->create([
+            'nakkikone' => $nakkikone,
+        ]);
+
+        $booking = NakkiBookingFactory::new()->booked()->create([
+            'member' => $member,
+            'nakkikone' => $nakkikone,
+            'nakki' => $nakki,
+        ]);
+        $bookingEntity = $booking instanceof Proxy ? $booking->_real() : $booking;
+
+        $nakkikone->setRequiredForTicketReservation(true);
+        $this->em()->flush();
+        self::assertSame(
+            (string) $event.': '.$bookingEntity->getNakki(),
+            (string) $bookingEntity,
+        );
+
+        $nakkikone->setRequiredForTicketReservation(false);
+        $bookingEntity->setStartAt(new \DateTimeImmutable('2030-01-01 09:15:00'));
+        $this->em()->flush();
+        self::assertSame(
+            (string) $event.': '.$bookingEntity->getNakki().' at 09:15',
+            (string) $bookingEntity,
+        );
+
+        self::assertSame('nakki.member@example.test', $bookingEntity->getMemberEmail());
+        self::assertFalse($bookingEntity->memberHasEventTicket());
+
+        $ticket = TicketFactory::new()
+            ->forEvent($event)
+            ->ownedBy($member)
+            ->paid()
+            ->create();
+        $ticketEntity = $ticket instanceof Proxy ? $ticket->_real() : $ticket;
+        $event->addTicket($ticketEntity);
+        $this->em()->flush();
+
+        self::assertTrue($bookingEntity->memberHasEventTicket());
+
+        $bookingEntity->setMember(null);
+        self::assertNull($bookingEntity->getMemberEmail());
     }
 
     private function createBooking(): NakkiBooking

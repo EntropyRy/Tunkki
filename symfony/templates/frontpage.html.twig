@@ -19,7 +19,11 @@
 {% endblock %}
 {% block epic_tile %}
     <div class="tile col-12 p-2">
-        <twig:EPicsRandom defaultImage="{{ asset('/images/header-logo.svg') }}" refreshInterval="8000" />
+        <twig:EPicsRandom
+            defaultImage="{{ asset('/images/header-logo.svg') }}"
+            refreshInterval="8000"
+            loading="lazy"
+        />
         <h2 class="h4">{{ 'epics.tile.heading'|trans }} {{ 'epics.tile.heading_events'|trans }}.</h2>
         <div class="justify-content-between d-flex">
             <a class="btn btn-outline-primary" href="https://epics.entropy.fi">{{ 'epics.tile.more_button'|trans }}</a>

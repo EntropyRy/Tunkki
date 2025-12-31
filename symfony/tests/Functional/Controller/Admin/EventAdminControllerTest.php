@@ -232,6 +232,7 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('table.table');
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getLastName());
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getFirstName());
+        self::assertNotNull($rsvp->getId());
     }
 
     /**

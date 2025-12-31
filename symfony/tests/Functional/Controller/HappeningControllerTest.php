@@ -134,8 +134,18 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $booking = new HappeningBooking();
         $booking->setMember($member);
         $booking->setHappening($happening);
+        $booking->setCreatedAt(new \DateTimeImmutable('2030-02-03 14:05:00'));
         $this->em()->persist($booking);
         $this->em()->flush();
+
+        self::assertSame(
+            '03.02. 14:05 '.$member->getName(),
+            (string) $booking,
+        );
+        self::assertSame(
+            '2030-02-03 14:05:00',
+            $booking->getCreatedAt()->format('Y-m-d H:i:s'),
+        );
 
         return $booking;
     }

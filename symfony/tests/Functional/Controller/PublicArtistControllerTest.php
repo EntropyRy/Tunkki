@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
+use App\Entity\EventArtistInfo;
 use App\Factory\ArtistFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -178,6 +180,60 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
         $this->assertStringContainsString('Actual Artist Name', $content);
+    }
+
+    public function testArtistEntityAccessorsAndLinks(): void
+    {
+        $member = MemberFactory::new()->create();
+        $artist = ArtistFactory::new()->create([
+            'name' => 'Artist Accessor Test',
+            'genre' => 'Electro',
+            'type' => 'DJ',
+            'bio' => 'Bio FI',
+            'bioEn' => 'Bio EN',
+            'hardware' => 'Modular',
+            'links' => [
+                ['url' => 'https://example.test/fractal', 'title' => 'Fractal Instruments'],
+                ['url' => 'https://example.test/hexagon', 'title' => 'Hexagon Intergalactic'],
+            ],
+            'copyForArchive' => true,
+        ]);
+
+        self::assertNotNull($artist->getId());
+        self::assertSame('Artist Accessor Test', (string) $artist);
+        self::assertSame('Electro', $artist->getGenre());
+        self::assertSame('dj', $artist->getType());
+        self::assertSame('Modular', $artist->getHardware());
+        self::assertSame('Bio FI', $artist->getBioByLocale('fi'));
+        self::assertSame('Bio EN', $artist->getBioByLocale('en'));
+        self::assertSame('Bio EN', $artist->getBioByLocale('sv'));
+        $artist->setBio(null);
+        self::assertSame('Bio EN', $artist->getBioByLocale('fi'));
+        self::assertTrue($artist->getCopyForArchive());
+        self::assertInstanceOf(\DateTimeImmutable::class, $artist->getCreatedAt());
+        $artist->setUpdatedAt(new \DateTimeImmutable('2030-01-01 12:00:00'));
+        self::assertSame('2030-01-01 12:00:00', $artist->getUpdatedAt()->format('Y-m-d H:i:s'));
+
+        $linkHtml = $artist->getLinkUrls();
+        self::assertNotNull($linkHtml);
+        self::assertStringContainsString('Fractal Instruments', $linkHtml);
+        self::assertStringContainsString('Hexagon Intergalactic', $linkHtml);
+        self::assertStringContainsString(' | ', $linkHtml);
+
+        $artist->setMember($member);
+        self::assertSame($member, $artist->getMember());
+        self::assertTrue($member->getArtist()->contains($artist));
+
+        $info = new EventArtistInfo();
+        $info->setArtist($artist);
+        self::assertTrue($artist->getEventArtistInfos()->contains($info));
+        $artist->setCreatedAt(new \DateTimeImmutable('2030-01-02 10:00:00'));
+        self::assertSame('2030-01-02 10:00:00', $artist->getCreatedAt()->format('Y-m-d H:i:s'));
+        $info->removeArtist();
+        $artist->removeEventArtistInfo($info);
+        self::assertFalse($artist->getEventArtistInfos()->contains($info));
+        $artist->clearEventArtistInfos();
+        self::assertCount(0, $artist->getEventArtistInfos());
     }
 
     public static function localeProvider(): array

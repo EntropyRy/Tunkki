@@ -13,9 +13,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * @extends AbstractAdmin<WhoCanRentChoice>
- *
- * TODO: Confirm the managed entity FQCN. If the entity class name differs,
- *       update this annotation accordingly.
  */
 class WhoCanRentChoiceAdmin extends AbstractAdmin
 {

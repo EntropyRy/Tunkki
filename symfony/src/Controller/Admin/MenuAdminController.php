@@ -29,7 +29,7 @@ class MenuAdminController extends CRUDController
         $formView = $datagrid->getForm()->createView();
 
         // $this->setFormTheme($formView, $this->admin->getFilterTheme());
-        return $this->render('admin/menutree.html.twig', [
+        return $this->renderWithExtraParams('admin/menutree.html.twig', [
             'action' => 'tree',
             'menu' => $menudata,
             'form' => $formView,

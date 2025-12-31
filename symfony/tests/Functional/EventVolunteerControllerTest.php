@@ -20,6 +20,7 @@ use App\Factory\NakkikoneFactory;
 use App\Factory\RSVPFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
+use Zenstruck\Foundry\Persistence\Proxy;
 
 /**
  * EventVolunteerControllerTest.
@@ -47,7 +48,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
     /**
      * Create an event with enabled nakkikone and booking.
      *
-     * @return array{event: Event, nakkikone: Nakkikone, booking: NakkiBooking, definition: NakkiDefinition}
+     * @return array{event: Event, nakkikone: Nakkikone, booking: NakkiBooking, definition: NakkiDefinition, nakki: Nakki}
      */
     private function createEventWithNakkikone(bool $requireDifferentTimes = true): array
     {
@@ -95,6 +96,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'nakkikone' => $nakkikone,
             'booking' => $booking,
             'definition' => $definition,
+            'nakki' => $nakki,
         ];
     }
 
@@ -417,6 +419,113 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
 
         $this->client->request('POST', $path);
         $this->assertResponseStatusCodeSame(302);
+    }
+
+    public function testNakkikoneEntityBehaviors(): void
+    {
+        [
+            'event' => $event,
+            'nakkikone' => $nakkikone,
+            'booking' => $booking,
+            'nakki' => $nakki,
+        ] = $this->createEventWithNakkikone();
+        $nakkikone = $nakkikone instanceof Proxy ? $nakkikone->_real() : $nakkikone;
+        $booking = $booking instanceof Proxy ? $booking->_real() : $booking;
+        $nakki = $nakki instanceof Proxy ? $nakki->_real() : $nakki;
+
+        $member = MemberFactory::new()->create([
+            'email' => 'nakki.member@example.test',
+            'locale' => 'fi',
+        ]);
+        $admin = MemberFactory::new()->create([
+            'email' => 'nakki.admin@example.test',
+            'locale' => 'fi',
+        ]);
+        $otherMember = MemberFactory::new()->create([
+            'email' => 'nakki.other@example.test',
+            'locale' => 'fi',
+        ]);
+        $noBookingMember = MemberFactory::new()->create([
+            'email' => 'nakki.nobooking@example.test',
+            'locale' => 'fi',
+        ]);
+
+        $nakkikone->setInfoFi('Valitse nakki');
+        $nakkikone->setInfoEn('Choose a nakki');
+        $nakkikone->setShowLinkInEvent(true);
+        $nakkikone->setRequireDifferentTimes(false);
+        $nakkikone->setRequiredForTicketReservation(true);
+
+        $nakki->setMattermostChannel('nakki-channel');
+        $nakki->setResponsible($member);
+
+        $member->addNakkiBooking($booking);
+        $nakkikone->addBooking($booking);
+        $nakkikone->addResponsibleAdmin($admin);
+        $this->em()->flush();
+
+        $extraBooking = new NakkiBooking();
+        $extraBooking->setNakki($nakki);
+        $extraBooking->setMember($otherMember);
+        $extraBooking->setStartAt($nakki->getStartAt()->modify('+4 hours'));
+        $extraBooking->setEndAt($nakki->getEndAt()->modify('+4 hours'));
+        $nakkikone->addBooking($extraBooking);
+
+        self::assertNotNull($nakkikone->getId());
+        self::assertTrue($nakkikone->getNakkis()->contains($nakki));
+        self::assertTrue($nakkikone->getBookings()->contains($booking));
+        self::assertTrue($nakkikone->getBookings()->contains($extraBooking));
+
+        $nakkikone->addResponsibleAdmin($member);
+        $nakkikone->removeResponsibleAdmin($member);
+        self::assertFalse($nakkikone->getResponsibleAdmins()->contains($member));
+
+        self::assertSame('Valitse nakki', $nakkikone->getInfoByLocale('fi'));
+        self::assertSame('Choose a nakki', $nakkikone->getInfoByLocale('en'));
+        self::assertTrue($nakkikone->isShowLinkInEvent());
+        self::assertTrue($nakkikone->shouldShowLinkInEvent());
+        self::assertFalse($nakkikone->isRequireDifferentTimes());
+        self::assertFalse($nakkikone->requiresDifferentTimes());
+        self::assertTrue($nakkikone->isRequiredForTicketReservation());
+
+        $memberNakkis = $nakkikone->getMemberNakkis($member);
+        $responsibleNakkis = $nakkikone->getResponsibleMemberNakkis($member);
+        $adminNakkis = $nakkikone->getResponsibleMemberNakkis($admin);
+        $allResponsibles = $nakkikone->getAllResponsibles('fi');
+
+        $name = $nakki->getDefinition()->getName('fi');
+        self::assertArrayHasKey($name, $memberNakkis);
+        self::assertArrayHasKey($name, $responsibleNakkis);
+        self::assertArrayHasKey($name, $adminNakkis);
+        self::assertArrayHasKey($name, $allResponsibles);
+        self::assertSame('nakki-channel', $allResponsibles[$name]['mattermost']);
+
+        self::assertSame($booking, $nakkikone->ticketHolderHasBooking($member));
+        self::assertSame($booking, $nakkikone->ticketHolderHasNakki($member));
+        self::assertNull($nakkikone->ticketHolderHasBooking(null));
+        self::assertSame($extraBooking, $nakkikone->ticketHolderHasNakki($otherMember));
+        self::assertNull($nakkikone->ticketHolderHasBooking($noBookingMember));
+        self::assertNull($nakkikone->ticketHolderHasNakki($noBookingMember));
+
+        $nakkikone->setRequiredForTicketReservation(false);
+        self::assertNull($nakkikone->ticketHolderHasBooking($member));
+        self::assertNull($nakkikone->ticketHolderHasNakki($member));
+
+        $nakkikone->removeBooking($booking);
+        self::assertFalse($nakkikone->getBookings()->contains($booking));
+
+        $extraNakki = new Nakki();
+        $extraNakki->setDefinition($nakki->getDefinition());
+        $extraNakki->setStartAt($nakki->getStartAt()->modify('+3 hours'));
+        $extraNakki->setEndAt($nakki->getEndAt()->modify('+3 hours'));
+        $nakkikone->addNakki($extraNakki);
+        self::assertTrue($nakkikone->getNakkis()->contains($extraNakki));
+
+        $nakkikone->removeNakki($extraNakki);
+        self::assertFalse($nakkikone->getNakkis()->contains($extraNakki));
+
+        $nakkikone->removeNakki($nakki);
+        self::assertFalse($nakkikone->getNakkis()->contains($nakki));
     }
 
     /**

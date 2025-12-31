@@ -14,9 +14,6 @@ use Sonata\Form\Validator\ErrorElement;
 
 /**
  * @extends AbstractAdmin<Renter>
- *
- * TODO: Confirm the correct entity FQCN (e.g. \App\Entity\Renter). If the managed
- * entity differs, update this annotation accordingly.
  */
 class RenterAdmin extends AbstractAdmin
 {

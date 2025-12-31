@@ -16,8 +16,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
  * @extends AbstractAdmin<Notification>
- *
- * TODO: Confirm the managed entity FQCN (e.g. \App\Entity\Notification). Update if it differs.
  */
 final class NotificationAdmin extends AbstractAdmin
 {

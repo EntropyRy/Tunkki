@@ -470,7 +470,6 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\Product
-        controller: App\Controller\Admin\ProductAdminController
         manager_type: orm
         group: admin
         label: Products

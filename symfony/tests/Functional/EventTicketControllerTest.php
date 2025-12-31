@@ -75,6 +75,14 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->paid()
             ->withReferenceNumber(123456)
             ->create();
+        self::assertNotNull($ticket->getId());
+        self::assertSame((string) $ticket->getReferenceNumber(), (string) $ticket);
+        self::assertSame($member->getEmail(), $ticket->getOwnerEmail());
+        self::assertInstanceOf(\DateTimeImmutable::class, $ticket->getUpdatedAt());
+        $ticket->setUpdatedAt(new \DateTimeImmutable('2030-01-01 12:00:00'));
+        self::assertSame('2030-01-01 12:00:00', $ticket->getUpdatedAt()->format('Y-m-d H:i:s'));
+        $ticket->setGiven(true);
+        self::assertTrue($ticket->isGiven());
 
         // Login as the ticket owner
         $this->loginAsMember($member->getUser()->getMember()->getEmail());

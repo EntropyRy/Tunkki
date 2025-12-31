@@ -14,9 +14,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * @extends AbstractAdmin<File>
- *
- * TODO: Confirm the correct entity FQCN (e.g. \App\Entity\File or \App\Entity\Media\FileInfo).
- * Replace if the managed entity differs.
  */
 class FileAdmin extends AbstractAdmin
 {

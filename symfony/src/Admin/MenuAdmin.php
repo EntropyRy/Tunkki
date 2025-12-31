@@ -14,9 +14,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * @extends AbstractAdmin<Menu>
- *
- * TODO: Confirm the managed entity FQCN. If the actual entity differs,
- *       update this annotation accordingly.
  */
 final class MenuAdmin extends AbstractAdmin
 {

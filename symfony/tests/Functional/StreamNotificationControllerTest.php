@@ -121,6 +121,24 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         $this->assertInstanceOf(Stream::class, $stream);
         $this->assertTrue($stream->isOnline(), 'Newly created stream should be online.');
         $this->assertSame($startFile, $stream->getFilename());
+        $this->assertNotNull($stream->getId());
+        $this->assertSame($startFile.'.mp3', $stream->getMp3Filename());
+        $this->assertSame($startFile.'.opus', $stream->getOpusFilename());
+        $this->assertSame($startFile.'_unprocessed.flac', $stream->getFlacFilename());
+        $this->assertSame(
+            'Stream: '.$stream->getCreatedAt()->format('d.m.Y H:i:s'),
+            (string) $stream,
+        );
+
+        $beforeUpdate = $stream->getUpdatedAt();
+        $stream->setListeners(42);
+        $this->em()->flush();
+        $this->assertSame(42, $stream->getListeners());
+        $this->assertGreaterThan(
+            $beforeUpdate,
+            $stream->getUpdatedAt(),
+            'UpdatedAt should advance on update.',
+        );
 
         // --- STOP EVENT ---
         $client->request(
@@ -156,6 +174,11 @@ final class StreamNotificationControllerTest extends FixturesWebTestCase
         $this->em()->clear();
         $onlineCount = $this->em()->getRepository(Stream::class)->count(['online' => true]);
         $this->assertSame(0, $onlineCount, 'There should be no online streams after stop.');
+
+        /** @var Stream $stopped */
+        $stopped = $this->em()->getRepository(Stream::class)->find($stream->getId());
+        $this->assertInstanceOf(Stream::class, $stopped);
+        $this->assertFalse($stopped->isOnline());
     }
 
     public function testStreamStopWithoutActiveStreamStillReturnsSuccess(): void

@@ -17,9 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
  * @extends AbstractAdmin<Package>
- *
- * TODO: Confirm the correct entity FQCN. If the managed entity differs
- * (e.g. \App\Entity\RentalPackage), update this annotation accordingly.
  */
 class PackageAdmin extends AbstractAdmin
 {

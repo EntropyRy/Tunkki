@@ -14,9 +14,6 @@ use Sonata\AdminBundle\Show\ShowMapper;
 
 /**
  * @extends AbstractAdmin<DoorLog>
- *
- * TODO: Confirm the managed entity FQCN (DoorLog). If the actual entity class differs,
- *       update this annotation accordingly.
  */
 final class DoorLogAdmin extends AbstractAdmin
 {

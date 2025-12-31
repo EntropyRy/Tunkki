@@ -230,11 +230,12 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $member = MemberFactory::new()->active()->create();
 
         // Create a recent door log without message (within 4 hours)
-        DoorLogFactory::new()->create([
+        $doorLog = DoorLogFactory::new()->create([
             'member' => $member,
             'message' => null,
             'createdAt' => new \DateTimeImmutable('-1 hour'),
         ]);
+        self::assertNotNull($doorLog->getId());
 
         $this->loginAsActiveMember($member->getEmail());
         $this->seedClientHome('fi');
