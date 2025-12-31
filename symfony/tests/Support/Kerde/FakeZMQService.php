@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Support\Kerde;
 
+use App\DTO\ZmqResponse;
+use App\DTO\ZmqStatus;
 use App\Service\ZMQServiceInterface;
 
 /**
@@ -14,36 +16,43 @@ use App\Service\ZMQServiceInterface;
  */
 final class FakeZMQService implements ZMQServiceInterface
 {
-    private string $sendResponse = 'ok';
-    private string $initResponse = 'connected';
-    private string $openResponse = 'door opened';
+    private ZmqResponse $sendResponse;
+    private ZmqResponse $initResponse;
+    private ZmqResponse $openResponse;
 
-    public function setSendResponse(string $response): void
+    public function __construct()
     {
-        $this->sendResponse = $response;
+        $this->sendResponse = ZmqResponse::ok('ok');
+        $this->initResponse = ZmqResponse::ok('connected');
+        $this->openResponse = ZmqResponse::ok('door opened');
     }
 
-    public function setInitResponse(string $response): void
+    public function setSendResponse(string $response, ZmqStatus $status = ZmqStatus::OK): void
     {
-        $this->initResponse = $response;
+        $this->sendResponse = new ZmqResponse($status, $response);
     }
 
-    public function setOpenResponse(string $response): void
+    public function setInitResponse(string $response, ZmqStatus $status = ZmqStatus::OK): void
     {
-        $this->openResponse = $response;
+        $this->initResponse = new ZmqResponse($status, $response);
     }
 
-    public function send(string $command): string
+    public function setOpenResponse(string $response, ZmqStatus $status = ZmqStatus::OK): void
+    {
+        $this->openResponse = new ZmqResponse($status, $response);
+    }
+
+    public function send(string $command): ZmqResponse
     {
         return $this->sendResponse;
     }
 
-    public function sendInit(string $username, int $timestamp): string
+    public function sendInit(string $username, int $timestamp): ZmqResponse
     {
         return $this->initResponse;
     }
 
-    public function sendOpen(string $username, int $timestamp): string
+    public function sendOpen(string $username, int $timestamp): ZmqResponse
     {
         return $this->openResponse;
     }

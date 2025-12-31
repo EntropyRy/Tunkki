@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service;
 
+use App\DTO\ZmqResponse;
+use App\DTO\ZmqStatus;
 use App\Service\ZMQService;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -61,14 +63,36 @@ final class ZMQServiceTest extends TestCase
     public function testSendReturnsExceptionWhenZMQNotAvailable(): void
     {
         // Without ZMQ extension, connect() will fail
-        // The service should catch \ZMQSocketException and return it
-        if (!\extension_loaded('zmq')) {
-            $this->markTestSkipped('ZMQ extension not loaded - cannot test exception handling');
-        }
+        $service = new ZMQService(new ParameterBag(['door_socket' => 'invalid://']));
+        $result = $service->send('test');
 
-        // This test would require mocking ZMQ, which is difficult
-        // In practice, without a real ZMQ server, send() will throw/return exception
-        $this->assertTrue(true, 'ZMQ extension loaded - would need real server to test');
+        $this->assertInstanceOf(ZmqResponse::class, $result);
+        $this->assertSame(ZmqStatus::ERROR, $result->status);
+    }
+
+    public function testSendReturnsOkWhenResponsePresent(): void
+    {
+        $service = new class(new ParameterBag(['door_socket' => 'ignored'])) extends ZMQService {
+            protected function connect(): object
+            {
+                return new class {
+                    public function send(string $command): void
+                    {
+                    }
+
+                    public function recv(): string
+                    {
+                        return 'pong';
+                    }
+                };
+            }
+        };
+
+        $result = $service->send('ping');
+
+        $this->assertInstanceOf(ZmqResponse::class, $result);
+        $this->assertSame(ZmqStatus::OK, $result->status);
+        $this->assertSame('pong', $result->message);
     }
 
     public function testServiceConstructsWithParameterBag(): void
@@ -95,11 +119,7 @@ final class ZMQServiceTest extends TestCase
         // But we can verify the method exists and accepts correct parameters
         $result = $this->service->sendInit('test_user', 1697654321);
 
-        // Result will be either a string response or ZMQSocketException
-        $this->assertTrue(
-            \is_string($result) || $result instanceof \ZMQSocketException,
-            'sendInit should return string or ZMQSocketException'
-        );
+        $this->assertInstanceOf(ZmqResponse::class, $result);
     }
 
     public function testSendOpenBuildsAndSendsCorrectCommand(): void
@@ -112,11 +132,7 @@ final class ZMQServiceTest extends TestCase
         // But we can verify the method exists and accepts correct parameters
         $result = $this->service->sendOpen('jane_doe', 1697654322);
 
-        // Result will be either a string response or ZMQSocketException
-        $this->assertTrue(
-            \is_string($result) || $result instanceof \ZMQSocketException,
-            'sendOpen should return string or ZMQSocketException'
-        );
+        $this->assertInstanceOf(ZmqResponse::class, $result);
     }
 
     public function testBuildCommandConsistency(): void

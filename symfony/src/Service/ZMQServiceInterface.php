@@ -19,9 +19,9 @@ interface ZMQServiceInterface
      *
      * @param string $command The command string to send
      *
-     * @return string Response from the door system or error message
+     * @return \App\DTO\ZmqResponse Response from the door system with status and message
      */
-    public function send(string $command): string;
+    public function send(string $command): \App\DTO\ZmqResponse;
 
     /**
      * Send an "init" command (initial connection check).
@@ -29,9 +29,9 @@ interface ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string Response from the door system
+     * @return \App\DTO\ZmqResponse Response from the door system
      */
-    public function sendInit(string $username, int $timestamp): string;
+    public function sendInit(string $username, int $timestamp): \App\DTO\ZmqResponse;
 
     /**
      * Send an "open" command to open the door.
@@ -39,9 +39,9 @@ interface ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string Response from the door system
+     * @return \App\DTO\ZmqResponse Response from the door system
      */
-    public function sendOpen(string $username, int $timestamp): string;
+    public function sendOpen(string $username, int $timestamp): \App\DTO\ZmqResponse;
 
     /**
      * Build a command string in the expected format.

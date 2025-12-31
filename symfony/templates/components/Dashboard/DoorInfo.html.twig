@@ -4,7 +4,7 @@
         <h5>
             {{ 'profile.door.log'|trans|capitalize }},
             status:
-            {% if status == 'broken' %}
+            {% if not isConnected %}
                 <span class="text-danger">{{ 'profile.door.connection_problems'|trans }}!</span>
             {% else %}
                 <span class="text-success">{{ 'profile.door.connection_ok'|trans }}!</span>

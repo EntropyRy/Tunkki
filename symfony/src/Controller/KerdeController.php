@@ -54,19 +54,21 @@ class KerdeController extends AbstractController
         $logs = $doorlogrepo->getSince($since);
         $form = $formF->create(OpenDoorType::class, $DoorLog);
         $now = new \DateTimeImmutable('now');
-        $status = $zmq->sendInit(
+        $statusResponse = $zmq->sendInit(
             $member->getUsername() ?? '',
             $now->getTimestamp(),
         );
+        $status = $statusResponse->message;
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $doorlog = $form->getData();
             $em->persist($doorlog);
             $em->flush();
-            $status = $zmq->sendOpen(
+            $statusResponse = $zmq->sendOpen(
                 $member->getUsername() ?? '',
                 $now->getTimestamp(),
             );
+            $status = $statusResponse->message;
             // $this->addFlash('success', 'profile.door.opened');
             $this->addFlash('success', $status);
 

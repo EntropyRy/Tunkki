@@ -13,6 +13,7 @@ use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 final class DoorInfo
 {
     public string $status = 'Service unavailable';
+    public bool $isConnected = false;
     public array $logs = [];
 
     public function __construct(
@@ -24,7 +25,9 @@ final class DoorInfo
     public function mount(Member $member): void
     {
         $timestamp = new \DateTimeImmutable()->getTimestamp();
-        $this->status = $this->zmq->sendInit($member->getUsername() ?? '', $timestamp);
+        $response = $this->zmq->sendInit($member->getUsername() ?? '', $timestamp);
+        $this->status = $response->message;
+        $this->isConnected = $response->isConnected();
         $this->logs = $this->doorLogR->getLatest(3);
     }
 }

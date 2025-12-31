@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\DTO\ZmqResponse;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 /**
@@ -37,21 +38,21 @@ class ZMQService implements ZMQServiceInterface
      *
      * @return string Response from the door system or 'broken' on timeout, or exception message on error
      */
-    public function send(string $command): string
+    public function send(string $command): ZmqResponse
     {
         try {
             $socket = $this->connect();
             $socket->send($command);
             $response = $socket->recv();
-        } catch (\ZMQSocketException $e) {
-            return $e->getMessage();
+        } catch (\Throwable $e) {
+            return ZmqResponse::error($e->getMessage());
         }
 
         if (empty($response)) {
-            return 'broken';
+            return ZmqResponse::timeout('broken');
         }
 
-        return $response;
+        return ZmqResponse::ok($response);
     }
 
     /**
@@ -62,7 +63,7 @@ class ZMQService implements ZMQServiceInterface
      *
      * @return string Response from the door system
      */
-    public function sendInit(string $username, int $timestamp): string
+    public function sendInit(string $username, int $timestamp): ZmqResponse
     {
         $command = $this->buildCommand($this->environment, 'init', $username, $timestamp);
 
@@ -77,7 +78,7 @@ class ZMQService implements ZMQServiceInterface
      *
      * @return string Response from the door system
      */
-    public function sendOpen(string $username, int $timestamp): string
+    public function sendOpen(string $username, int $timestamp): ZmqResponse
     {
         $command = $this->buildCommand($this->environment, 'open', $username, $timestamp);
 
@@ -104,7 +105,10 @@ class ZMQService implements ZMQServiceInterface
      *
      * @throws \ZMQSocketException on connection failure
      */
-    private function connect(): \ZMQSocket
+    /**
+     * @return object ZMQ socket-like object supporting send()/recv()
+     */
+    protected function connect(): object
     {
         $doorSocket = (string) $this->parameterBag->get('door_socket');
 
