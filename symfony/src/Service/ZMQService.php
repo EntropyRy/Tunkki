@@ -36,7 +36,7 @@ class ZMQService implements ZMQServiceInterface
      *
      * @param string $command The command string to send
      *
-     * @return string Response from the door system or 'broken' on timeout, or exception message on error
+     * @return ZmqResponse Response from the door system with status and message
      */
     public function send(string $command): ZmqResponse
     {
@@ -61,7 +61,7 @@ class ZMQService implements ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string Response from the door system
+     * @return ZmqResponse Response from the door system
      */
     public function sendInit(string $username, int $timestamp): ZmqResponse
     {
@@ -76,7 +76,7 @@ class ZMQService implements ZMQServiceInterface
      * @param string $username  Username performing the action
      * @param int    $timestamp Unix timestamp of the action
      *
-     * @return string Response from the door system
+     * @return ZmqResponse Response from the door system
      */
     public function sendOpen(string $username, int $timestamp): ZmqResponse
     {
