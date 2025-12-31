@@ -167,7 +167,7 @@ class Renter implements \Stringable
     /**
      * Set bookings.
      */
-    public function setBookings(?Booking $bookings = null): static
+    public function setBookings(Collection $bookings): static
     {
         $this->bookings = $bookings;
 
