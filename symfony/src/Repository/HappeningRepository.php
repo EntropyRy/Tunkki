@@ -30,15 +30,6 @@ class HappeningRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Happening $entity, bool $flush = false): void
-    {
-        $this->getEntityManager()->remove($entity);
-
-        if ($flush) {
-            $this->getEntityManager()->flush();
-        }
-    }
-
     public function findPreviousAndNext(Happening $happening): ?array
     {
         $array = $this->createQueryBuilder('h')

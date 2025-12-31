@@ -42,17 +42,6 @@ class MemberRepository extends ServiceEntityRepository
         return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
     }
 
-    public function getByName(string $firstname, string $lastname): mixed
-    {
-        $qb = $this->createQueryBuilder('m')
-            ->where('m.firstname = :firstname')
-            ->andWhere('m.lastname = :lastname')
-            ->setParameter('firstname', $firstname)
-            ->setParameter('lastname', $lastname);
-
-        return $qb->getQuery()->setMaxResults(1)->getOneOrNullResult();
-    }
-
     public function countByActiveMember(): mixed
     {
         $qb = $this->createQueryBuilder('m');

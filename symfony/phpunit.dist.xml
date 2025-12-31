@@ -78,6 +78,8 @@
             <file>src/Admin/WhoCanRentChoiceAdmin.php</file>
             <file>src/Admin/MenuAdmin.php</file>
             <file>src/Admin/AccessGroupsAdmin.php</file>
+            <file>src/Admin/NotificationAdmin.php</file>
+            <file>src/Admin/ProductAdmin.php</file>
             <!-- Exclude test infrastructure (Factories, Stories) from coverage: these are test helpers,
                  not production code. Including them dilutes meaningful coverage metrics. -->
             <directory>src/Factory</directory>

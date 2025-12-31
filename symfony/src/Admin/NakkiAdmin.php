@@ -211,7 +211,7 @@ final class NakkiAdmin extends AbstractAdmin
     {
         $errorElement
             ->with('definition')
-            ->assertNotNull(['definition cannot be null'])
+            ->assertNotNull(['message' => 'definition cannot be null'])
             ->end();
     }
 }
