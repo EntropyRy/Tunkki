@@ -6,7 +6,7 @@ namespace App\Admin;
 
 use App\Entity\Email;
 use App\Enum\EmailPurpose;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Repository\EmailRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -22,7 +22,7 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 final class EmailAdmin extends AbstractAdmin
 {
     public function __construct(
-        protected EntityManagerInterface $em,
+        protected EmailRepository $emailRepository,
     ) {
     }
 
@@ -75,6 +75,11 @@ final class EmailAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $existingSingletonPurposes = $this->getExistingSingletonPurposes();
+        if (!$this->hasSubject() || null === $this->getSubject()->getId()) {
+            $this->configureCreateFormFields($formMapper, $existingSingletonPurposes);
+
+            return;
+        }
 
         if (!$this->isChild()) {
             $this->configureStandaloneFormFields($formMapper, $existingSingletonPurposes);
@@ -83,6 +88,64 @@ final class EmailAdmin extends AbstractAdmin
         }
 
         $this->configureCommonFormFields($formMapper);
+    }
+
+    /**
+     * Only expose purpose on create.
+     *
+     * @param array<EmailPurpose> $existingSingletonPurposes
+     */
+    private function configureCreateFormFields(FormMapper $formMapper, array $existingSingletonPurposes): void
+    {
+        $currentPurpose = $this->hasSubject() ? $this->getSubject()->getPurpose() : null;
+
+        if (!$this->isChild()) {
+            $formMapper
+                ->add('purpose', EnumType::class, [
+                    'class' => EmailPurpose::class,
+                    'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                    'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
+                        if (!$purpose instanceof EmailPurpose) {
+                            return false;
+                        }
+                        if (!$purpose->canBeUsedInStandaloneAdmin()) {
+                            return false;
+                        }
+                        if ($purpose === $currentPurpose) {
+                            return true;
+                        }
+
+                        return !\in_array($purpose, $existingSingletonPurposes, true);
+                    },
+                    'required' => false,
+                    'expanded' => true,
+                    'help' => 'There is also automatic Booking email to vuokra list and "application rejected" for active member (sent from member list). these cannot be edited here. Other kinds of emails can be defined.',
+                ]);
+
+            return;
+        }
+
+        $formMapper
+            ->add('purpose', EnumType::class, [
+                'class' => EmailPurpose::class,
+                'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
+                    if (!$purpose instanceof EmailPurpose) {
+                        return false;
+                    }
+                    if (!$purpose->canBeUsedInChildAdmin()) {
+                        return false;
+                    }
+                    if ($purpose === $currentPurpose) {
+                        return true;
+                    }
+
+                    return !\in_array($purpose, $existingSingletonPurposes, true);
+                },
+                'required' => false,
+                'expanded' => false,
+                'help' => 'Main purpose determines the email template.',
+            ]);
     }
 
     /**
@@ -97,21 +160,8 @@ final class EmailAdmin extends AbstractAdmin
         }
 
         $currentEmail = $this->getSubject();
-        $qb = $this->em->createQueryBuilder()
-            ->select('e.purpose')
-            ->from(Email::class, 'e')
-            ->where('e.purpose IN (:singletons)')
-            ->setParameter('singletons', EmailPurpose::singletons());
 
-        // Exclude current email if editing (allow changing its own purpose)
-        if ($currentEmail->getId()) {
-            $qb->andWhere('e.id != :currentId')
-               ->setParameter('currentId', $currentEmail->getId());
-        }
-
-        $results = $qb->getQuery()->getResult();
-
-        return array_column($results, 'purpose');
+        return $this->emailRepository->findExistingSingletonPurposes($currentEmail);
     }
 
     /**
@@ -155,15 +205,7 @@ final class EmailAdmin extends AbstractAdmin
                     'disabled' => true,
                     'help' => 'Event association (read-only in standalone admin)',
                 ])
-                ->add('recipientGroups', EnumType::class, [
-                    'class' => EmailPurpose::class,
-                    'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                    'required' => false,
-                    'multiple' => true,
-                    'expanded' => true,
-                    'disabled' => true,
-                    'help' => 'Additional recipient groups (only editable in event sub-admin)',
-                ]);
+            ;
         }
     }
 

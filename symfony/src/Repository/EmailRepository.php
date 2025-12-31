@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Email;
+use App\Enum\EmailPurpose;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,6 +19,25 @@ class EmailRepository extends ServiceEntityRepository
         parent::__construct($registry, Email::class);
     }
 
+    /**
+     * @return array<EmailPurpose>
+     */
+    public function findExistingSingletonPurposes(?Email $exclude = null): array
+    {
+        $qb = $this->createQueryBuilder('e')
+            ->select('e.purpose')
+            ->where('e.purpose IN (:singletons)')
+            ->setParameter('singletons', EmailPurpose::singletons());
+
+        if ($exclude?->getId()) {
+            $qb->andWhere('e.id != :currentId')
+                ->setParameter('currentId', $exclude->getId());
+        }
+
+        $results = $qb->getQuery()->getResult();
+
+        return array_column($results, 'purpose');
+    }
     // /**
     //  * @return Email[] Returns an array of Email objects
     //  */
