@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Controller\RenterHashController;
 use App\Entity\Booking;
 use App\Entity\Contract;
 use App\Entity\Renter;
 use App\Entity\Sonata\SonataPagePage;
 use App\Entity\Sonata\SonataPageSite;
-use App\Tests\_Base\FixturesWebTestCase;
-use App\Controller\RenterHashController;
 use App\Repository\BookingRepository;
+use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
 use Sonata\PageBundle\CmsManager\CmsManagerSelector;
