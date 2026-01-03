@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Booking;
 use App\Entity\Contract;
 use App\Entity\Renter;
 use App\Form\BookingConsentType;
-use App\Repository\BookingRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Sonata\PageBundle\CmsManager\CmsManagerSelector;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController as Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 // Form
 use Symfony\Component\Routing\Annotation\Route;
 
-class RenterHashController extends Controller
+class BookingContractController extends Controller
 {
     #[Route(
         path: '/booking/{bookingid}/renter/{renterid}/{hash}',
@@ -29,29 +29,17 @@ class RenterHashController extends Controller
     )]
     public function indexAction(
         Request $request,
-        CmsManagerSelector $cms,
+        #[MapEntity(mapping: ['bookingid' => 'id', 'hash' => 'renterHash'])]
+        Booking $booking,
+        #[MapEntity(mapping: ['renterid' => 'id'])]
+        Renter $renter,
         EntityManagerInterface $em,
-        BookingRepository $bRepo,
     ): Response {
-        $bookingid = $request->attributes->get('bookingid');
-        $hash = $request->attributes->get('hash');
-        $renterid = $request->attributes->get('renterid');
-        if (\in_array(null, [$bookingid, $hash, $renterid], true)) {
+        if ($booking->getRenter()?->getId() !== $renter->getId()) {
             throw new NotFoundHttpException();
-        }
-        $renter = $em->getRepository(Renter::class)->findOneBy(['id' => $renterid]);
-        if (null === $renter) {
-            throw new NotFoundHttpException();
-        }
-        if (1 === $renter->getId()) { // means that it is For Entropy
-            $renter = null;
         }
         $contract = $em->getRepository(Contract::class)->findOneBy(['purpose' => 'rent']);
-        if (null !== $renter && null === $contract) {
-            throw new NotFoundHttpException();
-        }
-        $booking = $bRepo->findOneBy(['id' => $bookingid, 'renterHash' => $hash]);
-        if (null == $booking) {
+        if (null === $contract) {
             throw new NotFoundHttpException();
         }
         $form = $this->createForm(BookingConsentType::class, $booking);
@@ -70,14 +58,38 @@ class RenterHashController extends Controller
                 }
             }
         }
-        $page = $cms->retrieve()->getCurrentPage();
 
         return $this->render('contract.html.twig', [
             'contract' => $contract,
             'renter' => $renter,
             'bookingdata' => $booking->getDataArray(),
             'form' => $form,
-            'page' => $page,
+            'page' => null,
+        ]);
+    }
+
+    #[Route(
+        path: '/booking/{bookingid}/public/{hash}',
+        name: 'entropy_tunkki_booking_public_items',
+        requirements: [
+            'bookingid' => '\d+',
+        ]
+    )]
+    public function publicItemsAction(
+        #[MapEntity(mapping: ['bookingid' => 'id', 'hash' => 'renterHash'])]
+        Booking $booking,
+    ): Response {
+        $renter = $booking->getRenter();
+        if (!$renter instanceof Renter || Renter::ENTROPY_INTERNAL_ID !== $renter->getId()) {
+            throw new NotFoundHttpException();
+        }
+
+        return $this->render('contract.html.twig', [
+            'contract' => null,
+            'renter' => null,
+            'bookingdata' => $booking->getDataArray(),
+            'form' => null,
+            'page' => null,
         ]);
     }
 }

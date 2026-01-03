@@ -87,9 +87,16 @@
 {% endblock %}
 {% block contract %}
     {% if object.renterHash %}
-        <a href="{{ path('entropy_tunkki_booking_hash', {bookingid: object.id, renterid: object.renter.id, hash: object.renterHash}) }}">
+        {% set entropy_id = constant('App\\\\Entity\\\\Renter::ENTROPY_INTERNAL_ID') %}
+        {% set is_entropy = object.renter and object.renter.id == entropy_id %}
+        {% set route_name = is_entropy ? 'entropy_tunkki_booking_public_items' : 'entropy_tunkki_booking_hash' %}
+        {% set route_params = {bookingid: object.id, hash: object.renterHash} %}
+        {% if not is_entropy %}
+            {% set route_params = route_params|merge({renterid: object.renter.id}) %}
+        {% endif %}
+        <a href="{{ path(route_name, route_params) }}">
             Contract FI</a> |
-            <a href="/en{{ path('entropy_tunkki_booking_hash', {bookingid: object.id, renterid: object.renter.id, hash: object.renterHash}) }}">
+            <a href="/en{{ path(route_name, route_params) }}">
             Contract ENG</a>
         {% endif %}
     {% endblock %}

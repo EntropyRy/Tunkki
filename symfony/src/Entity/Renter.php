@@ -16,6 +16,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Renter implements \Stringable
 {
+    public const ENTROPY_INTERNAL_ID = 1;
+
     #[ORM\Column(name: 'id', type: Types::INTEGER)]
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]

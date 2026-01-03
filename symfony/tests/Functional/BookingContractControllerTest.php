@@ -4,25 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Controller\RenterHashController;
 use App\Entity\Booking;
 use App\Entity\Contract;
 use App\Entity\Renter;
-use App\Entity\Sonata\SonataPagePage;
-use App\Entity\Sonata\SonataPageSite;
-use App\Repository\BookingRepository;
 use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
-use Sonata\PageBundle\CmsManager\CmsManagerSelector;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
- * @covers \App\Controller\RenterHashController
+ * @covers \App\Controller\BookingContractController
  */
-final class RenterHashControllerTest extends FixturesWebTestCase
+final class BookingContractControllerTest extends FixturesWebTestCase
 {
     private ObjectManager $entityManager;
 
@@ -47,7 +40,6 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
@@ -68,7 +60,6 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'wrong-hash');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
@@ -87,7 +78,6 @@ final class RenterHashControllerTest extends FixturesWebTestCase
         $this->seedClientHome('fi');
         $nonExistingBookingId = (int) $booking->getId() + 999999;
         $path = \sprintf('/booking/%d/renter/%d/%s', $nonExistingBookingId, (int) $renter->getId(), 'hash-abc');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
@@ -106,7 +96,24 @@ final class RenterHashControllerTest extends FixturesWebTestCase
         $this->seedClientHome('fi');
         $nonExistingRenterId = (int) $renter->getId() + 999999;
         $path = \sprintf('/booking/%d/renter/%d/%s', (int) $booking->getId(), $nonExistingRenterId, 'hash-abc');
-        $this->ensureCmsPageForPath($path);
+        $this->client->request('GET', $path);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+    }
+
+    public function testBookingRenterMismatchReturnsNotFound(): void
+    {
+        $renter = $this->createRenter('Test Renter');
+        $otherRenter = $this->createRenter('Other Renter');
+        $this->createRentContract();
+        $booking = $this->createBookingWithReferenceNumber(
+            renter: $renter,
+            referenceNumber: 'REF-123',
+            renterHash: 'hash-abc',
+        );
+
+        $this->seedClientHome('fi');
+        $path = $this->path($booking, $otherRenter, 'hash-abc');
         $this->client->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
@@ -128,21 +135,9 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
-    }
-
-    public function testMissingAttributesThrowsNotFound(): void
-    {
-        $controller = static::getContainer()->get(RenterHashController::class);
-        $cms = static::getContainer()->get(CmsManagerSelector::class);
-        $repo = static::getContainer()->get(BookingRepository::class);
-        $request = Request::create('/booking/');
-
-        $this->expectException(NotFoundHttpException::class);
-        $controller->indexAction($request, $cms, $this->entityManager, $repo);
     }
 
     public function testEntropyRenterIsHidden(): void
@@ -157,10 +152,42 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-entropy');
-        $this->ensureCmsPageForPath($path);
+        $this->client->request('GET', $path);
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('form[name="booking_consent"]');
+    }
+
+    public function testPublicItemsRouteWorksForEntropyRenter(): void
+    {
+        $renter = $this->ensureEntropyRenter();
+        $booking = $this->createBookingWithReferenceNumber(
+            renter: $renter,
+            referenceNumber: 'REF-ENTROPY',
+            renterHash: 'hash-entropy',
+        );
+
+        $this->seedClientHome('fi');
+        $path = $this->publicPath($booking, 'hash-entropy');
         $this->client->request('GET', $path);
 
         $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorNotExists('form[name="booking_consent"]');
+    }
+
+    public function testPublicItemsRouteRejectsNonEntropyRenter(): void
+    {
+        $renter = $this->createRenter('Test Renter');
+        $booking = $this->createBookingWithReferenceNumber(
+            renter: $renter,
+            referenceNumber: 'REF-123',
+            renterHash: 'hash-abc',
+        );
+
+        $this->seedClientHome('fi');
+        $path = $this->publicPath($booking, 'hash-abc');
+        $this->client->request('GET', $path);
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     public function testRenterEntityBehaviors(): void
@@ -219,7 +246,6 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
         $this->assertResponseIsSuccessful();
 
@@ -255,7 +281,6 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
         $this->seedClientHome('fi');
         $path = $this->path($booking, $renter, 'hash-abc');
-        $this->ensureCmsPageForPath($path);
         $this->client->request('GET', $path);
         $this->assertResponseIsSuccessful();
 
@@ -289,6 +314,14 @@ final class RenterHashControllerTest extends FixturesWebTestCase
         return \sprintf('/booking/%d/renter/%d/%s', $id, $renterId, $hash);
     }
 
+    private function publicPath(Booking $booking, string $hash): string
+    {
+        $id = $booking->getId();
+        $this->assertNotNull($id);
+
+        return \sprintf('/booking/%d/public/%s', $id, $hash);
+    }
+
     private function createRenter(string $name): Renter
     {
         $renter = new Renter();
@@ -311,18 +344,19 @@ final class RenterHashControllerTest extends FixturesWebTestCase
 
     private function ensureEntropyRenter(): Renter
     {
-        $existing = $this->entityManager->getRepository(Renter::class)->findOneBy(['id' => 1]);
+        $entropyId = Renter::ENTROPY_INTERNAL_ID;
+        $existing = $this->entityManager->getRepository(Renter::class)->findOneBy(['id' => $entropyId]);
         if ($existing instanceof Renter) {
             return $existing;
         }
 
         $this->entityManager->getConnection()->insert('Renter', [
-            'id' => 1,
+            'id' => $entropyId,
             'name' => 'Entropy',
         ]);
 
         $this->entityManager->clear();
-        $created = $this->entityManager->getRepository(Renter::class)->findOneBy(['id' => 1]);
+        $created = $this->entityManager->getRepository(Renter::class)->findOneBy(['id' => $entropyId]);
         $this->assertInstanceOf(Renter::class, $created);
 
         return $created;
@@ -360,50 +394,5 @@ final class RenterHashControllerTest extends FixturesWebTestCase
         $this->assertNotNull($booking->getId());
 
         return $booking;
-    }
-
-    /**
-     * RenterHashController uses CmsManagerSelector->retrieve()->getCurrentPage(),
-     * which requires a Sonata Page entity for the requested URL.
-     */
-    private function ensureCmsPageForPath(string $path): void
-    {
-        $siteRepo = $this->entityManager->getRepository(SonataPageSite::class);
-        $pageRepo = $this->entityManager->getRepository(SonataPagePage::class);
-
-        $site = $siteRepo->findOneBy(['locale' => 'fi']);
-        $this->assertInstanceOf(SonataPageSite::class, $site);
-
-        $root = $pageRepo->findOneBy(['site' => $site, 'url' => '/']);
-        $this->assertInstanceOf(SonataPagePage::class, $root);
-
-        $existing = $pageRepo->findOneBy(['site' => $site, 'url' => $path]);
-        if (!$existing instanceof SonataPagePage) {
-            $page = new SonataPagePage();
-            $page->setSite($site);
-            $page->setParent($root);
-            $page->setPosition(50);
-            $page->setRouteName('page_slug');
-            $page->setName('Test Booking Contract');
-            $page->setTitle('Test Booking Contract');
-            $page->setSlug('test-booking-contract');
-            $page->setUrl($path);
-            $page->setEnabled(true);
-            $page->setDecorate(true);
-            $page->setType('sonata.page.service.default');
-            $page->setTemplateCode('onecolumn');
-            $page->setRequestMethod('GET|POST|HEAD');
-
-            $this->entityManager->persist($page);
-            $this->entityManager->flush();
-        }
-
-        $container = static::getContainer();
-        if ($container->has('sonata.page.service.create_snapshot')) {
-            $createSnapshot = $container->get('sonata.page.service.create_snapshot');
-            if (method_exists($createSnapshot, 'createBySite')) {
-                $createSnapshot->createBySite($site);
-            }
-        }
     }
 }

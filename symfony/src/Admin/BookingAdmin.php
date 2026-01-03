@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Booking;
+use App\Entity\Renter;
 use App\Entity\User;
 use App\Form\ItemsType;
 use App\Form\PackagesType;
@@ -91,14 +92,23 @@ class BookingAdmin extends AbstractAdmin
                 'uri' => $admin->generateUrl('stuffList', ['id' => $id]),
             ]);
             $object = $admin->getSubject();
-            $menu->addChild('Contract', [
-                'route' => 'entropy_tunkki_booking_hash',
-                'routeParameters' => [
+            $renter = $object->getRenter();
+            if ($renter instanceof Renter) {
+                $routeName = Renter::ENTROPY_INTERNAL_ID === $renter->getId()
+                    ? 'entropy_tunkki_booking_public_items'
+                    : 'entropy_tunkki_booking_hash';
+                $routeParameters = [
                     'bookingid' => $id,
-                    'renterid' => $object->getRenter()->getId(),
                     'hash' => $object->getRenterHash(),
-                ],
-            ]);
+                ];
+                if ('entropy_tunkki_booking_hash' === $routeName) {
+                    $routeParameters['renterid'] = $renter->getId();
+                }
+                $menu->addChild('Contract', [
+                    'route' => $routeName,
+                    'routeParameters' => $routeParameters,
+                ]);
+            }
         }
     }
 
