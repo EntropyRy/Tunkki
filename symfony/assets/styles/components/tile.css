@@ -76,7 +76,8 @@
 }
 
 .shimmer {
-  -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/450% 100%;
+  -webkit-mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/450%
+    100%;
   mask: linear-gradient(-60deg, #000 30%, #0005, #000 70%) right/450% 100%;
   background-repeat: no-repeat;
   animation: shimmer 2.5s infinite;
@@ -109,16 +110,26 @@
 
 .epics-container .epics-progress {
   border-radius: calc(var(--border-radius, 0.375rem) * 0.66667);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
   overflow: hidden;
 }
 
 /* Progress bar animation - alternating names to force restart on re-render */
 @keyframes epics-countdown-0 {
-  from { width: 100%; }
-  to { width: 0%; }
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
 
 @keyframes epics-countdown-1 {
-  from { width: 100%; }
-  to { width: 0%; }
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
 }
