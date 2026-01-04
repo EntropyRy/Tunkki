@@ -234,6 +234,135 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->assertSame('Fractal Instruments', (string) $renter);
     }
 
+    public function testContractEntityBehaviors(): void
+    {
+        $contract = new Contract();
+        $this->assertSame('purpose', (string) $contract);
+
+        $contract->setPurpose('rent');
+        $contract->setContentFi('<div class="contract-fi">Test contract fi</div>');
+        $contract->setContentEn('<div class="contract-en">Test contract en</div>');
+
+        $validFrom = new \DateTimeImmutable('2030-01-01 00:00:00');
+        $contract->setValidFrom($validFrom);
+
+        $customCreated = new \DateTimeImmutable('2000-01-01 00:00:00');
+        $customUpdated = new \DateTimeImmutable('2001-01-01 00:00:00');
+        $contract->setCreatedAt($customCreated);
+        $contract->setUpdatedAt($customUpdated);
+
+        $this->assertSame('rent', $contract->getPurpose());
+        $this->assertSame('<div class="contract-fi">Test contract fi</div>', $contract->getContentFi());
+        $this->assertSame('<div class="contract-en">Test contract en</div>', $contract->getContentEn());
+        $this->assertSame($validFrom, $contract->getValidFrom());
+        $this->assertSame($customCreated, $contract->getCreatedAt());
+        $this->assertSame($customUpdated, $contract->getUpdatedAt());
+        $this->assertSame('rent', (string) $contract);
+
+        $contract->setCreatedAtValue();
+        $this->assertNotEquals($customCreated, $contract->getCreatedAt());
+        $this->assertNotEquals($customUpdated, $contract->getUpdatedAt());
+
+        $updatedAfterCreate = $contract->getUpdatedAt();
+        $contract->setUpdatedAtValue();
+        $this->assertNotEquals($updatedAfterCreate, $contract->getUpdatedAt());
+
+        $this->entityManager->persist($contract);
+        $this->entityManager->flush();
+
+        $this->assertNotNull($contract->getId());
+    }
+
+    public function testHappeningEntityBehaviors(): void
+    {
+        $happening = new \App\Entity\Happening();
+        $happening->setNameFi('Tapahtuma');
+        $happening->setNameEn('Happening');
+        $happening->setDescriptionFi('Kuvaus FI');
+        $happening->setDescriptionEn('Description EN');
+        $happening->setSlugFi('tapahtuma-fi');
+        $happening->setSlugEn('happening-en');
+        $happening->setPaymentInfoFi('Maksuohje FI');
+        $happening->setPaymentInfoEn('Payment info EN');
+        $happening->setPriceFi('10 EUR');
+        $happening->setPriceEn('12 EUR');
+        $happening->setType('workshop');
+        $happening->setMaxSignUps(42);
+        $happening->setNeedsPreliminarySignUp(true);
+        $happening->setNeedsPreliminaryPayment(true);
+        $happening->setReleaseThisHappeningInEvent(true);
+        $happening->setAllowSignUpComments(false);
+
+        $time = new \DateTime('2025-01-01 12:00:00');
+        $happening->setTime($time);
+
+        $this->assertSame('Tapahtuma', $happening->getNameFi());
+        $this->assertSame('Happening', $happening->getNameEn());
+        $this->assertSame('Kuvaus FI', $happening->getDescriptionFi());
+        $this->assertSame('Description EN', $happening->getDescriptionEn());
+        $this->assertSame('tapahtuma-fi', $happening->getSlugFi());
+        $this->assertSame('happening-en', $happening->getSlugEn());
+        $this->assertSame('Maksuohje FI', $happening->getPaymentInfoFi());
+        $this->assertSame('Payment info EN', $happening->getPaymentInfoEn());
+        $this->assertSame('10 EUR', $happening->getPriceFi());
+        $this->assertSame('12 EUR', $happening->getPriceEn());
+        $this->assertSame('workshop', $happening->getType());
+        $this->assertSame(42, $happening->getMaxSignUps());
+        $this->assertTrue($happening->isNeedsPreliminarySignUp());
+        $this->assertTrue($happening->isNeedsPreliminaryPayment());
+        $this->assertTrue($happening->isReleaseThisHappeningInEvent());
+        $this->assertFalse($happening->isAllowSignUpComments());
+        $this->assertInstanceOf(\DateTimeImmutable::class, $happening->getTime());
+        $this->assertSame($time->getTimestamp(), $happening->getTime()->getTimestamp());
+
+        $this->assertSame('Tapahtuma', $happening->getName('fi'));
+        $this->assertSame('Happening', $happening->getName('en'));
+        $this->assertSame('tapahtuma-fi', $happening->getSlug('fi'));
+        $this->assertSame('happening-en', $happening->getSlug('en'));
+        $this->assertSame('Kuvaus FI', $happening->getDescription('fi'));
+        $this->assertSame('Description EN', $happening->getDescription('en'));
+        $this->assertSame('Maksuohje FI', $happening->getPaymentInfo('fi'));
+        $this->assertSame('Payment info EN', $happening->getPaymentInfo('en'));
+        $this->assertSame('10 EUR', $happening->getPrice('fi'));
+        $this->assertSame('12 EUR', $happening->getPrice('en'));
+        $this->assertSame('Happening', (string) $happening);
+
+        $member = new \App\Entity\Member();
+        $member->setFirstname('Test');
+        $member->setLastname('Member');
+        $member->setEmail('member@example.test');
+
+        $happening->addOwner($member);
+        $this->assertCount(1, $happening->getOwners());
+        $happening->removeOwner($member);
+        $this->assertCount(0, $happening->getOwners());
+
+        $booking = new \App\Entity\HappeningBooking();
+        $happening->addBooking($booking);
+        $this->assertCount(1, $happening->getBookings());
+        $this->assertSame($happening, $booking->getHappening());
+        $happening->removeBooking($booking);
+        $this->assertCount(0, $happening->getBookings());
+
+        $event = new \App\Entity\Event();
+        $happening->setEvent($event);
+        $this->assertSame($event, $happening->getEvent());
+        $this->assertNull($happening->getPicture());
+        $happening->setPicture(null);
+        $this->assertNull($happening->getPicture());
+
+        $this->assertTrue($happening->signUpsAreOpen());
+        $happening->setSignUpsOpenUntil(new \DateTimeImmutable('+10 minutes'));
+        $this->assertTrue($happening->signUpsAreOpen());
+        $happening->setSignUpsOpenUntil(new \DateTimeImmutable('-10 minutes'));
+        $this->assertFalse($happening->signUpsAreOpen());
+
+        $happening->setSignUpsOpenUntil(new \DateTime('2030-01-01 00:00:00'));
+        $this->assertInstanceOf(\DateTimeImmutable::class, $happening->getSignUpsOpenUntil());
+        $happening->setSignUpsOpenUntil(null);
+        $this->assertNull($happening->getSignUpsOpenUntil());
+    }
+
     public function testPostingConsentPersistsSignatureAndShowsSuccessFlash(): void
     {
         $renter = $this->createRenter('Test Renter');

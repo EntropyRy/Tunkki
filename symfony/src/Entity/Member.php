@@ -79,9 +79,6 @@ class Member implements \Stringable
     #[ORM\Column(name: 'isActiveMember', type: Types::BOOLEAN)]
     private bool $isActiveMember = false;
 
-    #[ORM\Column(name: 'rejectReasonSent', type: Types::BOOLEAN)]
-    private bool $rejectReasonSent = false;
-
     #[ORM\Column(name: 'StudentUnionMember', type: Types::BOOLEAN)]
     private bool $StudentUnionMember = false;
 
@@ -412,18 +409,6 @@ class Member implements \Stringable
     public function getRejectReason(): ?string
     {
         return $this->rejectReason;
-    }
-
-    public function setRejectReasonSent(mixed $rejectReasonSent): self
-    {
-        $this->rejectReasonSent = $rejectReasonSent;
-
-        return $this;
-    }
-
-    public function getRejectReasonSent(): ?bool
-    {
-        return $this->rejectReasonSent;
     }
 
     public function setApplicationHandledDate(
