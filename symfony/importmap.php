@@ -107,7 +107,7 @@ return [
         'version' => '2.30.1',
     ],
     'es-module-shims' => [
-        'version' => '2.7.0',
+        'version' => '2.8.0',
     ],
     'bootstrap/dist/css/bootstrap.min.css' => [
         'version' => '5.3.8',
