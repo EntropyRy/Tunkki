@@ -128,6 +128,11 @@ final readonly class EventTemporalStateService
         return $this->artistSignupWindow($event)->getInfoByLocale($locale);
     }
 
+    public function artistSignupEnd(Event $event): ?\DateTimeImmutable
+    {
+        return $this->artistSignupWindow($event)->getEnd();
+    }
+
     public function canShowSignupLink(Event $event, ?Member $member): bool
     {
         $window = $this->artistSignupWindow($event);

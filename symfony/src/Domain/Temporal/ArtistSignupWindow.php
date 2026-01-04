@@ -75,6 +75,11 @@ final readonly class ArtistSignupWindow
         return 'en' === $locale ? $this->infoEn : $this->infoFi;
     }
 
+    public function getEnd(): ?\DateTimeImmutable
+    {
+        return $this->end;
+    }
+
     /**
      * Normalizes DateTimeInterface to integer seconds to avoid microsecond drift.
      */

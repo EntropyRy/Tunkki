@@ -122,29 +122,6 @@ final class EventAdmin extends AbstractAdmin
                         'id' => $id,
                     ]),
                 ]);
-                /*                if ($event->getTicketsEnabled()) {
-                                    $menu->addChild(
-                                        'Update Ticket Count',
-                                        [
-                                            'uri' => $admin->generateUrl('admin.ticket.updateTicketCount', ['id' => $id]),
-                                            'attributes' => ['class' => 'btn-warning']
-                                        ]
-                                    );
-                                }
-                                if ($event->ticketPresaleEnabled()) {
-                                    $event = $this->getSubject();
-                                    $menu->addChild(
-                                        'Ticket Presale Preview',
-                                        [
-                                            'route' => 'entropy_event_ticket_presale',
-                                            'routeParameters' => [
-                                                'slug' => $event->getUrl(),
-                                                'year' => $event->getEventDate()->format('Y'),
-                                            ],
-                                            'linkAttributes' => ['target' => '_blank']
-                                        ]
-                                    );
-                                }*/
             }
             $menu->addChild('Happenings', [
                 'uri' => $admin->generateUrl('admin.happening.list', [

@@ -1495,13 +1495,6 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getArtistSignUpInfo($lang): ?string
-    {
-        $func = 'artistSignUpInfo'.ucfirst((string) $lang);
-
-        return $this->{$func};
-    }
-
     public function setSendRsvpEmail(?bool $sendRsvpEmail): static
     {
         $this->sendRsvpEmail = $sendRsvpEmail;
