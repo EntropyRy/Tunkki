@@ -9,6 +9,7 @@ use App\Entity\Event;
 use App\Entity\User;
 use App\Factory\ArtistFactory;
 use App\Factory\EventFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use App\Time\ClockInterface;
@@ -226,6 +227,55 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         }
     }
 
+    public function testSignupRedirectsToCreateAndReturnsAfterArtistCreation(): void
+    {
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
+        $this->loginAsMember($member->getEmail());
+        $this->seedClientHome('en');
+
+        $event = EventFactory::new()
+            ->signupEnabled()
+            ->published()
+            ->create([
+                'url' => 'artist-signup-event-'.uniqid('', true),
+            ]);
+
+        $signupPath = $this->generateSignupPath($event, 'en');
+        $this->client->request('GET', $signupPath);
+
+        $this->assertResponseStatusCodeSame(302);
+        $createLocation = $this->client->getResponse()->headers->get('Location') ?? '';
+        $createPath = parse_url($createLocation, \PHP_URL_PATH) ?: $createLocation;
+        $this->assertSame('/en/profile/artist/create', $createPath);
+
+        $crawler = $this->client->request('GET', $createPath);
+        $this->assertResponseIsSuccessful();
+
+        $form = $crawler->filter('form')->form();
+        $form['artist[name]'] = 'Signup Flow Artist';
+        $form['artist[type]'] = 'DJ';
+        $form['artist[hardware]'] = 'CDJs';
+        $form['artist[genre]'] = 'Techno';
+        $form['artist[bio]'] = 'Bio';
+        $form['artist[bioEn]'] = 'Bio EN';
+
+        $imagePath = $this->createTempPng();
+        $form['artist[Picture][binaryContent]']->upload($imagePath);
+
+        $this->client->submit($form);
+
+        $this->assertResponseStatusCodeSame(302);
+        $redirect = $this->client->getResponse()->headers->get('Location') ?? '';
+        $redirectPath = parse_url($redirect, \PHP_URL_PATH) ?: $redirect;
+        $this->assertSame($signupPath, $redirectPath);
+
+        $this->client->request('GET', $redirectPath);
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('form[name="event_artist_info"]');
+    }
+
     public function testSignupBlockedWhenEventNotEnabled(): void
     {
         $this->loginUserWithArtist();
@@ -365,5 +415,15 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
                 $overrides,
             ),
         );
+    }
+
+    private function createTempPng(): string
+    {
+        $path = __DIR__.'/../../assets/images/golden-logo.png';
+        if (!is_file($path)) {
+            self::fail('Expected fixture image not found for upload.');
+        }
+
+        return $path;
     }
 }

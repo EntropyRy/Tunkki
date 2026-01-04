@@ -209,6 +209,29 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('input[name="artist[name]"][value="Editable Artist"]');
     }
 
+    public function testMemberArtistCollectionsForProfile(): void
+    {
+        $member = MemberFactory::new()->inactive()->create();
+
+        $primary = new Artist();
+        $primary->setName('Primary');
+        $primary->setType('ART');
+        $member->addArtist($primary);
+
+        $secondary = new Artist();
+        $secondary->setName('Secondary');
+        $secondary->setType('DJ');
+        $member->addArtist($secondary);
+
+        $this->assertCount(2, $member->getArtist());
+        $this->assertSame($member, $primary->getMember());
+        $this->assertSame($member, $secondary->getMember());
+        $this->assertCount(1, $member->getStreamArtists());
+
+        $member->removeArtist($primary);
+        $this->assertCount(1, $member->getArtist());
+    }
+
     public function testMultipleArtistsForSameMember(): void
     {
         $member = MemberFactory::new()->inactive()->create();

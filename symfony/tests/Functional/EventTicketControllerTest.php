@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\Ticket;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
@@ -52,6 +54,26 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     {
         yield 'fi' => ['fi'];
         yield 'en' => ['en'];
+    }
+
+    public function testMemberTicketHelpers(): void
+    {
+        $member = new Member();
+        $event = new Event();
+
+        $ticket = new Ticket();
+        $ticket->setEvent($event);
+        $ticket->setPrice(1000);
+
+        $member->addTicket($ticket);
+        $this->assertCount(1, $member->getTickets());
+        $this->assertSame($ticket, $member->getTicketForEvent($event));
+
+        $otherEvent = new Event();
+        $this->assertNull($member->getTicketForEvent($otherEvent));
+
+        $member->removeTicket($ticket);
+        $this->assertCount(0, $member->getTickets());
     }
 
     /* =========================================================================

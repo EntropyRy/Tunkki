@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
+use App\Entity\Happening;
 use App\Entity\HappeningBooking;
 use App\Entity\Member;
 use App\Factory\EventFactory;
@@ -127,6 +128,29 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->em()->clear();
         $reloaded = $this->em()->getRepository(HappeningBooking::class)->find($booking->getId());
         self::assertNotNull($reloaded);
+    }
+
+    public function testMemberHappeningCollections(): void
+    {
+        $member = new Member();
+        $happening = new Happening();
+
+        $member->addHappening($happening);
+        $this->assertCount(1, $member->getHappenings());
+        $this->assertCount(1, $happening->getOwners());
+
+        $member->removeHappening($happening);
+        $this->assertCount(0, $member->getHappenings());
+        $this->assertCount(0, $happening->getOwners());
+
+        $booking = new HappeningBooking();
+        $member->addHappeningBooking($booking);
+        $this->assertCount(1, $member->getHappeningBooking());
+        $this->assertSame($member, $booking->getMember());
+
+        $member->removeHappeningBooking($booking);
+        $this->assertCount(0, $member->getHappeningBooking());
+        $this->assertNull($booking->getMember());
     }
 
     private function createBooking(Member $member, $happening): HappeningBooking

@@ -7,6 +7,7 @@ namespace App\Tests\Functional\Controller\Admin;
 use App\Entity\Event;
 use App\Entity\Location;
 use App\Factory\EventFactory;
+use App\Factory\MemberFactory;
 use App\Factory\NakkiBookingFactory;
 use App\Factory\NakkiFactory;
 use App\Factory\NakkikoneFactory;
@@ -209,12 +210,23 @@ final class EventAdminControllerTest extends FixturesWebTestCase
             'nimi' => 'Event RSVP List FI',
         ]);
 
-        // Create at least one RSVP so the table renders and is sortable.
+        // Create RSVPs so the table renders and sorting by availableLastName is exercised.
         $rsvp = RSVPFactory::new()->create([
             'event' => $event,
             'firstName' => 'Test',
             'lastName' => 'Person',
             'email' => 'test.person@example.com',
+        ]);
+        $member = MemberFactory::new()->create([
+            'firstname' => 'Ada',
+            'lastname' => 'Lovelace',
+        ]);
+        $memberRsvp = RSVPFactory::new()->create([
+            'event' => $event,
+            'member' => $member,
+            'firstName' => 'Ignored',
+            'lastName' => 'Ignored',
+            'email' => 'member.rsvp@example.com',
         ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
@@ -232,7 +244,18 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('table.table');
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getLastName());
         $this->client->assertSelectorTextContains('table.table tbody', $rsvp->getFirstName());
+        $this->client->assertSelectorTextContains('table.table tbody', 'Lovelace');
+
         self::assertNotNull($rsvp->getId());
+        self::assertInstanceOf(\DateTimeImmutable::class, $rsvp->getCreatedAt());
+        self::assertSame('Test Person', $rsvp->getName());
+        self::assertSame('Person', $rsvp->getAvailableLastName());
+        self::assertSame('test.person@example.com', $rsvp->getAvailableEmail());
+        self::assertSame('ID: '.$rsvp->getId(), (string) $rsvp);
+
+        self::assertSame('Lovelace', $memberRsvp->getAvailableLastName());
+        self::assertNotNull($member->getEmail());
+        self::assertSame($member->getEmail(), $memberRsvp->getAvailableEmail());
     }
 
     /**

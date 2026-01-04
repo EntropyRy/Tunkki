@@ -529,20 +529,6 @@ class Member implements \Stringable
         return $this->artist;
     }
 
-    /**
-     * @param int $id
-     */
-    public function getArtistWithId($id): ?Artist
-    {
-        foreach ($this->getArtist() as $artist) {
-            if ($artist->getId() == $id) {
-                return $artist;
-            }
-        }
-
-        return null;
-    }
-
     public function addArtist(Artist $artist): self
     {
         if (!$this->artist->contains($artist)) {
