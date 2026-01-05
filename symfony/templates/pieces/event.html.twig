@@ -5,8 +5,11 @@
 {% use 'pieces/bio.html.twig' %}
 
 {%- block menu -%}
-{% set theme = event.headerTheme ? event.headerTheme : 'light' %}
-<nav class="navbar navbar-expand-lg navbar-{{ theme }}">
+{% set theme = event.theme ? event.theme : 'dynamic' %}
+{% if theme == 'dynamic' %}
+    {% set theme = app.user ? app.user.member.theme : null %}
+{% endif %}
+<nav class="navbar navbar-expand-lg{% if theme %} navbar-{{ theme }}{% endif %}">
     <div class="container">
         <a class="navbar-brand d-lg-none" href="{{ block('event_path') }}">{{ 'Menu'|trans }}</a>
         <button class="navbar-toggler"

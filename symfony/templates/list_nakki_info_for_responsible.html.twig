@@ -6,8 +6,9 @@
 {% endblock %}
 {% block responsibles %}
     {% if responsibles|length > 0 and infos|length > 0 %}
+        {% set theme = event.theme == 'dynamic' ? (app.user ? app.user.member.theme : null) : event.theme %}
         <h3>{{ 'Responsibles'|trans }}</h3>
-        <table class="table table-striped {% if event.headerTheme == 'dark' %}table-dark{% endif %} ">
+        <table class="table table-striped {% if theme == 'dark' %}table-dark{% endif %} ">
             <thead>
                 <tr>
                     <th scope="col">Nakki</th>
@@ -43,6 +44,7 @@
     {% endif %}
 {% endblock %}
 {% block infos %}
+{% set theme = event.theme == 'dynamic' ? (app.user ? app.user.member.theme : null) : event.theme %}
     {% for name, nakki in infos %}
         <h3>
             Nakki: {{ name }}
@@ -104,7 +106,7 @@
 {% endfor %}
 {% endblock %}
 {% block thead %}
-    <table class="table table-striped {% if event.headerTheme == 'dark' %}table-dark{% endif %} ">
+        <table class="table table-striped {% if theme == 'dark' %}table-dark{% endif %} ">
         <thead>
             <tr>
                 <th scope="col">{{ 'Username'|trans }}</th>

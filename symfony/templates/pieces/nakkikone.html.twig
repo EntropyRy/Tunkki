@@ -23,10 +23,11 @@
     </div>
 {% endblock %}
 {% block card %}
+    {% set theme = event.theme == 'dynamic' ? (app.user ? app.user.member.theme : null) : event.theme %}
     {# { dump(show|default(false)) } #}
     <div class="col mb-3{% if not show|default(false) %} card-hide d-none{% endif %}"
          {% if not show|default(false) %}id="card-{{ i }}"{% endif %}>
-        <div class="card {% if event.headerTheme == 'dark' %}bg-black text-white{% endif %} ">
+        <div class="card {% if theme == 'dark' %}bg-black text-white{% endif %} ">
             <h5 class="card-header">{{ name }}</h5>
             <div class="card-body">
                 {% if not hide_time|default(false) %}<h6 class="card-subtitle mb-2 text-muted">{{ block('time') }}</h6>{% endif %}

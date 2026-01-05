@@ -2,12 +2,16 @@
     {% if app.user and event is not defined %}
         {% set theme = app.user.member.theme %}
     {% elseif event is defined %}
-        {% set theme = event.headerTheme %}
+        {% if event.theme == 'dynamic' %}
+            {% set theme = app.user ? app.user.member.theme : null %}
+        {% else %}
+            {% set theme = event.theme %}
+        {% endif %}
     {% else %}
         {% set theme = 'light' %}
     {% endif %}
     <!DOCTYPE html>
-    <html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ page is defined and page.site is defined and page.site.locale is not empty ? page.site.locale : (site is defined and site.locale is not empty ? site.locale : app.request.locale) }}" data-bs-theme="{{ theme }}">
+    <html prefix="og: http://ogp.me/ns#" {{ sonata_seo_html_attributes() }} lang="{{ page is defined and page.site is defined and page.site.locale is not empty ? page.site.locale : (site is defined and site.locale is not empty ? site.locale : app.request.locale) }}"{% if theme %} data-bs-theme="{{ theme }}"{% endif %}>
     {% endblock %}
     {% block sonata_page_head %}
         <head {{ sonata_seo_head_attributes() }}>

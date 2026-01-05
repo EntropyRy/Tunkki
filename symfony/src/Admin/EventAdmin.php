@@ -362,12 +362,14 @@ final class EventAdmin extends AbstractAdmin
             ]);
         if (false == $event->getexternalUrl()) {
             $formMapper
-                ->add('headerTheme', ChoiceType::class, [
+                ->add('theme', ChoiceType::class, [
                     'required' => true,
                     'choices' => [
+                        'dynamic' => 'dynamic',
                         'light' => 'light',
                         'dark' => 'dark',
                     ],
+                    'help' => 'dynamic lets visitors toggle theme on the event page; light/dark force a fixed theme.',
                 ])
                 ->add('backgroundEffect', ChoiceFieldMaskType::class, [
                     'required' => false,

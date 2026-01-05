@@ -187,8 +187,8 @@ class Event implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
     private ?bool $includeSaferSpaceGuidelines = false;
 
-    #[ORM\Column(type: Types::STRING, length: 255)]
-    private string $headerTheme = 'light';
+    #[ORM\Column(name: 'header_theme', type: Types::STRING, length: 255)]
+    private string $theme = 'dynamic';
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $streamPlayerUrl = null;
@@ -852,14 +852,14 @@ class Event implements \Stringable
         return $this;
     }
 
-    public function getHeaderTheme(): string
+    public function getTheme(): string
     {
-        return $this->headerTheme;
+        return $this->theme;
     }
 
-    public function setHeaderTheme(string $headerTheme): self
+    public function setTheme(string $theme): self
     {
-        $this->headerTheme = $headerTheme;
+        $this->theme = $theme;
 
         return $this;
     }
