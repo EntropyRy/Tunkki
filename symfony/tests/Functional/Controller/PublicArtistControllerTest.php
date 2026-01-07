@@ -202,7 +202,7 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
         self::assertNotNull($artist->getId());
         self::assertSame('Artist Accessor Test', (string) $artist);
         self::assertSame('Electro', $artist->getGenre());
-        self::assertSame('dj', $artist->getType());
+        self::assertSame('DJ', $artist->getType());
         self::assertSame('Modular', $artist->getHardware());
         self::assertSame('Bio FI', $artist->getBioByLocale('fi'));
         self::assertSame('Bio EN', $artist->getBioByLocale('en'));

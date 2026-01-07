@@ -171,26 +171,6 @@ class EventArtistInfo implements \Stringable
         return null;
     }
 
-    public function getArtistDataHasUpdate(\DateTimeInterface $eventDate): bool
-    {
-        if ($eventDate < new \DateTimeImmutable('now')->modify('-1 day')) {
-            return false;
-        }
-        if ($this->getArtist() instanceof Artist) {
-            return $this->getArtistClone()->getUpdatedAt()->format('U') <
-                $this->getArtist()->getUpdatedAt()->format('U');
-        }
-
-        return false;
-    }
-
-    public function getArtistName(): string
-    {
-        return $this->getArtist() instanceof Artist
-            ? $this->getArtist()->getName()
-            : $this->getArtistClone()->getName();
-    }
-
     public function isAgreeOnRecording(): ?bool
     {
         return $this->agreeOnRecording;

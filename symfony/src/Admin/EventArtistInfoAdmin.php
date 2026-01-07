@@ -53,9 +53,6 @@ final class EventArtistInfoAdmin extends AbstractAdmin
                     //                    'show' => [],
                     'edit' => [],
                     'delete' => [],
-                    'update' => [
-                        'template' => 'admin/crud/list__action_update_artist.html.twig',
-                    ],
                 ],
             ]);
     }
@@ -106,17 +103,9 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     #[\Override]
     public function prePersist($eventinfo): void
     {
-        $event = $eventinfo->getEvent();
-        $i = 1;
-        foreach ($event->getEventArtistInfos() as $info) {
-            if ($info->getArtist() == $eventinfo->getArtist()) {
-                ++$i;
-            }
-        }
         $artistClone = clone $eventinfo->getArtist();
         $artistClone->setMember(null);
         $artistClone->setCopyForArchive(true);
-        $artistClone->setName($artistClone->getName().' for '.$eventinfo->getEvent()->getName().' #'.$i);
         $eventinfo->setArtistClone($artistClone);
     }
 
@@ -124,7 +113,6 @@ final class EventArtistInfoAdmin extends AbstractAdmin
     protected function configureRoutes(RouteCollectionInterface $collection): void
     {
         $collection->remove('delete');
-        $collection->add('update', $this->getRouterIdParameter().'/update');
     }
 
     #[\Override]

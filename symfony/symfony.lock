@@ -621,9 +621,6 @@
             "config/routes.yaml"
         ]
     },
-    "symfony/security-acl": {
-        "version": "v3.0.2"
-    },
     "symfony/security-bundle": {
         "version": "6.2",
         "recipe": {

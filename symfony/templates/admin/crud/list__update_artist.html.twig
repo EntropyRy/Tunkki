@@ -1,8 +1,0 @@
-{% extends '@SonataAdmin/CRUD/base_list_field.html.twig' %}
-{% block field %}
-    {%- if object.event.EventDate > date('now') and object.artistDataHasUpdate %}
-        <a class="btn btn-sm btn-primary edit_link" href="{{ admin.generateObjectUrl('update', object) }}">
-            <i class="fa fa-magic" aria-hidden="true"></i> Update artist info
-        </a>
-    {% endif -%}
-{% endblock %}

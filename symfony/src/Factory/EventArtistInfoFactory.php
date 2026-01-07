@@ -64,12 +64,6 @@ final class EventArtistInfoFactory extends PersistentObjectFactory
                 $clone->setMember(null); // Clone should not link back to Member
                 $clone->setCopyForArchive(true);
 
-                // Generate unique archive name
-                $event = $info->getEvent();
-                $eventName = $event instanceof Event ? $event->getName() : 'Event';
-                $suffix = bin2hex(random_bytes(2));
-                $clone->setName($original->getName().' for '.$eventName.' #'.$suffix);
-
                 $info->setArtistClone($clone);
             }
         });

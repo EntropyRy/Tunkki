@@ -1,0 +1,143 @@
+{% extends 'onecolumn.html.twig' %}
+{% use 'pieces/event.html.twig' %}
+{% block title %}{{ 'artist.signups.title'|trans }} | {{ artist.name }} | Entropy ry{% endblock %}
+{% block content %}
+    <div class="col-12">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+            <div>
+                <h1 class="h4 mb-0">{{ 'artist.signups.title'|trans }}</h1>
+                <div class="text-muted">{{ artist.name }}</div>
+            </div>
+            <div class="d-flex gap-2">
+                <a class="btn btn-outline-secondary btn-sm"
+                   href="{{ path('entropy_artist_profile') }}">{{ 'artist.signups.back'|trans }}</a>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+            <span class="badge bg-success">{{ 'artist.signups.confirmed_time'|trans }}</span>
+            <span class="badge bg-warning text-dark">{{ 'artist.not_confirmed_yet'|trans }}</span>
+            <span class="badge bg-secondary">{{ 'artist.not_selected'|trans }}</span>
+        </div>
+        {% set currentArtist = artist %}
+        {% set signups = artist.eventArtistInfos|sort((a, b) => (
+            (eventTemporalState.isInPast(a.event) <=> eventTemporalState.isInPast(b.event))
+            ?: (
+                eventTemporalState.isInPast(a.event)
+                    ? (b.event.eventDate|date('U') <=> a.event.eventDate|date('U'))
+                    : (a.event.eventDate|date('U') <=> b.event.eventDate|date('U'))
+            )
+        )) %}
+        <div class="list-group">
+            {% set hasSignups = false %}
+            {% set upcomingHeadingShown = false %}
+            {% set pastHeadingShown = false %}
+            {% for info in signups %}
+                {% set isPast = eventTemporalState.isInPast(info.event) %}
+                {% set useClone = isPast and info.artistClone %}
+                {% set displayArtist = useClone ? info.artistClone : currentArtist %}
+                {% if displayArtist %}
+                    {% set hasSignups = true %}
+                    {% if not isPast and not upcomingHeadingShown %}
+                        {% set upcomingHeadingShown = true %}
+                        <div class="list-group-item active fw-semibold">
+                            {{ 'event.in_future'|trans }}
+                        </div>
+                    {% endif %}
+                    {% if isPast and not pastHeadingShown %}
+                        {% set pastHeadingShown = true %}
+                        <div class="list-group-item active fw-semibold">
+                            {{ 'event.after'|trans }}
+                        </div>
+                    {% endif %}
+                    <div class="list-group-item">
+                        <div class="row g-3 align-items-start">
+                            <div class="col-12 col-lg-7">
+                                <div class="fw-semibold d-flex flex-wrap align-items-center gap-2">
+                                    <a href="{{ path('entropy_event_slug', {year: info.event.eventDate|date('Y'), slug: info.event.url}) }}">
+                                        {{ info.event }}
+                                    </a>
+                                </div>
+                                <div class="text-muted small">{{ info.event.eventDate|date('d.m.Y') }}</div>
+                                <div class="mt-2">
+                                    {% if info.StartTime %}
+                                        <span class="badge bg-success">{{ info.StartTime|date('H:i') }}</span>
+                                        <span class="text-muted ms-2">{{ 'artist.signups.confirmed_time'|trans }}</span>
+                                    {% else %}
+                                        {% if info.event.eventDate|date('U') <= 'now'|date('U') %}
+                                            <span class="badge bg-secondary">{{ 'artist.not_selected'|trans }}</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">{{ 'artist.not_confirmed_yet'|trans }}</span>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                                {% set hasDetails = info.SetLength or info.WishForPlayTime or info.freeWord %}
+                                {% if hasDetails %}
+                                    <div class="mt-3 border rounded p-2">
+                                        <div class="row g-2">
+                                            {% if info.SetLength %}
+                                                <div class="col-12 col-md-6">
+                                                    <div class="small text-uppercase text-muted">
+                                                        {{ 'event.form.sign_up.set_length'|trans }}
+                                                    </div>
+                                                    <div class="text-muted">{{ info.SetLength }}</div>
+                                                </div>
+                                            {% endif %}
+                                            {% if info.WishForPlayTime %}
+                                                <div class="col-12 col-md-6">
+                                                    <div class="small text-uppercase text-muted">
+                                                        {{ 'event.form.sign_up.wish_for_playtime'|trans }}
+                                                    </div>
+                                                    <div class="text-muted">{{ info.WishForPlayTime }}</div>
+                                                </div>
+                                            {% endif %}
+                                            {% if info.freeWord %}
+                                                <div class="col-12">
+                                                    <div class="small text-uppercase text-muted">
+                                                        {{ 'event.form.sign_up.free_word'|trans }}
+                                                    </div>
+                                                    <div class="text-muted">{{ info.freeWord|nl2br }}</div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                <div class="mt-3 d-flex flex-wrap gap-2">
+                                    {% if not info.StartTime and info.event.eventDate|date('U') > 'now'|date('U') %}
+                                        <a class="btn btn-primary btn-sm"
+                                           href="{{ path('entropy_event_slug_artist_signup_edit', {year: info.event.eventDate|date('Y'), slug: info.event.url, id: info.id}) }}">
+                                            {{ 'edit'|trans|capitalize }}
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-5">
+                                <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                    <div class="small text-uppercase text-muted">
+                                        {{ useClone ? 'artist.signups.profile_used'|trans : 'artist.signups.profile_current'|trans }}
+                                    </div>
+                                    {% if not useClone %}
+                                        <a class="btn btn-outline-primary btn-sm"
+                                           href="{{ path('entropy_artist_edit', {id: currentArtist.id}) }}">{{ 'edit'|trans|capitalize }}</a>
+                                    {% endif %}
+                                </div>
+                                {% set artist = displayArtist %}
+                                <div class="row g-2">
+                                    <div class="col-12 col-md-7">
+                                        {{ block('artist_preview_info') }}
+                                    </div>
+                                    <div class="col-12 col-md-5">
+                                        {{ block('artist_pic') }}
+                                    </div>
+                                </div>
+                                {% set artist = currentArtist %}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% if not hasSignups %}
+            <div class="text-muted">{{ 'artist.signups.empty'|trans }}</div>
+        {% endif %}
+    </div>
+{% endblock %}

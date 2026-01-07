@@ -78,13 +78,6 @@ class Stream implements \Stringable
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): static
-    {
-        $this->updatedAt = $updatedAt;
-
-        return $this;
-    }
-
     public function getListeners(): int
     {
         return $this->listeners;
@@ -109,14 +102,6 @@ class Stream implements \Stringable
         return $this;
     }
 
-    /**
-     * @return Collection<int, StreamArtist>
-     */
-    public function getArtists(): Collection
-    {
-        return $this->artists;
-    }
-
     public function addArtist(StreamArtist $artist): static
     {
         if (!$this->artists->contains($artist)) {
@@ -127,13 +112,9 @@ class Stream implements \Stringable
         return $this;
     }
 
-    public function removeArtist(StreamArtist $artist): static
-    {
-        $this->artists->removeElement($artist);
-
-        return $this;
-    }
-
+    /**
+     * @return Collection<int, StreamArtist>
+     */
     public function getArtistsOnline(): Collection
     {
         return $this->artists->filter(fn (StreamArtist $artist): bool => !$artist->getStoppedAt() instanceof \DateTimeImmutable);

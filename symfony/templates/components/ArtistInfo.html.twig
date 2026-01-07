@@ -37,31 +37,25 @@
                         </div>
                         <script>
         function ConfirmDelete()
-        {
+                        {
         return confirm("{{ 'Are you sure you want to delete?'|trans }}");
         }
                         </script>
-                        <div class="pt-2">{{ 'events'|trans|capitalize }}:</div>
-                        <ul>
-                            {% for info in artist.eventArtistInfos %}
-                                {% if not eventTemporalState.isInPast(info.event) or info.StartTime %}
-                                    <li>
-                                        <a href="{{ path('entropy_event_slug', {year: info.event.eventDate|date('Y'), slug: info.event.url}) }}">{{ info.event }}</a>
-                                        {% if info.StartTime %}
-                                            @ {{ info.StartTime|date('H:i') }}
-                                        {% else %}
-                                            {% if info.event.eventDate|date('U') <= 'now'|date('U') %}
-                                                : {{ 'artist.not_selected'|trans }}
-                                            {% else %}
-                                                : {{ 'artist.not_confirmed_yet'|trans }},
-                                                <a href="{{ path('entropy_event_slug_artist_signup_edit', {year: info.event.eventDate|date('Y'), slug: info.event.url, id: info.id}) }}">{{ 'edit'|trans|capitalize }}</a>
-                                            {% endif %}
-                                        {% endif %}
-                                    </li>
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
-                        <a class="btn btn-primary w-100"
+                        {% set signupCount = 0 %}
+                        {% for info in artist.eventArtistInfos %}
+                            {% if not eventTemporalState.isInPast(info.event) or info.StartTime %}
+                                {% set signupCount = signupCount + 1 %}
+                            {% endif %}
+                        {% endfor %}
+                        <div class="pt-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="fw-semibold">{{ 'artist.signups.title'|trans }}</span>
+                                <span class="badge bg-secondary">{{ signupCount }}</span>
+                            </div>
+                            <a class="btn btn-outline-primary w-100 mt-2"
+                               href="{{ path('entropy_artist_signups', {id: artist.id}) }}">{{ 'artist.signups.view'|trans|capitalize }}</a>
+                        </div>
+                        <a class="btn btn-primary w-100 mt-2"
                             href="{{ path('entropy_artist_streams', {id: artist.id}) }}">{{ 'artist.streams'|trans|capitalize }}</a>
                     </div>
                 </div>

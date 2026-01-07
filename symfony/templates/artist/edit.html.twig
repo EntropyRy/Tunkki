@@ -5,6 +5,32 @@
             <p>{{ 'artist.explanation'|trans }}</p>
             {{ form_start(form) }}
                 {{ form_widget(form) }}
+
+                {% if activeSignups is defined and activeSignups|length > 1 %}
+                    {# Multiple signups: show checkboxes for selection #}
+                    <div class="card mt-4 mb-4">
+                        <div class="card-header">
+                            <h5 class="mb-0">{{ 'artist.sync.title'|trans }}</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">{{ 'artist.sync.description'|trans }}</p>
+                            {% for signup in activeSignups %}
+                                <div class="form-check">
+                                    <input class="form-check-input"
+                                           type="checkbox"
+                                           name="sync_signups[]"
+                                           value="{{ signup.id }}"
+                                           id="sync_signup_{{ signup.id }}">
+                                    <label class="form-check-label" for="sync_signup_{{ signup.id }}">
+                                        {{ signup.event.nameByLang(app.request.locale) }}
+                                        <span class="text-muted">({{ signup.event.eventDate|date('d.m.Y') }})</span>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endif %}
+
                 <input class="btn btn-primary"
                        data-turbo="false"
                        type="submit"

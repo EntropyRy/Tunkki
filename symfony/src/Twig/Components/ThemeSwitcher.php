@@ -66,33 +66,18 @@ final class ThemeSwitcher
 
     private function getSessionTheme(): ?string
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request || !$request->hasSession()) {
-            return null;
-        }
-
-        $theme = $request->getSession()->get('theme');
+        $theme = $this->requestStack->getSession()->get('theme');
 
         return \is_string($theme) && '' !== $theme ? $theme : null;
     }
 
     private function setSessionTheme(string $theme): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request || !$request->hasSession()) {
-            return;
-        }
-
-        $request->getSession()->set('theme', $theme);
+        $this->requestStack->getSession()->set('theme', $theme);
     }
 
     private function clearSessionTheme(): void
     {
-        $request = $this->requestStack->getCurrentRequest();
-        if (!$request || !$request->hasSession()) {
-            return;
-        }
-
-        $request->getSession()->remove('theme');
+        $this->requestStack->getSession()->remove('theme');
     }
 }

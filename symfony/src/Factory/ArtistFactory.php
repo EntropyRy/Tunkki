@@ -61,7 +61,7 @@ final class ArtistFactory extends PersistentObjectFactory
                 // Basic display name
                 'name' => $faker->unique()->sentence(2),
                 // Generic default type; refined by dj()/band() states
-                'type' => 'band',
+                'type' => 'Band',
                 // Add more attributes here if Artist gains new non-nullable fields.
             ];
         };
@@ -75,12 +75,6 @@ final class ArtistFactory extends PersistentObjectFactory
     {
         return $this
             ->afterInstantiate(static function (Artist $artist): void {
-                // Normalize type casing defensively
-                $type = strtolower((string) $artist->getType());
-                if ('dj' === $type || 'band' === $type) {
-                    $artist->setType($type);
-                }
-
                 // Synchronize inverse side: ensure Member->addArtist($artist) when a member is present.
                 if ($artist->getMember() instanceof Member) {
                     $member = $artist->getMember();
@@ -101,7 +95,7 @@ final class ArtistFactory extends PersistentObjectFactory
      */
     public function dj(): static
     {
-        return $this->with(['type' => 'dj']);
+        return $this->with(['type' => 'DJ']);
     }
 
     /**
@@ -109,7 +103,7 @@ final class ArtistFactory extends PersistentObjectFactory
      */
     public function band(): static
     {
-        return $this->with(['type' => 'band']);
+        return $this->with(['type' => 'Band']);
     }
 
     /**
@@ -141,7 +135,7 @@ final class ArtistFactory extends PersistentObjectFactory
     public function randomType(): static
     {
         return $this->with([
-            'type' => self::faker()->randomElement(['dj', 'band']),
+            'type' => self::faker()->randomElement(['DJ', 'Band']),
         ]);
     }
 }

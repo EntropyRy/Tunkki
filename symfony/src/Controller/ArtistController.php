@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Domain\ArtistSignupSyncService;
 use App\Entity\Artist;
 use App\Entity\User;
 use App\Form\ArtistType;
@@ -103,13 +104,51 @@ class ArtistController extends AbstractController
         Artist $artist,
         FormFactoryInterface $formF,
         EntityManagerInterface $em,
+        ArtistSignupSyncService $syncService,
     ): RedirectResponse|Response {
+        $user = $this->getUser();
+        \assert($user instanceof User);
+        $member = $user->getMember();
+
+        // Security: ensure the artist belongs to the current member
+        if ($artist->getMember()?->getId() !== $member->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $activeSignups = $syncService->findActiveSignups($artist);
         $form = $formF->create(ArtistType::class, $artist);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $artist = $form->getData();
             $em->persist($artist);
             $em->flush();
+
+            // Auto-sync if only one active signup, otherwise sync selected
+            if (1 === \count($activeSignups)) {
+                // Single signup: auto-sync
+                $syncedCount = $syncService->syncMultiple($activeSignups);
+                if ($syncedCount > 0) {
+                    $this->addFlash('success', 'artist.sync.auto');
+                }
+            } else {
+                // Multiple signups: sync user-selected ones
+                /** @var array<int> $selectedIds */
+                $selectedIds = array_map(
+                    intval(...),
+                    $request->request->all('sync_signups'),
+                );
+
+                if ([] !== $selectedIds) {
+                    $signupsToSync = $syncService->findSignupsByIds($artist, $selectedIds);
+                    $syncedCount = $syncService->syncMultiple($signupsToSync);
+
+                    if ($syncedCount > 0) {
+                        $this->addFlash('success', 'artist.sync.success');
+                    }
+                }
+            }
+
             $this->addFlash('success', 'edited');
 
             return $this->redirectToRoute('entropy_artist_profile');
@@ -118,6 +157,7 @@ class ArtistController extends AbstractController
         return $this->render('artist/edit.html.twig', [
             'artist' => $artist,
             'form' => $form,
+            'activeSignups' => $activeSignups,
         ]);
     }
 
@@ -170,6 +210,31 @@ class ArtistController extends AbstractController
         }
 
         return $this->render('artist/streams.html.twig', [
+            'artist' => $artist,
+        ]);
+    }
+
+    #[Route(
+        path: [
+            'fi' => '/profiili/artisti/{id}/ilmoittautumiset',
+            'en' => '/profile/artist/{id}/signups',
+        ],
+        name: 'entropy_artist_signups',
+        requirements: [
+            'id' => '\d+',
+        ]
+    )]
+    public function signups(Artist $artist): Response
+    {
+        $user = $this->getUser();
+        \assert($user instanceof User);
+        $member = $user->getMember();
+
+        if ($artist->getMember()?->getId() !== $member->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        return $this->render('artist/signups.html.twig', [
             'artist' => $artist,
         ]);
     }

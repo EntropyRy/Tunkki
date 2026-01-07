@@ -340,7 +340,6 @@ services:
     tags:
       - name: sonata.admin
         model_class: App\Entity\EventArtistInfo
-        controller: App\Controller\Admin\EventArtistInfoAdminController
         manager_type: orm
         group: admin
         label: EventArtistInfo

@@ -18,6 +18,7 @@ use App\Service\Email\EmailService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;
 use App\Service\StripeServiceInterface;
+use Fpt\StripeBundle\Event\StripeEvents;
 use Fpt\StripeBundle\Event\StripeWebhook;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -26,6 +27,23 @@ use Symfony\Component\AssetMapper\AssetMapperInterface;
 
 final class StripeEventSubscriberTest extends TestCase
 {
+    public function testGetSubscribedEvents(): void
+    {
+        $events = StripeEventSubscriber::getSubscribedEvents();
+
+        self::assertSame(
+            [
+                StripeEvents::PRICE_CREATED => 'onPriceCreated',
+                StripeEvents::PRICE_UPDATED => 'onPriceUpdated',
+                StripeEvents::PRICE_DELETED => 'onPriceDeleted',
+                StripeEvents::PRODUCT_UPDATED => 'onProductUpdated',
+                StripeEvents::CHECKOUT_SESSION_EXPIRED => 'onCheckoutExpired',
+                StripeEvents::CHECKOUT_SESSION_COMPLETED => 'onCheckoutCompleted',
+            ],
+            $events,
+        );
+    }
+
     public function testGiveEventTicketToEmailAssignsOwnerWhenMemberFound(): void
     {
         $member = new Member();

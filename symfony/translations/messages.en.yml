@@ -336,6 +336,14 @@ artist:
   streams_by: Streams by
   not_confirmed_yet: Not confirmed (yet)
   not_selected: Artist not selected
+  signups:
+    title: Event signups
+    view: View signups
+    back: Back to artist profiles
+    empty: No signups yet
+    confirmed_time: Time confirmed
+    profile_used: Profile used for this event
+    profile_current: Current profile
   explanation:
     In principle, the artist profile is event-specific. This means that
     your profile below will appear in the next event you are an artist. If you edit
@@ -371,6 +379,12 @@ artist:
     genre: Genre(s)
     information: Basic info
     hardware: Hardware
+  sync:
+    title: Update event-specific information
+    description: Select events whose artist information you want to update with your profile changes.
+    success: Event artist information updated.
+    auto: Event artist information updated automatically.
+    auto_info: Your upcoming event information will be updated automatically.
 member:
   welcome:
     subject: "[Entropy] Entropyn Jäsenyys / Entropy Membership"

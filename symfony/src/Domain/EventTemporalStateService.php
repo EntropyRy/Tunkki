@@ -99,6 +99,11 @@ final readonly class EventTemporalStateService
         return 'after' === $this->getPhase($event);
     }
 
+    public function isDateTimeInPast(\DateTimeImmutable $dateTime): bool
+    {
+        return $dateTime <= $this->clock->now();
+    }
+
     public function badgeKey(Event $event): string
     {
         if ('announcement' === $event->getType()) {

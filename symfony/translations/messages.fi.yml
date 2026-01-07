@@ -418,6 +418,14 @@ artist:
   streams_by: Artistin streamit
   not_confirmed_yet: Ei vahvistettu (vielä)
   not_selected: Artistia ei valittu
+  signups:
+    title: Tapahtumailmoittautumiset
+    view: Näytä ilmoittautumiset
+    back: Takaisin artistiprofiileihin
+    empty: Ei ilmoittautumisia vielä
+    confirmed_time: Aika vahvistettu
+    profile_used: Tapahtumassa käytetty profiili
+    profile_current: Nykyinen profiili
   explanation:
     Artistiprofiili on tapahtumakohtainen. Tämä tarkoittaa sitä, että alla
     näkyvä profiilisi tulee näkymään seuraavassa tapahtumassa, jossa olet artistina.
@@ -454,6 +462,12 @@ artist:
     genre: Genre(t)
     hardware: Laitteisto
     links: Linkit medianäytteisiin ja muihin palveluihin
+  sync:
+    title: Päivitä tapahtumakohtaiset tiedot
+    description: Valitse tapahtumat, joiden artistitiedot haluat päivittää profiilisi muutosten mukaiseksi.
+    success: Tapahtumien artistitiedot päivitetty.
+    auto: Tapahtuman artistitiedot päivitetty automaattisesti.
+    auto_info: Tulevan tapahtumasi tiedot päivitetään automaattisesti.
 epics:
   password_set: ePics-salasana tallennettu.
   password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.

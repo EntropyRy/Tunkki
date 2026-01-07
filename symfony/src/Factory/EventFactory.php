@@ -259,7 +259,7 @@ final class EventFactory extends PersistentObjectFactory
         return $this->with([
             'eventDate' => $start,
             'until' => $until,
-            // multiday flag will be applied via afterInstantiate()->setMultiday(true)
+            'multiday' => true,
         ]);
     }
 
