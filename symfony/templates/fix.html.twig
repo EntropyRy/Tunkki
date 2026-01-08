@@ -1,7 +1,10 @@
 {% extends 'onecolumn.html.twig' %}
 {% block content %}
-    <twig:ux:icon height="2rem" name="wrench" /> {{ 'page.fixing.icon.wrench'|trans }}
-    <twig:ux:icon height="2rem" style="color: red" name="puzzle" /> {{ 'page.fixing.icon.puzzle'|trans }}
+    <h1>{{ 'page.fixing.title'|trans }}</h1>
+    <div>
+        <twig:ux:icon height="2rem" name="wrench" /> {{ 'page.fixing.icon.wrench'|trans }}
+        <twig:ux:icon height="2rem" style="color: red" name="puzzle" /> {{ 'page.fixing.icon.puzzle'|trans }}
+    </div>
     {% if fix is defined %}
         {% for item in fix %}
             <div>

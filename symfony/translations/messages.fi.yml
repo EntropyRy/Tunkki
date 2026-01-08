@@ -298,6 +298,7 @@ page:
   title:
     checkout: Kassa
   fixing:
+    title: Entropyn korjattava kalusto
     icon:
       wrench: Tarkoittaa että tarvitsee korjausta
       puzzle: Tarkoittaa että on tarkoitettu varaosiksi eli vaatii isompaa korjausta

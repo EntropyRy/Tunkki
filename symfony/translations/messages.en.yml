@@ -177,6 +177,11 @@ page:
     link: Login to Your profile
   title:
     checkout: Checkout
+  fixing:
+    title: Entropy equipment needing repair
+    icon:
+      wrench: Needs fixing
+      puzzle: Spare parts
 block:
   tickets:
     name: Your tickets
