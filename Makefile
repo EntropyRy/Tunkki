@@ -51,6 +51,7 @@ PHPSTAN_MEMORY        ?= 1G
 PHPSTAN_PATHS_FAST    ?= src
 PHPSTAN_LEVEL         ?= 5
 PHPUNIT_MEMORY        ?= 1024M
+PHPUNIT_ARGS          ?=
 PHPSTAN_FLAGS_BASE    ?= -c phpstan.neon --memory-limit=$(PHPSTAN_MEMORY) --no-progress --level=$(PHPSTAN_LEVEL)
 GIT_DIFF_BASE         ?= origin/main
 
@@ -169,9 +170,9 @@ test-ci: _ensure-vendor prepare-test-db
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens -- --fail-on-warning --display-deprecations --display-errors=stderr; \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --fail-on-warning --display-deprecations --display-errors; \
 	else \
-		$(PHP_EXEC) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --fail-on-warning --display-deprecations --display-errors=stderr; \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --fail-on-warning --display-deprecations --display-errors $(PHPUNIT_ARGS); \
 	fi
 
 .PHONY: coverage

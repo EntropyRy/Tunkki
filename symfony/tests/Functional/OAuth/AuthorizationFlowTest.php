@@ -4,10 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\OAuth;
 
+use App\EventSubscriber\AuthorizationCodeSubscriber;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use App\Tests\Support\OAuthTestHelper;
+use League\Bundle\OAuth2ServerBundle\Event\AuthorizationRequestResolveEvent;
+use League\Bundle\OAuth2ServerBundle\Model\ClientInterface;
+use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final class AuthorizationFlowTest extends FixturesWebTestCase
 {
@@ -127,7 +136,52 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringContainsString('/login', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('/login', $parts['path'] ?? null);
+    }
+
+    public function testAuthorizationSubscriberRedirectsNonUserToLoginWithReturnUrl(): void
+    {
+        $request = Request::create('http://localhost/oauth/authorize?client_id=wiki_client_test');
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $subscriber = new AuthorizationCodeSubscriber(
+            static::getContainer()->get(UrlGeneratorInterface::class),
+            $requestStack,
+        );
+
+        $authRequest = $this->createStub(AuthorizationRequestInterface::class);
+        $client = $this->createStub(ClientInterface::class);
+        $user = new class implements UserInterface {
+            public function getRoles(): array
+            {
+                return [];
+            }
+
+            public function eraseCredentials(): void
+            {
+            }
+
+            public function getUserIdentifier(): string
+            {
+                return 'anonymous';
+            }
+        };
+
+        $event = new AuthorizationRequestResolveEvent($authRequest, [], $client, $user);
+        $subscriber->onAuthorizationRequestResolve($event);
+
+        $response = $event->getResponse();
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        $location = $response->getTargetUrl();
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('/login', $parts['path'] ?? null);
+        $query = [];
+        parse_str($parts['query'] ?? '', $query);
+        self::assertSame($request->getUri(), $query['returnUrl'] ?? null);
     }
 
     public function testInvalidClientIdReturnsError(): void

@@ -90,6 +90,41 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
         }
     }
 
+    /**
+     * Frontpage should have proper SEO meta tags.
+     */
+    #[DataProvider('localeProvider')]
+    public function testFrontpageHasSeoMetaTags(string $locale): void
+    {
+        $path = 'fi' === $locale ? '/' : '/en/';
+        $crawler = $this->client()->request('GET', $path);
+
+        self::assertResponseIsSuccessful();
+
+        // Title
+        $title = $crawler->filter('head title');
+        $this->assertGreaterThan(0, $title->count(), 'Page should have a <title> tag');
+        $this->assertNotEmpty($title->text(), 'Title should not be empty');
+
+        // Meta description
+        $description = $crawler->filter('meta[name="description"]');
+        if ($description->count() > 0) {
+            $this->assertNotEmpty($description->attr('content'), 'Meta description should not be empty when present');
+        }
+
+        // OG description
+        $ogDescription = $crawler->filter('meta[property="og:description"]');
+        if ($ogDescription->count() > 0) {
+            $this->assertNotEmpty($ogDescription->attr('content'), 'OG description should not be empty when present');
+        }
+
+        // Keywords
+        $keywords = $crawler->filter('meta[name="keywords"]');
+        if ($keywords->count() > 0) {
+            $this->assertNotEmpty($keywords->attr('content'), 'Keywords should not be empty when present');
+        }
+    }
+
     public function testCmsBaselineIdempotent(): void
     {
         $em = $this->em();

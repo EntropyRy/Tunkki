@@ -7,7 +7,9 @@ namespace App\Tests\Unit\Block;
 use App\Block\LinkListBlock;
 use PHPUnit\Framework\TestCase;
 use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Form\Mapper\FormMapper;
 use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\Form\Type\ImmutableArrayType;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
@@ -88,6 +90,54 @@ final class LinkListBlockTest extends TestCase
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('<div>Links</div>', $response->getContent());
+    }
+
+    public function testConfigureCreateFormDefinesExpectedKeys(): void
+    {
+        $twig = $this->createStub(Environment::class);
+        $block = new LinkListBlock($twig);
+        $formMapper = $this->createMock(FormMapper::class);
+        $blockModel = $this->createStub(BlockInterface::class);
+
+        $formMapper->expects($this->once())
+            ->method('add')
+            ->with(
+                'settings',
+                ImmutableArrayType::class,
+                $this->callback(static function (array $options): bool {
+                    if (!isset($options['keys']) || !\is_array($options['keys'])) {
+                        return false;
+                    }
+
+                    $keys = array_column($options['keys'], 0);
+
+                    return \in_array('title', $keys, true)
+                        && \in_array('show', $keys, true)
+                        && \in_array('urls', $keys, true);
+                })
+            )
+            ->willReturn($formMapper);
+
+        $block->configureCreateForm($formMapper, $blockModel);
+    }
+
+    public function testConfigureEditFormDelegatesToCreateForm(): void
+    {
+        $twig = $this->createStub(Environment::class);
+        $block = new LinkListBlock($twig);
+        $formMapper = $this->createMock(FormMapper::class);
+        $blockModel = $this->createStub(BlockInterface::class);
+
+        $formMapper->expects($this->once())
+            ->method('add')
+            ->with(
+                'settings',
+                ImmutableArrayType::class,
+                $this->isArray()
+            )
+            ->willReturn($formMapper);
+
+        $block->configureEditForm($formMapper, $blockModel);
     }
 
     public function testGetMetadata(): void
