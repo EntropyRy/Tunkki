@@ -79,6 +79,21 @@ final class ThemeSwitcherTest extends LiveComponentTestCase
         self::assertSame('dark', $reloadedMember->getTheme());
     }
 
+    public function testAuthenticatedUserInitialThemeUsesMemberPreference(): void
+    {
+        $member = MemberFactory::new()->active()->create(['theme' => 'dark']);
+
+        $component = $this->mountComponent(ThemeSwitcher::class, [
+            'user' => $member->getUser(),
+        ]);
+
+        /** @var ThemeSwitcher $state */
+        $state = $component->component();
+        $state->user = $member->getUser();
+        $state->mount();
+        self::assertSame('dark', $state->theme);
+    }
+
     public function testAuthenticatedUserMultipleTogglesPersist(): void
     {
         $member = MemberFactory::new()->active()->create(['theme' => 'light']);

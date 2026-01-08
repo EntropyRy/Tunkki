@@ -46,6 +46,8 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('form[name="booking_consent"]');
         $this->client->assertSelectorExists('input[name="booking_consent[renterSignature]"]');
         $this->client->assertSelectorExists('input[name="booking_consent[renterConsent]"]');
+        $this->client->assertSelectorExists('button[name="booking_consent[Agree]"][disabled]');
+        $this->client->assertSelectorExists('button[name="booking_consent[Agree]"].btn-large.btn-primary');
     }
 
     public function testInvalidHashReturnsNotFound(): void
@@ -431,6 +433,27 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->assertNotNull($reloaded);
         $this->assertFalse($reloaded->getRenterConsent());
         $this->assertNull($reloaded->getRenterSignature());
+    }
+
+    public function testConsentAlreadyGivenShowsSignedButton(): void
+    {
+        $renter = $this->createRenter('Test Renter');
+        $this->createRentContract();
+        $booking = $this->createBookingWithReferenceNumber(
+            renter: $renter,
+            referenceNumber: 'REF-123',
+            renterHash: 'hash-abc',
+        );
+        $booking->setRenterConsent(true);
+        $this->entityManager->flush();
+
+        $this->seedClientHome('fi');
+        $path = $this->path($booking, $renter, 'hash-abc');
+        $this->client->request('GET', $path);
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('button[name="booking_consent[Signed]"][disabled]');
+        $this->client->assertSelectorExists('button[name="booking_consent[Signed]"].btn-secondary.disabled');
     }
 
     private function path(Booking $booking, Renter $renter, string $hash): string
