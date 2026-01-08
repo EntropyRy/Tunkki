@@ -918,7 +918,6 @@ abstract class FixturesWebTestCase extends WebTestCase
                             ]);
                     }
 
-                    // Announcements now live in a controller route, not Sonata pages.
                 } else {
                     // FI: ensure /tapahtumat and /liity exist
                     $allowed[] = '/tapahtumat';
@@ -961,7 +960,6 @@ abstract class FixturesWebTestCase extends WebTestCase
                             ]);
                     }
 
-                    // Announcements now live in a controller route, not Sonata pages.
                 }
 
                 // Prune any other pages not in the whitelist
@@ -988,42 +986,9 @@ abstract class FixturesWebTestCase extends WebTestCase
                     }
                 }
             }
-            // Remove legacy announcements pages and snapshots (controller-owned now).
-            $snapshotRepo = $this->em()->getRepository(
-                \App\Entity\Sonata\SonataPageSnapshot::class,
-            );
-            foreach (['/announcements', '/tiedotukset', '/tietotukset'] as $url) {
-                $pages = $pageRepo->findBy(['url' => $url]);
-                foreach ($pages as $page) {
-                    $this->em()->remove($page);
-                }
-                $snapshots = $snapshotRepo->findBy(['url' => $url]);
-                foreach ($snapshots as $snapshot) {
-                    $this->em()->remove($snapshot);
-                }
-            }
             $this->em()->flush();
         } catch (\Throwable) {
             // ignore failures; baseline keeps minimal set when possible
-        }
-
-        // Force-remove legacy announcements pages/snapshots even if earlier normalization failed.
-        try {
-            $pageRepo = $this->em()->getRepository(SonataPagePage::class);
-            $snapshotRepo = $this->em()->getRepository(
-                \App\Entity\Sonata\SonataPageSnapshot::class,
-            );
-            foreach (['/announcements', '/tiedotukset', '/tietotukset'] as $url) {
-                foreach ($pageRepo->findBy(['url' => $url]) as $page) {
-                    $this->em()->remove($page);
-                }
-                foreach ($snapshotRepo->findBy(['url' => $url]) as $snapshot) {
-                    $this->em()->remove($snapshot);
-                }
-            }
-            $this->em()->flush();
-        } catch (\Throwable) {
-            // ignore cleanup failures
         }
 
         // Hard prune: keep exactly one FI site and one EN site; delete all others (including duplicates and non-FI/EN locales)
