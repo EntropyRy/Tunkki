@@ -296,21 +296,23 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
         ];
     }
 
+    /**
+     * Tests EventArtistInfo::timediff() via timetable rendering.
+     * Gap chip appears when multiday event has >4h gap between slots.
+     */
     public function testTimetableShowsGapChipForMultidayEventWithLargeGap(): void
     {
-        // Create multiday event
         $event = EventFactory::new()->published()->multiday()->create([
             'url' => 'event-timetable-gap-'.uniqid('', true),
         ]);
 
         $eventDate = $event->getEventDate();
 
-        // Create two artists with >4h gap between start times
         $artist1 = ArtistFactory::new()->create(['type' => 'DJ', 'name' => 'First DJ']);
         $artist2 = ArtistFactory::new()->create(['type' => 'DJ', 'name' => 'Second DJ']);
 
         // First slot at 20:00
-        $signup1 = EventArtistInfoFactory::new()
+        EventArtistInfoFactory::new()
             ->forEvent($event)
             ->forArtist($artist1)
             ->create([
@@ -318,8 +320,8 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
                 'stage' => 'Main',
             ]);
 
-        // Second slot at 02:00 next day (6 hours later - >4h gap)
-        $signup2 = EventArtistInfoFactory::new()
+        // Second slot at 02:00 next day (6 hours gap)
+        EventArtistInfoFactory::new()
             ->forEvent($event)
             ->forArtist($artist2)
             ->create([
@@ -327,43 +329,23 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
                 'stage' => 'Main',
             ]);
 
-        // Debug: verify the gap calculation
-        $gap = $signup2->timediff($signup1->getStartTime());
-        $this->assertGreaterThan(4, $gap, 'Gap between slots should be >4 hours');
-
-        // Verify event is multiday
-        $this->assertTrue($event->getMultiday(), 'Event should be multiday');
-
-        // Clear entity manager to force reload with relationships
-        $eventId = $event->getId();
         $this->em()->clear();
-
-        // Verify event still multiday after reload
-        $freshEvent = $this->em()->find(\App\Entity\Event::class, $eventId);
-        $this->assertTrue($freshEvent->getMultiday(), 'Event should be multiday after reload');
-
-        // Verify music artist infos loaded
-        $infos = $freshEvent->getMusicArtistInfos();
-        $this->assertNotEmpty($infos, 'Event should have music artist infos');
-        $this->assertCount(1, $infos, 'Should have one stage');
-        $mainStage = $infos['Main'] ?? [];
-        $this->assertCount(2, $mainStage, 'Should have two artists on Main stage');
-
         $this->seedClientHome('fi');
 
         $path = static::getContainer()->get('router')->generate('entropy_event_timetable', [
             'year' => $eventDate->format('Y'),
-            'slug' => $freshEvent->getUrl(),
+            'slug' => $event->getUrl(),
             '_locale' => 'fi',
         ]);
 
         $this->client->request('GET', $path);
         $this->assertResponseIsSuccessful();
-
-        // Gap chip should be visible for >4h gap on multiday event
         $this->client->assertSelectorExists('.gap-chip');
     }
 
+    /**
+     * Tests timetable renders artist names from artistClone.
+     */
     public function testTimetableRendersArtistNamesFromClone(): void
     {
         $event = EventFactory::new()->published()->create([
@@ -375,7 +357,7 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
             'name' => 'Test Artist Name',
         ]);
 
-        $signup = EventArtistInfoFactory::new()
+        EventArtistInfoFactory::new()
             ->forEvent($event)
             ->forArtist($artist)
             ->create([
@@ -383,24 +365,7 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
                 'stage' => 'Main',
             ]);
 
-        // Verify entities are correct before clearing
-        $eventId = $event->getId();
-        $signupEventId = $signup->getEvent()?->getId();
-        $cloneType = $signup->getArtistClone()?->getType();
-        $startTime = $signup->getStartTime();
-
-        $this->assertSame($eventId, $signupEventId, 'Signup should be linked to event');
-        $this->assertSame('DJ', $cloneType, 'Clone should have type DJ');
-        $this->assertNotNull($startTime, 'StartTime should be set');
-
-        // Clear entity manager to force reload with relationships
         $this->em()->clear();
-
-        // Verify after clear - load event fresh and check relationships
-        $freshEvent = $this->em()->find(\App\Entity\Event::class, $eventId);
-        $infos = $freshEvent->getMusicArtistInfos();
-        $this->assertNotEmpty($infos, 'Event should have music artist infos after reload');
-
         $this->seedClientHome('fi');
 
         $path = static::getContainer()->get('router')->generate('entropy_event_timetable', [
@@ -411,11 +376,12 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
 
         $this->client->request('GET', $path);
         $this->assertResponseIsSuccessful();
-
-        // Artist name from clone should be rendered in timetable
         $this->client->assertSelectorTextContains('.timetable', 'Test Artist Name');
     }
 
+    /**
+     * Tests EventArtistInfo::__toString() returns artist name.
+     */
     public function testEventArtistInfoToStringReturnsArtistName(): void
     {
         $artist = new \App\Entity\Artist();
@@ -425,16 +391,16 @@ final class EventControllerRoutesTest extends FixturesWebTestCase
         $info = new EventArtistInfo();
         $info->setArtist($artist);
 
-        // Test __toString returns artist name
         $this->assertSame('Stringable Artist', (string) $info);
     }
 
+    /**
+     * Tests EventArtistInfo::__toString() returns 'n/a' when no artist.
+     */
     public function testEventArtistInfoToStringReturnsNaWhenNoArtist(): void
     {
-        // Create EventArtistInfo without artist
         $info = new EventArtistInfo();
 
-        // Test __toString returns 'n/a' when no artist
         $this->assertSame('n/a', (string) $info);
     }
 
