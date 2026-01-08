@@ -103,7 +103,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertNotNull($fiRoot, 'Finnish root page should exist');
         $this->assertNotNull($enRoot, 'English root page should exist');
 
-        // Verify core pages exist (events, join, announcements, stream)
+        // Verify core pages exist (events, join, stream)
         $fiEvents = $pageRepo->findOneBy(['site' => $fiSite, 'pageAlias' => '_page_alias_events_fi']);
         $enEvents = $pageRepo->findOneBy(['site' => $enSite, 'pageAlias' => '_page_alias_events_en']);
 
@@ -126,9 +126,9 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertNotNull($fiStream, 'Finnish stream page should exist');
         $this->assertNotNull($enStream, 'English stream page should exist');
 
-        // Verify minimum page count (root + events + join + announcements + stream = 5 per site = 10 total)
+        // Verify minimum page count (root + events + join + stream = 4 per site = 8 total)
         $totalPages = $pageRepo->count([]);
-        $this->assertGreaterThanOrEqual(10, $totalPages, 'Should have at least 10 pages after seeding');
+        $this->assertGreaterThanOrEqual(8, $totalPages, 'Should have at least 8 pages after seeding');
     }
 
     public function testCommandIsIdempotent(): void

@@ -85,12 +85,16 @@ sonata_page:
         - event_stripe_checkouts
         - entropy_event_shop_complete
         - entropy_shop
+        - announcements
         - inventory_needs_fixing
         - path_test
     ignore_uri_patterns:
         - ^/admin\/
         - ^/api\/
         - ^/stripe\/
+        - ^/announcements
+        - ^/en/announcements
+        - ^/tiedotukset
 
     default_template: default
     templates:

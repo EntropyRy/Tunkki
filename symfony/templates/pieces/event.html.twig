@@ -471,14 +471,9 @@
     </span>
     {% endif %}
     {% if event.type == 'announcement' %}
-        {% if app.request.locale == 'fi' %}
-            {% set url = '/tiedotukset' %}
-        {% else %}
-            {% set url = '/en/announcements' %}
-        {% endif %}
     <span>
         <a class="btn btn-outline-info"
-           href="{{ url }}">
+           href="{{ path('announcements') }}">
             <twig:ux:icon name="tasks" height="1em" width="1em"/>
             {{ 'button.old_announcements'|trans }}
         </a>

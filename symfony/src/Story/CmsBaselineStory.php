@@ -24,7 +24,6 @@ use Zenstruck\Foundry\Story;
  *      - Root "/" (frontpage)
  *      - Events (/tapahtumat or /events)                type entropy.page.eventspage
  *      - Join   (/liity or /join-us)                    type sonata.page.service.default
- *      - Announcements (/tiedotukset or /announcements) type entropy.page.announcementspage, template "annnouncements"
  *      - Stream (/stream)                                type entropy.page.stream
  *
  * Intent:
@@ -48,7 +47,7 @@ final class CmsBaselineStory extends Story
         $fiRoot = $this->ensureRootPage($fi);
         $enRoot = $this->ensureRootPage($en);
 
-        // 4) Ensure core pages per locale (events, join, announcements, stream)
+        // 4) Ensure core pages per locale (events, join, stream)
         $this->ensureCorePagesForFi($fi, $fiRoot);
         $this->ensureCorePagesForEn($en, $enRoot);
 
@@ -218,18 +217,6 @@ final class CmsBaselineStory extends Story
             metaDescriptionIfMissing: 'Liity Jäseneksi'
         );
 
-        // Announcements (/tiedotukset) — templateCode intentionally "annnouncements"
-        $this->ensureAnnouncements(
-            $fi,
-            $root,
-            url: '/tiedotukset',
-            slug: 'tiedotukset',
-            name: 'Tiedotukset',
-            title: 'Tiedotukset',
-            alias: '_page_alias_announcements_fi',
-            position: 3
-        );
-
         // Stream (/stream)
         $this->ensureStream($fi, $root);
     }
@@ -267,18 +254,6 @@ final class CmsBaselineStory extends Story
             alias: '_page_alias_join_us_en',
             position: 1,
             metaDescriptionIfMissing: 'Join Us'
-        );
-
-        // Announcements (/announcements) — templateCode intentionally "annnouncements"
-        $this->ensureAnnouncements(
-            $en,
-            $root,
-            url: '/announcements',
-            slug: 'announcements',
-            name: 'Announcements',
-            title: 'Announcements',
-            alias: '_page_alias_announcements_en',
-            position: 3
         );
 
         // Stream (/stream)
@@ -349,71 +324,6 @@ final class CmsBaselineStory extends Story
         flush_after(static fn (): null => null);
 
         return $page;
-    }
-
-    private function ensureAnnouncements(
-        SonataPageSite $site,
-        SonataPagePage $root,
-        string $url,
-        string $slug,
-        string $name,
-        string $title,
-        string $alias,
-        int $position,
-    ): void {
-        $pageRepo = PageFactory::repository();
-
-        $candidates = $pageRepo->findBy(['site' => $site, 'url' => $url]);
-        $chosen = array_find($candidates, fn (SonataPagePage $candidate): bool => 'annnouncements' === (string) $candidate->getTemplateCode()
-            && 'entropy.page.announcementspage' === (string) $candidate->getType());
-        if (null === $chosen) {
-            $chosen = $candidates[0] ?? null;
-        }
-
-        // Remove duplicates beyond the chosen one
-        foreach ($candidates as $dup) {
-            if ($dup !== $chosen) {
-                delete($dup);
-            }
-        }
-
-        if (!$chosen instanceof SonataPagePage) {
-            // Create fresh announcements page
-            PageFactory::new()
-                ->withSite($site)
-                ->with([
-                    'routeName' => 'page_slug',
-                    'name' => $name,
-                    'title' => $title,
-                    'slug' => $slug,
-                    'url' => $url,
-                    'enabled' => true,
-                    'decorate' => true,
-                    'type' => 'entropy.page.announcementspage',
-                    'templateCode' => 'annnouncements',
-                    'requestMethod' => 'GET|POST|HEAD|DELETE|PUT',
-                    'pageAlias' => $alias,
-                    'parent' => $root,
-                    'position' => $position,
-                ])
-                ->create();
-        } else {
-            // Normalize attributes
-            $chosen->setParent($root);
-            $chosen->setPosition($position);
-            $chosen->setRouteName('page_slug');
-            $chosen->setName($name);
-            $chosen->setTitle($title);
-            $chosen->setSlug($slug);
-            $chosen->setUrl($url);
-            $chosen->setEnabled(true);
-            $chosen->setDecorate(true);
-            $chosen->setType('entropy.page.announcementspage');
-            $chosen->setTemplateCode('annnouncements');
-            $chosen->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-            $chosen->setPageAlias($alias);
-            flush_after(static fn (): null => null);
-        }
     }
 
     private function ensureStream(SonataPageSite $site, SonataPagePage $root): void

@@ -4,6 +4,8 @@
     {% set newyear = date('Y') %}
     {% set route = 'entropy_event' %}
 
+    <h1>{{ 'page.announcements.title'|trans }}</h1>
+
     <div id="events">
         {% for event in events %}
             {% if app.user %}
@@ -24,6 +26,9 @@
                         {% endif %}
                     </div>
                 {% else %}
+                    {% if loop.index == 2 %}
+                        <hr>
+                    {% endif %}
                     {% if year != newyear %}
                         <div class="linetext">
                             <span>{{ year }}</span>

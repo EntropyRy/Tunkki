@@ -170,6 +170,8 @@ stream:
     start: Start
     stop: Stop
 page:
+  announcements:
+    title: Announcements
   email_unsubscribe:
     removed: removed
     title: Email Unsubscribed

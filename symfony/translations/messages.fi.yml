@@ -290,6 +290,8 @@ block:
 menu:
   logon_to: Kirjaudu
 page:
+  announcements:
+    title: Tiedotukset
   email_unsubscribe:
     removed: poistettu
     title: Sähköposti poistettu tiedotuslistalta

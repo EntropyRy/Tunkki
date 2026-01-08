@@ -881,7 +881,6 @@ abstract class FixturesWebTestCase extends WebTestCase
                     $allowed[] = '/events';
                     $allowed[] = '/join-us';
                     $allowed[] = '/stream';
-                    $allowed[] = '/announcements';
 
                     $events = $pageRepo->findOneBy([
                         'site' => $siteObj2,
@@ -919,66 +918,12 @@ abstract class FixturesWebTestCase extends WebTestCase
                             ]);
                     }
 
-                    // Ensure Announcements page (EN) at /announcements (deduplicate + normalize)
-                    $annPages = $pageRepo->findBy([
-                        'site' => $siteObj2,
-                        'url' => '/announcements',
-                    ]);
-                    $ann = null;
-                    foreach ($annPages as $candidate) {
-                        if (
-                            method_exists($candidate, 'getTemplateCode')
-                            && method_exists($candidate, 'getType')
-                            && 'annnouncements' ===
-                                (string) $candidate->getTemplateCode()
-                            && 'entropy.page.announcementspage' ===
-                                (string) $candidate->getType()
-                        ) {
-                            $ann = $candidate;
-                            break;
-                        }
-                    }
-                    if (null === $ann) {
-                        $ann = $annPages[0] ?? null;
-                    }
-                    foreach ($annPages as $dup) {
-                        if ($dup !== $ann) {
-                            $this->em()->remove($dup);
-                        }
-                    }
-                    if (!$ann instanceof SonataPagePage) {
-                        $ann = new SonataPagePage();
-                        $ann->setSite($siteObj2);
-                    }
-                    // Parent under root if present
-                    $rootPage = $pageRepo->findOneBy([
-                        'site' => $siteObj2,
-                        'url' => '/',
-                    ]);
-                    if ($rootPage instanceof SonataPagePage) {
-                        $ann->setParent($rootPage);
-                        $ann->setPosition(3);
-                    }
-                    $ann->setRouteName('page_slug');
-                    $ann->setName('Announcements');
-                    $ann->setTitle('Announcements');
-                    $ann->setSlug('announcements');
-                    $ann->setUrl('/announcements');
-                    $ann->setEnabled(true);
-                    $ann->setDecorate(true);
-                    $ann->setType('entropy.page.announcementspage');
-                    $ann->setTemplateCode('annnouncements');
-                    $ann->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-                    if (method_exists($ann, 'setPageAlias')) {
-                        $ann->setPageAlias('_page_alias_announcements_en');
-                    }
-                    $this->em()->persist($ann);
+                    // Announcements now live in a controller route, not Sonata pages.
                 } else {
                     // FI: ensure /tapahtumat and /liity exist
                     $allowed[] = '/tapahtumat';
                     $allowed[] = '/liity';
                     $allowed[] = '/stream';
-                    $allowed[] = '/tiedotukset';
 
                     $events = $pageRepo->findOneBy([
                         'site' => $siteObj2,
@@ -1016,59 +961,7 @@ abstract class FixturesWebTestCase extends WebTestCase
                             ]);
                     }
 
-                    // Ensure Tiedotukset page (FI) at /tiedotukset (deduplicate + normalize)
-                    $annPagesFi = $pageRepo->findBy([
-                        'site' => $siteObj2,
-                        'url' => '/tiedotukset',
-                    ]);
-                    $annFi = null;
-                    foreach ($annPagesFi as $candidate) {
-                        if (
-                            method_exists($candidate, 'getTemplateCode')
-                            && method_exists($candidate, 'getType')
-                            && 'annnouncements' ===
-                                (string) $candidate->getTemplateCode()
-                            && 'entropy.page.announcementspage' ===
-                                (string) $candidate->getType()
-                        ) {
-                            $annFi = $candidate;
-                            break;
-                        }
-                    }
-                    if (null === $annFi) {
-                        $annFi = $annPagesFi[0] ?? null;
-                    }
-                    foreach ($annPagesFi as $dup) {
-                        if ($dup !== $annFi) {
-                            $this->em()->remove($dup);
-                        }
-                    }
-                    if (!$annFi instanceof SonataPagePage) {
-                        $annFi = new SonataPagePage();
-                        $annFi->setSite($siteObj2);
-                    }
-                    $rootPageFi = $pageRepo->findOneBy([
-                        'site' => $siteObj2,
-                        'url' => '/',
-                    ]);
-                    if ($rootPageFi instanceof SonataPagePage) {
-                        $annFi->setParent($rootPageFi);
-                        $annFi->setPosition(3);
-                    }
-                    $annFi->setRouteName('page_slug');
-                    $annFi->setName('Tiedotukset');
-                    $annFi->setTitle('Tiedotukset');
-                    $annFi->setSlug('tiedotukset');
-                    $annFi->setUrl('/tiedotukset');
-                    $annFi->setEnabled(true);
-                    $annFi->setDecorate(true);
-                    $annFi->setType('entropy.page.announcementspage');
-                    $annFi->setTemplateCode('annnouncements');
-                    $annFi->setRequestMethod('GET|POST|HEAD|DELETE|PUT');
-                    if (method_exists($annFi, 'setPageAlias')) {
-                        $annFi->setPageAlias('_page_alias_announcements_fi');
-                    }
-                    $this->em()->persist($annFi);
+                    // Announcements now live in a controller route, not Sonata pages.
                 }
 
                 // Prune any other pages not in the whitelist
@@ -1095,9 +988,42 @@ abstract class FixturesWebTestCase extends WebTestCase
                     }
                 }
             }
+            // Remove legacy announcements pages and snapshots (controller-owned now).
+            $snapshotRepo = $this->em()->getRepository(
+                \App\Entity\Sonata\SonataPageSnapshot::class,
+            );
+            foreach (['/announcements', '/tiedotukset', '/tietotukset'] as $url) {
+                $pages = $pageRepo->findBy(['url' => $url]);
+                foreach ($pages as $page) {
+                    $this->em()->remove($page);
+                }
+                $snapshots = $snapshotRepo->findBy(['url' => $url]);
+                foreach ($snapshots as $snapshot) {
+                    $this->em()->remove($snapshot);
+                }
+            }
             $this->em()->flush();
         } catch (\Throwable) {
             // ignore failures; baseline keeps minimal set when possible
+        }
+
+        // Force-remove legacy announcements pages/snapshots even if earlier normalization failed.
+        try {
+            $pageRepo = $this->em()->getRepository(SonataPagePage::class);
+            $snapshotRepo = $this->em()->getRepository(
+                \App\Entity\Sonata\SonataPageSnapshot::class,
+            );
+            foreach (['/announcements', '/tiedotukset', '/tietotukset'] as $url) {
+                foreach ($pageRepo->findBy(['url' => $url]) as $page) {
+                    $this->em()->remove($page);
+                }
+                foreach ($snapshotRepo->findBy(['url' => $url]) as $snapshot) {
+                    $this->em()->remove($snapshot);
+                }
+            }
+            $this->em()->flush();
+        } catch (\Throwable) {
+            // ignore cleanup failures
         }
 
         // Hard prune: keep exactly one FI site and one EN site; delete all others (including duplicates and non-FI/EN locales)
