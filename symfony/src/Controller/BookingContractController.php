@@ -64,7 +64,6 @@ class BookingContractController extends Controller
             'renter' => $renter,
             'bookingdata' => $booking->getDataArray(),
             'form' => $form,
-            'page' => null,
         ]);
     }
 
@@ -89,7 +88,6 @@ class BookingContractController extends Controller
             'renter' => null,
             'bookingdata' => $booking->getDataArray(),
             'form' => null,
-            'page' => null,
         ]);
     }
 }

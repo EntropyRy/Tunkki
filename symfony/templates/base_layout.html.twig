@@ -74,7 +74,7 @@
                                     </ul>
                                 </li>
                             {% endif %}
-                            {% if page is defined %}
+                            {% if page is defined and page is not null and page.id is defined %}
                                 <li class="dropdown nav-item">
                                     <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">Page <span class="caret"></span></a>
                                     <ul class="dropdown-menu">
@@ -93,7 +93,7 @@
                                     </ul>
                                 </li>
                             {% endif %}
-                            {% if page is defined and event is not defined %}
+                            {% if page is defined and page is not null and page.id is defined and event is not defined %}
                                 <li class="nav-item">
                                     <a class="nav-link"
                                        href="{{ sonata_page_admin.generateUrl('compose', {(sonata_page_admin.idParameter): page.id}) }}">
