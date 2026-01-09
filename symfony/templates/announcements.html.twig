@@ -7,7 +7,7 @@
 
     <h1>{{ 'page.announcements.title'|trans }}</h1>
 
-    <div id="events">
+    <div id="announcements">
         {% for event in events %}
             {% if app.user %}
                 {% set visible = true %}
