@@ -1,5 +1,6 @@
-{% extends 'twocolumn.html.twig' %}
+{% extends 'onecolumn.html.twig' %}
 {% use 'pieces/event.html.twig' %}
+{% block title %}{{ 'page.announcements.title'|trans }} | Entropy ry{% endblock %}
 {% block content %}
     {% set newyear = date('Y') %}
     {% set route = 'entropy_event' %}
