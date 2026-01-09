@@ -917,7 +917,6 @@ abstract class FixturesWebTestCase extends WebTestCase
                                 'decorate' => true,
                             ]);
                     }
-
                 } else {
                     // FI: ensure /tapahtumat and /liity exist
                     $allowed[] = '/tapahtumat';
@@ -959,7 +958,6 @@ abstract class FixturesWebTestCase extends WebTestCase
                                 'decorate' => true,
                             ]);
                     }
-
                 }
 
                 // Prune any other pages not in the whitelist

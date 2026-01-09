@@ -1477,16 +1477,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "3.6.0",
+            "version": "3.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/orm.git",
-                "reference": "d4e9276e79602b1eb4c4029c6c999b0d93478e2f"
+                "reference": "2148940290e4c44b9101095707e71fb590832fa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/orm/zipball/d4e9276e79602b1eb4c4029c6c999b0d93478e2f",
-                "reference": "d4e9276e79602b1eb4c4029c6c999b0d93478e2f",
+                "url": "https://api.github.com/repos/doctrine/orm/zipball/2148940290e4c44b9101095707e71fb590832fa5",
+                "reference": "2148940290e4c44b9101095707e71fb590832fa5",
                 "shasum": ""
             },
             "require": {
@@ -1559,9 +1559,9 @@
             ],
             "support": {
                 "issues": "https://github.com/doctrine/orm/issues",
-                "source": "https://github.com/doctrine/orm/tree/3.6.0"
+                "source": "https://github.com/doctrine/orm/tree/3.6.1"
             },
-            "time": "2025-12-19T20:36:14+00:00"
+            "time": "2026-01-09T05:28:15+00:00"
         },
         {
             "name": "doctrine/persistence",
@@ -2442,16 +2442,16 @@
         },
         {
             "name": "imagine/imagine",
-            "version": "1.5.1",
+            "version": "1.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-imagine/Imagine.git",
-                "reference": "8b130cd281efdea67e52d5f0f998572eb62d2f04"
+                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/8b130cd281efdea67e52d5f0f998572eb62d2f04",
-                "reference": "8b130cd281efdea67e52d5f0f998572eb62d2f04",
+                "url": "https://api.github.com/repos/php-imagine/Imagine/zipball/f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
+                "reference": "f9ed796eefb77c2f0f2167e1d4e36bc2b5ed6b0c",
                 "shasum": ""
             },
             "require": {
@@ -2498,9 +2498,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-imagine/Imagine/issues",
-                "source": "https://github.com/php-imagine/Imagine/tree/1.5.1"
+                "source": "https://github.com/php-imagine/Imagine/tree/1.5.2"
             },
-            "time": "2025-12-09T15:27:47+00:00"
+            "time": "2026-01-09T10:45:12+00:00"
         },
         {
             "name": "knplabs/gaufrette",
@@ -14424,16 +14424,16 @@
         },
         {
             "name": "friendsofphp/php-cs-fixer",
-            "version": "v3.92.4",
+            "version": "v3.92.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer.git",
-                "reference": "9e7488b19403423e02e8403cc1eb596baf4673b0"
+                "reference": "260cc8c4a1d2f6d2f22cd4f9c70aa72e55ebac58"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/9e7488b19403423e02e8403cc1eb596baf4673b0",
-                "reference": "9e7488b19403423e02e8403cc1eb596baf4673b0",
+                "url": "https://api.github.com/repos/PHP-CS-Fixer/PHP-CS-Fixer/zipball/260cc8c4a1d2f6d2f22cd4f9c70aa72e55ebac58",
+                "reference": "260cc8c4a1d2f6d2f22cd4f9c70aa72e55ebac58",
                 "shasum": ""
             },
             "require": {
@@ -14516,7 +14516,7 @@
             ],
             "support": {
                 "issues": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/issues",
-                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.92.4"
+                "source": "https://github.com/PHP-CS-Fixer/PHP-CS-Fixer/tree/v3.92.5"
             },
             "funding": [
                 {
@@ -14524,7 +14524,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-04T00:38:52+00:00"
+            "time": "2026-01-08T21:57:37+00:00"
         },
         {
             "name": "infection/abstract-testframework-adapter",

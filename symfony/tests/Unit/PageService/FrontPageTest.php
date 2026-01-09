@@ -41,8 +41,8 @@ final class FrontPageTest extends TestCase
             ->with(
                 'frontpage',
                 $this->callback(
-                    static fn (array $parameters): bool => array_key_exists('events', $parameters)
-                        && array_key_exists('info', $parameters),
+                    static fn (array $parameters): bool => \array_key_exists('events', $parameters)
+                        && \array_key_exists('info', $parameters),
                 ),
                 $response,
             )

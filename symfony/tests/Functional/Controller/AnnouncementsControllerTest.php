@@ -68,14 +68,15 @@ final class AnnouncementsControllerTest extends FixturesWebTestCase
         $container = self::getContainer();
         if ($container->has('session')) {
             $session = $container->get('session');
+
             return $session instanceof SessionInterface ? $session : null;
         }
         if ($container->has('session.factory')) {
             $session = $container->get('session.factory')->createSession();
+
             return $session instanceof SessionInterface ? $session : null;
         }
 
         return null;
     }
-
 }
