@@ -87,7 +87,7 @@
 {% endblock %}
 {% block contract %}
     {% if object.renterHash %}
-        {% set entropy_id = constant('App\\\\Entity\\\\Renter::ENTROPY_INTERNAL_ID') %}
+        {% set entropy_id = constant('App\\Entity\\Renter::ENTROPY_INTERNAL_ID') %}
         {% set is_entropy = object.renter and object.renter.id == entropy_id %}
         {% set route_name = is_entropy ? 'entropy_tunkki_booking_public_items' : 'entropy_tunkki_booking_hash' %}
         {% set route_params = {bookingid: object.id, hash: object.renterHash} %}
