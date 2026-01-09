@@ -87,6 +87,7 @@ sonata_page:
         - entropy_shop
         - announcements
         - inventory_needs_fixing
+        - entropy_tunkki_booking_public_items
         - path_test
     ignore_uri_patterns:
         - ^/admin\/
