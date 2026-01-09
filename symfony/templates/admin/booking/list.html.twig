@@ -87,35 +87,40 @@
 {% endblock %}
 {% block contract %}
     {% if object.renterHash %}
-        {% set entropy_id = constant('App\\Entity\\Renter::ENTROPY_INTERNAL_ID') %}
-        {% set is_entropy = object.renter and object.renter.id == entropy_id %}
+        {% set entropy_id = object.renter ? constant('ENTROPY_INTERNAL_ID', object.renter) : null %}
+        {% set is_entropy = entropy_id is not null and object.renter.id == entropy_id %}
         {% set route_name = is_entropy ? 'entropy_tunkki_booking_public_items' : 'entropy_tunkki_booking_hash' %}
         {% set route_params = {bookingid: object.id, hash: object.renterHash} %}
         {% if not is_entropy %}
             {% set route_params = route_params|merge({renterid: object.renter.id}) %}
         {% endif %}
-        <a href="{{ path(route_name, route_params) }}">
-            Contract FI</a> |
-            <a href="/en{{ path(route_name, route_params) }}">
-            Contract ENG</a>
+        {% if is_entropy %}
+            <a href="{{ path(route_name, route_params|merge({_locale: 'fi'})) }}">
+                Public Item list</a>
+        {% else %}
+            <a href="{{ path(route_name, route_params|merge({_locale: 'fi'})) }}">
+                Contract FI</a> |
+                <a href="{{ path(route_name, route_params|merge({_locale: 'en'})) }}">
+                Contract ENG</a>
         {% endif %}
-    {% endblock %}
-    {% block brokenitems %}
-        {% for item in object.items|filter(item=>item.needsFixing == 'true') %}
+    {% endif %}
+{% endblock %}
+{% block brokenitems %}
+    {% for item in object.items|filter(item=>item.needsFixing == 'true') %}
+        <a class="btn btn-sm"
+            style="display: inline-block"
+            href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
+            <i class="fa fa-medkit"></i>
+            {{ item.name }}
+        </a>
+    {% endfor %}
+    {% for package in object.packages %}
+        {% for item in package.itemsNeedingFixing %}
             <a class="btn btn-sm"
-               style="display: inline-block"
-               href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
+                href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
                 <i class="fa fa-medkit"></i>
                 {{ item.name }}
             </a>
         {% endfor %}
-        {% for package in object.packages %}
-            {% for item in package.itemsNeedingFixing %}
-                <a class="btn btn-sm"
-                   href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
-                    <i class="fa fa-medkit"></i>
-                    {{ item.name }}
-                </a>
-            {% endfor %}
-        {% endfor %}
-    {% endblock %}
+    {% endfor %}
+{% endblock %}
