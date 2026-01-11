@@ -221,6 +221,7 @@ timetable:
 stream:
   page:
     players: Streamissa tällä hetkellä
+    unknown: Tuntematon
   tile:
     button: Streami sivu
   live:

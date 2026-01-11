@@ -133,6 +133,7 @@ timetable:
 stream:
   page:
     players: Who is playing now
+    unknown: Unknown
   tile:
     button: Stream Page
   live:
