@@ -20,7 +20,7 @@ class BookingAdminController extends CRUDController
         $object = $this->admin->getSubject();
         $booking = $repo->findOneBy(['id' => $object->getId(), 'renterHash' => $object->getRenterHash()]);
 
-        return $this->render('admin/booking/stufflist.html.twig', array_merge($booking->getDataArray(), ['object' => $booking, 'action' => 'show']));
+        return $this->renderWithExtraParams('admin/booking/stufflist.html.twig', array_merge($booking->getDataArray(), ['object' => $booking, 'action' => 'show']));
     }
 
     public function removeSignatureAction(): RedirectResponse
