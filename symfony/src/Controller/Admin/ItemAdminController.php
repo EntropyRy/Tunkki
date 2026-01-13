@@ -72,12 +72,19 @@ class ItemAdminController extends Controller
 
         $modelManager = $this->admin->getModelManager();
 
-        $selectedModels = $selectedModelQuery->execute();
-        $sourceModel = $selectedModels[0];
-        unset($selectedModels[0]);
+        // Convert Paginator/iterable to array for indexed access
+        $selectedModels = iterator_to_array($selectedModelQuery->execute());
+        if (\count($selectedModels) < 2) {
+            $this->addFlash('sonata_flash_error', 'At least 2 items must be selected for batch edit');
+
+            return new RedirectResponse(
+                $this->admin->generateUrl('list', ['filter' => $this->admin->getFilterParameters()])
+            );
+        }
+
+        $sourceModel = array_shift($selectedModels);
 
         try {
-            $selectedModel = null;
             foreach ($selectedModels as $selectedModel) {
                 $selectedModel->resetWhoCanRent();
                 foreach ($sourceModel->getWhoCanRent() as $who) {
@@ -86,9 +93,8 @@ class ItemAdminController extends Controller
                 $selectedModel->setDescription($sourceModel->getDescription());
                 $selectedModel->setRent($sourceModel->getRent());
                 $selectedModel->setRentNotice($sourceModel->getRentNotice());
+                $modelManager->update($selectedModel);
             }
-
-            $modelManager->update($selectedModel);
         } catch (\Exception) {
             $this->addFlash('sonata_flash_error', 'flash_batch_merge_error');
 
