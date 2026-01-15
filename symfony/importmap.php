@@ -117,7 +117,7 @@ return [
         'version' => '1.25.4',
     ],
     'prosemirror-view' => [
-        'version' => '1.41.4',
+        'version' => '1.41.5',
     ],
     'prosemirror-transform' => [
         'version' => '1.10.5',
@@ -195,7 +195,7 @@ return [
         'version' => '1.3.4',
     ],
     'prosemirror-view/style/prosemirror.min.css' => [
-        'version' => '1.41.4',
+        'version' => '1.41.5',
         'type' => 'css',
     ],
 ];
