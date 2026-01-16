@@ -322,7 +322,9 @@ final class ArtistFormTest extends FixturesWebTestCase
 
     public function testCreateFormSubmissionWithPictureMissingShowsWarning(): void
     {
-        $member = MemberFactory::new()->active()->create();
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
         $this->loginAsMember($member->getEmail());
         $this->seedClientHome('en');
 
@@ -338,8 +340,14 @@ final class ArtistFormTest extends FixturesWebTestCase
 
         $this->client->submit($form);
 
-        // Should show picture missing warning and re-render form (no redirect)
+        // Expect: form is re-rendered (no redirect) so user can add a picture
         $this->assertResponseIsSuccessful();
+
+        // Assert we are still on the create page and the artist form is visible again
+        $this->client->assertSelectorExists('form');
+        $this->client->assertSelectorExists('input[name="artist[name]"]');
+        $this->client->assertSelectorExists('input[name="artist[type]"]');
+        $this->client->assertSelectorExists('input[name="artist[hardware]"]');
     }
 
     public function testEditFormSubmissionSuccess(): void

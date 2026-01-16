@@ -35,16 +35,17 @@ final class ArtistControllerTest extends TestCase
         return new TestableArtistController($user);
     }
 
-    private function makeUserWithMember(int $memberId = 1): User
-    {
+    private function makeUserWithMember(
+        int $memberId = 1,
+        bool $emailVerified = true,
+    ): User {
         $member = new Member();
         // Member class likely has setters (not shown here), but we only need an ID.
         // We reflectively set the id to simulate a persisted entity.
         $this->setPrivateProperty($member, 'id', $memberId);
 
-        // The controller "create" action redirects early unless email is verified.
-        // Default to verified in unit tests so we exercise the form flows.
-        $member->setEmailVerified(true);
+        // Make email verification explicit per test to avoid hiding guard changes.
+        $member->setEmailVerified($emailVerified);
 
         $user = new User();
         $user->setMember($member);
@@ -72,9 +73,36 @@ final class ArtistControllerTest extends TestCase
         $p->setValue($object, $value);
     }
 
+    public function testCreateUnverifiedEmailRedirectsAndFlashesWarning(): void
+    {
+        $user = $this->makeUserWithMember(emailVerified: false);
+        $controller = $this->makeController($user);
+
+        /** @var FormFactoryInterface&MockObject $formFactory */
+        $formFactory = $this->createMock(FormFactoryInterface::class);
+        $formFactory->expects(self::never())->method('create');
+
+        /** @var MattermostNotifierService $mm */
+        $mm = $this->createStub(MattermostNotifierService::class);
+        /** @var EntityManagerInterface $em */
+        $em = $this->createStub(EntityManagerInterface::class);
+
+        $request = new Request();
+
+        $response = $controller->create($request, $formFactory, $mm, $em);
+
+        self::assertInstanceOf(RedirectResponse::class, $response);
+        self::assertSame('redirect', $controller->lastAction);
+        self::assertArrayHasKey('warning', $controller->flashes);
+        self::assertSame(
+            ['artist.email_verification_required'],
+            $controller->flashes['warning'],
+        );
+    }
+
     public function testCreateInitialRenderShowsForm(): void
     {
-        $user = $this->makeUserWithMember();
+        $user = $this->makeUserWithMember(emailVerified: true);
         $controller = $this->makeController($user);
 
         /** @var FormInterface&MockObject $form */
@@ -107,7 +135,7 @@ final class ArtistControllerTest extends TestCase
 
     public function testCreateSubmittedValidMissingPictureAddsWarningFlash(): void
     {
-        $user = $this->makeUserWithMember();
+        $user = $this->makeUserWithMember(emailVerified: true);
         $controller = $this->makeController($user);
 
         $artist = new Artist();
@@ -145,7 +173,7 @@ final class ArtistControllerTest extends TestCase
 
     public function testCreateSubmittedValidWithPicturePersistsAndRedirects(): void
     {
-        $user = $this->makeUserWithMember();
+        $user = $this->makeUserWithMember(emailVerified: true);
         $controller = $this->makeController($user);
 
         $artist = new Artist();

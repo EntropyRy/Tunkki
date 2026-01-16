@@ -68,6 +68,18 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
             ArtistFactory::new()->withMember($member)->dj()->create();
         }
 
+        // Defensive assertion: when this helper returns, the user MUST have an artist.
+        if (
+            method_exists($member, 'getArtist')
+            && $member->getArtist() instanceof \Doctrine\Common\Collections\Collection
+        ) {
+            self::assertGreaterThan(
+                0,
+                $member->getArtist()->count(),
+                'Expected logged-in member to have at least one Artist.',
+            );
+        }
+
         return $user;
     }
 
@@ -109,40 +121,9 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         );
 
         $this->client->request('GET', $pathEn);
-        $status = $this->client->getResponse()->getStatusCode();
-        if (
-            302 === $status
-            && str_contains(
-                $this->client->getResponse()->headers->get('Location') ?? '',
-                '/login',
-            )
-        ) {
-            // Retry once if unexpected auth redirect (should not happen normally)
-            $this->client->request('GET', $pathEn);
-            $status = $this->client->getResponse()->getStatusCode();
-        }
 
-        self::assertTrue(
-            \in_array($status, [200, 302, 303], true),
-            'English signup page should return 200 or redirect (got '.
-                $status.
-                ').',
-        );
-        $response = $this->client->getResponse();
-        if ($response->isRedirect()) {
-            $loc = $response->headers->get('Location') ?? '';
-            // Accept redirect to artist create page as a valid outcome when no artist profile exists
-            if (
-                preg_match('#(/en/artist/create|/profiili/artisti/uusi)#', $loc)
-            ) {
-                // Valid outcome for a user without an Artist profile
-                $this->assertTrue(true);
-
-                return;
-            }
-            // Follow other redirects and continue with content assertion
-            $this->client->request('GET', $loc);
-        }
+        // Tighten: a logged-in user with an artist should not be redirected to /login.
+        $this->assertResponseStatusCodeSame(200);
 
         $content = $this->client->getResponse()->getContent() ?? '';
         self::assertStringContainsString(
@@ -192,7 +173,11 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
     public function testSignupRequiresArtistOrRedirectsToCreate(): void
     {
-        $user = $this->loginUserWithArtist();
+        // This test is specifically about the "no artist profile" branch.
+        $member = MemberFactory::new()->active()->create([
+            'emailVerified' => true,
+        ]);
+        $this->loginAsMember($member->getEmail());
         $this->seedClientHome('en');
 
         $event = EventFactory::new()
@@ -202,29 +187,12 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         $pathEn = $this->generateSignupPath($event, 'en');
         $this->client->request('GET', $pathEn);
 
-        $status = $this->client->getResponse()->getStatusCode();
-        if (
-            302 === $status
-            && str_contains(
-                $this->client->getResponse()->headers->get('Location') ?? '',
-                '/login',
-            )
-        ) {
-            // Retry once if unexpected auth redirect (should not happen normally)
-            $this->client->request('GET', $pathEn);
-            $status = $this->client->getResponse()->getStatusCode();
-        }
-        self::assertTrue(
-            \in_array($status, [200, 302], true),
-            "Expected 200 or 302, got {$status}",
-        );
-        if (302 === $status) {
-            $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            self::assertMatchesRegularExpression(
-                '#(/en/artist/create|/profiili/artisti/uusi)#',
-                $loc,
-            );
-        }
+        $this->assertResponseStatusCodeSame(302);
+        $loc = $this->client->getResponse()->headers->get('Location') ?? '';
+        $redirectPath = parse_url($loc, \PHP_URL_PATH) ?: $loc;
+
+        // Tighten: must redirect to artist create page (not login, not elsewhere)
+        self::assertSame('/en/profile/artist/create', $redirectPath);
     }
 
     public function testSignupRedirectsToCreateAndReturnsAfterArtistCreation(): void
