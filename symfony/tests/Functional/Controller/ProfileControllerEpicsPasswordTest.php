@@ -34,6 +34,22 @@ final class ProfileControllerEpicsPasswordTest extends FixturesWebTestCase
     }
 
     #[DataProvider('localeAndPaths')]
+    public function testUnverifiedEmailUserRedirectedToVerification(string $locale, string $path): void
+    {
+        $this->loginAsMemberWithUnverifiedEmail();
+        $this->seedClientHome($locale);
+
+        $this->client->request('GET', $path);
+
+        $this->assertResponseRedirects();
+        $location = $this->client->getResponse()->headers->get('Location');
+        $this->assertNotNull($location);
+
+        $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
+        $this->assertStringContainsString($expectedPath, $location);
+    }
+
+    #[DataProvider('localeAndPaths')]
     public function testGetRendersEpicsUsernameResolvedFromMemberUsername(string $locale, string $path): void
     {
         $memberFactory = 'en' === $locale

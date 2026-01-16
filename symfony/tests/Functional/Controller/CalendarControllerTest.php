@@ -52,7 +52,28 @@ final class CalendarControllerTest extends FixturesWebTestCase
     }
 
     /**
-     * Test that authenticated users can access the calendar config page.
+     * Test that users with unverified email are redirected to verification page.
+     */
+    #[DataProvider('localeProvider')]
+    public function testCalendarConfigRedirectsUnverifiedEmailUser(string $locale): void
+    {
+        $this->loginAsMemberWithUnverifiedEmail();
+        $this->seedClientHome($locale);
+
+        $path = 'en' === $locale ? '/en/profile/calendar' : '/profiili/kalenteri';
+        $this->client->request('GET', $path);
+
+        // Should redirect to resend verification page
+        $this->assertResponseRedirects();
+        $location = $this->client->getResponse()->headers->get('Location');
+        $this->assertNotNull($location);
+
+        $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
+        $this->assertStringContainsString($expectedPath, $location);
+    }
+
+    /**
+     * Test that authenticated users with verified email can access the calendar config page.
      */
     #[DataProvider('localeProvider')]
     public function testCalendarConfigPageLoadsForAuthenticatedUser(string $locale): void

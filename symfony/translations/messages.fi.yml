@@ -418,6 +418,7 @@ profile:
     connection_ok: Yhteys ok
     wifi: Tarvitsee kertsin wifiyhteyden toimiakseen. iPhone <a href="https://support.apple.com/en-us/HT212614">ongelma</a>
 artist:
+  email_verification_required: Vahvista sähköpostiosoitteesi luodaksesi artistiprofiilin.
   streams: Streamit
   streams_by: Artistin streamit
   not_confirmed_yet: Ei vahvistettu (vielä)
@@ -473,6 +474,7 @@ artist:
     auto: Tapahtuman artistitiedot päivitetty automaattisesti.
     auto_info: Tulevan tapahtumasi tiedot päivitetään automaattisesti.
 epics:
+  email_verification_required: Vahvista sähköpostiosoitteesi asettaaksesi ePics-salasanan.
   password_set: ePics-salasana tallennettu.
   password_set_failed: ePics-salasanan asetus epäonnistui. Yritä uudelleen tai ota yhteyttä ylläpitoon.
   tile:
@@ -683,6 +685,7 @@ calendar:
   add_notifications_for_meetings: Lisää muistutukset kokouksille
   generate: Generoi kalenteri linkki
   url_generated: Linkki generoitu
+  email_verification_required: Vahvista sähköpostiosoitteesi päästäksesi kalenterin konfigurointiin.
 nakkikone:
   build_up: Rakennus
   during: Tapahtuman aikana

@@ -328,6 +328,7 @@ profile:
     connection_ok: Connection ok
     wifi: Requires clubroom Wi‑Fi connection. iPhone issue <a href="https://support.apple.com/en-us/HT212614">details</a>
 epics:
+  email_verification_required: Please verify your email address to set an ePics password.
   tile:
     heading: Random photos from
     heading_events: our events
@@ -340,6 +341,7 @@ epics:
     password_set: ePics password saved.
     password_set_failed: Could not set ePics password. Please try again or contact support.
 artist:
+  email_verification_required: Please verify your email address to create an artist profile.
   streams: Streams
   streams_by: Streams by
   not_confirmed_yet: Not confirmed (yet)
@@ -561,6 +563,7 @@ calendar:
   add_notifications_for_meetings: Add reminders for meetings
   generate: Generate the calendar link
   url_generated: Link generated
+  email_verification_required: Please verify your email address to access calendar configuration.
 shop:
   title: Shop
   description: "Our shop is designed for easy pickup from the club room – we only ship items if specifically mentioned in the product info. Welcome to shop and collect your items!"

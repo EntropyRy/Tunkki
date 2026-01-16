@@ -51,6 +51,24 @@ final class ArtistFormTest extends FixturesWebTestCase
     }
 
     #[DataProvider('localeProvider')]
+    public function testUnverifiedEmailUserRedirectedToVerification(string $locale): void
+    {
+        $this->loginAsMemberWithUnverifiedEmail();
+        $this->seedClientHome($locale);
+
+        $path = 'en' === $locale ? '/en/profile/artist/create' : '/profiili/artisti/uusi';
+        $this->client->request('GET', $path);
+
+        // Should redirect to resend verification page
+        $this->assertResponseRedirects();
+        $location = $this->client->getResponse()->headers->get('Location');
+        $this->assertNotNull($location);
+
+        $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
+        $this->assertStringContainsString($expectedPath, $location);
+    }
+
+    #[DataProvider('localeProvider')]
     public function testAuthenticatedUserCanAccessCreateForm(string $locale): void
     {
         $member = MemberFactory::new()->inactive()->with(['locale' => $locale])->create();

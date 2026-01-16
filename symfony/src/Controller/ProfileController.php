@@ -322,6 +322,15 @@ class ProfileController extends AbstractController
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();
+
+        if (!$member->isEmailVerified()) {
+            $this->addFlash('warning', 'epics.email_verification_required');
+
+            return $this->redirectToRoute('profile_resend_verification', [
+                '_locale' => $request->getLocale(),
+            ]);
+        }
+
         $resolvedUsername =
             $member->getEpicsUsername() ?:
             $member->getUsername() ?? (string) $member->getId();

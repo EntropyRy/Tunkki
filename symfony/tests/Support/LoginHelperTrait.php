@@ -513,6 +513,38 @@ trait LoginHelperTrait
     }
 
     /**
+     * Log in a member with unverified email.
+     *
+     * Useful for testing permission boundaries where email verification status matters
+     * (e.g., calendar configuration requires verified email).
+     *
+     * If the user does not exist, it is created; the Member's emailVerified flag
+     * is explicitly set to FALSE and flushed before login.
+     *
+     * @return array{0:User,1:KernelBrowser}
+     */
+    protected function loginAsMemberWithUnverifiedEmail(?string $email = null): array
+    {
+        $candidate = $email ?? \sprintf('unverified_%s@example.test', bin2hex(random_bytes(4)));
+
+        $user = $this->getOrCreateUser($candidate);
+
+        $member = $user->getMember();
+        if ($member instanceof Member) {
+            $em = static::getContainer()->get('doctrine')->getManager();
+            $member->setEmailVerified(false);
+            $em->persist($member);
+            $em->flush();
+        }
+
+        $client = $this->client;
+        $client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
+
+        return [$user, $client];
+    }
+
+    /**
      * Log in a regular (non-active) member.
      *
      * Similar to loginAsActiveMember() but does NOT set isActiveMember=true.

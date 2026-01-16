@@ -70,6 +70,14 @@ class CalendarController extends AbstractController
         $user = $this->getUser();
         \assert($user instanceof User);
 
+        if (!$user->getMember()->isEmailVerified()) {
+            $this->addFlash('warning', 'calendar.email_verification_required');
+
+            return $this->redirectToRoute('profile_resend_verification', [
+                '_locale' => $request->getLocale(),
+            ]);
+        }
+
         $form = $this->createForm(CalendarConfigType::class);
         $url = null;
 
