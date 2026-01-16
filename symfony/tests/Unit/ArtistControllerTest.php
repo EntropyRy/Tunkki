@@ -42,6 +42,10 @@ final class ArtistControllerTest extends TestCase
         // We reflectively set the id to simulate a persisted entity.
         $this->setPrivateProperty($member, 'id', $memberId);
 
+        // The controller "create" action redirects early unless email is verified.
+        // Default to verified in unit tests so we exercise the form flows.
+        $member->setEmailVerified(true);
+
         $user = new User();
         $user->setMember($member);
 
