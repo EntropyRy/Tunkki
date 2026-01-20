@@ -61,6 +61,11 @@ services:
   Sonata\MediaBundle\Provider\ImageProvider: "@sonata.media.provider.image"
   Sonata\PageBundle\Service\Contract\CreateSnapshotBySiteInterface: "@sonata.page.service.create_snapshot"
 
+  # Override Sonata Media controller to fix category handling when categories are disabled
+  sonata.media.controller.media.admin:
+    class: App\Controller\Admin\MediaAdminController
+    tags: ['controller.service_arguments']
+
   Symfony\UX\Icons\Registry\LocalSvgIconRegistry:
     arguments:
       - "%kernel.project_dir%/assets/icons"
