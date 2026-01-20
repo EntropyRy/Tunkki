@@ -327,19 +327,23 @@
         {% set lazy = true %}
     {% endif %}
     {% if event.picture is not null %}
-        <twig:ProgressiveImage
-            :media="event.picture"
-            :sizes="{
-                'small': '(max-width: 480px)',
-                'normal': '(max-width: 768px)',
-                'banner': '(min-width: 769px)'
-            }"
-            :placeholder="sonata_path(event.picture, 'placeholder')"
-            :class="class"
-            :alt="block('event_img_title')"
-            :title="block('event_img_title')"
-            :lazy="lazy"
-        />
+        {% if event.picture.providername == 'sonata.media.provider.youtube' %}
+            {{ sonata_media(event.picture, 'reference') }}
+        {% else %}
+            <twig:ProgressiveImage
+                :media="event.picture"
+                :sizes="{
+                    'small': '(max-width: 480px)',
+                    'normal': '(max-width: 768px)',
+                    'banner': '(min-width: 769px)'
+                }"
+                :placeholder="sonata_path(event.picture, 'placeholder')"
+                :class="class"
+                :alt="block('event_img_title')"
+                :title="block('event_img_title')"
+                :lazy="lazy"
+            />
+        {% endif %}
     {% else %}
         {{ block('placeholder_img') }}
     {% endif %}

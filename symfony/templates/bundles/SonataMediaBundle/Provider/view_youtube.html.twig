@@ -1,0 +1,27 @@
+{% if options.html5 %}
+    <iframe
+        width="{{ options.player_parameters.width }}"
+        height="{{ options.player_parameters.height }}"
+        src="//www.youtube-nocookie.com/embed/{{ media.providerReference }}?{{ options.player_url_parameters }}"
+        frameborder="{{ options.player_parameters.border }}"
+        {% if options.player_parameters.allowFullScreen %} allowfullscreen{% endif %}>
+    </iframe>
+{% else %}
+    {% set allowFullScreen = options.player_parameters.allowFullScreen ? 'true' : 'false' %}
+    <object width="{{ options.player_parameters.width }}" height="{{ options.player_parameters.height }}">
+        <param name="movie" value="//www.youtube-nocookie.com/v/{{ media.providerreference }}?{{ options.player_url_parameters }}"></param>
+        <param name="allowFullScreen" value="{{ allowFullScreen }}"></param>
+        <param name="allowscriptaccess" value="{{ options.player_parameters.allowScriptAccess }}"></param>
+        <param name="wmode" value="{{ options.player_parameters.wmode }}">
+
+        <embed
+            src="//www.youtube-nocookie.com/v/{{ media.providerreference }}?{{ options.player_url_parameters }}"
+            type="application/x-shockwave-flash"
+            allowscriptaccess="{{ options.player_parameters.allowScriptAccess }}"
+            allowfullscreen="{{ allowFullScreen }}"
+            width="{{ options.player_parameters.width }}"
+            height="{{ options.player_parameters.height }}"
+            wmode="{{ options.player_parameters.wmode }}">
+        </embed>
+    </object>
+{% endif %}
