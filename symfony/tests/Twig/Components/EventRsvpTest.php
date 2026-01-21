@@ -76,6 +76,7 @@ final class EventRsvpTest extends LiveComponentTestCase
     public function testAnonymousValidSubmissionPersistsRsvpAndShowsSuccess(): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
+        $eventId = $event->getId();
         $component = $this->mountComponent(EventRsvp::class, [
             'event' => $event,
         ], 'en');
@@ -99,8 +100,9 @@ final class EventRsvpTest extends LiveComponentTestCase
         self::assertSame(1, $crawler->filter('.alert.alert-success')->count());
         self::assertSame(1, $crawler->filter('button[data-live-action-param="openForm"]')->count());
 
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
+            'event' => $eventId,
             'email' => $email,
         ]);
         self::assertCount(1, $rsvps);
@@ -188,7 +190,9 @@ final class EventRsvpTest extends LiveComponentTestCase
     public function testRsvpAsMemberWhenAlreadyRsvpdShowsWarningAndDoesNotPersistSecondTime(): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
+        $eventId = $event->getId();
         $member = MemberFactory::new()->inactive()->english()->create();
+        $memberId = $member->getId();
 
         $existing = new RSVP();
         $existing->setEvent($event);
@@ -206,9 +210,10 @@ final class EventRsvpTest extends LiveComponentTestCase
         $crawler = $component->render()->crawler();
         self::assertSame(1, $crawler->filter('.alert.alert-warning')->count());
 
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         self::assertCount(1, $rsvps);
     }

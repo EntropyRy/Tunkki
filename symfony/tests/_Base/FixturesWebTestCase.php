@@ -353,6 +353,22 @@ abstract class FixturesWebTestCase extends WebTestCase
     }
 
     /**
+     * Refresh the EntityManager after kernel rebooted requests.
+     *
+     * When the client is configured to reboot the kernel between requests (enableReboot()),
+     * the active EM/connection can end up in a transaction snapshot that does not
+     * see changes committed by the rebooted kernel's connection. Resetting the
+     * manager ensures subsequent repository reads observe the latest state.
+     *
+     * This is especially important when using Foundry's enable_auto_refresh_with_lazy_objects
+     * option, which will be forced to true in Foundry 3.0.
+     */
+    protected function refreshEntityManager(): void
+    {
+        $this->em = static::getContainer()->get('doctrine')->resetManager();
+    }
+
+    /**
      * Recover from a closed EntityManager after an exception during baseline seeding.
      * Re-opens the EM and clears the identity map to prevent stale managed entities.
      */

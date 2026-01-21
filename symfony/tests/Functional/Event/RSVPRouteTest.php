@@ -30,8 +30,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
     public function testLoggedInMemberCanRsvpViaPostRoute(string $locale): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
+        $eventId = $event->getId();
 
         $member = MemberFactory::new()->inactive()->create();
+        $memberId = $member->getId();
         $this->loginAsMember($member->getEmail());
         $this->seedClientHome($locale);
 
@@ -46,9 +48,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
 
         $this->assertResponseStatusCodeSame(302);
 
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         self::assertCount(1, $rsvps);
     }
@@ -57,8 +60,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
     public function testLoggedInMemberDuplicateRsvpDoesNotCreateSecondRow(string $locale): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
+        $eventId = $event->getId();
 
         $member = MemberFactory::new()->inactive()->create();
+        $memberId = $member->getId();
         $this->loginAsMember($member->getEmail());
         $this->seedClientHome($locale);
 
@@ -76,9 +81,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
         $this->client->request('POST', $path);
         $this->assertResponseStatusCodeSame(302);
 
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         self::assertCount(1, $rsvps);
     }
@@ -112,8 +118,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
     public function testLoggedInMemberAlreadyRsvpdShowsWarningFlash(string $locale): void
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
+        $eventId = $event->getId();
 
         $member = MemberFactory::new()->inactive()->create();
+        $memberId = $member->getId();
         $this->loginAsMember($member->getEmail());
         $this->seedClientHome($locale);
 
@@ -141,9 +149,10 @@ final class RSVPRouteTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('.alert.alert-warning');
         $this->client->assertSelectorTextContains('.alert.alert-warning', $this->expectedAlreadyRsvpdMessage($locale));
 
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         self::assertCount(1, $rsvps);
     }

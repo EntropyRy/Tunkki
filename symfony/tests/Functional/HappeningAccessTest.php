@@ -708,6 +708,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
     {
         $owner = $this->createUser();
         $booker = $this->createUser();
+        $bookerMemberId = $booker->getMember()->getId();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -717,6 +718,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
             ->forEvent($event)
             ->withOwner($owner)
             ->create();
+        $happeningId = $happening->getId();
 
         $year = $event->getEventDate()->format('Y');
 
@@ -739,11 +741,12 @@ final class HappeningAccessTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         // Now get the booking ID from the database
+        $this->refreshEntityManager();
         $em = static::getContainer()->get('doctrine.orm.entity_manager');
         $happeningBookingRepo = $em->getRepository(\App\Entity\HappeningBooking::class);
         $booking = $happeningBookingRepo->findOneBy([
-            'member' => $booker->getMember(),
-            'happening' => $happening,
+            'member' => $bookerMemberId,
+            'happening' => $happeningId,
         ]);
         $this->assertNotNull($booking, 'Booking should exist.');
 
@@ -759,7 +762,9 @@ final class HappeningAccessTest extends FixturesWebTestCase
         );
 
         // Verify booking is removed
-        $em->clear();
+        $this->refreshEntityManager();
+        $em = static::getContainer()->get('doctrine.orm.entity_manager');
+        $happeningBookingRepo = $em->getRepository(\App\Entity\HappeningBooking::class);
         $deletedBooking = $happeningBookingRepo->find($booking->getId());
         $this->assertNull($deletedBooking, 'Booking should be deleted.');
     }

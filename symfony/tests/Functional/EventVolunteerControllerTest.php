@@ -563,11 +563,13 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'rsvpSystemEnabled' => true,
             'url' => 'rsvp-enabled-'.uniqid('', true),
         ]);
+        $eventId = $event->getId();
 
         $member = MemberFactory::new()->create([
             'username' => 'rsvp_user_'.bin2hex(random_bytes(4)),
             'emailVerified' => true,
         ]);
+        $memberId = $member->getId();
 
         $this->loginAsMember($member->getEmail());
         $this->seedClientHome('fi');
@@ -581,9 +583,10 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
 
         // Verify RSVP was created
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         $this->assertCount(1, $rsvps, 'RSVP should be created');
     }
@@ -601,11 +604,13 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'rsvpSystemEnabled' => true,
             'url' => 'rsvp-already-'.uniqid('', true),
         ]);
+        $eventId = $event->getId();
 
         $member = MemberFactory::new()->create([
             'username' => 'rsvp_user_'.bin2hex(random_bytes(4)),
             'emailVerified' => true,
         ]);
+        $memberId = $member->getId();
 
         // Create existing RSVP using factory
         RSVPFactory::new()->forEvent($event)->create([
@@ -627,9 +632,10 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
 
         // Verify only one RSVP exists (no duplicate created)
+        $this->refreshEntityManager();
         $rsvps = $this->em()->getRepository(RSVP::class)->findBy([
-            'event' => $event,
-            'member' => $member,
+            'event' => $eventId,
+            'member' => $memberId,
         ]);
         $this->assertCount(1, $rsvps, 'Should not create duplicate RSVP');
     }
