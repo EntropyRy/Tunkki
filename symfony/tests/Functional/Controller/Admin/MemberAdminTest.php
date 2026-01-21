@@ -6,9 +6,9 @@ namespace App\Tests\Functional\Controller\Admin;
 
 use App\Admin\MemberAdmin;
 use App\Entity\Artist;
+use App\Entity\Event;
 use App\Entity\EventArtistInfo;
-use App\Factory\ArtistFactory;
-use App\Factory\EventArtistInfoFactory;
+use App\Entity\Member;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
@@ -148,6 +148,9 @@ final class MemberAdminTest extends FixturesWebTestCase
     {
         $memberProxy = MemberFactory::new()->create();
         $member = $memberProxy instanceof Proxy ? $memberProxy->object() : $memberProxy;
+        if (null !== $member->getId()) {
+            $member = $this->em()->getRepository(Member::class)->find($member->getId()) ?? $member;
+        }
 
         $admin = $this->memberAdmin();
         $admin->setSubject($member);
@@ -189,15 +192,29 @@ final class MemberAdminTest extends FixturesWebTestCase
 
     public function testPreRemoveDetachesArtistInfosAndRemovesArtist(): void
     {
-        $memberProxy = MemberFactory::new()->create();
-        $member = $memberProxy instanceof Proxy ? $memberProxy->object() : $memberProxy;
-        $event = EventFactory::new()->published()->create();
-        $artistProxy = ArtistFactory::new()->withMember($member)->create();
-        $artist = $artistProxy instanceof Proxy ? $artistProxy->object() : $artistProxy;
-        $infoProxy = EventArtistInfoFactory::new()->forEvent($event)->forArtist($artist)->create();
-        $info = $infoProxy instanceof Proxy ? $infoProxy->object() : $infoProxy;
+        $member = $this->createMember('member-pre-remove-'.bin2hex(random_bytes(4)).'@example.test');
+        $eventProxy = EventFactory::new()->published()->create();
+        $eventEntity = $eventProxy instanceof Proxy ? $eventProxy->object() : $eventProxy;
+        if (null !== $eventEntity->getId()) {
+            $eventEntity = $this->em()->getRepository(Event::class)->find($eventEntity->getId()) ?? $eventEntity;
+        }
+        $this->em()->persist($eventEntity);
+        $this->em()->flush();
+        $artist = new Artist();
+        $artist->setName('Test Artist');
+        $artist->setMember($member);
+        $this->em()->persist($artist);
+        $this->em()->flush();
+        $info = new EventArtistInfo();
+        $info->setEvent($eventEntity);
+        $info->setArtist($artist);
+        $this->em()->persist($info);
+        $this->em()->flush();
         $infoId = $info->getId();
         $artistId = $artist->getId();
+        if (null !== $member->getId()) {
+            $member = $this->em()->getRepository(Member::class)->find($member->getId()) ?? $member;
+        }
 
         $this->memberAdmin()->preRemove($member);
 
@@ -213,8 +230,7 @@ final class MemberAdminTest extends FixturesWebTestCase
 
     public function testPostRemoveSendsMattermostNotification(): void
     {
-        $memberProxy = MemberFactory::new()->create();
-        $member = $memberProxy instanceof Proxy ? $memberProxy->object() : $memberProxy;
+        $member = $this->createMember('member-post-remove-'.bin2hex(random_bytes(4)).'@example.test');
 
         $this->memberAdmin()->postRemove($member);
 
@@ -223,9 +239,23 @@ final class MemberAdminTest extends FixturesWebTestCase
 
     private function memberAdmin(): MemberAdmin
     {
-        $admin = static::getContainer()->get('entropy_tunkki.admin.member');
+        $admin = static::getContainer()->get('entropy.admin.member');
         \assert($admin instanceof MemberAdmin);
 
         return $admin;
+    }
+
+    private function createMember(string $email): Member
+    {
+        $member = new Member();
+        $member->setFirstname('Test');
+        $member->setLastname('Member');
+        $member->setEmail($email);
+        $member->setLocale('fi');
+
+        $this->em()->persist($member);
+        $this->em()->flush();
+
+        return $member;
     }
 }

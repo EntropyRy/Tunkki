@@ -6,7 +6,6 @@ namespace App\Tests\Functional\Event;
 
 use App\Entity\RSVP;
 use App\Factory\EventFactory;
-use App\Factory\MemberFactory;
 use App\Factory\RSVPFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
@@ -31,8 +30,8 @@ final class RSVPRouteTest extends FixturesWebTestCase
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
 
-        $member = MemberFactory::new()->inactive()->create();
-        $this->loginAsMember($member->getEmail());
+        [$user] = $this->loginAsMember();
+        $member = $user->getMember();
         $this->seedClientHome($locale);
 
         $year = $event->getEventDate()->format('Y');
@@ -58,8 +57,8 @@ final class RSVPRouteTest extends FixturesWebTestCase
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
 
-        $member = MemberFactory::new()->inactive()->create();
-        $this->loginAsMember($member->getEmail());
+        [$user] = $this->loginAsMember();
+        $member = $user->getMember();
         $this->seedClientHome($locale);
 
         $year = $event->getEventDate()->format('Y');
@@ -88,8 +87,7 @@ final class RSVPRouteTest extends FixturesWebTestCase
     {
         $event = EventFactory::new()->create(); // RSVP disabled by default
 
-        $member = MemberFactory::new()->inactive()->create();
-        $this->loginAsMember($member->getEmail());
+        $this->loginAsMember();
         $this->seedClientHome($locale);
 
         $year = $event->getEventDate()->format('Y');
@@ -113,8 +111,8 @@ final class RSVPRouteTest extends FixturesWebTestCase
     {
         $event = EventFactory::new()->withRsvpEnabled()->create();
 
-        $member = MemberFactory::new()->inactive()->create();
-        $this->loginAsMember($member->getEmail());
+        [$user] = $this->loginAsMember();
+        $member = $user->getMember();
         $this->seedClientHome($locale);
 
         RSVPFactory::new()

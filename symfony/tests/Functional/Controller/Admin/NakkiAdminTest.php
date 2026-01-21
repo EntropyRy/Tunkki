@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Controller\Admin;
 
 use App\Admin\NakkiAdmin;
+use App\Entity\Event;
+use App\Entity\Member;
 use App\Entity\Nakki;
 use App\Entity\NakkiBooking;
-use App\Factory\NakkiBookingFactory;
-use App\Factory\NakkiDefinitionFactory;
-use App\Factory\NakkiFactory;
+use App\Entity\NakkiDefinition;
+use App\Entity\Nakkikone;
+use App\Factory\EventFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use PHPUnit\Framework\Attributes\Group;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
@@ -136,12 +139,11 @@ final class NakkiAdminTest extends FixturesWebTestCase
     {
         $start = new \DateTimeImmutable('2030-01-01 10:00:00');
         $end = new \DateTimeImmutable('2030-01-01 14:00:00');
-        $nakkiProxy = NakkiFactory::new()->create([
-            'startAt' => $start,
-            'endAt' => $end,
-            'nakkiInterval' => new \DateInterval('PT2H'),
-        ]);
-        $nakki = $nakkiProxy instanceof Proxy ? $nakkiProxy->_real() : $nakkiProxy;
+        $nakki = $this->createManagedNakki(
+            $start,
+            $end,
+            new \DateInterval('PT2H'),
+        );
 
         $this->standaloneAdmin()->postPersist($nakki);
 
@@ -154,14 +156,20 @@ final class NakkiAdminTest extends FixturesWebTestCase
 
     public function testPostUpdateWarnsWhenBookingHasMember(): void
     {
-        $nakki = $this->createNakki();
-        $bookingProxy = NakkiBookingFactory::new()->booked()->create([
-            'nakki' => $nakki,
-            'nakkikone' => $nakki->getNakkikone(),
-            'startAt' => $nakki->getStartAt(),
-            'endAt' => $nakki->getStartAt()->modify('+1 hour'),
-        ]);
-        $booking = $bookingProxy instanceof Proxy ? $bookingProxy->_real() : $bookingProxy;
+        $nakki = $this->createManagedNakki();
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
+        if (null !== $member->getId()) {
+            $member = $this->em()->getRepository(Member::class)->find($member->getId()) ?? $member;
+        }
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setNakkikone($nakki->getNakkikone());
+        $booking->setStartAt($nakki->getStartAt());
+        $booking->setEndAt($nakki->getStartAt()->modify('+1 hour'));
+        $booking->setMember($member);
+        $this->em()->persist($booking);
+        $this->em()->flush();
         $nakki->addNakkiBooking($booking);
         $this->em()->refresh($nakki);
 
@@ -194,24 +202,22 @@ final class NakkiAdminTest extends FixturesWebTestCase
     {
         $start = new \DateTimeImmutable('2030-02-02 10:00:00');
         $end = new \DateTimeImmutable('2030-02-02 16:00:00');
-        $nakkiProxy = NakkiFactory::new()->create([
-            'startAt' => $start,
-            'endAt' => $end,
-            'nakkiInterval' => new \DateInterval('PT3H'),
-        ]);
-        $nakki = $nakkiProxy instanceof Proxy ? $nakkiProxy->_real() : $nakkiProxy;
+        $nakki = $this->createManagedNakki(
+            $start,
+            $end,
+            new \DateInterval('PT3H'),
+        );
 
-        $bookingProxy = NakkiBookingFactory::new()->free()->create([
-            'nakki' => $nakki,
-            'nakkikone' => $nakki->getNakkikone(),
-            'startAt' => $start,
-            'endAt' => $start->modify('+3 hours'),
-        ]);
-        $booking = $bookingProxy instanceof Proxy ? $bookingProxy->_real() : $bookingProxy;
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setNakkikone($nakki->getNakkikone());
+        $booking->setStartAt($start);
+        $booking->setEndAt($start->modify('+3 hours'));
+        $this->em()->persist($booking);
+        $this->em()->flush();
         $nakki->addNakkiBooking($booking);
         $this->em()->refresh($nakki);
         $bookingId = $booking->getId();
-
         $this->standaloneAdmin()->postUpdate($nakki);
 
         $count = $this->em()->getRepository(NakkiBooking::class)->count([
@@ -223,12 +229,14 @@ final class NakkiAdminTest extends FixturesWebTestCase
 
     public function testPostDeleteRemovesBookings(): void
     {
-        $nakki = $this->createNakki();
-        NakkiBookingFactory::new()->free()->create([
-            'nakki' => $nakki,
-            'nakkikone' => $nakki->getNakkikone(),
-        ]);
-
+        $nakki = $this->createManagedNakki();
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setNakkikone($nakki->getNakkikone());
+        $booking->setStartAt($nakki->getStartAt());
+        $booking->setEndAt($nakki->getStartAt()->modify('+1 hour'));
+        $this->em()->persist($booking);
+        $this->em()->flush();
         $this->standaloneAdmin()->postDelete($nakki);
 
         $count = $this->em()->getRepository(NakkiBooking::class)->count([
@@ -251,8 +259,7 @@ final class NakkiAdminTest extends FixturesWebTestCase
     public function testValidateRequiresDefinition(): void
     {
         $nakki = new Nakki();
-        $definitionProxy = NakkiDefinitionFactory::new()->create();
-        $definition = $definitionProxy instanceof Proxy ? $definitionProxy->_real() : $definitionProxy;
+        $definition = $this->createManagedDefinition();
         $nakki->setDefinition($definition);
         $validator = static::getContainer()->get(ValidatorInterface::class);
         $translator = static::getContainer()->get(TranslatorInterface::class);
@@ -266,9 +273,56 @@ final class NakkiAdminTest extends FixturesWebTestCase
 
     private function createNakki(): Nakki
     {
-        $nakkiProxy = NakkiFactory::new()->create();
+        return $this->createManagedNakki();
+    }
 
-        return $nakkiProxy instanceof Proxy ? $nakkiProxy->_real() : $nakkiProxy;
+    private function createManagedNakki(
+        ?\DateTimeImmutable $start = null,
+        ?\DateTimeImmutable $end = null,
+        ?\DateInterval $interval = null,
+    ): Nakki {
+        $start ??= new \DateTimeImmutable('2030-01-01 10:00:00');
+        $end ??= $start->modify('+1 hour');
+        $interval ??= new \DateInterval('PT1H');
+
+        $eventProxy = EventFactory::new()->published()->create();
+        $event = $eventProxy instanceof Proxy ? $eventProxy->_real() : $eventProxy;
+        if (null !== $event->getId()) {
+            $event = $this->em()->getRepository(Event::class)->find($event->getId()) ?? $event;
+        }
+
+        $nakkikone = new Nakkikone($event);
+        $event->setNakkikone($nakkikone);
+
+        $definition = $this->createManagedDefinition();
+
+        $nakki = new Nakki();
+        $nakki->setDefinition($definition);
+        $nakki->setNakkikone($nakkikone);
+        $nakki->setStartAt($start);
+        $nakki->setEndAt($end);
+        $nakki->setNakkiInterval($interval);
+
+        $this->em()->persist($event);
+        $this->em()->persist($nakkikone);
+        $this->em()->persist($nakki);
+        $this->em()->flush();
+
+        return $nakki;
+    }
+
+    private function createManagedDefinition(): NakkiDefinition
+    {
+        $definition = new NakkiDefinition();
+        $definition->setNameFi('Test nakki');
+        $definition->setNameEn('Test nakki');
+        $definition->setDescriptionFi('Test description');
+        $definition->setDescriptionEn('Test description');
+
+        $this->em()->persist($definition);
+        $this->em()->flush();
+
+        return $definition;
     }
 
     private function standaloneAdmin(): NakkiAdmin

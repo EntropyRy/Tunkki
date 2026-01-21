@@ -26,7 +26,7 @@ parameters:
     kerde: "kb7j8tb5b3bsfg8tym9jd9ro9r"
 
 services:
-  App\Service\BookingReferenceService:
+  App\Service\Rental\Booking\BookingReferenceService:
     arguments:
       $referenceAdd: 1220
       $referenceStart: 303
@@ -64,7 +64,7 @@ services:
   # Override Sonata Media controller to fix category handling when categories are disabled
   sonata.media.controller.media.admin:
     class: App\Controller\Admin\MediaAdminController
-    tags: ['controller.service_arguments']
+    tags: ["controller.service_arguments"]
 
   Symfony\UX\Icons\Registry\LocalSvgIconRegistry:
     arguments:
@@ -88,16 +88,17 @@ services:
         group: admin
         label: Door Log
 
-  entropy_tunkki.admin.item:
-    class: App\Admin\ItemAdmin
+  entropy.admin.item:
+    class: App\Admin\Rental\Inventory\ItemAdmin
     tags:
       - name: sonata.admin
+        code: entropy.admin.item
         manager_type: orm
         group: admin
         audit: true
         label: Items
-        model_class: App\Entity\Item
-        controller: App\Controller\Admin\ItemAdminController
+        model_class: App\Entity\Rental\Inventory\Item
+        controller: App\Controller\Admin\Rental\Inventory\ItemAdminController
     calls:
       - [
           setTemplate,
@@ -108,30 +109,32 @@ services:
           setTemplate,
           [base_list_field, admin/crud/base_list_flat_field.html.twig],
         ]
-      - [addChild, ["@entropy_tunkki.admin.statusevent", "item"]]
-      - [addChild, ["@entropy_tunkki.admin.file", "product"]]
+      - [addChild, ["@entropy.admin.statusevent", "item"]]
+      - [addChild, ["@entropy.admin.file", "product"]]
 
-  entropy_tunkki.admin.statusevent:
-    class: App\Admin\StatusEventAdmin
+  entropy.admin.statusevent:
+    class: App\Admin\Rental\StatusEventAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\StatusEvent
+        code: entropy.admin.statusevent
+        model_class: App\Entity\Rental\StatusEvent
         manager_type: orm
         group: admin
         label: Status Events
         show_mosaic_button: false
 
-  entropy_tunkki.admin.file:
-    class: App\Admin\FileAdmin
+  entropy.admin.file:
+    class: App\Admin\Rental\Inventory\FileAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\File
+        code: entropy.admin.file
+        model_class: App\Entity\Rental\Inventory\File
         manager_type: orm
         group: admin
         label: Files
         show_mosaic_button: false
 
-  entropy_tunkki.admin.member:
+  entropy.admin.member:
     class: App\Admin\MemberAdmin
     tags:
       - name: sonata.admin
@@ -169,12 +172,13 @@ services:
     tags:
       - { name: sonata.page, alias: frontpage }
 
-  entropy_tunkki.admin.booking:
-    class: App\Admin\BookingAdmin
+  entropy.admin.booking:
+    class: App\Admin\Rental\Booking\BookingAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Booking
-        controller: App\Controller\Admin\BookingAdminController
+        code: entropy.admin.booking
+        model_class: App\Entity\Rental\Booking\Booking
+        controller: App\Controller\Admin\Rental\BookingAdminController
         manager_type: orm
         group: admin
         audit: true
@@ -187,7 +191,7 @@ services:
           setTemplate,
           [base_list_field, admin/crud/base_list_flat_field.html.twig],
         ]
-      - [addChild, ["@entropy_tunkki.admin.statusevent", "booking"]]
+      - [addChild, ["@entropy.admin.statusevent", "booking"]]
 
   # Clock abstraction (STAN-03) - production/default
   App\Time\AppClock:
@@ -196,29 +200,32 @@ services:
 
   # (Other service definitions omitted for brevity in this edited section — retained below unchanged)
 
-  entropy_tunkki.admin.package:
-    class: App\Admin\PackageAdmin
+  entropy.admin.package:
+    class: App\Admin\Rental\Inventory\PackageAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Package
+        code: entropy.admin.package
+        model_class: App\Entity\Rental\Inventory\Package
         manager_type: orm
         group: admin
         label: Packages
 
-  entropy_tunkki.admin.renter:
-    class: App\Admin\RenterAdmin
+  entropy.admin.renter:
+    class: App\Admin\Rental\Booking\RenterAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Renter
+        code: entropy.admin.renter
+        model_class: App\Entity\Rental\Booking\Renter
         manager_type: orm
         group: admin
         label: Renters
 
-  entropy_tunkki.admin.billable_event:
-    class: App\Admin\BillableEventAdmin
+  entropy.admin.billable_event:
+    class: App\Admin\Rental\Booking\BillableEventAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\BillableEvent
+        code: entropy.admin.billable_event
+        model_class: App\Entity\Rental\Booking\BillableEvent
         manager_type: orm
         group: admin
         label: Billable Events
@@ -243,34 +250,37 @@ services:
     tags:
       - { name: sonata.block, alias: futureeventsblock }
 
-  entropy_tunkki.admin.who_can_rent_choice:
-    class: App\Admin\WhoCanRentChoiceAdmin
+  entropy.admin.who_can_rent_choice:
+    class: App\Admin\Rental\Inventory\WhoCanRentChoiceAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\WhoCanRentChoice
+        code: entropy.admin.who_can_rent_choice
+        model_class: App\Entity\Rental\Inventory\WhoCanRentChoice
         manager_type: orm
         group: admin
         label: Who Can Rent Choices
 
-  entropy_tunkki.admin.accessory:
-    class: App\Admin\AccessoryAdmin
+  entropy.admin.accessory:
+    class: App\Admin\Rental\Inventory\AccessoryAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Accessory
+        code: entropy.admin.accessory
+        model_class: App\Entity\Rental\Inventory\Accessory
         manager_type: orm
         group: admin
         label: Accessory
 
-  entropy_tunkki.admin.accessory_choices:
-    class: App\Admin\AccessoryChoiceAdmin
+  entropy.admin.accessory_choices:
+    class: App\Admin\Rental\Inventory\AccessoryChoiceAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\AccessoryChoice
+        code: entropy.admin.accessory_choices
+        model_class: App\Entity\Rental\Inventory\AccessoryChoice
         manager_type: orm
         group: admin
         label: Accessories
 
-  App\EventSubscriber\BookingAdminSubscriber:
+  App\EventSubscriber\Rental\Booking\BookingAdminSubscriber:
     arguments:
       $email: "%booking_notification_email%"
       $fromEmail: "%mailer_sender_address%"
@@ -286,11 +296,12 @@ services:
         label: Emails
 
   entropy.admin.reward:
-    class: App\Admin\RewardAdmin
+    class: App\Admin\Rental\Booking\RewardAdmin
     tags:
       - name: sonata.admin
-        model_class: App\Entity\Reward
-        controller: App\Controller\Admin\RewardAdminController
+        code: entropy.admin.reward
+        model_class: App\Entity\Rental\Booking\Reward
+        controller: App\Controller\Admin\Rental\Booking\RewardAdminController
         manager_type: orm
         group: admin
         label: Rewards

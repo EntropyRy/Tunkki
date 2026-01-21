@@ -27,7 +27,10 @@ final class RSVPFactory extends PersistentObjectFactory
         return [
             'firstName' => self::faker()->firstName(),
             'lastName' => self::faker()->lastName(),
-            'email' => self::faker()->unique()->safeEmail(),
+            'email' => \sprintf(
+                'rsvp_%s@example.test',
+                bin2hex(random_bytes(6)),
+            ),
             // 'event' must be provided via forEvent() or explicit with()
             // 'member' is optional (null by default)
         ];

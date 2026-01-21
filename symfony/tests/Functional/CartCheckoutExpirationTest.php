@@ -194,9 +194,12 @@ final class CartCheckoutExpirationTest extends FixturesWebTestCase
         $this->assertSame(0, $checkout->getStatus());
 
         // Simulate webhook marking it as expired (status -1)
-        $checkout->setStatus(-1);
+        // Fetch fresh from DB to avoid Foundry proxy issues with Doctrine
         $checkoutRepo = static::getContainer()->get(CheckoutRepository::class);
-        $checkoutRepo->save($checkout, true);
+        $checkoutFromDb = $checkoutRepo->find($checkout->getId());
+        $this->assertNotNull($checkoutFromDb);
+        $checkoutFromDb->setStatus(-1);
+        $checkoutRepo->save($checkoutFromDb, true);
 
         // Reload from database and verify
         $this->em()->clear();

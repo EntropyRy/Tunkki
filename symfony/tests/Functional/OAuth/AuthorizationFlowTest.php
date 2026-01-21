@@ -36,7 +36,8 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
     public function testActiveMemberCanAuthorizeWikiClient(): void
     {
-        $this->loginAsActiveMember('wiki_active@example.test');
+        $email = 'wiki-active-'.bin2hex(random_bytes(4)).'@example.test';
+        $this->loginAsActiveMember($email);
 
         $this->client()->request('GET', '/oauth/authorize', [
             'client_id' => self::WIKI_CLIENT_ID,
@@ -56,12 +57,13 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
     public function testNonActiveMemberCannotAuthorizeWikiClient(): void
     {
+        $email = 'nonactive-wiki-'.bin2hex(random_bytes(4)).'@example.test';
         MemberFactory::new()
             ->inactive()
             ->finnish()
-            ->create(['email' => 'nonactive_wiki@example.test']);
+            ->create(['email' => $email]);
 
-        [$user] = $this->loginAsMember('nonactive_wiki@example.test');
+        [$user] = $this->loginAsMember($email);
         $member = $user->getMember();
 
         $this->client()->request('GET', '/oauth/authorize', [
@@ -106,7 +108,8 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
     public function testNonActiveMemberCanAuthorizeForumClient(): void
     {
-        $this->loginAsMember('forum_nonactive@example.test');
+        $email = 'forum-nonactive-'.bin2hex(random_bytes(4)).'@example.test';
+        $this->loginAsMember($email);
 
         $this->client()->request('GET', '/oauth/authorize', [
             'client_id' => self::FORUM_CLIENT_ID,
@@ -186,7 +189,8 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
     public function testInvalidClientIdReturnsError(): void
     {
-        $this->loginAsActiveMember('invalid_client@example.test');
+        $email = 'invalid-client-'.bin2hex(random_bytes(4)).'@example.test';
+        $this->loginAsActiveMember($email);
 
         $this->client()->request('GET', '/oauth/authorize', [
             'client_id' => 'nonexistent_client',
@@ -204,7 +208,8 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
     public function testMismatchedRedirectUriReturnsError(): void
     {
-        $this->loginAsActiveMember('mismatch_redirect@example.test');
+        $email = 'mismatch-redirect-'.bin2hex(random_bytes(4)).'@example.test';
+        $this->loginAsActiveMember($email);
 
         $this->client()->request('GET', '/oauth/authorize', [
             'client_id' => self::WIKI_CLIENT_ID,

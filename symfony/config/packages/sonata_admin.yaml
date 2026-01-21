@@ -23,7 +23,7 @@ sonata_admin:
       - {
           position: top,
           type: sonata.admin.block.stats,
-          settings: { code: entropy_tunkki.admin.member, text: Members },
+          settings: { code: entropy.admin.member, text: Members },
         }
       - {
           position: top,
@@ -36,7 +36,7 @@ sonata_admin:
           type: sonata.admin.block.stats,
           settings:
             {
-              code: entropy_tunkki.admin.booking,
+              code: entropy.admin.booking,
               text: Bookings,
               color: bg-yellow,
             },
@@ -46,13 +46,13 @@ sonata_admin:
         label: Inventory
         icon: '<i class="fa fa-archive"></i>'
         items:
-          - entropy_tunkki.admin.item
-          - entropy_tunkki.admin.accessory_choices
+          - entropy.admin.item
+          - entropy.admin.accessory_choices
       sonata.admin.group.rentals:
         label: Rentals
         icon: '<i class="fa fa-sign-out"></i>'
         items:
-          - entropy_tunkki.admin.booking
+          - entropy.admin.booking
           - entropy.admin.reward
       sonata.admin.group.events:
         label: Events
@@ -80,18 +80,18 @@ sonata_admin:
         label: Members
         icon: '<i class="fa fa-users"></i>'
         items:
-          - entropy_tunkki.admin.member
+          - entropy.admin.member
           - admin.door_log
         roles: [SONATA_SUPER_ADMIN, MEMBERS]
       sonata.admin.group.config:
         label: Configuration
         icon: '<i class="fa fa-cogs"></i>'
         items:
-          - entropy_tunkki.admin.package
-          - entropy_tunkki.admin.renter
-          - entropy_tunkki.admin.who_can_rent_choice
-          - entropy_tunkki.admin.billable_event
-          - entropy_tunkki.admin.file
+          - entropy.admin.package
+          - entropy.admin.renter
+          - entropy.admin.who_can_rent_choice
+          - entropy.admin.billable_event
+          - entropy.admin.file
           - entropy.admin.contract
           - sonata.classification.admin.category
           - entropy.admin.nakki_definition
@@ -110,7 +110,7 @@ sonata_admin:
       sonata.admin.group.administration:
         label: Administration
         items:
-          #- entropy_tunkki.admin.statusevent
+          #- entropy.admin.statusevent
           - admin.email
           - sonata.page.admin.site
           - entropy.admin.access_groups

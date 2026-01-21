@@ -43,8 +43,9 @@ final class MemberAdminControllerTest extends FixturesWebTestCase
         ]);
 
         // Create a member
+        $email = 'test-member-'.bin2hex(random_bytes(4)).'@example.com';
         $member = MemberFactory::new()->create([
-            'email' => 'test-member@example.com',
+            'email' => $email,
             'locale' => 'en',
         ]);
 
@@ -70,8 +71,9 @@ final class MemberAdminControllerTest extends FixturesWebTestCase
         // Do NOT create email template - should trigger RuntimeException
 
         // Create a member
+        $email = 'test-member-'.bin2hex(random_bytes(4)).'@example.com';
         $member = MemberFactory::new()->create([
-            'email' => 'test-member@example.com',
+            'email' => $email,
         ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');

@@ -6,9 +6,9 @@ namespace App\Tests\Functional\Admin;
 
 use App\Admin\EventArtistInfoAdmin;
 use App\Entity\Artist;
+use App\Entity\Event;
 use App\Entity\EventArtistInfo;
 use App\Factory\ArtistFactory;
-use App\Factory\EventArtistInfoFactory;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
@@ -29,11 +29,11 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
 
     public function testPrePersistCreatesArtistCloneForEvent(): void
     {
-        $event = EventFactory::new()->published()->create([
+        $event = EventFactory::new()->published()->withoutPersisting()->create([
             'name' => 'Clone Event',
         ]);
-        $member = MemberFactory::new()->create();
-        $artist = ArtistFactory::new()->withMember($member)->create([
+        $member = MemberFactory::new()->withoutPersisting()->create();
+        $artist = ArtistFactory::new()->withMember($member)->withoutPersisting()->create([
             'name' => 'Clone Artist',
         ]);
 
@@ -54,14 +54,23 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
 
     public function testFormFieldsAreDisabledWhenArtistExists(): void
     {
-        $event = EventFactory::new()->published()->create([
+        $eventProxy = EventFactory::new()
+            ->published()
+            ->withoutPersisting()
+            ->create([
             'url' => 'event-artist-info-form-'.uniqid('', true),
         ]);
-        $infoProxy = EventArtistInfoFactory::new()
-            ->forEvent($event)
-            ->forArtist(ArtistFactory::new()->create())
-            ->create();
-        $info = $infoProxy instanceof Proxy ? $infoProxy->object() : $infoProxy;
+        $event = $this->unwrapProxy($eventProxy);
+        $event = $this->ensureManagedEvent($event);
+        $artistProxy = ArtistFactory::new()->withoutPersisting()->create();
+        $artist = $this->unwrapProxy($artistProxy);
+        $artist = $this->ensureManagedArtist($artist);
+
+        $info = new EventArtistInfo();
+        $info->setEvent($event);
+        $info->setArtist($artist);
+        $this->em()->persist($info);
+        $this->em()->flush();
 
         $admin = static::getContainer()->get('admin.event_artist_info');
         $admin->setSubject($info);
@@ -133,17 +142,23 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
 
     public function testPrePersistKeepsCloneNameForDuplicateArtist(): void
     {
-        $event = EventFactory::new()->published()->create([
+        $eventProxy = EventFactory::new()
+            ->published()
+            ->withoutPersisting()
+            ->create([
             'name' => 'Dup Artist Event',
         ]);
-        $artist = ArtistFactory::new()->create([
+        $event = $this->ensureManagedEvent($this->unwrapProxy($eventProxy));
+        $artistProxy = ArtistFactory::new()->withoutPersisting()->create([
             'name' => 'Dup Artist',
         ]);
+        $artist = $this->ensureManagedArtist($this->unwrapProxy($artistProxy));
 
-        EventArtistInfoFactory::new()
-            ->forEvent($event)
-            ->forArtist($artist)
-            ->create();
+        $existing = new EventArtistInfo();
+        $existing->setEvent($event);
+        $existing->setArtist($artist);
+        $this->em()->persist($existing);
+        $this->em()->flush();
 
         $info = new EventArtistInfo();
         $info->setEvent($event);
@@ -163,5 +178,56 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
         \assert($admin instanceof EventArtistInfoAdmin);
 
         return $admin;
+    }
+
+    private function ensureManagedEvent(Event $event): Event
+    {
+        if (null === $event->getId()) {
+            $this->em()->persist($event);
+            $this->em()->flush();
+
+            return $event;
+        }
+
+        $managed = $this->em()->getRepository(Event::class)->find($event->getId());
+        if ($managed instanceof Event) {
+            return $managed;
+        }
+
+        $this->em()->persist($event);
+        $this->em()->flush();
+
+        return $event;
+    }
+
+    private function ensureManagedArtist(Artist $artist): Artist
+    {
+        if (null === $artist->getId()) {
+            $this->em()->persist($artist);
+            $this->em()->flush();
+
+            return $artist;
+        }
+
+        $managed = $this->em()
+            ->getRepository(Artist::class)
+            ->find($artist->getId());
+        if ($managed instanceof Artist) {
+            return $managed;
+        }
+
+        $this->em()->persist($artist);
+        $this->em()->flush();
+
+        return $artist;
+    }
+
+    private function unwrapProxy(object $value): object
+    {
+        if ($value instanceof Proxy) {
+            return $value->object();
+        }
+
+        return $value;
     }
 }

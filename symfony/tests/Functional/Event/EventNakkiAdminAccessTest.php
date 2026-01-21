@@ -7,8 +7,6 @@ namespace App\Tests\Functional\Event;
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
 use App\Factory\NakkiDefinitionFactory;
-use App\Factory\NakkiFactory;
-use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 
@@ -92,18 +90,38 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
      * ----------------------------------------------------------------- */
     public function testNakkiResponsibleAdminCanAccess(): void
     {
-        $member = MemberFactory::new()->active()->create();
+        $member = MemberFactory::new()->active()->create([
+            'email' => 'member_'.uniqid('', true).'@example.test',
+        ]);
         $event = EventFactory::new()->published()->create([
             'url' => 'test-event-resp-admin-'.uniqid('', true),
         ]);
-        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
+        $member = $this->em()
+            ->getRepository(\App\Entity\Member::class)
+            ->find($member->getId());
+        \assert($member instanceof \App\Entity\Member);
+        $event = $this->em()
+            ->getRepository(\App\Entity\Event::class)
+            ->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
+        $nakkikone = new \App\Entity\Nakkikone($event);
+        $event->setNakkikone($nakkikone);
         $nakkikone->addResponsibleAdmin($member);
+        $this->em()->persist($nakkikone);
         $this->em()->flush();
+
+        $this->em()->clear();
+        $event = $this->em()->getRepository(\App\Entity\Event::class)->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
+        $member = $this->em()->getRepository(\App\Entity\Member::class)->find($member->getId());
+        \assert($member instanceof \App\Entity\Member);
 
         // Login using the member's user email
         $user = $member->getUser();
         \assert($user instanceof \App\Entity\User);
-        [$_user, $client] = $this->loginAsEmail($user->getEmail());
+        $client = $this->client;
+        $client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -117,23 +135,58 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
      * ----------------------------------------------------------------- */
     public function testNakkiResponsibleCanAccess(): void
     {
-        $member = MemberFactory::new()->active()->create();
+        $member = MemberFactory::new()->active()->create([
+            'email' => 'member_'.uniqid('', true).'@example.test',
+        ]);
         $event = EventFactory::new()->published()->create([
             'url' => 'test-event-nakki-resp-'.uniqid('', true),
         ]);
         $definition = NakkiDefinitionFactory::new()->create();
+        $member = $this->em()
+            ->getRepository(\App\Entity\Member::class)
+            ->find($member->getId());
+        \assert($member instanceof \App\Entity\Member);
+        $event = $this->em()
+            ->getRepository(\App\Entity\Event::class)
+            ->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
+        $definition = $this->em()
+            ->getRepository(\App\Entity\NakkiDefinition::class)
+            ->find($definition->getId());
+        \assert($definition instanceof \App\Entity\NakkiDefinition);
+        $nakkikone = new \App\Entity\Nakkikone($event);
+        $event->setNakkikone($nakkikone);
+        self::assertCount(
+            0,
+            $nakkikone->getResponsibleAdmins(),
+            'Expected no responsible admins before flush.',
+        );
+        $startAt = new \DateTimeImmutable('+1 day 10:00');
+        $endAt = $startAt->modify('+8 hours');
+        $nakki = new \App\Entity\Nakki();
+        $nakki
+            ->setNakkikone($nakkikone)
+            ->setDefinition($definition)
+            ->setResponsible($member)
+            ->setStartAt($startAt)
+            ->setEndAt($endAt)
+            ->setNakkiInterval(new \DateInterval('PT1H'));
+        $this->em()->persist($nakki);
+        $this->em()->persist($nakkikone);
+        $this->em()->flush();
 
-        $nakkikone = NakkikoneFactory::new()->create(['event' => $event]);
-        NakkiFactory::new()->create([
-            'nakkikone' => $nakkikone,
-            'definition' => $definition,
-            'responsible' => $member,
-        ]);
+        $this->em()->clear();
+        $event = $this->em()->getRepository(\App\Entity\Event::class)->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
+        $member = $this->em()->getRepository(\App\Entity\Member::class)->find($member->getId());
+        \assert($member instanceof \App\Entity\Member);
 
         // Login using the member's user email
         $user = $member->getUser();
         \assert($user instanceof \App\Entity\User);
-        [$_user, $client] = $this->loginAsEmail($user->getEmail());
+        $client = $this->client;
+        $client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -151,7 +204,8 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
             'url' => 'test-event-denied-'.uniqid('', true),
         ]);
 
-        [$_regular, $client] = $this->loginAsEmail('regular@example.com');
+        $email = 'regular-'.bin2hex(random_bytes(4)).'@example.com';
+        [$_regular, $client] = $this->loginAsEmail($email);
 
         $year = $event->getEventDate()->format('Y');
         $path = "/{$year}/{$event->getUrl()}/nakkikone/hallinta";
@@ -169,7 +223,8 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
             'url' => 'test-event-denied-en-'.uniqid('', true),
         ]);
 
-        [$_regular, $client] = $this->loginAsEmail('regular.en@example.com');
+        $email = 'regular-en-'.bin2hex(random_bytes(4)).'@example.com';
+        [$_regular, $client] = $this->loginAsEmail($email);
 
         $year = $event->getEventDate()->format('Y');
         $path = "/en/{$year}/{$event->getUrl()}/nakkikone/admin";

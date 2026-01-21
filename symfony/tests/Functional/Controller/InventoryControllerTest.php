@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller;
 
-use App\Entity\Item;
+use App\Entity\Rental\Inventory\Item;
 use App\Tests\_Base\FixturesWebTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 

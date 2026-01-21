@@ -147,25 +147,26 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         $nakkikone = NakkikoneFactory::new()->create([
             'event' => $event,
         ]);
+        $nakkikoneEntity = $nakkikone instanceof Proxy ? $nakkikone->_real() : $nakkikone;
         $nakki = \App\Factory\NakkiFactory::new()->create([
-            'nakkikone' => $nakkikone,
+            'nakkikone' => $nakkikoneEntity,
         ]);
 
         $booking = NakkiBookingFactory::new()->booked()->create([
             'member' => $member,
-            'nakkikone' => $nakkikone,
+            'nakkikone' => $nakkikoneEntity,
             'nakki' => $nakki,
         ]);
         $bookingEntity = $booking instanceof Proxy ? $booking->_real() : $booking;
 
-        $nakkikone->setRequiredForTicketReservation(true);
+        $nakkikoneEntity->setRequiredForTicketReservation(true);
         $this->em()->flush();
         self::assertSame(
             (string) $event.': '.$bookingEntity->getNakki(),
             (string) $bookingEntity,
         );
 
-        $nakkikone->setRequiredForTicketReservation(false);
+        $nakkikoneEntity->setRequiredForTicketReservation(false);
         $bookingEntity->setStartAt(new \DateTimeImmutable('2030-01-01 09:15:00'));
         $this->em()->flush();
         self::assertSame(

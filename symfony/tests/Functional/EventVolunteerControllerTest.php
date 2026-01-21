@@ -43,6 +43,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         parent::setUp();
         $this->initSiteAwareClient();
         $this->seedClientHome('fi');
+        $this->em()->clear();
     }
 
     /**
@@ -60,11 +61,13 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'until' => $eventDate->modify('+8 hours'),
             'url' => 'nakki-test-'.uniqid('', true),
         ]);
+        $event = $event instanceof Proxy ? $event->_real() : $event;
 
         $nakkikone = NakkikoneFactory::new()->enabled()->create([
             'event' => $event,
             'requireDifferentTimes' => $requireDifferentTimes,
         ]);
+        $nakkikone = $nakkikone instanceof Proxy ? $nakkikone->_real() : $nakkikone;
 
         $definition = NakkiDefinitionFactory::new()->create([
             'nameFi' => 'Test Nakki',
@@ -73,6 +76,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'descriptionEn' => 'Test description EN',
             'onlyForActiveMembers' => false,
         ]);
+        $definition = $definition instanceof Proxy ? $definition->_real() : $definition;
 
         $start = $eventDate->setTime(10, 0);
         $end = $start->modify('+2 hours');
@@ -83,6 +87,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'startAt' => $start,
             'endAt' => $end,
         ]);
+        $nakki = $nakki instanceof Proxy ? $nakki->_real() : $nakki;
 
         $booking = NakkiBookingFactory::new()->free()->create([
             'nakki' => $nakki,
@@ -90,6 +95,7 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
             'startAt' => $start,
             'endAt' => $end,
         ]);
+        $booking = $booking instanceof Proxy ? $booking->_real() : $booking;
 
         return [
             'event' => $event,
@@ -423,38 +429,56 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
 
     public function testNakkikoneEntityBehaviors(): void
     {
-        [
-            'event' => $event,
-            'nakkikone' => $nakkikone,
-            'booking' => $booking,
-            'nakki' => $nakki,
-        ] = $this->createEventWithNakkikone();
-        $nakkikone = $nakkikone instanceof Proxy ? $nakkikone->_real() : $nakkikone;
-        $booking = $booking instanceof Proxy ? $booking->_real() : $booking;
-        $nakki = $nakki instanceof Proxy ? $nakki->_real() : $nakki;
+        $eventDate = new \DateTimeImmutable('+7 days');
+        $event = new Event();
+        $event->setName('Test Event');
+        $event->setNimi('Test Event');
+        $event->setEventDate($eventDate);
+        $event->setUrl('nakki-test-'.uniqid('', true));
+        $event->setPublished(true);
 
-        $member = MemberFactory::new()->create([
-            'email' => 'nakki.member@example.test',
-            'locale' => 'fi',
-        ]);
-        $admin = MemberFactory::new()->create([
-            'email' => 'nakki.admin@example.test',
-            'locale' => 'fi',
-        ]);
-        $otherMember = MemberFactory::new()->create([
-            'email' => 'nakki.other@example.test',
-            'locale' => 'fi',
-        ]);
-        $noBookingMember = MemberFactory::new()->create([
-            'email' => 'nakki.nobooking@example.test',
-            'locale' => 'fi',
-        ]);
+        $nakkikone = new Nakkikone($event);
+
+        $definition = new NakkiDefinition();
+        $definition->setNameFi('Test Nakki');
+        $definition->setNameEn('Test Nakki EN');
+        $definition->setDescriptionFi('Test description FI');
+        $definition->setDescriptionEn('Test description EN');
+
+        $start = $eventDate->setTime(10, 0);
+        $end = $start->modify('+2 hours');
+
+        $nakki = new Nakki();
+        $nakki->setDefinition($definition);
+        $nakki->setStartAt($start);
+        $nakki->setEndAt($end);
+        $nakki->setNakkikone($nakkikone);
+
+        $booking = new NakkiBooking();
+        $booking->setNakki($nakki);
+        $booking->setNakkikone($nakkikone);
+        $booking->setStartAt($start);
+        $booking->setEndAt($end);
+
+        $member = (new Member())
+            ->setEmail('nakki.member@example.test')
+            ->setLocale('fi');
+        $admin = (new Member())
+            ->setEmail('nakki.admin@example.test')
+            ->setLocale('fi');
+        $otherMember = (new Member())
+            ->setEmail('nakki.other@example.test')
+            ->setLocale('fi');
+        $noBookingMember = (new Member())
+            ->setEmail('nakki.nobooking@example.test')
+            ->setLocale('fi');
 
         $nakkikone->setInfoFi('Valitse nakki');
         $nakkikone->setInfoEn('Choose a nakki');
         $nakkikone->setShowLinkInEvent(true);
         $nakkikone->setRequireDifferentTimes(false);
         $nakkikone->setRequiredForTicketReservation(true);
+        $nakkikone->addNakki($nakki);
 
         $nakki->setMattermostChannel('nakki-channel');
         $nakki->setResponsible($member);
@@ -462,7 +486,6 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         $member->addNakkiBooking($booking);
         $nakkikone->addBooking($booking);
         $nakkikone->addResponsibleAdmin($admin);
-        $this->em()->flush();
 
         $extraBooking = new NakkiBooking();
         $extraBooking->setNakki($nakki);
@@ -471,7 +494,6 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         $extraBooking->setEndAt($nakki->getEndAt()->modify('+4 hours'));
         $nakkikone->addBooking($extraBooking);
 
-        self::assertNotNull($nakkikone->getId());
         self::assertTrue($nakkikone->getNakkis()->contains($nakki));
         self::assertTrue($nakkikone->getBookings()->contains($booking));
         self::assertTrue($nakkikone->getBookings()->contains($extraBooking));

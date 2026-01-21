@@ -89,7 +89,7 @@
     {% if object.renterHash %}
         {% set entropy_id = object.renter ? constant('ENTROPY_INTERNAL_ID', object.renter) : null %}
         {% set is_entropy = entropy_id is not null and object.renter.id == entropy_id %}
-        {% set route_name = is_entropy ? 'entropy_tunkki_booking_public_items' : 'entropy_tunkki_booking_hash' %}
+        {% set route_name = is_entropy ? 'entropy_tunkki_booking_public_items' : 'entropy_booking_hash' %}
         {% set route_params = {bookingid: object.id, hash: object.renterHash} %}
         {% if not is_entropy %}
             {% set route_params = route_params|merge({renterid: object.renter.id}) %}
@@ -109,7 +109,7 @@
     {% for item in object.items|filter(item=>item.needsFixing == 'true') %}
         <a class="btn btn-sm"
             style="display: inline-block"
-            href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
+            href="{{ path('admin_entropy_admin_item_admin_entropy_admin_statusevent_list', {id: item.id}) }}">
             <i class="fa fa-medkit"></i>
             {{ item.name }}
         </a>
@@ -117,7 +117,7 @@
     {% for package in object.packages %}
         {% for item in package.itemsNeedingFixing %}
             <a class="btn btn-sm"
-                href="{{ path('admin_app_item_statusevent_list', {id: item.id}) }}">
+                href="{{ path('admin_entropy_admin_item_admin_entropy_admin_statusevent_list', {id: item.id}) }}">
                 <i class="fa fa-medkit"></i>
                 {{ item.name }}
             </a>

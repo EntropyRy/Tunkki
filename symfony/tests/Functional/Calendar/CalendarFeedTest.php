@@ -113,18 +113,15 @@ final class CalendarFeedTest extends FixturesWebTestCase
             ->setNameEn('Entropy Club')
             ->setStreetAddress('Testikatu 1, Helsinki');
         $this->em()->persist($location);
-
-        $event = EventFactory::new()
-            ->with([
-                'type' => 'event',
-                'name' => 'Hybrid Event',
-                'nimi' => 'Hybridi Tapahtuma',
-                'webMeetingUrl' => 'https://meet.example.com/entropy',
-            ])
-            ->create();
-
-        $event->setLocation($location);
         $this->em()->flush();
+
+        EventFactory::new()->create([
+            'type' => 'event',
+            'name' => 'Hybrid Event',
+            'nimi' => 'Hybridi Tapahtuma',
+            'webMeetingUrl' => 'https://meet.example.com/entropy',
+            'location' => $location,
+        ]);
 
         $hash = $this->encodeHash([1, 1, 0, 0, 0, 0]);
         $path = \sprintf('/%s/kalenteri.ics', $hash);

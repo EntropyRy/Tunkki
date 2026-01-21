@@ -102,7 +102,8 @@ final class GeneralShopCartSubmissionTest extends FixturesWebTestCase
 
     public function testLoggedInMemberCanSubmitCart(): void
     {
-        [$user, $client] = $this->loginAsMember('member@example.com');
+        $email = 'member-'.bin2hex(random_bytes(4)).'@example.com';
+        [$user, $client] = $this->loginAsMember($email);
         $this->seedClientHome('fi');
         self::$client = $client;
 

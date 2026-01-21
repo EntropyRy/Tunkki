@@ -52,18 +52,22 @@ final class EventNakkiAdminVoter extends Voter
         }
 
         $member = $user->getMember();
+        $memberId = (int) $member->getId();
 
         $nakkikone = $subject->getNakkikone();
         if (!$nakkikone instanceof Nakkikone) {
             return false;
         }
 
-        if ($nakkikone->getResponsibleAdmins()->contains($member)) {
-            return true;
+        foreach ($nakkikone->getResponsibleAdmins() as $admin) {
+            if ((int) $admin->getId() === $memberId) {
+                return true;
+            }
         }
 
         foreach ($nakkikone->getNakkis() as $nakki) {
-            if ($nakki->getResponsible() === $member) {
+            $responsible = $nakki->getResponsible();
+            if ($responsible && (int) $responsible->getId() === $memberId) {
                 return true;
             }
         }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Components\Dashboard;
 
-use App\Repository\BookingRepository;
+use App\Repository\Rental\Booking\BookingRepository;
 use App\Repository\EventRepository;
 use App\Repository\MemberRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;

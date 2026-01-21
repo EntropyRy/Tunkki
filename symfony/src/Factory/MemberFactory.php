@@ -32,7 +32,10 @@ final class MemberFactory extends PersistentObjectFactory
     protected function defaults(): array
     {
         return [
-            'email' => self::faker()->unique()->safeEmail(),
+            'email' => \sprintf(
+                'member_%s@example.test',
+                bin2hex(random_bytes(6)),
+            ),
             'firstname' => self::faker()->firstName(),
             'lastname' => self::faker()->lastName(),
             'locale' => self::faker()->randomElement(['fi', 'en']),

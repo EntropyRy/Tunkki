@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Block;
 
-use App\Entity\Booking;
+use App\Entity\Rental\Booking\Booking;
 use Doctrine\ORM\EntityManagerInterface;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService as BaseBlockService;

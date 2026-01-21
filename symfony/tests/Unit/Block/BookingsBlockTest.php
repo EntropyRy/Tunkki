@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Block;
 
 use App\Block\BookingsBlock;
-use App\Entity\Booking;
+use App\Entity\Rental\Booking\Booking;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use PHPUnit\Framework\TestCase;

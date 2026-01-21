@@ -8,7 +8,7 @@
     {% if fix is defined %}
         {% for item in fix %}
             <div>
-                <a href="{{ path('admin_app_item_edit', {id: item.id}) }}">
+                <a href="{{ path('admin_entropy_admin_item_edit', {id: item.id}) }}">
                     <h3>
                         {{ item.name }}
                         {% if item.needsFixing %}<twig:ux:icon height="2rem" name="wrench" />{% endif %}

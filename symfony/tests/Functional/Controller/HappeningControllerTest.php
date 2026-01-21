@@ -9,6 +9,7 @@ use App\Entity\HappeningBooking;
 use App\Entity\Member;
 use App\Factory\EventFactory;
 use App\Factory\HappeningFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -85,15 +86,25 @@ final class HappeningControllerTest extends FixturesWebTestCase
 
     public function testRemoveDeletesBookingForMember(): void
     {
-        [$user, $_client] = $this->loginAsMember();
-        $member = $user->getMember();
+        $member = MemberFactory::new()->create(['emailVerified' => true]);
+        $managedMember = $this->em()->getRepository(Member::class)->find($member->getId());
+        if ($managedMember instanceof Member) {
+            $member = $managedMember;
+        }
+        $this->client->loginUser($member->getUser());
+        $this->stabilizeSessionAfterLogin();
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
             ->released()
             ->forEvent($event)
-            ->withOwner($member)
             ->create();
         $happeningEntity = $happening instanceof Proxy ? $happening->_real() : $happening;
+        $memberRef = $this->em()->getReference(Member::class, $member->getId());
+        $happeningManaged = $this->em()->getRepository(Happening::class)->find($happeningEntity->getId());
+        if ($happeningManaged instanceof Happening) {
+            $happeningManaged->addOwner($memberRef);
+            $this->em()->flush();
+        }
 
         $booking = $this->createBooking($member, $happeningEntity);
 
@@ -107,20 +118,35 @@ final class HappeningControllerTest extends FixturesWebTestCase
 
     public function testRemoveDoesNotDeleteForOtherMember(): void
     {
-        [$ownerUser, $_client] = $this->loginAsMember();
-        $owner = $ownerUser->getMember();
+        $owner = MemberFactory::new()->create(['emailVerified' => true]);
+        $managedOwner = $this->em()->getRepository(Member::class)->find($owner->getId());
+        if ($managedOwner instanceof Member) {
+            $owner = $managedOwner;
+        }
+        $this->client->loginUser($owner->getUser());
+        $this->stabilizeSessionAfterLogin();
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
             ->released()
             ->forEvent($event)
-            ->withOwner($owner)
             ->create();
         $happeningEntity = $happening instanceof Proxy ? $happening->_real() : $happening;
+        $ownerRef = $this->em()->getReference(Member::class, $owner->getId());
+        $happeningManaged = $this->em()->getRepository(Happening::class)->find($happeningEntity->getId());
+        if ($happeningManaged instanceof Happening) {
+            $happeningManaged->addOwner($ownerRef);
+            $this->em()->flush();
+        }
 
         $booking = $this->createBooking($owner, $happeningEntity);
 
-        [$otherUser, $_clientTwo] = $this->loginAsMember();
-        $this->client->loginUser($otherUser);
+        $other = MemberFactory::new()->create(['emailVerified' => true]);
+        $managedOther = $this->em()->getRepository(Member::class)->find($other->getId());
+        if ($managedOther instanceof Member) {
+            $other = $managedOther;
+        }
+        $this->client->loginUser($other->getUser());
+        $this->stabilizeSessionAfterLogin();
 
         $this->client->request('GET', \sprintf('/happening/%d/remove', $booking->getId()));
         $this->assertResponseStatusCodeSame(302);
@@ -153,8 +179,18 @@ final class HappeningControllerTest extends FixturesWebTestCase
         $this->assertNull($booking->getMember());
     }
 
-    private function createBooking(Member $member, $happening): HappeningBooking
+    private function createBooking(Member $member, Happening $happening): HappeningBooking
     {
+        $managedMember = $this->em()->getRepository(Member::class)->find($member->getId());
+        if ($managedMember instanceof Member) {
+            $member = $managedMember;
+        }
+        $happening = $happening instanceof Proxy ? $happening->_real() : $happening;
+        $managed = $this->em()->getRepository(Happening::class)->find($happening->getId());
+        if ($managed instanceof Happening) {
+            $happening = $managed;
+        }
+
         $booking = new HappeningBooking();
         $booking->setMember($member);
         $booking->setHappening($happening);

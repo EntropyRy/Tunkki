@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Twig\Components\Dashboard;
 
-use App\Repository\ItemRepository;
+use App\Repository\Rental\Inventory\ItemRepository;
 use Symfony\UX\TwigComponent\Attribute\AsTwigComponent;
 
 #[AsTwigComponent]

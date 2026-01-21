@@ -498,7 +498,8 @@ final class EventTicketControllerTest extends FixturesWebTestCase
                 'url' => 'test-event-'.uniqid('', true),
             ]);
 
-        $member = MemberFactory::new()->create(['email' => 'ticketholder@example.com']);
+        $email = 'ticketholder-'.bin2hex(random_bytes(4)).'@example.com';
+        $member = MemberFactory::new()->create(['email' => $email]);
         $ticket = TicketFactory::new()
             ->forEvent($event)
             ->ownedBy($member)
@@ -527,7 +528,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         // Decode the inner JSON
         $ticketData = json_decode($outerData, true);
         $this->assertIsArray($ticketData);
-        $this->assertSame('ticketholder@example.com', $ticketData['email']);
+        $this->assertSame($email, $ticketData['email']);
         $this->assertSame('paid', $ticketData['status']);
         $this->assertFalse($ticketData['given']);
         $this->assertSame(123456, $ticketData['referenceNumber']);

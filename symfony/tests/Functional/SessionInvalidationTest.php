@@ -29,13 +29,11 @@ final class SessionInvalidationTest extends FixturesWebTestCase
 {
     use LoginHelperTrait;
 
-    private const ADMIN_EMAIL = 'session-admin@example.test';
-    private const NORMAL_EMAIL = 'session-user@example.test';
-
     public function testLogoutClearsAuthenticationToken(): void
     {
+        $adminEmail = 'session-admin-'.bin2hex(random_bytes(4)).'@example.test';
         // Arrange: create & login an admin-capable user
-        $adminUser = $this->getOrCreateUser(self::ADMIN_EMAIL, ['ROLE_ADMIN']);
+        $adminUser = $this->getOrCreateUser($adminEmail, ['ROLE_ADMIN']);
         $client = $this->client;
         $client->loginUser($adminUser);
 
@@ -55,8 +53,10 @@ final class SessionInvalidationTest extends FixturesWebTestCase
 
     public function testSecondLoginAfterLogoutUsesFreshSessionWithoutRoleLeak(): void
     {
+        $adminEmail = 'session-admin-'.bin2hex(random_bytes(4)).'@example.test';
+        $normalEmail = 'session-user-'.bin2hex(random_bytes(4)).'@example.test';
         // Arrange #1: User A with elevated role
-        $adminUser = $this->getOrCreateUser(self::ADMIN_EMAIL, ['ROLE_ADMIN']);
+        $adminUser = $this->getOrCreateUser($adminEmail, ['ROLE_ADMIN']);
         $client = $this->client;
         $client->loginUser($adminUser);
 
@@ -74,7 +74,7 @@ final class SessionInvalidationTest extends FixturesWebTestCase
         );
 
         // Arrange #2: User B WITHOUT admin role
-        $normalUser = $this->getOrCreateUser(self::NORMAL_EMAIL, []);
+        $normalUser = $this->getOrCreateUser($normalEmail, []);
         $client->loginUser($normalUser);
 
         // Assert: authenticated as second user

@@ -76,7 +76,8 @@ final class NotificationAdminControllerTest extends FixturesWebTestCase
     {
         $event = EventFactory::new()->published()->create();
         $notification = $this->createNotification($event, 'fi', '<b>Hello</b>', []);
-        [$_user, $_client] = $this->loginAsEmail('regular@example.com');
+        $email = 'regular-'.bin2hex(random_bytes(4)).'@example.com';
+        [$_user, $_client] = $this->loginAsEmail($email);
 
         $this->client->request('GET', "/admin/notification/{$notification->getId()}/send");
 

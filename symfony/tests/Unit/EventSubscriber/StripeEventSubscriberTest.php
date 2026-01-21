@@ -13,7 +13,7 @@ use App\Repository\CheckoutRepository;
 use App\Repository\MemberRepository;
 use App\Repository\ProductRepository;
 use App\Repository\TicketRepository;
-use App\Service\BookingReferenceService;
+use App\Service\Rental\Booking\BookingReferenceService;
 use App\Service\Email\EmailService;
 use App\Service\MattermostNotifierService;
 use App\Service\QrService;

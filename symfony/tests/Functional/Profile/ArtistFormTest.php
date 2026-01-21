@@ -229,7 +229,10 @@ final class ArtistFormTest extends FixturesWebTestCase
 
     public function testMemberArtistCollectionsForProfile(): void
     {
-        $member = MemberFactory::new()->inactive()->create();
+        $memberProxy = MemberFactory::new()->inactive()->withoutPersisting()->create();
+        $member = $memberProxy instanceof \Zenstruck\Foundry\Persistence\Proxy
+            ? $memberProxy->_real()
+            : $memberProxy;
 
         $primary = new Artist();
         $primary->setName('Primary');

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Tests\Functional\Auth;
 
 use App\Factory\MemberFactory;
+use App\Entity\Member;
+use App\Entity\User;
 use App\Tests\_Base\FixturesWebTestCase;
 use GuzzleHttp\ClientInterface;
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;
@@ -44,8 +46,9 @@ final class MattermostCallbackTest extends FixturesWebTestCase
     public function testExistingUserWithMattermostIdAuthenticates(): void
     {
         // Create member with linked Mattermost account
-        $member = MemberFactory::new()->active()->create();
-        $user = $member->getUser();
+        $email = \sprintf('mm-existing-%s@example.test', bin2hex(random_bytes(4)));
+        $member = MemberFactory::new()->active()->create(['email' => $email]);
+        $user = $this->reloadUser($member->getUser());
         $user->setMattermostId('mm_existing_123');
         $this->em()->persist($user);
         $this->em()->flush();
@@ -88,16 +91,17 @@ final class MattermostCallbackTest extends FixturesWebTestCase
      */
     public function testEmailMatchLinksAccountWithMattermostId(): void
     {
+        $email = \sprintf('linker-%s@example.test', bin2hex(random_bytes(4)));
         $member = MemberFactory::new()->active()->create([
-            'email' => 'linker@example.com',
+            'email' => $email,
         ]);
-        $user = $member->getUser();
+        $user = $this->reloadUser($member->getUser());
 
         $this->assertNull($user->getMattermostId());
 
         $this->mockMattermostHttpClient([
             'id' => 'mm_new_456',
-            'email' => 'linker@example.com',
+            'email' => $email,
             'username' => 'newuser',
         ]);
 
@@ -121,8 +125,12 @@ final class MattermostCallbackTest extends FixturesWebTestCase
      */
     public function testUsernameUpdateFromMattermost(): void
     {
-        $member = MemberFactory::new()->active()->create(['username' => 'olduser']);
-        $user = $member->getUser();
+        $email = \sprintf('mm-update-%s@example.test', bin2hex(random_bytes(4)));
+        $member = MemberFactory::new()->active()->create([
+            'username' => 'olduser',
+            'email' => $email,
+        ]);
+        $user = $this->reloadUser($member->getUser());
         $user->setMattermostId('mm_update_789');
         $this->em()->persist($user);
         $this->em()->flush();
@@ -141,7 +149,7 @@ final class MattermostCallbackTest extends FixturesWebTestCase
 
         $this->assertResponseStatusCodeSame(302);
 
-        $this->em()->refresh($member);
+        $member = $this->reloadMember($member);
         $this->assertSame('newuser', $member->getUsername());
     }
 
@@ -288,5 +296,33 @@ final class MattermostCallbackTest extends FixturesWebTestCase
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->client()->getCookieJar()->set($cookie);
+    }
+
+    private function reloadUser(User $user): User
+    {
+        if (null === $user->getId()) {
+            return $user;
+        }
+
+        $managed = $this->em()->getRepository(User::class)->find($user->getId());
+        if ($managed instanceof User) {
+            return $managed;
+        }
+
+        return $user;
+    }
+
+    private function reloadMember(Member $member): Member
+    {
+        if (null === $member->getId()) {
+            return $member;
+        }
+
+        $managed = $this->em()->getRepository(Member::class)->find($member->getId());
+        if ($managed instanceof Member) {
+            return $managed;
+        }
+
+        return $member;
     }
 }

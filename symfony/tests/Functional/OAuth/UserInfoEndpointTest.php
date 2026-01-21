@@ -25,10 +25,14 @@ final class UserInfoEndpointTest extends FixturesWebTestCase
 
     public function testMeEndpointReturnsUserInfoWithValidToken(): void
     {
+        $email = \sprintf(
+            'oauth-test-%s@example.test',
+            bin2hex(random_bytes(4)),
+        );
         $member = MemberFactory::new()
             ->active()
             ->withOAuthWikiAccess()
-            ->create(['email' => 'oauth-test@example.com']);
+            ->create(['email' => $email]);
         $user = $member->getUser();
 
         $token = $this->createAccessToken($user, ['wiki'], self::WIKI_CLIENT_ID);
@@ -46,7 +50,7 @@ final class UserInfoEndpointTest extends FixturesWebTestCase
 
         $this->assertSame($user->getAuthId(), $data['id']);
         $this->assertSame($user->getUsername(), $data['username']);
-        $this->assertSame('oauth-test@example.com', $data['email']);
+        $this->assertSame($email, $data['email']);
         $this->assertTrue($data['active_member']);
     }
 

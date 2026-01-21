@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Support;
 
 use Doctrine\ORM\Tools\SchemaTool;
+use DAMA\DoctrineTestBundle\PHPUnit\SkipDatabaseRollback;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
@@ -32,6 +33,7 @@ use Zenstruck\Foundry\Test\Factories;
  * - Eliminates var/ directory permission issues
  * - Automatic cleanup in tearDown()
  */
+#[SkipDatabaseRollback]
 abstract class PantherTestCase extends BasePantherTestCase
 {
     use Factories;

@@ -201,7 +201,8 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
 
     public function testLoggedInMemberCanSubmitCart(): void
     {
-        [$user, $client] = $this->loginAsMember('member@example.com');
+        $email = 'member-'.bin2hex(random_bytes(4)).'@example.com';
+        [$user, $client] = $this->loginAsMember($email);
         $this->seedClientHome('fi'); // Ensure the new client is seeded
         self::$client = $client; // Set static client for BrowserKit assertions
         [$realNow, $testNow] = $this->getDates();

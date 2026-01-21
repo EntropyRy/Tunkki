@@ -377,16 +377,15 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $location->setNameEn('Oranssi EN');
         $location->setStreetAddress('Kumpulantie 1');
         $this->em()->persist($location);
+        $this->em()->flush();
 
         $event = EventFactory::new()->published()->create([
             'type' => 'event',
             'nimi' => 'Paikka Tapahtuma',
             'name' => 'Location Event',
             'url' => 'location-'.uniqid('', true),
+            'location' => $location,
         ]);
-
-        // Set location after creation
-        $event->setLocation($location);
         $this->em()->flush();
 
         $sqid = new Sqids();
@@ -415,6 +414,10 @@ final class CalendarControllerTest extends FixturesWebTestCase
             'url' => 'online-'.uniqid('', true),
         ]);
 
+        $event = $this->em()
+            ->getRepository(\App\Entity\Event::class)
+            ->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
         $event->setWebMeetingUrl('https://meet.example.com/room123');
         $this->em()->flush();
 
@@ -443,15 +446,20 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $location->setNameEn('Hybrid Venue EN');
         $location->setStreetAddress('Hybridikatu 5');
         $this->em()->persist($location);
+        $this->em()->flush();
 
         $event = EventFactory::new()->published()->create([
             'type' => 'event',
             'nimi' => 'Hybrid Tapahtuma',
             'name' => 'Hybrid Event',
             'url' => 'hybrid-'.uniqid('', true),
+            'location' => $location,
         ]);
 
-        $event->setLocation($location);
+        $event = $this->em()
+            ->getRepository(\App\Entity\Event::class)
+            ->find($event->getId());
+        \assert($event instanceof \App\Entity\Event);
         $event->setWebMeetingUrl('https://meet.example.com/hybrid');
         $this->em()->flush();
 

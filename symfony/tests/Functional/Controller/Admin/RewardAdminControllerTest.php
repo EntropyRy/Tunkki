@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller\Admin;
 
-use App\Entity\Reward;
+use App\Entity\Rental\Booking\Reward;
 use App\Entity\User;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
@@ -84,8 +84,18 @@ final class RewardAdminControllerTest extends FixturesWebTestCase
 
     private function createReward(User $user, string $amount, int $weight): Reward
     {
+        $managedUser = null;
+        if (null !== $user->getId()) {
+            $managedUser = $this->em()->getRepository(User::class)->find($user->getId());
+        }
+        if (!$managedUser instanceof User) {
+            $this->em()->persist($user);
+            $this->em()->flush();
+            $managedUser = $user;
+        }
+
         $reward = new Reward();
-        $reward->setUser($user);
+        $reward->setUser($managedUser);
         $reward->setReward($amount);
         $reward->setWeight($weight);
 

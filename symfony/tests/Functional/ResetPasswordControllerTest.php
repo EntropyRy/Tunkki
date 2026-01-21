@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
+use App\Entity\User;
 use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
+use Zenstruck\Foundry\Proxy;
 
 final class ResetPasswordControllerTest extends FixturesWebTestCase
 {
@@ -51,8 +53,9 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
     public function testValidTokenDisplaysChangePasswordForm(): void
     {
-        $member = MemberFactory::createOne();
-        $user = $member->getUser();
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
+        $user = $this->reloadUser($member->getUser());
 
         /** @var ResetPasswordHelperInterface $resetHelper */
         $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
@@ -72,8 +75,9 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
     public function testValidTokenFormSubmissionChangesPassword(): void
     {
-        $member = MemberFactory::createOne();
-        $user = $member->getUser();
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
+        $user = $this->reloadUser($member->getUser());
         $userId = $user->getId();
         $originalPasswordHash = $user->getPassword();
 
@@ -104,8 +108,9 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
     public function testFormValidationRejectsShortPassword(): void
     {
-        $member = MemberFactory::createOne();
-        $user = $member->getUser();
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
+        $user = $this->reloadUser($member->getUser());
 
         /** @var ResetPasswordHelperInterface $resetHelper */
         $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
@@ -128,8 +133,9 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
     public function testFormValidationRejectsMismatchedPasswords(): void
     {
-        $member = MemberFactory::createOne();
-        $user = $member->getUser();
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
+        $user = $this->reloadUser($member->getUser());
 
         /** @var ResetPasswordHelperInterface $resetHelper */
         $resetHelper = static::getContainer()->get(ResetPasswordHelperInterface::class);
@@ -148,5 +154,19 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
         $this->client->submit($form);
         $this->assertResponseIsUnprocessable();
+    }
+
+    private function reloadUser(User $user): User
+    {
+        if (null === $user->getId()) {
+            return $user;
+        }
+
+        $managed = $this->em()->getRepository(User::class)->find($user->getId());
+        if ($managed instanceof User) {
+            return $managed;
+        }
+
+        return $user;
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Admin;
 
-use App\Admin\BookingAdmin;
-use App\Entity\Booking;
-use App\Entity\Renter;
+use App\Admin\Rental\Booking\BookingAdmin;
+use App\Entity\Rental\Booking\Booking;
+use App\Entity\Rental\Booking\Renter;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -201,7 +201,7 @@ final class BookingAdminControllerTest extends FixturesWebTestCase
 
     private function getBookingAdmin(): BookingAdmin
     {
-        $admin = static::getContainer()->get('entropy_tunkki.admin.booking');
+        $admin = static::getContainer()->get('entropy.admin.booking');
         self::assertInstanceOf(BookingAdmin::class, $admin);
 
         return $admin;

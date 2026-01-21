@@ -139,7 +139,9 @@ final class GeneralShopAccessTest extends FixturesWebTestCase
 
     public function testEmptyGeneralShopShowsNoProductsMessage(): void
     {
-        // Don't create any products
+        $this->em()
+            ->createQuery('DELETE FROM App\\Entity\\Product p WHERE p.event IS NULL')
+            ->execute();
 
         $this->client->request('GET', '/kauppa');
 

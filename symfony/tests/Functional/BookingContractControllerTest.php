@@ -4,16 +4,16 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Entity\Booking;
+use App\Entity\Rental\Booking\Booking;
 use App\Entity\Contract;
-use App\Entity\Renter;
+use App\Entity\Rental\Booking\Renter;
 use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
- * @covers \App\Controller\BookingContractController
+ * @covers \App\Controller\Rental\BookingContractController
  */
 final class BookingContractControllerTest extends FixturesWebTestCase
 {

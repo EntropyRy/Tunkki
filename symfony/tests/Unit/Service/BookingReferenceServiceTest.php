@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Service;
 
-use App\Entity\Booking;
-use App\Service\BookingReferenceService;
+use App\Entity\Rental\Booking\Booking;
+use App\Service\Rental\Booking\BookingReferenceService;
 use PHPUnit\Framework\TestCase;
 
 final class BookingReferenceServiceTest extends TestCase

@@ -7,6 +7,7 @@ namespace App\Tests\Functional;
 use App\Entity\Happening;
 use App\Factory\EventFactory;
 use App\Factory\HappeningFactory;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Http\SiteAwareKernelBrowser;
 use App\Tests\Support\LoginHelperTrait;
@@ -39,20 +40,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
     public function testPublicHappeningAccessibleToOwnerAndAnotherUser(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf(
-                'happening-owner+%s@example.test',
-                bin2hex(random_bytes(4)),
-            ),
-            [],
-        );
-        $other = $this->getOrCreateUser(
-            \sprintf(
-                'happening-other+%s@example.test',
-                bin2hex(random_bytes(4)),
-            ),
-            [],
-        );
+        $owner = $this->createUser();
+        $other = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -100,17 +89,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
     public function testPrivateHappeningOnlyAccessibleToOwner(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('private-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
-        $stranger = $this->getOrCreateUser(
-            \sprintf(
-                'private-stranger+%s@example.test',
-                bin2hex(random_bytes(4)),
-            ),
-            [],
-        );
+        $owner = $this->createUser();
+        $stranger = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -158,10 +138,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
     public function testOwnerCanAccessCreateFormAndSubmitMinimalHappening(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('creator-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
         $event = EventFactory::new()->published()->create();
         $year = $event->getEventDate()->format('Y');
 
@@ -249,14 +226,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
     public function testOwnerCanEditOwnHappeningAndNonOwnerCannot(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('edit-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
-        $nonOwner = $this->getOrCreateUser(
-            \sprintf('edit-stranger+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
+        $nonOwner = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -306,14 +277,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
     public function testAnotherUserCanBookPublicHappening(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('booking-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
-        $booker = $this->getOrCreateUser(
-            \sprintf('booking-user+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
+        $booker = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -364,12 +329,16 @@ final class HappeningAccessTest extends FixturesWebTestCase
     }
 
     /**
-     * Helper: Log in current SiteAwareKernelBrowser client as email (create if missing).
+     * Helper: Create a user via MemberFactory and return the linked User.
      */
-    private function loginExistingClientAs(string $email): \App\Entity\User
+    private function createUser(): \App\Entity\User
     {
-        $user = $this->getOrCreateUser($email, []);
-        $this->loginClientAs($user);
+        $memberProxy = MemberFactory::new()->create();
+        $member = $memberProxy instanceof \Zenstruck\Foundry\Persistence\Proxy
+            ? $memberProxy->_real()
+            : $memberProxy;
+        $user = $member->getUser();
+        self::assertInstanceOf(\App\Entity\User::class, $user);
 
         return $user;
     }
@@ -408,10 +377,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testCreateHappeningWithDuplicateSlugShowsWarning(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('dup-slug-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $year = $event->getEventDate()->format('Y');
@@ -464,10 +430,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testOwnerCanSubmitEditFormSuccessfully(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('edit-submit-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()
@@ -515,10 +478,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testHappeningShowRendersPaymentInfoAsMarkdown(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('payment-info-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
 
         // Event must be in the future for payment info to show
         $event = EventFactory::new()->published()->create([
@@ -560,10 +520,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testEditHappeningWithEmptyTimePreservesOriginalTime(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('empty-time-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $originalTime = new \DateTimeImmutable('+5 hours');
@@ -633,10 +590,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testCreateHappeningWithEmptyTimeTriggersValidation(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('new-empty-time-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
         $event = EventFactory::new()->published()->create();
         $year = $event->getEventDate()->format('Y');
 
@@ -683,10 +637,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testCreateHappeningWithPaymentRequiredButMissingPaymentInfo(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('payment-required-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
         $event = EventFactory::new()->published()->create();
         $year = $event->getEventDate()->format('Y');
 
@@ -755,14 +706,8 @@ final class HappeningAccessTest extends FixturesWebTestCase
      */
     public function testUserCanRemoveOwnBooking(): void
     {
-        $owner = $this->getOrCreateUser(
-            \sprintf('remove-booking-owner+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
-        $booker = $this->getOrCreateUser(
-            \sprintf('remove-booking-user+%s@example.test', bin2hex(random_bytes(4))),
-            [],
-        );
+        $owner = $this->createUser();
+        $booker = $this->createUser();
 
         $event = EventFactory::new()->published()->create();
         $happening = HappeningFactory::new()

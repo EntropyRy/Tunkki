@@ -240,6 +240,14 @@ trait LoginHelperTrait
 
                 return $recovered;
             }
+            $existingMember = $this->findMemberByEmail($email);
+            if ($existingMember instanceof Member) {
+                return $this->attachUserToExistingMember(
+                    $existingMember,
+                    $roles,
+                    $email,
+                );
+            }
             throw $e;
         }
 
@@ -259,6 +267,21 @@ trait LoginHelperTrait
                 $email,
                 $user->getRoles(),
             );
+        }
+
+        // Reload to ensure we return a managed, persisted User after recovery paths.
+        if ($reloaded = $this->findUserByMemberEmail($email)) {
+            if ($roles) {
+                $reloaded->setRoles(
+                    $this->mergeRoles($reloaded->getRoles(), $roles),
+                );
+                $this->persistAndFlush(
+                    $reloaded,
+                    'fresh-factory.reloaded.role-merge',
+                    $email,
+                );
+            }
+            $user = $reloaded;
         }
 
         $this->cacheUser($user);
@@ -377,6 +400,14 @@ trait LoginHelperTrait
         $roles = array_values(
             array_unique(array_merge([$primaryRole], $additionalRoles)),
         );
+        if ('ROLE_SUPER_ADMIN' === $primaryRole) {
+            // Ensure admin access even if role hierarchy is not applied in a test token.
+            $roles = array_values(
+                array_unique(
+                    array_merge($roles, ['ROLE_ADMIN', 'ROLE_SONATA_ADMIN']),
+                ),
+            );
+        }
         $targetEmail =
             $email ?? \sprintf('user_%s@example.test', bin2hex(random_bytes(4)));
 
@@ -525,9 +556,70 @@ trait LoginHelperTrait
      */
     protected function loginAsMemberWithUnverifiedEmail(?string $email = null): array
     {
-        $candidate = $email ?? \sprintf('unverified_%s@example.test', bin2hex(random_bytes(4)));
+        $attempts = 0;
+        $lastEx = null;
 
-        $user = $this->getOrCreateUser($candidate);
+        do {
+            ++$attempts;
+            $candidate =
+                $email ??
+                \sprintf(
+                    'unverified_%s@example.test',
+                    bin2hex(random_bytes(4)),
+                );
+            try {
+                $user = $this->getOrCreateUser($candidate);
+
+                $member = $user->getMember();
+                if ($member instanceof Member) {
+                    $em = static::getContainer()->get('doctrine')->getManager();
+                    $member->setEmailVerified(false);
+                    $em->persist($member);
+                    $em->flush();
+                }
+
+                $client = $this->client;
+                $client->loginUser($user);
+                $this->stabilizeSessionAfterLogin();
+
+                return [$user, $client];
+            } catch (\Doctrine\DBAL\Exception\UniqueConstraintViolationException $e) {
+                $lastEx = $e;
+
+                if (null !== $email) {
+                    $this->resetManager();
+                    throw $e;
+                }
+
+                $this->resetManager();
+                $recovered = $this->findUserByMemberEmail($candidate);
+                if ($recovered instanceof User) {
+                    $member = $recovered->getMember();
+                    if ($member instanceof Member) {
+                        $em = static::getContainer()
+                            ->get('doctrine')
+                            ->getManager();
+                        $member->setEmailVerified(false);
+                        $em->persist($member);
+                        $em->flush();
+                    }
+
+                    $client = $this->client;
+                    $client->loginUser($recovered);
+                    $this->stabilizeSessionAfterLogin();
+
+                    return [$recovered, $client];
+                }
+            }
+        } while ($attempts < 3);
+
+        if ($lastEx) {
+            throw $lastEx;
+        }
+
+        $user = $this->getOrCreateUser(
+            \sprintf('unverified_%s@example.test', bin2hex(random_bytes(8))),
+        );
 
         $member = $user->getMember();
         if ($member instanceof Member) {

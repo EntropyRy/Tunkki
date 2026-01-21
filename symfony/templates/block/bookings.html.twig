@@ -17,22 +17,22 @@
                             {{ booking.bookingDate|date('d.m.Y') }}
                             {% if booking.isSomethingBroken %}- <twig:ux:icon name="kit-medical" />{% endif %}
                             <br>
-                            <a href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">{{ booking.name }}</a>
+                            <a href="{{ path('admin_entropy_admin_booking_edit', {id: booking.id}) }}">{{ booking.name }}</a>
                         </div>
                         <div class="box-tools pull-right" style="position:relative">
                             <a class="btn btn-default btn-sm"
-                               href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
+                               href="{{ path('admin_entropy_admin_booking_edit', {id: booking.id}) }}">
                                 <twig:ux:icon name="edit" /> edit
                             </a>
-                            {% if admin_pool is defined and admin_pool.getAdminByAdminCode('entropy_tunkki.admin.statusevent') is not null %}
+                            {% if admin_pool is defined and admin_pool.getAdminByAdminCode('entropy.admin.statusevent') is not null %}
                                 <a class="btn btn-default btn-sm"
-                                   href="{{ admin_pool.getAdminByAdminCode('entropy_tunkki.admin.statusevent').generateUrl('create', {id: booking.id}) }}">
+                                   href="{{ admin_pool.getAdminByAdminCode('entropy.admin.statusevent').generateUrl('create', {id: booking.id}) }}">
                                     <twig:ux:icon name="edit" />
                                     Change Status
                                 </a>
                             {% else %}
                                 <a class="btn btn-default btn-sm"
-                                   href="{{ path('admin_app_booking_edit', {id: booking.id}) }}">
+                                   href="{{ path('admin_entropy_admin_booking_edit', {id: booking.id}) }}">
                                     <twig:ux:icon name="edit" />
                                     Change Status
                                 </a>

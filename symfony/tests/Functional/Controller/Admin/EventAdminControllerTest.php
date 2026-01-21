@@ -211,22 +211,24 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         ]);
 
         // Create RSVPs so the table renders and sorting by availableLastName is exercised.
+        $rsvpEmail = 'rsvp-test-'.bin2hex(random_bytes(4)).'@example.com';
         $rsvp = RSVPFactory::new()->create([
             'event' => $event,
             'firstName' => 'Test',
             'lastName' => 'Person',
-            'email' => 'test.person@example.com',
+            'email' => $rsvpEmail,
         ]);
         $member = MemberFactory::new()->create([
             'firstname' => 'Ada',
             'lastname' => 'Lovelace',
         ]);
+        $memberRsvpEmail = 'member-rsvp-'.bin2hex(random_bytes(4)).'@example.com';
         $memberRsvp = RSVPFactory::new()->create([
             'event' => $event,
             'member' => $member,
             'firstName' => 'Ignored',
             'lastName' => 'Ignored',
-            'email' => 'member.rsvp@example.com',
+            'email' => $memberRsvpEmail,
         ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
@@ -250,7 +252,7 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         self::assertInstanceOf(\DateTimeImmutable::class, $rsvp->getCreatedAt());
         self::assertSame('Test Person', $rsvp->getName());
         self::assertSame('Person', $rsvp->getAvailableLastName());
-        self::assertSame('test.person@example.com', $rsvp->getAvailableEmail());
+        self::assertSame($rsvpEmail, $rsvp->getAvailableEmail());
         self::assertSame('ID: '.$rsvp->getId(), (string) $rsvp);
 
         self::assertSame('Lovelace', $memberRsvp->getAvailableLastName());
@@ -484,12 +486,13 @@ final class EventAdminControllerTest extends FixturesWebTestCase
     public function testPrePersistAppliesDefaultsForEventType(): void
     {
         $admin = static::getContainer()->get('entropy.admin.event');
-        $event = EventFactory::new()->create([
+        $eventProxy = EventFactory::new()->withoutPersisting()->create([
             'type' => Event::TYPE_EVENT,
             'url' => null,
             'name' => 'Event Defaults EN',
             'nimi' => 'Oletus Tapahtuma FI',
         ]);
+        $event = $eventProxy instanceof Proxy ? $eventProxy->_real(false) : $eventProxy;
 
         $admin->prePersist($event);
 
@@ -509,12 +512,13 @@ final class EventAdminControllerTest extends FixturesWebTestCase
     public function testPrePersistSetsClubroomLocation(): void
     {
         $admin = static::getContainer()->get('entropy.admin.event');
-        $event = EventFactory::new()->create([
+        $eventProxy = EventFactory::new()->withoutPersisting()->create([
             'type' => Event::TYPE_CLUBROOM,
             'url' => null,
             'name' => 'Clubroom Event EN',
             'nimi' => 'Kerhotapahtuma FI',
         ]);
+        $event = $eventProxy instanceof Proxy ? $eventProxy->_real(false) : $eventProxy;
 
         $admin->prePersist($event);
 
@@ -550,11 +554,12 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         ]);
 
         NakkikoneFactory::new()->enabled()->create(['event' => $event]);
+        $menuRsvpEmail = 'menu-tester-'.bin2hex(random_bytes(4)).'@example.com';
         RSVPFactory::new()->create([
             'event' => $event,
             'firstName' => 'Menu',
             'lastName' => 'Tester',
-            'email' => 'menu.tester@example.com',
+            'email' => $menuRsvpEmail,
         ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');

@@ -62,7 +62,7 @@ CMD ["php-fpm", "-F"]
 # -------------------------------
 FROM base AS prod
 USER root
-COPY ./symfony.ini /usr/local/etc/php/php.ini
+COPY ./prod.ini /usr/local/etc/php/php.ini
 ADD symfony.pool.conf /usr/local/etc/php-fpm.d/www.conf
 RUN rm /usr/local/bin/install-php-extensions \
  && apk del chromium-chromedriver chromium \

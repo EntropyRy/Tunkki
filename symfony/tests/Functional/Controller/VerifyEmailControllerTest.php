@@ -152,13 +152,14 @@ final class VerifyEmailControllerTest extends FixturesWebTestCase
 
     public function testResendRedirectsWhenAlreadyVerified(): void
     {
-        $memberProxy = MemberFactory::new()->create([
-            'emailVerified' => true,
-            'locale' => 'fi',
-        ]);
-        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
-
-        $this->loginAsEmail($member->getEmail());
+        [$user] = $this->loginAsEmail(
+            'verified_'.bin2hex(random_bytes(4)).'@example.test',
+        );
+        $member = $user->getMember();
+        $member->setEmailVerified(true);
+        $member->setLocale('fi');
+        $this->em()->persist($member);
+        $this->em()->flush();
 
         $this->client->request('GET', '/profiili/laheta-vahvistus');
 
@@ -171,13 +172,14 @@ final class VerifyEmailControllerTest extends FixturesWebTestCase
 
     public function testResendRedirectsForUnverifiedMember(): void
     {
-        $memberProxy = MemberFactory::new()->create([
-            'emailVerified' => false,
-            'locale' => 'fi',
-        ]);
-        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
-
-        $this->loginAsEmail($member->getEmail());
+        [$user] = $this->loginAsEmail(
+            'unverified_'.bin2hex(random_bytes(4)).'@example.test',
+        );
+        $member = $user->getMember();
+        $member->setEmailVerified(false);
+        $member->setLocale('fi');
+        $this->em()->persist($member);
+        $this->em()->flush();
 
         $this->client->request('GET', '/profiili/laheta-vahvistus');
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Controller\Admin;
 
+use App\Entity\Artist;
+use App\Entity\Member;
 use App\Enum\EmailPurpose;
 use App\Factory\EmailFactory;
 use App\Factory\EventFactory;
@@ -109,7 +111,8 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
     public function testSendActionDeniesNonAdminUser(): void
     {
         $email = EmailFactory::new()->aktiivit()->create();
-        [$_user, $_client] = $this->loginAsEmail('regular@example.com');
+        $userEmail = 'regular-'.bin2hex(random_bytes(4)).'@example.com';
+        [$_user, $_client] = $this->loginAsEmail($userEmail);
 
         $this->client->request('GET', "/admin/email/{$email->getId()}/send");
 
@@ -364,6 +367,16 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $adminMember->setAllowActiveMemberMails(false);
         $this->em()->flush();
 
+        // Ensure no other members match the recipient groups
+        $members = $this->em()->getRepository(Member::class)->findAll();
+        foreach ($members as $member) {
+            $member->setAllowInfoMails(false);
+            $member->setAllowActiveMemberMails(false);
+            $member->setIsActiveMember(false);
+            $member->setEmailVerified(false);
+        }
+        $this->em()->flush();
+
         // NOW create ONE test member that matches both groups
         $member1 = MemberFactory::new()->create([
             'email' => 'test-member@example.com',
@@ -531,9 +544,15 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
         $email = EmailFactory::new()->rsvp()->forEvent($event)->create();
 
         // Create RSVPs for the event (each with unique email)
-        RSVPFactory::new()->forEvent($event)->create(['email' => 'attendee1@example.com']);
-        RSVPFactory::new()->forEvent($event)->create(['email' => 'attendee2@example.com']);
-        RSVPFactory::new()->forEvent($event)->create(['email' => 'attendee3@example.com']);
+        RSVPFactory::new()->forEvent($event)->create([
+            'email' => 'attendee1-'.bin2hex(random_bytes(4)).'@example.com',
+        ]);
+        RSVPFactory::new()->forEvent($event)->create([
+            'email' => 'attendee2-'.bin2hex(random_bytes(4)).'@example.com',
+        ]);
+        RSVPFactory::new()->forEvent($event)->create([
+            'email' => 'attendee3-'.bin2hex(random_bytes(4)).'@example.com',
+        ]);
 
         [$_admin, $_client] = $this->loginAsRole('ROLE_SUPER_ADMIN');
 
@@ -784,6 +803,21 @@ final class EmailAdminControllerTest extends FixturesWebTestCase
             'type' => 'DJ',
             'copyForArchive' => true,
         ]);
+
+        $dj1Entity = $dj1 instanceof \Zenstruck\Foundry\Proxy ? $dj1->_real() : $dj1;
+        $dj2Entity = $dj2 instanceof \Zenstruck\Foundry\Proxy ? $dj2->_real() : $dj2;
+        $allowedIds = array_filter([$dj1Entity->getId(), $dj2Entity->getId()]);
+
+        $existingDjs = $this->em()->getRepository(Artist::class)->findBy([
+            'type' => 'DJ',
+            'copyForArchive' => false,
+        ]);
+        foreach ($existingDjs as $dj) {
+            if (!\in_array($dj->getId(), $allowedIds, true)) {
+                $dj->setCopyForArchive(true);
+            }
+        }
+        $this->em()->flush();
 
         $email = EmailFactory::new()->create(['purpose' => EmailPurpose::DJ_ROSTER]);
 

@@ -31,6 +31,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     private RouterInterface $router;
     private EventTemporalStateService $temporalState;
     private ClockInterface $clock;
+    private ?string $artistLoginEmail = null;
 
     protected function setUp(): void
     {
@@ -49,7 +50,10 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
     private function loginUserWithArtist(): User
     {
         // Use loginAsActiveMember with a consistent email to enable caching
-        $email = 'artistworkflowtest@example.test';
+        if (null === $this->artistLoginEmail) {
+            $this->artistLoginEmail = 'artistworkflowtest-'.bin2hex(random_bytes(4)).'@example.test';
+        }
+        $email = $this->artistLoginEmail;
         [$user, $client] = $this->loginAsActiveMember($email);
 
         // Ensure the user has an artist

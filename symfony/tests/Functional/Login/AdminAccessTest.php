@@ -46,6 +46,11 @@ final class AdminAccessTest extends FixturesWebTestCase
     private const PRIMARY_DASHBOARD_PATH_EN = '/en/admin/dashboard';
     private const FALLBACK_DASHBOARD_PATH_EN = '/en/admin/';
 
+    private function uniqueEmail(string $prefix): string
+    {
+        return $prefix.'-'.bin2hex(random_bytes(4)).'@example.com';
+    }
+
     /* -----------------------------------------------------------------
      * Positive: Privileged users (canonical)
      * ----------------------------------------------------------------- */
@@ -54,7 +59,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         [$_admin, $client] = $this->loginAsRole(
             'ROLE_ADMIN',
             [],
-            'admin.test@example.com',
+            $this->uniqueEmail('admin'),
         );
         $this->assertDashboardReachable($client);
     }
@@ -64,7 +69,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         [$_super, $client] = $this->loginAsRole(
             'ROLE_SUPER_ADMIN',
             [],
-            'superadmin.test@example.com',
+            $this->uniqueEmail('superadmin'),
         );
         $this->assertDashboardReachable($client);
     }
@@ -77,7 +82,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         [$_admin, $client] = $this->loginAsRole(
             'ROLE_ADMIN',
             [],
-            'admin.en.test@example.com',
+            $this->uniqueEmail('admin-en'),
         );
         $this->assertDashboardReachableLocalized(
             $client,
@@ -91,7 +96,7 @@ final class AdminAccessTest extends FixturesWebTestCase
         [$_super, $client] = $this->loginAsRole(
             'ROLE_SUPER_ADMIN',
             [],
-            'superadmin.en.test@example.com',
+            $this->uniqueEmail('superadmin-en'),
         );
         $this->assertDashboardReachableLocalized(
             $client,
@@ -105,7 +110,9 @@ final class AdminAccessTest extends FixturesWebTestCase
      * ----------------------------------------------------------------- */
     public function testNonPrivilegedUserDeniedAdminAccess(): void
     {
-        [$_regular, $client] = $this->loginAsEmail('regular.test@example.com');
+        [$_regular, $client] = $this->loginAsEmail(
+            $this->uniqueEmail('regular'),
+        );
 
         $client->request('GET', self::PRIMARY_DASHBOARD_PATH);
         $status = $client->getResponse()->getStatusCode();

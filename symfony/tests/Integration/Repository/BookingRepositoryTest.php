@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration\Repository;
 
-use App\Entity\Booking;
-use App\Repository\BookingRepository;
-use App\Service\BookingReferenceService;
+use App\Entity\Rental\Booking\Booking;
+use App\Repository\Rental\Booking\BookingRepository;
+use App\Service\Rental\Booking\BookingReferenceService;
 
 /**
- * @covers \App\Repository\BookingRepository
+ * @covers \App\Repository\Rental\Booking\BookingRepository
  *
  * Integration tests for BookingRepository custom query logic.
  *

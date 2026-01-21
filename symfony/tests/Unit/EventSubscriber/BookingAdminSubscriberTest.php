@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\EventSubscriber;
 
-use App\Entity\Booking;
-use App\Entity\StatusEvent;
+use App\Entity\Rental\Booking\Booking;
+use App\Entity\Rental\StatusEvent;
 use App\Entity\User;
-use App\EventSubscriber\BookingAdminSubscriber;
+use App\EventSubscriber\Rental\Booking\BookingAdminSubscriber;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\UnitOfWork;
@@ -17,7 +17,7 @@ use Sonata\AdminBundle\Event\PersistenceEvent;
 use Symfony\Component\Mailer\MailerInterface;
 
 /**
- * @covers \App\EventSubscriber\BookingAdminSubscriber
+ * @covers \App\EventSubscriber\Rental\Booking\BookingAdminSubscriber
  */
 final class BookingAdminSubscriberTest extends TestCase
 {

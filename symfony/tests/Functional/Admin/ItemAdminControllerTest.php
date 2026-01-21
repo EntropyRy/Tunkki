@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Admin;
 
-use App\Admin\ItemAdmin;
-use App\Entity\Item;
-use App\Factory\ItemFactory;
+use App\Admin\Rental\Inventory\ItemAdmin;
+use App\Entity\Rental\Inventory\Item;
+use App\Factory\Rental\Inventory\ItemFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
 use PHPUnit\Framework\Attributes\Group;
@@ -346,14 +346,14 @@ final class ItemAdminControllerTest extends FixturesWebTestCase
         self::assertSame('Source Notice', $updatedTarget2->getRentNotice());
     }
 
-    private function getItemAdminController(): \App\Controller\Admin\ItemAdminController
+    private function getItemAdminController(): \App\Controller\Admin\Rental\Inventory\ItemAdminController
     {
-        return static::getContainer()->get(\App\Controller\Admin\ItemAdminController::class);
+        return static::getContainer()->get(\App\Controller\Admin\Rental\Inventory\ItemAdminController::class);
     }
 
     private function getItemAdmin(): ItemAdmin
     {
-        $admin = static::getContainer()->get('entropy_tunkki.admin.item');
+        $admin = static::getContainer()->get('entropy.admin.item');
         self::assertInstanceOf(ItemAdmin::class, $admin);
 
         return $admin;

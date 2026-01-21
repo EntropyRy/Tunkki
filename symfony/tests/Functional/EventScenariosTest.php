@@ -271,7 +271,8 @@ final class EventScenariosTest extends FixturesWebTestCase
     {
         // Updated assumption: unpublished events are only accessible to elevated users (e.g. ROLE_ADMIN).
         // If policy changes to allow normal authenticated users, adjust roles & assertions accordingly.
-        $user = $this->getOrCreateUser('local-user@example.test', [
+        $email = 'local-user-'.bin2hex(random_bytes(4)).'@example.test';
+        $user = $this->getOrCreateUser($email, [
             'ROLE_ADMIN',
         ]);
         $this->client->loginUser($user);

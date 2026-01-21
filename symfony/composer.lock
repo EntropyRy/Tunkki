@@ -14135,16 +14135,16 @@
         },
         {
             "name": "dama/doctrine-test-bundle",
-            "version": "v8.5.0",
+            "version": "v8.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmaicher/doctrine-test-bundle.git",
-                "reference": "490cdc0df04e2b9f3c4dab93c8302521b1019f6f"
+                "reference": "f7e3487643e685432f7e27c50cac64e9f8c515a4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/490cdc0df04e2b9f3c4dab93c8302521b1019f6f",
-                "reference": "490cdc0df04e2b9f3c4dab93c8302521b1019f6f",
+                "url": "https://api.github.com/repos/dmaicher/doctrine-test-bundle/zipball/f7e3487643e685432f7e27c50cac64e9f8c515a4",
+                "reference": "f7e3487643e685432f7e27c50cac64e9f8c515a4",
                 "shasum": ""
             },
             "require": {
@@ -14198,9 +14198,9 @@
             ],
             "support": {
                 "issues": "https://github.com/dmaicher/doctrine-test-bundle/issues",
-                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v8.5.0"
+                "source": "https://github.com/dmaicher/doctrine-test-bundle/tree/v8.6.0"
             },
-            "time": "2026-01-18T12:00:00+00:00"
+            "time": "2026-01-21T07:39:44+00:00"
         },
         {
             "name": "dbrekelmans/bdi",
@@ -15762,16 +15762,16 @@
         },
         {
             "name": "phpstan/phpstan-symfony",
-            "version": "2.0.9",
+            "version": "2.0.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan-symfony.git",
-                "reference": "24d8c157aa483141b0579d705ef0aac9e1b95436"
+                "reference": "5a7ab5319a0b0d856ddbe08f67a21b00b386107f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/24d8c157aa483141b0579d705ef0aac9e1b95436",
-                "reference": "24d8c157aa483141b0579d705ef0aac9e1b95436",
+                "url": "https://api.github.com/repos/phpstan/phpstan-symfony/zipball/5a7ab5319a0b0d856ddbe08f67a21b00b386107f",
+                "reference": "5a7ab5319a0b0d856ddbe08f67a21b00b386107f",
                 "shasum": ""
             },
             "require": {
@@ -15827,9 +15827,9 @@
             "description": "Symfony Framework extensions and rules for PHPStan",
             "support": {
                 "issues": "https://github.com/phpstan/phpstan-symfony/issues",
-                "source": "https://github.com/phpstan/phpstan-symfony/tree/2.0.9"
+                "source": "https://github.com/phpstan/phpstan-symfony/tree/2.0.10"
             },
-            "time": "2025-11-29T11:17:28+00:00"
+            "time": "2026-01-20T16:40:28+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -16798,21 +16798,21 @@
         },
         {
             "name": "rector/rector",
-            "version": "2.3.2",
+            "version": "2.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "07cbbe28bd60251b96b18d42e514779b0e2faa83"
+                "reference": "7d09105f868491828891239462eb5b13ffdf2643"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/07cbbe28bd60251b96b18d42e514779b0e2faa83",
-                "reference": "07cbbe28bd60251b96b18d42e514779b0e2faa83",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/7d09105f868491828891239462eb5b13ffdf2643",
+                "reference": "7d09105f868491828891239462eb5b13ffdf2643",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.34"
+                "phpstan/phpstan": "2.1.34"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -16846,7 +16846,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.2"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.3"
             },
             "funding": [
                 {
@@ -16854,7 +16854,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-20T01:11:51+00:00"
+            "time": "2026-01-21T10:54:49+00:00"
         },
         {
             "name": "sanmai/later",
@@ -18971,20 +18971,20 @@
         },
         {
             "name": "zenstruck/foundry",
-            "version": "v2.8.5",
+            "version": "v2.8.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zenstruck/foundry.git",
-                "reference": "654a2d9f23857fdc75d37d522fcb4e56bf8b0015"
+                "reference": "6b2c338241148ad1e8ee980b38d40703514cd685"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/654a2d9f23857fdc75d37d522fcb4e56bf8b0015",
-                "reference": "654a2d9f23857fdc75d37d522fcb4e56bf8b0015",
+                "url": "https://api.github.com/repos/zenstruck/foundry/zipball/6b2c338241148ad1e8ee980b38d40703514cd685",
+                "reference": "6b2c338241148ad1e8ee980b38d40703514cd685",
                 "shasum": ""
             },
             "require": {
-                "fakerphp/faker": "^1.23",
+                "fakerphp/faker": "^1.24",
                 "php": ">=8.1",
                 "symfony/deprecation-contracts": "^2.2|^3.0",
                 "symfony/polyfill-php84": "^1.32",
@@ -19079,7 +19079,7 @@
             ],
             "support": {
                 "issues": "https://github.com/zenstruck/foundry/issues",
-                "source": "https://github.com/zenstruck/foundry/tree/v2.8.5"
+                "source": "https://github.com/zenstruck/foundry/tree/v2.8.6"
             },
             "funding": [
                 {
@@ -19091,7 +19091,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-20T13:32:24+00:00"
+            "time": "2026-01-20T19:53:12+00:00"
         }
     ],
     "aliases": [
