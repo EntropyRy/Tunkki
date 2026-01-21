@@ -102,7 +102,7 @@
     "symfony/stopwatch": "^7.1",
     "symfony/web-profiler-bundle": "^7.1",
     "vincentlanglet/twig-cs-fixer": "^3.1",
-    "zenstruck/foundry": "^2.7"
+    "zenstruck/foundry": "2.8.4"
   },
   "scripts": {
     "post-root-package-install": [

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional;
 
-use App\Entity\Rental\Booking\Booking;
 use App\Entity\Contract;
+use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
 use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\Common\Collections\ArrayCollection;

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin\Rental\Booking;
 
-use App\Entity\Rental\Booking\BillableEvent;
 use App\Admin\Rental\AbstractRentalAdmin;
+use App\Entity\Rental\Booking\BillableEvent;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

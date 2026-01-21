@@ -101,7 +101,7 @@ final class ResetPasswordControllerTest extends FixturesWebTestCase
 
         // Verify password was changed by fetching fresh from DB
         $this->em()->clear();
-        $freshUser = $this->em()->find(\App\Entity\User::class, $userId);
+        $freshUser = $this->em()->find(User::class, $userId);
         $this->assertNotNull($freshUser);
         $this->assertNotSame($originalPasswordHash, $freshUser->getPassword());
     }

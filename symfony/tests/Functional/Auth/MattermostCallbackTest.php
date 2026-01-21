@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Auth;
 
-use App\Factory\MemberFactory;
 use App\Entity\Member;
 use App\Entity\User;
+use App\Factory\MemberFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use GuzzleHttp\ClientInterface;
 use KnpU\OAuth2ClientBundle\Client\OAuth2Client;

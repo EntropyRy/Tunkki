@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Admin\Rental\Booking;
 
+use App\Admin\Rental\AbstractRentalAdmin;
 use App\Entity\Rental\Booking\Reward;
 use Knp\Menu\ItemInterface;
-use App\Admin\Rental\AbstractRentalAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;

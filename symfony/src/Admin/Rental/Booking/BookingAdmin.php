@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Admin\Rental\Booking;
 
+use App\Admin\Rental\AbstractRentalAdmin;
 use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
 use App\Entity\User;
@@ -12,11 +13,10 @@ use App\Form\Rental\Inventory\PackagesType;
 use App\Repository\Rental\Booking\BookingRepository;
 use App\Repository\Rental\Inventory\ItemRepository;
 use App\Repository\Rental\Inventory\PackagesRepository;
-use App\Service\Rental\Booking\BookingReferenceService;
 use App\Service\MattermostNotifierService;
+use App\Service\Rental\Booking\BookingReferenceService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
-use App\Admin\Rental\AbstractRentalAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;

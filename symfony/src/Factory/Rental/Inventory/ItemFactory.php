@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Factory\Rental\Inventory;
 
 use App\Entity\Rental\Inventory\Item;
+use App\Entity\Rental\Inventory\WhoCanRentChoice;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\User;
-use App\Entity\Rental\Inventory\WhoCanRentChoice;
 use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**

@@ -58,8 +58,8 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
             ->published()
             ->withoutPersisting()
             ->create([
-            'url' => 'event-artist-info-form-'.uniqid('', true),
-        ]);
+                'url' => 'event-artist-info-form-'.uniqid('', true),
+            ]);
         $event = $this->unwrapProxy($eventProxy);
         $event = $this->ensureManagedEvent($event);
         $artistProxy = ArtistFactory::new()->withoutPersisting()->create();
@@ -146,8 +146,8 @@ final class EventArtistInfoAdminTest extends FixturesWebTestCase
             ->published()
             ->withoutPersisting()
             ->create([
-            'name' => 'Dup Artist Event',
-        ]);
+                'name' => 'Dup Artist Event',
+            ]);
         $event = $this->ensureManagedEvent($this->unwrapProxy($eventProxy));
         $artistProxy = ArtistFactory::new()->withoutPersisting()->create([
             'name' => 'Dup Artist',

@@ -7,7 +7,6 @@ namespace App\Admin\Rental;
 use App\Entity\Rental\StatusEvent;
 use App\Entity\User;
 use App\Service\MattermostNotifierService;
-use App\Admin\Rental\AbstractRentalAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

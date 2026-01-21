@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller\Rental;
 
-use App\Entity\Rental\Booking\Booking;
 use App\Entity\Contract;
+use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
 use App\Form\Rental\Booking\BookingConsentType;
 use Doctrine\ORM\EntityManagerInterface;

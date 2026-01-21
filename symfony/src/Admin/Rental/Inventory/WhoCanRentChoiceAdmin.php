@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Admin\Rental\Inventory;
 
-use App\Entity\Rental\Inventory\WhoCanRentChoice;
 use App\Admin\Rental\AbstractRentalAdmin;
+use App\Entity\Rental\Inventory\WhoCanRentChoice;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;

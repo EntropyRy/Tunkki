@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Admin\Rental\Inventory;
 
+use App\Admin\Rental\AbstractRentalAdmin;
 use App\Entity\Rental\Inventory\Item;
 use App\Entity\Sonata\SonataClassificationCategory as Category;
 use App\Entity\User;
 use App\Service\MattermostNotifierService;
 use Doctrine\ORM\EntityManagerInterface;
 use Knp\Menu\ItemInterface as MenuItemInterface;
-use App\Admin\Rental\AbstractRentalAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
