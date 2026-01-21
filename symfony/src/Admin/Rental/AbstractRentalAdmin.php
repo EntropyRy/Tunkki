@@ -8,6 +8,7 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 
 /**
  * @template T of object
+ *
  * @extends AbstractAdmin<T>
  */
 abstract class AbstractRentalAdmin extends AbstractAdmin
