@@ -33,9 +33,15 @@
         </testsuite>
         <testsuite name="Functional">
             <directory>tests/Functional</directory>
+            <exclude>tests/Functional/StreamWorkflowPantherTest.php</exclude>
+            <exclude>tests/Functional/Event/NakkiWorkflowPantherTest.php</exclude>
         </testsuite>
         <testsuite name="LiveComponents">
             <directory>tests/Twig</directory>
+        </testsuite>
+        <testsuite name="Panther">
+            <file>tests/Functional/StreamWorkflowPantherTest.php</file>
+            <file>tests/Functional/Event/NakkiWorkflowPantherTest.php</file>
         </testsuite>
     </testsuites>
 
@@ -106,8 +112,9 @@
 
     <extensions>
         <bootstrap class="Symfony\Component\Panther\ServerExtension" />
-        <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension" />
+        <!-- DAMA must run before Foundry to establish static connections before Foundry's kernel operations -->
         <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
+        <bootstrap class="Zenstruck\Foundry\PHPUnit\FoundryExtension" />
         <bootstrap class="App\Tests\Tools\DoctrineInstrumentationExtension" />
     </extensions>
 </phpunit>

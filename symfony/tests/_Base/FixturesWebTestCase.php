@@ -15,6 +15,7 @@ use Doctrine\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Zenstruck\Foundry\Test\Factories;
 
 /**
  * Base functional/integration WebTestCase.
@@ -46,6 +47,8 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
  */
 abstract class FixturesWebTestCase extends WebTestCase
 {
+    use Factories;
+
     /**
      * Local shadow for WebTestCase static client reference.
      * Symfony's WebTestCase stores its client in a private static property (not accessible here),
@@ -76,12 +79,14 @@ abstract class FixturesWebTestCase extends WebTestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->resetTestClock();
 
-        // Initialize the multisite-aware client first so WebTestCase registers an active browser
+        // Initialize the multisite-aware client FIRST to boot the kernel (required by Foundry 2.8.6+)
         $this->initSiteAwareClient();
         // Reflect site-aware client into WebTestCase static client so BrowserKit assertions reference the correct instance.
         self::$client = $this->siteAwareClient;
+
+        // Reset the test clock AFTER kernel is booted (resetTestClock() calls getContainer())
+        $this->resetTestClock();
 
         // Initialize the EntityManager after the client so it binds to the current kernel/container
         /* @var ObjectManager $em */

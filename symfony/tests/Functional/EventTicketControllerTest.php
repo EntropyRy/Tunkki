@@ -84,6 +84,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketDisplaysForOwner(string $locale): void
     {
         // Arrange: Create event, member, and ticket
+        $reference = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -95,7 +96,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
         self::assertNotNull($ticket->getId());
         self::assertSame((string) $ticket->getReferenceNumber(), (string) $ticket);
@@ -123,6 +124,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketDeniesNonOwner(string $locale): void
     {
         // Arrange: Create event and ticket for one member
+        $reference = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -134,7 +136,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event)
             ->ownedBy($ownerMember)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         // Login as a different member
@@ -154,6 +156,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketReturns404WhenTicketNotForEvent(string $locale): void
     {
         // Arrange: Create two events
+        $reference = $this->uniqueReferenceNumber();
         $event1 = EventFactory::new()
             ->published()
             ->create([
@@ -173,7 +176,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event2)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         // Login as the ticket owner
@@ -191,6 +194,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketRedirectsUnauthenticatedUser(): void
     {
         // Arrange: Create event and ticket
+        $reference = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -202,7 +206,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         // Act: Request ticket without authentication
@@ -224,6 +228,8 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketsListDisplaysMemberTickets(string $locale): void
     {
         // Arrange: Create event and multiple tickets for member
+        $reference1 = $this->uniqueReferenceNumber();
+        $reference2 = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -237,7 +243,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->ownedBy($member)
             ->paid()
             ->withName('General Admission')
-            ->withReferenceNumber(111111)
+            ->withReferenceNumber($reference1)
             ->create();
 
         $ticket2 = TicketFactory::new()
@@ -245,7 +251,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->ownedBy($member)
             ->paid()
             ->withName('VIP')
-            ->withReferenceNumber(222222)
+            ->withReferenceNumber($reference2)
             ->create();
 
         // Login as the member
@@ -492,6 +498,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketApiCheckReturnsCorrectTicketInfo(): void
     {
         // Arrange: Create event, member, and ticket
+        $reference = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -504,7 +511,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         // Login (API might still require authentication)
@@ -531,12 +538,13 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         $this->assertSame($email, $ticketData['email']);
         $this->assertSame('paid', $ticketData['status']);
         $this->assertFalse($ticketData['given']);
-        $this->assertSame(123456, $ticketData['referenceNumber']);
+        $this->assertSame($reference, $ticketData['referenceNumber']);
     }
 
     public function testTicketApiCheckReturnsErrorForMismatchedTicket(): void
     {
         // Arrange: Create two events
+        $reference = $this->uniqueReferenceNumber();
         $event1 = EventFactory::new()
             ->published()
             ->create([
@@ -556,7 +564,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event2)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         // Login
@@ -589,6 +597,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
     public function testTicketApiGiveMarksTicketAsGiven(): void
     {
         // Arrange: Create event and ticket
+        $reference = $this->uniqueReferenceNumber();
         $event = EventFactory::new()
             ->published()
             ->create([
@@ -600,7 +609,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
             ->forEvent($event)
             ->ownedBy($member)
             ->paid()
-            ->withReferenceNumber(123456)
+            ->withReferenceNumber($reference)
             ->create();
 
         $this->assertFalse($ticket->isGiven(), 'Ticket should not be given initially');
@@ -672,5 +681,10 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         }
 
         return '/'.$year.'/'.$slug.'/lippu/tarkistus';
+    }
+
+    private function uniqueReferenceNumber(): int
+    {
+        return random_int(100000, 999999);
     }
 }

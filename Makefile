@@ -97,12 +97,14 @@ panther-setup:
 help:
 	@echo ""
 	@echo "$(BOLD)Available targets$(RESET)"
-	@echo "  make test                 - Run full test suite"
+	@echo "  make test                 - Run full test suite with coverage + shields JSON"
 	@echo "  make test-unit            - Run only Unit tests (tests/Unit)"
 	@echo "  make test-functional      - Run only Functional tests (tests/Functional)"
+	@echo "  make test-panther         - Run only Panther browser tests (serial, with cleanup)"
 	@echo "  make test-ci              - CI-style full suite (fail-fast, shows deprecations/warnings, no coverage)"
 	@echo "  make coverage             - Run suite with coverage (needs Xdebug/PCOV)"
 	@echo "  make panther-setup        - Install/update Panther WebDriver binaries"
+	@echo "  make clean-panther        - Clean Panther cache/log/temp files"
 
 	@echo "  make test-one FILE=path   - Run a single test file (serial)"
 	@echo "  make test-one-filter FILE=path METHOD=name - Run a single test method"
@@ -137,10 +139,13 @@ test: _ensure-vendor prepare-test-db panther-setup
 	@PARA_BIN="$(PARATEST_BIN)"; \
 	if [ "$(USE_PARALLEL)" = "1" ] && $(PHP_EXEC) $$PARA_BIN --version >/dev/null 2>&1; then \
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
-		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens; \
+		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --coverage-text --coverage-clover coverage.xml --no-test-tokens; \
 	else \
-		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG); \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --coverage-text --coverage-clover coverage.xml; \
 	fi
+	@printf "%b\n" "$(CYAN)==> Generating shields.io coverage JSON (symfony/coverage.json)$(RESET)"
+	@$(PHP_EXEC) coverage_to_shields.php --in=coverage.xml --out=coverage.json || { printf "%b\n" "$(RED)Failed to generate coverage.json$(RESET)"; exit 1; }
+	@printf "%b\n" "$(GREEN)Wrote coverage.json$(RESET)"
 
 .PHONY: test-unit
 test-unit: _ensure-vendor prepare-test-db
@@ -150,7 +155,7 @@ test-unit: _ensure-vendor prepare-test-db
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
 		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Unit; \
 	else \
-		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Unit; \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --no-coverage --testsuite=Unit; \
 	fi
 
 .PHONY: test-functional
@@ -161,8 +166,23 @@ test-functional: _ensure-vendor prepare-test-db
 		PROCS=$$( if [ -n "$(PARA_PROCS)" ]; then echo "$(PARA_PROCS)"; else $(PHP_EXEC) -r 'echo (int) ((($$n=shell_exec("nproc 2>/dev/null"))? $$n : shell_exec("getconf _NPROCESSORS_ONLN 2>/dev/null")) ?: 1);'; fi ); \
 		$(PHP_EXEC) $$PARA_BIN -c $(PHPUNIT_CONFIG) -p $$PROCS --no-coverage --no-test-tokens --testsuite=Functional; \
 	else \
-		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --testsuite=Functional; \
+		$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --no-coverage --testsuite=Functional; \
 	fi
+
+.PHONY: clean-panther
+clean-panther:
+	@printf "%b\n" "$(CYAN)==> Cleaning Panther test artifacts$(RESET)"
+	@rm -rf symfony/var/cache/panther_* 2>/dev/null || true
+	@rm -rf symfony/var/log/panther_* 2>/dev/null || true
+	@rm -f /tmp/test_panther_*.db /tmp/test_panther_*.db-shm /tmp/test_panther_*.db-wal /tmp/test_panther_*.db-journal 2>/dev/null || true
+	@$(COMPOSE) exec -T $(PHP_FPM_SERVICE) sh -c 'rm -rf /var/www/symfony/var/cache/panther_* 2>/dev/null || true'
+	@$(COMPOSE) exec -T $(PHP_FPM_SERVICE) sh -c 'rm -rf /var/www/symfony/var/log/panther_* 2>/dev/null || true'
+	@$(COMPOSE) exec -T $(PHP_FPM_SERVICE) sh -c 'rm -f /tmp/test_panther_*.db /tmp/test_panther_*.db-* 2>/dev/null || true'
+
+.PHONY: test-panther
+test-panther: _ensure-vendor prepare-test-db clean-panther panther-setup
+	@printf "%b\n" "$(CYAN)==> Running Panther (browser) tests (serial, no ParaTest)$(RESET)"
+	@$(PHP_EXEC) -d memory_limit=$(PHPUNIT_MEMORY) $(PHPUNIT_BIN) -c $(PHPUNIT_CONFIG) --no-coverage --testsuite=Panther
 
 .PHONY: test-ci
 test-ci: _ensure-vendor prepare-test-db

@@ -56,6 +56,7 @@ abstract class PantherTestCase extends BasePantherTestCase
         }
 
         $this->bootstrapPantherEnvironment();
+        $this->clearErrorScreenshots();
     }
 
     protected function tearDown(): void
@@ -423,5 +424,39 @@ abstract class PantherTestCase extends BasePantherTestCase
     private static function cacheKey(): string
     {
         return self::paratestToken() ?? (string) getmypid();
+    }
+
+    private function clearErrorScreenshots(): void
+    {
+        $dir = $this->resolveErrorScreenshotDir();
+        if (null === $dir) {
+            return;
+        }
+
+        $filesystem = new Filesystem();
+        try {
+            if ($filesystem->exists($dir)) {
+                $filesystem->remove($dir);
+            }
+            $filesystem->mkdir($dir);
+        } catch (\Throwable $e) {
+            // Best effort cleanup to avoid masking test failures.
+        }
+    }
+
+    private function resolveErrorScreenshotDir(): ?string
+    {
+        $dir = $_SERVER['PANTHER_ERROR_SCREENSHOT_DIR']
+            ?? getenv('PANTHER_ERROR_SCREENSHOT_DIR')
+            ?? null;
+        if (!\is_string($dir) || '' === $dir) {
+            return null;
+        }
+
+        if (!str_starts_with($dir, '/')) {
+            $dir = $this->getProjectDir().'/'.ltrim($dir, './');
+        }
+
+        return $dir;
     }
 }

@@ -65,7 +65,11 @@ class EventTicketController extends Controller
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();
-        if ($ticket->getOwner() !== $member) {
+        $owner = $ticket->getOwner();
+        if (
+            !$owner instanceof Member
+            || $owner->getId() !== $member->getId()
+        ) {
             throw new NotFoundHttpException($trans->trans('event_not_found'));
         }
         $nakkirepo->findMemberEventBookings($member, $event);

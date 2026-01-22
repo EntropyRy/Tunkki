@@ -7,6 +7,7 @@ namespace App\Tests\Integration\Repository;
 use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ObjectRepository;
+use Zenstruck\Foundry\Test\Factories;
 
 /**
  * Base class for Doctrine repository integration tests.
@@ -37,6 +38,8 @@ use Doctrine\Persistence\ObjectRepository;
  */
 abstract class RepositoryTestCase extends FixturesWebTestCase
 {
+    use Factories;
+
     /**
      * setUp: just call parent and clear EM to ensure no stale managed entities
      * linger from previous tests (functional tests may keep references).

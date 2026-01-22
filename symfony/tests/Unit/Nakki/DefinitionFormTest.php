@@ -14,9 +14,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\UX\LiveComponent\LiveResponder;
+use Zenstruck\Foundry\Test\Factories;
 
 final class DefinitionFormTest extends FixturesWebTestCase
 {
+    use Factories;
+
     protected function setUp(): void
     {
         parent::setUp();

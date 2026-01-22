@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Factory;
 
 use App\Entity\Nakki;
-use Zenstruck\Foundry\Persistence\PersistentProxyObjectFactory;
+use Zenstruck\Foundry\Persistence\PersistentObjectFactory;
 
 /**
- * @extends PersistentProxyObjectFactory<Nakki>
+ * @extends PersistentObjectFactory<Nakki>
  */
-final class NakkiFactory extends PersistentProxyObjectFactory
+final class NakkiFactory extends PersistentObjectFactory
 {
     public static function class(): string
     {

@@ -17,9 +17,13 @@ use App\Twig\Components\Nakki\NakkiCreateForm;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\UX\LiveComponent\LiveResponder;
+use Zenstruck\Foundry\Persistence\Proxy;
+use Zenstruck\Foundry\Test\Factories;
 
 final class NakkiCreateFormTest extends FixturesWebTestCase
 {
+    use Factories;
+
     private ContainerInterface $container;
 
     protected function setUp(): void
@@ -31,9 +35,12 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
     public function testSaveCreatesNakki(): void
     {
         $component = $this->component();
-        $event = EventFactory::new()->create();
-        $definition = NakkiDefinitionFactory::new()->create();
-        $member = MemberFactory::new()->create();
+        $eventProxy = EventFactory::new()->create();
+        $definitionProxy = NakkiDefinitionFactory::new()->create();
+        $memberProxy = MemberFactory::new()->create();
+        $event = $eventProxy instanceof Proxy ? $eventProxy->_real() : $eventProxy;
+        $definition = $definitionProxy instanceof Proxy ? $definitionProxy->_real() : $definitionProxy;
+        $member = $memberProxy instanceof Proxy ? $memberProxy->_real() : $memberProxy;
 
         $component->eventId = $event->getId();
         $component->definitionId = $definition->getId();
@@ -51,8 +58,11 @@ final class NakkiCreateFormTest extends FixturesWebTestCase
         /** @var NakkiRepository $repository */
         $repository = $this->container->get(NakkiRepository::class);
 
-        // Refresh event from database to see changes made by component
-        $this->container->get(EntityManagerInterface::class)->refresh($event);
+        // Reload event in the current EntityManager to see changes made by component.
+        $event = $this->container
+            ->get(EventRepository::class)
+            ->find($event->getId());
+        self::assertNotNull($event);
 
         $nakkikone = $event->getNakkikone();
         self::assertNotNull($nakkikone, 'Event should have nakkikone created');
