@@ -5,6 +5,7 @@ cancel: Cancel
 login:
   join_us: To log in you must be a member. <a href="/en/join-us">Join us</a>.
   join_us_plain: To log in you must be a member. Please join us first.
+  mattermost: Continue with Mattermost
 cookie_policy: We only use essential cookies to ensure login (and payments) work.
 resend_verification: Resend verification email
 whisper: psst. <a href="/en/join-us">join us</a>
