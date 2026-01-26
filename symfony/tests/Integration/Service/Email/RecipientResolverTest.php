@@ -113,8 +113,8 @@ final class RecipientResolverTest extends FixturesWebTestCase
         $recipients = $this->resolver->resolve(EmailPurpose::AKTIIVIT, null);
 
         $this->assertGreaterThanOrEqual(2, \count($recipients), 'Should include at least 2 active members');
-        $emails = array_map(fn ($r) => $r->email, $recipients);
-        $activeCount = \count(array_filter($emails, fn ($e) => str_starts_with($e, 'active')));
+        $emails = array_map(static fn ($r) => $r->email, $recipients);
+        $activeCount = \count(array_filter($emails, static fn ($e) => str_starts_with($e, 'active')));
         $this->assertGreaterThanOrEqual(2, $activeCount);
     }
 
@@ -146,8 +146,8 @@ final class RecipientResolverTest extends FixturesWebTestCase
         ], $event);
 
         // Should only appear once despite being in 3 purposes
-        $emails = array_map(fn ($r) => $r->email, $recipients);
-        $this->assertCount(1, array_filter($emails, fn ($e) => $e === $sharedEmail));
+        $emails = array_map(static fn ($r) => $r->email, $recipients);
+        $this->assertCount(1, array_filter($emails, static fn ($e) => $e === $sharedEmail));
     }
 
     public function testResolveTiedotusIncludesAllVerifiedMembers(): void

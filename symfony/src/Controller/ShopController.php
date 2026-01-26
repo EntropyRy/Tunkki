@@ -23,15 +23,13 @@ class ShopController extends AbstractController
 {
     use TargetPathTrait;
 
-    #[
-        Route(
-            path: [
-                'fi' => '/kauppa',
-                'en' => '/shop',
-            ],
-            name: 'entropy_shop',
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/kauppa',
+            'en' => '/shop',
+        ],
+        name: 'entropy_shop',
+    ),]
     public function shop(
         Request $request,
         ProductRepository $productRepo,

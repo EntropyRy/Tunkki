@@ -49,15 +49,13 @@ class VerifyEmailController extends AbstractController
      *  2. Validate the signature
      *  3. Mark Member::emailVerified = true
      */
-    #[
-        Route(
-            path: [
-                'en' => '/verify/email',
-                'fi' => '/vahvista/sahkoposti',
-            ],
-            name: 'app_verify_email',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/verify/email',
+            'fi' => '/vahvista/sahkoposti',
+        ],
+        name: 'app_verify_email',
+    ),]
     public function verify(
         Request $request,
         UserRepository $userRepository,
@@ -122,15 +120,13 @@ class VerifyEmailController extends AbstractController
     /**
      * Resend verification email for a logged in (but unverified) user.
      */
-    #[
-        Route(
-            path: [
-                'en' => '/profile/resend-verification',
-                'fi' => '/profiili/laheta-vahvistus',
-            ],
-            name: 'profile_resend_verification',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/resend-verification',
+            'fi' => '/profiili/laheta-vahvistus',
+        ],
+        name: 'profile_resend_verification',
+    ),]
     public function resend(TranslatorInterface $translator): RedirectResponse
     {
         $user = $this->getUser();

@@ -106,7 +106,7 @@ final class EventFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Event $event): void {
+        return $this->afterInstantiate(static function (Event $event): void {
             // Normalize publishDate so it never exceeds eventDate for default/generated fixtures.
             if (
                 $event->getPublishDate()

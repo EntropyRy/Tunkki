@@ -33,7 +33,7 @@ final class NakkikoneFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Nakkikone $nakkikone): void {
+        return $this->afterInstantiate(static function (Nakkikone $nakkikone): void {
             $event = $nakkikone->getEvent();
             if (!$event->getNakkikone() instanceof Nakkikone) {
                 $event->setNakkikone($nakkikone);

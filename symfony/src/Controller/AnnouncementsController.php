@@ -11,16 +11,14 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class AnnouncementsController extends AbstractController
 {
-    #[
-        Route(
-            path: [
-                'fi' => '/tiedotukset',
-                'en' => '/announcements',
-            ],
-            name: 'announcements',
-            priority: 300,
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/tiedotukset',
+            'en' => '/announcements',
+        ],
+        name: 'announcements',
+        priority: 300,
+    ),]
     public function index(EventRepository $eventRepository): Response
     {
         $events = $eventRepository->findPublicEventsByType('announcement');

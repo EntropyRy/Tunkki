@@ -51,7 +51,7 @@ final class MattermostNotifierServiceTest extends TestCase
             ->expects(self::once())
             ->method('send')
             ->with(
-                self::callback(function ($message) use (&$captured) {
+                self::callback(static function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
                     $captured = $message;
 
@@ -88,7 +88,7 @@ final class MattermostNotifierServiceTest extends TestCase
             ->expects(self::once())
             ->method('send')
             ->with(
-                self::callback(function ($message) use (&$captured) {
+                self::callback(static function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
                     $captured = $message;
 
@@ -141,7 +141,7 @@ final class MattermostNotifierServiceTest extends TestCase
             ->expects(self::once())
             ->method('send')
             ->with(
-                self::callback(function ($message) use (&$captured) {
+                self::callback(static function ($message) use (&$captured) {
                     self::assertInstanceOf(ChatMessage::class, $message);
                     $captured = $message;
 

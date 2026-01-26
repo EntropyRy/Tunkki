@@ -31,28 +31,22 @@ class EventTicketController extends Controller
     ) {
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/{year}/{slug}/ticket/{reference}',
-                'fi' => '/{year}/{slug}/lippu/{reference}',
-            ],
-            name: 'entropy_event_ticket',
-            requirements: [
-                'year' => "\d+",
-                'reference' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/{reference}',
+            'fi' => '/{year}/{slug}/lippu/{reference}',
+        ],
+        name: 'entropy_event_ticket',
+        requirements: [
+            'year' => "\d+",
+            'reference' => "\d+",
+        ],
+    ),]
     public function ticket(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
-        #[
-            MapEntity(mapping: ['reference' => 'referenceNumber']),
-        ]
+        #[MapEntity(mapping: ['reference' => 'referenceNumber']),]
         Ticket $ticket,
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
@@ -81,24 +75,20 @@ class EventTicketController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/{year}/{slug}/tickets',
-                'fi' => '/{year}/{slug}/liput',
-            ],
-            name: 'entropy_event_tickets',
-            requirements: [
-                'year' => "\d+",
-                'reference' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/tickets',
+            'fi' => '/{year}/{slug}/liput',
+        ],
+        name: 'entropy_event_tickets',
+        requirements: [
+            'year' => "\d+",
+            'reference' => "\d+",
+        ],
+    ),]
     public function tickets(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         TranslatorInterface $trans,
         NakkiBookingRepository $nakkirepo,
@@ -154,22 +144,18 @@ class EventTicketController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/{year}/{slug}/ticket/check',
-                'fi' => '/{year}/{slug}/lippu/tarkistus',
-            ],
-            name: 'entropy_event_ticket_check',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/{year}/{slug}/ticket/check',
+            'fi' => '/{year}/{slug}/lippu/tarkistus',
+        ],
+        name: 'entropy_event_ticket_check',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function ticketCheck(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         return $this->render('ticket/check.html.twig', [
@@ -177,21 +163,17 @@ class EventTicketController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            '/api/ticket/{id}/{referenceNumber}/info',
-            name: '_entropy_event_ticket_api_check',
-            requirements: [
-                'id' => "\d+",
-                'referenceNumner' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        '/api/ticket/{id}/{referenceNumber}/info',
+        name: '_entropy_event_ticket_api_check',
+        requirements: [
+            'id' => "\d+",
+            'referenceNumner' => "\d+",
+        ],
+    ),]
     public function ticketApiCheck(
         #[MapEntity(mapping: ['id' => 'id'])] Event $event,
-        #[
-            MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),
-        ]
+        #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),]
         Ticket $ticket,
     ): JsonResponse {
         if ($ticket->getEvent() == $event) {
@@ -211,20 +193,16 @@ class EventTicketController extends Controller
         return new JsonResponse($data);
     }
 
-    #[
-        Route(
-            '/api/ticket/{id}/{referenceNumber}/give',
-            name: '_entropy_event_ticket_api_give',
-            requirements: [
-                'referenceNumner' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        '/api/ticket/{id}/{referenceNumber}/give',
+        name: '_entropy_event_ticket_api_give',
+        requirements: [
+            'referenceNumner' => "\d+",
+        ],
+    ),]
     public function ticketApiGive(
         #[MapEntity(mapping: ['id' => 'id'])] Event $event,
-        #[
-            MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),
-        ]
+        #[MapEntity(mapping: ['referenceNumber' => 'referenceNumber']),]
         Ticket $ticket,
         TicketRepository $ticketR,
     ): JsonResponse {

@@ -127,7 +127,7 @@ final class EventVolunteerControllerRsvpTest extends TestCase
 
         // EntityManager throws UniqueConstraintViolationException on flush
         // This simulates the race condition where another request created the RSVP
-        $this->em->method('persist')->willReturnCallback(function (RSVP $rsvp): void {
+        $this->em->method('persist')->willReturnCallback(static function (RSVP $rsvp): void {
             // Just accept the persist
         });
 

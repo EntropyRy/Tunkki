@@ -264,9 +264,9 @@ class Item implements \Stringable
     {
         if ('' !== $this->name && '0' !== $this->name) {
             return $this->name;
-        } else {
-            return 'N/A';
         }
+
+        return 'N/A';
     }
 
     public function __construct()
@@ -308,9 +308,9 @@ class Item implements \Stringable
         }
         if (null != $messages) {
             return $messages;
-        } else {
-            return 'no messages';
         }
+
+        return 'no messages';
     }
 
     public function resetFixingHistory(): void

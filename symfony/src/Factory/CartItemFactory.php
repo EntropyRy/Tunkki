@@ -54,7 +54,7 @@ final class CartItemFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (CartItem $cartItem): void {
+        return $this->afterInstantiate(static function (CartItem $cartItem): void {
             // No additional normalization needed
         });
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
-return function (RoutingConfigurator $routes) {
+return static function (RoutingConfigurator $routes) {
     $routes
         ->add('oauth2_authorize', '/oauth/authorize')
         ->controller(['league.oauth2_server.controller.authorization', 'indexAction'])

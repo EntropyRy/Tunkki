@@ -58,7 +58,7 @@ final class EmailVerifierTest extends TestCase
             ->expects(self::once())
             ->method('send')
             ->with(
-                self::callback(function (TemplatedEmail $email): bool {
+                self::callback(static function (TemplatedEmail $email): bool {
                     $ctx = $email->getContext();
 
                     // Assert context enrichment

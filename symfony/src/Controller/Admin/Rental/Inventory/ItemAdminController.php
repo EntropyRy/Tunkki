@@ -61,9 +61,9 @@ class ItemAdminController extends Controller
 
         if (\count($selectedIds) < 2) {
             return 'not enough selected';
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     public function batchActionBatchEdit(ProxyQueryInterface $selectedModelQuery): RedirectResponse

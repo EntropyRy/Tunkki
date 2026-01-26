@@ -11,15 +11,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class InventoryController extends AbstractController
 {
-    #[
-        Route(
-            path: [
-                'en' => '/inventory/needs-fixing',
-                'fi' => '/inventaario/korjattavat',
-            ],
-            name: 'inventory_needs_fixing',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/inventory/needs-fixing',
+            'fi' => '/inventaario/korjattavat',
+        ],
+        name: 'inventory_needs_fixing',
+    ),]
     public function needsFixing(ItemRepository $itemRepository): Response
     {
         $needsFixing = $itemRepository->findBy(['needsFixing' => true]);

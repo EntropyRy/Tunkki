@@ -74,8 +74,8 @@ class BillableEvent implements \Stringable
     {
         if (!\in_array($this->getUnitPrice(), ['', '0'], true)) {
             return '' !== $this->description && '0' !== $this->description ? $this->description.': '.$this->getUnitPrice() : '';
-        } else {
-            return '';
         }
+
+        return '';
     }
 }

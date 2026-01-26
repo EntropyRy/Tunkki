@@ -154,12 +154,10 @@ class Event implements \Stringable
     /**
      * @var Collection<int, EventArtistInfo>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: EventArtistInfo::class,
-            mappedBy: \Event::class,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: EventArtistInfo::class,
+        mappedBy: \Event::class,
+    ),]
     #[OrderBy(['stage' => 'ASC', 'StartTime' => 'ASC'])]
     private Collection $eventArtistInfos;
 
@@ -172,13 +170,11 @@ class Event implements \Stringable
     /**
      * @var Collection<int, RSVP>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: RSVP::class,
-            mappedBy: 'event',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: RSVP::class,
+        mappedBy: 'event',
+        orphanRemoval: true,
+    ),]
     private Collection $RSVPs;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]
@@ -217,13 +213,11 @@ class Event implements \Stringable
     /**
      * @var Collection<int, Ticket>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: Ticket::class,
-            mappedBy: 'event',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: Ticket::class,
+        mappedBy: 'event',
+        orphanRemoval: true,
+    ),]
     #[OrderBy(['id' => 'DESC'])]
     private Collection $tickets;
 
@@ -719,18 +713,18 @@ class Event implements \Stringable
     {
         if ('fi' == $lang) {
             return $this->Nimi;
-        } else {
-            return $this->Name;
         }
+
+        return $this->Name;
     }
 
     public function getNameAndDateByLang($lang): string
     {
         if ('fi' == $lang) {
             return $this->Nimi.' - '.$this->EventDate->format('j.n.Y, H:i');
-        } else {
-            return $this->Name.' - '.$this->EventDate->format('j.n.Y, H:i');
         }
+
+        return $this->Name.' - '.$this->EventDate->format('j.n.Y, H:i');
     }
 
     /**
@@ -1432,7 +1426,7 @@ class Event implements \Stringable
     public function getTicketProducts(): Collection
     {
         return $this->products->filter(
-            fn (Product $product): bool => $product->isTicket(),
+            static fn (Product $product): bool => $product->isTicket(),
         );
     }
 

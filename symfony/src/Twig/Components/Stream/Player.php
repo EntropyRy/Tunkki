@@ -79,9 +79,9 @@ final class Player
             $this->setOfflineState();
 
             return;
-        } else {
-            $this->setOnlineState();
         }
+        $this->setOnlineState();
+
         try {
             // Get the main page which contains information about both streams
             $response = $this->httpClient->request('GET', $this->url, [

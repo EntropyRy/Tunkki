@@ -72,12 +72,12 @@ class File implements \Stringable
         if (\is_object($this->getFile())) {
             if (\is_string($this->getFileinfo())) {
                 return '<a href="/media/download/'.$this->getFile()->getId().'">'.$this->getFileinfo().'</a>';
-            } else {
-                return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
             }
-        } else {
-            return 'X';
+
+            return '<a href="/media/download/'.$this->getFile()->getId().'">Download</a>';
         }
+
+        return 'X';
     }
 
     #[\Override]

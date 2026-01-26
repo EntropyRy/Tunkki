@@ -58,7 +58,7 @@ final class UserCommandTest extends TestCase
             ->expects(self::once())
             ->method('hashPassword')
             ->with(
-                self::callback(function ($u) use (&$capturedUser): bool {
+                self::callback(static function ($u) use (&$capturedUser): bool {
                     $capturedUser = $u;
 
                     return $u instanceof User;
@@ -87,7 +87,7 @@ final class UserCommandTest extends TestCase
         $em
             ->expects(self::once())
             ->method('persist')
-            ->with(self::callback(function ($entity) use (&$capturedUser, $email) {
+            ->with(self::callback(static function ($entity) use (&$capturedUser, $email) {
                 self::assertInstanceOf(User::class, $entity, 'Persisted entity must be User.');
                 /** @var User $entity */
                 $member = $entity->getMember();
@@ -166,7 +166,7 @@ final class UserCommandTest extends TestCase
         $em
             ->expects(self::once())
             ->method('persist')
-            ->with(self::callback(function ($entity) use (&$capturedUser, $user) {
+            ->with(self::callback(static function ($entity) use (&$capturedUser, $user) {
                 self::assertSame($user, $entity, 'Persist should receive existing User instance.');
                 $capturedUser = $entity;
 

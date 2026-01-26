@@ -15,9 +15,7 @@ class HappeningBooking implements \Stringable
     #[ORM\Column]
     private ?int $id = null;
 
-    #[
-        ORM\ManyToOne(targetEntity: Member::class, cascade: ['persist'], inversedBy: 'happeningBooking'),
-    ]
+    #[ORM\ManyToOne(targetEntity: Member::class, cascade: ['persist'], inversedBy: 'happeningBooking'),]
     #[ORM\JoinColumn(nullable: true)]
     private ?Member $member = null;
 

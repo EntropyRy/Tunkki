@@ -35,7 +35,7 @@ if ($_SERVER['APP_DEBUG']) {
  *  - Idempotent: entropy:cms:seed can run on every bootstrap; snapshots can be recreated safely.
  *  - Advisory lock (key 1220304): Serializes entire CMS baseline setup across parallel processes.
  */
-(function (): void {
+(static function (): void {
     // Seed minimal CMS and ensure snapshots exist (front page routing depends on snapshots in this setup).
     try {
         // Boot kernel if not already booted

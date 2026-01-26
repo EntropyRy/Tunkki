@@ -73,7 +73,7 @@ final class ItemFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Item $item): void {
+        return $this->afterInstantiate(static function (Item $item): void {
             // Lifecycle callbacks handle createdAt/updatedAt
         });
     }
@@ -255,7 +255,7 @@ final class ItemFactory extends PersistentObjectFactory
      */
     public function withWhoCanRent(WhoCanRentChoice ...$choices): static
     {
-        return $this->afterInstantiate(function (Item $item) use ($choices): void {
+        return $this->afterInstantiate(static function (Item $item) use ($choices): void {
             foreach ($choices as $choice) {
                 $item->addWhoCanRent($choice);
             }

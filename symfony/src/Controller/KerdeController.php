@@ -24,12 +24,10 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 #[IsGranted('IS_AUTHENTICATED_FULLY')]
 class KerdeController extends AbstractController
 {
-    #[
-        Route(
-            path: ['en' => '/kerde/door', 'fi' => '/kerde/ovi'],
-            name: 'kerde_door',
-        ),
-    ]
+    #[Route(
+        path: ['en' => '/kerde/door', 'fi' => '/kerde/ovi'],
+        name: 'kerde_door',
+    ),]
     public function door(
         Request $request,
         FormFactoryInterface $formF,

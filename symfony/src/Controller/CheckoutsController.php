@@ -18,15 +18,13 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CheckoutsController extends AbstractController
 {
-    #[
-        Route(
-            path: [
-                'fi' => '/kassa',
-                'en' => '/checkout',
-            ],
-            name: 'stripe_checkout',
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/kassa',
+            'en' => '/checkout',
+        ],
+        name: 'stripe_checkout',
+    ),]
     public function checkout(
         Request $request,
         StripeServiceInterface $stripe,
@@ -71,15 +69,13 @@ class CheckoutsController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/kauppa/valmis',
-                'en' => '/shop/complete',
-            ],
-            name: 'entropy_shop_complete',
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/kauppa/valmis',
+            'en' => '/shop/complete',
+        ],
+        name: 'entropy_shop_complete',
+    ),]
     public function complete(
         Request $request,
         StripeServiceInterface $stripe,

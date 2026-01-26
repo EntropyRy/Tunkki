@@ -159,7 +159,7 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository->method('createQueryBuilder')->willReturn($this->createQueryBuilderStub(null));
 
         $this->entityManager->method('getRepository')
-            ->willReturnCallback(fn (string $class) => match ($class) {
+            ->willReturnCallback(static fn (string $class) => match ($class) {
                 SonataPagePage::class => $repository,
                 Menu::class => $menuRepository,
                 default => throw new \RuntimeException("Unexpected class: $class"),
@@ -305,7 +305,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
-            ->willReturnCallback(fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
+            ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
             ->with(Menu::class)
@@ -341,7 +341,7 @@ final class LocalizedUrlExtensionTest extends TestCase
         $menuRepository = $this->createStub(EntityRepository::class);
         $callCount = 0;
         $menuRepository->method('findOneBy')
-            ->willReturnCallback(function (array $criteria) use (&$callCount, $menu) {
+            ->willReturnCallback(static function (array $criteria) use (&$callCount, $menu) {
                 ++$callCount;
 
                 // First call is pageFi, returns null
@@ -425,7 +425,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
-            ->willReturnCallback(fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
+            ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
         $queryBuilder = $this->createStub(QueryBuilder::class);
         $query = $this->createStub(Query::class);
         $query->method('getOneOrNullResult')->willReturn(null);
@@ -751,7 +751,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
-            ->willReturnCallback(fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
+            ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
             ->with(Menu::class)
@@ -785,7 +785,7 @@ final class LocalizedUrlExtensionTest extends TestCase
 
         $menuRepository = $this->createStub(EntityRepository::class);
         $menuRepository->method('findOneBy')
-            ->willReturnCallback(fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
+            ->willReturnCallback(static fn (array $criteria) => isset($criteria['pageFi']) ? $menu : null);
 
         $this->entityManager->method('getRepository')
             ->with(Menu::class)

@@ -84,7 +84,7 @@ final class HappeningFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Happening $happening): void {
+        return $this->afterInstantiate(static function (Happening $happening): void {
             // Ensure maxSignUps non-negative
             if ($happening->getMaxSignUps() < 0) {
                 $happening->setMaxSignUps(0);
@@ -202,7 +202,7 @@ final class HappeningFactory extends PersistentObjectFactory
         $resolvedEvent = $event instanceof EventFactory ? $event->create() : $event;
         \assert($resolvedEvent instanceof Event);
 
-        return $this->afterInstantiate(function (Happening $happening) use ($resolvedEvent): void {
+        return $this->afterInstantiate(static function (Happening $happening) use ($resolvedEvent): void {
             $happening->setEvent($resolvedEvent);
         });
     }
@@ -212,7 +212,7 @@ final class HappeningFactory extends PersistentObjectFactory
      */
     public function withOwner(Member|User $owner): static
     {
-        return $this->afterInstantiate(function (Happening $happening) use ($owner): void {
+        return $this->afterInstantiate(static function (Happening $happening) use ($owner): void {
             $member = $owner instanceof User ? $owner->getMember() : $owner;
             $happening->addOwner($member);
         });
@@ -225,7 +225,7 @@ final class HappeningFactory extends PersistentObjectFactory
      */
     public function withOwners(array $owners): static
     {
-        return $this->afterInstantiate(function (Happening $happening) use ($owners): void {
+        return $this->afterInstantiate(static function (Happening $happening) use ($owners): void {
             foreach ($owners as $o) {
                 $member = $o instanceof User ? $o->getMember() : $o;
                 if ($member instanceof Member) {

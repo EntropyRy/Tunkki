@@ -87,9 +87,8 @@ class ArtistController extends AbstractController
                 $this->addFlash('success', 'edited');
 
                 return $this->redirectToRoute('entropy_artist_profile');
-            } else {
-                $this->addFlash('warning', 'artist.form.pic_missing');
             }
+            $this->addFlash('warning', 'artist.form.pic_missing');
         }
 
         return $this->render('artist/edit.html.twig', [

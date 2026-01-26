@@ -66,7 +66,7 @@ final class CmsBaselineHealthTest extends FixturesWebTestCase
         self::assertSame(2, $siteCount, 'Expected exactly two CMS sites (FI default + EN).');
 
         $sites = method_exists($siteRepo, 'findAll') ? $siteRepo->findAll() : [];
-        $locales = array_map(fn ($s) => method_exists($s, 'getLocale') ? (string) $s->getLocale() : '', $sites);
+        $locales = array_map(static fn ($s) => method_exists($s, 'getLocale') ? (string) $s->getLocale() : '', $sites);
         sort($locales);
         self::assertSame(['en', 'fi'], $locales, 'Expected only FI and EN sites.');
 

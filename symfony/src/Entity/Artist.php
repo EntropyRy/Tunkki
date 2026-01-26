@@ -31,12 +31,10 @@ class Artist implements \Stringable
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
     private ?string $type = null;
 
-    #[
-        Assert\Expression(
-            '!(!value or !this.getBioEn())',
-            message: 'artist.form.error',
-        ),
-    ]
+    #[Assert\Expression(
+        '!(!value or !this.getBioEn())',
+        message: 'artist.form.error',
+    ),]
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $bio = null;
 
@@ -46,13 +44,11 @@ class Artist implements \Stringable
     /**
      * @var Collection<int, EventArtistInfo>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: EventArtistInfo::class,
-            mappedBy: 'Artist',
-            cascade: ['persist', 'detach'],
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: EventArtistInfo::class,
+        mappedBy: 'Artist',
+        cascade: ['persist', 'detach'],
+    ),]
     #[ORM\JoinColumn(nullable: true, onDelete: 'CASCADE')]
     private Collection $eventArtistInfos;
 
@@ -71,12 +67,10 @@ class Artist implements \Stringable
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $links = [];
 
-    #[
-        ORM\ManyToOne(
-            targetEntity: SonataMediaMedia::class,
-            cascade: ['persist', 'detach'],
-        ),
-    ]
+    #[ORM\ManyToOne(
+        targetEntity: SonataMediaMedia::class,
+        cascade: ['persist', 'detach'],
+    ),]
     private ?SonataMediaMedia $Picture = null;
 
     #[ORM\Column(type: Types::BOOLEAN, nullable: true)]

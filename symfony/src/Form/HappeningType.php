@@ -151,7 +151,7 @@ class HappeningType extends AbstractType
 
         // Conditional validation at form-level: when preliminary payment is enabled,
         // require payment info in both languages.
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (
             FormEvent $event,
         ): void {
             $data = $event->getData();
@@ -198,7 +198,7 @@ class HappeningType extends AbstractType
                 );
             }
         });
-        $builder->addEventListener(FormEvents::POST_SUBMIT, function (
+        $builder->addEventListener(FormEvents::POST_SUBMIT, static function (
             FormEvent $event,
         ): void {
             $form = $event->getForm();

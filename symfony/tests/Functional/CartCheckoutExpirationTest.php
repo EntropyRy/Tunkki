@@ -180,7 +180,7 @@ final class CartCheckoutExpirationTest extends FixturesWebTestCase
         }
 
         // Verify our specific expired checkouts are in the result
-        $expiredIds = array_map(fn ($c) => $c->getId(), $unneeded);
+        $expiredIds = array_map(static fn ($c) => $c->getId(), $unneeded);
         $this->assertContains($expired1->getId(), $expiredIds);
         $this->assertContains($expired2->getId(), $expiredIds);
     }

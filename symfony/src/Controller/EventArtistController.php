@@ -32,21 +32,17 @@ class EventArtistController extends AbstractController
     ) {
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/artisti/ilmottautuminen',
-                'en' => '/{year}/{slug}/artist/signup',
-            ],
-            name: 'entropy_event_slug_artist_signup',
-            requirements: ['year' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/artisti/ilmottautuminen',
+            'en' => '/{year}/{slug}/artist/signup',
+        ],
+        name: 'entropy_event_slug_artist_signup',
+        requirements: ['year' => "\d+"],
+    ),]
     public function artistSignUp(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         TranslatorInterface $trans,
         EntityManagerInterface $em,
@@ -135,21 +131,17 @@ class EventArtistController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            '/{year}/{slug}/signup/{id}/edit',
-            name: 'entropy_event_slug_artist_signup_edit',
-            requirements: [
-                'year' => "\d+",
-                'id' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        '/{year}/{slug}/signup/{id}/edit',
+        name: 'entropy_event_slug_artist_signup_edit',
+        requirements: [
+            'year' => "\d+",
+            'id' => "\d+",
+        ],
+    ),]
     public function artistSignUpEdit(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         EventArtistInfo $artisteventinfo,
         TranslatorInterface $trans,
@@ -194,16 +186,14 @@ class EventArtistController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            '/signup/{id}/delete',
-            name: 'entropy_event_slug_artist_signup_delete',
-            requirements: [
-                'year' => "\d+",
-                'id' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        '/signup/{id}/delete',
+        name: 'entropy_event_slug_artist_signup_delete',
+        requirements: [
+            'year' => "\d+",
+            'id' => "\d+",
+        ],
+    ),]
     public function artistSignUpDelete(
         EventArtistInfo $artisteventinfo,
         TranslatorInterface $trans,

@@ -30,15 +30,13 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ProfileController extends AbstractController
 {
-    #[
-        Route(
-            path: [
-                'en' => '/profile/new',
-                'fi' => '/profiili/uusi',
-            ],
-            name: 'profile_new',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/new',
+            'fi' => '/profiili/uusi',
+        ],
+        name: 'profile_new',
+    ),]
     public function newMember(
         Request $request,
         MemberRepository $memberRepo,
@@ -141,15 +139,13 @@ class ProfileController extends AbstractController
         $mm->sendToMattermost($text, 'yhdistys');
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/dashboard',
-                'fi' => '/yleiskatsaus',
-            ],
-            name: 'dashboard',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/dashboard',
+            'fi' => '/yleiskatsaus',
+        ],
+        name: 'dashboard',
+    ),]
     public function dashboard(BarcodeService $barcodeService): Response
     {
         $user = $this->getUser();
@@ -163,15 +159,13 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/profile',
-                'fi' => '/profiili',
-            ],
-            name: 'profile',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile',
+            'fi' => '/profiili',
+        ],
+        name: 'profile',
+    ),]
     public function index(): Response
     {
         $user = $this->getUser();
@@ -183,15 +177,13 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/profile/edit',
-                'fi' => '/profiili/muokkaa',
-            ],
-            name: 'profile_edit',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/edit',
+            'fi' => '/profiili/muokkaa',
+        ],
+        name: 'profile_edit',
+    ),]
     public function edit(
         Request $request,
         EntityManagerInterface $em,
@@ -217,15 +209,13 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/profile/password',
-                'fi' => '/profiili/salasana',
-            ],
-            name: 'profile_password_edit',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/password',
+            'fi' => '/profiili/salasana',
+        ],
+        name: 'profile_password_edit',
+    ),]
     public function password(
         Request $request,
         UserPasswordHasherInterface $hasher,
@@ -262,15 +252,13 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/profile/apply',
-                'fi' => '/profiili/aktiiviksi',
-            ],
-            name: 'apply_for_active_member',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/apply',
+            'fi' => '/profiili/aktiiviksi',
+        ],
+        name: 'apply_for_active_member',
+    ),]
     public function apply(
         Request $request,
         MattermostNotifierService $mm,
@@ -305,15 +293,13 @@ class ProfileController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'en' => '/profile/epics/password',
-                'fi' => '/profiili/epics/salasana',
-            ],
-            name: 'profile_epics_password',
-        ),
-    ]
+    #[Route(
+        path: [
+            'en' => '/profile/epics/password',
+            'fi' => '/profiili/epics/salasana',
+        ],
+        name: 'profile_epics_password',
+    ),]
     public function epicsPassword(
         Request $request,
         EPicsService $epics,

@@ -65,7 +65,7 @@ final class CheckoutFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Checkout $checkout): void {
+        return $this->afterInstantiate(static function (Checkout $checkout): void {
             // Lifecycle callbacks (createdAt/updatedAt) are handled by the entity
             // No additional normalization needed
         });

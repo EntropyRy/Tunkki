@@ -29,18 +29,16 @@ class EventController extends Controller
     ) {
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/tapahtuma/{id}',
-                'en' => '/event/{id}',
-            ],
-            name: 'entropy_event',
-            requirements: [
-                'id' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/tapahtuma/{id}',
+            'en' => '/event/{id}',
+        ],
+        name: 'entropy_event',
+        requirements: [
+            'id' => "\d+",
+        ],
+    ),]
     public function oneId(
         Request $request,
         Event $event,
@@ -76,20 +74,16 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: '/{year}/{slug}',
-            name: 'entropy_event_slug',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: '/{year}/{slug}',
+        name: 'entropy_event_slug',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function oneSlug(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         TranslatorInterface $trans,
         TicketRepository $ticketRepo,
@@ -118,22 +112,18 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/artistit',
-                'en' => '/{year}/{slug}/artists',
-            ],
-            name: 'entropy_event_artists',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/artistit',
+            'en' => '/{year}/{slug}/artists',
+        ],
+        name: 'entropy_event_artists',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function eventArtists(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();
@@ -149,22 +139,18 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/aikataulu',
-                'en' => '/{year}/{slug}/timetable',
-            ],
-            name: 'entropy_event_timetable',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/aikataulu',
+            'en' => '/{year}/{slug}/timetable',
+        ],
+        name: 'entropy_event_timetable',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function eventTimetable(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();
@@ -180,22 +166,18 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/paikka',
-                'en' => '/{year}/{slug}/location',
-            ],
-            name: 'entropy_event_location',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/paikka',
+            'en' => '/{year}/{slug}/location',
+        ],
+        name: 'entropy_event_location',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function eventLocation(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();
@@ -212,22 +194,18 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/info',
-                'en' => '/{year}/{slug}/about',
-            ],
-            name: 'entropy_event_info',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/info',
+            'en' => '/{year}/{slug}/about',
+        ],
+        name: 'entropy_event_info',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function eventInfo(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();
@@ -243,22 +221,18 @@ class EventController extends Controller
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/turvallisempi-tila',
-                'en' => '/{year}/{slug}/safer-space',
-            ],
-            name: 'entropy_event_safer_space',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/turvallisempi-tila',
+            'en' => '/{year}/{slug}/safer-space',
+        ],
+        name: 'entropy_event_safer_space',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function eventSaferSpace(
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();

@@ -56,7 +56,7 @@ final class EventArtistInfoFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (EventArtistInfo $info): void {
+        return $this->afterInstantiate(static function (EventArtistInfo $info): void {
             // If an Artist is attached but no artistClone exists, create one
             if ($info->getArtist() instanceof Artist && !$info->getArtistClone() instanceof Artist) {
                 $original = $info->getArtist();

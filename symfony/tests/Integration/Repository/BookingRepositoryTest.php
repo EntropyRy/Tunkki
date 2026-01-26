@@ -301,12 +301,12 @@ final class BookingRepositoryTest extends RepositoryTestCase
         // Outside
         self::assertNotContains(
             $outside->getId(),
-            array_map(fn (Booking $b) => $b->getId(), $results),
+            array_map(static fn (Booking $b) => $b->getId(), $results),
             'Non-overlapping booking should be excluded.',
         );
 
         // Base excluded (by id, not by name)
-        $resultIds = array_map(fn (Booking $b) => $b->getId(), $results);
+        $resultIds = array_map(static fn (Booking $b) => $b->getId(), $results);
         self::assertNotContains(
             $baseId,
             $resultIds,
@@ -422,7 +422,7 @@ final class BookingRepositoryTest extends RepositoryTestCase
             $names,
             'cancelled=true returning-only overlap must be excluded.',
         );
-        $resultIds = array_map(fn (Booking $b) => $b->getId(), $results);
+        $resultIds = array_map(static fn (Booking $b) => $b->getId(), $results);
         self::assertNotContains(
             $baseId,
             $resultIds,

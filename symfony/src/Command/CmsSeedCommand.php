@@ -18,12 +18,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Zenstruck\Foundry\Persistence\PersistedObjectsTracker;
 
-#[
-    AsCommand(
-        name: 'entropy:cms:seed',
-        description: 'Seed the base minimum Sonata CMS sites and pages (FI "", EN "/en"; root + alias pages). Idempotent.',
-    ),
-]
+#[AsCommand(
+    name: 'entropy:cms:seed',
+    description: 'Seed the base minimum Sonata CMS sites and pages (FI "", EN "/en"; root + alias pages). Idempotent.',
+),]
 final class CmsSeedCommand extends Command
 {
     public function __construct(

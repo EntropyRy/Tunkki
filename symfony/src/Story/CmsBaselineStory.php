@@ -331,7 +331,7 @@ final class CmsBaselineStory extends Story
         $pageRepo = PageFactory::repository();
 
         $streams = $pageRepo->findBy(['site' => $site, 'url' => '/stream']);
-        $chosen = array_find($streams, fn (SonataPagePage $candidate): bool => 'stream' === (string) $candidate->getTemplateCode()
+        $chosen = array_find($streams, static fn (SonataPagePage $candidate): bool => 'stream' === (string) $candidate->getTemplateCode()
             && 'entropy.page.stream' === (string) $candidate->getType());
         if (null === $chosen) {
             $chosen = $streams[0] ?? null;

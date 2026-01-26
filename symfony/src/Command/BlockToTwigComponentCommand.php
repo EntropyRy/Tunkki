@@ -14,12 +14,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Filesystem\Filesystem;
 
-#[
-    AsCommand(
-        name: 'app:block-to-component',
-        description: 'Convert a Sonata Block to a Symfony TwigComponent',
-    ),
-]
+#[AsCommand(
+    name: 'app:block-to-component',
+    description: 'Convert a Sonata Block to a Symfony TwigComponent',
+),]
 class BlockToTwigComponentCommand extends Command
 {
     private const string BLOCK_DIR = '/src/Block/';

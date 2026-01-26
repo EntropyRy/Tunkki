@@ -29,19 +29,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 class EventVolunteerController extends AbstractController
 {
-    #[
-        Route(
-            path: '/{year}/{slug}/nakkikone/{id}/cancel',
-            name: 'entropy_event_nakki_cancel',
-            requirements: ['year' => "\d+", 'id' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: '/{year}/{slug}/nakkikone/{id}/cancel',
+        name: 'entropy_event_nakki_cancel',
+        requirements: ['year' => "\d+", 'id' => "\d+"],
+    ),]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiCancel(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         MattermostNotifierService $mm,
         NakkiBooking $booking,
@@ -71,19 +67,15 @@ class EventVolunteerController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[
-        Route(
-            path: '/{year}/{slug}/nakkikone/{id}/signup',
-            name: 'entropy_event_nakki_sign_up',
-            requirements: ['year' => "\d+", 'id' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: '/{year}/{slug}/nakkikone/{id}/signup',
+        name: 'entropy_event_nakki_sign_up',
+        requirements: ['year' => "\d+", 'id' => "\d+"],
+    ),]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiSignUp(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         MattermostNotifierService $mm,
         NakkiBooking $booking,
@@ -151,16 +143,14 @@ class EventVolunteerController extends AbstractController
         return $this->redirect($request->headers->get('referer'));
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/nakkikone/hallinta',
-                'en' => '/{year}/{slug}/nakkikone/admin',
-            ],
-            name: 'entropy_event_nakki_admin',
-            requirements: ['year' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/nakkikone/hallinta',
+            'en' => '/{year}/{slug}/nakkikone/admin',
+        ],
+        name: 'entropy_event_nakki_admin',
+        requirements: ['year' => "\d+"],
+    ),]
     #[IsGranted(EventNakkiAdminVoter::ATTRIBUTE, 'event')]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkiAdmin(
@@ -172,19 +162,15 @@ class EventVolunteerController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: '/{year}/{slug}/nakkikone',
-            name: 'entropy_event_slug_nakkikone',
-            requirements: ['year' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: '/{year}/{slug}/nakkikone',
+        name: 'entropy_event_slug_nakkikone',
+        requirements: ['year' => "\d+"],
+    ),]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function nakkikone(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         NakkiBookingRepository $repo,
     ): Response {
@@ -208,22 +194,18 @@ class EventVolunteerController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/nakkikone/vastuuhenkilo',
-                'en' => '/{year}/{slug}/nakkikone/responsible',
-            ],
-            name: 'entropy_event_responsible',
-            requirements: ['year' => "\d+"],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/nakkikone/vastuuhenkilo',
+            'en' => '/{year}/{slug}/nakkikone/responsible',
+        ],
+        name: 'entropy_event_responsible',
+        requirements: ['year' => "\d+"],
+    ),]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function responsible(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
     ): Response {
         $user = $this->getUser();
@@ -246,15 +228,11 @@ class EventVolunteerController extends AbstractController
         ]);
     }
 
-    #[
-        Route(path: '/{year}/{slug}/rsvp', name: 'entropy_event_rsvp', requirements: ['year' => "\d+"], methods: ['POST']),
-    ]
+    #[Route(path: '/{year}/{slug}/rsvp', name: 'entropy_event_rsvp', requirements: ['year' => "\d+"], methods: ['POST']),]
     #[IsGranted('IS_AUTHENTICATED_FULLY')]
     public function rsvp(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         RSVPRepository $rsvpRepository,
         TranslatorInterface $trans,

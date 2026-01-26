@@ -65,18 +65,17 @@ class HappeningController extends AbstractController
                     'year' => $event->getEventDate()->format('Y'),
                     'happeningSlug' => $happening->getSlug($request->getLocale()),
                 ]);
-            } else {
-                $hr->save($happening, true);
-                $text = '** New Happening: ** '.$happening->getNameEn().' for '.$event->getName();
-                $mm->sendToMattermost($text, 'yhdistys');
-                $this->addFlash('success', 'happening.created');
-
-                return $this->redirectToRoute('entropy_event_happening_show', [
-                    'slug' => $event->getUrl(),
-                    'year' => $event->getEventDate()->format('Y'),
-                    'happeningSlug' => $happening->getSlug($request->getLocale()),
-                ]);
             }
+            $hr->save($happening, true);
+            $text = '** New Happening: ** '.$happening->getNameEn().' for '.$event->getName();
+            $mm->sendToMattermost($text, 'yhdistys');
+            $this->addFlash('success', 'happening.created');
+
+            return $this->redirectToRoute('entropy_event_happening_show', [
+                'slug' => $event->getUrl(),
+                'year' => $event->getEventDate()->format('Y'),
+                'happeningSlug' => $happening->getSlug($request->getLocale()),
+            ]);
         }
 
         return $this->render('happening/create.html.twig', [

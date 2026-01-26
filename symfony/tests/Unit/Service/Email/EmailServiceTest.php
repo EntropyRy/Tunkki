@@ -231,7 +231,7 @@ final class EmailServiceTest extends TestCase
         // Second email fails
         $mockMailer->expects($this->exactly(3))
             ->method('send')
-            ->willReturnCallback(function ($message) {
+            ->willReturnCallback(static function ($message) {
                 static $callCount = 0;
                 ++$callCount;
                 if (2 === $callCount) {
@@ -278,7 +278,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 
@@ -350,7 +350,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 
@@ -398,7 +398,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 
@@ -445,7 +445,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 
@@ -484,7 +484,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 
@@ -522,7 +522,7 @@ final class EmailServiceTest extends TestCase
         $capturedMessage = null;
         $mockMailer->expects($this->once())
             ->method('send')
-            ->willReturnCallback(function ($message) use (&$capturedMessage) {
+            ->willReturnCallback(static function ($message) use (&$capturedMessage) {
                 $capturedMessage = $message;
             });
 

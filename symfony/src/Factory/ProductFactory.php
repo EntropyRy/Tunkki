@@ -75,7 +75,7 @@ final class ProductFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Product $product): void {
+        return $this->afterInstantiate(static function (Product $product): void {
             // Ensure lifecycle callbacks are respected (createdAt/updatedAt auto-set)
             // No additional normalization needed for now
         });

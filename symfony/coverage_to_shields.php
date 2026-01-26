@@ -89,7 +89,7 @@ if ($statements > 0) {
 $rounded = (float) round($percentage, 2);
 
 // -------- Color ramp ---------------------------------------------------------
-$color = (function (float $p): string {
+$color = (static function (float $p): string {
     if ($p >= 90) {
         return 'brightgreen';
     }

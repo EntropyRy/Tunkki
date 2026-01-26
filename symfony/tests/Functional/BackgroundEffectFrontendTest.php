@@ -70,7 +70,7 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
         if (0 === $canvasCount) {
             // When canvas is not rendered, ensure the importmap declares the module (server integration point)
             $importReferenced = false;
-            $crawler->filter('script[type="importmap"]')->each(function ($node) use (&$importReferenced) {
+            $crawler->filter('script[type="importmap"]')->each(static function ($node) use (&$importReferenced) {
                 $json = trim($node->text());
                 if ('' === $json) {
                     return;
@@ -101,7 +101,7 @@ final class BackgroundEffectFrontendTest extends FixturesWebTestCase
 
         // Importmap reference: find script[type=importmap] and ensure "flowfields" module is declared
         $importReferenced = false;
-        $crawler->filter('script[type="importmap"]')->each(function ($node) use (&$importReferenced) {
+        $crawler->filter('script[type="importmap"]')->each(static function ($node) use (&$importReferenced) {
             $json = trim($node->text());
             if ('' === $json) {
                 return;

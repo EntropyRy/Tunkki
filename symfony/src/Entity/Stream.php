@@ -117,7 +117,7 @@ class Stream implements \Stringable
      */
     public function getArtistsOnline(): Collection
     {
-        return $this->artists->filter(fn (StreamArtist $artist): bool => !$artist->getStoppedAt() instanceof \DateTimeImmutable);
+        return $this->artists->filter(static fn (StreamArtist $artist): bool => !$artist->getStoppedAt() instanceof \DateTimeImmutable);
     }
 
     public function getFilename(): string

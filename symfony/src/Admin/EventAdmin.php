@@ -598,7 +598,7 @@ final class EventAdmin extends AbstractAdmin
         $builder = $formMapper->getFormBuilder();
 
         // Ensure config is nulled when effect doesn't support configuration
-        $builder->addEventListener(FormEvents::PRE_SET_DATA, function (
+        $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (
             FormEvent $event,
         ): void {
             $data = $event->getData();
@@ -611,7 +611,7 @@ final class EventAdmin extends AbstractAdmin
         // On submit, clear config when switching to a non-configurable effect.
         // If effect changed and no explicit config is provided, clear stale config by default.
         // Only process if the form has the backgroundEffectConfig field (not present when externalUrl=true)
-        $builder->addEventListener(FormEvents::PRE_SUBMIT, function (
+        $builder->addEventListener(FormEvents::PRE_SUBMIT, static function (
             FormEvent $event,
         ): void {
             $submitted = $event->getData();

@@ -38,36 +38,30 @@ class Member implements \Stringable
     #[ORM\Column(name: 'email', type: Types::STRING, length: 190, unique: true)]
     private $email;
 
-    #[
-        ORM\Column(
-            name: 'username',
-            type: Types::STRING,
-            length: 190,
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'username',
+        type: Types::STRING,
+        length: 190,
+        nullable: true,
+    ),]
     #[Assert\Length(max: 190, maxMessage: 'username.max_length')]
     #[Assert\NotBlank(message: 'username.required', allowNull: true)]
     private ?string $username = null;
 
-    #[
-        ORM\Column(
-            name: 'phone',
-            type: Types::STRING,
-            length: 190,
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'phone',
+        type: Types::STRING,
+        length: 190,
+        nullable: true,
+    ),]
     private ?string $phone = null;
 
-    #[
-        ORM\Column(
-            name: 'CityOfResidence',
-            type: Types::STRING,
-            length: 190,
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'CityOfResidence',
+        type: Types::STRING,
+        length: 190,
+        nullable: true,
+    ),]
     private ?string $CityOfResidence = null;
 
     #[ORM\Column(name: 'createdAt', type: 'datetime_immutable', nullable: true)]
@@ -91,13 +85,11 @@ class Member implements \Stringable
     #[ORM\Column(name: 'ApplicationDate', type: 'datetime', nullable: true)]
     private ?\DateTime $ApplicationDate = null;
 
-    #[
-        ORM\Column(
-            name: 'ApplicationHandledDate',
-            type: 'datetime',
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'ApplicationHandledDate',
+        type: 'datetime',
+        nullable: true,
+    ),]
     private ?\DateTime $ApplicationHandledDate = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
@@ -106,13 +98,11 @@ class Member implements \Stringable
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $isFullMember = false;
 
-    #[
-        ORM\OneToOne(
-            targetEntity: User::class,
-            mappedBy: 'member',
-            cascade: ['persist', 'remove'],
-        ),
-    ]
+    #[ORM\OneToOne(
+        targetEntity: User::class,
+        mappedBy: 'member',
+        cascade: ['persist', 'remove'],
+    ),]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private ?User $user = null;
 
@@ -122,26 +112,22 @@ class Member implements \Stringable
     /**
      * @var Collection<int, Artist>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: Artist::class,
-            mappedBy: 'member',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: Artist::class,
+        mappedBy: 'member',
+        orphanRemoval: true,
+    ),]
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE', region: 'member')]
     private $artist;
 
     /**
      * @var Collection<int, DoorLog>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: DoorLog::class,
-            mappedBy: 'member',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: DoorLog::class,
+        mappedBy: 'member',
+        orphanRemoval: true,
+    ),]
     private $doorLogs;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
@@ -150,13 +136,11 @@ class Member implements \Stringable
     /**
      * @var Collection<int, RSVP>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: RSVP::class,
-            mappedBy: 'member',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: RSVP::class,
+        mappedBy: 'member',
+        orphanRemoval: true,
+    ),]
     private $RSVPs;
 
     /**
@@ -183,13 +167,11 @@ class Member implements \Stringable
     /**
      * @var Collection<int, HappeningBooking>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: HappeningBooking::class,
-            mappedBy: 'member',
-            cascade: ['persist', 'remove'],
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: HappeningBooking::class,
+        mappedBy: 'member',
+        cascade: ['persist', 'remove'],
+    ),]
     private Collection $happeningBooking;
 
     /**
@@ -495,9 +477,9 @@ class Member implements \Stringable
         }
         if ($this->isActiveMember) {
             return '66';
-        } else {
-            return '33';
         }
+
+        return '33';
     }
 
     public function canVote(): bool

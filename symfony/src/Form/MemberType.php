@@ -76,7 +76,7 @@ class MemberType extends AbstractType
             ]);
 
             // Conditionally add active member mails only if entity is active
-            $builder->addEventListener(FormEvents::PRE_SET_DATA, function (FormEvent $event): void {
+            $builder->addEventListener(FormEvents::PRE_SET_DATA, static function (FormEvent $event): void {
                 $member = $event->getData();
                 if ($member instanceof Member && $member->getIsActiveMember()) {
                     $event->getForm()->add('allowActiveMemberMails', CheckboxType::class, [

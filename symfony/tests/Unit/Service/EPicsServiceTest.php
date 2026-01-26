@@ -571,7 +571,7 @@ final class EPicsServiceTest extends TestCase
     public function testCreateOrUpdateUserPasswordReturnsFalseOnException(): void
     {
         // Set up client to throw exception
-        $this->client->setResponseFactory(function () {
+        $this->client->setResponseFactory(static function () {
             throw new \Exception('Network error');
         });
 
@@ -681,7 +681,7 @@ final class EPicsServiceTest extends TestCase
     public function testFindUserIdCatchesException(): void
     {
         $requestCount = 0;
-        $this->client->setResponseFactory(function () use (&$requestCount) {
+        $this->client->setResponseFactory(static function () use (&$requestCount) {
             ++$requestCount;
             if (1 === $requestCount) {
                 // Session establishment succeeds
@@ -715,7 +715,7 @@ final class EPicsServiceTest extends TestCase
         ];
 
         $requestCount = 0;
-        $this->client->setResponseFactory(function () use (&$requestCount, $userList) {
+        $this->client->setResponseFactory(static function () use (&$requestCount, $userList) {
             ++$requestCount;
             if (1 === $requestCount) {
                 return new MockResponse('', [
@@ -746,7 +746,7 @@ final class EPicsServiceTest extends TestCase
     public function testCreateUserCatchesException(): void
     {
         $requestCount = 0;
-        $this->client->setResponseFactory(function () use (&$requestCount) {
+        $this->client->setResponseFactory(static function () use (&$requestCount) {
             ++$requestCount;
             if (1 === $requestCount) {
                 return new MockResponse('', [
@@ -777,7 +777,7 @@ final class EPicsServiceTest extends TestCase
 
     public function testEstablishSessionCatchesException(): void
     {
-        $this->client->setResponseFactory(function () {
+        $this->client->setResponseFactory(static function () {
             throw new \RuntimeException('Connection refused');
         });
 
@@ -789,7 +789,7 @@ final class EPicsServiceTest extends TestCase
     public function testLoginCatchesException(): void
     {
         $requestCount = 0;
-        $this->client->setResponseFactory(function () use (&$requestCount) {
+        $this->client->setResponseFactory(static function () use (&$requestCount) {
             ++$requestCount;
             if (1 === $requestCount) {
                 return new MockResponse('', [
@@ -814,7 +814,7 @@ final class EPicsServiceTest extends TestCase
     public function testGetRandomPhotoRequestThrowsException(): void
     {
         $requestCount = 0;
-        $this->client->setResponseFactory(function () use (&$requestCount) {
+        $this->client->setResponseFactory(static function () use (&$requestCount) {
             ++$requestCount;
             if (1 === $requestCount) {
                 return new MockResponse('', [

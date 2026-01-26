@@ -139,7 +139,7 @@ trait MetaAssertionTrait
         );
 
         $hrefs = [];
-        $nodes->each(function (Crawler $n) use (&$hrefs): void {
+        $nodes->each(static function (Crawler $n) use (&$hrefs): void {
             $href = trim((string) $n->attr('href'));
             if ('' !== $href) {
                 $hrefs[] = $href;
@@ -168,7 +168,7 @@ trait MetaAssertionTrait
         $found = [];
 
         $crawler->filter('link[rel="alternate"][hreflang]')->each(
-            function (Crawler $node) use (&$found): void {
+            static function (Crawler $node) use (&$found): void {
                 $lang = (string) $node->attr('hreflang');
                 $href = (string) $node->attr('href');
                 if ('' !== $lang && '' !== $href) {

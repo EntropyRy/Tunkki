@@ -35,7 +35,7 @@ final class NakkiBookingFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (NakkiBooking $booking): void {
+        return $this->afterInstantiate(static function (NakkiBooking $booking): void {
             $nakki = $booking->getNakki();
             if ($nakki->getNakkikone() !== $booking->getNakkikone()) {
                 $booking->setNakkikone($nakki->getNakkikone());

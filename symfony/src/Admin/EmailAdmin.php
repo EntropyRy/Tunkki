@@ -103,8 +103,8 @@ final class EmailAdmin extends AbstractAdmin
             $formMapper
                 ->add('purpose', EnumType::class, [
                     'class' => EmailPurpose::class,
-                    'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                    'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
+                    'choice_label' => static fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                    'choice_filter' => static function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
                         if (!$purpose instanceof EmailPurpose) {
                             return false;
                         }
@@ -128,8 +128,8 @@ final class EmailAdmin extends AbstractAdmin
         $formMapper
             ->add('purpose', EnumType::class, [
                 'class' => EmailPurpose::class,
-                'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
+                'choice_label' => static fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                'choice_filter' => static function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentPurpose): bool {
                     if (!$purpose instanceof EmailPurpose) {
                         return false;
                     }
@@ -176,8 +176,8 @@ final class EmailAdmin extends AbstractAdmin
         $formMapper
             ->add('purpose', EnumType::class, [
                 'class' => EmailPurpose::class,
-                'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
+                'choice_label' => static fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                'choice_filter' => static function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
                     if (!$purpose instanceof EmailPurpose) {
                         return false;
                     }
@@ -221,8 +221,8 @@ final class EmailAdmin extends AbstractAdmin
         $formMapper
             ->add('purpose', EnumType::class, [
                 'class' => EmailPurpose::class,
-                'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
+                'choice_label' => static fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                'choice_filter' => static function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
                     if (!$purpose instanceof EmailPurpose) {
                         return false;
                     }
@@ -248,8 +248,8 @@ final class EmailAdmin extends AbstractAdmin
             $formMapper
                 ->add('recipientGroups', EnumType::class, [
                     'class' => EmailPurpose::class,
-                    'choice_label' => fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
-                    'choice_filter' => function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
+                    'choice_label' => static fn (?EmailPurpose $purpose): string => $purpose?->label() ?? 'None',
+                    'choice_filter' => static function (?EmailPurpose $purpose) use ($existingSingletonPurposes, $currentEmail): bool {
                         if (!$purpose instanceof EmailPurpose) {
                             return false;
                         }

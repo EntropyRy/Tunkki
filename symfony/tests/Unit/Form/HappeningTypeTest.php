@@ -42,7 +42,7 @@ final class HappeningTypeTest extends TestCase
 
         $builder->method('add')->willReturnSelf();
         $builder->method('addEventListener')
-            ->willReturnCallback(function (string $eventName, callable $listener) use (&$listeners, $builder) {
+            ->willReturnCallback(static function (string $eventName, callable $listener) use (&$listeners, $builder) {
                 $listeners[$eventName][] = $listener;
 
                 return $builder;
@@ -76,7 +76,7 @@ final class HappeningTypeTest extends TestCase
 
         $builder->method('add')->willReturnSelf();
         $builder->method('addEventListener')
-            ->willReturnCallback(function (string $eventName, callable $listener) use (&$listeners, $builder) {
+            ->willReturnCallback(static function (string $eventName, callable $listener) use (&$listeners, $builder) {
                 $listeners[$eventName][] = $listener;
 
                 return $builder;
@@ -110,7 +110,7 @@ final class HappeningTypeTest extends TestCase
 
         $builder->method('add')->willReturnSelf();
         $builder->method('addEventListener')
-            ->willReturnCallback(function (string $eventName, callable $listener) use (&$listeners, $builder) {
+            ->willReturnCallback(static function (string $eventName, callable $listener) use (&$listeners, $builder) {
                 $listeners[$eventName][] = $listener;
 
                 return $builder;

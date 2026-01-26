@@ -352,7 +352,7 @@ final class MemberPasswordFormTest extends FixturesWebTestCase
         $this->client->request('GET', '/en/logout');
 
         // Helper closure to detect authenticated status
-        $isAuthed = function (): bool {
+        $isAuthed = static function (): bool {
             $ts = static::getContainer()->get('security.token_storage');
             $token = $ts->getToken();
             if (!$token) {

@@ -67,13 +67,11 @@ class Booking implements \Stringable
     #[ORM\Column(name: 'retrieval', type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $retrieval = null;
 
-    #[
-        ORM\Column(
-            name: 'return_date',
-            type: 'datetime_immutable',
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'return_date',
+        type: 'datetime_immutable',
+        nullable: true,
+    ),]
     private ?\DateTimeImmutable $returning = null;
 
     #[ORM\Column(name: 'paid_date', type: 'datetime_immutable', nullable: true)]
@@ -93,12 +91,10 @@ class Booking implements \Stringable
     #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private Collection $accessories;
 
-    #[
-        ORM\ManyToOne(
-            targetEntity: WhoCanRentChoice::class,
-            cascade: ['persist'],
-        ),
-    ]
+    #[ORM\ManyToOne(
+        targetEntity: WhoCanRentChoice::class,
+        cascade: ['persist'],
+    ),]
     private ?WhoCanRentChoice $rentingPrivileges = null;
 
     #[ORM\ManyToOne(targetEntity: Renter::class, inversedBy: 'bookings')]
@@ -106,14 +102,12 @@ class Booking implements \Stringable
     private ?Renter $renter = null;
 
     /** @var Collection<int, BillableEvent> */
-    #[
-        ORM\OneToMany(
-            targetEntity: BillableEvent::class,
-            mappedBy: 'booking',
-            cascade: ['persist'],
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: BillableEvent::class,
+        mappedBy: 'booking',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    ),]
     private Collection $billableEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]
@@ -125,29 +119,25 @@ class Booking implements \Stringable
     /**
      * Monetary aggregate (decimal). Doctrine returns string for DECIMAL.
      */
-    #[
-        ORM\Column(
-            name: 'actualPrice',
-            type: 'decimal',
-            precision: 7,
-            scale: 2,
-            nullable: true,
-        ),
-    ]
+    #[ORM\Column(
+        name: 'actualPrice',
+        type: 'decimal',
+        precision: 7,
+        scale: 2,
+        nullable: true,
+    ),]
     private ?string $actualPrice = null;
 
     #[ORM\Column(name: 'numberOfRentDays', type: Types::INTEGER)]
     private int $numberOfRentDays = 1;
 
     /** @var Collection<int, StatusEvent> */
-    #[
-        ORM\OneToMany(
-            targetEntity: StatusEvent::class,
-            mappedBy: 'booking',
-            cascade: ['all'],
-            fetch: 'LAZY',
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: StatusEvent::class,
+        mappedBy: 'booking',
+        cascade: ['all'],
+        fetch: 'LAZY',
+    ),]
     private Collection $statusEvents;
 
     #[ORM\ManyToOne(targetEntity: User::class)]

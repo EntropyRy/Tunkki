@@ -99,7 +99,7 @@ class MenuBuilder
         $array = $m->getChildren()->toArray();
         usort(
             $array,
-            fn ($a, $b): int => $a->getPosition() <=> $b->getPosition()
+            static fn ($a, $b): int => $a->getPosition() <=> $b->getPosition()
         );
 
         return $array;

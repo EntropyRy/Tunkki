@@ -52,7 +52,7 @@ final class CartFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Cart $cart): void {
+        return $this->afterInstantiate(static function (Cart $cart): void {
             // Collections are auto-initialized by entity constructor
             // No additional normalization needed
         });
@@ -90,7 +90,7 @@ final class CartFactory extends PersistentObjectFactory
      */
     public function withItems(array $items): static
     {
-        return $this->afterInstantiate(function (Cart $cart) use ($items): void {
+        return $this->afterInstantiate(static function (Cart $cart) use ($items): void {
             foreach ($items as $item) {
                 // Foundry automatically handles proxy unwrapping
                 // Cart::addProduct() sets the bidirectional relationship

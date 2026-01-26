@@ -87,7 +87,7 @@ final class UrlWithIconType extends AbstractType
                 'attr' => [
                     'class' => 'icon-select form-select',
                 ],
-                'choice_attr' => fn ($choice, $key, $value): array => ['data-icon' => $choice],
+                'choice_attr' => static fn ($choice, $key, $value): array => ['data-icon' => $choice],
             ])
             ->add('title', TextType::class, [
                 'label' => 'url.form.title',

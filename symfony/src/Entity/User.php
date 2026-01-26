@@ -37,13 +37,11 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     #[Assert\Length(min: 8)]
     private ?string $plainPassword = null;
 
-    #[
-        ORM\OneToOne(
-            targetEntity: Member::class,
-            inversedBy: 'user',
-            cascade: ['persist', 'remove'],
-        ),
-    ]
+    #[ORM\OneToOne(
+        targetEntity: Member::class,
+        inversedBy: 'user',
+        cascade: ['persist', 'remove'],
+    ),]
     #[ORM\JoinColumn(unique: true, nullable: false, onDelete: 'CASCADE')]
     private Member $member;
 
@@ -56,13 +54,11 @@ class User implements UserInterface, \Stringable, PasswordAuthenticatedUserInter
     /**
      * @var Collection<int, Reward>
      */
-    #[
-        ORM\OneToMany(
-            targetEntity: Reward::class,
-            mappedBy: 'user',
-            orphanRemoval: true,
-        ),
-    ]
+    #[ORM\OneToMany(
+        targetEntity: Reward::class,
+        mappedBy: 'user',
+        orphanRemoval: true,
+    ),]
     private Collection $rewards;
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]

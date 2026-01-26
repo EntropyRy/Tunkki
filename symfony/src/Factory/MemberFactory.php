@@ -52,7 +52,7 @@ final class MemberFactory extends PersistentObjectFactory
     #[\Override]
     protected function initialize(): static
     {
-        return $this->afterInstantiate(function (Member $member): void {
+        return $this->afterInstantiate(static function (Member $member): void {
             $existing = $member->getUser();
 
             // If caller supplied a user explicitly, ensure the owning side is in sync.
@@ -122,7 +122,7 @@ final class MemberFactory extends PersistentObjectFactory
      */
     public function withOAuthWikiAccess(): static
     {
-        return $this->afterInstantiate(function (Member $member): void {
+        return $this->afterInstantiate(static function (Member $member): void {
             $user = $member->getUser();
             if (!$user instanceof User) {
                 $user = new User();
@@ -148,7 +148,7 @@ final class MemberFactory extends PersistentObjectFactory
      */
     public function withOAuthForumAccess(): static
     {
-        return $this->afterInstantiate(function (Member $member): void {
+        return $this->afterInstantiate(static function (Member $member): void {
             $user = $member->getUser();
             if (!$user instanceof User) {
                 $user = new User();

@@ -125,7 +125,7 @@ class Email implements \Stringable
 
         // Convert strings to enum instances if needed (from JSON deserialization)
         return array_map(
-            fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value : EmailPurpose::from($value),
+            static fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value : EmailPurpose::from($value),
             $recipientGroups
         );
     }
@@ -137,7 +137,7 @@ class Email implements \Stringable
     {
         // Store as string values for JSON serialization
         $this->recipientGroups = array_map(
-            fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value->value : $value,
+            static fn (EmailPurpose|string $value) => $value instanceof EmailPurpose ? $value->value : $value,
             $recipientGroups
         );
 

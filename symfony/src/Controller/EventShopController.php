@@ -38,23 +38,19 @@ class EventShopController extends AbstractController
     ) {
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/kauppa',
-                'en' => '/{year}/{slug}/shop',
-            ],
-            name: 'entropy_event_shop',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/kauppa',
+            'en' => '/{year}/{slug}/shop',
+        ],
+        name: 'entropy_event_shop',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function shop(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         CartRepository $cartR,
         CheckoutRepository $checkoutR,
@@ -164,20 +160,16 @@ class EventShopController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/kassa',
-                'en' => '/{year}/{slug}/checkout',
-            ],
-            name: 'event_stripe_checkouts',
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/kassa',
+            'en' => '/{year}/{slug}/checkout',
+        ],
+        name: 'event_stripe_checkouts',
+    ),]
     public function checkout(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,
@@ -229,23 +221,19 @@ class EventShopController extends AbstractController
         ]);
     }
 
-    #[
-        Route(
-            path: [
-                'fi' => '/{year}/{slug}/valmis',
-                'en' => '/{year}/{slug}/complete',
-            ],
-            name: 'entropy_event_shop_complete',
-            requirements: [
-                'year' => "\d+",
-            ],
-        ),
-    ]
+    #[Route(
+        path: [
+            'fi' => '/{year}/{slug}/valmis',
+            'en' => '/{year}/{slug}/complete',
+        ],
+        name: 'entropy_event_shop_complete',
+        requirements: [
+            'year' => "\d+",
+        ],
+    ),]
     public function complete(
         Request $request,
-        #[
-            MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),
-        ]
+        #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
         StripeServiceInterface $stripe,
         CheckoutRepository $cRepo,

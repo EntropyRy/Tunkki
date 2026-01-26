@@ -25,9 +25,7 @@ class EventArtistInfo implements \Stringable
     #[ORM\ManyToOne(targetEntity: Event::class, inversedBy: 'eventArtistInfos')]
     private ?Event $Event = null;
 
-    #[
-        ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'], inversedBy: 'eventArtistInfos'),
-    ]
+    #[ORM\ManyToOne(targetEntity: Artist::class, cascade: ['persist'], inversedBy: 'eventArtistInfos'),]
     private ?Artist $Artist = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, nullable: true)]
