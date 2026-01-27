@@ -1,11 +1,12 @@
 {% set en_slug = object.purpose %}
 {% set fi_slug = object.purpose %}
-{% if object.purpose == 'rental-contract' %}
-    {% set fi_slug = 'vuokrasopimus' %}
-{% elseif object.purpose == 'privacy-notice' %}
-    {% set fi_slug = 'rekisteriseloste' %}
-{% elseif object.purpose == 'rsvp-privacy-notice' %}
-    {% set fi_slug = 'rsvp-rekisteriseloste' %}
+{% set slug_map = constant('SLUGS_FI', object) %}
+{% if slug_map is iterable %}
+    {% for key, value in constant('PURPOSES', object) %}
+        {% if value == object.purpose and slug_map[key] is defined %}
+            {% set fi_slug = slug_map[key] %}
+        {% endif %}
+    {% endfor %}
 {% endif %}
 <a class="btn btn-sm btn-default"
    href="{{ path('contract_show', {purpose: fi_slug, _locale: 'fi'}) }}"
