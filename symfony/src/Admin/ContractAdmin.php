@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Contract;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
+use App\Form\MarkdownEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -72,11 +72,11 @@ final class ContractAdmin extends AbstractAdmin
                     ],
                 ],
             ])
-            ->add('ContentFi', CKEditorType::class, [
-                'config' => ['full'],
+            ->add('ContentFi', MarkdownEditorType::class, [
+                'simple' => true,
             ])
-            ->add('ContentEn', CKEditorType::class, [
-                'config' => ['full'],
+            ->add('ContentEn', MarkdownEditorType::class, [
+                'simple' => true,
             ]);
     }
 
