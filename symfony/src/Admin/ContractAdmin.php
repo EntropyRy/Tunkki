@@ -45,6 +45,9 @@ final class ContractAdmin extends AbstractAdmin
                     'show' => [],
                     'edit' => [],
                     'delete' => [],
+                    'public' => [
+                        'template' => 'admin/crud/list__action_public_contract.html.twig',
+                    ],
                 ],
             ]);
     }

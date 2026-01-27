@@ -1,0 +1,23 @@
+{% set en_slug = object.purpose %}
+{% set fi_slug = object.purpose %}
+{% if object.purpose == 'rental-contract' %}
+    {% set fi_slug = 'vuokrasopimus' %}
+{% elseif object.purpose == 'privacy-notice' %}
+    {% set fi_slug = 'rekisteriseloste' %}
+{% elseif object.purpose == 'rsvp-privacy-notice' %}
+    {% set fi_slug = 'rsvp-rekisteriseloste' %}
+{% endif %}
+<a class="btn btn-sm btn-default"
+   href="{{ path('contract_show', {purpose: fi_slug, _locale: 'fi'}) }}"
+   target="_blank"
+   rel="noopener noreferrer">
+    <i class="fa fa-external-link"></i>
+    FI
+</a>
+<a class="btn btn-sm btn-default"
+   href="{{ path('contract_show', {purpose: en_slug, _locale: 'en'}) }}"
+   target="_blank"
+   rel="noopener noreferrer">
+    <i class="fa fa-external-link"></i>
+    EN
+</a>
