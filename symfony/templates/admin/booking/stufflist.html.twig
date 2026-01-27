@@ -14,8 +14,11 @@
             <div class="col-md-12">
                 <h3>Items</h3>
                 {{ block('tablehead') }}
-                {% if packages %}
-                    {% for package in packages %}
+                {% set package_list = object.packageSnapshots is defined and object.packageSnapshots|length > 0
+                    ? object.packageSnapshots
+                    : packages %}
+                {% if package_list %}
+                    {% for package in package_list %}
                         <tr>
                             <td>
                                 <div class="checkbox">
@@ -35,8 +38,11 @@
                         </tr>
                     {% endfor %}
                 {% endif %}
-                {% if items %}
-                    {% for item in items %}
+                {% set item_list = object.itemSnapshots is defined and object.itemSnapshots|length > 0
+                    ? object.itemSnapshots
+                    : items %}
+                {% if item_list %}
+                    {% for item in item_list %}
                         <tr>
                             <td>
                                 <div class="checkbox">

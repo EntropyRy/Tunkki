@@ -17,7 +17,7 @@
             <div>
                 <input type="checkbox">
                 <label>{{ package }}:</label>
-                {% if package.rent %}<span class="float-end">{{ package.rent }} €</span>{% endif %}
+                {% if package.rent %}<span class="float-end package-rent-price">{{ package.rent }} €</span>{% endif %}
             </div>
             <ul class="list-unstyled">
                 {% set show_price = false %}
@@ -72,6 +72,9 @@
         </div>
         <hr>
         <h3>Allekirjoitus</h3>
+        <p class="text-muted small">
+            {{ 'contract.signature_note'|trans }}
+        </p>
         <div {{ stimulus_controller('signature') }}>
             <div style="height: 260px">
                 {% if bookingdata.renterSignature is empty %}
@@ -123,6 +126,6 @@
             {% if item.serialNumber %}, S/N: {{ item.serialNumber }}{% endif %}
         </small>
         {% for file in item.files %}<span class="no-print">- {{ file.downloadLink|raw }}</span>{% endfor %}
-        {% if show_price %}<span class="float-end">{{ item.rent }} €</span>{% endif %}
+        {% if show_price %}<span class="float-end item-rent-price">{{ item.rent }} €</span>{% endif %}
     </div>
 {% endblock -%}

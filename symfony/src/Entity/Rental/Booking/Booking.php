@@ -87,6 +87,24 @@ class Booking implements \Stringable
     #[ORM\Cache(usage: 'NONSTRICT_READ_WRITE')]
     private Collection $packages;
 
+    /** @var Collection<int, BookingItemSnapshot> */
+    #[ORM\OneToMany(
+        targetEntity: BookingItemSnapshot::class,
+        mappedBy: 'booking',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
+    private Collection $itemSnapshots;
+
+    /** @var Collection<int, BookingPackageSnapshot> */
+    #[ORM\OneToMany(
+        targetEntity: BookingPackageSnapshot::class,
+        mappedBy: 'booking',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
+    private Collection $packageSnapshots;
+
     /** @var Collection<int, Accessory> */
     #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private Collection $accessories;
@@ -184,6 +202,8 @@ class Booking implements \Stringable
         $this->billableEvents = new ArrayCollection();
         $this->statusEvents = new ArrayCollection();
         $this->rewards = new ArrayCollection();
+        $this->itemSnapshots = new ArrayCollection();
+        $this->packageSnapshots = new ArrayCollection();
 
         // Initialize non-nullable DateTimes to a sentinel; replaced in lifecycle callbacks.
         $now = new \DateTimeImmutable();
@@ -230,6 +250,7 @@ class Booking implements \Stringable
             $item->addRentHistory($this);
         }
         $this->packages->add($package);
+        $this->ensurePackageSnapshot($package);
 
         return $this;
     }
@@ -240,12 +261,14 @@ class Booking implements \Stringable
             $item->removeRentHistory($this);
         }
         $this->packages->removeElement($package);
+        $this->removePackageSnapshot($package);
     }
 
     public function addItem(Item $item): self
     {
         $item->addRentHistory($this);
         $this->items->add($item);
+        $this->ensureItemSnapshot($item);
 
         return $this;
     }
@@ -254,6 +277,7 @@ class Booking implements \Stringable
     {
         $item->removeRentHistory($this);
         $this->items->removeElement($item);
+        $this->removeItemSnapshot($item);
     }
 
     public function addBillableEvent(BillableEvent $billableEvent): self
@@ -321,11 +345,23 @@ class Booking implements \Stringable
     public function getCalculatedTotalPrice(): int
     {
         $price = 0;
-        foreach ($this->items as $item) {
-            $price += (int) $item->getRent();
+        if ($this->itemSnapshots->count() > 0) {
+            foreach ($this->itemSnapshots as $snapshot) {
+                $price += (int) $snapshot->getRent();
+            }
+        } else {
+            foreach ($this->items as $item) {
+                $price += (int) $item->getRent();
+            }
         }
-        foreach ($this->packages as $package) {
-            $price += (int) $package->getRent();
+        if ($this->packageSnapshots->count() > 0) {
+            foreach ($this->packageSnapshots as $snapshot) {
+                $price += (int) $snapshot->getRent();
+            }
+        } else {
+            foreach ($this->packages as $package) {
+                $price += (int) $package->getRent();
+            }
         }
 
         return $price;
@@ -385,16 +421,34 @@ class Booking implements \Stringable
         $items = [];
         $packages = [];
         $accessories = [];
+        $useItemSnapshots = $this->itemSnapshots->count() > 0;
+        $usePackageSnapshots = $this->packageSnapshots->count() > 0;
 
-        foreach ($this->items as $item) {
-            $items[] = $item;
-            $rent['items'] += (int) $item->getRent();
-            $compensation['items'] += (int) $item->getCompensationPrice();
+        if ($useItemSnapshots) {
+            foreach ($this->itemSnapshots as $snapshot) {
+                $items[] = $snapshot;
+                $rent['items'] += (int) $snapshot->getRent();
+                $compensation['items'] += (int) $snapshot->getCompensationPrice();
+            }
+        } else {
+            foreach ($this->items as $item) {
+                $items[] = $item;
+                $rent['items'] += (int) $item->getRent();
+                $compensation['items'] += (int) $item->getCompensationPrice();
+            }
         }
-        foreach ($this->packages as $package) {
-            $packages[] = $package;
-            $rent['packages'] += (int) $package->getRent();
-            $compensation['packages'] += (int) $package->getCompensationPrice();
+        if ($usePackageSnapshots) {
+            foreach ($this->packageSnapshots as $snapshot) {
+                $packages[] = $snapshot;
+                $rent['packages'] += (int) $snapshot->getRent();
+                $compensation['packages'] += (int) $snapshot->getCompensationPrice();
+            }
+        } else {
+            foreach ($this->packages as $package) {
+                $packages[] = $package;
+                $rent['packages'] += (int) $package->getRent();
+                $compensation['packages'] += (int) $package->getCompensationPrice();
+            }
         }
         foreach ($this->accessories as $item) {
             $accessories[] = $item;
@@ -508,6 +562,22 @@ class Booking implements \Stringable
     public function getItems(): Collection
     {
         return $this->items;
+    }
+
+    /**
+     * @return Collection<int, BookingItemSnapshot>
+     */
+    public function getItemSnapshots(): Collection
+    {
+        return $this->itemSnapshots;
+    }
+
+    /**
+     * @return Collection<int, BookingPackageSnapshot>
+     */
+    public function getPackageSnapshots(): Collection
+    {
+        return $this->packageSnapshots;
     }
 
     public function setNumberOfRentDays(int $numberOfRentDays): self
@@ -762,5 +832,79 @@ class Booking implements \Stringable
     public function getVersion(): int
     {
         return $this->version;
+    }
+
+    private function ensureItemSnapshot(Item $item): void
+    {
+        if ($this->findItemSnapshot($item) instanceof BookingItemSnapshot) {
+            return;
+        }
+
+        $snapshot = new BookingItemSnapshot($this, $item);
+        $rent = $item->getRent();
+        $snapshot->setRent(null !== $rent ? (string) $rent : null);
+        $comp = $item->getCompensationPrice();
+        $snapshot->setCompensationPrice(null !== $comp ? (string) $comp : null);
+        $this->itemSnapshots->add($snapshot);
+    }
+
+    private function removeItemSnapshot(Item $item): void
+    {
+        $snapshot = $this->findItemSnapshot($item);
+        if ($snapshot instanceof BookingItemSnapshot) {
+            $this->itemSnapshots->removeElement($snapshot);
+        }
+    }
+
+    private function findItemSnapshot(Item $item): ?BookingItemSnapshot
+    {
+        foreach ($this->itemSnapshots as $snapshot) {
+            $snapshotItem = $snapshot->getItem();
+            if (
+                $snapshotItem === $item
+                || (null !== $snapshotItem?->getId()
+                    && $snapshotItem?->getId() === $item->getId())
+            ) {
+                return $snapshot;
+            }
+        }
+
+        return null;
+    }
+
+    private function ensurePackageSnapshot(Package $package): void
+    {
+        if ($this->findPackageSnapshot($package) instanceof BookingPackageSnapshot) {
+            return;
+        }
+
+        $snapshot = new BookingPackageSnapshot($this, $package);
+        $snapshot->setRent($package->getRent());
+        $snapshot->setCompensationPrice($package->getCompensationPrice());
+        $this->packageSnapshots->add($snapshot);
+    }
+
+    private function removePackageSnapshot(Package $package): void
+    {
+        $snapshot = $this->findPackageSnapshot($package);
+        if ($snapshot instanceof BookingPackageSnapshot) {
+            $this->packageSnapshots->removeElement($snapshot);
+        }
+    }
+
+    private function findPackageSnapshot(Package $package): ?BookingPackageSnapshot
+    {
+        foreach ($this->packageSnapshots as $snapshot) {
+            $snapshotPackage = $snapshot->getPackage();
+            if (
+                $snapshotPackage === $package
+                || (null !== $snapshotPackage?->getId()
+                    && $snapshotPackage?->getId() === $package->getId())
+            ) {
+                return $snapshot;
+            }
+        }
+
+        return null;
     }
 }

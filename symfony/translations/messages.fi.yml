@@ -665,6 +665,7 @@ Back to: Takaisin
 contract:
   accessories:
     prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
+  signature_note: Allekirjoita sopimus vasta varastolla, koska vuokrattavat tuotteet voivat muuttua.
   signed: Allekirjoitettu!
   error: Allekirjoita uudestaan ja hyväksy ehdot
 pcs: kpl

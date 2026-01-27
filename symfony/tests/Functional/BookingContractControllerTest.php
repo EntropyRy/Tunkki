@@ -7,6 +7,7 @@ namespace App\Tests\Functional;
 use App\Entity\Contract;
 use App\Entity\Rental\Booking\Booking;
 use App\Entity\Rental\Booking\Renter;
+use App\Entity\Rental\Inventory\Item;
 use App\Tests\_Base\FixturesWebTestCase;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
@@ -454,6 +455,48 @@ final class BookingContractControllerTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         $this->client->assertSelectorExists('button[name="booking_consent[Signed]"][disabled]');
         $this->client->assertSelectorExists('button[name="booking_consent[Signed]"].btn-secondary.disabled');
+    }
+
+    public function testContractUsesSnapshotPricesAfterItemPriceChange(): void
+    {
+        $renter = $this->createRenter('Test Renter');
+        $this->createRentContract();
+        $booking = $this->createBookingWithReferenceNumber(
+            renter: $renter,
+            referenceNumber: 'REF-123',
+            renterHash: 'hash-abc',
+        );
+
+        $item = new Item();
+        $item->setName('Snapshot Item');
+        $item->setRent('10.00');
+        $item->setCompensationPrice('100.00');
+        $this->entityManager->persist($item);
+
+        $booking->addItem($item);
+        $this->entityManager->flush();
+
+        $item->setRent('20.00');
+        $item->setCompensationPrice('200.00');
+        $this->entityManager->flush();
+
+        $this->entityManager->clear();
+        $reloaded = $this->entityManager->getRepository(Booking::class)->find($booking->getId());
+        $this->assertNotNull($reloaded);
+        $this->assertCount(1, $reloaded->getItemSnapshots());
+        $snapshot = $reloaded->getItemSnapshots()->first();
+        $this->assertInstanceOf(\App\Entity\Rental\Booking\BookingItemSnapshot::class, $snapshot);
+        $this->assertSame('10.00', $snapshot->getRent());
+        $this->assertSame('100.00', $snapshot->getCompensationPrice());
+
+        $this->seedClientHome('fi');
+        $path = $this->path($reloaded, $renter, 'hash-abc');
+        $this->client->request('GET', $path);
+
+        $this->assertResponseIsSuccessful();
+        $this->client->assertSelectorExists('.item-rent-price');
+        $priceText = $this->client->getCrawler()->filter('.item-rent-price')->text();
+        $this->assertSame('10.00 €', $priceText);
     }
 
     private function path(Booking $booking, Renter $renter, string $hash): string

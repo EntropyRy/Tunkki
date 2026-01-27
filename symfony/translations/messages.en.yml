@@ -543,6 +543,7 @@ Price en: Price in English
 contract:
   accessories:
     prices: Costs for damaged or misplaced accessories
+  signature_note: Please sign at the storage, as the items may change.
   signed: Signed!
   error: Please sign again and agree to the terms as well
 share:
