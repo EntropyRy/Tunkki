@@ -544,6 +544,10 @@ contract:
   accessories:
     prices: Costs for damaged or misplaced accessories
   signature_note: Please sign at the storage, as the items may change.
+  purpose:
+    rent: Rent contract
+    privacy_notice: Privacy notice
+    rsvp_privacy_notice: RSVP privacy notice
   signed: Signed!
   error: Please sign again and agree to the terms as well
 share:

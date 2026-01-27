@@ -55,7 +55,10 @@ final class ContractAdmin extends AbstractAdmin
     protected function configureFormFields(FormMapper $formMapper): void
     {
         $formMapper
-            ->add('purpose', ChoiceType::class, ['choices' => $this->getPurposeChoices()])
+            ->add('purpose', ChoiceType::class, [
+                'choices' => $this->getPurposeChoices(),
+                'choice_translation_domain' => 'messages',
+            ])
             ->add('validFrom', DateTimePickerType::class, [
                 'required' => false,
                 'format' => 'd.M.y H:mm',
@@ -94,6 +97,10 @@ final class ContractAdmin extends AbstractAdmin
      */
     private function getPurposeChoices(): array
     {
-        return ['Rent Contract' => 'rent'];
+        return [
+            'contract.purpose.rent' => 'rent',
+            'contract.purpose.privacy_notice' => 'privacy-notice',
+            'contract.purpose.rsvp_privacy_notice' => 'rsvp-privacy-notice',
+        ];
     }
 }
