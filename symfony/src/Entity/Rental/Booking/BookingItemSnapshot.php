@@ -31,12 +31,11 @@ class BookingItemSnapshot implements \Stringable
     public function __construct(
         #[ORM\ManyToOne(targetEntity: Booking::class, inversedBy: 'itemSnapshots')]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-        private ?Booking $booking = null,
+        private Booking $booking,
         #[ORM\ManyToOne(targetEntity: Item::class)]
         #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-        private ?Item $item = null
-    )
-    {
+        private ?Item $item = null,
+    ) {
     }
 
     public function getId(): ?int
@@ -44,12 +43,12 @@ class BookingItemSnapshot implements \Stringable
         return $this->id;
     }
 
-    public function getBooking(): ?Booking
+    public function getBooking(): Booking
     {
         return $this->booking;
     }
 
-    public function setBooking(?Booking $booking): self
+    public function setBooking(Booking $booking): self
     {
         $this->booking = $booking;
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Entity\Rental\Booking;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use App\Entity\Rental\Inventory\Package;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,12 +32,11 @@ class BookingPackageSnapshot implements \Stringable
     public function __construct(
         #[ORM\ManyToOne(targetEntity: Booking::class, inversedBy: 'packageSnapshots')]
         #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
-        private ?Booking $booking = null,
+        private Booking $booking,
         #[ORM\ManyToOne(targetEntity: Package::class)]
         #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
-        private ?Package $package = null
-    )
-    {
+        private ?Package $package = null,
+    ) {
     }
 
     public function getId(): ?int
@@ -45,12 +44,12 @@ class BookingPackageSnapshot implements \Stringable
         return $this->id;
     }
 
-    public function getBooking(): ?Booking
+    public function getBooking(): Booking
     {
         return $this->booking;
     }
 
-    public function setBooking(?Booking $booking): self
+    public function setBooking(Booking $booking): self
     {
         $this->booking = $booking;
 

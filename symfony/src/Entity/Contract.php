@@ -11,6 +11,27 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\HasLifecycleCallbacks]
 class Contract implements \Stringable
 {
+    /**
+     * Canonical (English) purpose slugs stored in DB.
+     *
+     * @var array<string, string>
+     */
+    public const array PURPOSES = [
+        'rent' => 'rental-contract',
+        'privacy_notice' => 'privacy-notice',
+        'rsvp_privacy_notice' => 'rsvp-privacy-notice',
+    ];
+
+    /**
+     * Localized Finnish slugs for public routes.
+     *
+     * @var array<string, string>
+     */
+    public const array SLUGS_FI = [
+        'rent' => 'vuokrasopimus',
+        'privacy_notice' => 'rekisteriseloste',
+        'rsvp_privacy_notice' => 'rsvp-rekisteriseloste',
+    ];
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]

@@ -1,0 +1,23 @@
+{% extends 'onecolumn.html.twig' %}
+{% block title %}
+    {% if label_key %}
+        {{ label_key|trans }}
+    {% else %}
+        {{ contract.purpose }}
+    {% endif %}
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 contract-public">
+        <h1>
+            {% if label_key %}
+                {{ label_key|trans }}
+            {% else %}
+                {{ contract.purpose }}
+            {% endif %}
+        </h1>
+        <div class="contract-content">
+            {% set loc = 'content' ~ ((app.request.locale)|capitalize) %}
+            {{ attribute(contract, loc)|markdown_to_html|raw }}
+        </div>
+    </div>
+{% endblock %}

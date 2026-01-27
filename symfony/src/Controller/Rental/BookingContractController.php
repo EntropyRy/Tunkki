@@ -38,7 +38,9 @@ class BookingContractController extends Controller
         if ($booking->getRenter()?->getId() !== $renter->getId()) {
             throw new NotFoundHttpException();
         }
-        $contract = $em->getRepository(Contract::class)->findOneBy(['purpose' => 'rent']);
+        $contract = $em->getRepository(Contract::class)->findOneBy([
+            'purpose' => Contract::PURPOSES['rent'],
+        ]);
         if (null === $contract) {
             throw new NotFoundHttpException();
         }

@@ -860,10 +860,15 @@ class Booking implements \Stringable
     {
         foreach ($this->itemSnapshots as $snapshot) {
             $snapshotItem = $snapshot->getItem();
+            if ($snapshotItem === $item) {
+                return $snapshot;
+            }
+            if (null === $snapshotItem) {
+                continue;
+            }
             if (
-                $snapshotItem === $item
-                || (null !== $snapshotItem?->getId()
-                    && $snapshotItem?->getId() === $item->getId())
+                null !== $snapshotItem->getId()
+                && $snapshotItem->getId() === $item->getId()
             ) {
                 return $snapshot;
             }
@@ -896,10 +901,15 @@ class Booking implements \Stringable
     {
         foreach ($this->packageSnapshots as $snapshot) {
             $snapshotPackage = $snapshot->getPackage();
+            if ($snapshotPackage === $package) {
+                return $snapshot;
+            }
+            if (null === $snapshotPackage) {
+                continue;
+            }
             if (
-                $snapshotPackage === $package
-                || (null !== $snapshotPackage?->getId()
-                    && $snapshotPackage?->getId() === $package->getId())
+                null !== $snapshotPackage->getId()
+                && $snapshotPackage->getId() === $package->getId()
             ) {
                 return $snapshot;
             }

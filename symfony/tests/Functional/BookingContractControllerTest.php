@@ -125,7 +125,9 @@ final class BookingContractControllerTest extends FixturesWebTestCase
     public function testMissingContractReturnsNotFound(): void
     {
         $renter = $this->createRenter('Test Renter');
-        $existingContract = $this->entityManager->getRepository(Contract::class)->findOneBy(['purpose' => 'rent']);
+        $existingContract = $this->entityManager->getRepository(Contract::class)->findOneBy([
+            'purpose' => Contract::PURPOSES['rent'],
+        ]);
         if ($existingContract instanceof Contract) {
             $this->entityManager->remove($existingContract);
             $this->entityManager->flush();
@@ -559,13 +561,15 @@ final class BookingContractControllerTest extends FixturesWebTestCase
 
     private function createRentContract(): Contract
     {
-        $existing = $this->entityManager->getRepository(Contract::class)->findOneBy(['purpose' => 'rent']);
+        $existing = $this->entityManager->getRepository(Contract::class)->findOneBy([
+            'purpose' => Contract::PURPOSES['rent'],
+        ]);
         if ($existing instanceof Contract) {
             return $existing;
         }
 
         $contract = new Contract();
-        $contract->setPurpose('rent');
+        $contract->setPurpose(Contract::PURPOSES['rent']);
         $contract->setContentFi('<div class="contract-fi">Test contract fi</div>');
         $contract->setContentEn('<div class="contract-en">Test contract en</div>');
 

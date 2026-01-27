@@ -549,7 +549,7 @@ rsvp:
     Jos olet jäsen, kirjaudu ensin sisään (jäsenille voidaan lähettää tapahtumapäivityksiä sähköpostilla).
     Etkö ole jäsen? Voit liittyä jäseneksi <a href="/liity">täällä</a>.
     Voit myös ilmoittautua tapahtumaan jättämällä yhteystietosi lomakkeelle.
-    Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/rsvp-rekisteriseloste">täällä</a>.
+    Voit tutustua tähän liittyvään tietosuojaselosteeseemme <a href="/sopimus/rsvp-rekisteriseloste">täällä</a>.
   closed: Ilmoittautuminen suljettu
 ticket:
   ticket: Lippu
@@ -666,6 +666,10 @@ contract:
   accessories:
     prices: Hinnat ovat rikkoutuneille tai hävinneille tarvikkeille
   signature_note: Allekirjoita sopimus vasta varastolla, koska vuokrattavat tuotteet voivat muuttua.
+  slug:
+    rent: vuokrasopimus
+    privacy_notice: rekisteriseloste
+    rsvp_privacy_notice: rsvp-rekisteriseloste
   purpose:
     rent: Vuokrasopimus
     privacy_notice: Rekisteriseloste

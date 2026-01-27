@@ -38,8 +38,6 @@ final class ContractAdmin extends AbstractAdmin
         $listMapper
             ->add('purpose')
             ->add('validFrom')
-            ->add('ContentFi', 'html')
-            ->add('ContentEn', 'html')
             ->add('updatedAt')
             ->add('createdAt')
             ->add(ListMapper::NAME_ACTIONS, null, [
@@ -97,10 +95,11 @@ final class ContractAdmin extends AbstractAdmin
      */
     private function getPurposeChoices(): array
     {
-        return [
-            'contract.purpose.rent' => 'rent',
-            'contract.purpose.privacy_notice' => 'privacy-notice',
-            'contract.purpose.rsvp_privacy_notice' => 'rsvp-privacy-notice',
-        ];
+        $choices = [];
+        foreach (Contract::PURPOSES as $key => $value) {
+            $choices['contract.purpose.'.$key] = $value;
+        }
+
+        return $choices;
     }
 }

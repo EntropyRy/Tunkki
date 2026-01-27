@@ -437,7 +437,7 @@ rsvp:
   total_shown_only_to_active_members: "Total shown only to active members: %count%"
 
   rsvpd_successfully: RSVP successfully saved! We'll send you an email before the event.
-  info: If you are a member, please log in first (members get event updates by email). Not a member? You can become a member <a href="/en/join-us">here</a>. You can also RSVP by leaving your contact details in the form below. Read our privacy notice <a href="/rsvp-rekisteriseloste">here</a>.
+  info: If you are a member, please log in first (members get event updates by email). Not a member? You can become a member <a href="/en/join-us">here</a>. You can also RSVP by leaving your contact details in the form below. Read our privacy notice <a href="/contract/rsvp-privacy-notice">here</a>.
 
   closed: Sign-up closed
 verify:
@@ -544,6 +544,10 @@ contract:
   accessories:
     prices: Costs for damaged or misplaced accessories
   signature_note: Please sign at the storage, as the items may change.
+  slug:
+    rent: rental-contract
+    privacy_notice: privacy-notice
+    rsvp_privacy_notice: rsvp-privacy-notice
   purpose:
     rent: Rent contract
     privacy_notice: Privacy notice

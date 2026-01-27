@@ -28,7 +28,7 @@
                     <small>{{ 'submit_and_agree'|trans }}</small>
                 </div>
                 <a target="privacypolicy"
-                   href="/rekisteriseloste"
+                   href="{{ path('contract_show', {purpose: 'contract.slug.privacy_notice'|trans}) }}"
                    type="button"
                    class="btn btn-secondary">{{ 'privacy_policy'|trans }}</a>
                 <input data-turbo="false"
