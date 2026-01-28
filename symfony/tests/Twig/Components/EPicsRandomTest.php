@@ -195,8 +195,8 @@ final class EPicsRandomTest extends LiveComponentTestCase
 
         $badge = $crawler->filter('.badge');
         self::assertCount(1, $badge);
-        // Should show loading text when no takenAt
-        self::assertStringContainsString('..', $badge->text());
+        self::assertCount(1, $crawler->filter('.epics-badge-loading'));
+        self::assertMatchesRegularExpression('/\\.\\.$/', $badge->text());
     }
 
     public function testRenderedOutputShowsDateWhenTakenAtPresent(): void
@@ -212,8 +212,14 @@ final class EPicsRandomTest extends LiveComponentTestCase
 
         $badge = $crawler->filter('.badge');
         self::assertCount(1, $badge);
-        // Should show formatted date
-        self::assertStringContainsString('15.6.2025', $badge->text());
+        self::assertCount(1, $crawler->filter('.epics-badge-date'));
+        $expectedDate = (new \DateTimeImmutable('2025-06-15T18:30:00+00:00'))
+            ->setTimezone(new \DateTimeZone(date_default_timezone_get()))
+            ->format('j.n.Y');
+        self::assertMatchesRegularExpression(
+            '/^'.preg_quote($expectedDate, '/').', \\d{2}:\\d{2}$/',
+            $badge->text(),
+        );
     }
 
     public function testRenderedOutputHasShimmerClassWhenNoPhoto(): void
@@ -247,8 +253,7 @@ final class EPicsRandomTest extends LiveComponentTestCase
 
         $container = $crawler->filter('[data-poll]');
         self::assertCount(1, $container);
-        self::assertStringContainsString('delay(10000)', $container->attr('data-poll'));
-        self::assertStringContainsString('refresh', $container->attr('data-poll'));
+        self::assertSame('delay(10000)|refresh', $container->attr('data-poll'));
     }
 
     public function testRenderedOutputContainsProgressBar(): void
@@ -261,8 +266,10 @@ final class EPicsRandomTest extends LiveComponentTestCase
 
         $progressBar = $crawler->filter('.progress-bar');
         self::assertCount(1, $progressBar);
-        // Check animation style is present
-        self::assertStringContainsString('epics-countdown-', $progressBar->attr('style'));
+        self::assertMatchesRegularExpression(
+            '/^animation: epics-countdown-[01] var\\(--epics-duration\\) linear forwards$/',
+            (string) $progressBar->attr('style'),
+        );
     }
 
     public function testRenderedOutputHasEpicsContainerClass(): void
@@ -281,7 +288,7 @@ final class EPicsRandomTest extends LiveComponentTestCase
 
         $container = $crawler->filter('[data-loading]');
         self::assertCount(1, $container);
-        self::assertStringContainsString('addClass(loading)', $container->attr('data-loading'));
+        self::assertSame('addClass(loading)', $container->attr('data-loading'));
     }
 
     public function testRenderedOutputHasDynamicDurationStyle(): void
@@ -292,7 +299,7 @@ final class EPicsRandomTest extends LiveComponentTestCase
         $crawler = $component->render()->crawler();
 
         $container = $crawler->filter('.epics-container');
-        self::assertStringContainsString('--epics-duration: 5s', $container->attr('style'));
+        self::assertSame('--epics-duration: 5s', $container->attr('style'));
     }
 
     public function testDefaultValuesAreSetCorrectly(): void

@@ -133,9 +133,9 @@ final class LoginSubscriberTest extends TestCase
 
         $flashes = $session->getFlashBag()->get('warning_html');
         $this->assertCount(1, $flashes);
-        $this->assertStringContainsString('Sähköpostiosoitteesi ei ole vahvistettu', $flashes[0]);
-        $this->assertStringContainsString('Lähetä vahvistussähköposti uudelleen', $flashes[0]);
-        $this->assertStringContainsString('/fi/profile/resend-verification', $flashes[0]);
+        $this->assertMatchesRegularExpression('/Sähköpostiosoitteesi ei ole vahvistettu/', $flashes[0]);
+        $this->assertMatchesRegularExpression('/Lähetä vahvistussähköposti uudelleen/', $flashes[0]);
+        $this->assertMatchesRegularExpression('#/fi/profile/resend-verification#', $flashes[0]);
     }
 
     public function testOnLoginSuccessAddsFlashForUnverifiedEmailEnglish(): void
@@ -164,9 +164,9 @@ final class LoginSubscriberTest extends TestCase
 
         $flashes = $session->getFlashBag()->get('warning_html');
         $this->assertCount(1, $flashes);
-        $this->assertStringContainsString('Your email address is not verified', $flashes[0]);
-        $this->assertStringContainsString('Resend verification email', $flashes[0]);
-        $this->assertStringContainsString('/en/profile/resend-verification', $flashes[0]);
+        $this->assertMatchesRegularExpression('/Your email address is not verified/', $flashes[0]);
+        $this->assertMatchesRegularExpression('/Resend verification email/', $flashes[0]);
+        $this->assertMatchesRegularExpression('#/en/profile/resend-verification#', $flashes[0]);
     }
 
     public function testOnLoginSuccessNoFlashWhenEmailVerified(): void

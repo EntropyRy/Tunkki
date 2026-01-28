@@ -48,7 +48,7 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $this->assertResponseRedirects();
         $location = $this->client->getResponse()->headers->get('Location');
         $this->assertNotNull($location);
-        $this->assertStringContainsString('login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     /**
@@ -69,7 +69,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $this->assertNotNull($location);
 
         $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
-        $this->assertStringContainsString($expectedPath, $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        $this->assertSame($expectedPath, $parts['path'] ?? null);
     }
 
     /**
@@ -180,13 +182,13 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertSame('text/calendar; charset=utf-8', $response->headers->get('Content-Type'));
-        $this->assertStringContainsString('attachment; filename="entropy.ics"', $response->headers->get('Content-Disposition') ?? '');
+        $this->assertMatchesRegularExpression('/attachment; filename="entropy\\.ics"/', $response->headers->get('Content-Disposition') ?? '');
 
         // Verify ICS content structure
         $content = $response->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
-        $this->assertStringContainsString('END:VCALENDAR', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VCALENDAR/', $content);
+        $this->assertMatchesRegularExpression('/END:VCALENDAR/', $content);
     }
 
     /**
@@ -236,9 +238,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Party Tapahtuma', $content);
-        $this->assertStringNotContainsString('Kerhokerta', $content);
-        $this->assertStringNotContainsString('Kokous', $content);
+        $this->assertMatchesRegularExpression('/Party Tapahtuma/', $content);
+        $this->assertDoesNotMatchRegularExpression('/Kerhokerta/', $content);
+        $this->assertDoesNotMatchRegularExpression('/Kokous/', $content);
     }
 
     /**
@@ -273,8 +275,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Kerhokerta', $content);
-        $this->assertStringContainsString('Striimi', $content);
+        $this->assertMatchesRegularExpression('/Kerhokerta/', $content);
+        $this->assertMatchesRegularExpression('/Striimi/', $content);
     }
 
     /**
@@ -302,7 +304,7 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Hallituksen kokous', $content);
+        $this->assertMatchesRegularExpression('/Hallituksen kokous/', $content);
     }
 
     /**
@@ -330,9 +332,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('BEGIN:VALARM', $content);
-        $this->assertStringContainsString('TRIGGER', $content);
-        $this->assertStringContainsString('Muistutus huomisesta Entropy tapahtumasta', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VALARM/', $content);
+        $this->assertMatchesRegularExpression('/TRIGGER/', $content);
+        $this->assertMatchesRegularExpression('/Muistutus huomisesta Entropy tapahtumasta/', $content);
     }
 
     /**
@@ -360,8 +362,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('BEGIN:VALARM', $content);
-        $this->assertStringContainsString('Reminder for Entropy event tommorrow', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VALARM/', $content);
+        $this->assertMatchesRegularExpression('/Reminder for Entropy event tommorrow/', $content);
     }
 
     /**
@@ -396,8 +398,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('LOCATION', $content);
-        $this->assertStringContainsString('Kumpulantie 1', $content);
+        $this->assertMatchesRegularExpression('/LOCATION/', $content);
+        $this->assertMatchesRegularExpression('/Kumpulantie 1/', $content);
     }
 
     /**
@@ -429,8 +431,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('LOCATION', $content);
-        $this->assertStringContainsString('https://meet.example.com/room123', $content);
+        $this->assertMatchesRegularExpression('/LOCATION/', $content);
+        $this->assertMatchesRegularExpression('#https://meet\\.example\\.com/room123#', $content);
     }
 
     /**
@@ -471,15 +473,15 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('LOCATION', $content);
+        $this->assertMatchesRegularExpression('/LOCATION/', $content);
         // Should contain composite location with physical and online info
         // Format: "Venue Name – Street Address (Online: URL)"
         // Note: ICS folds long lines at 75 chars, so we check individual parts
-        $this->assertStringContainsString('Hybrid Venue', $content);
-        $this->assertStringContainsString('Hybridikatu 5', $content);
-        $this->assertStringContainsString('(Online:', $content);
+        $this->assertMatchesRegularExpression('/Hybrid Venue/', $content);
+        $this->assertMatchesRegularExpression('/Hybridikatu 5/', $content);
+        $this->assertMatchesRegularExpression('/\\(Online:/', $content);
         // URL may be folded across lines, check the recognizable part
-        $this->assertStringContainsString('meet.example.com', $content);
+        $this->assertMatchesRegularExpression('/meet\\.example\\.com/', $content);
     }
 
     /**
@@ -507,8 +509,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
         // Should still have valid ICS structure
-        $this->assertStringContainsString('BEGIN:VEVENT', $content);
-        $this->assertStringContainsString('END:VEVENT', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VEVENT/', $content);
+        $this->assertMatchesRegularExpression('/END:VEVENT/', $content);
     }
 
     /**
@@ -537,9 +539,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VCALENDAR/', $content);
         // No VEVENT should be present if all filters are off
-        $this->assertStringNotContainsString('Hidden Event', $content);
+        $this->assertDoesNotMatchRegularExpression('/Hidden Event/', $content);
     }
 
     /**
@@ -581,9 +583,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('All Types - Event', $content);
-        $this->assertStringContainsString('All Types - Clubroom', $content);
-        $this->assertStringContainsString('All Types - Meeting', $content);
+        $this->assertMatchesRegularExpression('/All Types - Event/', $content);
+        $this->assertMatchesRegularExpression('/All Types - Clubroom/', $content);
+        $this->assertMatchesRegularExpression('/All Types - Meeting/', $content);
         // Should have alarms for all
         $eventCount = substr_count($content, 'BEGIN:VEVENT');
         $this->assertGreaterThanOrEqual(3, $eventCount);
@@ -613,8 +615,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('VTIMEZONE', $content);
-        $this->assertStringContainsString('Europe/Helsinki', $content);
+        $this->assertMatchesRegularExpression('/VTIMEZONE/', $content);
+        $this->assertMatchesRegularExpression('/Europe\\/Helsinki/', $content);
     }
 
     /**
@@ -641,7 +643,7 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('URL:', $content);
+        $this->assertMatchesRegularExpression('/URL:/', $content);
     }
 
     /**
@@ -668,7 +670,7 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('English Name', $content);
+        $this->assertMatchesRegularExpression('/English Name/', $content);
     }
 
     /**
@@ -695,7 +697,7 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Suomenkielinen Nimi', $content);
+        $this->assertMatchesRegularExpression('/Suomenkielinen Nimi/', $content);
     }
 
     /**
@@ -723,8 +725,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Kerho Alarm', $content);
-        $this->assertStringContainsString('BEGIN:VALARM', $content);
+        $this->assertMatchesRegularExpression('/Kerho Alarm/', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VALARM/', $content);
     }
 
     /**
@@ -752,8 +754,8 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Kokous Alarm', $content);
-        $this->assertStringContainsString('BEGIN:VALARM', $content);
+        $this->assertMatchesRegularExpression('/Kokous Alarm/', $content);
+        $this->assertMatchesRegularExpression('/BEGIN:VALARM/', $content);
     }
 
     /**
@@ -780,10 +782,10 @@ final class CalendarControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
-        $this->assertStringContainsString('Kolmen paivan tapahtuma', $content);
+        $this->assertMatchesRegularExpression('/Kolmen paivan tapahtuma/', $content);
         // Should have both DTSTART and DTEND
-        $this->assertStringContainsString('DTSTART', $content);
-        $this->assertStringContainsString('DTEND', $content);
+        $this->assertMatchesRegularExpression('/DTSTART/', $content);
+        $this->assertMatchesRegularExpression('/DTEND/', $content);
     }
 
     /**
@@ -813,9 +815,9 @@ final class CalendarControllerTest extends FixturesWebTestCase
         $content = $this->client->getResponse()->getContent();
         $this->assertIsString($content);
         // HTML should be stripped
-        $this->assertStringNotContainsString('<p>', $content);
-        $this->assertStringNotContainsString('<strong>', $content);
-        $this->assertStringContainsString('Test content with links', $content);
+        $this->assertDoesNotMatchRegularExpression('/<p>/', $content);
+        $this->assertDoesNotMatchRegularExpression('/<strong>/', $content);
+        $this->assertMatchesRegularExpression('/Test content with links/', $content);
     }
 
     /**

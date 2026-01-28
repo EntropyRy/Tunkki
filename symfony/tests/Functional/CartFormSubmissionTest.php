@@ -171,8 +171,8 @@ final class CartFormSubmissionTest extends FixturesWebTestCase
             'Should redirect to checkout (kassa) route',
         );
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString(
-            '/kassa',
+        $this->assertMatchesRegularExpression(
+            '#/kassa(/|$)#',
             $location,
             'Should redirect to checkout (kassa) route',
         );

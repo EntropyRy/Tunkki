@@ -159,7 +159,7 @@ final class SitemapControllerTest extends FixturesWebTestCase
         // Ensure no empty loc entries.
         self::assertNotContains('', $locs);
         // Ensure we don't leak locale through query parameters.
-        self::assertStringNotContainsString('?_locale=', $xml);
+        self::assertDoesNotMatchRegularExpression('/\\?_locale=/', $xml);
 
         // External events have no EN alternate (no localized page exists).
         $externalUrlNode = $xpath->query('/sm:urlset/sm:url[sm:loc="'.$externalUrl.'"]');

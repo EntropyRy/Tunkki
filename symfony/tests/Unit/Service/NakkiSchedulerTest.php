@@ -190,7 +190,7 @@ final class NakkiSchedulerTest extends FixturesWebTestCase
         self::assertCount(1, $result->conflicts, 'Should report assigned booking as conflict');
         self::assertTrue($result->hasConflicts());
         self::assertNotNull($result->warning);
-        self::assertStringContainsString('1 booking(s) with assigned members', $result->warning);
+        self::assertMatchesRegularExpression('/1 booking\\(s\\) with assigned members/', $result->warning);
 
         self::assertSame($assignedBooking, $result->conflicts[0]);
     }

@@ -254,7 +254,7 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
         self::assertTrue($response->isRedirect(), 'Anonymous user should be redirected');
 
         $location = $response->headers->get('Location') ?? '';
-        self::assertStringContainsString('/login', $location, 'Should redirect to login page');
+        self::assertMatchesRegularExpression('#/login(/|$)#', $location, 'Should redirect to login page');
     }
 
     public function testAnonymousUserRedirectedToLoginEnglishLocale(): void
@@ -272,6 +272,6 @@ final class EventNakkiAdminAccessTest extends FixturesWebTestCase
         self::assertTrue($response->isRedirect(), 'Anonymous user should be redirected (EN)');
 
         $location = $response->headers->get('Location') ?? '';
-        self::assertStringContainsString('/login', $location, 'Should redirect to login page (EN)');
+        self::assertMatchesRegularExpression('#/login(/|$)#', $location, 'Should redirect to login page (EN)');
     }
 }

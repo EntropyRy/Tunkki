@@ -288,7 +288,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     #[DataProvider('localeProvider')]
@@ -378,7 +378,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         // Assert: Redirects to artist profile
         $this->assertResponseRedirects();
         $response = $this->client->getResponse();
-        $this->assertStringContainsString('/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify edit was saved
         $this->em()->clear();
@@ -416,7 +416,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         // Assert: Redirects with warning
         $this->assertResponseRedirects();
         $response = $this->client->getResponse();
-        $this->assertStringContainsString('/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
     }
 
     public function testArtistSignupEditRedirectsUnauthenticatedUser(): void
@@ -444,7 +444,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     /* =========================================================================
@@ -481,7 +481,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         // Assert: Redirects to artist profile
         $this->assertResponseRedirects();
         $response = $this->client->getResponse();
-        $this->assertStringContainsString('/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify deletion
         $this->em()->clear();
@@ -521,7 +521,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         // Assert: Redirects with warning
         $this->assertResponseRedirects();
         $response = $this->client->getResponse();
-        $this->assertStringContainsString('/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify signup still exists
         $this->em()->clear();
@@ -559,7 +559,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         // Assert: Redirects with warning (not allowed)
         $this->assertResponseRedirects();
         $response = $this->client->getResponse();
-        $this->assertStringContainsString('/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // Verify signup still exists
         $this->em()->clear();
@@ -592,7 +592,7 @@ final class EventArtistControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     /* =========================================================================

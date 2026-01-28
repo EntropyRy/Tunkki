@@ -42,7 +42,7 @@ final class ActiveMemberApplicationTest extends FixturesWebTestCase
 
         $location = $response->headers->get('Location');
         $this->assertNotNull($location);
-        $this->assertStringContainsString('/login', $location, 'Should redirect to login page');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location, 'Should redirect to login page');
     }
 
     #[DataProvider('localeProvider')]

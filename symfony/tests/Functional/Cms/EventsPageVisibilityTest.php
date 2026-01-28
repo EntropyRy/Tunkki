@@ -48,11 +48,22 @@ final class EventsPageVisibilityTest extends FixturesWebTestCase
         // Assert
         self::assertResponseIsSuccessful();
 
-        // Temporary micro-invariant assertions (replace with structural hooks when available)
-        $content = $this->client()->getResponse()->getContent() ?: '';
-        self::assertStringContainsString('events-page-visible', $content, 'Publicly published event must be listed for anonymous users.');
-        self::assertStringNotContainsString('events-page-draft', $content, 'Draft event must not be listed for anonymous users.');
-        self::assertStringNotContainsString('events-page-future', $content, 'Future publishDate event must not be listed for anonymous users.');
+        $crawler = $this->client()->getCrawler();
+        self::assertGreaterThan(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-visible"]')->count(),
+            'Publicly published event must be listed for anonymous users.',
+        );
+        self::assertSame(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-draft"]')->count(),
+            'Draft event must not be listed for anonymous users.',
+        );
+        self::assertSame(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-future"]')->count(),
+            'Future publishDate event must not be listed for anonymous users.',
+        );
     }
 
     /**
@@ -83,11 +94,22 @@ final class EventsPageVisibilityTest extends FixturesWebTestCase
         // Assert
         self::assertResponseIsSuccessful();
 
-        // Temporary micro-invariant assertions (replace with structural hooks when available)
-        $content = $this->client()->getResponse()->getContent() ?: '';
-        self::assertStringContainsString('events-page-visible-am', $content, 'Published event must be listed for active members.');
-        self::assertStringContainsString('events-page-draft-am', $content, 'Draft event must be listed for active members.');
-        self::assertStringContainsString('events-page-future-am', $content, 'Future publishDate event must be listed for active members.');
+        $crawler = $this->client()->getCrawler();
+        self::assertGreaterThan(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-visible-am"]')->count(),
+            'Published event must be listed for active members.',
+        );
+        self::assertGreaterThan(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-draft-am"]')->count(),
+            'Draft event must be listed for active members.',
+        );
+        self::assertGreaterThan(
+            0,
+            $crawler->filter('.event-list-item[data-event-url="events-page-future-am"]')->count(),
+            'Future publishDate event must be listed for active members.',
+        );
     }
 
     /**

@@ -66,7 +66,7 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
-        $this->assertStringContainsString($artistName, $content);
+        $this->assertMatchesRegularExpression('/'.preg_quote($artistName, '/').'/', $content);
     }
 
     public function testArtistPageTitleContainsArtistName(): void
@@ -119,7 +119,7 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
-        $this->assertStringContainsString($bioPart, $content);
+        $this->assertMatchesRegularExpression('/'.preg_quote($bioPart, '/').'/', $content);
     }
 
     public function testArtistWithGenreDisplaysGenre(): void
@@ -136,7 +136,7 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('Techno / House', $content);
+        $this->assertMatchesRegularExpression('/Techno \\/ House/', $content);
     }
 
     public function testDjTypeArtistPageWorks(): void
@@ -179,7 +179,7 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('Actual Artist Name', $content);
+        $this->assertMatchesRegularExpression('/Actual Artist Name/', $content);
     }
 
     public function testArtistEntityAccessorsAndLinks(): void
@@ -216,9 +216,9 @@ final class PublicArtistControllerTest extends FixturesWebTestCase
 
         $linkHtml = $artist->getLinkUrls();
         self::assertNotNull($linkHtml);
-        self::assertStringContainsString('Fractal Instruments', $linkHtml);
-        self::assertStringContainsString('Hexagon Intergalactic', $linkHtml);
-        self::assertStringContainsString(' | ', $linkHtml);
+        self::assertMatchesRegularExpression('/Fractal Instruments/', $linkHtml);
+        self::assertMatchesRegularExpression('/Hexagon Intergalactic/', $linkHtml);
+        self::assertMatchesRegularExpression('/ \\| /', $linkHtml);
 
         $artist->setMember($member);
         self::assertSame($member, $artist->getMember());

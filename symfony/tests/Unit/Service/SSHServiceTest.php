@@ -36,7 +36,7 @@ final class SSHServiceTest extends TestCase
 
         // Legacy mode: returns string error message (not false)
         $this->assertIsString($result);
-        $this->assertStringContainsString('Missing parameter', $result);
+        $this->assertMatchesRegularExpression('/Missing parameter/', $result);
     }
 
     public function testSendCommandStructuredReturnsMissingParameterError(): void
@@ -46,7 +46,7 @@ final class SSHServiceTest extends TestCase
 
         $this->assertIsArray($result);
         $this->assertFalse($result['success']);
-        $this->assertStringContainsString('Missing parameter', $result['error']);
+        $this->assertMatchesRegularExpression('/Missing parameter/', $result['error']);
         $this->assertSame('recording.script.nonexistent', $result['command']);
     }
 

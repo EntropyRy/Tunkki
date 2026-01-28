@@ -16,7 +16,9 @@ final class MattermostLoginTest extends FixturesWebTestCase
 
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringContainsString('chat.entropy.fi', $location);
-        $this->assertStringContainsString('oauth/authorize', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        $this->assertSame('chat.entropy.fi', $parts['host'] ?? null);
+        $this->assertMatchesRegularExpression('#/oauth/authorize#', $parts['path'] ?? '');
     }
 }

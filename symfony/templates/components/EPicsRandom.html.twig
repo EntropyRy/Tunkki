@@ -12,7 +12,7 @@
         loading="lazy"
     >
     <div class="badge-container">
-        <span class="badge bg-secondary">
+        <span class="badge bg-secondary{{ this.takenAt ? ' epics-badge-date' : ' epics-badge-loading' }}">
             {%- if this.takenAt -%}
                 {{ this.takenAt|date('j.n.Y, H:i') }}
             {%- else -%}

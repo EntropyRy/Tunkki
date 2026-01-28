@@ -62,7 +62,7 @@ final class DefaultPageServiceTest extends FixturesWebTestCase
         // html prefix attribute
         $htmlPrefix = $crawler->filter('html[prefix]');
         $this->assertGreaterThan(0, $htmlPrefix->count(), 'HTML tag should have prefix attribute');
-        $this->assertStringContainsString('og:', $htmlPrefix->attr('prefix'));
+        $this->assertMatchesRegularExpression('/og:/', (string) $htmlPrefix->attr('prefix'));
     }
 
     public function testTwitterImageTagRendered(): void

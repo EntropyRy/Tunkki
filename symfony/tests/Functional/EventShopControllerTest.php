@@ -196,8 +196,8 @@ final class EventShopControllerTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect(), 'Should redirect when cart is empty');
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString(
-            '/kauppa',
+        $this->assertMatchesRegularExpression(
+            '#/kauppa(/|$)#',
             $location,
             'Should redirect to event shop when cart is empty',
         );
@@ -223,8 +223,8 @@ final class EventShopControllerTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect(), 'Should redirect when checkout is still open');
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString(
-            '/kassa',
+        $this->assertMatchesRegularExpression(
+            '#/kassa(/|$)#',
             $location,
             'Should redirect to checkout when status is open',
         );
@@ -287,7 +287,7 @@ final class EventShopControllerTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/kauppa', $location);
+        $this->assertMatchesRegularExpression('#/kauppa(/|$)#', $location);
     }
 
     /**
@@ -332,6 +332,6 @@ final class EventShopControllerTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/kauppa', $location);
+        $this->assertMatchesRegularExpression('#/kauppa(/|$)#', $location);
     }
 }

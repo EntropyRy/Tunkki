@@ -47,8 +47,6 @@ final class MemberCreateFormTest extends FixturesWebTestCase
             'Registration form should load.',
         );
 
-        $html = $this->client->getResponse()->getContent() ?? '';
-
         // Core text inputs
         $this->assertGreaterThan(
             0,
@@ -110,13 +108,13 @@ final class MemberCreateFormTest extends FixturesWebTestCase
         );
 
         // Ensure no edit-only fields sneak in
-        $this->assertStringNotContainsString(
-            'name="member[allowInfoMails]"',
-            $html,
+        $this->assertSame(
+            0,
+            $crawler->filter('input[name="member[allowInfoMails]"]')->count(),
         );
-        $this->assertStringNotContainsString(
-            'name="member[allowActiveMemberMails]"',
-            $html,
+        $this->assertSame(
+            0,
+            $crawler->filter('input[name="member[allowActiveMemberMails]"]')->count(),
         );
     }
 
@@ -194,15 +192,11 @@ final class MemberCreateFormTest extends FixturesWebTestCase
             'Final landing after registration should be 200.',
         );
 
-        // Accept either login page (form present) or a check-email/verify page
-        $content = $this->client->getResponse()->getContent() ?? '';
-        $crawlerAfter = new \Symfony\Component\DomCrawler\Crawler($content);
-        $loginFormPresent = $crawlerAfter->filter('form input[name="_username"]')->count() > 0;
-        $checkEmailWording = false !== stripos($content, 'check') && false !== stripos($content, 'email');
-        $verifyWording = false !== stripos($content, 'verify');
-        $this->assertTrue(
-            $loginFormPresent || $checkEmailWording || $verifyWording,
-            'Expected to land on login page or a check-email/verify page after registration.'
+        $crawlerAfter = $this->client->getCrawler();
+        $this->assertGreaterThan(
+            0,
+            $crawlerAfter->filter('form input[name="_username"]')->count(),
+            'Expected to land on login page after registration.',
         );
 
         // Verify persistence

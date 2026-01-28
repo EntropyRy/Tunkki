@@ -138,9 +138,9 @@ final class ClockTest extends TestCase
             $clock->advance('++ invalid relative spec ++');
             $this->fail('Expected an exception for invalid relative time modifier.');
         } catch (\InvalidArgumentException|\DateMalformedStringException $e) {
-            $this->assertStringContainsString(
-                'invalid',
-                strtolower($e->getMessage()),
+            $this->assertMatchesRegularExpression(
+                '/invalid/i',
+                $e->getMessage(),
                 'Exception message should reference invalid modifier.'
             );
         }

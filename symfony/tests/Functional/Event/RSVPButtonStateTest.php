@@ -66,12 +66,12 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
 
         // Should not have disabled class nor aria-disabled attribute
         $class = $crawler->attr('class') ?? '';
-        $this->assertStringNotContainsString('disabled', $class, 'RSVP button should not be disabled');
+        $this->assertDoesNotMatchRegularExpression('/\\bdisabled\\b/', $class, 'RSVP button should not be disabled');
         $this->assertNull($crawler->attr('aria-disabled'), 'RSVP button should not have aria-disabled attribute');
         $this->assertNull($crawler->attr('disabled'), 'RSVP button should not have disabled attribute');
 
         // Should contain label "RSVP" (base text)
-        $this->assertStringContainsString('RSVP', $crawler->text(), 'Enabled RSVP button should contain "RSVP" label');
+        $this->assertMatchesRegularExpression('/RSVP/', $crawler->text(), 'Enabled RSVP button should contain "RSVP" label');
     }
 
     public function testLoggedInUserWithRsvpSeesDisabledButtonWithCheckmarkAndText(): void
@@ -114,17 +114,17 @@ final class RSVPButtonStateTest extends FixturesWebTestCase
 
         // Disabled state attributes/classes
         $class = $crawler->attr('class') ?? '';
-        $this->assertStringContainsString('disabled', $class, 'RSVP button should be visually disabled');
+        $this->assertMatchesRegularExpression('/\\bdisabled\\b/', $class, 'RSVP button should be visually disabled');
         $this->assertSame('true', $crawler->attr('aria-disabled'), 'RSVP button should indicate aria-disabled');
         $this->assertNotNull($crawler->attr('disabled'), 'RSVP button should have disabled attribute');
 
         // Should include a checkmark and translated "already RSVP'd" message
         $text = $crawler->text();
-        $this->assertStringContainsString('✓', $text, 'Disabled RSVP button should include a checkmark');
+        $this->assertMatchesRegularExpression('/✓/', $text, 'Disabled RSVP button should include a checkmark');
 
         // We cannot assert exact translation string content, but ensure "RSVP" is not present as the primary label
         // and that there is non-empty text (translation rendered).
         $this->assertNotEmpty(trim($text), 'Disabled RSVP button should have user-facing text');
-        $this->assertStringContainsString('already', strtolower($text), 'Disabled RSVP button should indicate the already RSVPed state');
+        $this->assertMatchesRegularExpression('/already/i', $text, 'Disabled RSVP button should indicate the already RSVPed state');
     }
 }

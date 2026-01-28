@@ -65,7 +65,7 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
         if ($client->getResponse()->isRedirect()) {
             $this->assertContains($client->getResponse()->getStatusCode(), [301, 302, 303]);
             $location = $client->getResponse()->headers->get('Location') ?? '';
-            $this->assertStringContainsString('/login', $location);
+            $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
             $crawler = $client->request('GET', $location);
             $this->assertSame(200, $client->getResponse()->getStatusCode());
             $this->assertGreaterThan(0, $crawler->filter('form input[name="_username"]')->count());
@@ -108,7 +108,7 @@ final class InvalidCredentialsTest extends FixturesWebTestCase
         if ($client->getResponse()->isRedirect()) {
             $this->assertContains($client->getResponse()->getStatusCode(), [301, 302, 303]);
             $location = $client->getResponse()->headers->get('Location') ?? '';
-            $this->assertStringContainsString('/login', $location);
+            $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
             $crawler = $client->request('GET', $location);
             $this->assertSame(200, $client->getResponse()->getStatusCode());
             $this->assertGreaterThan(0, $crawler->filter('form input[name="_username"]')->count());

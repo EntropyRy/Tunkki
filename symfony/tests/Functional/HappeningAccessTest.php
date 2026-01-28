@@ -267,9 +267,9 @@ final class HappeningAccessTest extends FixturesWebTestCase
             'Non-owner should not hard error.',
         );
         if (200 === $status) {
-            $this->assertStringNotContainsString(
-                'name="happening[nameEn]"',
-                $this->client->getResponse()->getContent() ?? '',
+            $this->assertSame(
+                0,
+                $this->client->getCrawler()->filter('input[name="happening[nameEn]"]')->count(),
                 'Non-owner should not see full edit form.',
             );
         }
@@ -508,9 +508,11 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         $this->assertSame(200, $this->client->getResponse()->getStatusCode());
         // The markdown should be converted - check for the strong tag
-        $this->assertStringContainsString(
-            '<strong>Bold payment info</strong>',
-            $this->client->getResponse()->getContent(),
+        $this->client->assertSelectorExists('.happening-payment-info');
+        $this->assertGreaterThan(
+            0,
+            $this->client->getCrawler()->filter('.happening-payment-info strong')->count(),
+            'Expected payment info to render markdown strong tag inside payment info block.',
         );
     }
 

@@ -118,7 +118,7 @@ final class StreamPageTest extends FixturesWebTestCase
         $this->assertGreaterThan(0, $titleNode->count(), 'og:title meta tag should exist.');
         $content = $titleNode->first()->attr('content') ?? '';
         $this->assertNotEmpty($content, 'og:title content attribute should not be empty.');
-        $this->assertStringContainsStringIgnoringCase('stream', $content, 'og:title content should reference Stream.');
+        $this->assertMatchesRegularExpression('/stream/i', $content, 'og:title content should reference Stream.');
     }
 
     public function testStreamPageContainsSonataPageContainers(): void

@@ -76,8 +76,8 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
 
         // Assert output contains success message
         $output = $tester->getDisplay();
-        $this->assertStringContainsString('CMS seed completed', $output);
-        $this->assertStringContainsString('CmsBaselineStory', $output);
+        $this->assertMatchesRegularExpression('/CMS seed completed/', $output);
+        $this->assertMatchesRegularExpression('/CmsBaselineStory/', $output);
 
         // Verify database state: should have exactly 2 sites (fi and en)
         $sites = $siteRepo->findAll();
@@ -161,7 +161,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
 
         // Output should still indicate success
         $output = $tester2->getDisplay();
-        $this->assertStringContainsString('CMS seed completed', $output);
+        $this->assertMatchesRegularExpression('/CMS seed completed/', $output);
     }
 
     public function testCommandOutputIncludesSiteSummary(): void
@@ -173,14 +173,14 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $output = $tester->getDisplay();
 
         // Should mention both locales
-        $this->assertStringContainsString('fi', $output, 'Output should mention Finnish locale');
-        $this->assertStringContainsString('en', $output, 'Output should mention English locale');
+        $this->assertMatchesRegularExpression('/\\bfi\\b/', $output, 'Output should mention Finnish locale');
+        $this->assertMatchesRegularExpression('/\\ben\\b/', $output, 'Output should mention English locale');
 
         // Should show relative paths
-        $this->assertStringContainsString('/en', $output, 'Output should show English relative path');
+        $this->assertMatchesRegularExpression('#/en\\b#', $output, 'Output should show English relative path');
 
         // Should indicate loading CmsBaselineStory
-        $this->assertStringContainsString('Loading CmsBaselineStory', $output);
+        $this->assertMatchesRegularExpression('/Loading CmsBaselineStory/', $output);
     }
 
     public function testCommandHandlesEmptyDatabaseGracefully(): void
@@ -209,7 +209,7 @@ final class CmsSeedCommandTest extends FixturesWebTestCase
         $this->assertSame(2, $siteRepo->count([]), 'Should create 2 sites from scratch');
 
         $output = $tester->getDisplay();
-        $this->assertStringContainsString('CMS seed completed', $output);
+        $this->assertMatchesRegularExpression('/CMS seed completed/', $output);
     }
 
     public function testCommandNormalizesExistingNonStandardSites(): void

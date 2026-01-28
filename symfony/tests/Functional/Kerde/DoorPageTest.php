@@ -65,6 +65,6 @@ final class DoorPageTest extends FixturesWebTestCase
         // Should redirect to login
         $response = $this->client()->getResponse();
         $this->assertTrue($response->isRedirect(), 'Expected redirect for unauthenticated user');
-        $this->assertStringContainsString('/login', $response->headers->get('Location'));
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $response->headers->get('Location'));
     }
 }

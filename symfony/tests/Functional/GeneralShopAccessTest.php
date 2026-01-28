@@ -170,8 +170,8 @@ final class GeneralShopAccessTest extends FixturesWebTestCase
         $response = $this->client->getResponse();
         if ($response->isRedirect()) {
             $location = $response->headers->get('Location') ?? '';
-            $this->assertStringNotContainsString(
-                '/login',
+            $this->assertDoesNotMatchRegularExpression(
+                '#/login(/|$)#',
                 $location,
                 'Anonymous users should not be redirected to login for general shop',
             );

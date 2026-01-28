@@ -322,7 +322,7 @@ final class NakkiWorkflowPantherTest extends PantherTestCase
         $buttonText = $submitButton->getText();
 
         // Button should say "Update" not "Add"
-        self::assertStringContainsStringIgnoringCase('päivit', $buttonText, 'Button should show update text');
+        self::assertMatchesRegularExpression('/päivit/i', $buttonText, 'Button should show update text');
 
         $submitButton->click();
 

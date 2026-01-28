@@ -128,12 +128,10 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
         // Tighten: a logged-in user with an artist should not be redirected to /login.
         $this->assertResponseStatusCodeSame(200);
-
-        $content = $this->client->getResponse()->getContent() ?? '';
-        self::assertStringContainsString(
+        $this->client->assertSelectorTextContains(
+            'h3',
             'Artist Signup Event',
-            $content,
-            'Expected event name to appear in the English signup page response body.',
+            'Expected event name to appear in the English signup page heading.',
         );
     }
 
@@ -314,7 +312,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
 
         if (302 === $status) {
             $loc = $this->client->getResponse()->headers->get('Location') ?? '';
-            self::assertStringNotContainsString('/artist-signup', $loc);
+            self::assertDoesNotMatchRegularExpression('#/artist-signup(/|$)#', $loc);
         }
     }
 

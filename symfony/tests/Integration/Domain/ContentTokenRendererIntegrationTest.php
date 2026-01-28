@@ -56,13 +56,13 @@ MD;
 
         $html = (string) (new GithubFlavoredMarkdownConverter())->convert($rendered);
 
-        self::assertStringNotContainsString('<pre><code>', $html, 'Rendered tokens must not be treated as code blocks');
-        self::assertStringContainsString('id="timetable"', $html);
-        self::assertStringContainsString('Test Artist', $html);
-        self::assertStringContainsString('Bio FI', $html);
-        self::assertStringContainsString('id="happening_list"', $html);
-        self::assertStringContainsString('id="ticket"', $html);
-        self::assertStringContainsString('id="RSVP"', $html);
+        self::assertDoesNotMatchRegularExpression('/<pre><code>/', $html, 'Rendered tokens must not be treated as code blocks');
+        self::assertMatchesRegularExpression('/id="timetable"/', $html);
+        self::assertMatchesRegularExpression('/Test Artist/', $html);
+        self::assertMatchesRegularExpression('/Bio FI/', $html);
+        self::assertMatchesRegularExpression('/id="happening_list"/', $html);
+        self::assertMatchesRegularExpression('/id="ticket"/', $html);
+        self::assertMatchesRegularExpression('/id="RSVP"/', $html);
     }
 
     private function buildEvent(): Event

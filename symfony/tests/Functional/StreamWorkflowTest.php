@@ -77,7 +77,7 @@ final class StreamWorkflowTest extends FixturesWebTestCase
         // Then: User should be redirected (access denied)
         $response = $this->client->getResponse();
         $this->assertSame(302, $response->getStatusCode(), 'Should redirect when accessing other member\'s artist');
-        $this->assertStringContainsString('/profiili/artisti', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/profiili/artisti(/|$)#', $response->headers->get('Location') ?? '');
 
         // And: Following the redirect should show the artist list
         $this->client->followRedirect();

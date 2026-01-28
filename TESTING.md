@@ -291,7 +291,7 @@ $this->stabilizeSessionAfterLogin();
 - `assertResponseIsSuccessful()`
 - `assertResponseStatusCodeSame(403)`
 - `assertResponseRedirects('/login')`
-- `$this->client->assertSelectorExists('[data-test="event-title"]')`
+- `$this->client->assertSelectorExists('.event-title')`
 - `$this->client->assertSelectorTextContains('h1', 'Dashboard')`
 
 **Avoid**:
@@ -337,7 +337,7 @@ Examples:
 - [ ] Factory states used (no broad fixtures)
 - [ ] Time controlled (if needed)
 - [ ] Negative path included
-- [ ] Structural selectors (no brittle substrings)
+- [ ] Structural selectors (no brittle substrings; prefer existing semantic class/id; avoid test-only attributes)
 - [ ] Bilingual variant (if applicable)
 - [ ] Assertions specific & meaningful
 
@@ -347,7 +347,7 @@ Examples:
 
 | Smell | Description | Consequence | Preferred Alternative |
 |-------|-------------|-------------|-----------------------|
-| Brittle Substring Assertion | Searching HTML for text | Breaks on markup changes | Selector or `data-test` attribute |
+| Brittle Substring Assertion | Searching HTML for text | Breaks on markup changes | Semantic selector (existing class/id) |
 | Over-Scoped Scenario | Huge multi-purpose test | Hard to pinpoint failures | Split into focused tests |
 | Redundant Factory Overbuild | Creating unused entities | Slower tests, noise | Only build what you assert |
 | Hidden Time Dependency | Using real `now()` | Flaky boundary tests | Inject or time-travel with clock |
@@ -359,7 +359,7 @@ Examples:
 ### Quick Remediation Strategies
 | Smell | Fix Strategy |
 |-------|--------------|
-| Substring Assertion | Add `data-test` attr in template → Replace with selector → Remove substring |
+| Substring Assertion | Prefer existing semantic class/id → Add semantic class/id if missing → Replace with selector |
 | Overbuilt Factory | Remove unused relations → Inline attribute overrides → Re-run test |
 | Hidden Time Dependency | Inject ClockInterface → Use TimeTravelTrait → Add boundary assertions |
 | Duplicate Locale Tests | Introduce data provider → Parameterize locale in URL → Assert conditionally |
@@ -593,7 +593,7 @@ $this->assertResponseRedirects('/login');
 ```php
 $this->client->assertSelectorExists('form[name="cart"]');
 $this->client->assertSelectorTextContains('h1', 'Dashboard');
-$this->client->assertSelectorExists('[data-test="event-title"]');
+$this->client->assertSelectorExists('.event-title');
 ```
 
 ### 11.2 Anti-Patterns to Avoid
@@ -833,12 +833,12 @@ final class EventVisibilityTest extends FixturesWebTestCase
         // Test Finnish
         $this->client->request('GET', sprintf('/%d/%s', $event->getYear(), $event->getUrl()));
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('[data-test="event-title"]');
+        $this->client->assertSelectorExists('.event-title');
 
         // Test English
         $this->client->request('GET', sprintf('/en/%d/%s', $event->getYear(), $event->getUrl()));
         $this->assertResponseIsSuccessful();
-        $this->client->assertSelectorExists('[data-test="event-title"]');
+        $this->client->assertSelectorExists('.event-title');
     }
 
     public function testScheduledEventNotYetVisible(): void

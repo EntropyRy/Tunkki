@@ -73,8 +73,9 @@ final class GeneralShopCartSubmissionTest extends FixturesWebTestCase
         );
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertTrue(
-            str_contains($location, '/checkout') || str_contains($location, '/kassa'),
+        $this->assertMatchesRegularExpression(
+            '#/(checkout|kassa)(/|$)#',
+            $location,
             'Should redirect to checkout route (/checkout or /kassa)',
         );
 
@@ -284,8 +285,8 @@ final class GeneralShopCartSubmissionTest extends FixturesWebTestCase
         if ($response->isRedirect()) {
             $location = $response->headers->get('Location') ?? '';
             // If redirect, should NOT go to checkout (empty cart)
-            $this->assertStringNotContainsString(
-                '/checkout',
+            $this->assertDoesNotMatchRegularExpression(
+                '#/checkout(/|$)#',
                 $location,
                 'Empty cart should not redirect to checkout',
             );

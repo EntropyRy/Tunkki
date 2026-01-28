@@ -141,7 +141,12 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         // Form should not be present initially (no definition selected)
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringNotContainsString('data-live-action-param="addColumn"', $content, 'Form should not be rendered when no definition selected');
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertSame(
+                0,
+                $crawler->filter('[data-live-action-param="addColumn"]')->count(),
+                'Form should not be rendered when no definition selected'
+            );
         }
 
         // Note: Full interaction testing (selecting definition -> form appears)
@@ -165,7 +170,12 @@ final class NakkiBoardComponentTest extends FixturesWebTestCase
         // Form and submit button should not be rendered when no definition selected
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringNotContainsString('data-live-action-param="addColumn"', $content, 'Form should not be rendered when no definition selected');
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertSame(
+                0,
+                $crawler->filter('[data-live-action-param="addColumn"]')->count(),
+                'Form should not be rendered when no definition selected'
+            );
         }
     }
 

@@ -176,7 +176,7 @@ final class MattermostCallbackTest extends FixturesWebTestCase
         $this->assertSame(302, $response->getStatusCode());
 
         $location = $response->headers->get('Location');
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
 
         $this->assertNotAuthenticated('Unknown user should not authenticate');
     }
@@ -202,7 +202,7 @@ final class MattermostCallbackTest extends FixturesWebTestCase
 
         $response = $this->client()->getResponse();
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', (string) $response->headers->get('Location'));
+        $this->assertMatchesRegularExpression('#/login(/|$)#', (string) $response->headers->get('Location'));
         $this->assertNotAuthenticated('Incomplete payload should not authenticate');
     }
 
@@ -227,7 +227,7 @@ final class MattermostCallbackTest extends FixturesWebTestCase
 
         $response = $this->client()->getResponse();
         $this->assertSame(302, $response->getStatusCode());
-        $this->assertStringContainsString('/login', (string) $response->headers->get('Location'));
+        $this->assertMatchesRegularExpression('#/login(/|$)#', (string) $response->headers->get('Location'));
         $this->assertNotAuthenticated('Incomplete payload should not authenticate');
     }
 

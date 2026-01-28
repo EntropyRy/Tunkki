@@ -72,7 +72,7 @@ final class ProfileControllerTest extends FixturesWebTestCase
         $this->assertResponseRedirects();
         $location = $this->client->getResponse()->headers->get('Location');
         $this->assertNotNull($location);
-        $this->assertStringContainsString('login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
 
         // Verify member was created
         $member = $this->em()->getRepository(Member::class)->findOneBy(['email' => $uniqueEmail]);

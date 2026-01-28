@@ -97,7 +97,7 @@ final class EPicsServiceTest extends TestCase
         $this->assertIsArray($result);
         $this->assertArrayHasKey('url', $result);
         $this->assertArrayHasKey('taken', $result);
-        $this->assertStringContainsString('https://epics.test.local/uploads/medium/photo.jpg', $result['url']);
+        $this->assertMatchesRegularExpression('#https://epics\\.test\\.local/uploads/medium/photo\\.jpg#', $result['url']);
         $this->assertSame('2025-01-01T12:00:00+00:00', $result['taken']);
     }
 
@@ -158,7 +158,7 @@ final class EPicsServiceTest extends TestCase
 
         $result = $this->service->getRandomPhoto();
 
-        $this->assertStringContainsString('medium2x.jpg', $result['url']);
+        $this->assertMatchesRegularExpression('/medium2x\\.jpg$/', $result['url']);
     }
 
     public function testCreateOrUpdateUserPasswordReturnsFalseWhenSessionFails(): void
@@ -341,7 +341,7 @@ final class EPicsServiceTest extends TestCase
         $result = $this->service->getRandomPhoto();
 
         $this->assertIsArray($result);
-        $this->assertStringContainsString('thumb.jpg', $result['url']);
+        $this->assertMatchesRegularExpression('/thumb\\.jpg$/', $result['url']);
     }
 
     public function testGetRandomPhotoFallsBackToThumb2xSize(): void
@@ -369,7 +369,7 @@ final class EPicsServiceTest extends TestCase
         $result = $this->service->getRandomPhoto();
 
         $this->assertIsArray($result);
-        $this->assertStringContainsString('thumb2x.jpg', $result['url']);
+        $this->assertMatchesRegularExpression('/thumb2x\\.jpg$/', $result['url']);
     }
 
     public function testGetRandomPhotoUsesCreatedAtWhenTakenAtMissing(): void

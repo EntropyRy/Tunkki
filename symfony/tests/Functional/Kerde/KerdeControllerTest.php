@@ -45,7 +45,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Unauthenticated user should be redirected');
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $response->headers->get('Location') ?? '');
     }
 
     public function testBarcodesPageAccessibleForAuthenticatedMember(): void
@@ -84,11 +84,11 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
 
-        $this->assertStringContainsString('Your Code', $content);
-        $this->assertStringContainsString('10€', $content);
-        $this->assertStringContainsString('20€', $content);
-        $this->assertStringContainsString('Cancel', $content);
-        $this->assertStringContainsString('Manual', $content);
+        $this->assertMatchesRegularExpression('/Your Code/', $content);
+        $this->assertMatchesRegularExpression('/10€/', $content);
+        $this->assertMatchesRegularExpression('/20€/', $content);
+        $this->assertMatchesRegularExpression('/Cancel/', $content);
+        $this->assertMatchesRegularExpression('/Manual/', $content);
     }
 
     // =========================================================================
@@ -102,7 +102,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Unauthenticated user should be redirected');
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $response->headers->get('Location') ?? '');
     }
 
     public static function doorRouteProvider(): array
@@ -149,7 +149,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
         // FakeZMQService returns 'connected' for sendInit
-        $this->assertStringContainsString('connected', $content);
+        $this->assertMatchesRegularExpression('/connected/', $content);
     }
 
     public function testDoorPageDisplaysBarcode(): void
@@ -205,7 +205,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $this->client->submit($form);
 
         $this->assertResponseRedirects();
-        $this->assertStringContainsString('kerde', $this->client->getResponse()->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/kerde#', $this->client->getResponse()->headers->get('Location') ?? '');
     }
 
     public function testDoorFormSubmissionWithoutMessageSendsMattermostIfNoRecentLog(): void
@@ -270,7 +270,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
         $this->assertResponseIsSuccessful();
         $content = $this->client->getResponse()->getContent();
         $this->assertNotFalse($content);
-        $this->assertStringContainsString('Previous door open', $content);
+        $this->assertMatchesRegularExpression('/Previous door open/', $content);
     }
 
     // =========================================================================
@@ -283,7 +283,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Unauthenticated user should be redirected');
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $response->headers->get('Location') ?? '');
     }
 
     public function testRecordingStartRedirectsToKerdeDoor(): void
@@ -296,7 +296,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Should redirect after recording start attempt');
-        $this->assertStringContainsString('kerde', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/kerde#', $response->headers->get('Location') ?? '');
     }
 
     public function testRecordingStartSuccessForActiveMember(): void
@@ -362,7 +362,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Unauthenticated user should be redirected');
-        $this->assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $response->headers->get('Location') ?? '');
     }
 
     public function testRecordingStopRedirectsToKerdeDoor(): void
@@ -375,7 +375,7 @@ final class KerdeControllerTest extends FixturesWebTestCase
 
         $response = $this->client->getResponse();
         $this->assertTrue($response->isRedirect(), 'Should redirect after recording stop attempt');
-        $this->assertStringContainsString('kerde', $response->headers->get('Location') ?? '');
+        $this->assertMatchesRegularExpression('#/kerde#', $response->headers->get('Location') ?? '');
     }
 
     public function testRecordingStopSuccessForActiveMember(): void

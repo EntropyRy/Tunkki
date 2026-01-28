@@ -90,35 +90,28 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $form = $formNode->form();
         $values = $form->getPhpValues();
 
-        $html = $crawler->html() ?? '';
-        $root = null;
+        $includeLinksName = $formNode
+            ->filter('input[name*="djTimetableIncludePageLinks"]')
+            ->attr('name');
+        self::assertNotNull($includeLinksName, 'DJ timetable include_page_links field not found');
 
-        // Root form name is the token before the first "[" in input names like:
-        //   name="s6943fb6a30aea[artistDisplayConfiguration][djTimetable][djTimetableIncludePageLinks]"
-        if (1 === preg_match('/name="([^"]+)\[artistDisplayConfiguration\]\[djTimetable\]\[djTimetableIncludePageLinks\]"/', $html, $m)) {
-            $root = $m[1];
-        } elseif (1 === preg_match('/name="([^"]+)\[artistDisplayConfiguration\]\[vjTimetable\]\[vjTimetableShowGenre\]"/', $html, $m)) {
-            $root = $m[1];
-        } elseif (1 === preg_match('/name="([^"]+)\[artistDisplayConfiguration\]\[artBio\]\[artBioShowTime\]"/', $html, $m)) {
-            $root = $m[1];
-        }
+        $showGenreName = $formNode
+            ->filter('input[name*="vjTimetableShowGenre"]')
+            ->attr('name');
+        self::assertNotNull($showGenreName, 'VJ timetable show_genre field not found');
 
-        self::assertNotNull(
-            $root,
-            'Could not detect Sonata form root name for artistDisplayConfiguration fields'
-        );
+        $bioShowTimeName = $formNode
+            ->filter('input[name*="artBioShowTime"]')
+            ->attr('name');
+        self::assertNotNull($bioShowTimeName, 'ART bio show_time field not found');
 
-        // The HTML you supplied shows the nested payload shape Sonata renders:
-        //   sXXXX[artistDisplayConfiguration][djTimetable][djTimetableIncludePageLinks]
-        // so we update those exact keys.
-        $values[$root]['artistDisplayConfiguration']['djTimetable']['djTimetableIncludePageLinks'] = '1'; // false -> true
+        // Update the exact field names that Sonata rendered.
+        $this->setFormFieldValueByName($values, $includeLinksName, '1'); // false -> true
 
         // Checkbox semantics: unchecked checkboxes typically submit no key at all.
-        // Setting an explicit "0" may be ignored depending on the form wiring, so remove the key to
-        // simulate a real user unchecking it.
-        unset($values[$root]['artistDisplayConfiguration']['vjTimetable']['vjTimetableShowGenre']);       // true -> false
+        $this->removeFormFieldValueByName($values, $showGenreName);      // true -> false
 
-        $values[$root]['artistDisplayConfiguration']['artBio']['artBioShowTime'] = '1';                  // false -> true
+        $this->setFormFieldValueByName($values, $bioShowTimeName, '1');  // false -> true
 
         $this->client->request($form->getMethod(), $form->getUri(), $values);
 
@@ -298,12 +291,7 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $values = $form->getPhpValues();
 
         // Detect the Sonata root form name
-        $html = $crawler->html() ?? '';
-        $root = null;
-        if (1 === preg_match('/name="([^"]+)\[Name\]"/', $html, $m)) {
-            $root = $m[1];
-        }
-
+        $root = array_key_first($values);
         self::assertNotNull($root, 'Could not detect Sonata form root name');
 
         // Update a simple field to trigger form submission
@@ -373,12 +361,7 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $form = $formNode->form();
         $values = $form->getPhpValues();
 
-        $html = $crawler->html() ?? '';
-        $root = null;
-        if (1 === preg_match('/name="([^"]+)\[Name\]"/', $html, $m)) {
-            $root = $m[1];
-        }
-
+        $root = array_key_first($values);
         self::assertNotNull($root);
 
         // Clear the URL - should trigger auto-generation
@@ -438,12 +421,7 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $form = $formNode->form();
         $values = $form->getPhpValues();
 
-        $html = $crawler->html() ?? '';
-        $root = null;
-        if (1 === preg_match('/name="([^"]+)\[Name\]"/', $html, $m)) {
-            $root = $m[1];
-        }
-
+        $root = array_key_first($values);
         self::assertNotNull($root);
 
         // Clear the URL - should stay empty for external events
@@ -802,5 +780,76 @@ final class EventAdminControllerTest extends FixturesWebTestCase
         $values[$root][$targetField] = $value->format('Y-m-d H:i');
 
         return $values;
+    }
+
+    /**
+     * @param array<string, mixed> $formValues
+     */
+    private function setFormFieldValueByName(
+        array &$formValues,
+        string $fieldName,
+        string $value,
+    ): void {
+        $root = strstr($fieldName, '[', true);
+        if (false === $root) {
+            $root = $fieldName;
+        }
+
+        preg_match_all('/\[([^\]]*)\]/', $fieldName, $matches);
+        $segments = $matches[1] ?? [];
+
+        if (!isset($formValues[$root])) {
+            $formValues[$root] = [];
+        }
+
+        $ref = &$formValues[$root];
+        $last = array_pop($segments);
+        if (null === $last || '' === $last) {
+            $formValues[$root] = $value;
+
+            return;
+        }
+        foreach ($segments as $segment) {
+            if (!isset($ref[$segment]) || !\is_array($ref[$segment])) {
+                $ref[$segment] = [];
+            }
+            $ref = &$ref[$segment];
+        }
+        $ref[$last] = $value;
+    }
+
+    /**
+     * @param array<string, mixed> $formValues
+     */
+    private function removeFormFieldValueByName(
+        array &$formValues,
+        string $fieldName,
+    ): void {
+        $root = strstr($fieldName, '[', true);
+        if (false === $root) {
+            $root = $fieldName;
+        }
+
+        if (!isset($formValues[$root])) {
+            return;
+        }
+
+        preg_match_all('/\[([^\]]*)\]/', $fieldName, $matches);
+        $segments = $matches[1] ?? [];
+        if ([] === $segments) {
+            unset($formValues[$root]);
+
+            return;
+        }
+
+        $ref = &$formValues[$root];
+        $last = array_pop($segments);
+        foreach ($segments as $segment) {
+            if (!isset($ref[$segment]) || !\is_array($ref[$segment])) {
+                return;
+            }
+            $ref = &$ref[$segment];
+        }
+        unset($ref[$last]);
     }
 }

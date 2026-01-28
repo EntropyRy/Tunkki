@@ -50,9 +50,15 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
         $this->assertResponseRedirects();
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringStartsWith('https://wiki.example.test/callback', $location);
-        $this->assertStringContainsString('code=', $location);
-        $this->assertStringContainsString('state=wiki_state', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('https', $parts['scheme'] ?? null);
+        self::assertSame('wiki.example.test', $parts['host'] ?? null);
+        self::assertSame('/callback', $parts['path'] ?? null);
+        $query = [];
+        parse_str($parts['query'] ?? '', $query);
+        self::assertNotEmpty($query['code'] ?? null);
+        self::assertSame('wiki_state', $query['state'] ?? null);
     }
 
     public function testNonActiveMemberCannotAuthorizeWikiClient(): void
@@ -77,7 +83,9 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
 
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringContainsString('/profiili', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('/profiili', $parts['path'] ?? null);
 
         $this->client()->followRedirect();
         $this->assertResponseIsSuccessful();
@@ -103,7 +111,9 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
         $this->assertResponseRedirects();
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringContainsString('/en/profile', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('/en/profile', $parts['path'] ?? null);
     }
 
     public function testNonActiveMemberCanAuthorizeForumClient(): void
@@ -122,8 +132,14 @@ final class AuthorizationFlowTest extends FixturesWebTestCase
         $this->assertResponseRedirects();
         $location = $this->client()->getResponse()->headers->get('Location');
         $this->assertNotFalse($location);
-        $this->assertStringStartsWith('https://forum.example.test/callback', $location);
-        $this->assertStringContainsString('state=forum_state', $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        self::assertSame('https', $parts['scheme'] ?? null);
+        self::assertSame('forum.example.test', $parts['host'] ?? null);
+        self::assertSame('/callback', $parts['path'] ?? null);
+        $query = [];
+        parse_str($parts['query'] ?? '', $query);
+        self::assertSame('forum_state', $query['state'] ?? null);
     }
 
     public function testAnonymousUserMustLoginForAuthorization(): void

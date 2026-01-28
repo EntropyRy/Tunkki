@@ -77,7 +77,7 @@ final class CsrfProtectionTest extends FixturesWebTestCase
         );
         $location = (string) ($client->getResponse()->headers->get('Location') ?? '');
         self::assertNotEmpty($location, 'Redirect Location header must be present after successful login.');
-        self::assertStringNotContainsString('/login', $location, 'Successful login should not redirect back to /login.');
+        self::assertDoesNotMatchRegularExpression('#/login(/|$)#', $location, 'Successful login should not redirect back to /login.');
 
         $crawler = $client->followRedirect();
 
@@ -119,7 +119,7 @@ final class CsrfProtectionTest extends FixturesWebTestCase
                 (string) ($client->getResponse()->headers->get('Location') ??
                     '');
             self::assertNotEmpty($loc);
-            self::assertStringContainsString('/login', $loc);
+            self::assertMatchesRegularExpression('#/login(/|$)#', $loc);
             $crawler = $client->followRedirect();
             self::assertSame(200, $client->getResponse()->getStatusCode());
             // Accept direct 200 re-render; no specific form selector required here.
@@ -179,7 +179,7 @@ final class CsrfProtectionTest extends FixturesWebTestCase
                 (string) ($client->getResponse()->headers->get('Location') ??
                     '');
             self::assertNotEmpty($loc);
-            self::assertStringContainsString('/login', $loc);
+            self::assertMatchesRegularExpression('#/login(/|$)#', $loc);
             $crawler = $client->followRedirect();
             self::assertSame(200, $client->getResponse()->getStatusCode());
             // Accept direct 200 re-render; no specific form selector required here.

@@ -79,8 +79,8 @@ final class TicketPurchaseFlowTest extends FixturesWebTestCase
         $status = $this->client->getResponse()->getStatusCode();
         if (\in_array($status, [301, 302, 303], true)) {
             $location = $this->client->getResponse()->headers->get('Location') ?? '';
-            $this->assertStringNotContainsString(
-                '/login',
+            $this->assertDoesNotMatchRegularExpression(
+                '#/login(/|$)#',
                 $location,
                 'Anonymous users should not be forced to log in to view the shop.',
             );

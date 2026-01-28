@@ -190,8 +190,8 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
         $response = $this->client->getResponse();
         if (\in_array($response->getStatusCode(), [301, 302, 303], true)) {
             $location = $response->headers->get('Location') ?? '';
-            $this->assertStringNotContainsString(
-                '/login',
+            $this->assertDoesNotMatchRegularExpression(
+                '#/login(/|$)#',
                 $location,
                 'Valid presale window should not redirect to login.',
             );

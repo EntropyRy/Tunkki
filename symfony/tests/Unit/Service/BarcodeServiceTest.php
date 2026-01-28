@@ -66,7 +66,7 @@ final class BarcodeServiceTest extends TestCase
 
         $this->assertIsString($barcode);
         $this->assertNotEmpty($barcode);
-        $this->assertStringContainsString('<div', $barcode, 'Barcode HTML should contain div tags');
+        $this->assertMatchesRegularExpression('/<div\\b/', $barcode, 'Barcode HTML should contain div tags');
     }
 
     public function testGetBarcodeForCodeWithEmptyStringThrowsException(): void

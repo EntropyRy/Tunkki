@@ -217,7 +217,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     /* =========================================================================
@@ -312,7 +312,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     public function testTicketsListShowsShopLinkWhenSingleProductType(): void
@@ -488,7 +488,7 @@ final class EventTicketControllerTest extends FixturesWebTestCase
         $this->assertResponseStatusCodeSame(302);
         $response = $this->client->getResponse();
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/login', $location);
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location);
     }
 
     /* =========================================================================

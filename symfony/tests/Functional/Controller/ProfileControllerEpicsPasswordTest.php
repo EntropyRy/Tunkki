@@ -46,7 +46,9 @@ final class ProfileControllerEpicsPasswordTest extends FixturesWebTestCase
         $this->assertNotNull($location);
 
         $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
-        $this->assertStringContainsString($expectedPath, $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        $this->assertSame($expectedPath, $parts['path'] ?? null);
     }
 
     #[DataProvider('localeAndPaths')]

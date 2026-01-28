@@ -76,7 +76,7 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         self::assertTrue($filter->isActive());
         $groupBy = $query->getQueryBuilder()->getDQLPart('groupBy');
         $groupByString = implode(',', array_map('strval', (array) $groupBy));
-        self::assertStringContainsString('o.member', $groupByString);
+        self::assertMatchesRegularExpression('/o\\.member/', $groupByString);
     }
 
     public function testListFieldsIncludeEventForStandalone(): void

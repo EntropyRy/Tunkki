@@ -60,7 +60,7 @@ TWIG);
 
         $rendered = $this->renderer->render("Hi\n{{ dj_bio }}\nBye", $template, []);
 
-        self::assertStringNotContainsString("\n    <", $rendered);
+        self::assertDoesNotMatchRegularExpression('/\\n\\s+</', $rendered);
         self::assertSame("Hi\n<div class=\"bio\">DJ Bio</div>\nBye", $rendered);
     }
 
@@ -78,8 +78,8 @@ TWIG);
         $converter = new GithubFlavoredMarkdownConverter();
         $html = (string) $converter->convert($rendered);
 
-        self::assertStringNotContainsString('<pre><code>', $html, 'Bios should not be treated as code blocks by markdown');
-        self::assertStringContainsString('<div class="bio">DJ Bio Content</div>', $html);
+        self::assertDoesNotMatchRegularExpression('/<pre><code>/', $html, 'Bios should not be treated as code blocks by markdown');
+        self::assertMatchesRegularExpression('/<div class="bio">DJ Bio Content<\\/div>/', $html);
     }
 
     public function testNormalizeLegacyContentRewritesDeprecatedTokens(): void

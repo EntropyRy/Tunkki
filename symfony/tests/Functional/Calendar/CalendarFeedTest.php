@@ -78,28 +78,28 @@ final class CalendarFeedTest extends FixturesWebTestCase
 
         $body = $response->getContent();
         $this->assertNotFalse($body);
-        $this->assertStringContainsString('BEGIN:VCALENDAR', $body);
+        $this->assertMatchesRegularExpression('/BEGIN:VCALENDAR/', $body);
         $expectedEventSummary = self::EVENT_TITLES['event'][$locale];
         $expectedMeetingSummary = self::EVENT_TITLES['meeting'][$locale];
         $blockedClubSummary = self::EVENT_TITLES['clubroom'][$locale];
 
-        $this->assertStringContainsString(
-            'SUMMARY:'.$expectedEventSummary,
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote('SUMMARY:'.$expectedEventSummary, '/').'/',
             $body,
             'Enabled events should be present in the ICS feed.',
         );
-        $this->assertStringContainsString(
-            'SUMMARY:'.$expectedMeetingSummary,
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote('SUMMARY:'.$expectedMeetingSummary, '/').'/',
             $body,
             'Enabled meetings should be present in the ICS feed.',
         );
-        $this->assertStringNotContainsString(
-            'SUMMARY:'.$blockedClubSummary,
+        $this->assertDoesNotMatchRegularExpression(
+            '/'.preg_quote('SUMMARY:'.$blockedClubSummary, '/').'/',
             $body,
             'Disabled clubroom events must be filtered out.',
         );
-        $this->assertStringContainsString(
-            'URL:'.$meeting->getUrlByLang($locale),
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote('URL:'.$meeting->getUrlByLang($locale), '/').'/',
             $body,
             'Absolute event URLs should be rendered for enabled entries.',
         );
@@ -139,19 +139,19 @@ final class CalendarFeedTest extends FixturesWebTestCase
         $body = $response->getContent();
         $this->assertNotFalse($body);
 
-        $this->assertStringContainsString('BEGIN:VEVENT', $body);
-        $this->assertStringContainsString(
-            'BEGIN:VALARM',
+        $this->assertMatchesRegularExpression('/BEGIN:VEVENT/', $body);
+        $this->assertMatchesRegularExpression(
+            '/BEGIN:VALARM/',
             $body,
             'Notifications enabled should emit VALARM blocks.',
         );
-        $this->assertStringContainsString(
-            'Muistutus huomisesta Entropy tapahtumasta!',
+        $this->assertMatchesRegularExpression(
+            '/Muistutus huomisesta Entropy tapahtumasta!/',
             $body,
         );
         $normalizedBody = str_replace("\r\n ", '', $body);
-        $this->assertStringContainsString(
-            'Entropy Klubi – Testikatu 1\, Helsinki (Online: https://meet.example.com/entropy)',
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote('Entropy Klubi – Testikatu 1\\, Helsinki (Online: https://meet.example.com/entropy)', '/').'/',
             $normalizedBody,
             'Hybrid events should include combined physical + online location info.',
         );

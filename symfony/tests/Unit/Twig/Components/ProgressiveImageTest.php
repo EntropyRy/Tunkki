@@ -26,7 +26,8 @@ final class ProgressiveImageTest extends TestCase
 
         $placeholder = $component->getPlaceholderSrc();
         self::assertStringStartsWith('data:image/svg+xml;base64,', $placeholder);
-        self::assertStringContainsString('Loading...', base64_decode(str_replace('data:image/svg+xml;base64,', '', $placeholder)));
+        $decoded = base64_decode(str_replace('data:image/svg+xml;base64,', '', $placeholder));
+        self::assertMatchesRegularExpression('/Loading\\.{3}/', (string) $decoded);
 
         self::assertSame('progressive-media-container', $component->getContainerClasses());
         self::assertSame('progressive-placeholder', $component->getPlaceholderClasses());
@@ -63,13 +64,15 @@ final class ProgressiveImageTest extends TestCase
         self::assertSame('Custom title', $component->title);
         self::assertFalse($component->lazy);
         $containerClasses = $component->getContainerClasses();
-        self::assertStringContainsString('progressive-media-container', $containerClasses);
-        self::assertStringContainsString('wrapper', $containerClasses);
-        self::assertStringContainsString('progressive-placeholder', $component->getPlaceholderClasses());
-        self::assertStringContainsString('blurred', $component->getPlaceholderClasses());
-        self::assertStringContainsString('progressive-picture', $component->getPictureClasses());
-        self::assertStringContainsString('picture-frame', $component->getPictureClasses());
-        self::assertStringContainsString('full-width', $component->getImageClasses());
+        self::assertMatchesRegularExpression('/\\bprogressive-media-container\\b/', $containerClasses);
+        self::assertMatchesRegularExpression('/\\bwrapper\\b/', $containerClasses);
+        $placeholderClasses = $component->getPlaceholderClasses();
+        self::assertMatchesRegularExpression('/\\bprogressive-placeholder\\b/', $placeholderClasses);
+        self::assertMatchesRegularExpression('/\\bblurred\\b/', $placeholderClasses);
+        $pictureClasses = $component->getPictureClasses();
+        self::assertMatchesRegularExpression('/\\bprogressive-picture\\b/', $pictureClasses);
+        self::assertMatchesRegularExpression('/\\bpicture-frame\\b/', $pictureClasses);
+        self::assertMatchesRegularExpression('/\\bfull-width\\b/', $component->getImageClasses());
         self::assertSame(['xl' => '(min-width: 1200px)'], $component->sizes);
         self::assertSame(['data-test' => 'picture'], $component->pictureAttributes);
         self::assertSame(['loading' => 'eager'], $component->imgAttributes);

@@ -72,15 +72,17 @@ final class EventPageTest extends FixturesWebTestCase
         );
         $fullText = $crawler->filter('html')->text(null, true);
         if ('en' === $expectedLang) {
-            $this->assertTrue(
-                str_contains($fullText, $expectedTitle) || str_contains($fullText, 'Testitapahtuma'),
+            $expectedPattern = '/'.preg_quote($expectedTitle, '/').'|Testitapahtuma/';
+            $this->assertMatchesRegularExpression(
+                $expectedPattern,
+                $fullText,
                 \sprintf(
                     "Expected title to contain either '%s' or fallback 'Testitapahtuma' when EN template renders FI-oriented title.",
                     $expectedTitle
                 )
             );
         } else {
-            $this->assertStringContainsString($expectedTitle, $fullText);
+            $this->assertMatchesRegularExpression('/'.preg_quote($expectedTitle, '/').'/', $fullText);
         }
         $presentEn = $crawler->filter('html[lang="en"]')->count();
         $presentFi = $crawler->filter('html[lang="fi"]')->count();

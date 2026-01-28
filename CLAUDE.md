@@ -252,7 +252,7 @@ grep -R "assertTrue(.*!empty" tests/
 Policy:
 
 - Do not use substring assertions in tests.
-- If a page lacks stable selectors to assert on, update templates/components to provide semantic, stable selectors (classes/ids) and assert structurally.
+- Prefer existing semantic classes/ids for selectors. If missing, add a semantic class/id (not a test-only attribute) and assert structurally.
 
 ---
 
@@ -270,7 +270,7 @@ Quick checklist:
 4. Assertions:
    - Use `assertResponseIsSuccessful()`
    - Use `assertSelectorExists()` or `assertSelectorTextContains()`
-   - Do not use raw HTML scanning. If selectors are missing, add semantic classes/ids to templates and assert structurally.
+   - Do not use raw HTML scanning. Prefer existing semantic classes/ids; if missing, add a semantic class/id (not a test-only attribute) and assert structurally.
 5. Negative scenario:
    - At least one invalid input / access denial variant.
 6. No environment variable mutation; prefer service overrides or configuration.

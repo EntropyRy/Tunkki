@@ -454,7 +454,10 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         // Assert: Redirected to login
         $response = $this->client->getResponse();
         self::assertSame(302, $response->getStatusCode());
-        self::assertStringContainsString('/login', $response->headers->get('Location') ?? '');
+        self::assertMatchesRegularExpression(
+            '#/login(/|$)#',
+            $response->headers->get('Location') ?? '',
+        );
     }
 
     public function testItemAdminListPageAccessibleToAdmin(): void
@@ -1001,20 +1004,18 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         $item1Name = $item1Checkbox->attr('name');
         self::assertNotEmpty($item1Name, 'Item 1 checkbox has no name attribute');
 
-        // Extract root token from the name (e.g., "s64f8a3b2c1d0e" from "s64f8a3b2c1d0e[items][]")
-        preg_match('/^([^\[]+)/', $item1Name, $rootMatch);
-        $root = $rootMatch[1];
-
-        // Get CSRF token from the form
-        $csrfToken = $crawler->filter('input[name="'.$root.'[_token]"]')->attr('value');
-        self::assertNotEmpty($csrfToken, 'CSRF token not found');
-
         // Get the form's action URL
         $formAction = $form->getUri();
         $formMethod = $form->getMethod();
 
         // Build raw form data - use getPhpValues() as base and add items
         $formValues = $form->getPhpValues();
+        $root = array_key_first($formValues);
+        self::assertNotNull($root, 'Could not detect Sonata form root');
+
+        // Get CSRF token from the form
+        $csrfToken = $crawler->filter('input[name="'.$root.'[_token]"]')->attr('value');
+        self::assertNotEmpty($csrfToken, 'CSRF token not found');
         $root = $root ?? array_key_first($formValues);
         self::assertNotNull($root, 'Could not detect form root');
 
@@ -1165,8 +1166,13 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         self::assertResponseIsSuccessful();
 
         // Assert: The item appears as a choice in the form (exercises ItemsType::configureOptions)
-        $html = $crawler->html();
-        self::assertStringContainsString('Visible Choice Item', $html);
+        self::assertGreaterThan(
+            0,
+            $crawler
+                ->filterXPath('//*[contains(normalize-space(.), "Visible Choice Item")]')
+                ->count(),
+            'Expected item to appear as an option in the form.',
+        );
 
         // Verify item was created
         self::assertNotNull($item->getId());
@@ -1197,8 +1203,13 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         self::assertResponseIsSuccessful();
 
         // Assert: The package appears as a choice in the form (exercises PackagesType::configureOptions)
-        $html = $crawler->html();
-        self::assertStringContainsString('Visible Package Choice', $html);
+        self::assertGreaterThan(
+            0,
+            $crawler
+                ->filterXPath('//*[contains(normalize-space(.), "Visible Package Choice")]')
+                ->count(),
+            'Expected package to appear as an option in the form.',
+        );
 
         // Verify package was created
         self::assertNotNull($package->getId());
@@ -1234,12 +1245,11 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
 
         // Assert: Form contains expected booking status fields
         $this->client->assertSelectorExists('form');
-        $html = $crawler->html();
-        self::assertStringContainsString('cancelled', $html);
-        self::assertStringContainsString('itemsReturned', $html);
-        self::assertStringContainsString('invoiceSent', $html);
-        self::assertStringContainsString('paid', $html);
-        self::assertStringContainsString('description', $html);
+        $this->client->assertSelectorExists('input[name*="cancelled"]');
+        $this->client->assertSelectorExists('input[name*="itemsReturned"]');
+        $this->client->assertSelectorExists('input[name*="invoiceSent"]');
+        $this->client->assertSelectorExists('input[name*="paid"]');
+        $this->client->assertSelectorExists('textarea[name*="description"]');
     }
 
     public function testStatusEventSubmitMarkBookingItemsReturned(): void

@@ -68,11 +68,21 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
             // All definitions should be present in the dropdown (in current locale: Finnish)
             // Note: English names only appear in the accordion when a definition is selected
-            self::assertStringContainsString('Ilmoittautuminen', $content);
-            self::assertStringContainsString('Somistus', $content);
-            self::assertStringContainsString('Purku', $content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Ilmoittautuminen")]')->count()
+            );
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Somistus")]')->count()
+            );
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Purku")]')->count()
+            );
         }
     }
 
@@ -136,10 +146,17 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
             // Both definitions should appear in the dropdown (in Finnish locale)
             // Note: The current template does not visually distinguish "in use" vs "unused" definitions
-            self::assertStringContainsString('Used Definition', $content);
-            self::assertStringContainsString('Unused Definition', $content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Used Definition")]')->count()
+            );
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Unused Definition")]')->count()
+            );
         }
     }
 
@@ -242,8 +259,12 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
 
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
             // Should have create definition action
-            self::assertStringContainsString('createDefinition', $content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filter('[data-live-action-param="createDefinition"]')->count()
+            );
         }
     }
 
@@ -407,9 +428,19 @@ final class NakkiDefinitionComponentTest extends FixturesWebTestCase
         // All definitions should be present (in Finnish locale)
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringContainsString('Definition 1 FI', $content);
-            self::assertStringContainsString('Definition 6 FI', $content);
-            self::assertStringContainsString('Definition 12 FI', $content);
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Definition 1 FI")]')->count()
+            );
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Definition 6 FI")]')->count()
+            );
+            self::assertGreaterThan(
+                0,
+                $crawler->filterXPath('//*[contains(normalize-space(.), "Definition 12 FI")]')->count()
+            );
         }
     }
 }

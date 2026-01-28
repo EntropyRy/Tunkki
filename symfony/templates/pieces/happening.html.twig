@@ -89,11 +89,11 @@
                 {% if happening.needsPreliminaryPayment and not eventInPast %}
                     <hr>
                     <h4>{{ 'happening.paymentInfo'|trans }}</h4>
-                    <p>
+                    <div class="happening-payment-info">
                         {{ payment_info|replace({
                                                 '{{ ticket_ref }}': ticket_ref,
                                                 })|raw }}
-                    </p>
+                    </div>
                     <h5>{{ 'Price'|trans }}</h5>
                     <p>{{ happening.price(app.request.locale) }}</p>
                 {% endif %}

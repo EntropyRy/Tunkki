@@ -104,6 +104,9 @@ final class StreamWorkflowPantherTest extends PantherTestCase
 
         $client->request('GET', "/profiili/artisti/{$artistId}/streamit");
         $heading = $client->getCrawler()->filter('h1')->text('');
-        self::assertStringContainsStringIgnoringCase($artist->getName(), $heading);
+        self::assertMatchesRegularExpression(
+            '/'.preg_quote($artist->getName(), '/').'/i',
+            $heading,
+        );
     }
 }

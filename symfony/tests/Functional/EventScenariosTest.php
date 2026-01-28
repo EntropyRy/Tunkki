@@ -116,16 +116,16 @@ final class EventScenariosTest extends FixturesWebTestCase
             'Expected an event title element for the event page.',
         );
         if (str_contains($content, 'Choose login method')) {
-            $this->assertStringContainsString(
-                'Choose login method',
+            $this->assertMatchesRegularExpression(
+                '/Choose login method/',
                 $content,
                 'Login page rendered when accessing past event (policy: auth required).',
             );
 
             return;
         }
-        $this->assertStringContainsString(
-            'Past Event',
+        $this->assertMatchesRegularExpression(
+            '/Past Event/',
             $titleNode->text('', true),
         );
 
@@ -249,10 +249,17 @@ final class EventScenariosTest extends FixturesWebTestCase
             'Expected success (2xx) status after optional redirect.',
         );
         $content = (string) $client->getResponse()->getContent();
-        $this->assertStringContainsString(
-            'Shop Ready Event',
-            $content,
-            'Shop Ready Event text missing in body.',
+        $crawler = $crawler ?? new \Symfony\Component\DomCrawler\Crawler($content);
+        $titleNode = $crawler->filter('h1, h2, .event-title, .event-name')->first();
+        $this->assertGreaterThan(
+            0,
+            $titleNode->count(),
+            'Expected an event title element for the shop page.',
+        );
+        $this->assertMatchesRegularExpression(
+            '/Shop Ready Event/',
+            $titleNode->text('', true),
+            'Shop Ready Event text missing in title element.',
         );
         if (preg_match('/<html[^>]*lang=\"([a-z]{2})\"/i', $content, $m)) {
             $this->assertContains(

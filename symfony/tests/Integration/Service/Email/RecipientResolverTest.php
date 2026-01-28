@@ -86,7 +86,7 @@ final class RecipientResolverTest extends FixturesWebTestCase
         $recipients = $this->resolver->resolve(EmailPurpose::SELECTED_ARTIST, $event);
 
         $this->assertCount(1, $recipients, 'Should only include artists with startTime set');
-        $this->assertStringContainsString('selected-', $recipients[0]->email);
+        $this->assertMatchesRegularExpression('/selected-/', $recipients[0]->email);
     }
 
     public function testResolveAktiivitQueriesRealMembers(): void

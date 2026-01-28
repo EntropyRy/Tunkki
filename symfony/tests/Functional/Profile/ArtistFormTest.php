@@ -47,7 +47,7 @@ final class ArtistFormTest extends FixturesWebTestCase
 
         $location = $response->headers->get('Location');
         $this->assertNotNull($location);
-        $this->assertStringContainsString('/login', $location, 'Should redirect to login page');
+        $this->assertMatchesRegularExpression('#/login(/|$)#', $location, 'Should redirect to login page');
     }
 
     #[DataProvider('localeProvider')]
@@ -65,7 +65,9 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->assertNotNull($location);
 
         $expectedPath = 'en' === $locale ? '/en/profile/resend-verification' : '/profiili/laheta-vahvistus';
-        $this->assertStringContainsString($expectedPath, $location);
+        $parts = parse_url($location);
+        $this->assertNotFalse($parts);
+        $this->assertSame($expectedPath, $parts['path'] ?? null);
     }
 
     #[DataProvider('localeProvider')]
@@ -94,12 +96,10 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('input[name="artist[type]"]');
 
         // Check for hardware, genre, bio fields (may be input or textarea)
-        $html = $this->client->getResponse()->getContent();
-        $this->assertNotFalse($html);
-        $this->assertStringContainsString('artist[hardware]', $html);
-        $this->assertStringContainsString('artist[genre]', $html);
-        $this->assertStringContainsString('artist[bio]', $html);
-        $this->assertStringContainsString('artist[bioEn]', $html);
+        $this->client->assertSelectorExists('[name="artist[hardware]"]');
+        $this->client->assertSelectorExists('[name="artist[genre]"]');
+        $this->client->assertSelectorExists('[name="artist[bio]"]');
+        $this->client->assertSelectorExists('[name="artist[bioEn]"]');
     }
 
     public function testTypeRadioButtonsRenderInline(): void
@@ -123,9 +123,11 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->assertSame(1, $artRadio->count(), 'ART radio button should exist');
 
         // Verify inline rendering (form-check-inline class on wrapper divs)
-        $html = $this->client->getResponse()->getContent();
-        $this->assertNotFalse($html);
-        $this->assertStringContainsString('form-check-inline', $html, 'Type options should render inline');
+        $this->assertGreaterThan(
+            0,
+            $crawler->filter('.form-check-inline')->count(),
+            'Type options should render inline',
+        );
     }
 
     public function testArtistCreatedViaFactory(): void
@@ -176,11 +178,7 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->seedClientHome('en');
 
         $this->client->request('GET', '/en/profile/artist/create');
-        $html = $this->client->getResponse()->getContent();
-        $this->assertNotFalse($html);
-
-        // Verify hardware field is marked as required in the form
-        $this->assertStringContainsString('artist[hardware]', $html);
+        $this->client->assertSelectorExists('[name="artist[hardware]"]');
     }
 
     #[DataProvider('localeProvider')]
@@ -276,14 +274,11 @@ final class ArtistFormTest extends FixturesWebTestCase
         $this->seedClientHome('en');
 
         $this->client->request('GET', '/en/profile/artist/create');
-        $html = $this->client->getResponse()->getContent();
-        $this->assertNotFalse($html);
-
-        // Verify all 4 type options are present in HTML
-        $this->assertStringContainsString('value="DJ"', $html);
-        $this->assertStringContainsString('value="Live"', $html);
-        $this->assertStringContainsString('value="VJ"', $html);
-        $this->assertStringContainsString('value="ART"', $html);
+        $crawler = $this->client->getCrawler();
+        $this->assertGreaterThan(0, $crawler->filter('input[name="artist[type]"][value="DJ"]')->count());
+        $this->assertGreaterThan(0, $crawler->filter('input[name="artist[type]"][value="Live"]')->count());
+        $this->assertGreaterThan(0, $crawler->filter('input[name="artist[type]"][value="VJ"]')->count());
+        $this->assertGreaterThan(0, $crawler->filter('input[name="artist[type]"][value="ART"]')->count());
     }
 
     public function testBioAndBioEnFieldsSeparate(): void

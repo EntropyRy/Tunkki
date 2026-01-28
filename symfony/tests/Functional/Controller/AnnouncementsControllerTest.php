@@ -26,7 +26,10 @@ final class AnnouncementsControllerTest extends FixturesWebTestCase
         $response = $this->renderAnnouncements($locale, $path);
 
         $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString($expectedTitle, (string) $response->getContent());
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote($expectedTitle, '/').'/',
+            (string) $response->getContent()
+        );
     }
 
     public static function localeProvider(): array

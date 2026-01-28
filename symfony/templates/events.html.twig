@@ -43,8 +43,9 @@
                 </div>
             {% endif %}
             {% if event is not null %}
-                <div class="post {{ event.type }} collapse {% if event.type != 'meeting' %}show{% endif %}"
-                     data-name="{{ event.nameByLang(app.request.locale) }}">{{ block('events') }}</div>
+                <div class="post event-list-item {{ event.type }} collapse {% if event.type != 'meeting' %}show{% endif %}"
+                     data-name="{{ event.nameByLang(app.request.locale) }}"
+                     data-event-url="{{ event.url }}">{{ block('events') }}</div>
             {% endif %}
             {% set newyear = event.eventdate|date('Y') %}
         {% endfor %}

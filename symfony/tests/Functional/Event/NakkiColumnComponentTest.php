@@ -230,7 +230,12 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
         // Should have edit button with LiveAction
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringContainsString('editColumn', $content, 'Should have edit button action');
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filter('[data-live-action-param="editColumn"]')->count(),
+                'Should have edit button action'
+            );
         }
     }
 
@@ -257,7 +262,12 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
         // Should have delete/remove button with LiveAction
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringContainsString('deleteColumn', $content, 'Should have delete button action');
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filter('[data-live-action-param="deleteColumn"]')->count(),
+                'Should have delete button action'
+            );
         }
     }
 
@@ -287,7 +297,12 @@ final class NakkiColumnComponentTest extends FixturesWebTestCase
         // Should have add slots action
         $content = $this->client->getResponse()->getContent();
         if (false !== $content) {
-            self::assertStringContainsString('addSlots', $content, 'Should have add slots functionality');
+            $crawler = new \Symfony\Component\DomCrawler\Crawler($content);
+            self::assertGreaterThan(
+                0,
+                $crawler->filter('[data-live-action-param="addSlots"]')->count(),
+                'Should have add slots functionality'
+            );
         }
     }
 

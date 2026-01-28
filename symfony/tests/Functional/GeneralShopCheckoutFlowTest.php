@@ -99,8 +99,8 @@ final class GeneralShopCheckoutFlowTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect(), 'Should redirect when cart is empty');
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString(
-            '/kauppa',
+        $this->assertMatchesRegularExpression(
+            '#/kauppa(/|$)#',
             $location,
             'Should redirect to shop when cart is empty',
         );
@@ -115,8 +115,9 @@ final class GeneralShopCheckoutFlowTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect(), 'Should redirect when no cart in session');
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertTrue(
-            str_contains($location, '/kauppa') || str_contains($location, '/shop'),
+        $this->assertMatchesRegularExpression(
+            '#/(kauppa|shop)(/|$)#',
+            $location,
             'Should redirect to shop when cart ID is invalid',
         );
     }
@@ -187,7 +188,7 @@ final class GeneralShopCheckoutFlowTest extends FixturesWebTestCase
         $this->assertTrue($response->isRedirect());
 
         $location = $response->headers->get('Location') ?? '';
-        $this->assertStringContainsString('/kassa', $location);
+        $this->assertMatchesRegularExpression('#/kassa(/|$)#', $location);
     }
 
     public function testCompletedCheckoutShowsEmailConfirmation(): void

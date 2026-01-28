@@ -36,8 +36,8 @@ final class StripeReturnUrlRoutingTest extends FixturesWebTestCase
         $service = static::getContainer()->get(StripeService::class);
         $url = $service->getReturnUrl(null);
 
-        $this->assertStringContainsString('/kauppa/valmis', $url);
-        $this->assertStringContainsString('session_id={CHECKOUT_SESSION_ID}', $url);
+        $this->assertMatchesRegularExpression('#/kauppa/valmis#', $url);
+        $this->assertMatchesRegularExpression('/session_id=\\{CHECKOUT_SESSION_ID\\}/', $url);
     }
 
     public function testEventShopReturnUrlRoutesCorrectly(): void
@@ -50,7 +50,7 @@ final class StripeReturnUrlRoutingTest extends FixturesWebTestCase
         $service = static::getContainer()->get(StripeService::class);
         $url = $service->getReturnUrl($event);
 
-        $this->assertStringContainsString('/2025/test-event/valmis', $url);
-        $this->assertStringContainsString('session_id={CHECKOUT_SESSION_ID}', $url);
+        $this->assertMatchesRegularExpression('#/2025/test-event/valmis#', $url);
+        $this->assertMatchesRegularExpression('/session_id=\\{CHECKOUT_SESSION_ID\\}/', $url);
     }
 }

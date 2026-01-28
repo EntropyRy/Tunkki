@@ -109,8 +109,8 @@ final class BookingAdminControllerTest extends FixturesWebTestCase
             $response->getStatusCode(),
             'Anonymous user should be redirected to login'
         );
-        self::assertStringContainsString(
-            '/login',
+        self::assertMatchesRegularExpression(
+            '#/login(/|$)#',
             $response->headers->get('Location') ?? '',
             'Should redirect to login page'
         );

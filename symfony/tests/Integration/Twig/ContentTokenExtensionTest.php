@@ -58,9 +58,9 @@ final class ContentTokenExtensionTest extends KernelTestCase
             'app' => $this->createMockApp(),
         ]);
 
-        self::assertStringContainsString('Introduction text', $rendered);
-        self::assertStringContainsString('Conclusion', $rendered);
-        self::assertStringNotContainsString('{{ dj_bio }}', $rendered, 'Token should be replaced');
+        self::assertMatchesRegularExpression('/Introduction text/', $rendered);
+        self::assertMatchesRegularExpression('/Conclusion/', $rendered);
+        self::assertDoesNotMatchRegularExpression('/\\{\\{\\s*dj_bio\\s*\\}\\}/', $rendered, 'Token should be replaced');
     }
 
     public function testRenderTokensHandlesContentWithoutTokens(): void

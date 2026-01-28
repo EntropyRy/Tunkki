@@ -243,7 +243,11 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
 
         // Verify artist name appears in the page (rendered by Artists component) - use local crawler
         $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
-        $this->assertStringContainsString($artistName, $crawler->filter('body')->text('', true), 'Artist name should be displayed on stream page');
+        $this->assertMatchesRegularExpression(
+            '/'.preg_quote($artistName, '/').'/',
+            $crawler->filter('body')->text('', true),
+            'Artist name should be displayed on stream page'
+        );
 
         // Clean up
         $stream->setOnline(false);
@@ -337,8 +341,8 @@ final class StreamLiveComponentsTest extends FixturesWebTestCase
         $content = $client->getResponse()->getContent();
 
         $crawler = new \Symfony\Component\DomCrawler\Crawler($content ?? '');
-        $this->assertStringContainsString('First Artist', $crawler->filter('body')->text('', true));
-        $this->assertStringContainsString('Second DJ', $crawler->filter('body')->text('', true));
+        $this->assertMatchesRegularExpression('/First Artist/', $crawler->filter('body')->text('', true));
+        $this->assertMatchesRegularExpression('/Second DJ/', $crawler->filter('body')->text('', true));
 
         // Clean up
         $stream->setOnline(false);

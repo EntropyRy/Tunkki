@@ -132,9 +132,10 @@ final class EventUrlBehaviorTest extends FixturesWebTestCase
             $crawler->filter('.event-name')->count(),
             'Expected .event-name element to exist on event page.',
         );
-        self::assertStringContainsString(
-            $expectedFragment,
-            $crawler->filter('.event-name')->text(null, true),
+        $eventNameText = $crawler->filter('.event-name')->text(null, true);
+        self::assertMatchesRegularExpression(
+            '/'.preg_quote($expectedFragment, '/').'/',
+            $eventNameText,
         );
     }
 
