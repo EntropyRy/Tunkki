@@ -77,9 +77,9 @@ class ItemsType extends AbstractType
             ]
         );
 
-        $resolver->setDefault('choices', fn(Options $options): array => $this->itemR->getAllItemChoices());
+        $resolver->setDefault('choices', fn (Options $options): array => $this->itemR->getAllItemChoices());
 
-        $resolver->setDefault('categories', fn(Options $options): array => $this->getCategories($options['choices']));
+        $resolver->setDefault('categories', fn (Options $options): array => $this->getCategories($options['choices']));
     }
 
     #[\Override]

@@ -883,6 +883,42 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         return $childCategory;
     }
 
+    /**
+     * @param array<string, mixed> $formValues
+     */
+    private function setFormFieldValueByName(
+        array &$formValues,
+        string $fieldName,
+        string $value,
+    ): void {
+        $root = strstr($fieldName, '[', true);
+        if (false === $root) {
+            $root = $fieldName;
+        }
+
+        preg_match_all('/\[([^\]]*)\]/', $fieldName, $matches);
+        $segments = $matches[1] ?? [];
+
+        if (!isset($formValues[$root])) {
+            $formValues[$root] = [];
+        }
+
+        $ref = &$formValues[$root];
+        $last = array_pop($segments);
+        if (null === $last || '' === $last) {
+            $formValues[$root] = $value;
+
+            return;
+        }
+        foreach ($segments as $segment) {
+            if (!isset($ref[$segment]) || !\is_array($ref[$segment])) {
+                $ref[$segment] = [];
+            }
+            $ref = &$ref[$segment];
+        }
+        $ref[$last] = $value;
+    }
+
     public function testBookingEditFormSubmitWithItemsSelected(): void
     {
         // Ensure required classification fixtures exist and get child category
@@ -979,6 +1015,8 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
 
         // Build raw form data - use getPhpValues() as base and add items
         $formValues = $form->getPhpValues();
+        $root = $root ?? array_key_first($formValues);
+        self::assertNotNull($root, 'Could not detect form root');
 
         // Set items as array of entity IDs
         $formValues[$root]['items'] = [(string) $item1Id, (string) $item2Id];
@@ -1074,12 +1112,7 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         $form = $formNode->form();
         $values = $form->getPhpValues();
 
-        // Detect Sonata root form name
-        $html = $crawler->html();
-        $root = null;
-        if (1 === preg_match('/name="([^"]+)\[name\]"/', $html, $m)) {
-            $root = $m[1];
-        }
+        $root = array_key_first($values);
         self::assertNotNull($root, 'Could not detect form root');
 
         // Set packages as array of entity IDs (this exercises PackagesType)
@@ -1169,5 +1202,365 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
 
         // Verify package was created
         self::assertNotNull($package->getId());
+    }
+
+    /* -------------------------------------------------------------------------
+     * Story Part 12: StatusEventAdmin Tests (Child Admin for Booking Status)
+     *
+     * Tests the StatusEventAdmin which allows changing booking status through
+     * a child admin interface at /admin/booking/{id}/status-event/create
+     * ------------------------------------------------------------------------- */
+
+    public function testStatusEventCreateFormLoadsForBooking(): void
+    {
+        // Arrange: Create a booking
+        $renter = RenterFactory::new()
+            ->withName('Status Event Test Renter')
+            ->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Status Event Form Test')
+            ->create();
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // Act: Load the StatusEvent create form (child admin)
+        $createUrl = '/admin/booking/'.$booking->getId().'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+
+        // Assert: Form loads successfully
+        self::assertResponseIsSuccessful();
+
+        // Assert: Form contains expected booking status fields
+        $this->client->assertSelectorExists('form');
+        $html = $crawler->html();
+        self::assertStringContainsString('cancelled', $html);
+        self::assertStringContainsString('itemsReturned', $html);
+        self::assertStringContainsString('invoiceSent', $html);
+        self::assertStringContainsString('paid', $html);
+        self::assertStringContainsString('description', $html);
+    }
+
+    public function testStatusEventSubmitMarkBookingItemsReturned(): void
+    {
+        // Arrange: Create a booking that hasn't had items returned yet
+        $renter = RenterFactory::new()
+            ->withName('Items Returned Test Renter')
+            ->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Items Returned Test Booking')
+            ->create();
+
+        $bookingId = $booking->getId();
+
+        // Verify initial state
+        self::assertFalse($booking->getItemsReturned());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // Act: Load the StatusEvent create form
+        $createUrl = '/admin/booking/'.$bookingId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        // Find the form that contains the description field
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+
+        $form = $formNode->form();
+
+        // Get form values as base
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $itemsReturnedName = $formNode
+            ->filter('input[name*="itemsReturned"]')
+            ->attr('name');
+        self::assertNotNull($itemsReturnedName, 'ItemsReturned field name not found');
+
+        // Set the items returned checkbox and description
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'All items returned in good condition',
+        );
+        $this->setFormFieldValueByName($formValues, $itemsReturnedName, '1');
+
+        // Submit the form
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        // Should redirect on success
+        $response = $this->client->getResponse();
+
+        // If not redirect, check for form errors
+        if (!$response->isRedirect()) {
+            $errorCrawler = $this->client->getCrawler();
+            $errors = $errorCrawler->filter('.sonata-ba-field-error, .help-block, .invalid-feedback, .form-error-message, .alert-danger, .has-error');
+            $errorMessages = [];
+            foreach ($errors as $err) {
+                $text = trim($err->textContent);
+                if (!empty($text)) {
+                    $errorMessages[] = $text;
+                }
+            }
+            self::fail(
+                'Expected redirect after status event creation, got status: '.$response->getStatusCode().
+                '. Form errors: '.implode('; ', $errorMessages).
+                '. Form values submitted: '.json_encode($formValues)
+            );
+        }
+
+        // Refresh booking from database
+        $this->em()->clear();
+        $updatedBooking = $this->em()->getRepository(\App\Entity\Rental\Booking\Booking::class)
+            ->find($bookingId);
+
+        // Assert: Booking status was updated
+        self::assertTrue($updatedBooking->getItemsReturned(), 'Booking should be marked as items returned');
+
+        // Assert: StatusEvent was created
+        $statusEvents = $updatedBooking->getStatusEvents();
+        self::assertGreaterThan(0, $statusEvents->count(), 'StatusEvent should be created');
+
+        $latestEvent = $statusEvents->last();
+        self::assertSame('All items returned in good condition', $latestEvent->getDescription());
+        self::assertSame($updatedBooking, $latestEvent->getBooking());
+    }
+
+    public function testStatusEventSubmitMarkBookingCancelled(): void
+    {
+        // Arrange: Create a booking
+        $renter = RenterFactory::new()
+            ->withName('Cancellation Test Renter')
+            ->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Cancellation Test Booking')
+            ->create();
+
+        $bookingId = $booking->getId();
+
+        // Verify initial state
+        self::assertFalse($booking->getCancelled());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // Act: Load and submit the StatusEvent form
+        $createUrl = '/admin/booking/'.$bookingId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+        $form = $formNode->form();
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $cancelledName = $formNode
+            ->filter('input[name*="cancelled"]')
+            ->attr('name');
+        self::assertNotNull($cancelledName, 'Cancelled field name not found');
+
+        // Mark as cancelled
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'Customer cancelled the booking',
+        );
+        $this->setFormFieldValueByName($formValues, $cancelledName, '1');
+
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        // Assert: Redirect on success
+        self::assertTrue($this->client->getResponse()->isRedirect());
+
+        // Verify booking was cancelled
+        $this->em()->clear();
+        $updatedBooking = $this->em()->getRepository(\App\Entity\Rental\Booking\Booking::class)
+            ->find($bookingId);
+
+        self::assertTrue($updatedBooking->getCancelled(), 'Booking should be marked as cancelled');
+    }
+
+    public function testStatusEventSubmitMarkBookingPaid(): void
+    {
+        // Arrange: Create a booking with items returned (typical flow before marking paid)
+        $renter = RenterFactory::new()
+            ->withName('Payment Test Renter')
+            ->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Payment Test Booking')
+            ->create();
+
+        // Mark items as returned first (typical workflow)
+        $booking->setItemsReturned(true);
+        $booking->setInvoiceSent(true);
+        $this->em()->flush();
+
+        $bookingId = $booking->getId();
+
+        // Verify initial state
+        self::assertFalse($booking->getPaid());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // Act: Load and submit the StatusEvent form
+        $createUrl = '/admin/booking/'.$bookingId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+        $form = $formNode->form();
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $itemsReturnedName = $formNode
+            ->filter('input[name*="itemsReturned"]')
+            ->attr('name');
+        self::assertNotNull($itemsReturnedName, 'ItemsReturned field name not found');
+        $invoiceSentName = $formNode
+            ->filter('input[name*="invoiceSent"]')
+            ->attr('name');
+        self::assertNotNull($invoiceSentName, 'InvoiceSent field name not found');
+        $paidName = $formNode->filter('input[name*="paid"]')->attr('name');
+        self::assertNotNull($paidName, 'Paid field name not found');
+
+        // Mark as paid (keep existing statuses)
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'Payment received via bank transfer',
+        );
+        $this->setFormFieldValueByName($formValues, $itemsReturnedName, '1');
+        $this->setFormFieldValueByName($formValues, $invoiceSentName, '1');
+        $this->setFormFieldValueByName($formValues, $paidName, '1');
+
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        // Assert: Redirect on success
+        self::assertTrue($this->client->getResponse()->isRedirect());
+
+        // Verify booking was marked as paid
+        $this->em()->clear();
+        $updatedBooking = $this->em()->getRepository(\App\Entity\Rental\Booking\Booking::class)
+            ->find($bookingId);
+
+        self::assertTrue($updatedBooking->getPaid(), 'Booking should be marked as paid');
+        self::assertNotNull($updatedBooking->getPaidDate(), 'Paid date should be set');
+    }
+
+    public function testStatusEventListShowsBookingEvents(): void
+    {
+        // Arrange: Create a booking with a status event
+        $renter = RenterFactory::new()
+            ->withName('Status List Test Renter')
+            ->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Status List Test Booking')
+            ->create();
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        // First create a status event
+        $createUrl = '/admin/booking/'.$booking->getId().'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+        $form = $formNode->form();
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $itemsReturnedName = $formNode
+            ->filter('input[name*="itemsReturned"]')
+            ->attr('name');
+        self::assertNotNull($itemsReturnedName, 'ItemsReturned field name not found');
+
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'Test status event for list',
+        );
+        $this->setFormFieldValueByName($formValues, $itemsReturnedName, '1');
+
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        // Act: Load the status event list for this booking
+        $listUrl = '/admin/booking/'.$booking->getId().'/status-event/list';
+        $this->client->request('GET', $listUrl);
+
+        // Assert: List page loads successfully
+        self::assertResponseIsSuccessful();
+    }
+
+    public function testStatusEventAdminDeniedToNonAdmin(): void
+    {
+        // Arrange: Create a booking
+        $renter = RenterFactory::new()->create();
+
+        $booking = BookingFactory::new()
+            ->forRenter($renter)
+            ->withName('Access Denied Status Test')
+            ->create();
+
+        // Login as regular member (not admin)
+        $this->loginAsMember();
+
+        // Act: Try to access StatusEvent create form
+        $createUrl = '/admin/booking/'.$booking->getId().'/status-event/create';
+        $this->client->request('GET', $createUrl);
+
+        // Assert: Access denied (403)
+        $response = $this->client->getResponse();
+        self::assertSame(403, $response->getStatusCode());
     }
 }
