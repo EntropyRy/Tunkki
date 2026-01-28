@@ -198,6 +198,13 @@ services:
     class: App\Time\AppClock
   App\Time\ClockInterface: '@App\Time\AppClock'
 
+  # GFM Markdown converter with soft breaks as <br> (matches Toast-UI preview)
+  App\Twig\GfmMarkdownConverterFactory: ~
+
+  twig.markdown.league_common_mark_converter:
+    class: League\CommonMark\MarkdownConverter
+    factory: ['@App\Twig\GfmMarkdownConverterFactory', '__invoke']
+
   # (Other service definitions omitted for brevity in this edited section — retained below unchanged)
 
   entropy.admin.package:

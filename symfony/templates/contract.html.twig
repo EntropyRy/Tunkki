@@ -8,7 +8,7 @@
             onClick="window.print()">
     {% if renter %}
         {% set loc = 'content' ~ ((app.request.locale)|capitalize) %}
-        {{ attribute(contract, loc)|markdown_to_html|raw }}
+        {{ attribute(contract, loc)|markdown_to_html }}
     {% endif %}
     <h1>{{ bookingdata.name }} - {{ bookingdata.date }}</h1>
     {% if bookingdata.packages %}
