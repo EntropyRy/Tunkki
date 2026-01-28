@@ -71,6 +71,11 @@ class Accessory implements \Stringable
         return $this->name;
     }
 
+    public function getCompensationPrice(): ?int
+    {
+        return $this->name?->getCompensationPrice();
+    }
+
     #[\Override]
     public function __toString(): string
     {

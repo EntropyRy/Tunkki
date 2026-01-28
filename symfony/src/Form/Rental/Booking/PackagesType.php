@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Rental\Inventory;
+namespace App\Form\Rental\Booking;
 
 use App\Entity\Rental\Inventory\Package;
 use Doctrine\ORM\EntityManagerInterface;

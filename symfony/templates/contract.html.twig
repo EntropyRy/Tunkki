@@ -45,8 +45,8 @@
                     <label>
                         <span class="lead">{{ item.count }}</span> X {{ item.name }}
                     </label>
-                    {% if item.name.compensationPrice %}
-                        <span class="float-end">{{ item.name.compensationPrice }} €/{{ 'pcs'|trans }}</span>
+                    {% if item.compensationPrice %}
+                        <span class="float-end">{{ item.compensationPrice }} €/{{ 'pcs'|trans }}</span>
                     {% endif %}
                 </li>
             {% endfor %}

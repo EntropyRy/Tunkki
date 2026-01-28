@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Form\Rental\Inventory;
+namespace App\Form\Rental\Booking;
 
 use App\Entity\Rental\Inventory\Item;
 use App\Repository\Rental\Inventory\ItemRepository;
@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
@@ -44,9 +45,9 @@ class ItemsType extends AbstractType
         $cats = [];
         foreach ($choices as $choice) {
             foreach ($root->getChildren() as $cat) {
-                if ($choice->getCategory() == $cat) {
+                if ($choice->getCategory() === $cat) {
                     $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
-                } elseif (\in_array($choice->getCategory(), $cat->getChildren()->toArray())) {
+                } elseif (\in_array($choice->getCategory(), $cat->getChildren()->toArray(), true)) {
                     $cats[$cat->getName()][$choice->getCategory()->getName()] = $choice;
                 }
             }
@@ -58,16 +59,13 @@ class ItemsType extends AbstractType
     #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $choices = $this->itemR->getAllItemChoices();
-        $categories = $this->getCategories($choices);
-
         $resolver->setDefaults(
             [
                 'class' => Item::class,
                 'required' => false,
-                'choices' => $choices,
+                'choices' => static fn (): array => [],
                 'bookings' => null,
-                'categories' => $categories,
+                'categories' => static fn (): array => [],
                 'by_reference' => false,
                 'compound' => true,
                 'multiple' => true,
@@ -78,6 +76,10 @@ class ItemsType extends AbstractType
                 'btn_catalogue' => 'SonataAdminBundle',
             ]
         );
+
+        $resolver->setDefault('choices', fn(Options $options): array => $this->itemR->getAllItemChoices());
+
+        $resolver->setDefault('categories', fn(Options $options): array => $this->getCategories($options['choices']));
     }
 
     #[\Override]

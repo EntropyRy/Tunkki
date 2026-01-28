@@ -105,6 +105,15 @@ class Booking implements \Stringable
     )]
     private Collection $packageSnapshots;
 
+    /** @var Collection<int, BookingAccessorySnapshot> */
+    #[ORM\OneToMany(
+        targetEntity: BookingAccessorySnapshot::class,
+        mappedBy: 'booking',
+        cascade: ['persist'],
+        orphanRemoval: true,
+    )]
+    private Collection $accessorySnapshots;
+
     /** @var Collection<int, Accessory> */
     #[ORM\ManyToMany(targetEntity: Accessory::class, cascade: ['persist'])]
     private Collection $accessories;
@@ -204,6 +213,7 @@ class Booking implements \Stringable
         $this->rewards = new ArrayCollection();
         $this->itemSnapshots = new ArrayCollection();
         $this->packageSnapshots = new ArrayCollection();
+        $this->accessorySnapshots = new ArrayCollection();
 
         // Initialize non-nullable DateTimes to a sentinel; replaced in lifecycle callbacks.
         $now = new \DateTimeImmutable();
@@ -309,6 +319,7 @@ class Booking implements \Stringable
     {
         if (!$this->accessories->contains($accessory)) {
             $this->accessories->add($accessory);
+            $this->ensureAccessorySnapshot($accessory);
         }
 
         return $this;
@@ -317,6 +328,7 @@ class Booking implements \Stringable
     public function removeAccessory(Accessory $accessory): self
     {
         $this->accessories->removeElement($accessory);
+        $this->removeAccessorySnapshot($accessory);
 
         return $this;
     }
@@ -423,6 +435,7 @@ class Booking implements \Stringable
         $accessories = [];
         $useItemSnapshots = $this->itemSnapshots->count() > 0;
         $usePackageSnapshots = $this->packageSnapshots->count() > 0;
+        $useAccessorySnapshots = $this->accessorySnapshots->count() > 0;
 
         if ($useItemSnapshots) {
             foreach ($this->itemSnapshots as $snapshot) {
@@ -450,12 +463,23 @@ class Booking implements \Stringable
                 $compensation['packages'] += (int) $package->getCompensationPrice();
             }
         }
-        foreach ($this->accessories as $item) {
-            $accessories[] = $item;
-            if (\is_int($item->getCount())) {
-                $compensation['accessories'] +=
-                    (int) $item->getName()->getCompensationPrice() *
-                    $item->getCount();
+        if ($useAccessorySnapshots) {
+            foreach ($this->accessorySnapshots as $item) {
+                $accessories[] = $item;
+                if (is_numeric($item->getCount())) {
+                    $compensation['accessories'] +=
+                        (int) $item->getCompensationPrice() *
+                        (int) $item->getCount();
+                }
+            }
+        } else {
+            foreach ($this->accessories as $item) {
+                $accessories[] = $item;
+                if (is_numeric($item->getCount())) {
+                    $compensation['accessories'] +=
+                        (int) $item->getCompensationPrice() *
+                        (int) $item->getCount();
+                }
             }
         }
 
@@ -578,6 +602,14 @@ class Booking implements \Stringable
     public function getPackageSnapshots(): Collection
     {
         return $this->packageSnapshots;
+    }
+
+    /**
+     * @return Collection<int, BookingAccessorySnapshot>
+     */
+    public function getAccessorySnapshots(): Collection
+    {
+        return $this->accessorySnapshots;
     }
 
     public function setNumberOfRentDays(int $numberOfRentDays): self
@@ -910,6 +942,50 @@ class Booking implements \Stringable
             if (
                 null !== $snapshotPackage->getId()
                 && $snapshotPackage->getId() === $package->getId()
+            ) {
+                return $snapshot;
+            }
+        }
+
+        return null;
+    }
+
+    private function ensureAccessorySnapshot(Accessory $accessory): void
+    {
+        if ($this->findAccessorySnapshot($accessory) instanceof BookingAccessorySnapshot) {
+            return;
+        }
+
+        $snapshot = new BookingAccessorySnapshot($this, $accessory);
+        $choice = $accessory->getName();
+        $snapshot->setName($choice?->getName());
+        $snapshot->setCount($accessory->getCount());
+        $snapshot->setCompensationPrice($choice?->getCompensationPrice());
+        $this->accessorySnapshots->add($snapshot);
+    }
+
+    private function removeAccessorySnapshot(Accessory $accessory): void
+    {
+        $snapshot = $this->findAccessorySnapshot($accessory);
+        if ($snapshot instanceof BookingAccessorySnapshot) {
+            $this->accessorySnapshots->removeElement($snapshot);
+        }
+    }
+
+    private function findAccessorySnapshot(
+        Accessory $accessory,
+    ): ?BookingAccessorySnapshot {
+        foreach ($this->accessorySnapshots as $snapshot) {
+            $snapshotAccessory = $snapshot->getAccessory();
+            if ($snapshotAccessory === $accessory) {
+                return $snapshot;
+            }
+            if (null === $snapshotAccessory) {
+                continue;
+            }
+            if (
+                null !== $snapshotAccessory->getId()
+                && $snapshotAccessory->getId() === $accessory->getId()
             ) {
                 return $snapshot;
             }
