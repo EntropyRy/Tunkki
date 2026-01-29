@@ -7,13 +7,13 @@
     {{ parent() }}
 {% endblock %}
 {% block content %}
-    <h1 class="mb-4">
-        {% if email %}
-            {{ email }}
-        {% else %}
-            {{ 'page.title.checkout'|trans }}
-        {% endif %}
+    <h1 class="event-heading mb-4">
+        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+        — {{ 'page.title.checkout'|trans }}
     </h1>
+    {% if email %}
+        <p class="text-muted mb-2">{{ email }}</p>
+    {% endif %}
     {% if email %}
         <p class="text-muted mb-4">
             {{ 'checkout.email.confirmation'|trans|default('We will use this email for your purchases.') }}

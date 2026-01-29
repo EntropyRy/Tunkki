@@ -4,6 +4,10 @@
     {{ title }} - {{ 'Timetable'|trans }} | Entropy ry
 {% endblock %}
 {% block content %}
+    <h1 class="event-heading">
+        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+        — {{ 'event.section.timetable'|trans }}
+    </h1>
     {% set input = template_from_string(event.contentForTwig(app.request.locale)) %}
     <div class="content">
         {{ block('content_timetable', input) ?? '' }}
@@ -11,4 +15,5 @@
         <h2>VJ</h2>
         {{ block('vj_timetable_to_page') }}
     </div>
+    {{ block('event_back_to_link') }}
 {% endblock %}

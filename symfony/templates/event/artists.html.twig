@@ -15,8 +15,9 @@
         <div class="row">
             <div class="col">
                 {% if event.template == 'event.html.twig' %}
-                    <h1>
-                        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> - {{ 'Artists'|trans }}
+                    <h1 class="event-heading">
+                        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+                        — {{ 'event.section.artists'|trans }}
                     </h1>
                 {% endif %}
                 {% if event.ArtistInfosByType('DJ')|length > 0 %}
@@ -27,26 +28,24 @@
                     {{ block('bios') }}
                     {% if event.ArtistInfosByType('VJ')|length > 0 %}
                         {% if event.template == 'event.html.twig' %}
-                            <h1>
-                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
-                                VJ {{ 'Artists'|trans }}
-                            </h1>
+                            <h2 class="event-heading">
+                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+                                — VJ {{ 'event.section.artists'|trans }}
+                            </h2>
                         {% endif %}
                         {{ block('vj_bios') }}
                     {% endif %}
                     {% if event.ArtistInfosByType('ART')|length > 0 %}
                         {% if event.template == 'event.html.twig' %}
-                            <h1>
-                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a> -
-                                {{ 'Artists'|trans }}
-                            </h1>
+                            <h2 class="event-heading">
+                                <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+                                — {{ 'event.section.artists'|trans }}
+                            </h2>
                         {% endif %}
                         {{ block('art_bios') }}
                     {% endif %}
                     {% if event.template == 'event.html.twig' %}
-                        <h1>
-                            {{ 'Back to'|trans }} <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
-                        </h1>
+                        {{ block('event_back_to_link') }}
                     {% endif %}
                 {% else %}
                     <h1>{{ 'event.no_artists'|trans }}</h1>

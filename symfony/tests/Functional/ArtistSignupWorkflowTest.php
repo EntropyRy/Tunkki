@@ -129,7 +129,7 @@ final class ArtistSignupWorkflowTest extends FixturesWebTestCase
         // Tighten: a logged-in user with an artist should not be redirected to /login.
         $this->assertResponseStatusCodeSame(200);
         $this->client->assertSelectorTextContains(
-            'h3',
+            'h1.event-heading a',
             'Artist Signup Event',
             'Expected event name to appear in the English signup page heading.',
         );

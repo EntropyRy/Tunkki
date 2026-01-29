@@ -7,7 +7,15 @@
     {% endif %}
     {% set l = app.request.locale %}
     <div class="col-12" {{ stimulus_controller('nakkikone') }}>
-        <h1>Nakkikone: <a href="{{ block('event_path') }}">{{ block('event_name') }}</a></h1>
+        <h1 class="event-heading">
+            <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+            — {{ 'event.section.nakkikone'|trans }}
+        </h1>
+        <p class="text-muted">
+            {{ 'event.section.event_time'|trans }}:
+            {{ event.eventdate|date('d.m.Y, H:i') }}
+            {% if event.until %}– {{ event.until|date('d.m.Y, H:i') }}{% endif %}
+        </p>
         {{ block('your_nakkis') }}
         {% set nakki_info = event.nakkikone ? event.nakkikone.getInfoByLocale(l) : null %}
         {% if nakki_info %}

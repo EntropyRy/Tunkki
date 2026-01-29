@@ -733,6 +733,18 @@ docker compose exec -T -e APP_ENV=test fpm php vendor/bin/phpunit tests/Function
 - HTML snapshots: `var/test_login_page.html`, `var/test_stream_page.html`
 - Non-headless mode: `PANTHER_NO_HEADLESS=1` (local debugging only)
 
+### 15.6 Container Browser (Dev Site)
+Use Chromium inside the `fpm` container to load pages from the `web` (nginx) container.
+
+```bash
+# Headless fetch + DOM dump
+docker compose exec -T fpm chromium --headless=new --no-sandbox --disable-dev-shm-usage --dump-dom http://web/2028/test/artistit > /tmp/dev-artistit.html
+```
+
+Notes:
+- If you see **Untrusted Host "web" (400)**, update `TRUSTED_HOSTS` to include `web` in `symfony/.env.local`, then retry.
+- This is a quick visual/DOM sanity check; prefer BrowserKit or Panther for automated assertions.
+
 ---
 
 ## 16. Pre-Commit Hook (Local Quality Gate)

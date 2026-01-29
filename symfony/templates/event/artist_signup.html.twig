@@ -1,0 +1,39 @@
+{% extends event.template %}
+{% block content %}
+    <div class="col-12">
+        <h1 class="event-heading">
+            <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+            — {{ 'event.section.artist_signup'|trans }}
+        </h1>
+        <p class="text-muted">
+            {{ 'event.section.event_time'|trans }}:
+            {{ event.eventdate|date('d.m.Y, H:i') }}
+            {% if event.until %}– {{ event.until|date('d.m.Y, H:i') }}{% endif %}
+            <span class="ms-2">
+                <twig:ux:icon name="clock" />
+                <strong>{{ 'event.form.sign_up.ends'|trans }}:</strong>
+                {{ eventTemporalState.artistSignupEnd(event)|date('d.m.Y, H:i') }}
+            </span>
+        </p>
+        <p class="text-muted small">{{ 'event.form.sign_up.description'|trans }}.</p>
+        {% set signup_info = eventTemporalState.artistSignupInfo(event, app.request.locale) %}
+        {% if signup_info %}
+            {{ signup_info|markdown_to_html|raw }}
+        {% endif %}
+        <hr>
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <input class="btn btn-primary"
+                data-turbo="false"
+                type="submit"
+                value="{{ 'event.form.sign_up.save'|trans }}">
+        {% if form.vars.value.id is not null %}
+            <a href="{{- path('entropy_event_slug_artist_signup_delete', {id: form.vars.value.id}) -}}"
+                class="btn btn-warning float-end"
+                data-turbo="false">
+                {{- 'event.form.sign_up.delete'|trans -}}
+            <a />
+        {% endif %}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

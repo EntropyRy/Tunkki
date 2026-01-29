@@ -244,12 +244,22 @@ event:
   after: Past event
   now: Event in progress
   safer_space: Safer Space
+  back_to: Back to event
   tickets:
     available: available
     total_amount: Total amount
   ticket:
     shop: Ticket Shop
     to_shop: To Ticket Shop
+  section:
+    timetable: Timetable
+    artists: Artists
+    safer_space: Safer space
+    info: Info
+    shop_complete: Purchase complete
+    artist_signup: Artist signup
+    nakkikone: Nakkikone
+    event_time: Event time
   player:
     will_appear_here_when_the_stream_is_on: The player will appear here when the stream is live.
 

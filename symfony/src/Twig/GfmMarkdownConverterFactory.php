@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Twig;
 
 use League\CommonMark\GithubFlavoredMarkdownConverter;
-use League\CommonMark\MarkdownConverter;
 
 /**
  * Factory for creating a GitHub Flavored Markdown converter with soft breaks as <br>.

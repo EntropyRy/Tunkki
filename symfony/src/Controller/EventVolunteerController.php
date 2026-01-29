@@ -157,7 +157,7 @@ class EventVolunteerController extends AbstractController
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)')]
         Event $event,
     ): Response {
-        return $this->render('event/nakkikone_admin.html.twig', [
+        return $this->render('event/admin/nakkikone.html.twig', [
             'event' => $event,
         ]);
     }
@@ -183,7 +183,7 @@ class EventVolunteerController extends AbstractController
             $this->addFlash('warning', 'Nakkikone is not enabled');
         }
 
-        return $this->render('nakkikone.html.twig', [
+        return $this->render('event/nakkikone.html.twig', [
             'selected' => $selected,
             'event' => $event,
             'nakkis' => $this->getNakkis(

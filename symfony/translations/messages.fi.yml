@@ -331,12 +331,22 @@ event:
   after: Mennyt tapahtuma
   now: Tapahtuma meneillään
   safer_space: Turvallisempi tila
+  back_to: Takaisin tapahtumaan
   tickets:
     available: saatavilla
     total_amount: yhteensä
   ticket:
     shop: Lippukauppa
     to_shop: Lippukauppaan
+  section:
+    timetable: Aikataulu
+    artists: Artistit
+    safer_space: Turvallisempi tila
+    info: Info
+    shop_complete: Osto valmis
+    artist_signup: Artisti-ilmoittautuminen
+    nakkikone: Nakkikone
+    event_time: Tapahtuma-aika
   player:
     will_appear_here_when_the_stream_is_on:
       Voit kuunnella streamausta suoraan tältä

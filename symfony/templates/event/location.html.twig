@@ -1,10 +1,9 @@
 {% extends event.template %}
 {% use 'pieces/event.html.twig' %}
 {% block content %}
-    <h1>{{ 'event.location.title'|trans }}:
-        <a href="{{ block('event_path') }}">
-            {{ block('event_name') }} ~ {{ block('event_time') }}
-        </a>
+    <h1 class="event-heading">
+        <a href="{{ block('event_path') }}">{{ block('event_name') }}</a>
+        — {{ 'event.location.title'|trans }}
     </h1>
     <div class="col-12 col-sm-9 col-md-7 col-xl-6 m-auto">
         {% set location = event.location %}
@@ -55,4 +54,5 @@
                 <p>{{ 'event.location.not_found'|trans }}</p>
         {% endif %}
     </div>
+    {{ block('event_back_to_link') }}
 {% endblock %}

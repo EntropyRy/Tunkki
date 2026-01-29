@@ -125,7 +125,7 @@ class EventArtistController extends AbstractController
             );
         }
 
-        return $this->render('artist/signup.html.twig', [
+        return $this->render('event/artist_signup.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
@@ -180,7 +180,7 @@ class EventArtistController extends AbstractController
             );
         }
 
-        return $this->render('artist/signup.html.twig', [
+        return $this->render('event/artist_signup.html.twig', [
             'event' => $event,
             'form' => $form,
         ]);
