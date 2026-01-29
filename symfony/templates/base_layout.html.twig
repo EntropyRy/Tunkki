@@ -136,15 +136,13 @@
                                     {{ 'event.edit'|trans }}
                                 </a>
                             </li>
-                            {% if event.nakkikone and event.url %}
-                                <li class="nav-item">
-                                    <a class="nav-link"
-                                       href="{{ path('entropy_event_nakki_admin', {slug: event.url, year: event.eventdate|date('Y')}) }}">
-                                        <twig:ux:icon name="tasks" />
-                                        {{ 'event.section.nakkikone'|trans }}
-                                    </a>
-                                </li>
-                            {% endif %}
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ path('entropy_event_nakki_admin', {slug: event.url, year: event.eventdate|date('Y')}) }}">
+                                    <twig:ux:icon name="tasks" />
+                                    {{ 'event.section.nakkikone'|trans }}
+                                </a>
+                            </li>
                             {% if event.published == false %}
                                 <li class="nav-item">
                                     <span class="nav-link">

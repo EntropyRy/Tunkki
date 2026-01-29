@@ -94,28 +94,26 @@ final class EventAdmin extends AbstractAdmin
                 ]);
             }
             $nakkikone = $event->getNakkikone();
-            if ($nakkikone && $nakkikone->isEnabled()) {
-                $year = $event->getEventDate()?->format('Y');
-                $slug = $event->getUrl();
-                if ($year && $slug) {
-                    $menu->addChild('Nakkikone', [
-                        'route' => 'entropy_event_nakki_admin',
-                        'routeParameters' => [
-                            'year' => $year,
-                            'slug' => $slug,
-                        ],
-                    ]);
-                }
-                $menu->addChild('Nakit', [
-                    'uri' => $admin->generateUrl(
-                        'entropy.admin.event|entropy.admin.nakki_booking.list',
-                        ['id' => $id],
-                    ),
-                ]);
-                $menu->addChild('Printable Nakkilist', [
-                    'uri' => $admin->generateUrl('nakkiList', ['id' => $id]),
+            $year = $event->getEventDate()?->format('Y');
+            $slug = $event->getUrl();
+            if ($year && $slug) {
+                $menu->addChild('Nakkikone', [
+                    'route' => 'entropy_event_nakki_admin',
+                    'routeParameters' => [
+                        'year' => $year,
+                        'slug' => $slug,
+                    ],
                 ]);
             }
+            $menu->addChild('Nakit', [
+                'uri' => $admin->generateUrl(
+                    'entropy.admin.event|entropy.admin.nakki_booking.list',
+                    ['id' => $id],
+                ),
+            ]);
+            $menu->addChild('Printable Nakkilist', [
+                'uri' => $admin->generateUrl('nakkiList', ['id' => $id]),
+            ]);
             if (\count($event->getTickets()) > 0) {
                 $menu->addChild('Tickets', [
                     'uri' => $admin->generateUrl('admin.ticket.list', [

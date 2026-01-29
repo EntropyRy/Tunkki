@@ -665,6 +665,46 @@ final class EventVolunteerControllerTest extends FixturesWebTestCase
         $this->client->assertSelectorExists('.alert-warning');
     }
 
+    public function testNakkikoneRedirectsWhenEventInPast(): void
+    {
+        $clock = static::getContainer()->get(\App\Time\ClockInterface::class);
+        $now = $clock->now();
+
+        $event = EventFactory::new()->published()->create([
+            'publishDate' => $now->modify('-10 days'),
+            'eventDate' => $now->modify('-3 days'),
+            'until' => $now->modify('-3 days')->modify('+4 hours'),
+            'url' => 'past-nakkikone-'.uniqid('', true),
+        ]);
+        $event = $event instanceof Proxy ? $event->_real() : $event;
+
+        NakkikoneFactory::new()->enabled()->create([
+            'event' => $event,
+        ]);
+
+        $user = $this->createVerifiedUser();
+        $this->client->loginUser($user);
+        $this->stabilizeSessionAfterLogin();
+
+        $year = (int) $event->getEventDate()->format('Y');
+        $nakkikonePath = \sprintf('/%d/%s/nakkikone', $year, $event->getUrl());
+
+        $this->client->request('GET', $nakkikonePath);
+
+        $response = $this->client->getResponse();
+        $this->assertSame(
+            302,
+            $response->getStatusCode(),
+            'Past event nakkikone should redirect to event page',
+        );
+        $expectedPath = \sprintf('/%d/%s', $year, $event->getUrl());
+        $this->assertSame(
+            $expectedPath,
+            $response->headers->get('Location'),
+            'Should redirect to event page when event is in the past',
+        );
+    }
+
     /**
      * Test nakkikone page with active member only nakkis.
      * Covers lines 321-332.

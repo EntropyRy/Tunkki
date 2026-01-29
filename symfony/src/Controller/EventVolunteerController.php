@@ -10,6 +10,7 @@ use App\Entity\NakkiBooking;
 use App\Entity\Nakkikone;
 use App\Entity\RSVP;
 use App\Entity\User;
+use App\Domain\EventTemporalStateService;
 use App\Repository\NakkiBookingRepository;
 use App\Repository\RSVPRepository;
 use App\Security\Voter\EventNakkiAdminVoter;
@@ -172,8 +173,16 @@ class EventVolunteerController extends AbstractController
         Request $request,
         #[MapEntity(expr: 'repository.findEventBySlugAndYear(slug,year)'),]
         Event $event,
+        EventTemporalStateService $eventTemporalState,
         NakkiBookingRepository $repo,
     ): Response {
+        if ($eventTemporalState->isInPast($event)) {
+            return $this->redirectToRoute('entropy_event_slug', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+                '_locale' => $request->getLocale(),
+            ]);
+        }
         $user = $this->getUser();
         \assert($user instanceof User);
         $member = $user->getMember();

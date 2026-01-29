@@ -57,6 +57,13 @@ class EventShopController extends AbstractController
         NakkiBookingRepository $nakkirepo,
         TicketRepository $ticketRepo,
     ): Response {
+        if ($this->eventTemporalState->isInPast($event)) {
+            return $this->redirectToRoute('entropy_event_slug', [
+                'year' => $event->getEventDate()->format('Y'),
+                'slug' => $event->getUrl(),
+                '_locale' => $request->getLocale(),
+            ]);
+        }
         if (!$this->eventTemporalState->isPresaleOpen($event)) {
             throw $this->createAccessDeniedException('');
         }

@@ -14,7 +14,7 @@ use App\Tests\_Base\FixturesWebTestCase;
  * Tests shop access control based on ticket presale timing windows:
  * - Presale not started yet (403)
  * - Presale ended (403)
- * - Event in the past (403)
+ * - Event in the past (redirect to event page)
  * - Valid presale window (200)
  *
  * Addresses GAP from todo.md line 38:
@@ -149,17 +149,17 @@ final class ShopAccessTimingTest extends FixturesWebTestCase
 
         $this->client->request('GET', $shopPath);
 
-        // Anonymous users get 302 redirect to login when access is denied
         $response = $this->client->getResponse();
         $this->assertSame(
             302,
             $response->getStatusCode(),
-            'Anonymous users should be redirected when event is in the past',
+            'Past event shop should redirect to the event page',
         );
+        $expectedPath = \sprintf('/%d/%s', $year, $event->getUrl());
         $this->assertSame(
-            'http://localhost/login',
+            $expectedPath,
             $response->headers->get('Location'),
-            'Should redirect to /login',
+            'Should redirect to event page when event is in the past',
         );
     }
 
