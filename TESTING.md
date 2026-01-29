@@ -745,6 +745,102 @@ Notes:
 - If you see **Untrusted Host "web" (400)**, update `TRUSTED_HOSTS` to include `web` in `symfony/.env.local`, then retry.
 - This is a quick visual/DOM sanity check; prefer BrowserKit or Panther for automated assertions.
 
+### 15.7 Manual Browser Container (noVNC)
+Use the dedicated browser container for manual click-through verification (kept out of the default stack).
+
+```bash
+# Start the browser service (opt-in file + profile)
+docker compose -f compose.yaml -f compose.ai.yaml --profile ai-tools up -d browser
+```
+
+Open the noVNC UI at `http://localhost:7900` and browse to `http://web/...` inside the container.
+
+Notes:
+- If prompted for a password, use `secret` (selenium default).
+- The browser container shares the Docker network, so `http://web/` resolves to nginx.
+
+### 15.8 Selenium Headless Script (Dev Site)
+Use Selenium via the `browser` container to drive a headless login + page capture against the running dev site.
+
+```bash
+python - <<'PY'
+import json
+import time
+import urllib.request
+
+BASE = 'http://localhost:4444'
+
+def req(method, path, data=None, timeout=10):
+    url = BASE + path
+    headers = {'Content-Type': 'application/json'}
+    body = None
+    if data is not None:
+        body = json.dumps(data).encode('utf-8')
+    r = urllib.request.Request(url, data=body, headers=headers, method=method)
+    with urllib.request.urlopen(r, timeout=timeout) as resp:
+        raw = resp.read().decode('utf-8')
+        return json.loads(raw)
+
+# Start a new session
+caps = {
+    'capabilities': {
+        'alwaysMatch': {
+            'browserName': 'chrome',
+            'pageLoadStrategy': 'eager',
+            'goog:chromeOptions': {
+                'args': ['--headless=new', '--no-sandbox', '--disable-dev-shm-usage']
+            }
+        }
+    }
+}
+resp = req('POST', '/session', caps, timeout=30)
+value = resp.get('value', {})
+SESSION = resp.get('sessionId') or value.get('sessionId')
+
+EL_KEY = 'element-6066-11e4-a52e-4f735466cecf'
+
+def find(css):
+    r = req('POST', f'/session/{SESSION}/element', {'using': 'css selector', 'value': css})
+    el = r['value']
+    return el.get(EL_KEY) or el.get('ELEMENT')
+
+def send_keys(el_id, text):
+    req('POST', f'/session/{SESSION}/element/{el_id}/value', {'text': text})
+
+try:
+    # Login
+    req('POST', f'/session/{SESSION}/url', {'url': 'http://web/login'}, timeout=30)
+    for _ in range(40):
+        time.sleep(0.25)
+        try:
+            email_el = find('#inputEmail')
+            pass_el = find('#inputPassword')
+            break
+        except Exception:
+            continue
+    send_keys(email_el, 'superadmin@example.test')
+    send_keys(pass_el, 'adminpass')
+    req('POST', f'/session/{SESSION}/execute/sync', {
+        'script': "document.querySelector('form[action*=\"login\"]').submit();",
+        'args': []
+    })
+    time.sleep(2)
+
+    # Navigate + capture
+    req('POST', f'/session/{SESSION}/url', {'url': 'http://web/2028/test'}, timeout=30)
+    time.sleep(1)
+    source = req('GET', f'/session/{SESSION}/source')
+    html = source.get('value', '')
+    open('/tmp/admin_event.html', 'w', encoding='utf-8').write(html)
+    print('Saved /tmp/admin_event.html')
+finally:
+    try:
+        req('DELETE', f'/session/{SESSION}')
+    except Exception:
+        pass
+PY
+```
+
 ---
 
 ## 16. Pre-Commit Hook (Local Quality Gate)

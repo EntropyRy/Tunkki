@@ -111,7 +111,6 @@ export default class extends Controller {
       this.animateImageReveal();
       this.markAsLoaded(false);
     } catch (error) {
-      console.error(`Failed to load progressive image:`, error);
       this.handleLoadError();
     } finally {
       this.loadingPromise = null;

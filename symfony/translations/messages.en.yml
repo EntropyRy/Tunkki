@@ -218,6 +218,7 @@ block:
     events: events
 menu:
   logon_to: Log on to
+  admin: Admin
 event:
   no_artists: Artists have not been selected yet.
   badge:

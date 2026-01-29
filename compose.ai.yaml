@@ -1,0 +1,11 @@
+services:
+  browser:
+    image: selenium/standalone-chromium:latest
+    profiles:
+      - ai-tools
+    shm_size: 1g
+    depends_on:
+      - web
+    ports:
+      - "7900:7900" # noVNC
+      - "4444:4444" # WebDriver

@@ -290,6 +290,7 @@ block:
     events: tapahtumat
 menu:
   logon_to: Kirjaudu
+  admin: Ylläpito
 page:
   announcements:
     title: Tiedotukset
