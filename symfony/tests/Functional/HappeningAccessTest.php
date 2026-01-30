@@ -703,6 +703,38 @@ final class HappeningAccessTest extends FixturesWebTestCase
     }
 
     /**
+     * Smoke test: verify translation keys resolve (detects broken YAML).
+     */
+    public function testHappeningFormTranslationsResolve(): void
+    {
+        $owner = $this->createUser();
+        $event = EventFactory::new()->published()->create();
+        $year = $event->getEventDate()->format('Y');
+
+        $this->loginClientAs($owner);
+
+        $createUrl = \sprintf('/en/%s/%s/happening/create', $year, $event->getUrl());
+        $crawler = $this->client->request('GET', $createUrl);
+        $this->assertSame(200, $this->client->getResponse()->getStatusCode());
+
+        // Check that labels are translated, not showing raw keys
+        $nameLabel = $crawler->filter('label[for="happening_nameFi"]')->text();
+        $this->assertStringNotContainsString(
+            'happening.field',
+            $nameLabel,
+            'Translation key should resolve, not display raw key',
+        );
+        $this->assertSame('Name in Finnish', $nameLabel);
+
+        // Check type dropdown has translated options
+        $typeOptions = $crawler->filter('#happening_type option')->each(
+            fn ($node) => $node->text(),
+        );
+        $this->assertContains('Restaurant', $typeOptions);
+        $this->assertContains('Lecture', $typeOptions);
+    }
+
+    /**
      * Test that user can remove their own booking.
      * Covers HappeningController lines 225-238.
      */
