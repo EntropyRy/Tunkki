@@ -562,6 +562,7 @@ happening:
   type:
     restaurant: Restaurant
     event: Event
+    lecture: Lecture
   bookings: Bookings
   time_help: When is this happening?
   seats_available: seats available

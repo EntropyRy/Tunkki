@@ -659,6 +659,7 @@ happening:
   type:
     restaurant: Ravintola
     event: Tapahtuma
+    lecture: Luento
   bookings: Varaukset
   time_help: Koska tapahtuma alkaa?
   seats_available: paikkaa vapaana

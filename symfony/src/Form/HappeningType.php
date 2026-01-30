@@ -37,6 +37,7 @@ class HappeningType extends AbstractType
                 'choices' => [
                     'happening.type.restaurant' => 'restaurant',
                     'happening.type.event' => 'event',
+                    'happening.type.lecture' => 'lecture',
                 ],
                 'required' => true,
                 'constraints' => [
