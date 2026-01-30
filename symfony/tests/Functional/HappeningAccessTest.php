@@ -728,7 +728,7 @@ final class HappeningAccessTest extends FixturesWebTestCase
 
         // Check type dropdown has translated options
         $typeOptions = $crawler->filter('#happening_type option')->each(
-            fn ($node) => $node->text(),
+            static fn ($node) => $node->text(),
         );
         $this->assertContains('Restaurant', $typeOptions);
         $this->assertContains('Lecture', $typeOptions);
