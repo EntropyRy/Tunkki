@@ -96,7 +96,7 @@ final class EventAdmin extends AbstractAdmin
             $nakkikone = $event->getNakkikone();
             $year = $event->getEventDate()?->format('Y');
             $slug = $event->getUrl();
-            if ($year && $slug) {
+            if ($event->isExternalUrl() === false && $year && $slug && $nakkikone instanceof Nakkikone) {
                 $menu->addChild('Nakkikone', [
                     'route' => 'entropy_event_nakki_admin',
                     'routeParameters' => [
