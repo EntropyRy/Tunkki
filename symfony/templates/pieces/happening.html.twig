@@ -26,7 +26,7 @@
 {% endif %}
 {%- endblock -%}
 {% block shown_only_to %}
-    {{ 'SHOWN ONLY TO'|trans }}:
+    {{ 'happening.shown_only_to'|trans }}
     {% for member in happening.owners %}
         {{ member.username }}{% if not loop.last %},{% endif %}
     {% endfor %}
@@ -64,10 +64,10 @@
         <div class="col-12">
             <h1>
                 <a href="{{ path('entropy_event_slug', {slug: event.url, year: event.eventdate|date('Y')}) }}">{{ event.name }}</a> ~
-                {{ happening.type|capitalize|trans }}
+                {{ ('happening.type.' ~ happening.type)|trans }}
                 {% if admin and not eventInPast %}
                     ~ <a class="btn btn-lg btn-success"
-    href="{{ path('entropy_event_happening_edit', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ 'Edit'|trans }}</a>
+    href="{{ path('entropy_event_happening_edit', {slug: event.url, year: event.eventdate|date('Y'), happeningSlug: happening.slug(app.request.locale)}) }}">{{ 'happening.edit'|trans }}</a>
                 {% endif %}
                 {% if happening.releaseThisHappeningInEvent == false %}
                     ~ <span class="text-danger">{{ block('shown_only_to') }}</span>
@@ -94,7 +94,7 @@
                                                 '{{ ticket_ref }}': ticket_ref,
                                                 })|raw }}
                     </div>
-                    <h5>{{ 'Price'|trans }}</h5>
+                    <h5>{{ 'happening.field.price'|trans }}</h5>
                     <p>{{ happening.price(app.request.locale) }}</p>
                 {% endif %}
             </div>
@@ -102,31 +102,31 @@
                 <div class="col-12 mt-4">
                     {% if happening.needsPreliminarySignUp %}
                         {% if happening.signUpsAreOpen %}
-                            <h4>{{ space_left }} {{ 'seats available'|trans }}</h4>
+                            <h4>{{ space_left }} {{ 'happening.seats_available'|trans }}</h4>
                             {% if happeningB.member == app.user.member %}
                                 {% if happeningB.comment %}
-                                    <p>{{ 'You have an reservation with a comment'|trans }}: {{ happeningB.comment }}</p>
+                                    <p>{{ 'happening.reservation_with_comment'|trans }}: {{ happeningB.comment }}</p>
                                 {% endif %}
                                 <div>
                                     <a data-turbo="false" href="{{ path('entropy_event_happening_remove', {id: happeningB.id}) }}"
-                                       class="w-100 btn btn-warning">{{ 'Remove reservation'|trans }}</a>
+                                       class="w-100 btn btn-warning">{{ 'happening.remove_reservation'|trans }}</a>
                                 </div>
                             {% else %}
                                 {{ form_start(form) }}
                                     {{ form_widget(form) }}
                                     <input class="btn btn-primary w-100"
                                            type="submit"
-                                           value="{{ 'sign up'|trans|capitalize }}">
+                                           value="{{ 'happening.sign_up'|trans|capitalize }}">
                                 {{ form_end(form) }}
                             {% endif %}
                         {% else %}
                             <h4>
-                                {{ space_left }} {{ 'seats available'|trans }},
+                                {{ space_left }} {{ 'happening.seats_available'|trans }},
                                 {{ 'happening.sign_ups_have_ended'|trans }}
                             </h4>
                             {% for booking in happening.bookings %}
                                 {% if booking.member == app.user.member %}
-                                    <p class="text-success">{{ 'You have an reservation with a comment'|trans }}: {{ booking.comment }}</p>
+                                    <p class="text-success">{{ 'happening.reservation_with_comment'|trans }}: {{ booking.comment }}</p>
                                 {% endif %}
                             {% endfor %}
                         {% endif %}
@@ -134,7 +134,7 @@
                     {% if happening.needsPreliminarySignUp and admin %}
                         <div class="row mt-4">
                             <div class="col-12">
-                                <h4>{{ 'Bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
+                                <h4>{{ 'happening.bookings'|trans }} {{ 'happening.bookings_for_admin'|trans }}</h4>
                                 <ol>
                                     {% for booking in happening.bookings %}
                                         <li>

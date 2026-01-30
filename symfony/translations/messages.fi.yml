@@ -636,41 +636,45 @@ happening:
   edited: Muokkaukset tallennettu onnistuneesti.
   ticket_missing: Tarvitset lipun ensin.
   happenings: Tapahtumat
-Name fi: Nimi suomeksi
-Name en: Nimi englanniksi
-Description fi: Kuvaus suomeksi
-Description en: Kuvaus englanniksi
-Time: Aika
-Picture: Kuva
-Needs preliminary sign up: Tarvitsee varaukset ennakkoon
-Needs preliminary payment: Tarvitsee maksut ennakkoon
-Payment info fi: Maksutiedot suomeksi
-Payment info en: Maksutiedot englanniksi
-Type: Tyyppi
-Price: Hinta
-Remove: Poista
-Restaurant: Ravintola
-Event: Tapahtuma
-Max sign ups: Maksimi määrä varauksia
-Bookings: Varaukset
-When is this happening?: Koska tapahtuma alkaa?
-seats available: paikkaa vapaana
-Comment: Kommentti
-sign up: Varaa
-Remove reservation: Poista varaus
-You have an reservation with a comment: Sinulle on varaus kommentilla
-create: Luo
-Price fi: Hinta suomeksi
-Price en: Hinta englanniksi
-Release this happening in event: Julkaise tapahtuma sivulle
-SHOWN ONLY TO: NÄYTETÄÄN VAIN
-missing: puuttuu
+  field:
+    name_fi: Nimi suomeksi
+    name_en: Nimi englanniksi
+    description_fi: Kuvaus suomeksi
+    description_en: Kuvaus englanniksi
+    time: Aika
+    picture: Kuva
+    needs_preliminary_sign_up: Tarvitsee varaukset ennakkoon
+    needs_preliminary_payment: Tarvitsee maksut ennakkoon
+    payment_info_fi: Maksutiedot suomeksi
+    payment_info_en: Maksutiedot englanniksi
+    type: Tyyppi
+    price: Hinta
+    price_fi: Hinta suomeksi
+    price_en: Hinta englanniksi
+    max_sign_ups: Maksimi määrä varauksia
+    sign_ups_open_until: Varaukset ovat auki tähän asti
+    allow_sign_up_comments: Kommentti varauksen yhteydessä?
+    release_in_event: Julkaise tapahtuma sivulle
+    comment: Kommentti
+  type:
+    restaurant: Ravintola
+    event: Tapahtuma
+  bookings: Varaukset
+  time_help: Koska tapahtuma alkaa?
+  seats_available: paikkaa vapaana
+  sign_up: Varaa
+  remove_reservation: Poista varaus
+  reservation_with_comment: Sinulle on varaus kommentilla
+  shown_only_to: "NÄYTETÄÄN VAIN:"
+  remove: Poista
+  missing: puuttuu
+  button:
+    create: Luo
+    save: Tallenna
 location:
   location: sijainti
   former_industrial_complex: entinen teollisuuskompleksi
 Your username was updated to your Mattermost username: Käyttäjänimesi vaihdettiin Mattermost käyttäjänimeksi.
-Sign ups open until: Varaukset ovat auki tähän asti
-Allow sign up comments: Kommentti varauksen yhteydessä?
 edited: Muokkaukset tallennettu onnistuneesti.
 Back to: Takaisin
 contract:

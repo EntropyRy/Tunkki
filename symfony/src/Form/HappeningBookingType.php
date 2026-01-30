@@ -19,6 +19,7 @@ class HappeningBookingType extends AbstractType
     {
         $builder
             ->add('comment', null, [
+                'label' => 'happening.field.comment',
                 'row_attr' => ['class' => $options['comments'] ? '' : 'd-none'],
             ]);
     }

@@ -8,7 +8,6 @@ use App\Entity\Happening;
 use Sonata\MediaBundle\Form\Type\MediaType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -34,9 +33,10 @@ class HappeningType extends AbstractType
     ): void {
         $builder
             ->add('type', ChoiceType::class, [
+                'label' => 'happening.field.type',
                 'choices' => [
-                    'Restaurant' => 'restaurant',
-                    'Event' => 'event',
+                    'happening.type.restaurant' => 'restaurant',
+                    'happening.type.event' => 'event',
                 ],
                 'required' => true,
                 'constraints' => [
@@ -44,25 +44,18 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('time', null, [
-                'help' => 'When is this happening?',
-                // 'format' => 'D, G:i'
+                'label' => 'happening.field.time',
+                'help' => 'happening.time_help',
             ])
-            /*            ->add('time', DateTimeType::class, [
-
-                'widget' => 'single_text',
-                'html5' => false,
-                'format' => 'yyyy-MM-dd HH:mm:ss',
-                'input' => 'datetime',
-                'required' => false,
-            ])
-                */
             ->add('picture', MediaType::class, [
+                'label' => 'happening.field.picture',
                 'context' => 'artist',
                 'provider' => 'sonata.media.provider.image',
                 'translation_domain' => 'messages',
                 'required' => false,
             ])
             ->add('nameFi', null, [
+                'label' => 'happening.field.name_fi',
                 'constraints' => [
                     new NotBlank(
                         message: 'happening.validation.name_fi_required',
@@ -70,6 +63,7 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('descriptionFi', null, [
+                'label' => 'happening.field.description_fi',
                 'attr' => [
                     'placeholder' => 'happening.description_fi',
                     'rows' => 3,
@@ -83,6 +77,7 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('paymentInfoFi', null, [
+                'label' => 'happening.field.payment_info_fi',
                 'attr' => [
                     'placeholder' => 'happening.payment_info_fi',
                     'rows' => 3,
@@ -91,9 +86,11 @@ class HappeningType extends AbstractType
                 'help_html' => true,
             ])
             ->add('priceFi', null, [
+                'label' => 'happening.field.price_fi',
                 'attr' => ['placeholder' => 'happening.price_fi'],
             ])
             ->add('nameEn', null, [
+                'label' => 'happening.field.name_en',
                 'constraints' => [
                     new NotBlank(
                         message: 'happening.validation.name_en_required',
@@ -101,6 +98,7 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('descriptionEn', null, [
+                'label' => 'happening.field.description_en',
                 'attr' => ['rows' => 3],
                 'help' => 'happening.markdown_allowed',
                 'help_html' => true,
@@ -111,12 +109,16 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('paymentInfoEn', null, [
+                'label' => 'happening.field.payment_info_en',
                 'attr' => ['rows' => 3],
                 'help' => 'happening.markdown_allowed',
                 'help_html' => true,
             ])
-            ->add('priceEn')
+            ->add('priceEn', null, [
+                'label' => 'happening.field.price_en',
+            ])
             ->add('needsPreliminarySignUp', null, [
+                'label' => 'happening.field.needs_preliminary_sign_up',
                 'required' => false,
                 'attr' => [
                     'data-bs-toggle' => 'collapse',
@@ -126,6 +128,7 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('maxSignUps', null, [
+                'label' => 'happening.field.max_sign_ups',
                 'constraints' => [
                     new PositiveOrZero(
                         message: 'happening.validation.max_signups_positive_or_zero',
@@ -133,8 +136,12 @@ class HappeningType extends AbstractType
                 ],
                 'empty_data' => '0',
             ])
-            ->add('signUpsOpenUntil')
-            ->add('allowSignUpComments')
+            ->add('signUpsOpenUntil', null, [
+                'label' => 'happening.field.sign_ups_open_until',
+            ])
+            ->add('allowSignUpComments', null, [
+                'label' => 'happening.field.allow_sign_up_comments',
+            ])
             ->add('needsPreliminaryPayment', null, [
                 'required' => false,
                 'label' => 'happening.show_payment_info',
@@ -146,6 +153,7 @@ class HappeningType extends AbstractType
                 ],
             ])
             ->add('releaseThisHappeningInEvent', null, [
+                'label' => 'happening.field.release_in_event',
                 'required' => false,
             ]);
 

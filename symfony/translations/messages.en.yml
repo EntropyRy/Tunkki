@@ -539,18 +539,45 @@ happening:
   edited: Changes saved successfully!
   ticket_missing: You need a ticket first.
   happenings: Happenings
+  field:
+    name_fi: Name in Finnish
+    name_en: Name in English
+    description_fi: Description in Finnish
+    description_en: Description in English
+    time: Time
+    picture: Picture
+    needs_preliminary_sign_up: Requires sign-up in advance
+    needs_preliminary_payment: Requires payment in advance
+    payment_info_fi: Payment info in Finnish
+    payment_info_en: Payment info in English
+    type: Type
+    price: Price
+    price_fi: Price in Finnish
+    price_en: Price in English
+    max_sign_ups: Maximum sign-ups
+    sign_ups_open_until: Sign-ups open until
+    allow_sign_up_comments: Allow comments with sign-up?
+    release_in_event: Release this happening in event
+    comment: Comment
+  type:
+    restaurant: Restaurant
+    event: Event
+  bookings: Bookings
+  time_help: When is this happening?
+  seats_available: seats available
+  sign_up: Sign up
+  remove_reservation: Remove reservation
+  reservation_with_comment: You have a reservation with comment
+  shown_only_to: "SHOWN ONLY TO:"
+  remove: Remove
+  missing: missing
+  button:
+    create: Create
+    save: Save
 edited: Changes saved successfully!
 location:
   location: location
   former_industrial_complex: former industrial complex
-Name fi: Name in Finnish
-Name en: Name in English
-Description fi: Description in Finnish
-Description en: Description in English
-Payment info fi: Payment info in Finnish
-Payment info en: Payment info in English
-Price fi: Price in Finnish
-Price en: Price in English
 contract:
   accessories:
     prices: Costs for damaged or misplaced accessories

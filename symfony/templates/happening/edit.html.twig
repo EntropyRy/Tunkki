@@ -3,7 +3,7 @@
 {% block content %}
     <div class="col-12">
         <h1>{{ 'happening.heading.edit'|trans }}: {{ happening.name(app.request.locale) }}</h1>
-        {% if happening.releaseThisHappeningInEvent %}<h2 class="text-warning">{{ 'SHOWN ONLY TO YOU'|trans }}</h2>{% endif %}
+        {% if not happening.releaseThisHappeningInEvent %}<h2 class="text-warning">{{ 'happening.shown_only_to'|trans }} {{ app.user.member.username }}</h2>{% endif %}
         {{ form_start(form) }}
             <div class="row">
                 {{ form_row(form.type) }}
@@ -54,7 +54,7 @@
             <input class="btn btn-primary"
                    data-turbo="false"
                    type="submit"
-                   value="{{ 'edit'|trans|capitalize }}">
+                   value="{{ 'happening.button.save'|trans }}">
         {{ form_end(form) }}
     </div>
 {% endblock %}
