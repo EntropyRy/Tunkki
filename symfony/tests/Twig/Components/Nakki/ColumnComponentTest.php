@@ -565,6 +565,78 @@ final class ColumnComponentTest extends LiveComponentTestCase
         self::assertCount(2, $groups[0]['intervalGroups']);
     }
 
+    public function testRemoveLastSlotInTimeFrameRemovesEntireTimeFrame(): void
+    {
+        // Create two distinct time frames
+        $firstStart = new \DateTimeImmutable('2025-01-05 10:00:00');
+        $firstEnd = $firstStart->modify('+1 hour');
+        $secondStart = new \DateTimeImmutable('2025-01-05 14:00:00');
+        $secondEnd = $secondStart->modify('+2 hours');
+
+        $nakki = NakkiFactory::new()->create([
+            'startAt' => $firstStart,
+            'endAt' => $secondEnd,
+        ]);
+
+        // First time frame: single booking (will be removed)
+        $bookingToRemove = NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $firstStart,
+                'endAt' => $firstEnd,
+            ])
+            ->free()
+            ->create();
+
+        // Second time frame: two bookings (will remain)
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $secondStart,
+                'endAt' => $secondEnd,
+            ])
+            ->free()
+            ->create();
+        NakkiBookingFactory::new()
+            ->with([
+                'nakki' => $nakki,
+                'nakkikone' => $nakki->getNakkikone(),
+                'startAt' => $secondStart,
+                'endAt' => $secondEnd,
+            ])
+            ->free()
+            ->create();
+
+        $component = $this->mountComponent(Column::class, ['nakkiId' => $nakki->getId()]);
+        $component->render();
+
+        // Verify initial state: two time groups
+        /** @var Column $state */
+        $state = $component->component();
+        $groupsBefore = $state->getNestedBookingGroups();
+        self::assertCount(2, $groupsBefore, 'Should have two time groups before removal');
+
+        // Remove the only booking in the first time frame
+        $component->call('removeSlot', ['bookingId' => $bookingToRemove->getId()]);
+
+        // After removal, only one time group should remain
+        /** @var Column $stateAfter */
+        $stateAfter = $component->component();
+        $groupsAfter = $stateAfter->getNestedBookingGroups();
+        self::assertCount(1, $groupsAfter, 'Should have one time group after removing last slot from first time frame');
+
+        // The remaining group should be the second time frame
+        $remainingGroup = $groupsAfter[0];
+        self::assertSame(
+            $secondStart->format('Y-m-d H:i:s'),
+            $remainingGroup['startTime']->format('Y-m-d H:i:s'),
+            'Remaining group should be the second time frame'
+        );
+        self::assertCount(2, $remainingGroup['intervalGroups'][0]['bookings'], 'Second time frame should still have 2 bookings');
+    }
+
     private function reloadNakki(int $id): Nakki
     {
         /** @var NakkiRepository $repository */

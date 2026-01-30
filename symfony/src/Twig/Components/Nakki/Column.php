@@ -153,6 +153,10 @@ final class Column
         $this->recalculateBounds($nakki);
         $this->entityManager->flush();
 
+        // Refresh entity to ensure collection is synchronized with database
+        // This is needed for LiveComponent re-render when last slot in a time frame is removed
+        $this->entityManager->refresh($nakki);
+
         $this->notice = $this->translator->trans('nakkikone.column.booking_removed');
 
         $this->resetCache();

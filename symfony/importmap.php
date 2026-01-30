@@ -94,7 +94,7 @@ return [
         'version' => '2.3.8',
     ],
     '@hotwired/turbo' => [
-        'version' => '8.0.22',
+        'version' => '8.0.23',
     ],
     '@fontsource-variable/space-grotesk/index.css' => [
         'version' => '5.2.10',
