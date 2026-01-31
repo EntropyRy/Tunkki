@@ -1,18 +1,44 @@
 import { readEffectConfigById } from "./effects-config.js";
 // Snow: https://codepen.io/otsukatomoya/pen/gbDxF/
 
+const defaults = {
+    amountOfSnow: 500,
+    size: 2,
+    speed: 5,
+    colorLight: "rgba(50, 50, 50, 0.8)",
+    colorDark: "rgba(230, 230, 230, 1)",
+};
+
+const config = readEffectConfigById("snow", defaults);
+
+function getTheme() {
+    return document.documentElement.getAttribute("data-bs-theme") || "light";
+}
+
+function getSnowColor() {
+    // Legacy support: if old snowColor config exists, use it for both themes
+    if (config.snowColor) {
+        return config.snowColor;
+    }
+    return getTheme() === "dark" ? config.colorDark : config.colorLight;
+}
+
 var w = window.innerWidth,
     h = window.innerHeight,
     canvas = document.getElementById("snow"),
     ctx = canvas.getContext("2d"),
     rate = 50,
-    amountOfSnow = 500,
-    size = 2,
-    speed = 5,
-    snowColor = "rgba(230, 230, 230,1)",
+    amountOfSnow = config.amountOfSnow,
+    size = config.size,
+    speed = config.speed,
+    snowColor = getSnowColor(),
     snowflake = new Array(),
     time,
     count;
+
+document.addEventListener("theme:changed", function (event) {
+    snowColor = getSnowColor();
+});
 
 canvas.setAttribute("width", w);
 canvas.setAttribute("height", h);
