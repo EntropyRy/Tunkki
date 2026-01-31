@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\Notification;
+use App\Form\MarkdownEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
@@ -65,17 +65,11 @@ final class NotificationAdmin extends AbstractAdmin
                 ],
                 'help' => 'Defines links language',
             ])
-            ->add(
-                'message',
-                SimpleFormatterType::class,
-                [
-                    'format' => 'richhtml',
-                    'required' => true,
-                    'attr' => ['rows' => 20],
-                    'ckeditor_context' => 'simple',
-                    'help' => 'Telegram does not support lists of any kind',
-                ]
-            )
+            ->add('message', MarkdownEditorType::class, [
+                'format' => 'telegram',
+                'required' => true,
+                'help' => 'Telegram supports: bold, italic, strikethrough, links. Lists and headings are not supported.',
+            ])
             ->add('options', ChoiceType::class, [
                 'multiple' => true,
                 'expanded' => true,

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Form;
 
 use App\Domain\Content\ContentTokenRenderer;
+use App\Form\DataTransformer\HtmlToMarkdownTransformer;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\Options;
@@ -46,14 +48,20 @@ final class MarkdownEditorType extends AbstractType
     }
 
     #[\Override]
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder->addModelTransformer(new HtmlToMarkdownTransformer());
+    }
+
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'simple' => false,
+            'format' => 'simple',  // default: simple editor (most common use)
             'heading_levels' => [2, 3, 4, 5, 6],
             'attr' => [],
         ]);
-        $resolver->setAllowedTypes('simple', 'bool');
+        $resolver->setAllowedValues('format', ['event', 'simple', 'telegram']);
         $resolver->setAllowedTypes('heading_levels', 'array');
         $resolver->setNormalizer('attr', function (
             Options $options,
@@ -67,15 +75,15 @@ final class MarkdownEditorType extends AbstractType
                     $options['heading_levels'],
                     \JSON_THROW_ON_ERROR,
                 ),
+                'data-markdown-editor-format-value' => $options['format'],
             ];
 
-            if ($options['simple']) {
-                $base['data-markdown-editor-simple-value'] = 'true';
-                $base['data-markdown-editor-tokens-value'] = json_encode([], \JSON_THROW_ON_ERROR);
-                $base['data-markdown-editor-token-map-value'] = json_encode([], \JSON_THROW_ON_ERROR);
-            } else {
+            if ('event' === $options['format']) {
                 $base['data-markdown-editor-tokens-value'] = json_encode(array_keys(self::TOKEN_LABELS), \JSON_THROW_ON_ERROR);
                 $base['data-markdown-editor-token-map-value'] = json_encode($this->buildTokenMap(), \JSON_THROW_ON_ERROR);
+            } else {
+                $base['data-markdown-editor-tokens-value'] = json_encode([], \JSON_THROW_ON_ERROR);
+                $base['data-markdown-editor-token-map-value'] = json_encode([], \JSON_THROW_ON_ERROR);
             }
 
             return array_merge($base, $value);

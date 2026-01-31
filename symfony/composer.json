@@ -32,6 +32,7 @@
     "gedmo/doctrine-extensions": "^3.9",
     "knpuniversity/oauth2-client-bundle": "^2",
     "league/commonmark": "^2.4",
+    "league/html-to-markdown": "^5.1",
     "league/oauth2-server-bundle": "^1.0",
     "picqer/php-barcode-generator": "^3.0",
     "simplesoftwareio/simple-qrcode": "^4.2",

@@ -43,11 +43,9 @@ final class NakkikoneAdmin extends AbstractAdmin
             ])
             ->add('infoEn', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ])
             ->add('infoFi', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ]);
     }
 }

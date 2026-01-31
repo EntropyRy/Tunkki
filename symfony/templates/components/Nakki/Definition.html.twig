@@ -56,11 +56,11 @@
                     <div class="accordion-body">
                         <div class="mb-3">
                             <h6 class="fw-semibold">{{ 'nakkikone.definition.section_fi'|trans }}</h6>
-                            <div>{{ selectedDefinition.getDescriptionFi()|raw }}</div>
+                            <div>{{ selectedDefinition.getDescriptionFi()|markdown_to_html }}</div>
                         </div>
                         <div class="mb-3">
                             <h6 class="fw-semibold">{{ 'nakkikone.definition.section_en'|trans }}</h6>
-                            <div>{{ selectedDefinition.getDescriptionEn()|raw }}</div>
+                            <div>{{ selectedDefinition.getDescriptionEn()|markdown_to_html }}</div>
                         </div>
                         {% if selectedDefinition.getOnlyForActiveMembers() %}
                             <span class="badge bg-warning text-dark mb-3">{{ 'nakkikone.definition.only_active'|trans }}</span>

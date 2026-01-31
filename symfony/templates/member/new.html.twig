@@ -3,9 +3,9 @@
     <div class="col-md-8 col-xl-6 mx-auto mb-3">
         {% if email %}
             <p>{{ 'member.join.info'|trans }}</p>
-            <code class="bg-gray">
-                {{ email.body|raw }}
-            </code>
+            <div class="bg-gray">
+                {{ email.body|markdown_to_html }}
+            </div>
             <a href="{{ path('app_login') }}" type="button" class="btn btn-primary">{{ 'sign_in'|trans }}</a>
         {% else %}
             <h1>{{ 'register_as_member'|trans }}</h1>

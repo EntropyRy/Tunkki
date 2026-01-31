@@ -8,6 +8,7 @@ use App\Entity\Event;
 use App\Entity\Location;
 use App\Entity\Notification;
 use App\Entity\Sonata\SonataMediaMedia;
+use League\CommonMark\CommonMarkConverter;
 use Sonata\AdminBundle\Controller\CRUDController;
 use Sonata\MediaBundle\Provider\Pool;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -62,7 +63,11 @@ final class NotificationAdminController extends CRUDController
         }
 
         $rawMessage = $notification->getMessage() ?? '';
-        $msg = html_entity_decode(strip_tags($rawMessage, '<a><b><strong><u><code><em>'));
+        // Convert markdown to HTML, then strip unsupported tags for Telegram
+        $converter = new CommonMarkConverter(['html_input' => 'allow']);
+        $html = $converter->convert($rawMessage)->getContent();
+        // Keep only Telegram-supported HTML: <a>, <b>, <strong>, <i>, <em>, <u>, <s>, <code>, <pre>
+        $msg = trim(html_entity_decode(strip_tags($html, '<a><b><strong><i><em><u><s><code><pre>')));
 
         // Prepare buttons with each button on its own row
         $options = $notification->getOptions();

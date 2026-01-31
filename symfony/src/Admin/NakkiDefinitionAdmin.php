@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use App\Entity\NakkiDefinition;
+use App\Form\MarkdownEditorType;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 
 /**
  * @extends AbstractAdmin<NakkiDefinition>
@@ -52,13 +52,9 @@ final class NakkiDefinitionAdmin extends AbstractAdmin
     {
         $form
             ->add('nameFi')
-            ->add('DescriptionFi', SimpleFormatterType::class, [
-                'format' => 'richhtml',
-            ])
+            ->add('DescriptionFi', MarkdownEditorType::class)
             ->add('nameEn')
-            ->add('DescriptionEn', SimpleFormatterType::class, [
-                'format' => 'richhtml',
-            ])
+            ->add('DescriptionEn', MarkdownEditorType::class)
             ->add('onlyForActiveMembers')
         ;
     }

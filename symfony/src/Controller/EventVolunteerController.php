@@ -328,6 +328,19 @@ class EventVolunteerController extends AbstractController
             }
         }
 
+        // Sort by category: build_up → during → tear_down
+        $categoryOrder = [
+            'nakkikone.build_up' => 1,
+            'nakkikone.during' => 2,
+            'nakkikone.tear_down' => 3,
+        ];
+        uasort($nakkis, static function (array $a, array $b) use ($categoryOrder): int {
+            $orderA = $categoryOrder[$a['compared_to_event']] ?? 99;
+            $orderB = $categoryOrder[$b['compared_to_event']] ?? 99;
+
+            return $orderA <=> $orderB;
+        });
+
         return $nakkis;
     }
 

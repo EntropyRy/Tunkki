@@ -23,7 +23,7 @@ export default class extends Controller {
   static values = {
     tokens: Array,
     tokenMap: Object,
-    simple: Boolean,
+    format: { type: String, default: 'simple' },
     headingLevels: Array,
   };
 
@@ -93,19 +93,27 @@ export default class extends Controller {
   }
 
   toolbarItems() {
-    if (this.isSimple) {
-      return [
-        ["heading", "bold", "italic", "strike"],
-        ["quote", "link", "hr"],
-        ["ul", "ol"],
-      ];
+    switch (this.formatValue) {
+      case 'telegram':
+        // Only Telegram MarkdownV2 supported: *bold*, _italic_, ~strike~, [link](url)
+        return [
+          ["bold", "italic", "strike"],
+          ["link"],
+        ];
+      case 'simple':
+        return [
+          ["heading", "bold", "italic", "strike"],
+          ["quote", "link", "hr"],
+          ["ul", "ol"],
+        ];
+      case 'event':
+      default:
+        return [
+          ["heading", "bold", "italic", "strike"],
+          ["quote", "link", "code", "codeblock"],
+          ["ul", "ol", "task", "table", "hr"],
+        ];
     }
-
-    return [
-      ["heading", "bold", "italic", "strike"],
-      ["quote", "link", "code", "codeblock"],
-      ["ul", "ol", "task", "table", "hr"],
-    ];
   }
 
   injectTokenButton() {
@@ -326,7 +334,7 @@ export default class extends Controller {
   }
 
   get isSimple() {
-    return this.hasSimpleValue && this.simpleValue === true;
+    return this.formatValue === 'simple' || this.formatValue === 'telegram';
   }
 
   get allowedHeadingLevels() {

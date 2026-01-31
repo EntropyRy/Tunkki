@@ -73,12 +73,8 @@ final class ContractAdmin extends AbstractAdmin
                     ],
                 ],
             ])
-            ->add('ContentFi', MarkdownEditorType::class, [
-                'simple' => true,
-            ])
-            ->add('ContentEn', MarkdownEditorType::class, [
-                'simple' => true,
-            ]);
+            ->add('ContentFi', MarkdownEditorType::class)
+            ->add('ContentEn', MarkdownEditorType::class);
     }
 
     #[\Override]

@@ -6,6 +6,7 @@ namespace App\Admin;
 
 use App\Entity\Email;
 use App\Enum\EmailPurpose;
+use App\Form\MarkdownEditorType;
 use App\Repository\EmailRepository;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
@@ -13,7 +14,6 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Route\RouteCollectionInterface as RouteCollection;
 use Sonata\AdminBundle\Show\ShowMapper;
-use Sonata\FormatterBundle\Form\Type\SimpleFormatterType;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
 /**
@@ -300,7 +300,7 @@ final class EmailAdmin extends AbstractAdmin
                 'disabled' => $disabled,
                 'data' => $placeholder,
             ])
-            ->add('body', SimpleFormatterType::class, ['format' => 'richhtml'])
+            ->add('body', MarkdownEditorType::class)
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
 

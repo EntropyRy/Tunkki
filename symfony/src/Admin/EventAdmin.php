@@ -257,6 +257,7 @@ final class EventAdmin extends AbstractAdmin
             $formMapper
                 ->add('Content', MarkdownEditorType::class, [
                     'required' => true,
+                    'format' => 'event',
                     'help' => $help ?: 'Use the {{ }} button to insert content blocks.',
                     'help_html' => true,
                 ])
@@ -273,6 +274,7 @@ final class EventAdmin extends AbstractAdmin
             $formMapper
                 ->add('Sisallys', MarkdownEditorType::class, [
                     'required' => true,
+                    'format' => 'event',
                     'help' => $help ?:
                         'Käytä {{ }} -painiketta ja lisää sisältölohkot.',
                     'help_html' => true,
@@ -512,11 +514,9 @@ final class EventAdmin extends AbstractAdmin
             ])
             ->add('artistSignUpInfoEn', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ])
             ->add('artistSignUpInfoFi', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ])
             ->end()
             ->end()
@@ -580,11 +580,9 @@ final class EventAdmin extends AbstractAdmin
             ->with('Info', ['class' => 'col-md-12'])
             ->add('ticketInfoFi', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ])
             ->add('ticketInfoEn', MarkdownEditorType::class, [
                 'required' => false,
-                'simple' => true,
             ])
             ->end()
             ->end();
