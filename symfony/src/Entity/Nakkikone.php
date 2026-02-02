@@ -20,7 +20,7 @@ use Doctrine\ORM\Mapping as ORM;
  * - Responsible admins
  */
 #[ORM\Entity(repositoryClass: NakkikoneRepository::class)]
-class Nakkikone
+class Nakkikone implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
