@@ -411,6 +411,23 @@ a svg {
     mix-blend-mode: var(--img-filter-mode, normal);
 }
 
+.nakkikone-schedule-time {
+    width: 110px;
+    border-right: 2px solid #dee2e6;
+}
+
+.nakkikone-schedule-slot {
+    min-width: 150px;
+}
+
+.nakkikone-schedule-cell {
+    border-right-width: 2px !important;
+}
+
+.nakkikone-interval-group--multi {
+    border-left-width: 4px !important;
+}
+
 [data-bs-theme=dark] .nakkikone-schedule-table .table-success,
 [data-bs-theme=dark] .nakkikone-schedule-table .table-secondary,
 [data-bs-theme=dark] .nakkikone-schedule-table .table-light,

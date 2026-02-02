@@ -109,20 +109,20 @@
                 </div>
             {% else %}
                 <div class="table-responsive">
-                    <table class="table table-bordered table-sm border-dark">
-                        <thead class="table-light">
+                    <table class="table table-bordered table-sm table-striped">
+                        <thead>
                             <tr>
-                                <th style="width: 100px; border-right: 2px solid #dee2e6;">{{ 'Time'|trans }}</th>
+                                <th class="nakkikone-schedule-time">{{ 'Time'|trans }}</th>
                                 {% for i in 1..grid.maxColumns %}
-                                    <th style="min-width: 150px;">{{ 'Slot'|trans }} {{ i }}</th>
+                                    <th class="nakkikone-schedule-slot">{{ 'Slot'|trans }} {{ i }}</th>
                                 {% endfor %}
                             </tr>
                         </thead>
                         <tbody>
                             {% for slot in grid.timeSlots %}
                                 {% set rowIndex = loop.index0 %}
-                                <tr class="{{ rowIndex is even ? 'table-light' : '' }}">
-                                    <td class="fw-semibold align-middle" style="border-right: 2px solid #dee2e6;">
+                                <tr>
+                                    <td class="fw-semibold align-middle nakkikone-schedule-time">
                                         {{ slot.time|date('H:i') }}
                                     </td>
 
@@ -139,28 +139,29 @@
                                             {% if bookingData.booking is not null %}
                                                 {% set booking = bookingData.booking %}
                                                 <td rowspan="{{ bookingData.rowspan }}"
-                                                    class="{{ booking.member ? 'table-success' : 'table-secondary' }} align-middle border-end"
-                                                    style="border-right-width: 2px !important;">
+                                                    class="{{ booking.member ? 'table-success text-dark' : '' }} align-middle border-end nakkikone-schedule-cell">
                                                     {% if booking.member %}
                                                         <span class="badge bg-success mb-1">{{ 'Reserved'|trans }}</span><br>
                                                         <strong>{{ booking.member.name }}</strong>
                                                         {% if booking.member.email %}
-                                                            <br><small class="text-muted">{{ booking.member.email }}</small>
+                                                            <br><small>{{ booking.member.email }}</small>
                                                         {% endif %}
                                                     {% else %}
                                                         <span class="badge bg-secondary">{{ 'Available'|trans }}</span>
                                                     {% endif %}
                                                     <br>
-                                                    <small class="text-muted">
-                                                        {{ booking.startAt|date('H:i') }}–{{ booking.endAt|date('H:i') }}
-                                                        ({{ bookingData.rowspan }}h)
-                                                    </small>
+                                                    {% if not booking.member %}
+                                                        <small class="text-muted">
+                                                            {{ booking.startAt|date('H:i') }}–{{ booking.endAt|date('H:i') }}
+                                                            ({{ bookingData.rowspan }}h)
+                                                        </small>
+                                                    {% endif %}
                                                 </td>
                                             {% endif %}
                                             {# If booking is null, it's a placeholder - cell is covered by rowspan, skip rendering #}
                                         {% else %}
                                             {# Column not occupied - empty cell #}
-                                            <td class="border-end" style="border-right-width: 2px !important; background-color: #f8f9fa;"></td>
+                                            <td class="border-end nakkikone-schedule-cell"></td>
                                         {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -254,8 +255,7 @@
                     {% endif %}
 
                     {# Wrap interval groups in a container with left border if mixed intervals #}
-                    <div class="{{ timeGroup.intervalGroups|length > 1 ? 'border-start border-warning ms-2 ps-2' : '' }}"
-                         style="{{ timeGroup.intervalGroups|length > 1 ? 'border-left-width: 4px !important;' : '' }}">
+                    <div class="{{ timeGroup.intervalGroups|length > 1 ? 'border-start border-warning ms-2 ps-2 nakkikone-interval-group--multi' : '' }}">
                         {# Show each interval group #}
                         {% for group in timeGroup.intervalGroups %}
                             <div class="border rounded p-3 {{ timeGroup.intervalGroups|length > 1 ? 'ms-2' : '' }}">

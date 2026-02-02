@@ -65,20 +65,20 @@
                     <div class="alert alert-info mb-0">{{ 'nakkikone.board.schedule_no_bookings'|trans }}</div>
                 {% else %}
                     <div class="table-responsive">
-                        <table class="table table-bordered table-sm border-dark nakkikone-schedule-table">
-                            <thead class="table-light">
+                        <table class="table table-bordered table-sm table-striped nakkikone-schedule-table">
+                            <thead>
                                 <tr>
-                                    <th style="width: 110px; border-right: 2px solid #dee2e6;">{{ 'nakkikone.board.schedule_time'|trans }}</th>
+                                    <th class="nakkikone-schedule-time">{{ 'nakkikone.board.schedule_time'|trans }}</th>
                                     {% for i in 1..grid.maxColumns %}
-                                        <th style="min-width: 160px;">{{ 'nakkikone.board.schedule_slot'|trans }} {{ i }}</th>
+                                        <th class="nakkikone-schedule-slot">{{ 'nakkikone.board.schedule_slot'|trans }} {{ i }}</th>
                                     {% endfor %}
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for slot in grid.timeSlots %}
                                     {% set rowIndex = loop.index0 %}
-                                    <tr class="{{ rowIndex is even ? 'table-light' : '' }}">
-                                        <td class="fw-semibold align-middle" style="border-right: 2px solid #dee2e6;">
+                                    <tr>
+                                        <td class="fw-semibold align-middle nakkikone-schedule-time">
                                             {{ slot.time|date('H:i') }}
                                         </td>
 
@@ -92,30 +92,31 @@
                                                 {% set bookingData = columnMap[col] %}
                                                 {% if bookingData.booking is not null %}
                                                     {% set booking = bookingData.booking %}
-                                                    <td rowspan="{{ bookingData.rowspan }}"
-                                                        class="{{ booking.member ? 'table-success' : 'table-secondary' }} align-middle border-end"
-                                                        style="border-right-width: 2px !important;">
-                                                        <div class="fw-semibold">
-                                                            {{ booking.nakki.definition.getName(app.request.locale) }}
-                                                        </div>
-                                                        {% if booking.member %}
-                                                            <span class="badge bg-success mb-1">{{ 'nakkikone.column.reserved'|trans }}</span><br>
-                                                            <strong>{{ booking.member.name }}</strong>
-                                                            {% if booking.member.email %}
-                                                                <br><small class="text-muted">{{ booking.member.email }}</small>
-                                                            {% endif %}
-                                                        {% else %}
-                                                            <span class="badge bg-secondary">{{ 'nakkikone.column.available'|trans }}</span>
+                                                <td rowspan="{{ bookingData.rowspan }}"
+                                                    class="{{ booking.member ? 'table-success text-dark' : '' }} align-middle border-end nakkikone-schedule-cell">
+                                                    <div class="fw-semibold">
+                                                        {{ booking.nakki.definition.getName(app.request.locale) }}
+                                                    </div>
+                                                    {% if booking.member %}
+                                                        <span class="badge bg-success mb-1">{{ 'nakkikone.column.reserved'|trans }}</span><br>
+                                                        <strong>{{ booking.member.name }}</strong>
+                                                        {% if booking.member.email %}
+                                                            <br><small>{{ booking.member.email }}</small>
                                                         {% endif %}
+                                                    {% else %}
+                                                        <span class="badge bg-secondary">{{ 'nakkikone.column.available'|trans }}</span>
+                                                    {% endif %}
                                                         <br>
-                                                        <small class="text-muted">
-                                                            {{ booking.startAt|date('H:i') }}–{{ booking.endAt|date('H:i') }}
-                                                            ({{ bookingData.rowspan }}h)
-                                                        </small>
+                                                        {% if not booking.member %}
+                                                            <small class="text-muted">
+                                                                {{ booking.startAt|date('H:i') }}–{{ booking.endAt|date('H:i') }}
+                                                                ({{ bookingData.rowspan }}h)
+                                                            </small>
+                                                        {% endif %}
                                                     </td>
                                                 {% endif %}
                                             {% else %}
-                                                <td class="border-end" style="border-right-width: 2px !important; background-color: #f8f9fa;"></td>
+                                                <td class="border-end nakkikone-schedule-cell"></td>
                                             {% endif %}
                                         {% endfor %}
                                     </tr>
