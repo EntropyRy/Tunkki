@@ -6,8 +6,8 @@ namespace App\Tests\Functional\Event;
 
 use App\Factory\EventFactory;
 use App\Factory\MemberFactory;
-use App\Factory\NakkiFactory;
 use App\Factory\NakkiDefinitionFactory;
+use App\Factory\NakkiFactory;
 use App\Factory\NakkikoneFactory;
 use App\Tests\_Base\FixturesWebTestCase;
 use App\Tests\Support\LoginHelperTrait;
