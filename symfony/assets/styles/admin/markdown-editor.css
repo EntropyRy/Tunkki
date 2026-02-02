@@ -66,6 +66,23 @@
   content: none !important;
 }
 
+.toastui-editor-contents .email-event-button-wrap {
+  text-align: center;
+  margin: 16px 0;
+}
+
+.toastui-editor-contents .email-event-button {
+  display: block;
+  width: 50%;
+  margin: 0 auto;
+  padding: 12px 0;
+  background: #4caf50;
+  color: #ffffff;
+  text-decoration: none;
+  border: 2px solid #000;
+  font-weight: bold;
+}
+
 .token-preview {
   display: block;
   padding: 0.6rem 0.75rem;

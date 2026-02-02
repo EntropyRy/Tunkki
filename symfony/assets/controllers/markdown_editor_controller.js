@@ -25,6 +25,8 @@ export default class extends Controller {
     tokenMap: Object,
     format: { type: String, default: 'simple' },
     headingLevels: Array,
+    eventButtonFi: String,
+    eventButtonEn: String,
   };
 
   async connect() {
@@ -81,6 +83,7 @@ export default class extends Controller {
       if (!this.isSimple) {
         this.injectTokenButton();
       }
+      this.injectEventButtons();
       this.container.addEventListener("click", this.onToolbarClick);
     } catch (error) {
       console.error("Failed to initialize Toast UI Editor", error);
@@ -143,6 +146,58 @@ export default class extends Controller {
     group.appendChild(button);
     toolbar.appendChild(group);
     this.tokenButtonAdded = true;
+  }
+
+  injectEventButtons() {
+    if (!this.container || !this.hasEventButtonFiValue || !this.hasEventButtonEnValue) return;
+
+    const toolbar = this.container.querySelector(".toastui-editor-defaultUI-toolbar");
+    if (!toolbar) return;
+
+    if (toolbar.querySelector(".markdown-event-button")) {
+      return;
+    }
+
+    const group = document.createElement("div");
+    group.className = "toastui-editor-defaultUI-toolbar-group";
+
+    const buttonFi = document.createElement("button");
+    buttonFi.type = "button";
+    buttonFi.className = "toastui-editor-toolbar-icons markdown-event-button";
+    buttonFi.setAttribute("aria-label", "Insert event button (FI)");
+    buttonFi.textContent = "Event FI";
+    buttonFi.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.insertEventButton(this.eventButtonFiValue, "Siirry tapahtumaan");
+    });
+
+    const buttonEn = document.createElement("button");
+    buttonEn.type = "button";
+    buttonEn.className = "toastui-editor-toolbar-icons markdown-event-button";
+    buttonEn.setAttribute("aria-label", "Insert event button (EN)");
+    buttonEn.textContent = "Event EN";
+    buttonEn.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.insertEventButton(this.eventButtonEnValue, "Go to event");
+    });
+
+    group.appendChild(buttonFi);
+    group.appendChild(buttonEn);
+    toolbar.appendChild(group);
+  }
+
+  insertEventButton(url, label) {
+    if (!this.editor || !url) return;
+
+    const snippet = [
+      '<div class="email-event-button-wrap">',
+      `  <a class="email-event-button" href="${url}">${label}</a>`,
+      '</div>',
+      '',
+    ].join("\n");
+
+    this.editor.insertText(snippet);
+    this.syncTextarea();
   }
 
   promptAndInsertToken() {

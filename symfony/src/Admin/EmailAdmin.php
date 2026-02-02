@@ -294,13 +294,27 @@ final class EmailAdmin extends AbstractAdmin
             $placeholder = '[event name] Ticket #1 / Lippusi #1';
         }
 
+        $bodyAttr = [];
+        if ($this->isChild()) {
+            $event = $email->getEvent();
+            if ($event) {
+                $bodyAttr['data-markdown-editor-event-button-fi-value'] = $event->getUrlByLang('fi');
+                $bodyAttr['data-markdown-editor-event-button-en-value'] = $event->getUrlByLang('en');
+            }
+        }
+
+        $enableHtmlTransform = $email->getUpdatedAt() < new \DateTimeImmutable('2026-02-01 00:00:00');
+
         $formMapper
             ->add('subject', null, [
                 'help' => $subjectHelp,
                 'disabled' => $disabled,
                 'data' => $placeholder,
             ])
-            ->add('body', MarkdownEditorType::class)
+            ->add('body', MarkdownEditorType::class, [
+                'attr' => $bodyAttr,
+                'enable_html_transform' => $enableHtmlTransform,
+            ])
             ->add('addLoginLinksToFooter', null, ['help' => 'adds links to login']);
     }
 
