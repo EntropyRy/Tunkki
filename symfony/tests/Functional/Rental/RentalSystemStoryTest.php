@@ -1350,6 +1350,90 @@ final class RentalSystemStoryTest extends FixturesWebTestCase
         self::assertSame($updatedBooking, $latestEvent->getBooking());
     }
 
+    public function testStatusEventSubmitMarkItemNeedsFixing(): void
+    {
+        $item = ItemFactory::new()->cloneable()->create();
+        $itemId = $item->getId();
+
+        self::assertFalse($item->getNeedsFixing());
+        self::assertFalse($item->getCannotBeRented());
+
+        $this->loginAsRole('ROLE_SUPER_ADMIN');
+
+        $createUrl = '/admin/item/'.$itemId.'/status-event/create';
+        $crawler = $this->client->request('GET', $createUrl);
+        self::assertResponseIsSuccessful();
+
+        $formNode = null;
+        foreach ($crawler->filter('form')->each(static fn ($n) => $n) as $candidate) {
+            if ($candidate->filter('textarea[name*="[description]"]')->count() > 0) {
+                $formNode = $candidate;
+                break;
+            }
+        }
+        self::assertNotNull($formNode, 'Form with description field not found');
+
+        $form = $formNode->form();
+        $formValues = $form->getPhpValues();
+
+        $descriptionName = $formNode
+            ->filter('textarea[name*="[description]"]')
+            ->attr('name');
+        self::assertNotNull($descriptionName, 'Description field name not found');
+
+        $needsFixingName = $formNode
+            ->filter('input[name*="needsFixing"]')
+            ->attr('name');
+        self::assertNotNull($needsFixingName, 'NeedsFixing field name not found');
+
+        $cannotBeRentedName = $formNode
+            ->filter('input[name*="cannotBeRented"]')
+            ->attr('name');
+        self::assertNotNull($cannotBeRentedName, 'CannotBeRented field name not found');
+
+        $this->setFormFieldValueByName(
+            $formValues,
+            $descriptionName,
+            'Item requires fixing',
+        );
+        $this->setFormFieldValueByName($formValues, $needsFixingName, '1');
+        $this->setFormFieldValueByName($formValues, $cannotBeRentedName, '1');
+
+        $this->client->request($form->getMethod(), $form->getUri(), $formValues);
+
+        $response = $this->client->getResponse();
+        if (!$response->isRedirect()) {
+            $errorCrawler = $this->client->getCrawler();
+            $errors = $errorCrawler->filter('.sonata-ba-field-error, .help-block, .invalid-feedback, .form-error-message, .alert-danger, .has-error');
+            $errorMessages = [];
+            foreach ($errors as $err) {
+                $text = trim($err->textContent);
+                if (!empty($text)) {
+                    $errorMessages[] = $text;
+                }
+            }
+            self::fail(
+                'Expected redirect after status event creation, got status: '.$response->getStatusCode().
+                '. Form errors: '.implode('; ', $errorMessages).
+                '. Form values submitted: '.json_encode($formValues)
+            );
+        }
+
+        $this->em()->clear();
+        $updatedItem = $this->em()->getRepository(\App\Entity\Rental\Inventory\Item::class)
+            ->find($itemId);
+        self::assertNotNull($updatedItem);
+
+        self::assertTrue($updatedItem->getNeedsFixing(), 'Item should be marked as needs fixing');
+        self::assertTrue($updatedItem->getCannotBeRented(), 'Item should be marked as cannot be rented');
+
+        $events = $updatedItem->getFixingHistory();
+        self::assertGreaterThan(0, $events->count(), 'StatusEvent should be created for item');
+        $latestEvent = $events->last();
+        self::assertSame('Item requires fixing', $latestEvent->getDescription());
+        self::assertSame($updatedItem, $latestEvent->getItem());
+    }
+
     public function testStatusEventSubmitMarkBookingCancelled(): void
     {
         // Arrange: Create a booking
