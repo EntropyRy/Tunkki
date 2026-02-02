@@ -22,7 +22,7 @@
                 </div>
                 {% set description = nakki.definition.getDescription(app.request.locale) %}
                 {% if description %}
-                    <div class="text-muted small">{{ description|raw }}</div>
+                    <div class="text-muted small">{{ description|markdown_to_html|raw }}</div>
                 {% endif %}
             </div>
             <div class="d-flex flex-column align-items-end gap-2 ms-3">

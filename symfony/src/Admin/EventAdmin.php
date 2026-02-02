@@ -105,12 +105,6 @@ final class EventAdmin extends AbstractAdmin
                     ],
                 ]);
             }
-            $menu->addChild('Nakit', [
-                'uri' => $admin->generateUrl(
-                    'entropy.admin.event|entropy.admin.nakki_booking.list',
-                    ['id' => $id],
-                ),
-            ]);
             $menu->addChild('Printable Nakkilist', [
                 'uri' => $admin->generateUrl('nakkiList', ['id' => $id]),
             ]);

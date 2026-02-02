@@ -30,7 +30,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('nakki');
         if (!$this->isChild()) {
             $filter
-                ->add('event');
+                ->add('nakkikone');
         }
         $filter
             ->add('display_only_unique_members', CallbackFilter::class, [
@@ -70,7 +70,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('nakki');
         if (!$this->isChild()) {
             $list
-                ->add('event');
+                ->add('nakkikone');
         }
         $list
             ->add('member')
@@ -93,7 +93,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
             ->add('nakki');
         if (!$this->isChild()) {
             $form
-                ->add('event');
+                ->add('nakkikone');
         }
         $form
             ->add('member')
@@ -110,7 +110,7 @@ final class NakkiBookingAdmin extends AbstractAdmin
     {
         $show
             ->add('nakki')
-            ->add('event')
+            ->add('nakkikone')
             ->add('member')
             ->add('startAt')
             ->add('endAt');

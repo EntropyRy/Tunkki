@@ -547,7 +547,6 @@ final class EventAdminControllerTest extends FixturesWebTestCase
 
         $this->client->assertSelectorTextContains('body', 'RSVP List');
         $this->client->assertSelectorTextContains('body', 'Nakkikone');
-        $this->client->assertSelectorTextContains('body', 'Nakit');
         $this->client->assertSelectorTextContains('body', 'Printable Nakkilist');
     }
 

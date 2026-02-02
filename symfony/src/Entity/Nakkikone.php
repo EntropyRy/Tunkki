@@ -195,6 +195,13 @@ class Nakkikone
         return $this;
     }
 
+    public function __toString(): string
+    {
+        $date = $this->event->getEventDate()->format('Y-m-d');
+
+        return 'Nakkikone for '.$this->event.' ('.$date.')';
+    }
+
     // === Nakki Collection Management ===
 
     /**

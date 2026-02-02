@@ -35,23 +35,13 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         $datagrid = $admin->getDatagrid();
 
         self::assertTrue($datagrid->hasFilter('nakki'));
-        self::assertTrue($datagrid->hasFilter('event'));
+        self::assertTrue($datagrid->hasFilter('nakkikone'));
         self::assertTrue($datagrid->hasFilter('display_only_unique_members'));
         self::assertTrue($datagrid->hasFilter('member'));
         self::assertTrue($datagrid->hasFilter('memberNotAssigned'));
         self::assertTrue($datagrid->hasFilter('startAt'));
         self::assertTrue($datagrid->hasFilter('startAtRange'));
         self::assertTrue($datagrid->hasFilter('endAt'));
-    }
-
-    public function testDatagridFiltersIncludeParentEventForChild(): void
-    {
-        $admin = $this->childAdmin();
-        self::assertTrue($admin->isChild());
-        $datagrid = $admin->getDatagrid();
-
-        self::assertTrue($datagrid->hasFilter('event'));
-        self::assertTrue($datagrid->hasFilter('nakki'));
     }
 
     public function testUniqueMembersFilterInactiveWhenNoValue(): void
@@ -84,20 +74,12 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         $list = $this->standaloneAdmin()->getList();
 
         self::assertTrue($list->has('nakki'));
-        self::assertTrue($list->has('event'));
+        self::assertTrue($list->has('nakkikone'));
         self::assertTrue($list->has('member'));
         self::assertTrue($list->has('memberHasEventTicket'));
         self::assertTrue($list->has('startAt'));
         self::assertTrue($list->has('endAt'));
         self::assertTrue($list->has(ListMapper::NAME_ACTIONS));
-    }
-
-    public function testListFieldsExcludeEventForChild(): void
-    {
-        $list = $this->childAdmin()->getList();
-
-        self::assertFalse($list->has('event'));
-        self::assertTrue($list->has('nakki'));
     }
 
     public function testFormFieldsIncludeEventForStandalone(): void
@@ -108,23 +90,11 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
 
         $form = $admin->getFormBuilder()->getForm();
 
-        self::assertTrue($form->has('event'));
+        self::assertTrue($form->has('nakkikone'));
         self::assertTrue($form->has('nakki'));
         self::assertTrue($form->has('member'));
         self::assertTrue($form->has('startAt'));
         self::assertTrue($form->has('endAt'));
-    }
-
-    public function testFormFieldsExcludeEventForChild(): void
-    {
-        $booking = $this->createBooking();
-        $admin = $this->childAdmin();
-        $admin->setSubject($booking);
-
-        $form = $admin->getFormBuilder()->getForm();
-
-        self::assertFalse($form->has('event'));
-        self::assertTrue($form->has('nakki'));
     }
 
     public function testShowFieldsIncludeExpectedFields(): void
@@ -132,7 +102,7 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         $show = $this->standaloneAdmin()->getShow();
 
         self::assertTrue($show->has('nakki'));
-        self::assertTrue($show->has('event'));
+        self::assertTrue($show->has('nakkikone'));
         self::assertTrue($show->has('member'));
         self::assertTrue($show->has('startAt'));
         self::assertTrue($show->has('endAt'));
@@ -208,29 +178,12 @@ final class NakkiBookingAdminTest extends FixturesWebTestCase
         return $admin;
     }
 
-    private function childAdmin(): NakkiBookingAdmin
-    {
-        $admin = clone $this->nakkiBookingAdmin();
-        $this->clearParent($admin);
-        $this->setChildContext($admin);
-        $this->resetAdminCaches($admin);
-
-        return $admin;
-    }
-
     private function nakkiBookingAdmin(): NakkiBookingAdmin
     {
         $admin = static::getContainer()->get('entropy.admin.nakki_booking');
         \assert($admin instanceof NakkiBookingAdmin);
 
         return $admin;
-    }
-
-    private function setChildContext(AbstractAdmin $admin): void
-    {
-        $parent = static::getContainer()->get('entropy.admin.event');
-        \assert($parent instanceof AbstractAdmin);
-        $admin->setParent($parent, 'event');
     }
 
     private function clearParent(AbstractAdmin $admin): void
