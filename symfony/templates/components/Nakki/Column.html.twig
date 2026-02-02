@@ -18,7 +18,7 @@
                     </button>
                 </h3>
                 <div class="text-muted small">
-                    {{ nakki.startAt|date('j.n H:i') }} – {{ nakki.endAt|date('H:i') }}
+                    {{ nakki.startAt|date('j.n.Y H:i') }} – {{ nakki.endAt|date('H:i') }}
                 </div>
                 {% set description = nakki.definition.getDescription(app.request.locale) %}
                 {% if description %}
@@ -249,7 +249,7 @@
                     {# Show start time header if there are multiple interval groups #}
                     {% if timeGroup.intervalGroups|length > 1 %}
                         <div class="fw-semibold text-muted small mb-2">
-                            <span class="badge bg-body-secondary text-body border">{{ timeGroup.startTime|date('j.n Y H:i') }}</span>
+                            <span class="badge bg-body-secondary text-body border">{{ timeGroup.startTime|date('j.n. H:i') }}</span>
                         </div>
                     {% endif %}
 
@@ -266,7 +266,7 @@
                                         {{ group.start|date('H:i') }} – {{ group.end|date('H:i') }}
                                     {% else %}
                                         {# Show full datetime when standalone #}
-                                        {{ group.start|date('j.n Y H:i') }} – {{ group.end|date('H:i') }}
+                                        {{ group.start|date('j.n. H:i') }} – {{ group.end|date('H:i') }}
                                     {% endif %}
                                 </div>
                                 <span class="badge bg-secondary">
